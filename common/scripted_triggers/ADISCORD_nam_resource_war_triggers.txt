@@ -646,6 +646,14 @@ NAM_colony_phase = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 }
 
+# COUNTRY NAM. Metropolitan contracts close at collapse; local security continues separately.
+NAM_colonial_programme_operable = {
+	NAM_country_operable = yes
+	NAM_colony_phase = yes
+	is_subject = yes
+	WRK = { exists = yes }
+}
+
 # COUNTRY NAM. Only one counterinsurgency sweep runs at a time.
 NAM_sweep_slot_free = {
 	NOT = { has_country_flag = NAM_sweep_running }

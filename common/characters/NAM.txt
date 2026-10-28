@@ -181,12 +181,12 @@ characters = {
 		name = NAM_Yaroslav_Weber
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_9
-				small = GFX_Portrait_Forul_Generic_9_small
+				large = GFX_portrait_NAM_Yaroslav_Weber
+				small = GFX_portrait_NAM_Yaroslav_Weber_small
 			}
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_9
-				small = GFX_Portrait_Forul_Generic_9_small
+				large = GFX_portrait_NAM_Yaroslav_Weber
+				small = GFX_portrait_NAM_Yaroslav_Weber_small
 			}
 		}
 		corps_commander = {

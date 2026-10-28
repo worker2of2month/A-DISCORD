@@ -2,6 +2,765 @@
 # gendarmerie's sweeps against Weber's network. The category closes at the
 # Vorkerland collapse; running work settles through its cancel trigger.
 NAM_colony = {
+	NAM_colonial_rifle_contract = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_deliver_the_quota
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 30
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_rifle_contract_paid }
+			custom_effect_tooltip = NAM_colonial_rifle_contract_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_rifle_contract_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_rifle_contract_paid }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 4500
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = NAM
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_rifle_contract_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_rifle_contract_paid }
+					add_political_power = 30
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_rifle_contract_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_rifle_contract_paid }
+				add_political_power = 30
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_fuel_reserve = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_concealed_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 60
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_fuel_reserve_paid }
+			custom_effect_tooltip = NAM_colonial_fuel_reserve_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_fuel_reserve_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_fuel_reserve_paid }
+				add_fuel = 6000
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_fuel_reserve_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_fuel_reserve_paid }
+					add_political_power = 25
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_fuel_reserve_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_fuel_reserve_paid }
+				add_political_power = 25
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_workshops = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_wrk_return_cargo
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = { building = arms_factory size = 1 include_locked = yes }
+			}
+		}
+		cost = 60
+		fire_only_once = no
+		days_remove = 35
+		days_re_enable = 120
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_workshops_paid }
+			custom_effect_tooltip = NAM_colonial_workshops_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = { building = arms_factory size = 1 include_locked = yes }
+					}
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_workshops_paid }
+					NAM_colonial_programme_operable = yes
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = { building = arms_factory size = 1 include_locked = yes }
+					}
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_workshops_paid }
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_workshops_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_workshops_paid }
+					add_political_power = 60
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_workshops_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_workshops_paid }
+				add_political_power = 60
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_artillery_contract = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_metropolitan_depots
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 45
+		fire_only_once = no
+		days_remove = 28
+		days_re_enable = 90
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_artillery_contract_paid }
+			custom_effect_tooltip = NAM_colonial_artillery_contract_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_artillery_contract_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_artillery_contract_paid }
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 60
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = NAM
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_artillery_contract_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_artillery_contract_paid }
+					add_political_power = 45
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_artillery_contract_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_artillery_contract_paid }
+				add_political_power = 45
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_gendarme_operation = {
+		icon = generic_operation
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_imperial_gendarmes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_print_network_active_tt
+				NAM_underground_active = yes
+			}
+			check_variable = { var = NAM_underground value = 0 compare = greater_than }
+		}
+		cost = 35
+		fire_only_once = no
+		days_remove = 14
+		days_re_enable = 60
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_gendarme_operation_paid }
+			custom_effect_tooltip = NAM_colonial_gendarme_operation_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+					NAM_underground_active = yes
+					check_variable = { var = NAM_underground value = 0 compare = greater_than }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_gendarme_operation_paid }
+					NAM_colonial_programme_operable = yes
+					NAM_underground_active = yes
+					check_variable = { var = NAM_underground value = 0 compare = greater_than }
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_gendarme_operation_paid }
+				custom_effect_tooltip = NAM_colonial_gendarme_result_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_underground_change value = -15 }
+					NAM_underground_add = yes
+					add_to_variable = { var = NAM_grp_dist_support value = -3 }
+					NAM_groups_refresh = yes
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_gendarme_operation_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_gendarme_operation_paid }
+					add_political_power = 35
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_gendarme_operation_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_gendarme_operation_paid }
+				add_political_power = 35
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_volunteer_training = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_oilfield_militia
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 40
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 90
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_volunteer_training_paid }
+			custom_effect_tooltip = NAM_colonial_volunteer_training_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_volunteer_training_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_volunteer_training_paid }
+				add_manpower = 3000
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = NAM
+				}
+				custom_effect_tooltip = NAM_colonial_volunteers_result_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_dist_support value = 3 }
+					NAM_groups_refresh = yes
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_volunteer_training_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_volunteer_training_paid }
+					add_political_power = 40
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_volunteer_training_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_volunteer_training_paid }
+				add_political_power = 40
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_reserve_fund = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_second_ledger
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_reserve_ready_tt
+				has_variable = NAM_hidden_reserve
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		days_remove = 14
+		days_re_enable = 45
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_reserve_fund_paid }
+			custom_effect_tooltip = NAM_colonial_reserve_fund_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+					has_variable = NAM_hidden_reserve
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_reserve_fund_paid }
+					NAM_colonial_programme_operable = yes
+					has_variable = NAM_hidden_reserve
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_reserve_fund_paid }
+				custom_effect_tooltip = NAM_colonial_reserve_result_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_hidden_reserve value = 150 }
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_reserve_fund_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_reserve_fund_paid }
+					add_political_power = 35
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_reserve_fund_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_reserve_fund_paid }
+				add_political_power = 35
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_officer_course = {
+		icon = generic_operation
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_metropolitan_instructors
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 90
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_officer_course_paid }
+			custom_effect_tooltip = NAM_colonial_officer_course_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_officer_course_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_officer_course_paid }
+				army_experience = 20
+				custom_effect_tooltip = NAM_colonial_officers_result_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_garr_support value = 4 }
+					NAM_groups_refresh = yes
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_officer_course_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_officer_course_paid }
+					add_political_power = 35
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_officer_course_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_officer_course_paid }
+				add_political_power = 35
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_local_register = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_quiet_officer_lists
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 35
+		fire_only_once = yes
+		days_remove = 21
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_local_register_paid }
+			custom_effect_tooltip = NAM_colonial_local_register_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_local_register_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_local_register_paid }
+				add_manpower = 4000
+				custom_effect_tooltip = NAM_colonial_officers_result_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_garr_support value = 4 }
+					NAM_groups_refresh = yes
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_local_register_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_local_register_paid }
+					add_political_power = 35
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_local_register_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_local_register_paid }
+				add_political_power = 35
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_emergency_stocks = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_sand_runs_out
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 35
+		fire_only_once = yes
+		days_remove = 14
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_emergency_stocks_paid }
+			custom_effect_tooltip = NAM_colonial_emergency_stocks_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_emergency_stocks_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_emergency_stocks_paid }
+				add_fuel = 3000
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = NAM
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_emergency_stocks_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_emergency_stocks_paid }
+					add_political_power = 35
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_emergency_stocks_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_emergency_stocks_paid }
+				add_political_power = 35
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_warehouse_transfer = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_last_centre_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 40
+		fire_only_once = yes
+		days_remove = 14
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_warehouse_transfer_paid }
+			custom_effect_tooltip = NAM_colonial_warehouse_transfer_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_warehouse_transfer_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_warehouse_transfer_paid }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = NAM
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_warehouse_transfer_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_warehouse_transfer_paid }
+					add_political_power = 40
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_warehouse_transfer_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_warehouse_transfer_paid }
+				add_political_power = 40
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_colonial_archive_transfer = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			NAM_colony_phase = yes
+			has_completed_focus = NAM_letters_to_the_centre
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_operable_tt
+				NAM_colonial_programme_operable = yes
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 14
+		complete_effect = {
+			hidden_effect = { set_country_flag = NAM_colonial_archive_transfer_paid }
+			custom_effect_tooltip = NAM_colonial_archive_transfer_result_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_colonial_programme_operable = yes
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = { has_country_flag = NAM_colonial_archive_transfer_paid }
+					NAM_colonial_programme_operable = yes
+				}
+				hidden_effect = { clr_country_flag = NAM_colonial_archive_transfer_paid }
+				add_stability = 0.03
+				custom_effect_tooltip = NAM_colonial_archive_result_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_colonial_archive_transfer_paid } }
+					hidden_effect = { clr_country_flag = NAM_colonial_archive_transfer_paid }
+					add_political_power = 50
+				}
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_colonial_archive_transfer_paid } }
+				hidden_effect = { clr_country_flag = NAM_colonial_archive_transfer_paid }
+				add_political_power = 50
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	NAM_wrk_fuel_shipment = {
 		icon = oil
 		allowed = { tag = NAM }
@@ -22,7 +781,7 @@ NAM_colony = {
 			NOT = { has_fuel < 4000 }
 		}
 		fire_only_once = no
-		days_re_enable = 45
+		days_re_enable = 30
 		complete_effect = {
 			if = {
 				limit = {
@@ -59,7 +818,7 @@ NAM_colony = {
 		}
 	}
 
-	# Negotiations take 45 days and hold the treasury price in escrow; the
+	# Negotiations take 21 days and hold the treasury price in escrow; the
 	# signed concession pays every month until the collapse.
 	NAM_wrk_trade_concession = {
 		icon = generic_industry
@@ -83,7 +842,7 @@ NAM_colony = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		fire_only_once = no
-		days_remove = 45
+		days_remove = 21
 		cancel_trigger = {
 			OR = {
 				NAM_country_operable = no
@@ -161,7 +920,7 @@ NAM_colony = {
 			NOT = { has_fuel < 3000 }
 		}
 		fire_only_once = no
-		days_remove = 30
+		days_remove = 21
 		cancel_trigger = {
 			OR = {
 				NAM_country_operable = no
@@ -2153,11 +2912,100 @@ NAM_overseas_districts = {
 
 # Svetlogorye public campaigns. Slots come from the shared campaign pool.
 NAM_public_campaigns = {
+	NAM_campaign_answer_leaflets = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = NAM }
+		visible = {
+			NAM_underground_open = yes
+			OR = {
+				has_completed_focus = NAM_open_ledgers
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_colonial_watch
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_print_network_active_tt
+				NAM_underground_active = yes
+			}
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = NAM_campaign_answer_leaflets_slot_held } }
+		}
+		cost = 25
+		days_remove = 60
+		days_re_enable = 30
+		modifier = {
+			stability_weekly = 0.002
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_answer_leaflets_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = NAM_campaign_answer_leaflets_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = NAM_campaign_answer_leaflets_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_campaign_answer_leaflets_slot_held }
+					clr_country_flag = NAM_campaign_answer_leaflets_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = NAM_campaign_answer_leaflets_slot_held }
+					clr_country_flag = NAM_campaign_answer_leaflets_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 3
+				has_stability < 0.60
+			}
+		}
+	}
+
 	NAM_campaign_oil_is_ours = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_open_ledgers
+			OR = {
+				has_completed_focus = NAM_open_ledgers
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_sand_runs_out
+				}
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2224,7 +3072,13 @@ NAM_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_open_ledgers
+			OR = {
+				has_completed_focus = NAM_open_ledgers
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_inventory
+				}
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2290,7 +3144,13 @@ NAM_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_open_ledgers
+			OR = {
+				has_completed_focus = NAM_open_ledgers
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_centre_hourglass
+				}
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2353,7 +3213,13 @@ NAM_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_service_state
+			OR = {
+				has_completed_focus = NAM_service_state
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_imperial_gendarmes
+				}
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -2416,7 +3282,13 @@ NAM_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_federal_charter
+			OR = {
+				has_completed_focus = NAM_federal_charter
+				AND = {
+					NAM_colony_phase = yes
+					has_completed_focus = NAM_oilfield_militia
+				}
+			}
 		}
 		available = {
 			NAM_country_operable = yes
@@ -3379,6 +4251,135 @@ ADISCORD_south_final_war_category = {
 
 # Yaroslav Weber's underground: the districts talk, the vertical hunts.
 NAM_underground = {
+	NAM_colonial_pipeline_guard = {
+		icon = generic_operation
+		allowed = { tag = NAM }
+		visible = {
+			has_country_flag = NAM_pipeline_guard_authorised
+			NAM_underground_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_print_network_active_tt
+				NAM_underground_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_underground_left_tt
+				check_variable = { var = NAM_underground value = 0 compare = greater_than }
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		days_remove = 60
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = NAM_colonial_pipeline_guard_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pipeline_guard_cancel_tt
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 2
+				check_variable = { var = NAM_underground value = 30 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	NAM_disrupt_print_supply = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_print_shop_raid
+			NAM_underground_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_print_network_active_tt
+				NAM_underground_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_underground_left_tt
+				check_variable = { var = NAM_underground value = 0 compare = greater_than }
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		days_remove = 60
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = NAM_print_supply_control_tt
+		}
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_print_supply_cancel_tt
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 2
+				check_variable = { var = NAM_underground value = 30 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	NAM_intercept_underground_couriers = {
+		icon = generic_operation
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_print_shop_raid
+			NAM_underground_open = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_print_network_active_tt
+				NAM_underground_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_underground_left_tt
+				check_variable = { var = NAM_underground value = 0 compare = greater_than }
+			}
+		}
+		cost = 40
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = NAM_courier_network_disrupted_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -12 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 4
+				check_variable = { var = NAM_underground value = 40 compare = greater_than_or_equals }
+			}
+		}
+	}
+
 	# Three rounds of talks end in the amnesty. Each round must finish while
 	# the network still exists and no uprising is open.
 	NAM_weber_talks_1 = {

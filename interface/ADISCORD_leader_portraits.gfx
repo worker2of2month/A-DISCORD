@@ -708,6 +708,19 @@ spriteTypes = {
 
 	###NAM
 	spriteType = {
+		name = "GFX_portrait_NAM_Yaroslav_Weber"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Yaroslav_Weber.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Yaroslav_Weber_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Yaroslav_Weber.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
 		name = "GFX_portrait_NAM_Egor_Rom"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom.png"
 	}

@@ -89,6 +89,379 @@
         "FAF_Rally_the_Imperial_Spirit.png"
       ],
       "palette_reference": "gfx/interface/goals/NAM/GFX_focus_NAM_inventory.png"
+    },
+    {
+      "file": "watch_reporting_officer.png",
+      "focus": "NAM_colonial_watch",
+      "generator": "Built-in image_gen",
+      "prompt": "Create ONE standalone transparent cutout layer for a Hearts of Iron IV focus named 'Colonial Guard Reports'. Reference 1 is the PRIMARY style: the restrained photographic pasted-collage people in SOV_fruits_of_the_motherland. Reference 2 is ONLY a NAM uniform/character reference, not its excessive gold lighting or oversharpened surface. Reinterpret the male colonial guard officer as a chest-up adult man in matte olive-grey field uniform, dark green collar and practical peaked cap, worn brown leather shoulder strap. He is turned slightly left, focused serious face, holding a compact black field-radio handset near his mouth with one naturally posed hand, actively reporting suspicious movements. Human skin remains natural subdued tan, fabric reads as cloth, black radio remains dark painted steel. Warm muted light from upper left, broad readable face and uniform planes, deep charcoal shadows under cap and lower torso. Match gritty photographic game collage with slight painterly retouching from reference 1. Moderate details, designed to read at a 150px final icon scale. Figure occupies most of canvas with head, cap, shoulders and hand fully present. Lower torso gently fades to alpha. ALL background genuinely transparent, no halo, no scene, no square backdrop. No golden metallic person, no glowing orange outline, no ornate trim, no medallion, no lens flare, no exaggerated pores, no paperwork, no tower, no text. Only one movable guard figure layer.",
+      "style_references": [
+        "SOV_fruits_of_the_motherland.png",
+        "SOV_expansion_of_security_state.png",
+        "SOV_eurasiaan_powerhouse.png"
+      ]
+    },
+    {
+      "file": "watch_report_dossier.png",
+      "focus": "NAM_colonial_watch",
+      "generator": "Built-in image_gen",
+      "prompt": "Create ONE separate transparent PNG cutout asset for NAM Hearts of Iron IV focus 'Colonial Guard Reports'. Match the supplied small game-icon references' gritty photographic propaganda COLLAGE treatment, broad readable shapes, restrained amber light and deep charcoal shadows. Subject is a partly open dark olive cardboard dossier with a substantial stack of cream paper intelligence reports, diagonally composed in a slightly frontal three-quarter view so the paper faces read clearly. Three slightly fanned report sheets, one small clipped black-and-white surveillance photograph of an oil pipeline and one rough black-line pipeline sketch with just two dark red incident marks on the top sheet. Small practical plain dark metal binder clip. The documents are the main shape, enough visual simplicity to read at 150px. Paper is real pale cream with gently worn edges, folder is matte olive and brown, ink is charcoal, incident marks muted red. Large simple indistinct typed lines only, no legible words, slogans or numbers. Lighting subdued warm on upper paper edges, lower half dark. No gold-plated paper, no glowing outline, no ornamental seal, no ribbons, no badge, no decorative medals, no person, no table, no map of a country, no fog, no background glow. All corners fully visible with transparent safety margin. Genuine transparent background and gaps. A separate report-dossier foreground layer for manual collage assembly, not a finished focus icon.",
+      "style_references": [
+        "SOV_fruits_of_the_motherland.png",
+        "SOV_expansion_of_security_state.png",
+        "SOV_eurasiaan_powerhouse.png"
+      ]
+    },
+    {
+      "file": "watch_oilfield_post.png",
+      "focus": "NAM_colonial_watch",
+      "generator": "Built-in image_gen",
+      "prompt": "Create ONE isolated transparent PNG BACKGROUND ARCHITECTURE LAYER for NAM Hearts of Iron IV focus 'Colonial Guard Reports'. Use the attached references' subdued gritty photographic collage buildings and industrial shapes, natural materials, broad tonal masses readable at small icon scale, deep charcoal shadows and selective muted ochre light. A compact colonial oilfield guard post: squat weathered grey concrete checkpoint building, an elevated small steel observation cabin above one side with a simple roof and thin antenna, a short chain-link fence section and one thick dark oil pipeline on supports passing along lower edge. Three-quarter frontal perspective, compact horizontal silhouette about 1.5:1. The checkpoint building and steel observation cabin form ONE cohesive recognizable structure. Cold dull olive painted steel, dusty warm grey concrete, black-brown pipe, sparse restrained amber edge light from upper left. Modest realistic utilitarian architecture, no elaborate tower or ornate design. No people, no flags, no logos, no text, no reports, no binoculars, no weapon emblem, no sun, no fog, no terrain base, no sky, no rectangle, no halo. Entire structure including supports fully visible with safe transparent margin. Background and spaces inside supports/fence genuinely transparent. Lower base can fade subtly into alpha. This is a movable supporting layer behind a separate guard portrait and dossier, NOT a completed focus composition.",
+      "style_references": [
+        "SOV_fruits_of_the_motherland.png",
+        "SOV_expansion_of_security_state.png",
+        "SOV_eurasiaan_powerhouse.png"
+      ]
+    },
+    {
+      "file": "weber_printing_press.png",
+      "focus": "NAM_print_shop_raid",
+      "generator": "Built-in image_gen",
+      "prompt": "ONE isolated transparent PNG asset for Hearts of Iron IV NAM focus 'Weber's Print Shop', about a raid on an underground leaflet printing shop. Use supplied references ONLY for restrained gritty photographic collage style and strong small-icon readability. Main subject: a compact vintage mechanical platen PRINTING PRESS, recognizably a printing machine, three-quarter frontal view. Large dark cast-iron flywheel on left, exposed ink roller and rectangular platen centrally, sloping paper-feed tray with ONE cream sheet on right, sturdy short base. Chunky coherent mechanical forms, 4-5 large visual masses, readable inside a 150px focus icon. Matte charcoal painted iron, worn steel moving parts, brown wooden feed tray, natural pale paper. Deep shadows, restrained warm amber light only on select upper left edges; metal stays black/grey, no all-gold treatment. Entire press and wheel fully visible within generous transparent safe margins. No person, hand, floor, walls, background, fog, glow, frame, emblem, typography, text or floating accessories. No gears as decorative symbols. Real transparent alpha outside the machine AND in the flywheel gaps. Separate movable printing-press cutout for manual collage assembly, NOT a finished scene or icon.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eurasiaan_powerhouse.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png"
+      ]
+    },
+    {
+      "file": "weber_underground_leaflets.png",
+      "focus": "NAM_print_shop_raid",
+      "generator": "Built-in image_gen",
+      "prompt": "Create ONE standalone transparent PNG foreground layer for the Hearts of Iron IV focus 'Weber's Print Shop', a discovered underground leaflet printing shop. The supplied images are style references for subdued photographic game collage, strong broad tonal shapes and restrained amber light. Subject ONLY: a substantial small stack of freshly printed cheap cream-paper LEAFLETS, with three top sheets loosely fanned and one corner curled up. Slightly tilted frontal three-quarter view so printed faces are visible. Top leaflet features a bold black woodcut illustration of a clenched worker's fist rising above a small oil derrick and simple heavy charcoal horizontal ink lines suggesting a short manifesto; a muted dark red diagonal printer's mark near a corner. No readable words or letters, no fictional gibberish, no real-party symbols. Natural warm off-white paper, black ink, subtly imperfect printing, a little ink staining, matte surfaces and broad readable contrast. Sparse warm light along upper paper folds, deep grey-brown shadows between sheets. Entire paper stack fully visible with safe margins. Genuine transparent alpha outside the sheets, no floor or table, no background haze, glow or rectangular backdrop. No printing press, no hands, no person, no folder, no gold paper, no metal trim, no decorative seal, no banner, no frame. Separate movable leaflet stack cutout for a 150px focus collage.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_expansion_of_security_state.png"
+      ]
+    },
+    {
+      "file": "weber_raid_flashlight_hand.png",
+      "focus": "NAM_print_shop_raid",
+      "generator": "Built-in image_gen",
+      "prompt": "ONE isolated transparent PNG gesture layer for NAM Hearts of Iron IV focus 'Weber's Print Shop', a night raid on a clandestine printing shop. Reference images specify gritty photographic cutout collage and restrained amber illumination, natural materials, broad readable shapes. Subject ONLY: a gendarme's forearm entering from upper RIGHT, wearing a practical muted olive-grey wool sleeve and worn dark brown leather glove, gripping a short vintage cylindrical black metal flashlight. Flashlight points diagonally DOWN-LEFT toward where separate papers will be placed in a manual collage. Clear plausible hand anatomy, natural firm grip, complete flashlight including its wide round lens visible, three-quarter side view; gloved hand and flashlight are the main compact masses. Flashlight lens softly lit warm cream, a tiny subtle translucent glow immediately at lens ONLY, no long beam. Sleeve upper end gently fades to transparent alpha rather than a hard crop. Natural matte cloth and leather, dark painted steel with selective small amber highlights, deep charcoal shadows. No gold-plated metal, no glowing orange outline, no exaggerated fine grain. Entire visible gesture fits inside canvas with safe margin. No face, body, gun, papers, press, background, fog, room, floor, text or frame. Genuine transparent background and gaps around fingers and wrist. A separate movable cutout layer, NOT a completed focus icon. Broad shape designed to remain legible at 150px.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_expansion_of_security_state.png"
+      ]
+    },
+    {
+      "file": "weber_traitor_portrait.png",
+      "focus": "NAM_print_shop_raid",
+      "generator": "Built-in image_gen",
+      "prompt": "Edit reference 1 into ONE monumental political-propaganda PORTRAIT CUTOUT for a Hearts of Iron IV focus. Reference 1 is the ACTUAL in-game portrait of fictional Yaroslav Weber and MUST control identity. Preserve his recognizable exact facial structure, side-parted dark brown hair swept back, clean-shaven face, firm mouth, head angle and stern gaze, high-collared black/navy military tunic with burgundy red collar and panels and restrained gold piping. Do not substitute another man, do not add a cap, beard, glasses or different uniform. Faithfully upscale and restore the small reference portrait, removing scanlines. Reference 2 establishes the dramatic photographic retouched political collage style; reference 3 establishes monumentality and strong tonal masses ONLY, do not copy its eagle or map. Frame a commanding very large head-and-upper-chest portrait, shoulders broad, face dominant. The portrait fills almost the entire canvas but keep hair and shoulders fully visible with safe margin. Powerful sculpted directional pale amber light from upper left, dramatic deep charcoal shadow on opposite side, natural skin, rich near-black cloth and deep burgundy, subtle warm edge light, no glowing neon contour, no gold skin or ornate frame. Across BOTH EYES paint ONE bold rough CRIMSON RED BRUSH STROKE, slightly rising left-to-right, as if the face was defaced by state propaganda marking a traitor. Stroke covers the eyes and extends slightly past the temples, has forceful torn brush edges, opaque red core and a few dry-brush gaps. This is paint applied on top of a portrait, NOT an injury, blood, blindfold, glasses or physical object. Preserve nose, mouth, jaw and hair clearly recognizable. No words or lettering. Small lower edge of torso dissolves into dark translucent wisps for collage integration. Genuine transparent background, no rectangular backdrop, no poster paper, no sun, no architecture, no weapons, no folders or printing press. This is a single reusable portrait asset with crossed-out eyes, NOT a complete assembled focus composition. Aim for the grandiose instantly legible political image in a 150px game icon, not a little inventory object or neutral character portrait.",
+      "identity_reference": "gfx/leaders/Forul/Portrait_Forul_Generic_9.png",
+      "style_references": [
+        "SOV_fruits_of_the_motherland.png",
+        "SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "weber_clean_portrait.png",
+      "character": "Yaroslav Weber",
+      "generator": "Built-in image_gen",
+      "prompt": "Create a NEW ORIGINAL character portrait of fictional YAROSLAV WEBER for a Hearts of Iron IV total-conversion mod. References are STYLE AND CROPPING ONLY, not identities: do not copy either man's face, outfit or rank. Weber is a humanist political organizer and leader of an underground movement among oilfield workers, an opponent of the colonial governors. He has spent years organizing printers, couriers, strikes and clandestine networks, and can later become a civilian national leader. Invent a distinctive believable man aged about 45-50: a lean slightly elongated face, pronounced cheekbones, substantial straight nose with a slight natural asymmetry, tired attentive grey eyes, thick dark eyebrows, dark brown wavy hair brushed to the side with restrained grey at temples, a short neatly kept dark moustache with a hint of grey, clean-shaven cheeks and chin. Quiet commanding expression, intelligent, stubborn and wary, lips closed, looks slightly to viewer's right. Human and credible, not caricature, not villain sneer, not a handsome generic soldier. Clothing: worn dark charcoal-brown civilian wool jacket over a muted warm grey shirt, top button open, no tie; an understated dark olive waistcoat visible at chest. Practical and modest but composed as a political leader, no dirty costume, no military uniform, no epaulettes, no medals, no hat, no badges or weapons. Chest-up portrait, head and shoulders fully inside frame, upright posture, slight three-quarter angle, plenty of chest for native HOI4 portrait cropping, vertical roughly 3:4 composition. Grounded photorealistic historical portrait with subtle hand-painted retouching, broad softly modeled facial planes suitable for reduction to 156x210, subtle film grain only, no harsh pores, no oversharpened skin or CGI plastic. Soft neutral-warm key light from upper left, subdued cool shadows, natural skin colors, restrained contrast. No golden rim light or orange glow. Genuine transparent background around the complete figure, clean shoulder silhouette with modest safe margin. Hair and head fully visible, no cut crown. No scene, no paper, no text, no letters, no red brush stripe, no crossed-out eyes, no propaganda overlay. This is the clean canonical personal portrait, reusable for character UI and future focus art.",
+      "references": [
+        "gfx/leaders/NAM/portrait_NAM_Egor_Rom.png",
+        "gfx/leaders/NAM/portrait_NAM_Grigory_Levashov.png"
+      ],
+      "usage": "Original clean character portrait for leader UI export and focus compositions."
+    },
+    {
+      "file": "weber_traitor_portrait_v2.png",
+      "focus": "NAM_print_shop_raid",
+      "generator": "Built-in image_gen",
+      "prompt": "Edit IMAGE 1, the new canonical clean portrait of Yaroslav Weber with moustache and civilian brown coat. IMAGE 2 is STYLE OF RED PAINT AND LIGHTING ONLY; absolutely do not copy image 2's clean-shaven man's face or military uniform. Preserve image 1's exact identity, grey-templed wavy hair, moustache, facial proportions, head angle, brown civilian jacket, grey shirt and olive waistcoat. Add ONE bold rough crimson red paint brush stroke across BOTH EYES, rising slightly left-to-right, extending just beyond both temples, like image 2. Opaque strong red central band with dry-brush ragged edges. This is defacement of a political portrait with PAINT, not blood, injury or blindfold. Intensify portrait lighting toward image 2: sculpted warm amber side light from upper left, deeper charcoal shadows, restrained warm edge light, natural skin and fabric. Face stays dominant and recognizable, nose, moustache and mouth unobscured. Monumental forceful political collage asset, broad tonal masses readable at 150px. Keep full head and shoulders with safe margin, lower coat subtly dissolving to dark transparent wisps. Genuine transparent background and preserve alpha. No background scene, text, paper, objects, uniform changes or new symbols. Output ONLY the new Weber portrait with crossed-out eyes as a separate movable layer.",
+      "identity_reference": "tools/assets/source/focus_icons/NAM/weber_clean_portrait.png",
+      "style_reference": "weber_traitor_portrait.png",
+      "variant": "Canonical civilian Weber with red paint across the eyes."
+    },
+    {
+      "file": "order_oilfield_worker.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract/reconstruct ONLY the oilfield WORKER on the LEFT of this reference as one independent transparent PNG layer. Preserve this exact bearded mature man's identity, leftward gaze, dark steel industrial helmet, worn olive work jacket, grey undershirt, pose and warm directional lighting. Monumental chest-up photographic political collage figure, broad readable face and shoulders, same natural flesh and matte cloth. Reconstruct both shoulders and full lower chest hidden by the pipe and fog. Keep entire helmet, head and shoulders within frame with safe margins. Upper body fills most of canvas. Clean cutout around silhouette, bottom torso gently fades to alpha. Genuine transparent background. Remove absolutely EVERYTHING else: other man, sun, refineries, derricks, pipe, valve, train, fog, smoke, halo, ground. No separate objects or environment in this asset. Only the single worker portrait layer, faithful to the reference. No text or frame.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_colonial_guard.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract/reconstruct ONLY the colonial GUARD on the RIGHT of this reference as one independent transparent PNG layer. Preserve this exact clean-shaven man's identity, rightward gaze, olive-grey peaked cap, dark green uniform collar, plain tie, brown leather cross-body strap, shoulder tabs and pose. Natural skin and matte cloth, restrained brass fastenings, strong amber directional edge lighting and deep charcoal shadows matching reference. Monumental chest-up photographic political collage figure. Reconstruct complete lower chest and both shoulders hidden by other figure, fog and buildings. Entire cap, head and shoulders within canvas with safe margins. Figure fills canvas, bottom torso subtly fades into alpha. Genuine transparent background. Remove absolutely EVERYTHING except this one man: worker, sun, industrial buildings, derricks, fog, train, pipe, halo, landscape. No radio, weapons, new accessories, text, insignia or frame. Only the single guard portrait layer, NOT an assembled icon.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_industrial_skyline.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract and reconstruct ONLY the industrial OILFIELD AND REFINERY ARCHITECTURE from this reference as one independent transparent PNG background layer for manual focus collage assembly. Broad monumental industrial skyline: tall lattice oil derricks at left and right sides, a grouped cluster of vertical refinery columns and chimneys in center, low pipe racks and tanks at base. Reconstruct all architecture hidden behind the two men, pipe and train. Keep a cohesive readable grouping, tall silhouettes with simpler low masses, approximately 1.7:1 wide. Natural dark charcoal steel, warm bronze edge highlights and strong amber directional backlighting ON THE METAL ONLY, preserve deep recesses. Same photographic game-collage treatment as reference. Entire structures including derrick tops inside safe margins. Genuine transparent background, including gaps between towers. Architecture ONLY: no people, portraits, train, foreground large pipeline or valve, sun, rays, sky, smoke, fog, fire, ground plane or atmospheric halo. No frame, text or completed scene. One separately movable industrial skyline layer; lighting/fog/sun will be added as other assets.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_pipeline_valve.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract/reconstruct ONLY the large FOREGROUND PIPELINE WITH VALVE from lower left of this reference, as one separate transparent PNG. Preserve its strong receding perspective: thick dark rusty oil pipe enters from near left foreground, large bolted flange and upright chunky valve body with a round HORIZONTAL handwheel above it, then connected pipe sections narrow toward the lower-right distance. Show 3-4 short pipe sections on low concrete supports, terminate them cleanly inside frame rather than infinite cropped ends. Large valve and wheel are dominant. Weathered black iron and muted reddish rust, warm amber directional highlights, deep charcoal recesses, same monumental photographic game-collage style. Entire handwheel, flanges, pipe ends and supports visible with safe padding. Genuine alpha transparency around pipe and through wheel openings. No figures, train, buildings, towers, sun, light beams, fog, smoke, ground, background glow, text or frame. ONLY this one pipe-and-valve assembly as a movable foreground layer, not an assembled composition.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_tank_wagons.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract/reconstruct ONLY the railway TANK WAGONS from the lower-right of this reference as ONE independent transparent PNG layer. Two connected cylindrical oil tank railcars, nearest large rounded tank end at RIGHT foreground, second smaller wagon receding toward LEFT background. Preserve the exact three-quarter perspective and warm industrial atmosphere from the reference. Show complete tanks, ladders, upper safety walkways, wheels, bogies and couplings, all fully inside safe canvas margins. Dark charcoal-brown painted steel with selective warm amber highlights and deep shadows, clearly modeled large cylindrical shapes, readable photographic HOI4 game-collage style. Keep two very short bare rails immediately beneath wheels if necessary, no ballast or landscape base. No locomotive, people, pipe, refinery, buildings, derricks, sun, fog, smoke, halo, sky, text or numbers. Genuine transparent alpha everywhere outside rolling stock and tiny rail segments, including gaps between wheels and undercarriage. Natural dark steel, not gold-plated. A separate train cutout only, not an assembled scene.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_dawn_sun.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Create ONLY the pale golden SUN AND SOFT DAWN LIGHT from this reference as a standalone transparent PNG lighting layer. Reconstruct a full clean round luminous pale cream-yellow sun disk, softly textured with a few extremely subtle horizontal warm atmospheric bands, warm amber near lower rim. Around disk a restrained soft golden glow and a few broad faint diffuse dawn rays, dissolving smoothly into genuine alpha on all sides. Complete disk centered with generous transparent padding. Dominant round pale sun should remain clearly readable behind separately placed portraits and industrial architecture. This is an isolated optical/lighting layer, NOT a metal coin or badge, no ornamental rings, no face, no hard star spikes. Absolutely no people, silhouettes, helmets, refineries, derricks, pipeline, railway wagons, clouds, fog bank, landscape, text or background rectangle. Extract/reconstruct the light only, never the assembled composition.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "order_foreground_fog.png",
+      "focus": "NAM_colony_order",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract/reconstruct ONLY the low rolling industrial FOG from the bottom of this reference as an independent transparent PNG VFX overlay. Broad low horizontal bank, visible plume about 3.5:1 wide, uneven curling amber-ochre wisps, muted pale honey highlights on top, darker warm grey-brown lower billows. Dense enough in patches to partly hide foundations but predominantly translucent and airy with open thinner areas. Natural industrial dust and mist, not flames, explosion, solid dirt or an opaque golden slab. ALL outer edges fade smoothly into true alpha zero with transparent safe margin. Preserve the reference's warm atmospheric appearance but no light source or sun baked in. Absolutely no human faces, bodies, silhouettes, pipe, wheel, train, buildings, derricks, ground, rails, horizon, sun, rays, text, frame or rectangular backdrop. Just one standalone smoke/fog overlay to move independently over other PNG assets.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-f6903165-bed3-4c03-a7bf-48ae4d607846.png"
+    },
+    {
+      "file": "trade_house_monumental_exchange.png",
+      "focus": "NAM_wrk_trade_house",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. A monumental colonial trading-house headquarters in the metropole: imposing five-storey stone commercial palace, broad central entrance, tall orderly windows, modest stepped roofline and loading arcade at base. Slight dramatic low-angle three-quarter view. Weathered pale sandstone and charcoal roofs, small bronze fittings. Whole building isolated, no street, people, flags, letters or background. Make large architectural masses readable; dignified commercial power.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "trade_house_merchant.png",
+      "focus": "NAM_wrk_trade_house",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One imposing chest-up mature colonial oil merchant, about 55, broad face, receding dark hair greying at temples, neatly trimmed beard, thoughtful commanding expression, three-quarter gaze left. Dark brown civilian three-piece suit and ivory shirt, understated burgundy tie, no medals. One hand extends forward in a confident negotiating gesture, no prop. Complete head and shoulders, lower torso softly fading. Natural skin and fabric. A fictional original merchant, not a known person.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "return_cargo_freighter.png",
+      "focus": "NAM_wrk_return_cargo",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental dark steel cargo freighter arriving loaded, dramatic three-quarter bow view, bow at lower right and stern receding left. Two simple deck cargo derricks and a few big timber shipping crates visible on deck, cream bridge and dark funnel. Full vessel visible with safe margins. No water, wake, harbour, sun, sky, fog or people. This ship carries factory machinery back to the colony; make its broad hull and crane shapes readable.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "return_cargo_suspended_machine.png",
+      "focus": "NAM_wrk_return_cargo",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One large industrial machine-tool LATHE on a heavy timber shipping skid, suspended securely by four taut dark lifting chains converging toward a visible hook above. Dark olive cast iron, exposed steel chuck, simple handwheels, restrained amber highlights. Three-quarter frontal perspective. Machine, skid, chains and hook form one coherent suspended cargo layer, all fully visible. No crane structure, people, background, ground, ship, mist or letters.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "depots_arsenal_gate.png",
+      "focus": "NAM_metropolitan_depots",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One imposing military arsenal warehouse facade: massive grey stone industrial arch, heavy steel sliding doors open, interior deep dark with a restrained pool of amber light showing a few broad shelving silhouettes. Monumental low-angle view, compact complete freestanding building shape with roof and sidewalls. No people, weapon crates outside, flags, emblems, letters, landscape or haze. Natural rough stone and dark painted iron.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "depots_rifle_crate.png",
+      "focus": "NAM_metropolitan_depots",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One open substantial wooden military supply crate containing six visible wood-stock service rifles standing diagonally in tidy parallel arrangement, a folded khaki equipment roll in one corner. A large readable triangular group, natural rough brown timber, dark blued steel and walnut rifle stocks, no gold weapons. Entire crate and rifle barrels visible. No hands, soldiers, warehouse, background, ground or fog. A single movable supplied-weapons asset.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "gendarmes_commander.png",
+      "focus": "NAM_imperial_gendarmes",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental waist-up imperial gendarme commander. Mature severe clean-shaven fictional man wearing a dark charcoal steel service helmet with plain rim, dark olive closed-collar tunic, thick brown leather cross-belt and restrained brass buttons. Gloved hands rest firmly on a vertically held wood-stock rifle, muzzle upward to side of shoulder. Strong looming three-quarter view, hard watchful expression, no smile. Keep head, helmet, hands and rifle inside margins. No emblem, cape, gas mask, red eyes, scene or background. Natural skin, cloth and metal.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "gendarmes_marching_column.png",
+      "focus": "NAM_imperial_gendarmes",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One compact COLUMN OF FOUR imperial gendarmes marching toward viewer, front man largest, others stepping back diagonally. Full figures, plain dark steel helmets, olive-grey closed-collar coats, brown leather belts, wood-stock rifles carried vertically by sides. Faces subordinate and mostly in cap shadows, no exaggerated features. Tight monumental triangular silhouette suitable behind a separate commander portrait. Natural proportions. No ground, flags, text, background, fog or extra leader.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "militia_armed_driller.png",
+      "focus": "NAM_oilfield_militia",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One heroic waist-up oilfield driller turned local militiaman: sturdy 40-year-old man, dark stubble, worn canvas work cap, faded olive work shirt with sleeves rolled and dark brown work vest. Holds a wood-stock service rifle across chest with both hands, alert protective expression, gaze right. A worker defending his own oilfield, modest and resolute. Complete head, shoulders, hands and rifle; no medals or army uniform. No background, other people, smoke, derrick, emblems or text.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "militia_field_barricade.png",
+      "focus": "NAM_oilfield_militia",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One compact improvised oilfield guard barricade with low stacked timber sleepers, three dark oil drums, simple sandbag breastwork and a tall narrow unlit industrial lamp pole at one side. Solid broad chunky silhouette, slightly low three-quarter view, dark natural wood and weathered grey-brown canvas. No people, rifles, flag, background, landscape, derrick, clouds, text or ground plane. Whole defensive structure visible. This is a single coherent field-defense architecture layer, not separated objects on a sheet.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "patrol_pipeline_walker.png",
+      "focus": "NAM_pipeline_patrols",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One full-height pipeline patrolman walking attentively toward left, weathered adult man in practical olive-brown field jacket, canvas cap and brown boots, small leather shoulder bag. One hand holds a short coil of leash ending cleanly beside hand; no dog in this asset. Other hand holds a compact black inspection flashlight pointed down. Natural purposeful walking posture, complete head-to-boots figure inside margins. Dramatic natural warm light, no ground, pipeline, telephone box, landscape, fog or text. Not a military parade pose.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "patrol_watchdog.png",
+      "focus": "NAM_pipeline_patrols",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One strong alert sable-and-black shepherd working dog, full body with erect ears, looking left, standing in a purposeful three-quarter side view. Plain brown leather working collar with a small ring, no dangling leash. Natural realistic fur in broad tonal masses, warm amber side light and deep shadows. Entire ears, tail and all four paws visible with safe margins. No person, pipeline, ground, grass, scene, text or atmospheric glow. Single independently movable animal cutout.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "patrol_emergency_telephone.png",
+      "focus": "NAM_pipeline_patrols",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One imposing narrow oilfield emergency telephone post: weathered dark olive metal cabinet mounted on a stout steel pole, small sloped protective roof, cabinet door open revealing a black wired handset and a simple large rotary dial. A short industrial cable runs down pole. Whole structure visible, no readable labels. Matte painted steel and dark rubber, selective amber highlights. No person, dog, pipeline, landscape, ground, sky or smoke. Compact readable vertical silhouette.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "commissioner_severe_official.png",
+      "focus": "NAM_commissioner_plan",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental chest-up emergency commissioner: original fictional man about 60, gaunt angular face, swept-back grey hair, thin lips and stern impassive expression. Black civilian high-buttoned administration jacket over ivory shirt and dark tie, no medals or emblems. One hand poised palm-down as if demanding compliance, no object in hand. Three-quarter facing left, full head, shoulders and hand, lower torso gently fades to alpha. Natural fabric and skin, deep authoritative shadows. No desk, document, scenery, halo or text.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "commissioner_requisition_plan.png",
+      "focus": "NAM_commissioner_plan",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One large upright slightly tilted official requisition PLAN sheet on a dark rigid backing board, pale ivory paper with three broad heavy ruled rows, abstract ink marks without readable letters or numbers, and one conspicuous large rectangular burgundy approval stamp at bottom right. Paper and simple board form a bold monumental single silhouette. Two plain metal clips at top. Natural paper and dark wood, strong warm light at upper edge. No hand, stamp tool, portrait, train, background, gold trim or heraldic emblem.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "second_ledger_secret_book.png",
+      "focus": "NAM_second_ledger",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One large thick open SECRET ACCOUNT BOOK, dark burgundy worn leather binding, cream pages with heavy ruled accounting columns and abstract faint handwriting, no legible words or numerals. A loose second thin ledger sheet is partly concealed under the right page, unmistakably a hidden second set of accounts. Dramatic three-quarter view, large pages dominate, one muted dark red cloth bookmark. Entire book visible, strong light across paper and deep shadow in spine. No coins, person, hand, desk, background, seal, sun or fog.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "second_ledger_accountant.png",
+      "focus": "NAM_second_ledger",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One imposing chest-up clandestine oil-company accountant: original fictional man in his late 40s with neatly side-parted dark hair, thin round spectacles and short moustache, cautious concentrated expression, gaze down-left. Dark charcoal civilian waistcoat over a warm-grey rolled-sleeve shirt, discreet dark tie. One hand holds a fountain pen near lower chest ready to write, but no book or paper in this layer. Full head, shoulders and hand, lower torso softly fades. Natural skin and cloth. No gold skin, neon outline, desk, scene or text.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "instructors_senior_officer.png",
+      "focus": "NAM_metropolitan_instructors",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental waist-up metropolitan military instructor: original fictional veteran about 50, close-cropped greying hair beneath a plain olive-grey peaked cap, lean commanding face, dark green standing collar, olive service tunic and brown leather belt. One arm extends a wooden pointer diagonally toward lower left as he firmly explains drill, other arm relaxed. Head, hand and complete pointer visible within canvas. Natural stern professional expression, no medals or national emblems. No cadets, chalkboard, paperwork, scene, ground or fog.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "instructors_garrison_drill.png",
+      "focus": "NAM_metropolitan_instructors",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One disciplined close-rank group of FIVE young garrison recruits practicing rifle drill, front recruit largest and other four receding to left. Full figures, simple olive uniforms, field caps, brown belts, wood-stock service rifles held across chest in matching precise positions. Compact wide triangular mass, readable large silhouettes and subordinate faces, natural anatomy. No instructor, flags, buildings, ground, background, smoke, text or symbols. A separately movable formation cutout.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "quiet_lists_conspiratorial_officer.png",
+      "focus": "NAM_quiet_officer_lists",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental chest-up loyal local staff officer discreetly reviewing an unseen list: original fictional adult man around 40, tired wary face, short dark hair without cap, olive-grey uniform with dark green collar, brown leather shoulder strap. Looking down and slightly right, lips closed, thoughtful rather than theatrical. One hand near chest holds a plain dark pencil; no paper included. Strong narrow warm light on face, most uniform in charcoal shadow. Full head and shoulders, natural skin, no badges, background, person, halo or text.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "quiet_lists_personnel_register.png",
+      "focus": "NAM_quiet_officer_lists",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One substantial open personnel register folder with several ivory roster pages, a conspicuous folded dark olive cover, a small clipped black-and-white generic officer headshot and five broad lined roster rows with tiny dark check marks. All writing abstract and unreadable, no specific names or numbers. At top, a loose innocent-looking blank leave slip partly covers the roster. Slightly oblique frontal angle, bold paper silhouette. Natural paper and dark cardboard. No portrait person, hand, badge, stamp, background or ornamental gold.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "last_register_departing_courier.png",
+      "focus": "NAM_last_centre_register",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental three-quarter waist-up departing government courier: original fictional mature man in dark charcoal travel overcoat, muted burgundy scarf, close-cropped greying hair, solemn composed expression looking left. One hand grips the shoulder strap of a substantial brown leather dispatch satchel worn at his side, other hand rests at coat. Full head, shoulders, hand and visible satchel inside margins. Natural travel-worn cloth and leather, last warm light at one edge and deep shadow. No crown, medals, writing, scenery, other figures, clock or fog.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
+    },
+    {
+      "file": "last_register_closed_archive.png",
+      "focus": "NAM_last_centre_register",
+      "generator": "Built-in image_gen",
+      "prompt": "Generate ONE separate transparent PNG asset for a monumental Hearts of Iron IV NAM focus collage. References establish only the grandiose photographic propaganda style: heroic scale, dramatic layered realism, strong pale amber directional lighting, deep charcoal/olive shadows, broad readable forms for a 150px icon. Preserve natural skin, paper, fabric, wood and dark steel; golden light is selective, objects are not gold-plated. Match the supplied style, not generic fantasy inventory art. Isolated subject only, no assembled icon, no sheet of variants. Genuine alpha-zero background and open gaps; no rectangular backdrop, horizon, atmospheric halo, text, letters, logos, ornamental badge or frame. Whole subject inside generous safe transparent margins. One monumental thick CLOSED government registry book in worn deep burgundy leather, broad spine, several ivory paper tabs projecting from edges, tied securely with a dark cloth archival ribbon and a simple rectangular paper seal with a small burgundy ink mark. No readable words, numbers or heraldic signs. A single ivory final inventory sheet protrudes below the book. Dramatic three-quarter angle and clear large silhouette, natural leather and cream paper, restrained small brass corner protectors. No hand, courier, bag, background, desk, clock or gold ornament.",
+      "references": [
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
+        "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
+      ]
     }
   ],
   "shared_style_history": [
@@ -215,6 +588,7 @@
     },
     {
       "focus_id": "NAM_print_shop_raid",
+      "export_runtime": false,
       "file": "nam_print_shop_raid_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. WEBER'S PRINT SHOP: heavy old black printing press seen three-quarter view, broad flywheel at left and printing platen at center; a warm lantern held by a gloved hand entering upper right illuminates a small fan of fresh ivory underground leaflets caught on the rollers. Press is large clear silhouette, no readable writing, no political emblems. A discovered clandestine press, smoky low industrial atmosphere, black ink, dull steel and paper.",
       "sprite": "GFX_focus_NAM_print_shop_raid",
@@ -309,5 +683,290 @@
       "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_centre_hourglass.png",
       "sha256": "fe07169e1ded3af47e84a6160999ba51217beedb130a2bd4a426a12e3793156d"
     }
-  ]
+  ],
+  "individual_focus_layers": [
+    {
+      "file": "quota_locomotive.png",
+      "focus": "NAM_deliver_the_quota",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The black diesel locomotive ONLY, three-quarter front view, complete engine including all wheels and rear end. Remove all tank wagons, rails, fog and ground. Preserve the reference engine design. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_deliver_the_quota_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "quota_tank_wagon.png",
+      "focus": "NAM_deliver_the_quota",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: ONE complete cylindrical railway oil tank wagon, three-quarter view, including steel chassis and all wheels. No locomotive, tracks, steam or ground. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_deliver_the_quota_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_storage_tank.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The tall cylindrical riveted oil storage tank ONLY, complete tank with top and base. Remove worker, drums, tarpaulin, foreground props and fog. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_concealed_reserve_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "nam_puppet_hanging_flag.png",
+      "focus": "NAM_shared",
+      "prompt": "Use case: precise-object-edit / compositing. Create ONE separate hanging NAM puppet-state flag PNG asset, transparent background. Image 1 is the EXACT authoritative NAM flag graphic: orange field, white mountain silhouette across lower middle, dark navy semicircular rising sun with its short detached rays above the mountain, solid dark navy bottom stripe. Preserve this simple graphic precisely, exact emblem silhouette, ray count/layout and the color-region arrangement. Image 2 is ONLY the hanging cloth shape and material reference: wide horizontal rectangular cloth pinned at the two upper corners, center of top edge sags gently, natural draped fabric folds and slight lower edge sag, frontal view. Replace ALL of image 2's red cloth design, eagle and lettering with the design from Image 1. NO text, no eagle, no extra heraldry, no gold trim, no pole, no ropes, no wall, no props. Natural woven fabric and seams, subtle realistic fabric shading and restrained warm amber edge illumination matching NAM focus assets, keep orange/ivory/navy material colors clean. Graphic should follow cloth folds without getting distorted beyond legibility. Full flag visible with small transparent padding on all edges, landscape aspect, approximately 3:2. True alpha-transparent outside the cloth, NO dark rectangle, no glow, no halo, no background shadow. This is an independent movable flag layer for manual focus-icon assembly, not a finished icon or scene. Final alpha extraction: Remove the entire background from this image. Keep ONLY the hanging orange, ivory and navy NAM cloth flag. Preserve the exact existing flag design, folds, fabric texture, colors, shape and stitching without any artistic changes. Everything outside the physical cloth silhouette, including all orange glow and blue gradient around it, must become fully transparent alpha zero. Clean antialiased cloth edges. Do not add any scenery, shadows, glow, outline or backdrop. Output a genuine transparent PNG cutout.",
+      "reference": "gfx/flags/NAM.tga; tools/assets/source/country_flags/RUS_hanging/khan_hanging_flag_realistic_finish.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_worker.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The oil worker holding up the tarpaulin, as one isolated character-and-cloth action layer. Preserve face, clothing, pose; reconstruct torso/legs hidden by drums so the whole standing worker is available. No tank, barrels, ground or fog. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object. Critical: background must be completely empty alpha zero, no amber gradient outside the object silhouette. Do not retain lighting backdrop from reference.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_concealed_reserve_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "watch_officer.png",
+      "focus": "NAM_colonial_watch",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The uniformed colonial officer portrait ONLY, head and shoulders/bust, looking to the left as in reference. Natural skin and dark olive clothing; remove binoculars, papers, tower and background. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object. Critical: background must be completely empty alpha zero, no amber gradient outside the object silhouette. Do not retain lighting backdrop from reference.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_colonial_watch_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "watchtower.png",
+      "focus": "NAM_colonial_watch",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The wooden guard watchtower ONLY, complete top lookout, supports and ladder down to ground level. No people, landscape, fence, sun or fog. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object. Critical: background must be completely empty alpha zero, no amber gradient outside the object silhouette. Do not retain lighting backdrop from reference.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_colonial_watch_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "watch_binoculars.png",
+      "focus": "NAM_colonial_watch",
+      "prompt": "Use case: background-extraction. Input image is the EDIT TARGET and authoritative style reference. Deliver ONE standalone movable PNG layer for manual NAM HOI4 focus-icon assembly, NOT a finished composition, NOT an asset sheet. Extract and faithfully reconstruct ONLY the requested subject: The large black binoculars ONLY, complete object in the same three-quarter angle. No papers, map, officer, tower, tabletop or background. Keep the reference's shape, camera angle, natural materials, warm amber highlights and charcoal shadows. Reconstruct occluded parts plausibly to make this layer independently usable. Genuine transparent alpha everywhere outside the subject, including holes/gaps. No backdrop, ground shadow, atmospheric halo, frame, label, watermark or added text. Full subject inside canvas with safe margin, large and detailed, no crop through any requested object. Critical: background must be completely empty alpha zero, no amber gradient outside the object silhouette. Do not retain lighting backdrop from reference.",
+      "reference": "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_colonial_watch_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "locomotive_wheel_dust.png",
+      "focus": "NAM_deliver_the_quota",
+      "prompt": "Create ONE separate reusable transparent PNG VFX layer: dust stirred up by locomotive wheels, for manual assembly of the NAM Hearts of Iron IV focus icon in the reference. Reference is ONLY for palette, lighting and perspective; do NOT draw ANY train, wheels, track, factory, ground or other solid objects. ONLY DUST. Very low, long horizontal plume, roughly 5:1 width-to-visible-height ratio, framed on a wide canvas with clear transparent margins. Main locomotive front will sit at RIGHT, trailing dust sweeps gently LEFT. A few small rolling puffs low at right-center, blending into finer wisps toward left; irregular broken silhouette with transparent gaps. Predominantly dark muted umber and warm charcoal brown dust, restrained ochre/amber highlights only along upper edges, no bright white smoke, no yellow fire, no glowing orange cloud. Volumetric realistic fine particulate dust, broad readable forms suitable for a 150px game collage. Semi-transparent throughout, thinner toward top, left and bottom; soft natural alpha falloff on ALL sides. Medium density near lower center but no opaque muddy slab, no hard baseline. Transparent spaces between puffs so train wheels can remain readable when overlaying. NO baked background of any color, no black rectangle, no vignette, no shadow plane, no typography. Deliver actual RGBA transparency with alpha zero outside plume. Asset by itself, not a composition or mockup.",
+      "reference": "C:/Users/Admin/Desktop/nam_deliver_the_quota_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_storage_tank_v2.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "For NAM Hearts of Iron IV focus 'Reserve outside the accounts'. Produce ONE independent transparent PNG cutout layer for manual collage assembly. Match dark photographic game collage with broad readable tonal masses, matte natural materials, muted ochre/amber lighting and deep charcoal-brown shadows. Preserve visible detail when reduced inside a 150x150px icon. Restrained warm light only on selected edges, never all-gold material or continuous neon-orange outline. No frame, lettering, decoration, scene or assembled icon. Full object within safe transparent margins. Genuine alpha-zero background and holes, no atmospheric halo, no background gradient, no ground shadow. EDIT input tank only: preserve its cylindrical riveted structure, attached ladder, circular top railing and perspective. Change the glaring gold/bronze surface to dark worn steel with muted olive-gray paint and subtle umber weathering. A broad restrained ochre side-light on the right provides volume; left side charcoal, midtones sufficiently visible. Simplify tiny speckled rust into broader weathered patches. Keep complete tank including base and transparent spaces inside railings. No worker, tarpaulin, barrels, pipes detached from tank, crates, fog, sun or environment.",
+      "references": [
+        "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\focus_icons\\NAM\\reserve_storage_tank.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_worker_v2.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "For NAM Hearts of Iron IV focus 'Reserve outside the accounts'. Produce ONE independent transparent PNG cutout layer for manual collage assembly. Match dark photographic game collage with broad readable tonal masses, matte natural materials, muted ochre/amber lighting and deep charcoal-brown shadows. Preserve visible detail when reduced inside a 150x150px icon. Restrained warm light only on selected edges, never all-gold material or continuous neon-orange outline. No frame, lettering, decoration, scene or assembled icon. Full object within safe transparent margins. Genuine alpha-zero background and holes, no atmospheric halo, no background gradient, no ground shadow. EDIT input worker holding tarpaulin. Preserve exactly one worker, raised arm firmly gripping the heavy cloth, cap, back/side view and complete full-body pose. Restore anatomically coherent hand and grip if needed. Use desaturated brown-gray work clothes, muted olive-brown tarpaulin and natural skin. Reduce harsh orange edge highlights substantially, keep warm light softly defining shoulder, arm and the upper cloth folds. Remove the entire amber halo behind him, alpha zero there. Cloth is part of this one movable gesture layer. No tank, barrels, crates, fog, ground or other people.",
+      "references": [
+        "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\focus_icons\\NAM\\reserve_worker.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_covered_crates.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "For NAM Hearts of Iron IV focus 'Reserve outside the accounts'. Produce ONE independent transparent PNG cutout layer for manual collage assembly. Match dark photographic game collage with broad readable tonal masses, matte natural materials, muted ochre/amber lighting and deep charcoal-brown shadows. Preserve visible detail when reduced inside a 150x150px icon. Restrained warm light only on selected edges, never all-gold material or continuous neon-orange outline. No frame, lettering, decoration, scene or assembled icon. Full object within safe transparent margins. Genuine alpha-zero background and holes, no atmospheric halo, no background gradient, no ground shadow. Extract/reconstruct ONLY the concealed wooden supply crates from lower left of the reference. A low compact grouping of two wooden crates mostly covered by ONE heavy draped olive-brown tarpaulin; one exposed lower wooden corner and broad plank surfaces make the concealed cargo readable. Whole grouping fully visible, slightly three-quarter front view, approximately 1.6:1 wide silhouette. Matte dark brown wood and dull khaki canvas, sparse muted amber light on upper folds. Restore complete crate sides hidden in reference. ONLY covered crates, no worker or hands, no storage tank, no pipe/valve, no oil barrel, no ground, no fog. This is a separate foreground asset.",
+      "references": [
+        "C:\\Users\\Admin\\Desktop\\namestnik\\assets\\nam_concealed_reserve_composition.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_oil_valve.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "Use case: background-extraction. Extract and reconstruct ONLY the oil dispensing tap/industrial valve and its short attached pipe from the center of this reference. One independent transparent PNG layer for manual NAM focus collage. Keep the same perspective: short horizontal rusty black steel pipe extends left, central thick flanged valve body, horizontal round handwheel on TOP, short open spout pointing right and slightly toward viewer, a thin short trickle of dark oil falling from outlet. Whole valve, wheel, pipe ends and trickle fully visible with margin. Reconstruct portions hidden by tarp/barrel. Natural worn dark iron and muted reddish-brown rust with selective ochre highlights, readable chunky silhouette and dark recesses. Not a lifting crane or water faucet. Remove ALL tank, worker, cloth, crates, barrel, fog, glow, environment and ground. Transparent holes in wheel and all areas outside metal/oil. Genuine alpha-zero background, no halo, no text. This is only the movable valve-and-pipe asset, NOT a completed focus icon.",
+      "reference": "C:/Users/Admin/Desktop/namestnik/assets/nam_concealed_reserve_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_low_fog.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "Use case: background-extraction / VFX. Create ONLY the low rolling foreground fog from the bottom of this reference as a separate reusable transparent PNG layer for manual NAM focus assembly. Broad low horizontal band, visible plume approximately 4:1 wide. Uneven puffs are thicker on left, curl across lower center and thin out on right. Natural smoky industrial haze with dark umber-brown lower masses, muted warm gray-ochre midtones and restrained pale amber wisps on top. Soft semitransparent billows and translucent gaps, never an opaque solid slab. Feather into genuine alpha zero on EVERY outer edge. Preserve the reference's understated dusty atmosphere, not fire, explosion, white steam, bright golden cloud or soil. NO train, tank, pipe, worker, crates, barrel, ground or any solid object. No rectangular backdrop, no black background baked in. ONLY the fog overlay with actual RGBA transparency, no scene.",
+      "reference": "C:/Users/Admin/Desktop/namestnik/assets/nam_concealed_reserve_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "reserve_warm_light.png",
+      "focus": "NAM_concealed_reserve",
+      "prompt": "Use case: VFX overlay. Create ONE isolated semitransparent warm LIGHT GLOW layer matching the amber illumination revealed beneath the raised tarp in the reference. ONLY LIGHT, absolutely no physical objects. A tall softly tapered wedge of warm luminous haze, narrow near upper center, gently opening toward lower right, with an off-center pale honey-yellow core and softer orange-amber surroundings. About 1:2 width-to-height visible shape, irregular natural diffuse edges. Subtle volumetric luminous haze but no distinct clouds or smoke billows. Designed to place BEHIND a separate worker and tarp and over a separate dark oil tank in a 150px HOI4 focus collage. Brightest small area near upper center; lower part more translucent, avoid a huge white patch. All light gradually fades into REAL ALPHA transparency on all sides, generous transparent margins, no black/gray background pixels with opacity outside glow. No sharp spotlight triangle, rays, flare rings, sun disk, starburst, lens flare, fire, lamp, tank, man, fabric, barrel, ground, frame or text. Just one reusable golden-amber lighting overlay on genuinely transparent background.",
+      "reference": "C:/Users/Admin/Desktop/namestnik/assets/nam_concealed_reserve_composition.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "metropolitan_quota_sheet_v3.png",
+      "focus": "NAM_metropolitan_quota",
+      "prompt": "Use case: style-transfer. Image 1 is the old isolated asset to REWORK SUBSTANTIALLY. Images 2 and 3 are authoritative STYLE references for HOI4 political focus photomontage icons: bold cutout shapes, punchy black shadows, luminous amber/gold highlights, compressed broad tones, graphic storytelling and sharply readable silhouettes at tiny size. Match this collage treatment, not ultra-realistic macro product rendering. Remove micro-scratches, pores, woven grain and speckled dirt; model volume with large light/dark planes. Retain natural material identity, not entirely metallic gold. ONE standalone movable asset only on true transparent background. No completed composition, frame, background, fog, atmospheric glow, other props or extra emblems from style references. Safe transparent padding, full silhouette visible. Redesign the requisition document as a commanding large paper silhouette: two slightly offset thick ivory/ochre office sheets, tilted slightly counterclockwise, almost frontal. Bright warm cream upper-left plane, deep brown shadow on right paper edge and between sheets, crisp darker contour. ONE dark metal paper clip. Replace dull thin marks with a bold dark heading block and THREE broad rows of a simple quota table, thick enough to read at 150px. Prominent dark burgundy rectangular ink approval stamp in lower right, simple double border and two short bars inside. No readable lettering or invented script. Restrained light amber edge highlights and slight fold only. Keep paper smooth and matte, no parchment grunge, torn edges, rolled scroll, bevelled metal, hands, barrels or desk. Enlarge important graphical marks and reduce empty visual dead space without filling page with tiny text.",
+      "edit_source": "metropolitan_quota_sheet_v2.png",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_agreement_with_the_pdo.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "metropolitan_quota_oil_drums_v3.png",
+      "focus": "NAM_metropolitan_quota",
+      "prompt": "Use case: style-transfer. Image 1 is the old isolated asset to REWORK SUBSTANTIALLY. Images 2 and 3 are authoritative STYLE references for HOI4 political focus photomontage icons: bold cutout shapes, punchy black shadows, luminous amber/gold highlights, compressed broad tones, graphic storytelling and sharply readable silhouettes at tiny size. Match this collage treatment, not ultra-realistic macro product rendering. Remove micro-scratches, pores, woven grain and speckled dirt; model volume with large light/dark planes. Retain natural material identity, not entirely metallic gold. ONE standalone movable asset only on true transparent background. No completed composition, frame, background, fog, atmospheric glow, other props or extra emblems from style references. Safe transparent padding, full silhouette visible. Rework three petroleum drums: two upright in back at different heights and one horizontal across front, its round end visible toward right. Keep whole compact grouping and every drum silhouette. Real charcoal-black painted steel, broad amber reflections along one lit side, simplified warm gold hoop highlights with deep black separations. Stronger graphic contrast and larger smoother tonal planes, almost no rust, no gritty speckled metal, no photorealistic noise. One large simple pale ochre oil-drop stencil centered on front drum end as a key readable symbol. Dark outlines come from modeled shadow, not flat vector line art. No floor, pallet, ground, puddle, smoke or glow. These should visually resemble the chunky strongly lit objects in the small style references, not three detailed rusty barrels photographed in a studio.",
+      "edit_source": "metropolitan_quota_oil_drums_v2.png",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_agreement_with_the_pdo.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "metropolitan_stamping_hand_v2.png",
+      "focus": "NAM_metropolitan_quota",
+      "prompt": "Use case: style-transfer. Image 1 is the old isolated asset to REWORK SUBSTANTIALLY. Images 2 and 3 are authoritative STYLE references for HOI4 political focus photomontage icons: bold cutout shapes, punchy black shadows, luminous amber/gold highlights, compressed broad tones, graphic storytelling and sharply readable silhouettes at tiny size. Match this collage treatment, not ultra-realistic macro product rendering. Remove micro-scratches, pores, woven grain and speckled dirt; model volume with large light/dark planes. Retain natural material identity, not entirely metallic gold. ONE standalone movable asset only on true transparent background. No completed composition, frame, background, fog, atmospheric glow, other props or extra emblems from style references. Safe transparent padding, full silhouette visible. Rework ONE decisive hand gripping a large administrative stamp, short forearm in black suit sleeve enters from upper right, stamp points down-left. Preserve natural five-finger anatomy and recognizable grip. Make gesture and stamp read immediately at tiny size: a bold compact hand, broad warm tan skin planes, sharp deep shadow between fingers, selective amber highlights, simplified smooth skin WITHOUT pores or dense wrinkles. Black sleeve as a clean strong dark mass and one crisp ivory cuff. Dark walnut stamp handle with a broad brass-edged rectangular base, make base substantially prominent. Keep all fingers, whole stamp and sleeve end within canvas. No full person, arm stump with torso, desk, document, oil drums, ink pad, seal emblem, letters, backdrop or outer glow. Avoid glossy toy rendering, use dramatic photographic collage treatment like the supplied references.",
+      "edit_source": "metropolitan_stamping_hand.png",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_agreement_with_the_pdo.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "sand_running_out_hourglass.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE independent movable transparent PNG asset for the NAM HOI4 national focus 'Sand is running out'. The small reference icons define the target art direction: sharply cut-out dramatic photomontage, bold readable silhouettes, large near-black shadow masses, broad saturated ochre/golden highlights, selective pale cream highlights. Compact icon-friendly graphic treatment, not a photoreal macro product render. Strong form hierarchy, REDUCE tiny scratches, granular rust and decorative detail; no uniformly shiny gold objects, no continuous neon rim. Preserve natural material differences. Must read when reduced into a 150px collage. Fully contained with 8% safe transparent margins. Genuine alpha background and empty gaps, no backdrop, floor, shadow plane, fog, aura or frame. NO complete composition, no extra objects or words. Image 1 is the object design to EDIT; images 2-3 are STYLE references only. Keep the imposing antique hourglass with broad stepped base and two sturdy columns. Simplify the excessive grain into broad bronze-black planes and sharp gold highlights. Slight three-quarter frontal view, upright. The upper bulb contains ONLY a tiny last pinch of pale golden sand, visibly less than five percent of total sand; bottom bulb contains the accumulated sand. A fine visible stream passes through the neck. Retain clear glass silhouette and translucency in the empty upper chamber, dark bronze pillars contrast with pale sand. No clocks, telegraph, paper, sun, smoke, scenery or ornament.",
+      "references": [
+        "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\focus_icons\\NAM\\empire_hourglass.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "sand_telegraph_receiver.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE independent movable transparent PNG asset for the NAM HOI4 national focus 'Sand is running out'. The small reference icons define the target art direction: sharply cut-out dramatic photomontage, bold readable silhouettes, large near-black shadow masses, broad saturated ochre/golden highlights, selective pale cream highlights. Compact icon-friendly graphic treatment, not a photoreal macro product render. Strong form hierarchy, REDUCE tiny scratches, granular rust and decorative detail; no uniformly shiny gold objects, no continuous neon rim. Preserve natural material differences. Must read when reduced into a 150px collage. Fully contained with 8% safe transparent margins. Genuine alpha background and empty gaps, no backdrop, floor, shadow plane, fog, aura or frame. NO complete composition, no extra objects or words. Subject: ONE old imperial office Morse telegraph receiver, a compact low-wide black metal and dark walnut instrument with a large brass paper reel on the LEFT, chunky brass clockwork housing in center and small recording wheel at right. Three-quarter frontal view, width roughly 1.7 times height. Clear large brass reel circle, black mechanism and a tiny ivory tape end emerging at right, no long loose paper stream (that is a separate asset). Austere functional late nineteenth/early twentieth century design, no retro-futuristic invention, no radio, telephone, typewriter or electric screen. Warm ochre light from upper left, deep black recesses, broad restrained wear. All feet and sides visible. This is ONLY the telegraph receiver, no hourglass, table, hands, desk, fog or scenery.",
+      "references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "sand_urgent_telegram_tape.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE independent movable transparent PNG asset for the NAM HOI4 national focus 'Sand is running out'. The small reference icons define the target art direction: sharply cut-out dramatic photomontage, bold readable silhouettes, large near-black shadow masses, broad saturated ochre/golden highlights, selective pale cream highlights. Compact icon-friendly graphic treatment, not a photoreal macro product render. Strong form hierarchy, REDUCE tiny scratches, granular rust and decorative detail; no uniformly shiny gold objects, no continuous neon rim. Preserve natural material differences. Must read when reduced into a 150px collage. Fully contained with 8% safe transparent margins. Genuine alpha background and empty gaps, no backdrop, floor, shadow plane, fog, aura or frame. NO complete composition, no extra objects or words. Subject: ONE separate long loose strip of warm ivory telegraph paper tape, forming two broad readable angular curls across a low horizontal silhouette approximately 3:1 wide. Broad enough to be readable at tiny icon size, muted ochre creases with dark brown undersides, one slightly torn free end at right. Sparse bold charcoal Morse dots and dashes along the strip, arranged as short abstract groups; NO letters, words, numbers or readable slogans. Paper should look like a photographic cutout simplified into broad graphic shapes, not glittery metal, parchment scroll or ribbon medal. Whole strip floating as a freely positionable foreground layer; no machine, reel, clock, hourglass, hand, tabletop, ground, fog or background.",
+      "references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasian_keynesianism.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "sand_colossal_hourglass.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE standalone transparent PNG layer for an EPIC, MONUMENTAL, symbolic Hearts of Iron IV national focus collage 'Sand is running out'. Supplied images are STYLE references only: imperial propaganda photomontage, monumental silhouettes, exaggerated scale, dramatic black shadows, brilliant old-gold/amber light, compact powerful shapes. This must convey the last moments of a vast empire, not a mundane tabletop object or polished mobile-game inventory item. Broad dimensional modeling and strong silhouette readable at 150px, sparse microtexture. NAM palette charcoal black, antique bronze, burnt amber and selective pale golden-white highlights. Real alpha transparency outside the subject, safe margins and complete silhouette. NO completed composition, no text, no watermark or border. Each object/effect will be assembled manually. ONLY an immense architectural HOURGLASS, framed from a slightly low three-quarter frontal angle, upright but leaning subtly left by five degrees. Frame built like an imperial monument: massive stepped cap and pedestal, two severe fluted bronze pillars, restrained geometric Art Deco ornament, no jewelry filigree. Bulbs are extremely large and readable; upper bulb is nearly EMPTY with a tiny remaining crescent of gold sand and a hair-thin final stream falling into an almost FULL lower bulb. Small deliberate crack in one support column signifies failing imperial authority. Glass remains mostly clear/transparent with thin bright rim reflections, dark glass edges and large clear negative areas; no opaque black fill inside upper bulb. Pale golden rim light from upper right, deep near-black bronze opposite side, selective glowing sand. Monumental heroic scale and ominous grandeur. Entire hourglass fully visible. NO city, people, table, desert, fog, light halo or sand outside the glass: the hourglass ALONE.",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_era_of_russian_megapolises.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen",
+      "approved_direction": "Monumental symbolic imperial imagery, dramatic scale, architecture, light and elemental effects; independent transparent layers."
+    },
+    {
+      "file": "sand_imperial_capital.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE standalone transparent PNG layer for an EPIC, MONUMENTAL, symbolic Hearts of Iron IV national focus collage 'Sand is running out'. Supplied images are STYLE references only: imperial propaganda photomontage, monumental silhouettes, exaggerated scale, dramatic black shadows, brilliant old-gold/amber light, compact powerful shapes. This must convey the last moments of a vast empire, not a mundane tabletop object or polished mobile-game inventory item. Broad dimensional modeling and strong silhouette readable at 150px, sparse microtexture. NAM palette charcoal black, antique bronze, burnt amber and selective pale golden-white highlights. Real alpha transparency outside the subject, safe margins and complete silhouette. NO completed composition, no text, no watermark or border. Each object/effect will be assembled manually. ONLY a monumental imperial capital skyline as a low wide architectural cutout, approximately 2:1 width-to-height. One imposing central stepped government tower rises above two massive symmetrical ministry wings with severe vertical columns and dark window strips, smaller distant spires layered behind. Strong low-angle architectural perspective, plausible coherent Art Deco imperial civic architecture, grand ceremonial scale. A few thin diagonal cracks and one partially broken cornice suggest authority fading; buildings largely intact, NOT a bombed battlefield. Broad pale bronze/ivory lit facade planes contrast deep charcoal shadow, warmer amber windows very sparse. Complete self-contained silhouettes and base edges, transparent spaces between buildings. This skyline will be positioned below a SEPARATE giant hourglass. Do not draw hourglass, sand, dust, sun, rays, flags, heraldry, people, ground plane or scenery. Only the austere immense architecture.",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_era_of_russian_megapolises.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen",
+      "approved_direction": "Monumental symbolic imperial imagery, dramatic scale, architecture, light and elemental effects; independent transparent layers."
+    },
+    {
+      "file": "sand_imperial_sandstorm.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE standalone transparent PNG layer for an EPIC, MONUMENTAL, symbolic Hearts of Iron IV national focus collage 'Sand is running out'. Supplied images are STYLE references only: imperial propaganda photomontage, monumental silhouettes, exaggerated scale, dramatic black shadows, brilliant old-gold/amber light, compact powerful shapes. This must convey the last moments of a vast empire, not a mundane tabletop object or polished mobile-game inventory item. Broad dimensional modeling and strong silhouette readable at 150px, sparse microtexture. NAM palette charcoal black, antique bronze, burnt amber and selective pale golden-white highlights. Real alpha transparency outside the subject, safe margins and complete silhouette. NO completed composition, no text, no watermark or border. Each object/effect will be assembled manually. ONLY a dramatic SANDSTORM foreground VFX overlay. Low wide sweeping crescent of turbulent ochre sand, main billow thick near lower left, arcs low across center and tapers into streaming particles on right. A taller curling surge at far left hints at immense approaching storm. Visible form approximately 3:1 width-to-height. Deep warm umber lower body, brilliant selective amber-gold light catching upper rolling crests, darker transparent gaps, loose dust flecks in a few broad streams. Clear soft translucency so architecture can show through; complex natural volumetric dust but broad shapes read when tiny. Fade every edge into alpha zero, no straight bottom line, no opaque rectangular gradient. Epic ominous scale, not small wheel dust, flames, explosion, white clouds or ocean waves. Absolutely no physical objects, buildings, hourglass, people, ground, sun or backdrop. Only dust and sand effect.",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_era_of_russian_megapolises.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen",
+      "approved_direction": "Monumental symbolic imperial imagery, dramatic scale, architecture, light and elemental effects; independent transparent layers."
+    },
+    {
+      "file": "sand_last_light_rays.png",
+      "focus": "NAM_sand_runs_out",
+      "prompt": "Create ONE standalone transparent PNG layer for an EPIC, MONUMENTAL, symbolic Hearts of Iron IV national focus collage 'Sand is running out'. Supplied images are STYLE references only: imperial propaganda photomontage, monumental silhouettes, exaggerated scale, dramatic black shadows, brilliant old-gold/amber light, compact powerful shapes. This must convey the last moments of a vast empire, not a mundane tabletop object or polished mobile-game inventory item. Broad dimensional modeling and strong silhouette readable at 150px, sparse microtexture. NAM palette charcoal black, antique bronze, burnt amber and selective pale golden-white highlights. Real alpha transparency outside the subject, safe margins and complete silhouette. NO completed composition, no text, no watermark or border. Each object/effect will be assembled manually. ONLY a monumental BACKLIGHT overlay for the final glow of an empire: a partial fan of 9 broad gold-amber shafts of light radiating upward and outward from a low central origin. Like severe imperial poster rays made from luminous atmospheric light, a few long rays alternating with shorter rays, roughly semicircular fan silhouette with 2:1 width-to-height. Pale honey near origin, rich amber on rays, semitransparent ray interiors and feathered ends. Rays separated by truly transparent dark gaps, NOT filled black wedges. Strong graphic rhythm inspired by the radial architectural motif in reference 1, softened slightly so it works as a background light layer behind separate hourglass and city. No circular sun disk, star, insignia, eye, heraldry, text, buildings or hourglass. Whole fan within generous transparent margins, light fades to alpha zero at outer tips, no rectangle. Only the golden light fan.",
+      "style_references": [
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_era_of_russian_megapolises.png",
+        "Z:\\SteamLibrary\\steamapps\\workshop\\content\\394360\\3350890356\\gfx\\interface\\goals\\SOV\\SOV_eurasiaan_powerhouse.png"
+      ],
+      "generator": "Built-in image_gen",
+      "approved_direction": "Monumental symbolic imperial imagery, dramatic scale, architecture, light and elemental effects; independent transparent layers."
+    },
+    {
+      "file": "letters_imperial_dispatches.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "ONE independent movable transparent PNG asset for the grand symbolic HOI4 focus collage 'Letters to the centre'. The two input images are STYLE references only: monumental imperial scale, strong dimensional silhouettes, dramatic deep-black shadows, selective brilliant antique-gold and honey-ivory light, severe Art Deco grandeur. The story is weekly appeals to a distant imperial capital whose replies grow rarer. Epic, solemn and ominous; NOT a tabletop still life or cute inventory item. Broad forms must read inside a small 150px focus. NAM amber/bronze/charcoal palette with natural ivory paper and restrained burgundy seals. Only the specified subject, no full scene, no labels or invented readable writing. Actual RGBA alpha transparency outside subject, generous clear margins, no cropped edges. ONLY a dramatic diagonal procession of FIVE sealed imperial letters in exaggerated receding perspective. One huge ivory envelope dominates lower left/center, its folded triangular back and a large deep burgundy wax seal clearly visible; behind it two slightly overlapping large folded correspondence sheets and TWO progressively smaller sealed envelopes sweep upward toward upper right, like appeals being carried toward a distant unseen capital. Keep a strong compact diagonal wing-like silhouette, NOT tiny scattered confetti. Raised tactile paper folds, sharp golden light on upper edges, deep charcoal separations, paper itself ivory not metallic. Main wax seal bears a simple abstract three-step tower imprint, no eagle or real-world insignia. No quill, hand, desk, architecture, sky, fog, ribbons of light or scenery. Only the complete paper/envelope procession as one reusable foreground layer, all papers intact and within transparent margins.",
+      "style_references": [
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "letters_monumental_quill.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "ONE independent movable transparent PNG asset for the grand symbolic HOI4 focus collage 'Letters to the centre'. The two input images are STYLE references only: monumental imperial scale, strong dimensional silhouettes, dramatic deep-black shadows, selective brilliant antique-gold and honey-ivory light, severe Art Deco grandeur. The story is weekly appeals to a distant imperial capital whose replies grow rarer. Epic, solemn and ominous; NOT a tabletop still life or cute inventory item. Broad forms must read inside a small 150px focus. NAM amber/bronze/charcoal palette with natural ivory paper and restrained burgundy seals. Only the specified subject, no full scene, no labels or invented readable writing. Actual RGBA alpha transparency outside subject, generous clear margins, no cropped edges. ONLY one colossal ceremonial writing QUILL, a powerful sweeping feather like an imperial standard. Long elegant feather curves diagonally from LOWER LEFT nib to UPPER RIGHT tip, whole silhouette visible. Dark charcoal-black feather with broad antique-gold illuminated barbs and ivory-gold central shaft; the feather is natural sculptural plumage, not an actual wing, angel, bird or sword. Heavy dark bronze collar at the shaft's lower end and clearly recognizable sharp brass writing nib. Restrained ornament, no heraldic creatures. Strong broad shape and distinct barbs at outer silhouette, no fussy microdetail. Asymmetric feather slightly wider near upper middle, dramatic black recesses and honey-gold side light matching monument references. No hand, inkwell, envelope, paper, stand, desk, building, fog or background glow. This ONE isolated enormous symbolic quill will overlap separate letters in manual assembly.",
+      "style_references": [
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "letters_silent_centre.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "ONE independent movable transparent PNG asset for the grand symbolic HOI4 focus collage 'Letters to the centre'. The two input images are STYLE references only: monumental imperial scale, strong dimensional silhouettes, dramatic deep-black shadows, selective brilliant antique-gold and honey-ivory light, severe Art Deco grandeur. The story is weekly appeals to a distant imperial capital whose replies grow rarer. Epic, solemn and ominous; NOT a tabletop still life or cute inventory item. Broad forms must read inside a small 150px focus. NAM amber/bronze/charcoal palette with natural ivory paper and restrained burgundy seals. Only the specified subject, no full scene, no labels or invented readable writing. Actual RGBA alpha transparency outside subject, generous clear margins, no cropped edges. ONLY the distant imperial centre: a narrow imposing architectural cluster with one extremely tall severe government tower and two lower ministry towers, linked by a broad monumental arched portal at their feet. Approximately 1.2:1 width-to-height compact silhouette, strong vertical ribs and stepped crowns, coherent Art Deco civic architecture. Low-angle view communicates remote immense authority. Almost all windows unlit; a single narrow pale amber slit of light in the central closed doorway. Broad shadowed charcoal stone faces with only one side of towers catching pale bronze light, much darker overall than reference skyline. The capital should feel silent and unreachable, no visible destruction. Restore complete architectural base with clean silhouette. No streets, bridge, landscape, letters, quill, people, banners, sun, fog or surrounding lighting backdrop. Isolated building cluster ONLY, a separate background layer.",
+      "style_references": [
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "letters_distant_beacon.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "ONE independent movable transparent PNG asset for the grand symbolic HOI4 focus collage 'Letters to the centre'. The two input images are STYLE references only: monumental imperial scale, strong dimensional silhouettes, dramatic deep-black shadows, selective brilliant antique-gold and honey-ivory light, severe Art Deco grandeur. The story is weekly appeals to a distant imperial capital whose replies grow rarer. Epic, solemn and ominous; NOT a tabletop still life or cute inventory item. Broad forms must read inside a small 150px focus. NAM amber/bronze/charcoal palette with natural ivory paper and restrained burgundy seals. Only the specified subject, no full scene, no labels or invented readable writing. Actual RGBA alpha transparency outside subject, generous clear margins, no cropped edges. ONLY an atmospheric light overlay, the distant capital's fading golden beacon. A small bright pale-honey elliptical glow in upper-right third, with three broad soft oblique amber beams spreading DOWNWARD toward lower left across otherwise empty transparency. Strong depth: upper origin compact and radiant, beams become dimmer, wider and more transparent toward lower-left ends. Light should suggest a vast distance and dwindling connection, not an explosion, fire, sun icon, lens flare rings or a geometric emblem. Sparse luminous dust within the shafts, no opaque clouds. True smooth translucent RGBA light fades to alpha zero on all sides. Whole glow and shafts comfortably inside canvas. No buildings, envelopes, paper, quill, physical objects, sky rectangle or black background. ONLY the independently positionable warm beacon-light effect.",
+      "style_references": [
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "letters_obscuring_mist.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "ONE independent movable transparent PNG asset for the grand symbolic HOI4 focus collage 'Letters to the centre'. The two input images are STYLE references only: monumental imperial scale, strong dimensional silhouettes, dramatic deep-black shadows, selective brilliant antique-gold and honey-ivory light, severe Art Deco grandeur. The story is weekly appeals to a distant imperial capital whose replies grow rarer. Epic, solemn and ominous; NOT a tabletop still life or cute inventory item. Broad forms must read inside a small 150px focus. NAM amber/bronze/charcoal palette with natural ivory paper and restrained burgundy seals. Only the specified subject, no full scene, no labels or invented readable writing. Actual RGBA alpha transparency outside subject, generous clear margins, no cropped edges. ONLY a low ominous foreground MIST overlay to obscure the base of a silent imperial capital. Wide irregular soft horizontal bank, visible aspect about 3.5:1, darker warm charcoal and umber rolling masses at bottom, dim amber-touched wisps at upper left, middle gently dipping so a separate large envelope can stay readable. One higher curl at far right. Sparse warm gold airborne dust, restrained illumination, considerably darker than a sandstorm. Broad readable translucent smoke shapes with soft gaps and full soft alpha fade on every outer edge. No straight baseline, opaque rectangular patch or solid ground. No buildings, letters, quill, fire, sun, lighting rays, person, props or scenery. Just ONE reusable semi-transparent mist layer on a completely transparent background.",
+      "style_references": [
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "letters_unity_tower.png",
+      "focus": "NAM_letters_to_the_centre",
+      "prompt": "Use case: style-transfer.\nCreate one standalone transparent PNG asset of Vorkerland Unity Tower for a grand imperial Hearts of Iron IV focus collage \"Letters to the centre\".\nImage 1 is the AUTHORITATIVE building geometry, a three-quarter offline render of the actual game mesh. Image 2 is the same actual building from another angle. Image 3 is STYLE ONLY: dramatic black/bronze/amber highlights and imposing monumental atmosphere.\nPreserve the unique shape of image 1 very closely: a very broad square sloping pyramidal lower building, long diagonal ribs and narrow window strips down each face, small recessed entrances at the foot, a pinched narrow waist, then a flared outward upper crown with FOUR broad angular corner lobes. The upper flat roof has a small central octagonal helipad. It is a squat massive building, approximately twice as wide as tall. Keep the exact silhouette and three-quarter viewing angle of image 1, retaining visible roof. It is NOT a conventional pointed pyramid, not a stepped ziggurat, not a skyscraper. Do not invent spires or towers, columns, statues or an hourglass.\nTransform the flat model into richly textured monumental architecture: charcoal stone and dark metal, thin warm bronze edges, restrained amber windows, strong directional golden rim lighting and deep readable shadows. Weathered heavy material, majestic ominous imperial scale. Keep broad clean geometric masses readable when downscaled to a small game icon. Intact pre-destruction building. No explosion, no fire, no rubble, no foreground objects, no envelopes, no fog layer, no sun disk, no background scene, no ground plane, no text or logo. The building alone as a clean cutout with actual transparent background and generous margins. Full base and crown fit within the canvas.",
+      "generator": "Built-in image_gen",
+      "geometry_reference": "gfx/models/buildings/vorkerland_special/ADISCORD_vorkerland_pyramid.mesh",
+      "reference_method": "Offline orthographic projections of original mesh; three-quarter and front views.",
+      "style_references": [
+        "tools/assets/source/focus_icons/NAM/sand_colossal_hourglass.png"
+      ]
+    }
+  ],
+  "composition_direction": "Grandiose political and industrial imagery with dominant large figures or symbols, dramatic scale and strong graphic accents. Individual assets should support a monumental photographic collage. Preserve natural materials and avoid small inventory-item presentation.",
+  "monumental_style_direction": "Grand symbolic imperial photomontage: colossal focal objects, monumental architecture, dramatic amber light and deep charcoal shadows, elemental sand or fog. Broad readable masses and exaggerated scale rather than ordinary tabletop props. Supply every object, atmosphere and light effect as a separate transparent PNG for manual assembly.",
+  "delivery_policy": "Deliver each requested focus element as a separate transparent PNG. Generate an assembled composition only when explicitly requested; keep assembled previews outside the mod."
 }

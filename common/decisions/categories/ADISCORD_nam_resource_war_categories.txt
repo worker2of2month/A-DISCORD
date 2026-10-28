@@ -114,7 +114,7 @@ NAM_public_campaigns = {
 	icon = ADISCORD_propaganda
 	allowed = { tag = NAM }
 	visible = {
-		has_completed_focus = NAM_open_ledgers
+		has_completed_focus = NAM_inventory
 	}
 	visible_when_empty = yes
 	priority = 20

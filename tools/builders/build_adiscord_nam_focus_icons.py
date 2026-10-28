@@ -29,6 +29,8 @@ def expected_outputs() -> dict[Path, bytes]:
         if not focus_id.startswith("NAM_") or focus_id in seen:
             raise ValueError(f"Invalid or duplicate focus: {focus_id}")
         seen.add(focus_id)
+        if entry.get("export_runtime", True) is False:
+            continue
         source = (ROOT / SOURCE / entry["file"]).resolve()
         if not source.is_relative_to((ROOT / SOURCE).resolve()):
             raise ValueError(f"Source escapes artwork folder: {source}")

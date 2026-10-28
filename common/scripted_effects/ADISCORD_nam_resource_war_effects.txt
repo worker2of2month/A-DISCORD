@@ -2336,7 +2336,7 @@ NAM_add_treasury = {
 # metropole; focuses add to it and call NAM_wrk_trade_refresh. The level sets
 # the price of a fuel shipment and the monthly income of the trade concession.
 
-# COUNTRY NAM. Shipment 120 + 30 per level; concession 25 + 15 per level a month.
+# COUNTRY NAM. Shipment 180 + 40 per level; concession 40 + 20 per level a month.
 NAM_wrk_trade_refresh = {
 	clamp_variable = {
 		var = NAM_wrk_trade_level
@@ -2344,11 +2344,11 @@ NAM_wrk_trade_refresh = {
 		max = 3
 	}
 	set_variable = { var = NAM_wrk_shipment_income value = NAM_wrk_trade_level }
-	multiply_variable = { var = NAM_wrk_shipment_income value = 30 }
-	add_to_variable = { var = NAM_wrk_shipment_income value = 120 }
+	multiply_variable = { var = NAM_wrk_shipment_income value = 40 }
+	add_to_variable = { var = NAM_wrk_shipment_income value = 180 }
 	set_variable = { var = NAM_wrk_trade_income value = NAM_wrk_trade_level }
-	multiply_variable = { var = NAM_wrk_trade_income value = 15 }
-	add_to_variable = { var = NAM_wrk_trade_income value = 25 }
+	multiply_variable = { var = NAM_wrk_trade_income value = 20 }
+	add_to_variable = { var = NAM_wrk_trade_income value = 40 }
 	if = {
 		limit = { has_country_flag = NAM_wrk_concession_active }
 		ADISCORD_economy_mark_dirty = yes
@@ -2373,7 +2373,7 @@ NAM_colony_monthly = {
 			NAM_colony_phase = yes
 			WRK = { exists = yes }
 		}
-		add_to_variable = { var = NAM_hidden_reserve value = 30 }
+		add_to_variable = { var = NAM_hidden_reserve value = 45 }
 	}
 }
 
@@ -2391,12 +2391,12 @@ NAM_wrk_echelon_deliver = {
 		WRK = { add_fuel = 3000 }
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
-			amount = 4500
+			amount = 6000
 			producer = NAM
 		}
 		add_equipment_to_stockpile = {
 			type = support_equipment
-			amount = 40
+			amount = 60
 			producer = NAM
 		}
 		add_to_variable = { var = NAM_grp_nam_support value = 2 }
@@ -4644,8 +4644,9 @@ NAM_underground_close_event = {
 # COUNTRY NAM. on_monthly_NAM from the first day of the colony: base +3, +2
 # while the districts' support is below 40 and +1 more below 25, +2 while the
 # vertical holds the ladder, -1 while the districts' support is 60 or more,
-# -3 while the Svetlogorsk compact is paid. The month's change is kept for
-# the category text, then the network may strike.
+# -3 while the Svetlogorsk compact is paid and -3 during print-supply control.
+# Pipeline guards and counter-leaflet campaigns each subtract another 2.
+# The month's change is kept for the category text, then the network may strike.
 NAM_underground_monthly = {
 	if = {
 		limit = { NAM_underground_active = yes }
@@ -4675,6 +4676,18 @@ NAM_underground_monthly = {
 		if = {
 			limit = { has_country_flag = NAM_district_compact }
 			add_to_temp_variable = { var = NAM_underground_delta value = -3 }
+		}
+		if = {
+			limit = { has_decision = NAM_disrupt_print_supply }
+			add_to_temp_variable = { var = NAM_underground_delta value = -3 }
+		}
+		if = {
+			limit = { has_decision = NAM_colonial_pipeline_guard }
+			add_to_temp_variable = { var = NAM_underground_delta value = -2 }
+		}
+		if = {
+			limit = { has_decision = NAM_campaign_answer_leaflets }
+			add_to_temp_variable = { var = NAM_underground_delta value = -2 }
 		}
 		set_variable = { var = NAM_underground_growth value = NAM_underground_delta }
 		add_to_variable = { var = NAM_underground value = NAM_underground_delta }

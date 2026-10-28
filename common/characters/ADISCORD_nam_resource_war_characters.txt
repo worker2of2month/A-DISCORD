@@ -3,12 +3,12 @@ characters = {
 		name = SLF_Yaroslav_Weber
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_9
-				small = GFX_Portrait_Forul_Generic_9_small
+				large = GFX_portrait_NAM_Yaroslav_Weber
+				small = GFX_portrait_NAM_Yaroslav_Weber_small
 			}
 			army = {
-				large = GFX_Portrait_Forul_Generic_9
-				small = GFX_Portrait_Forul_Generic_9_small
+				large = GFX_portrait_NAM_Yaroslav_Weber
+				small = GFX_portrait_NAM_Yaroslav_Weber_small
 			}
 		}
 		country_leader = {
