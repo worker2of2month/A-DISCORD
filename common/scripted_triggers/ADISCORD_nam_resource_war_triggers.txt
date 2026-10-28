@@ -359,6 +359,28 @@ NAM_independence_recognised = {
 	has_country_flag = NAM_treaty_independence_recognised
 }
 
+# ----- Independent institutions -----
+# COUNTRY NAM. National institutions survive war, settlement and an island handoff.
+# Subjugation refunds pending work; liberation reopens the existing authorisations.
+NAM_independent_programmes_operable = {
+	NAM_country_operable = yes
+	has_country_flag = NAM_center_vanished
+	is_subject = no
+}
+
+# COUNTRY NAM. A dossier addresses the current unresolved claim, never a queued war.
+NAM_ind_border_dossier_possible = {
+	NAM_independent_programmes_operable = yes
+	NAM_rw_ultimatum_open = yes
+	check_variable = { var = NAM_rw_tension value = 0 compare = greater_than }
+}
+
+# Administrative programmes retain their course across war and tree changes.
+NAM_admin_programme_operable = {
+	NAM_independent_programmes_operable = yes
+	NAM_ladder_formed = yes
+}
+
 # ----- Oil monopoly -----
 # COUNTRY. The fixed list of states that may buy Svetlogorye's oil.
 NAM_oil_buyer_tag = {
@@ -1193,5 +1215,36 @@ NAM_landing_third_division = {
 	OR = {
 		check_variable = { var = NAM_marine_orders_paid value = 1 compare = greater_than_or_equals }
 		check_variable = { var = NAM_revenge_readiness value = 70 compare = greater_than_or_equals }
+	}
+}
+
+# Economic orders use existing fields and national stockpiles.
+NAM_econ_refinery_available = {
+	OR = {
+		67 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			synthetic_refinery > 0
+		}
+		688 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			synthetic_refinery > 0
+		}
+		689 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			synthetic_refinery > 0
+		}
+		690 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			synthetic_refinery > 0
+		}
+		719 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			synthetic_refinery > 0
+		}
 	}
 }

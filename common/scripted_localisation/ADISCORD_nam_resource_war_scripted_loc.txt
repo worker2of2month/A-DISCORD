@@ -1161,6 +1161,22 @@ defined_text = {
 	text = {
 		trigger = {
 			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_pp_deposit value = 30 compare = equals }
+			check_variable = { var = NAM_project_deposit value = 200 compare = equals }
+		}
+		localization_key = NAM_econ_deep_drilling_map
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_pp_deposit value = 30 compare = equals }
+			check_variable = { var = NAM_project_deposit value = 250 compare = equals }
+		}
+		localization_key = NAM_econ_emergency_service_map
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
 			check_variable = { NAM_project_deposit = 150 }
 		}
 		localization_key = NAM_bw_works_repair

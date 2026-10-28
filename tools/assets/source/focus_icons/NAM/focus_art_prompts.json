@@ -462,6 +462,108 @@
         "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_fruits_of_the_motherland.png",
         "Z:/SteamLibrary/steamapps/workshop/content/394360/3350890356/gfx/interface/goals/SOV/SOV_eternal_derzhava.png"
       ]
+    },
+    {
+      "file": "desert_dune_backdrop.png",
+      "focus": "NAM_shared",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG background layer for manually assembling grandiose HOI4 NAM focus collages. Broad sweeping pale ochre desert dune ridges, three receding layers, gently curving silhouette, small dark rock outcrop at one edge, broad low horizontal landscape fragment. Realistic photographic matte-painting materials, restrained amber side lighting, natural sand beige, brown shaded rock, dusty grey shadow; broad readable forms. No sun, solar disc, moon, halo, radial rays, yellow glow or sky rectangle. Landscape upper edge sharply silhouettes against actual alpha-zero transparency, lower and lateral edges softly fade into translucent dust and alpha-zero. Transparent margin on every side. No people, buildings, equipment, text, frame or icons. Terrain occupies central 75% width, no crop. This is a movable terrain cutout, not a finished scene.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "desert_rocky_backdrop.png",
+      "focus": "NAM_shared",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG background layer for manually assembling grandiose HOI4 NAM focus collages. Monumental weathered sandstone escarpment and rugged desert mesa skyline, sandy dry basin in front, asymmetrical stepped cliff silhouette, wide low landscape fragment. Realistic photographic matte-painting materials, restrained amber side lighting, natural sand beige, brown shaded rock, dusty grey shadow; broad readable forms. No sun, solar disc, moon, halo, radial rays, yellow glow or sky rectangle. Landscape upper edge sharply silhouettes against actual alpha-zero transparency, lower and lateral edges softly fade into translucent dust and alpha-zero. Transparent margin on every side. No people, buildings, equipment, text, frame or icons. Terrain occupies central 75% width, no crop. This is a movable terrain cutout, not a finished scene.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_independence_day",
+      "file": "independence_state_seal.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One monumental newly made state hand-stamp: dark walnut handle, heavy engraved brass base tilted so the underside seal matrix is visible. The matrix bears a simple mountain ridge emblem, no eagle and no lettering. Entire stamp isolated, dramatic low three-quarter angle; real functional object, no paper, hand or pedestal. The supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_independence_day",
+      "file": "independence_declaration.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One large ivory declaration sheet with a few subordinate stacked pages, slightly curled corners, restrained handwritten ink strokes too small to read and a large deep burgundy wax impression with a simple mountain ridge emblem in lower third. Three-quarter front angle, very broad clear page silhouette. No hand, stamp tool, quill, table or extra props. The supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_neutral_basin",
+      "file": "neutral_basin_diplomatic_handshake.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One firm diplomatic handshake of two adult male hands and cropped forearms, left sleeve charcoal civilian wool suit with white cuff, right sleeve muted olive official uniform with simple brass button. Convincing anatomy, complete fingers and wrists, hands central and large. Forearms taper into transparent edges. No faces, torsos, flags or other props. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_neutral_basin",
+      "file": "neutral_basin_negotiation_table.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One imposing compact dark polished wooden negotiation table with two empty high-backed dark leather chairs facing each other, front three-quarter view. A single unmarked ivory sheet on table. Balanced substantial silhouette, early 20th century official furniture. No people, room, flags, floor or added separate props. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_basin_is_ours",
+      "file": "basin_border_sentry.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One resolute border sentry, waist-up three-quarter portrait, mature weathered man with short moustache, olive military tunic, simple field cap, sand-colored shoulder scarf and leather ammunition pouches. Holds a wood-stock bolt-action rifle vertically at side, complete rifle muzzle and both hands visible. Looks outward guarding his homeland, heroic low angle, natural skin. No scenery, flag, insignia or other people. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_basin_is_ours",
+      "file": "basin_flagged_border_post.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One heavy weathered stone border marker with a single tall pole mounted beside it and a wind-blown NAM cloth flag. Use supplied flag reference for EXACT emblem and color arrangement: orange field, white mountain ridge, dark navy half-sun and detached rays, navy bottom stripe. Preserve printed heraldic sun on fabric only; no actual sun in scene. Whole stone, pole and cloth visible, angle slightly from below. No text, people, landscape, ground or extra flags. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/nam_puppet_hanging_flag.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_provisional_statute",
+      "file": "statute_open_law_book.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One massive open law book with dark navy leather binding and ivory pages, deep maroon bookmark, a few understated ink paragraphs represented as indistinct fine strokes, no readable headings. Wide front three-quarter view, stately official legal volume, naturally aged but newly in use, clean broad page shapes. No other props, hands, pen, table, seal or pedestal. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_provisional_statute",
+      "file": "statute_balance_scales.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One complete monumental but functional bronze balance scale of justice, straight central stem, simple stone foot, two shallow brass weighing pans hanging from fine chains, pans balanced at equal height. Imposing front three-quarter angle, dark patinated bronze with selective pale amber highlights. Restrained engineering, no baroque decoration, eagle, sword, books, people, scenery or pedestal beyond its small actual base. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_rom_address",
+      "file": "rom_address_portrait.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: Reconstruct the EXACT man from first supplied portrait as a large detailed waist-up orator cutout. Preserve his recognizable narrow face, dark slicked-back hair, high forehead, prominent ears, clean-shaven appearance, dark striped scarf and utilitarian dark jacket with light shoulder panels. He is Egor Rom, do not substitute a generic older general or bearded man. Upright determined public-speaking pose, mouth slightly speaking and one hand open at chest height, retain natural face proportions. Remove scanlines and original rectangular background. No podium, microphones, flags or other people. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/NAM/portrait_NAM_Egor_Rom.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_rom_address",
+      "file": "rom_address_microphones.png",
+      "prompt": "Use case: stylized-concept. Generate ONE separate transparent PNG layer for a monumental HOI4 NAM focus collage. Photographic propaganda photomontage realism, heroic scale, broad readable silhouette at 150px, natural material colors, pale amber side lighting and charcoal shadows, restrained ochre accents. User wants independent movable assets, NOT assembled compositions or contact sheets. Actual alpha-zero background and open gaps. Entire subject contained with ample transparent margins. No landscape, background, fog, sky, sun, solar disc, halo, circular glow, text, frame or badge. Subject: One compact cluster of three vintage broadcast microphones on short black metal stands, prominent central rectangular chrome ribbon microphone, two smaller round dark microphones at different heights. Whole microphones and small common mounting rail visible. Grand early 20th century state radio broadcast equipment, worn real steel and chrome, selective warm side light. No logos, people, podium, table, wires trailing outside frame or other objects. Supplied image is a style-only reference unless subject instructions explicitly name its identity or emblem; do not copy unrelated content.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
+      ],
+      "generator": "Built-in image_gen"
     }
   ],
   "shared_style_history": [
@@ -524,6 +626,7 @@
     },
     {
       "focus_id": "NAM_imperial_gendarmes",
+      "export_runtime": false,
       "file": "nam_imperial_gendarmes_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. IMPERIAL GENDARMERIE: two stern human gendarmes in dark olive-grey peaked-cap uniforms, brown leather belts and subdued brass buttons, one main waist-up officer at left with folded arms, second smaller helmeted guard behind holding a slung rifle muzzle downward. Behind them a heavy barred checkpoint gate and restrained smoky amber backlight. Imposing organized authority, no skulls, no eagles, no real national insignia, no victim or violence.",
       "sprite": "GFX_focus_NAM_imperial_gendarmes",
@@ -532,6 +635,7 @@
     },
     {
       "focus_id": "NAM_oilfield_militia",
+      "export_runtime": false,
       "file": "nam_oilfield_militia_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. OILFIELD SELF-DEFENCE: two civilian oil workers defending their own field, one main weathered man in brown work jacket and battered dark hardhat holding an old wood-stock rifle diagonally across his torso, a second worker in dark cap behind; single oil derrick rises at back right. Natural working clothes, rolled sleeves, warm skin and worn steel. Confident local solidarity, not professional uniformed police, no insignia, no flags.",
       "sprite": "GFX_focus_NAM_oilfield_militia",
@@ -540,6 +644,7 @@
     },
     {
       "focus_id": "NAM_wrk_trade_house",
+      "export_runtime": false,
       "file": "nam_wrk_trade_house_composition_v2.png",
       "prompt": "Edit this focus-icon collage with ONE specific correction. Remove the headless merchant torso, visible shoulder, neck opening, collar and tie on the left. Keep only a realistic HAND with a short dark suit sleeve entering from the LEFT edge at mid-height, offering the same rolled contract toward the viewer. The sleeve should be a clearly cropped isolated forearm, not a torso missing its head. Fill the area formerly occupied by the shoulder/torso with the existing commercial building facade and transparent outside margins as appropriate. Preserve the handsome building, illuminated entrance, cargo crate, rolled contract, warm amber photographic color grading, full free silhouette, existing dramatic lighting and true transparent background. No new people, face, lettering, flags, emblems, extra decorative objects. Keep a compact strong composition readable at 150px.",
       "sprite": "GFX_focus_NAM_wrk_trade_house",
@@ -564,6 +669,7 @@
     },
     {
       "focus_id": "NAM_pipeline_patrols",
+      "export_runtime": false,
       "file": "nam_pipeline_patrols_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. PIPELINE PATROLS: an alert brown shepherd dog in foreground beside a watchman in dark work coat and flat cap holding a lantern, waist-up/three-quarter figure; large oil pipeline elbows and short line of pipes lead behind them, a small roadside telephone callbox at far rear. Dog and pipe are readable main shapes, warm lantern spot, cool charcoal shadows, evening patrol. No grand sun, no weapons or flags.",
       "sprite": "GFX_focus_NAM_pipeline_patrols",
@@ -636,6 +742,245 @@
       "sprite": "GFX_focus_NAM_wrk_trade_house",
       "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_trade_house.png",
       "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_wrk_trade_house",
+      "title": "Подворье в метрополии",
+      "prompt": "Use case: compositing. Assemble ONE finished monumental HOI4 NAM national-focus collage for 'Подворье в метрополии'. First input images are the exact separate foreground subjects to combine; last two inputs are the shared sun and fog. Preserve recognizable faces, clothing, object design and photographic material rendering. Composition: Merchant portrait dominates left foreground, magnificent exchange palace rises behind at right, sun partly behind palace, thin ochre mist unites base. Grandiose heroic scale, compact interlocking silhouettes, layered cutout photomontage as in TFR focus icons, not a rectangular painted scene. Warm amber highlights, natural colors, deep charcoal shadows; ensure foreground objects remain readable at 150px. Keep whole composition within transparent safe margin; base dissolves softly to alpha. Transparent background outside collage, no text, title, border, badge, extra portrait, duplicate object or sheet of variants. Do not make the sun or fog overpower the subjects.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_monumental_exchange.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-2587c578-9ffe-435c-aed1-411e7d768d8f.png"
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "title": "Обратные рейсы",
+      "prompt": "Use case: compositing. Assemble ONE finished monumental HOI4 NAM national-focus collage for 'Обратные рейсы'. First input images are the exact separate foreground subjects to combine; last two inputs are the shared sun and fog. Preserve recognizable faces, clothing, object design and photographic material rendering. Composition: Freighter spans lower middle angled toward viewer; suspended machine on chains dominates upper right, low sun behind ship on left, sparse harbor mist at bottom. Grandiose heroic scale, compact interlocking silhouettes, layered cutout photomontage as in TFR focus icons, not a rectangular painted scene. Warm amber highlights, natural colors, deep charcoal shadows; ensure foreground objects remain readable at 150px. Keep whole composition within transparent safe margin; base dissolves softly to alpha. Transparent background outside collage, no text, title, border, badge, extra portrait, duplicate object or sheet of variants. Do not make the sun or fog overpower the subjects.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/return_cargo_freighter.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/return_cargo_suspended_machine.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-bd03917d-ce48-4245-a360-a318272e8143.png"
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "title": "Склады метрополии",
+      "prompt": "Use case: compositing. ONE assembled monumental HOI4 focus icon 'Склады метрополии', compact almost square isolated photomontage, never a rectangular scene. First input subjects must retain exact design and faces; last two are sun and fog accents. Arsenal gate monumental central background, open rifle crate prominent lower foreground and slightly right, sun behind gate, low dust at feet. Heroic scale and strong overlapping silhouettes, natural metal/skin/fabric, dramatic selective gold light, charcoal shadows. All subjects together occupy central 80% of canvas with transparent space on EVERY side. Low fog only along bottom, no atmospheric rectangular backdrop. Genuine alpha outside artwork. No text, frame, border, badge, duplicate people or variants. Clear readable shapes at 150px.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/depots_arsenal_gate.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/depots_rifle_crate.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0a39d200-3bcf-465f-92fb-9917b24b0ef5.png"
+    },
+    {
+      "focus": "NAM_imperial_gendarmes",
+      "title": "Имперская жандармерия",
+      "prompt": "Use case: compositing. ONE assembled monumental HOI4 focus icon 'Имперская жандармерия', compact almost square isolated photomontage, never a rectangular scene. First input subjects must retain exact design and faces; last two are sun and fog accents. Huge commander at right foreground, marching column lower left in receding perspective, low sun behind helmets, dark restrained mist under figures. Heroic scale and strong overlapping silhouettes, natural metal/skin/fabric, dramatic selective gold light, charcoal shadows. All subjects together occupy central 80% of canvas with transparent space on EVERY side. Low fog only along bottom, no atmospheric rectangular backdrop. Genuine alpha outside artwork. No text, frame, border, badge, duplicate people or variants. Clear readable shapes at 150px.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/gendarmes_commander.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/gendarmes_marching_column.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-2cf1bc97-f6dd-4ca1-949c-2140853b4c58.png"
+    },
+    {
+      "focus": "NAM_oilfield_militia",
+      "title": "Промысловая самооборона",
+      "prompt": "Use case: compositing. ONE assembled monumental HOI4 focus icon 'Промысловая самооборона', compact almost square isolated photomontage, never a rectangular scene. First input subjects must retain exact design and faces; last two are sun and fog accents. Large armed driller at left foreground behind low barricade across bottom, sun upper right, tiny oil derricks behind shoulder, sparse dust. Heroic scale and strong overlapping silhouettes, natural metal/skin/fabric, dramatic selective gold light, charcoal shadows. All subjects together occupy central 80% of canvas with transparent space on EVERY side. Low fog only along bottom, no atmospheric rectangular backdrop. Genuine alpha outside artwork. No text, frame, border, badge, duplicate people or variants. Clear readable shapes at 150px.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/militia_armed_driller.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/militia_field_barricade.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-ffda91cd-c349-4fce-8ef3-affe67895646.png"
+    },
+    {
+      "focus": "NAM_pipeline_patrols",
+      "title": "Обходчики трубопроводов",
+      "prompt": "Use case: compositing. ONE assembled monumental HOI4 focus icon 'Обходчики трубопроводов', compact almost square isolated photomontage, never a rectangular scene. First input subjects must retain exact design and faces; last two are sun and fog accents. Patrolman dominant centre left, dog lower right and telephone tall at rear right, low sun behind patrolman and a faint pipe running across bottom, thin dust. Heroic scale and strong overlapping silhouettes, natural metal/skin/fabric, dramatic selective gold light, charcoal shadows. All subjects together occupy central 80% of canvas with transparent space on EVERY side. Low fog only along bottom, no atmospheric rectangular backdrop. Genuine alpha outside artwork. No text, frame, border, badge, duplicate people or variants. Clear readable shapes at 150px.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/patrol_pipeline_walker.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/patrol_watchdog.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/patrol_emergency_telephone.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/golden_sun.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/ochre_fog.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "sun_preview_superseded",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-fa79f1e2-ce5c-4404-9600-edee5cd1a8a2.png"
+    },
+    {
+      "focus": "NAM_wrk_trade_house",
+      "title": "Подворье в метрополии",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is the new desert terrain layer. REMOVE the entire giant SUN, its circular glow, rays, sky and excessive yellow halo. Preserve main faces, clothing, buildings/equipment, poses and relative size. Replace only the background: Low pale dunes barely visible behind exchange facade; keep the merchant and palace dominant. Keep warm amber side lighting on subjects but mute overly orange fog. Compact almost square silhouette with transparent space around ALL outer edges, terrain and fine dust taper to transparency. No sun, orb, circle, halo, text or frame. This is a layered HOI4 focus icon, not a rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-2587c578-9ffe-435c-aed1-411e7d768d8f.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0d7fc7be-4a75-4fe0-8c5a-72cc7a778e6e.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-1cb0cc82-e8e8-4dc7-82ee-04fa7227145c.png"
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "title": "Обратные рейсы",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is the new desert terrain layer. REMOVE the entire giant SUN, its circular glow, rays, sky and excessive yellow halo. Preserve main faces, clothing, buildings/equipment, poses and relative size. Replace only the background: A desert coastal port: low dry sandstone shore behind cargo ship, ship on a subtle dark strip of harbor water; machine remains suspended on chains. Keep warm amber side lighting on subjects but mute overly orange fog. Compact almost square silhouette with transparent space around ALL outer edges, terrain and fine dust taper to transparency. No sun, orb, circle, halo, text or frame. This is a layered HOI4 focus icon, not a rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-bd03917d-ce48-4245-a360-a318272e8143.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-d88912c5-d30a-42ba-b291-16941d4648e2.png"
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "title": "Склады метрополии",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is new desert terrain. REMOVE the entire giant SUN, circular glow, rays, sky and yellow halo. Preserve main faces, clothing, buildings, equipment, poses and relative size. Replace background: Rocky dry escarpment behind arsenal roof, rifle crate clearly readable in front. Terrain behind subjects, not a huge foreground pedestal. Warm restrained amber side lighting, natural material colors, muted dusty beige haze. Compact square silhouette with transparent space around ALL edges. No sun, orb, circle, halo, text or frame. Layered HOI4 focus icon, not rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0a39d200-3bcf-465f-92fb-9917b24b0ef5.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-8ec0008c-cc57-4c75-a6bf-2c0a1b3c4b45.png"
+    },
+    {
+      "focus": "NAM_imperial_gendarmes",
+      "title": "Имперская жандармерия",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is new desert terrain. REMOVE the entire giant SUN, circular glow, rays, sky and yellow halo. Preserve main faces, clothing, buildings, equipment, poses and relative size. Replace background: Low rocky desert ridgeline behind marching gendarmes, no bright halo around commander. Terrain behind subjects, not a huge foreground pedestal. Warm restrained amber side lighting, natural material colors, muted dusty beige haze. Compact square silhouette with transparent space around ALL edges. No sun, orb, circle, halo, text or frame. Layered HOI4 focus icon, not rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-2cf1bc97-f6dd-4ca1-949c-2140853b4c58.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0b74a0f7-27e0-4058-8405-ffe1e3b191a1.png"
+    },
+    {
+      "focus": "NAM_oilfield_militia",
+      "title": "Промысловая самооборона",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is new dune terrain. REMOVE entire giant SUN, circular glow, rays, sky and yellow halo. Preserve main faces, clothing, dog, equipment, poses and relative size. Replace background: Sweeping dunes and distant dark oil derricks behind driller and barricade. Dunes behind subjects, not large foreground pedestal. Restrained warm side light, natural material colors, muted sandy dust. Compact square silhouette with transparent margins on ALL edges. No sun, orb, halo, text or frame. Layered HOI4 focus icon, not rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-ffda91cd-c349-4fce-8ef3-affe67895646.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0d7fc7be-4a75-4fe0-8c5a-72cc7a778e6e.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-7bf90012-8224-43fa-95a2-2bf12dc12505.png"
+    },
+    {
+      "focus": "NAM_pipeline_patrols",
+      "title": "Обходчики трубопроводов",
+      "prompt": "Use case: precise-object-edit. First image is an existing focus collage to edit. Second is new dune terrain. REMOVE entire giant SUN, circular glow, rays, sky and yellow halo. Preserve main faces, clothing, dog, equipment, poses and relative size. Replace background: Broad low dunes behind patrolman, dog and telephone; muted sand haze near pipeline. Dunes behind subjects, not large foreground pedestal. Restrained warm side light, natural material colors, muted sandy dust. Compact square silhouette with transparent margins on ALL edges. No sun, orb, halo, text or frame. Layered HOI4 focus icon, not rectangular scene.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-fa79f1e2-ce5c-4404-9600-edee5cd1a8a2.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0d7fc7be-4a75-4fe0-8c5a-72cc7a778e6e.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-3e788a8a-c267-4bd7-be6c-1df007e8cb65.png"
+    },
+    {
+      "focus": "NAM_commissioner_plan",
+      "title": "Печать под планом комиссара",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 national-focus icon, compact almost square isolated photographic collage. Preserve exact recognizable faces, clothing and object designs from the supplied subject layers. Natural skin, steel, paper and fabric; restrained amber SIDE LIGHT, deep charcoal shadows, strong large readable silhouettes. NO SUN, solar disc, moon, halo, glowing orb, circular light or radial rays. Use the supplied sandy/rocky desert layer as irregular background terrain, partly behind the subjects, its visible ridgeline must read as desert. Fine dusty haze only at base. Alpha-zero around all outer contours, transparent margins on all four sides, no rectangular landscape or sky backdrop, text, badge, frame, extra subjects or duplicates.  Focus: Печать под планом комиссара. The last input is the desert backdrop; preceding inputs are main subjects. Layout: Severe commissioner dominates left two thirds, requisition plan large and slightly tilted at right foreground. Narrow low dunes behind elbows only; avoid busy background.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/commissioner_severe_official.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/commissioner_requisition_plan.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0d7fc7be-4a75-4fe0-8c5a-72cc7a778e6e.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-da1b0922-5b66-4f92-8310-426e3f0760f0.png"
+    },
+    {
+      "focus": "NAM_second_ledger",
+      "title": "Вторая бухгалтерия",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 national-focus icon, compact almost square isolated photographic collage. Preserve exact recognizable faces, clothing and object designs from the supplied subject layers. Natural skin, steel, paper and fabric; restrained amber SIDE LIGHT, deep charcoal shadows, strong large readable silhouettes. NO SUN, solar disc, moon, halo, glowing orb, circular light or radial rays. Use the supplied sandy/rocky desert layer as irregular background terrain, partly behind the subjects, its visible ridgeline must read as desert. Fine dusty haze only at base. Alpha-zero around all outer contours, transparent margins on all four sides, no rectangular landscape or sky backdrop, text, badge, frame, extra subjects or duplicates.  Focus: Вторая бухгалтерия. The last input is the desert backdrop; preceding inputs are main subjects. Layout: Accountant upper right looks down at open secret ledger across lower left, loose hidden page visibly protrudes. Narrow muted rocky ridge behind his shoulder, dark discreet mood.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/second_ledger_secret_book.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/second_ledger_accountant.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-29e8ab09-57e2-47c4-a6e5-928e0fabbfda.png"
+    },
+    {
+      "focus": "NAM_metropolitan_instructors",
+      "title": "Инструкторы метрополии",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 national-focus icon, compact almost square isolated photographic collage. Preserve exact recognizable faces, clothing and object designs from the supplied subject layers. Natural skin, steel, paper and fabric; restrained amber SIDE LIGHT, deep charcoal shadows, strong large readable silhouettes. NO SUN, solar disc, moon, halo, glowing orb, circular light or radial rays. Use the supplied sandy/rocky desert layer as irregular background terrain, partly behind the subjects, its visible ridgeline must read as desert. Fine dusty haze only at base. Alpha-zero around all outer contours, transparent margins on all four sides, no rectangular landscape or sky backdrop, text, badge, frame, extra subjects or duplicates.  Focus: Инструкторы метрополии. The last input is desert backdrop; preceding inputs are main subjects. Layout: Senior instructor large at right pointing across the collage; smaller drilling recruits recede along lower left. Low dry sandstone ridge behind the group, sparse dust.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/instructors_senior_officer.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/instructors_garrison_drill.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-5845a091-51a8-4993-b178-b3378dec723e.png"
+    },
+    {
+      "focus": "NAM_quiet_officer_lists",
+      "title": "Тихие списки офицеров",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 national-focus icon, compact almost square isolated photographic collage. Preserve exact recognizable faces, clothing and object designs from the supplied subject layers. Natural skin, steel, paper and fabric; restrained amber SIDE LIGHT, deep charcoal shadows, strong large readable silhouettes. NO SUN, solar disc, moon, halo, glowing orb, circular light or radial rays. Use the supplied sandy/rocky desert layer as irregular background terrain, partly behind the subjects, its visible ridgeline must read as desert. Fine dusty haze only at base. Alpha-zero around all outer contours, transparent margins on all four sides, no rectangular landscape or sky backdrop, text, badge, frame, extra subjects or duplicates.  Focus: Тихие списки офицеров. The last input is desert backdrop; preceding inputs are main subjects. Layout: Thoughtful officer with pencil at upper left, large open personnel folder at lower right. Very subdued low desert dunes visible between shapes, secretive charcoal-brown shadows.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_conspiratorial_officer.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_personnel_register.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-0d7fc7be-4a75-4fe0-8c5a-72cc7a778e6e.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-041c61ee-8ec4-498e-b878-f99b15386d6e.png"
+    },
+    {
+      "focus": "NAM_last_centre_register",
+      "title": "Последний реестр центра",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 national-focus icon, compact almost square isolated photographic collage. Preserve exact recognizable faces, clothing and object designs from the supplied subject layers. Natural skin, steel, paper and fabric; restrained amber SIDE LIGHT, deep charcoal shadows, strong large readable silhouettes. NO SUN, solar disc, moon, halo, glowing orb, circular light or radial rays. Use the supplied sandy/rocky desert layer as irregular background terrain, partly behind the subjects, its visible ridgeline must read as desert. Fine dusty haze only at base. Alpha-zero around all outer contours, transparent margins on all four sides, no rectangular landscape or sky backdrop, text, badge, frame, extra subjects or duplicates.  Focus: Последний реестр центра. The last input is desert backdrop; preceding inputs are main subjects. Layout: Courier large on left, closed tied registry book overlapping lower right. Sandstone ridge and thin pale sand haze behind lower shoulders; clear face, book and satchel.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/last_register_departing_courier.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/last_register_closed_archive.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-b65d6c7f-2529-4d57-9e3b-a43bc5beaef2.png"
+      ],
+      "generator": "Built-in image_gen",
+      "variant": "desert_preview",
+      "preview_only": true,
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-463d2e4a-ca00-452c-805d-86167f92d449.png"
     }
   ],
   "native_export": {
@@ -968,5 +1313,6 @@
   ],
   "composition_direction": "Grandiose political and industrial imagery with dominant large figures or symbols, dramatic scale and strong graphic accents. Individual assets should support a monumental photographic collage. Preserve natural materials and avoid small inventory-item presentation.",
   "monumental_style_direction": "Grand symbolic imperial photomontage: colossal focal objects, monumental architecture, dramatic amber light and deep charcoal shadows, elemental sand or fog. Broad readable masses and exaggerated scale rather than ordinary tabletop props. Supply every object, atmosphere and light effect as a separate transparent PNG for manual assembly.",
-  "delivery_policy": "Deliver each requested focus element as a separate transparent PNG. Generate an assembled composition only when explicitly requested; keep assembled previews outside the mod."
+  "delivery_policy": "Deliver each requested focus element as a separate transparent PNG. Generate an assembled composition only when explicitly requested; keep assembled previews outside the mod.",
+  "background_direction": "Prefer varied desert dunes, sandstone ridges and restrained dust as background layers. Do not repeat a large sun disc or circular halo across the set. Keep amber side lighting on natural materials and preserve transparency around each independent asset. Use subdued terrain for administrative subjects; foreground silhouettes remain dominant."
 }
