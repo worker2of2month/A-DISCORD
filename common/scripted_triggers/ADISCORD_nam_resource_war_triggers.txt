@@ -1248,3 +1248,35 @@ NAM_econ_refinery_available = {
 		}
 	}
 }
+
+# COUNTRY NAM. Security requires an oil district still held by Svetlogorye.
+NAM_mil_security_operable = {
+	NAM_independent_programmes_operable = yes
+	OR = {
+		AND = {
+			owns_state = 67
+			controls_state = 67
+		}
+		AND = {
+			owns_state = 688
+			controls_state = 688
+		}
+		AND = {
+			owns_state = 689
+			controls_state = 689
+		}
+		AND = {
+			owns_state = 690
+			controls_state = 690
+		}
+		AND = {
+			owns_state = 719
+			controls_state = 719
+		}
+	}
+}
+
+NAM_mil_mobile_operation_open = {
+	NAM_independent_programmes_operable = yes
+	has_war = yes
+}

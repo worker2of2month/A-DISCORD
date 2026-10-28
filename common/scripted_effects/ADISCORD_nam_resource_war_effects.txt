@@ -3128,15 +3128,32 @@ NAM_line_begin = {
 	NAM = { add_to_variable = { var = NAM_lines_in_progress value = 1 } }
 }
 
-# STATE target. Releases an unfinished line: slot and treasury deposit return.
+# STATE target. A supply project refunds its full receipt; an ordinary line
+# returns its 100 treasury deposit. Both release the same preparation slot.
 NAM_line_release = {
 	if = {
 		limit = { has_state_flag = NAM_line_in_progress }
 		clr_state_flag = NAM_line_in_progress
-		NAM = {
-			subtract_from_variable = { var = NAM_lines_in_progress value = 1 }
-			set_temp_variable = { var = NAM_treasury_amount value = 100 }
-			NAM_add_treasury = yes
+		NAM = { subtract_from_variable = { var = NAM_lines_in_progress value = 1 } }
+		if = {
+			limit = { has_variable = NAM_line_supply_deposit }
+			NAM = {
+				add_political_power = 25
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = NAM
+				}
+				set_temp_variable = { var = NAM_treasury_amount value = PREV.NAM_line_supply_deposit }
+				NAM_add_treasury = yes
+			}
+			clear_variable = NAM_line_supply_deposit
+		}
+		else = {
+			NAM = {
+				set_temp_variable = { var = NAM_treasury_amount value = 100 }
+				NAM_add_treasury = yes
+			}
 		}
 	}
 }
@@ -3430,7 +3447,19 @@ NAM_field_update_units = {
 NAM_field_apply_damage = {
 	if = {
 		limit = { has_variable = NAM_field_condition }
-		subtract_from_variable = { var = NAM_field_condition value = NAM_field_damage_amount }
+		set_temp_variable = { var = NAM_field_effective_damage value = NAM_field_damage_amount }
+		if = {
+			limit = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+				NAM = {
+					NAM_independent_programmes_operable = yes
+					has_decision = NAM_mil_field_security
+				}
+			}
+			multiply_temp_variable = { var = NAM_field_effective_damage value = 0.5 }
+		}
+		subtract_from_variable = { var = NAM_field_condition value = NAM_field_effective_damage }
 		clamp_variable = {
 			var = NAM_field_condition
 			min = 0

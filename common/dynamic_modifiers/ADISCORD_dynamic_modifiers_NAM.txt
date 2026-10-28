@@ -223,3 +223,41 @@ NAM_south_convoy_blockade = {
 	fuel_gain_factor = -0.25
 	industrial_capacity_factory = -0.05
 }
+
+# Temporary operational tempo; payment is made before installation.
+NAM_mil_mobile_operation = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { NAM_mil_mobile_operation_open = yes }
+	remove_trigger = { NOT = { NAM_mil_mobile_operation_open = yes } }
+	army_speed_factor = 0.10
+	planning_speed = 0.25
+	army_fuel_consumption_factor = 0.15
+	supply_consumption_factor = 0.05
+}
+
+# STATE. Supply remains local and closes when the defended campaign ends.
+NAM_mil_forward_depot = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+		NAM = {
+			NAM_independent_programmes_operable = yes
+			NAM_line_programme_open = yes
+		}
+	}
+	remove_trigger = {
+		NOT = {
+			AND = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+				NAM = {
+					NAM_independent_programmes_operable = yes
+					NAM_line_programme_open = yes
+				}
+			}
+		}
+	}
+	local_supplies = 0.20
+	local_org_regain = 0.10
+}
