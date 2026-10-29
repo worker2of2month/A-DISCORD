@@ -4961,7 +4961,7 @@ RUS_lab_spawn_zeppelin = {
 	}
 	capital_scope = {
 		create_unit = {
-			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Khanate Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			division = "name = \"Воздушный линкор \\\"Цепелин\\\"\" division_template = \"Khanate Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 			owner = RUS
 			allow_spawning_on_enemy_provs = no
 		}

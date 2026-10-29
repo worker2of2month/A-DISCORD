@@ -46,6 +46,7 @@ class FactoryModelTests(unittest.TestCase):
         for kind, building in builder.KINDS.items():
             entity = builder.entity_text(kind)
             self.assertIn(entity, text)
+            self.assertIn('version = 1', entity)
             self.assertIn('default_state = "idle"', entity)
             self.assertEqual(entity.count('particle = "factory_smoke_particle"'), 1)
             self.assertEqual(entity.count('particle = "building_damaged_particle"'), 2)

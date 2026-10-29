@@ -593,8 +593,8 @@ def check_ladder(
         and "NOT = { has_country_flag = NAM_weber_amnesty }"
         in named_block(event_block(events, "ADISCORD_nam_resource_war.2"), "trigger")
         and "set_country_flag = NAM_weber_amnesty" in named_block(effects, "NAM_weber_amnesty")
-        and "recruit_character = NAM_Yaroslav_Weber" in named_block(effects, "NAM_weber_amnesty"),
-        "the amnesty must recruit Weber for NAM and prevent SLF for good",
+        and "NAM_activate_weber_commander = yes" in named_block(effects, "NAM_weber_amnesty"),
+        "the amnesty must activate Weber for NAM and prevent SLF for good",
     )
     clamp = named_block(effects, "NAM_underground_clamp")
     check(

@@ -1,4 +1,34 @@
 spriteTypes = {
+	SpriteType = {
+		name = "GFX_support_equipment_1_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_01_field_kit.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_support_equipment_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_support_equipment_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_support_equipment_2200_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_support_01_field_kit_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_01_field_kit.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_support_02_drone_kit_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
+	}
+
 	spriteType = {
 		name = "GFX_STP_taran_project"
 		texturefile = "gfx/interface/technologies/STP_taran_project.dds"

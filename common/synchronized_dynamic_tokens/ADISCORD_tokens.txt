@@ -159,3 +159,6 @@ NAM_hold_field_67
 NAM_hold_field_689
 NAM_hold_field_690
 NAM_rival_demand
+ADISCORD_interceptor_archetype
+ADISCORD_strike_drone_archetype
+transport_plane_equipment

@@ -7,6 +7,84 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_air_equipment_prerequisites_precede_their_models(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries
+
+        equipment = block(entries("common/units/equipment/ADISCORD_air_equipment.txt"), "equipments")
+        identifiers = {item.key for item in equipment}
+        loaded = set()
+        for item in equipment:
+            for field in item.value:
+                if field.key in {"archetype", "parent"} and field.value in identifiers:
+                    self.assertIn(field.value, loaded, f"{item.key}: {field.key}")
+            loaded.add(item.key)
+
+    def test_nam_scripted_text_has_unique_names_and_complete_body(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, scalar
+
+        definitions = entries("common/scripted_localisation/ADISCORD_nam_resource_war_scripted_loc.txt")
+        names = [scalar(item.value, "name") for item in definitions]
+        self.assertEqual(len(names), len(set(names)))
+        for item in definitions:
+            self.assertEqual(item.key, "defined_text")
+            self.assertTrue({field.key for field in item.value} <= {"name", "text"})
+        bodies = {scalar(item.value, "name"): item.value for item in definitions}
+        body = bodies["NAMBasinLineBody"]
+        self.assertEqual(
+            [scalar(field.value, "localization_key") for field in body if field.key == "text"],
+            ["NAM_bw_line_body"],
+        )
+        status = bodies["NAMBasinLine"]
+        self.assertEqual(
+            [scalar(field.value, "localization_key") for field in status if field.key == "text"],
+            ["NAM_mil_forward_supply_map", "NAM_mil_forward_depot", "NAM_bw_line_prepared",
+             "NAM_bw_line_building", "NAM_bw_line_none"],
+        )
+
+    def test_weber_starts_dormant_and_both_routes_activate_his_commander_role(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        history = entries("history/countries/NAM - NamestnikLand.txt")
+        self.assertEqual(
+            [item.value for item in history if item.key == "recruit_character"].count("NAM_Yaroslav_Weber"),
+            1,
+        )
+        characters = block(entries("common/characters/NAM.txt"), "characters")
+        dormant = block(characters, "NAM_Yaroslav_Weber")
+        self.assertFalse({"corps_commander", "country_leader"} & {item.key for item in dormant})
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        for route in ("NAM_weber_amnesty", "NAM_exile_choose_humanist"):
+            self.assertEqual(scalar(block(effects, route), "NAM_activate_weber_commander"), "yes")
+        activation = block(block(effects, "NAM_activate_weber_commander"), "if")
+        guard = block(block(activation, "limit"), "NAM_Yaroslav_Weber")
+        self.assertEqual(scalar(guard, "is_unit_leader"), "no")
+        role = block(activation, "add_corps_commander_role")
+        self.assertEqual(scalar(role, "character"), "NAM_Yaroslav_Weber")
+        for key, value in {"skill": "3", "attack_skill": "3", "defense_skill": "2",
+                           "planning_skill": "3", "logistics_skill": "3"}.items():
+            self.assertEqual(scalar(role, key), value)
+
+    def test_air_stockpile_dynamic_tokens_are_synchronized(self):
+        tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text().split()
+        for token in ("ADISCORD_interceptor_archetype", "ADISCORD_strike_drone_archetype",
+                      "transport_plane_equipment"):
+            self.assertEqual(tokens.count(token), 1)
+
+    def test_port_contract_texture_and_shine_resolve_to_the_same_asset(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        textures = []
+        for path, name in (("interface/ADISCORD_national_focus.gfx", "GFX_focus_STP_party_port_contracts"),
+                           ("interface/ADISCORD_focus_shines.gfx", "GFX_focus_STP_party_port_contracts_shine")):
+            sprites = block(entries(path), "spriteTypes")
+            sprite = next(item.value for item in sprites if scalar(item.value, "name") == name)
+            texture = scalar(sprite, "texturefile").strip('"')
+            self.assertTrue((ROOT / texture).is_file(), texture)
+            textures.append(texture)
+            for animation in (item.value for item in sprite if item.key == "animation"):
+                self.assertEqual(scalar(animation, "animationmaskfile").strip('"'), texture)
+        self.assertEqual(textures[0], textures[1])
+
     def test_stp_scripts_use_native_power_and_temporary_variable_operations(self):
         paths = (
             "common/decisions/ADISCORD_STP_decisions.txt",

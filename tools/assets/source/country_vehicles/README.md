@@ -14,7 +14,8 @@ tanks and STS Taran. The APC and Taran geometry builders call its exporter.
 - STS: six-wheel chassis with a separate engine hood, driver's cab and troop box;
   open shielded weapon mount, olive paint and external kit.
 - NAM: wide eight-wheel amphibious hull with a boat bow, side floats and stern jets;
-  rear asymmetric turret with an offset optic housing, teal paint and ochre strips.
+  rear asymmetric turret with an offset optic housing, sand paint, earth-brown
+  recesses and sun-bleached sand strips.
 - NOD: six large wheels with separate angled mudguards, a continuous sloped hull,
   rear troop ramp and compact enclosed turret; slate-blue armour and pale bands.
 

@@ -266,7 +266,7 @@ def native_position(point):
 
 def entity_text(kind):
     lines = ['entity = {', f'\tname = "building_{KINDS[kind]}"',
-             f'\tpdxmesh = "{model_name(kind)}_mesh"', '\tscale = 1']
+             '\tversion = 1', f'\tpdxmesh = "{model_name(kind)}_mesh"', '\tscale = 1']
     for prefix, points in (("factory_smoke", SMOKE[kind]), ("factory_damage", DAMAGE[kind])):
         for index, point in enumerate(points, 1):
             x, y, z = native_position(point)

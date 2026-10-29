@@ -979,18 +979,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBasinLine
-	text = {
-		trigger = {
-			has_state_flag = NAM_line_in_progress
-			has_variable = NAM_line_supply_deposit
-		}
-		localization_key = NAM_mil_forward_supply_map
-	}
-	text = {
-		trigger = { has_dynamic_modifier = { modifier = NAM_mil_forward_depot } }
-		localization_key = NAM_mil_forward_depot
-	}Body
+	name = NAMBasinLineBody
 	text = {
 		localization_key = NAM_bw_line_body
 	}
@@ -1222,6 +1211,17 @@ defined_text = {
 # STATE node.
 defined_text = {
 	name = NAMBasinLine
+	text = {
+		trigger = {
+			has_state_flag = NAM_line_in_progress
+			has_variable = NAM_line_supply_deposit
+		}
+		localization_key = NAM_mil_forward_supply_map
+	}
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_mil_forward_depot } }
+		localization_key = NAM_mil_forward_depot
+	}
 	text = {
 		trigger = { has_state_flag = NAM_line_prepared }
 		localization_key = NAM_bw_line_prepared

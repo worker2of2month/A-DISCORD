@@ -6744,6 +6744,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_60_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6762,6 +6763,7 @@ NAM_public_campaigns = {
 			}
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_our_own_word_slot_held }
@@ -6823,6 +6825,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_30_tt
 			custom_effect_tooltip = NAM_campaign_answer_leaflets_tt
 			hidden_effect = {
 				if = {
@@ -6845,6 +6848,7 @@ NAM_public_campaigns = {
 			}
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_answer_leaflets_slot_held }
@@ -6902,6 +6906,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_75_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6918,6 +6923,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_oil_is_ours_slot_held }
@@ -6974,6 +6980,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_80_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6990,6 +6997,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_every_seal_counts_slot_held }
@@ -7047,6 +7055,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_70_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7063,6 +7072,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_wages_on_time_slot_held }
@@ -7116,6 +7126,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_70_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7132,6 +7143,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_ladder_holds_slot_held }
@@ -7185,6 +7197,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_75_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7201,6 +7214,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_charter_of_districts_slot_held }
@@ -7252,6 +7266,7 @@ NAM_public_campaigns = {
 		}
 		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_70_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7268,6 +7283,7 @@ NAM_public_campaigns = {
 			NAM_country_operable = no
 		}
 		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
 			hidden_effect = {
 				if = {
 					limit = { has_country_flag = NAM_campaign_furnaces_threaten_the_desert_slot_held }
@@ -8221,6 +8237,7 @@ NAM_underground = {
 		days_remove = 60
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = NAM_operation_repeat_after_completion_30_tt
 			custom_effect_tooltip = NAM_colonial_pipeline_guard_tt
 		}
 		cancel_trigger = {
@@ -8266,6 +8283,7 @@ NAM_underground = {
 		days_remove = 60
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = NAM_operation_repeat_after_completion_30_tt
 			custom_effect_tooltip = NAM_print_supply_control_tt
 		}
 		cancel_trigger = {
@@ -8310,6 +8328,7 @@ NAM_underground = {
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = NAM_operation_repeat_60_tt
 			custom_effect_tooltip = NAM_courier_network_disrupted_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_underground_change value = -12 }

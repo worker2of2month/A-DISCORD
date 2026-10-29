@@ -14,6 +14,7 @@ recruit_character = NAM_Grigory_Levashov
 recruit_character = NAM_Gleb_Burov
 recruit_character = NAM_Anton_Zhar
 recruit_character = NAM_Matvei_Prichal
+recruit_character = NAM_Yaroslav_Weber
 
 ####### Basic shit
 

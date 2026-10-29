@@ -38,7 +38,7 @@
           -0.56
         ]
       ],
-      "source_blend_sha256": "58d958f4273e35de012cafc0cd2c8e9858bb16aab3ba1929fdaf1824777441d6"
+      "source_blend_sha256": "3394777980da1e1f0a2f7cd771f4f9bf5fc722f6d8fa11f662a77e61214e7458"
     },
     "military": {
       "vertices": 1848,
@@ -78,7 +78,7 @@
           0.14
         ]
       ],
-      "source_blend_sha256": "86bb34db2355437196d31e2e05b869033841536ae83d2619617fc888ba85f165"
+      "source_blend_sha256": "911b9d223ca60c78b587a912fd2b563280b28c2d337c5ddc559e5417bc143a64"
     }
   },
   "files": {
@@ -91,7 +91,7 @@
   "native_reimport": true,
   "hoi4_runtime_verified": false,
   "input_sha256": {
-    "tools/builders/build_adiscord_factory_models.py": "8b614dee7b719a7931258846233dc7a95764d553aa7f2a2887561c4166d8dc77",
+    "tools/builders/build_adiscord_factory_models.py": "989d2424402c558fb99c0bc2ce6d6a497b67b41a49bc2b02d60758208ffc6016",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a"
   }
 }

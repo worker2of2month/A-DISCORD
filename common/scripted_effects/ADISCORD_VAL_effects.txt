@@ -3737,7 +3737,7 @@ VAL_zeppelin_finish = {
 			# The paid crew is already outside the national recruit pool.
 			capital_scope = {
 				create_unit = {
-					division = "name = \"Воздушный линкор «Кефрейт»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					division = "name = \"Воздушный линкор \\\"Кефрейт\\\"\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 					owner = VAL
 					allow_spawning_on_enemy_provs = no
 				}
@@ -3763,7 +3763,7 @@ VAL_spawn_zeppelin_trial = {
 		# Debug staffing and hull supply are independent of national reserves.
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Воздушный линкор \\\"Цепелин\\\"\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}

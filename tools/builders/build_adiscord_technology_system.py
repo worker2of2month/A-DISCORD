@@ -814,43 +814,43 @@ BRANCHES = tuple(expand_dense_branch(branch) for branch in BRANCHES)
 # visual_level rather than technology localisation.
 TECH_TEXT_OVERRIDES = {
     "drone_recon_swarms": (
-        "Программа Р-63 «След»",
+        "Программа Р-63 \"След\"",
         "R-63 “Trace” Programme",
     ),
     "active_scouting_suites": (
-        "Контур Р-66 «Эхо»",
+        "Контур Р-66 \"Эхо\"",
         "R-66 “Echo” Reconnaissance Loop",
     ),
     "semi_autonomous_combat_modules": (
-        "Контур БТ-62 «Вожак»",
+        "Контур БТ-62 \"Вожак\"",
         "BT-62 “Lead” Control Loop",
     ),
     "autonomous_breakthrough_platforms": (
-        "Программа Т-71 «Таран»",
+        "Программа Т-71 \"Таран\"",
         "T-71 “Ram” Programme",
     ),
     "siege_platform_networks": (
-        "Контур Т-80 «Жернов»",
+        "Контур Т-80 \"Жернов\"",
         "T-80 “Millstone” Siege Loop",
     ),
     "reclaimed_jet_platforms": (
-        "Программа А-50 «Искра»",
+        "Программа А-50 \"Искра\"",
         "A-50 “Spark” Programme",
     ),
     "battlefield_attack_aircraft": (
-        "Программа АШ-50 «Коршун»",
+        "Программа АШ-50 \"Коршун\"",
         "AS-50 “Kite” Programme",
     ),
     "drone_air_wings": (
-        "Контур А-65 «Стая»",
+        "Контур А-65 \"Стая\"",
         "A-65 “Flock” Air-control Loop",
     ),
     "directed_energy_defensive_suites": (
-        "Контур А-73 «Призма»",
+        "Контур А-73 \"Призма\"",
         "A-73 “Prism” Defensive Loop",
     ),
     "suborbital_strike_systems": (
-        "Программа Р-80 «Стрела»",
+        "Программа Р-80 \"Стрела\"",
         "R-80 “Arrow” Programme",
     ),
     "refinery_catalyst_recovery": (
@@ -4804,7 +4804,7 @@ BRANCHES = (
             ),
             (
                 "drone_recon_swarms",
-                "Программа Р-63 «След»",
+                "Программа Р-63 \"След\"",
                 "R-63 “Trace” Programme",
                 "advanced_light_tank",
                 2161,
@@ -4861,7 +4861,7 @@ BRANCHES = (
         (
             (
                 "armored_carrier_program",
-                "Программа М-63 «Ковчег»",
+                "Программа М-63 \"Ковчег\"",
                 "M-63 “Ark” Programme",
                 "mechanized_equipment_1",
                 2160,
@@ -4895,7 +4895,7 @@ BRANCHES = (
             ),
             (
                 "infantry_combat_vehicle_program",
-                "Контур М-70 «Рубеж»",
+                "Контур М-70 \"Рубеж\"",
                 "M-70 “Rampart” Combat Loop",
                 "mechanized_equipment_2",
                 2168,
@@ -4921,7 +4921,7 @@ BRANCHES = (
             ),
             (
                 "networked_mechanized_cells",
-                "Контур М-83 «Свод»",
+                "Контур М-83 \"Свод\"",
                 "M-83 “Vault” Mechanized Loop",
                 "mechanized_equipment_3",
                 2175,
@@ -4974,7 +4974,7 @@ BRANCHES = (
             ),
             (
                 "semi_autonomous_combat_modules",
-                "Контур БТ-62 «Вожак»",
+                "Контур БТ-62 \"Вожак\"",
                 "BT-62 “Lead” Control Loop",
                 "generic_modern_tank",
                 2162,
@@ -5103,7 +5103,7 @@ BRANCHES = (
             ),
             (
                 "autonomous_breakthrough_platforms",
-                "Программа Т-71 «Таран»",
+                "Программа Т-71 \"Таран\"",
                 "T-71 “Ram” Programme",
                 "nsb_engine_tech_1",
                 2170,
@@ -5123,7 +5123,7 @@ BRANCHES = (
             ),
             (
                 "siege_platform_networks",
-                "Контур Т-80 «Жернов»",
+                "Контур Т-80 \"Жернов\"",
                 "T-80 “Millstone” Siege Loop",
                 "generic_land_cruiser_chassis",
                 2180,
@@ -5186,7 +5186,7 @@ BRANCHES = (
         (
             (
                 "reclaimed_jet_platforms",
-                "Программа А-50 «Искра»",
+                "Программа А-50 \"Искра\"",
                 "A-50 “Spark” Programme",
                 "early_fighter",
                 2150,
@@ -5398,7 +5398,7 @@ BRANCHES = (
         (
             (
                 "battlefield_attack_aircraft",
-                "Программа АШ-50 «Коршун»",
+                "Программа АШ-50 \"Коршун\"",
                 "AS-50 “Kite” Programme",
                 "CAS1",
                 2150,
@@ -5446,7 +5446,7 @@ BRANCHES = (
             ),
             (
                 "drone_air_wings",
-                "Контур А-65 «Стая»",
+                "Контур А-65 \"Стая\"",
                 "A-65 “Flock” Air-control Loop",
                 "CAS3",
                 2166,
@@ -5596,7 +5596,7 @@ BRANCHES = (
             ),
             (
                 "suborbital_strike_systems",
-                "Программа Р-80 «Стрела»",
+                "Программа Р-80 \"Стрела\"",
                 "R-80 “Arrow” Programme",
                 "ballistic_missile_equipment_3",
                 2180,
@@ -8774,10 +8774,10 @@ EQUIPMENT_UNLOCK_ICONS = {
     "ADISCORD_tech_autonomous_support_weapons": "ADISCORD_squad_07_networked_precision_support",
     "ADISCORD_tech_robotic_heavy_weapon_teams": "ADISCORD_squad_08_autonomous_fire_control",
     "ADISCORD_tech_swarm_fireteams": "ADISCORD_squad_09_swarm_coordinated_support",
-    "ADISCORD_tech_field_workshop_tools": "support_equipment_1",
-    "ADISCORD_tech_drone_delivered_repair_spares": "support_equipment_1",
-    "ADISCORD_tech_predictive_parts_prepositioning": "support_equipment_1",
-    "ADISCORD_tech_self_sustaining_support": "support_equipment_1",
+    "ADISCORD_tech_field_workshop_tools": "ADISCORD_support_01_field_kit",
+    "ADISCORD_tech_drone_delivered_repair_spares": "ADISCORD_support_02_drone_kit",
+    "ADISCORD_tech_predictive_parts_prepositioning": "ADISCORD_support_02_drone_kit",
+    "ADISCORD_tech_self_sustaining_support": "ADISCORD_support_02_drone_kit",
     "ADISCORD_tech_hardened_logistics_nodes": "train_equipment_3",
     "ADISCORD_tech_restored_field_artillery": "artillery_equipment",
     "ADISCORD_tech_electrohydraulic_gun_laying": "artillery_equipment",
@@ -8958,6 +8958,10 @@ WEAPON_CATEGORY_ICONS.update(
         "swarm_fireteams": "ADISCORD_squad_04_advanced_fire_support",
         "electrothermal_ignition": "ADISCORD_weapon_03_standardized_battle_rifle",
         "biometric_trigger_locks": "ADISCORD_weapon_03_standardized_battle_rifle",
+        "field_workshop_tools": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_field_workshop_tools"],
+        "drone_delivered_repair_spares": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_drone_delivered_repair_spares"],
+        "predictive_parts_prepositioning": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_predictive_parts_prepositioning"],
+        "self_sustaining_support": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_self_sustaining_support"],
     }
 )
 
@@ -9386,7 +9390,7 @@ TECHNICAL_TECH_DESCRIPTIONS = {
         "Recovering unreacted feedstock increases rubber output",
     ),
     "synthetic_oil_synthesis": (
-        "Открывает выпуск нефти на нефтехимических заводах. Требует технологию «Заводы синтетической резины»; число заводов в регионе расширяется в резиновой ветке",
+        "Открывает выпуск нефти на нефтехимических заводах. Требует технологию \"Заводы синтетической резины\"; число заводов в регионе расширяется в резиновой ветке",
         "Enables oil output at petrochemical plants. Requires Synthetic Rubber Plants; regional plant capacity is expanded in the rubber branch",
     ),
     "synthetic_feedstock_purification": (
@@ -9796,7 +9800,7 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
     if branch.key == "power_shields":
         if index == 0:
             notes.append(
-                "Базовая технология выдаётся завершённым спецпроектом «Силовые щиты». Кефрейт, Партия и Шабрат также получают завершённый проект по своим фокусам."
+                "Базовая технология выдаётся завершённым спецпроектом \"Силовые щиты\". Кефрейт, Партия и Шабрат также получают завершённый проект по своим фокусам."
                 if is_ru else
                 "The Power Shields special project grants this base technology. Kefreyt, the Party and Shabrat can also complete the project through their national focuses."
             )
@@ -9856,7 +9860,7 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
             )
         else:
             notes.append(
-                f"Постоянный выбор специализации: альтернатива «{alternatives}» останется закрыта до конца магистрали."
+                f"Постоянный выбор специализации: альтернатива \"{alternatives}\" останется закрыта до конца магистрали."
                 if is_ru
                 else f"Permanent specialization choice: {alternatives} remains locked for the rest of the branch."
             )
@@ -10936,7 +10940,7 @@ def country_aircraft_names(language: str) -> dict[str, str]:
                 kind_en = ("Propeller attack aircraft", "Jet attack aircraft", "Next-generation strike aircraft")[tier - 1]
             if is_ru:
                 short = f"{prefix_ru}{role_ru}-{year % 100:02d}"
-                name = f"{short} «{titles[tier - 1][0]}»"
+                name = f"{short} \"{titles[tier - 1][0]}\""
                 description = f"{kind_ru} {name}."
             else:
                 short = f"{prefix_en}{role_en}-{year % 100:02d}"
@@ -11139,9 +11143,9 @@ def infantry_card_outputs() -> dict[Path, bytes]:
 def country_uniform_names(language: str) -> dict[str, str]:
     is_ru = language == "russian"
     models = (
-        ("КП-50", "«Дозор»", "IK-50", "“Watch”"),
-        ("КП-55", "«Рубеж»", "IK-55", "“Frontier”"),
-        ("КП-62", "«Бастион»", "IK-62", "“Bastion”"),
+        ("КП-50", "\"Дозор\"", "IK-50", "“Watch”"),
+        ("КП-55", "\"Рубеж\"", "IK-55", "“Frontier”"),
+        ("КП-62", "\"Бастион\"", "IK-62", "“Bastion”"),
     )
     names = {}
     for tech, icon in EQUIPMENT_UNLOCK_ICONS.items():
@@ -11162,7 +11166,7 @@ def country_uniform_names(language: str) -> dict[str, str]:
 
 
 def escape_localisation_value(value: str) -> str:
-    value = value.translate(str.maketrans({char: '"' for char in "«»“”„"}))
+    value = value.translate(str.maketrans({char: '"' for char in "\u00ab\u00bb“”„"}))
     value = re.sub(r"(\b[A-Z][A-Z0-9]*-\d+\s+)'([^'\r\n]+)'", r'\1"\2"', value)
     return re.sub(r'(?<!\\)"', r'\\"', value)
 
@@ -11348,6 +11352,8 @@ def weapon_category_gfx_output(branch_key: str | None = None) -> str:
             texture = (
                 f"gfx/interface/technologies/{icons[tech.key]}.dds"
             )
+            if tech.key in {"electrothermal_ignition", "biometric_trigger_locks"}:
+                texture = texture.removesuffix(".dds") + "_card.dds"
             replacement = (
                 "\tSpriteType = {\n"
                 f'\t\tname = "{sprite}"\n'
@@ -11435,7 +11441,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "Simple trucks with rebuilt engines and running gear. Used to motorize supply hubs.",
     ),
     "infantry_equipment_0": (
-        "ОВ-40 «Лом»",
+        "ОВ-40 \"Лом\"",
         "SR-40 “Crowbar”",
         "ОВ-40",
         "SR-40",
@@ -11443,7 +11449,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A recovered rifle set rebuilt with newly rifled barrels, common calibres, and gauged inspection.",
     ),
     "ADISCORD_infantry_equipment_2156": (
-        "ОВ-56 «Шов»",
+        "ОВ-56 \"Шов\"",
         "SR-56 “Seam”",
         "ОВ-56",
         "SR-56",
@@ -11451,7 +11457,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "The first newly manufactured service rifle with controlled breech obturation and an interchangeable bolt.",
     ),
     "ADISCORD_infantry_equipment_2163": (
-        "АВ-63 «Рёв»",
+        "АВ-63 \"Рёв\"",
         "AR-63 “Roar”",
         "АВ-63",
         "AR-63",
@@ -11459,7 +11465,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "An automatic weapon chambered for an intermediate cartridge intended for controllable short bursts.",
     ),
     "ADISCORD_infantry_equipment_2168": (
-        "АВ-68 «Срез»",
+        "АВ-68 \"Срез\"",
         "AR-68 “Cut”",
         "АВ-68",
         "AR-68",
@@ -11467,7 +11473,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A self-loading rifle with a production-standard mechanism for extraction, feeding, and cocking from firing energy.",
     ),
     "ADISCORD_infantry_equipment_2170": (
-        "АВ-70 «Контур»",
+        "АВ-70 \"Контур\"",
         "AR-70 “Contour”",
         "АВ-70",
         "AR-70",
@@ -11475,7 +11481,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "An automatic rifle with a laser rangefinder and reticle calibrated to the service cartridge trajectory.",
     ),
     "ADISCORD_infantry_equipment_2178": (
-        "АВ-78 «Клык»",
+        "АВ-78 \"Клык\"",
         "AR-78 “Fang”",
         "АВ-78",
         "AR-78",
@@ -11483,7 +11489,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A gas-operated automatic rifle with an adjustable gas system and a stable cycle under fouling.",
     ),
     "ADISCORD_infantry_equipment_2183": (
-        "АВ-83 «Призма»",
+        "АВ-83 \"Призма\"",
         "AR-83 “Prism”",
         "АВ-83",
         "AR-83",
@@ -11491,7 +11497,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "An automatic rifle with a chrome-lined bore that preserves barrel life under a high rate of fire.",
     ),
     "ADISCORD_infantry_equipment_2193": (
-        "АВ-93 «Игла»",
+        "АВ-93 \"Игла\"",
         "AR-93 “Needle”",
         "АВ-93",
         "AR-93",
@@ -11499,7 +11505,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "An automatic rifle with tuned recoil impulse, a buffered bolt group, and reduced muzzle rise.",
     ),
     "ADISCORD_infantry_equipment_2200": (
-        "ИСК-00 «Предел»",
+        "ИСК-00 \"Предел\"",
         "IWS-00 “Limit”",
         "ИСК-00",
         "IWS-00",
@@ -11507,7 +11513,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "An individual weapon for programmable ammunition that receives range and fuze mode from the sight.",
     ),
     "ADISCORD_squad_weapons_equipment_0": (
-        "КОП-40 «Скат»",
+        "КОП-40 \"Скат\"",
         "FSC-40 “Ray”",
         "КОП-40",
         "FSC-40",
@@ -11515,7 +11521,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "Recovered machine guns, optics, and ammunition issued to the squad heavy group.",
     ),
     "ADISCORD_squad_weapons_equipment_2156": (
-        "КОП-56 «Жгут»",
+        "КОП-56 \"Жгут\"",
         "FSC-56 “Cord”",
         "КОП-56",
         "FSC-56",
@@ -11523,7 +11529,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A common belt-fed system with standardized boxes and portable spare barrels.",
     ),
     "ADISCORD_squad_weapons_equipment_2163": (
-        "КОП-63 «Зуб»",
+        "КОП-63 \"Зуб\"",
         "FSC-63 “Tooth”",
         "КОП-63",
         "FSC-63",
@@ -11531,7 +11537,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A crew-operated anti-tank launcher with a reinforced mount, optics, and portable ammunition.",
     ),
     "ADISCORD_squad_weapons_equipment_2168": (
-        "КОП-68 «Вал»",
+        "КОП-68 \"Вал\"",
         "FSC-68 “Shaft”",
         "КОП-68",
         "FSC-68",
@@ -11539,7 +11545,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A mounted grenade launcher with interchangeable assemblies, shared optics, and portable ammunition.",
     ),
     "ADISCORD_squad_weapons_equipment_2170": (
-        "КОП-70 «Гул»",
+        "КОП-70 \"Гул\"",
         "FSC-70 “Rumble”",
         "КОП-70",
         "FSC-70",
@@ -11547,7 +11553,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A machine-gun system with a rangefinder and target sharing through the crew tablet.",
     ),
     "ADISCORD_squad_weapons_equipment_2178": (
-        "КОП-78 «Узел»",
+        "КОП-78 \"Узел\"",
         "FSC-78 “Knot”",
         "КОП-78",
         "FSC-78",
@@ -11555,7 +11561,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A mounted grenade launcher with programmable fuzes and protected target sharing.",
     ),
     "ADISCORD_squad_weapons_equipment_2183": (
-        "КОП-83 «Маяк»",
+        "КОП-83 \"Маяк\"",
         "FSC-83 “Beacon”",
         "КОП-83",
         "FSC-83",
@@ -11563,7 +11569,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A remotely controlled fire-support mount with multichannel sensors and a crew tablet.",
     ),
     "ADISCORD_squad_weapons_equipment_2193": (
-        "КОП-93 «Рой»",
+        "КОП-93 \"Рой\"",
         "FSC-93 “Swarm”",
         "КОП-93",
         "FSC-93",
@@ -11571,7 +11577,7 @@ LAND_EQUIPMENT_LOCALISATION = {
         "A robotic heavy-weapon carrier with automatic target tracking and manual crew control.",
     ),
     "ADISCORD_squad_weapons_equipment_2200": (
-        "КОП-00 «Хор»",
+        "КОП-00 \"Хор\"",
         "FSC-00 “Chorus”",
         "КОП-00",
         "FSC-00",
@@ -11954,7 +11960,7 @@ for _model, _ru, _en, _ru_desc, _en_desc in (
     ("ADISCORD_deep_strike_airframe_2200", "Ракетоносец глубокого проникновения", "Deep-penetration Missile Carrier",
      "Большая дальность и защита для ударов в глубине вражеской территории. Дорогое производство требует редких материалов.",
      "Long range and protection for strikes deep inside enemy territory. Expensive production requires rare materials."),
-    ("ADISCORD_orbital_tracking_platform_2200", "Дальний ракетоносец «Стрела»", "Strela Long-range Missile Carrier",
+    ("ADISCORD_orbital_tracking_platform_2200", "Дальний ракетоносец \"Стрела\"", "Strela Long-range Missile Carrier",
      "Поздний самолёт стратегического удара с максимальной дальностью и боевой нагрузкой своей линии.",
      "A late strategic strike aircraft with the greatest range and payload in its line."),
     ("ADISCORD_transport_airframe_2162", "Восстановленный транспортный самолёт", "Restored Transport Plane",
@@ -12018,7 +12024,7 @@ for _equipment, _ru, _en, _description_ru, _description_en in (
         "Towed howitzers with equipment for programming corrected shells. Improve fire against infantry and prepared positions.",
     ),
     (
-        "ADISCORD_artillery_equipment_2183", "Автоматизированные гаубицы «Гул»", "Gul Automated Howitzers",
+        "ADISCORD_artillery_equipment_2183", "Автоматизированные гаубицы \"Гул\"", "Gul Automated Howitzers",
         "Буксируемые гаубицы с автоматизированной подачей снарядов и дистанционным наведением. Мощный огонь требует редких сплавов и электронных компонентов.",
         "Towed howitzers with automated shell handling and remote laying. Powerful fire requires rare alloys and electronic components.",
     ),
@@ -12053,7 +12059,7 @@ for _equipment, _ru, _en, _description_ru, _description_en in (
         "Target-tracking drives and rapid-fire barrels improve close protection while retaining an affordable production base.",
     ),
     (
-        "ADISCORD_anti_air_equipment_2165", "Зенитные ракетные комплексы «Заслон»", "Zaslon Surface-to-air Missiles",
+        "ADISCORD_anti_air_equipment_2165", "Зенитные ракетные комплексы \"Заслон\"", "Zaslon Surface-to-air Missiles",
         "Управляемые ракеты усиливают войсковую ПВО, но почти бесполезны против брони. Для производства нужны редкие компоненты.",
         "Guided missiles strengthen divisional air defense but are poorly suited to fighting armor. Production requires rare components.",
     ),

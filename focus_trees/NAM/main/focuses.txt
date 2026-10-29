@@ -32,6 +32,7 @@ focus_tree = {
 			custom_effect_tooltip = NAM_campaign_add_slot_tt
 			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 			unlock_decision_tooltip = NAM_campaign_every_seal_counts
+			custom_effect_tooltip = NAM_campaign_every_seal_counts_unlock_tt
 			add_political_power = 35
 			hidden_effect = {
 				if = {
@@ -318,6 +319,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_answer_leaflets
+			custom_effect_tooltip = NAM_campaign_answer_leaflets_unlock_tt
 			unlock_decision_tooltip = NAM_counterinsurgency_sweep
 			custom_effect_tooltip = NAM_colonial_watch_tt
 			hidden_effect = {
@@ -353,6 +355,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_ladder_holds
+			custom_effect_tooltip = NAM_campaign_ladder_holds_unlock_tt
 			unlock_decision_tooltip = NAM_colonial_gendarme_operation
 			army_experience = 10
 			add_stability = -0.02
@@ -396,6 +399,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_charter_of_districts
+			custom_effect_tooltip = NAM_campaign_charter_of_districts_unlock_tt
 			unlock_decision_tooltip = NAM_colonial_volunteer_training
 			add_manpower = 2000
 			add_stability = 0.02
@@ -598,6 +602,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_wages_on_time
+			custom_effect_tooltip = NAM_campaign_wages_on_time_unlock_tt
 			add_political_power = 45
 			add_stability = 0.03
 		}
@@ -782,6 +787,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_oil_is_ours
+			custom_effect_tooltip = NAM_campaign_oil_is_ours_unlock_tt
 			unlock_decision_tooltip = NAM_colonial_emergency_stocks
 			add_political_power = 25
 			# NAM_ladder_declare_independence applies the lean when it creates the ladder.
@@ -1041,6 +1047,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_our_own_word
+			custom_effect_tooltip = NAM_campaign_our_own_word_unlock_tt
 			custom_effect_tooltip = NAM_campaign_add_slot_tt
 			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 			add_war_support = 0.05
@@ -1087,6 +1094,7 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_campaign_every_seal_counts
+			custom_effect_tooltip = NAM_campaign_every_seal_counts_unlock_tt
 			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 		}
 		ai_will_do = {

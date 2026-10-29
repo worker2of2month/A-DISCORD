@@ -537,8 +537,8 @@ class ShabratUniformIconTests(unittest.TestCase):
     def test_uniform_names_match_research_production_and_three_visual_stages(self):
         names = generator.country_uniform_names("russian")
         expected = [
-            "КП-50 «Дозор»", "КП-55 «Рубеж»", "КП-62 «Бастион»",
-            *[f"КП-62 «Бастион» М{index}" for index in range(1, 7)],
+            "КП-50 \"Дозор\"", "КП-55 \"Рубеж\"", "КП-62 \"Бастион\"",
+            *[f"КП-62 \"Бастион\" М{index}" for index in range(1, 7)],
         ]
         technologies = [
             tech for tech, icon in generator.EQUIPMENT_UNLOCK_ICONS.items()
@@ -920,7 +920,7 @@ class AircraftTechnologyIconTests(unittest.TestCase):
             for line in filter(str.strip, lines):
                 with self.subTest(language=language, line=line[:80]):
                     self.assertIsNotNone(ENTRY.fullmatch(line))
-                    self.assertNotRegex(line, "[«»“”„]")
+                    self.assertNotRegex(line, "[\u00ab\u00bb“”„]")
             self.assertTrue(any('\\"' in line for line in lines))
 
     def test_crew_served_unlock_names_match_the_produced_model(self):
@@ -935,7 +935,7 @@ class AircraftTechnologyIconTests(unittest.TestCase):
             for tech in generator.BRANCH_BY_KEY["squad_weapons"].techs:
                 for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ()):
                     name = generator.LAND_EQUIPMENT_LOCALISATION[equipment][index]
-                    name = name.translate(str.maketrans({char: '"' for char in "«»“”„"}))
+                    name = name.translate(str.maketrans({char: '"' for char in "\u00ab\u00bb“”„"}))
                     self.assertEqual(entries[tech.id], name)
 
     def test_production_type_subtitle_matches_propeller_and_jet_cards(self):

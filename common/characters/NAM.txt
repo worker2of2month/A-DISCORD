@@ -174,9 +174,8 @@ characters = {
 	}
 
 	# Yaroslav Weber on Svetlogorye's side after the amnesty or as the humanist
-	# leader of the island exile. The uprising keeps its own SLF character; this
-	# one is recruited by the amnesty or by the humanists' overthrow of the
-	# namestnik, which also adds his leader role.
+	# leader of the island exile. Recruited dormant at startup; the amnesty and
+	# the humanist takeover activate his roles. SLF has a separate character.
 	NAM_Yaroslav_Weber = {
 		name = NAM_Yaroslav_Weber
 		portraits = {
@@ -188,19 +187,6 @@ characters = {
 				large = GFX_portrait_NAM_Yaroslav_Weber
 				small = GFX_portrait_NAM_Yaroslav_Weber_small
 			}
-		}
-		corps_commander = {
-			traits = {
-				guerilla_fighter
-				ambusher
-				hill_fighter
-			}
-			skill = 3
-			attack_skill = 3
-			defense_skill = 2
-			planning_skill = 3
-			logistics_skill = 3
-			legacy_id = -1
 		}
 	}
 

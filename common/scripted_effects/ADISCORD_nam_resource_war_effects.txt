@@ -4751,7 +4751,7 @@ NAM_weber_talks_refund = {
 NAM_weber_amnesty = {
 	set_country_flag = NAM_weber_amnesty
 	NAM_underground_clamp = yes
-	recruit_character = NAM_Yaroslav_Weber
+	NAM_activate_weber_commander = yes
 	add_to_variable = { var = NAM_grp_dist_support value = 10 }
 	add_to_variable = { var = NAM_grp_nam_support value = -5 }
 	NAM_groups_refresh = yes
@@ -5893,10 +5893,7 @@ NAM_exile_choose_humanist = {
 		ruling_party = humanism
 		elections_allowed = no
 	}
-	if = {
-		limit = { NOT = { has_character = NAM_Yaroslav_Weber } }
-		recruit_character = NAM_Yaroslav_Weber
-	}
+	NAM_activate_weber_commander = yes
 	add_country_leader_role = {
 		character = NAM_Yaroslav_Weber
 		promote_leader = yes
@@ -5911,6 +5908,27 @@ NAM_exile_choose_humanist = {
 	NAM_corp_initialize = yes
 	ADISCORD_economy_mark_dirty = yes
 	log = "[ADISCORD][NAM][EXILE] Veter's humanists overthrow the namestnik."
+}
+
+# COUNTRY NAM. Both political routes use the dormant startup character.
+# An earlier amnesty preserves his accumulated commander experience.
+NAM_activate_weber_commander = {
+	if = {
+		limit = { NAM_Yaroslav_Weber = { is_unit_leader = no } }
+		add_corps_commander_role = {
+			character = NAM_Yaroslav_Weber
+			traits = {
+				guerilla_fighter
+				ambusher
+				hill_fighter
+			}
+			skill = 3
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
+		}
+	}
 }
 
 # ----- Humanist exile: corporations and free zones -----

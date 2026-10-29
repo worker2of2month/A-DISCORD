@@ -1,6 +1,12 @@
 spriteTypes = {	
 
 	spriteType = {
+		name = "GFX_privacy_reveal_eye"
+		texturefile = "gfx/interface/privacy_reveal_eye.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
 		name = "GFX_leader_frame_0_6"
 		texturefile = "gfx/interface/leader_frame_0_6.dds"
 	}

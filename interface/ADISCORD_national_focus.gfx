@@ -326,7 +326,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_party_port_contracts"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_port_contracts.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_foreign_supply_desk.png"
 	}
 
 	spriteType = {

@@ -168,7 +168,7 @@
         "NAM_apc.mesh": "07b65d1ae74f693ddab60dc687a516edf3161b6e3b9aefab9f762cb8f565a4b3",
         "NAM_apc_move.anim": "95eb799f1b4cd7f16f99d751e5a46300c11999d0f43e8f7db92e6ff93bd33b49",
         "NAM_apc_attack.anim": "5a3d4315d1803af54c16278cb21b8b68777db15006304677b78e9ca05d975c93",
-        "NAM_apc_diffuse.dds": "a29bebc8debfadd31624fac02eab5bcef14bc49a1a60beb5f3cfefc6f85e4aff",
+        "NAM_apc_diffuse.dds": "c10dab3b7ffdd948f4b61a925646541b483132e7aa270cc2bfb043bdeaeac9d4",
         "NAM_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
       }
@@ -707,14 +707,14 @@
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_apc_idle.anim": "1f7d88674a3b5d408184f8644545e372542707861f0c7881d17ef066bf3db64c",
     "tools\\assets\\source\\country_vehicles\\STS_apc.blend": "c17e10384bb55c77e4770e65a37ed957951dbbbfc28e8eda91e3d547b252dcda",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NAM_apc_idle.anim": "36c353626271586087dd51a12fa5976c14d596f39e02f1963debdc891c14e25c",
-    "tools\\assets\\source\\country_vehicles\\NAM_apc.blend": "f1b1aab7ce50a4ed620b23f41053933bf7377c4e295993fa3d2c2700fe5ca684",
+    "tools\\assets\\source\\country_vehicles\\NAM_apc.blend": "d74d0aa5c474b3d276d8c53b8c3cd3595b1b99591da555d161b2432b37f5a167",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\VAL_tank_idle.anim": "02726d37b6a064a2f28b32c324a8ed8a5439d93376a85ca79055ddd7aa581b7a",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_tank_idle.anim": "0948ae8f18b37a34e3415b152aaeeb48e593ba2a9a2a95145e7911304e67bda1",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_tank_idle.anim": "cff9b038ddf529fc19e9c2bd0551744aa47ec744f9a1b1763df7fe5f005868f0",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_taran_idle.anim": "b370572b7882a9be3d2de08138d42f48901968a1dae8779e8826394cb755fbf1",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_apc_idle.anim": "4211f940b90a9173d71f2d8ee87abbecfa86a2eda6620d9ae16518ebe2da35e6",
     "tools\\assets\\source\\country_vehicles\\NOD_apc.blend": "b5a406d1f1f71c8a37799039ea2bdb61e3c0d23bba3530afdb6020caaeef624b",
-    "docs\\development\\model-verification\\country_apc.json": "99b42b63408b2e2663a149dabf25725cffa778bf06b2418bd740f1761a528806",
+    "docs\\development\\model-verification\\country_apc.json": "48d6249e224ce842a1c96abbadcc5f53ff91feb12596dcb50986597b1b5b21cb",
     "docs\\development\\model-verification\\STS_taran_verification.json": "8b1ffc7aefd107d383f08a829dec048231d005650cd1fc209648fd866cac56bb"
   }
 }

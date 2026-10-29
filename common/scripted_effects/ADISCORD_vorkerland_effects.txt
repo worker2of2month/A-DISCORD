@@ -11539,25 +11539,38 @@ ADISCORD_vorkerland_empire_install_governor = {
 		limit = { ROOT = { has_completed_focus = WRK_empire_military_governors } }
 		add_dynamic_modifier = { modifier = WRK_empire_military_governorate }
 		ROOT = { add_manpower = 4000 }
-		set_temp_variable = { var = WRK_empire_governor_shift value = 0.02 }
 	}
 	else_if = {
 		limit = { ROOT = { has_completed_focus = WRK_empire_civil_governors } }
 		add_dynamic_modifier = { modifier = WRK_empire_civil_governorate }
 		ROOT = { add_manpower = 2000 }
-		set_temp_variable = { var = WRK_empire_governor_shift value = -0.05 }
 	}
 	else = {
 		add_dynamic_modifier = { modifier = WRK_empire_crown_governorate }
 		ROOT = { add_manpower = 2000 }
-		set_temp_variable = { var = WRK_empire_governor_shift value = -0.03 }
 	}
 	ROOT = {
 		if = {
 			limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = WRK_empire_governor_shift
+			if = {
+				limit = { has_completed_focus = WRK_empire_military_governors }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.02
+				}
+			}
+			else_if = {
+				limit = { has_completed_focus = WRK_empire_civil_governors }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.05
+				}
+			}
+			else = {
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.03
+				}
 			}
 		}
 	}

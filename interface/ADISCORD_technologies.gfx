@@ -1443,7 +1443,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_field_workshop_tools_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_01_field_kit.dds"
 	}
 
 	SpriteType = {
@@ -1463,7 +1463,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_delivered_repair_spares_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
 	}
 
 	SpriteType = {
@@ -1478,12 +1478,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_predictive_parts_prepositioning_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_self_sustaining_support_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_support_02_drone_kit.dds"
 	}
 
 	SpriteType = {

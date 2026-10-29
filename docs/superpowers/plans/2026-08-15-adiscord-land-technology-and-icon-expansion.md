@@ -227,7 +227,7 @@ Map the nine milestone technology IDs to the nine equipment IDs in `ENABLE_EQUIP
 
 - [ ] **Step 4: Add generated RU/EN equipment names**
 
-Use terse series names rather than generic role labels. Keep technical IDs ASCII and localisation natural, for example the naming shape `БТ-63 «Рёв»` / `BT-63 “Roar”`, without country prefixes on global equipment keys.
+Use terse series names rather than generic role labels. Keep technical IDs ASCII and localisation natural, for example the naming shape `БТ-63 "Рёв"` / `BT-63 “Roar”`, without country prefixes on global equipment keys.
 
 - [ ] **Step 5: Run equipment and localisation tests**
 

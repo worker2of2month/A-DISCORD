@@ -1218,6 +1218,11 @@ class WorldEmpireTests(unittest.TestCase):
             self.assertRegex(install, rf"has_completed_focus = {focus} \}} \}}\s*add_dynamic_modifier = \{{ modifier = {modifier} \}}")
         self.assertIn("add_dynamic_modifier = { modifier = WRK_empire_crown_governorate }", install)
         self.assertIn("limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }", install)
+        self.assertNotIn("WRK_empire_governor_shift", install)
+        self.assertEqual(
+            re.findall(r"add_power_balance_value = \{\s*id = ADISCORD_vorkerland_empire_bop\s*value = ([^\s}]+)", install),
+            ["0.02", "-0.05", "-0.03"],
+        )
         categories = read("common/decisions/categories/ADISCORD_vorkerland_categories.txt")
         self.assertIn("has_power_balance = { id = ADISCORD_vorkerland_empire_bop }", named_block(categories, "ADISCORD_vorkerland_empire_category"))
         unlock = block(self.focuses["WRK_empire_imperial_governors"], "completion_reward")

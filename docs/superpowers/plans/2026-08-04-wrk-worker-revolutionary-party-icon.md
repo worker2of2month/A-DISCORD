@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Подключить подготовленный значок к правящей прагматистской партии WRK и переименовать её в «Рабочая революционная партия».
+**Goal:** Подключить подготовленный значок к правящей прагматистской партии WRK и переименовать её в "Рабочая революционная партия".
 
 **Architecture:** Отдельный WRK-текстовый спрайт связывает нормализованное имя PNG с двумя локализационными ключами партии. Небольшой контрактный тест проверяет файл, размер изображения, регистрацию спрайта, русскую локализацию и UTF-8 BOM.
 

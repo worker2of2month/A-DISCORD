@@ -1236,10 +1236,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_party_port_contracts_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_port_contracts.png"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_foreign_supply_desk.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_port_contracts.png"
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_foreign_supply_desk.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

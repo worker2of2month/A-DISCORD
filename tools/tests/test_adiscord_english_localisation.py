@@ -57,7 +57,7 @@ class LocalisationGlyphTests(unittest.TestCase):
 
     def test_supported_text_and_native_markup_are_accepted(self):
         self.write(
-            ' SAMPLE:0 "Ёж, ёлка, «кавычки», à ä ç Æ, ±50, 2 × 3, ·, ’, „text“'
+            ' SAMPLE:0 "Ёж, ёлка, \u00abкавычки\u00bb, à ä ç Æ, ±50, 2 × 3, ·, ’, „text“'
             r'\n\n§G+10%§! £political_power_texticon $NAME|H$ '
             r'''[?FROM.amount|0] [GetText] @STP 'quoted' \"quoted\""'''
         )

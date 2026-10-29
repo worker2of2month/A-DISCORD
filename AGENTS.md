@@ -30,6 +30,12 @@ gameplay and balance-of-power categories.
 Use ASCII '-' instead of typographic dashes (U+2013, U+2014) in all authored
 user-facing text, localisation, documentation and comments. Preserve mathematical
 operators, unchanged third-party source material and Unicode validation semantics.
+Use ASCII double quotation marks (`"`, U+0022) instead of guillemets
+(U+00AB/U+00BB) throughout the mod, including localisation, documentation,
+comments and generator sources. Escape quotes for the containing format:
+inside a localisation value write `\"text\"`; nested quoted script payloads
+need an escape at each parsing level. Keep Unicode validation semantics by
+using explicit code-point escapes in fixtures and normalisation tables.
 
 ## Localisation encoding
 
@@ -130,10 +136,10 @@ check before deletion. Keep cleanup limited to verified paths.
 
 Комментарии объясняют нетривиальное поведение, область действия, порядок вызовов
 и ограничения движка. Не пересказывай очевидный код.
-Не пиши в комментариях, что код взят из TFR или другого мода, сделан «по примеру»
+Не пиши в комментариях, что код взят из TFR или другого мода, сделан "по примеру"
 чужой реализации либо перенесён агентом. Не ссылайся на конкретные сохранения,
 скриншоты, временные каталоги, переписку, оценки агентов и историю прогонов.
-Не оставляй отчёты «раньше было / теперь исправлено», похвалу решению и другие
+Не оставляй отчёты "раньше было / теперь исправлено", похвалу решению и другие
 следы рабочего процесса. Оставляй только информацию, нужную для сопровождения
 текущего кода; техническую документацию также не превращай в дневник работы.
 
@@ -172,6 +178,21 @@ persistent capability, immediate result, and a paid follow-up are useful
 partners; arbitrary bonus padding is not. Reserve custom tooltips for unique
 mechanics, delayed results, and recipient or cost conditions that native output
 cannot explain.
+
+Name propaganda campaign decisions `§YПРОПАГАНДА:§! <название>` in Russian and
+`§YPROPAGANDA:§! <title>` in English. Only the prefix is yellow; the title uses
+the normal colour without surrounding quotation marks. Classify by the actual
+action, not by a reused propaganda icon:
+raids, censorship, construction and other operations are not propaganda campaigns.
+Focus and decision descriptions are narrative text. Never repeat gameplay effects
+in their `_desc` localisation, whether the effect is shown natively or through a
+custom tooltip. Put mechanical explanations in the reward/effect block, including
+unique effects that native output cannot show. Do not duplicate native prices,
+durations, modifiers or cancellation consequences in the description.
+An unlock in a focus needs a short result summary when its name does not explain
+the benefit; put that summary beside `unlock_decision_tooltip` in
+`completion_reward`, never inside the focus or decision description.
+
 Check the whole focus route: a promised unlock must be usable at that point,
 an exclusive branch must give a meaningful alternative, and a delayed reward
 must reach the country the player will control. Do not gate a shared story

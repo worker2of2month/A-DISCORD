@@ -839,6 +839,646 @@
       "companion": "depots_rifle_crate.png",
       "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Выслушать коменданта. Subject: One stern dark olive military commandant's peaked cap with black leather visor, restrained brass braid and plain geometric badge, resting at a dramatic three-quarter angle. No real-world insignia.",
       "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_hear_the_registrar",
+      "title": "Выслушать регистратора",
+      "file": "hear_registrar_archive_cabinet.png",
+      "subject": "One tall dark wooden archival cabinet, two drawers opened enough to reveal dense ranks of ivory docket folders and red ribbon tabs; brass handles, no readable labels. Entire cabinet visible in slight three-quarter view.",
+      "companion": "metropolitan_quota_stamp.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Выслушать регистратора. Subject: One tall dark wooden archival cabinet, two drawers opened enough to reveal dense ranks of ivory docket folders and red ribbon tabs; brass handles, no readable labels. Entire cabinet visible in slight three-quarter view.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_pillar_arbitration",
+      "title": "Третейский суд опор",
+      "file": "pillar_arbitration_mediators_hands.png",
+      "subject": "An isolated pair of calm civilian mediator's hands in dark coat sleeves, palms placed level and open toward two sides, balanced symmetrical gesture at lower chest height; no full body, no table, no props.",
+      "companion": "neutral_basin_negotiation_table.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Третейский суд опор. Subject: An isolated pair of calm civilian mediator's hands in dark coat sleeves, palms placed level and open toward two sides, balanced symmetrical gesture at lower chest height; no full body, no table, no props.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_crisis_office",
+      "title": "Служба происшествий",
+      "file": "crisis_office_switchboard.png",
+      "subject": "One compact vintage manual emergency telephone switchboard with rows of brass jacks, a few cloth patch cords and a hanging black receiver, full wooden cabinet, no operator, no text.",
+      "companion": "empire_urgent_telephone.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Служба происшествий. Subject: One compact vintage manual emergency telephone switchboard with rows of brass jacks, a few cloth patch cords and a hanging black receiver, full wooden cabinet, no operator, no text.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_field_firefighters",
+      "title": "Пожарные дружины промыслов",
+      "file": "field_firefighters_foam_fireman.png",
+      "subject": "One rugged industrial firefighter in dark protective coat and brass helmet, half-length crouched powerful stance holding a thick firehose nozzle with both hands. No water spray or flames, no background. 1930s industrial equipment.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Пожарные дружины промыслов. Subject: One rugged industrial firefighter in dark protective coat and brass helmet, half-length crouched powerful stance holding a thick firehose nozzle with both hands. No water spray or flames, no background. 1930s industrial equipment.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_chancellery_purge",
+      "title": "Чистка канцелярии",
+      "file": "chancellery_purge_dismissal_hand.png",
+      "subject": "One firm gloved administrative hand in a dark civilian sleeve placing a black diagonal cancellation stroke with a thick red grease pencil across an ivory office credential sheet. No eyes or faces, just the hand and credential with abstract rows.",
+      "companion": "hear_registrar_archive_cabinet.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Чистка канцелярии. Subject: One firm gloved administrative hand in a dark civilian sleeve placing a black diagonal cancellation stroke with a thick red grease pencil across an ivory office credential sheet. No eyes or faces, just the hand and credential with abstract rows.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_underground_reports",
+      "title": "Сводки о подполье",
+      "file": "underground_reports_pinned_evidence.png",
+      "subject": "One portable cork-backed intelligence dossier panel with three pinned monochrome photos of a deserted warehouse, an oil derrick and a printing press, connected by two short red threads. Compact coherent evidence object, no readable words.",
+      "companion": "weber_underground_leaflets.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Сводки о подполье. Subject: One portable cork-backed intelligence dossier panel with three pinned monochrome photos of a deserted warehouse, an oil derrick and a printing press, connected by two short red threads. Compact coherent evidence object, no readable words.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_weber_channel",
+      "title": "Канал к Веберу",
+      "file": "weber_channel_discreet_message.png",
+      "subject": "Two hands passing a small folded cream note discreetly: one from a rough worker coat sleeve and one from a dark civilian cuff. Hands and sleeves only, note clearly readable as folded paper but unmarked; quiet horizontal gesture.",
+      "companion": "weber_clean_portrait.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Канал к Веберу. Subject: Two hands passing a small folded cream note discreetly: one from a rough worker coat sleeve and one from a dark civilian cuff. Hands and sleeves only, note clearly readable as folded paper but unmarked; quiet horizontal gesture.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_cache_hunters",
+      "title": "Охотники за тайниками",
+      "file": "cache_hunters_search_soldier.png",
+      "subject": "One crouching olive-uniformed soldier wearing a plain steel helmet, lifting a focused metal hand lantern in his left hand while holding a compact rifle low with his right. Entire crouched figure, alert downward gaze, no terrain or background.",
+      "companion": "depots_rifle_crate.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Охотники за тайниками. Subject: One crouching olive-uniformed soldier wearing a plain steel helmet, lifting a focused metal hand lantern in his left hand while holding a compact rifle low with his right. Entire crouched figure, alert downward gaze, no terrain or background.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_amnesty_lists",
+      "title": "Списки амнистии",
+      "file": "amnesty_lists_unlocked_manacles.png",
+      "subject": "One pair of heavy old iron wrist manacles lying open with the connecting chain slack and both locks visibly released, dark weathered steel with restrained warm highlights. No hands or other props.",
+      "companion": "independence_declaration.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Списки амнистии. Subject: One pair of heavy old iron wrist manacles lying open with the connecting chain slack and both locks visibly released, dark weathered steel with restrained warm highlights. No hands or other props.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_mine_councils",
+      "title": "Советы промыслов",
+      "file": "mine_councils_worker_delegates.png",
+      "subject": "Three oilfield workers shoulder-to-shoulder as one waist-up delegation: woman in plain headscarf, older man in flatcap, younger man bareheaded, dusty dark workclothes, serious constructive expressions, no tools, no text.",
+      "companion": "district_assemblies_ballot_box.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Советы промыслов. Subject: Three oilfield workers shoulder-to-shoulder as one waist-up delegation: woman in plain headscarf, older man in flatcap, younger man bareheaded, dusty dark workclothes, serious constructive expressions, no tools, no text.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_informers",
+      "title": "Сеть осведомителей",
+      "file": "informers_shadowed_whisper.png",
+      "subject": "One waist-up anonymous informant in a dark overcoat and low-brim felt hat, face mostly shadowed but natural, cupping one hand beside his mouth in a quiet whisper. No sinister fantasy mask, no weapons, no scene.",
+      "companion": "quiet_lists_personnel_register.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Сеть осведомителей. Subject: One waist-up anonymous informant in a dark overcoat and low-brim felt hat, face mostly shadowed but natural, cupping one hand beside his mouth in a quiet whisper. No sinister fantasy mask, no weapons, no scene.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_field_gendarmes",
+      "title": "Жандармерия промыслов",
+      "file": "field_gendarmes_checkpoint_guard.png",
+      "subject": "One standing stern field gendarme in charcoal uniform, leather belt and plain steel helmet, holding a rifle vertically close to chest. Mid-thigh portrait, physically grounded realistic proportions, no insignia or scenery.",
+      "companion": "militia_field_barricade.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Жандармерия промыслов. Subject: One standing stern field gendarme in charcoal uniform, leather belt and plain steel helmet, holding a rifle vertically close to chest. Mid-thigh portrait, physically grounded realistic proportions, no insignia or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_quiet_wells",
+      "title": "Тихие скважины",
+      "file": "quiet_wells_pumpjack.png",
+      "subject": "One intact industrial walking-beam oil pumpjack with a broad dark steel horsehead, orange-brown rust at joints and a sturdy concrete mounting foot, side-three-quarter angle. Quiet maintained machinery, no other structures or sky.",
+      "companion": "desert_dune_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Тихие скважины. Subject: One intact industrial walking-beam oil pumpjack with a broad dark steel horsehead, orange-brown rust at joints and a sturdy concrete mounting foot, side-three-quarter angle. Quiet maintained machinery, no other structures or sky.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_well_register",
+      "title": "У скважины есть адрес",
+      "file": "well_register_survey_marker.png",
+      "subject": "One substantial brass-and-steel oil-well identification plate mounted to a short thick industrial pipe, abstract stamped rows without readable text, a hanging rectangular inspection tag on wire. Entire isolated assembly.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: У скважины есть адрес. Subject: One substantial brass-and-steel oil-well identification plate mounted to a short thick industrial pipe, abstract stamped rows without readable text, a hanging rectangular inspection tag on wire. Entire isolated assembly.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_export_quays",
+      "title": "Нефть оплачивает государство",
+      "file": "export_quays_loading_arm.png",
+      "subject": "One massive dockside articulated oil-loading arm with thick steel pipes, hinge joints and valve wheels on a compact pedestal, side view, dark grey industrial metal. Full apparatus, no dock, ship or water.",
+      "companion": "return_cargo_freighter.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Нефть оплачивает государство. Subject: One massive dockside articulated oil-loading arm with thick steel pipes, hinge joints and valve wheels on a compact pedestal, side view, dark grey industrial metal. Full apparatus, no dock, ship or water.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_contract_bureau",
+      "title": "Контрактное бюро",
+      "file": "contract_bureau_typewriter.png",
+      "subject": "One heavy black mechanical office typewriter, ivory keys and a single cream contract sheet fed through the roller, illegible faint rules only. Three-quarter angle, entire silhouette clear.",
+      "companion": "independence_state_seal.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Контрактное бюро. Subject: One heavy black mechanical office typewriter, ivory keys and a single cream contract sheet fed through the roller, illegible faint rules only. Three-quarter angle, entire silhouette clear.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_domestic_refining",
+      "title": "Нефть остаётся дома",
+      "file": "domestic_refining_fractionation_tower.png",
+      "subject": "One compact industrial fractionation column with attached pipework, narrow ladders and two small horizontal tanks on a single base. Dark steel, working refinery equipment, monumental low-angle silhouette; no smoke or scenery.",
+      "companion": "industrial_factories.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Нефть остаётся дома. Subject: One compact industrial fractionation column with attached pipework, narrow ladders and two small horizontal tanks on a single base. Dark steel, working refinery equipment, monumental low-angle silhouette; no smoke or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_insured_cargoes",
+      "title": "Рейс с обратным грузом",
+      "file": "insured_cargoes_spare_parts_crate.png",
+      "subject": "One opened weathered timber shipping crate packed with a large steel gear, folded canvas and neatly nested pump replacement parts, intact lid leaning against same crate; no separate scattered props.",
+      "companion": "return_cargo_freighter.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Рейс с обратным грузом. Subject: One opened weathered timber shipping crate packed with a large steel gear, folded canvas and neatly nested pump replacement parts, intact lid leaning against same crate; no separate scattered props.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_overseas_buyers",
+      "title": "Заморские покупатели",
+      "file": "overseas_buyers_ocean_tanker.png",
+      "subject": "One ocean-going 1930s oil tanker with long black hull, cream bridge, dark red funnel and visible deck pipe runs, full ship in broad three-quarter side view, no flags, water or smoke.",
+      "companion": "return_cargo_harbour_water.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Заморские покупатели. Subject: One ocean-going 1930s oil tanker with long black hull, cream bridge, dark red funnel and visible deck pipe runs, full ship in broad three-quarter side view, no flags, water or smoke.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_field_repair_crews",
+      "title": "Ремонтные бригады промыслов",
+      "file": "field_repair_crews_mechanic.png",
+      "subject": "One skilled oilfield mechanic in rolled sleeves and dark coveralls, waist-up, holding an enormous pipe wrench across his body with both hands, grease on gloves, intent competent expression.",
+      "companion": "reserve_oil_valve.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Ремонтные бригады промыслов. Subject: One skilled oilfield mechanic in rolled sleeves and dark coveralls, waist-up, holding an enormous pipe wrench across his body with both hands, grease on gloves, intent competent expression.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_refinery_programme",
+      "title": "Программа переработки",
+      "file": "refinery_programme_blueprint_roll.png",
+      "subject": "One partly unrolled heavy blue engineering drawing with bold white linework of a distillation tower, curling ends, brass drafting compass clipped to edge. No readable words, one coherent drafting asset.",
+      "companion": "domestic_refining_fractionation_tower.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Программа переработки. Subject: One partly unrolled heavy blue engineering drawing with bold white linework of a distillation tower, curling ends, brass drafting compass clipped to edge. No readable words, one coherent drafting asset.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_machine_shops",
+      "title": "Сменные детали для промыслов",
+      "file": "machine_shops_metal_lathe.png",
+      "subject": "One substantial early twentieth-century grey-green machine-shop lathe with a chuck, workpiece, handwheels and compact integral stand, three-quarter view. Full machine isolated, no operator or shop floor.",
+      "companion": "industrial_factories.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Сменные детали для промыслов. Subject: One substantial early twentieth-century grey-green machine-shop lathe with a chuck, workpiece, handwheels and compact integral stand, three-quarter view. Full machine isolated, no operator or shop floor.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_klyuchevsk_pipeline",
+      "title": "Трасса Ключевского нефтепровода",
+      "file": "klyuchevsk_pipeline_pipe_section.png",
+      "subject": "One long heavy dark steel pipeline segment with a broad elbow, two flange joints and red-brown shutoff wheel, supported by two low concrete saddles. Wide diagonal sweep, no scenery or separate objects.",
+      "companion": "desert_rocky_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Трасса Ключевского нефтепровода. Subject: One long heavy dark steel pipeline segment with a broad elbow, two flange joints and red-brown shutoff wheel, supported by two low concrete saddles. Wide diagonal sweep, no scenery or separate objects.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_deep_wells",
+      "title": "Глубокие скважины",
+      "file": "deep_wells_drill_bit.png",
+      "subject": "One colossal oil drilling tricone bit at the lower end of a short thick vertical steel drill pipe, three distinct toothed cones, worn dark alloy, low-angle close-up, entire object visible.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Глубокие скважины. Subject: One colossal oil drilling tricone bit at the lower end of a short thick vertical steel drill pipe, three distinct toothed cones, worn dark alloy, low-angle close-up, entire object visible.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_fuel_depots",
+      "title": "Хранилища гавани",
+      "file": "fuel_depots_tank_farm.png",
+      "subject": "Three connected large cylindrical oil storage tanks of different heights forming one compact tank-farm structure, ladders and a common manifold, weathered cream-grey metal, no industrial background or ground.",
+      "companion": "return_cargo_stone_quay.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Хранилища гавани. Subject: Three connected large cylindrical oil storage tanks of different heights forming one compact tank-farm structure, ladders and a common manifold, weathered cream-grey metal, no industrial background or ground.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_second_drilling_crew",
+      "title": "Вторая буровая партия",
+      "file": "second_drilling_crew_derrick_truck.png",
+      "subject": "One dusty dark industrial truck carrying a folded portable drilling mast and tightly secured pipe sections, complete vehicle in front-three-quarter view, no passengers, no road.",
+      "companion": "desert_dune_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Вторая буровая партия. Subject: One dusty dark industrial truck carrying a folded portable drilling mast and tightly secured pipe sections, complete vehicle in front-three-quarter view, no passengers, no road.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_civilian_combine",
+      "title": "Город вокруг промысла",
+      "file": "civilian_combine_workers_housing.png",
+      "subject": "One connected group of three modest brick workers' apartment buildings with a small central repair workshop, flat rooflines, realistic industrial settlement architecture, no people, no sky or ground plane.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Город вокруг промысла. Subject: One connected group of three modest brick workers' apartment buildings with a small central repair workshop, flat rooflines, realistic industrial settlement architecture, no people, no sky or ground plane.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_basin_roads",
+      "title": "Дороги бассейна",
+      "file": "basin_roads_road_roller.png",
+      "subject": "One heavy vintage diesel road roller, broad front steel drum and two rear wheels, dark ochre worn paint, all parts visible in three-quarter view. No driver or road.",
+      "companion": "desert_rocky_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Дороги бассейна. Subject: One heavy vintage diesel road roller, broad front steel drum and two rear wheels, dark ochre worn paint, all parts visible in three-quarter view. No driver or road.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_technical_college",
+      "title": "Инженер выше инструкции",
+      "file": "technical_college_engineer.png",
+      "subject": "One thoughtful young engineer in dark work jacket, rolled blueprint under one arm and slide rule in the other hand, waist-up, clean-shaven focused face, no cap, strong distinct silhouette.",
+      "companion": "refinery_programme_blueprint_roll.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Инженер выше инструкции. Subject: One thoughtful young engineer in dark work jacket, rolled blueprint under one arm and slide rule in the other hand, waist-up, clean-shaven focused face, no cap, strong distinct silhouette.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_count_garrisons",
+      "title": "Гарнизон на бумаге и на дороге",
+      "file": "count_garrisons_rollcall_sergeant.png",
+      "subject": "One grizzled garrison sergeant waist-up in faded olive tunic and peaked field cap, checking a compact clipboard with pencil, sharp attentive gaze lifted toward viewer. No readable text.",
+      "companion": "quiet_lists_personnel_register.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Гарнизон на бумаге и на дороге. Subject: One grizzled garrison sergeant waist-up in faded olive tunic and peaked field cap, checking a compact clipboard with pencil, sharp attentive gaze lifted toward viewer. No readable text.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_field_guards",
+      "title": "Армия опорных пунктов",
+      "file": "field_guards_machinegun_bunker.png",
+      "subject": "One squat sand-coloured reinforced-concrete defensive pillbox, broad single firing slit with a dark machinegun barrel, small earth-stained base integral to structure, front-three-quarter view; no surrounding landscape.",
+      "companion": "desert_rocky_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Армия опорных пунктов. Subject: One squat sand-coloured reinforced-concrete defensive pillbox, broad single firing slit with a dark machinegun barrel, small earth-stained base integral to structure, front-three-quarter view; no surrounding landscape.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_mobilisation_office",
+      "title": "Мобилизационное управление",
+      "file": "mobilisation_office_recruiting_officer.png",
+      "subject": "One mature mobilisation clerk in plain olive service tunic, half-length, holding an open enrollment register against his chest with one hand and beckoning forward with the other. Serious practical expression, no text.",
+      "companion": "quiet_lists_personnel_register.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Мобилизационное управление. Subject: One mature mobilisation clerk in plain olive service tunic, half-length, holding an open enrollment register against his chest with one hand and beckoning forward with the other. Serious practical expression, no text.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_mobile_columns",
+      "title": "Армия перекрёстков",
+      "file": "mobile_columns_armoured_car.png",
+      "subject": "One rugged 1930s six-wheel armoured reconnaissance car with angular riveted armour and small turret, dusty dark olive paint, dramatic front-three-quarter angle. Entire vehicle, no insignia, crew, dirt cloud or terrain.",
+      "companion": "desert_dune_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Армия перекрёстков. Subject: One rugged 1930s six-wheel armoured reconnaissance car with angular riveted armour and small turret, dusty dark olive paint, dramatic front-three-quarter angle. Entire vehicle, no insignia, crew, dirt cloud or terrain.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_engineer_depots",
+      "title": "Инструмент перед винтовкой",
+      "file": "engineer_depots_tool_rack.png",
+      "subject": "One compact sturdy military engineer tool rack with entrenching shovels, pickaxe, wirecutters and coiled cable secured to its timber frame. One assembled equipment unit, no scattered objects.",
+      "companion": "depots_rifle_crate.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Инструмент перед винтовкой. Subject: One compact sturdy military engineer tool rack with entrenching shovels, pickaxe, wirecutters and coiled cable secured to its timber frame. One assembled equipment unit, no scattered objects.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_line_survey",
+      "title": "Съёмка рубежей",
+      "file": "line_survey_theodolite.png",
+      "subject": "One precise brass-and-black surveying theodolite on a full wooden tripod, telescope and adjustment wheels clear, broad stable silhouette, all tripod feet visible, no landscape.",
+      "companion": "desert_rocky_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Съёмка рубежей. Subject: One precise brass-and-black surveying theodolite on a full wooden tripod, telescope and adjustment wheels clear, broad stable silhouette, all tripod feet visible, no landscape.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_motor_pool",
+      "title": "Общий автомобильный парк",
+      "file": "motor_pool_military_truck.png",
+      "subject": "One dusty olive 1930s military cargo truck with canvas-covered rear bed, large rugged tires and a modest hood, full vehicle in three-quarter front view, no driver or load outside truck.",
+      "companion": "desert_dune_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Общий автомобильный парк. Subject: One dusty olive 1930s military cargo truck with canvas-covered rear bed, large rugged tires and a modest hood, full vehicle in three-quarter front view, no driver or load outside truck.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_line_engineers",
+      "title": "Инженеры рубежей",
+      "file": "line_engineers_sapper.png",
+      "subject": "One muscular field sapper in rolled olive sleeves and steel helmet, three-quarter-length figure carrying a long shovel diagonally over one shoulder, leather tool belt, determined composed expression.",
+      "companion": "field_guards_machinegun_bunker.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Инженеры рубежей. Subject: One muscular field sapper in rolled olive sleeves and steel helmet, three-quarter-length figure carrying a long shovel diagonally over one shoulder, leather tool belt, determined composed expression.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_reserve_rolls",
+      "title": "Списки резерва",
+      "file": "reserve_rolls_reservist_identity_cards.png",
+      "subject": "One thick fan of four cream military reserve identity cards bound by a dark metal clip, each with a distinct small monochrome portrait thumbnail and ruled service fields, no readable words. Bold layered paper silhouette.",
+      "companion": "quiet_lists_personnel_register.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Списки резерва. Subject: One thick fan of four cream military reserve identity cards bound by a dark metal clip, each with a distinct small monochrome portrait thumbnail and ruled service fields, no readable words. Bold layered paper silhouette.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_motor_column_orders",
+      "title": "Заказ на моторные колонны",
+      "file": "motor_column_orders_dispatch_rider.png",
+      "subject": "One military motorcycle with sidecar and one rider in olive tunic, leather helmet and goggles, full vehicle, front-three-quarter view, no dust or ground, restrained practical realism.",
+      "companion": "motor_pool_military_truck.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Заказ на моторные колонны. Subject: One military motorcycle with sidecar and one rider in olive tunic, leather helmet and goggles, full vehicle, front-three-quarter view, no dust or ground, restrained practical realism.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_quartermaster",
+      "title": "Склад знает свой фронт",
+      "file": "quartermaster_supply_officer.png",
+      "subject": "One reliable quartermaster in dark olive tunic, waist-up, holding a folded inventory manifest in one hand and a large heavy warehouse keyring in the other. Strong readable key silhouette, no readable text.",
+      "companion": "depots_rifle_crate.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Склад знает свой фронт. Subject: One reliable quartermaster in dark olive tunic, waist-up, holding a folded inventory manifest in one hand and a large heavy warehouse keyring in the other. Strong readable key silhouette, no readable text.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_port_arsenal",
+      "title": "Арсенал Южнобережья",
+      "file": "port_arsenal_workshop.png",
+      "subject": "One imposing brick waterfront arms workshop with a broad sawtooth roof, large open assembly door and a modest smokestack, isolated industrial building in low-angle three-quarter view, no docks, water or people.",
+      "companion": "return_cargo_stone_quay.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Арсенал Южнобережья. Subject: One imposing brick waterfront arms workshop with a broad sawtooth roof, large open assembly door and a modest smokestack, isolated industrial building in low-angle three-quarter view, no docks, water or people.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_officer_courses",
+      "title": "Офицерские курсы",
+      "file": "officer_courses_tactical_board.png",
+      "subject": "One portable wooden military classroom blackboard on a sturdy easel, chalk sketch of a simple ridge, three unit rectangles and two directional arrows. No letters or numbers, entire board and legs visible.",
+      "companion": "instructors_senior_officer.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Офицерские курсы. Subject: One portable wooden military classroom blackboard on a sturdy easel, chalk sketch of a simple ridge, three unit rectangles and two directional arrows. No letters or numbers, entire board and legs visible.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_harbour_service",
+      "title": "Порт не закрывается на обед",
+      "file": "harbour_service_dock_foreman.png",
+      "subject": "One weathered dock foreman wearing dark pea jacket and knitted cap, waist-up, holding a metal signalling whistle at chest height and extending one arm to direct loading. No ship or dock.",
+      "companion": "return_cargo_stone_quay.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Порт не закрывается на обед. Subject: One weathered dock foreman wearing dark pea jacket and knitted cap, waist-up, holding a metal signalling whistle at chest height and extending one arm to direct loading. No ship or dock.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_repair_yard",
+      "title": "Своя ремонтная стенка",
+      "file": "repair_yard_drydock_crane.png",
+      "subject": "One tall sturdy vintage dockyard portal crane with a lattice boom and a suspended empty hook, broad industrial steel legs, full apparatus, no water, quay or surrounding dock.",
+      "companion": "return_cargo_freighter.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Своя ремонтная стенка. Subject: One tall sturdy vintage dockyard portal crane with a lattice boom and a suspended empty hook, broad industrial steel legs, full apparatus, no water, quay or surrounding dock.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_escort_school",
+      "title": "Сопровождение до последнего буя",
+      "file": "escort_school_escort_destroyer.png",
+      "subject": "One compact early twentieth-century naval escort destroyer with slim dark hull, two funnels and modest deck guns, entire vessel in three-quarter view, no flags, water or smoke.",
+      "companion": "return_cargo_harbour_water.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Сопровождение до последнего буя. Subject: One compact early twentieth-century naval escort destroyer with slim dark hull, two funnels and modest deck guns, entire vessel in three-quarter view, no flags, water or smoke.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_coastal_battalions",
+      "title": "Береговые батальоны",
+      "file": "coastal_battalions_coastal_gun.png",
+      "subject": "One heavy naval coastal defence gun mounted on a low circular concrete barbette, long broad barrel angled upward, dark steel mechanisms and rivets, no crew or scenery.",
+      "companion": "return_cargo_coastal_cliffs.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Береговые батальоны. Subject: One heavy naval coastal defence gun mounted on a low circular concrete barbette, long broad barrel angled upward, dark steel mechanisms and rivets, no crew or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_island_accounts",
+      "title": "Заморские округа тоже считают",
+      "file": "island_accounts_port_registry.png",
+      "subject": "One cream nautical port-account register opened wide, faint blue route lines and several abstract island shapes beside ruled accounting columns, dark blue leather cover with brass corners. No readable text or real map.",
+      "companion": "return_cargo_freighter.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Заморские округа тоже считают. Subject: One cream nautical port-account register opened wide, faint blue route lines and several abstract island shapes beside ruled accounting columns, dark blue leather cover with brass corners. No readable text or real map.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_coastal_watch",
+      "title": "Береговое наблюдение",
+      "file": "coastal_watch_signal_station.png",
+      "subject": "One compact sandstone coastal signal tower with a small radio mast, antenna wires and enclosed lookout windows, full isolated structure, no cliff, sea or sky.",
+      "companion": "return_cargo_coastal_cliffs.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Береговое наблюдение. Subject: One compact sandstone coastal signal tower with a small radio mast, antenna wires and enclosed lookout windows, full isolated structure, no cliff, sea or sky.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_island_levy_office",
+      "title": "Островная сборная контора",
+      "file": "island_levy_office_customs_scales.png",
+      "subject": "One robust industrial weighbridge balance with a small iron ore sample in a hanging metal pan, large mechanical dial with abstract ticks, no numbers, complete compact weighing apparatus.",
+      "companion": "tax_rolls_brass_abacus.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Островная сборная контора. Subject: One robust industrial weighbridge balance with a small iron ore sample in a hanging metal pan, large mechanical dial with abstract ticks, no numbers, complete compact weighing apparatus.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_island_concession",
+      "title": "Островная концессия",
+      "file": "island_concession_ore_cart.png",
+      "subject": "One riveted steel mine cart filled with coarse dark iron ore on a short integral wheelbase, full vehicle, three-quarter view, no rails or background.",
+      "companion": "independence_declaration.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Островная концессия. Subject: One riveted steel mine cart filled with coarse dark iron ore on a short integral wheelbase, full vehicle, three-quarter view, no rails or background.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_island_convoys",
+      "title": "Островные конвои",
+      "file": "island_convoys_coastal_cargo_ship.png",
+      "subject": "One sturdy small coastal cargo steamer with cream bridge, weathered black hull, cargo booms and compact deck load, complete ship, no flags, sea or sky.",
+      "companion": "return_cargo_harbour_water.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Островные конвои. Subject: One sturdy small coastal cargo steamer with cream bridge, weathered black hull, cargo booms and compact deck load, complete ship, no flags, sea or sky.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_island_governors",
+      "title": "Островные управители",
+      "file": "island_governors_administration_house.png",
+      "subject": "One modest island administrative building in pale plaster with shaded arches and a broad wooden veranda, a small attached warehouse wing, full isolated building, no palms, flags or scenery.",
+      "companion": "return_cargo_stone_quay.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Островные управители. Subject: One modest island administrative building in pale plaster with shaded arches and a broad wooden veranda, a small attached warehouse wing, full isolated building, no palms, flags or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_restitution_desk",
+      "title": "Стол реституции",
+      "file": "restitution_desk_treaty_bundle.png",
+      "subject": "One thick bundle of old cream border treaties and folded cadastral sheets, bound by crossed dark red archive tape, several worn wax seals on hanging cords, no readable words or actual geographic borders.",
+      "companion": "statute_balance_scales.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Стол реституции. Subject: One thick bundle of old cream border treaties and folded cadastral sheets, bound by crossed dark red archive tape, several worn wax seals on hanging cords, no readable words or actual geographic borders.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_court_azhar",
+      "title": "Склонить Ажар",
+      "file": "court_azhar_fuel_gift.png",
+      "subject": "One pristine heavy dark oil drum fitted into a sturdy export timber cradle, cream delivery tag tied with a modest dark red ribbon, no text or national symbols. Diplomatic fuel shipment as a single object.",
+      "companion": "neutral_basin_diplomatic_handshake.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Склонить Ажар. Subject: One pristine heavy dark oil drum fitted into a sturdy export timber cradle, cream delivery tag tied with a modest dark red ribbon, no text or national symbols. Diplomatic fuel shipment as a single object.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_fuel_leverage",
+      "title": "Топливный рычаг",
+      "file": "fuel_leverage_locked_valve.png",
+      "subject": "One huge red-brown industrial oil valve wheel on a short steel pipeline junction, securely locked by a thick chain and brass padlock. Distinct clear lock and wheel, no background.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Топливный рычаг. Subject: One huge red-brown industrial oil valve wheel on a short steel pipeline junction, securely locked by a thick chain and brass padlock. Distinct clear lock and wheel, no background.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_basin_talks",
+      "title": "Переговоры о бассейне",
+      "file": "basin_talks_three_chairs.png",
+      "subject": "One triangular polished dark wooden negotiation table with three empty chairs, three closed thin cream folders on tabletop, full compact group as a standalone meeting furniture asset.",
+      "companion": "neutral_basin_diplomatic_handshake.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Переговоры о бассейне. Subject: One triangular polished dark wooden negotiation table with three empty chairs, three closed thin cream folders on tabletop, full compact group as a standalone meeting furniture asset.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_eflor_fuel_prices",
+      "title": "Цены для Эфлора",
+      "file": "eflor_fuel_prices_mechanical_calculator.png",
+      "subject": "One heavy vintage mechanical adding machine with ivory numbered-style keys but no readable lettering, steel crank and a curled blank cream paper tape, dark green enamel, three-quarter close view.",
+      "companion": "metropolitan_quota_oil_drums_v3.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Цены для Эфлора. Subject: One heavy vintage mechanical adding machine with ivory numbered-style keys but no readable lettering, steel crank and a curled blank cream paper tape, dark green enamel, three-quarter close view.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_general_staff_plan",
+      "title": "План генерального штаба",
+      "file": "general_staff_plan_map_board.png",
+      "subject": "One tilted military planning board holding a pale abstract operational map with thick red and blue route arrows, three small wooden unit blocks and a brass divider attached at edge. No real borders, readable labels or separate scene.",
+      "companion": "instructors_senior_officer.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: План генерального штаба. Subject: One tilted military planning board holding a pale abstract operational map with thick red and blue route arrows, three small wooden unit blocks and a brass divider attached at edge. No real borders, readable labels or separate scene.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_alarm",
+      "title": "Больше не пограничный спор",
+      "file": "alarm_air_raid_siren.png",
+      "subject": "One large old mechanical air-raid siren with slotted dark metal rotor housing and two broad horns mounted on a short sturdy steel support. Full object, no tower or scenery.",
+      "companion": "empire_urgent_telephone.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Больше не пограничный спор. Subject: One large old mechanical air-raid siren with slotted dark metal rotor housing and two broad horns mounted on a short sturdy steel support. Full object, no tower or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_hold_basin",
+      "title": "У промыслов нет тыла",
+      "file": "hold_basin_sandbag_gun_position.png",
+      "subject": "One compact defensive breastwork of worn khaki sandbags with a heavy machinegun on tripod planted behind its gap, entire low emplacement isolated, no soldier or landscape.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: У промыслов нет тыла. Subject: One compact defensive breastwork of worn khaki sandbags with a heavy machinegun on tripod planted behind its gap, entire low emplacement isolated, no soldier or landscape.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_relief_columns",
+      "title": "Дорога, по которой ещё можно пройти",
+      "file": "relief_columns_loaded_supply_truck.png",
+      "subject": "One heavily laden military supply truck with open rear bed holding securely roped timber ammunition crates and fuel cans, olive canvas half rolled back, full vehicle rear-three-quarter view, no driver, dust or terrain.",
+      "companion": "desert_rocky_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Дорога, по которой ещё можно пройти. Subject: One heavily laden military supply truck with open rear bed holding securely roped timber ammunition crates and fuel cans, olive canvas half rolled back, full vehicle rear-three-quarter view, no driver, dust or terrain.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_discipline_of_seals",
+      "title": "Никто не оставляет печать",
+      "file": "discipline_of_seals_firm_hand.png",
+      "subject": "One resolute hand in an olive command sleeve gripping a heavy wooden official stamp upright so tightly the knuckles show, close-up hand and forearm only, realistic skin and dark brass base, no emblems.",
+      "companion": "independence_declaration.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Никто не оставляет печать. Subject: One resolute hand in an olive command sleeve gripping a heavy wooden official stamp upright so tightly the knuckles show, close-up hand and forearm only, realistic skin and dark brass base, no emblems.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_counterstroke",
+      "title": "Вернуть узлы, удержать людей",
+      "file": "counterstroke_field_commander.png",
+      "subject": "One olive-uniformed field commander in a plain steel helmet, waist-up, one arm extended decisively toward the right while the other holds folded field binoculars at chest. Alert measured expression, no gun or scenery.",
+      "companion": "general_staff_plan_map_board.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Вернуть узлы, удержать людей. Subject: One olive-uniformed field commander in a plain steel helmet, waist-up, one arm extended decisively toward the right while the other holds folded field binoculars at chest. Alert measured expression, no gun or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_volunteer_levies",
+      "title": "Добровольческие наборы",
+      "file": "volunteer_levies_civilian_recruit.png",
+      "subject": "One young civilian volunteer in worn work jacket with a rolled blanket strapped across his body, holding an old rifle vertically beside him, waist-to-thigh portrait, serious uncertain but willing expression.",
+      "companion": "depots_rifle_crate.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Добровольческие наборы. Subject: One young civilian volunteer in worn work jacket with a rolled blanket strapped across his body, holding an old rifle vertically beside him, waist-to-thigh portrait, serious uncertain but willing expression.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_scorched_wells",
+      "title": "Выжженные скважины",
+      "file": "scorched_wells_detonator.png",
+      "subject": "One old military plunger detonator box with tall T-handle raised, dark wooden case, two insulated cable leads curling beside it. No explosion, fire or scenery.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Выжженные скважины. Subject: One old military plunger detonator box with tall T-handle raised, dark wooden case, two insulated cable leads curling beside it. No explosion, fire or scenery.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_wells_under_guard",
+      "title": "Скважины под охраной",
+      "file": "wells_under_guard_shielded_wellhead.png",
+      "subject": "One compact steel oil wellhead protected by a semicircular waist-high sandbag wall and a plain corrugated steel defensive panel, one coherent fortified industrial fixture, no people or terrain.",
+      "companion": "basin_border_sentry.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Скважины под охраной. Subject: One compact steel oil wellhead protected by a semicircular waist-high sandbag wall and a plain corrugated steel defensive panel, one coherent fortified industrial fixture, no people or terrain.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_last_reserve",
+      "title": "Последний резерв",
+      "file": "last_reserve_vault_door.png",
+      "subject": "One heavy battered steel arsenal vault door swung open in its thick standalone frame, exposed locking bolts and a broad handwheel, full dramatic open silhouette, no room visible beyond the doorway.",
+      "companion": "reserve_covered_crates.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Последний резерв. Subject: One heavy battered steel arsenal vault door swung open in its thick standalone frame, exposed locking bolts and a broad handwheel, full dramatic open silhouette, no room visible beyond the doorway.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_district_volunteers",
+      "title": "Добровольцы округов",
+      "file": "district_volunteers_pair.png",
+      "subject": "Two civilian district volunteers standing together waist-to-thigh: older workman in flat cap and a younger woman in plain field jacket, each carrying a rifle at rest, neither aiming, resolute expressions, no flags or background.",
+      "companion": "desert_dune_backdrop.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Добровольцы округов. Subject: Two civilian district volunteers standing together waist-to-thigh: older workman in flat cap and a younger woman in plain field jacket, each carrying a rifle at rest, neither aiming, resolute expressions, no flags or background.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_martial_seals",
+      "title": "Военные печати",
+      "file": "martial_seals_military_tribunal_seal.png",
+      "subject": "One heavy dark steel official stamp with angular handle and an attached plain military identification disc on a short chain, stamp base placed over a folded cream order with a bold burgundy seal mark. No readable words or insignia.",
+      "companion": "hear_commandant_peaked_cap.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Военные печати. Subject: One heavy dark steel official stamp with angular handle and an attached plain military identification disc on a short chain, stamp base placed over a folded cream order with a bold burgundy seal mark. No readable words or insignia.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_oil_score",
+      "title": "Нефтяной счёт",
+      "file": "oil_score_industrial_meter.png",
+      "subject": "One large analog industrial oil-flow meter with a weathered round ivory dial, black pointer, brass rim and sturdy black pipe fittings, abstract tickmarks without readable numbers. Full physical apparatus, no background.",
+      "companion": "oil_derricks.png",
+      "prompt": "Use case: stylized-concept. Deliver ONE SEPARATE transparent PNG asset for manual assembly of a Hearts of Iron IV NAM national focus icon, not a complete composition, not an asset sheet. Style: monumental photographic realism with subtle painted integration, dramatic low-angle presence, strong broad masses readable at 150px, deep charcoal shadows and restrained amber edge highlights. Preserve natural steel, skin, ivory paper, cloth and wood colours; objects are not solid gold. Mid-twentieth-century fictional desert industrial state. Show the entire requested object or specified figure crop, filling about 80 percent of canvas with generous clear margin on every edge. Genuinely transparent alpha outside the subject and in gaps, no opaque background, no floor shadow, no checkerboard. No sun, halo, glow cloud, fog, landscape, frame, captions, watermark, logos or readable text. Only the subject described next. Focus context: Нефтяной счёт. Subject: One large analog industrial oil-flow meter with a weathered round ivory dial, black pointer, brass rim and sturdy black pipe fittings, abstract tickmarks without readable numbers. Full physical apparatus, no background.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_rivals_ledger",
+      "title": "Книга соперников",
+      "file": "rivals_ledger_index_file_v2.png",
+      "subject": "One open dark green archival card-file box with four tall labelled divider tabs and a fan of four cream dossier cards, each carries an indistinct small monochrome portrait thumbnail and abstract rules, no readable names. Front three-quarter view, strong layered silhouette.",
+      "companion": "quiet_lists_personnel_register.png",
+      "prompt": "Edit the supplied transparent PNG asset. Preserve the green metal index-file box, four cards, arrangement, paper, lighting, scale and alpha transparency exactly. Change ONLY the four small monochrome fictional portrait thumbnails. From left to right: a stern male civilian oil-industry administrator in plain business suit; a male shipping merchant in period civilian business suit; a male army commandant in plain military uniform; a middle-aged FEMALE chief registrar in plain dark office jacket, neatly pinned dark hair. Exactly three men and one woman. No ethnic costume, no text additions, no frame or background. Maintain sepia realistic photographic dossier style.",
+      "generator": "Built-in image_gen",
+      "variant_of": "rivals_ledger_index_file.png"
     }
   ],
   "shared_style_history": [
@@ -1655,5 +2295,985 @@
   "composition_direction": "Grandiose political and industrial imagery with dominant large figures or symbols, dramatic scale and strong graphic accents. Individual assets should support a monumental photographic collage. Preserve natural materials and avoid small inventory-item presentation.",
   "monumental_style_direction": "Grand symbolic imperial photomontage: colossal focal objects, monumental architecture, dramatic amber light and deep charcoal shadows, elemental sand or fog. Broad readable masses and exaggerated scale rather than ordinary tabletop props. Supply every object, atmosphere and light effect as a separate transparent PNG for manual assembly.",
   "delivery_policy": "Deliver each requested focus element as a separate transparent PNG. Generate an assembled composition only when explicitly requested; keep assembled previews outside the mod.",
-  "background_direction": "Prefer varied desert dunes, sandstone ridges and restrained dust as background layers. Do not repeat a large sun disc or circular halo across the set. Keep amber side lighting on natural materials and preserve transparency around each independent asset. Use subdued terrain for administrative subjects; foreground silhouettes remain dominant."
+  "background_direction": "Prefer varied desert dunes, sandstone ridges and restrained dust as background layers. Do not repeat a large sun disc or circular halo across the set. Keep amber side lighting on natural materials and preserve transparency around each independent asset. Use subdued terrain for administrative subjects; foreground silhouettes remain dominant.",
+  "main_tree_asset_map": [
+    {
+      "focus": "NAM_inventory",
+      "title": "Опись исчезающей империи",
+      "assets": [
+        "vorkerland_gold_map.png",
+        "industrial_factories.png",
+        "oil_derricks.png",
+        "ochre_fog.png"
+      ]
+    },
+    {
+      "focus": "NAM_metropolitan_quota",
+      "title": "Разнарядка метрополии",
+      "assets": [
+        "metropolitan_quota_sheet_v3.png",
+        "metropolitan_quota_oil_drums_v3.png",
+        "metropolitan_stamping_hand_v2.png"
+      ]
+    },
+    {
+      "focus": "NAM_deliver_the_quota",
+      "title": "Исполнить разнарядку",
+      "assets": [
+        "quota_locomotive.png",
+        "quota_tank_wagon.png",
+        "locomotive_wheel_dust.png"
+      ]
+    },
+    {
+      "focus": "NAM_concealed_reserve",
+      "title": "Резерв вне ведомости",
+      "assets": [
+        "reserve_storage_tank.png",
+        "reserve_storage_tank_v2.png",
+        "reserve_worker_v2.png",
+        "reserve_covered_crates.png",
+        "reserve_oil_valve.png",
+        "reserve_low_fog.png",
+        "reserve_warm_light.png"
+      ]
+    },
+    {
+      "focus": "NAM_wrk_trade_house",
+      "title": "Подворье в метрополии",
+      "assets": [
+        "trade_house_monumental_exchange.png",
+        "trade_house_merchant.png"
+      ]
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "title": "Обратные рейсы",
+      "assets": [
+        "return_cargo_freighter.png",
+        "return_cargo_suspended_machine.png",
+        "return_cargo_harbour_water.png",
+        "return_cargo_stone_quay.png",
+        "return_cargo_coastal_cliffs.png"
+      ]
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "title": "Склады метрополии",
+      "assets": [
+        "depots_arsenal_gate.png",
+        "depots_rifle_crate.png",
+        "depots_open_arsenal_v2.png",
+        "depots_loaded_handcart.png"
+      ]
+    },
+    {
+      "focus": "NAM_colonial_watch",
+      "title": "Сводки колониальной стражи",
+      "assets": [
+        "watch_reporting_officer.png",
+        "watch_report_dossier.png",
+        "watch_oilfield_post.png",
+        "watch_officer.png",
+        "watchtower.png",
+        "watch_binoculars.png"
+      ]
+    },
+    {
+      "focus": "NAM_imperial_gendarmes",
+      "title": "Имперская жандармерия",
+      "assets": [
+        "gendarmes_commander.png",
+        "gendarmes_marching_column.png"
+      ]
+    },
+    {
+      "focus": "NAM_oilfield_militia",
+      "title": "Промысловая самооборона",
+      "assets": [
+        "militia_armed_driller.png",
+        "militia_field_barricade.png"
+      ]
+    },
+    {
+      "focus": "NAM_pipeline_patrols",
+      "title": "Обходчики трубопроводов",
+      "assets": [
+        "patrol_pipeline_walker.png",
+        "patrol_watchdog.png",
+        "patrol_emergency_telephone.png"
+      ]
+    },
+    {
+      "focus": "NAM_print_shop_raid",
+      "title": "Найти чернила будущего восстания",
+      "assets": [
+        "weber_printing_press.png",
+        "weber_underground_leaflets.png",
+        "weber_raid_flashlight_hand.png",
+        "weber_traitor_portrait_v2.png"
+      ]
+    },
+    {
+      "focus": "NAM_colony_order",
+      "title": "Порядок на промыслах",
+      "assets": [
+        "order_oilfield_worker.png",
+        "order_colonial_guard.png",
+        "order_industrial_skyline.png",
+        "order_pipeline_valve.png",
+        "order_tank_wagons.png",
+        "order_dawn_sun.png",
+        "order_foreground_fog.png"
+      ]
+    },
+    {
+      "focus": "NAM_letters_to_the_centre",
+      "title": "Штиль перед штормом",
+      "assets": [
+        "calm_before_storm_rom_with_cap.png",
+        "calm_before_storm_thunderclouds.png",
+        "calm_before_storm_dry_ground.png",
+        "letters_imperial_dispatches.png",
+        "letters_monumental_quill.png",
+        "letters_silent_centre.png",
+        "letters_distant_beacon.png",
+        "letters_obscuring_mist.png"
+      ]
+    },
+    {
+      "focus": "NAM_centre_hourglass",
+      "title": "Часы центра",
+      "assets": [
+        "empire_hourglass.png",
+        "empire_supply_orders.png",
+        "empire_cracked_clock.png",
+        "empire_administration_tower.png",
+        "empire_urgent_telephone.png"
+      ]
+    },
+    {
+      "focus": "NAM_commissioner_plan",
+      "title": "Печать под планом комиссара",
+      "assets": [
+        "commissioner_severe_official.png",
+        "commissioner_requisition_plan.png"
+      ]
+    },
+    {
+      "focus": "NAM_second_ledger",
+      "title": "Вторая бухгалтерия",
+      "assets": [
+        "second_ledger_secret_book.png",
+        "second_ledger_accountant.png"
+      ]
+    },
+    {
+      "focus": "NAM_metropolitan_instructors",
+      "title": "Инструкторы метрополии",
+      "assets": [
+        "instructors_senior_officer.png",
+        "instructors_garrison_drill.png"
+      ]
+    },
+    {
+      "focus": "NAM_quiet_officer_lists",
+      "title": "Тихие списки офицеров",
+      "assets": [
+        "quiet_lists_conspiratorial_officer.png",
+        "quiet_lists_personnel_register.png",
+        "quiet_lists_desk_lamp.png"
+      ]
+    },
+    {
+      "focus": "NAM_sand_runs_out",
+      "title": "Песок на исходе",
+      "assets": [
+        "sand_running_out_hourglass.png",
+        "sand_telegraph_receiver.png",
+        "sand_urgent_telegram_tape.png",
+        "sand_colossal_hourglass.png",
+        "sand_imperial_capital.png",
+        "sand_imperial_sandstorm.png",
+        "sand_last_light_rays.png"
+      ]
+    },
+    {
+      "focus": "NAM_last_centre_register",
+      "title": "Последний реестр центра",
+      "assets": [
+        "last_register_departing_courier.png",
+        "last_register_closed_archive.png",
+        "last_register_departing_commissioner.png"
+      ]
+    },
+    {
+      "focus": "NAM_independence_day",
+      "title": "Своя печать",
+      "assets": [
+        "independence_state_seal.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_neutral_basin",
+      "title": "Бассейн вне войны",
+      "assets": [
+        "neutral_basin_diplomatic_handshake.png",
+        "neutral_basin_negotiation_table.png"
+      ]
+    },
+    {
+      "focus": "NAM_basin_is_ours",
+      "title": "Бассейн принадлежит нам",
+      "assets": [
+        "basin_border_sentry.png",
+        "basin_flagged_border_post.png"
+      ]
+    },
+    {
+      "focus": "NAM_provisional_statute",
+      "title": "Временный статут",
+      "assets": [
+        "statute_open_law_book.png",
+        "statute_balance_scales.png"
+      ]
+    },
+    {
+      "focus": "NAM_rom_address",
+      "title": "Обращение Рома",
+      "assets": [
+        "rom_address_portrait.png",
+        "rom_address_microphones.png"
+      ]
+    },
+    {
+      "focus": "NAM_open_ledgers",
+      "title": "Сколько стоит каждая печать",
+      "assets": [
+        "open_ledgers_auditor.png",
+        "second_ledger_secret_book.png"
+      ]
+    },
+    {
+      "focus": "NAM_vertical",
+      "title": "Одна подпись Рома",
+      "assets": [
+        "vertical_signing_hand.png",
+        "independence_state_seal.png"
+      ]
+    },
+    {
+      "focus": "NAM_districts",
+      "title": "Подписи округов",
+      "assets": [
+        "districts_seal_cluster.png",
+        "statute_open_law_book.png"
+      ]
+    },
+    {
+      "focus": "NAM_inspectors",
+      "title": "Инспектор отвечает именем",
+      "assets": [
+        "inspectors_open_inspection_crate.png",
+        "watch_report_dossier.png"
+      ]
+    },
+    {
+      "focus": "NAM_tax_rolls",
+      "title": "Налоговые списки",
+      "assets": [
+        "tax_rolls_brass_abacus.png",
+        "second_ledger_secret_book.png"
+      ]
+    },
+    {
+      "focus": "NAM_public_payroll",
+      "title": "Ведомость на площади",
+      "assets": [
+        "public_payroll_notice_board.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_emergency_writ",
+      "title": "Предписание на чрезвычайный случай",
+      "assets": [
+        "emergency_writ_sealed_dispatch.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_district_guarantees",
+      "title": "Гарантии Светлогорску",
+      "assets": [
+        "district_guarantees_city_hall.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_one_budget",
+      "title": "Бюджет без двойного дна",
+      "assets": [
+        "one_budget_open_treasury_box.png",
+        "second_ledger_secret_book.png"
+      ]
+    },
+    {
+      "focus": "NAM_namestnik_circuits",
+      "title": "Объезды наместников",
+      "assets": [
+        "namestnik_circuits_staff_car.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_district_assemblies",
+      "title": "Собрания округов",
+      "assets": [
+        "district_assemblies_ballot_box.png",
+        "statute_balance_scales.png"
+      ]
+    },
+    {
+      "focus": "NAM_seal_courts",
+      "title": "Суды печатей",
+      "assets": [
+        "seal_courts_judicial_desk_seal.png",
+        "statute_open_law_book.png"
+      ]
+    },
+    {
+      "focus": "NAM_supports_council",
+      "title": "Совет опор",
+      "assets": [
+        "supports_council_five_seat_table.png",
+        "independence_state_seal.png"
+      ]
+    },
+    {
+      "focus": "NAM_supports_oil_compact",
+      "title": "Договор с промыслами",
+      "assets": [
+        "supports_oil_compact_worker_handshake.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_supports_export_houses",
+      "title": "Экспортные дома",
+      "assets": [
+        "supports_export_houses_facade.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_supports_balance",
+      "title": "Равновесие опор",
+      "assets": [
+        "supports_balance_five_pillar_pedestal.png",
+        "independence_state_seal.png"
+      ]
+    },
+    {
+      "focus": "NAM_garrison_assembly",
+      "title": "Собрание гарнизонов",
+      "assets": [
+        "garrison_assembly_officer_delegation.png",
+        "neutral_basin_negotiation_table.png"
+      ]
+    },
+    {
+      "focus": "NAM_rivals_ledger",
+      "title": "Книга соперников",
+      "assets": [
+        "rivals_ledger_index_file_v2.png",
+        "quiet_lists_personnel_register.png"
+      ]
+    },
+    {
+      "focus": "NAM_hear_klyuchevsk",
+      "title": "Выслушать Ключевск",
+      "assets": [
+        "hear_klyuchevsk_oil_delegate.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_hear_the_harbour",
+      "title": "Выслушать гавань",
+      "assets": [
+        "hear_harbour_ship_bell.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_hear_the_commandant",
+      "title": "Выслушать коменданта",
+      "assets": [
+        "hear_commandant_peaked_cap.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_hear_the_registrar",
+      "title": "Выслушать регистратора",
+      "assets": [
+        "hear_registrar_archive_cabinet.png",
+        "metropolitan_quota_stamp.png"
+      ]
+    },
+    {
+      "focus": "NAM_pillar_arbitration",
+      "title": "Третейский суд опор",
+      "assets": [
+        "pillar_arbitration_mediators_hands.png",
+        "neutral_basin_negotiation_table.png"
+      ]
+    },
+    {
+      "focus": "NAM_crisis_office",
+      "title": "Служба происшествий",
+      "assets": [
+        "crisis_office_switchboard.png",
+        "empire_urgent_telephone.png"
+      ]
+    },
+    {
+      "focus": "NAM_field_firefighters",
+      "title": "Пожарные дружины промыслов",
+      "assets": [
+        "field_firefighters_foam_fireman.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_chancellery_purge",
+      "title": "Чистка канцелярии",
+      "assets": [
+        "chancellery_purge_dismissal_hand.png",
+        "hear_registrar_archive_cabinet.png"
+      ]
+    },
+    {
+      "focus": "NAM_underground_reports",
+      "title": "Сводки о подполье",
+      "assets": [
+        "underground_reports_pinned_evidence.png",
+        "weber_underground_leaflets.png"
+      ]
+    },
+    {
+      "focus": "NAM_weber_channel",
+      "title": "Канал к Веберу",
+      "assets": [
+        "weber_channel_discreet_message.png",
+        "weber_clean_portrait.png"
+      ]
+    },
+    {
+      "focus": "NAM_cache_hunters",
+      "title": "Охотники за тайниками",
+      "assets": [
+        "cache_hunters_search_soldier.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_amnesty_lists",
+      "title": "Списки амнистии",
+      "assets": [
+        "amnesty_lists_unlocked_manacles.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_mine_councils",
+      "title": "Советы промыслов",
+      "assets": [
+        "mine_councils_worker_delegates.png",
+        "district_assemblies_ballot_box.png"
+      ]
+    },
+    {
+      "focus": "NAM_informers",
+      "title": "Сеть осведомителей",
+      "assets": [
+        "informers_shadowed_whisper.png",
+        "quiet_lists_personnel_register.png"
+      ]
+    },
+    {
+      "focus": "NAM_field_gendarmes",
+      "title": "Жандармерия промыслов",
+      "assets": [
+        "field_gendarmes_checkpoint_guard.png",
+        "militia_field_barricade.png"
+      ]
+    },
+    {
+      "focus": "NAM_quiet_wells",
+      "title": "Тихие скважины",
+      "assets": [
+        "quiet_wells_pumpjack.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_well_register",
+      "title": "У скважины есть адрес",
+      "assets": [
+        "well_register_survey_marker.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_export_quays",
+      "title": "Нефть оплачивает государство",
+      "assets": [
+        "export_quays_loading_arm.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_contract_bureau",
+      "title": "Контрактное бюро",
+      "assets": [
+        "contract_bureau_typewriter.png",
+        "independence_state_seal.png"
+      ]
+    },
+    {
+      "focus": "NAM_domestic_refining",
+      "title": "Нефть остаётся дома",
+      "assets": [
+        "domestic_refining_fractionation_tower.png",
+        "industrial_factories.png"
+      ]
+    },
+    {
+      "focus": "NAM_insured_cargoes",
+      "title": "Рейс с обратным грузом",
+      "assets": [
+        "insured_cargoes_spare_parts_crate.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_overseas_buyers",
+      "title": "Заморские покупатели",
+      "assets": [
+        "overseas_buyers_ocean_tanker.png",
+        "return_cargo_harbour_water.png"
+      ]
+    },
+    {
+      "focus": "NAM_field_repair_crews",
+      "title": "Ремонтные бригады промыслов",
+      "assets": [
+        "field_repair_crews_mechanic.png",
+        "reserve_oil_valve.png"
+      ]
+    },
+    {
+      "focus": "NAM_refinery_programme",
+      "title": "Программа переработки",
+      "assets": [
+        "refinery_programme_blueprint_roll.png",
+        "domestic_refining_fractionation_tower.png"
+      ]
+    },
+    {
+      "focus": "NAM_machine_shops",
+      "title": "Сменные детали для промыслов",
+      "assets": [
+        "machine_shops_metal_lathe.png",
+        "industrial_factories.png"
+      ]
+    },
+    {
+      "focus": "NAM_klyuchevsk_pipeline",
+      "title": "Трасса Ключевского нефтепровода",
+      "assets": [
+        "klyuchevsk_pipeline_pipe_section.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_deep_wells",
+      "title": "Глубокие скважины",
+      "assets": [
+        "deep_wells_drill_bit.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_fuel_depots",
+      "title": "Хранилища гавани",
+      "assets": [
+        "fuel_depots_tank_farm.png",
+        "return_cargo_stone_quay.png"
+      ]
+    },
+    {
+      "focus": "NAM_second_drilling_crew",
+      "title": "Вторая буровая партия",
+      "assets": [
+        "second_drilling_crew_derrick_truck.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_civilian_combine",
+      "title": "Город вокруг промысла",
+      "assets": [
+        "civilian_combine_workers_housing.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_basin_roads",
+      "title": "Дороги бассейна",
+      "assets": [
+        "basin_roads_road_roller.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_technical_college",
+      "title": "Инженер выше инструкции",
+      "assets": [
+        "technical_college_engineer.png",
+        "refinery_programme_blueprint_roll.png"
+      ]
+    },
+    {
+      "focus": "NAM_count_garrisons",
+      "title": "Гарнизон на бумаге и на дороге",
+      "assets": [
+        "count_garrisons_rollcall_sergeant.png",
+        "quiet_lists_personnel_register.png"
+      ]
+    },
+    {
+      "focus": "NAM_field_guards",
+      "title": "Армия опорных пунктов",
+      "assets": [
+        "field_guards_machinegun_bunker.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_mobilisation_office",
+      "title": "Мобилизационное управление",
+      "assets": [
+        "mobilisation_office_recruiting_officer.png",
+        "quiet_lists_personnel_register.png"
+      ]
+    },
+    {
+      "focus": "NAM_mobile_columns",
+      "title": "Армия перекрёстков",
+      "assets": [
+        "mobile_columns_armoured_car.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_engineer_depots",
+      "title": "Инструмент перед винтовкой",
+      "assets": [
+        "engineer_depots_tool_rack.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_line_survey",
+      "title": "Съёмка рубежей",
+      "assets": [
+        "line_survey_theodolite.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_motor_pool",
+      "title": "Общий автомобильный парк",
+      "assets": [
+        "motor_pool_military_truck.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_line_engineers",
+      "title": "Инженеры рубежей",
+      "assets": [
+        "line_engineers_sapper.png",
+        "field_guards_machinegun_bunker.png"
+      ]
+    },
+    {
+      "focus": "NAM_reserve_rolls",
+      "title": "Списки резерва",
+      "assets": [
+        "reserve_rolls_reservist_identity_cards.png",
+        "quiet_lists_personnel_register.png"
+      ]
+    },
+    {
+      "focus": "NAM_motor_column_orders",
+      "title": "Заказ на моторные колонны",
+      "assets": [
+        "motor_column_orders_dispatch_rider.png",
+        "motor_pool_military_truck.png"
+      ]
+    },
+    {
+      "focus": "NAM_quartermaster",
+      "title": "Склад знает свой фронт",
+      "assets": [
+        "quartermaster_supply_officer.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_port_arsenal",
+      "title": "Арсенал Южнобережья",
+      "assets": [
+        "port_arsenal_workshop.png",
+        "return_cargo_stone_quay.png"
+      ]
+    },
+    {
+      "focus": "NAM_officer_courses",
+      "title": "Офицерские курсы",
+      "assets": [
+        "officer_courses_tactical_board.png",
+        "instructors_senior_officer.png"
+      ]
+    },
+    {
+      "focus": "NAM_harbour_service",
+      "title": "Порт не закрывается на обед",
+      "assets": [
+        "harbour_service_dock_foreman.png",
+        "return_cargo_stone_quay.png"
+      ]
+    },
+    {
+      "focus": "NAM_repair_yard",
+      "title": "Своя ремонтная стенка",
+      "assets": [
+        "repair_yard_drydock_crane.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_escort_school",
+      "title": "Сопровождение до последнего буя",
+      "assets": [
+        "escort_school_escort_destroyer.png",
+        "return_cargo_harbour_water.png"
+      ]
+    },
+    {
+      "focus": "NAM_coastal_battalions",
+      "title": "Береговые батальоны",
+      "assets": [
+        "coastal_battalions_coastal_gun.png",
+        "return_cargo_coastal_cliffs.png"
+      ]
+    },
+    {
+      "focus": "NAM_island_accounts",
+      "title": "Заморские округа тоже считают",
+      "assets": [
+        "island_accounts_port_registry.png",
+        "return_cargo_freighter.png"
+      ]
+    },
+    {
+      "focus": "NAM_coastal_watch",
+      "title": "Береговое наблюдение",
+      "assets": [
+        "coastal_watch_signal_station.png",
+        "return_cargo_coastal_cliffs.png"
+      ]
+    },
+    {
+      "focus": "NAM_island_levy_office",
+      "title": "Островная сборная контора",
+      "assets": [
+        "island_levy_office_customs_scales.png",
+        "tax_rolls_brass_abacus.png"
+      ]
+    },
+    {
+      "focus": "NAM_island_concession",
+      "title": "Островная концессия",
+      "assets": [
+        "island_concession_ore_cart.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_island_convoys",
+      "title": "Островные конвои",
+      "assets": [
+        "island_convoys_coastal_cargo_ship.png",
+        "return_cargo_harbour_water.png"
+      ]
+    },
+    {
+      "focus": "NAM_island_governors",
+      "title": "Островные управители",
+      "assets": [
+        "island_governors_administration_house.png",
+        "return_cargo_stone_quay.png"
+      ]
+    },
+    {
+      "focus": "NAM_restitution_desk",
+      "title": "Стол реституции",
+      "assets": [
+        "restitution_desk_treaty_bundle.png",
+        "statute_balance_scales.png"
+      ]
+    },
+    {
+      "focus": "NAM_court_azhar",
+      "title": "Склонить Ажар",
+      "assets": [
+        "court_azhar_fuel_gift.png",
+        "neutral_basin_diplomatic_handshake.png"
+      ]
+    },
+    {
+      "focus": "NAM_fuel_leverage",
+      "title": "Топливный рычаг",
+      "assets": [
+        "fuel_leverage_locked_valve.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_basin_talks",
+      "title": "Переговоры о бассейне",
+      "assets": [
+        "basin_talks_three_chairs.png",
+        "neutral_basin_diplomatic_handshake.png"
+      ]
+    },
+    {
+      "focus": "NAM_eflor_fuel_prices",
+      "title": "Цены для Эфлора",
+      "assets": [
+        "eflor_fuel_prices_mechanical_calculator.png",
+        "metropolitan_quota_oil_drums_v3.png"
+      ]
+    },
+    {
+      "focus": "NAM_general_staff_plan",
+      "title": "План генерального штаба",
+      "assets": [
+        "general_staff_plan_map_board.png",
+        "instructors_senior_officer.png"
+      ]
+    },
+    {
+      "focus": "NAM_alarm",
+      "title": "Больше не пограничный спор",
+      "assets": [
+        "alarm_air_raid_siren.png",
+        "empire_urgent_telephone.png"
+      ]
+    },
+    {
+      "focus": "NAM_hold_basin",
+      "title": "У промыслов нет тыла",
+      "assets": [
+        "hold_basin_sandbag_gun_position.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_relief_columns",
+      "title": "Дорога, по которой ещё можно пройти",
+      "assets": [
+        "relief_columns_loaded_supply_truck.png",
+        "desert_rocky_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_discipline_of_seals",
+      "title": "Никто не оставляет печать",
+      "assets": [
+        "discipline_of_seals_firm_hand.png",
+        "independence_declaration.png"
+      ]
+    },
+    {
+      "focus": "NAM_counterstroke",
+      "title": "Вернуть узлы, удержать людей",
+      "assets": [
+        "counterstroke_field_commander.png",
+        "general_staff_plan_map_board.png"
+      ]
+    },
+    {
+      "focus": "NAM_volunteer_levies",
+      "title": "Добровольческие наборы",
+      "assets": [
+        "volunteer_levies_civilian_recruit.png",
+        "depots_rifle_crate.png"
+      ]
+    },
+    {
+      "focus": "NAM_scorched_wells",
+      "title": "Выжженные скважины",
+      "assets": [
+        "scorched_wells_detonator.png",
+        "oil_derricks.png"
+      ]
+    },
+    {
+      "focus": "NAM_wells_under_guard",
+      "title": "Скважины под охраной",
+      "assets": [
+        "wells_under_guard_shielded_wellhead.png",
+        "basin_border_sentry.png"
+      ]
+    },
+    {
+      "focus": "NAM_last_reserve",
+      "title": "Последний резерв",
+      "assets": [
+        "last_reserve_vault_door.png",
+        "reserve_covered_crates.png"
+      ]
+    },
+    {
+      "focus": "NAM_district_volunteers",
+      "title": "Добровольцы округов",
+      "assets": [
+        "district_volunteers_pair.png",
+        "desert_dune_backdrop.png"
+      ]
+    },
+    {
+      "focus": "NAM_martial_seals",
+      "title": "Военные печати",
+      "assets": [
+        "martial_seals_military_tribunal_seal.png",
+        "hear_commandant_peaked_cap.png"
+      ]
+    },
+    {
+      "focus": "NAM_oil_score",
+      "title": "Нефтяной счёт",
+      "assets": [
+        "oil_score_industrial_meter.png",
+        "oil_derricks.png"
+      ]
+    }
+  ]
 }
