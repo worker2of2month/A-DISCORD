@@ -31,10 +31,10 @@ TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
 CLIPS = ("idle", "move", "attack")
 PAINTS = {
     "VAL": ((77, 94, 112), (39, 49, 61), (185, 194, 199)),
-    "STP": ((91, 43, 49), (44, 32, 35), (161, 132, 76)),
-    "STS": ((88, 96, 64), (44, 52, 37), (188, 184, 150)),
+    "STP": ((88, 96, 64), (44, 52, 37), (188, 184, 150)),
+    "STS": ((67, 88, 99), (34, 47, 58), (167, 196, 197)),
     "NAM": ((172, 148, 105), (98, 80, 55), (221, 199, 151)),
-    "NOD": ((67, 88, 99), (34, 47, 58), (167, 196, 197)),
+    "NOD": ((51, 65, 66), (30, 41, 43), (164, 166, 153)),
 }
 
 
@@ -59,6 +59,7 @@ def prepare(tags=TAGS):
 
     for tag in tags:
         base, dark, accent = PAINTS[tag]
+        marking = {"STP": "STS", "STS": "NOD"}.get(tag, tag)
         palette = [base, dark, (23, 25, 25), (105, 113, 113), accent,
                    (34, 63, 75), accent, (15, 20, 21), base,
                    tuple(min(255, c + 18) for c in base), (140, 35, 27),
@@ -88,19 +89,19 @@ def prepare(tags=TAGS):
                 for y in range(8, 128, 10):
                     draw.line((0, y, 128, y), fill=(52, 58, 57), width=2)
             if index == 8:
-                if tag == "VAL":
+                if marking == "VAL":
                     draw.polygon(((25, 94), (64, 24), (103, 94), (82, 94), (64, 60), (46, 94)), fill=accent)
-                elif tag == "STP":
+                elif marking == "STP":
                     points = []
                     for i in range(10):
                         angle = -math.pi / 2 + i * math.pi / 5
                         radius = 43 if i % 2 == 0 else 19
                         points.append((64 + radius * math.cos(angle), 64 + radius * math.sin(angle)))
                     draw.polygon(points, fill=accent)
-                elif tag == "NAM":
+                elif marking == "NAM":
                     draw.polygon(((64, 21), (107, 64), (64, 107), (21, 64)), fill=accent)
                     draw.polygon(((64, 43), (85, 64), (64, 85), (43, 64)), fill=base)
-                elif tag == "NOD":
+                elif marking == "NOD":
                     # Recognition bands keep small side panels readable.
                     for x in (24, 66):
                         draw.polygon(((x, 108), (x + 24, 20), (x + 41, 20), (x + 17, 108)), fill=accent)
@@ -204,7 +205,7 @@ def val_vehicle(model, body):
     model.rod((-.89, 2.78, 1.88), (-.89, 2.78, 2.72), .018, 3, body)
 
 
-def stp_vehicle(model, body):
+def nod_vehicle(model, body):
     # A short four-wheel chassis carries a raised cabin and a rear drum turret.
     hull(model, [(.65, 1.90, -2.37, 2.34, .16),
                  (1.31, 2.45, -2.83, 2.74, .22),
@@ -245,7 +246,7 @@ def stp_vehicle(model, body):
     model.rod((-.83, 2.16, 2.52), (-.83, 2.16, 3.23), .025, 3, body)
 
 
-def sts_vehicle(model, body):
+def stp_vehicle(model, body):
     # The engine hood, driver's cab and troop box remain separate masses.
     hull(model, [(.65, 1.86, -3.25, 2.94, .15),
                  (1.22, 2.45, -3.57, 3.24, .22)], 1, body)
@@ -341,7 +342,7 @@ def nam_vehicle(model, body):
     model.rod((.73, 2.30, 2.01), (.73, 2.30, 2.87), .018, 3, body)
 
 
-def nod_vehicle(model, body):
+def sts_vehicle(model, body):
     # Three evenly spaced axles support a continuous hull and a narrow roof.
     hull(model, [(.62, 1.86, -2.75, 2.82, .24),
                  (1.30, 2.88, -3.43, 3.28, .48),

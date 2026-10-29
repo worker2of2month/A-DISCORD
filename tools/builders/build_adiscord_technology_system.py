@@ -11045,6 +11045,9 @@ def aircraft_gfx_output() -> bytes:
 APC_CARDS_BEGIN = "\t# BEGIN ADISCORD country APC cards\n"
 APC_CARDS_END = "\t# END ADISCORD country APC cards\n"
 COUNTRY_APC_CARD_TEXTURES = {
+    "VAL": "gfx/interface/technologies/ADISCORD_apc_VAL.png",
+    "STP": "gfx/interface/technologies/ADISCORD_apc_STP.png",
+    "STS": "gfx/interface/technologies/ADISCORD_apc_STS.png",
     "NAM": "gfx/interface/technologies/ADISCORD_apc_NAM.png",
     "NOD": "gfx/interface/technologies/ADISCORD_apc_NOD.png",
 }

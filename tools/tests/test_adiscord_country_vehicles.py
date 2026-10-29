@@ -419,7 +419,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                     self.assertLess(metrics["loop_error"], .001)
                     self.assertGreater(metrics["max_vertex_motion"], .05 if clip == "idle" else .10)
                 wheels = row["animations"]["move"]["moving_bones"]
-                expected_wheels = {"VAL_apc": 8, "STP_apc": 4, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 6}
+                expected_wheels = {"VAL_apc": 8, "STP_apc": 6, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 4}
                 self.assertEqual(len(wheels), expected_wheels[name])
                 self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
         self.assertEqual(len(hashes), 5)

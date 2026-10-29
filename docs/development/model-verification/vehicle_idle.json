@@ -52,9 +52,9 @@
         "samples": 35,
         "frames": 256,
         "fps": 30,
-        "max_vertex_motion": 0.20797267184372148,
-        "loop_error": 4.9887196704063876e-17,
-        "velocity_loop_error": 5.2071403667246985e-05,
+        "max_vertex_motion": 0.18939432685835883,
+        "loop_error": 4.5013892182050295e-17,
+        "velocity_loop_error": 5.664197749706114e-05,
         "bone_motion": {
           "vehicle_root": 0.0,
           "hull": 0.0030728578567504883,
@@ -62,25 +62,29 @@
           "gun": 0.10452649742364883,
           "wheel_-1_0": 0.0,
           "wheel_-1_1": 0.0,
+          "wheel_-1_2": 0.0,
           "wheel_1_0": 0.0,
-          "wheel_1_1": 0.0
+          "wheel_1_1": 0.0,
+          "wheel_1_2": 0.0
         },
         "stationary_bones": [
           "vehicle_root",
           "wheel_-1_0",
           "wheel_-1_1",
+          "wheel_-1_2",
           "wheel_1_0",
-          "wheel_1_1"
+          "wheel_1_1",
+          "wheel_1_2"
         ],
         "native_reimport": true,
         "hoi4_runtime_verified": false
       },
-      "sha256": "d1c8e012ca47ce3e000af6347d2478f73c9da2a4440cb0182daad3f24d4493af",
+      "sha256": "581e2b115155b96dd381996362d580b259b085cc33ed67ffc1799ecfccd6833d",
       "inputs": {
-        "STP_apc.mesh": "9a0b791af5976090f3e6b375feb1a733cad998f69ddbfee19163d48fd64d2a4a",
-        "STP_apc_move.anim": "eef1ee6ae1b2a48261abb98152c234843790e85715c6b818a9bb172a23929c53",
-        "STP_apc_attack.anim": "35ca9c5ea9cdd8a2504556b92feb48e60beddff284b43b36855a196534dbfd77",
-        "STP_apc_diffuse.dds": "41c6060d24c129a8eebb51affc49831a5094784b5b45dc1f6d0259098472052c",
+        "STP_apc.mesh": "341526699342860eacdde744c25901b2f16ad05187a4568216d655fd6aabb8cd",
+        "STP_apc_move.anim": "651651ae9c03d6284e0cf164b8f8e7cda173d5c27c7f91979be04051a5b5ab35",
+        "STP_apc_attack.anim": "65f7d10aeb0625cce01e2441936e4f74cbd7ba23150819ff97e5deacc54c6c91",
+        "STP_apc_diffuse.dds": "43e2b6547688312ecf38b0c3b52809103e109a671a06b63b06a5fa22cc559ed7",
         "STP_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "STP_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
       }
@@ -90,9 +94,9 @@
         "samples": 35,
         "frames": 271,
         "fps": 30,
-        "max_vertex_motion": 0.18924198539641046,
-        "loop_error": 4.5013892182050295e-17,
-        "velocity_loop_error": 5.2328842966373e-05,
+        "max_vertex_motion": 0.30444366342067447,
+        "loop_error": 7.245825659299207e-17,
+        "velocity_loop_error": 8.154229108028628e-05,
         "bone_motion": {
           "vehicle_root": 0.0,
           "hull": 0.0029103755950927734,
@@ -117,12 +121,12 @@
         "native_reimport": true,
         "hoi4_runtime_verified": false
       },
-      "sha256": "1f7d88674a3b5d408184f8644545e372542707861f0c7881d17ef066bf3db64c",
+      "sha256": "c290d39c3103c7d4fad124d1e6ebd8635844c5f1ce391870ef71ffbc9be3240c",
       "inputs": {
-        "STS_apc.mesh": "9cd2f36ff20dbc4b0eb8d23d2789016ef41abb01e3e5a465f7ede61022c397f2",
-        "STS_apc_move.anim": "651651ae9c03d6284e0cf164b8f8e7cda173d5c27c7f91979be04051a5b5ab35",
-        "STS_apc_attack.anim": "65f7d10aeb0625cce01e2441936e4f74cbd7ba23150819ff97e5deacc54c6c91",
-        "STS_apc_diffuse.dds": "c433db8d55fad7c19676c6d97c05ca0603dc8c51fd8ce64aa553a3bbebb4a76c",
+        "STS_apc.mesh": "19301fa907614b857c02baf3766890cfbd6a06f6c6ee4c59d69a0cc351871774",
+        "STS_apc_move.anim": "c82e1f3eb3a127bbfc5097bbe0137b6f172ee2073acacbc89ad7557bd0f78aa8",
+        "STS_apc_attack.anim": "c434dd2186e96e77c4c3c3285cfefe407d9f601853a9209c52d1d3dd0d7264db",
+        "STS_apc_diffuse.dds": "bc124f10128b9bf0e384def463134a285d946af05d55ba2da897a2db4979ccba",
         "STS_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "STS_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
       }
@@ -643,9 +647,9 @@
         "samples": 35,
         "frames": 361,
         "fps": 30,
-        "max_vertex_motion": 0.3046723463123534,
-        "loop_error": 7.245825659299207e-17,
-        "velocity_loop_error": 4.591345695765911e-05,
+        "max_vertex_motion": 0.20811393695848363,
+        "loop_error": 4.9887196704063876e-17,
+        "velocity_loop_error": 2.6705009512859334e-05,
         "bone_motion": {
           "vehicle_root": 0.0,
           "hull": 0.0022051334381103516,
@@ -653,29 +657,25 @@
           "gun": 0.10452844947576523,
           "wheel_-1_0": 0.0,
           "wheel_-1_1": 0.0,
-          "wheel_-1_2": 0.0,
           "wheel_1_0": 0.0,
-          "wheel_1_1": 0.0,
-          "wheel_1_2": 0.0
+          "wheel_1_1": 0.0
         },
         "stationary_bones": [
           "vehicle_root",
           "wheel_-1_0",
           "wheel_-1_1",
-          "wheel_-1_2",
           "wheel_1_0",
-          "wheel_1_1",
-          "wheel_1_2"
+          "wheel_1_1"
         ],
         "native_reimport": true,
         "hoi4_runtime_verified": false
       },
-      "sha256": "4211f940b90a9173d71f2d8ee87abbecfa86a2eda6620d9ae16518ebe2da35e6",
+      "sha256": "3bdd378fb60d73a3f65a4c2811b4602ddd1148306dbe045451a218a7c9c654aa",
       "inputs": {
-        "NOD_apc.mesh": "06922e637b2241c54a73c16be66655680eb41fcab1fb5caebfd9aaf8a86a54bf",
-        "NOD_apc_move.anim": "c82e1f3eb3a127bbfc5097bbe0137b6f172ee2073acacbc89ad7557bd0f78aa8",
-        "NOD_apc_attack.anim": "c434dd2186e96e77c4c3c3285cfefe407d9f601853a9209c52d1d3dd0d7264db",
-        "NOD_apc_diffuse.dds": "279aebad3c9e2f7987c3e2a188f59ee0adee78a2ff9bcc6834e68a8459459bab",
+        "NOD_apc.mesh": "2864d1548aefbff72f04d97a9836b07eb4e76043bbe69e9d0482d4a1c5d8a3b2",
+        "NOD_apc_move.anim": "eef1ee6ae1b2a48261abb98152c234843790e85715c6b818a9bb172a23929c53",
+        "NOD_apc_attack.anim": "35ca9c5ea9cdd8a2504556b92feb48e60beddff284b43b36855a196534dbfd77",
+        "NOD_apc_diffuse.dds": "2f38a9983b543d8d8b7325bf716a6d2c8caea42fa55bd74e92c18f5508141995",
         "NOD_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NOD_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
       }
@@ -702,19 +702,19 @@
   "output_hashes": {
     "gfx\\models\\units\\ADISCORD_country_vehicles\\VAL_apc_idle.anim": "7e57853070196eb446edd5dcc0eb15a8ff791fb9c1d3fb5c5f2c76b9d3509b47",
     "tools\\assets\\source\\country_vehicles\\VAL_apc.blend": "e60bcccfbcdb113fc96d61f8dea570f98beffa1bc7de57b1186f37051a3242d7",
-    "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_apc_idle.anim": "d1c8e012ca47ce3e000af6347d2478f73c9da2a4440cb0182daad3f24d4493af",
-    "tools\\assets\\source\\country_vehicles\\STP_apc.blend": "50598e17bcee9b7925735ad6bffd0b848a854c91ded556db6810572f2f5e1a14",
-    "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_apc_idle.anim": "1f7d88674a3b5d408184f8644545e372542707861f0c7881d17ef066bf3db64c",
-    "tools\\assets\\source\\country_vehicles\\STS_apc.blend": "c17e10384bb55c77e4770e65a37ed957951dbbbfc28e8eda91e3d547b252dcda",
+    "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_apc_idle.anim": "581e2b115155b96dd381996362d580b259b085cc33ed67ffc1799ecfccd6833d",
+    "tools\\assets\\source\\country_vehicles\\STP_apc.blend": "2b989b15c3aac20b5637bcef59e73dc91c4fb0901013df41806d1c89b2815c28",
+    "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_apc_idle.anim": "c290d39c3103c7d4fad124d1e6ebd8635844c5f1ce391870ef71ffbc9be3240c",
+    "tools\\assets\\source\\country_vehicles\\STS_apc.blend": "c20f104a33a5dc297d6a6fe3396cd9f9cf09384e5aec6aaaf8515195b5ef6c0b",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NAM_apc_idle.anim": "36c353626271586087dd51a12fa5976c14d596f39e02f1963debdc891c14e25c",
     "tools\\assets\\source\\country_vehicles\\NAM_apc.blend": "d74d0aa5c474b3d276d8c53b8c3cd3595b1b99591da555d161b2432b37f5a167",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\VAL_tank_idle.anim": "02726d37b6a064a2f28b32c324a8ed8a5439d93376a85ca79055ddd7aa581b7a",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_tank_idle.anim": "0948ae8f18b37a34e3415b152aaeeb48e593ba2a9a2a95145e7911304e67bda1",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STP_tank_idle.anim": "cff9b038ddf529fc19e9c2bd0551744aa47ec744f9a1b1763df7fe5f005868f0",
     "gfx\\models\\units\\ADISCORD_country_vehicles\\STS_taran_idle.anim": "b370572b7882a9be3d2de08138d42f48901968a1dae8779e8826394cb755fbf1",
-    "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_apc_idle.anim": "4211f940b90a9173d71f2d8ee87abbecfa86a2eda6620d9ae16518ebe2da35e6",
-    "tools\\assets\\source\\country_vehicles\\NOD_apc.blend": "b5a406d1f1f71c8a37799039ea2bdb61e3c0d23bba3530afdb6020caaeef624b",
-    "docs\\development\\model-verification\\country_apc.json": "48d6249e224ce842a1c96abbadcc5f53ff91feb12596dcb50986597b1b5b21cb",
+    "gfx\\models\\units\\ADISCORD_country_vehicles\\NOD_apc_idle.anim": "3bdd378fb60d73a3f65a4c2811b4602ddd1148306dbe045451a218a7c9c654aa",
+    "tools\\assets\\source\\country_vehicles\\NOD_apc.blend": "8d926df0099918064b511125ed46a2ae0a73035eb47462b96c96601300bc8583",
+    "docs\\development\\model-verification\\country_apc.json": "def441f7c23684a5672f5561e236babbd4053d2a5ce63edf53de05890af512cf",
     "docs\\development\\model-verification\\STS_taran_verification.json": "8b1ffc7aefd107d383f08a829dec048231d005650cd1fc209648fd866cac56bb"
   }
 }

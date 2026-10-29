@@ -3641,6 +3641,111 @@ spriteTypes = {
 	}
 	# BEGIN ADISCORD country APC cards
 	SpriteType = {
+		name = "GFX_VAL_ADISCORD_armored_carrier_archetype_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_armored_carrier_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_ifv_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_networked_ifv_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_armored_carrier_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_infantry_combat_vehicle_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_networked_mechanized_cells_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_VAL.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_armored_carrier_archetype_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_armored_carrier_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_ifv_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_networked_ifv_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_armored_carrier_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_infantry_combat_vehicle_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_networked_mechanized_cells_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STP.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_armored_carrier_archetype_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_armored_carrier_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_ifv_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_networked_ifv_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_armored_carrier_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_infantry_combat_vehicle_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_networked_mechanized_cells_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_STS.png"
+	}
+
+	SpriteType = {
 		name = "GFX_NAM_ADISCORD_armored_carrier_archetype_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
 	}

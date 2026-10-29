@@ -9,15 +9,15 @@ tanks and STS Taran. The APC and Taran geometry builders call its exporter.
 
 - VAL: long, low eight-wheel wedge hull with overlapping side skirts and a wide,
   flat faceted turret; blue-grey panels.
-- STP: short four-wheel chassis with a raised cabin, rear drum turret and commander's
-  cupola; burgundy panels and brass trim.
-- STS: six-wheel chassis with a separate engine hood, driver's cab and troop box;
+- STP: six-wheel chassis with a separate engine hood, driver's cab and troop box;
   open shielded weapon mount, olive paint and external kit.
+- STS: six large wheels with separate angled mudguards, a continuous sloped hull,
+  rear troop ramp and compact enclosed turret; slate-blue armour and pale bands.
 - NAM: wide eight-wheel amphibious hull with a boat bow, side floats and stern jets;
   rear asymmetric turret with an offset optic housing, sand paint, earth-brown
   recesses and sun-bleached sand strips.
-- NOD: six large wheels with separate angled mudguards, a continuous sloped hull,
-  rear troop ramp and compact enclosed turret; slate-blue armour and pale bands.
+- NOD: short four-wheel chassis with a raised cabin, rear drum turret and commander's
+  cupola; dark blue-green armour and pale grey-green trim matching the NOD tank.
 
 The existing `ADISCORD_mechanized_infantry` battalion uses `sprite = mechanized`.
 National and cosmetic identities route its visual levels and carrier equipment
