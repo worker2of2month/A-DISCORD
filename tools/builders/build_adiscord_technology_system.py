@@ -11042,6 +11042,54 @@ def aircraft_gfx_output() -> bytes:
     return text.encode("utf-8")
 
 
+APC_CARDS_BEGIN = "\t# BEGIN ADISCORD country APC cards\n"
+APC_CARDS_END = "\t# END ADISCORD country APC cards\n"
+COUNTRY_APC_CARD_TEXTURES = {
+    "NAM": "gfx/interface/technologies/ADISCORD_apc_NAM.png",
+    "NOD": "gfx/interface/technologies/ADISCORD_apc_NOD.png",
+}
+APC_CARD_EQUIPMENT = (
+    "ADISCORD_armored_carrier_2163",
+    "ADISCORD_ifv_2170",
+    "ADISCORD_networked_ifv_2183",
+)
+
+
+def country_apc_gfx_entries() -> str:
+    keys = ["ADISCORD_armored_carrier_archetype", *APC_CARD_EQUIPMENT]
+    keys.extend(
+        tech_id for tech_id, equipment in ENABLE_EQUIPMENT.items()
+        if any(item in APC_CARD_EQUIPMENT for item in equipment)
+    )
+    entries = [APC_CARDS_BEGIN]
+    for tag, texture in COUNTRY_APC_CARD_TEXTURES.items():
+        for key in keys:
+            entries.append(
+                "\tSpriteType = {\n"
+                f'\t\tname = "GFX_{tag}_{key}_medium"\n'
+                f'\t\ttextureFile = "{texture}"\n'
+                "\t}\n\n"
+            )
+    entries.append(APC_CARDS_END)
+    return "".join(entries)
+
+
+def apc_gfx_output() -> bytes:
+    """Refresh APC bindings without changing supplied runtime artwork."""
+    path = ROOT / "interface/ADISCORD_technologies.gfx"
+    original = path.read_bytes()
+    text = path.read_text(encoding="utf-8")
+    if APC_CARDS_BEGIN in text:
+        start = text.index(APC_CARDS_BEGIN)
+        end = text.index(APC_CARDS_END, start) + len(APC_CARDS_END)
+    else:
+        start = end = text.rfind("}")
+    text = text[:start] + country_apc_gfx_entries() + text[end:]
+    if b"\r\n" in original:
+        text = text.replace("\n", "\r\n")
+    return text.encode("utf-8")
+
+
 UNIFORM_CARDS_BEGIN = "\t# BEGIN ADISCORD country uniform cards\n"
 UNIFORM_CARDS_END = "\t# END ADISCORD country uniform cards\n"
 
@@ -11327,7 +11375,8 @@ def write_gfx() -> None:
                 )
     content = (
         "spriteTypes = {\n" + "\n".join(entries) + technology_tree_gfx_entries()
-        + country_aircraft_gfx_entries() + country_uniform_gfx_entries() + "}\n"
+        + country_aircraft_gfx_entries() + country_uniform_gfx_entries()
+        + country_apc_gfx_entries() + "}\n"
     )
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(
         content, encoding="utf-8"
@@ -12895,7 +12944,26 @@ def main() -> int:
         "--infantry-cards-only", action="store_true",
         help="check or apply supplied infantry equipment cards and their GFX routes",
     )
+    parser.add_argument(
+        "--apc-icons-only", action="store_true",
+        help="check or apply country APC sprites without rebuilding other UI",
+    )
     args = parser.parse_args()
+    if args.apc_icons_only:
+        if any(value for key, value in vars(args).items()
+               if key not in {"check", "apply", "apc_icons_only", "aircraft_role"}) or args.aircraft_role != "all":
+            parser.error("--apc-icons-only cannot be combined with other partial output modes")
+        for texture in COUNTRY_APC_CARD_TEXTURES.values():
+            with Image.open(ROOT / texture) as image:
+                if image.mode != "RGBA" or image.size != (176, 72):
+                    raise ValueError(f"APC card must be 176x72 RGBA: {texture}")
+        path = ROOT / "interface/ADISCORD_technologies.gfx"
+        content = apc_gfx_output()
+        changed = path.read_bytes() != content
+        if args.apply and changed:
+            path.write_bytes(content)
+        print(f"Country APC sprites {'updated' if args.apply else 'different'}: {int(changed)}")
+        return int(changed and not args.apply)
     if args.air_only:
         if any(value for key, value in vars(args).items()
                if key not in {"check", "apply", "air_only", "aircraft_role"}) or args.aircraft_role != "all":

@@ -3639,4 +3639,76 @@ spriteTypes = {
 		name = "GFX_ADISCORD_tech_garrison_service_records_medium"
 		textureFile = "gfx/interface/technologies/tech_military_police.dds"
 	}
+	# BEGIN ADISCORD country APC cards
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_armored_carrier_archetype_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_armored_carrier_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_ifv_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_networked_ifv_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_armored_carrier_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_infantry_combat_vehicle_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_networked_mechanized_cells_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NAM.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_armored_carrier_archetype_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_armored_carrier_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_ifv_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_networked_ifv_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_armored_carrier_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_infantry_combat_vehicle_program_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_networked_mechanized_cells_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_apc_NOD.png"
+	}
+
+	# END ADISCORD country APC cards
 }

@@ -51,6 +51,12 @@ same country routes, independently of human or AI control.
 Native addresses, source hashes and the replay's limits are recorded in
 `docs/development/model-verification/country_apc_selection.json`.
 
+Ready-to-use APC technology cards are 176x72 RGBA PNGs in
+`gfx/interface/technologies/ADISCORD_apc_<TAG>.png`. The technology builder's
+`--apc-icons-only` mode checks or applies their country-specific research,
+equipment and carrier-archetype sprites without converting the supplied art.
+The shared motorized picture remains separate from the carrier card.
+
 The root entity uses the native `motorized_frame_mesh`. The vehicle and existing
 national rifle infantry are separate attachments, with idle, move, retreat,
 attack, defend, support attack, training and death states. The frame already
