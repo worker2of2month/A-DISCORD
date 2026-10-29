@@ -10853,6 +10853,16 @@ COUNTRY_AIRCRAFT_CARD_FAMILIES = {
 
 # Ready-to-use cards can cover one role without overriding the other role's art or names.
 COUNTRY_AIRCRAFT_ROLE_TEXTURES = {
+    "NAM": {
+        "fighter": tuple(
+            f"gfx/interface/technologies/ADISCORD_aircraft_NAM_{tier}.png"
+            for tier in range(1, 4)
+        ),
+        "cas": tuple(
+            f"gfx/interface/technologies/ADISCORD_aircraft_cas_NAM_{tier}.png"
+            for tier in range(1, 4)
+        ),
+    },
     "RUS": {
         "fighter": tuple(
             f"gfx/interface/technologies/ADISCORD_aircraft_RUS_{tier}.png"

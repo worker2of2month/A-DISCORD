@@ -122,6 +122,14 @@ logs before treating the runtime result as verified.
 
 ## NAM naval family
 
+NAM fighter technology and production cards use the three supplied runtime PNGs
+`gfx/interface/technologies/ADISCORD_aircraft_NAM_1.png` through `_3.png`;
+CAS uses `ADISCORD_aircraft_cas_NAM_1.png` through `_3.png` in the same directory.
+`COUNTRY_AIRCRAFT_ROLE_TEXTURES` in the technology builder routes them by research
+tier; subsequent fighter and interceptor models use the third card. The
+`aircraft_gfx_output()` builder refreshes these bindings independently of optional
+authoring sources. The third CAS card also covers subsequent attack and drone models.
+
 `tools.builders.build_adiscord_nam_models` owns the NAM headquarters, marine
 and six aircraft exports. NAM general portraits define the olive, dark green,
 brown leather and brass palette. The marine keeps the NAM field body and kit,
