@@ -23,10 +23,26 @@ NAM_garrison_dynamic = {
 	supply_consumption_factor = NAM_gar_supply_consumption
 	army_speed_factor = NAM_gar_army_speed
 	planning_speed = NAM_gar_planning_speed
-	convoy_escort_efficiency = NAM_gar_convoy_escort
 	army_org_factor = NAM_gar_army_org
 	army_defence_factor = NAM_gar_army_defence
 	conscription = NAM_gar_conscription
+}
+
+NAM_navy_dynamic = {
+	icon = GFX_idea_generic_coastal_navy
+	enable = { tag = NAM }
+	convoy_escort_efficiency = NAM_gar_convoy_escort
+	repair_speed_factor = NAM_navy_repair_speed
+	amphibious_invasion = NAM_navy_landing_speed
+}
+
+NAM_air_dynamic = {
+	icon = GFX_idea_generic_air_bonus
+	enable = { tag = NAM }
+	air_accidents_factor = NAM_air_accidents
+	air_mission_efficiency = NAM_air_mission_efficiency
+	air_intercept_efficiency = NAM_air_intercept_efficiency
+	air_cas_efficiency = NAM_air_cas_efficiency
 }
 
 # Pillars of power. NAM_groups_refresh derives every field from group support.

@@ -393,6 +393,17 @@ defined_text = {
 		localization_key = NAM_rw_next_war
 	}
 	text = {
+		trigger = {
+			has_country_flag = NAM_rw_protocol_signed
+			has_country_flag = NAM_rw_time_bought
+		}
+		localization_key = NAM_rw_next_window_both
+	}
+	text = {
+		trigger = { has_country_flag = NAM_rw_time_bought }
+		localization_key = NAM_rw_next_window_bought
+	}
+	text = {
 		trigger = { has_country_flag = NAM_rw_protocol_signed }
 		localization_key = NAM_rw_next_window_protocol
 	}
@@ -867,6 +878,21 @@ defined_text = {
 			NAM_rw_war_window_open = yes
 		}
 		localization_key = NAM_bw_tension_war
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			has_country_flag = NAM_rw_protocol_signed
+			has_country_flag = NAM_rw_time_bought
+		}
+		localization_key = NAM_bw_tension_window_both
+	}
+	text = {
+		trigger = {
+			NAM_rw_clock_running = yes
+			has_country_flag = NAM_rw_time_bought
+		}
+		localization_key = NAM_bw_tension_window_bought
 	}
 	text = {
 		trigger = {

@@ -294,21 +294,43 @@ NAM_rw_time_bought_active = {
 }
 
 # COUNTRY NAM. The scheduled flag was set at the collapse edge, so its age is
-# the time since the collapse wars began: 300 days, or 665 after the protocol.
-# A bought delay closes the window until it runs out.
+# the time since the collapse wars began: 700 days, or 1065 after the protocol.
+# Buying time also moves the earliest window 75 days, even when bought early.
+# The 75 days after payment remain protected when the purchase happens late.
 NAM_rw_war_window_open = {
 	NOT = { NAM_rw_time_bought_active = yes }
 	OR = {
 		AND = {
 			NOT = { has_country_flag = NAM_rw_protocol_signed }
+			NOT = { has_country_flag = NAM_rw_time_bought }
 			has_global_flag = {
 				flag = ADISCORD_nam_resource_war_scheduled
-				days > 299
+				days > 699
 			}
 		}
-		has_global_flag = {
-			flag = ADISCORD_nam_resource_war_scheduled
-			days > 664
+		AND = {
+			NOT = { has_country_flag = NAM_rw_protocol_signed }
+			has_country_flag = NAM_rw_time_bought
+			has_global_flag = {
+				flag = ADISCORD_nam_resource_war_scheduled
+				days > 774
+			}
+		}
+		AND = {
+			has_country_flag = NAM_rw_protocol_signed
+			NOT = { has_country_flag = NAM_rw_time_bought }
+			has_global_flag = {
+				flag = ADISCORD_nam_resource_war_scheduled
+				days > 1064
+			}
+		}
+		AND = {
+			has_country_flag = NAM_rw_protocol_signed
+			has_country_flag = NAM_rw_time_bought
+			has_global_flag = {
+				flag = ADISCORD_nam_resource_war_scheduled
+				days > 1139
+			}
 		}
 	}
 }

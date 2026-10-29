@@ -822,7 +822,9 @@ focus_tree = {
 			custom_effect_tooltip = NAM_defeat_southern_charter_tt
 			hidden_effect = { ADISCORD_south_final_war_start = yes }
 			unlock_decision_tooltip = NAM_south_allied_fuel
+			custom_effect_tooltip = NAM_south_allied_fuel_unlock_tt
 			unlock_decision_tooltip = NAM_south_convoy_interdiction
+			custom_effect_tooltip = NAM_south_convoy_interdiction_unlock_tt
 		}
 		ai_will_do = {
 			base = 10

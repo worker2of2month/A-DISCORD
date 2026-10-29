@@ -821,6 +821,10 @@ country_event = {
 			base = 10
 			modifier = {
 				factor = 0
+				NOT = { NAM_rw_war_window_open = yes }
+			}
+			modifier = {
+				factor = 0
 				check_variable = { var = NAM_orders_paid value = 4 compare = less_than }
 			}
 		}

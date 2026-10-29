@@ -655,6 +655,8 @@ class FocusAggregateTests(unittest.TestCase):
     REFRESH = {
         "NAM_administration_dynamic": "NAM_refresh_administration",
         "NAM_garrison_dynamic": "NAM_refresh_garrison",
+        "NAM_navy_dynamic": "NAM_refresh_navy",
+        "NAM_air_dynamic": "NAM_refresh_air",
         "SHL_conclave_power_dynamic": "SHL_refresh_conclave_power",
     }
 
@@ -698,7 +700,7 @@ class FocusAggregateTests(unittest.TestCase):
                 self.assertEqual(applied, delta, identifier)
                 self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
                 checked += 1
-        self.assertEqual(checked, 63)
+        self.assertEqual(checked, 69)
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)
@@ -714,7 +716,8 @@ class FocusAggregateTests(unittest.TestCase):
             source = body(path, refresh)
             self.assertIn(f"add_dynamic_modifier = {{ modifier = {name} }}", source)
             self.assertIn("force_update_dynamic_modifier = yes", source)
-            self.assertIn("ADISCORD_economy_mark_dirty = yes", source)
+            if name not in ("NAM_navy_dynamic", "NAM_air_dynamic"):
+                self.assertIn("ADISCORD_economy_mark_dirty = yes", source)
             self.assertNotIn("set_variable", source)
 
 

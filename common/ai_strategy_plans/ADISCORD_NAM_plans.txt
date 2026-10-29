@@ -61,21 +61,6 @@ NAM_prewar_plan = {
 		NAM_line_engineers
 		NAM_one_budget
 		NAM_neutral_basin
-		NAM_provisional_statute
-		NAM_rom_address
-		NAM_restitution_desk
-		NAM_court_azhar
-		NAM_reserve_rolls
-		NAM_contract_bureau
-		NAM_underground_reports
-		NAM_weber_channel
-		NAM_amnesty_lists
-		NAM_mine_councils
-		NAM_quiet_wells
-		NAM_district_assemblies
-		NAM_seal_courts
-		NAM_basin_talks
-		NAM_general_staff_plan
 		NAM_supports_council
 		NAM_supports_oil_compact
 		NAM_supports_balance
@@ -84,18 +69,39 @@ NAM_prewar_plan = {
 		NAM_hear_klyuchevsk
 		NAM_hear_the_commandant
 		NAM_pillar_arbitration
-		NAM_field_repair_crews
+		NAM_restitution_desk
+		NAM_court_azhar
+		NAM_district_assemblies
+		NAM_seal_courts
 		NAM_machine_shops
-		NAM_klyuchevsk_pipeline
-		NAM_deep_wells
-		NAM_fuel_depots
-		NAM_second_drilling_crew
+		NAM_civilian_combine
+		NAM_technical_college
+		NAM_flight_school
+		NAM_air_ground_service
+		NAM_air_interceptors
+		NAM_air_operations
 		NAM_quartermaster
 		NAM_port_arsenal
 		NAM_officer_courses
 		NAM_harbour_service
 		NAM_repair_yard
 		NAM_escort_school
+		NAM_provisional_statute
+		NAM_rom_address
+		NAM_reserve_rolls
+		NAM_contract_bureau
+		NAM_underground_reports
+		NAM_weber_channel
+		NAM_amnesty_lists
+		NAM_mine_councils
+		NAM_quiet_wells
+		NAM_basin_talks
+		NAM_general_staff_plan
+		NAM_field_repair_crews
+		NAM_klyuchevsk_pipeline
+		NAM_deep_wells
+		NAM_fuel_depots
+		NAM_second_drilling_crew
 		NAM_coastal_battalions
 		NAM_coastal_watch
 		NAM_island_accounts
@@ -106,10 +112,7 @@ NAM_prewar_plan = {
 		NAM_field_firefighters
 		NAM_chancellery_purge
 		NAM_tax_rolls
-		NAM_civilian_combine
 		NAM_basin_roads
-		NAM_technical_college
-
 	}
 	weight = { factor = 20 }
 }

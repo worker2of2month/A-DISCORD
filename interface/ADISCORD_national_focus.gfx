@@ -1,5 +1,10 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_harbour_service"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_harbour_service.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_metropolitan_quota"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_quota.png"
 	}

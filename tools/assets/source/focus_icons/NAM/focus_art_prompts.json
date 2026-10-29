@@ -1479,6 +1479,87 @@
       "prompt": "Edit the supplied transparent PNG asset. Preserve the green metal index-file box, four cards, arrangement, paper, lighting, scale and alpha transparency exactly. Change ONLY the four small monochrome fictional portrait thumbnails. From left to right: a stern male civilian oil-industry administrator in plain business suit; a male shipping merchant in period civilian business suit; a male army commandant in plain military uniform; a middle-aged FEMALE chief registrar in plain dark office jacket, neatly pinned dark hair. Exactly three men and one woman. No ethnic costume, no text additions, no frame or background. Maintain sepia realistic photographic dossier style.",
       "generator": "Built-in image_gen",
       "variant_of": "rivals_ledger_index_file.png"
+    },
+    {
+      "title": "Корабль",
+      "file": "eternal_port_cargo_steamship.png",
+      "subject": "The immense black riveted cargo steamship ONLY, with towering bow on right, hull receding toward left, decks, superstructure, smokestack and masts with amber lamps. Complete visible vessel silhouette, restore the hull hidden by foreman and pier. Preserve heroic low-angle bow perspective. No cranes, docks, people, cargo sling, water, sky, fog or smoke outside ship.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: The immense black riveted cargo steamship ONLY, with towering bow on right, hull receding toward left, decks, superstructure, smokestack and masts with amber lamps. Complete visible vessel silhouette, restore the hull hidden by foreman and pier. Preserve heroic low-angle bow perspective. No cranes, docks, people, cargo sling, water, sky, fog or smoke outside ship.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Левый кран",
+      "file": "eternal_port_left_crane.png",
+      "subject": "The LEFT gigantic lattice dock crane ONLY, its complete pedestal, dark steel gantry, operator cabin, walkways, amber lamps and boom extending toward upper right. Complete crane standing alone, reconstruct concealed base. No suspended wooden cargo, no ship, people, quay, sea, clouds or fog.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: The LEFT gigantic lattice dock crane ONLY, its complete pedestal, dark steel gantry, operator cabin, walkways, amber lamps and boom extending toward upper right. Complete crane standing alone, reconstruct concealed base. No suspended wooden cargo, no ship, people, quay, sea, clouds or fog.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Правый кран",
+      "file": "eternal_port_right_crane.png",
+      "subject": "The RIGHT gigantic lattice dock crane ONLY, complete tall steel pedestal and operator cabin, boom leaning to upper left, cable and empty hook hanging down, warm electric lamps. Reconstruct parts hidden by ship. No ship, people, quay, cargo, sea, clouds or fog.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: The RIGHT gigantic lattice dock crane ONLY, complete tall steel pedestal and operator cabin, boom leaning to upper left, cable and empty hook hanging down, warm electric lamps. Reconstruct parts hidden by ship. No ship, people, quay, cargo, sea, clouds or fog.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Подвешенный груз",
+      "file": "eternal_port_suspended_cargo.png",
+      "subject": "The suspended wooden cargo bundle from the top middle ONLY: several heavy wood shipping crates held by rope sling, with short converging sling ropes and hook above. View from slightly below, amber lamp highlights, dark natural timber. No crane, sky, people, ship or fog.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: The suspended wooden cargo bundle from the top middle ONLY: several heavy wood shipping crates held by rope sling, with short converging sling ropes and hook above. View from slightly below, amber lamp highlights, dark natural timber. No crane, sky, people, ship or fog.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Причал",
+      "file": "eternal_port_quay.png",
+      "subject": "The LOWER stone and concrete quay segment ONLY, in the exact low view and diagonal perspective, including wet stone paving, vertical seawall edge, mooring bollards and a few stacked dockside wooden crates. Warm amber reflections on wet surface. Remove all people and all ropes leading outside the layer; no ship, cranes, sea, sky or fog. Complete freestanding segment with irregular clean silhouette.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: The LOWER stone and concrete quay segment ONLY, in the exact low view and diagonal perspective, including wet stone paving, vertical seawall edge, mooring bollards and a few stacked dockside wooden crates. Warm amber reflections on wet surface. Remove all people and all ropes leading outside the layer; no ship, cranes, sea, sky or fog. Complete freestanding segment with irregular clean silhouette.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Рабочие ночной смены",
+      "file": "eternal_port_dock_workers.png",
+      "subject": "A compact group of THREE small dockworkers matching the lower-right quay figures, full bodies including boots, wearing dark period work caps and navy jackets, two bending and pulling a thick mooring rope, third directing the rope. Group is one independent foreground layer. Amber backlight and cool shadows. No quay, crates, bollard, ship, cranes, water or fog.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: A compact group of THREE small dockworkers matching the lower-right quay figures, full bodies including boots, wearing dark period work caps and navy jackets, two bending and pulling a thick mooring rope, third directing the rope. Group is one independent foreground layer. Amber backlight and cool shadows. No quay, crates, bollard, ship, cranes, water or fog.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Море",
+      "file": "eternal_port_sea.png",
+      "subject": "ONLY the strip of dark teal choppy seawater and white foam from the bottom foreground, strong broken amber electric-light reflections. Wide low patch of realistic surface waves viewed at shallow angle, irregular feathered perimeter fading into true alpha. No land, quay, people, ships, cranes, sky or fog. The wave surface itself is visible; outside it transparent.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: ONLY the strip of dark teal choppy seawater and white foam from the bottom foreground, strong broken amber electric-light reflections. Wide low patch of realistic surface waves viewed at shallow angle, irregular feathered perimeter fading into true alpha. No land, quay, people, ships, cranes, sky or fog. The wave surface itself is visible; outside it transparent.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Грозовые облака",
+      "file": "eternal_port_storm_clouds.png",
+      "subject": "ONLY the localized patch of dark blue-grey storm clouds from the upper central background. Voluminous layered night cloud mass, subtle cold blue illumination, broad bold forms with irregular softly feathered transparent perimeter. No sky rectangle, sun, moon, stars, lightning, ship, cranes, people, water or fog. Standalone atmospheric backdrop cutout.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: ONLY the localized patch of dark blue-grey storm clouds from the upper central background. Voluminous layered night cloud mass, subtle cold blue illumination, broad bold forms with irregular softly feathered transparent perimeter. No sky rectangle, sun, moon, stars, lightning, ship, cranes, people, water or fog. Standalone atmospheric backdrop cutout.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "title": "Морской туман",
+      "file": "eternal_port_sea_mist.png",
+      "subject": "ONLY the billowing pale sea mist from around the lower ship and quay: a wide low bank of wispy white-grey salt mist, cool blue shaded sides and restrained warm amber light inside, rolling upward at right. Semi-transparent cloud interiors and soft fading edges on genuine transparent alpha. No water surface, foam waves, ship, quay, people, buildings, lamps or sky.",
+      "focus": "NAM_harbour_service",
+      "prompt": "Use case: background-extraction and compositing asset reconstruction. The supplied image is the authoritative Eternal Port composition. Extract and faithfully reconstruct ONLY the requested layer as ONE independently movable high-resolution transparent PNG. Preserve the original low-angle perspective, shape, photographic realism, cool navy/steel tones and amber electric night lighting. Reconstruct hidden portions plausibly, so other layers leave no holes in this subject. Full requested subject within canvas, small clear margin on all sides. True transparent alpha outside the subject and through gaps. No other scene elements, no rectangular background, no ground shadow, no sun, no frame, text or watermark. Do not deliver a composition or asset sheet. Requested layer: ONLY the billowing pale sea mist from around the lower ship and quay: a wide low bank of wispy white-grey salt mist, cool blue shaded sides and restrained warm amber light inside, rolling upward at right. Semi-transparent cloud interiors and soft fading edges on genuine transparent alpha. No water surface, foam waves, ship, quay, people, buildings, lamps or sky.",
+      "reference": "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-88f444cb-60e0-40d0-a57b-d7388c70aa00.png",
+      "generator": "Built-in image_gen"
     }
   ],
   "shared_style_history": [
@@ -1491,6 +1572,12 @@
     "compositions_duplicate": "C:/Users/Admin/Desktop/namestnik/compositions"
   },
   "focus_compositions": [
+    {
+      "focus_id": "NAM_harbour_service",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_harbour_service",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_harbour_service.png"
+    },
     {
       "focus_id": "NAM_metropolitan_quota",
       "file": "nam_metropolitan_quota_composition.png",

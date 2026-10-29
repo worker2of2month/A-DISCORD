@@ -42,14 +42,14 @@ ADISCORD_nam_resource_war_schedule = {
 		}
 		set_global_flag = ADISCORD_nam_resource_war_scheduled
 		# The scheduled flag keeps the collapse date: the restitution clock reads
-		# its age for the 300-day minimum. Event .1 at 420-480 days is the backstop.
+		# its age for the 700-day minimum. Event .1 at 730-760 days is the backstop.
 		NAM = {
 			set_variable = { var = NAM_rw_tension value = 10 }
 			NAM_rw_count_entry_dispatch = yes
 			country_event = {
 				id = ADISCORD_nam_resource_war.1
-				days = 420
-				random_days = 60
+				days = 730
+				random_days = 30
 			}
 		}
 	}
@@ -1599,6 +1599,8 @@ NAM_receive_250 = {
 # The mission displays the deadline; event 50 owns the treaty and remains its only dispatcher.
 # Seal discipline outlives the war and keeps recovering in peacetime.
 NAM_close_war_programmes = {
+	remove_decision = NAM_war_supply_priority
+	remove_decision = NAM_war_counterstroke_operation
 	clr_country_flag = NAM_compact_ratified
 	clr_country_flag = NAM_rw_first_strike
 	clr_country_flag = NAM_rw_war_dispatched
@@ -1730,6 +1732,22 @@ NAM_refresh_garrison = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+NAM_refresh_navy = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_navy_dynamic } } }
+		add_dynamic_modifier = { modifier = NAM_navy_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+NAM_refresh_air = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_air_dynamic } } }
+		add_dynamic_modifier = { modifier = NAM_air_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+}
+
 # COUNTRY NAM, FROM recipient. Called after the targeted decision debits the exact shipment.
 
 NAM_deliver_charter_fuel = {
@@ -1748,6 +1766,12 @@ NAM_groups_initialize = {
 	if = {
 		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
 		set_country_flag = NAM_groups_initialized
+		set_variable = { var = NAM_navy_repair_speed value = 0 }
+		set_variable = { var = NAM_navy_landing_speed value = 0 }
+		set_variable = { var = NAM_air_accidents value = 0 }
+		set_variable = { var = NAM_air_mission_efficiency value = 0 }
+		set_variable = { var = NAM_air_intercept_efficiency value = 0 }
+		set_variable = { var = NAM_air_cas_efficiency value = 0 }
 		set_variable = { var = NAM_grp_nam_support value = 55 }
 		set_variable = { var = NAM_grp_nam_influence value = 30 }
 		set_variable = { var = NAM_grp_oil_support value = 40 }
@@ -2374,6 +2398,10 @@ NAM_wrk_concession_refund = {
 # ends with it. Running decisions settle through their own cancel triggers.
 NAM_colony_close = {
 	set_country_flag = NAM_center_vanished
+	# Independence creates the services; later tree changes keep their values.
+	NAM_refresh_garrison = yes
+	NAM_refresh_navy = yes
+	NAM_refresh_air = yes
 	if = {
 		limit = { has_country_flag = NAM_wrk_concession_active }
 		clr_country_flag = NAM_wrk_concession_active
@@ -2473,6 +2501,10 @@ NAM_rw_tension_clamp = {
 		if = {
 			limit = {
 				NOT = { has_country_flag = NAM_rw_ultimatum_sent }
+				has_global_flag = {
+					flag = ADISCORD_nam_resource_war_scheduled
+					days > 649
+				}
 				check_variable = { var = NAM_rw_tension value = 70 compare = greater_than_or_equals }
 			}
 			set_country_flag = NAM_rw_ultimatum_sent

@@ -134,6 +134,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_board_arbitration
+			custom_effect_tooltip = NAM_corp_board_arbitration_unlock_tt
 			add_stability = 0.05
 			add_political_power = 30
 			# The humanist union may already have opened this slot.
@@ -204,6 +205,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_charter_renewal
+			custom_effect_tooltip = NAM_corp_charter_renewal_unlock_tt
 			custom_effect_tooltip = NAM_board_shareholders_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
@@ -269,6 +271,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_auction_district
+			custom_effect_tooltip = NAM_corp_auction_district_unlock_tt
 			add_political_power = 30
 		}
 		ai_will_do = {
@@ -468,6 +471,7 @@ focus_tree = {
 			if = {
 				limit = { NAM_exile_return_programme_open = yes }
 				unlock_decision_tooltip = NAM_exile_drill
+				custom_effect_tooltip = NAM_exile_drill_unlock_tt
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
@@ -515,6 +519,7 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_order_marines_corp
+			custom_effect_tooltip = NAM_order_marines_corp_unlock_tt
 			custom_effect_tooltip = NAM_board_landing_contracts_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_marine_order_cap value = 1 }

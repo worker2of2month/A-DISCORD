@@ -1769,8 +1769,8 @@ def main() -> int:
         "country_exists = AZH",
         "set_global_flag = ADISCORD_nam_resource_war_scheduled",
         "id = ADISCORD_nam_resource_war.1",
-        "days = 420",
-        "random_days = 60",
+        "days = 730",
+        "random_days = 30",
     ):
         check(
             schedule.count(token) == 1,
@@ -2238,8 +2238,8 @@ def main() -> int:
     )
     window = named_block(triggers, "NAM_rw_war_window_open")
     check(
-        "days > 299" in window and "days > 664" in window,
-        "the war window must keep the 300-day minimum and the protocol's 365-day delay",
+        "days > 699" in window and "days > 1064" in window,
+        "the war window must keep the 700-day minimum and the protocol's 365-day delay",
     )
     tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
     for mission in ("NAM_hold_field_67", "NAM_hold_field_689", "NAM_hold_field_690"):
