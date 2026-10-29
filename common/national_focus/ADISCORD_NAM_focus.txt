@@ -935,7 +935,7 @@ shared_focus = {
 		icon = GFX_goal_generic_neutrality_focus
 		x = 37
 		y = 8
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_basin_is_ours }
@@ -985,7 +985,7 @@ shared_focus = {
 		icon = GFX_focus_generic_provoke_border_clashes
 		x = 39
 		y = 8
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_neutral_basin }
@@ -1035,7 +1035,7 @@ shared_focus = {
 		icon = GFX_focus_generic_social_democracy
 		x = 38
 		y = 9
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_neutral_basin
@@ -1093,7 +1093,7 @@ shared_focus = {
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
 		x = 1
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1129,7 +1129,7 @@ shared_focus = {
 		icon = GFX_focus_generic_improve_the_administration
 		x = 0
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_open_ledgers }
 		mutually_exclusive = { focus = NAM_districts }
@@ -1183,7 +1183,7 @@ shared_focus = {
 		icon = GFX_focus_generic_freedom_council
 		x = 2
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_open_ledgers }
 		mutually_exclusive = { focus = NAM_vertical }
@@ -1234,7 +1234,7 @@ shared_focus = {
 		icon = GFX_focus_generic_secret_service_agency
 		x = 0
 		y = 3
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_vertical }
 		available = {
@@ -1291,7 +1291,7 @@ shared_focus = {
 		icon = GFX_focus_generic_welfare
 		x = 2
 		y = 3
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_districts }
 		available = {
@@ -1329,7 +1329,7 @@ shared_focus = {
 		icon = GFX_focus_generic_national_security
 		x = 0
 		y = 4
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_inspectors }
 		available = {
@@ -1361,7 +1361,7 @@ shared_focus = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 2
 		y = 4
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_public_payroll }
 		available = {
@@ -1397,7 +1397,7 @@ shared_focus = {
 		icon = GFX_focus_generic_currency_reforms
 		x = 1
 		y = 5
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_emergency_writ
@@ -1541,7 +1541,7 @@ shared_focus = {
 		icon = GFX_focus_generic_conference
 		x = 10
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -1885,7 +1885,7 @@ shared_focus = {
 		icon = GFX_focus_generic_league_of_nations
 		x = 13
 		y = 6
-		cost = 6
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_garrison_assembly }
 		prerequisite = {
@@ -1920,7 +1920,7 @@ shared_focus = {
 		icon = GFX_focus_generic_phone
 		x = 25
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2010,7 +2010,7 @@ shared_focus = {
 		icon = GFX_focus_generic_secret_agent_operative
 		x = 30
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2043,7 +2043,7 @@ shared_focus = {
 		icon = GFX_focus_generic_treaty
 		x = 29
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_underground_reports }
 		mutually_exclusive = { focus = NAM_cache_hunters }
@@ -2077,7 +2077,7 @@ shared_focus = {
 		icon = GFX_focus_generic_infiltration
 		x = 31
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_underground_reports }
 		mutually_exclusive = { focus = NAM_weber_channel }
@@ -2229,7 +2229,7 @@ shared_focus = {
 		icon = GFX_focus_generic_world_peace
 		x = 30
 		y = 5
-		cost = 5
+		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_mine_councils
@@ -2262,7 +2262,7 @@ shared_focus = {
 		icon = GFX_focus_generic_offshore_oil_rig
 		x = 48
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2297,7 +2297,7 @@ shared_focus = {
 		icon = GFX_focus_generic_merchant_fleet
 		x = 47
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_well_register }
 		mutually_exclusive = { focus = NAM_domestic_refining }
@@ -2338,7 +2338,7 @@ shared_focus = {
 		icon = GFX_focus_generic_concessions
 		x = 54
 		y = 2
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_well_register }
 		available = {
@@ -2365,7 +2365,7 @@ shared_focus = {
 		icon = GFX_goal_generic_oil_refinery
 		x = 49
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_well_register }
 		mutually_exclusive = { focus = NAM_export_quays }
@@ -2493,7 +2493,7 @@ shared_focus = {
 		icon = GFX_focus_generic_industry_2
 		x = 51
 		y = 3
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_domestic_refining }
 		available = {
@@ -2789,7 +2789,7 @@ shared_focus = {
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 60
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -2823,7 +2823,7 @@ shared_focus = {
 		icon = GFX_goal_generic_defence
 		x = 59
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		mutually_exclusive = { focus = NAM_mobile_columns }
@@ -2864,7 +2864,7 @@ shared_focus = {
 		icon = GFX_focus_generic_manpower
 		x = 65
 		y = 2
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		bypass = {
@@ -2902,7 +2902,7 @@ shared_focus = {
 		icon = GFX_goal_generic_army_motorized
 		x = 61
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		mutually_exclusive = { focus = NAM_field_guards }
@@ -2970,7 +2970,7 @@ shared_focus = {
 		icon = GFX_focus_generic_defensive_reorganization
 		x = 66
 		y = 3
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_mobilisation_office }
 		bypass = {
@@ -3038,7 +3038,7 @@ shared_focus = {
 		icon = GFX_focus_generic_mountain_fortification
 		x = 63
 		y = 6
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_field_guards }
 		prerequisite = { focus = NAM_line_survey }
@@ -3123,7 +3123,7 @@ shared_focus = {
 		icon = GFX_focus_generic_mechanized
 		x = 64
 		y = 3
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_mobile_columns }
 		prerequisite = { focus = NAM_mobilisation_office }
@@ -3262,7 +3262,7 @@ shared_focus = {
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 72
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -3291,7 +3291,7 @@ shared_focus = {
 		icon = GFX_focus_generic_refit_civilian_ships
 		x = 72
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_harbour_service }
 		available = {
@@ -3321,7 +3321,7 @@ shared_focus = {
 		icon = GFX_goal_generic_navy_anti_submarine
 		x = 72
 		y = 3
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_repair_yard }
 		available = {
@@ -3357,7 +3357,7 @@ shared_focus = {
 		icon = GFX_goal_generic_amphibious_assault
 		x = 70
 		y = 4
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_escort_school }
 		bypass = {
@@ -3406,7 +3406,7 @@ shared_focus = {
 		icon = GFX_focus_generic_smugglers
 		x = 74
 		y = 4
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_escort_school }
 		available = {
@@ -3468,7 +3468,7 @@ shared_focus = {
 		icon = GFX_focus_generic_steel
 		x = 73
 		y = 5
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_concession }
@@ -3496,7 +3496,7 @@ shared_focus = {
 		icon = GFX_focus_generic_license_production
 		x = 75
 		y = 5
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_levy_office }
@@ -3528,7 +3528,7 @@ shared_focus = {
 		icon = GFX_focus_generic_escort_efficiency
 		x = 74
 		y = 6
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
 			focus = NAM_island_levy_office
@@ -3604,7 +3604,7 @@ shared_focus = {
 		icon = GFX_goal_generic_improve_relations
 		x = 20
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		allow_branch = { has_country_flag = NAM_center_vanished }
@@ -3628,7 +3628,13 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_restitution_note
+			if = {
+				limit = { has_completed_focus = NAM_neutral_basin }
+				add_political_power = 25
+			}
+			else = {
+				unlock_decision_tooltip = NAM_restitution_note
+			}
 			custom_effect_tooltip = NAM_restitution_desk_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_rw_tension value = -5 }
@@ -3651,6 +3657,8 @@ shared_focus = {
 		mutually_exclusive = { focus = NAM_fuel_leverage }
 		bypass = {
 			OR = {
+				has_country_flag = NAM_rw_time_bought
+				has_country_flag = NAM_rw_first_strike
 				has_global_flag = ADISCORD_nam_resource_war_started
 				has_global_flag = ADISCORD_nam_resource_war_resolved
 				AND = {
@@ -3665,27 +3673,43 @@ shared_focus = {
 				tooltip = NAM_restitution_clock_tt
 				has_global_flag = ADISCORD_nam_resource_war_scheduled
 			}
-			NOT = { has_fuel < 3000 }
+			NOT = { has_fuel < 6000 }
+			AZH = { exists = yes }
+			hidden_trigger = {
+				NOT = { has_country_flag = NAM_rw_time_bought }
+				NOT = { has_country_flag = NAM_rw_first_strike }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = -3000
-			AZH = {
-				if = {
-					limit = { exists = yes }
-					add_fuel = 3000
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_country_flag = NAM_rw_time_bought }
+						NOT = { has_country_flag = NAM_rw_first_strike }
+						NOT = { has_fuel < 6000 }
+						AZH = { exists = yes }
+					}
 				}
-			}
-			custom_effect_tooltip = NAM_court_azhar_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = -4 }
-				NAM_rw_tension_clamp = yes
-			}
-			custom_effect_tooltip = NAM_grp_court_azhar_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 3 }
-				NAM_groups_refresh = yes
+				add_fuel = -6000
+				AZH = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 6000
+					}
+				}
+				hidden_effect = { set_country_flag = NAM_rw_time_bought }
+				custom_effect_tooltip = NAM_court_azhar_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_rw_tension value = -4 }
+					NAM_rw_tension_clamp = yes
+				}
+				custom_effect_tooltip = NAM_grp_court_azhar_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_trade_support value = 3 }
+					NAM_groups_refresh = yes
+				}
 			}
 		}
 		ai_will_do = {

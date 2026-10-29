@@ -1,5 +1,7 @@
 # Svetlogorye takes the district course before the resource war, keeps the
 # coalition talking and prepares positional defence of the fields.
+# Wartime focuses take priority as soon as their current-war gates open;
+# the district compact and refinery start early enough to mature before attack.
 NAM_prewar_plan = {
 	name = "NAM district course"
 	desc = ""
@@ -17,38 +19,52 @@ NAM_prewar_plan = {
 	}
 	ai_national_focuses = {
 		NAM_inventory
-		NAM_metropolitan_quota
-		NAM_colonial_watch
-		NAM_deliver_the_quota
-		NAM_oilfield_militia
-		NAM_wrk_trade_house
-		NAM_pipeline_patrols
-		NAM_wrk_return_cargo
-		NAM_print_shop_raid
-		NAM_metropolitan_depots
-		NAM_colony_order
-		NAM_letters_to_the_centre
+		NAM_alarm
+		NAM_hold_basin
+		NAM_relief_columns
+		NAM_discipline_of_seals
+		NAM_counterstroke
+		NAM_volunteer_levies
+		NAM_wells_under_guard
+		NAM_last_reserve
+		NAM_district_volunteers
+		NAM_oil_score
 		NAM_centre_hourglass
 		NAM_second_ledger
 		NAM_quiet_officer_lists
 		NAM_sand_runs_out
 		NAM_last_centre_register
+		NAM_metropolitan_quota
+		NAM_concealed_reserve
+		NAM_wrk_trade_house
+		NAM_wrk_return_cargo
+		NAM_metropolitan_depots
+		NAM_letters_to_the_centre
+		NAM_colonial_watch
+		NAM_oilfield_militia
+		NAM_pipeline_patrols
+		NAM_print_shop_raid
+		NAM_colony_order
 		NAM_independence_day
+		NAM_count_garrisons
+		NAM_mobilisation_office
 		NAM_open_ledgers
 		NAM_districts
-		NAM_count_garrisons
-		NAM_field_guards
 		NAM_well_register
 		NAM_domestic_refining
+		NAM_refinery_programme
 		NAM_public_payroll
 		NAM_district_guarantees
-		NAM_one_budget
-		NAM_neutral_basin
-		NAM_restitution_desk
-		NAM_court_azhar
-		NAM_mobilisation_office
+		NAM_field_guards
+		NAM_engineer_depots
 		NAM_line_survey
 		NAM_line_engineers
+		NAM_one_budget
+		NAM_neutral_basin
+		NAM_provisional_statute
+		NAM_rom_address
+		NAM_restitution_desk
+		NAM_court_azhar
 		NAM_reserve_rolls
 		NAM_contract_bureau
 		NAM_underground_reports
@@ -60,8 +76,6 @@ NAM_prewar_plan = {
 		NAM_seal_courts
 		NAM_basin_talks
 		NAM_general_staff_plan
-		NAM_provisional_statute
-		NAM_rom_address
 		NAM_supports_council
 		NAM_supports_oil_compact
 		NAM_supports_balance
@@ -71,13 +85,11 @@ NAM_prewar_plan = {
 		NAM_hear_the_commandant
 		NAM_pillar_arbitration
 		NAM_field_repair_crews
-		NAM_refinery_programme
 		NAM_machine_shops
 		NAM_klyuchevsk_pipeline
 		NAM_deep_wells
 		NAM_fuel_depots
 		NAM_second_drilling_crew
-		NAM_engineer_depots
 		NAM_quartermaster
 		NAM_port_arsenal
 		NAM_officer_courses
@@ -97,16 +109,7 @@ NAM_prewar_plan = {
 		NAM_civilian_combine
 		NAM_basin_roads
 		NAM_technical_college
-		NAM_alarm
-		NAM_hold_basin
-		NAM_relief_columns
-		NAM_discipline_of_seals
-		NAM_counterstroke
-		NAM_volunteer_levies
-		NAM_wells_under_guard
-		NAM_last_reserve
-		NAM_district_volunteers
-		NAM_oil_score
+
 	}
 	weight = { factor = 20 }
 }

@@ -2075,12 +2075,8 @@
         "gfx/interface/goals/NAM/GFX_focus_NAM_colonial_watch.png",
         "gfx/interface/goals/NAM/GFX_focus_NAM_commissioner_plan.png",
         "gfx/interface/goals/NAM/GFX_focus_NAM_second_ledger.png",
-        "gfx/interface/goals/NAM/GFX_focus_NAM_quiet_officer_lists.png",
-        "gfx/interface/goals/NAM/GFX_focus_NAM_wrk_return_cargo.png",
         "gfx/interface/goals/NAM/GFX_focus_NAM_sand_runs_out.png",
-        "gfx/interface/goals/NAM/GFX_focus_NAM_metropolitan_depots.png",
-        "gfx/interface/goals/NAM/GFX_focus_NAM_last_centre_register.png",
-        "gfx/interface/goals/NAM/GFX_focus_NAM_letters_to_the_centre.png"
+        "gfx/interface/goals/NAM/GFX_focus_NAM_last_centre_register.png"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_nam_focus_icons.py",

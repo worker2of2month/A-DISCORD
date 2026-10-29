@@ -564,6 +564,83 @@
         "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/trade_house_merchant.png"
       ],
       "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "file": "depots_open_arsenal_v2.png",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG asset for a grandiose HOI4 NAM national focus. Reference image gives ONLY photographic materials and warm directional lighting. Heroic object scale, bold readable shapes, dark iron, natural wood, muted olive and pale stone, selective amber highlights. No decorative gold plating. One massive military supply depot loading bay, squat wide industrial structure, dark corrugated steel roof, thick riveted iron portal and rough pale sandstone walls. Two sliding metal doors fully open; visible interior filled with broad orderly stacks of wooden military supply crates and olive canvas bundles, two warm hanging lamps illuminate supplies. Strong diagonal three-quarter viewpoint, low roof, wide doorway dominates, freight logistics over ornate architecture. Whole building silhouette including roof and wall ends contained. No foreground detached crates, people, vehicles, landscape, sun, ground, long rail tracks or extra props. Genuine alpha-zero outside object and in open gaps; generous transparent margins on ALL sides. No fog, halo, backdrop, sky, frame, text, labels, miniature decorative clutter or assembled collage.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/depots_arsenal_gate.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "file": "depots_loaded_handcart.png",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG asset for a grandiose HOI4 NAM national focus. Reference image gives ONLY photographic materials and warm directional lighting. Heroic object scale, bold readable shapes, dark iron, natural wood, muted olive and pale stone, selective amber highlights. No decorative gold plating. One heavy four-wheel warehouse platform handcart, worn timber bed and black iron wheels, angled three-quarter view, loaded with THREE large strapped wooden military supply crates and one rolled olive canvas tarpaulin. Long curved metal push handle behind crates fully visible. Cargo arranged in a stepped broad silhouette. Complete cart, all wheels and crates within canvas, no people, weapons sticking out, warehouse, landscape, floor, sun or text. Genuine alpha-zero outside object and in open gaps; generous transparent margins on ALL sides. No fog, halo, backdrop, sky, frame, text, labels, miniature decorative clutter or assembled collage.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/depots_arsenal_gate.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "file": "return_cargo_harbour_water.png",
+      "prompt": "Use case: background-extraction. Input is authoritative assembled reference. Deliver ONE separate movable transparent PNG layer for manual NAM HOI4 focus assembly. Preserve photographic textures, perspective, natural material colors and restrained warm side light from reference. Extract/reconstruct ONLY requested layer: ONLY the harbour seawater surface beneath and in front of the ship. Reconstruct the occluded water to make a continuous broad shallow perspective water patch, dark slate-blue small ripples, restrained amber reflections, a little soft foam. Wide low footprint with distant back edge, not a top-down disk, not a wave wall. No ship silhouette or ship-shaped hole. All edges softly dissolve into genuine transparency. NO ship, hull, boat, pier, ropes, cranes, crates, cliffs, land, sky, sun, horizon or fog. Generous transparent margin all sides. No black or brown rectangular backdrop, no text, frame, badge, contact sheet or additional objects. Subject is large and detailed; don't bake other composition elements into it.",
+      "references": [
+        "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-d88912c5-d30a-42ba-b291-16941d4648e2.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "file": "return_cargo_stone_quay.png",
+      "prompt": "Use case: background-extraction. Input is authoritative assembled reference. Deliver ONE separate movable transparent PNG layer for manual NAM HOI4 focus assembly. Preserve photographic textures, perspective, natural material colors and restrained warm side light from reference. Extract/reconstruct ONLY requested layer: ONLY the stone cargo quay on the right, reconstructed as a complete freestanding harbour pier segment: worn pale sandstone block vertical seawall and flat top, two dark iron mooring bollards along edge, a small group of three closed wooden shipping crates at rear. View angle matches reference, extends diagonally away toward right rear. No hanging ropes connected to absent ship. Fully contained pier and bollards, natural irregular crop of stone base fades gently to transparency. NO ship, machine, sea, water, cliff, landscape, sky, sun, people or fog. Generous transparent margin all sides. No black or brown rectangular backdrop, no text, frame, badge, contact sheet or additional objects. Subject is large and detailed; don't bake other composition elements into it.",
+      "references": [
+        "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-d88912c5-d30a-42ba-b291-16941d4648e2.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_wrk_return_cargo",
+      "file": "return_cargo_coastal_cliffs.png",
+      "prompt": "Use case: background-extraction. Input is authoritative assembled reference. Deliver ONE separate movable transparent PNG layer for manual NAM HOI4 focus assembly. Preserve photographic textures, perspective, natural material colors and restrained warm side light from reference. Extract/reconstruct ONLY requested layer: ONLY the distant desert coastal cliffs behind the ship: broad stepped sandstone escarpment with tall flat-topped ochre rock faces at left and lower dry rocky shore descending to right, faint sand haze close to ground. Faithfully preserve reference arrangement and lighting, reconstruct terrain hidden by ship into complete independent background layer. Wide low silhouette, all edges feather into alpha except natural crisp upper ridgeline. NO ship, sea, pier, cargo, machine, cranes, people, sky, sun or halo. Generous transparent margin all sides. No black or brown rectangular backdrop, no text, frame, badge, contact sheet or additional objects. Subject is large and detailed; don't bake other composition elements into it.",
+      "references": [
+        "C:/Users/Admin/.codex/generated_images/01a1843b-bf11-7792-aa58-8379310415d6/exec-d88912c5-d30a-42ba-b291-16941d4648e2.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_letters_to_the_centre",
+      "file": "calm_before_storm_rom_with_cap.png",
+      "prompt": "Use case: stylized-concept. ONE independent transparent PNG asset for NAM HOI4 national focus 'Тишина перед бурей'. Grandiose photographic political collage style, realistic materials, strong readable silhouette, restrained cinematic contrast. User assembles separate layers manually. IDENTITY-PRESERVING full-body portrait of Egor Rom from the supplied game portrait: narrow clean-shaven face, high forehead, prominent ears, straight nose, short slicked dark hair. Same recognizable man, not an older bearded general. He stands still, three-quarter rear/side view, body turned right, visible right-facing profile, looking slightly upward toward a distant storm OUTSIDE this asset. Solemn contemplative stance, shoulders weighted, no heroic raised gesture. Bare head. BOTH hands gently hold ONE dark wool peaked cap in front at waist, fingers naturally gripping its rim, cap not worn. Practical long charcoal coat over his recognizable utilitarian dark jacket and striped scarf, plain trousers and heavy boots. Full figure and feet visible within ample margins. Cold slate light from upper right, faint muted warm rim on left. ONLY person with clothing and cap; NO terrain, sky, storm, fog, weapon, podium or separate accessories. Remove original scanlines and background. Genuine transparent alpha background. No title, caption, lettering, border, frame, badge, contact sheet or other subjects.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/gfx/leaders/NAM/portrait_NAM_Egor_Rom.png"
+      ],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_letters_to_the_centre",
+      "file": "calm_before_storm_thunderclouds.png",
+      "prompt": "Use case: stylized-concept. ONE independent transparent PNG asset for NAM HOI4 national focus 'Тишина перед бурей'. Grandiose photographic political collage style, realistic materials, strong readable silhouette, restrained cinematic contrast. User assembles separate layers manually. ONE separate distant storm-front overlay for an ominous monumental political focus collage. Towering dark slate-blue and charcoal thundercloud bank sweeping upward to upper right, layered heavy rolling cloud masses, dim cold silver light inside clouds and thin distant rain curtains falling down at right. One restrained branching lightning streak embedded far inside cloud at right, not across foreground. Broad asymmetrical dramatic cloud silhouette, visibly threatening but quiet, not fiery explosion. Lower left lighter and partly open to leave room for standing figure. No sun, solar disc, yellow halo, sea, ground, mountains, people, buildings, ships or text. Cloud outer edges fade naturally through translucent wisps into true alpha-zero, no rectangular sky. Whole bank has safe transparent margins. Genuine transparent alpha background. No title, caption, lettering, border, frame, badge, contact sheet or other subjects.",
+      "references": [],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_letters_to_the_centre",
+      "file": "calm_before_storm_dry_ground.png",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG terrain layer for monumental HOI4 focus collage 'Тишина перед бурей'. Photographic realism, broad readable forms, subdued ominous palette. ONE separate low broad fragment of dry desert earth to stand a full-length person on: shallow windswept ochre-grey rock shelf with cracked dusty ground, scattered small angular stones, slightly elevated lip at right, distant low sand ridge behind. Ground plane seen at low eye level with a flat clear standing area at left centre. Ominous cold grey-blue reflected light from upper right, restrained muted amber grazing highlight at left. No people, footprints, cap, vegetation, buildings, sky, clouds, storm, lightning or sun. Low horizontal fragment, natural uneven edges fading gently into transparent dust; no massive pedestal, vertical cutaway slab or floating island. Safe transparent margins. Genuine alpha-zero outside terrain. No lettering, frame, badge, assembled scene or extra subjects.",
+      "references": [],
+      "generator": "Built-in image_gen"
+    },
+    {
+      "focus": "NAM_quiet_officer_lists",
+      "file": "quiet_lists_desk_lamp.png",
+      "generator": "Built-in image_gen",
+      "prompt": "Use case: stylized-concept. ONE separate transparent PNG asset for a monumental photographic HOI4 focus collage 'Тихие списки офицеров'. An early twentieth-century military office desk lamp: deep muted olive-green enamel half-dome shade, slightly bent blackened brass articulated neck, heavy low round dark metal base. Three-quarter front view, shade tilted downward to LEFT toward a dossier outside this asset. Warm ivory lit interior of shade, restrained amber highlights on aged real metal, deep charcoal shadows, imposing sculptural silhouette with broad readable shapes. Entire lamp and base comfortably contained in transparent safe margins. Supplied reference establishes paper/metal photographic shading only; do not copy dossier or papers. Lamp ONLY, no desk, light cone, halo, room, background, documents, people, cables outside frame, sun, fog, text, logo or border. Genuine alpha-zero outside the lamp and through open gaps. This is an independent movable layer, not a complete focus composition.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_personnel_register.png"
+      ]
     }
   ],
   "shared_style_history": [
@@ -662,6 +739,7 @@
     },
     {
       "focus_id": "NAM_quiet_officer_lists",
+      "export_runtime": false,
       "file": "nam_quiet_officer_lists_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. QUIET OFFICER LISTS: close-up of an olive-uniformed officer's sleeve and hand sliding a sealed thin file beneath a broad folded military cap; behind the cap a half-lit serious generic officer face turned in profile, discreet and thoughtful. A few short dark rows on file, no readable text. Muted olive, ivory and dark brown, narrow amber light. Secret planning of future loyal officers, no death imagery or assassination.",
       "sprite": "GFX_focus_NAM_quiet_officer_lists",
@@ -679,6 +757,7 @@
     },
     {
       "focus_id": "NAM_wrk_return_cargo",
+      "export_runtime": false,
       "file": "nam_wrk_return_cargo_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. RETURN CARGO: dark cargo freighter bow at left with one crane arm lowering a large industrial machine crate at right; partially visible steel lathe and flywheel emerge from open crate. Dynamic harbor montage of a ship bringing machinery home, strong diagonal crane cable, subdued waves at base. Steel gray, brown wood and amber reflections; no oil barrels, no text, no flags, no enormous sun.",
       "sprite": "GFX_focus_NAM_wrk_return_cargo",
@@ -704,6 +783,7 @@
     },
     {
       "focus_id": "NAM_metropolitan_depots",
+      "export_runtime": false,
       "file": "nam_metropolitan_depots_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. METROPOLITAN DEPOTS: open dark wooden military supply crate filled with clearly visible wood-stock rifles pointing diagonally upward, behind it an imposing warehouse entrance with its heavy sliding door open; a single artillery wheel half-visible at base. Lawful transfer of stored weapons to local garrisons, natural brown wood and dark steel, amber light from warehouse. Not ammunition explosions, no soldiers, no text or gold weapons.",
       "sprite": "GFX_focus_NAM_metropolitan_depots",
@@ -729,6 +809,7 @@
     },
     {
       "focus_id": "NAM_letters_to_the_centre",
+      "export_runtime": false,
       "file": "nam_letters_to_the_centre_composition.png",
       "prompt": "Create ONE finished Hearts of Iron IV national focus icon, a compact narrative PHOTOMONTAGE with transparent background, NOT separate assets and NOT a sheet of variants. Reference 1 establishes NAM amber/ochre lighting, charcoal shadows and readable free silhouette; references 2-3 establish natural materials and dramatic layered cutout collage. Preserve natural steel, paper, skin, fabric and wood; gold is selective lighting, NOT the material of everything. Broad strong tonal masses, cohesive overlap, crisp subject silhouettes, restrained atmospheric wisps only at base, no photographic rectangle. Designed to remain readable at 150x150 pixels: 2-3 main shapes, no miniature clutter. The art occupies central 85% of square canvas, full silhouette comfortably inside all edges. Transparent outside the irregular composition. No border, wreath, shield frame, text, captions, numerals, slogans, logos, real-world flags or eagle emblems. Objects and human figures have realistic proportions and photographic shading with subtle painterly integration, not glossy fantasy inventory items. LETTERS TO THE CENTRE: a large hand with fountain pen writing a final line on an ivory letter, fan of three sealed envelopes behind and a small dark desk lamp illuminating the page; beyond them a distant faint silhouette of the capital fading into shadow. Quiet uncertain correspondence, dark brown desk objects with no actual rectangular tabletop background, amber pool of light and muted parchment. No readable text, no stamp tool, no emblems, no phone, no hourglass.",
       "sprite": "GFX_focus_NAM_letters_to_the_centre",
@@ -983,6 +1064,49 @@
       "variant": "desert_preview",
       "preview_only": true,
       "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-463d2e4a-ca00-452c-805d-86167f92d449.png"
+    },
+    {
+      "focus": "NAM_metropolitan_depots",
+      "title": "Склады метрополии",
+      "variant": "supply_dispatch_v2",
+      "preview_only": true,
+      "generator": "Built-in image_gen",
+      "prompt": "Use case: compositing. Assemble a substantially redesigned monumental HOI4 focus icon 'Metropolitan Depots' from the four supplied transparent assets. Image1 open arsenal building; image2 loaded handcart; image3 open rifle crate; image4 desert ridge. PRIMARY VISUAL is supplies being issued: enormous open rifle crate in left foreground, loaded wheeled cargo handcart at right foreground, clear wheels and cargo straps. The TWO cargo masses together dominate lower 60 percent. Arsenal is secondary, scaled down behind them toward upper left; show its lit open doorway and receding crate shelves, not a towering giant facade. Low narrow sandstone ridge just visible at rear right, do not make a cliff wall surround the icon. Dynamic interlocking diagonal shapes, compact broad roughly square collage, realistic military logistics, heroic scale and tactile wood, steel and cloth. Restrained amber side light, deep neutral shadows, subtle pale dust across base only. No sun, glowing disc, halo, sky, people, text, badge, frame, duplication of supplies or rectangular background. Preserve supplied object details. Fully isolated irregular silhouette on genuine transparency with clear safe margin ALL sides. Grand propaganda photomontage readable at 150px, not wide landscape or inventory sheet.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-83c953a2-b143-4980-a3e6-600b34d9b499.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-013f552d-3a4f-4e2a-be10-2d4497be9885.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/depots_rifle_crate.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/desert_rocky_backdrop.png"
+      ],
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-193e6da8-a082-4b74-beda-aa33b4b04a2c.png"
+    },
+    {
+      "focus": "NAM_letters_to_the_centre",
+      "title": "Тишина перед бурей",
+      "variant": "rom_holding_cap_before_storm",
+      "generator": "Built-in image_gen",
+      "preview_only": true,
+      "prompt": "Use case: compositing. Assemble ONE finished grandiose HOI4 national focus collage 'Тишина перед бурей' from the three supplied transparent layers. Image1 is Egor Rom holding his cap, exact identity and pose. Image2 is approaching thunderstorm. Image3 dry earth. Keep Rom in FULL BODY at left, large enough his face and the ONE cap held in BOTH hands at waist are readable; head uncovered. His boots firmly touch dry ground. He gazes right toward the massive advancing storm occupying upper right. Solemn silent anticipation, human figure calm and still, thunderclouds overwhelming distant landscape, one subdued lightning streak far right and distant rain. Preserve Rom's exact recognizable face, dark hair, charcoal long coat, striped scarf and cap. Broad rocky earth runs across bottom and recedes toward storm. No ocean or sea. Compact near-square monumental photomontage, asymmetrical strong silhouettes, natural scale and lighting integration, cold blue-grey storm light with only faint warm grazing light on ground left. No sun, solar disc, golden halo, fire, flags, additional characters, title, lettering, frame or badge. IMPORTANT isolated irregular silhouette on true alpha: cloud edges must billow and dissolve to transparency with generous transparent margins on all four sides, do not fill canvas with rectangular sky. Entire person and storm inside canvas. No huge foreground terrain slab. Three main forms: standing man, storm, low earth. This is a focus icon preview, not an asset sheet.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-23280d19-732f-49b0-9501-c27ac539d806.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-bc956c00-2369-442c-9926-f30d40c19142.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-01a6a221-1a63-44fe-8751-ba364fd756a0.png"
+      ],
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-f03156f9-e56c-48a1-95e3-9ca961f603ef.png"
+    },
+    {
+      "focus": "NAM_quiet_officer_lists",
+      "title": "Тихие списки офицеров",
+      "variant": "confidential_review_lamplight",
+      "preview_only": true,
+      "generator": "Built-in image_gen",
+      "prompt": "Use case: compositing. Assemble ONE monumental HOI4 NAM national focus icon 'Тихие списки офицеров' from these three exact assets: 1 thoughtful officer with pencil, 2 open personnel dossier with clipped portrait and rows, 3 green desk lamp. Preserve officer face and uniform and recognizable dossier and lamp. Theme: discreet preparation of a trusted officer list, quiet confidential late-night personnel review. Composition: huge officer head and upper torso occupy left and upper centre, eyes looking DOWN RIGHT at a prominent oversized dossier in lower centre/right. His hand with ONE short pencil rests just above one marked row naturally. Lamp at upper right, smaller than portrait, bends toward dossier, its base partly behind folder. Strong deliberate interlocking silhouette, three readable masses, grand photographic propaganda collage rather than realistic room snapshot. Lighting motivated by lamp: narrow warm ivory illumination across paper and lower face; deep charcoal and olive shadows across uniform and far side of face; warm highlights are selective not all-gold. Personnel portrait and checkmarks readable as shapes, no new readable words or slogans. No sun, halo, desert, mountain, fog, flame, scenery, extra officer, extra papers, table, room, frame or badge. Full irregular cutout on true transparent alpha with safe transparent margins ALL sides; no rectangular black background. Compact almost square composition, designed for 150px readability, all major objects contained.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_conspiratorial_officer.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_personnel_register.png",
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-3524ac2b-47b5-4b18-b298-235c42a5588d.png"
+      ],
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-10e23d9e-03d7-4c86-a12d-82a93abbc8f0.png"
     }
   ],
   "native_export": {

@@ -2575,7 +2575,6 @@ NAM_national_programmes = {
 						NAM = { subtract_from_variable = { var = NAM_lines_in_progress value = 1 } }
 						add_dynamic_modifier = {
 							modifier = NAM_mil_forward_depot
-							days = 120
 						}
 					}
 				}
@@ -3637,10 +3636,10 @@ NAM_national_programmes = {
 		custom_cost_text = NAM_econ_export_dispatch_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 25 }
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 		}
 		fire_only_once = no
-		days_remove = 120
+		days_remove = 180
 		days_re_enable = 30
 		complete_effect = {
 			if = {
@@ -3652,12 +3651,12 @@ NAM_national_programmes = {
 						controls_state = 700
 						check_variable = { var = NAM_oil_contracts value = 1 compare = greater_than_or_equals }
 						NOT = { has_political_power < 25 }
-						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+						check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
 					}
 				}
 				add_political_power = -25
 				hidden_effect = {
-					set_temp_variable = { var = NAM_treasury_amount value = 100 }
+					set_temp_variable = { var = NAM_treasury_amount value = 50 }
 					NAM_spend_treasury = yes
 					set_country_flag = NAM_econ_dispatch_paid
 				}
@@ -4868,12 +4867,12 @@ NAM_national_programmes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = NAM_cost_75_500_0
+		custom_cost_text = NAM_cost_compact
 		custom_cost_trigger = {
-			NOT = { has_political_power < 75 }
+			NOT = { has_political_power < 50 }
 			check_variable = {
 				var = ADISCORD_economy_treasury
-				value = 500
+				value = 350
 				compare = greater_than_or_equals
 			}
 		}
@@ -4888,16 +4887,19 @@ NAM_national_programmes = {
 							tooltip = NAM_compact_signable_tt
 							NAM_can_sign_compact = yes
 						}
-						NOT = { has_political_power < 75 }
+						NOT = { has_political_power < 50 }
 						check_variable = {
 							var = ADISCORD_economy_treasury
-							value = 500
+							value = 350
 							compare = greater_than_or_equals
 						}
 					}
 				}
-				add_political_power = -75
-				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				add_political_power = -50
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 350 }
+					NAM_spend_treasury = yes
+				}
 				custom_effect_tooltip = NAM_compact_paid_tt
 				hidden_effect = { set_country_flag = NAM_district_compact }
 			}
