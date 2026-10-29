@@ -11,10 +11,14 @@ ADISCORD_south_final_war_category = {
 	visible = {
 		OR = {
 			AND = {
-				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_resource_question_closed = yes
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+				NOT = { has_global_flag = ADISCORD_south_final_resolved }
 				OR = {
 					tag = SHL
 					tag = NAM
+					tag = EFL
+					tag = AZH
 				}
 			}
 			AND = {

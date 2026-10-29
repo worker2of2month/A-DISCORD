@@ -94,6 +94,21 @@ defined_text = {
 	}
 	text = {
 		trigger = {
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+			ADISCORD_south_nam_story_clear = no
+		}
+		localization_key = ADISCORD_south_status_return
+	}
+	text = {
+		trigger = {
+			ADISCORD_south_crisis_open = yes
+			has_global_flag = ADISCORD_south_preparation_started
+			ADISCORD_south_preparation_elapsed = no
+		}
+		localization_key = ADISCORD_south_status_preparation
+	}
+	text = {
+		trigger = {
 			ADISCORD_south_crisis_open = yes
 			NOT = { ADISCORD_south_north_candidate_exists = yes }
 		}

@@ -5549,6 +5549,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_south.46",
+      "namespace": "ADISCORD_south",
+      "number": 46,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_crisis.1",
       "namespace": "ADISCORD_rus_crisis",
       "number": 1,

@@ -16,8 +16,8 @@
  ADISCORD_south_north_side_efl_plain: "Eflor's Restitution Alliance"
  ADISCORD_south_north_side_azh_plain: "Azhar"
  ADISCORD_south_north_side_unknown_plain: "no one"
- ADISCORD_south_status_crisis: "§YCRISIS GROWTH§!\n- §R+4§! £world_tension_texticon per Shahrabad furnace cycle: §Y28§! £time_texticon days.\n- §R+15§! per limited war won by Shahrabad.\n- §R+10§! per neighbour subdued or brought into an alliance through consolidation campaigns.\n\n§YWAR OUTBREAK§!\nAt §R100§!, Shahrabad starts the War for the South. Either claimant's final focus can start it earlier.\nNo one may stay out: every independent desert state will take a side."
- ADISCORD_south_status_war: "§YWAR FOR THE SOUTH§!\nA peace without a victor is impossible.\n\n§YSETTLEMENT CONDITIONS§!\n- A claimant capitulates.\n- After §Y900§! £time_texticon days, control of key districts decides the outcome.\n\n§YKEY DISTRICTS§!\n- The claimants' capitals.\n- Oil belt: Northern Deposits and Svetlogorsk District.\n- Furnace district: Khazar and Shahrabad District."
+ ADISCORD_south_status_crisis: "§YCRISIS GROWTH§!\n- §R+4§! each 28-day furnace cycle.\n- §R+15§! per successful limited Shahrabad war.\n- §R+10§! per successful neighbour consolidation.\nAt §R100§! and after the 490-day respite, Shahrabad may attack on the next cycle. Unfinished exile campaigns and Shahrabad limited wars block the start."
+ ADISCORD_south_status_war: "§RWAR FOR THE SOUTH§!\nA champion's capitulation decides the outcome. After §Y900§! days, compare captured key states held by the opposing side at the start. Initial holdings, neutral land and late ally alignment do not score. Equal gains mean peace without a hegemon and a new respite."
  ADISCORD_south_status_no_rival: "Shahrabad has no northern rival left. At the end of the next furnace cycle it will be recognised as suzerain of the south."
  ADISCORD_south_status_closed: "The crisis opens once Svetlogorye's resource war has an outcome."
 
@@ -120,3 +120,13 @@
  ADISCORD_south.45.d: "On the first day of the War for the South, the oil workers of the Svetlogorsk District rose in revolt. Yaroslav Weber led the underground out of the workers' quarters with rifles smuggled in by Shahrabad's commune.\n\nSvetlogorye must fight on two fronts: against the furnaces in the south and against its own oil fields behind the lines."
  ADISCORD_south.45.a: "The fire has reached the wells."
  ADISCORD_south_status_resolved: "The war for the South is over. The region has one suzerain."
+
+ ADISCORD_south_preparation: "Respite before the southern war"
+ ADISCORD_south_preparation_desc: "Peace grants §Y490§! days for focuses, paid programmes and deployment. Shahrabad cannot start the shared war before this period ends, even at 100 tension. Svetlogorye may voluntarily strike earlier through its final war focus. The exile return and further exile campaign must finish before a new respite begins. Expiry permits an attack; it does not itself declare war."
+ ADISCORD_south_preparation_ready_tt: "490 days of postwar preparation have elapsed, or Svetlogorye voluntarily starts the war through its final focus."
+ ADISCORD_south_status_return: "§YSVETLOGORYE RETURNS§!\nThe shared southern campaign and new submission demands wait for the return and further exile campaign. Accumulated tension cannot override this protection."
+ ADISCORD_south_status_preparation: "§YPOSTWAR PREPARATION§!\nRespite: §Y490§! days from peace or completion of the return and further exile campaign. The mission below shows the remaining time. Tension continues to accumulate, but an external attack must wait. Svetlogorye may strike earlier through its own war focus."
+ ADISCORD_south.40.closed: "The circumstances of these negotiations must be reassessed."
+ ADISCORD_south.32.d_nam: "Svetlogorye and Shahrabad end their campaign without a decisive advantage. Neither side has secured enough of the key districts to claim the South.\n\nThe armies return behind the prewar lines. Peace establishes no hegemon and transfers no defeated territory. Both sides gain time to rebuild before another confrontation."
+
+ ADISCORD_south_story_ready_tt: "The exile campaign is complete: victory in the return, followed by victory in the great war or no remaining opponents."

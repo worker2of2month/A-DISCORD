@@ -867,6 +867,28 @@ NAM_wor_campaign_active = {
 	}
 }
 
+# COUNTRY NAM. Its return and southern consolidation own the region's alliances.
+# Annexation or subjugation ends that claim; liberation restores the same route.
+NAM_south_story_pending = {
+	exists = yes
+	is_subject = no
+	OR = {
+		NAM_wor_campaign_active = yes
+		AND = {
+			has_global_flag = ADISCORD_nam_resource_war_island_exile
+			NOT = {
+				AND = {
+					has_global_flag = NAM_war_of_return_won
+					OR = {
+						has_global_flag = NAM_great_war_won
+						NOT = { NAM_great_war_target_left = yes }
+					}
+				}
+			}
+		}
+	}
+}
+
 # COUNTRY NAM. The preparation focus, or the renewal decision after a great
 # war closed outside the treaty, calls NAM_great_war_start behind this
 # trigger: the exile war is won, the great war is neither fought nor won, the
@@ -1279,4 +1301,112 @@ NAM_mil_security_operable = {
 NAM_mil_mobile_operation_open = {
 	NAM_independent_programmes_operable = yes
 	has_war = yes
+}
+
+# ----- Postwar investment -----
+# Paid work survives renewed war; lost sovereignty or a lost building site refunds it.
+NAM_pw_operable = {
+	NAM_country_operable = yes
+	is_subject = no
+	has_global_flag = ADISCORD_nam_resource_war_nam_victory
+}
+
+NAM_pw_capital_civil_site = {
+	owns_state = 700
+	controls_state = 700
+	700 = {
+		free_building_slots = {
+			building = industrial_complex
+			size = 1
+			include_locked = no
+		}
+	}
+}
+
+NAM_pw_capital_arms_site = {
+	owns_state = 700
+	controls_state = 700
+	700 = {
+		free_building_slots = {
+			building = arms_factory
+			size = 1
+			include_locked = no
+		}
+	}
+}
+
+NAM_pw_district_civil_site = {
+	owns_state = 688
+	controls_state = 688
+	688 = {
+		free_building_slots = {
+			building = industrial_complex
+			size = 1
+			include_locked = no
+		}
+	}
+}
+
+NAM_veteran_housing_ready = {
+	NAM_pw_operable = yes
+	NAM_pw_capital_civil_site = yes
+}
+
+NAM_postwar_rearmament_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_district_audit_ready = {
+	NAM_pw_operable = yes
+	check_variable = { var = NAM_grp_dist_support value = 30 compare = greater_than_or_equals }
+}
+
+NAM_pw_veteran_course_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_garrison_order_ready = {
+	NAM_pw_operable = yes
+	check_variable = { var = NAM_grp_dist_support value = 30 compare = greater_than_or_equals }
+}
+
+NAM_pw_fuel_quota_ready = {
+	NAM_pw_operable = yes
+	check_variable = { var = NAM_grp_oil_support value = 30 compare = greater_than_or_equals }
+}
+
+NAM_pw_state_arsenal_ready = {
+	NAM_pw_operable = yes
+	NAM_pw_capital_arms_site = yes
+}
+
+NAM_pw_district_congress_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_district_schools_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_militia_reserve_ready = {
+	NAM_pw_operable = yes
+	check_variable = { var = NAM_grp_dist_support value = 55 compare = greater_than_or_equals }
+}
+
+NAM_pw_district_cooperative_ready = {
+	NAM_pw_operable = yes
+	NAM_pw_district_civil_site = yes
+	check_variable = { var = NAM_grp_dist_support value = 50 compare = greater_than_or_equals }
+}
+
+NAM_pw_export_shipment_ready = {
+	NAM_pw_operable = yes
+}
+
+# COUNTRY recipient. Aid spends only the sender's stocks.
+NAM_pw_charter_recipient = {
+	exists = yes
+	has_capitulated = no
+	is_in_faction_with = NAM
+	NOT = { has_war_with = NAM }
 }

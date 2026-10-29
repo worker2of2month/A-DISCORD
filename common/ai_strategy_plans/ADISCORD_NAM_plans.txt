@@ -122,6 +122,70 @@ NAM_postwar_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_postwar_focus
+		NOT = { has_completed_focus = NAM_vertical }
+		NOT = { has_completed_focus = NAM_service_state }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_postwar_focus }
+			has_completed_focus = NAM_vertical
+			has_completed_focus = NAM_service_state
+		}
+	}
+	ai_national_focuses = {
+		NAM_recognition
+		NAM_federal_charter
+		NAM_district_council
+		NAM_law_after_war
+		NAM_civil_repair
+		NAM_armed_peace
+		NAM_oil_fund
+		NAM_district_militia
+		NAM_common_fuel_market
+		NAM_aftermath_commission
+		NAM_normalisation
+		NAM_oil_ministry
+		NAM_prisoner_exchange
+		NAM_border_trade_posts
+		NAM_aftermath_settled
+		NAM_export_consortium
+		NAM_middle_loren_wells
+		NAM_reclaim_230
+		NAM_oil_exchange
+		NAM_national_university
+		NAM_charter_ending_federation
+		NAM_veterans_return
+		NAM_svetlogorye
+		NAM_svetlogorsk_shipyards
+		NAM_south_oil_for_water
+		NAM_south_fenn_guarantee
+		NAM_south_oil_charter
+		NAM_south_war_council
+		NAM_south_allied_fuel_office
+		NAM_south_oil_tap
+		NAM_south_field_fortresses
+		NAM_south_counteroffensive
+		NAM_south_heritage
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
+	}
+	weight = { factor = 20 }
+}
+
+NAM_postwar_vertical_plan = {
+	name = "NAM service state"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_postwar_focus
+		OR = {
+			has_completed_focus = NAM_vertical
+			has_completed_focus = NAM_service_state
+		}
 	}
 	abort = {
 		OR = {
@@ -131,32 +195,32 @@ NAM_postwar_plan = {
 	}
 	ai_national_focuses = {
 		NAM_recognition
-		NAM_federal_charter
-		NAM_civil_repair
+		NAM_service_state
+		NAM_seal_registry
 		NAM_law_after_war
+		NAM_civil_repair
+		NAM_armed_peace
+		NAM_oil_quotas
+		NAM_namestnik_garrisons
+		NAM_ladder_of_seals
 		NAM_aftermath_commission
 		NAM_normalisation
 		NAM_oil_ministry
-		NAM_district_council
-		NAM_armed_peace
-		NAM_oil_fund
-		NAM_district_militia
 		NAM_prisoner_exchange
 		NAM_border_trade_posts
 		NAM_aftermath_settled
-		NAM_export_consortium
+		NAM_state_refineries
 		NAM_middle_loren_wells
 		NAM_reclaim_230
 		NAM_oil_exchange
 		NAM_national_university
-		NAM_common_fuel_market
-		NAM_charter_ending_federation
+		NAM_ladder_ending_service
 		NAM_veterans_return
 		NAM_svetlogorye
 		NAM_svetlogorsk_shipyards
-		NAM_south_oil_for_water
-		NAM_south_fenn_guarantee
-		NAM_south_oil_charter
+		NAM_south_black_basin
+		NAM_south_desert_offices
+		NAM_south_seal_over_furnaces
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
 		NAM_south_oil_tap

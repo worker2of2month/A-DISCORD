@@ -258,7 +258,7 @@ country_event = {
 		ADISCORD_south_final_active = yes
 		has_global_flag = {
 			flag = ADISCORD_south_final_started
-			days > 898
+			days > 899
 		}
 	}
 
@@ -373,6 +373,10 @@ news_event = {
 news_event = {
 	id = ADISCORD_south.32
 	title = ADISCORD_south.32.t
+	desc = {
+		text = ADISCORD_south.32.d_nam
+		trigger = { NAM = { ADISCORD_south_champion_viable = yes } }
+	}
 	desc = ADISCORD_south.32.d
 	picture = GFX_news_event_adiscord_peace_negotiations
 	major = yes
@@ -469,6 +473,10 @@ country_event = {
 
 	option = {
 		name = ADISCORD_south.40.a
+		trigger = {
+			ADISCORD_south_nam_story_clear = yes
+			ADISCORD_south_offer_answer_valid = yes
+		}
 		if = {
 			limit = {
 				check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
@@ -531,6 +539,10 @@ country_event = {
 
 	option = {
 		name = ADISCORD_south.40.b
+		trigger = {
+			ADISCORD_south_nam_story_clear = yes
+			ADISCORD_south_offer_answer_valid = yes
+		}
 		if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_refuse_tt
@@ -557,6 +569,25 @@ country_event = {
 			}
 		}
 	}
+	option = {
+		name = ADISCORD_south.40.closed
+		trigger = {
+			OR = {
+				ADISCORD_south_nam_story_clear = no
+				ADISCORD_south_offer_answer_valid = no
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { ADISCORD_south_offer_answer_valid = yes }
+				save_event_target_as = ADISCORD_south_offer_target
+				FROM = { country_event = { id = ADISCORD_south.46 days = 28 } }
+			}
+			else = { clear_variable = ADISCORD_south_offer_kind }
+		}
+		ai_chance = { base = 100 }
+	}
+
 }
 
 country_event = {
@@ -565,7 +596,18 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_south_finalize_submission = yes
+		if = {
+			limit = { ADISCORD_south_submission_pending_valid = yes }
+			if = {
+				limit = { ADISCORD_south_nam_story_clear = yes }
+				ADISCORD_south_finalize_submission = yes
+			}
+			else = { country_event = { id = ADISCORD_south.41 days = 28 } }
+		}
+		else = {
+			clr_country_flag = ADISCORD_south_submits_to_SHL
+			clr_country_flag = ADISCORD_south_submits_to_NAM
+		}
 	}
 }
 
@@ -616,5 +658,43 @@ news_event = {
 
 	option = {
 		name = ADISCORD_south.45.a
+	}
+}
+
+# ROOT is the original champion; the local target belongs to this one offer.
+country_event = {
+	id = ADISCORD_south.46
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				ADISCORD_south_champion_viable = yes
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+				NOT = { has_global_flag = ADISCORD_south_final_resolved }
+				event_target:ADISCORD_south_offer_target = {
+					ADISCORD_south_offer_terms_valid = yes
+					NOT = { has_war_with = ROOT }
+					NOT = { is_in_faction_with = ROOT }
+					OR = {
+						NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+						ROOT = {
+							OR = {
+								is_in_faction = no
+								is_faction_leader = yes
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { ADISCORD_south_nam_story_clear = yes }
+				event_target:ADISCORD_south_offer_target = { country_event = { id = ADISCORD_south.40 hours = 1 } }
+			}
+			else = { country_event = { id = ADISCORD_south.46 days = 28 } }
+		}
+		else = {
+			event_target:ADISCORD_south_offer_target = { clear_variable = ADISCORD_south_offer_kind }
+		}
 	}
 }

@@ -356,6 +356,7 @@ ADISCORD_nam_resource_war_resolve_compromise = {
 			}
 		}
 		EFL = { news_event = { id = ADISCORD_nam_resource_news.7 hours = 1 } }
+		ADISCORD_south_begin_preparation = yes
 	}
 }
 
@@ -632,6 +633,7 @@ NAM_rw_cede_mainland_state = {
 # opens for the human and the AI alike: its answer loads the junta's or the
 # humanists' exile tree. The defeat tree belongs to the compromise only.
 NAM_rw_settle_island_exile = {
+	ADISCORD_south_suspend_preparation = yes
 	set_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM = {
 		every_owned_state = {
@@ -1229,6 +1231,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 			}
 			news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 }
 		}
+		ADISCORD_south_begin_preparation = yes
 	}
 }
 
@@ -1294,6 +1297,7 @@ ADISCORD_nam_resource_war_resolve_standoff = {
 			}
 			news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 }
 		}
+		ADISCORD_south_begin_preparation = yes
 	}
 }
 
@@ -1726,97 +1730,12 @@ NAM_refresh_garrison = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# COUNTRY NAM. Oil charter deliveries to regional members of Svetlogorye's faction.
+# COUNTRY NAM, FROM recipient. Called after the targeted decision debits the exact shipment.
+
 NAM_deliver_charter_fuel = {
-	EFL = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	AZH = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	WEF = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	KDR = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	RHM = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	SDR = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	MZR = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	KYZ = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
-	}
-	GLP = {
-		if = {
-			limit = {
-				exists = yes
-				is_in_faction_with = NAM
-			}
-			add_fuel = 2500
-			add_stability = 0.03
-		}
+	FROM = {
+		add_fuel = 2500
+		add_stability = 0.03
 	}
 }
 
@@ -4057,17 +3976,13 @@ NAM_south_supply_ally = {
 	}
 }
 
-# COUNTRY NAM. The fixed regional roster of the South war.
+# COUNTRY NAM, FROM recipient. The targeted decision has paid for this shipment.
+
 NAM_south_allied_fuel_delivery = {
-	EFL = { NAM_south_supply_ally = yes }
-	AZH = { NAM_south_supply_ally = yes }
-	WEF = { NAM_south_supply_ally = yes }
-	KDR = { NAM_south_supply_ally = yes }
-	RHM = { NAM_south_supply_ally = yes }
-	SDR = { NAM_south_supply_ally = yes }
-	MZR = { NAM_south_supply_ally = yes }
-	KYZ = { NAM_south_supply_ally = yes }
-	GLP = { NAM_south_supply_ally = yes }
+	FROM = {
+		add_fuel = 2500
+		add_war_support = 0.02
+	}
 }
 
 # ----- Khan's crisis -----
@@ -5212,6 +5127,7 @@ NAM_wor_call_participants = {
 NAM_war_of_return_start = {
 	if = {
 		limit = { NAM_war_of_return_can_start = yes }
+		ADISCORD_south_suspend_preparation = yes
 		set_temp_variable = { var = NAM_wor_start_exile value = 0 }
 		if = {
 			limit = { NAM_wor_exile_war_ready = yes }
@@ -5374,6 +5290,7 @@ NAM_war_of_return_resolve_victory = {
 			NAM_oil_refresh = yes
 			country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
 		}
+		ADISCORD_south_begin_preparation = yes
 	}
 }
 
@@ -5834,6 +5751,7 @@ NAM_hum_reconstruction_refund = {
 NAM_great_war_start = {
 	if = {
 		limit = { NAM_great_war_can_start = yes }
+		ADISCORD_south_suspend_preparation = yes
 		set_global_flag = NAM_great_war_started
 		clr_global_flag = NAM_great_war_resolved
 		clear_array = global.NAM_wor_participants
@@ -5895,6 +5813,7 @@ NAM_great_war_resolve_victory = {
 			country_event = { id = ADISCORD_nam_resource_war.107 hours = 1 }
 		}
 		log = "[ADISCORD][NAM][GREAT_WAR] Great war won; the southern settlement applies to every participant."
+		ADISCORD_south_begin_preparation = yes
 	}
 }
 
@@ -7595,4 +7514,362 @@ NAM_wor_revenge_landing = {
 			country_event = { id = ADISCORD_nam_resource_war.94 hours = 2 }
 		}
 	}
+}
+
+# ----- Postwar paid orders -----
+# Receipts own each payment and channel; callbacks clear them before delivery or refund.
+NAM_veteran_housing_refund = {
+	if = {
+		limit = { has_country_flag = NAM_veteran_housing_paid }
+		clr_country_flag = NAM_veteran_housing_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 500 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_veteran_housing_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_veteran_housing_paid
+			NAM_veteran_housing_ready = yes
+		}
+		clr_country_flag = NAM_veteran_housing_paid
+		clr_country_flag = NAM_pw_civil_busy
+		700 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_timed_idea = {
+			idea = NAM_housing_programme
+			days = 60
+		}
+	}
+	else = { NAM_veteran_housing_refund = yes }
+}
+
+NAM_postwar_rearmament_refund = {
+	if = {
+		limit = { has_country_flag = NAM_postwar_rearmament_paid }
+		clr_country_flag = NAM_postwar_rearmament_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 400 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_postwar_rearmament_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_postwar_rearmament_paid
+			NAM_postwar_rearmament_ready = yes
+		}
+		clr_country_flag = NAM_postwar_rearmament_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 9000
+			producer = NAM
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 120
+			producer = NAM
+		}
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 120
+			producer = NAM
+		}
+	}
+	else = { NAM_postwar_rearmament_refund = yes }
+}
+
+NAM_district_audit_refund = {
+	if = {
+		limit = { has_country_flag = NAM_district_audit_paid }
+		clr_country_flag = NAM_district_audit_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 25
+	}
+}
+
+NAM_district_audit_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_district_audit_paid
+			NAM_district_audit_ready = yes
+		}
+		clr_country_flag = NAM_district_audit_paid
+		clr_country_flag = NAM_pw_civil_busy
+		set_temp_variable = { var = NAM_treasury_amount value = 250 }
+		NAM_add_treasury = yes
+		add_to_variable = { var = NAM_grp_dist_support value = -4 }
+		NAM_groups_refresh = yes
+	}
+	else = { NAM_district_audit_refund = yes }
+}
+
+NAM_pw_veteran_course_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_veteran_course_paid }
+		clr_country_flag = NAM_pw_veteran_course_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_political_power = 25
+		set_temp_variable = { var = NAM_treasury_amount value = 150 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_veteran_course_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_veteran_course_paid
+			NAM_pw_veteran_course_ready = yes
+		}
+		clr_country_flag = NAM_pw_veteran_course_paid
+		clr_country_flag = NAM_pw_military_busy
+		army_experience = 25
+		add_command_power = 15
+	}
+	else = { NAM_pw_veteran_course_refund = yes }
+}
+
+NAM_pw_garrison_order_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_garrison_order_paid }
+		clr_country_flag = NAM_pw_garrison_order_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_political_power = 25
+		set_temp_variable = { var = NAM_treasury_amount value = 200 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_garrison_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_garrison_order_paid
+			NAM_pw_garrison_order_ready = yes
+		}
+		clr_country_flag = NAM_pw_garrison_order_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 6000
+			producer = NAM
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 60
+			producer = NAM
+		}
+		add_to_variable = { var = NAM_grp_dist_support value = -3 }
+		NAM_groups_refresh = yes
+	}
+	else = { NAM_pw_garrison_order_refund = yes }
+}
+
+NAM_pw_fuel_quota_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_fuel_quota_paid }
+		clr_country_flag = NAM_pw_fuel_quota_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 20
+	}
+}
+
+NAM_pw_fuel_quota_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_fuel_quota_paid
+			NAM_pw_fuel_quota_ready = yes
+		}
+		clr_country_flag = NAM_pw_fuel_quota_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_fuel = 6000
+		add_to_variable = { var = NAM_grp_oil_support value = -4 }
+		NAM_groups_refresh = yes
+	}
+	else = { NAM_pw_fuel_quota_refund = yes }
+}
+
+NAM_pw_state_arsenal_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_state_arsenal_paid }
+		clr_country_flag = NAM_pw_state_arsenal_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 40
+		set_temp_variable = { var = NAM_treasury_amount value = 650 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_state_arsenal_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_state_arsenal_paid
+			NAM_pw_state_arsenal_ready = yes
+		}
+		clr_country_flag = NAM_pw_state_arsenal_paid
+		clr_country_flag = NAM_pw_civil_busy
+		700 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+	else = { NAM_pw_state_arsenal_refund = yes }
+}
+
+NAM_pw_district_congress_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_district_congress_paid }
+		clr_country_flag = NAM_pw_district_congress_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 20
+		set_temp_variable = { var = NAM_treasury_amount value = 100 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_district_congress_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_district_congress_paid
+			NAM_pw_district_congress_ready = yes
+		}
+		clr_country_flag = NAM_pw_district_congress_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_to_variable = { var = NAM_grp_dist_support value = 10 }
+		add_to_variable = { var = NAM_grp_nam_support value = -3 }
+		NAM_groups_refresh = yes
+	}
+	else = { NAM_pw_district_congress_refund = yes }
+}
+
+NAM_pw_district_schools_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_district_schools_paid }
+		clr_country_flag = NAM_pw_district_schools_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 25
+		set_temp_variable = { var = NAM_treasury_amount value = 200 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_district_schools_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_district_schools_paid
+			NAM_pw_district_schools_ready = yes
+		}
+		clr_country_flag = NAM_pw_district_schools_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 60
+			producer = NAM
+		}
+		add_tech_bonus = {
+			name = NAM_pw_district_schools_bonus
+			bonus = 0.5
+			uses = 1
+			category = industry
+		}
+	}
+	else = { NAM_pw_district_schools_refund = yes }
+}
+
+NAM_pw_militia_reserve_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_militia_reserve_paid }
+		clr_country_flag = NAM_pw_militia_reserve_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_political_power = 25
+		set_temp_variable = { var = NAM_treasury_amount value = 200 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_militia_reserve_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_militia_reserve_paid
+			NAM_pw_militia_reserve_ready = yes
+		}
+		clr_country_flag = NAM_pw_militia_reserve_paid
+		clr_country_flag = NAM_pw_military_busy
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 6000
+			producer = NAM
+		}
+		add_manpower = 6000
+	}
+	else = { NAM_pw_militia_reserve_refund = yes }
+}
+
+NAM_pw_district_cooperative_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_district_cooperative_paid }
+		clr_country_flag = NAM_pw_district_cooperative_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 45
+		set_temp_variable = { var = NAM_treasury_amount value = 450 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_district_cooperative_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_district_cooperative_paid
+			NAM_pw_district_cooperative_ready = yes
+		}
+		clr_country_flag = NAM_pw_district_cooperative_paid
+		clr_country_flag = NAM_pw_civil_busy
+		688 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_to_variable = { var = NAM_grp_dist_support value = 5 }
+		NAM_groups_refresh = yes
+	}
+	else = { NAM_pw_district_cooperative_refund = yes }
+}
+
+NAM_pw_export_shipment_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_export_shipment_paid }
+		clr_country_flag = NAM_pw_export_shipment_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 25
+		add_fuel = 5000
+	}
+}
+
+NAM_pw_export_shipment_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_export_shipment_paid
+			NAM_pw_export_shipment_ready = yes
+		}
+		clr_country_flag = NAM_pw_export_shipment_paid
+		clr_country_flag = NAM_pw_civil_busy
+		set_temp_variable = { var = NAM_treasury_amount value = 450 }
+		NAM_add_treasury = yes
+	}
+	else = { NAM_pw_export_shipment_refund = yes }
 }

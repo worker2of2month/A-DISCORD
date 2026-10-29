@@ -741,6 +741,10 @@ focus_tree = {
 			AZH = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
@@ -793,6 +797,12 @@ focus_tree = {
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_defeat_road_south }
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
+		}
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes

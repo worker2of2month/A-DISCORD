@@ -13,12 +13,29 @@ ADISCORD_south_resource_question_closed = {
 	}
 }
 
-# GLOBAL. Switch for the Shahrabad-Svetlogorye final war. It is off while the
-# Svetlogorye exile campaign is rebalanced: with it on, Shahrabad's coalition
-# declares on the exiled Svetlogorye as soon as its war of return begins.
-# Turning it back on restores the crisis clock, the final war and its focuses.
+# GLOBAL. The regional campaign uses the same lifecycle gate for every starter.
 ADISCORD_south_final_war_enabled = {
-	always = no
+	always = yes
+}
+
+ADISCORD_south_nam_story_clear = {
+	NOT = { NAM = { NAM_south_story_pending = yes } }
+}
+
+# GLOBAL. A dated receipt is authoritative even if a visible mission was cancelled.
+ADISCORD_south_preparation_elapsed = {
+	has_global_flag = {
+		flag = ADISCORD_south_preparation_started
+		days > 489
+	}
+}
+
+# COUNTRY NAM. A completed offensive focus may voluntarily end its own respite.
+ADISCORD_south_nam_first_strike = {
+	tag = NAM
+	ADISCORD_south_champion_viable = yes
+	has_war = no
+	ADISCORD_south_nam_story_clear = yes
 }
 
 # GLOBAL. The crisis clock runs between the resource war and the final campaign.
@@ -28,6 +45,7 @@ ADISCORD_south_crisis_open = {
 
 	has_global_flag = ADISCORD_fresh_campaign_contract_v1
 	ADISCORD_south_resource_question_closed = yes
+	ADISCORD_south_nam_story_clear = yes
 	NOT = { has_global_flag = ADISCORD_south_final_started }
 	NOT = { has_global_flag = ADISCORD_south_final_resolved }
 }
@@ -54,9 +72,39 @@ ADISCORD_south_north_candidate_exists = {
 	}
 }
 
-# A limited Shahrabad war keeps its own settlement; the final campaign waits for it.
+# COUNTRY. Only SHL or the candidate actually selected by the leader order may declare.
+ADISCORD_south_declarer_valid = {
+	OR = {
+		tag = SHL
+		AND = {
+			tag = NAM
+			ADISCORD_south_champion_viable = yes
+		}
+		AND = {
+			tag = EFL
+			ADISCORD_south_champion_viable = yes
+			NOT = { NAM = { ADISCORD_south_champion_viable = yes } }
+		}
+		AND = {
+			tag = AZH
+			ADISCORD_south_champion_viable = yes
+			NOT = { NAM = { ADISCORD_south_champion_viable = yes } }
+			NOT = { EFL = { ADISCORD_south_champion_viable = yes } }
+		}
+	}
+}
+
+# A limited Shahrabad war keeps its own settlement. Only NAM can voluntarily
+# waive its preparation period; SHL focuses and the automatic clock cannot.
 ADISCORD_south_final_can_start = {
 	ADISCORD_south_crisis_open = yes
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_south_preparation_ready_tt
+		OR = {
+			ADISCORD_south_preparation_elapsed = yes
+			ADISCORD_south_nam_first_strike = yes
+		}
+	}
 	SHL = {
 		ADISCORD_south_champion_viable = yes
 		has_country_flag = SHL_furnaces_initialized
@@ -219,9 +267,8 @@ ADISCORD_south_fights_north_leader = {
 # COUNTRY target; ROOT is the champion sending a consolidation offer. Offers stop
 # once the final campaign has begun; a pending answer blocks a second offer.
 ADISCORD_south_campaign_target_valid = {
-	exists = yes
-	is_subject = no
-	has_capitulated = no
+	ADISCORD_south_nam_story_clear = yes
+	ADISCORD_south_offer_target_open = yes
 	NOT = { tag = ROOT }
 	NOT = { tag = SHL }
 	NOT = { tag = NAM }
@@ -229,6 +276,85 @@ ADISCORD_south_campaign_target_valid = {
 	NOT = { is_in_faction_with = ROOT }
 	NOT = { has_war_with = ROOT }
 	NOT = { has_global_flag = ADISCORD_south_final_started }
+	NOT = { has_global_flag = ADISCORD_south_final_resolved }
+}
+
+# COUNTRY target. An accepted but deferred submission owns the negotiation slot.
+ADISCORD_south_offer_target_open = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_country_flag = ADISCORD_south_submits_to_SHL }
+	NOT = { has_country_flag = ADISCORD_south_submits_to_NAM }
+}
+
+ADISCORD_south_offer_terms_valid = {
+	ADISCORD_south_offer_target_open = yes
+	has_variable = ADISCORD_south_offer_kind
+	NOT = { has_global_flag = ADISCORD_south_final_started }
+	NOT = { has_global_flag = ADISCORD_south_final_resolved }
+	OR = {
+		check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+		check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+		AND = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			OR = {
+				is_in_faction = no
+				ADISCORD_south_alliance_switch_possible = yes
+			}
+		}
+	}
+}
+
+# COUNTRY event recipient; FROM is the original champion.
+ADISCORD_south_offer_answer_valid = {
+	ADISCORD_south_offer_terms_valid = yes
+	FROM = { ADISCORD_south_champion_viable = yes }
+	NOT = { has_war_with = FROM }
+	NOT = { is_in_faction_with = FROM }
+	OR = {
+		NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+		FROM = {
+			OR = {
+				is_in_faction = no
+				is_faction_leader = yes
+			}
+		}
+	}
+}
+
+# COUNTRY accepted recipient. A new settlement supersedes a deferred contract.
+ADISCORD_south_submission_to_shl_valid = {
+	has_country_flag = ADISCORD_south_submits_to_SHL
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	SHL = { ADISCORD_south_champion_viable = yes }
+	NOT = { has_war_with = SHL }
+	OR = {
+		is_in_faction = no
+		is_in_faction_with = SHL
+	}
+}
+
+ADISCORD_south_submission_to_nam_valid = {
+	has_country_flag = ADISCORD_south_submits_to_NAM
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NAM = { ADISCORD_south_champion_viable = yes }
+	NOT = { has_war_with = NAM }
+	OR = {
+		is_in_faction = no
+		is_in_faction_with = NAM
+	}
+}
+
+ADISCORD_south_submission_pending_valid = {
+	OR = {
+		ADISCORD_south_submission_to_shl_valid = yes
+		ADISCORD_south_submission_to_nam_valid = yes
+	}
 }
 
 # COUNTRY target. A follower of another regional faction (AZH in Eflor's

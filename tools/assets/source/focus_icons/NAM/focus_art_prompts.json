@@ -641,6 +641,15 @@
       "references": [
         "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/quiet_lists_personnel_register.png"
       ]
+    },
+    {
+      "focus": "NAM_last_centre_register",
+      "file": "last_register_departing_commissioner.png",
+      "generator": "Built-in image_gen",
+      "prompt": "Use case: identity-preserve. Separate transparent PNG character asset for the grand photographic collage HOI4 NAM focus 'Последний реестр центра'. Reference image is the exact commissioner identity: preserve his swept-back grey hair, long angular clean-shaven face, furrowed forehead, age, black suit, white collar and black tie. Change the pose to a departing commissioner: waist-to-mid-thigh figure, body turned three-quarter toward the right, head looking back over his left shoulder with a stern, final expression. His lowered right hand firmly holds the handle of a worn dark brown leather travel briefcase, fully visible at lower right. Long charcoal overcoat. Both arms lowered naturally, no extended palm. Monumental low-angle photographic realism, crisp sculptural face, material detail, restrained amber edge light and deep charcoal shadows consistent with the reference. One character with his held briefcase ONLY, clean isolated silhouette, ample transparent margin. No ledger, no papers, no scenery, no floor, no sun, no halo, no text, no emblem, no frame. Actual transparent alpha background.",
+      "references": [
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/commissioner_severe_official.png"
+      ]
     }
   ],
   "shared_style_history": [
@@ -1107,6 +1116,20 @@
         "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-3524ac2b-47b5-4b18-b298-235c42a5588d.png"
       ],
       "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-10e23d9e-03d7-4c86-a12d-82a93abbc8f0.png"
+    },
+    {
+      "focus": "NAM_last_centre_register",
+      "title": "Последний реестр центра",
+      "variant": "departing_commissioner_final_register",
+      "preview_only": true,
+      "generator": "Built-in image_gen",
+      "prompt": "Use case: compositing. Create a finished monumental photographic HOI4 focus icon collage for 'Последний реестр центра'. Image 1 is the departing commissioner character and held travel briefcase; preserve exact identity, pose, costume and suitcase. Image 2 is the closed final colonial register, preserve burgundy leather, black crossed cloth ribbons, brass corners and paper tabs. Image 3 is the separate desert ridge background. Compact near-square composition: commissioner large on the LEFT and rear, head upper left, looking back; the HUGE register across lower RIGHT foreground, taking almost half the composition, its top surface and ribbon knot clearly visible. His briefcase remains partially visible at lower left, distinct from the register. A LOW narrow rocky desert ridge runs behind them at lower-middle height, subdued in shadow, does not compete with the face or book. This tells of a severe commissioner leaving the colony for the capital with the final account book. Dramatic sculptural photographic cutout collage, grand scale, charcoal and burgundy natural colors, restrained amber highlights, crisp readable silhouettes at small icon size. Keep assembled objects overlapping tightly with a natural irregular outer outline and transparent surroundings. No words or letters, no captions, no sun or disc or halo, no flags, no extra people, no buildings, no rectangular background, no border. Actual transparent alpha outside objects.",
+      "references": [
+        "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-1a5f309c-db9a-4313-b620-7567fe5c6bd7.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/last_register_closed_archive.png",
+        "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/desert_rocky_backdrop.png"
+      ],
+      "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-be2860c1-201f-45ce-b58c-77e876c56077.png"
     }
   ],
   "native_export": {

@@ -3004,6 +3004,10 @@ focus_tree = {
 			SDR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3034,6 +3038,10 @@ focus_tree = {
 			KDR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3060,6 +3068,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = SHL_south_great_road
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -3095,6 +3109,10 @@ focus_tree = {
 			SDR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 2 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3154,6 +3172,10 @@ focus_tree = {
 			KDR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 2 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3178,6 +3200,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = SHL_south_free_road
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -3212,6 +3240,10 @@ focus_tree = {
 			GLP = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3242,6 +3274,10 @@ focus_tree = {
 			MZR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3272,6 +3308,10 @@ focus_tree = {
 			RHM = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3297,6 +3337,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = SHL_south_iron_march
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -3331,6 +3377,10 @@ focus_tree = {
 			KDR = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3361,6 +3411,10 @@ focus_tree = {
 			RHM = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3392,6 +3446,10 @@ focus_tree = {
 			GLP = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3417,6 +3475,12 @@ focus_tree = {
 		allow_branch = { has_country_flag = SHL_regency_path }
 		prerequisite = {
 			focus = SHL_south_veyr_debt
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -3452,6 +3516,10 @@ focus_tree = {
 			GLP = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
@@ -3507,6 +3575,12 @@ focus_tree = {
 		allow_branch = { has_country_flag = SHL_commune_path }
 		prerequisite = {
 			focus = SHL_south_oil_underground
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes

@@ -2728,7 +2728,12 @@ NAM_national_programmes = {
 	NAM_econ_petrochemical_batch = {
 		icon = ADISCORD_factory
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_domestic_refining }
+		visible = {
+			OR = {
+				has_completed_focus = NAM_domestic_refining
+				has_completed_focus = NAM_state_refineries
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_econ_operable_tt
@@ -5231,106 +5236,120 @@ NAM_national_programmes = {
 
 	NAM_veteran_housing = {
 		icon = generic_industry
-		visible = {
-			has_completed_focus = NAM_civil_dividend
-			has_war = no
-			NOT = { has_idea = NAM_housing_programme }
-		}
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_civil_dividend }
 		available = {
-			NAM_country_operable = yes
-			has_war = no
-			NOT = { has_idea = NAM_housing_programme }
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_35_250_0
-		custom_cost_trigger = {
-			NOT = { has_political_power < 35 }
-			check_variable = {
-				var = ADISCORD_economy_treasury
-				value = 250
-				compare = greater_than_or_equals
+			custom_trigger_tooltip = {
+				tooltip = NAM_veteran_housing_ready_tt
+				NAM_veteran_housing_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
 			}
 		}
+		cost = 0
+		custom_cost_text = NAM_veteran_housing_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
 		fire_only_once = no
-		days_re_enable = 60
+		days_remove = 42
+		days_re_enable = 180
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NAM_country_operable = yes
-						has_war = no
-						NOT = { has_idea = NAM_housing_programme }
+						has_completed_focus = NAM_civil_dividend
+						NAM_veteran_housing_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_veteran_housing_paid }
 						NOT = { has_political_power < 35 }
-						check_variable = {
-							var = ADISCORD_economy_treasury
-							value = 250
-							compare = greater_than_or_equals
-						}
+						check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 					}
 				}
 				add_political_power = -35
-				hidden_effect = { ADISCORD_economy_spend_250 = yes }
-				add_timed_idea = {
-					idea = NAM_housing_programme
-					days = 60
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					NAM_spend_treasury = yes
 				}
+				hidden_effect = {
+					set_country_flag = NAM_veteran_housing_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_veteran_housing_result_tt
 			}
 		}
-		ai_will_do = {
-			base = 10
+		cancel_trigger = { NAM_veteran_housing_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_veteran_housing_result_tt
+			hidden_effect = { NAM_veteran_housing_settle = yes }
 		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_veteran_housing_refund = yes }
+		}
+		ai_will_do = { base = 8 }
 	}
 
 	NAM_postwar_rearmament = {
-		icon = ADISCORD_factory
-		visible = {
-			has_completed_focus = NAM_armed_peace
-		}
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_armed_peace }
 		available = {
-			NAM_country_operable = yes
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_35_500_0
-		custom_cost_trigger = {
-			NOT = { has_political_power < 35 }
-			check_variable = {
-				var = ADISCORD_economy_treasury
-				value = 500
-				compare = greater_than_or_equals
+			custom_trigger_tooltip = {
+				tooltip = NAM_postwar_rearmament_ready_tt
+				NAM_postwar_rearmament_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_military_free_tt
+				NOT = { has_country_flag = NAM_pw_military_busy }
 			}
 		}
+		cost = 0
+		custom_cost_text = NAM_postwar_rearmament_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+		}
 		fire_only_once = no
-		days_re_enable = 45
+		days_remove = 35
+		days_re_enable = 90
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NAM_country_operable = yes
+						has_completed_focus = NAM_armed_peace
+						NAM_postwar_rearmament_ready = yes
+						NOT = { has_country_flag = NAM_pw_military_busy }
+						NOT = { has_country_flag = NAM_postwar_rearmament_paid }
 						NOT = { has_political_power < 35 }
-						check_variable = {
-							var = ADISCORD_economy_treasury
-							value = 500
-							compare = greater_than_or_equals
-						}
+						check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 					}
 				}
 				add_political_power = -35
-				hidden_effect = { ADISCORD_economy_spend_500 = yes }
-				add_equipment_to_stockpile = {
-					type = infantry_equipment
-					amount = 18000
-					producer = NAM
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 400 }
+					NAM_spend_treasury = yes
 				}
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 80
-					producer = NAM
+				hidden_effect = {
+					set_country_flag = NAM_postwar_rearmament_paid
+					set_country_flag = NAM_pw_military_busy
 				}
+				custom_effect_tooltip = NAM_postwar_rearmament_result_tt
 			}
 		}
-		ai_will_do = {
-			base = 10
+		cancel_trigger = { NAM_postwar_rearmament_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_postwar_rearmament_result_tt
+			hidden_effect = { NAM_postwar_rearmament_settle = yes }
 		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_postwar_rearmament_refund = yes }
+		}
+		ai_will_do = { base = 8 }
 	}
 
 	NAM_defend_fields = {
@@ -5347,46 +5366,79 @@ NAM_national_programmes = {
 	}
 
 	NAM_district_audit = {
-		icon = ADISCORD_inspection
-		visible = {
-			has_completed_focus = NAM_seal_registry
-			has_war = no
-		}
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_seal_registry }
 		available = {
-			NAM_country_operable = yes
-			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_district_audit_ready_tt
+				NAM_district_audit_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
 		}
-		cost = 50
+		cost = 0
+		custom_cost_text = NAM_district_audit_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+		}
 		fire_only_once = no
-		days_remove = 30
+		days_remove = 14
 		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_seal_registry
+						NAM_district_audit_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_district_audit_paid }
+						NOT = { has_political_power < 25 }
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					set_country_flag = NAM_district_audit_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_district_audit_result_tt
+			}
+		}
+		cancel_trigger = { NAM_district_audit_ready = no }
 		remove_effect = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
+			custom_effect_tooltip = NAM_district_audit_result_tt
+			hidden_effect = { NAM_district_audit_settle = yes }
 		}
-		ai_will_do = {
-			base = 5
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_district_audit_refund = yes }
 		}
+		ai_will_do = { base = 8 }
 	}
 
 	NAM_charter_fuel_aid = {
-		icon = generic_industry
+		icon = oil
+		allowed = { tag = NAM }
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
 		visible = {
 			has_completed_focus = NAM_oil_fund
-			NAM_has_charter_member = yes
+			FROM = { NAM_pw_charter_recipient = yes }
 		}
 		available = {
 			NAM_country_operable = yes
 			custom_trigger_tooltip = {
-				tooltip = NAM_charter_members_tt
-				NAM_has_charter_member = yes
+				tooltip = NAM_pw_fuel_recipient_tt
+				FROM = { NAM_pw_charter_recipient = yes }
 			}
 		}
 		cost = 0
-		custom_cost_text = NAM_cost_25_0_5000
+		custom_cost_text = NAM_pw_fuel_aid_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 25 }
-			NOT = { has_fuel < 5000 }
+			NOT = { has_fuel < 2500 }
 		}
 		fire_only_once = no
 		days_re_enable = 60
@@ -5395,19 +5447,24 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_country_operable = yes
-						NAM_has_charter_member = yes
+						has_completed_focus = NAM_oil_fund
+						FROM = { NAM_pw_charter_recipient = yes }
 						NOT = { has_political_power < 25 }
-						NOT = { has_fuel < 5000 }
+						NOT = { has_fuel < 2500 }
 					}
 				}
 				add_political_power = -25
-				add_fuel = -5000
+				add_fuel = -2500
 				custom_effect_tooltip = NAM_charter_fuel_aid_tt
 				hidden_effect = { NAM_deliver_charter_fuel = yes }
 			}
 		}
 		ai_will_do = {
-			base = 5
+			base = 10
+			modifier = {
+				factor = 0
+				has_fuel < 10000
+			}
 		}
 	}
 
@@ -5946,6 +6003,535 @@ NAM_national_programmes = {
 		ai_will_do = {
 			base = 6
 		}
+	}
+
+	# Postwar orders share one civil and one military channel.
+	NAM_pw_veteran_course = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_veterans_return }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_veteran_course_ready_tt
+				NAM_pw_veteran_course_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_military_free_tt
+				NOT = { has_country_flag = NAM_pw_military_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_veteran_course_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_veterans_return
+						NAM_pw_veteran_course_ready = yes
+						NOT = { has_country_flag = NAM_pw_military_busy }
+						NOT = { has_country_flag = NAM_pw_veteran_course_paid }
+						NOT = { has_political_power < 25 }
+						check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_veteran_course_paid
+					set_country_flag = NAM_pw_military_busy
+				}
+				custom_effect_tooltip = NAM_pw_veteran_course_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_veteran_course_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_veteran_course_result_tt
+			hidden_effect = { NAM_pw_veteran_course_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_veteran_course_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_garrison_order = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_namestnik_garrisons }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_garrison_order_ready_tt
+				NAM_pw_garrison_order_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_military_free_tt
+				NOT = { has_country_flag = NAM_pw_military_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_garrison_order_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_namestnik_garrisons
+						NAM_pw_garrison_order_ready = yes
+						NOT = { has_country_flag = NAM_pw_military_busy }
+						NOT = { has_country_flag = NAM_pw_garrison_order_paid }
+						NOT = { has_political_power < 25 }
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 200 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_garrison_order_paid
+					set_country_flag = NAM_pw_military_busy
+				}
+				custom_effect_tooltip = NAM_pw_garrison_order_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_garrison_order_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_garrison_order_result_tt
+			hidden_effect = { NAM_pw_garrison_order_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_garrison_order_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_fuel_quota = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_oil_quotas }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_fuel_quota_ready_tt
+				NAM_pw_fuel_quota_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_fuel_quota_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+		}
+		fire_only_once = no
+		days_remove = 14
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_oil_quotas
+						NAM_pw_fuel_quota_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_fuel_quota_paid }
+						NOT = { has_political_power < 20 }
+					}
+				}
+				add_political_power = -20
+				hidden_effect = {
+					set_country_flag = NAM_pw_fuel_quota_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_fuel_quota_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_fuel_quota_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_fuel_quota_result_tt
+			hidden_effect = { NAM_pw_fuel_quota_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_fuel_quota_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_state_arsenal = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_ladder_of_seals }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_state_arsenal_ready_tt
+				NAM_pw_state_arsenal_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_state_arsenal_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 40 }
+			check_variable = { var = ADISCORD_economy_treasury value = 650 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 42
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_ladder_of_seals
+						NAM_pw_state_arsenal_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_state_arsenal_paid }
+						NOT = { has_political_power < 40 }
+						check_variable = { var = ADISCORD_economy_treasury value = 650 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -40
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 650 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_state_arsenal_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_state_arsenal_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_state_arsenal_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_state_arsenal_result_tt
+			hidden_effect = { NAM_pw_state_arsenal_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_state_arsenal_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_district_congress = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_district_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_district_congress_ready_tt
+				NAM_pw_district_congress_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_district_congress_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 14
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_district_council
+						NAM_pw_district_congress_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_district_congress_paid }
+						NOT = { has_political_power < 20 }
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -20
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 100 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_district_congress_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_district_congress_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_district_congress_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_district_congress_result_tt
+			hidden_effect = { NAM_pw_district_congress_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_district_congress_refund = yes }
+		}
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				check_variable = { var = NAM_grp_dist_support value = 80 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	NAM_pw_district_schools = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_oil_fund }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_district_schools_ready_tt
+				NAM_pw_district_schools_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_district_schools_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 35
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_oil_fund
+						NAM_pw_district_schools_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_district_schools_paid }
+						NOT = { has_political_power < 25 }
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 200 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_district_schools_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_district_schools_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_district_schools_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_district_schools_result_tt
+			hidden_effect = { NAM_pw_district_schools_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_district_schools_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_militia_reserve = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_district_militia }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_militia_reserve_ready_tt
+				NAM_pw_militia_reserve_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_military_free_tt
+				NOT = { has_country_flag = NAM_pw_military_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_militia_reserve_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 35
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_district_militia
+						NAM_pw_militia_reserve_ready = yes
+						NOT = { has_country_flag = NAM_pw_military_busy }
+						NOT = { has_country_flag = NAM_pw_militia_reserve_paid }
+						NOT = { has_political_power < 25 }
+						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 200 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_militia_reserve_paid
+					set_country_flag = NAM_pw_military_busy
+				}
+				custom_effect_tooltip = NAM_pw_militia_reserve_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_militia_reserve_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_militia_reserve_result_tt
+			hidden_effect = { NAM_pw_militia_reserve_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_militia_reserve_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_district_cooperative = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_common_fuel_market }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_district_cooperative_ready_tt
+				NAM_pw_district_cooperative_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_district_cooperative_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 45 }
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 56
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_common_fuel_market
+						NAM_pw_district_cooperative_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_district_cooperative_paid }
+						NOT = { has_political_power < 45 }
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -45
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_spend_treasury = yes
+				}
+				hidden_effect = {
+					set_country_flag = NAM_pw_district_cooperative_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_district_cooperative_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_district_cooperative_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_district_cooperative_result_tt
+			hidden_effect = { NAM_pw_district_cooperative_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_district_cooperative_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_export_shipment = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_export_consortium }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_export_shipment_ready_tt
+				NAM_pw_export_shipment_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_export_shipment_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_fuel < 5000 }
+		}
+		fire_only_once = no
+		days_remove = 21
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_export_consortium
+						NAM_pw_export_shipment_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_export_shipment_paid }
+						NOT = { has_political_power < 25 }
+						NOT = { has_fuel < 5000 }
+					}
+				}
+				add_political_power = -25
+				add_fuel = -5000
+				hidden_effect = {
+					set_country_flag = NAM_pw_export_shipment_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_export_shipment_result_tt
+			}
+		}
+		cancel_trigger = { NAM_pw_export_shipment_ready = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_export_shipment_result_tt
+			hidden_effect = { NAM_pw_export_shipment_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_export_shipment_refund = yes }
+		}
+		ai_will_do = { base = 8 }
 	}
 }
 
@@ -7463,9 +8049,42 @@ NAM_treasury = {
 # post-war tree chooses one of them; the defeat tree's Southern Compact, which
 # starts that war itself, opens both.
 ADISCORD_south_final_war_category = {
+	ADISCORD_south_preparation = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = SHL
+				tag = EFL
+				tag = AZH
+			}
+		}
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = {
+			ADISCORD_south_crisis_open = yes
+			NOT = { ADISCORD_south_preparation_elapsed = yes }
+		}
+		days_mission_timeout = 490
+		selectable_mission = no
+		fire_only_once = no
+		is_good = yes
+		cancel_trigger = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+				NOT = { has_global_flag = ADISCORD_south_preparation_started }
+			}
+		}
+		timeout_effect = { }
+	}
+
+
 	NAM_south_allied_fuel = {
 		icon = oil
 		allowed = { tag = NAM }
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
 		visible = {
 			OR = {
 				has_completed_focus = NAM_south_allied_fuel_office
@@ -7473,20 +8092,47 @@ ADISCORD_south_final_war_category = {
 			}
 			ADISCORD_south_final_active = yes
 			has_country_flag = ADISCORD_south_north_leader
+			FROM = { NAM_south_fuel_recipient = yes }
 		}
 		available = {
 			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_fuel_recipient_tt
+				FROM = { NAM_south_fuel_recipient = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_fuel_aid_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
 			NOT = { has_fuel < 2500 }
 		}
-		cost = 25
 		fire_only_once = no
 		days_re_enable = 45
 		complete_effect = {
-			custom_effect_tooltip = NAM_south_allied_fuel_tt
-			hidden_effect = { NAM_south_allied_fuel_delivery = yes }
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						OR = {
+							has_completed_focus = NAM_south_allied_fuel_office
+							has_completed_focus = NAM_defeat_southern_charter
+						}
+						ADISCORD_south_final_active = yes
+						has_country_flag = ADISCORD_south_north_leader
+						FROM = { NAM_south_fuel_recipient = yes }
+						NOT = { has_political_power < 25 }
+						NOT = { has_fuel < 2500 }
+					}
+				}
+				add_political_power = -25
+				add_fuel = -2500
+				custom_effect_tooltip = NAM_south_allied_fuel_tt
+				hidden_effect = { NAM_south_allied_fuel_delivery = yes }
+			}
 		}
 		ai_will_do = {
-			base = 20
+			base = 10
 			modifier = {
 				factor = 0
 				has_fuel < 10000
