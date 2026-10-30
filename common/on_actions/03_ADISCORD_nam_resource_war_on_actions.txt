@@ -44,8 +44,15 @@ on_actions = {
 				}
 				NAM = { NAM_rw_queue_front_check = yes }
 			}
-			# A lost field shakes seal discipline; a lost line may be prepared
-			# again after recapture.
+			# Any prepared border district may rebuild its line after recapture.
+			if = {
+				limit = {
+					FROM = { tag = NAM }
+					FROM.FROM = { has_state_flag = NAM_line_prepared }
+				}
+				FROM.FROM = { clr_state_flag = NAM_line_prepared }
+			}
+			# Only the original oilfields shake seal discipline during the resource war.
 			if = {
 				limit = {
 					FROM = { tag = NAM }
@@ -60,7 +67,6 @@ on_actions = {
 						}
 					}
 				}
-				FROM.FROM = { clr_state_flag = NAM_line_prepared }
 				if = {
 					limit = {
 						ADISCORD_nam_resource_war_active = yes

@@ -824,7 +824,7 @@ NAM_colony = {
 		icon = generic_industry
 		allowed = { tag = NAM }
 		visible = {
-			NAM_colony_phase = yes
+			NAM_colonial_programme_operable = yes
 			has_completed_focus = NAM_wrk_trade_house
 			NOT = { has_country_flag = NAM_wrk_concession_active }
 		}
@@ -846,7 +846,7 @@ NAM_colony = {
 		cancel_trigger = {
 			OR = {
 				NAM_country_operable = no
-				NAM_colony_phase = no
+				NAM_colonial_programme_operable = no
 				WRK = { exists = no }
 			}
 		}
@@ -854,7 +854,7 @@ NAM_colony = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NAM_colony_phase = yes
+						NAM_colonial_programme_operable = yes
 						NOT = { has_political_power < 50 }
 						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 					}
@@ -874,7 +874,7 @@ NAM_colony = {
 				if = {
 					limit = {
 						check_variable = { var = NAM_wrk_concession_deposit value = 0 compare = greater_than }
-						NAM_colony_phase = yes
+						NAM_colonial_programme_operable = yes
 					}
 					clear_variable = NAM_wrk_concession_deposit
 					set_country_flag = NAM_wrk_concession_active
@@ -1414,13 +1414,12 @@ NAM_mobilisation = {
 		icon = generic_fortify_the_borders
 		allowed = { tag = NAM }
 		state_target = yes
-		targets = { 67 688 689 690 719 700 }
+		targets = { 67 688 689 690 719 700 701 720 721 722 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			NAM_line_programme_open = yes
-			has_completed_focus = NAM_line_survey
+			NAM_permanent_lines_authorized = yes
 			FROM = {
 				is_owned_by = ROOT
 				is_controlled_by = ROOT
@@ -1431,7 +1430,7 @@ NAM_mobilisation = {
 		}
 		available = {
 			NAM_country_operable = yes
-			hidden_trigger = { NAM_line_programme_open = yes }
+			hidden_trigger = { NAM_permanent_lines_authorized = yes }
 			FROM = {
 				is_controlled_by = ROOT
 				NOT = { has_state_flag = NAM_line_in_progress }
@@ -7559,7 +7558,7 @@ NAM_national_programmes = {
 	NAM_pw_export_shipment = {
 		icon = generic_industry
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_export_consortium }
+		visible = { NAM_pw_export_shipment_unlocked = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_export_shipment_ready_tt
@@ -7583,7 +7582,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_completed_focus = NAM_export_consortium
+						NAM_pw_export_shipment_unlocked = yes
 						NAM_pw_export_shipment_ready = yes
 						NOT = { has_country_flag = NAM_pw_civil_busy }
 						NOT = { has_country_flag = NAM_pw_export_shipment_paid }

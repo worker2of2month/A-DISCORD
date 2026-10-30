@@ -1883,3 +1883,13 @@ defined_text = {
 		localization_key = NAM_bw_reason_ready
 	}
 }
+
+# Permanent border works retain their construction report after the resource war.
+defined_text = {
+	name = NAMGetMobilisationDescription
+	text = {
+		trigger = { NAM_line_programme_open = yes }
+		localization_key = NAM_mobilisation_active_desc
+	}
+	text = { localization_key = NAM_mobilisation_border_desc }
+}

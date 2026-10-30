@@ -103,14 +103,9 @@ exile routes may legitimately postpone it.
 
 ## Task 8: Postwar border-course design
 
-The territorial intent of `NAM_border_revenge` requires a user choice:
-armed deterrence before the southern war, a separate war with EFL/AZH,
-or negotiated territorial concessions. Claims on 68/725 currently have
-no scripted declaration or settlement consumer. Do not remove the territorial
-promise or add a new war before this choice is resolved.
-
-The proposed deterrence version contains two mutually exclusive 35-day focuses,
-both directly after `NAM_recognition`, replacing the current eight-node branch:
+The approved course is trade or armed deterrence before the southern war.
+Two mutually exclusive 35-day focuses follow `NAM_recognition`, replacing
+the eight-node branch. Neither route starts a separate northern war.
 
 - `NAM_normalisation` combines the prisoner return (4000 manpower), one oil
   capacity unit and improved EFL/AZH relations. Existing oil-contract events
@@ -127,14 +122,9 @@ both directly after `NAM_recognition`, replacing the current eight-node branch:
   AI plans, prerequisites, localisation consumers and source-count checks.
 
 The route takes 35 days after recognition instead of 112. The common 2165
-date and southern readiness gates remain authoritative. Before implementation,
-check that paid lines work after victory and standoff, respect completed sites
+date and southern readiness gates remain authoritative. Verify paid lines work after victory and standoff, respect completed sites
 and construction slots, refund on ownership loss, and retain a useful immediate
 reward when all eligible lines were already built before the resource war.
-
-Independent of that design choice, the current bunker focus now includes
-owned and controlled original mainland districts as well as acquired border
-districts, so its construction reward remains usable after a standoff.
 
 ## Task 9: Exile routes and preparation verification
 
@@ -161,7 +151,7 @@ districts, so its construction reward remains usable after a standoff.
 - [x] Classify propaganda by the actual decision action. Use the yellow prefix
   alone for all 34 paired Russian/English campaign titles, including the STP
   election campaign and official-history campaign.
-- [ ] Resolve the postwar territorial course in Task 8 after the pending user choice.
+- [x] Implement the approved trade/deterrence course in Task 8.
 
 ## Task 10: Postwar readiness and usable final rewards
 
@@ -205,13 +195,13 @@ districts, so its construction reward remains usable after a standoff.
   remove the redundant claim focus and reconnect the actual war declaration.
   The defeated tree contains 22 focuses after these two merges.
 - [x] Count accommodation readiness after road-south diplomacy,
-  alongside the cabinet and harbour milestones. Put the AI's cabinet last
-  before its 42-day offensive, with all prior dependencies already complete.
+  alongside the cabinet and harbour milestones. The AI selects the economic
+  course after road-south diplomacy and retains defensive readiness.
 - [x] Update dependent readiness text, source validators, counts and generated
   outputs. Exercise trade with and without the prewar bureau, the diplomatic
   milestone and the actual AI queue against the 56-day warning.
-- [x] Review and run affected checks. The meaning of oil-peace neutrality is a
-  separate pending user choice; do not add a new peace outcome in this packet.
+- [x] Implement the approved economic oil-peace course, exclusive with the
+  southern offensive. Open paid exports and retain defence against SHL.
 
 ## Task 13: Requirement audit and radical preparation
 
@@ -241,3 +231,16 @@ districts, so its construction reward remains usable after a standoff.
   existing hot-reload logs do not verify the current naval definitions.
 - [x] Complete affected suites, total-conversion validation and critic review;
   refresh the verification manifest and retain the manual campaign checks.
+
+## Colonial timing
+
+The 17 compatible colonial focuses take 329 days. Independence follows the
+WRK collapse event and its response, roughly on days 352-396. The approved
+choice preserves this interval for colonial decisions; do not lengthen the
+mandatory chains or add continuous focuses. Paid operations must settle
+through the normal collapse lifecycle.
+
+The ordering window ends at the actual WRK split, roughly days 350-394.
+Fourteen-day orders fit after day 329; longer orders may be cancelled by an
+early split. Concession settlement rechecks the same operating predicate as
+payment and refunds its 200 treasury once if the metropole has disappeared.

@@ -69,7 +69,12 @@ NAM_restitution = {
 NAM_mobilisation = {
 	icon = generic_prepare_civil_war
 	allowed = { tag = NAM }
-	visible = { NAM_line_programme_open = yes }
+	visible = {
+		OR = {
+			NAM_line_programme_open = yes
+			NAM_permanent_lines_authorized = yes
+		}
+	}
 	visible_when_empty = yes
 	priority = 23
 }

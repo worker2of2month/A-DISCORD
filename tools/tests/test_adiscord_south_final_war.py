@@ -547,6 +547,23 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.assertTrue(self.trigger_matches("ADISCORD_south_north_focus_ready", leader))
                 self.flag("ADISCORD_nam_resource_war_resolved", False)
 
+    def test_oil_peace_blocks_northern_offensives_without_stopping_shahrabad(self):
+        tree = focus_blocks(ROOT / "focus_trees/NAM/defeated/focuses.txt")
+        self.assertEqual(scalar(block(tree["NAM_defeat_oil_peace"], "mutually_exclusive"), "focus"), "NAM_defeat_southern_charter")
+        self.assertEqual(scalar(block(tree["NAM_defeat_southern_charter"], "mutually_exclusive"), "focus"), "NAM_defeat_oil_peace")
+        self.facts[("NAM", "has_completed_focus", "NAM_defeat_oil_peace")] = True
+        self.execute("ADISCORD_south_begin_preparation")
+        self.flag("ADISCORD_south_crisis_warned", age=84)
+        self.assertTrue(self.trigger_matches("ADISCORD_south_preparing_country", "NAM"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_final_focus_available", "NAM"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start", "NAM"))
+        self.assertTrue(self.trigger_matches("ADISCORD_south_final_can_start", "SHL"))
+        self.execute("ADISCORD_south_prepare_offensive", "NAM")
+        self.assertFalse(self.facts.get(("NAM", "has_country_flag", "ADISCORD_south_offensive_order"), False))
+        self.facts[("NAM", "has_country_flag", "ADISCORD_south_offensive_order")] = True
+        self.execute("ADISCORD_south_dispatch_prepared_war")
+        self.assertEqual(self.start_scopes, ["SHL"], "An invalid northern order must not block the southern attack")
+
     def test_northern_successors_wait_for_2165_and_every_shl_milestone(self):
         self.facts[("NAM", "exists", "yes")] = False
         self.execute("ADISCORD_south_begin_preparation")

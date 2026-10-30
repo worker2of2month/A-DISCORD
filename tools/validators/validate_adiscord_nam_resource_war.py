@@ -407,6 +407,8 @@ def check_oil_monopoly(
             visible += named_block(triggers, "NAM_field_repair_unlocked")
         if "NAM_oil_trade_authorized = yes" in visible:
             visible += named_block(triggers, "NAM_oil_trade_authorized")
+        if "NAM_permanent_lines_authorized = yes" in visible:
+            visible += named_block(triggers, "NAM_permanent_lines_authorized")
         check(
             f"has_completed_focus = {focus}" in visible,
             f"{decision_name} must be gated by its unlocking focus {focus}",
@@ -2123,7 +2125,7 @@ def main() -> int:
     )
     line_decision = named_block(prewar_decisions, "NAM_prepare_line")
     check(
-        "targets = { 67 688 689 690 719 700 }" in line_decision
+        "targets = { 67 688 689 690 719 700 701 720 721 722 }" in line_decision
         and "custom_cost_text = NAM_cost_line" in line_decision
         and "cost = 0" in line_decision
         and "days_remove = 35" in line_decision

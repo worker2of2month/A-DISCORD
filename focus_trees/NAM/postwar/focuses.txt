@@ -770,39 +770,16 @@ focus_tree = {
 	# ----- Eflor and Azhar after the war -----
 
 	focus = {
-		id = NAM_aftermath_commission
-		icon = GFX_focus_generic_commission_uap
-		x = 10
-		y = 1
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_recognition }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 40
-			add_stability = 0.02
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
 		id = NAM_normalisation
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_goal_generic_positive_trade_relations
 		x = 9
-		y = 2
-		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_aftermath_commission }
+		y = 1
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_recognition }
 		mutually_exclusive = { focus = NAM_border_revenge }
 		available = {
-			has_capitulated = no
+			NAM_independent_programmes_operable = yes
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -811,242 +788,73 @@ focus_tree = {
 			69 = { remove_claim_by = NAM }
 			727 = { remove_claim_by = NAM }
 			728 = { remove_claim_by = NAM }
-			add_stability = 0.05
-			EFL = {
-				if = {
-					limit = { exists = yes }
-					add_opinion_modifier = {
-						target = NAM
-						modifier = improve_relation
-					}
-				}
-			}
-			AZH = {
-				if = {
-					limit = { exists = yes }
-					add_opinion_modifier = {
-						target = NAM
-						modifier = improve_relation
-					}
-				}
-			}
-			custom_effect_tooltip = NAM_grp_normalisation_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 5 }
-				add_to_variable = { var = NAM_grp_garr_support value = -4 }
-				NAM_groups_refresh = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_border_revenge
-		icon = GFX_focus_generic_provoke_border_clashes
-		x = 11
-		y = 2
-		cost = 4
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_aftermath_commission }
-		mutually_exclusive = { focus = NAM_normalisation }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_war_support = 0.08
-			army_experience = 20
-			68 = { add_claim_by = NAM }
-			725 = { add_claim_by = NAM }
-			custom_effect_tooltip = NAM_grp_border_revenge_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_garr_support value = 6 }
-				add_to_variable = { var = NAM_grp_trade_support value = -4 }
-				NAM_groups_refresh = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_prisoner_exchange
-		icon = GFX_focus_generic_immigration
-		x = 9
-		y = 3
-		cost = 3
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_normalisation }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			add_manpower = 4000
-			add_stability = 0.02
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_border_trade_posts
-		icon = GFX_goal_generic_positive_trade_relations
-		x = 9
-		y = 4
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_prisoner_exchange }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_border_trade_posts_tt
+			custom_effect_tooltip = NAM_normalisation_trade_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
 				NAM_oil_refresh = yes
 			}
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_frontier_bunkers
-		icon = GFX_focus_generic_mountain_fortification
-		x = 11
-		y = 3
-		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_border_revenge }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			every_owned_state = {
-				limit = {
-					OR = {
-						state = 67
-						state = 688
-						state = 689
-						state = 690
-						state = 700
-						state = 719
-						state = 701
-						state = 720
-						state = 721
-						state = 722
-					}
-					is_controlled_by = NAM
-				}
-				add_building_construction = {
-					type = bunker
-					level = 2
-					instant_build = yes
-					province = {
-						all_provinces = yes
-						limit_to_border = yes
-					}
-				}
+			if = {
+				limit = { NAM_oil_trade_authorized = no }
+				unlock_decision_tooltip = NAM_oil_contract_offer
+				custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
 			}
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 80
-				producer = NAM
-			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_border_incidents
-		icon = GFX_focus_generic_secret_agent_operative
-		x = 11
-		y = 4
-		cost = 3
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = { focus = NAM_frontier_bunkers }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_war_support = 0.05
 			EFL = {
 				if = {
 					limit = { exists = yes }
-					add_stability = -0.03
 					add_opinion_modifier = {
 						target = NAM
-						modifier = protest_action
+						modifier = improve_relation
 					}
 				}
 			}
 			AZH = {
 				if = {
 					limit = { exists = yes }
-					add_stability = -0.03
 					add_opinion_modifier = {
 						target = NAM
-						modifier = protest_action
+						modifier = improve_relation
 					}
 				}
 			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_aftermath_settled
-		icon = GFX_focus_generic_world_peace
-		x = 10
-		y = 5
-		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = {
-			focus = NAM_border_trade_posts
-			focus = NAM_border_incidents
-		}
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 50
-			add_stability = 0.02
 			country_event = {
 				id = ADISCORD_nam_archive.6
 				hours = 2
 			}
 		}
-		ai_will_do = {
-			base = 5
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = NAM_border_revenge
+		icon = GFX_focus_generic_mountain_fortification
+		x = 11
+		y = 1
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_recognition }
+		mutually_exclusive = { focus = NAM_normalisation }
+		available = {
+			NAM_independent_programmes_operable = yes
+			has_war = no
 		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 80
+				producer = NAM
+			}
+			unlock_decision_tooltip = NAM_prepare_line
+			custom_effect_tooltip = NAM_prepare_line_unlock_tt
+			country_event = {
+				id = ADISCORD_nam_archive.6
+				hours = 2
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	# ----- Oil after the victory -----

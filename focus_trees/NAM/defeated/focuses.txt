@@ -692,10 +692,12 @@ focus_tree = {
 		id = NAM_defeat_oil_peace
 		icon = GFX_goal_generic_neutrality_focus
 		x = 4
-		y = 5
+		y = 6
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_defeat_oil_union }
+		prerequisite = { focus = NAM_defeat_road_south }
+		mutually_exclusive = { focus = NAM_defeat_southern_charter }
 		available = {
 			has_capitulated = no
 			has_war = no
@@ -706,6 +708,10 @@ focus_tree = {
 			add_stability = 0.05
 			add_political_power = 60
 			add_fuel = 5000
+			unlock_decision_tooltip = NAM_pw_export_shipment
+			custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+			custom_effect_tooltip = NAM_defeat_oil_peace_tt
+			hidden_effect = { clr_country_flag = ADISCORD_south_offensive_order }
 		}
 		ai_will_do = {
 			base = 10
@@ -720,7 +726,9 @@ focus_tree = {
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_defeat_road_south }
+		mutually_exclusive = { focus = NAM_defeat_oil_peace }
 		bypass = {
+			NOT = { has_completed_focus = NAM_defeat_oil_peace }
 			OR = {
 				has_global_flag = ADISCORD_south_final_started
 				has_global_flag = ADISCORD_south_final_resolved

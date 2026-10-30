@@ -428,6 +428,20 @@ NAM_line_programme_open = {
 	}
 }
 
+# COUNTRY NAM. Permanent works can also be commissioned by the postwar border course.
+NAM_permanent_lines_authorized = {
+	OR = {
+		AND = {
+			has_completed_focus = NAM_line_survey
+			NAM_line_programme_open = yes
+		}
+		AND = {
+			has_completed_focus = NAM_border_revenge
+			NAM_independent_programmes_operable = yes
+		}
+	}
+}
+
 # COUNTRY NAM.
 NAM_line_slot_free = {
 	check_variable = { var = NAM_line_slots value = NAM_lines_in_progress compare = greater_than }
@@ -482,6 +496,7 @@ NAM_oil_trade_authorized = {
 	OR = {
 		has_completed_focus = NAM_contract_bureau
 		has_completed_focus = NAM_defeat_oil_union
+		has_completed_focus = NAM_normalisation
 	}
 }
 
@@ -1266,8 +1281,7 @@ NAM_bw_line_offered = {
 	is_owned_by = NAM
 	NOT = { has_state_flag = NAM_line_prepared }
 	NAM = {
-		has_completed_focus = NAM_line_survey
-		NAM_line_programme_open = yes
+		NAM_permanent_lines_authorized = yes
 	}
 	any_neighbor_state = { NOT = { is_owned_by = NAM } }
 }
@@ -1558,8 +1572,22 @@ NAM_pw_district_cooperative_ready = {
 	check_variable = { var = NAM_grp_dist_support value = 50 compare = greater_than_or_equals }
 }
 
+NAM_pw_export_shipment_unlocked = {
+	OR = {
+		has_completed_focus = NAM_export_consortium
+		has_completed_focus = NAM_defeat_oil_peace
+	}
+}
+
 NAM_pw_export_shipment_ready = {
-	NAM_pw_operable = yes
+	OR = {
+		NAM_pw_operable = yes
+		AND = {
+			NAM_independent_programmes_operable = yes
+			has_global_flag = ADISCORD_nam_resource_war_compromise
+			has_completed_focus = NAM_defeat_oil_peace
+		}
+	}
 }
 
 # COUNTRY recipient. Aid spends only the sender's stocks.

@@ -191,12 +191,8 @@ NAM_postwar_plan = {
 		NAM_oil_fund
 		NAM_district_militia
 		NAM_common_fuel_market
-		NAM_aftermath_commission
 		NAM_normalisation
 		NAM_oil_ministry
-		NAM_prisoner_exchange
-		NAM_border_trade_posts
-		NAM_aftermath_settled
 		NAM_export_consortium
 		NAM_middle_loren_wells
 		NAM_reclaim_230
@@ -251,12 +247,8 @@ NAM_postwar_vertical_plan = {
 		NAM_oil_quotas
 		NAM_namestnik_garrisons
 		NAM_ladder_of_seals
-		NAM_aftermath_commission
 		NAM_normalisation
 		NAM_oil_ministry
-		NAM_prisoner_exchange
-		NAM_border_trade_posts
-		NAM_aftermath_settled
 		NAM_state_refineries
 		NAM_middle_loren_wells
 		NAM_reclaim_230
@@ -308,10 +300,9 @@ NAM_defeated_plan = {
 		NAM_defeat_island_refuge
 		NAM_defeat_refugee_quarters
 		NAM_defeat_open_border
-		NAM_defeat_oil_peace
 		NAM_defeat_road_south
+		NAM_defeat_oil_peace
 		NAM_defeat_rump_cabinet
-		NAM_defeat_southern_charter
 		NAM_defeat_island_foundries
 		NAM_defeat_purge_of_seals
 		NAM_defeat_second_chapter

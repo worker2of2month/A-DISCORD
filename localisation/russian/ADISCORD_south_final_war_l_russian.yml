@@ -144,3 +144,4 @@
  ADISCORD_south_north_ready: "§GСеверная сторона готова.§! Светлогорье завершило фокусы своего пути; для Эфлора или Ажара достаточно урегулированной ресурсной войны."
 
  ADISCORD_south_north_pending: "§YСветлогорье готовится.§!\n- Обычный послевоенный путь: $NAM_svetlogorye$, $NAM_oil_exchange$ и один из двух фокусов - $NAM_ladder_of_seals$ или $NAM_common_fuel_market$.\n- Компромисс: $NAM_defeat_rump_cabinet$, $NAM_defeat_harbour_economy$ и $NAM_defeat_road_south$.\n- Реванш после компромисса: $NAM_defeat_revenge$ и $NAM_defeat_second_chapter$.\n- Возвращение из изгнания: $NAM_rad_great_war_plan$, $NAM_hum_union_call$ или $NAM_board_stock_mobilisation$; войны возвращения должны завершиться.\n- Если ресурсная война окончательно отменена: $NAM_seal_courts$, $NAM_civilian_combine$ и $NAM_officer_courses$."
+ ADISCORD_south_offensive_policy_tt:0 "Курс страны допускает наступление на юг."

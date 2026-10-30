@@ -158,13 +158,29 @@ ADISCORD_south_declarer_valid = {
 	}
 }
 
-# GLOBAL. Every starter waits for the same calendar, focus preparation and warning.
+# COUNTRY. The compromise's oil-peace course keeps defensive preparation.
+ADISCORD_south_offensive_policy_allowed = {
+	OR = {
+		NOT = { tag = NAM }
+		NOT = { has_completed_focus = NAM_defeat_oil_peace }
+	}
+}
+
+# COUNTRY. Every starter waits for the same calendar, focus preparation and warning.
 ADISCORD_south_final_focus_available = {
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_south_offensive_policy_tt
+		ADISCORD_south_offensive_policy_allowed = yes
+	}
 	ADISCORD_south_preparation_can_finish = yes
 	has_global_flag = ADISCORD_south_crisis_warned
 }
 
 ADISCORD_south_final_can_start = {
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_south_offensive_policy_tt
+		ADISCORD_south_offensive_policy_allowed = yes
+	}
 	ADISCORD_south_preparation_can_finish = yes
 	custom_trigger_tooltip = {
 		tooltip = ADISCORD_south_warning_elapsed_tt

@@ -565,3 +565,23 @@ Python-модель проверяет исходные скрипты, но н�
 Проверьте награды гуманистических дорог, работ Сардана, водного договора
 Рахмы и караванной хартии: бывший округ не получает награды, а в оккупированной
 столице действующего округа нет стройки. Собственные награды NAM сохраняются.
+
+### Trade, border deterrence and the economic compromise course
+
+- After recognition, verify the exclusive 35-day normalisation/border choice.
+  Normalisation returns 4000 manpower and opens ordinary fuel contracts if
+  needed. Armed Border grants 80 artillery, 20 army XP and permanent-line orders.
+- Order a line after peace in an owned, controlled border district. Verify
+  30 PP and 100 treasury payment, 35-day delivery, occupied slots and loss
+  cancellation. Treasury returns once; PP does not. Forward depots stay closed.
+- After compromise, finish oil union and road-south, then choose oil peace.
+  Verify the 25 PP / 5000 fuel export, 450 treasury delivery after 21 days,
+  cancellation/refund on subjugation and exclusion of the southern charter.
+  SHL can still attack after the common preparation and warning.
+- Keep the colonial interval for decisions: focuses finish on day 329;
+  colonial ordering ends at the actual WRK split, before NAM's later focus
+  unlock. A late 21/28/35-day order may be refunded instead of delivered.
+  Complete a concession exactly as WRK disappears, before wars_started:
+  its 200 treasury deposit returns once, without refunding the 50 PP fee.
+
+These are manual checks; source scenario tests do not establish native timing.

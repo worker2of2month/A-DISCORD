@@ -104,6 +104,7 @@ ADISCORD_south_dispatch_prepared_war = {
 			limit = {
 				NAM = {
 					ADISCORD_south_declarer_valid = yes
+					ADISCORD_south_final_can_start = yes
 					has_country_flag = ADISCORD_south_offensive_order
 				}
 			}

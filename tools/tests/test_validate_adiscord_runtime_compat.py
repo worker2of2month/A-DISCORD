@@ -64,10 +64,10 @@ class RuntimeCompatibilityTests(unittest.TestCase):
                            "planning_skill": "3", "logistics_skill": "3"}.items():
             self.assertEqual(scalar(role, key), value)
 
-    def test_air_stockpile_dynamic_tokens_are_synchronized(self):
+    def test_equipment_and_marine_dynamic_tokens_are_synchronized(self):
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text().split()
         for token in ("ADISCORD_interceptor_archetype", "ADISCORD_strike_drone_archetype",
-                      "transport_plane_equipment"):
+                      "transport_plane_equipment", "ADISCORD_marine_infantry", "train_equipment"):
             self.assertEqual(tokens.count(token), 1)
 
     def test_port_contract_texture_and_shine_resolve_to_the_same_asset(self):

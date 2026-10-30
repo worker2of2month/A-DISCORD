@@ -144,3 +144,4 @@
  ADISCORD_south_north_ready: "§GThe northern side is ready.§! Svetlogorye has completed its route's focuses; Eflor or Azhar requires a settled resource war."
 
  ADISCORD_south_north_pending: "§YSvetlogorye is preparing.§!\n- Normal postwar route: $NAM_svetlogorye$, $NAM_oil_exchange$ and either $NAM_ladder_of_seals$ or $NAM_common_fuel_market$.\n- Compromise: $NAM_defeat_rump_cabinet$, $NAM_defeat_harbour_economy$ and $NAM_defeat_road_south$.\n- Compromise revenge: $NAM_defeat_revenge$ and $NAM_defeat_second_chapter$.\n- Return from exile: $NAM_rad_great_war_plan$, $NAM_hum_union_call$ or $NAM_board_stock_mobilisation$; the return campaigns must be over.\n- If resource-war entry is finally cancelled: $NAM_seal_courts$, $NAM_civilian_combine$ and $NAM_officer_courses$."
+ ADISCORD_south_offensive_policy_tt:0 "The country's political course permits a southern offensive."
