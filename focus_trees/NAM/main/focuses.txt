@@ -9,7 +9,7 @@ focus_tree = {
 	}
 	default = no
 	continuous_focus_position = {
-		x = 5000
+		x = 4996
 		y = 5555
 	}
 
@@ -19,7 +19,7 @@ focus_tree = {
 	focus = {
 		id = NAM_inventory
 		icon = GFX_focus_NAM_inventory
-		x = 38
+		x = 26
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -51,20 +51,16 @@ focus_tree = {
 	}
 
 	# ----- Colony: trade with the metropole and the underground -----
-	# The only course visible before the collapse of Vorkerland. The trade, watch
-	# and hourglass routes together take longer than the window before the centre
-	# vanishes, so the player chooses which colony focuses to finish. The colony
-	# decisions close with the collapse wars, so the same moment bypasses
-	# whatever is left of the colony; NAM_center_vanished (event
-	# ADISCORD_nam_resource_war.80) reveals the other branches, which carry
-	# allow_branch on their roots.
+	# The gateway reveals preparation after all three colonial routes. Its
+	# institutions remain unavailable until independence. Collapse closes the
+	# colonial decisions and bypasses any unfinished colonial prerequisites.
 
 	focus = {
 		id = NAM_metropolitan_quota
 		icon = GFX_focus_NAM_metropolitan_quota
-		x = 34
+		x = 22
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
@@ -93,9 +89,9 @@ focus_tree = {
 	focus = {
 		id = NAM_deliver_the_quota
 		icon = GFX_focus_NAM_deliver_the_quota
-		x = 33
+		x = 21
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_concealed_reserve }
@@ -142,9 +138,9 @@ focus_tree = {
 	focus = {
 		id = NAM_concealed_reserve
 		icon = GFX_focus_NAM_concealed_reserve
-		x = 35
+		x = 23
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_deliver_the_quota }
@@ -180,9 +176,9 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_trade_house
 		icon = GFX_focus_NAM_wrk_trade_house
-		x = 34
+		x = 22
 		y = 3
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_deliver_the_quota
@@ -223,7 +219,7 @@ focus_tree = {
 	focus = {
 		id = NAM_wrk_return_cargo
 		icon = GFX_focus_NAM_wrk_return_cargo
-		x = 34
+		x = 22
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -262,7 +258,7 @@ focus_tree = {
 	focus = {
 		id = NAM_metropolitan_depots
 		icon = GFX_focus_NAM_metropolitan_depots
-		x = 34
+		x = 22
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -306,9 +302,9 @@ focus_tree = {
 	focus = {
 		id = NAM_colonial_watch
 		icon = GFX_focus_NAM_colonial_watch
-		x = 42
+		x = 30
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
@@ -342,9 +338,9 @@ focus_tree = {
 	focus = {
 		id = NAM_imperial_gendarmes
 		icon = GFX_focus_NAM_imperial_gendarmes
-		x = 41
+		x = 29
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_oilfield_militia }
@@ -387,9 +383,9 @@ focus_tree = {
 	focus = {
 		id = NAM_oilfield_militia
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 43
+		x = 31
 		y = 2
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_imperial_gendarmes }
@@ -433,7 +429,7 @@ focus_tree = {
 	focus = {
 		id = NAM_pipeline_patrols
 		icon = GFX_focus_NAM_pipeline_patrols
-		x = 42
+		x = 30
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
@@ -485,7 +481,7 @@ focus_tree = {
 	focus = {
 		id = NAM_print_shop_raid
 		icon = GFX_focus_NAM_print_shop_raid
-		x = 42
+		x = 30
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -517,7 +513,7 @@ focus_tree = {
 	focus = {
 		id = NAM_colony_order
 		icon = GFX_focus_NAM_colony_order
-		x = 42
+		x = 30
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
@@ -552,14 +548,13 @@ focus_tree = {
 	focus = {
 		id = NAM_letters_to_the_centre
 		icon = GFX_focus_NAM_letters_to_the_centre
-		x = 38
+		x = 26
 		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = {
-			focus = NAM_metropolitan_depots
-			focus = NAM_colony_order
-		}
+		prerequisite = { focus = NAM_metropolitan_depots }
+		prerequisite = { focus = NAM_colony_order }
+		prerequisite = { focus = NAM_last_centre_register }
 		available = {
 			has_capitulated = no
 		}
@@ -595,9 +590,9 @@ focus_tree = {
 	focus = {
 		id = NAM_centre_hourglass
 		icon = GFX_focus_NAM_centre_hourglass
-		x = 38
+		x = 26
 		y = 1
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
@@ -626,9 +621,9 @@ focus_tree = {
 	focus = {
 		id = NAM_commissioner_plan
 		icon = GFX_focus_NAM_commissioner_plan
-		x = 37
+		x = 25
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_centre_hourglass }
 		mutually_exclusive = { focus = NAM_second_ledger }
@@ -667,9 +662,9 @@ focus_tree = {
 	focus = {
 		id = NAM_second_ledger
 		icon = GFX_focus_NAM_second_ledger
-		x = 39
+		x = 27
 		y = 2
-		cost = 5
+		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_centre_hourglass }
 		mutually_exclusive = { focus = NAM_commissioner_plan }
@@ -708,9 +703,9 @@ focus_tree = {
 	focus = {
 		id = NAM_metropolitan_instructors
 		icon = GFX_focus_NAM_metropolitan_instructors
-		x = 37
+		x = 25
 		y = 3
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_commissioner_plan }
 		bypass = {
@@ -748,9 +743,9 @@ focus_tree = {
 	focus = {
 		id = NAM_quiet_officer_lists
 		icon = GFX_focus_NAM_quiet_officer_lists
-		x = 39
+		x = 27
 		y = 3
-		cost = 4
+		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_second_ledger }
 		bypass = {
@@ -781,7 +776,7 @@ focus_tree = {
 	focus = {
 		id = NAM_sand_runs_out
 		icon = GFX_focus_NAM_sand_runs_out
-		x = 38
+		x = 26
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -830,7 +825,7 @@ focus_tree = {
 	focus = {
 		id = NAM_last_centre_register
 		icon = GFX_focus_NAM_last_centre_register
-		x = 38
+		x = 26
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -882,14 +877,13 @@ focus_tree = {
 
 	focus = {
 		id = NAM_independence_day
-		icon = GFX_focus_generic_happy_cheer
-		x = 38
+		icon = GFX_focus_NAM_independence_day
+		x = 26
 		y = 7
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_letters_to_the_centre }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
@@ -920,7 +914,7 @@ focus_tree = {
 	focus = {
 		id = NAM_neutral_basin
 		icon = GFX_goal_generic_neutrality_focus
-		x = 37
+		x = 25
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -952,11 +946,6 @@ focus_tree = {
 			custom_effect_tooltip = NAM_restitution_note_unlock_tt
 			add_stability = 0.03
 			add_political_power = 30
-			custom_effect_tooltip = NAM_neutral_basin_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = -6 }
-				NAM_rw_tension_clamp = yes
-			}
 		}
 		ai_will_do = {
 			base = 10
@@ -966,7 +955,7 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_is_ours
 		icon = GFX_focus_generic_provoke_border_clashes
-		x = 39
+		x = 27
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
@@ -997,11 +986,6 @@ focus_tree = {
 			hidden_effect = { set_country_flag = NAM_ind_defence_supply_authorised }
 			add_war_support = 0.05
 			army_experience = 15
-			custom_effect_tooltip = NAM_basin_is_ours_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = 4 }
-				NAM_rw_tension_clamp = yes
-			}
 		}
 		ai_will_do = {
 			base = 10
@@ -1011,7 +995,7 @@ focus_tree = {
 	focus = {
 		id = NAM_provisional_statute
 		icon = GFX_focus_generic_social_democracy
-		x = 38
+		x = 26
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1041,7 +1025,7 @@ focus_tree = {
 	focus = {
 		id = NAM_rom_address
 		icon = GFX_focus_generic_public_meetings
-		x = 38
+		x = 26
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_STABILITY }
@@ -1069,21 +1053,27 @@ focus_tree = {
 		}
 	}
 
+	# The gateway reveals preparation; the declaration of independence
+	# is the shared prerequisite for every independent programme.
+
 	# ----- Administration and the ladder of seals -----
 
 	focus = {
 		id = NAM_open_ledgers
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
-		x = 1
+		x = 3
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
@@ -1115,7 +1105,7 @@ focus_tree = {
 	focus = {
 		id = NAM_vertical
 		icon = GFX_focus_generic_improve_the_administration
-		x = 0
+		x = 2
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1151,9 +1141,6 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_dist_support value = -10 }
 				NAM_groups_refresh = yes
 			}
-			# Before the declaration the ladder does not exist yet; its
-			# initialisation applies the same course shift.
-			custom_effect_tooltip = NAM_vertical_tt
 			if = {
 				limit = { has_power_balance = { id = NAM_ladder_bop } }
 				add_power_balance_value = {
@@ -1170,7 +1157,7 @@ focus_tree = {
 	focus = {
 		id = NAM_districts
 		icon = GFX_focus_generic_freedom_council
-		x = 2
+		x = 4
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1205,7 +1192,6 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_nam_support value = -10 }
 				NAM_groups_refresh = yes
 			}
-			custom_effect_tooltip = NAM_districts_tt
 			if = {
 				limit = { has_power_balance = { id = NAM_ladder_bop } }
 				add_power_balance_value = {
@@ -1220,37 +1206,9 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_inspectors
-		icon = GFX_focus_generic_secret_service_agency
-		x = 0
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_vertical }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_admin_warehouse_inspection
-			custom_effect_tooltip = NAM_admin_warehouse_inspection_unlock_tt
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 13500
-				producer = NAM
-			}
-			army_experience = 10
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
 		id = NAM_tax_rolls
 		icon = GFX_focus_generic_stockpile_currency
-		x = 4
+		x = 6
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -1273,52 +1231,21 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_public_payroll
-		icon = GFX_focus_generic_welfare
-		x = 2
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_districts }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_admin_pay_local_arrears
-			custom_effect_tooltip = NAM_admin_pay_local_arrears_unlock_tt
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_public_payroll_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
-				NAM_refresh_administration = yes
-			}
-			add_political_power = 25
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
 		id = NAM_emergency_writ
 		icon = GFX_focus_generic_national_security
-		x = 0
-		y = 11
+		x = 2
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_inspectors }
+		prerequisite = { focus = NAM_vertical }
 		available = {
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_admin_warehouse_inspection
+			custom_effect_tooltip = NAM_admin_warehouse_inspection_unlock_tt
 			unlock_decision_tooltip = NAM_admin_transport_requisition
 			custom_effect_tooltip = NAM_admin_transport_requisition_unlock_tt
 			unlock_decision_tooltip = NAM_supply_order
@@ -1327,6 +1254,11 @@ focus_tree = {
 			custom_effect_tooltip = NAM_emergency_arsenal_unlock_tt
 			unlock_decision_tooltip = NAM_counterinsurgency
 			custom_effect_tooltip = NAM_counterinsurgency_unlock_tt
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 13500
+				producer = NAM
+			}
 			army_experience = 10
 		}
 		ai_will_do = {
@@ -1337,20 +1269,31 @@ focus_tree = {
 	focus = {
 		id = NAM_district_guarantees
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 2
-		y = 11
+		x = 4
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_public_payroll }
+		prerequisite = { focus = NAM_districts }
 		available = {
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_admin_pay_local_arrears
+			custom_effect_tooltip = NAM_admin_pay_local_arrears_unlock_tt
 			unlock_decision_tooltip = NAM_admin_district_guard_contract
 			custom_effect_tooltip = NAM_admin_district_guard_contract_unlock_tt
-			add_stability = 0.03
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_district_guarantees_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1370,8 +1313,8 @@ focus_tree = {
 	focus = {
 		id = NAM_one_budget
 		icon = GFX_focus_generic_currency_reforms
-		x = 1
-		y = 12
+		x = 3
+		y = 11
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1411,11 +1354,10 @@ focus_tree = {
 		id = NAM_namestnik_circuits
 		icon = GFX_focus_generic_advisors
 		x = 0
-		y = 13
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_one_budget }
-		mutually_exclusive = { focus = NAM_district_assemblies }
+		prerequisite = { focus = NAM_vertical }
 		available = {
 			has_capitulated = no
 			has_completed_focus = NAM_vertical
@@ -1444,12 +1386,11 @@ focus_tree = {
 	focus = {
 		id = NAM_district_assemblies
 		icon = GFX_focus_generic_worker_administration
-		x = 2
-		y = 13
+		x = 6
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_one_budget }
-		mutually_exclusive = { focus = NAM_namestnik_circuits }
+		prerequisite = { focus = NAM_districts }
 		available = {
 			has_capitulated = no
 			has_completed_focus = NAM_districts
@@ -1478,10 +1419,11 @@ focus_tree = {
 	focus = {
 		id = NAM_seal_courts
 		icon = GFX_focus_generic_court
-		x = 1
-		y = 14
+		x = 3
+		y = 12
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_one_budget }
 		prerequisite = {
 			focus = NAM_namestnik_circuits
 			focus = NAM_district_assemblies
@@ -1494,8 +1436,12 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_admin_seal_appeal
 			custom_effect_tooltip = NAM_admin_seal_appeal_unlock_tt
-			add_stability = 0.03
-			add_political_power = 50
+			if = {
+				limit = {
+					hidden_trigger = { has_completed_focus = NAM_districts }
+				}
+				custom_effect_tooltip = NAM_admin_contract_security_tt
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1511,188 +1457,15 @@ focus_tree = {
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
-			has_capitulated = no
-			NAM_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_concede_nam
-			custom_effect_tooltip = NAM_concede_nam_unlock_tt
-			unlock_decision_tooltip = NAM_concede_oil
-			custom_effect_tooltip = NAM_concede_oil_unlock_tt
-			unlock_decision_tooltip = NAM_concede_dist
-			custom_effect_tooltip = NAM_concede_dist_unlock_tt
-			unlock_decision_tooltip = NAM_concede_garr
-			custom_effect_tooltip = NAM_concede_garr_unlock_tt
-			unlock_decision_tooltip = NAM_concede_trade
-			custom_effect_tooltip = NAM_concede_trade_unlock_tt
-			unlock_decision_tooltip = NAM_bribe_nam
-			custom_effect_tooltip = NAM_bribe_nam_unlock_tt
-			unlock_decision_tooltip = NAM_bribe_oil
-			custom_effect_tooltip = NAM_bribe_oil_unlock_tt
-			unlock_decision_tooltip = NAM_bribe_dist
-			custom_effect_tooltip = NAM_bribe_dist_unlock_tt
-			unlock_decision_tooltip = NAM_bribe_garr
-			custom_effect_tooltip = NAM_bribe_garr_unlock_tt
-			unlock_decision_tooltip = NAM_bribe_trade
-			custom_effect_tooltip = NAM_bribe_trade_unlock_tt
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_supports_oil_compact
-		icon = GFX_focus_generic_stockpile_fuel
-		x = 9
-		y = 9
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_supports_council }
-		mutually_exclusive = { focus = NAM_supports_export_houses }
-		available = {
-			has_capitulated = no
-			NAM_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_council_fuel_reserve
-			custom_effect_tooltip = NAM_council_fuel_reserve_unlock_tt
-			custom_effect_tooltip = NAM_grp_supports_oil_compact_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_oil_support value = 12 }
-				add_to_variable = { var = NAM_grp_trade_support value = -6 }
-				NAM_groups_refresh = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
 			}
-			add_fuel = 2000
-			unlock_decision_tooltip = NAM_favour_oil
-			custom_effect_tooltip = NAM_favour_oil_unlock_tt
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_supports_export_houses
-		icon = GFX_goal_generic_trade
-		x = 11
-		y = 9
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_supports_council }
-		mutually_exclusive = { focus = NAM_supports_oil_compact }
-		available = {
-			has_capitulated = no
-			NAM_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_council_import_machinery
-			custom_effect_tooltip = NAM_council_import_machinery_unlock_tt
-			custom_effect_tooltip = NAM_grp_supports_export_houses_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 12 }
-				add_to_variable = { var = NAM_grp_oil_support value = -6 }
-				NAM_groups_refresh = yes
-			}
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			unlock_decision_tooltip = NAM_favour_trade
-			custom_effect_tooltip = NAM_favour_trade_unlock_tt
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_supports_balance
-		icon = GFX_goal_generic_major_alliance
-		x = 10
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = {
-			focus = NAM_supports_oil_compact
-			focus = NAM_supports_export_houses
-		}
-		available = {
-			has_capitulated = no
-			NAM_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_supports_balance_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
-				NAM_refresh_administration = yes
-			}
-			if = {
-				limit = { NAM_rw_clock_running = yes }
-				custom_effect_tooltip = NAM_council_order_capacity_tt
-				hidden_effect = {
-					add_to_variable = { var = NAM_order_cap value = 1 }
-				}
-			}
-			else = { add_command_power = 20 }
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_garrison_assembly
-		icon = GFX_focus_generic_soldier_salute
-		x = 7
-		y = 11
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_supports_balance }
-		available = {
-			has_capitulated = no
-			NAM_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_council_arsenal_contract
-			custom_effect_tooltip = NAM_council_arsenal_contract_unlock_tt
-			unlock_decision_tooltip = NAM_favour_garr
-			custom_effect_tooltip = NAM_favour_garr_unlock_tt
-			army_experience = 10
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_rivals_ledger
-		icon = GFX_focus_generic_conspiracy
-		x = 13
-		y = 11
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_supports_balance }
-		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
 		}
@@ -1705,6 +1478,108 @@ focus_tree = {
 				uses = 2
 				category = industry
 			}
+
+			unlock_decision_tooltip = NAM_council_fuel_reserve
+			custom_effect_tooltip = NAM_council_fuel_reserve_unlock_tt
+			unlock_decision_tooltip = NAM_council_import_machinery
+			custom_effect_tooltip = NAM_council_import_machinery_unlock_tt
+			unlock_decision_tooltip = NAM_council_arsenal_contract
+			custom_effect_tooltip = NAM_council_arsenal_contract_unlock_tt
+			unlock_decision_tooltip = NAM_council_registrar_contract
+			custom_effect_tooltip = NAM_council_registrar_contract_unlock_tt
+			unlock_decision_tooltip = NAM_council_workshop_contract
+			custom_effect_tooltip = NAM_council_workshop_contract_unlock_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_oil_compact
+		icon = GFX_focus_generic_stockpile_fuel
+		x = 8
+		y = 9
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_supports_council }
+		mutually_exclusive = { focus = NAM_supports_export_houses }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 6000
+			custom_effect_tooltip = NAM_council_oil_trust_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_favour_oil
+			custom_effect_tooltip = NAM_favour_oil_unlock_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_export_houses
+		icon = GFX_goal_generic_trade
+		x = 10
+		y = 9
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_supports_council }
+		mutually_exclusive = { focus = NAM_supports_oil_compact }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = NAM }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 80 producer = NAM }
+			custom_effect_tooltip = NAM_council_trade_trust_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_favour_trade
+			custom_effect_tooltip = NAM_favour_trade_unlock_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_garrison_assembly
+		icon = GFX_focus_generic_soldier_salute
+		x = 12
+		y = 9
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_supports_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 9000 producer = NAM }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = NAM }
+			custom_effect_tooltip = NAM_council_garr_trust_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_favour_garr
+			custom_effect_tooltip = NAM_favour_garr_unlock_tt
 		}
 		ai_will_do = {
 			base = 5
@@ -1714,11 +1589,11 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_klyuchevsk
 		icon = GFX_focus_generic_industrialists
-		x = 10
-		y = 12
+		x = 8
+		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_rivals_ledger }
+		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_hear_the_harbour }
 		available = {
 			has_capitulated = no
@@ -1743,11 +1618,11 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_harbour
 		icon = GFX_focus_generic_british_trade
-		x = 12
-		y = 12
+		x = 10
+		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
-		prerequisite = { focus = NAM_rivals_ledger }
+		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_hear_klyuchevsk }
 		available = {
 			has_capitulated = no
@@ -1772,11 +1647,11 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_commandant
 		icon = GFX_focus_generic_military_academy
-		x = 14
-		y = 12
+		x = 12
+		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_rivals_ledger }
+		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_hear_the_registrar }
 		available = {
 			has_capitulated = no
@@ -1801,11 +1676,11 @@ focus_tree = {
 	focus = {
 		id = NAM_hear_the_registrar
 		icon = GFX_focus_generic_printing_press
-		x = 16
-		y = 12
+		x = 14
+		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_rivals_ledger }
+		prerequisite = { focus = NAM_supports_council }
 		mutually_exclusive = { focus = NAM_hear_the_commandant }
 		available = {
 			has_capitulated = no
@@ -1825,10 +1700,14 @@ focus_tree = {
 	focus = {
 		id = NAM_pillar_arbitration
 		icon = GFX_focus_generic_league_of_nations
-		x = 13
-		y = 13
+		x = 11
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_supports_oil_compact
+			focus = NAM_supports_export_houses
+		}
 		prerequisite = { focus = NAM_garrison_assembly }
 		prerequisite = {
 			focus = NAM_hear_klyuchevsk
@@ -1854,6 +1733,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_supports_balance_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			if = {
+				limit = { NAM_rw_clock_running = yes }
+				NAM_expand_mobilisation_capacity = yes
+			}
+			else = { add_command_power = 20 }
+
 			add_stability = 0.03
 			67 = {
 				if = {
@@ -1877,6 +1772,7 @@ focus_tree = {
 				id = ADISCORD_nam_archive.4
 				hours = 2
 			}
+
 		}
 		ai_will_do = {
 			base = 5
@@ -1888,16 +1784,19 @@ focus_tree = {
 	focus = {
 		id = NAM_crisis_office
 		icon = GFX_focus_generic_phone
-		x = 25
+		x = 17
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 			NAM_country_operable = yes
 		}
@@ -1928,18 +1827,28 @@ focus_tree = {
 	focus = {
 		id = NAM_field_firefighters
 		icon = GFX_focus_generic_field_hostpital
-		x = 24
+		x = 16
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_crisis_office }
+		mutually_exclusive = { focus = NAM_chancellery_purge }
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_field_repair_crews } }
+				unlock_decision_tooltip = NAM_project_repair_wells
+				custom_effect_tooltip = NAM_project_repair_wells_unlock_tt
+			}
+			else = { custom_effect_tooltip = NAM_field_repair_upgrade_tt }
 			custom_effect_tooltip = NAM_field_firefighters_tt
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -1955,19 +1864,29 @@ focus_tree = {
 	focus = {
 		id = NAM_chancellery_purge
 		icon = GFX_focus_generic_sympathetic_judges
-		x = 26
+		x = 18
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_crisis_office }
+		mutually_exclusive = { focus = NAM_field_firefighters }
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_well_register } }
+				unlock_decision_tooltip = NAM_fuel_audit
+				custom_effect_tooltip = NAM_fuel_audit_unlock_tt
+			}
 			custom_effect_tooltip = NAM_chancellery_purge_tt
+			add_political_power = 50
 		}
 		ai_will_do = {
 			base = 5
@@ -1979,14 +1898,13 @@ focus_tree = {
 
 	focus = {
 		id = NAM_underground_reports
-		icon = GFX_focus_generic_secret_agent_operative
-		x = 30
+		icon = GFX_focus_NAM_underground_reports
+		x = 21
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
@@ -2016,7 +1934,7 @@ focus_tree = {
 	focus = {
 		id = NAM_weber_channel
 		icon = GFX_focus_generic_treaty
-		x = 29
+		x = 20
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -2045,7 +1963,7 @@ focus_tree = {
 	focus = {
 		id = NAM_cache_hunters
 		icon = GFX_focus_generic_infiltration
-		x = 31
+		x = 22
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
@@ -2061,32 +1979,9 @@ focus_tree = {
 			unlock_decision_tooltip = NAM_hunt_caches
 			custom_effect_tooltip = NAM_hunt_caches_unlock_tt
 			army_experience = 10
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
 
-	focus = {
-		id = NAM_amnesty_lists
-		icon = GFX_focus_generic_immigration
-		x = 29
-		y = 10
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_weber_channel }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_stability = 0.02
-			custom_effect_tooltip = NAM_amnesty_lists_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -10 }
-				NAM_underground_clamp = yes
-			}
+			add_political_power = 30
+			custom_effect_tooltip = NAM_cache_intelligence_tt
 		}
 		ai_will_do = {
 			base = 5
@@ -2096,49 +1991,32 @@ focus_tree = {
 	focus = {
 		id = NAM_mine_councils
 		icon = GFX_focus_generic_workers
-		x = 29
-		y = 11
+		x = 20
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_amnesty_lists }
+		prerequisite = { focus = NAM_weber_channel }
 		available = {
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_stability = 0.03
 			custom_effect_tooltip = NAM_mine_councils_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -5 }
-				NAM_underground_clamp = yes
 				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
 				NAM_oil_refresh = yes
 			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_informers
-		icon = GFX_focus_generic_radio_communication
-		x = 31
-		y = 10
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_cache_hunters }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 30
-			custom_effect_tooltip = NAM_informers_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -10 }
-				NAM_underground_clamp = yes
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_weber_amnesty } }
+				effect_tooltip = { add_manpower = 2000 }
+				hidden_effect = { NAM_deliver_amnesty_recruits = yes }
+			}
+			else = { custom_effect_tooltip = NAM_amnesty_recruits_pending_tt }
+			country_event = {
+				id = ADISCORD_nam_archive.3
+				hours = 2
 			}
 		}
 		ai_will_do = {
@@ -2149,11 +2027,11 @@ focus_tree = {
 	focus = {
 		id = NAM_field_gendarmes
 		icon = GFX_goal_generic_special_forces
-		x = 31
-		y = 11
+		x = 22
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_informers }
+		prerequisite = { focus = NAM_cache_hunters }
 		available = {
 			has_capitulated = no
 		}
@@ -2166,40 +2044,8 @@ focus_tree = {
 				producer = NAM
 			}
 			army_experience = 10
-			custom_effect_tooltip = NAM_field_gendarmes_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -5 }
-				NAM_underground_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_quiet_wells
-		icon = GFX_focus_generic_world_peace
-		x = 30
-		y = 12
-		cost = 2
-		search_filters = { FOCUS_FILTER_STABILITY }
-		prerequisite = {
-			focus = NAM_mine_councils
-			focus = NAM_field_gendarmes
-		}
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			add_stability = 0.03
-			custom_effect_tooltip = NAM_quiet_wells_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -5 }
-				NAM_underground_clamp = yes
-			}
+			custom_effect_tooltip = NAM_field_gendarmes_tt
 			country_event = {
 				id = ADISCORD_nam_archive.3
 				hours = 2
@@ -2217,16 +2063,19 @@ focus_tree = {
 	focus = {
 		id = NAM_well_register
 		icon = GFX_focus_generic_offshore_oil_rig
-		x = 48
+		x = 36
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 			owns_state = 67
 			controls_state = 67
@@ -2245,8 +2094,11 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
 				NAM_refresh_administration = yes
 			}
-			unlock_decision_tooltip = NAM_fuel_audit
-			custom_effect_tooltip = NAM_fuel_audit_unlock_tt
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_chancellery_purge } }
+				unlock_decision_tooltip = NAM_fuel_audit
+				custom_effect_tooltip = NAM_fuel_audit_unlock_tt
+			}
 		}
 		ai_will_do = {
 			base = 15
@@ -2256,7 +2108,7 @@ focus_tree = {
 	focus = {
 		id = NAM_export_quays
 		icon = GFX_focus_generic_merchant_fleet
-		x = 47
+		x = 35
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2299,7 +2151,7 @@ focus_tree = {
 	focus = {
 		id = NAM_contract_bureau
 		icon = GFX_focus_generic_concessions
-		x = 54
+		x = 42
 		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -2327,7 +2179,7 @@ focus_tree = {
 	focus = {
 		id = NAM_domestic_refining
 		icon = GFX_goal_generic_oil_refinery
-		x = 49
+		x = 37
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2369,7 +2221,7 @@ focus_tree = {
 	focus = {
 		id = NAM_insured_cargoes
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 47
+		x = 35
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -2398,7 +2250,7 @@ focus_tree = {
 	focus = {
 		id = NAM_overseas_buyers
 		icon = GFX_focus_generic_the_suez
-		x = 45
+		x = 33
 		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
@@ -2422,7 +2274,7 @@ focus_tree = {
 	focus = {
 		id = NAM_field_repair_crews
 		icon = GFX_goal_generic_construction2
-		x = 54
+		x = 42
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2433,8 +2285,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_project_repair_wells
-			custom_effect_tooltip = NAM_project_repair_wells_unlock_tt
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_field_firefighters } }
+				unlock_decision_tooltip = NAM_project_repair_wells
+				custom_effect_tooltip = NAM_project_repair_wells_unlock_tt
+			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = 60
@@ -2450,7 +2305,7 @@ focus_tree = {
 	focus = {
 		id = NAM_refinery_programme
 		icon = GFX_focus_generic_industry_2
-		x = 51
+		x = 39
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2472,7 +2327,7 @@ focus_tree = {
 	focus = {
 		id = NAM_machine_shops
 		icon = GFX_focus_generic_modernize_industry
-		x = 49
+		x = 37
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -2510,7 +2365,7 @@ focus_tree = {
 	focus = {
 		id = NAM_klyuchevsk_pipeline
 		icon = GFX_focus_generic_road_investment
-		x = 54
+		x = 42
 		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2538,7 +2393,7 @@ focus_tree = {
 	focus = {
 		id = NAM_deep_wells
 		icon = GFX_focus_generic_mineral_prospecting
-		x = 52
+		x = 42
 		y = 12
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2568,11 +2423,11 @@ focus_tree = {
 	focus = {
 		id = NAM_fuel_depots
 		icon = GFX_focus_generic_energy
-		x = 54
-		y = 12
+		x = 44
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_klyuchevsk_pipeline }
+		prerequisite = { focus = NAM_field_repair_crews }
 		available = {
 			has_capitulated = no
 			owns_state = 700
@@ -2601,11 +2456,11 @@ focus_tree = {
 	focus = {
 		id = NAM_second_drilling_crew
 		icon = GFX_focus_generic_mining_industry
-		x = 56
-		y = 12
+		x = 46
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_klyuchevsk_pipeline }
+		prerequisite = { focus = NAM_field_repair_crews }
 		available = {
 			has_capitulated = no
 		}
@@ -2632,7 +2487,7 @@ focus_tree = {
 	focus = {
 		id = NAM_civilian_combine
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 48
+		x = 36
 		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2667,7 +2522,7 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_roads
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 47
+		x = 35
 		y = 12
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -2715,7 +2570,7 @@ focus_tree = {
 	focus = {
 		id = NAM_technical_college
 		icon = GFX_focus_generic_university_1
-		x = 49
+		x = 37
 		y = 12
 		cost = 3
 		search_filters = { FOCUS_FILTER_RESEARCH }
@@ -2741,16 +2596,19 @@ focus_tree = {
 	focus = {
 		id = NAM_count_garrisons
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 60
+		x = 50
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
@@ -2774,7 +2632,7 @@ focus_tree = {
 	focus = {
 		id = NAM_field_guards
 		icon = GFX_goal_generic_defence
-		x = 59
+		x = 49
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -2810,7 +2668,7 @@ focus_tree = {
 	focus = {
 		id = NAM_mobilisation_office
 		icon = GFX_focus_generic_manpower
-		x = 65
+		x = 55
 		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -2839,6 +2697,16 @@ focus_tree = {
 			custom_effect_tooltip = NAM_order_resource_guard_unlock_tt
 			unlock_decision_tooltip = NAM_order_field_infantry
 			custom_effect_tooltip = NAM_order_field_infantry_unlock_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_rw_clock_running = yes
+						has_completed_focus = NAM_motor_pool
+					}
+				}
+				unlock_decision_tooltip = NAM_order_motor_column
+				custom_effect_tooltip = NAM_order_motor_column_unlock_tt
+			}
 			add_command_power = 15
 			add_manpower = 2000
 		}
@@ -2850,7 +2718,7 @@ focus_tree = {
 	focus = {
 		id = NAM_mobile_columns
 		icon = GFX_goal_generic_army_motorized
-		x = 61
+		x = 51
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -2886,7 +2754,7 @@ focus_tree = {
 	focus = {
 		id = NAM_engineer_depots
 		icon = GFX_goal_generic_construction
-		x = 60
+		x = 50
 		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -2914,7 +2782,7 @@ focus_tree = {
 	focus = {
 		id = NAM_line_survey
 		icon = GFX_focus_generic_defensive_reorganization
-		x = 66
+		x = 56
 		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -2956,9 +2824,9 @@ focus_tree = {
 	focus = {
 		id = NAM_motor_pool
 		icon = GFX_focus_generic_truck
-		x = 62
+		x = 52
 		y = 10
-		cost = 2
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_mobile_columns }
 		available = {
@@ -2969,6 +2837,16 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_mil_carrier_contract
 			custom_effect_tooltip = NAM_mil_carrier_contract_unlock_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_rw_clock_running = yes
+						has_completed_focus = NAM_mobilisation_office
+					}
+				}
+				unlock_decision_tooltip = NAM_order_motor_column
+				custom_effect_tooltip = NAM_order_motor_column_unlock_tt
+			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
 				amount = 120
@@ -2984,8 +2862,8 @@ focus_tree = {
 	focus = {
 		id = NAM_line_engineers
 		icon = GFX_focus_generic_mountain_fortification
-		x = 63
-		y = 13
+		x = 54
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_field_guards }
@@ -3030,7 +2908,7 @@ focus_tree = {
 	focus = {
 		id = NAM_reserve_rolls
 		icon = GFX_goal_generic_axis_build_infantry
-		x = 67
+		x = 57
 		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -3057,54 +2935,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_mil_reserve_arsenal
 			custom_effect_tooltip = NAM_mil_reserve_arsenal_unlock_tt
-			custom_effect_tooltip = NAM_reserve_rolls_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_order_cap value = 1 }
-			}
+			NAM_expand_mobilisation_capacity = yes
 			add_manpower = 3000
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_motor_column_orders
-		icon = GFX_focus_generic_mechanized
-		x = 64
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_mobile_columns }
-		prerequisite = { focus = NAM_mobilisation_office }
-		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
-				}
-			}
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_restitution_clock_tt
-				has_global_flag = ADISCORD_nam_resource_war_scheduled
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_order_motor_column
-			custom_effect_tooltip = NAM_order_motor_column_unlock_tt
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 120
-				producer = NAM
-			}
-			add_fuel = 3000
 		}
 		ai_will_do = {
 			base = 10
@@ -3114,7 +2946,7 @@ focus_tree = {
 	focus = {
 		id = NAM_quartermaster
 		icon = GFX_focus_generic_supply_line
-		x = 61
+		x = 51
 		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -3153,7 +2985,7 @@ focus_tree = {
 	focus = {
 		id = NAM_port_arsenal
 		icon = GFX_focus_RUS_industrial_belt
-		x = 60
+		x = 50
 		y = 12
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -3185,7 +3017,7 @@ focus_tree = {
 	focus = {
 		id = NAM_officer_courses
 		icon = GFX_focus_generic_advanced_military_studies
-		x = 62
+		x = 52
 		y = 12
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -3211,15 +3043,12 @@ focus_tree = {
 	focus = {
 		id = NAM_flight_school
 		icon = GFX_goal_generic_air_doctrine
-		x = 92
+		x = 71
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
-		prerequisite = {
-			focus = NAM_letters_to_the_centre
-		}
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
@@ -3258,7 +3087,7 @@ focus_tree = {
 	focus = {
 		id = NAM_air_ground_service
 		icon = GFX_goal_generic_air_production
-		x = 92
+		x = 69
 		y = 9
 		cost = 1
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
@@ -3297,14 +3126,12 @@ focus_tree = {
 	focus = {
 		id = NAM_air_interceptors
 		icon = GFX_goal_generic_air_fighter
-		x = 90
-		y = 10
+		x = 71
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
-		prerequisite = {
-			focus = NAM_air_ground_service
-		}
 		mutually_exclusive = { focus = NAM_air_support }
+		prerequisite = { focus = NAM_flight_school }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -3338,14 +3165,12 @@ focus_tree = {
 	focus = {
 		id = NAM_air_support
 		icon = GFX_goal_generic_CAS
-		x = 94
-		y = 10
+		x = 73
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
-		prerequisite = {
-			focus = NAM_air_ground_service
-		}
 		mutually_exclusive = { focus = NAM_air_interceptors }
+		prerequisite = { focus = NAM_flight_school }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -3379,10 +3204,11 @@ focus_tree = {
 	focus = {
 		id = NAM_air_operations
 		icon = GFX_goal_generic_air_doctrine
-		x = 92
-		y = 11
+		x = 71
+		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = NAM_air_ground_service }
 		prerequisite = {
 			focus = NAM_air_interceptors
 			focus = NAM_air_support
@@ -3417,16 +3243,19 @@ focus_tree = {
 	focus = {
 		id = NAM_harbour_service
 		icon = GFX_focus_NAM_harbour_service
-		x = 72
+		x = 62
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 			owns_state = 700
 			controls_state = 700
@@ -3434,6 +3263,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_island_convoy_service
+			custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
 			add_equipment_to_stockpile = {
 				type = convoy
 				amount = 15
@@ -3449,7 +3280,7 @@ focus_tree = {
 	focus = {
 		id = NAM_repair_yard
 		icon = GFX_focus_generic_refit_civilian_ships
-		x = 72
+		x = 61
 		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -3473,11 +3304,17 @@ focus_tree = {
 				NAM_refresh_navy = yes
 			}
 			700 = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = dockyard
-					level = 1
-					instant_build = yes
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
 				}
 			}
 		}
@@ -3489,12 +3326,12 @@ focus_tree = {
 	focus = {
 		id = NAM_escort_school
 		icon = GFX_goal_generic_navy_anti_submarine
-		x = 70
+		x = 60
 		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_repair_yard }
-		mutually_exclusive = { focus = NAM_landing_school }
+		mutually_exclusive = { focus = NAM_active_squadron }
 		available = {
 			has_capitulated = no
 		}
@@ -3521,14 +3358,13 @@ focus_tree = {
 	focus = {
 		id = NAM_landing_school
 		icon = GFX_goal_generic_amphibious_assault
-		x = 74
+		x = 64
 		y = 10
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		prerequisite = {
-			focus = NAM_repair_yard
+			focus = NAM_basin_reconnaissance
 		}
-		mutually_exclusive = { focus = NAM_escort_school }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -3557,13 +3393,12 @@ focus_tree = {
 	focus = {
 		id = NAM_coastal_battalions
 		icon = GFX_goal_generic_amphibious_assault
-		x = 70
-		y = 11
-		cost = 2
+		x = 61
+		y = 12
+		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
-			focus = NAM_escort_school
-			focus = NAM_landing_school
+			focus = NAM_naval_construction
 		}
 		bypass = {
 			OR = {
@@ -3585,6 +3420,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			navy_experience = 10
 			unlock_decision_tooltip = NAM_order_coastal_battalion
 			custom_effect_tooltip = NAM_order_coastal_battalion_unlock_tt
 			700 = {
@@ -3592,6 +3428,14 @@ focus_tree = {
 					limit = {
 						is_owned_by = NAM
 						is_controlled_by = NAM
+					}
+					if = {
+						limit = { radar_station < 2 }
+						add_building_construction = {
+							type = radar_station
+							level = 1
+							instant_build = yes
+						}
 					}
 					add_building_construction = {
 						type = coastal_bunker
@@ -3610,62 +3454,27 @@ focus_tree = {
 	focus = {
 		id = NAM_island_accounts
 		icon = GFX_focus_generic_smugglers
-		x = 74
-		y = 11
+		x = 67
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = {
-			focus = NAM_escort_school
-			focus = NAM_landing_school
+		prerequisite = { focus = NAM_harbour_service }
+		bypass = {
+			NAM_overseas_service_operable = yes
+			NAM_island_public_works_needed = no
 		}
 		available = {
 			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_overseas_service_operable_tt
+				NAM_overseas_service_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_island_accounts_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
-				add_to_variable = { var = NAM_adm_compliance_gain value = 0.02 }
-				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
-				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	focus = {
-		id = NAM_coastal_watch
-		icon = GFX_goal_generic_radar
-		x = 70
-		y = 12
-		cost = 3
-		search_filters = { FOCUS_FILTER_NAVY_XP }
-		prerequisite = { focus = NAM_coastal_battalions }
-		available = {
-			has_capitulated = no
-			owns_state = 700
-			controls_state = 700
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			700 = {
-				add_building_construction = {
-					type = radar_station
-					level = 1
-					instant_build = yes
-				}
-			}
-			navy_experience = 10
+			unlock_decision_tooltip = NAM_island_public_works
+			custom_effect_tooltip = NAM_island_public_works_unlock_tt
 		}
 		ai_will_do = {
 			base = 5
@@ -3675,14 +3484,18 @@ focus_tree = {
 	focus = {
 		id = NAM_island_levy_office
 		icon = GFX_focus_generic_steel
-		x = 73
-		y = 12
+		x = 66
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_concession }
 		available = {
 			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_island_levy_operable_tt
+				NAM_island_levy_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3704,14 +3517,19 @@ focus_tree = {
 	focus = {
 		id = NAM_island_concession
 		icon = GFX_focus_generic_license_production
-		x = 75
-		y = 12
+		x = 68
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_island_accounts }
 		mutually_exclusive = { focus = NAM_island_levy_office }
 		available = {
 			has_capitulated = no
+			231 = { NAM_owned_overseas_district = yes }
+			OR = {
+				VAL = { NAM_steel_concession_target_valid = yes }
+				GLP = { NAM_steel_concession_target_valid = yes }
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_independent_tt
 				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -3735,80 +3553,139 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_island_convoys
-		icon = GFX_focus_generic_escort_efficiency
-		x = 74
-		y = 13
+		id = NAM_basin_reconnaissance
+		icon = GFX_goal_generic_radar
+		x = 64
+		y = 9
 		cost = 2
-		search_filters = { FOCUS_FILTER_NAVY_XP }
-		prerequisite = {
-			focus = NAM_island_levy_office
-			focus = NAM_island_concession
-		}
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_harbour_service }
+		bypass = { 700 = { radar_station > 1 } }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_home_port_tt
+				NAM_naval_home_port = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_island_convoy_service
-			custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 14
-				producer = NAM
+			set_technology = {
+				ADISCORD_tech_signal_intercept_arrays = 1
+				popup = no
 			}
+			unlock_decision_tooltip = NAM_coast_observation_order
+			custom_effect_tooltip = NAM_coast_observation_order_unlock_tt
 		}
-		ai_will_do = {
-			base = 5
-		}
+		ai_will_do = { base = 5 }
 	}
 
 	focus = {
-		id = NAM_island_governors
-		icon = GFX_focus_generic_public_works
-		x = 74
-		y = 14
-		cost = 6
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_island_convoys }
+		id = NAM_active_squadron
+		icon = GFX_goal_generic_navy_cruiser
+		x = 62
+		y = 10
+		cost = 2
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_repair_yard }
+		mutually_exclusive = { focus = NAM_escort_school }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_home_port_tt
+				NAM_naval_home_port = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			230 = {
-				if = {
-					limit = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-					}
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_navy_active_squadron_idea
 				}
 			}
-			231 = {
-				if = {
-					limit = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-					}
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
+			hidden_effect = {
+				add_to_variable = { var = NAM_navy_organisation value = 0.10 }
+				NAM_refresh_navy = yes
+			}
+			navy_experience = 15
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_naval_construction
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 61
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_escort_school
+			focus = NAM_active_squadron
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_home_port_tt
+				NAM_naval_home_port = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { has_completed_focus = NAM_escort_school }
+				hidden_effect = {
+					create_equipment_variant = {
+						name = "ADISCORD_escort_ship_2155"
+						type = ADISCORD_escort_ship_2155
+						allow_without_tech = yes
 					}
 				}
+				unlock_decision_tooltip = NAM_escort_order
+				custom_effect_tooltip = NAM_escort_order_unlock_tt
 			}
-			add_stability = 0.02
+			else = {
+				hidden_effect = {
+					create_equipment_variant = {
+						name = "ADISCORD_submarine_2155"
+						type = ADISCORD_submarine_2155
+						allow_without_tech = yes
+					}
+				}
+				unlock_decision_tooltip = NAM_submarine_order
+				custom_effect_tooltip = NAM_submarine_order_unlock_tt
+			}
 		}
-		ai_will_do = {
-			base = 5
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_marine_arsenal
+		icon = GFX_goal_generic_amphibious_assault
+		x = 64
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_landing_school }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_home_port_tt
+				NAM_naval_home_port = yes
+			}
 		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			set_technology = {
+				ADISCORD_tech_svetlogorsk_marine_corps = 1
+				popup = no
+			}
+			unlock_decision_tooltip = NAM_marine_detachment_order
+			custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
+			hidden_effect = { NAM_naval_ensure_marine_template = yes }
+		}
+		ai_will_do = { base = 5 }
 	}
 
 	# ----- Restitution diplomacy -----
@@ -3817,13 +3694,12 @@ focus_tree = {
 	focus = {
 		id = NAM_restitution_desk
 		icon = GFX_goal_generic_improve_relations
-		x = 20
+		x = 30
 		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_letters_to_the_centre }
+		prerequisite = { focus = NAM_independence_day }
 		allow_branch = {
-			has_country_flag = NAM_center_vanished
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		bypass = {
@@ -3837,6 +3713,10 @@ focus_tree = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_restitution_clock_tt
@@ -3847,17 +3727,21 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			if = {
-				limit = { has_completed_focus = NAM_neutral_basin }
+				limit = {
+					OR = {
+						has_completed_focus = NAM_neutral_basin
+						has_country_flag = NAM_rw_talks_open
+					}
+				}
 				add_political_power = 25
 			}
 			else = {
 				unlock_decision_tooltip = NAM_restitution_note
 				custom_effect_tooltip = NAM_restitution_note_unlock_tt
 			}
-			custom_effect_tooltip = NAM_restitution_desk_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = -5 }
-				NAM_rw_tension_clamp = yes
+			if = {
+				limit = { NAM_rw_deadline_open = yes }
+				add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 45 }
 			}
 		}
 		ai_will_do = {
@@ -3868,7 +3752,7 @@ focus_tree = {
 	focus = {
 		id = NAM_court_azhar
 		icon = GFX_focus_generic_influence_middle_east
-		x = 19
+		x = 29
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
@@ -3890,10 +3774,18 @@ focus_tree = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_restitution_clock_tt
-				has_global_flag = ADISCORD_nam_resource_war_scheduled
+				NAM_rw_ultimatum_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
 			}
 			NOT = { has_fuel < 6000 }
-			AZH = { exists = yes }
+			AZH = {
+				exists = yes
+				has_capitulated = no
+				NOT = { has_war_with = NAM }
+			}
 			hidden_trigger = {
 				NOT = { has_country_flag = NAM_rw_time_bought }
 				NOT = { has_country_flag = NAM_rw_first_strike }
@@ -3905,25 +3797,16 @@ focus_tree = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NOT = { has_country_flag = NAM_rw_time_bought }
-						NOT = { has_country_flag = NAM_rw_first_strike }
+						NAM_rw_can_buy_time = yes
 						NOT = { has_fuel < 6000 }
-						AZH = { exists = yes }
 					}
 				}
 				add_fuel = -6000
 				AZH = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 6000
-					}
+					add_fuel = 6000
 				}
 				hidden_effect = { set_country_flag = NAM_rw_time_bought }
-				custom_effect_tooltip = NAM_court_azhar_tt
-				hidden_effect = {
-					add_to_variable = { var = NAM_rw_tension value = -4 }
-					NAM_rw_tension_clamp = yes
-				}
+				add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 75 }
 				custom_effect_tooltip = NAM_grp_court_azhar_tt
 				hidden_effect = {
 					add_to_variable = { var = NAM_grp_trade_support value = 3 }
@@ -3939,7 +3822,7 @@ focus_tree = {
 	focus = {
 		id = NAM_fuel_leverage
 		icon = GFX_focus_generic_trade_interdiction
-		x = 21
+		x = 31
 		y = 9
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
@@ -3956,7 +3839,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_tt
+				NAM_independent_programmes_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_restitution_clock_tt
 				has_global_flag = ADISCORD_nam_resource_war_scheduled
@@ -3967,93 +3853,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_fuel_embargo
 			custom_effect_tooltip = NAM_fuel_embargo_unlock_tt
-			add_war_support = 0.03
-			custom_effect_tooltip = NAM_fuel_leverage_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = 3 }
-				NAM_rw_tension_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_basin_talks
-		icon = GFX_goal_generic_intelligence_exchange
-		x = 19
-		y = 10
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_court_azhar }
-		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
-				}
-			}
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_restitution_clock_tt
-				has_global_flag = ADISCORD_nam_resource_war_scheduled
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 50
-			custom_effect_tooltip = NAM_basin_talks_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = -5 }
-				NAM_rw_tension_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_eflor_fuel_prices
-		icon = GFX_focus_generic_price_controls
-		x = 21
-		y = 10
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = { focus = NAM_fuel_leverage }
-		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
-				}
-			}
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_restitution_clock_tt
-				has_global_flag = ADISCORD_nam_resource_war_scheduled
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			custom_effect_tooltip = NAM_eflor_fuel_prices_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_rw_tension value = 3 }
-				NAM_rw_tension_clamp = yes
-			}
+			add_political_power = 25
 		}
 		ai_will_do = {
 			base = 10
@@ -4063,13 +3863,13 @@ focus_tree = {
 	focus = {
 		id = NAM_general_staff_plan
 		icon = GFX_goal_generic_army_doctrines
-		x = 20
-		y = 11
+		x = 30
+		y = 10
 		cost = 5
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
-			focus = NAM_basin_talks
-			focus = NAM_eflor_fuel_prices
+			focus = NAM_court_azhar
+			focus = NAM_fuel_leverage
 		}
 		bypass = {
 			OR = {
@@ -4091,10 +3891,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_general_staff_plan_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_order_cap value = 1 }
-			}
+			NAM_expand_mobilisation_capacity = yes
 			add_command_power = 15
 			army_experience = 10
 			country_event = {
@@ -4104,492 +3901,6 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 15
-		}
-	}
-
-	# ----- Resource war: visible after the gateway, available during the war -----
-
-	focus = {
-		id = NAM_alarm
-		icon = GFX_goal_generic_occupy_start_war
-		x = 82
-		y = 8
-		cost = 1
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_command_power = 20
-			custom_effect_tooltip = NAM_war_objective_tt
-		}
-		ai_will_do = {
-			base = 200
-		}
-	}
-
-	focus = {
-		id = NAM_hold_basin
-		icon = GFX_focus_generic_coastal_fort
-		x = 81
-		y = 9
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_alarm }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-			owns_state = 67
-			controls_state = 67
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 100
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 100
-				producer = NAM
-			}
-			add_timed_idea = {
-				idea = NAM_wartime_entrenchment
-				days = 120
-			}
-		}
-		ai_will_do = {
-			base = 100
-		}
-	}
-
-	focus = {
-		id = NAM_relief_columns
-		icon = GFX_goal_generic_production2
-		x = 83
-		y = 9
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_alarm }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 100
-				producer = NAM
-			}
-			unlock_decision_tooltip = NAM_relief_batch
-			custom_effect_tooltip = NAM_relief_batch_unlock_tt
-		}
-		ai_will_do = {
-			base = 90
-		}
-	}
-
-	focus = {
-		id = NAM_discipline_of_seals
-		icon = GFX_goal_generic_propaganda
-		x = 80
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_hold_basin }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_war_supply_priority
-			custom_effect_tooltip = NAM_war_supply_priority_unlock_tt
-			add_war_support = 0.03
-			custom_effect_tooltip = NAM_discipline_of_seals_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_seal_discipline value = 10 }
-				NAM_seal_discipline_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 90
-		}
-	}
-
-	focus = {
-		id = NAM_counterstroke
-		icon = GFX_focus_generic_army_attack
-		x = 82
-		y = 10
-		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = {
-			focus = NAM_hold_basin
-			focus = NAM_relief_columns
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_war_counterstroke_operation
-			custom_effect_tooltip = NAM_war_counterstroke_operation_unlock_tt
-			army_experience = 15
-		}
-		ai_will_do = {
-			base = 80
-		}
-	}
-
-	focus = {
-		id = NAM_volunteer_levies
-		icon = GFX_focus_generic_limited_social_mobilization
-		x = 84
-		y = 10
-		cost = 2
-		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_relief_columns }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_manpower = 5000
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 22500
-				producer = NAM
-			}
-		}
-		ai_will_do = {
-			base = 80
-		}
-	}
-
-	focus = {
-		id = NAM_scorched_wells
-		icon = GFX_focus_ADISCORD_sabotage
-		x = 81
-		y = 11
-		cost = 2
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_counterstroke }
-		mutually_exclusive = { focus = NAM_wells_under_guard }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_scorch_wells
-			custom_effect_tooltip = NAM_scorch_wells_unlock_tt
-			add_war_support = 0.05
-		}
-		ai_will_do = {
-			base = 60
-		}
-	}
-
-	focus = {
-		id = NAM_wells_under_guard
-		icon = GFX_goal_generic_fortify_city
-		x = 83
-		y = 11
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_counterstroke }
-		mutually_exclusive = { focus = NAM_scorched_wells }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			67 = {
-				if = {
-					limit = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-					}
-					add_building_construction = { type = bunker level = 1 instant_build = yes province = 6099 }
-				}
-			}
-			688 = {
-				if = {
-					limit = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-					}
-					add_building_construction = { type = bunker level = 1 instant_build = yes province = 16721 }
-				}
-			}
-			custom_effect_tooltip = NAM_wells_under_guard_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_seal_discipline value = 10 }
-				NAM_seal_discipline_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 60
-		}
-	}
-
-	focus = {
-		id = NAM_last_reserve
-		icon = GFX_goal_generic_army_artillery
-		x = 82
-		y = 12
-		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = {
-			focus = NAM_scorched_wells
-			focus = NAM_wells_under_guard
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 120
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 80
-				producer = NAM
-			}
-			add_command_power = 20
-		}
-		ai_will_do = {
-			base = 60
-		}
-	}
-
-	focus = {
-		id = NAM_district_volunteers
-		icon = GFX_focus_generic_forest_brothers
-		x = 81
-		y = 13
-		cost = 2
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_last_reserve }
-		mutually_exclusive = { focus = NAM_martial_seals }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-			NOT = { has_completed_focus = NAM_vertical }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_manpower = 6000
-			custom_effect_tooltip = NAM_district_volunteers_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_underground value = -10 }
-				NAM_underground_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 50
-		}
-	}
-
-	focus = {
-		id = NAM_martial_seals
-		icon = GFX_focus_generic_total_war
-		x = 83
-		y = 13
-		cost = 2
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = { focus = NAM_last_reserve }
-		mutually_exclusive = { focus = NAM_district_volunteers }
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-			NOT = { has_completed_focus = NAM_districts }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_stability = -0.03
-			custom_effect_tooltip = NAM_martial_seals_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_seal_discipline value = 15 }
-				NAM_seal_discipline_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 50
-		}
-	}
-
-	focus = {
-		id = NAM_oil_score
-		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 82
-		y = 14
-		cost = 3
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			OR = {
-				has_completed_focus = NAM_letters_to_the_centre
-				has_global_flag = ADISCORD_nam_resource_war_started
-			}
-		}
-		prerequisite = {
-			focus = NAM_district_volunteers
-			focus = NAM_martial_seals
-		}
-		available = {
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = NAM_current_war_tt
-				ADISCORD_nam_resource_war_active = yes
-			}
-			has_war = yes
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_fuel = 6000
-			add_war_support = 0.03
-			custom_effect_tooltip = NAM_oil_score_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_seal_discipline value = 5 }
-				NAM_seal_discipline_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 50
 		}
 	}
 }

@@ -2182,6 +2182,12 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "WKR intervention focus plan",
         issues,
     )
+    southern_preparation = _unique_block(
+        plans,
+        "ADISCORD_vorkerland_wkr_southern_preparation_plan",
+        "WKR southern preparation plan",
+        issues,
+    )
     for token in (
         "WKR_establish_workers_air_command",
         "WKR_raise_mobile_fortification_crews",
@@ -2189,9 +2195,19 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "WKR_secure_the_southern_corridor",
         "WKR_rehearse_operation_southbound",
     ):
-        for core_plan in core_plans:
-            if token not in core_plan:
-                issues.append(f"WKR core focus plan omits {token}")
+        if token not in southern_preparation:
+            issues.append(f"WKR southern preparation plan omits {token}")
+    if "has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked" not in southern_preparation:
+        issues.append("WKR southern preparation must follow central readiness")
+    for token in (
+        "WKR_bind_workshops_to_directive",
+        "WKR_form_revolutionary_supply_commission",
+        "WKR_reopen_collective_workshops",
+        "WKR_stockpile_interchange_reserves",
+        "WKR_republic_fights_as_one",
+    ):
+        if token not in core_plans[1]:
+            issues.append(f"WKR utilitarian core focus plan omits {token}")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
         "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",

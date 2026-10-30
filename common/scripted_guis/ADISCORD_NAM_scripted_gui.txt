@@ -151,7 +151,7 @@ scripted_gui = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				67 = { is_owned_by = NAM }
 			}
 			NAM_bw_67_repair_duration_visible = {
@@ -159,7 +159,7 @@ scripted_gui = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				67 = { is_owned_by = NAM }
 			}
 			NAM_bw_67_refinery_price_visible = {
@@ -230,12 +230,12 @@ scripted_gui = {
 			}
 			NAM_bw_688_repair_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				688 = { is_owned_by = NAM }
 			}
 			NAM_bw_688_repair_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				688 = { is_owned_by = NAM }
 			}
 			NAM_bw_688_refinery_price_visible = {
@@ -291,12 +291,12 @@ scripted_gui = {
 			}
 			NAM_bw_689_repair_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				689 = { is_owned_by = NAM }
 			}
 			NAM_bw_689_repair_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				689 = { is_owned_by = NAM }
 			}
 			NAM_bw_689_refinery_price_visible = {
@@ -352,12 +352,12 @@ scripted_gui = {
 			}
 			NAM_bw_690_repair_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				690 = { is_owned_by = NAM }
 			}
 			NAM_bw_690_repair_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				690 = { is_owned_by = NAM }
 			}
 			NAM_bw_690_refinery_price_visible = {
@@ -413,12 +413,12 @@ scripted_gui = {
 			}
 			NAM_bw_719_repair_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				719 = { is_owned_by = NAM }
 			}
 			NAM_bw_719_repair_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				719 = { is_owned_by = NAM }
 			}
 			NAM_bw_719_refinery_price_visible = {
@@ -513,31 +513,31 @@ scripted_gui = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				67 = { is_owned_by = NAM }
 			}
 
 			NAM_bw_688_repair_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				688 = { is_owned_by = NAM }
 			}
 
 			NAM_bw_689_repair_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				689 = { is_owned_by = NAM }
 			}
 
 			NAM_bw_690_repair_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				690 = { is_owned_by = NAM }
 			}
 
 			NAM_bw_719_repair_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_field_repair_crews
+				NAM_field_repair_unlocked = yes
 				719 = { is_owned_by = NAM }
 			}
 			NAM_bw_67_repair_click_enabled = {
@@ -1066,12 +1066,16 @@ scripted_gui = {
 			}
 			NAM_pw_marine_1_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 1 compare = greater_than_or_equals } }
 			NAM_pw_marine_1_open_visible = {
+				NAM_marine_orders_open = yes
 				check_variable = { var = NAM_marine_orders_paid value = 1 compare = less_than }
 				check_variable = { var = NAM_marine_order_cap value = 1 compare = greater_than_or_equals }
 			}
 			NAM_pw_marine_1_locked_visible = {
 				check_variable = { var = NAM_marine_orders_paid value = 1 compare = less_than }
-				check_variable = { var = NAM_marine_order_cap value = 1 compare = less_than }
+				OR = {
+					NAM_marine_orders_open = no
+					check_variable = { var = NAM_marine_order_cap value = 1 compare = less_than }
+				}
 			}
 			NAM_pw_fleet_2_sea_visible = { check_variable = { var = NAM_pirate_raids_active value = 2 compare = greater_than_or_equals } }
 			NAM_pw_fleet_2_free_visible = {
@@ -1084,12 +1088,16 @@ scripted_gui = {
 			}
 			NAM_pw_marine_2_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 2 compare = greater_than_or_equals } }
 			NAM_pw_marine_2_open_visible = {
+				NAM_marine_orders_open = yes
 				check_variable = { var = NAM_marine_orders_paid value = 2 compare = less_than }
 				check_variable = { var = NAM_marine_order_cap value = 2 compare = greater_than_or_equals }
 			}
 			NAM_pw_marine_2_locked_visible = {
 				check_variable = { var = NAM_marine_orders_paid value = 2 compare = less_than }
-				check_variable = { var = NAM_marine_order_cap value = 2 compare = less_than }
+				OR = {
+					NAM_marine_orders_open = no
+					check_variable = { var = NAM_marine_order_cap value = 2 compare = less_than }
+				}
 			}
 			NAM_pw_fleet_3_sea_visible = { check_variable = { var = NAM_pirate_raids_active value = 3 compare = greater_than_or_equals } }
 			NAM_pw_fleet_3_free_visible = {
@@ -1102,12 +1110,16 @@ scripted_gui = {
 			}
 			NAM_pw_marine_3_ready_visible = { check_variable = { var = NAM_marine_orders_paid value = 3 compare = greater_than_or_equals } }
 			NAM_pw_marine_3_open_visible = {
+				NAM_marine_orders_open = yes
 				check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
 				check_variable = { var = NAM_marine_order_cap value = 3 compare = greater_than_or_equals }
 			}
 			NAM_pw_marine_3_locked_visible = {
 				check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
-				check_variable = { var = NAM_marine_order_cap value = 3 compare = less_than }
+				OR = {
+					NAM_marine_orders_open = no
+					check_variable = { var = NAM_marine_order_cap value = 3 compare = less_than }
+				}
 			}
 
 			# Actions: shown where the decision is visible, enabled where it may start.
@@ -1165,8 +1177,14 @@ scripted_gui = {
 				NOT = { has_decision = NAM_exile_drill }
 				NOT = { has_country_flag = NAM_exile_drill_cd }
 			}
-			NAM_pw_order_marines_visible = { has_completed_focus = NAM_exile_marine_orders }
-			NAM_pw_order_marines_price_visible = { has_completed_focus = NAM_exile_marine_orders }
+			NAM_pw_order_marines_visible = {
+				has_completed_focus = NAM_exile_marine_orders
+				NAM_marine_orders_open = yes
+			}
+			NAM_pw_order_marines_price_visible = {
+				has_completed_focus = NAM_exile_marine_orders
+				NAM_marine_orders_open = yes
+			}
 			NAM_pw_order_marines_click_enabled = {
 				NAM_piracy_open = yes
 				has_completed_focus = NAM_exile_marine_orders

@@ -13,11 +13,14 @@
 - `VAL/main`, `VAL/defeated`, `VAL/administration` - деревья Кефрейта.
 - `RUS/main` - дерево Руси.
 - `Vorkerland/prewar` - довоенный WRK и автономии; собирается как общая история фокусов,
-  дерево WKR подключает её корень WRK.
+  WKR копирует её при расколе и сохраняет завершения без довоенных корней в военном дереве.
 - `Vorkerland/wkr`, `Vorkerland/vad`, `Vorkerland/tva` - претенденты гражданской войны.
-- `Vorkerland/settlement` - объединённый WRK: рабочее, совместное и техническое урегулирование.
+- `Vorkerland/settlement` - объединённый WRK: рабочее и техническое урегулирование.
+- `Vorkerland/joint_postwar` - урегулирование победы Петричева и послевоенная кампания
+  совместного правительства; завершённые программы сохраняются при смене кабинета.
 - `Vorkerland/worker_confederation`, `Vorkerland/technical_directorate`,
-  `Vorkerland/world_empire` - послевоенные деревья маршрутов.
+  `Vorkerland/world_empire` - послевоенные деревья маршрутов; империя содержит
+  общие программы и отдельные политические ветки Петричева и Уоркера.
 - `Vorkerland/iba_norvane`, `Vorkerland/zao` - региональные деревья Воркерланда.
 - `shared/generic`, `shared/bookmark` - общие деревья.
 

@@ -162,3 +162,4 @@ NAM_rival_demand
 ADISCORD_interceptor_archetype
 ADISCORD_strike_drone_archetype
 transport_plane_equipment
+NAM_resource_war_deadline

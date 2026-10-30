@@ -536,7 +536,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The theatre builder owns its declared OSV, STP/YPR, MON and RUS rail connections, the MON-Kalten border connection and MON/Vorkerland supply hubs, including forward depots across the six Khan campaign countries. Unmanaged Nudge records and equivalent existing record formatting are preserved."
+      "overlap_explanation": "The theatre builder owns its declared OSV, STP/YPR, MON, RUS and EFL/AZH rail connections, the MON-Kalten border connection and MON/Vorkerland/EFL/AZH supply hubs, including forward depots across the six Khan campaign countries. Unmanaged Nudge records and equivalent existing record formatting are preserved."
     },
     {
       "id": "state_history",
@@ -584,7 +584,7 @@
         "history/states/69[0-9]-*.txt",
         "history/states/70[0-9]-*.txt",
         "history/states/71[0-9]-*.txt",
-        "history/states/72[0-2]-*.txt",
+        "history/states/72[0-9]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -604,7 +604,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_new_states", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The base state-history pass owns generated metadata and selected legacy repairs, then invokes the shared map/buildings synchronizer; later regional builders populate or repartition subsets of the same files."
+      "overlap_explanation": "The base state-history pass owns generated metadata, coalition regional partitions and selected legacy repairs, then invokes the shared map/buildings synchronizer; later regional builders populate or repartition subsets of the same files."
     },
     {
       "id": "northern_countries",
@@ -2009,6 +2009,7 @@
         "tools/data/adiscord_southern_cities.json",
         "tools/builders/build_adiscord_new_states.py",
         "tools/builders/build_adiscord_coastal_geography.py",
+        "tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds",
         "tools/lib/coastal_clearance.py",
         "tools/builders/build_adiscord_ivn_geography.py",
         "map/provinces.bmp",
@@ -2019,7 +2020,6 @@
         "map/heightmap.bmp",
         "map/rivers.bmp",
         "map/world_normal.bmp",
-        "map/terrain/colormap_rgb_cityemissivemask_a.dds",
         "map/unitstacks.txt"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography"],
@@ -2104,6 +2104,7 @@
       "output_globs": [
         "common/national_focus/ADISCORD_NOD_focus.txt",
         "common/national_focus/ADISCORD_NAM_focus.txt",
+        "common/national_focus/ADISCORD_NAM_wartime.txt",
         "common/national_focus/ADISCORD_NAM_postwar.txt",
         "common/national_focus/ADISCORD_NAM_defeated.txt",
         "common/national_focus/ADISCORD_NAM_exile_radical.txt",
@@ -2126,6 +2127,7 @@
         "common/national_focus/ADISCORD_Vorkerland_vad.txt",
         "common/national_focus/ADISCORD_Vorkerland_tva.txt",
         "common/national_focus/ADISCORD_Vorkerland_settlement.txt",
+        "common/national_focus/ADISCORD_Vorkerland_joint_postwar.txt",
         "common/national_focus/ADISCORD_Vorkerland_world_empire.txt",
         "common/national_focus/ADISCORD_Vorkerland_worker_confederation.txt",
         "common/national_focus/ADISCORD_Vorkerland_technical_directorate.txt",

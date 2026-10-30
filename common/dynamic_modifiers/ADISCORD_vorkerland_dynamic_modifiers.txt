@@ -87,29 +87,81 @@ ADISCORD_vorkerland_wkr_war_economy = {
 # values whenever a council is seated or mobilised.
 ADISCORD_vorkerland_wkr_councils = {
 	icon = GFX_idea_generic_production_bonus
-	enable = { always = yes }
+	enable = { WKR_administration_active = yes }
 	custom_modifier_tooltip = ADISCORD_vorkerland_wkr_councils_tt
 
 	industrial_capacity_factory = ADISCORD_vorkerland_wkr_council_output
 	stability_factor = ADISCORD_vorkerland_wkr_council_stability
 	conscription = ADISCORD_vorkerland_wkr_council_conscription
+	training_time_army_factor = WKR_council_doctrine_training_time_army_factor
+	army_attack_factor = WKR_council_doctrine_army_attack_factor
+	army_org_factor = WKR_council_doctrine_army_org_factor
+	experience_gain_army_factor = WKR_council_doctrine_experience_gain_army_factor
+	send_volunteer_size = WKR_foreign_send_volunteer_size
+	send_volunteers_tension = WKR_foreign_send_volunteers_tension
+	political_power_gain = WKR_foreign_political_power_gain
 }
 
 # District oaths (VAD), state scope. Applied when a charter or commandant rule
 # is sealed and retired with the civil-war modifiers.
 ADISCORD_vorkerland_vad_chartered_district = {
 	icon = GFX_modifiers_generic_military_plans
-	enable = { always = yes }
+	enable = {
+		is_owned_and_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
 
 	local_manpower = 0.20
 }
 
+WKR_railway_council = {
+	icon = GFX_idea_generic_logistics
+	enable = {
+		is_owned_and_controlled_by = WKR
+		is_fully_controlled_by = WKR
+		supply_node > 0
+		WKR = { WKR_administration_active = yes }
+	}
+	local_supplies_for_controller = 0.25
+	army_speed_factor_for_controller = 0.10
+}
+
+WKR_airfield_workshop = {
+	icon = GFX_idea_generic_production_bonus
+	enable = {
+		WKR_railway_council_site = yes
+		air_base > 0
+		WKR = { WKR_administration_active = yes }
+	}
+	state_repair_speed_air_base_factor = 1.00
+	local_factories = -0.05
+}
+
+
 ADISCORD_vorkerland_vad_commandant_district = {
 	icon = GFX_modifiers_generic_military_plans
-	enable = { always = yes }
+	enable = {
+		is_owned_and_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+	}
 
-	local_manpower = -0.20
-	local_factories = -0.15
+	custom_modifier_tooltip = VAD_commandant_unrest_modifier_tt
+	local_manpower = 0.10
+	local_factories = 0.15
+}
+
+ADISCORD_vorkerland_vad_district_uprising = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_factories = -0.35
+	local_manpower = -0.30
+	local_supplies_for_controller = -0.25
+	army_speed_factor_for_controller = -0.10
 }
 
 ADISCORD_vorkerland_vad_war_economy = {
@@ -122,16 +174,6 @@ ADISCORD_vorkerland_vad_war_economy = {
 	political_power_gain = ADISCORD_vorkerland_war_economy_authority
 }
 
-ADISCORD_vorkerland_tva_war_economy = {
-	icon = GFX_idea_generic_central_management
-	enable = { always = yes }
-
-	industrial_capacity_factory = ADISCORD_vorkerland_war_economy_output
-	production_factory_max_efficiency_factor = ADISCORD_vorkerland_war_economy_efficiency
-	research_speed_factor = ADISCORD_vorkerland_war_economy_research
-	stability_factor = ADISCORD_vorkerland_war_economy_unrest
-	consumer_goods_factor = ADISCORD_vorkerland_war_economy_goods
-}
 
 # Variant doctrine
 # Country-scoped doctrine values follow the variant and current legitimacy.
@@ -150,7 +192,7 @@ ADISCORD_vorkerland_wkr_doctrine = {
 
 ADISCORD_vorkerland_vad_doctrine = {
 	icon = GFX_idea_generic_production_bonus
-	enable = { always = yes }
+	enable = { VAD_administration_active = yes }
 
 	army_attack_factor = ADISCORD_vorkerland_doctrine_attack
 	army_defence_factor = ADISCORD_vorkerland_doctrine_defence
@@ -158,6 +200,10 @@ ADISCORD_vorkerland_vad_doctrine = {
 	conscription = ADISCORD_vorkerland_doctrine_manpower
 	stability_factor = ADISCORD_vorkerland_doctrine_stability
 	breakthrough_factor = ADISCORD_vorkerland_doctrine_breakthrough
+	experience_gain_army_factor = VAD_doctrine_experience_gain_army_factor
+	army_leader_start_level = VAD_doctrine_army_leader_start_level
+	planning_speed = VAD_doctrine_planning_speed
+	training_time_army_factor = VAD_doctrine_training_time_army_factor
 }
 
 ADISCORD_vorkerland_tva_doctrine = {
@@ -268,4 +314,173 @@ WRK_worx_directorate = {
 	industrial_capacity_factory = WRK_worx_production
 	political_power_gain = WRK_worx_authority
 	stability_factor = WRK_worx_order
+}
+
+WKR_measured_republic_dynamic = {
+	icon = GFX_idea_generic_central_management
+	enable = { always = yes }
+	army_attack_factor = WKR_norm_army_attack_factor
+	army_defence_factor = WKR_norm_army_defence_factor
+	army_org_factor = WKR_norm_army_org_factor
+	army_org_regain = WKR_norm_army_org_regain
+	conscription = WKR_norm_conscription
+	consumer_goods_factor = WKR_norm_consumer_goods_factor
+	industrial_capacity_factory = WKR_norm_industrial_capacity_factory
+	industry_repair_factor = WKR_norm_industry_repair_factor
+	land_reinforce_rate = WKR_norm_land_reinforce_rate
+	max_dig_in_factor = WKR_norm_max_dig_in_factor
+	max_planning_factor = WKR_norm_max_planning_factor
+	production_factory_efficiency_gain_factor = WKR_norm_production_factory_efficiency_gain_factor
+	production_factory_max_efficiency_factor = WKR_norm_production_factory_max_efficiency_factor
+	production_speed_buildings_factor = WKR_norm_production_speed_buildings_factor
+	stability_factor = WKR_norm_stability_factor
+	supply_consumption_factor = WKR_norm_supply_consumption_factor
+	training_time_army_factor = WKR_norm_training_time_army_factor
+	war_support_factor = WKR_norm_war_support_factor
+}
+
+TVA_administration_dynamic = {
+	icon = GFX_idea_generic_central_management
+	enable = { TVA_administration_active = yes }
+	custom_modifier_tooltip = TVA_administration_status_tt
+	industrial_capacity_factory = TVA_network_output
+	research_speed_factor = TVA_cadre_research
+	army_attack_factor = TVA_policy_army_attack_factor
+	army_defence_factor = TVA_policy_army_defence_factor
+	army_leader_start_level = TVA_policy_army_leader_start_level
+	army_morale_factor = TVA_policy_army_morale_factor
+	army_org_factor = TVA_crew_organization
+	army_org_regain = TVA_policy_army_org_regain
+	army_speed_factor = TVA_policy_army_speed_factor
+	attrition = TVA_policy_attrition
+	breakthrough_factor = TVA_policy_breakthrough_factor
+	conscription = TVA_policy_conscription
+	experience_gain_army_factor = TVA_policy_experience_gain_army_factor
+	experience_loss_factor = TVA_crew_experience_loss
+	land_reinforce_rate = TVA_policy_land_reinforce_rate
+	line_change_production_efficiency_factor = TVA_policy_line_change_production_efficiency_factor
+	max_dig_in_factor = TVA_policy_max_dig_in_factor
+	production_factory_efficiency_gain_factor = TVA_policy_production_factory_efficiency_gain_factor
+	production_factory_max_efficiency_factor = TVA_policy_production_factory_max_efficiency_factor
+	stability_factor = TVA_policy_stability_factor
+	supply_consumption_factor = TVA_policy_supply_consumption_factor
+	training_time_army_factor = TVA_policy_training_time_army_factor
+	air_cas_efficiency = TVA_policy_air_cas_efficiency
+	air_accidents_factor = TVA_policy_air_accidents_factor
+	air_intercept_efficiency = TVA_policy_air_intercept_efficiency
+	air_range_factor = TVA_policy_air_range_factor
+}
+
+WRK_empire_officer_estate = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = WRK
+		owner = { ADISCORD_vorkerland_petrichev_empire = yes }
+	}
+	local_manpower = 0.15
+	local_factories = -0.10
+}
+
+VAD_crown_recruitment_disruption = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		VAD = { VAD_administration_active = yes }
+	}
+	local_factories = -0.10
+}
+
+VAD_staff_rotated_garrison = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		VAD = { VAD_collegial_administration_active = yes }
+	}
+	local_supplies_for_controller = 0.15
+}
+
+VAD_staff_field_depot = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		VAD = { VAD_collegial_administration_active = yes }
+	}
+	local_supplies_for_controller = 0.25
+	army_speed_factor_for_controller = 0.05
+}
+
+VAD_collegial_staff_dynamic = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = { VAD_collegial_government = yes }
+	planning_speed = VAD_staff_planning
+	army_org_regain = VAD_staff_recovery
+	land_reinforce_rate = VAD_staff_reinforce
+	army_speed_factor = VAD_staff_speed
+	supply_consumption_factor = VAD_staff_supply
+	political_power_gain = VAD_staff_authority
+	stability_factor = VAD_staff_stability
+	command_power_gain_mult = VAD_staff_command
+}
+
+VAD_crown_district_privileges = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		VAD = { VAD_crown_government_active = yes }
+	}
+	local_factories = 0.15
+	local_supplies_for_controller = 0.10
+}
+
+VAD_crown_district_collateral = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		VAD = { VAD_crown_government_active = yes }
+	}
+	local_factories = -0.20
+}
+
+
+WKR_prepared_interchange = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = {
+		WKR_railway_council_site = yes
+		WKR = { WKR_administration_active = yes }
+	}
+	local_supplies = 0.25
+	enemy_army_speed_factor = -0.10
+	enemy_attrition = 0.10
+	local_factories = -0.10
+}
+
+
+VAD_local_militia = {
+	icon = GFX_idea_generic_manpower_bonus
+	custom_modifier_tooltip = VAD_local_militia_tt
+	enable = {
+		is_owned_and_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+	}
+	local_manpower = 0.10
+	local_factories = -0.05
+}
+
+
+VAD_march_commitment = {
+	icon = GFX_idea_generic_production_bonus
+	enable = {
+		VAD_final_operations_district = yes
+		VAD = { VAD_central_campaign_active = yes }
+	}
+	local_factories = -0.15
 }

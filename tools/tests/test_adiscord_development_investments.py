@@ -334,7 +334,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             body = focus_block(text, focus)
             self.assertIn(f"mutually_exclusive = {{ focus = {alternative} }}", body)
             self.assertIn("ADISCORD_reform_social_system_development = yes", body)
-        text = (ROOT / "focus_trees/Vorkerland/settlement/focuses.txt").read_text(encoding="utf-8")
+        text = (ROOT / "focus_trees/Vorkerland/joint_postwar/focuses.txt").read_text(encoding="utf-8")
         pairs = {
             "pw_census": "society", "pw_municipal_network": "social_system",
             "pw_officer_school": "army", "restore_unity_tower": "cultural",
@@ -347,6 +347,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
             self.assertIn(f"ADISCORD_reform_{axis}_development = yes", body)
         # The worker and technocratic routes take culture from their Unity Tower
         # and the other five axes, once each, from their own postwar tree.
+        text = (ROOT / "focus_trees/Vorkerland/settlement/focuses.txt").read_text(encoding="utf-8")
         for route, folder in (("worker", "worker_confederation"), ("utilitarian", "technical_directorate")):
             tower = focus_block(text, f"WRK_{route}_restore_unity_tower")
             self.assertIn("ADISCORD_reform_cultural_development = yes", tower)

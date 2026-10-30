@@ -18,11 +18,15 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.validators._vorkerland_release_contract import (
+        base_front_controls,
+        validate_adaptive_fronts,
         validate_release_hook_normal_branches,
         validate_release_interceptor_structure,
     )
 except ModuleNotFoundError:
     from _vorkerland_release_contract import (
+        base_front_controls,
+        validate_adaptive_fronts,
         validate_release_hook_normal_branches,
         validate_release_interceptor_structure,
     )
@@ -777,7 +781,19 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     worker_formation = named_block(
         phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
     )
-    worker_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+    completion = named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+    worker_formation += completion
+    if not re.search(
+        r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*"
+        r"ADISCORD_vorkerland_worker_utilitarian_outcome\s*\}\s*WKR_appoint_executive\s*=\s*yes",
+        completion,
+    ):
+        issues.append("restored WRK must apply the recorded executive mandate")
+    else:
+        worker_formation += named_block(
+            read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+            "WKR_appoint_executive",
+        )
     for token in (
         "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
@@ -1530,10 +1546,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_apply_initial_map = yes",
         "ADISCORD_vorkerland_teardown_confederation = yes",
         "ADISCORD_vorkerland_apply_claimant_cosmetics = yes",
-        "ADISCORD_vorkerland_form_joint_government = yes",
     ):
         if token not in outbreak:
             issues.append(f"collapse outbreak is missing {token}")
+    if "ADISCORD_vorkerland_form_joint_government = yes" in outbreak:
+        issues.append("collapse outbreak must leave the joint-government choice to its political focus")
     if outbreak.find("ADISCORD_vorkerland_apply_initial_map = yes") > outbreak.find(
         "ADISCORD_vorkerland_teardown_confederation = yes"
     ):
@@ -2905,7 +2922,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         events,
     )
     joint_repair = joint_repair_match.group(1) if joint_repair_match else ""
-    for token in ("tag = VAD", "ADISCORD_vorkerland_appoint_joint_council = yes"):
+    for token in ("VAD_administration_active = yes", "ADISCORD_vorkerland_appoint_joint_council = yes"):
         if token not in joint_repair:
             issues.append(
                 f"Vorkerland joint-government delayed repair is missing {token}"
@@ -4764,10 +4781,8 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             issues.append(f"collapse field-army profile is missing {token}")
     if "ADISCORD_vorkerland_collapse_front_commitment" in ai:
         issues.append("obsolete all-tags front commitment survived")
-    if (
-        "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai
-        or "country_trigger = {" in ai
-    ):
+    validate_adaptive_fronts(ai, issues)
+    if "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai:
         issues.append("removed dynamic regional front fallback survived")
     if "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200" not in defines:
         issues.append("collapse AI is missing its small-front plan execution threshold")
@@ -4970,8 +4985,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
                     issues.append(
                         f"{attacker}-{defender} supply-aware front is missing {token}"
                     )
+            default_orders = "\n".join(base_front_controls(front))
             for forbidden in ("execution_type = rush", "manual_attack = yes"):
-                if forbidden in front:
+                if forbidden in default_orders:
                     issues.append(
                         f"{attacker}-{defender} supply-aware front still has {forbidden}"
                     )

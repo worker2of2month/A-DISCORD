@@ -22,10 +22,7 @@ focus_tree = {
 	default = no
 	continuous_focus_position = { x = 100 y = 555555 }
 
-	# WKR inherits the WRK prewar route through copy_completed_from = WRK at the
-	# split. The shared focuses stay hidden by their WRK branch condition.
-	shared_focus = WRK_measure_confederation_fault_lines
-	shared_focus = WRK_face_the_hourglass
+	# Shared preparation history is copied before this tree is loaded.
 
 	# ---------------------------------------------------------------------
 	# WKR: constitutional worker federation versus emergency mobilisation.
@@ -65,6 +62,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_worker_mandate }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_rally_the_chairmans_delegates
+			unlock_decision_tooltip = WKR_convene_the_executive_session
+			custom_effect_tooltip = WKR_balance_mandate_tt
 			add_political_power = 15
 			add_stability = 0.02
 			add_manpower = 250
@@ -75,9 +75,6 @@ focus_tree = {
 			}
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_mandate
-			}
-			hidden_effect = {
-				country_event = { id = ADISCORD_vorkerland_claimant.1 days = 1 }
 			}
 		}
 		ai_will_do = {
@@ -97,9 +94,9 @@ focus_tree = {
 		relative_position_id = WKR_affirm_worker_mandate
 		cost = 2
 		prerequisite = { focus = WKR_affirm_worker_mandate }
+		mutually_exclusive = { focus = WKR_empower_front_executive }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -108,9 +105,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -121,6 +119,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_front_soviets }
 		completion_reward = {
+			custom_effect_tooltip = WKR_mandate_fixed_tt
 			add_political_power = 25
 			ADISCORD_vorkerland_wkr_seat_council = yes
 			hidden_effect = {
@@ -169,6 +168,7 @@ focus_tree = {
 			ADISCORD_vorkerland_wkr_seat_council = yes
 			army_experience = 5
 			unlock_decision_tooltip = ADISCORD_vorkerland_wkr_mobilize_council
+			custom_effect_tooltip = WKR_council_unlock_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_factory_battalions
 			}
@@ -211,8 +211,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_organize_railway_council
+			custom_effect_tooltip = WKR_railway_unlock_tt
 			ADISCORD_vorkerland_wkr_seat_council = yes
-			add_command_power = 5
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = WKR }
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 40 producer = WKR }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_railways_under_councils
 			}
@@ -232,7 +235,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_organize_factory_battalions
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WKR_organize_factory_battalions }
 		allow_branch = {
 			tag = WKR
@@ -277,7 +280,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_train_shopfloor_officers
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WKR_train_shopfloor_officers }
 		allow_branch = {
 			tag = WKR
@@ -327,7 +330,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_put_railways_under_councils
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WKR_put_railways_under_councils }
 		allow_branch = {
 			tag = WKR
@@ -349,6 +352,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_supply_commission }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_support_contract
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
 				amount = 9000
@@ -379,7 +383,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_convene_front_soviets }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -388,9 +391,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -431,11 +435,11 @@ focus_tree = {
 		x = -4
 		y = 1
 		relative_position_id = WKR_affirm_worker_mandate
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WKR_affirm_worker_mandate }
+		mutually_exclusive = { focus = WKR_convene_front_soviets }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -444,8 +448,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -456,6 +462,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_front_executive }
 		completion_reward = {
+			custom_effect_tooltip = WKR_mandate_fixed_tt
 			add_manpower = 3000
 			add_command_power = 20
 			add_stability = -0.01
@@ -480,7 +487,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_form_revolutionary_supply_commission
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WKR_form_revolutionary_supply_commission }
 		allow_branch = {
 			tag = WKR
@@ -502,8 +509,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_collective_workshops }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_workshop_contract
 			if = {
-				limit = { controls_state = 32 }
+				limit = { ADISCORD_vorkerland_wkr_workshop_site = yes }
 				32 = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
 			}
 			else = {
@@ -536,7 +544,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_open_free_republics_channel }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -545,9 +552,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -578,14 +586,14 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
-		y = 1
+		x = -1
+		y = 2
 		relative_position_id = WKR_empower_front_executive
 		cost = 2
 		prerequisite = { focus = WKR_empower_front_executive }
+		mutually_exclusive = { focus = WKR_bind_workshops_to_directive }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -594,8 +602,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -604,13 +614,9 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = {
-			OR = {
-				has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_command
-				has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-			}
-		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_command }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_staff_course
 			army_experience = 20
 			add_command_power = 10
 			hidden_effect = {
@@ -626,14 +632,14 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_STABILITY
 		}
-		x = 0
-		y = 1
-		relative_position_id = WKR_authorize_normative_command
+		x = 1
+		y = 2
+		relative_position_id = WKR_empower_front_executive
 		cost = 2
-		prerequisite = { focus = WKR_authorize_normative_command }
+		prerequisite = { focus = WKR_empower_front_executive }
+		mutually_exclusive = { focus = WKR_authorize_normative_command }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -642,8 +648,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -652,13 +660,9 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = {
-			OR = {
-				has_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
-				has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-			}
-		}
+		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_rifle_contract
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
 				amount = 4500
@@ -681,10 +685,11 @@ focus_tree = {
 		x = 1
 		y = 1
 		relative_position_id = WKR_publish_emergency_constitution
-		cost = 2
+		cost = 1
 		prerequisite = {
 			focus = WKR_publish_emergency_constitution
 			focus = WKR_bind_workshops_to_directive
+			focus = WKR_authorize_normative_command
 		}
 		allow_branch = {
 			tag = WKR
@@ -730,7 +735,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_authorize_retreat_levies
-		cost = 2
+		cost = 1
 		prerequisite = { focus = WKR_authorize_retreat_levies }
 		allow_branch = {
 			tag = WKR
@@ -775,7 +780,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_reopen_collective_workshops
-		cost = 2
+		cost = 1
 		prerequisite = { focus = WKR_reopen_collective_workshops }
 		allow_branch = {
 			tag = WKR
@@ -825,7 +830,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WKR_stockpile_interchange_reserves
-		cost = 4
+		cost = 2
 		prerequisite = { focus = WKR_settle_front_authority }
 		prerequisite = { focus = WKR_coordinate_counterattack_cells }
 		prerequisite = { focus = WKR_stockpile_interchange_reserves }
@@ -935,19 +940,15 @@ focus_tree = {
 		prerequisite = { focus = WKR_establish_front_operations_bureau }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -994,17 +995,15 @@ focus_tree = {
 		prerequisite = { focus = WKR_establish_front_operations_bureau }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		}
 		available = {
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -1135,6 +1134,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_night_freight_corridors }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_rail_contract
 			if = {
 				limit = {
 					owns_state = 200
@@ -1635,24 +1635,10 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# WKR variant depth: two incompatible answers to "who is the republic".
-	# The collapse roll picks the branch, so the two are never both visible;
-	# the mutually_exclusive pair only exists so the tree can never be walked
-	# down both political settlements if a later save-game edit shows both.
-	#
-	# Nikita line (ADISCORD_vorkerland_worker_safe_with_loyalists).
-	# Personalist continuation of the revolution. Play pattern: sell stability
-	# and factory output to buy war support, conscription and offensive tempo,
-	# then convert the leader's surviving person into permanent emergency
-	# powers. Fast, brittle, and diplomatically loud - it opens the volunteer
-	# channel to the free republics instead of trading for recognition.
-	#
-	# Anton line (NOT ADISCORD_vorkerland_worker_safe_with_loyalists).
-	# Managerial legitimacy. Play pattern: deliver output and rations first,
-	# buy stability and construction instead of tempo, accept a slower and
-	# flatter front in exchange for a home front that does not crack, and
-	# settle authority on published norms rather than on a person. Its
-	# diplomacy is technical exchange, not volunteers.
+	# The first political mandate locks the course. Both lines remain visible;
+	# actual leadership controls availability before their exclusive entry.
+	# The chairman mobilizes labour for the front, while the executive keeps
+	# labour in workshops and governs through published production norms.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -1671,7 +1657,6 @@ focus_tree = {
 		mutually_exclusive = { focus = WKR_govern_by_delivered_results }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1680,9 +1665,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1706,7 +1692,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 90
-			modifier = { factor = 0 NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
+			modifier = { factor = 0 WKR_presidential_course = no }
 			modifier = { factor = 2 has_war = yes }
 			modifier = { factor = 1.5 has_war_support < 0.60 }
 		}
@@ -1726,7 +1712,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_declare_the_revolution_unfinished }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1735,7 +1720,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1775,7 +1763,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_raise_the_worker_levy }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1784,9 +1771,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = pragmatism
-			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1798,7 +1786,6 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate }
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_chairmans_mandate
-			set_rule = { can_send_volunteers = yes }
 			add_command_power = 10
 			add_war_support = 0.03
 			hidden_effect = {
@@ -1819,15 +1806,17 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WKR_bind_workshops_to_directive
 		cost = 2
-		prerequisite = { focus = WKR_bind_workshops_to_directive }
+		prerequisite = {
+			focus = WKR_bind_workshops_to_directive
+			focus = WKR_authorize_normative_command
+		}
 		mutually_exclusive = { focus = WKR_declare_the_revolution_unfinished }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1836,8 +1825,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1848,7 +1839,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_delivery_mandate }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_delivery_mandate
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_delivery_mandate }
+			hidden_effect = {
+				add_to_variable = { var = WKR_norm_industrial_capacity_factory value = 0.08 }
+				add_to_variable = { var = WKR_norm_production_speed_buildings_factor value = 0.10 }
+				add_to_variable = { var = WKR_norm_consumer_goods_factor value = -0.03 }
+				add_to_variable = { var = WKR_norm_stability_factor value = 0.05 }
+				add_to_variable = { var = WKR_norm_war_support_factor value = -0.05 }
+				add_to_variable = { var = WKR_norm_army_attack_factor value = -0.03 }
+				ADISCORD_vorkerland_wkr_refresh_measured_republic = yes
+			}
 			add_stability = 0.03
 			add_political_power = 20
 			hidden_effect = {
@@ -1860,7 +1860,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 90
-			modifier = { factor = 0 has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			modifier = { factor = 0 WKR_executive_course = no }
 			modifier = { factor = 2 has_stability < 0.50 }
 			modifier = { factor = 1.5 num_of_factories < 15 }
 		}
@@ -1880,7 +1880,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_govern_by_delivered_results }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1889,7 +1888,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1900,7 +1902,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_ration_ledger }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_ration_ledger days = 70 }
+			unlock_decision_tooltip = WKR_ration_contract
 			add_stability = 0.03
 			add_political_power = 15
 			hidden_effect = {
@@ -1928,7 +1930,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_publish_the_ration_ledger }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1937,8 +1938,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1949,7 +1952,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_normative_republic
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_normative_republic }
+			hidden_effect = {
+				add_to_variable = { var = WKR_norm_production_factory_efficiency_gain_factor value = 0.10 }
+				add_to_variable = { var = WKR_norm_production_factory_max_efficiency_factor value = 0.05 }
+				add_to_variable = { var = WKR_norm_industry_repair_factor value = 0.15 }
+				add_to_variable = { var = WKR_norm_stability_factor value = 0.05 }
+				add_to_variable = { var = WKR_norm_army_org_factor value = 0.03 }
+				add_to_variable = { var = WKR_norm_max_planning_factor value = -0.05 }
+				ADISCORD_vorkerland_wkr_refresh_measured_republic = yes
+			}
 			add_tech_bonus = { name = ADISCORD_vorkerland_wkr_normative_republic bonus = 0.5 uses = 1 category = industry }
 			add_stability = 0.03
 			hidden_effect = {
@@ -2135,7 +2147,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_vest_all_power_in_the_chairman }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2144,7 +2155,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2153,12 +2167,15 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_the_armed_people }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_doctrine_armed_people
-			army_experience = 10
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_doctrine_armed_people }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_the_armed_people
+				add_to_variable = { var = WKR_council_doctrine_conscription value = 0.02 }
+				add_to_variable = { var = WKR_council_doctrine_training_time_army_factor value = -0.15 }
+				add_to_variable = { var = WKR_council_doctrine_army_attack_factor value = 0.05 }
+				add_to_variable = { var = WKR_council_doctrine_army_org_factor value = -0.05 }
+				add_to_variable = { var = WKR_council_doctrine_experience_gain_army_factor value = -0.10 }
+				ADISCORD_vorkerland_wkr_refresh_councils = yes
 			}
 		}
 		ai_will_do = {
@@ -2172,16 +2189,14 @@ focus_tree = {
 		icon = GFX_focus_WKR_break_them_with_numbers
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
 		}
 		x = 0
 		y = 1
 		relative_position_id = WKR_doctrine_of_the_armed_people
-		cost = 4
+		cost = 3
 		prerequisite = { focus = WKR_doctrine_of_the_armed_people }
 		allow_branch = {
 			tag = WKR
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2190,7 +2205,22 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_council_context_tt
+				WKR_council_order_context = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_council_seats_2_tt
+				WKR_has_two_working_councils = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_council_order_free_tt
+				WKR_council_order_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_presidential_course_tt
+				WKR_presidential_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2199,14 +2229,10 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_break_them_with_numbers }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_doctrine_weight_of_numbers
-			add_war_support = 0.03
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_break_them_with_numbers
-			}
+			unlock_decision_tooltip = WKR_assault_column_programme
+			custom_effect_tooltip = WKR_assault_column_unlock_tt
+			hidden_effect = { WKR_lock_assault_column_template = yes }
 		}
 		ai_will_do = {
 			base = 105
@@ -2228,7 +2254,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_bind_the_republic_to_its_norms }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2237,7 +2262,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2248,7 +2276,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_measured_force }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_doctrine_measured_force
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_doctrine_measured_force }
+			hidden_effect = {
+				add_to_variable = { var = WKR_norm_army_defence_factor value = 0.08 }
+				add_to_variable = { var = WKR_norm_max_dig_in_factor value = 0.10 }
+				add_to_variable = { var = WKR_norm_supply_consumption_factor value = -0.05 }
+				add_to_variable = { var = WKR_norm_army_attack_factor value = -0.04 }
+				add_to_variable = { var = WKR_norm_conscription value = -0.01 }
+				ADISCORD_vorkerland_wkr_refresh_measured_republic = yes
+			}
 			army_experience = 8
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_doctrine_of_measured_force
@@ -2274,7 +2310,6 @@ focus_tree = {
 		prerequisite = { focus = WKR_doctrine_of_measured_force }
 		allow_branch = {
 			tag = WKR
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2283,7 +2318,10 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_executive_course_tt
+				WKR_executive_course = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2294,7 +2332,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men
+			unlock_decision_tooltip = WKR_artillery_contract
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men }
+			hidden_effect = {
+				add_to_variable = { var = WKR_norm_production_factory_efficiency_gain_factor value = 0.10 }
+				add_to_variable = { var = WKR_norm_army_org_regain value = 0.06 }
+				add_to_variable = { var = WKR_norm_land_reinforce_rate value = 0.02 }
+				add_to_variable = { var = WKR_norm_training_time_army_factor value = 0.10 }
+				ADISCORD_vorkerland_wkr_refresh_measured_republic = yes
+			}
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = WKR }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output
@@ -2315,57 +2361,17 @@ focus_tree = {
 	# ---------------------------------------------------------------------
 
 	focus = {
-		id = WKR_the_last_levy
-		icon = GFX_focus_WKR_the_last_levy
-		search_filters = {
-			FOCUS_FILTER_MANPOWER
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = 7
-		y = 1
-		relative_position_id = WKR_republic_fights_as_one
-		cost = 3
-		prerequisite = { focus = WKR_republic_fights_as_one }
-		allow_branch = {
-			tag = WKR
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_the_last_levy }
-		completion_reward = {
-			add_manpower = 4000
-			add_war_support = 0.03
-			add_stability = -0.03
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_the_last_levy
-			}
-		}
-		ai_will_do = {
-			base = 120
-			modifier = { factor = 2 has_manpower < 25000 }
-		}
-	}
-
-	focus = {
 		id = WKR_throw_the_reserves_forward
 		icon = GFX_focus_WKR_throw_the_reserves_forward
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = -1
+		x = 6
 		y = 1
-		relative_position_id = WKR_the_last_levy
+		relative_position_id = WKR_republic_fights_as_one
 		cost = 3
-		prerequisite = { focus = WKR_the_last_levy }
+		prerequisite = { focus = WKR_republic_fights_as_one }
 		mutually_exclusive = { focus = WKR_dig_in_along_the_interchange }
 		allow_branch = {
 			tag = WKR
@@ -2377,16 +2383,23 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = {
+				WKR_administration_active = yes
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_final_operation_council_tt
+				any_owned_state = { WKR_railway_council_site = yes }
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward }
+
 		completion_reward = {
-			unlock_decision_tooltip = WKR_throw_the_reserves_forward_activate_plan
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward
-			}
+			unlock_decision_tooltip = WKR_breakthrough_programme
+			custom_effect_tooltip = WKR_breakthrough_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
@@ -2402,11 +2415,11 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 1
+		x = 8
 		y = 1
-		relative_position_id = WKR_the_last_levy
+		relative_position_id = WKR_republic_fights_as_one
 		cost = 3
-		prerequisite = { focus = WKR_the_last_levy }
+		prerequisite = { focus = WKR_republic_fights_as_one }
 		mutually_exclusive = { focus = WKR_throw_the_reserves_forward }
 		allow_branch = {
 			tag = WKR
@@ -2418,16 +2431,23 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = {
+				WKR_administration_active = yes
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_interchange_defence_site_tt
+				any_owned_state = { WKR_interchange_defence_site = yes }
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange }
+
 		completion_reward = {
-			unlock_decision_tooltip = WKR_dig_in_along_the_interchange_activate_plan
-			add_stability = 0.03
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange
-			}
+			unlock_decision_tooltip = WKR_interchange_defence_programme
+			custom_effect_tooltip = WKR_interchange_defence_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
@@ -2560,6 +2580,14 @@ focus_tree = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = WKR_council_seats_2_tt
+				WKR_has_two_working_councils = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = WKR_council_order_free_tt
+				WKR_council_order_free = yes
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2570,9 +2598,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name }
 		completion_reward = {
+			unlock_decision_tooltip = WKR_mobilize_factory_columns
 			custom_effect_tooltip = ADISCORD_vorkerland_wkr_requisition_councils_tt
-			hidden_effect = { ADISCORD_vorkerland_wkr_mobilize_all_councils = yes }
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
+			hidden_effect = { set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 } }
 			ADISCORD_vorkerland_add_legitimacy = yes
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name
@@ -2586,11 +2614,8 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# WKR diplomacy: the bracket winners and the outside powers.
-	#
-	# The Worker channel to the free republics can be spent on arming a
-	# local bracket winner or on buying recognition abroad. A competent
-	# player who is winning the central war can skip this branch.
+	# Coalition deliveries require an actual shared war. Recognition instead
+	# protects each consenting republic's independence after a Worker victory.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -2600,11 +2625,11 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 4
+		x = 5
 		y = 1
-		relative_position_id = WKR_open_free_republics_channel
+		relative_position_id = WKR_settle_front_authority
 		cost = 3
-		prerequisite = { focus = WKR_open_free_republics_channel }
+		prerequisite = { focus = WKR_settle_front_authority }
 		mutually_exclusive = { focus = WKR_seek_outside_recognition }
 		allow_branch = {
 			tag = WKR
@@ -2624,13 +2649,11 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_arm_the_bracket_victors }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_bracket_patronage days = 70 }
-			add_political_power = 15
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_arm_the_bracket_victors
-			}
+			unlock_decision_tooltip = WKR_supply_coalition_partner
+			custom_effect_tooltip = WKR_coalition_supply_unlock_tt
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WKR }
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = WKR }
 		}
 		ai_will_do = {
 			base = 60
@@ -2646,11 +2669,11 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_RESEARCH
 		}
-		x = 6
+		x = 7
 		y = 1
-		relative_position_id = WKR_open_free_republics_channel
+		relative_position_id = WKR_settle_front_authority
 		cost = 3
-		prerequisite = { focus = WKR_open_free_republics_channel }
+		prerequisite = { focus = WKR_settle_front_authority }
 		mutually_exclusive = { focus = WKR_arm_the_bracket_victors }
 		allow_branch = {
 			tag = WKR
@@ -2662,6 +2685,13 @@ focus_tree = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = WKR_recognition_targets_tt
+				OR = {
+					ROM = { WKR_recognition_candidate = yes }
+					TRU = { WKR_recognition_candidate = yes }
+				}
+			}
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2670,15 +2700,10 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_seek_outside_recognition }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_outside_recognition days = 70 }
-			add_political_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_seek_outside_recognition
-			}
+			unlock_decision_tooltip = WKR_negotiate_republic_recognition
+			custom_effect_tooltip = WKR_recognition_unlock_tt
+			add_political_power = 50
 		}
 		ai_will_do = {
 			base = 55
@@ -2686,67 +2711,20 @@ focus_tree = {
 		}
 	}
 
-	# Air
-	# The republic already has a sortie desk. This is the wartime air
-	# programme hanging off the mandate: close support from the shopfloors,
-	# or a fighter screen over the interchange.
-
-	focus = {
-		id = WKR_form_the_republican_air_staff
-		icon = GFX_focus_WKR_form_the_republican_air_staff
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = 9
-		y = 1
-		relative_position_id = WKR_affirm_worker_mandate
-		cost = 2
-		prerequisite = { focus = WKR_affirm_worker_mandate }
-		allow_branch = {
-			tag = WKR
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_form_the_republican_air_staff }
-		completion_reward = {
-			air_experience = 25
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_form_the_republican_air_staff
-			}
-		}
-		ai_will_do = {
-			base = 80
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# Council aviation and railway programmes
 
 	focus = {
 		id = WKR_commit_shopfloor_squadrons
 		icon = GFX_focus_WKR_commit_shopfloor_squadrons
 		search_filters = {
-			FOCUS_FILTER_ARMY_XP
+			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = -1
+		x = 2
 		y = 1
-		relative_position_id = WKR_form_the_republican_air_staff
+		relative_position_id = WKR_put_railways_under_councils
 		cost = 3
-		prerequisite = { focus = WKR_form_the_republican_air_staff }
+		prerequisite = { focus = WKR_put_railways_under_councils }
 		mutually_exclusive = { focus = WKR_screen_the_interchange_sky }
 		allow_branch = {
 			tag = WKR
@@ -2758,25 +2736,23 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = { WKR_administration_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_airfield_workshop_district_tt
+				any_owned_state = { WKR_airfield_workshop_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_commit_shopfloor_squadrons }
 		completion_reward = {
-			unlock_decision_tooltip = WKR_commit_shopfloor_squadrons_activate_plan
-			air_experience = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_commit_shopfloor_squadrons
-			}
+			unlock_decision_tooltip = WKR_airfield_workshop_programme
+			custom_effect_tooltip = WKR_airfield_workshop_unlock_tt
 		}
 		ai_will_do = {
 			base = 75
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
@@ -2784,14 +2760,14 @@ focus_tree = {
 		id = WKR_screen_the_interchange_sky
 		icon = GFX_focus_WKR_screen_the_interchange_sky
 		search_filters = {
-			FOCUS_FILTER_ARMY_XP
+			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = 1
+		x = 4
 		y = 1
-		relative_position_id = WKR_form_the_republican_air_staff
+		relative_position_id = WKR_put_railways_under_councils
 		cost = 3
-		prerequisite = { focus = WKR_form_the_republican_air_staff }
+		prerequisite = { focus = WKR_put_railways_under_councils }
 		mutually_exclusive = { focus = WKR_commit_shopfloor_squadrons }
 		allow_branch = {
 			tag = WKR
@@ -2803,74 +2779,27 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = { WKR_administration_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = WKR_armoured_train_district_tt
+				any_owned_state = { WKR_armoured_train_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_screen_the_interchange_sky }
 		completion_reward = {
-			unlock_decision_tooltip = WKR_screen_the_interchange_sky_activate_plan
-			air_experience = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_screen_the_interchange_sky
-			}
+			unlock_decision_tooltip = WKR_armoured_train_programme
+			custom_effect_tooltip = WKR_armoured_train_unlock_tt
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
 	# Foreign Policy
-	# A desk that talks outward. Volunteers keep the channel warm, or
-	# licensed patterns buy drawings the workshops cannot print this month.
-
-	focus = {
-		id = WKR_open_the_external_desk
-		icon = GFX_focus_WKR_open_the_external_desk
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_POLITICAL
-		}
-		x = 14
-		y = 1
-		relative_position_id = WKR_affirm_worker_mandate
-		cost = 2
-		prerequisite = { focus = WKR_affirm_worker_mandate }
-		allow_branch = {
-			tag = WKR
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_open_the_external_desk }
-		completion_reward = {
-			add_political_power = 50
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_open_the_external_desk
-			}
-		}
-		ai_will_do = {
-			base = 50
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
 
 	focus = {
 		id = WKR_send_republican_volunteers
@@ -2879,11 +2808,11 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_MANPOWER
 		}
-		x = -1
+		x = 13
 		y = 1
-		relative_position_id = WKR_open_the_external_desk
+		relative_position_id = WKR_affirm_worker_mandate
 		cost = 3
-		prerequisite = { focus = WKR_open_the_external_desk }
+		prerequisite = { focus = WKR_affirm_worker_mandate }
 		mutually_exclusive = { focus = WKR_license_outside_patterns }
 		allow_branch = {
 			tag = WKR
@@ -2894,26 +2823,39 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = WKR_administration_active_tt
+				ADISCORD_vorkerland_wkr_programmes_open = yes
+			}
+			has_war = no
+			NOT = {
+				has_game_rule = {
+					rule = allow_volunteers
+					option = BLOCKED
+				}
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_send_republican_volunteers }
+
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_republican_volunteers days = 70 }
-			add_political_power = 10
+			set_rule = { can_send_volunteers = yes }
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_wkr_republican_volunteers }
+			custom_effect_tooltip = WKR_volunteer_expedition_unlock_tt
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_send_republican_volunteers
+				set_variable = { var = WKR_foreign_send_volunteer_size value = 2 }
+				set_variable = { var = WKR_foreign_send_volunteers_tension value = -1 }
+				set_variable = { var = WKR_foreign_political_power_gain value = -0.08 }
+				ADISCORD_vorkerland_wkr_refresh_councils = yes
 			}
 		}
 		ai_will_do = {
 			base = 45
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = no
+			}
 		}
 	}
 
@@ -2924,11 +2866,11 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_RESEARCH
 		}
-		x = 1
+		x = 15
 		y = 1
-		relative_position_id = WKR_open_the_external_desk
+		relative_position_id = WKR_affirm_worker_mandate
 		cost = 3
-		prerequisite = { focus = WKR_open_the_external_desk }
+		prerequisite = { focus = WKR_affirm_worker_mandate }
 		mutually_exclusive = { focus = WKR_send_republican_volunteers }
 		allow_branch = {
 			tag = WKR
@@ -2939,26 +2881,31 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = WKR_administration_active_tt
+				ADISCORD_vorkerland_wkr_programmes_open = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_license_outside_patterns }
+
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_licensed_patterns days = 70 }
-			add_political_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_wkr_license_outside_patterns
+			unlock_decision_tooltip = WKR_pattern_contract
+			custom_effect_tooltip = WKR_pattern_contract_unlock_tt
+			add_tech_bonus = {
+				name = WKR_license_outside_patterns
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
 			}
 		}
 		ai_will_do = {
 			base = 40
-			modifier = { factor = 2 has_stability < 0.40 }
+			modifier = {
+				factor = 2
+				has_stability < 0.40
+			}
 		}
 	}
 

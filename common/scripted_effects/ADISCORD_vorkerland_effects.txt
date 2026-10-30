@@ -2358,6 +2358,7 @@ ADISCORD_vorkerland_verify_coalition_membership = {
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
 		log = "[ADISCORD][VORKERLAND][RECOVERY] A regional coalition entry failed its membership or war postcondition."
 	}
+	VAD_settle_coalition_guarantees = yes
 }
 
 # Start both bounded northern escalation checks from the verified launch path,
@@ -3599,16 +3600,34 @@ ADISCORD_vorkerland_check_rom_northern_intervention = {
 }
 
 # Only Workerland's own victory can restore its former republic autonomies.
-# The two rolls are independent. Ivanland's timely guarantee suppresses this
-# entire settlement and leaves both republics sovereign.
+# Each unrecognised republic has an independent roll. Ivanland's guarantee
+# protects both; a signed treaty protects its own signatory and binds WRK.
 ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 	if = {
 		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_resolution_done } }
+		WRK = {
+			if = {
+				limit = { ROM = { WKR_recognized_republic_survives = yes } }
+				diplomatic_relation = { country = ROM relation = non_aggression_pact active = yes }
+			}
+			if = {
+				limit = { TRU = { WKR_recognized_republic_survives = yes } }
+				diplomatic_relation = { country = TRU relation = non_aggression_pact active = yes }
+			}
+		}
 		if = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn } }
 			WRK = {
 				if = {
-					limit = { ROM = { exists = yes is_subject = no is_ai = yes NOT = { is_in_faction_with = WRK } } }
+					limit = {
+						ROM = {
+							exists = yes
+							is_subject = no
+							is_ai = yes
+							NOT = { is_in_faction_with = WRK }
+							NOT = { has_country_flag = WKR_independence_treaty }
+						}
+					}
 					random_list = {
 						50 = {
 							puppet = ROM
@@ -3624,7 +3643,15 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 					}
 				}
 				if = {
-					limit = { TRU = { exists = yes is_subject = no is_ai = yes NOT = { is_in_faction_with = WRK } } }
+					limit = {
+						TRU = {
+							exists = yes
+							is_subject = no
+							is_ai = yes
+							NOT = { is_in_faction_with = WRK }
+							NOT = { has_country_flag = WKR_independence_treaty }
+						}
+					}
 					random_list = {
 						50 = {
 							puppet = TRU
@@ -3844,17 +3871,13 @@ ADISCORD_vorkerland_promote_nikita_worcker = {
 }
 
 ADISCORD_vorkerland_prepare_claimant_characters = {
-	# Move only the selected route characters while pre-collapse WRK still owns
-	# them. This prevents WKR from receiving a generated fallback leader.
+	# Both western candidates must be present before the balance can change the
+	# government. Nikita rescued by the eastern army remains with that army.
+	WRK = { set_nationality = { target_country = WKR character = WRK_Anton_Bagley } }
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 		WRK = {
 			set_nationality = { target_country = WKR character = WRK_Nikita_Worcker }
-		}
-	}
-	else = {
-		WRK = {
-			set_nationality = { target_country = WKR character = WRK_Anton_Bagley }
 		}
 	}
 	if = {
@@ -3949,6 +3972,10 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 			set_cosmetic_tag = WRK_vorkerland_joint_government
 			ADISCORD_vorkerland_appoint_joint_council = yes
 		}
+		else_if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+			VAD_appoint_collegial_staff = yes
+		}
 		else = {
 			set_cosmetic_tag = VAD_vorkerland_restoration
 			set_country_leader_portrait = {
@@ -3998,21 +4025,121 @@ ADISCORD_vorkerland_appoint_joint_council = {
 	set_country_flag = ADISCORD_vorkerland_joint_council_character_repair_v2
 }
 
+VAD_appoint_collegial_staff = {
+	set_politics = {
+		ruling_party = pragmatism
+		elections_allowed = no
+	}
+	promote_character = {
+		character = WRK_Vlad_Petrichev
+		ideology = pragmatism_ideology
+	}
+	if = {
+		limit = { has_completed_focus = WRK_joint_ratify_staff_constitution }
+		set_cosmetic_tag = VAD_vorkerland_staff_republic
+	}
+	else = { set_cosmetic_tag = VAD_vorkerland_collegial_staff }
+	set_party_name = {
+		ideology = pragmatism
+		name = VAD_staff_party
+		long_name = VAD_staff_party_long
+	}
+	if = {
+		limit = { tag = VAD }
+		set_country_leader_portrait = {
+			ideology = pragmatism
+			portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
+		}
+	}
+	else = {
+		set_country_leader_portrait = {
+			ideology = pragmatism
+			portrait = GFX_portrait_WRK_Vlad_Petrichev
+		}
+	}
+	# Mandate variables survive the tree handoff; departed ordinary focus IDs do not.
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = VAD_staff_planning value = 0 compare = greater_than }
+				check_variable = { var = VAD_staff_reinforce value = 0 compare = greater_than }
+				check_variable = { var = VAD_staff_stability value = 0 compare = greater_than }
+				check_variable = { var = VAD_staff_command value = 0 compare = greater_than }
+			}
+		}
+		VAD_apply_collegial_mandate = yes
+	}
+}
+
+# ROOT is the successor before VAD is annexed or its administration closes.
+VAD_transfer_collegial_mandate = {
+	if = {
+		limit = {
+			tag = WRK
+			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+			VAD = { exists = yes }
+		}
+		set_variable = { var = VAD_staff_planning value = VAD.VAD_staff_planning }
+		set_variable = { var = VAD_staff_recovery value = VAD.VAD_staff_recovery }
+		set_variable = { var = VAD_staff_reinforce value = VAD.VAD_staff_reinforce }
+		set_variable = { var = VAD_staff_speed value = VAD.VAD_staff_speed }
+		set_variable = { var = VAD_staff_supply value = VAD.VAD_staff_supply }
+		set_variable = { var = VAD_staff_authority value = VAD.VAD_staff_authority }
+		set_variable = { var = VAD_staff_stability value = VAD.VAD_staff_stability }
+		set_variable = { var = VAD_staff_command value = VAD.VAD_staff_command }
+	}
+}
+
+VAD_form_collegial_staff = {
+	if = {
+		limit = {
+			VAD_administration_active = yes
+			has_completed_focus = VAD_proclaim_joint_charter
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+			NOT = { has_completed_focus = VAD_open_imperial_registers }
+			NOT = { has_completed_focus = VAD_form_field_commandantures }
+		}
+		set_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+		# The additional role is created once; country handoff transfers it with Petrichev.
+		add_country_leader_role = {
+			character = WRK_Vlad_Petrichev
+			promote_leader = yes
+			country_leader = {
+				ideology = pragmatism_ideology
+				expire = "2200.1.1.1"
+				traits = { Marshal_Of_War }
+				desc = VAD_collegial_petrichev_desc
+			}
+		}
+		VAD_appoint_collegial_staff = yes
+		news_event = { id = ADISCORD_vorkerland_story.48 }
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
 ADISCORD_vorkerland_form_joint_government = {
-	# Wartime rescue route: the council belongs to VAD while VAD and WKR
-	# remain separate. Ordinary VAD victory must keep Vlad and never consume WKR.
+	# Rescue makes the council possible; the political focus chooses it.
+	# Its authority belongs to VAD independently of the western claimant.
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-			country_exists = VAD
-			country_exists = WKR
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+			VAD = {
+				VAD_administration_active = yes
+				has_completed_focus = VAD_proclaim_joint_charter
+				NOT = { has_completed_focus = VAD_open_imperial_registers }
+			}
 		}
 		set_global_flag = ADISCORD_vorkerland_joint_government_formed
 		VAD = {
 			set_cosmetic_tag = WRK_vorkerland_joint_government
 			ADISCORD_vorkerland_appoint_joint_council = yes
+			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 }
+			news_event = { id = ADISCORD_vorkerland_story.44 hours = 1 }
 		}
 	}
 }
@@ -6536,6 +6663,11 @@ ADISCORD_vorkerland_refresh_doctrine_dynamic_state = {
 		set_variable = { var = ADISCORD_vorkerland_doctrine_stability value = 0.03 }
 	}
 
+	if = {
+		limit = { tag = VAD }
+		add_to_variable = { var = ADISCORD_vorkerland_doctrine_manpower value = VAD_doctrine_conscription }
+		add_to_variable = { var = ADISCORD_vorkerland_doctrine_org value = VAD_doctrine_army_org_factor }
+	}
 	ADISCORD_vorkerland_apply_focus_doctrine = yes
 }
 
@@ -6636,6 +6768,37 @@ ADISCORD_vorkerland_ensure_line_infantry_brigade_template = {
 }
 
 # --- focus_decision_effects ---
+
+# One receipt owns payment until delivery, cancellation or country handoff.
+ADISCORD_vorkerland_wkr_clear_programme = {
+	clear_variable = WKR_programme_deposit
+	clr_country_flag = WKR_rifle_contract_pending
+	clr_country_flag = WKR_staff_course_pending
+	clr_country_flag = WKR_support_contract_pending
+	clr_country_flag = WKR_workshop_contract_pending
+	clr_country_flag = WKR_ration_contract_pending
+	clr_country_flag = WKR_rail_contract_pending
+	clr_country_flag = WKR_artillery_contract_pending
+	clr_country_flag = WKR_pattern_contract_pending
+}
+
+ADISCORD_vorkerland_wkr_refund_programme = {
+	if = {
+		limit = { hidden_trigger = { has_variable = WKR_programme_deposit } }
+		add_political_power = WKR_programme_deposit
+		hidden_effect = { ADISCORD_vorkerland_wkr_clear_programme = yes }
+	}
+}
+
+# WRK is materialized before this settlement; callbacks on WKR lose their receipt.
+ADISCORD_vorkerland_wkr_settle_programme_handoff = {
+	if = {
+		limit = { WKR = { has_variable = WKR_programme_deposit } }
+		add_political_power = WKR.WKR_programme_deposit
+		WKR = { ADISCORD_vorkerland_wkr_clear_programme = yes }
+	}
+}
+
 # A central campaign is launched as one operational wave. All targets were
 # recorded before this delayed hook, so declarations in this block cannot
 # change which other neighbours belong to the same wave.
@@ -7285,6 +7448,14 @@ ADISCORD_vorkerland_expire_precollapse_itoran_armistice = {
 # --- party_identity_effects ---
 ADISCORD_vorkerland_sync_party_identity = {
 	if = {
+		limit = { VAD_collegial_government = yes }
+		set_party_name = {
+			ideology = pragmatism
+			name = VAD_staff_party
+			long_name = VAD_staff_party_long
+		}
+	}
+	else_if = {
 		limit = { tag = VAD }
 		if = {
 			limit = { OR = { is_subject_of = WRK is_subject_of = WKR } }
@@ -7498,6 +7669,16 @@ ADISCORD_vorkerland_retire_civil_war_modifiers = {
 }
 
 ADISCORD_vorkerland_clear_claimant_war_modifiers = {
+	WKR_close_administration = yes
+	VAD_close_administration = yes
+	TVA_close_administration = yes
+	ADISCORD_vorkerland_tva_cancel_field_trial = yes
+	if = {
+		limit = { has_dynamic_modifier = { modifier = WKR_measured_republic_dynamic } }
+		remove_dynamic_modifier = { modifier = WKR_measured_republic_dynamic }
+		ADISCORD_economy_mark_dirty = yes
+	}
+
 	if = {
 		limit = { has_idea = ADISCORD_vorkerland_central_initiative }
 		remove_ideas = ADISCORD_vorkerland_central_initiative
@@ -7509,7 +7690,6 @@ ADISCORD_vorkerland_clear_claimant_war_modifiers = {
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } }
-	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy } }
 	if = { limit = { has_idea = ADISCORD_vorkerland_theatre_priority } remove_ideas = ADISCORD_vorkerland_theatre_priority }
 	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_wkr } remove_ideas = ADISCORD_vorkerland_coalition_against_wkr }
 	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_vad } remove_ideas = ADISCORD_vorkerland_coalition_against_vad }
@@ -7891,7 +8071,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		if = {
 			limit = { has_completed_focus = WRK_measure_confederation_fault_lines }
 			event_target:ADISCORD_vorkerland_preparation_heir = {
-				add_political_power = 40
+				add_political_power = 75
 			}
 		}
 		if = {
@@ -7925,7 +8105,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 			event_target:ADISCORD_vorkerland_preparation_heir = {
 				add_equipment_to_stockpile = {
 					type = support_equipment_1
-					amount = 60
+					amount = 100
 					producer = WRK
 				}
 			}
@@ -7978,6 +8158,19 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 		limit = { country_exists = WKR }
 		WKR = {
 			if = {
+				limit = { has_country_flag = WKR_administration_initialized }
+				# A daily leader-cache retry follows the current ruling party after
+				# startup. It must not restore the original fate-based government.
+				if = {
+					limit = { WKR_administration_active = yes }
+					if = {
+						limit = { has_government = utilitarism }
+						WKR_appoint_executive = yes
+					}
+					else = { WKR_appoint_chairman = yes }
+				}
+			}
+			else_if = {
 				limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 				set_cosmetic_tag = WRK_vorkerland_emergency
 				set_politics = { ruling_party = pragmatism elections_allowed = no }
@@ -8020,6 +8213,10 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 				limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 				set_cosmetic_tag = WRK_vorkerland_joint_government
 				ADISCORD_vorkerland_appoint_joint_council = yes
+			}
+			else_if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+				VAD_appoint_collegial_staff = yes
 			}
 			else = {
 				set_cosmetic_tag = VAD_vorkerland_restoration
@@ -8187,6 +8384,22 @@ ADISCORD_vorkerland_log_materialization_failure = {
 ADISCORD_vorkerland_log_claimant_identity_mismatches = {
 	if = {
 		limit = {
+			WKR = {
+				has_country_flag = WKR_administration_initialized
+				WKR_administration_active = yes
+				NOT = {
+					OR = {
+						WKR_presidential_course = yes
+						WKR_executive_course = yes
+					}
+				}
+			}
+		}
+		log = "[ADISCORD][VORKERLAND][IDENTITY] The current western government has not activated its authored leader role. The war lifecycle will continue."
+	}
+	if = {
+		limit = {
+			WKR = { NOT = { has_country_flag = WKR_administration_initialized } }
 			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			NOT = {
 				WKR = {
@@ -8200,6 +8413,7 @@ ADISCORD_vorkerland_log_claimant_identity_mismatches = {
 	}
 	if = {
 		limit = {
+			WKR = { NOT = { has_country_flag = WKR_administration_initialized } }
 			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			NOT = {
 				WKR = {
@@ -9464,6 +9678,15 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	# the winner. change_tag_from only follows the human player; it does not
 	# replace the country object or transfer its armed forces.
 	transfer_state = 32
+	ADISCORD_vorkerland_wkr_settle_programme_handoff = yes
+	WKR_settle_council_order_handoff = yes
+	WKR_settle_railway_handoff = yes
+	WKR = { WKR_close_administration = yes }
+	ADISCORD_vorkerland_tva_settle_trial_handoff = yes
+	VAD_settle_oath_handoff = yes
+	VAD = { VAD_close_administration = yes }
+	TVA_settle_administration_handoff = yes
+	TVA = { TVA_close_administration = yes }
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = WKR
@@ -9476,20 +9699,18 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 		copy_completed_from = WKR
 	}
 	if = {
-		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		WKR = {
-			set_nationality = {
-				target_country = WRK
-				character = WRK_Nikita_Worcker
-			}
-		}
+		limit = { WKR = { WKR_executive_course = yes } }
+		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		WKR = { set_nationality = { target_country = WRK character = WRK_Anton_Bagley } }
 	}
 	else = {
-		WKR = {
-			set_nationality = {
-				target_country = WRK
-				character = WRK_Anton_Bagley
-			}
+		clr_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			WKR = { set_nationality = { target_country = WRK character = WRK_Nikita_Worcker } }
+		}
+		else = {
+			WKR = { set_nationality = { target_country = WRK character = WKR_Emergency_Coordination_Committee } }
 		}
 	}
 	# These two stay on WRK through the war unless annex moved them to WKR.
@@ -9537,26 +9758,19 @@ ADISCORD_vorkerland_complete_wrk_from_wkr = {
 	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	set_country_flag = ADISCORD_vorkerland_route_worker
-	set_cosmetic_tag = WRK_vorkerland_emergency
-	set_politics = { ruling_party = pragmatism elections_allowed = no }
+	# The handoff receipt is written before moving the ruling character. Its
+	# leader cache can lag behind the country transfer by one tick.
 	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		WKR_appoint_executive = yes
+	}
+	else_if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		clr_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
-		promote_character = {
-			character = WRK_Nikita_Worcker
-			ideology = neo_vorkerism
-		}
+		promote_character = { character = WRK_Nikita_Worcker ideology = neo_vorkerism }
+		set_politics = { ruling_party = pragmatism elections_allowed = no }
+		set_cosmetic_tag = WRK_vorkerland_emergency
 	}
-	else = {
-		# Persist the authored Anton outcome independently of the leader cache.
-		# Reunification verification happens on the next tick, when a transferred
-		# character role can otherwise briefly fail a ruling-leader check.
-		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
-		set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-		# The leader role must exist before the government flips to utilitarism.
-		ADISCORD_vorkerland_promote_anton_bagley = yes
-		set_politics = { ruling_party = utilitarism elections_allowed = no }
-	}
+	else = { WKR_appoint_chairman = yes }
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified
@@ -9611,14 +9825,28 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		}
 	}
 	transfer_state = 32
+	ADISCORD_vorkerland_wkr_settle_programme_handoff = yes
+	WKR_settle_council_order_handoff = yes
+	WKR_settle_railway_handoff = yes
+	WKR = { WKR_close_administration = yes }
+	ADISCORD_vorkerland_tva_settle_trial_handoff = yes
+	VAD_transfer_collegial_mandate = yes
+	VAD_settle_oath_handoff = yes
+	VAD = { VAD_close_administration = yes }
+	TVA_settle_administration_handoff = yes
+	TVA = { TVA_close_administration = yes }
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = VAD
 	VAD = {
 		PREV = { ADISCORD_copy_development_from_prev = yes }
 	}
+	clr_country_flag = ADISCORD_vorkerland_route_worker
+	clr_country_flag = ADISCORD_vorkerland_route_joint
+	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
+	set_country_flag = ADISCORD_vorkerland_route_joint
 	load_focus_tree = {
-		tree = ADISCORD_vorkerland_settlement_focus
+		tree = ADISCORD_vorkerland_joint_postwar_focus
 		keep_completed = yes
 		copy_completed_from = VAD
 	}
@@ -9644,10 +9872,6 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 			}
 		}
 	}
-	clr_country_flag = ADISCORD_vorkerland_route_worker
-	clr_country_flag = ADISCORD_vorkerland_route_joint
-	clr_country_flag = ADISCORD_vorkerland_route_utilitarian
-	set_country_flag = ADISCORD_vorkerland_route_joint
 	VAD = { ADISCORD_vorkerland_transfer_military_staff_to_wrk = yes }
 	country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 	if = {
@@ -9676,12 +9900,16 @@ ADISCORD_vorkerland_complete_wrk_from_vad = {
 	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_joint also covers an ordinary VAD victory; the government flag
-	# distinguishes the rescue council from Vlad's imperial restoration.
+	# distinguishes the rescue council, collegial staff and imperial restoration.
 	set_country_flag = ADISCORD_vorkerland_route_joint
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 		set_cosmetic_tag = WRK_vorkerland_joint_government
 		ADISCORD_vorkerland_appoint_joint_council = yes
+	}
+	else_if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		VAD_appoint_collegial_staff = yes
 	}
 	else = {
 		set_cosmetic_tag = VAD_vorkerland_restoration
@@ -9752,6 +9980,15 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	}
 	ADISCORD_vorkerland_prepare_claimants_for_formation = yes
 	transfer_state = 32
+	ADISCORD_vorkerland_wkr_settle_programme_handoff = yes
+	WKR_settle_council_order_handoff = yes
+	WKR_settle_railway_handoff = yes
+	WKR = { WKR_close_administration = yes }
+	ADISCORD_vorkerland_tva_settle_trial_handoff = yes
+	VAD_settle_oath_handoff = yes
+	VAD = { VAD_close_administration = yes }
+	TVA_settle_administration_handoff = yes
+	TVA = { TVA_close_administration = yes }
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
 	inherit_technology = TVA
@@ -10012,7 +10249,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			set_global_flag = ADISCORD_vorkerland_worker_won
 			# Select the victory presentation from the state that actually survived
-			# reunification. The old fate flag can drift in repaired saves.
+			# reunification. The handoff preserves the mandate chosen during the civil campaign.
 			if = {
 				limit = {
 					OR = {
@@ -10041,6 +10278,10 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 					limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 					ADISCORD_vorkerland_show_joint_victory_superevent = yes
 					country_event = { id = ADISCORD_vorkerland_postwar.4 days = 7 }
+				}
+				else_if = {
+					limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+					set_global_flag = ADISCORD_vorkerland_central_victory_announced
 				}
 				else = {
 					ADISCORD_vorkerland_show_vlad_victory_superevent = yes
@@ -10931,7 +11172,7 @@ ADISCORD_vorkerland_story_finish_reunification = {
 
 # --- war_economy_effects ---
 # Claimant factory scaling is the only recurring civil-war producer.
-# Called from the tag-specific monthly hooks for WKR, VAD and TVA.
+# Called from the tag-specific monthly hooks for WKR and VAD.
 ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 	set_variable = { var = ADISCORD_vorkerland_factory_count value = num_of_factories }
 
@@ -10969,7 +11210,6 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 			OR = {
 				has_country_flag = ADISCORD_vorkerland_focus_wkr_strip_the_civil_economy
 				has_country_flag = ADISCORD_vorkerland_focus_vad_levy_the_crown_estates
-				has_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load
 			}
 		}
 		set_variable = { var = ADISCORD_vorkerland_war_economy_stance value = 1 }
@@ -10979,7 +11219,6 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 			OR = {
 				has_country_flag = ADISCORD_vorkerland_focus_wkr_keep_the_bread_ration
 				has_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets
-				has_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power
 			}
 		}
 		set_variable = { var = ADISCORD_vorkerland_war_economy_stance value = -1 }
@@ -10996,10 +11235,8 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 	}
 
 	set_variable = { var = ADISCORD_vorkerland_war_economy_output value = 0 }
-	set_variable = { var = ADISCORD_vorkerland_war_economy_efficiency value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_war_economy_manpower value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_war_economy_mobilization value = 0 }
-	set_variable = { var = ADISCORD_vorkerland_war_economy_research value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_war_economy_unrest value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_war_economy_goods value = 0 }
 	set_variable = { var = ADISCORD_vorkerland_war_economy_authority value = 0 }
@@ -11054,36 +11291,6 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 		multiply_variable = { ADISCORD_vorkerland_war_economy_authority = -0.15 }
 	}
 
-	# The load board argues about the current: the front or the laboratories.
-	if = {
-		limit = { tag = TVA }
-		set_variable = {
-			var = ADISCORD_vorkerland_war_economy_output
-			value = ADISCORD_vorkerland_war_economy_bite
-		}
-		multiply_variable = { ADISCORD_vorkerland_war_economy_output = 0.12 }
-		set_variable = {
-			var = ADISCORD_vorkerland_war_economy_efficiency
-			value = ADISCORD_vorkerland_war_economy_bite
-		}
-		multiply_variable = { ADISCORD_vorkerland_war_economy_efficiency = 0.05 }
-		set_variable = {
-			var = ADISCORD_vorkerland_war_economy_research
-			value = ADISCORD_vorkerland_war_economy_stance
-		}
-		multiply_variable = { ADISCORD_vorkerland_war_economy_research = -0.05 }
-		set_variable = {
-			var = ADISCORD_vorkerland_war_economy_unrest
-			value = ADISCORD_vorkerland_war_economy_stance
-		}
-		multiply_variable = { ADISCORD_vorkerland_war_economy_unrest = -0.06 }
-		set_variable = {
-			var = ADISCORD_vorkerland_war_economy_goods
-			value = ADISCORD_vorkerland_war_economy_stance
-		}
-		multiply_variable = { ADISCORD_vorkerland_war_economy_goods = -0.06 }
-	}
-
 	# Percentage of the original industrial base still in hand, for the tooltip.
 	set_variable = {
 		var = ADISCORD_vorkerland_war_economy_scale_display
@@ -11098,6 +11305,8 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 # rewards and the mobilisation decision write the counts, so the aggregate is
 # refreshed on those writes instead of on a pulse.
 ADISCORD_vorkerland_wkr_refresh_councils = {
+	set_variable = { var = WKR_working_councils value = ADISCORD_vorkerland_wkr_councils }
+	subtract_from_variable = { var = WKR_working_councils value = ADISCORD_vorkerland_wkr_councils_mobilized }
 	set_variable = { var = ADISCORD_vorkerland_wkr_council_output value = ADISCORD_vorkerland_wkr_councils }
 	subtract_from_variable = { var = ADISCORD_vorkerland_wkr_council_output value = ADISCORD_vorkerland_wkr_councils_mobilized }
 	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_output value = 0.03 }
@@ -11105,8 +11314,10 @@ ADISCORD_vorkerland_wkr_refresh_councils = {
 	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_stability value = 0.01 }
 	set_variable = { var = ADISCORD_vorkerland_wkr_council_conscription value = ADISCORD_vorkerland_wkr_councils_mobilized }
 	multiply_variable = { var = ADISCORD_vorkerland_wkr_council_conscription value = 0.004 }
+	add_to_variable = { var = ADISCORD_vorkerland_wkr_council_conscription value = WKR_council_doctrine_conscription }
 	if = {
 		limit = {
+			WKR_administration_active = yes
 			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils } }
 		}
 		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_councils }
@@ -11129,35 +11340,156 @@ ADISCORD_vorkerland_wkr_withdraw_council = {
 }
 
 ADISCORD_vorkerland_wkr_council_battalion = {
-	add_manpower = 2500
-	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
+	ADISCORD_vorkerland_ensure_worker_home_guard_template = yes
+	capital_scope = {
+		create_unit = {
+			division = "name = \"WKR_factory_battalion_unit\" division_template = \"Worker Home Guard\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = PREV
+			allow_spawning_on_enemy_provs = no
+		}
+	}
 }
 
-# Field trials, TVA only. Every resolved trial, successful or not, is one more
-# iteration; each earlier iteration adds 15 points to the next success chance,
-# from 40 up to 85. Focuses can contribute iterations before the first trial.
+# Each resolved trial adds an iteration. Payment snapshots the success chance;
+# subsequent training, repairs and focus rewards affect only the next order.
 ADISCORD_vorkerland_tva_add_iteration = {
 	add_to_variable = { var = ADISCORD_vorkerland_tva_iterations value = 1 }
+	TVA_refresh_administration = yes
+}
+
+# Temporary price inputs are shared by payment and both refund destinations.
+# The stored kind fixes the contract while later focuses change future orders.
+TVA_calculate_trial_price = {
+	set_temp_variable = { var = TVA_trial_price_pp value = 30 }
+	set_temp_variable = { var = TVA_trial_price_rifles value = 9000 }
+	set_temp_variable = { var = TVA_trial_price_support value = 0 }
+	set_temp_variable = { var = TVA_trial_price_manpower value = 0 }
+	if = {
+		limit = { check_variable = { var = TVA_trial_receipt_kind value = 2 compare = equals } }
+		set_temp_variable = { var = TVA_trial_price_rifles value = 6000 }
+		set_temp_variable = { var = TVA_trial_price_manpower value = 600 }
+	}
+	else_if = {
+		limit = { check_variable = { var = TVA_trial_receipt_kind value = 3 compare = equals } }
+		set_temp_variable = { var = TVA_trial_price_pp value = 35 }
+		set_temp_variable = { var = TVA_trial_price_rifles value = 0 }
+		set_temp_variable = { var = TVA_trial_price_support value = 120 }
+	}
+	else_if = {
+		limit = { check_variable = { var = TVA_trial_receipt_kind value = 4 compare = equals } }
+		set_temp_variable = { var = TVA_trial_price_pp value = 25 }
+		set_temp_variable = { var = TVA_trial_price_rifles value = 0 }
+		set_temp_variable = { var = TVA_trial_price_support value = 80 }
+	}
+}
+
+TVA_return_trial_payment = {
+	add_political_power = TVA_trial_price_pp
+	if = {
+		limit = { check_variable = { var = TVA_trial_price_rifles value = 0 compare = greater_than } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = TVA_trial_price_rifles producer = ROOT }
+	}
+	if = {
+		limit = { check_variable = { var = TVA_trial_price_support value = 0 compare = greater_than } }
+		add_equipment_to_stockpile = { type = support_equipment amount = TVA_trial_price_support producer = ROOT }
+	}
+	if = {
+		limit = { check_variable = { var = TVA_trial_price_manpower value = 0 compare = greater_than } }
+		add_manpower = TVA_trial_price_manpower
+	}
+}
+
+TVA_release_trial_receipt = {
+	clr_country_flag = ADISCORD_vorkerland_tva_trial_paid
+	clear_variable = TVA_trial_kind
+	clear_variable = TVA_trial_chance
 }
 
 ADISCORD_vorkerland_tva_begin_field_trial = {
-	add_political_power = -30
-	add_equipment_to_stockpile = { type = infantry_equipment amount = -9000 }
+	if = {
+		limit = {
+			ADISCORD_vorkerland_tva_trial_context = yes
+			ADISCORD_vorkerland_tva_trial_affordable = yes
+			NOT = { has_country_flag = ADISCORD_vorkerland_tva_trial_paid }
+		}
+		set_variable = { var = TVA_trial_kind value = 1 }
+		if = {
+			limit = { has_completed_focus = TVA_raise_technical_battalions }
+			set_variable = { var = TVA_trial_kind value = 2 }
+		}
+		else_if = {
+			limit = { has_completed_focus = TVA_test_remote_fire_control }
+			set_variable = { var = TVA_trial_kind value = 3 }
+		}
+		else_if = {
+			limit = { has_completed_focus = TVA_test_adaptive_logistics }
+			set_variable = { var = TVA_trial_kind value = 4 }
+		}
+		set_temp_variable = { var = TVA_trial_receipt_kind value = TVA_trial_kind }
+		TVA_calculate_trial_price = yes
+		multiply_temp_variable = { var = TVA_trial_price_pp value = -1 }
+		add_political_power = TVA_trial_price_pp
+		if = {
+			limit = { check_variable = { var = TVA_trial_price_rifles value = 0 compare = greater_than } }
+			multiply_temp_variable = { var = TVA_trial_price_rifles value = -1 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = TVA_trial_price_rifles }
+		}
+		if = {
+			limit = { check_variable = { var = TVA_trial_price_support value = 0 compare = greater_than } }
+			multiply_temp_variable = { var = TVA_trial_price_support value = -1 }
+			add_equipment_to_stockpile = { type = support_equipment amount = TVA_trial_price_support }
+		}
+		if = {
+			limit = { check_variable = { var = TVA_trial_price_manpower value = 0 compare = greater_than } }
+			multiply_temp_variable = { var = TVA_trial_price_manpower value = -1 }
+			add_manpower = TVA_trial_price_manpower
+		}
+		set_country_flag = ADISCORD_vorkerland_tva_trial_paid
+		TVA_refresh_administration = yes
+		set_variable = { var = TVA_trial_chance value = TVA_trial_success_chance }
+	}
 }
 
-# The bonus follows the trial protocol the directorate committed to.
+ADISCORD_vorkerland_tva_cancel_field_trial = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = ADISCORD_vorkerland_tva_trial_paid } }
+		hidden_effect = {
+			set_temp_variable = { var = TVA_trial_receipt_kind value = TVA_trial_kind }
+			TVA_calculate_trial_price = yes
+			TVA_release_trial_receipt = yes
+		}
+		TVA_return_trial_payment = yes
+	}
+}
+
+# ROOT is the living successor or annexer; the receipt is still held by TVA.
+ADISCORD_vorkerland_tva_settle_trial_handoff = {
+	if = {
+		limit = { TVA = { has_country_flag = ADISCORD_vorkerland_tva_trial_paid } }
+		set_temp_variable = { var = TVA_trial_receipt_kind value = TVA.TVA_trial_kind }
+		TVA_calculate_trial_price = yes
+		TVA = { TVA_release_trial_receipt = yes }
+		TVA_return_trial_payment = yes
+	}
+}
+
+# The completed programme follows its paid protocol, not a later focus reward.
 ADISCORD_vorkerland_tva_field_trial_success = {
 	if = {
-		limit = { has_completed_focus = TVA_raise_technical_battalions }
+		limit = { hidden_trigger = { TVA_trial_is_battalion = yes } }
 		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
+		custom_effect_tooltip = TVA_trial_battalion_cadres_tt
+		hidden_effect = { add_to_variable = { var = TVA_cadre_reserve value = 15 } }
 	}
 	else_if = {
-		limit = { has_completed_focus = TVA_test_remote_fire_control }
+		limit = { hidden_trigger = { TVA_trial_is_fire_control = yes } }
 		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = electronics }
+		army_experience = 15
 	}
 	else_if = {
-		limit = { has_completed_focus = TVA_test_adaptive_logistics }
+		limit = { hidden_trigger = { TVA_trial_is_logistics = yes } }
 		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = support_tech }
+		add_timed_idea = { idea = ADISCORD_vorkerland_worx_adaptive_logistics_trial days = 70 }
 	}
 	else = {
 		add_tech_bonus = { name = ADISCORD_vorkerland_tva_trial_bonus bonus = 0.5 uses = 1 category = industry }
@@ -11166,76 +11498,134 @@ ADISCORD_vorkerland_tva_field_trial_success = {
 	hidden_effect = {
 		set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.02 }
 		ADISCORD_vorkerland_add_legitimacy = yes
+		country_event = { id = ADISCORD_vorkerland_claimant.25 }
 	}
 }
 
 ADISCORD_vorkerland_tva_field_trial_failure = {
 	custom_effect_tooltip = ADISCORD_vorkerland_tva_trial_failed_tt
 	army_experience = 10
+	hidden_effect = { country_event = { id = ADISCORD_vorkerland_claimant.26 } }
 }
 
 ADISCORD_vorkerland_tva_resolve_field_trial = {
 	if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 3 compare = greater_than_or_equals } }
-		random_list = {
-			85 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
-			15 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+		limit = { hidden_trigger = { has_country_flag = ADISCORD_vorkerland_tva_trial_paid } }
+		if = {
+			limit = { hidden_trigger = { ADISCORD_vorkerland_tva_trial_context = yes } }
+			hidden_effect = {
+				clr_country_flag = ADISCORD_vorkerland_tva_trial_paid
+				set_temp_variable = { var = TVA_trial_failure_chance value = 100 }
+				subtract_from_temp_variable = { var = TVA_trial_failure_chance value = TVA_trial_chance }
+			}
+			random_list = {
+				TVA_trial_chance = { ADISCORD_vorkerland_tva_field_trial_success = yes }
+				TVA_trial_failure_chance = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
+			}
+			custom_effect_tooltip = TVA_trial_wear_tt
+			custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
+			hidden_effect = {
+				clear_variable = TVA_trial_kind
+				clear_variable = TVA_trial_chance
+				add_to_variable = { var = TVA_network_load value = 10 }
+				subtract_from_variable = { var = TVA_cadre_reserve value = 5 }
+				ADISCORD_vorkerland_tva_add_iteration = yes
+			}
 		}
+		else = { ADISCORD_vorkerland_tva_cancel_field_trial = yes }
 	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 2 compare = greater_than_or_equals } }
-		random_list = {
-			70 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
-			30 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
-		}
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_vorkerland_tva_iterations value = 1 compare = greater_than_or_equals } }
-		random_list = {
-			55 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
-			45 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
-		}
-	}
-	else = {
-		random_list = {
-			40 = { ADISCORD_vorkerland_tva_field_trial_success = yes }
-			60 = { ADISCORD_vorkerland_tva_field_trial_failure = yes }
-		}
-	}
-	custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
-	hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
 }
 
-# District oaths, VAD only. FROM is the target state. Each state swears once,
-# to a charter or to commandant rule; the flag is held from the start of the
-# programme so both cannot run, and a cancelled programme releases it.
+# District decisions run in VAD with their state in FROM. A shared receipt
+# reserves the chancery; its state pointer lets native peace hooks refund the
+# project without depending on the hook's unrelated FROM scope.
+
 ADISCORD_vorkerland_vad_begin_district_oath = {
-	FROM = { set_state_flag = ADISCORD_vorkerland_vad_district_oath }
+	set_variable = { var = VAD_oath_state value = FROM }
+	FROM = { set_state_flag = VAD_oath_in_progress }
 }
 
 ADISCORD_vorkerland_vad_release_district_oath = {
-	FROM = { clr_state_flag = ADISCORD_vorkerland_vad_district_oath }
+	if = {
+		limit = { has_variable = VAD_oath_state }
+		var:VAD_oath_state = { clr_state_flag = VAD_oath_in_progress }
+	}
+	VAD_release_foreign_offer = yes
+	clear_variable = VAD_oath_pp
+	clear_variable = VAD_oath_manpower
+	clear_variable = VAD_oath_support
+	clear_variable = VAD_oath_rifles
+	clear_variable = VAD_oath_squad_weapons
+	clear_variable = VAD_oath_kind
+	clear_variable = VAD_oath_state
 }
 
 ADISCORD_vorkerland_vad_seal_district_charter = {
-	add_to_variable = { var = ADISCORD_vorkerland_vad_charters value = 1 }
-	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.03 }
-	ADISCORD_vorkerland_add_legitimacy = yes
-	FROM = {
-		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
-		add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 1 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_charter_available = yes } }
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_charter_result_tt
+			add_power_balance_value = { id = VAD_bop value = 0.15 }
+			hidden_effect = {
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				add_to_variable = { var = ADISCORD_vorkerland_vad_charters value = 1 }
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.03 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+				FROM = {
+					set_state_flag = ADISCORD_vorkerland_vad_district_oath
+					add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+					if = {
+						limit = { NOT = { has_variable = VAD_district_recruited } }
+						set_variable = { var = VAD_district_recruited value = 0 }
+					}
+					add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
 	}
 }
 
 ADISCORD_vorkerland_vad_seal_commandant_rule = {
-	add_to_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 }
-	add_manpower = 1500
-	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
-	set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.02 }
-	ADISCORD_vorkerland_add_legitimacy = yes
-	FROM = {
-		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
-		add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 2 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_commandant_available = yes } }
+			custom_effect_tooltip = ADISCORD_vorkerland_vad_commandant_result_tt
+			add_power_balance_value = { id = VAD_bop value = -0.15 }
+			hidden_effect = {
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				add_to_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 }
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.02 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+				FROM = {
+					set_state_flag = ADISCORD_vorkerland_vad_district_oath
+					add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+					if = {
+						limit = { NOT = { has_variable = VAD_district_recruited } }
+						set_variable = { var = VAD_district_recruited value = 0 }
+					}
+					set_variable = { var = VAD_district_unrest value = 20 }
+					add_to_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
 	}
 }
 
@@ -11252,39 +11642,494 @@ ADISCORD_vorkerland_vad_retire_district_oaths = {
 			limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district } }
 			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
 		}
+		VAD_clear_district_unrest = yes
+		VAD_clear_recruitment_disruption = yes
+		VAD_clear_staff_programmes = yes
+		VAD_clear_crown_programmes = yes
+		VAD_clear_local_militia = yes
+		VAD_clear_march_commitment = yes
 		clr_state_flag = ADISCORD_vorkerland_vad_district_oath
 	}
 	clear_array = global.ADISCORD_vorkerland_vad_oath_states
 }
 
-# Either leader's route can seat at most five councils.
-ADISCORD_vorkerland_wkr_mobilize_all_councils = {
+# The receipt reserves councils and their full personnel and equipment cost.
+# It survives leadership changes; only delivery, cancellation or handoff settles it.
+WKR_begin_council_order = {
 	if = {
-		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		limit = {
+			WKR_council_order_context = yes
+			WKR_council_order_free = yes
+			ADISCORD_vorkerland_wkr_has_working_council = yes
+			WKR_council_order_affordable = yes
+		}
+		add_political_power = -25
+		add_manpower = -3000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
+		set_variable = { var = WKR_council_order_pp value = 25 }
+		set_variable = { var = WKR_council_order_manpower value = 3000 }
+		set_variable = { var = WKR_council_order_rifles value = 2700 }
+		set_variable = { var = WKR_council_order_units value = 1 }
+		set_variable = { var = WKR_council_order_kind value = 1 }
 		ADISCORD_vorkerland_wkr_withdraw_council = yes
-		ADISCORD_vorkerland_wkr_council_battalion = yes
+		ADISCORD_vorkerland_wkr_refresh_councils = yes
+		WKR_lock_council_template = yes
 	}
+}
+
+WKR_begin_council_batch = {
 	if = {
-		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
+		limit = {
+			WKR_council_order_context = yes
+			has_completed_focus = WKR_requisition_in_the_republics_name
+			WKR_council_order_free = yes
+			WKR_has_two_working_councils = yes
+			WKR_council_batch_affordable = yes
+		}
+		add_political_power = -50
+		add_manpower = -6000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
+		set_variable = { var = WKR_council_order_pp value = 50 }
+		set_variable = { var = WKR_council_order_manpower value = 6000 }
+		set_variable = { var = WKR_council_order_rifles value = 5400 }
+		set_variable = { var = WKR_council_order_units value = 2 }
+		set_variable = { var = WKR_council_order_kind value = 2 }
 		ADISCORD_vorkerland_wkr_withdraw_council = yes
-		ADISCORD_vorkerland_wkr_council_battalion = yes
-	}
-	if = {
-		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
 		ADISCORD_vorkerland_wkr_withdraw_council = yes
-		ADISCORD_vorkerland_wkr_council_battalion = yes
+		ADISCORD_vorkerland_wkr_refresh_councils = yes
+		WKR_lock_council_template = yes
 	}
-	if = {
-		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
-		ADISCORD_vorkerland_wkr_withdraw_council = yes
-		ADISCORD_vorkerland_wkr_council_battalion = yes
-	}
-	if = {
-		limit = { ADISCORD_vorkerland_wkr_has_working_council = yes }
-		ADISCORD_vorkerland_wkr_withdraw_council = yes
-		ADISCORD_vorkerland_wkr_council_battalion = yes
-	}
+}
+
+WKR_release_council_order = {
+	clear_variable = WKR_council_order_pp
+	clear_variable = WKR_council_order_manpower
+	clear_variable = WKR_council_order_rifles
+	clear_variable = WKR_council_order_units
+	clear_variable = WKR_council_order_kind
+}
+
+WKR_return_reserved_councils = {
+	subtract_from_variable = { var = ADISCORD_vorkerland_wkr_councils_mobilized value = WKR_council_order_units }
+	WKR_release_council_order = yes
 	ADISCORD_vorkerland_wkr_refresh_councils = yes
+}
+
+WKR_refund_council_order = {
+	if = {
+		limit = { hidden_trigger = { has_variable = WKR_council_order_pp } }
+		add_political_power = WKR_council_order_pp
+		add_manpower = WKR_council_order_manpower
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = WKR_council_order_rifles producer = ROOT }
+		hidden_effect = { WKR_return_reserved_councils = yes }
+	}
+}
+
+# ROOT already owns its first state when reunifying, or is the native annexer.
+WKR_settle_council_order_handoff = {
+	if = {
+		limit = { WKR = { has_variable = WKR_council_order_pp } }
+		add_political_power = WKR.WKR_council_order_pp
+		add_manpower = WKR.WKR_council_order_manpower
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = WKR.WKR_council_order_rifles producer = ROOT }
+		WKR = { WKR_return_reserved_councils = yes }
+	}
+}
+
+WKR_finish_council_order = {
+	if = {
+		limit = { hidden_trigger = { has_variable = WKR_council_order_pp } }
+		if = {
+			limit = { hidden_trigger = { WKR_council_order_context = yes } }
+			hidden_effect = {
+				set_temp_variable = { var = WKR_delivered_councils value = WKR_council_order_units }
+				set_temp_variable = { var = WKR_delivered_order_kind value = WKR_council_order_kind }
+				WKR_release_council_order = yes
+			}
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = WKR_delivered_order_kind value = 3 compare = equals } } }
+				custom_effect_tooltip = WKR_assault_column_result_tt
+				hidden_effect = { WKR_create_assault_column = yes }
+			}
+			else = {
+				custom_effect_tooltip = WKR_council_delivered_tt
+				hidden_effect = {
+					for_loop_effect = {
+						end = WKR_delivered_councils
+						value = WKR_council_formation_index
+						ADISCORD_vorkerland_wkr_council_battalion = yes
+					}
+				}
+			}
+		}
+		else = { WKR_refund_council_order = yes }
+	}
+}
+
+# Ordinary recruitment remains available, but paid formations retain their
+# three-battalion composition until the campaign closes every pending order.
+WKR_lock_council_template = {
+	ADISCORD_vorkerland_ensure_worker_home_guard_template = yes
+	set_division_template_lock = { division_template = "Worker Home Guard" is_locked = yes }
+	set_division_force_allow_recruiting = { division_template = "Worker Home Guard" force_allow_recruiting = yes }
+}
+
+WKR_lock_assault_column_template = {
+	if = {
+		limit = { NOT = { has_template = "Worker Assault Column" } }
+		division_template = {
+			name = "Worker Assault Column"
+			template_counter = 78
+			division_names_group = WRK_INF_01
+			is_locked = yes
+			force_allow_recruiting = yes
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 0 y = 2 }
+				ADISCORD_militia = { x = 1 y = 0 }
+				ADISCORD_militia = { x = 1 y = 1 }
+				ADISCORD_militia = { x = 1 y = 2 }
+			}
+		}
+	}
+	set_division_template_lock = { division_template = "Worker Assault Column" is_locked = yes }
+	set_division_force_allow_recruiting = { division_template = "Worker Assault Column" force_allow_recruiting = yes }
+}
+
+WKR_begin_assault_column = {
+	if = {
+		limit = {
+			WKR_council_order_context = yes
+			WKR_presidential_course = yes
+			has_completed_focus = WKR_break_them_with_numbers
+			WKR_council_order_free = yes
+			WKR_has_two_working_councils = yes
+			WKR_assault_column_affordable = yes
+		}
+		add_political_power = -60
+		add_manpower = -6000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
+		set_variable = { var = WKR_council_order_pp value = 60 }
+		set_variable = { var = WKR_council_order_manpower value = 6000 }
+		set_variable = { var = WKR_council_order_rifles value = 5400 }
+		set_variable = { var = WKR_council_order_units value = 2 }
+		set_variable = { var = WKR_council_order_kind value = 3 }
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_withdraw_council = yes
+		ADISCORD_vorkerland_wkr_refresh_councils = yes
+		WKR_lock_assault_column_template = yes
+	}
+}
+
+# Two councils supply one larger unit; the receipt count remains the number
+# of councils withdrawn from production for cancellation and veteran accounting.
+WKR_create_assault_column = {
+	WKR_lock_assault_column_template = yes
+	capital_scope = {
+		create_unit = {
+			division = "name = \"WKR_assault_column_unit\" division_template = \"Worker Assault Column\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = PREV
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+WKR_initialize_administration = {
+	if = {
+		limit = {
+			tag = WKR
+			NOT = { has_country_flag = WKR_administration_initialized }
+		}
+		set_country_flag = WKR_administration_initialized
+		set_variable = { var = WKR_council_doctrine_conscription value = 0 }
+		set_variable = { var = WKR_council_doctrine_training_time_army_factor value = 0 }
+		set_variable = { var = WKR_council_doctrine_army_attack_factor value = 0 }
+		set_variable = { var = WKR_council_doctrine_army_org_factor value = 0 }
+		set_variable = { var = WKR_council_doctrine_experience_gain_army_factor value = 0 }
+		set_variable = { var = WKR_foreign_send_volunteer_size value = 0 }
+		set_variable = { var = WKR_foreign_send_volunteers_tension value = 0 }
+		set_variable = { var = WKR_foreign_political_power_gain value = 0 }
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			set_power_balance = { id = WKR_bop set_value = -0.30 }
+		}
+		else = { set_power_balance = { id = WKR_bop set_value = 0.30 } }
+		country_event = { id = ADISCORD_vorkerland_claimant.1 days = 7 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+WKR_appoint_chairman = {
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		ADISCORD_vorkerland_promote_nikita_worcker = yes
+		set_politics = { ruling_party = pragmatism elections_allowed = no }
+		set_country_leader_portrait = {
+			ideology = pragmatism
+			portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar
+		}
+	}
+	else = {
+		promote_character = {
+			character = WKR_Emergency_Coordination_Committee
+			ideology = neo_vorkerism
+		}
+		set_politics = { ruling_party = pragmatism elections_allowed = no }
+	}
+	set_cosmetic_tag = WRK_vorkerland_emergency
+}
+
+WKR_appoint_executive = {
+	ADISCORD_vorkerland_promote_anton_bagley = yes
+	set_politics = { ruling_party = utilitarism elections_allowed = no }
+	set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+	set_country_leader_portrait = {
+		ideology = utilitarism
+		portrait = GFX_portrait_WRK_Anton_Bagley
+	}
+}
+
+# Range entry dispatches the leadership event; there is no periodic election.
+# Its immediate block rechecks the mandate because another event may be open.
+WKR_resolve_balance = {
+	if = {
+		limit = {
+			WKR_administration_active = yes
+			WKR_mandate_open = yes
+		}
+		if = {
+			limit = {
+				WKR_chairman_has_majority = yes
+				WKR_presidential_course = no
+			}
+			country_event = { id = ADISCORD_vorkerland_claimant.5 }
+		}
+		else_if = {
+			limit = {
+				WKR_executive_has_majority = yes
+				WKR_executive_course = no
+			}
+			country_event = { id = ADISCORD_vorkerland_claimant.6 }
+		}
+	}
+}
+
+WKR_close_administration = {
+	WKR_close_council_orders = yes
+	WKR_close_railway_councils = yes
+	WKR_close_recognition_offers = yes
+	if = {
+		limit = {
+			tag = WKR
+			has_completed_focus = WKR_send_republican_volunteers
+		}
+		set_rule = { can_send_volunteers = no }
+	}
+	if = {
+		limit = { has_idea = ADISCORD_vorkerland_wkr_reserves_forward }
+		remove_ideas = ADISCORD_vorkerland_wkr_reserves_forward
+	}
+	if = {
+		limit = { has_power_balance = { id = WKR_bop } }
+		remove_power_balance = { id = WKR_bop }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+WKR_close_recognition_offers = {
+	if = {
+		limit = { tag = WKR }
+		ROM = { clr_country_flag = WKR_recognition_offer_pending }
+		TRU = { clr_country_flag = WKR_recognition_offer_pending }
+	}
+}
+
+WKR_deliver_coalition_supply = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				WKR_coalition_supply_context = yes
+				WKR_coalition_supply_affordable = yes
+			}
+		}
+		hidden_effect = { add_political_power = -25 }
+		send_equipment = { type = infantry_equipment amount = 1000 target = FROM }
+		send_equipment = { type = support_equipment amount = 50 target = FROM }
+	}
+}
+
+WKR_offer_republic_recognition = {
+	if = {
+		limit = { WKR_can_offer_recognition = yes }
+		FROM = {
+			set_country_flag = WKR_recognition_offer_pending
+			country_event = { id = ADISCORD_vorkerland_diplomacy.17 days = 1 }
+		}
+	}
+}
+
+# COUNTRY: the signatory. The pending offer is consumed in the same effect as
+# payment, so another event copy cannot ratify or charge the agreement again.
+WKR_accept_republic_recognition = {
+	if = {
+		limit = { hidden_trigger = { WKR_recognition_offer_valid = yes } }
+		hidden_effect = {
+			clr_country_flag = WKR_recognition_offer_pending
+			set_country_flag = WKR_independence_treaty
+		}
+		WKR = {
+			add_political_power = -50
+			diplomatic_relation = { country = ROOT relation = non_aggression_pact active = yes }
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.04 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+			}
+		}
+	}
+}
+
+WKR_begin_railway_council = {
+	if = {
+		limit = {
+			WKR_railway_context = yes
+			WKR_railway_slot_free = yes
+			WKR_railway_target_free = yes
+			WKR_railway_affordable = yes
+		}
+		add_political_power = -40
+		add_manpower = -500
+		add_equipment_to_stockpile = { type = support_equipment amount = -40 producer = ROOT }
+		add_equipment_to_stockpile = { type = train_equipment amount = -5 producer = ROOT }
+		set_variable = { var = WKR_railway_order_pp value = 40 }
+		set_variable = { var = WKR_railway_order_manpower value = 500 }
+		set_variable = { var = WKR_railway_order_support value = 40 }
+		set_variable = { var = WKR_railway_order_trains value = 5 }
+		set_variable = { var = WKR_railway_order_kind value = 1 }
+		set_variable = { var = WKR_railway_order_state value = FROM }
+		FROM = { set_state_flag = WKR_railway_in_progress }
+	}
+}
+
+WKR_release_railway_order = {
+	if = {
+		limit = { has_variable = WKR_railway_order_state }
+		var:WKR_railway_order_state = { clr_state_flag = WKR_railway_in_progress }
+	}
+	clear_variable = WKR_railway_order_pp
+	clear_variable = WKR_railway_order_manpower
+	clear_variable = WKR_railway_order_support
+	clear_variable = WKR_railway_order_trains
+	clear_variable = WKR_railway_order_state
+	clear_variable = WKR_railway_order_kind
+}
+
+WKR_refund_railway_order = {
+	if = {
+		limit = { hidden_trigger = { has_variable = WKR_railway_order_pp } }
+		add_political_power = WKR_railway_order_pp
+		add_manpower = WKR_railway_order_manpower
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = WKR_railway_order_support producer = ROOT }
+		add_equipment_to_stockpile = { type = train_equipment_1 amount = WKR_railway_order_trains producer = ROOT }
+		hidden_effect = { WKR_release_railway_order = yes }
+	}
+}
+
+# The recipient is already alive: either united WRK after its first transfer,
+# or the native annexer. The same receipt guards delayed decision callbacks.
+WKR_settle_railway_handoff = {
+	if = {
+		limit = { WKR = { has_variable = WKR_railway_order_pp } }
+		add_political_power = WKR.WKR_railway_order_pp
+		add_manpower = WKR.WKR_railway_order_manpower
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = WKR.WKR_railway_order_support producer = ROOT }
+		add_equipment_to_stockpile = { type = train_equipment_1 amount = WKR.WKR_railway_order_trains producer = ROOT }
+		WKR = { WKR_release_railway_order = yes }
+	}
+}
+
+WKR_finish_railway_council = {
+	if = {
+		limit = { hidden_trigger = { WKR_railway_order_matches_target = yes } }
+		if = {
+			limit = {
+				hidden_trigger = {
+					WKR_railway_context = yes
+					FROM = { NOT = { has_dynamic_modifier = { modifier = WKR_railway_council } } }
+				}
+			}
+			FROM = { add_dynamic_modifier = { modifier = WKR_railway_council } }
+			hidden_effect = {
+				FROM = { add_to_array = { array = global.WKR_railway_council_states value = THIS } }
+				WKR_release_railway_order = yes
+			}
+		}
+		else = { WKR_refund_railway_order = yes }
+	}
+}
+
+# STATE. A battle or territorial handoff can precede the decision's cancel
+# callback. In reunification the first transferred state already belongs to
+# the living recipient, so its pending payment must not return to dormant WKR.
+WKR_lose_railway_council = {
+	if = {
+		limit = { NOT = { is_owned_and_controlled_by = WKR } }
+		if = {
+			limit = { has_state_flag = WKR_railway_in_progress }
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_phase_reunification
+					is_owned_by = WRK
+				}
+				WRK = { WKR_settle_railway_handoff = yes }
+			}
+			else_if = {
+				limit = { WKR = { exists = yes } }
+				WKR = { WKR_refund_railway_order = yes }
+			}
+		}
+		WKR_clear_airfield_workshop = yes
+		WKR_clear_prepared_interchange = yes
+		if = {
+			limit = { has_dynamic_modifier = { modifier = WKR_railway_council } }
+			remove_dynamic_modifier = { modifier = WKR_railway_council }
+		}
+		if = {
+			limit = { is_in_array = { array = global.WKR_railway_council_states value = THIS } }
+			remove_from_array = { array = global.WKR_railway_council_states value = THIS }
+		}
+	}
+}
+
+WKR_close_railway_councils = {
+	if = {
+		limit = { tag = WKR }
+		WKR_refund_railway_order = yes
+		for_each_scope_loop = {
+			array = global.WKR_railway_council_states
+			WKR_clear_airfield_workshop = yes
+			WKR_clear_prepared_interchange = yes
+			if = {
+				limit = { has_dynamic_modifier = { modifier = WKR_railway_council } }
+				remove_dynamic_modifier = { modifier = WKR_railway_council }
+			}
+		}
+		clear_array = global.WKR_railway_council_states
+	}
+}
+
+WKR_close_council_orders = {
+	WKR_refund_council_order = yes
+	if = {
+		limit = { has_template = "Worker Home Guard" }
+		set_division_template_lock = { division_template = "Worker Home Guard" is_locked = no }
+		set_division_force_allow_recruiting = { division_template = "Worker Home Guard" force_allow_recruiting = yes }
+	}
+	if = {
+		limit = { has_template = "Worker Assault Column" }
+		set_division_template_lock = { division_template = "Worker Assault Column" is_locked = no }
+		set_division_force_allow_recruiting = { division_template = "Worker Assault Column" force_allow_recruiting = yes }
+	}
 }
 
 # --- superevent_observer ---
@@ -11406,11 +12251,12 @@ ADISCORD_superevent_observer_tick = {
 }
 
 # --- postwar_expansion_effects ---
-# The verified joint victory schedules this once. Political settlement is
-# independent of the local super-event window and its close button.
+# The succession choice is separate from the local super-event window.
+# Recheck the cabinet before applying the political transition once.
 ADISCORD_vorkerland_establish_world_empire = {
 	if = {
 		limit = { ADISCORD_vorkerland_world_empire_can_form = yes }
+		set_country_flag = ADISCORD_vorkerland_joint_succession_settled
 		set_cosmetic_tag = WRK_vorkerland_world_empire
 		retire_character = WRK_VAD_Joint_Council
 		if = {
@@ -11451,31 +12297,46 @@ ADISCORD_vorkerland_establish_world_empire = {
 			ideology = etatism
 			portrait = GFX_portrait_WRK_Nikita_Worcker_victory
 		}
-		set_variable = { var = WRK_empire_attack value = 0 }
-		set_variable = { var = WRK_empire_defence value = 0 }
-		set_variable = { var = WRK_empire_org value = 0 }
-		set_variable = { var = WRK_empire_supply value = 0 }
-		set_variable = { var = WRK_empire_output value = 0 }
-		set_variable = { var = WRK_empire_stability value = 0 }
-		set_variable = { var = WRK_empire_politics value = 0 }
-		if = {
-			limit = {
-				NOT = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
-			}
-			set_power_balance = { id = ADISCORD_vorkerland_empire_bop set_value = 0.20 }
-		}
-		load_focus_tree = {
-			tree = ADISCORD_vorkerland_world_empire_focus
-			keep_completed = no
-		}
-		mark_focus_tree_layout_dirty = yes
-		ADISCORD_economy_mark_dirty = yes
+		ADISCORD_vorkerland_initialize_world_empire = yes
 		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
 	}
 }
 
-# COUNTRY WRK at its route's Unity Tower. The worker and technocratic routes
-# continue in their own postwar trees; the event loads them in a fresh scope.
+# Both imperial founders enter through guarded transitions. Keep the cabinet
+# and character settlement in those callers; only the common institutions reset here.
+ADISCORD_vorkerland_initialize_world_empire = {
+	set_variable = { var = WRK_empire_attack value = 0 }
+	set_variable = { var = WRK_empire_defence value = 0 }
+	set_variable = { var = WRK_empire_org value = 0 }
+	set_variable = { var = WRK_empire_supply value = 0 }
+	set_variable = { var = WRK_empire_output value = 0 }
+	set_variable = { var = WRK_empire_stability value = 0 }
+	set_variable = { var = WRK_empire_politics value = 0 }
+	if = {
+		limit = {
+			NOT = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+		}
+		set_power_balance = { id = ADISCORD_vorkerland_empire_bop set_value = 0.20 }
+	}
+	load_focus_tree = {
+		tree = ADISCORD_vorkerland_world_empire_focus
+		keep_completed = no
+	}
+	mark_focus_tree_layout_dirty = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_vorkerland_establish_petrichev_empire = {
+	if = {
+		limit = { ADISCORD_vorkerland_petrichev_empire_can_form = yes }
+		set_cosmetic_tag = WRK_vorkerland_world_empire
+		ADISCORD_vorkerland_initialize_world_empire = yes
+		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
+	}
+}
+
+# COUNTRY WRK at its route's Unity Tower. The delayed callback reads the
+# completed settlement before loading the next campaign tree.
 ADISCORD_vorkerland_schedule_route_tree = {
 	country_event = { id = ADISCORD_vorkerland_postwar.6 days = 1 }
 }
@@ -11509,8 +12370,8 @@ ADISCORD_vorkerland_empire_refresh_court = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# COUNTRY WRK. The conspiracy range of the Shadow of Petrishchev schedules one
-# plot at a time; the event reads the balance again when it fires.
+# COUNTRY WRK. The officer corps schedules one plot at a time; the event
+# reads the balance again when it fires.
 ADISCORD_vorkerland_empire_schedule_coup = {
 	if = {
 		limit = { NOT = { has_country_flag = WRK_empire_coup_pending } }
@@ -11530,11 +12391,28 @@ ADISCORD_vorkerland_empire_settle_shadow = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# STATE. A grant survives occupation as a land title, while its modifier is
+# active only under the restoration empire. Repeated grants cannot raise men twice.
+ADISCORD_vorkerland_empire_grant_estate = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = WRK_empire_officer_estate } } }
+		add_dynamic_modifier = { modifier = WRK_empire_officer_estate }
+		ROOT = {
+			add_manpower = 2000
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
 # STATE target of WRK_empire_appoint_governor; ROOT is WRK. The governor focus
 # choice selects the administration; a governor stays for the whole campaign.
 # The balance shift is skipped once the Veyran order has settled the balance.
 ADISCORD_vorkerland_empire_install_governor = {
 	hidden_effect = { set_state_flag = WRK_empire_governor_seat }
+	if = {
+		limit = { ROOT = { has_completed_focus = WRK_empire_officer_estates } }
+		ADISCORD_vorkerland_empire_grant_estate = yes
+	}
 	if = {
 		limit = { ROOT = { has_completed_focus = WRK_empire_military_governors } }
 		add_dynamic_modifier = { modifier = WRK_empire_military_governorate }
@@ -11617,11 +12495,17 @@ ADISCORD_vorkerland_pw_record_district_oaths = {
 	multiply_variable = { var = ADISCORD_vorkerland_pw_amnesty_manpower value = 3000 }
 }
 
-# Eight iterations is the ceiling of the transferred laboratory practice.
+# Up to eight iterations survive as laboratory practice, scaled by the trained
+# cadres retained at reunification. Read TVA before its annexation.
 ADISCORD_vorkerland_pw_record_trial_iterations = {
 	set_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency value = TVA.ADISCORD_vorkerland_tva_iterations }
 	clamp_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency min = 0 max = 8 }
 	multiply_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency value = 0.01 }
+	set_temp_variable = { var = TVA_inherited_cadre_share value = TVA.TVA_cadre_reserve }
+	add_to_temp_variable = { var = TVA_inherited_cadre_share value = TVA.TVA_protected_cadre }
+	clamp_temp_variable = { var = TVA_inherited_cadre_share min = 0 max = 100 }
+	multiply_temp_variable = { var = TVA_inherited_cadre_share value = 0.01 }
+	multiply_variable = { var = ADISCORD_vorkerland_pw_iteration_efficiency value = TVA_inherited_cadre_share }
 }
 
 ADISCORD_vorkerland_pw_ensure_institutions = {
@@ -14043,5 +14927,2002 @@ WRK_worx_finish_corridor_depots = {
 			WRK_worx_refresh = yes
 		}
 		else = { WRK_worx_refund = yes }
+	}
+}
+
+ADISCORD_vorkerland_wkr_refresh_measured_republic = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = WKR_measured_republic_dynamic } } }
+		add_dynamic_modifier = { modifier = WKR_measured_republic_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_vorkerland_wkr_initialize_measured_republic = {
+	set_variable = { var = WKR_norm_army_attack_factor value = 0 }
+	set_variable = { var = WKR_norm_army_defence_factor value = 0 }
+	set_variable = { var = WKR_norm_army_org_factor value = 0 }
+	set_variable = { var = WKR_norm_army_org_regain value = 0 }
+	set_variable = { var = WKR_norm_conscription value = 0 }
+	set_variable = { var = WKR_norm_consumer_goods_factor value = 0 }
+	set_variable = { var = WKR_norm_industrial_capacity_factory value = 0 }
+	set_variable = { var = WKR_norm_industry_repair_factor value = 0 }
+	set_variable = { var = WKR_norm_land_reinforce_rate value = 0 }
+	set_variable = { var = WKR_norm_max_dig_in_factor value = 0 }
+	set_variable = { var = WKR_norm_max_planning_factor value = 0 }
+	set_variable = { var = WKR_norm_production_factory_efficiency_gain_factor value = 0 }
+	set_variable = { var = WKR_norm_production_factory_max_efficiency_factor value = 0 }
+	set_variable = { var = WKR_norm_production_speed_buildings_factor value = 0 }
+	set_variable = { var = WKR_norm_stability_factor value = 0 }
+	set_variable = { var = WKR_norm_supply_consumption_factor value = 0 }
+	set_variable = { var = WKR_norm_training_time_army_factor value = 0 }
+	set_variable = { var = WKR_norm_war_support_factor value = 0 }
+}
+
+# Administration inputs persist for the current campaign. Reopening a decision
+# category never resets the balance, network or trained reserve.
+TVA_initialize_administration = {
+	if = {
+		limit = {
+			tag = TVA
+			NOT = { has_country_flag = TVA_administration_initialized }
+		}
+		set_country_flag = TVA_administration_initialized
+		set_power_balance = { id = TVA_bop set_value = 0 }
+		set_variable = { var = TVA_network_load value = 35 }
+		set_variable = { var = TVA_cadre_reserve value = 60 }
+		set_variable = { var = TVA_crew_standards value = 0 }
+		set_variable = { var = TVA_protected_cadre value = 0 }
+		set_variable = { var = TVA_policy_army_attack_factor value = 0 }
+		set_variable = { var = TVA_policy_army_defence_factor value = 0 }
+		set_variable = { var = TVA_policy_army_leader_start_level value = 0 }
+		set_variable = { var = TVA_policy_army_morale_factor value = 0 }
+		set_variable = { var = TVA_policy_army_org_factor value = 0 }
+		set_variable = { var = TVA_policy_army_org_regain value = 0 }
+		set_variable = { var = TVA_policy_army_speed_factor value = 0 }
+		set_variable = { var = TVA_policy_attrition value = 0 }
+		set_variable = { var = TVA_policy_breakthrough_factor value = 0 }
+		set_variable = { var = TVA_policy_conscription value = 0 }
+		set_variable = { var = TVA_policy_experience_gain_army_factor value = 0 }
+		set_variable = { var = TVA_policy_experience_loss_factor value = 0 }
+		set_variable = { var = TVA_policy_industrial_capacity_factory value = 0 }
+		set_variable = { var = TVA_policy_land_reinforce_rate value = 0 }
+		set_variable = { var = TVA_policy_line_change_production_efficiency_factor value = 0 }
+		set_variable = { var = TVA_policy_max_dig_in_factor value = 0 }
+		set_variable = { var = TVA_policy_production_factory_efficiency_gain_factor value = 0 }
+		set_variable = { var = TVA_policy_production_factory_max_efficiency_factor value = 0 }
+		set_variable = { var = TVA_policy_research_speed_factor value = 0 }
+		set_variable = { var = TVA_policy_stability_factor value = 0 }
+		set_variable = { var = TVA_policy_supply_consumption_factor value = 0 }
+		set_variable = { var = TVA_policy_training_time_army_factor value = 0 }
+		set_variable = { var = TVA_policy_air_cas_efficiency value = 0 }
+		set_variable = { var = TVA_policy_air_accidents_factor value = 0 }
+		set_variable = { var = TVA_policy_air_intercept_efficiency value = 0 }
+		set_variable = { var = TVA_policy_air_range_factor value = 0 }
+		TVA_refresh_administration = yes
+	}
+}
+
+TVA_refresh_administration = {
+	clamp_variable = { var = TVA_network_load min = 0 max = 100 }
+	clamp_variable = { var = TVA_cadre_reserve min = 0 max = 100 }
+	clamp_variable = { var = TVA_crew_standards min = 0 max = 3 }
+	set_variable = { var = TVA_crew_organization value = TVA_crew_standards }
+	multiply_variable = { var = TVA_crew_organization value = 0.01 }
+	add_to_variable = { var = TVA_crew_organization value = TVA_policy_army_org_factor }
+	set_variable = { var = TVA_crew_experience_loss value = TVA_crew_standards }
+	multiply_variable = { var = TVA_crew_experience_loss value = -0.03 }
+	add_to_variable = { var = TVA_crew_experience_loss value = TVA_policy_experience_loss_factor }
+	set_variable = { var = TVA_network_output value = TVA_network_load }
+	subtract_from_variable = { var = TVA_network_output value = 50 }
+	clamp_variable = { var = TVA_network_output min = 0 max = 50 }
+	multiply_variable = { var = TVA_network_output value = -0.002 }
+	add_to_variable = { var = TVA_network_output value = TVA_policy_industrial_capacity_factory }
+	set_variable = { var = TVA_cadre_research value = TVA_cadre_reserve }
+	subtract_from_variable = { var = TVA_cadre_research value = 50 }
+	multiply_variable = { var = TVA_cadre_research value = 0.001 }
+	add_to_variable = { var = TVA_cadre_research value = TVA_policy_research_speed_factor }
+	set_variable = { var = TVA_trial_success_chance value = ADISCORD_vorkerland_tva_iterations }
+	multiply_variable = { var = TVA_trial_success_chance value = 15 }
+	add_to_variable = { var = TVA_trial_success_chance value = 40 }
+	clamp_variable = { var = TVA_trial_success_chance min = 40 max = 85 }
+	if = {
+		limit = { check_variable = { var = TVA_network_load value = 90 compare = greater_than_or_equals } }
+		subtract_from_variable = { var = TVA_trial_success_chance value = 35 }
+	}
+	else_if = {
+		limit = { check_variable = { var = TVA_network_load value = 70 compare = greater_than_or_equals } }
+		subtract_from_variable = { var = TVA_trial_success_chance value = 20 }
+	}
+	if = {
+		limit = { check_variable = { var = TVA_cadre_reserve value = 75 compare = greater_than_or_equals } }
+		add_to_variable = { var = TVA_trial_success_chance value = 10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = TVA_cadre_reserve value = 30 compare = less_than } }
+		subtract_from_variable = { var = TVA_trial_success_chance value = 15 }
+	}
+	clamp_variable = { var = TVA_trial_success_chance min = 5 max = 95 }
+	if = {
+		limit = {
+			TVA_administration_active = yes
+			NOT = { has_dynamic_modifier = { modifier = TVA_administration_dynamic } }
+		}
+		add_dynamic_modifier = { modifier = TVA_administration_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+TVA_clear_programme = {
+	clear_variable = TVA_programme_pp
+	clear_variable = TVA_programme_support
+	clear_variable = TVA_programme_manpower
+	clear_variable = TVA_programme_kind
+}
+
+TVA_refund_programme = {
+	if = {
+		limit = { hidden_trigger = { has_variable = TVA_programme_pp } }
+		add_political_power = TVA_programme_pp
+		add_manpower = TVA_programme_manpower
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = TVA_programme_support producer = ROOT }
+		hidden_effect = { TVA_clear_programme = yes }
+	}
+}
+
+# Country ROOT receives the dormant programme before TVA is consumed.
+TVA_settle_administration_handoff = {
+	if = {
+		limit = { TVA = { has_variable = TVA_programme_pp } }
+		add_political_power = TVA.TVA_programme_pp
+		add_manpower = TVA.TVA_programme_manpower
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = TVA.TVA_programme_support producer = ROOT }
+		TVA = { TVA_clear_programme = yes }
+	}
+}
+
+TVA_send_specialist_offer = {
+	if = {
+		limit = {
+			TVA_exchange_payment_available = yes
+			FROM = {
+				TVA_exchange_recipient_available = yes
+				NOT = { has_country_flag = TVA_exchange_offer_pending }
+			}
+		}
+		FROM = {
+			set_country_flag = TVA_exchange_offer_pending
+			country_event = { id = ADISCORD_vorkerland_diplomacy.18 days = 1 }
+		}
+	}
+}
+
+TVA_accept_specialist_exchange = {
+	if = {
+		limit = { TVA_specialist_exchange_valid = yes }
+		add_manpower = -600
+		TVA = {
+			add_political_power = -30
+			send_equipment = {
+				target = ROOT
+				type = support_equipment
+				amount = 100
+			}
+			add_manpower = 600
+			add_to_variable = { var = TVA_cadre_reserve value = 10 }
+			TVA_refresh_administration = yes
+		}
+	}
+	clr_country_flag = TVA_exchange_offer_pending
+}
+
+TVA_close_exchange_offers = {
+	if = {
+		limit = { tag = TVA }
+		EYR = { clr_country_flag = TVA_exchange_offer_pending }
+		EGC = { clr_country_flag = TVA_exchange_offer_pending }
+		RIV = { clr_country_flag = TVA_exchange_offer_pending }
+		REV = { clr_country_flag = TVA_exchange_offer_pending }
+		YOR = { clr_country_flag = TVA_exchange_offer_pending }
+		NDN = { clr_country_flag = TVA_exchange_offer_pending }
+		SWB = { clr_country_flag = TVA_exchange_offer_pending }
+		VHV = { clr_country_flag = TVA_exchange_offer_pending }
+		OSV = { clr_country_flag = TVA_exchange_offer_pending }
+		ZAO = { clr_country_flag = TVA_exchange_offer_pending }
+		WPA = { clr_country_flag = TVA_exchange_offer_pending }
+		WPS = { clr_country_flag = TVA_exchange_offer_pending }
+		PWR = { clr_country_flag = TVA_exchange_offer_pending }
+		PSD = { clr_country_flag = TVA_exchange_offer_pending }
+		VLA = { clr_country_flag = TVA_exchange_offer_pending }
+		EBA = { clr_country_flag = TVA_exchange_offer_pending }
+		TGD = { clr_country_flag = TVA_exchange_offer_pending }
+		SOL = { clr_country_flag = TVA_exchange_offer_pending }
+		SRA = { clr_country_flag = TVA_exchange_offer_pending }
+		CSL = { clr_country_flag = TVA_exchange_offer_pending }
+		DVA = { clr_country_flag = TVA_exchange_offer_pending }
+		ZTA = { clr_country_flag = TVA_exchange_offer_pending }
+	}
+}
+
+TVA_clear_accountability_results = {
+	if = {
+		limit = { has_idea = TVA_public_confidence }
+		remove_ideas = TVA_public_confidence
+	}
+	if = {
+		limit = { has_idea = TVA_public_accountability_crisis }
+		remove_ideas = TVA_public_accountability_crisis
+	}
+	if = {
+		limit = { has_idea = TVA_research_diversion }
+		remove_ideas = TVA_research_diversion
+	}
+}
+
+TVA_close_administration = {
+	TVA_clear_accountability_results = yes
+	if = {
+		limit = { has_idea = ADISCORD_vorkerland_tva_doctrine_line_replacement }
+		remove_ideas = ADISCORD_vorkerland_tva_doctrine_line_replacement
+	}
+	TVA_close_exchange_offers = yes
+	TVA_refund_programme = yes
+	if = {
+		limit = { has_power_balance = { id = TVA_bop } }
+		remove_power_balance = { id = TVA_bop }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = TVA_administration_dynamic } }
+		remove_dynamic_modifier = { modifier = TVA_administration_dynamic }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+TVA_begin_public_audit = {
+	if = {
+		limit = {
+			TVA_public_audit_available = yes
+			TVA_public_audit_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -35
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		set_variable = { var = TVA_programme_pp value = 35 }
+		set_variable = { var = TVA_programme_support value = 60 }
+		set_variable = { var = TVA_programme_manpower value = 0 }
+		set_variable = { var = TVA_programme_kind value = 5 }
+	}
+}
+
+TVA_finish_public_audit = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 5 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_public_audit_available = yes } }
+			add_power_balance_value = { id = TVA_bop value = 0.10 }
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = TVA_public_audit_healthy_tt
+						TVA_public_audit_healthy = yes
+					}
+				}
+				add_timed_idea = { idea = TVA_public_confidence days = 70 }
+				custom_effect_tooltip = TVA_public_audit_success_tt
+				hidden_effect = {
+					set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.08 }
+					ADISCORD_vorkerland_add_legitimacy = yes
+					country_event = { id = ADISCORD_vorkerland_claimant.27 days = 1 }
+				}
+			}
+			else = {
+				add_timed_idea = { idea = TVA_public_accountability_crisis days = 70 }
+				custom_effect_tooltip = TVA_public_audit_failure_tt
+				hidden_effect = {
+					set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.04 }
+					ADISCORD_vorkerland_add_legitimacy = yes
+					country_event = { id = ADISCORD_vorkerland_claimant.28 days = 1 }
+				}
+			}
+			hidden_effect = { TVA_clear_programme = yes }
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+TVA_begin_research_conversion = {
+	if = {
+		limit = {
+			TVA_research_conversion_available = yes
+			TVA_research_conversion_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -35
+		add_manpower = -600
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = TVA_programme_pp value = 35 }
+		set_variable = { var = TVA_programme_support value = 100 }
+		set_variable = { var = TVA_programme_manpower value = 600 }
+		set_variable = { var = TVA_programme_kind value = 6 }
+	}
+}
+
+TVA_finish_research_conversion = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 6 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_research_conversion_available = yes } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = TVA }
+			add_timed_idea = { idea = TVA_research_diversion days = 70 }
+			add_power_balance_value = { id = TVA_bop value = -0.10 }
+			custom_effect_tooltip = TVA_research_conversion_result_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 15 }
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+				country_event = { id = ADISCORD_vorkerland_claimant.29 days = 1 }
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+TVA_begin_maintenance = {
+	if = {
+		limit = {
+			TVA_maintenance_available = yes
+			TVA_maintenance_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -40
+		add_equipment_to_stockpile = { type = support_equipment amount = -80 }
+		set_variable = { var = TVA_programme_pp value = 40 }
+		set_variable = { var = TVA_programme_support value = 80 }
+		set_variable = { var = TVA_programme_manpower value = 0 }
+		set_variable = { var = TVA_programme_kind value = 1 }
+	}
+}
+
+TVA_finish_maintenance = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 1 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_maintenance_available = yes } }
+			custom_effect_tooltip = TVA_maintenance_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = TVA_hold_back_civil_power }
+					subtract_from_variable = { var = TVA_network_load value = 35 }
+				}
+				else = { subtract_from_variable = { var = TVA_network_load value = 25 } }
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+TVA_begin_cadre_training = {
+	if = {
+		limit = {
+			TVA_cadre_training_available = yes
+			TVA_cadre_training_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -35
+		add_manpower = -600
+		set_variable = { var = TVA_programme_pp value = 35 }
+		set_variable = { var = TVA_programme_support value = 0 }
+		set_variable = { var = TVA_programme_manpower value = 600 }
+		set_variable = { var = TVA_programme_kind value = 2 }
+	}
+}
+
+TVA_finish_cadre_training = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 2 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_cadre_training_available = yes } }
+			if = {
+				limit = { hidden_trigger = { TVA_crew_training_can_improve = yes } }
+				custom_effect_tooltip = TVA_crew_training_level_tt
+				effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_doctrine_fewer_better_crews }
+				hidden_effect = { add_to_variable = { var = TVA_crew_standards value = 1 } }
+			}
+			custom_effect_tooltip = TVA_cadre_training_result_tt
+			add_power_balance_value = { id = TVA_bop value = 0.10 }
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = TVA_build_the_engineering_service }
+					add_to_variable = { var = TVA_cadre_reserve value = 35 }
+				}
+				else = { add_to_variable = { var = TVA_cadre_reserve value = 20 } }
+				subtract_from_variable = { var = TVA_network_load value = 5 }
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+# Reissuing a shipment starts a fresh interval rather than accumulating time.
+TVA_frontline_dispatch_reward = {
+	hidden_effect = {
+		if = {
+			limit = { has_idea = ADISCORD_vorkerland_tva_doctrine_line_replacement }
+			remove_ideas = ADISCORD_vorkerland_tva_doctrine_line_replacement
+		}
+	}
+	add_timed_idea = { idea = ADISCORD_vorkerland_tva_doctrine_line_replacement days = 21 }
+}
+
+TVA_begin_emergency_series = {
+	if = {
+		limit = {
+			TVA_emergency_series_available = yes
+			TVA_emergency_series_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -30
+		set_variable = { var = TVA_programme_pp value = 30 }
+		set_variable = { var = TVA_programme_support value = 0 }
+		set_variable = { var = TVA_programme_manpower value = 0 }
+		set_variable = { var = TVA_programme_kind value = 3 }
+		if = {
+			limit = { has_completed_focus = TVA_run_the_grid_at_war_load }
+			set_variable = { var = TVA_programme_kind value = 4 }
+		}
+	}
+}
+
+# Programme kinds 3 and 4 preserve the quoted production tier until settlement.
+TVA_finish_emergency_series = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				OR = {
+					check_variable = { var = TVA_programme_kind value = 3 compare = equals }
+					check_variable = { var = TVA_programme_kind value = 4 compare = equals }
+				}
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_emergency_series_order_available = yes } }
+			if = {
+				limit = { hidden_trigger = { check_variable = { var = TVA_programme_kind value = 4 compare = equals } } }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment_1 amount = 90 producer = ROOT }
+				custom_effect_tooltip = TVA_war_load_series_result_tt
+				hidden_effect = {
+					add_to_variable = { var = TVA_network_load value = 30 }
+					subtract_from_variable = { var = TVA_cadre_reserve value = 15 }
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4500 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = ROOT }
+				custom_effect_tooltip = TVA_emergency_series_result_tt
+				hidden_effect = {
+					add_to_variable = { var = TVA_network_load value = 20 }
+					subtract_from_variable = { var = TVA_cadre_reserve value = 10 }
+				}
+			}
+			if = {
+				limit = { hidden_trigger = { TVA_frontline_dispatch_context = yes } }
+				TVA_frontline_dispatch_reward = yes
+			}
+			add_power_balance_value = { id = TVA_bop value = -0.10 }
+			hidden_effect = {
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+VAD_initialize_administration = {
+	if = {
+		limit = {
+			tag = VAD
+			NOT = { has_country_flag = VAD_administration_initialized }
+		}
+		set_country_flag = VAD_administration_initialized
+		set_variable = { var = VAD_doctrine_experience_gain_army_factor value = 0 }
+		set_variable = { var = VAD_doctrine_army_leader_start_level value = 0 }
+		set_variable = { var = VAD_doctrine_planning_speed value = 0 }
+		set_variable = { var = VAD_doctrine_conscription value = 0 }
+		set_variable = { var = VAD_doctrine_training_time_army_factor value = 0 }
+		set_variable = { var = VAD_doctrine_army_org_factor value = 0 }
+		set_variable = { var = VAD_staff_planning value = 0 }
+		set_variable = { var = VAD_staff_recovery value = 0 }
+		set_variable = { var = VAD_staff_reinforce value = 0 }
+		set_variable = { var = VAD_staff_speed value = 0 }
+		set_variable = { var = VAD_staff_supply value = 0 }
+		set_variable = { var = VAD_staff_authority value = 0 }
+		set_variable = { var = VAD_staff_stability value = 0 }
+		set_variable = { var = VAD_staff_command value = 0 }
+		set_power_balance = { id = VAD_bop set_value = -0.15 }
+	}
+}
+
+VAD_refund_oath = {
+	if = {
+		limit = { hidden_trigger = { has_variable = VAD_oath_pp } }
+		add_political_power = VAD_oath_pp
+		add_manpower = VAD_oath_manpower
+		if = {
+			limit = { hidden_trigger = { has_variable = VAD_oath_rifles } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = VAD_oath_rifles }
+		}
+		if = {
+			limit = { hidden_trigger = { has_variable = VAD_oath_squad_weapons } }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = VAD_oath_squad_weapons }
+		}
+		if = {
+			limit = { hidden_trigger = { has_variable = VAD_oath_support } }
+			add_equipment_to_stockpile = { type = support_equipment amount = VAD_oath_support }
+		}
+		hidden_effect = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+	}
+}
+
+# ROOT is the living successor or the annexer, never the disappearing VAD.
+VAD_settle_oath_handoff = {
+	if = {
+		limit = { VAD = { has_variable = VAD_oath_pp } }
+		add_political_power = VAD.VAD_oath_pp
+		add_manpower = VAD.VAD_oath_manpower
+		if = {
+			limit = { hidden_trigger = { VAD = { has_variable = VAD_oath_rifles } } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = VAD.VAD_oath_rifles }
+		}
+		if = {
+			limit = { hidden_trigger = { VAD = { has_variable = VAD_oath_squad_weapons } } }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = VAD.VAD_oath_squad_weapons }
+		}
+		if = {
+			limit = { hidden_trigger = { VAD = { has_variable = VAD_oath_support } } }
+			add_equipment_to_stockpile = { type = support_equipment amount = VAD.VAD_oath_support }
+		}
+		VAD = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+	}
+}
+
+VAD_close_administration = {
+	VAD_refund_oath = yes
+	if = {
+		limit = { has_template = "Imperial Guard Regiment" }
+		set_division_template_lock = { division_template = "Imperial Guard Regiment" is_locked = no }
+		set_division_force_allow_recruiting = { division_template = "Imperial Guard Regiment" force_allow_recruiting = yes }
+	}
+	# Shared claimant cleanup also calls this effect from WKR and TVA.
+	if = {
+		limit = { tag = VAD }
+		ADISCORD_vorkerland_vad_retire_district_oaths = yes
+		if = {
+			limit = { has_dynamic_modifier = { modifier = VAD_collegial_staff_dynamic } }
+			remove_dynamic_modifier = { modifier = VAD_collegial_staff_dynamic }
+		}
+	}
+	if = {
+		limit = { has_power_balance = { id = VAD_bop } }
+		remove_power_balance = { id = VAD_bop }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	if = {
+		limit = { has_idea = VAD_joint_operational_orders }
+		remove_ideas = VAD_joint_operational_orders
+	}
+}
+
+VAD_begin_charter = {
+	if = {
+		limit = {
+			VAD_charter_available = yes
+			VAD_oath_slot_free = yes
+			VAD_oath_target_free = yes
+			VAD_charter_affordable = yes
+		}
+		add_political_power = -40
+		add_manpower = -500
+		set_variable = { var = VAD_oath_pp value = 40 }
+		set_variable = { var = VAD_oath_manpower value = 500 }
+		set_variable = { var = VAD_oath_kind value = 1 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_begin_commandant = {
+	if = {
+		limit = {
+			VAD_commandant_available = yes
+			VAD_oath_slot_free = yes
+			VAD_oath_target_free = yes
+			VAD_commandant_affordable = yes
+		}
+		add_political_power = -30
+		add_manpower = -1000
+		set_variable = { var = VAD_oath_pp value = 30 }
+		set_variable = { var = VAD_oath_manpower value = 1000 }
+		set_variable = { var = VAD_oath_kind value = 2 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+# A control edge settles paid work immediately. Recapture may rebuild the
+# administration for its full price; the history flag is not a permanent lock.
+VAD_lose_district_administration = {
+	if = {
+		limit = { NOT = { is_owned_and_controlled_by = VAD } }
+		if = {
+			limit = { has_state_flag = VAD_oath_in_progress }
+			VAD = { VAD_refund_oath = yes }
+		}
+		VAD_remove_district_administration = yes
+	}
+}
+
+# State scope; the receipt is settled by the caller before the institution is removed.
+VAD_remove_district_administration = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		VAD = { subtract_from_variable = { var = ADISCORD_vorkerland_vad_charters value = 1 } }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		VAD = { subtract_from_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 } }
+	}
+	VAD_clear_district_unrest = yes
+	VAD_clear_recruitment_disruption = yes
+	VAD_clear_staff_programmes = yes
+	VAD_clear_crown_programmes = yes
+	VAD_clear_local_militia = yes
+	VAD_clear_march_commitment = yes
+	clr_state_flag = ADISCORD_vorkerland_vad_district_oath
+	if = {
+		limit = { is_in_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS } }
+		remove_from_array = { array = global.ADISCORD_vorkerland_vad_oath_states value = THIS }
+	}
+	VAD = { ADISCORD_economy_mark_dirty = yes }
+}
+
+VAD_clear_district_unrest = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising }
+	}
+	clear_variable = VAD_district_unrest
+}
+
+# State scope; callers collect newly raised districts before dispatching one notice.
+VAD_check_district_uprising = {
+	if = {
+		limit = {
+			check_variable = { var = VAD_district_unrest value = 100 compare = greater_than_or_equals }
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising }
+		VAD = {
+			add_to_temp_variable = { var = VAD_new_district_revolts value = 1 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# The existing monthly VAD pulse visits only registered oath states. A fresh
+# revolt reports once per pulse, even when several states cross the threshold.
+VAD_monthly_district_unrest = {
+	if = {
+		limit = { VAD_administration_active = yes }
+		set_temp_variable = { var = VAD_new_district_revolts value = 0 }
+		for_each_scope_loop = {
+			array = global.ADISCORD_vorkerland_vad_oath_states
+			if = {
+				limit = {
+					is_owned_and_controlled_by = VAD
+					has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+					NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+				}
+				if = {
+					limit = { VAD = { power_balance_value = { id = VAD_bop value > 0.10 } } }
+					add_to_variable = { var = VAD_district_unrest value = 10 }
+				}
+				else_if = {
+					limit = { VAD = { power_balance_value = { id = VAD_bop value < -0.60 } } }
+					add_to_variable = { var = VAD_district_unrest value = 30 }
+				}
+				else = { add_to_variable = { var = VAD_district_unrest value = 20 } }
+				if = {
+					limit = { has_dynamic_modifier = { modifier = VAD_local_militia } }
+					subtract_from_variable = { var = VAD_district_unrest value = 10 }
+				}
+				clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+				VAD_check_district_uprising = yes
+			}
+		}
+		if = {
+			limit = { check_variable = { var = VAD_new_district_revolts value = 1 compare = greater_than_or_equals } }
+			country_event = { id = ADISCORD_vorkerland_claimant.15 hours = 1 }
+		}
+	}
+}
+
+VAD_begin_district_order = {
+	if = {
+		limit = {
+			VAD_district_order_available = yes
+			VAD_district_order_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -25
+		add_manpower = -500
+		set_variable = { var = VAD_oath_pp value = 25 }
+		set_variable = { var = VAD_oath_manpower value = 500 }
+		set_variable = { var = VAD_oath_kind value = 3 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_district_order = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 3 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_district_order_available = yes } }
+			custom_effect_tooltip = VAD_district_order_result_tt
+			hidden_effect = {
+				FROM = {
+					subtract_from_variable = { var = VAD_district_unrest value = 60 }
+					clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+					if = {
+						limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+						remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising }
+					}
+				}
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_withdraw_district_commandant = {
+	if = {
+		limit = { VAD_can_withdraw_commandant = yes }
+		FROM = { VAD_remove_district_administration = yes }
+	}
+}
+
+# Recruited cohorts remain state history after an institution is lost or rebuilt.
+# Only the current administration's production disruption is reversible.
+VAD_clear_recruitment_disruption = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_crown_recruitment_disruption } }
+		remove_dynamic_modifier = { modifier = VAD_crown_recruitment_disruption }
+		VAD = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+VAD_begin_crown_recruitment = {
+	if = {
+		limit = {
+			VAD_crown_recruitment_available = yes
+			VAD_crown_recruitment_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -35
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		set_variable = { var = VAD_oath_pp value = 35 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 60 }
+		set_variable = { var = VAD_oath_kind value = 4 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_crown_recruitment = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 4 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		VAD_finish_district_recruitment = yes
+	}
+}
+
+VAD_begin_joint_recruitment = {
+	if = {
+		limit = {
+			VAD_joint_recruitment_available = yes
+			VAD_joint_recruitment_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -30
+		add_equipment_to_stockpile = { type = support_equipment amount = -80 }
+		set_variable = { var = VAD_oath_pp value = 30 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 80 }
+		set_variable = { var = VAD_oath_kind value = 5 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_joint_recruitment = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 5 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		VAD_finish_district_recruitment = yes
+	}
+}
+
+VAD_finish_district_recruitment = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					AND = {
+						check_variable = { var = VAD_oath_kind value = 4 compare = equals }
+						VAD_crown_recruitment_available = yes
+					}
+					AND = {
+						check_variable = { var = VAD_oath_kind value = 5 compare = equals }
+						VAD_joint_recruitment_available = yes
+					}
+				}
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { check_variable = { var = VAD_oath_kind value = 4 compare = equals } } }
+			add_manpower = 3000
+			custom_effect_tooltip = VAD_crown_recruitment_disruption_tt
+			hidden_effect = {
+				FROM = {
+					set_variable = { var = VAD_district_recruited value = 3000 }
+					add_dynamic_modifier = { modifier = VAD_crown_recruitment_disruption }
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = {
+			add_manpower = 4500
+			custom_effect_tooltip = VAD_joint_recruitment_unrest_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAD_new_district_revolts value = 0 }
+				FROM = {
+					set_variable = { var = VAD_district_recruited value = 4500 }
+					add_to_variable = { var = VAD_district_unrest value = 30 }
+					clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+					VAD_check_district_uprising = yes
+				}
+				if = {
+					limit = { check_variable = { var = VAD_new_district_revolts value = 1 compare = greater_than_or_equals } }
+					country_event = { id = ADISCORD_vorkerland_claimant.15 hours = 1 }
+				}
+			}
+		}
+		hidden_effect = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+	}
+	else = { VAD_refund_oath = yes }
+}
+
+VAD_begin_joint_congress = {
+	if = {
+		limit = {
+			VAD_joint_congress_available = yes
+			VAD_joint_congress_affordable = yes
+			VAD_oath_slot_free = yes
+		}
+		add_political_power = -35
+		add_manpower = -500
+		set_variable = { var = VAD_oath_kind value = 6 }
+		set_variable = { var = VAD_oath_pp value = 35 }
+		set_variable = { var = VAD_oath_manpower value = 500 }
+		set_variable = { var = VAD_oath_support value = 0 }
+	}
+}
+
+VAD_finish_joint_congress = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 6 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_joint_congress_available = yes } }
+			custom_effect_tooltip = VAD_joint_congress_result_tt
+			hidden_effect = {
+				for_each_scope_loop = {
+					array = global.ADISCORD_vorkerland_vad_oath_states
+					if = {
+						limit = {
+							is_owned_and_controlled_by = VAD
+							has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+						}
+						subtract_from_variable = { var = VAD_district_unrest value = 20 }
+						clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+						if = {
+							limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+							remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising }
+						}
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_joint_operations = {
+	if = {
+		limit = {
+			VAD_joint_operations_available = yes
+			VAD_joint_operations_affordable = yes
+			VAD_oath_slot_free = yes
+		}
+		add_political_power = -30
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = VAD_oath_kind value = 7 }
+		set_variable = { var = VAD_oath_pp value = 30 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 100 }
+	}
+}
+
+VAD_finish_joint_operations = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 7 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_joint_operations_available = yes } }
+			custom_effect_tooltip = VAD_joint_operations_result_tt
+			add_timed_idea = { idea = VAD_joint_operational_orders days = 35 }
+			hidden_effect = {
+				set_temp_variable = { var = VAD_new_district_revolts value = 0 }
+				for_each_scope_loop = {
+					array = global.ADISCORD_vorkerland_vad_oath_states
+					if = {
+						limit = {
+							is_owned_and_controlled_by = VAD
+							has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+						}
+						add_to_variable = { var = VAD_district_unrest value = 10 }
+						clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+						VAD_check_district_uprising = yes
+					}
+				}
+				if = {
+					limit = { check_variable = { var = VAD_new_district_revolts value = 1 compare = greater_than_or_equals } }
+					country_event = { id = ADISCORD_vorkerland_claimant.15 hours = 1 }
+				}
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_clear_staff_programmes = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_staff_rotated_garrison } }
+		remove_dynamic_modifier = { modifier = VAD_staff_rotated_garrison }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_staff_field_depot } }
+		remove_dynamic_modifier = { modifier = VAD_staff_field_depot }
+	}
+}
+
+VAD_begin_staff_rotation = {
+	if = {
+		limit = {
+			VAD_staff_rotation_available = yes
+			VAD_staff_rotation_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -25
+		add_manpower = -500
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		set_variable = { var = VAD_oath_pp value = 25 }
+		set_variable = { var = VAD_oath_manpower value = 500 }
+		set_variable = { var = VAD_oath_support value = 60 }
+		set_variable = { var = VAD_oath_kind value = 8 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_staff_rotation = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 8 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_staff_rotation_available = yes } }
+			custom_effect_tooltip = VAD_staff_rotation_result_tt
+			hidden_effect = {
+				FROM = {
+					add_dynamic_modifier = { modifier = VAD_staff_rotated_garrison days = 70 }
+					subtract_from_variable = { var = VAD_district_unrest value = 30 }
+					clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+					if = {
+						limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+						remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising }
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_staff_depot = {
+	if = {
+		limit = {
+			VAD_staff_depot_available = yes
+			VAD_staff_depot_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -25
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = VAD_oath_pp value = 25 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 100 }
+		set_variable = { var = VAD_oath_kind value = 9 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_staff_depot = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 9 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_staff_depot_available = yes } }
+			custom_effect_tooltip = VAD_staff_depot_result_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAD_new_district_revolts value = 0 }
+				FROM = {
+					add_dynamic_modifier = { modifier = VAD_staff_field_depot days = 70 }
+					add_to_variable = { var = VAD_district_unrest value = 20 }
+					clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+					VAD_check_district_uprising = yes
+				}
+				if = {
+					limit = { check_variable = { var = VAD_new_district_revolts value = 1 compare = greater_than_or_equals } }
+					country_event = { id = ADISCORD_vorkerland_claimant.15 hours = 1 }
+				}
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_ratify_collegial_mandate = {
+	if = {
+		limit = { VAD_collegial_administration_active = yes }
+		if = {
+			limit = { has_completed_focus = VAD_require_collective_directives }
+			set_variable = { var = VAD_staff_planning value = 0.10 }
+			set_variable = { var = VAD_staff_recovery value = 0.03 }
+			set_variable = { var = VAD_staff_authority value = -0.05 }
+		}
+		else_if = {
+			limit = { has_completed_focus = VAD_delegate_to_front_commands }
+			set_variable = { var = VAD_staff_reinforce value = 0.03 }
+			set_variable = { var = VAD_staff_speed value = 0.05 }
+			set_variable = { var = VAD_staff_supply value = 0.03 }
+		}
+		VAD_apply_collegial_mandate = yes
+	}
+}
+
+VAD_apply_collegial_mandate = {
+	if = {
+		limit = {
+			VAD_collegial_government = yes
+			NOT = { has_dynamic_modifier = { modifier = VAD_collegial_staff_dynamic } }
+		}
+		add_dynamic_modifier = { modifier = VAD_collegial_staff_dynamic }
+	}
+}
+
+VAD_ratify_staff_constitution = {
+	if = {
+		limit = {
+			tag = WRK
+			VAD_collegial_government = yes
+			has_completed_focus = WRK_joint_restore_unity_tower
+			NOT = { has_completed_focus = WRK_joint_ratify_staff_constitution }
+		}
+		set_variable = { var = VAD_staff_stability value = 0.05 }
+		set_variable = { var = VAD_staff_command value = 0.10 }
+		VAD_apply_collegial_mandate = yes
+		set_cosmetic_tag = VAD_vorkerland_staff_republic
+		news_event = { id = ADISCORD_vorkerland_story.49 }
+	}
+}
+
+
+# State scope, invoked when the charter or the wartime district system ends.
+VAD_clear_crown_programmes = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_crown_district_privileges } }
+		remove_dynamic_modifier = { modifier = VAD_crown_district_privileges }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_crown_district_collateral } }
+		remove_dynamic_modifier = { modifier = VAD_crown_district_collateral }
+	}
+}
+
+VAD_begin_crown_privileges = {
+	if = {
+		limit = {
+			VAD_crown_privileges_available = yes
+			VAD_crown_privileges_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -30
+		add_equipment_to_stockpile = { type = support_equipment amount = -80 }
+		set_variable = { var = VAD_oath_pp value = 30 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 80 }
+		set_variable = { var = VAD_oath_kind value = 10 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_crown_privileges = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 10 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_crown_privileges_available = yes } }
+			add_power_balance_value = { id = VAD_bop value = 0.10 }
+			FROM = { add_dynamic_modifier = { modifier = VAD_crown_district_privileges days = 90 } }
+			custom_effect_tooltip = VAD_crown_privileges_legitimacy_tt
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.03 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				ADISCORD_economy_mark_dirty = yes
+				country_event = { id = ADISCORD_vorkerland_claimant.33 days = 91 }
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_crown_collateral = {
+	if = {
+		limit = {
+			VAD_crown_collateral_available = yes
+			VAD_crown_collateral_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -35
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		set_variable = { var = VAD_oath_pp value = 35 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_support value = 60 }
+		set_variable = { var = VAD_oath_kind value = 11 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_crown_collateral = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 11 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_crown_collateral_available = yes } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = VAD }
+			add_power_balance_value = { id = VAD_bop value = -0.10 }
+			FROM = { add_dynamic_modifier = { modifier = VAD_crown_district_collateral days = 90 } }
+			custom_effect_tooltip = VAD_crown_collateral_legitimacy_tt
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.04 }
+				ADISCORD_vorkerland_add_legitimacy = yes
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				ADISCORD_economy_mark_dirty = yes
+				country_event = { id = ADISCORD_vorkerland_claimant.33 days = 91 }
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+TVA_begin_strike_aircraft = {
+	if = {
+		limit = {
+			TVA_strike_aircraft_available = yes
+			TVA_strike_aircraft_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -40
+		add_manpower = -300
+		add_equipment_to_stockpile = { type = support_equipment amount = -120 }
+		set_variable = { var = TVA_programme_pp value = 40 }
+		set_variable = { var = TVA_programme_support value = 120 }
+		set_variable = { var = TVA_programme_manpower value = 300 }
+		set_variable = { var = TVA_programme_kind value = 7 }
+	}
+}
+
+TVA_finish_strike_aircraft = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 7 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_strike_aircraft_available = yes } }
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 24 producer = TVA }
+			custom_effect_tooltip = TVA_strike_aircraft_result_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 20 }
+				subtract_from_variable = { var = TVA_cadre_reserve value = 10 }
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+TVA_begin_interceptor_reserve = {
+	if = {
+		limit = {
+			TVA_interceptor_reserve_available = yes
+			TVA_interceptor_reserve_affordable = yes
+			TVA_programme_slot_free = yes
+		}
+		add_political_power = -40
+		add_manpower = -200
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = TVA_programme_pp value = 40 }
+		set_variable = { var = TVA_programme_support value = 100 }
+		set_variable = { var = TVA_programme_manpower value = 200 }
+		set_variable = { var = TVA_programme_kind value = 8 }
+	}
+}
+
+TVA_finish_interceptor_reserve = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = TVA_programme_pp
+				check_variable = { var = TVA_programme_kind value = 8 compare = equals }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { TVA_interceptor_reserve_available = yes } }
+			add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 30 producer = TVA }
+			custom_effect_tooltip = TVA_interceptor_reserve_result_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 10 }
+				subtract_from_variable = { var = TVA_cadre_reserve value = 5 }
+				TVA_clear_programme = yes
+				TVA_refresh_administration = yes
+			}
+		}
+		else = { TVA_refund_programme = yes }
+	}
+}
+
+VAD_begin_forward_airfield = {
+	if = {
+		limit = {
+			VAD_forward_airfield_available = yes
+			VAD_forward_airfield_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -40
+		add_manpower = -500
+		add_equipment_to_stockpile = { type = support_equipment amount = -120 }
+		set_variable = { var = VAD_oath_pp value = 40 }
+		set_variable = { var = VAD_oath_manpower value = 500 }
+		set_variable = { var = VAD_oath_support value = 120 }
+		set_variable = { var = VAD_oath_kind value = 12 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_forward_airfield = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 12 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_forward_airfield_available = yes } }
+			FROM = {
+				add_building_construction = {
+					type = air_base
+					level = 2
+					instant_build = yes
+				}
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_district_air_defence = {
+	if = {
+		limit = {
+			VAD_district_air_defence_available = yes
+			VAD_district_air_defence_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -45
+		add_manpower = -800
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = VAD_oath_pp value = 45 }
+		set_variable = { var = VAD_oath_manpower value = 800 }
+		set_variable = { var = VAD_oath_support value = 100 }
+		set_variable = { var = VAD_oath_kind value = 13 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_district_air_defence = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 13 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_district_air_defence_available = yes } }
+			FROM = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 2
+					instant_build = yes
+				}
+			}
+			hidden_effect = {
+				ADISCORD_vorkerland_vad_release_district_oath = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+# State scope. The local industry allocation ends with its council.
+WKR_clear_airfield_workshop = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = WKR_airfield_workshop } }
+		remove_dynamic_modifier = { modifier = WKR_airfield_workshop }
+		WKR = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+WKR_begin_airfield_workshop = {
+	if = {
+		limit = {
+			WKR_airfield_workshop_available = yes
+			WKR_airfield_workshop_affordable = yes
+			WKR_railway_slot_free = yes
+			FROM = { NOT = { has_state_flag = WKR_railway_in_progress } }
+		}
+		add_political_power = -40
+		add_manpower = -400
+		add_equipment_to_stockpile = { type = support_equipment amount = -80 }
+		set_variable = { var = WKR_railway_order_pp value = 40 }
+		set_variable = { var = WKR_railway_order_manpower value = 400 }
+		set_variable = { var = WKR_railway_order_support value = 80 }
+		set_variable = { var = WKR_railway_order_trains value = 0 }
+		set_variable = { var = WKR_railway_order_kind value = 2 }
+		set_variable = { var = WKR_railway_order_state value = FROM }
+		FROM = { set_state_flag = WKR_railway_in_progress }
+	}
+}
+
+WKR_finish_airfield_workshop = {
+	if = {
+		limit = { hidden_trigger = { WKR_airfield_workshop_order_matches = yes } }
+		if = {
+			limit = { hidden_trigger = { WKR_airfield_workshop_available = yes } }
+			FROM = { add_dynamic_modifier = { modifier = WKR_airfield_workshop } }
+			hidden_effect = {
+				WKR_release_railway_order = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { WKR_refund_railway_order = yes }
+	}
+}
+
+WKR_begin_armoured_train = {
+	if = {
+		limit = {
+			WKR_armoured_train_available = yes
+			WKR_armoured_train_affordable = yes
+			WKR_railway_slot_free = yes
+		}
+		add_political_power = -35
+		add_manpower = -600
+		add_equipment_to_stockpile = { type = support_equipment amount = -120 }
+		set_variable = { var = WKR_railway_order_pp value = 35 }
+		set_variable = { var = WKR_railway_order_manpower value = 600 }
+		set_variable = { var = WKR_railway_order_support value = 120 }
+		set_variable = { var = WKR_railway_order_trains value = 0 }
+		set_variable = { var = WKR_railway_order_kind value = 3 }
+	}
+}
+
+WKR_finish_armoured_train = {
+	if = {
+		limit = { hidden_trigger = { WKR_armoured_train_order_matches = yes } }
+		if = {
+			limit = { hidden_trigger = { WKR_armoured_train_available = yes } }
+			add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 8 producer = WKR }
+			hidden_effect = {
+				WKR_release_railway_order = yes
+			}
+		}
+		else = { WKR_refund_railway_order = yes }
+	}
+}
+
+
+WKR_clear_prepared_interchange = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = WKR_prepared_interchange } }
+		remove_dynamic_modifier = { modifier = WKR_prepared_interchange }
+		WKR = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+WKR_begin_breakthrough = {
+	if = {
+		limit = {
+			WKR_breakthrough_available = yes
+			WKR_breakthrough_affordable = yes
+			WKR_railway_slot_free = yes
+		}
+		add_political_power = -40
+		add_manpower = -600
+		add_equipment_to_stockpile = { type = support_equipment amount = -150 }
+		set_variable = { var = WKR_railway_order_pp value = 40 }
+		set_variable = { var = WKR_railway_order_manpower value = 600 }
+		set_variable = { var = WKR_railway_order_support value = 150 }
+		set_variable = { var = WKR_railway_order_trains value = 0 }
+		set_variable = { var = WKR_railway_order_kind value = 4 }
+	}
+}
+
+WKR_begin_interchange_defence = {
+	if = {
+		limit = {
+			WKR_interchange_defence_available = yes
+			WKR_interchange_defence_affordable = yes
+			WKR_railway_slot_free = yes
+			FROM = { NOT = { has_state_flag = WKR_railway_in_progress } }
+		}
+		add_political_power = -35
+		add_manpower = -800
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = WKR_railway_order_pp value = 35 }
+		set_variable = { var = WKR_railway_order_manpower value = 800 }
+		set_variable = { var = WKR_railway_order_support value = 100 }
+		set_variable = { var = WKR_railway_order_trains value = 0 }
+		set_variable = { var = WKR_railway_order_kind value = 5 }
+		set_variable = { var = WKR_railway_order_state value = FROM }
+		FROM = { set_state_flag = WKR_railway_in_progress }
+	}
+}
+
+WKR_finish_breakthrough = {
+	if = {
+		limit = { hidden_trigger = { WKR_breakthrough_order_matches = yes } }
+		if = {
+			limit = { hidden_trigger = { WKR_breakthrough_available = yes } }
+			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_reserves_forward days = 35 }
+			hidden_effect = {
+				WKR_release_railway_order = yes
+			}
+		}
+		else = { WKR_refund_railway_order = yes }
+	}
+}
+
+WKR_finish_interchange_defence = {
+	if = {
+		limit = { hidden_trigger = { WKR_interchange_defence_order_matches = yes } }
+		if = {
+			limit = { hidden_trigger = { WKR_interchange_defence_available = yes } }
+			FROM = { add_dynamic_modifier = { modifier = WKR_prepared_interchange } }
+			hidden_effect = {
+				WKR_release_railway_order = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = { WKR_refund_railway_order = yes }
+	}
+}
+
+
+VAD_clear_local_militia = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_local_militia } }
+		remove_dynamic_modifier = { modifier = VAD_local_militia }
+		VAD = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+VAD_lock_guards_template = {
+	if = {
+		limit = { NOT = { has_template = "Imperial Guard Regiment" } }
+		division_template = {
+			name = "Imperial Guard Regiment"
+			template_counter = 78
+			division_names_group = ADISCORD_INF_01
+			is_locked = yes
+			force_allow_recruiting = yes
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+			}
+			support = { engineer = { x = 0 y = 0 } }
+		}
+	}
+	set_division_template_lock = { division_template = "Imperial Guard Regiment" is_locked = yes }
+	set_division_force_allow_recruiting = { division_template = "Imperial Guard Regiment" force_allow_recruiting = yes }
+}
+
+VAD_begin_guards = {
+	if = {
+		limit = {
+			VAD_guards_available = yes
+			VAD_guards_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -60
+		add_manpower = -1300
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3870 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -90 }
+		set_variable = { var = VAD_oath_pp value = 60 }
+		set_variable = { var = VAD_oath_manpower value = 1300 }
+		set_variable = { var = VAD_oath_rifles value = 3870 }
+		set_variable = { var = VAD_oath_support value = 90 }
+		set_variable = { var = VAD_oath_kind value = 14 }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = -32 }
+		set_variable = { var = VAD_oath_squad_weapons value = 32 }
+		VAD_lock_guards_template = yes
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_guards = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 14 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_guards_available = yes } }
+			VAD_lock_guards_template = yes
+			FROM = {
+				create_unit = {
+					division = "name = \"VAD_guard_regiment_unit\" division_template = \"Imperial Guard Regiment\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					allow_spawning_on_enemy_provs = no
+				}
+				set_variable = { var = VAD_district_recruited value = 3000 }
+				add_dynamic_modifier = { modifier = VAD_crown_recruitment_disruption }
+			}
+			ADISCORD_vorkerland_vad_release_district_oath = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_local_militia = {
+	if = {
+		limit = {
+			VAD_local_militia_available = yes
+			VAD_local_militia_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -35
+		add_manpower = -1000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -900 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -60 }
+		set_variable = { var = VAD_oath_pp value = 35 }
+		set_variable = { var = VAD_oath_manpower value = 1000 }
+		set_variable = { var = VAD_oath_rifles value = 900 }
+		set_variable = { var = VAD_oath_support value = 60 }
+		set_variable = { var = VAD_oath_kind value = 15 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_local_militia = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_variable = VAD_oath_pp
+				check_variable = { var = VAD_oath_kind value = 15 compare = equals }
+				FROM = { has_state_flag = VAD_oath_in_progress }
+			}
+		}
+		if = {
+			limit = { hidden_trigger = { VAD_local_militia_available = yes } }
+			FROM = {
+				subtract_from_variable = { var = VAD_district_unrest value = 20 }
+				clamp_variable = { var = VAD_district_unrest min = 0 max = 100 }
+				add_dynamic_modifier = { modifier = VAD_local_militia }
+			}
+			ADISCORD_vorkerland_vad_release_district_oath = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+
+# State scope. There can be only one district sustaining the national march plan.
+VAD_clear_march_commitment = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAD_march_commitment } }
+		remove_dynamic_modifier = { modifier = VAD_march_commitment }
+		VAD = {
+			remove_ideas = ADISCORD_vorkerland_vad_march_on_the_capital
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAD_begin_district_march = {
+	if = {
+		limit = {
+			VAD_district_march_available = yes
+			VAD_district_march_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -45
+		add_manpower = -1000
+		add_equipment_to_stockpile = { type = support_equipment amount = -120 }
+		set_variable = { var = VAD_oath_pp value = 45 }
+		set_variable = { var = VAD_oath_manpower value = 1000 }
+		set_variable = { var = VAD_oath_support value = 120 }
+		set_variable = { var = VAD_oath_kind value = 16 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_begin_city_redoubts = {
+	if = {
+		limit = {
+			VAD_city_redoubts_available = yes
+			VAD_city_redoubts_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+		}
+		add_political_power = -40
+		add_manpower = -800
+		add_equipment_to_stockpile = { type = support_equipment amount = -150 }
+		set_variable = { var = VAD_oath_pp value = 40 }
+		set_variable = { var = VAD_oath_manpower value = 800 }
+		set_variable = { var = VAD_oath_support value = 150 }
+		set_variable = { var = VAD_oath_kind value = 17 }
+		ADISCORD_vorkerland_vad_begin_district_oath = yes
+	}
+}
+
+VAD_finish_district_march = {
+	if = {
+		limit = { VAD_district_march_order_matches = yes }
+		if = {
+			limit = { VAD_district_march_available = yes }
+			add_timed_idea = { idea = ADISCORD_vorkerland_vad_march_on_the_capital days = 70 }
+			FROM = {
+				add_dynamic_modifier = { modifier = VAD_march_commitment days = 70 }
+				if = {
+					limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district } }
+					add_to_variable = { var = VAD_district_unrest value = 30 }
+				}
+			}
+			ADISCORD_vorkerland_vad_release_district_oath = yes
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = ADISCORD_vorkerland_claimant.33 days = 71 }
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_finish_city_redoubts = {
+	if = {
+		limit = { VAD_city_redoubts_order_matches = yes }
+		if = {
+			limit = { VAD_city_redoubts_available = yes }
+			FROM = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					province = {
+						all_provinces = yes
+						limit_to_victory_point = yes
+					}
+				}
+			}
+			ADISCORD_vorkerland_vad_release_district_oath = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+
+# An open recipient event owns its pending marker until dismissal. This prevents
+# a later offer to the same country from being mistaken for that open event.
+VAD_release_foreign_offer = {
+	if = {
+		limit = { has_variable = VAD_oath_foreign_stage }
+		if = {
+			limit = {
+				check_variable = { var = VAD_oath_foreign_stage value = 1 compare = equals }
+				has_event_target = VAD_foreign_partner
+			}
+			event_target:VAD_foreign_partner = { clr_country_flag = VAD_foreign_offer_pending }
+		}
+		clear_global_event_target = VAD_foreign_partner
+		clear_variable = VAD_oath_foreign_stage
+		clr_country_flag = VAD_foreign_offer_clock
+	}
+}
+
+# ROOT is the recipient. A close-only stale event cannot settle another receipt.
+VAD_refuse_foreign_offer = {
+	if = {
+		limit = {
+			VAD_foreign_recipient_matches = yes
+			VAD = { check_variable = { var = VAD_oath_foreign_stage value = 2 compare = equals } }
+		}
+		VAD = { VAD_refund_oath = yes }
+	}
+	clr_country_flag = VAD_foreign_offer_pending
+}
+
+VAD_accept_coalition_guarantees = {
+	if = {
+		limit = { VAD_coalition_guarantees_reply_valid = yes }
+		VAD = { set_variable = { var = VAD_oath_foreign_stage value = 3 } }
+		ADISCORD_vorkerland_join_coalition_of_FROM = yes
+	}
+}
+
+# Called after the existing verifier either confirms membership or exhausts its
+# bounded retry. The sponsor's deposit is separate from a regional self-entry fee.
+VAD_settle_coalition_guarantees = {
+	if = {
+		limit = {
+			VAD_foreign_recipient_matches = yes
+			VAD = {
+				check_variable = { var = VAD_oath_kind value = 18 compare = equals }
+				check_variable = { var = VAD_oath_foreign_stage value = 3 compare = equals }
+			}
+		}
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed }
+			VAD = { VAD_refund_oath = yes }
+			clr_country_flag = VAD_foreign_offer_pending
+		}
+		else_if = {
+			limit = {
+				is_in_faction_with = VAD
+				NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used }
+				VAD = {
+					NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }
+				}
+			}
+			VAD = { ADISCORD_vorkerland_vad_release_district_oath = yes }
+			clr_country_flag = VAD_foreign_offer_pending
+		}
+	}
+}
+
+VAD_accept_foreign_observers = {
+	if = {
+		limit = { VAD_foreign_observers_reply_valid = yes }
+		add_intel = { target = VAD army_intel = 20 }
+		set_country_flag = VAD_observer_report_received
+		VAD = {
+			army_experience = 20
+			set_temp_variable = { var = ADISCORD_vorkerland_legitimacy_delta value = 0.06 }
+			ADISCORD_vorkerland_add_legitimacy = yes
+			ADISCORD_vorkerland_vad_release_district_oath = yes
+		}
+		clr_country_flag = VAD_foreign_offer_pending
+	}
+}
+
+VAD_begin_coalition_guarantees = {
+	if = {
+		limit = {
+			VAD_coalition_guarantees_context = yes
+			VAD_coalition_guarantees_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_country_flag = VAD_foreign_offer_pending } }
+		}
+		add_political_power = -50
+		set_variable = { var = VAD_oath_pp value = 50 }
+		set_variable = { var = VAD_oath_support value = 0 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_kind value = 18 }
+		set_variable = { var = VAD_oath_foreign_stage value = 1 }
+		set_country_flag = VAD_foreign_offer_clock
+		FROM = {
+			save_global_event_target_as = VAD_foreign_partner
+			set_country_flag = { flag = VAD_foreign_offer_pending days = 35 }
+		}
+		country_event = { id = ADISCORD_vorkerland_diplomacy.21 days = 30 }
+	}
+}
+
+VAD_dispatch_coalition_guarantees = {
+	if = {
+		limit = {
+			VAD_coalition_guarantees_receipt_matches = yes
+			check_variable = { var = VAD_oath_foreign_stage value = 1 compare = equals }
+		}
+		if = {
+			limit = { VAD_coalition_guarantees_context = yes }
+			set_variable = { var = VAD_oath_foreign_stage value = 2 }
+			FROM = {
+				set_country_flag = { flag = VAD_foreign_offer_pending days = 21 }
+				country_event = { id = ADISCORD_vorkerland_diplomacy.19 hours = 1 }
+			}
+		}
+		else = { VAD_refund_oath = yes }
+	}
+}
+
+VAD_begin_foreign_observers = {
+	if = {
+		limit = {
+			VAD_foreign_observers_context = yes
+			VAD_foreign_observers_affordable = yes
+			VAD_oath_slot_free = yes
+			FROM = { NOT = { has_country_flag = VAD_foreign_offer_pending } }
+		}
+		add_political_power = -40
+		add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+		set_variable = { var = VAD_oath_pp value = 40 }
+		set_variable = { var = VAD_oath_support value = 100 }
+		set_variable = { var = VAD_oath_manpower value = 0 }
+		set_variable = { var = VAD_oath_kind value = 19 }
+		set_variable = { var = VAD_oath_foreign_stage value = 1 }
+		set_country_flag = VAD_foreign_offer_clock
+		FROM = {
+			save_global_event_target_as = VAD_foreign_partner
+			set_country_flag = { flag = VAD_foreign_offer_pending days = 35 }
+		}
+		country_event = { id = ADISCORD_vorkerland_diplomacy.21 days = 30 }
+	}
+}
+
+VAD_dispatch_foreign_observers = {
+	if = {
+		limit = {
+			VAD_foreign_observers_receipt_matches = yes
+			check_variable = { var = VAD_oath_foreign_stage value = 1 compare = equals }
+		}
+		if = {
+			limit = { VAD_foreign_observers_context = yes }
+			set_variable = { var = VAD_oath_foreign_stage value = 2 }
+			FROM = {
+				set_country_flag = { flag = VAD_foreign_offer_pending days = 21 }
+				country_event = { id = ADISCORD_vorkerland_diplomacy.20 hours = 1 }
+			}
+		}
+		else = { VAD_refund_oath = yes }
 	}
 }

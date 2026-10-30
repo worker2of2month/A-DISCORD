@@ -10,6 +10,7 @@ import unittest
 
 from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.validators.validate_tc import LOCALISATION_ENTRY
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -275,13 +276,16 @@ class WorxMadnessTests(unittest.TestCase):
                      for e in scene if e.key == "desc"]
             for language in ("russian", "english"):
                 localisation = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+                entries = dict(match.groups() for line in localisation.splitlines()
+                               if (match := LOCALISATION_ENTRY.fullmatch(line)))
                 for text_key in texts:
-                    match = re.search(rf'^ {re.escape(text_key)}:\d* "([^"\n]+)"$', localisation, re.M)
-                    self.assertIsNotNone(match, text_key)
-                    expanded = match[1].replace(r"\n", "\n")
+                    self.assertIn(text_key, entries)
+                    value = entries[text_key]
+                    self.assertNotRegex(value, r'\\(?![n"\\])', text_key)
+                    expanded = re.sub(r'\\([n"\\])',
+                                      lambda match: "\n" if match[1] == "n" else match[1], value)
                     self.assertLessEqual(len(expanded), 3000, text_key)
                     self.assertLessEqual(len(expanded.encode("utf-8")), 5500, text_key)
-                    self.assertNotRegex(match[1], r"\\(?!n)", text_key)
 
     def test_story_variants_match_the_actual_course_and_madness_boundary(self):
         entries = parse_clausewitz(read("events/ADISCORD_vorkerland_events.txt"))
@@ -812,7 +816,7 @@ class WorxMadnessTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             for line in path.read_text(encoding="utf-8-sig").splitlines():
                 if re.match(r" (WRK_worx_|ADISCORD_vorkerland_postwar\.2[0-3])", line):
-                    self.assertRegex(line, r'^ [\w.]+:\d* "[^"\r\n]*"$')
+                    self.assertIsNotNone(LOCALISATION_ENTRY.fullmatch(line), line)
                     self.assertNotRegex(line, "[\u2013\u2014]")
 
 

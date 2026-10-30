@@ -1,5 +1,15 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_independence_day"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_independence_day.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_underground_reports"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_underground_reports.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_harbour_service"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_harbour_service.png"
 	}
@@ -1630,236 +1640,226 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_WKR_affirm_worker_mandate"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_convene_front_soviets"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_organize_factory_battalions"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_put_railways_under_councils"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_authorize_retreat_levies"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_form_revolutionary_supply_commission"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_train_shopfloor_officers"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_open_free_republics_channel"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_empower_front_executive"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_reopen_collective_workshops"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_publish_emergency_constitution"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_authorize_normative_command"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_bind_workshops_to_directive"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_settle_front_authority"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_coordinate_counterattack_cells"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_stockpile_interchange_reserves"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_republic_fights_as_one"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_establish_front_operations_bureau"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_authorize_republican_mission_commands"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_issue_normative_campaign_tables"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_form_rolling_factory_groups"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_reopen_night_freight_corridors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_arm_the_mobile_reserve"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_coordinate_the_rolling_front"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_establish_workers_air_command"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_keep_frontline_sorties_flying"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_raise_mobile_fortification_crews"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_secure_the_southern_corridor"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_rehearse_operation_southbound"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_intervene_in_solyarino"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_open_the_remaining_fronts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_declare_the_revolution_unfinished"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_raise_the_worker_levy"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_vest_all_power_in_the_chairman"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_govern_by_delivered_results"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_1.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_publish_the_ration_ledger"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_bind_the_republic_to_its_norms"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_3.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_convene_the_production_soviet"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_strip_the_civil_economy"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_keep_the_bread_ration"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_doctrine_of_the_armed_people"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_break_them_with_numbers"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_doctrine_of_measured_force"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_replace_men_with_output"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_the_last_levy"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_throw_the_reserves_forward"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_dig_in_along_the_interchange"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_seat_the_factory_councils"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_publish_the_production_returns"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_requisition_in_the_republics_name"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_arm_the_bracket_victors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WKR_seek_outside_recognition"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 	}
 
 	spriteType = {
-		name = "GFX_focus_WKR_form_the_republican_air_staff"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		name = "GFX_focus_WKR_throw_the_reserves_forward"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
+		name = "GFX_focus_WKR_dig_in_along_the_interchange"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WKR_seat_the_factory_councils"
+		texturefile = "gfx/interface/goals/focus_generic_industry_1.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WKR_publish_the_production_returns"
+		texturefile = "gfx/interface/goals/focus_generic_industry_2.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WKR_requisition_in_the_republics_name"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WKR_arm_the_bracket_victors"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WKR_seek_outside_recognition"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+	}
+
+	spriteType = {
 		name = "GFX_focus_WKR_commit_shopfloor_squadrons"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_screen_the_interchange_sky"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 	}
-	spriteType = {
-		name = "GFX_focus_WKR_open_the_external_desk"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
+
 	spriteType = {
 		name = "GFX_focus_WKR_send_republican_volunteers"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WKR_license_outside_patterns"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 	}
 
 	###VAD
@@ -1930,11 +1930,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_imperial_registers"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_monarchy_1.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_form_field_commandantures"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/goal_generic_national_unity.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_invite_sol_delegation"
@@ -1998,7 +1998,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_issue_crown_mobilization_warrants"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_turn_the_chancery_into_a_war_cabinet"
@@ -2010,7 +2010,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_merge_guard_and_worker_rolls"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_sign_the_dual_authority_protocol"
@@ -2106,76 +2106,57 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_officer_estates"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_advanced_military_studies.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_restore_the_guards_regiments"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_district_levies"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_diverse_army.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_train_the_council_militias"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_hold_the_historic_capitals"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_march_on_the_old_capital"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_fortify_the_restoration_line"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_convene_the_court_of_honours"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_stage_the_coronation_rites"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_mortgage_the_regalia"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_court_the_bracket_victors"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
-	spriteType = {
-		name = "GFX_focus_VAD_seek_legitimist_recognition"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_home_defense.dds"
 	}
 
 	spriteType = {
-		name = "GFX_focus_VAD_restore_the_restoration_air_arm"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		name = "GFX_focus_VAD_march_on_the_old_capital"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 	}
 	spriteType = {
+		name = "GFX_focus_VAD_fortify_the_restoration_line"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_stage_the_coronation_rites"
+		texturefile = "gfx/interface/goals/focus_generic_concessions.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_VAD_mortgage_the_regalia"
+		texturefile = "gfx/interface/goals/focus_SWI_issue_war_bonds.dds"
+	}
+
+
+
+	spriteType = {
 		name = "GFX_focus_VAD_task_the_guards_for_close_support"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_cover_the_district_capitals"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_PRC_anti_air_effort.dds"
 	}
-	spriteType = {
-		name = "GFX_focus_VAD_open_the_foreign_chancery"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-	}
+
 	spriteType = {
 		name = "GFX_focus_VAD_issue_restoration_guarantees"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seat_the_observer_missions"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 	}
 
 	###TVA
@@ -2194,7 +2175,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_raise_technical_battalions"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_seal_the_approaches"
@@ -2234,11 +2215,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_test_remote_fire_control"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_army_artillery2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_test_adaptive_logistics"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_army_motorized.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_integrate_field_results"
@@ -2346,15 +2327,15 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_run_the_grid_at_war_load"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_energy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hold_back_civil_power"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_hydroelectric_energy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_doctrine_of_continuous_assault"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_replace_losses_from_the_line"
@@ -2362,7 +2343,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_doctrine_of_the_measured_front"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_CHI_formalise_training_regime.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hold_with_fewer_better_crews"
@@ -2374,44 +2355,42 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_spend_the_reserve_cadre"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_special_forces.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_seal_the_technical_core"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
-		name = "GFX_focus_TVA_certify_the_completed_programmes"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_publish_the_reconstruction_index"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_education.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_divert_the_research_budget"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_reorient_production.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_open_the_technical_exchange"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_scientific_exchange.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_TVA_build_the_engineering_service"
+		texturefile = "gfx/interface/goals/goal_generic_production.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_hire_the_bracket_victors"
 		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 
-	spriteType = {
-		name = "GFX_focus_TVA_stand_up_the_grid_air_staff"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
+
 	spriteType = {
 		name = "GFX_focus_TVA_print_unattended_strike_packages"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_cas_aircraft.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_keep_the_interdictors_on_station"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_air_defense.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_open_the_exchange_window"
@@ -2428,18 +2407,8 @@ spriteTypes = {
 
 	###ADISCORD
 
-	spriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_stabilize_claimant_regime"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_mobilize_field_forces"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_fortify_home_region"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-	}
+
+
 
 	spriteType = {
 		name = "GFX_focus_STP_ps_permanent_security"
@@ -2955,5 +2924,45 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_TVA"
 		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_convene_joint_congress"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_sign_joint_operational_orders"
+		texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_convene_collegial_staff"
+		texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_require_collective_directives"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_delegate_to_front_commands"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_codify_staff_mandate"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_joint_ratify_staff_constitution"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		legacy_lazy_load = no
 	}
 }

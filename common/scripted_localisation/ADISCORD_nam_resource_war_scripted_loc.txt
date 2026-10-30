@@ -377,39 +377,10 @@ defined_text = {
 		localization_key = NAM_rw_next_dispatched
 	}
 	text = {
-		trigger = { NOT = { has_country_flag = NAM_rw_notes_sent } }
-		localization_key = NAM_rw_next_notes
-	}
-	text = {
-		trigger = { NOT = { has_country_flag = NAM_rw_ultimatum_sent } }
+		trigger = { has_country_flag = NAM_rw_ultimatum_sent }
 		localization_key = NAM_rw_next_ultimatum
 	}
-	text = {
-		trigger = { NAM_rw_time_bought_active = yes }
-		localization_key = NAM_rw_next_time_bought
-	}
-	text = {
-		trigger = { NAM_rw_war_window_open = yes }
-		localization_key = NAM_rw_next_war
-	}
-	text = {
-		trigger = {
-			has_country_flag = NAM_rw_protocol_signed
-			has_country_flag = NAM_rw_time_bought
-		}
-		localization_key = NAM_rw_next_window_both
-	}
-	text = {
-		trigger = { has_country_flag = NAM_rw_time_bought }
-		localization_key = NAM_rw_next_window_bought
-	}
-	text = {
-		trigger = { has_country_flag = NAM_rw_protocol_signed }
-		localization_key = NAM_rw_next_window_protocol
-	}
-	text = {
-		localization_key = NAM_rw_next_window
-	}
+	text = { localization_key = NAM_rw_next_notes }
 }
 
 # The mobilisation ledger in the NAM_mobilisation category: open orders before
@@ -804,7 +775,7 @@ defined_text = {
 		localization_key = NAM_bw_value_discipline
 	}
 	text = {
-		trigger = { NAM_rw_clock_running = yes }
+		trigger = { has_active_mission = NAM_resource_war_deadline }
 		localization_key = NAM_bw_value_tension
 	}
 	text = {
@@ -812,11 +783,11 @@ defined_text = {
 		localization_key = NAM_bw_value_discipline
 	}
 	text = {
-		localization_key = NAM_bw_value_tension
+		localization_key = NAM_bw_value_none
 	}
 }
 
-# The tension branches follow NAMGetTensionNext in a shorter form for the gauge.
+# The basin panel shows the same deadline as the national mission.
 defined_text = {
 	name = NAMBasinPhaseDetail
 	text = {
@@ -852,58 +823,8 @@ defined_text = {
 		localization_key = NAM_bw_tension_dispatched
 	}
 	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			NOT = { has_country_flag = NAM_rw_notes_sent }
-		}
-		localization_key = NAM_bw_tension_notes
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			NOT = { has_country_flag = NAM_rw_ultimatum_sent }
-		}
-		localization_key = NAM_bw_tension_ultimatum
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			NAM_rw_time_bought_active = yes
-		}
-		localization_key = NAM_bw_tension_time_bought
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			NAM_rw_war_window_open = yes
-		}
-		localization_key = NAM_bw_tension_war
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			has_country_flag = NAM_rw_protocol_signed
-			has_country_flag = NAM_rw_time_bought
-		}
-		localization_key = NAM_bw_tension_window_both
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			has_country_flag = NAM_rw_time_bought
-		}
-		localization_key = NAM_bw_tension_window_bought
-	}
-	text = {
-		trigger = {
-			NAM_rw_clock_running = yes
-			has_country_flag = NAM_rw_protocol_signed
-		}
-		localization_key = NAM_bw_tension_window_protocol
-	}
-	text = {
-		trigger = { NAM_rw_clock_running = yes }
-		localization_key = NAM_bw_tension_window
+		trigger = { NAM_rw_deadline_open = yes }
+		localization_key = NAM_bw_deadline_active
 	}
 	text = {
 		trigger = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
@@ -1384,7 +1305,10 @@ defined_text = {
 defined_text = {
 	name = NAMBasinLevy
 	text = {
-		trigger = { has_country_flag = NAM_island_levy_active }
+		trigger = {
+			has_country_flag = NAM_island_levy_active
+			NAM_island_levy_operable = yes
+		}
 		localization_key = NAM_bw_levy_active
 	}
 	text = {
@@ -1397,13 +1321,34 @@ defined_text = {
 	text = {
 		trigger = {
 			OR = {
-				225 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				226 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				227 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				228 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				229 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				230 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
-				231 = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+				225 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				226 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				227 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				228 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				229 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				230 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
+				231 = {
+					NAM_island_route_operable = yes
+					has_dynamic_modifier = { modifier = NAM_island_convoy_route }
+				}
 			}
 		}
 		localization_key = NAM_bw_convoy_active

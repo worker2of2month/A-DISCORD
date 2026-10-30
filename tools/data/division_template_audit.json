@@ -998,51 +998,6 @@
       }
     },
     {
-      "key": "oob_azh_nam_resource_war_azh_basin_levy",
-      "source": {
-        "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-        "owner": "script"
-      },
-      "technical_name": "Basin Levy",
-      "display_name": "Basin Levy",
-      "legacy_names": [],
-      "regiments": [
-        {
-          "type": "ADISCORD_militia",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 0,
-          "y": 1
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 1,
-          "y": 0
-        }
-      ],
-      "support": [],
-      "computed": {
-        "organization": 40.75,
-        "manpower": 3000,
-        "equipment": {
-          "infantry_equipment": 2700
-        },
-        "supply": 0.12
-      },
-      "equipment_availability": {
-        "infantry_equipment": true
-      },
-      "ai_role": "territorial",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "oob_azh_nam_resource_war_azh_basin_levy"
-      }
-    },
-    {
       "key": "oob_bbv_border_levy",
       "source": {
         "kind": "oob",
@@ -3252,76 +3207,6 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_capital_guard"
-      }
-    },
-    {
-      "key": "oob_efl_nam_resource_war_efl_restoration_brigade",
-      "source": {
-        "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
-        "owner": "script"
-      },
-      "technical_name": "Line Infantry Brigade",
-      "display_name": "Line Infantry Brigade",
-      "legacy_names": [],
-      "regiments": [
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 0,
-          "y": 2
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 0
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 1
-        },
-        {
-          "type": "infantry",
-          "x": 1,
-          "y": 2
-        }
-      ],
-      "support": [
-        {
-          "type": "engineer",
-          "x": 0,
-          "y": 0
-        }
-      ],
-      "computed": {
-        "organization": 50.642857,
-        "manpower": 6300,
-        "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48,
-          "infantry_equipment": 5670,
-          "support_equipment": 30
-        },
-        "supply": 0.38
-      },
-      "equipment_availability": {
-        "ADISCORD_squad_weapons_equipment": true,
-        "infantry_equipment": true,
-        "support_equipment": true
-      },
-      "ai_role": "line",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "oob_efl_nam_resource_war_efl_restoration_brigade"
       }
     },
     {
@@ -11534,6 +11419,70 @@
       }
     },
     {
+      "key": "script_vorkerland_worker_assault_column",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Worker Assault Column",
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      },
+      "display_name": "Worker Assault Column",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 6000,
+        "equipment": {
+          "infantry_equipment": 5400
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "emergency_militia",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_vorkerland_worker_assault_column"
+      }
+    },
+    {
       "key": "script_adiscord_vorkerland_collapse_effects_worker_rifle_division",
       "source": {
         "kind": "script",
@@ -14007,6 +13956,172 @@
         "is_locked": true,
         "force_allow_recruiting": true
       }
+    },
+    {
+      "key": "script_coalition_restitution_regiment",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Restitution Regiment",
+      "display_name": "Restitution Regiment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_coalition_restitution_regiment"
+      }
+    },
+    {
+      "key": "script_nam_naval_landing_detachment",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Naval Landing Detachment",
+      "display_name": "Naval Landing Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 65.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 144,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_nam_naval_landing_detachment"
+      },
+      "definition_metadata": {
+        "is_locked": true
+      }
+    },
+    {
+      "key": "script_vorkerland_imperial_guard_regiment",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Imperial Guard Regiment",
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      },
+      "display_name": "Imperial Guard Regiment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 48.6,
+        "manpower": 4300,
+        "equipment": {
+          "infantry_equipment": 3870,
+          "ADISCORD_squad_weapons_equipment": 32,
+          "support_equipment": 30
+        },
+        "supply": 0.26
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_vorkerland_imperial_guard_regiment"
+      }
     }
   ],
   "references": [
@@ -14360,6 +14475,42 @@
       "count": 2
     },
     {
+      "key": "wkr_paid_factory_detachment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Worker Home Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "wkr_factory_detachment_template_lock_and_recruitment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Worker Home Guard",
+      "legacy_names": [],
+      "count": 4
+    },
+    {
+      "key": "wkr_paid_assault_column",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Worker Assault Column",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "wkr_assault_column_template_lock_and_recruitment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Worker Assault Column",
+      "legacy_names": [],
+      "count": 4
+    },
+    {
       "key": "adiscord_vorkerland_focus_decision_effects_create_unit_workerland_militia_xp_0_05_eq_0_55",
       "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
       "kind": "create_unit",
@@ -14513,26 +14664,6 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
-      "count": 2
-    },
-    {
-      "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_25_eq_0_85",
-      "path": "history/units/AZH_nam_resource_war.txt",
-      "kind": "oob",
-      "technical_name": "Basin Levy",
-      "legacy_names": [],
-      "start_experience_factor": 0.25,
-      "start_equipment_factor": 0.85,
-      "count": 1
-    },
-    {
-      "key": "azh_nam_resource_war_oob_azh_basin_levy_xp_0_3_eq_0_9",
-      "path": "history/units/AZH_nam_resource_war.txt",
-      "kind": "oob",
-      "technical_name": "Basin Levy",
-      "legacy_names": [],
-      "start_experience_factor": 0.3,
-      "start_equipment_factor": 0.9,
       "count": 2
     },
     {
@@ -14771,26 +14902,6 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
-      "count": 2
-    },
-    {
-      "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_2_eq_0_8",
-      "path": "history/units/EFL_nam_resource_war.txt",
-      "kind": "oob",
-      "technical_name": "Line Infantry Brigade",
-      "legacy_names": [],
-      "start_experience_factor": 0.2,
-      "start_equipment_factor": 0.8,
-      "count": 1
-    },
-    {
-      "key": "efl_nam_resource_war_oob_efl_restoration_brigade_xp_0_25_eq_0_85",
-      "path": "history/units/EFL_nam_resource_war.txt",
-      "kind": "oob",
-      "technical_name": "Line Infantry Brigade",
-      "legacy_names": [],
-      "start_experience_factor": 0.25,
-      "start_equipment_factor": 0.85,
       "count": 2
     },
     {
@@ -16716,6 +16827,52 @@
       "start_experience_factor": 0.5,
       "start_equipment_factor": 1.0,
       "count": 1
+    },
+    {
+      "key": "coalition_restitution_regiment_spawn",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Restitution Regiment",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "nam_naval_landing_detachment_create_unit",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Naval Landing Detachment",
+      "legacy_names": [],
+      "count": 1,
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0
+    },
+    {
+      "key": "nam_naval_landing_detachment_technical_reference",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Naval Landing Detachment",
+      "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "vad_paid_guards_regiment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Imperial Guard Regiment",
+      "legacy_names": [],
+      "start_experience_factor": 0.35,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "vad_guards_template_lock_and_recruitment",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Imperial Guard Regiment",
+      "legacy_names": [],
+      "count": 4
     }
   ]
 }

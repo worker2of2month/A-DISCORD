@@ -187,6 +187,69 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertEqual(shared, ordinary)
 
 
+class JointPostwarAssemblyTests(unittest.TestCase):
+    SOURCE = "Vorkerland/joint_postwar/focuses.txt"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.authored_text = render_source(cls.SOURCE)
+        cls.authored = one(parse_clausewitz(cls.authored_text), "focus_tree")
+        cls.output = OUTPUT_ROOT / SOURCES[cls.SOURCE]
+        cls.native_text = read_native_focus_source(cls.output)
+        cls.native = parse_clausewitz(cls.native_text)
+        cls.focuses = {one(row.value, "id"): row for row in cls.authored if row.key == "focus"}
+        cls.shared = {one(row.value, "id"): row for row in cls.native if row.key == "shared_focus"}
+
+    def test_unique_native_bodies_match_their_authoring_source(self):
+        self.assertEqual(len(self.focuses), 52)
+        self.assertEqual(self.focuses.keys(), self.shared.keys())
+        self.assertEqual(self.output.read_bytes(), expected_outputs()[self.output])
+        self.assertFalse(self.output.read_bytes().startswith(b"\xef\xbb\xbf"))
+        for name, row in self.focuses.items():
+            with self.subTest(focus=name):
+                self.assertEqual(body_text(self.authored_text, row), body_text(self.native_text, self.shared[name]))
+        tree = one(self.native, "focus_tree")
+        self.assertFalse(any(row.key == "focus" for row in tree))
+        self.assertEqual([row.value for row in tree if row.key == "shared_focus"],
+                         ["WRK_joint_convene_restoration_council"])
+
+    def test_root_covers_the_whole_graph_without_external_prerequisites(self):
+        parents = {
+            name: {child.value for row in focus.value if row.key == "prerequisite" for child in row.value}
+            for name, focus in self.focuses.items()
+        }
+        self.assertFalse(set().union(*parents.values()) - self.focuses.keys())
+        roots = {name for name, references in parents.items() if not references}
+        self.assertEqual(roots, {"WRK_joint_convene_restoration_council"})
+        covered = set(roots)
+        while True:
+            expanded = covered | {name for name, references in parents.items() if references & covered}
+            if expanded == covered:
+                break
+            covered = expanded
+        self.assertEqual(covered, self.focuses.keys())
+        root = self.focuses["WRK_joint_convene_restoration_council"].value
+        self.assertEqual(one(root, "y"), "0")
+
+    def test_definitions_are_not_duplicated_and_other_trees_do_not_display_the_old_root(self):
+        counts = Counter()
+        for path in OUTPUT_ROOT.glob("*.txt"):
+            for row in parse_clausewitz(read_native_focus_source(path)):
+                if row.key == "shared_focus" and isinstance(row.value, list):
+                    counts[one(row.value, "id")] += 1
+                elif row.key == "focus_tree":
+                    for focus in row.value:
+                        if focus.key == "focus":
+                            counts[one(focus.value, "id")] += 1
+                    if path != self.output:
+                        self.assertFalse({focus.value for focus in row.value if focus.key == "shared_focus"}
+                                         & self.focuses.keys(), path)
+        self.assertEqual({name: counts[name] for name in self.focuses}, dict.fromkeys(self.focuses, 1))
+        settlement = parse_clausewitz(read_native_focus_source(OUTPUT_ROOT / SOURCES["Vorkerland/settlement/focuses.txt"]))
+        self.assertFalse({one(row.value, "id") for row in one(settlement, "focus_tree") if row.key == "focus"}
+                         & self.focuses.keys())
+
+
 class STPCharterAssemblyTests(unittest.TestCase):
     SOURCE = "STP/civil_war/focuses.txt"
     CANDIDATES = ("sotnikov", "shabrat", "tikhoreva")

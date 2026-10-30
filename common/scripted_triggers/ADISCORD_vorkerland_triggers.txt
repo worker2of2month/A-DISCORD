@@ -1202,6 +1202,7 @@ ADISCORD_vorkerland_claimant_identities_materialized = {
 		AND = {
 			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			WKR = {
+				NOT = { has_country_flag = WKR_administration_initialized }
 				has_government = pragmatism
 				has_country_leader_ideology = neo_vorkerism
 				has_country_leader = {
@@ -1213,11 +1214,20 @@ ADISCORD_vorkerland_claimant_identities_materialized = {
 		AND = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			WKR = {
+				NOT = { has_country_flag = WKR_administration_initialized }
 				has_government = utilitarism
 				has_country_leader = {
 					character = WRK_Anton_Bagley
 					ruling_only = yes
 				}
+			}
+		}
+
+		WKR = {
+			has_country_flag = WKR_administration_initialized
+			OR = {
+				WKR_presidential_course = yes
+				WKR_executive_course = yes
 			}
 		}
 	}
@@ -1870,6 +1880,181 @@ ADISCORD_vorkerland_wkr_has_working_council = {
 	}
 }
 
+WKR_presidential_course = {
+	has_government = pragmatism
+	has_country_leader_ideology = neo_vorkerism
+	OR = {
+		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		has_country_leader = { character = WKR_Emergency_Coordination_Committee ruling_only = yes }
+	}
+}
+
+WKR_executive_course = {
+	has_government = utilitarism
+	has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+}
+
+# A published mandate keeps the exclusive political route and its institutions.
+WKR_mandate_open = {
+	NOT = { has_completed_focus = WKR_convene_front_soviets }
+	NOT = { has_completed_focus = WKR_empower_front_executive }
+}
+
+WKR_chairman_has_majority = {
+	has_power_balance = { id = WKR_bop }
+	NOT = { power_balance_value = { id = WKR_bop value > -0.60 } }
+}
+
+WKR_executive_has_majority = {
+	has_power_balance = { id = WKR_bop }
+	NOT = { power_balance_value = { id = WKR_bop value < 0.60 } }
+}
+
+WKR_administration_active = {
+	tag = WKR
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+WKR_council_order_context = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_organize_factory_battalions
+	capital_scope = { is_owned_and_controlled_by = ROOT }
+}
+
+WKR_council_order_free = {
+	NOT = { has_variable = WKR_council_order_pp }
+}
+
+WKR_has_two_working_councils = {
+	check_variable = { var = WKR_working_councils value = 2 compare = greater_than_or_equals }
+}
+
+WKR_council_order_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_manpower < 3000 }
+	NOT = { has_equipment = { infantry_equipment < 2700 } }
+}
+
+WKR_council_batch_affordable = {
+	NOT = { has_political_power < 50 }
+	NOT = { has_manpower < 6000 }
+	NOT = { has_equipment = { infantry_equipment < 5400 } }
+}
+
+WKR_assault_column_affordable = {
+	NOT = { has_political_power < 60 }
+	NOT = { has_manpower < 6000 }
+	NOT = { has_equipment = { infantry_equipment < 5400 } }
+}
+
+WKR_coalition_supply_context = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_arm_the_bracket_victors
+	FROM = {
+		exists = yes
+		has_capitulated = no
+		is_in_faction_with = ROOT
+		has_war_together_with = ROOT
+		NOT = { has_war_with = ROOT }
+	}
+}
+
+WKR_coalition_supply_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { support_equipment < 50 } }
+}
+
+WKR_recognition_open = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_seek_outside_recognition
+}
+
+# COUNTRY: the prospective signatory. Recognition does not change its faction.
+WKR_recognition_candidate = {
+	OR = {
+		tag = ROM
+		tag = TRU
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = WKR }
+	NOT = { has_country_flag = WKR_independence_treaty }
+}
+
+WKR_can_offer_recognition = {
+	WKR_recognition_open = yes
+	NOT = { has_political_power < 50 }
+	FROM = {
+		WKR_recognition_candidate = yes
+		NOT = { has_country_flag = WKR_recognition_offer_pending }
+	}
+}
+
+# COUNTRY: the event recipient. Recheck the sender before spending its budget.
+WKR_recognition_offer_valid = {
+	has_country_flag = WKR_recognition_offer_pending
+	WKR_recognition_candidate = yes
+	WKR = {
+		WKR_recognition_open = yes
+		NOT = { has_political_power < 50 }
+	}
+}
+
+WKR_recognized_republic_survives = {
+	has_country_flag = WKR_independence_treaty
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = WRK }
+}
+
+# The target list contains the existing supply hubs of the civil-war theatre.
+# Occupied provinces keep the station's work unavailable even if the state
+# controller has not changed yet.
+WKR_railway_context = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_put_railways_under_councils
+	FROM = {
+		is_owned_and_controlled_by = ROOT
+		is_fully_controlled_by = ROOT
+		supply_node > 0
+	}
+}
+
+WKR_railway_slot_free = {
+	NOT = { has_variable = WKR_railway_order_pp }
+}
+
+WKR_railway_target_free = {
+	FROM = {
+		NOT = { has_dynamic_modifier = { modifier = WKR_railway_council } }
+		NOT = { has_state_flag = WKR_railway_in_progress }
+	}
+}
+
+WKR_railway_order_matches_target = {
+	has_variable = WKR_railway_order_pp
+	check_variable = { var = WKR_railway_order_kind value = 1 compare = equals }
+	FROM = {
+		state = var:WKR.WKR_railway_order_state
+		has_state_flag = WKR_railway_in_progress
+	}
+}
+
+WKR_railway_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_manpower < 500 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+	NOT = { has_equipment = { train_equipment < 5 } }
+}
+
 # Three charters, three more after the crown commissions are restored.
 ADISCORD_vorkerland_vad_charter_slot_free = {
 	OR = {
@@ -1881,9 +2066,399 @@ ADISCORD_vorkerland_vad_charter_slot_free = {
 	}
 }
 
-ADISCORD_vorkerland_tva_trial_affordable = {
+TVA_administration_active = {
+	tag = TVA
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_country_flag = TVA_administration_initialized
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+VAD_administration_active = {
+	tag = VAD
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_country_flag = VAD_administration_initialized
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+VAD_oath_slot_free = {
+	NOT = { has_variable = VAD_oath_pp }
+}
+
+# The AI chooses a feasible first mandate, then follows the player's completed
+# entry focus on takeover. Rescue never installs the government by itself.
+VAD_imperial_core_course = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+	OR = {
+		has_completed_focus = VAD_open_imperial_registers
+		NOT = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+	}
+}
+
+VAD_joint_core_course = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_joint_government_formed
+		AND = {
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			NOT = { has_completed_focus = VAD_open_imperial_registers }
+		}
+	}
+}
+
+VAD_collegial_core_course = {
+	has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+}
+
+VAD_collegial_government = {
+	has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	OR = {
+		tag = VAD
+		AND = {
+			tag = WRK
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+	}
+	has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+	has_country_leader_ideology = pragmatism_ideology
+}
+
+VAD_collegial_administration_active = {
+	VAD_administration_active = yes
+	VAD_collegial_government = yes
+}
+
+VAD_oath_target_free = {
+	FROM = {
+		is_owned_and_controlled_by = ROOT
+		NOT = { has_state_flag = ADISCORD_vorkerland_vad_district_oath }
+		NOT = { has_state_flag = VAD_oath_in_progress }
+	}
+}
+
+VAD_charter_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_open_imperial_registers
+	ADISCORD_vorkerland_vad_charter_slot_free = yes
+	FROM = { is_owned_and_controlled_by = ROOT }
+}
+
+VAD_commandant_available = {
+	VAD_administration_active = yes
+	OR = {
+		has_completed_focus = VAD_form_field_commandantures
+		has_completed_focus = VAD_convene_collegial_staff
+	}
+	FROM = { is_owned_and_controlled_by = ROOT }
+}
+
+VAD_charter_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_commandant_affordable = {
 	NOT = { has_political_power < 30 }
-	NOT = { has_equipment = { infantry_equipment < 9000 } }
+	NOT = { has_manpower < 1000 }
+}
+
+VAD_commandant_target_active = {
+	VAD_administration_active = yes
+	FROM = {
+		is_owned_and_controlled_by = ROOT
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+	}
+}
+
+VAD_district_order_available = {
+	VAD_commandant_target_active = yes
+	FROM = { check_variable = { var = VAD_district_unrest value = 40 compare = greater_than_or_equals } }
+}
+
+VAD_district_order_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_can_withdraw_commandant = {
+	VAD_commandant_target_active = yes
+	FROM = { NOT = { has_state_flag = VAD_oath_in_progress } }
+}
+
+# In a targeted decision FROM is the prospective sender of specialists.
+TVA_exchange_recipient_available = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = TVA }
+}
+
+TVA_exchange_has_partner = {
+	OR = {
+		EYR = { TVA_exchange_recipient_available = yes }
+		EGC = { TVA_exchange_recipient_available = yes }
+		RIV = { TVA_exchange_recipient_available = yes }
+		REV = { TVA_exchange_recipient_available = yes }
+		YOR = { TVA_exchange_recipient_available = yes }
+		NDN = { TVA_exchange_recipient_available = yes }
+		SWB = { TVA_exchange_recipient_available = yes }
+		VHV = { TVA_exchange_recipient_available = yes }
+		OSV = { TVA_exchange_recipient_available = yes }
+		ZAO = { TVA_exchange_recipient_available = yes }
+		WPA = { TVA_exchange_recipient_available = yes }
+		WPS = { TVA_exchange_recipient_available = yes }
+		PWR = { TVA_exchange_recipient_available = yes }
+		PSD = { TVA_exchange_recipient_available = yes }
+		VLA = { TVA_exchange_recipient_available = yes }
+		EBA = { TVA_exchange_recipient_available = yes }
+		TGD = { TVA_exchange_recipient_available = yes }
+		SOL = { TVA_exchange_recipient_available = yes }
+		SRA = { TVA_exchange_recipient_available = yes }
+		CSL = { TVA_exchange_recipient_available = yes }
+		DVA = { TVA_exchange_recipient_available = yes }
+		ZTA = { TVA_exchange_recipient_available = yes }
+	}
+}
+
+TVA_exchange_payment_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_open_the_technical_exchange
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+TVA_can_offer_specialist_exchange = {
+	TVA_exchange_payment_available = yes
+	NOT = { has_political_power < 40 }
+	FROM = {
+		TVA_exchange_recipient_available = yes
+		NOT = { has_country_flag = TVA_exchange_offer_pending }
+	}
+}
+
+# The reply event runs in the country supplying personnel; TVA supplies equipment.
+TVA_specialist_exchange_valid = {
+	has_country_flag = TVA_exchange_offer_pending
+	TVA_exchange_recipient_available = yes
+	NOT = { has_manpower < 600 }
+	TVA = { TVA_exchange_payment_available = yes }
+}
+
+TVA_final_operation_context = {
+	TVA_administration_active = yes
+	has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	ADISCORD_vorkerland_plan_war_active = yes
+}
+
+TVA_frontline_cadre_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_spend_the_reserve_cadre
+	NOT = { has_idea = ADISCORD_vorkerland_tva_reserve_cadre_spent }
+}
+
+TVA_protected_core_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_seal_the_technical_core
+	NOT = { check_variable = { var = TVA_protected_cadre value = 0 compare = greater_than } }
+}
+
+TVA_frontline_cadre_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { command_power < 20 }
+	check_variable = { var = TVA_cadre_reserve value = 30 compare = greater_than_or_equals }
+}
+
+TVA_protected_core_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	check_variable = { var = TVA_cadre_reserve value = 30 compare = greater_than_or_equals }
+}
+
+TVA_programme_slot_free = {
+	NOT = { has_variable = TVA_programme_pp }
+}
+
+TVA_public_audit_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_publish_the_reconstruction_index
+	NOT = { has_idea = TVA_public_confidence }
+	NOT = { has_idea = TVA_public_accountability_crisis }
+}
+
+TVA_public_audit_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+# The report grades the current network when publication is complete.
+TVA_public_audit_healthy = {
+	check_variable = { var = TVA_network_load value = 50 compare = less_than_or_equals }
+	check_variable = { var = TVA_cadre_reserve value = 50 compare = greater_than_or_equals }
+}
+
+TVA_research_conversion_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_divert_the_research_budget
+	NOT = { has_idea = TVA_research_diversion }
+}
+
+TVA_research_conversion_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = { has_manpower < 600 }
+}
+
+TVA_maintenance_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_reroute_city_grid
+	check_variable = { var = TVA_network_load value = 1 compare = greater_than_or_equals }
+}
+
+TVA_crew_training_can_improve = {
+	has_completed_focus = TVA_doctrine_of_the_measured_front
+	check_variable = { var = TVA_crew_standards value = 3 compare = less_than }
+}
+
+TVA_frontline_dispatch_context = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_doctrine_of_continuous_assault
+	ADISCORD_vorkerland_plan_war_active = yes
+}
+
+TVA_cadre_training_available = {
+	TVA_administration_active = yes
+	OR = {
+		has_completed_focus = TVA_deploy_field_laboratories
+		has_completed_focus = TVA_doctrine_of_the_measured_front
+	}
+	OR = {
+		check_variable = { var = TVA_cadre_reserve value = 100 compare = less_than }
+		TVA_crew_training_can_improve = yes
+	}
+}
+
+TVA_standard_series_ready = {
+	OR = {
+		has_completed_focus = TVA_optimize_for_throughput
+		has_completed_focus = TVA_declare_continuous_mobilization
+	}
+	power_balance_value = { id = TVA_bop value < -0.10 }
+	NOT = { check_variable = { var = TVA_network_load value = 75 compare = greater_than } }
+	check_variable = { var = TVA_cadre_reserve value = 20 compare = greater_than_or_equals }
+}
+
+TVA_war_load_series_ready = {
+	has_completed_focus = TVA_run_the_grid_at_war_load
+	NOT = { check_variable = { var = TVA_network_load value = 65 compare = greater_than } }
+	check_variable = { var = TVA_cadre_reserve value = 30 compare = greater_than_or_equals }
+}
+
+TVA_emergency_series_available = {
+	TVA_administration_active = yes
+	OR = {
+		TVA_war_load_series_ready = yes
+		AND = {
+			NOT = { has_completed_focus = TVA_run_the_grid_at_war_load }
+			TVA_standard_series_ready = yes
+		}
+	}
+}
+
+TVA_emergency_series_order_available = {
+	TVA_administration_active = yes
+	OR = {
+		AND = {
+			check_variable = { var = TVA_programme_kind value = 3 compare = equals }
+			TVA_standard_series_ready = yes
+		}
+		AND = {
+			check_variable = { var = TVA_programme_kind value = 4 compare = equals }
+			TVA_war_load_series_ready = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_trial_context = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_select_trial_protocol
+	ADISCORD_vorkerland_plan_war_active = yes
+}
+
+TVA_trial_is_battalion = {
+	OR = {
+		check_variable = { var = TVA_trial_kind value = 2 compare = equals }
+		AND = {
+			NOT = { has_variable = TVA_trial_kind }
+			has_completed_focus = TVA_raise_technical_battalions
+		}
+	}
+}
+
+TVA_trial_is_fire_control = {
+	OR = {
+		check_variable = { var = TVA_trial_kind value = 3 compare = equals }
+		AND = {
+			NOT = { has_variable = TVA_trial_kind }
+			has_completed_focus = TVA_test_remote_fire_control
+		}
+	}
+}
+
+TVA_trial_is_logistics = {
+	OR = {
+		check_variable = { var = TVA_trial_kind value = 4 compare = equals }
+		AND = {
+			NOT = { has_variable = TVA_trial_kind }
+			has_completed_focus = TVA_test_adaptive_logistics
+		}
+	}
+}
+
+TVA_trial_is_baseline = {
+	NOT = {
+		OR = {
+			TVA_trial_is_battalion = yes
+			TVA_trial_is_fire_control = yes
+			TVA_trial_is_logistics = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_trial_affordable = {
+	OR = {
+		AND = {
+			TVA_trial_is_baseline = yes
+			NOT = { has_political_power < 30 }
+			NOT = { has_equipment = { infantry_equipment < 9000 } }
+		}
+		AND = {
+			TVA_trial_is_battalion = yes
+			NOT = { has_political_power < 30 }
+			NOT = { has_equipment = { infantry_equipment < 6000 } }
+			NOT = { has_manpower < 600 }
+		}
+		AND = {
+			TVA_trial_is_fire_control = yes
+			NOT = { has_political_power < 35 }
+			NOT = { has_equipment = { support_equipment < 120 } }
+		}
+		AND = {
+			TVA_trial_is_logistics = yes
+			NOT = { has_political_power < 25 }
+			NOT = { has_equipment = { support_equipment < 80 } }
+		}
+	}
 }
 
 # --- stalemate_triggers ---
@@ -2131,6 +2706,7 @@ ADISCORD_vorkerland_pw_reconstruction_open = {
 		has_completed_focus = WRK_joint_pw_census
 		has_completed_focus = WRK_tech_district_metrics
 		has_completed_focus = WRK_empire_imperial_works
+		has_completed_focus = WRK_empire_crown_service
 	}
 }
 
@@ -2145,6 +2721,7 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 				has_completed_focus = WRK_joint_pw_repair_crews
 				has_completed_focus = WRK_tech_municipal_utilities
 				has_completed_focus = WRK_empire_building_offices
+				has_completed_focus = WRK_empire_crown_service
 			}
 		}
 		AND = {
@@ -2168,8 +2745,33 @@ ADISCORD_vorkerland_pw_rebuild_site = {
 }
 
 # --- world_empire_triggers ---
+ADISCORD_vorkerland_petrichev_empire_can_form = {
+	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+	tag = WRK
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = ADISCORD_vorkerland_reunification_verified
+	has_global_flag = ADISCORD_vorkerland_collapse_finished
+	has_country_flag = ADISCORD_vorkerland_route_joint
+	NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+	has_completed_focus = WRK_joint_restore_unity_tower
+	has_cosmetic_tag = VAD_vorkerland_restoration
+	has_country_leader = {
+		character = WRK_Vlad_Petrichev
+		ruling_only = yes
+	}
+}
+
+# The founding settlement distinguishes the two imperial cabinets even after
+# a later leadership change. The accepted joint mandate never becomes this route.
+ADISCORD_vorkerland_petrichev_empire = {
+	ADISCORD_vorkerland_world_empire_active = yes
+	NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+}
+
 ADISCORD_vorkerland_world_empire_can_form = {
 	tag = WRK
+	NOT = { has_country_flag = ADISCORD_vorkerland_joint_succession_settled }
 	is_subject = no
 	has_capitulated = no
 	has_global_flag = ADISCORD_vorkerland_reunification_verified
@@ -2583,4 +3185,720 @@ WRK_worx_population_registry_valid = {
 WRK_worx_corridor_depots_valid = {
 	WRK_worx_normal_programmes = yes
 	has_completed_focus = WRK_worx_maps_have_weight
+}
+
+# National orders remain available between the regional and central wars.
+ADISCORD_vorkerland_wkr_programmes_open = {
+	tag = WKR
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+}
+
+ADISCORD_vorkerland_wkr_workshop_site = {
+	owns_state = 32
+	controls_state = 32
+	32 = {
+		free_building_slots = {
+			building = arms_factory
+			size > 0
+			include_locked = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_needs_political_priority = {
+	tag = TVA
+	is_ai = yes
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	has_completed_focus = TVA_publish_operational_metrics
+	NOT = {
+		OR = {
+			has_completed_focus = TVA_optimize_for_throughput
+			has_completed_focus = TVA_delegate_to_algorithmic_board
+			has_completed_focus = TVA_protect_irreplaceable_specialists
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_needs_trial_priority = {
+	tag = TVA
+	is_ai = yes
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	has_completed_focus = TVA_select_trial_protocol
+	OR = {
+		has_country_flag = ADISCORD_vorkerland_tva_trial_technical_battalions
+		has_country_flag = ADISCORD_vorkerland_tva_trial_remote_fire_control
+		has_country_flag = ADISCORD_vorkerland_tva_trial_adaptive_logistics
+	}
+	NOT = {
+		OR = {
+			has_completed_focus = TVA_raise_technical_battalions
+			has_completed_focus = TVA_test_remote_fire_control
+			has_completed_focus = TVA_test_adaptive_logistics
+		}
+	}
+}
+
+TVA_maintenance_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+TVA_cadre_training_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_manpower < 600 }
+}
+
+TVA_emergency_series_affordable = {
+	NOT = { has_political_power < 30 }
+}
+
+ADISCORD_vorkerland_tva_needs_mandate_priority = {
+	tag = TVA
+	is_ai = yes
+	has_global_flag = ADISCORD_vorkerland_collapse_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	has_completed_focus = TVA_codify_utilitarian_directorate
+	NOT = { has_completed_focus = TVA_declare_continuous_mobilization }
+	NOT = { has_completed_focus = TVA_enact_the_preservation_protocol }
+}
+
+# State scope: a cohort is spent only when recruits have actually arrived.
+VAD_district_cohort_available = {
+	is_owned_and_controlled_by = VAD
+	check_variable = { var = VAD_district_recruited value = 0 compare = equals }
+}
+
+VAD_crown_recruitment_site = {
+	VAD_district_cohort_available = yes
+	has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+}
+
+VAD_crown_recruitment_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_issue_crown_mobilization_warrants
+	FROM = { VAD_crown_recruitment_site = yes }
+}
+
+VAD_crown_recruitment_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+VAD_joint_recruitment_site = {
+	VAD_district_cohort_available = yes
+	has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+	NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+}
+
+VAD_joint_recruitment_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_merge_guard_and_worker_rolls
+	FROM = { VAD_joint_recruitment_site = yes }
+}
+
+VAD_joint_recruitment_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+VAD_joint_programme_context = {
+	VAD_administration_active = yes
+	has_global_flag = ADISCORD_vorkerland_joint_government_formed
+	has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+}
+
+VAD_joint_congress_available = {
+	VAD_joint_programme_context = yes
+	has_completed_focus = VAD_convene_joint_congress
+	any_owned_state = {
+		is_owned_and_controlled_by = ROOT
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		check_variable = { var = VAD_district_unrest value = 20 compare = greater_than_or_equals }
+	}
+}
+
+VAD_joint_operations_available = {
+	VAD_joint_programme_context = yes
+	has_completed_focus = VAD_sign_joint_operational_orders
+	has_war = yes
+	NOT = { has_idea = VAD_joint_operational_orders }
+}
+
+VAD_joint_congress_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_joint_operations_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+VAD_staff_rotation_available = {
+	VAD_collegial_administration_active = yes
+	has_completed_focus = VAD_require_collective_directives
+	FROM = {
+		is_owned_and_controlled_by = ROOT
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		NOT = { has_dynamic_modifier = { modifier = VAD_staff_rotated_garrison } }
+		NOT = { has_dynamic_modifier = { modifier = VAD_staff_field_depot } }
+	}
+}
+
+VAD_staff_rotation_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_staff_depot_available = {
+	VAD_collegial_administration_active = yes
+	has_completed_focus = VAD_delegate_to_front_commands
+	FROM = {
+		is_owned_and_controlled_by = ROOT
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+		NOT = { has_dynamic_modifier = { modifier = VAD_staff_rotated_garrison } }
+		NOT = { has_dynamic_modifier = { modifier = VAD_staff_field_depot } }
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+	}
+}
+
+VAD_staff_depot_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+
+VAD_crown_government_active = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_open_imperial_registers
+	NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+	has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+}
+
+# State scope: the local productive estate is the collateral for either policy.
+VAD_crown_industrial_district = {
+	is_owned_and_controlled_by = VAD
+	has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+	OR = {
+		industrial_complex > 0
+		arms_factory > 0
+	}
+}
+
+VAD_crown_policy_site_available = {
+	VAD_crown_industrial_district = yes
+	NOT = { has_dynamic_modifier = { modifier = VAD_crown_district_privileges } }
+	NOT = { has_dynamic_modifier = { modifier = VAD_crown_district_collateral } }
+}
+
+VAD_crown_privileges_available = {
+	VAD_crown_government_active = yes
+	has_completed_focus = VAD_stage_the_coronation_rites
+	FROM = { VAD_crown_policy_site_available = yes }
+}
+
+VAD_crown_privileges_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+VAD_crown_collateral_available = {
+	VAD_crown_government_active = yes
+	has_completed_focus = VAD_mortgage_the_regalia
+	FROM = { VAD_crown_policy_site_available = yes }
+}
+
+VAD_crown_collateral_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+TVA_aircraft_industry_ready = {
+	any_owned_state = {
+		is_owned_and_controlled_by = ROOT
+		air_base > 0
+	}
+	any_owned_state = {
+		is_owned_and_controlled_by = ROOT
+		arms_factory > 0
+	}
+}
+
+TVA_strike_aircraft_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_print_unattended_strike_packages
+	TVA_aircraft_industry_ready = yes
+	check_variable = { var = TVA_network_load value = 65 compare = less_than_or_equals }
+	check_variable = { var = TVA_cadre_reserve value = 25 compare = greater_than_or_equals }
+}
+
+TVA_strike_aircraft_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 120 } }
+	NOT = { has_manpower < 300 }
+}
+
+TVA_interceptor_reserve_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_keep_the_interdictors_on_station
+	TVA_aircraft_industry_ready = yes
+	check_variable = { var = TVA_network_load value = 80 compare = less_than_or_equals }
+	check_variable = { var = TVA_cadre_reserve value = 20 compare = greater_than_or_equals }
+}
+
+TVA_interceptor_reserve_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = { has_manpower < 200 }
+}
+
+# State scope: native infrastructure belongs to the district after its administration ends.
+VAD_air_infrastructure_district = {
+	is_owned_and_controlled_by = VAD
+	is_demilitarized_zone = no
+	OR = {
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+	}
+	NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+}
+
+VAD_forward_airfield_site = {
+	VAD_air_infrastructure_district = yes
+	air_base < 1
+	free_building_slots = {
+		building = air_base
+		size > 1
+	}
+}
+
+VAD_forward_airfield_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_task_the_guards_for_close_support
+	FROM = { VAD_forward_airfield_site = yes }
+}
+
+VAD_forward_airfield_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 120 } }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_district_air_defence_site = {
+	VAD_air_infrastructure_district = yes
+	free_building_slots = {
+		building = anti_air_building
+		size > 1
+	}
+}
+
+VAD_district_air_defence_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_cover_the_district_capitals
+	FROM = { VAD_district_air_defence_site = yes }
+}
+
+VAD_district_air_defence_affordable = {
+	NOT = { has_political_power < 45 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = { has_manpower < 800 }
+}
+
+# State scope: workshops and procurement require a working local council.
+WKR_railway_council_site = {
+	is_owned_and_controlled_by = WKR
+	is_fully_controlled_by = WKR
+	supply_node > 0
+	has_dynamic_modifier = { modifier = WKR_railway_council }
+}
+
+WKR_airfield_workshop_site = {
+	WKR_railway_council_site = yes
+	air_base > 0
+	NOT = { has_dynamic_modifier = { modifier = WKR_airfield_workshop } }
+}
+
+WKR_armoured_train_site = {
+	WKR_railway_council_site = yes
+	arms_factory > 0
+}
+
+WKR_airfield_workshop_available = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_commit_shopfloor_squadrons
+	FROM = { WKR_airfield_workshop_site = yes }
+}
+
+WKR_armoured_train_available = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_screen_the_interchange_sky
+	any_owned_state = { WKR_armoured_train_site = yes }
+}
+
+WKR_airfield_workshop_order_matches = {
+	has_variable = WKR_railway_order_pp
+	check_variable = { var = WKR_railway_order_kind value = 2 compare = equals }
+	FROM = {
+		state = var:WKR.WKR_railway_order_state
+		has_state_flag = WKR_railway_in_progress
+	}
+}
+
+WKR_armoured_train_order_matches = {
+	has_variable = WKR_railway_order_pp
+	check_variable = { var = WKR_railway_order_kind value = 3 compare = equals }
+}
+
+WKR_airfield_workshop_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+	NOT = { has_manpower < 400 }
+}
+
+WKR_armoured_train_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 120 } }
+	NOT = { has_manpower < 600 }
+}
+
+
+WKR_breakthrough_war_active = {
+	WKR_administration_active = yes
+	has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	any_enemy_country = { ADISCORD_vorkerland_is_main_claimant = yes }
+}
+
+WKR_interchange_defence_site = {
+	WKR_railway_council_site = yes
+	NOT = { has_dynamic_modifier = { modifier = WKR_prepared_interchange } }
+}
+
+WKR_breakthrough_available = {
+	WKR_breakthrough_war_active = yes
+	has_completed_focus = WKR_throw_the_reserves_forward
+	any_owned_state = { WKR_railway_council_site = yes }
+	NOT = { has_idea = ADISCORD_vorkerland_wkr_reserves_forward }
+}
+
+WKR_interchange_defence_available = {
+	WKR_administration_active = yes
+	has_completed_focus = WKR_dig_in_along_the_interchange
+	FROM = { WKR_interchange_defence_site = yes }
+}
+
+WKR_breakthrough_order_matches = {
+	has_variable = WKR_railway_order_pp
+	check_variable = { var = WKR_railway_order_kind value = 4 compare = equals }
+}
+
+WKR_interchange_defence_order_matches = {
+	has_variable = WKR_railway_order_pp
+	check_variable = { var = WKR_railway_order_kind value = 5 compare = equals }
+	FROM = {
+		state = var:WKR.WKR_railway_order_state
+		has_state_flag = WKR_railway_in_progress
+	}
+}
+
+WKR_breakthrough_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 150 } }
+	NOT = { has_manpower < 600 }
+}
+
+WKR_interchange_defence_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = { has_manpower < 800 }
+}
+
+
+VAD_guards_context = {
+	VAD_administration_active = yes
+	VAD_imperial_core_course = yes
+	has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+}
+
+VAD_guards_site = {
+	VAD_crown_recruitment_site = yes
+	is_demilitarized_zone = no
+	NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+}
+
+VAD_local_militia_context = {
+	VAD_joint_programme_context = yes
+	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+}
+
+VAD_local_militia_site = {
+	is_owned_and_controlled_by = VAD
+	is_demilitarized_zone = no
+	has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+	NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+	NOT = { has_dynamic_modifier = { modifier = VAD_local_militia } }
+}
+
+VAD_guards_available = {
+	VAD_guards_context = yes
+	has_completed_focus = VAD_restore_the_guards_regiments
+	FROM = { VAD_guards_site = yes }
+}
+
+VAD_guards_affordable = {
+	NOT = { has_political_power < 60 }
+	NOT = { has_manpower < 1300 }
+	NOT = { has_equipment = { infantry_equipment < 3870 } }
+	NOT = { has_equipment = { support_equipment < 90 } }
+	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 32 } }
+}
+
+VAD_local_militia_available = {
+	VAD_local_militia_context = yes
+	has_completed_focus = VAD_train_the_council_militias
+	FROM = { VAD_local_militia_site = yes }
+}
+
+VAD_local_militia_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_manpower < 1000 }
+	NOT = { has_equipment = { infantry_equipment < 900 } }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+
+VAD_final_operations_context = {
+	VAD_administration_active = yes
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	}
+}
+
+VAD_central_campaign_active = {
+	VAD_final_operations_context = yes
+	has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	any_enemy_country = { ADISCORD_vorkerland_is_main_claimant = yes }
+}
+
+# State scope. Partial occupation cannot support a district-wide programme.
+VAD_final_operations_district = {
+	VAD_air_infrastructure_district = yes
+	is_fully_controlled_by = VAD
+}
+
+VAD_district_march_site = {
+	VAD_final_operations_district = yes
+	OR = {
+		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
+		check_variable = { var = VAD_district_unrest value = 70 compare = less_than }
+	}
+	NOT = { has_dynamic_modifier = { modifier = VAD_march_commitment } }
+}
+
+VAD_city_redoubts_site = {
+	VAD_final_operations_district = yes
+	any_province_building_level = {
+		province = {
+			all_provinces = yes
+			limit_to_victory_point = yes
+		}
+		building = bunker
+		level < 9
+	}
+	NOT = {
+		any_province_building_level = {
+			province = {
+				all_provinces = yes
+				limit_to_victory_point = yes
+			}
+			building = bunker
+			level > 8
+		}
+	}
+}
+
+VAD_district_march_available = {
+	VAD_central_campaign_active = yes
+	has_completed_focus = VAD_march_on_the_old_capital
+	FROM = { VAD_district_march_site = yes }
+	NOT = { has_idea = ADISCORD_vorkerland_vad_march_on_the_capital }
+	NOT = {
+		any_owned_state = { has_dynamic_modifier = { modifier = VAD_march_commitment } }
+	}
+}
+
+VAD_city_redoubts_available = {
+	VAD_final_operations_context = yes
+	has_completed_focus = VAD_fortify_the_restoration_line
+	FROM = { VAD_city_redoubts_site = yes }
+}
+
+VAD_district_march_affordable = {
+	NOT = { has_political_power < 45 }
+	NOT = { has_manpower < 1000 }
+	NOT = { has_equipment = { support_equipment < 120 } }
+}
+
+VAD_district_march_order_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 16 compare = equals }
+	FROM = {
+		state = var:VAD.VAD_oath_state
+		has_state_flag = VAD_oath_in_progress
+	}
+}
+
+VAD_city_redoubts_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_manpower < 800 }
+	NOT = { has_equipment = { support_equipment < 150 } }
+}
+
+VAD_city_redoubts_order_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 17 compare = equals }
+	FROM = {
+		state = var:VAD.VAD_oath_state
+		has_state_flag = VAD_oath_in_progress
+	}
+}
+
+
+VAD_coalition_host_ready = {
+	VAD_administration_active = yes
+	OR = {
+		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	}
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+	}
+}
+
+# Country scope. SOL uses its own treaty; EGC is absorbed during reunification.
+VAD_coalition_candidate = {
+	OR = {
+		tag = EYR
+		tag = YOR
+		tag = SWB
+		tag = NDN
+		tag = OSV
+		tag = REV
+		tag = RIV
+		tag = VHV
+		tag = ZAO
+		tag = WPA
+		tag = WPS
+		tag = PWR
+		tag = PSD
+		tag = VLA
+		tag = EBA
+		tag = TGD
+		tag = DVA
+		tag = SRA
+		tag = ZTA
+		tag = CSL
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	is_in_faction = no
+	has_war = no
+	capital_scope = { is_controlled_by = PREV }
+	NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+	NOT = { has_country_flag = ADISCORD_vorkerland_coalition_join_paid }
+	ADISCORD_vorkerland_has_live_local_rival = no
+}
+
+VAD_observer_candidate = {
+	OR = {
+		tag = SOL
+		tag = ROM
+		tag = TRU
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = VAD }
+	NOT = { has_country_flag = VAD_observer_report_received }
+}
+
+VAD_coalition_guarantees_context = {
+	VAD_coalition_host_ready = yes
+	has_completed_focus = VAD_issue_restoration_guarantees
+	FROM = { VAD_coalition_candidate = yes }
+}
+
+VAD_foreign_observers_context = {
+	VAD_administration_active = yes
+	ADISCORD_vorkerland_plan_war_active = yes
+	has_completed_focus = VAD_seat_the_observer_missions
+	FROM = { VAD_observer_candidate = yes }
+}
+
+# Country scope: a recipient or the native coalition verifier's ROOT.
+VAD_foreign_recipient_matches = {
+	has_event_target = VAD_foreign_partner
+	tag = event_target:VAD_foreign_partner
+	VAD = {
+		has_variable = VAD_oath_pp
+		has_variable = VAD_oath_foreign_stage
+	}
+}
+
+VAD_coalition_guarantees_reply_valid = {
+	VAD_foreign_recipient_matches = yes
+	VAD_coalition_candidate = yes
+	VAD = {
+		check_variable = { var = VAD_oath_kind value = 18 compare = equals }
+		check_variable = { var = VAD_oath_foreign_stage value = 2 compare = equals }
+		VAD_coalition_host_ready = yes
+		has_completed_focus = VAD_issue_restoration_guarantees
+		ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes
+	}
+}
+
+VAD_foreign_observers_reply_valid = {
+	VAD_foreign_recipient_matches = yes
+	VAD_observer_candidate = yes
+	VAD = {
+		check_variable = { var = VAD_oath_kind value = 19 compare = equals }
+		check_variable = { var = VAD_oath_foreign_stage value = 2 compare = equals }
+		VAD_administration_active = yes
+		ADISCORD_vorkerland_plan_war_active = yes
+		has_completed_focus = VAD_seat_the_observer_missions
+	}
+}
+
+VAD_coalition_guarantees_affordable = {
+	NOT = { has_political_power < 50 }
+}
+
+VAD_coalition_guarantees_receipt_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 18 compare = equals }
+	has_event_target = VAD_foreign_partner
+	FROM = { tag = event_target:VAD_foreign_partner }
+}
+
+VAD_foreign_observers_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+VAD_foreign_observers_receipt_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 19 compare = equals }
+	has_event_target = VAD_foreign_partner
+	FROM = { tag = event_target:VAD_foreign_partner }
 }

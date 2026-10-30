@@ -16,6 +16,7 @@ OUTPUT_ROOT = ROOT / "common/national_focus"
 SOURCES = {
     "NOD/main/focuses.txt": "ADISCORD_NOD_focus.txt",
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
+    "NAM/wartime/focuses.txt": "ADISCORD_NAM_wartime.txt",
     "NAM/postwar/focuses.txt": "ADISCORD_NAM_postwar.txt",
     "NAM/defeated/focuses.txt": "ADISCORD_NAM_defeated.txt",
     "NAM/exile_radical/focuses.txt": "ADISCORD_NAM_exile_radical.txt",
@@ -38,6 +39,7 @@ SOURCES = {
     "Vorkerland/vad/focuses.txt": "ADISCORD_Vorkerland_vad.txt",
     "Vorkerland/tva/focuses.txt": "ADISCORD_Vorkerland_tva.txt",
     "Vorkerland/settlement/focuses.txt": "ADISCORD_Vorkerland_settlement.txt",
+    "Vorkerland/joint_postwar/focuses.txt": "ADISCORD_Vorkerland_joint_postwar.txt",
     "Vorkerland/world_empire/focuses.txt": "ADISCORD_Vorkerland_world_empire.txt",
     "Vorkerland/worker_confederation/focuses.txt": "ADISCORD_Vorkerland_worker_confederation.txt",
     "Vorkerland/technical_directorate/focuses.txt": "ADISCORD_Vorkerland_technical_directorate.txt",
@@ -48,13 +50,16 @@ INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
 # The humanist exile tree is replaced by the corporate tree at the takeover;
 # its completed focuses still open the free-zone and federation decisions.
-# WKR's tree includes the WRK prewar root, so copy_completed_from = WRK keeps
-# the prewar completion that seeds WKR legitimacy and the preparation package.
+# WKR copies WRK completion through the prewar tree before loading its own tree.
+# Shared history retains preparation rewards without displaying the old branches.
+# Restoration programmes keep their unlocks through a later cabinet transition.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
+    "NAM/wartime/focuses.txt",
     "NAM/exile_humanist/focuses.txt",
     "Vorkerland/prewar/focuses.txt",
+    "Vorkerland/joint_postwar/focuses.txt",
 })
 
 

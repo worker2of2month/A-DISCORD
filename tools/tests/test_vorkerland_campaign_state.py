@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
 
-from tools.validators.validate_adiscord_vorkerland_recovery import named_block
+from tools.validators.validate_adiscord_vorkerland_recovery import named_block, named_blocks
 
 
 from tools.lib.paths import source_section
@@ -51,7 +51,8 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
             'vorkerland_collapse',
         )
-        for tag in ("WKR", "VAD", "TVA"):
+        self.assertEqual(named_block(on_actions, "on_monthly_TVA"), "")
+        for tag in ("WKR", "VAD"):
             hook = named_block(on_actions, f"on_monthly_{tag}")
             self.assertTrue(hook, f"missing on_monthly_{tag}")
             self.assertEqual(
@@ -156,11 +157,13 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         )
         self.assertTrue(0 <= started < attrition < reconcile)
         for tag in ("WKR", "VAD", "TVA"):
-            initialize = (
-                f"{tag} = {{ ADISCORD_vorkerland_initialize_legitimacy = yes }}"
-            )
-            self.assertEqual(event_text.count(initialize), 1)
-            self.assertLess(event_text.find(initialize), reconcile)
+            initialize = "ADISCORD_vorkerland_initialize_legitimacy = yes"
+            scopes = [block for block in named_blocks(event_text, tag) if initialize in block]
+            self.assertEqual(len(scopes), 1)
+            self.assertEqual(scopes[0].count(initialize), 1)
+            self.assertLess(event_text.find(scopes[0]) + scopes[0].find(initialize), reconcile)
+            if tag in ("TVA", "VAD"):
+                self.assertEqual(scopes[0].count(f"{tag}_initialize_administration = yes"), 1)
 
         phase = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -196,6 +199,97 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertEqual(
             state_hook.count("ADISCORD_vorkerland_refresh_claimant_coalition = yes"), 3
         )
+
+    def test_district_orders_follow_native_state_loss_and_country_handoffs(self) -> None:
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "vorkerland_collapse",
+        )
+        state_hook = named_block(on_actions, "on_state_control_changed")
+        self.assertIn("FROM.FROM = { VAD_lose_district_administration = yes }", state_hook)
+        for flag in ("VAD_oath_in_progress", "ADISCORD_vorkerland_vad_district_oath"):
+            self.assertIn(f"has_state_flag = {flag}", state_hook)
+        for hook in ("on_capitulation_immediate", "on_capitulation", "on_puppet"):
+            hooks = "\n".join(named_blocks(on_actions, hook))
+            self.assertEqual(hooks.count("VAD_refund_oath = yes"), 1, hook)
+        annex = "\n".join(named_blocks(on_actions, "on_annex"))
+        self.assertIn("limit = { FROM = { tag = VAD } }", annex)
+        self.assertIn("ROOT = { VAD_settle_oath_handoff = yes }", annex)
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        for claimant in ("wkr", "vad", "tva"):
+            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            self.assertEqual(handoff.count("VAD_settle_oath_handoff = yes"), 1, claimant)
+            self.assertLess(handoff.index("transfer_state = 32"), handoff.index("VAD_settle_oath_handoff = yes"))
+            self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"), handoff.index("load_focus_tree"))
+            self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"),
+                            handoff.index("country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"))
+            self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"),
+                            re.search(r"\bchange_tag_from\s*=", handoff).start())
+            completion = named_block(effects, f"ADISCORD_vorkerland_complete_wrk_from_{claimant}")
+            self.assertRegex(completion, r"annex_country\s*=\s*\{\s*target = VAD")
+
+    def test_factory_orders_settle_before_native_peace_or_player_handoff(self) -> None:
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "vorkerland_collapse",
+        )
+        for hook in ("on_capitulation_immediate", "on_capitulation", "on_puppet"):
+            callbacks = "\n".join(named_blocks(on_actions, hook))
+            self.assertEqual(callbacks.count("WKR_refund_council_order = yes"), 1, hook)
+        annex = "\n".join(named_blocks(on_actions, "on_annex"))
+        self.assertIn("limit = { FROM = { tag = WKR } }", annex)
+        self.assertTrue(any("WKR_settle_council_order_handoff = yes" in block
+                            for block in named_blocks(annex, "ROOT")))
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        for claimant in ("wkr", "vad", "tva"):
+            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            self.assertEqual(handoff.count("WKR_settle_council_order_handoff = yes"), 1)
+            self.assertLess(handoff.index("transfer_state = 32"), handoff.index("WKR_settle_council_order_handoff"))
+            self.assertLess(handoff.index("WKR_settle_council_order_handoff"), handoff.index("WKR_close_administration"))
+            self.assertLess(handoff.index("WKR_close_administration"), handoff.index("load_focus_tree"))
+        cleanup = named_block(effects, "ADISCORD_vorkerland_clear_claimant_war_modifiers")
+        self.assertLess(cleanup.index("WKR_close_administration"), cleanup.index("remove_dynamic_modifier"))
+        close = named_block(effects, "WKR_close_council_orders")
+        self.assertLess(close.index("WKR_refund_council_order"), close.index("set_division_template_lock"))
+
+    def test_railway_orders_settle_before_native_peace_or_player_handoff(self) -> None:
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "vorkerland_collapse",
+        )
+        for hook in ("on_capitulation_immediate", "on_capitulation", "on_puppet"):
+            callbacks = "\n".join(named_blocks(on_actions, hook))
+            self.assertEqual(callbacks.count("WKR_refund_railway_order = yes"), 1, hook)
+        annex = "\n".join(named_blocks(on_actions, "on_annex"))
+        self.assertTrue(any("WKR_settle_railway_handoff = yes" in block
+                            for block in named_blocks(annex, "ROOT")))
+        self.assertLess(annex.index("WKR_settle_railway_handoff"), annex.index("WKR_close_railway_councils"))
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        for claimant in ("wkr", "vad", "tva"):
+            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            self.assertEqual(handoff.count("WKR_settle_railway_handoff = yes"), 1)
+            self.assertLess(handoff.index("transfer_state = 32"), handoff.index("WKR_settle_railway_handoff"))
+            self.assertLess(handoff.index("WKR_settle_railway_handoff"), handoff.index("WKR_close_administration"))
+            self.assertLess(handoff.index("WKR_close_administration"), handoff.index("load_focus_tree"))
+        control = named_block(on_actions, "on_state_control_changed")
+        self.assertIn("FROM.FROM = { WKR_lose_railway_council = yes }", control)
+        for callback in ("on_daily", "on_weekly", "on_monthly"):
+            self.assertNotIn("WKR_railway", "\n".join(named_blocks(on_actions, callback)))
+
+    def test_recognition_offers_close_on_terminal_hooks_and_honour_only_worker_settlement(self) -> None:
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "vorkerland_collapse",
+        )
+        for hook in ("on_capitulation_immediate", "on_capitulation", "on_puppet", "on_annex"):
+            callbacks = "\n".join(named_blocks(on_actions, hook))
+            self.assertEqual(callbacks.count("WKR_close_recognition_offers = yes"), 1, hook)
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        self.assertIn("WKR_close_recognition_offers = yes", named_block(effects, "WKR_close_administration"))
+        callers = [block for block in named_blocks(effects, "if")
+                   if "ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes" in block
+                   and "has_country_flag = ADISCORD_vorkerland_route_worker" in named_block(block, "limit")]
+        self.assertEqual(len(callers), 1)
 
 
 if __name__ == "__main__":

@@ -196,10 +196,6 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         COUNTRY,
         "applied to VAD by the war-economy branch head focus",
     ),
-    "ADISCORD_vorkerland_tva_war_economy": (
-        COUNTRY,
-        "applied to TVA by the war-economy branch head focus",
-    ),
     "ADISCORD_vorkerland_wkr_doctrine": (
         COUNTRY,
         "applied to WKR when it publishes a variant programme, then rewritten "

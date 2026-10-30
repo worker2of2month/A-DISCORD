@@ -8,6 +8,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from tools.lib.adiscord_ui_contracts import (
+    native_sprite_blocks,
     replace_gui_block,
     SpriteContract,
     render_gfx_entry,
@@ -45,21 +46,30 @@ def render_gui() -> str:
         text,
         "positionType",
         "focus_spacing",
-        ((r"\bx = 96\b", "x = 108"),),
+        ((r"\by = 130\b", "y = 140"),),
     )
     for old, new, count in (
         ("GFX_tiled_plain_bg2", "window", 1),
         ("GFX_tiled_bg", "panel", 1),
         ("GFX_tiled_focus_bg", "tree", 1),
-        ("GFX_tiled_window_thin_border2", "window", 4),
+        ("GFX_tiled_window_thin_border2", "window", 3),
         ("GFX_tiled_paper_bg2", "panel", 3),
-        ("GFX_tiled_window_transparent", "panel", 2),
         ("GFX_tech_info_top_win", "detail_header", 2),
         ("GFX_generic_bg_307x113", "requirements", 2),
         ("GFX_unit_list_header", "reward_header", 2),
         ("GFX_button_123x34", "button", 3),
     ):
         text = replace_counted(text, old, f"GFX_ADISCORD_focus_{new}", count)
+
+    # Shortcut-only buttons share the transparent sprite and must stay invisible.
+    # Replace the nested filter panel before its parent background.
+    for name in ("filter_grid_container", "filter_grid_bg_container"):
+        text = replace_gui_block(
+            text,
+            "containerWindowType",
+            name,
+            ((r"\bGFX_tiled_window_transparent\b", "GFX_ADISCORD_focus_panel"),),
+        )
 
     # The palette is empty. Keep native children addressable and clipped.
     # Remove the background: corner tiles remain visible even at zero size.
@@ -236,6 +246,10 @@ def expected_outputs() -> dict[Path, bytes]:
         )
         outputs[path] = dds_bytes(image)
         entries.append(render_gfx_entry(contract, path.relative_to(ROOT).as_posix()))
+    # The mod overrides core.gfx, so the native bookmark sprite needs an
+    # additive declaration to retain its hover and selection states.
+    bookmark = native_sprite_blocks(BASE_GAME, {"GFX_focus_shortcut_button"})
+    entries.append("\t" + bookmark["GFX_focus_shortcut_button"] + "\n")
     outputs[GFX_OUTPUT] = (
         HEADER + "spriteTypes = {\n" + "".join(entries) + "}\n"
     ).encode("utf-8")

@@ -41,21 +41,140 @@ ADISCORD_nam_resource_war_schedule = {
 			country_exists = AZH
 		}
 		set_global_flag = ADISCORD_nam_resource_war_scheduled
-		# The scheduled flag keeps the collapse date: the restitution clock reads
-		# its age for the 700-day minimum. Event .1 at 730-760 days is the backstop.
+		EFL = {
+			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.110 days = 300 } }
+		}
+		AZH = {
+			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.110 days = 300 } }
+		}
 		NAM = {
-			set_variable = { var = NAM_rw_tension value = 10 }
-			NAM_rw_count_entry_dispatch = yes
-			country_event = {
-				id = ADISCORD_nam_resource_war.1
-				days = 730
-				random_days = 30
-			}
+			activate_mission = NAM_resource_war_deadline
 		}
 	}
 	# The same collapse edge proclaims independence and creates the ladder,
 	# whether or not the neighbours can open the restitution campaign.
 	NAM = { NAM_ladder_declare_independence = yes }
+}
+
+# COUNTRY EFL/AZH. The own-country callback is independent of NAM's focus tree.
+# A single bounded muster counts ordinary recruitment and consumes real recruits.
+NAM_rw_coalition_muster = {
+	if = {
+		limit = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_country_flag = NAM_rw_coalition_mobilised }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+			capital_scope = {
+				is_owned_by = PREV
+				is_controlled_by = PREV
+			}
+		}
+		set_country_flag = NAM_rw_coalition_mobilised
+		set_temp_variable = { var = NAM_rw_muster_target value = 10 }
+		set_temp_variable = { var = NAM_rw_rifle_reserve value = 12000 }
+		set_temp_variable = { var = NAM_rw_squad_reserve value = 200 }
+		if = {
+			limit = { tag = EFL }
+			set_temp_variable = { var = NAM_rw_muster_target value = 15 }
+			set_temp_variable = { var = NAM_rw_rifle_reserve value = 20000 }
+			set_temp_variable = { var = NAM_rw_squad_reserve value = 300 }
+		}
+		set_temp_variable = { var = NAM_rw_muster_count value = num_divisions }
+		set_temp_variable = { var = NAM_rw_muster_missing value = NAM_rw_muster_target }
+		subtract_from_temp_variable = { var = NAM_rw_muster_missing value = NAM_rw_muster_count }
+		clamp_temp_variable = { var = NAM_rw_muster_missing min = 0 max = 15 }
+		set_temp_variable = { var = NAM_rw_rifle_need value = NAM_rw_muster_missing }
+		multiply_temp_variable = { var = NAM_rw_rifle_need value = 3600 }
+		add_to_temp_variable = { var = NAM_rw_rifle_need value = NAM_rw_rifle_reserve }
+		subtract_from_temp_variable = { var = NAM_rw_rifle_need value = num_equipment@infantry_equipment }
+		if = {
+			limit = { check_variable = { NAM_rw_rifle_need > 0 } }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = NAM_rw_rifle_need producer = THIS }
+		}
+		set_temp_variable = { var = NAM_rw_squad_need value = NAM_rw_muster_missing }
+		multiply_temp_variable = { var = NAM_rw_squad_need value = 32 }
+		add_to_temp_variable = { var = NAM_rw_squad_need value = NAM_rw_squad_reserve }
+		subtract_from_temp_variable = { var = NAM_rw_squad_need value = num_equipment@ADISCORD_squad_weapons_equipment }
+		if = {
+			limit = { check_variable = { NAM_rw_squad_need > 0 } }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = NAM_rw_squad_need producer = THIS }
+		}
+		NAM_rw_coalition_transport_reserve = yes
+		division_template = {
+			name = "Restitution Regiment"
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+			}
+		}
+		for_loop_effect = {
+			end = 15
+			value = NAM_rw_muster_index
+			if = {
+				limit = {
+					check_variable = { var = NAM_rw_muster_count value = NAM_rw_muster_target compare = less_than }
+					NOT = { has_manpower < 4000 }
+					NOT = { has_equipment = { infantry_equipment < 3600 } }
+					NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 32 } }
+				}
+				add_manpower = -4000
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -3600 producer = THIS }
+				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = -32 producer = THIS }
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Restitution Regiment\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = PREV
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+				add_to_temp_variable = { var = NAM_rw_muster_count value = 1 }
+			}
+		}
+	}
+}
+
+# COUNTRY EFL/AZH. Top up reserves once; ordinary supply use and losses continue.
+NAM_rw_coalition_transport_reserve = {
+	if = {
+		limit = { has_fuel < 20000 }
+		set_fuel = 20000
+	}
+	set_temp_variable = { var = NAM_rw_transport_need value = 20 }
+	subtract_from_temp_variable = { var = NAM_rw_transport_need value = num_equipment@train_equipment }
+	if = {
+		limit = { check_variable = { NAM_rw_transport_need > 0 } }
+		add_equipment_to_stockpile = { type = train_equipment_1 amount = NAM_rw_transport_need producer = THIS }
+	}
+	set_temp_variable = { var = NAM_rw_transport_need value = 150 }
+	subtract_from_temp_variable = { var = NAM_rw_transport_need value = num_equipment@motorized_equipment }
+	if = {
+		limit = { check_variable = { NAM_rw_transport_need > 0 } }
+		add_equipment_to_stockpile = { type = motorized_equipment_1 amount = NAM_rw_transport_need producer = THIS }
+	}
+	set_temp_variable = { var = NAM_rw_transport_need value = 150 }
+	subtract_from_temp_variable = { var = NAM_rw_transport_need value = num_equipment@support_equipment }
+	if = {
+		limit = { check_variable = { NAM_rw_transport_need > 0 } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = NAM_rw_transport_need producer = THIS }
+	}
+	for_loop_effect = {
+		end = 40
+		value = NAM_rw_convoy_index
+		if = {
+			limit = { has_navy_size = { size < 40 type = convoy } }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 1 producer = THIS }
+		}
+	}
 }
 
 # Every queued ADISCORD_nam_resource_war.1 is counted. A dispatch that fails
@@ -85,8 +204,6 @@ ADISCORD_nam_resource_war_start = {
 
 ADISCORD_nam_resource_war_begin_hostilities = {
 	set_global_flag = ADISCORD_nam_resource_war_started
-	# Reveals the wartime branch of the Svetlogorye tree.
-	NAM = { mark_focus_tree_layout_dirty = yes }
 	VAL = {
 		if = {
 			limit = {
@@ -103,6 +220,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 
 	NAM = {
+		remove_mission = NAM_resource_war_deadline
 		clr_country_flag = NAM_rw_war_dispatched
 		if = {
 			limit = { has_country_flag = NAM_rw_first_strike }
@@ -133,29 +251,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.18
-		if = {
-			limit = { NOT = { has_template = "Line Infantry Brigade" } }
-			division_template = {
-				name = "Line Infantry Brigade"
-				template_counter = 3
-				division_names_group = ADISCORD_INF_01
-				regiments = {
-					infantry = { x = 0 y = 0 }
-					infantry = { x = 0 y = 1 }
-					infantry = { x = 0 y = 2 }
-					infantry = { x = 1 y = 0 }
-					infantry = { x = 1 y = 1 }
-					infantry = { x = 1 y = 2 }
-				}
-				support = {
-					engineer = { x = 0 y = 0 }
-				}
-			}
-		}
-		load_oob = "EFL_nam_resource_war"
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = EFL }
-		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 100 producer = EFL }
-		add_equipment_to_stockpile = { type = support_equipment amount = 350 producer = EFL }
+		NAM_rw_coalition_muster = yes
 	}
 	AZH = {
 		if = {
@@ -164,21 +260,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.22
-		if = {
-			limit = { NOT = { has_template = "Basin Levy" } }
-			division_template = {
-				name = "Basin Levy"
-				template_counter = 7
-				division_names_group = ADISCORD_INF_01
-				regiments = {
-					ADISCORD_militia = { x = 0 y = 0 }
-					ADISCORD_militia = { x = 0 y = 1 }
-					ADISCORD_militia = { x = 1 y = 0 }
-				}
-			}
-		}
-		load_oob = "AZH_nam_resource_war"
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 18000 producer = AZH }
+		NAM_rw_coalition_muster = yes
 	}
 	if = {
 		limit = { NAM = { has_country_flag = NAM_rw_first_strike } }
@@ -249,6 +331,13 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	}
 
 	NAM = {
+		if = {
+			limit = { ADISCORD_nam_resource_war_active = yes }
+			load_focus_tree = {
+				tree = NAM_resource_war_focus
+				keep_completed = yes
+			}
+		}
 		# The declarations above end the contracts of every belligerent buyer.
 		NAM_oil_validate_clients = yes
 		if = {
@@ -345,9 +434,6 @@ ADISCORD_nam_resource_war_resolve_compromise = {
 
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
 		VAL = { VAL_settle_resource_aid = yes }
-		# Tribute replaces any embargo on the two neighbours.
-		EFL = { NAM_oil_lift_embargo = yes }
-		AZH = { NAM_oil_lift_embargo = yes }
 		NAM = {
 			NAM_rw_start_tribute = yes
 			load_focus_tree = {
@@ -585,6 +671,15 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 			clr_global_flag = ADISCORD_nam_resource_war_island_exile
 			if = {
 				limit = { NAM = { exists = yes } }
+				NAM = {
+					if = {
+						limit = { has_focus_tree = NAM_resource_war_focus }
+						load_focus_tree = {
+							tree = NAM_focus
+							keep_completed = yes
+						}
+					}
+				}
 				EFL = { annex_country = { target = NAM transfer_troops = no } }
 			}
 			ADISCORD_nam_resource_war_clear_temporary_support = yes
@@ -668,7 +763,7 @@ NAM_rw_settle_island_exile = {
 # the army that stood at the end of the war, rounded, and at least one. The
 # rest is left behind division by division in a fixed order: columns cut off
 # in mainland states Svetlogorye no longer controls, the front (719, 690, 688,
-# 67, 689), the principals' ground (720, 721, 722, 701, 68, 70, 691, 69, 692),
+# 67, 689), the principals' ground and regional districts,
 # any other mainland state and the South Harbour, where the transports load,
 # last. Divisions already on the islands or at sea are never left behind.
 # The survivors move to the island capital, and the whole army in exile loses
@@ -733,10 +828,17 @@ NAM_rw_exile_evacuate = {
 		722 = { NAM_rw_exile_abandon_state = yes }
 		701 = { NAM_rw_exile_abandon_state = yes }
 		68 = { NAM_rw_exile_abandon_state = yes }
+		725 = { NAM_rw_exile_abandon_state = yes }
 		70 = { NAM_rw_exile_abandon_state = yes }
+		723 = { NAM_rw_exile_abandon_state = yes }
+		724 = { NAM_rw_exile_abandon_state = yes }
 		691 = { NAM_rw_exile_abandon_state = yes }
+		726 = { NAM_rw_exile_abandon_state = yes }
 		69 = { NAM_rw_exile_abandon_state = yes }
+		727 = { NAM_rw_exile_abandon_state = yes }
+		728 = { NAM_rw_exile_abandon_state = yes }
 		692 = { NAM_rw_exile_abandon_state = yes }
+		729 = { NAM_rw_exile_abandon_state = yes }
 		if = {
 			limit = { check_variable = { NAM_exile_to_cut > 0 } }
 			every_state = {
@@ -1203,13 +1305,15 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		# (720), the Loren borderland (721) and the Middle Loren city (701), which
 		# touches Svetlogorye only through 720; Azhar cedes its seaboard (722).
 		# Only a sliver still owned by that principal changes hands. Azhar keeps
-		# its capital state 69, on which Svetlogorye retains a claim to the Black
+		# the Black Basin districts, on which Svetlogorye retains its claim to the
 		# Basin; post-war normalisation can renounce it.
 		720 = { NAM_rw_award_border_state = yes }
 		721 = { NAM_rw_award_border_state = yes }
 		701 = { NAM_rw_award_border_state = yes }
 		722 = { NAM_rw_award_border_state = yes }
 		69 = { add_claim_by = NAM }
+		727 = { add_claim_by = NAM }
+		728 = { add_claim_by = NAM }
 		# ----- End of the border award -----
 		NAM_rw_punish_defeated_coalition = yes
 		NAM = {
@@ -1498,7 +1602,6 @@ NAM_rw_compute_oil_score = {
 # the production effects instead of duplicating any resource-war mechanics.
 ADISCORD_nam_debug_start_resource_war = {
 	set_global_flag = ADISCORD_vorkerland_collapse_wars_started
-	clr_global_flag = ADISCORD_nam_resource_war_scheduled
 	clr_global_flag = ADISCORD_nam_resource_war_started
 	clr_global_flag = ADISCORD_nam_resource_war_resolved
 	ADISCORD_nam_resource_war_start = yes
@@ -1518,8 +1621,11 @@ ADISCORD_nam_debug_resolve_compromise = {
 
 ADISCORD_nam_debug_add_tension = {
 	NAM = {
-		add_to_variable = { var = NAM_rw_tension value = 30 }
-		NAM_rw_tension_clamp = yes
+		if = {
+			limit = { NAM_rw_deadline_open = yes }
+			add_days_mission_timeout = { mission = NAM_resource_war_deadline days = -30 }
+			NAM_rw_deadline_monthly = yes
+		}
 	}
 }
 
@@ -1695,7 +1801,15 @@ ADISCORD_nam_resource_war_close_external = {
 			}
 		}
 		set_global_flag = ADISCORD_nam_resource_war_resolved
-		NAM = { mark_focus_tree_layout_dirty = yes }
+		NAM = {
+			if = {
+				limit = { has_focus_tree = NAM_resource_war_focus }
+				load_focus_tree = {
+					tree = NAM_focus
+					keep_completed = yes
+				}
+			}
+		}
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
@@ -1768,6 +1882,7 @@ NAM_groups_initialize = {
 		set_country_flag = NAM_groups_initialized
 		set_variable = { var = NAM_navy_repair_speed value = 0 }
 		set_variable = { var = NAM_navy_landing_speed value = 0 }
+		set_variable = { var = NAM_navy_organisation value = 0 }
 		set_variable = { var = NAM_air_accidents value = 0 }
 		set_variable = { var = NAM_air_mission_efficiency value = 0 }
 		set_variable = { var = NAM_air_intercept_efficiency value = 0 }
@@ -2229,29 +2344,143 @@ NAM_crisis_draw = {
 			NOT = { has_country_flag = NAM_crisis_cooldown }
 			NOT = { has_country_flag = NAM_crisis_open }
 		}
-		random_list = {
-			92 = { }
-			8 = {
-				modifier = {
-					factor = 0.5
-					has_completed_focus = NAM_crisis_office
-				}
-				set_country_flag = NAM_crisis_open
-				set_country_flag = { flag = NAM_crisis_cooldown value = 1 days = 120 }
-				random_list = {
-					20 = { country_event = { id = ADISCORD_nam_crisis.1 hours = 1 } }
-					20 = { country_event = { id = ADISCORD_nam_crisis.2 hours = 1 } }
-					20 = { country_event = { id = ADISCORD_nam_crisis.3 hours = 1 } }
-					20 = { country_event = { id = ADISCORD_nam_crisis.4 hours = 1 } }
-					20 = {
-						modifier = {
-							factor = 0
-							check_variable = { var = NAM_grp_garr_support value = 40 compare = greater_than_or_equals }
-						}
-						country_event = { id = ADISCORD_nam_crisis.5 hours = 1 }
-					}
+		if = {
+			limit = { has_completed_focus = NAM_crisis_office }
+			random = {
+				chance = 4
+				NAM_crisis_select = yes
+			}
+		}
+		else = {
+			random = {
+				chance = 8
+				NAM_crisis_select = yes
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Only the selected case reserves the incident receipt. The event
+# still opens after a context change so its safe closing answer can release it.
+NAM_crisis_select = {
+	set_country_flag = { flag = NAM_crisis_cooldown value = 1 days = 120 }
+	random_list = {
+		20 = {
+			modifier = {
+				factor = 0
+				NAM_crisis_fire_operable = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 1 }
+			country_event = { id = ADISCORD_nam_crisis.1 hours = 1 }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				NAM_fuel_embargo_source = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 2 }
+			country_event = { id = ADISCORD_nam_crisis.2 hours = 1 }
+		}
+		20 = {
+			set_country_flag = { flag = NAM_crisis_open value = 3 }
+			country_event = { id = ADISCORD_nam_crisis.3 hours = 1 }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				NAM_fuel_embargo_source = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 4 }
+			country_event = { id = ADISCORD_nam_crisis.4 hours = 1 }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				check_variable = { var = NAM_grp_garr_support value = 40 compare = greater_than_or_equals }
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 5 }
+			country_event = { id = ADISCORD_nam_crisis.5 hours = 1 }
+		}
+	}
+}
+
+# COUNTRY NAM. Unpaid first answers fall back to the same guarded outcome
+# as an explicit refusal, or consume a reserved fund, so timeout cannot lock a case.
+NAM_crisis_default_1 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_crisis_case_1 = yes
+			}
+		}
+		custom_effect_tooltip = NAM_crisis_1_b_tt
+		add_fuel = -8000
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = -8 }
+			NAM_groups_refresh = yes
+			# The fire burns out in the Northern Deposits.
+			67 = {
+				if = {
+					limit = { is_controlled_by = NAM }
+					set_temp_variable = { var = NAM_field_damage_amount value = 20 }
+					NAM_field_apply_damage = yes
 				}
 			}
+			clr_country_flag = NAM_crisis_open
+		}
+	}
+}
+
+NAM_crisis_default_2 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_crisis_case_2 = yes
+			}
+		}
+		custom_effect_tooltip = NAM_crisis_2_b_tt
+		add_stability = -0.03
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = -12 }
+			add_to_variable = { var = NAM_grp_garr_support value = 4 }
+			NAM_groups_refresh = yes
+			clr_country_flag = NAM_crisis_open
+		}
+	}
+}
+
+NAM_crisis_default_3 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_crisis_case_3 = yes
+			}
+		}
+		custom_effect_tooltip = NAM_crisis_3_b_tt
+		add_stability = -0.02
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = -8 }
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+			clr_country_flag = NAM_crisis_open
+		}
+	}
+}
+
+NAM_crisis_default_5 = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_crisis_case_5 = yes
+			}
+		}
+		custom_effect_tooltip = NAM_crisis_5_b_tt
+		add_stability = -0.02
+		add_manpower = -2000
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -6 }
+			NAM_groups_refresh = yes
+			clr_country_flag = NAM_crisis_open
 		}
 	}
 }
@@ -2410,10 +2639,17 @@ NAM_colony_close = {
 	mark_focus_tree_layout_dirty = yes
 }
 
-# STATE target of NAM_counterinsurgency_sweep. The sweep ends in the district:
-# the network loses 8 (12 in Svetlogorsk), the districts lose 4 support and
-# in 30% of sweeps (15% with loyal garrisons) excesses cost stability, another
-# 4 district support and give the network 3 martyrs' points back.
+# COUNTRY NAM; PREV is the district searched by the gendarmerie.
+NAM_sweep_excesses = {
+	add_stability = -0.02
+	add_to_variable = { var = NAM_grp_dist_support value = -4 }
+	set_temp_variable = { var = NAM_underground_change value = 3 }
+	NAM_underground_add = yes
+	log = "[ADISCORD][NAM][UNDERGROUND] Sweep excesses in [PREV.GetName]."
+}
+
+# STATE target. Settlement consumes the district's receipt before applying
+# national consequences; cancellation returns only the treasury deposit.
 NAM_sweep_complete = {
 	if = {
 		limit = {
@@ -2439,18 +2675,19 @@ NAM_sweep_complete = {
 			}
 			NAM_underground_add = yes
 			add_to_variable = { var = NAM_grp_dist_support value = -4 }
-			random_list = {
-				70 = { }
-				30 = {
-					modifier = {
-						factor = 0.5
-						check_variable = { NAM_grp_garr_support > 59 }
-					}
-					add_stability = -0.02
-					add_to_variable = { var = NAM_grp_dist_support value = -4 }
-					set_temp_variable = { var = NAM_underground_change value = 3 }
-					NAM_underground_add = yes
-					log = "[ADISCORD][NAM][UNDERGROUND] Sweep excesses in [PREV.GetName]."
+			if = {
+				limit = {
+					check_variable = { var = NAM_grp_garr_support value = 60 compare = greater_than_or_equals }
+				}
+				random = {
+					chance = 15
+					NAM_sweep_excesses = yes
+				}
+			}
+			else = {
+				random = {
+					chance = 30
+					NAM_sweep_excesses = yes
 				}
 			}
 			NAM_groups_refresh = yes
@@ -2476,24 +2713,15 @@ NAM_sweep_release = {
 	}
 }
 
-# ----- Restitution pressure -----
-# NAM_rw_tension (0-100) is the restitution clock. Every writer calls
-# NAM_rw_tension_clamp, so monthly drift, focus rewards, decisions and events
-# cross the same thresholds; each threshold fires once per campaign.
-
-# COUNTRY NAM.
-NAM_rw_tension_clamp = {
-	clamp_variable = {
-		var = NAM_rw_tension
-		min = 0
-		max = 100
-	}
+# ----- Restitution deadline -----
+# COUNTRY NAM. Monthly story warnings read the same mission that owns war entry.
+NAM_rw_deadline_monthly = {
 	if = {
-		limit = { NAM_rw_clock_running = yes }
+		limit = { NAM_rw_deadline_open = yes }
 		if = {
 			limit = {
 				NOT = { has_country_flag = NAM_rw_notes_sent }
-				check_variable = { var = NAM_rw_tension value = 40 compare = greater_than_or_equals }
+				check_variable = { var = days_mission_timeout@NAM_resource_war_deadline value = 300 compare = less_than_or_equals }
 			}
 			set_country_flag = NAM_rw_notes_sent
 			country_event = { id = ADISCORD_nam_resource_war.20 hours = 6 }
@@ -2501,103 +2729,53 @@ NAM_rw_tension_clamp = {
 		if = {
 			limit = {
 				NOT = { has_country_flag = NAM_rw_ultimatum_sent }
-				has_global_flag = {
-					flag = ADISCORD_nam_resource_war_scheduled
-					days > 649
-				}
-				check_variable = { var = NAM_rw_tension value = 70 compare = greater_than_or_equals }
+				check_variable = { var = days_mission_timeout@NAM_resource_war_deadline value = 90 compare = less_than_or_equals }
 			}
 			set_country_flag = NAM_rw_ultimatum_sent
-			country_event = { id = ADISCORD_nam_resource_war.21 days = 2 }
+			country_event = { id = ADISCORD_nam_resource_war.21 hours = 6 }
 		}
-		# Full pressure starts the war once the minimum period since the collapse
-		# has passed; a later monthly pass dispatches it if the window was closed.
-		if = {
-			limit = {
-				NOT = { has_country_flag = NAM_rw_war_dispatched }
-				check_variable = { var = NAM_rw_tension value = 100 compare = greater_than_or_equals }
-				NAM_rw_war_window_open = yes
-			}
-			set_country_flag = NAM_rw_war_dispatched
-			NAM_rw_count_entry_dispatch = yes
-			country_event = { id = ADISCORD_nam_resource_war.1 days = 7 random_days = 14 }
-		}
-	}
-}
-
-# COUNTRY NAM. on_monthly_NAM while the clock runs: base +6, each fuel
-# delivery to Eflor or Azhar -2, each embargo on them +1, two or more paid
-# orders +1.
-NAM_rw_tension_monthly = {
-	if = {
-		limit = { NAM_rw_clock_running = yes }
-		set_temp_variable = { var = NAM_rw_tension_delta value = 6 }
-		if = {
-			limit = { has_country_flag = NAM_rw_tribute }
-			subtract_from_temp_variable = { var = NAM_rw_tension_delta value = 4 }
-		}
-		if = {
-			limit = { EFL = { has_country_flag = NAM_oil_client } }
-			subtract_from_temp_variable = { var = NAM_rw_tension_delta value = 2 }
-		}
-		if = {
-			limit = { AZH = { has_country_flag = NAM_oil_client } }
-			subtract_from_temp_variable = { var = NAM_rw_tension_delta value = 2 }
-		}
-		if = {
-			limit = { EFL = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
-			add_to_temp_variable = { var = NAM_rw_tension_delta value = 1 }
-		}
-		if = {
-			limit = { AZH = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } } }
-			add_to_temp_variable = { var = NAM_rw_tension_delta value = 1 }
-		}
-		if = {
-			limit = { check_variable = { var = NAM_orders_paid value = 2 compare = greater_than_or_equals } }
-			add_to_temp_variable = { var = NAM_rw_tension_delta value = 1 }
-		}
-		add_to_variable = { var = NAM_rw_tension value = NAM_rw_tension_delta }
-		NAM_rw_tension_clamp = yes
 	}
 }
 
 # COUNTRY NAM. Ultimatum answer: East Sukhorechye passes to Azhar, a year of
 # tribute begins and the earliest war date moves 365 days later.
 NAM_rw_sign_klyuchevsk_protocol = {
-	set_country_flag = NAM_rw_protocol_signed
-	719 = {
-		if = {
-			limit = { is_owned_by = NAM }
-			AZH = { transfer_state = 719 }
-			remove_core_of = NAM
-			add_core_of = AZH
-			add_claim_by = NAM
-			set_state_controller_to = AZH
+	if = {
+		limit = { NAM_rw_can_sign_protocol = yes }
+		set_country_flag = NAM_rw_protocol_signed
+		719 = {
+			if = {
+				limit = { is_owned_by = NAM }
+				AZH = { transfer_state = 719 }
+				remove_core_of = NAM
+				add_core_of = AZH
+				add_claim_by = NAM
+				set_state_controller_to = AZH
+			}
 		}
+		NAM_rw_start_tribute = yes
+		add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 365 }
 	}
-	NAM_rw_start_tribute = yes
-	add_to_variable = { var = NAM_rw_tension value = -40 }
-	NAM_rw_tension_clamp = yes
 }
 
-# COUNTRY NAM. Ultimatum answer: Azhar sells a delay for fuel. For 75 days no
-# war is dispatched, and the next backstop deadline moves 75 days later. The
-# permanent flag dates the payment and keeps the purchase once per campaign.
+# COUNTRY NAM. Both fuel prices share one receipt and extend the active deadline.
 NAM_rw_buy_time = {
 	if = {
 		limit = {
-			NOT = { has_country_flag = NAM_rw_time_bought }
+			NAM_rw_can_buy_time = yes
 			NOT = { has_fuel < 12000 }
 		}
 		add_fuel = -12000
 		AZH = { add_fuel = 12000 }
 		set_country_flag = NAM_rw_time_bought
+		add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 75 }
 	}
 }
 
 # COUNTRY NAM. The war never started: return paid orders and drop the dispatch.
 # A refund the player did not order is announced with its exact amounts.
 NAM_rw_close_preparation = {
+	remove_mission = NAM_resource_war_deadline
 	if = {
 		limit = { check_variable = { var = NAM_orders_paid value = 0 compare = greater_than } }
 		set_variable = { var = NAM_orders_refunded_guard value = NAM_order_guard_paid }
@@ -2618,6 +2796,8 @@ NAM_rw_close_preparation = {
 # Clearing the flag and calling NAM_oil_refresh ends the tribute completely:
 # deliveries read the flag and the refresh releases its two committed units.
 NAM_rw_start_tribute = {
+	EFL = { NAM_oil_lift_embargo = yes }
+	AZH = { NAM_oil_lift_embargo = yes }
 	set_country_flag = {
 		flag = NAM_rw_tribute
 		value = 1
@@ -2658,7 +2838,7 @@ NAM_rw_deliveries_monthly = {
 
 # COUNTRY NAM. Every recurring part guards itself and reads fixed tags only.
 NAM_rw_monthly = {
-	NAM_rw_tension_monthly = yes
+	NAM_rw_deadline_monthly = yes
 	NAM_rw_deliveries_monthly = yes
 	NAM_seal_discipline_monthly = yes
 	NAM_oil_monthly = yes
@@ -2671,12 +2851,31 @@ NAM_rw_monthly = {
 # price on release before the war. Prices: guard 200/9600, field infantry
 # 100/6300, motorised division 250/4600 and 3000 fuel, coastal battalion 50/3300.
 
+# COUNTRY NAM. All capacity rewards share the six-order ceiling. Additional
+# training supplies replacements once no further paid formation can be opened.
+NAM_expand_mobilisation_capacity = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_rw_clock_running = yes
+				check_variable = { var = NAM_order_cap value = 6 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_mobilisation_capacity_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_order_cap value = 1 }
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_mobilisation_reinforcements_tt
+		add_manpower = 2000
+	}
+}
+
 # COUNTRY NAM. Called after the debit of one order.
 NAM_order_register = {
 	add_to_variable = { var = NAM_orders_paid value = 1 }
 	NAM_order_ensure_templates = yes
-	add_to_variable = { var = NAM_rw_tension value = 2 }
-	NAM_rw_tension_clamp = yes
 }
 
 # COUNTRY NAM. The motorised division rides armoured carriers; its order
@@ -3109,13 +3308,17 @@ NAM_line_release = {
 	}
 }
 
-# STATE target. Builds the line only for a state still owned and controlled.
+# STATE target. Paid permanent fortifications may finish after peace.
+# A later supply project owns a different receipt and must not be settled here.
 NAM_line_complete = {
 	if = {
 		limit = {
 			has_state_flag = NAM_line_in_progress
+			NOT = { has_variable = NAM_line_supply_deposit }
+			NAM = { NAM_country_operable = yes }
 			is_owned_by = NAM
 			is_controlled_by = NAM
+			any_neighbor_state = { NOT = { is_owned_by = NAM } }
 		}
 		clr_state_flag = NAM_line_in_progress
 		set_state_flag = NAM_line_prepared
@@ -3142,7 +3345,8 @@ NAM_line_complete = {
 			}
 		}
 	}
-	else = {
+	else_if = {
+		limit = { NOT = { has_variable = NAM_line_supply_deposit } }
 		NAM_line_release = yes
 	}
 }
@@ -3318,6 +3522,12 @@ NAM_oil_initialize = {
 # contracts use the South Harbour terminal unit first; land buyers and
 # tribute can never use it.
 NAM_oil_refresh = {
+	if = {
+		limit = { NAM_fuel_embargo_source = no }
+		EFL = { NAM_oil_lift_embargo = yes }
+		AZH = { NAM_oil_lift_embargo = yes }
+		SHL = { NAM_oil_lift_embargo = yes }
+	}
 	set_variable = { var = NAM_oil_throughput value = NAM_oil_bonus_units }
 	set_variable = { var = NAM_oil_terminal_units value = 0 }
 	67 = { NAM_field_update_units = yes }
@@ -3693,15 +3903,31 @@ NAM_oil_release_all_buyers = {
 
 # COUNTRY target.
 NAM_oil_impose_embargo = {
-	add_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier }
-	add_opinion_modifier = {
-		target = NAM
-		modifier = embargoed_us
-	}
-	ADISCORD_economy_mark_dirty = yes
-	NAM = {
-		add_to_variable = { var = NAM_grp_trade_support value = -10 }
-		NAM_groups_refresh = yes
+	if = {
+		limit = {
+			hidden_trigger = {
+				NAM_fuel_embargo_target_valid = yes
+				NAM = {
+					NAM_independent_programmes_operable = yes
+					NAM_fuel_embargo_source = yes
+					has_completed_focus = NAM_fuel_leverage
+				}
+			}
+		}
+		add_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier }
+		add_opinion_modifier = {
+			target = NAM
+			modifier = embargoed_us
+		}
+		NAM = { custom_effect_tooltip = NAM_fuel_embargo_trade_tt }
+
+		hidden_effect = {
+			ADISCORD_economy_mark_dirty = yes
+			NAM = {
+				add_to_variable = { var = NAM_grp_trade_support value = -10 }
+				NAM_groups_refresh = yes
+			}
+		}
 	}
 }
 
@@ -3714,7 +3940,7 @@ NAM_oil_lift_embargo = {
 			target = NAM
 			modifier = embargoed_us
 		}
-		ADISCORD_economy_mark_dirty = yes
+		hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 	}
 }
 
@@ -3762,20 +3988,24 @@ NAM_project_complete_repair = {
 	if = {
 		limit = {
 			has_state_flag = NAM_project_in_progress
-			is_owned_by = NAM
-			is_controlled_by = NAM
+			check_variable = { var = NAM_project_deposit value = 150 compare = equals }
 		}
-		NAM_project_close = yes
-		add_to_variable = { var = NAM_field_condition value = 30 }
-		clamp_variable = {
-			var = NAM_field_condition
-			min = 0
-			max = 100
+		if = {
+			limit = { NAM_field_repair_possible = yes }
+			NAM_project_close = yes
+			add_to_variable = { var = NAM_field_condition value = 30 }
+			if = {
+				limit = { NAM = { has_completed_focus = NAM_field_firefighters } }
+				add_to_variable = { var = NAM_field_condition value = 15 }
+			}
+			clamp_variable = {
+				var = NAM_field_condition
+				min = 0
+				max = 100
+			}
+			NAM = { NAM_oil_refresh = yes }
 		}
-		NAM = { NAM_oil_refresh = yes }
-	}
-	else = {
-		NAM_project_release = yes
+		else = { NAM_project_release = yes }
 	}
 }
 
@@ -3843,11 +4073,37 @@ NAM_project_complete_terminal = {
 }
 
 # ----- Overseas districts -----
-# COUNTRY NAM. While the levy runs, each levied island owned and controlled
-# by Svetlogorye pays 30 treasury a month and loses 2 compliance.
+# COUNTRY NAM. The levy diverts local ore from normal distribution into revenue.
+NAM_island_levy_start = {
+	if = {
+		limit = { NAM_island_levy_operable = yes }
+		set_country_flag = NAM_island_levy_active
+		228 = { NAM_island_levy_prepare_state = yes }
+		230 = { NAM_island_levy_prepare_state = yes }
+		231 = { NAM_island_levy_prepare_state = yes }
+	}
+}
+
+# STATE. Newly acquired districts join on the next collection; existing districts
+# retain the same term through temporary occupation without a second timer.
+NAM_island_levy_prepare_state = {
+	if = {
+		limit = {
+			NAM_island_levy_state_active = yes
+			NOT = { has_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier } }
+		}
+		add_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier }
+		NAM = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+# COUNTRY NAM. Income and the production cost use the same current districts.
 NAM_island_levy_monthly = {
 	if = {
-		limit = { has_country_flag = NAM_island_levy_active }
+		limit = {
+			NAM_island_levy_running = yes
+			NAM_island_levy_operable = yes
+		}
 		set_temp_variable = { var = NAM_island_levy_income value = 0 }
 		228 = { NAM_island_levy_collect = yes }
 		230 = { NAM_island_levy_collect = yes }
@@ -3863,21 +4119,42 @@ NAM_island_levy_monthly = {
 # STATE island.
 NAM_island_levy_collect = {
 	if = {
-		limit = {
-			is_owned_by = NAM
-			is_controlled_by = NAM
-		}
-		add_compliance = -2
+		limit = { NAM_island_levy_state_active = yes }
+		NAM_island_levy_prepare_state = yes
 		NAM = { add_to_temp_variable = { var = NAM_island_levy_income value = 30 } }
 	}
+}
+
+# COUNTRY NAM. Native completion/cancellation clears every district, including
+# those temporarily occupied by another country.
+NAM_island_levy_close = {
+	clr_country_flag = NAM_island_levy_active
+	228 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier } }
+			remove_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier }
+		}
+	}
+	230 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier } }
+			remove_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier }
+		}
+	}
+	231 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier } }
+			remove_dynamic_modifier = { modifier = NAM_island_steel_levy_modifier }
+		}
+	}
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # STATE island. Convoy service for 180 days; a repeated order renews it.
 NAM_island_convoy_route = {
 	if = {
 		limit = {
-			is_owned_by = NAM
-			is_controlled_by = NAM
+			NAM_island_route_operable = yes
 		}
 		if = {
 			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
@@ -3890,46 +4167,99 @@ NAM_island_convoy_route = {
 	}
 }
 
-# COUNTRY VAL or GLP, ROOT of ADISCORD_nam_oil.4. The buyer pays 300 treasury
-# for the extraction rights of the Middle Island; the state stays Svetlogorsk.
-NAM_steel_concession_grant = {
-	set_temp_variable = { var = NAM_treasury_amount value = 300 }
-	NAM_spend_treasury = yes
-	set_country_flag = NAM_steel_concession_231
-	ADISCORD_release_non_participating_minor_optimization = yes
-	if = {
-		limit = { tag = VAL }
-		NAM = {
-			give_resource_rights = {
-				receiver = VAL
-				state = 231
-			}
+# COUNTRY NAM. Native decision completion and cancellation end the shipping term.
+NAM_island_convoy_close = {
+	225 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
 		}
 	}
-	else = {
-		NAM = {
-			give_resource_rights = {
-				receiver = GLP
-				state = 231
-			}
+	226 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
+		}
+	}
+	227 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
+		}
+	}
+	228 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
+		}
+	}
+	229 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
+		}
+	}
+	230 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
+		}
+	}
+	231 = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_island_convoy_route } }
+			remove_dynamic_modifier = { modifier = NAM_island_convoy_route }
 		}
 	}
 	ADISCORD_economy_mark_dirty = yes
-	NAM = {
-		clr_country_flag = NAM_concession_231_pending
+}
+
+# COUNTRY VAL or GLP, ROOT of ADISCORD_nam_oil.4. The buyer pays 300 treasury
+# for the extraction rights of the Middle Island; the state stays Svetlogorsk.
+NAM_steel_concession_grant = {
+	if = {
+		limit = { NAM_steel_concession_can_accept = yes }
 		set_temp_variable = { var = NAM_treasury_amount value = 300 }
-		NAM_add_treasury = yes
-		add_to_variable = { var = NAM_grp_trade_support value = 6 }
-		NAM_groups_refresh = yes
-		country_event = { id = ADISCORD_nam_oil.5 hours = 6 }
+		NAM_spend_treasury = yes
+		set_country_flag = NAM_steel_concession_231
+		ADISCORD_release_non_participating_minor_optimization = yes
+		if = {
+			limit = { tag = VAL }
+			NAM = {
+				give_resource_rights = {
+					receiver = VAL
+					state = 231
+				}
+			}
+		}
+		else = {
+			NAM = {
+				give_resource_rights = {
+					receiver = GLP
+					state = 231
+				}
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+		NAM = {
+			clr_country_flag = NAM_concession_231_pending
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+			country_event = { id = ADISCORD_nam_oil.5 hours = 6 }
+		}
 	}
 }
 
 # COUNTRY VAL or GLP, ROOT of ADISCORD_nam_oil.4.
 NAM_steel_concession_decline = {
-	NAM = {
-		clr_country_flag = NAM_concession_231_pending
-		country_event = { id = ADISCORD_nam_oil.5 hours = 6 }
+	if = {
+		limit = { NAM_steel_concession_offer_current = yes }
+		NAM = {
+			clr_country_flag = NAM_concession_231_pending
+			country_event = { id = ADISCORD_nam_oil.5 hours = 6 }
+		}
 	}
 }
 
@@ -4179,19 +4509,19 @@ NAM_ladder_monthly = {
 # 4 garrisons, 5 export houses). The favour costs that pillar 15 support.
 NAM_favour_pay_support = {
 	if = {
-		limit = { check_variable = { NAM_favour_group = 1 } }
+		limit = { check_variable = { var = NAM_favour_group value = 1 compare = equals } }
 		add_to_variable = { var = NAM_grp_nam_support value = -15 }
 	}
 	else_if = {
-		limit = { check_variable = { NAM_favour_group = 2 } }
+		limit = { check_variable = { var = NAM_favour_group value = 2 compare = equals } }
 		add_to_variable = { var = NAM_grp_oil_support value = -15 }
 	}
 	else_if = {
-		limit = { check_variable = { NAM_favour_group = 3 } }
+		limit = { check_variable = { var = NAM_favour_group value = 3 compare = equals } }
 		add_to_variable = { var = NAM_grp_dist_support value = -15 }
 	}
 	else_if = {
-		limit = { check_variable = { NAM_favour_group = 4 } }
+		limit = { check_variable = { var = NAM_favour_group value = 4 compare = equals } }
 		add_to_variable = { var = NAM_grp_garr_support value = -15 }
 	}
 	else = {
@@ -4632,6 +4962,11 @@ NAM_underground_open_event = {
 # COUNTRY NAM. Every option of an underground event ends with this call.
 NAM_underground_close_event = {
 	clr_country_flag = NAM_ug_event_pending
+	clear_variable = NAM_ug_rifles_stolen
+	if = {
+		limit = { has_event_target = NAM_ug_field }
+		event_target:NAM_ug_field = { clear_variable = NAM_ug_damage_receipt }
+	}
 }
 
 # COUNTRY NAM. on_monthly_NAM from the first day of the colony: base +3, +2
@@ -4778,6 +5113,20 @@ NAM_weber_talks_refund = {
 	clear_variable = NAM_weber_talks_deposit
 }
 
+# COUNTRY NAM. The council and the signed amnesty may complete in either order.
+NAM_deliver_amnesty_recruits = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				has_country_flag = NAM_weber_amnesty
+				NOT = { has_country_flag = NAM_amnesty_recruits_delivered }
+			}
+		}
+		add_manpower = 2000
+		set_country_flag = NAM_amnesty_recruits_delivered
+	}
+}
+
 # COUNTRY NAM. The third round of talks ends in the amnesty: the underground
 # dissolves, Weber serves Svetlogorye and the uprising can no longer happen.
 NAM_weber_amnesty = {
@@ -4792,6 +5141,10 @@ NAM_weber_amnesty = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+	}
+	if = {
+		limit = { has_completed_focus = NAM_mine_councils }
+		NAM_deliver_amnesty_recruits = yes
 	}
 	country_event = { id = ADISCORD_nam_groups.30 hours = 1 }
 }
@@ -6205,31 +6558,30 @@ NAM_corp_count_zone = {
 	}
 }
 
-# STATE island, the end of NAM_corp_charter_free_zone. The zone opens on an
-# island still Svetlogorsk; the signing bonus and the influence follow it.
+# STATE island. Its pending receipt settles once, even if cancellation and
+# completion both run. Delivery requires NAM's ownership and control.
 NAM_corp_zone_establish = {
-	clr_state_flag = NAM_free_zone_pending
-	NAM = {
-		subtract_from_variable = { var = NAM_free_zones_pending value = 1 }
-		clamp_variable = {
-			var = NAM_free_zones_pending
-			min = 0
-			max = 3
-		}
-	}
 	if = {
-		limit = { is_owned_by = NAM }
-		set_state_flag = NAM_free_zone
+		limit = { has_state_flag = NAM_free_zone_pending }
+		NAM_corp_zone_release = yes
 		if = {
-			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_free_zone_state } } }
-			add_dynamic_modifier = { modifier = NAM_free_zone_state }
-		}
-		NAM = {
-			NAM_corp_count_zones = yes
-			set_temp_variable = { var = NAM_corp_capital_change value = 20 }
-			NAM_corp_capital_add = yes
-			add_to_variable = { var = NAM_corp_influence value = 5 }
-			NAM_corp_influence_clamp = yes
+			limit = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+				NAM = { NAM_country_operable = yes }
+			}
+			set_state_flag = NAM_free_zone
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = NAM_free_zone_state } } }
+				add_dynamic_modifier = { modifier = NAM_free_zone_state }
+			}
+			NAM = {
+				NAM_corp_count_zones = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_corp_influence value = 5 }
+				NAM_corp_influence_clamp = yes
+			}
 		}
 	}
 }
@@ -6237,13 +6589,16 @@ NAM_corp_zone_establish = {
 # STATE island. Interrupted negotiations free the slot; political power stays
 # spent.
 NAM_corp_zone_release = {
-	clr_state_flag = NAM_free_zone_pending
-	NAM = {
-		subtract_from_variable = { var = NAM_free_zones_pending value = 1 }
-		clamp_variable = {
-			var = NAM_free_zones_pending
-			min = 0
-			max = 3
+	if = {
+		limit = { has_state_flag = NAM_free_zone_pending }
+		clr_state_flag = NAM_free_zone_pending
+		NAM = {
+			subtract_from_variable = { var = NAM_free_zones_pending value = 1 }
+			clamp_variable = {
+				var = NAM_free_zones_pending
+				min = 0
+				max = 3
+			}
 		}
 	}
 }
@@ -7239,8 +7594,8 @@ NAM_pirate_raid_success = {
 	}
 }
 
-# COUNTRY NAM. A rich prize: 100 loot, 2000 fuel, 1000 rifles and 3 convoys
-# taken with the ship; the owners lose 3000 fuel between them.
+# COUNTRY NAM. Captured cargo goes to the raider; the fuel loss is shared
+# between the route owners recorded when the flotilla sailed.
 NAM_pirate_raid_prize = {
 	set_temp_variable = { var = NAM_pirate_loot_change value = 100 }
 	set_temp_variable = { var = NAM_pirate_notoriety_change value = 8 }
@@ -7427,10 +7782,13 @@ NAM_marine_ensure_template = {
 	}
 }
 
-# COUNTRY NAM. No marine order remains open.
+# COUNTRY NAM. The template stays fixed while another paid order is possible.
 NAM_marine_unlock_template = {
 	if = {
-		limit = { has_template = "Island Marines" }
+		limit = {
+			has_template = "Island Marines"
+			NAM_marine_orders_open = no
+		}
 		set_division_template_lock = {
 			division_template = "Island Marines"
 			is_locked = no
@@ -7471,12 +7829,13 @@ NAM_marine_orders_refund = {
 # the whole landing when the harbour's controller is not at war with
 # Svetlogorye. The beachhead is ordinary control and awards nothing by itself:
 # the harbour returns only with the capitulation of its owner. Every trained
-# order is delivered here.
+# order is delivered here. The delivery receipt prevents a renewed war from
+# creating the expedition again, including when the first landing used no orders.
 NAM_wor_revenge_landing = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_nam_resource_war_island_exile
-			700 = { NOT = { is_owned_by = NAM } }
+			NOT = { has_variable = NAM_marines_orders_delivered }
 		}
 		NAM_marine_ensure_template = yes
 		set_variable = { var = NAM_marines_orders_delivered value = NAM_marine_orders_paid }
@@ -7485,7 +7844,10 @@ NAM_wor_revenge_landing = {
 			limit = { NAM_landing_third_division = yes }
 			add_to_variable = { var = NAM_marines_landed value = 1 }
 			if = {
-				limit = { check_variable = { NAM_marine_orders_paid > 0 } }
+				limit = {
+					check_variable = { NAM_marine_orders_paid > 0 }
+					check_variable = { var = NAM_revenge_readiness value = 70 compare = less_than }
+				}
 				subtract_from_variable = { var = NAM_marine_orders_paid value = 1 }
 			}
 		}
@@ -7519,7 +7881,7 @@ NAM_wor_revenge_landing = {
 		}
 		else_if = {
 			limit = { 700 = { is_controlled_by = NAM } }
-			set_temp_variable = { var = NAM_landing_at_harbour value = 1 }
+			set_temp_variable = { var = NAM_landing_at_harbour value = 2 }
 		}
 		if = {
 			limit = { check_variable = { NAM_landing_at_harbour = 0 } }
@@ -7560,7 +7922,7 @@ NAM_wor_revenge_landing = {
 		}
 		log = "[ADISCORD][NAM][MARINES] Revenge landing: beachhead [?NAM_landing_at_harbour], harbour held [?NAM_landing_harbour_held]; [?NAM_marines_landed] divisions at the South Harbour, [?NAM_marines_island] on the island capital, [?NAM_marines_orders_delivered] trained orders delivered."
 		if = {
-			limit = { check_variable = { NAM_marines_landed > 0 } }
+			limit = { check_variable = { NAM_landing_at_harbour = 1 } }
 			country_event = { id = ADISCORD_nam_resource_war.94 hours = 2 }
 		}
 	}
@@ -7922,4 +8284,132 @@ NAM_pw_export_shipment_settle = {
 		NAM_add_treasury = yes
 	}
 	else = { NAM_pw_export_shipment_refund = yes }
+}
+
+# ----- National naval procurement -----
+# The fixed-price template stays locked while the permanent programme is open;
+# ordinary recruitment remains available independently of paid orders.
+NAM_naval_ensure_marine_template = {
+	if = {
+		limit = { NOT = { has_template = "Naval Landing Detachment" } }
+		division_template = {
+			name = "Naval Landing Detachment"
+			override_model = ADISCORD_NAM_marine_entity
+			template_counter = 34
+			division_names_group = ADISCORD_INF_01
+			is_locked = yes
+			regiments = {
+				ADISCORD_marine_infantry = { x = 0 y = 0 }
+				ADISCORD_marine_infantry = { x = 0 y = 1 }
+				ADISCORD_marine_infantry = { x = 0 y = 2 }
+			}
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Naval Landing Detachment"
+			force_allow_recruiting = yes
+		}
+	}
+}
+
+NAM_coast_observation_order_refund = {
+	if = {
+		limit = { has_country_flag = NAM_coast_observation_paid }
+		clr_country_flag = NAM_coast_observation_paid
+		add_political_power = 50
+	}
+}
+
+NAM_coast_observation_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_coast_observation_paid
+			NAM_naval_observation_ready = yes
+		}
+		clr_country_flag = NAM_coast_observation_paid
+		700 = {
+			add_building_construction = {
+				type = radar_station
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+	else = { NAM_coast_observation_order_refund = yes }
+}
+
+NAM_escort_order_refund = {
+	if = {
+		limit = { has_country_flag = { flag = NAM_ship_order_paid value < 2 } }
+		clr_country_flag = NAM_ship_order_paid
+		add_political_power = 100
+	}
+}
+
+NAM_escort_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = { flag = NAM_ship_order_paid value < 2 }
+			NAM_naval_shipyard_ready = yes
+		}
+		clr_country_flag = NAM_ship_order_paid
+		create_ship = {
+			type = ADISCORD_escort_ship_2155
+			equipment_variant = "ADISCORD_escort_ship_2155"
+			amount = 2
+		}
+	}
+	else = { NAM_escort_order_refund = yes }
+}
+
+NAM_submarine_order_refund = {
+	if = {
+		limit = { has_country_flag = { flag = NAM_ship_order_paid value > 1 } }
+		clr_country_flag = NAM_ship_order_paid
+		add_political_power = 100
+	}
+}
+
+NAM_submarine_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = { flag = NAM_ship_order_paid value > 1 }
+			NAM_naval_shipyard_ready = yes
+		}
+		clr_country_flag = NAM_ship_order_paid
+		create_ship = {
+			type = ADISCORD_submarine_2155
+			equipment_variant = "ADISCORD_submarine_2155"
+			amount = 2
+		}
+	}
+	else = { NAM_submarine_order_refund = yes }
+}
+
+NAM_marine_detachment_order_refund = {
+	if = {
+		limit = { has_country_flag = NAM_marine_detachment_paid }
+		clr_country_flag = NAM_marine_detachment_paid
+		add_political_power = 50
+		add_manpower = 3000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 2700 producer = NAM }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 144 producer = NAM }
+	}
+}
+
+NAM_marine_detachment_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_marine_detachment_paid
+			NAM_naval_marines_ready = yes
+		}
+		clr_country_flag = NAM_marine_detachment_paid
+		NAM_naval_ensure_marine_template = yes
+		700 = {
+			create_unit = {
+				division = "name = \"Морской десантный отряд\" division_template = \"Naval Landing Detachment\" start_experience_factor = 0.3 start_equipment_factor = 1.0"
+				owner = NAM
+			}
+		}
+	}
+	else = { NAM_marine_detachment_order_refund = yes }
 }

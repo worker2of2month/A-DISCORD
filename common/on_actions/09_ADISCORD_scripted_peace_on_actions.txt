@@ -61,6 +61,15 @@ on_actions = {
 				if = { limit = { ROOT = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
 
 				# BEGIN vorkerland_collapse:on_capitulation_immediate
+				ROOT = {
+					ADISCORD_vorkerland_tva_cancel_field_trial = yes
+					TVA_refund_programme = yes
+					TVA_clear_accountability_results = yes
+					VAD_refund_oath = yes
+					WKR_refund_council_order = yes
+					WKR_refund_railway_order = yes
+					WKR_close_recognition_offers = yes
+				}
 				ADISCORD_vorkerland_pw_handle_capitulation = yes
 				RUS_crisis_record_capitulation = yes
 				# END vorkerland_collapse:on_capitulation_immediate
@@ -996,6 +1005,15 @@ on_actions = {
 				}
 
 				# BEGIN vorkerland_collapse:on_capitulation
+				ROOT = {
+					ADISCORD_vorkerland_tva_cancel_field_trial = yes
+					TVA_refund_programme = yes
+					TVA_clear_accountability_results = yes
+					VAD_refund_oath = yes
+					WKR_refund_council_order = yes
+					WKR_refund_railway_order = yes
+					WKR_close_recognition_offers = yes
+				}
 				ADISCORD_vorkerland_pw_handle_capitulation = yes
 				if = {
 					limit = { ROOT = { has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved } }
@@ -2339,6 +2357,15 @@ on_actions = {
 	on_puppet = {
 		effect = {
 			# BEGIN vorkerland_collapse:on_puppet
+			ROOT = {
+				ADISCORD_vorkerland_tva_cancel_field_trial = yes
+				TVA_refund_programme = yes
+				TVA_clear_accountability_results = yes
+				VAD_refund_oath = yes
+				WKR_refund_council_order = yes
+				WKR_refund_railway_order = yes
+				WKR_close_recognition_offers = yes
+			}
 			ADISCORD_vorkerland_pw_close_external = yes
 			if = {
 				limit = { RUS_crisis_callback_relevant = yes }
@@ -2366,6 +2393,29 @@ on_actions = {
 			if = {
 				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 				# BEGIN vorkerland_collapse:on_annex
+				if = {
+					limit = { FROM = { tag = WKR } }
+					ROOT = {
+						WKR_settle_council_order_handoff = yes
+						WKR_settle_railway_handoff = yes
+					}
+					WKR = {
+						WKR_close_railway_councils = yes
+						WKR_close_recognition_offers = yes
+					}
+				}
+				if = {
+					limit = { FROM = { tag = VAD } }
+					ROOT = { VAD_settle_oath_handoff = yes }
+				}
+				if = {
+					limit = { FROM = { tag = TVA } }
+					ROOT = {
+						ADISCORD_vorkerland_tva_settle_trial_handoff = yes
+						TVA_settle_administration_handoff = yes
+					}
+					FROM = { TVA_clear_accountability_results = yes }
+				}
 				ADISCORD_vorkerland_pw_close_external = yes
 				# The generic capitulation handler awards its state snapshot after annex.
 				# Defer the client handoff until that final ownership write has finished.

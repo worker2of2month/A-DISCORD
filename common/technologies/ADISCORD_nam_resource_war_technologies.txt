@@ -1,6 +1,5 @@
 technologies = {
-	# Script-only unlock for the exiled Svetlogorye's marine orders and the
-	# revenge landing; NAM_marine_ensure_template grants it.
+	# Script-only unlock shared by the national arsenal and island marine orders.
 	ADISCORD_tech_svetlogorsk_marine_corps = {
 		enable_subunits = { ADISCORD_marine_infantry }
 		research_cost = 999

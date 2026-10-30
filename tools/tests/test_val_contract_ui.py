@@ -1691,6 +1691,68 @@ class TestValReclamationCompletion(unittest.TestCase):
 
 
 class TestValExpansionRoute(unittest.TestCase):
+    def test_val_has_one_operations_category_during_stelander_war(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        categories = parse_clausewitz(
+            read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+            + read("common/decisions/categories/ADISCORD_decision_categories_STP.txt")
+        )
+        facts = {
+            ("VAL", "has_country_flag", "VAL_operations_map_unlocked"): True,
+            ("VAL", "has_global_flag", "STP_cw_started"): True,
+            ("VAL", "has_country_flag", "STP_ps_val_authorized"): True,
+            ("VAL", "has_country_flag", "VAL_cw_mobilizing"): True,
+        }
+        visible = {
+            category.key
+            for category in categories
+            if category.key in ("VAL_military_operations", "STP_military_operations")
+            and matches_conditions(block(category.value, "allowed"), facts, "VAL")
+            and matches_conditions(block(category.value, "visible"), facts, "VAL")
+        }
+        self.assertEqual(visible, {"VAL_military_operations"})
+
+    def test_stelander_missions_remain_accessible_before_val_focus_unlocks(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        categories = parse_clausewitz(
+            read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        )
+        decisions = parse_clausewitz(read("common/decisions/ADISCORD_VAL_decisions.txt"))
+        cases = (
+            ("VAL_cw_intervention_preparation", "VAL_military_operations",
+             "has_country_flag", "VAL_cw_mobilizing"),
+            ("STP_ps_val_departure", "VAL_foreign_sales",
+             "has_active_mission", "STP_ps_val_departure"),
+            ("STP_ps_val_route_wait", "VAL_foreign_sales",
+             "has_active_mission", "STP_ps_val_route_wait"),
+            ("STP_ps_val_send_supply", "VAL_foreign_sales",
+             "has_country_flag", "STP_ps_val_authorized"),
+            ("STP_ps_val_sell_rifles", "VAL_foreign_sales",
+             "has_country_flag", "STP_ps_val_authorized"),
+        )
+        for name, owner, kind, value in cases:
+            with self.subTest(decision=name):
+                facts = {
+                    ("VAL", kind, value): True,
+                    ("VAL", "STP_ps_val_supply_open", "yes"): True,
+                    ("STP", "STP_cw_preparation_open", "yes"): True,
+                }
+                category = block(categories, owner)
+                decision = block(block(decisions, owner), name)
+                for node in (category, decision):
+                    self.assertTrue(matches_conditions(block(node, "allowed"), facts, "VAL"))
+                    self.assertTrue(matches_conditions(block(node, "visible"), facts, "VAL"))
+        foreign = block(categories, "VAL_foreign_sales")
+        self.assertTrue(matches_conditions(
+            block(foreign, "visible"),
+            {("VAL", "has_variable", "STP_ps_val_receipt_rifles"): True},
+            "VAL",
+        ))
+
     def test_north_policy_does_not_wait_for_someone_elses_civil_war(self):
         from tools.validators.validate_adiscord_division_templates import (
             parse_clausewitz,

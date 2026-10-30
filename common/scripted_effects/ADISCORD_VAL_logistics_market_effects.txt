@@ -1034,7 +1034,7 @@ VAL_finish_south_corridor_project = {
 			level = 3
 			fallback = yes
 			start_state = 24
-			target_state = 70
+			target_state = 723
 		}
 		VAL_refresh_trade_network = yes
 		ADISCORD_economy_mark_dirty = yes

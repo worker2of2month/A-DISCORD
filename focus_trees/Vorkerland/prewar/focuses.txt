@@ -1,6 +1,6 @@
 # Vorkerland prewar tree: WRK preparation and the autonomous districts before
-# the Unity Tower. The builder emits it as shared focus history; the WKR tree
-# includes the WRK roots, so copy_completed_from = WRK keeps prewar completion.
+# the Unity Tower. WKR briefly loads this shared history with copy_completed_from
+# before switching to the wartime tree, which does not display these branches.
 # Tooling reads prewar, wkr, vad, tva and settlement as one civil_war_focus view.
 
 # --- civil_war_focus ---
@@ -29,7 +29,7 @@ focus_tree = {
 	continuous_focus_position = { x = 100 y = 555555 }
 
 	# ---------------------------------------------------------------------
-	# Prewar WRK: independent industrial, military and evacuation choices.
+	# Prewar WRK: one preparation tree for budgets, production, camps and continuity.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -39,15 +39,16 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 7
+		x = 15
 		y = 0
-		cost = 2
+		cost = 3
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_open_stores
-			add_political_power = 40
+			add_political_power = 75
+			custom_effect_tooltip = WRK_prewar_programmes_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prewar_hide_reserves
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 		}
@@ -60,7 +61,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -1
+		x = 6
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
 		cost = 3
@@ -89,7 +90,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 2
+		x = 8
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
 		cost = 3
@@ -170,7 +171,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = WRK_disperse_railway_reserves
 		cost = 2
@@ -309,12 +310,11 @@ focus_tree = {
 		ai_will_do = { base = 100 }
 	}
 
-
 	focus = {
 		id = WRK_reopen_emergency_workshops
 		icon = GFX_focus_WRK_reopen_emergency_workshops
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		x = -6
+		x = -8
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
 		cost = 1
@@ -328,7 +328,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
-				amount = 60
+				amount = 100
 				producer = WRK
 			}
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
@@ -353,6 +353,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_war_shifts_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_war_shifts
 		}
 		ai_will_do = { base = 10 }
@@ -375,6 +376,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_save_specialists_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_save_specialists
 		}
 		ai_will_do = { base = 10 }
@@ -384,7 +386,7 @@ focus_tree = {
 		id = WRK_collect_officer_returns
 		icon = GFX_focus_WRK_collect_officer_returns
 		search_filters = { FOCUS_FILTER_MANPOWER }
-		x = 6
+		x = 0
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
 		cost = 1
@@ -419,6 +421,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_local_guard_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_local_guard
 		}
 		ai_will_do = { base = 10 }
@@ -441,6 +444,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_cadre_school_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_cadre_school
 		}
 		ai_will_do = { base = 10 }
@@ -463,6 +467,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_civil_evacuation_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_civil_evacuation
 		}
 		ai_will_do = { base = 10 }
@@ -485,6 +490,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_vorkerland_prep_military_evacuation_result_tt
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_military_evacuation
 		}
 		ai_will_do = { base = 10 }
@@ -498,42 +504,22 @@ focus_tree = {
 	# ---------------------------------------------------------------------
 
 	focus = {
-		id = WRK_face_the_hourglass
-		icon = GFX_focus_WRK_face_the_hourglass
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-			FOCUS_FILTER_STABILITY
-		}
-		x = 7
-		y = 7
-		cost = 3
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
-		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 40
-			unlock_decision_tooltip = ADISCORD_vorkerland_prewar_central_levy
-			unlock_decision_tooltip = ADISCORD_vorkerland_prewar_district_mandates
-		}
-		ai_will_do = { base = 12 }
-	}
-
-	focus = {
 		id = WRK_emergency_central_budget
 		icon = GFX_focus_WRK_emergency_central_budget
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -6
+		x = -14
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
-		cost = 4
-		prerequisite = { focus = WRK_face_the_hourglass }
+		relative_position_id = WRK_measure_confederation_fault_lines
+		cost = 2
+		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		mutually_exclusive = { focus = WRK_district_emergency_powers }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_prewar_central_levy
 			add_political_power = 40
 			add_power_balance_value = {
 				id = ADISCORD_vorkerland_prewar_bop
@@ -550,16 +536,17 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_STABILITY
 		}
-		x = -4
+		x = -12
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
-		cost = 4
-		prerequisite = { focus = WRK_face_the_hourglass }
+		relative_position_id = WRK_measure_confederation_fault_lines
+		cost = 2
+		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		mutually_exclusive = { focus = WRK_emergency_central_budget }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_prewar_district_mandates
 			add_stability = 0.04
 			add_power_balance_value = {
 				id = ADISCORD_vorkerland_prewar_bop
@@ -579,12 +566,13 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WRK_emergency_central_budget
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WRK_emergency_central_budget }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = WRK_requisition_emergency_tools
 			add_political_power = 50
 			add_power_balance_value = {
 				id = ADISCORD_vorkerland_prewar_bop
@@ -605,12 +593,13 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WRK_district_emergency_powers
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WRK_district_emergency_powers }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = WRK_finance_evacuation_stock
 			add_stability = 0.03
 			add_political_power = 25
 			add_power_balance_value = {
@@ -632,7 +621,7 @@ focus_tree = {
 		x = 1
 		y = 1
 		relative_position_id = WRK_requisition_commissions
-		cost = 3
+		cost = 2
 		prerequisite = {
 			focus = WRK_requisition_commissions
 			focus = WRK_district_treasuries
@@ -653,15 +642,16 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -2
+		x = -4
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
+		relative_position_id = WRK_measure_confederation_fault_lines
 		cost = 2
-		prerequisite = { focus = WRK_face_the_hourglass }
+		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = WRK_register_volunteer_reserve
 			add_political_power = 30
 			ADISCORD_vorkerland_camp_committees_add_10 = yes
 		}
@@ -700,15 +690,19 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
+		x = 1
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
+		relative_position_id = WRK_contract_local_garrisons
 		cost = 2
-		prerequisite = { focus = WRK_face_the_hourglass }
+		prerequisite = {
+			focus = WRK_contract_local_garrisons
+			focus = WRK_prepare_officer_reserve
+		}
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = WRK_drill_emergency_staff
 			add_command_power = 15
 			ADISCORD_vorkerland_camp_staff_add_10 = yes
 		}
@@ -747,15 +741,19 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_RESEARCH
 		}
-		x = 2
+		x = 1
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
+		relative_position_id = WRK_prioritize_arsenal_output
 		cost = 2
-		prerequisite = { focus = WRK_face_the_hourglass }
+		prerequisite = {
+			focus = WRK_prioritize_arsenal_output
+			focus = WRK_preserve_machine_tools
+		}
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = WRK_order_standard_tools
 			add_tech_bonus = {
 				name = WRK_worx_network_register
 				bonus = 0.5
@@ -800,10 +798,10 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 1
-		y = 1
+		x = -1
+		y = 3
 		relative_position_id = WRK_factory_committee_councils
-		cost = 3
+		cost = 2
 		prerequisite = {
 			focus = WRK_factory_committee_councils
 			focus = WRK_petrichev_depots
@@ -826,10 +824,10 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_STABILITY
 		}
-		x = 1
+		x = -3
 		y = 1
 		relative_position_id = WRK_petrichev_depots
-		cost = 3
+		cost = 2
 		prerequisite = {
 			focus = WRK_factory_committee_councils
 			focus = WRK_petrichev_depots
@@ -855,11 +853,11 @@ focus_tree = {
 			FOCUS_FILTER_POLITICAL
 			FOCUS_FILTER_STABILITY
 		}
-		x = 5
+		x = 13
 		y = 1
-		relative_position_id = WRK_face_the_hourglass
-		cost = 3
-		prerequisite = { focus = WRK_face_the_hourglass }
+		relative_position_id = WRK_measure_confederation_fault_lines
+		cost = 2
+		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
@@ -879,7 +877,7 @@ focus_tree = {
 		x = -1
 		y = 1
 		relative_position_id = WRK_inspect_the_unity_tower
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WRK_inspect_the_unity_tower }
 		mutually_exclusive = { focus = WRK_disperse_the_government }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -902,7 +900,7 @@ focus_tree = {
 		x = 1
 		y = 1
 		relative_position_id = WRK_inspect_the_unity_tower
-		cost = 3
+		cost = 2
 		prerequisite = { focus = WRK_inspect_the_unity_tower }
 		mutually_exclusive = { focus = WRK_reinforce_the_tower_guard }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -1317,93 +1315,8 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
-	# ---------------------------------------------------------------------
-	# Retired wartime stubs. Their IDs remain inert and reserved; the compact
-	# claimant routes no longer expose or depend on them.
-	# ---------------------------------------------------------------------
 
-	focus = {
-		id = ADISCORD_vorkerland_stabilize_claimant_regime
-		icon = GFX_focus_ADISCORD_vorkerland_stabilize_claimant_regime
-		search_filters = {
-			FOCUS_FILTER_STABILITY
-			FOCUS_FILTER_POLITICAL
-		}
-		x = 21
-		y = 0
-		cost = 3
-		allow_branch = { always = no }
-		available = { always = no }
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_political_power = 60
-			add_stability = 0.04
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_regime_stabilized
-			}
-		}
-		ai_will_do = { base = 15 }
-	}
 
-	focus = {
-		id = ADISCORD_vorkerland_mobilize_field_forces
-		icon = GFX_focus_ADISCORD_vorkerland_mobilize_field_forces
-		search_filters = {
-			FOCUS_FILTER_MANPOWER
-			FOCUS_FILTER_ARMY_XP
-		}
-		x = 1
-		y = 1
-		relative_position_id = ADISCORD_vorkerland_stabilize_claimant_regime
-		cost = 3
-		prerequisite = { focus = ADISCORD_vorkerland_stabilize_claimant_regime }
-		allow_branch = { always = no }
-		available = { always = no }
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_manpower = 3000
-			army_experience = 15
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_field_forces_mobilized
-			}
-		}
-		ai_will_do = { base = 15 }
-	}
 
-	focus = {
-		id = ADISCORD_vorkerland_fortify_home_region
-		icon = GFX_focus_ADISCORD_vorkerland_fortify_home_region
-		search_filters = {
-			FOCUS_FILTER_INDUSTRY
-			FOCUS_FILTER_ARMY_XP
-		}
-		x = -1
-		y = 1
-		relative_position_id = ADISCORD_vorkerland_stabilize_claimant_regime
-		cost = 3
-		prerequisite = { focus = ADISCORD_vorkerland_stabilize_claimant_regime }
-		allow_branch = { always = no }
-		available = { always = no }
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_command_power = 5
-			if = {
-				limit = { tag = WKR controls_state = 32 }
-				32 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6713 } }
-			}
-			if = {
-				limit = { tag = VAD controls_state = 75 }
-				75 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6192 } }
-			}
-			if = {
-				limit = { tag = TVA controls_state = 36 }
-				36 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 12227 } }
-			}
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_home_region_fortified
-			}
-		}
-		ai_will_do = { base = 13 }
-	}
 
 }

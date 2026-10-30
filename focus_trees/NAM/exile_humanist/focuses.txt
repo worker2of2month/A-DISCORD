@@ -2125,7 +2125,10 @@ focus_tree = {
 					limit = { has_country_flag = NAM_federal_district }
 					capital_scope = {
 						if = {
-							limit = { is_owned_by = PREV }
+							limit = {
+								is_owned_by = PREV
+								is_controlled_by = PREV
+							}
 							add_building_construction = {
 								type = infrastructure
 								level = 1
@@ -2402,11 +2405,15 @@ focus_tree = {
 						limit = {
 							exists = yes
 							has_country_flag = NAM_federal_district
+							is_subject_of = NAM
 						}
 						add_stability = 0.05
 						capital_scope = {
 							if = {
-								limit = { is_owned_by = SDR }
+								limit = {
+									is_owned_by = SDR
+									is_controlled_by = SDR
+								}
 								add_building_construction = {
 									type = infrastructure
 									level = 1
@@ -2451,11 +2458,15 @@ focus_tree = {
 						limit = {
 							exists = yes
 							has_country_flag = NAM_federal_district
+							is_subject_of = NAM
 						}
 						add_stability = 0.10
 						capital_scope = {
 							if = {
-								limit = { is_owned_by = RHM }
+								limit = {
+									is_owned_by = RHM
+									is_controlled_by = RHM
+								}
 								add_building_construction = {
 									type = infrastructure
 									level = 1
@@ -2522,11 +2533,15 @@ focus_tree = {
 						limit = {
 							exists = yes
 							has_country_flag = NAM_federal_district
+							is_subject_of = NAM
 						}
 						add_stability = 0.05
 						capital_scope = {
 							if = {
-								limit = { is_owned_by = KDR }
+								limit = {
+									is_owned_by = KDR
+									is_controlled_by = KDR
+								}
 								add_building_construction = {
 									type = infrastructure
 									level = 1

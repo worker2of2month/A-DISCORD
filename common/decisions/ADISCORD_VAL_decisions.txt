@@ -1,5 +1,18 @@
 VAL_military_operations = {
 
+	VAL_cw_intervention_preparation = {
+		activation = { always = no }
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_cw_mobilizing }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 21
+		cancel_trigger = { NOT = { has_country_flag = VAL_cw_mobilizing } }
+		# Event .21 starts the war for both displayed timers.
+		timeout_effect = { }
+	}
+
 	# Stelander contracts require buyer consent before payment.
 
 	VAL_cw_begin_mobilization = {
@@ -2393,6 +2406,91 @@ VAL_livonn_settlement_category = {
 }
 
 VAL_foreign_sales = {
+
+	STP_ps_val_sell_rifles = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		visible = {
+			has_country_flag = STP_ps_val_authorized
+			STP_ps_val_supply_open = yes
+			STP = { STP_cw_preparation_open = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_program_available_tt
+				NOT = { has_variable = STP_ps_val_receipt_rifles }
+				NOT = { has_country_flag = STP_ps_val_supply_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_val_sale_cooldown_tt
+				NOT = { has_country_flag = STP_ps_val_sale_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_val_sale_not_declined_tt
+				NOT = { has_country_flag = STP_ps_val_sale_declined }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_val_sale_buyer_ready_tt
+				STP = { STP_ps_val_sale_buyer_ready = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_ps_val_sell_rifles_cost
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 25000 } } }
+		complete_effect = {
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = STP_ps_val_sale_party_route_tt
+						STP = { has_country_flag = STP_sided_with_the_party_flag }
+					}
+				}
+				custom_effect_tooltip = STP_ps_val_sell_rifles_credit_tt
+			}
+			else = {
+				custom_effect_tooltip = STP_ps_val_sell_rifles_paid_tt
+			}
+			hidden_effect = { STP_ps_begin_val_sale = yes }
+		}
+		ai_will_do = { base = 6 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
+	}
+
+	STP_ps_val_send_supply = {
+		allowed = { tag = VAL }
+		visible = { has_country_flag = STP_ps_val_authorized STP_ps_val_supply_open = yes }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  NOT = { has_variable = STP_ps_val_receipt_rifles } NOT = { has_country_flag = STP_ps_val_supply_cooldown }  } }
+		cost = 0
+		custom_cost_text = STP_ps_val_send_supply_cost
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 12000 } } }
+		complete_effect = { hidden_effect = { STP_ps_begin_val_supply = yes } }
+		ai_will_do = { base = 4 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
+	}
+
+	STP_ps_val_route_wait = {
+		allowed = { tag = VAL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_val_route_wait }
+		days_mission_timeout = 7
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { STP_ps_val_supply_open = no }
+		timeout_effect = { hidden_effect = { STP_ps_dispatch_val_supply = yes } }
+		cancel_effect = { hidden_effect = { STP_ps_refund_val_supply = yes } }
+	}
+
+	STP_ps_val_departure = {
+		allowed = { tag = VAL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_val_departure }
+		days_mission_timeout = 28
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { STP_ps_val_supply_open = no }
+		timeout_effect = { hidden_effect = { STP_ps_dispatch_val_supply = yes } }
+		cancel_effect = { hidden_effect = { STP_ps_refund_val_supply = yes } }
+	}
 
 	VAL_sign_annual_trade = {
 		icon = ADISCORD_deal

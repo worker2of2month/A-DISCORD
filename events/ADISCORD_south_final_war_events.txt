@@ -114,6 +114,7 @@ news_event = {
 
 	option = {
 		name = ADISCORD_south.3.a
+		custom_effect_tooltip = ADISCORD_south_warning_notice_tt
 	}
 }
 
@@ -621,6 +622,17 @@ country_event = {
 
 	option = {
 		name = ADISCORD_south.42.a
+		if = {
+			limit = {
+				hidden_trigger = {
+					tag = NAM
+					has_completed_focus = NAM_oil_fund
+					FROM = { NAM_pw_charter_recipient = yes }
+				}
+			}
+			unlock_decision_tooltip = NAM_charter_fuel_aid
+			custom_effect_tooltip = NAM_charter_fuel_aid_unlock_tt
+		}
 	}
 }
 

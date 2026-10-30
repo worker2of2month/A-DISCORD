@@ -2,7 +2,6 @@ ADISCORD_nam_resource_war_eflor_offensive = {
 	allowed = { tag = EFL }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
 	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
@@ -36,7 +35,6 @@ ADISCORD_nam_resource_war_azhar_offensive = {
 	allowed = { tag = AZH }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
 	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
@@ -387,5 +385,65 @@ ADISCORD_difficulty_nam_resource_logistics = {
 		type = equipment_production_factor
 		id = artillery
 		value = 15
+	}
+}
+
+# Generic active-front demand contributes +50. This correction leaves -20
+# while an embarkation reserve exists, and restores +150 when it cannot sail.
+NAM_rw_coalition_land_only = {
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = {
+		is_ai = yes
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = NAM
+		NAM_rw_coalition_landing_ready = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
+}
+
+NAM_rw_coalition_naval_invasion = {
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = { NAM_rw_coalition_landing_ready = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = invade id = NAM value = 100 }
+	ai_strategy = { type = front_unit_request tag = NAM value = -70 }
+	ai_strategy = { type = invasion_unit_request tag = NAM value = 50 }
+	ai_strategy = { type = naval_invasion_support_priority id = 38 value = 200 }
+}
+
+NAM_rw_efl_landing_reserve = {
+	allowed = { tag = EFL }
+	enable = { NAM_rw_coalition_landing_ready = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.14
+		states = { 723 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = no
+	}
+}
+
+NAM_rw_azh_landing_reserve = {
+	allowed = { tag = AZH }
+	enable = { NAM_rw_coalition_landing_ready = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.20
+		states = { 692 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = no
 	}
 }

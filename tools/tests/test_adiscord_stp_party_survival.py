@@ -336,7 +336,9 @@ class PartySurvivalContracts(unittest.TestCase):
         cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
         cls.decisions = {
             d.key: d.value
-            for c in parse_clausewitz(read(DECISIONS))
+            for c in parse_clausewitz(
+                read(DECISIONS) + read('common/decisions/ADISCORD_VAL_decisions.txt')
+            )
             for d in c.value
             if isinstance(d.value, list)
         }

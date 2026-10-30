@@ -77,14 +77,184 @@ units = {
 		start_equipment_factor = 0.40
 	}
 	fleet = {
-		name = "Loren Restitution Flotilla"
+		name = "Лоренский флот"
 		naval_base = 6495
 		task_force = {
-			name = "Lower Loren Patrol"
+			name = "Лоренская крейсерская эскадра"
 			location = 6495
-			ship = { name = "Upper Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
-			ship = { name = "Lower Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
-			ship = { name = "Restitution" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
+			ship = {
+				name = "EFL-ТК-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЛК-01"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЛК-02"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Береговое сопровождение"
+			location = 6495
+			ship = {
+				name = "EFL-ЭМ-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ЭМ-09"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Лоренский подводный дивизион"
+			location = 6495
+			ship = {
+				name = "EFL-ПЛ-01"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ПЛ-02"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "EFL-ПЛ-03"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
 		}
 	}
 }
@@ -92,7 +262,8 @@ units = {
 ##### No notable air forces #####
 
 instant_effect = {
-	add_equipment_to_stockpile = { type = convoy_1 amount = 20 producer = EFL }
+	add_fuel = 20000
+	add_equipment_to_stockpile = { type = convoy_1 amount = 40 producer = EFL }
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "EFL" }
 		requested_factories = 1

@@ -1,7 +1,6 @@
 # Svetlogorye takes the district course before the resource war, keeps the
 # coalition talking and prepares positional defence of the fields.
-# Wartime focuses take priority as soon as their current-war gates open;
-# the district compact and refinery start early enough to mature before attack.
+# The district compact and refinery start early enough to mature before attack.
 NAM_prewar_plan = {
 	name = "NAM district course"
 	desc = ""
@@ -19,16 +18,6 @@ NAM_prewar_plan = {
 	}
 	ai_national_focuses = {
 		NAM_inventory
-		NAM_alarm
-		NAM_hold_basin
-		NAM_relief_columns
-		NAM_discipline_of_seals
-		NAM_counterstroke
-		NAM_volunteer_levies
-		NAM_wells_under_guard
-		NAM_last_reserve
-		NAM_district_volunteers
-		NAM_oil_score
 		NAM_centre_hourglass
 		NAM_second_ledger
 		NAM_quiet_officer_lists
@@ -39,12 +28,12 @@ NAM_prewar_plan = {
 		NAM_wrk_trade_house
 		NAM_wrk_return_cargo
 		NAM_metropolitan_depots
-		NAM_letters_to_the_centre
 		NAM_colonial_watch
 		NAM_oilfield_militia
 		NAM_pipeline_patrols
 		NAM_print_shop_raid
 		NAM_colony_order
+		NAM_letters_to_the_centre
 		NAM_independence_day
 		NAM_count_garrisons
 		NAM_mobilisation_office
@@ -53,7 +42,6 @@ NAM_prewar_plan = {
 		NAM_well_register
 		NAM_domestic_refining
 		NAM_refinery_programme
-		NAM_public_payroll
 		NAM_district_guarantees
 		NAM_field_guards
 		NAM_engineer_depots
@@ -63,9 +51,7 @@ NAM_prewar_plan = {
 		NAM_neutral_basin
 		NAM_supports_council
 		NAM_supports_oil_compact
-		NAM_supports_balance
 		NAM_garrison_assembly
-		NAM_rivals_ledger
 		NAM_hear_klyuchevsk
 		NAM_hear_the_commandant
 		NAM_pillar_arbitration
@@ -86,16 +72,17 @@ NAM_prewar_plan = {
 		NAM_harbour_service
 		NAM_repair_yard
 		NAM_escort_school
+		NAM_naval_construction
+		NAM_basin_reconnaissance
+		NAM_landing_school
+		NAM_marine_arsenal
 		NAM_provisional_statute
 		NAM_rom_address
 		NAM_reserve_rolls
 		NAM_contract_bureau
 		NAM_underground_reports
 		NAM_weber_channel
-		NAM_amnesty_lists
 		NAM_mine_councils
-		NAM_quiet_wells
-		NAM_basin_talks
 		NAM_general_staff_plan
 		NAM_field_repair_crews
 		NAM_klyuchevsk_pipeline
@@ -103,16 +90,74 @@ NAM_prewar_plan = {
 		NAM_fuel_depots
 		NAM_second_drilling_crew
 		NAM_coastal_battalions
-		NAM_coastal_watch
 		NAM_island_accounts
 		NAM_island_levy_office
-		NAM_island_convoys
-		NAM_island_governors
 		NAM_crisis_office
 		NAM_field_firefighters
-		NAM_chancellery_purge
 		NAM_tax_rolls
 		NAM_basin_roads
+	}
+	weight = { factor = 20 }
+}
+
+NAM_resource_war_district_plan = {
+	name = "NAM district wartime course"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_resource_war_focus
+		NOT = { has_completed_focus = NAM_vertical }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_resource_war_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_alarm
+		NAM_hold_basin
+		NAM_relief_columns
+		NAM_discipline_of_seals
+		NAM_counterstroke
+		NAM_volunteer_levies
+		NAM_wells_under_guard
+		NAM_last_reserve
+		NAM_district_volunteers
+		NAM_oil_score
+	}
+	weight = { factor = 20 }
+}
+
+NAM_resource_war_vertical_plan = {
+	name = "NAM vertical wartime course"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_resource_war_focus
+		has_completed_focus = NAM_vertical
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_resource_war_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_alarm
+		NAM_hold_basin
+		NAM_relief_columns
+		NAM_discipline_of_seals
+		NAM_counterstroke
+		NAM_volunteer_levies
+		NAM_wells_under_guard
+		NAM_last_reserve
+		NAM_martial_seals
+		NAM_oil_score
 	}
 	weight = { factor = 20 }
 }
@@ -159,11 +204,11 @@ NAM_postwar_plan = {
 		NAM_national_university
 		NAM_charter_ending_federation
 		NAM_veterans_return
-		NAM_svetlogorye
-		NAM_svetlogorsk_shipyards
 		NAM_south_oil_for_water
 		NAM_south_fenn_guarantee
+		NAM_svetlogorye
 		NAM_south_oil_charter
+		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
 		NAM_south_oil_tap
@@ -219,11 +264,11 @@ NAM_postwar_vertical_plan = {
 		NAM_national_university
 		NAM_ladder_ending_service
 		NAM_veterans_return
-		NAM_svetlogorye
-		NAM_svetlogorsk_shipyards
 		NAM_south_black_basin
 		NAM_south_desert_offices
+		NAM_svetlogorye
 		NAM_south_seal_over_furnaces
+		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
 		NAM_south_oil_tap
@@ -260,14 +305,13 @@ NAM_defeated_plan = {
 		NAM_defeat_accommodation
 		NAM_defeat_early_tribute
 		NAM_defeat_oil_union
-		NAM_defeat_rump_cabinet
+		NAM_defeat_island_refuge
 		NAM_defeat_refugee_quarters
 		NAM_defeat_open_border
-		NAM_defeat_joint_fields
 		NAM_defeat_oil_peace
 		NAM_defeat_road_south
+		NAM_defeat_rump_cabinet
 		NAM_defeat_southern_charter
-		NAM_defeat_island_refuge
 		NAM_defeat_island_foundries
 		NAM_defeat_purge_of_seals
 		NAM_defeat_second_chapter
@@ -323,7 +367,6 @@ NAM_exile_radical_plan = {
 		NAM_rad_penal_mines
 		NAM_rad_island_airfields
 		NAM_exile_harbour_pilots
-		NAM_exile_army_of_return
 		NAM_rad_fortress_capital
 		NAM_exile_tanker_raids
 		NAM_exile_privateer_captains
@@ -338,7 +381,6 @@ NAM_exile_radical_plan = {
 		NAM_exile_black_market
 		NAM_exile_hidden_anchorages
 		NAM_exile_corsair_admiralty
-		NAM_rad_return_plan
 		NAM_rad_war_of_return
 		NAM_rad_spoils_of_return
 		NAM_rad_martial_law
@@ -483,11 +525,9 @@ NAM_exile_corporate_plan = {
 		NAM_board_landing_contracts
 		NAM_board_constitution
 		NAM_board_private_navy
-		NAM_board_mercenary_battalions
 		NAM_board_war_of_return
 		NAM_board_shareholders
 		NAM_board_company_capital
-		NAM_board_company_housing
 		NAM_board_company_docks
 		NAM_board_company_airport
 		NAM_board_corporate_courts

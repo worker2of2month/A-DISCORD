@@ -181,7 +181,7 @@ DECISION_FOCUS_GATES = {
     "NAM_restitution_note": "NAM_restitution_desk",
     "NAM_order_resource_guard": "NAM_mobilisation_office",
     "NAM_order_field_infantry": "NAM_mobilisation_office",
-    "NAM_order_motor_column": "NAM_motor_column_orders",
+    "NAM_order_motor_column": "NAM_motor_pool",
     "NAM_order_coastal_battalion": "NAM_coastal_battalions",
     "NAM_prepare_line": "NAM_line_survey",
     "NAM_scorch_wells": "NAM_scorched_wells",
@@ -193,7 +193,7 @@ DECISION_FOCUS_GATES = {
     "NAM_project_sea_terminal": "NAM_overseas_buyers",
     "NAM_island_steel_levy": "NAM_island_levy_office",
     "NAM_island_concession_231": "NAM_island_concession",
-    "NAM_island_convoy_service": "NAM_island_convoys",
+    "NAM_island_convoy_service": "NAM_harbour_service",
     "NAM_renegotiate_val_concession": "NAM_reclaim_230",
     "NAM_south_allied_fuel": "NAM_south_allied_fuel_office",
     "NAM_south_convoy_interdiction": "NAM_south_convoy_hunters",
@@ -314,10 +314,9 @@ def check_oil_monopoly(
         and hostilities.count("NOT = { has_country_flag = NAM_oil_client }") == 2,
         "hostilities must end belligerent contracts and spare RHM/MZR clients the volunteer idea",
     )
-    tension = named_block(effects, "NAM_rw_tension_monthly")
     check(
-        tension.count("modifier = NAM_fuel_embargo_modifier") == 2,
-        "each embargo on Eflor or Azhar must add restitution pressure",
+        "NAM_rw_tension" not in effects,
+        "resource-war diplomacy must not retain a second pressure clock",
     )
     check(
         "NAM_oil_release_all_buyers = yes" in named_block(effects, "NAM_oil_close_all")
@@ -327,14 +326,16 @@ def check_oil_monopoly(
     )
     buy_time = named_block(effects, "NAM_rw_buy_time")
     check(
-        "NOT = { has_country_flag = NAM_rw_time_bought }" in buy_time
+        "NAM_rw_can_buy_time = yes" in buy_time
+        and "NOT = { has_country_flag = NAM_rw_time_bought }" in named_block(triggers, "NAM_rw_can_buy_time")
+        and "NAM_rw_ultimatum_open = yes" in named_block(triggers, "NAM_rw_can_buy_time")
         and "NOT = { has_fuel < 12000 }" in buy_time
         and buy_time.count("add_fuel = -12000") == 1
         and "AZH = { add_fuel = 12000 }" in buy_time
         and "set_country_flag = NAM_rw_time_bought" in buy_time
-        and "NOT = { NAM_rw_time_bought_active = yes }" in named_block(triggers, "NAM_rw_war_window_open")
-        and "days < 75" in named_block(triggers, "NAM_rw_time_bought_active"),
-        "Azhar's delay must be paid once in fuel and close the war window for 75 days",
+        and "mission = NAM_resource_war_deadline days = 75" in buy_time
+        and "NAM_rw_deadline_open = yes" in named_block(triggers, "NAM_rw_ultimatum_open"),
+        "Azhar's delay must be paid once in fuel and extend the active mission by 75 days",
     )
     check(
         "NAM_oil_refresh = yes" in named_block(effects, "NAM_rw_start_tribute"),
@@ -387,6 +388,8 @@ def check_oil_monopoly(
             f"{decision_name} must settle at completion and refund on cancellation",
         )
         settle_block = named_block(effects, completion)
+        if "NAM_field_repair_possible = yes" in settle_block:
+            settle_block += named_block(triggers, "NAM_field_repair_possible")
         check(
             "is_owned_by = NAM" in settle_block
             and "is_controlled_by = NAM" in settle_block
@@ -399,8 +402,13 @@ def check_oil_monopoly(
     )
     for decision_name, focus in DECISION_FOCUS_GATES.items():
         decision = named_block(decisions, decision_name)
+        visible = named_block(decision, "visible")
+        if "NAM_field_repair_unlocked = yes" in visible:
+            visible += named_block(triggers, "NAM_field_repair_unlocked")
+        if "NAM_oil_trade_authorized = yes" in visible:
+            visible += named_block(triggers, "NAM_oil_trade_authorized")
         check(
-            f"has_completed_focus = {focus}" in named_block(decision, "visible"),
+            f"has_completed_focus = {focus}" in visible,
             f"{decision_name} must be gated by its unlocking focus {focus}",
         )
     for decision_name in ("NAM_island_convoy_service", "NAM_south_convoy_interdiction"):
@@ -438,19 +446,19 @@ def check_oil_monopoly(
     check(
         "global.NAM_rw_entry_dispatches" in entry
         and "value = 0 compare = less_than_or_equals" in entry
-        and entry.count("NAM_rw_count_entry_dispatch = yes") == 3,
+        and entry.count("NAM_rw_count_entry_dispatch = yes") == 1,
         "the entry event must stop the war only when no other dispatch is queued",
     )
     check(
-        "NAM_rw_time_bought_active = yes" in entry
-        and "set_global_flag = ADISCORD_nam_resource_war_time_deferred" in entry
-        and "days = 75" in entry,
-        "the entry event must honour Azhar's delay and move the backstop by 75 days once",
+        "days = 75" not in entry and "days = 365" not in entry,
+        "war entry must not reapply delays already paid into the mission",
     )
+    deadline = named_block(decisions, "NAM_resource_war_deadline")
     check(
-        "NAM_rw_count_entry_dispatch = yes" in named_block(effects, "ADISCORD_nam_resource_war_schedule")
-        and "NAM_rw_count_entry_dispatch = yes" in named_block(effects, "NAM_rw_tension_clamp"),
-        "every scheduled entry dispatch must be counted",
+        "activate_mission = NAM_resource_war_deadline" in named_block(effects, "ADISCORD_nam_resource_war_schedule")
+        and "NAM_rw_count_entry_dispatch = yes" in deadline
+        and "id = ADISCORD_nam_resource_war.1 hours = 1" in deadline,
+        "the single deadline must activate at collapse and count its war dispatch",
     )
 
 
@@ -838,7 +846,9 @@ def check_exile_revolution(
     )
     check(
         "has_country_flag = NAM_exile_radical" in named_block(triggers, "NAM_piracy_open")
-        and "NAM_exile_return_programme_open = yes" in named_block(triggers, "NAM_marine_order_can_place")
+        and "NAM_marine_orders_open = yes" in named_block(triggers, "NAM_marine_order_can_place")
+        and "NAM_exile_return_programme_open = yes" in named_block(triggers, "NAM_marine_orders_open")
+        and "NOT = { has_variable = NAM_marines_orders_delivered }" in named_block(triggers, "NAM_marine_orders_open")
         and "NAM_exile_return_programme_open = yes" in named_block(named_block(decisions, "NAM_exile_drill"), "visible")
         and "NAM_exile_drill_currency_ready = yes" in named_block(decisions, "NAM_exile_drill")
         and "has_country_flag = NAM_exile_humanist" in named_block(effects, "NAM_exile_drill_refund")
@@ -1173,10 +1183,12 @@ def check_colony_and_exile(
     )
     for event_id in ("82", "83", "84", "85", "86", "87"):
         block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
+        extended = event_id in ("85", "86")
         check(
-            block.count("option = {") == 3
-            and block.count("NAM_underground_close_event = yes") == 3,
-            f"underground event .{event_id} needs three answers that each close the event",
+            block.count("option = {") == (5 if extended else 3)
+            and block.count("NAM_underground_close_event = yes") == (9 if extended else 3)
+            and (not extended or "name = NAM_ug_close_case" in block),
+            f"underground event .{event_id} must settle every answer, including a stale case",
         )
     coalition = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
     check(
@@ -1435,7 +1447,7 @@ def check_settlement(
     ultimatum = event_block(events, "ADISCORD_nam_resource_war.21")
     buy_option = ultimatum[ultimatum.find("ADISCORD_nam_resource_war.21.c"):]
     check(
-        "NOT = { has_country_flag = NAM_rw_time_bought }" in buy_option
+        "NAM_rw_can_buy_time = yes" in buy_option
         and "NOT = { has_fuel < 12000 }" in buy_option
         and "NAM_rw_buy_time = yes" in buy_option,
         "the ultimatum must offer Azhar's paid delay once and only with the fuel in stock",
@@ -1490,7 +1502,7 @@ def check_settlement(
         "ADISCORD_nam_resource_war.12.d_standoff",
         "ADISCORD_nam_resource_war.21.c",
         "NAM_rw_21_c_tt",
-        "NAM_rw_next_time_bought",
+        "NAM_resource_war_deadline",
         "ADISCORD_nam_resource_news.2.t_exile",
         "ADISCORD_nam_resource_news.2.d_exile",
         "ADISCORD_nam_resource_news.2.a_exile",
@@ -1533,8 +1545,6 @@ def main() -> int:
         "events/ADISCORD_vorkerland_events.txt",
         "history/countries/SLF - Svetlogorsk Uprising.txt",
         "history/units/NAM_resource_war.txt",
-        "history/units/EFL_nam_resource_war.txt",
-        "history/units/AZH_nam_resource_war.txt",
         "history/units/SLF_nam_resource_war.txt",
         "common/units/ADISCORD_naval_units.txt",
         "common/units/equipment/ADISCORD_convoy_equipment.txt",
@@ -1554,8 +1564,6 @@ def main() -> int:
 
     for relative in (
         "history/units/NAM_resource_war.txt",
-        "history/units/EFL_nam_resource_war.txt",
-        "history/units/AZH_nam_resource_war.txt",
         "history/units/SLF_nam_resource_war.txt",
     ):
         source = sources[relative]
@@ -1768,18 +1776,16 @@ def main() -> int:
         "country_exists = EFL",
         "country_exists = AZH",
         "set_global_flag = ADISCORD_nam_resource_war_scheduled",
-        "id = ADISCORD_nam_resource_war.1",
-        "days = 730",
-        "random_days = 30",
+        "activate_mission = NAM_resource_war_deadline",
     ):
         check(
-            schedule.count(token) == 1,
+            len(re.findall(re.escape(token) + r"(?![0-9])", schedule)) == 1,
             f"bounded resource-war schedule lacks exact token: {token}",
         )
     check(
         schedule.find("set_global_flag = ADISCORD_nam_resource_war_scheduled")
-        < schedule.find("id = ADISCORD_nam_resource_war.1"),
-        "resource-war schedule does not record its one-shot guard before queueing .1",
+        < schedule.find("activate_mission = NAM_resource_war_deadline"),
+        "resource-war schedule does not record its one-shot guard before activating its mission",
     )
 
     collapse_two = next(
@@ -1816,19 +1822,13 @@ def main() -> int:
         entry_immediate,
     )
     check(
-        len(retry_calls) == 3,
-        "resource-war .1 must contain one protocol deferral, one bought delay and one delayed self-retry",
+        len(retry_calls) == 1,
+        "resource-war .1 must contain only one delayed self-retry",
     )
     for token, expected in (
         ("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }", 1),
         ("set_global_flag = ADISCORD_nam_resource_war_retry_used", 1),
-        ("NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }", 1),
-        ("set_global_flag = ADISCORD_nam_resource_war_protocol_deferred", 1),
-        ("NOT = { has_global_flag = ADISCORD_nam_resource_war_time_deferred }", 1),
-        ("set_global_flag = ADISCORD_nam_resource_war_time_deferred", 1),
         ("clr_global_flag = ADISCORD_nam_resource_war_scheduled", 1),
-        ("days = 365", 1),
-        ("days = 75", 1),
         ("days = 120", 1),
         ("random_days = 90", 1),
     ):
@@ -1842,24 +1842,11 @@ def main() -> int:
     retry_setter = entry_immediate.find(
         "set_global_flag = ADISCORD_nam_resource_war_retry_used"
     )
-    deferral_guard = entry_immediate.find(
-        "NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }"
-    )
-    deferral_setter = entry_immediate.find(
-        "set_global_flag = ADISCORD_nam_resource_war_protocol_deferred"
-    )
     check(
         retry_guard
         < retry_setter
         < entry_immediate.find("id = ADISCORD_nam_resource_war.1", retry_setter),
         "resource-war .1 self-retry is not protected by its permanent one-retry guard",
-    )
-    check(
-        deferral_guard
-        < deferral_setter
-        < entry_immediate.find("id = ADISCORD_nam_resource_war.1", deferral_setter)
-        < retry_guard,
-        "the protocol deferral of .1 is not a single guarded reschedule",
     )
     runtime_entry = "\n".join((effects, news, on_actions, collapse_events))
     check(
@@ -2046,17 +2033,20 @@ def main() -> int:
     )
     for equipment_id, amount, producer in (
         ("infantry_equipment", 20000, "NAM"),
-        ("infantry_equipment", 30000, "EFL"),
-        ("infantry_equipment", 18000, "AZH"),
         ("infantry_equipment", 18000, "SLF"),
         ("ADISCORD_squad_weapons_equipment_0", 80, "NAM"),
-        ("ADISCORD_squad_weapons_equipment_0", 100, "EFL"),
         ("ADISCORD_squad_weapons_equipment_0", 20, "SLF"),
     ):
         check(
             f"type = {equipment_id} amount = {amount} producer = {producer}" in effects,
             f"incorrect resource-war stockpile for {producer}: expected {amount} {equipment_id}",
         )
+    muster = named_block(effects, "NAM_rw_coalition_muster")
+    for variable, value in (("NAM_rw_muster_target", 10), ("NAM_rw_muster_target", 15),
+                            ("NAM_rw_rifle_reserve", 12000), ("NAM_rw_rifle_reserve", 20000),
+                            ("NAM_rw_squad_reserve", 200), ("NAM_rw_squad_reserve", 300)):
+        check(f"var = {variable} value = {value} " in muster,
+              f"coalition muster lacks {variable} = {value}")
     check_front_ai(ai)
 
     hidden_ideas = named_block(ideas, "hidden_ideas")
@@ -2227,21 +2217,32 @@ def main() -> int:
         "mobilisation orders must respect NAM_order_cap and the ceiling of six",
     )
 
-    # Restitution clock and the field missions.
-    clamp = named_block(effects, "NAM_rw_tension_clamp")
+    # A single timeout owns entry; monthly checks issue story warnings only.
+    warnings = named_block(effects, "NAM_rw_deadline_monthly")
+    deadline = named_block(prewar_decisions, "NAM_resource_war_deadline")
     check(
-        "id = ADISCORD_nam_resource_war.20" in clamp
-        and "id = ADISCORD_nam_resource_war.21" in clamp
-        and "NAM_rw_war_window_open = yes" in clamp
-        and "id = ADISCORD_nam_resource_war.1 days = 7 random_days = 14" in clamp,
-        "the restitution clamp must own the notes, ultimatum and war thresholds",
+        "id = ADISCORD_nam_resource_war.20" in warnings
+        and "id = ADISCORD_nam_resource_war.21" in warnings
+        and "value = 90 compare = less_than_or_equals" in warnings
+        and "NAM_rw_war_dispatched" in deadline,
+        "monthly deadline checks must warn before the mission dispatches war",
     )
-    window = named_block(triggers, "NAM_rw_war_window_open")
     check(
-        "days > 699" in window and "days > 1064" in window,
-        "the war window must keep the 700-day minimum and the protocol's 365-day delay",
+        "available = { hidden_trigger = { always = no } }" in deadline
+        and "days_mission_timeout = 450" in deadline
+        and "remove_mission = NAM_resource_war_deadline" in named_block(effects, "ADISCORD_nam_resource_war_begin_hostilities")
+        and "remove_mission = NAM_resource_war_deadline" in named_block(effects, "NAM_rw_close_preparation"),
+        "the 450-day timeout-only mission must close on hostilities and final cancellation",
+    )
+    protocol = named_block(effects, "NAM_rw_sign_klyuchevsk_protocol")
+    check(
+        "NAM_rw_can_sign_protocol = yes" in protocol
+        and "mission = NAM_resource_war_deadline days = 365" in protocol
+        and "NOT = { has_country_flag = NAM_rw_protocol_signed }" in named_block(triggers, "NAM_rw_can_sign_protocol"),
+        "the territorial protocol must extend a current deadline only once",
     )
     tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
+    check("NAM_resource_war_deadline" in tokens.splitlines(), "the resource-war mission needs a synchronized token")
     for mission in ("NAM_hold_field_67", "NAM_hold_field_689", "NAM_hold_field_690"):
         mission_block = named_block(prewar_decisions, mission)
         check(
@@ -2717,9 +2718,9 @@ def main() -> int:
             f"missing critical part {part}",
         )
     fleet_contracts = (
-        ("NAM", "history/units/NAM.txt", 4, 30, 16716, 700, 1, 688),
-        ("EFL", "history/units/EFL.txt", 3, 20, 6495, 70, 2, 70),
-        ("AZH", "history/units/AZH.txt", 2, 15, 493, 692, 1, 692),
+        ("NAM", "history/units/NAM.txt", 22, 30, 16716, 700, 1, 688),
+        ("EFL", "history/units/EFL.txt", 9, 40, 6495, 723, 4, 723),
+        ("AZH", "history/units/AZH.txt", 13, 40, 493, 692, 5, 692),
     )
     for (
         tag,
@@ -2885,7 +2886,7 @@ def main() -> int:
         == 15,
         "NAM resource redistribution changed the theatre's total deposits",
     )
-    azh_resources = {69: {"oil": 2, "chromium": 1}, 692: {"oil": 1, "chromium": 1}}
+    azh_resources = {69: {"oil": 1, "chromium": 1}, 692: {"oil": 1}, 727: {"oil": 1}, 729: {"chromium": 1, "tungsten": 1}}
     for state_id, resources in azh_resources.items():
         state = state_source(state_id)
         for resource, amount in resources.items():
@@ -2986,10 +2987,17 @@ def main() -> int:
         67: {6099: 1, 16890: 5},
         68: {6150: 1},
         69: {
-            16893: 5, 16883: 5, 16886: 5, 16889: 5, 16894: 5,
-            8234: 1, 16882: 5, 16888: 5, 16891: 5,
+            16893: 10, 16883: 5, 16886: 5, 16889: 5, 16894: 5,
+            16888: 5,
         },
-        70: {2986: 1, 6495: 1},
+        70: {2986: 1},
+        723: {6495: 1},
+        724: {},
+        725: {},
+        726: {},
+        727: {8234: 1},
+        728: {16882: 5, 16891: 5},
+        729: {},
         688: {16721: 5, 1710: 1},
         689: {},
         690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
@@ -3020,13 +3028,13 @@ def main() -> int:
         "NAM mainland VP total must be 44",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721))
+        sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726))
         == 9,
         "EFL mainland VP total must be 9",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722)) == 43,
-        "AZH mainland VP total must be 43",
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 48,
+        "AZH mainland VP total must be 48",
     )
 
     localisation = (

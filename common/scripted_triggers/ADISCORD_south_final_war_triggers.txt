@@ -22,20 +22,84 @@ ADISCORD_south_nam_story_clear = {
 	NOT = { NAM = { NAM_south_story_pending = yes } }
 }
 
-# GLOBAL. A dated receipt is authoritative even if a visible mission was cancelled.
+# GLOBAL. The campaign calendar is shared by automatic and focus declarations.
 ADISCORD_south_preparation_elapsed = {
-	has_global_flag = {
-		flag = ADISCORD_south_preparation_started
-		days > 489
+	has_global_flag = ADISCORD_south_preparation_started
+	date > 2164.12.31
+}
+
+# COUNTRY NAM. Each route has attainable preparation milestones before its war focus.
+ADISCORD_south_nam_focus_ready = {
+	OR = {
+		AND = {
+			has_global_flag = ADISCORD_nam_resource_war_retry_used
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+			has_completed_focus = NAM_seal_courts
+			has_completed_focus = NAM_civilian_combine
+			has_completed_focus = NAM_officer_courses
+		}
+		AND = {
+			has_completed_focus = NAM_svetlogorye
+			has_completed_focus = NAM_oil_exchange
+			OR = {
+				has_completed_focus = NAM_ladder_of_seals
+				has_completed_focus = NAM_common_fuel_market
+			}
+		}
+		AND = {
+			has_completed_focus = NAM_defeat_rump_cabinet
+			has_completed_focus = NAM_defeat_harbour_economy
+			has_completed_focus = NAM_defeat_road_south
+		}
+		AND = {
+			has_completed_focus = NAM_defeat_revenge
+			has_completed_focus = NAM_defeat_second_chapter
+		}
+		has_completed_focus = NAM_rad_great_war_plan
+		has_completed_focus = NAM_hum_union_call
+		has_completed_focus = NAM_board_stock_mobilisation
 	}
 }
 
-# COUNTRY NAM. A completed offensive focus may voluntarily end its own respite.
-ADISCORD_south_nam_first_strike = {
-	tag = NAM
+# COUNTRY SHL. Shared industrial and army branches stay available on every political course.
+ADISCORD_south_shl_focus_ready = {
+	has_completed_focus = SHL_conclave_rules
+	has_completed_focus = SHL_metal_market
+	has_completed_focus = SHL_conclave_army
+}
+
+# GLOBAL. EFL and AZH have no authored focus trees; their resource-war settlement
+# supplies their preparation milestone when they inherit northern leadership.
+ADISCORD_south_north_focus_ready = {
+	OR = {
+		NAM = {
+			ADISCORD_south_champion_viable = yes
+			ADISCORD_south_nam_focus_ready = yes
+		}
+		AND = {
+			NOT = { NAM = { ADISCORD_south_champion_viable = yes } }
+			has_global_flag = ADISCORD_nam_resource_war_resolved
+			OR = {
+				EFL = { ADISCORD_south_champion_viable = yes }
+				AZH = { ADISCORD_south_champion_viable = yes }
+			}
+		}
+	}
+}
+
+ADISCORD_south_both_focus_ready = {
+	SHL = { ADISCORD_south_shl_focus_ready = yes }
+	ADISCORD_south_north_focus_ready = yes
+}
+
+# COUNTRY. Production preparation begins before the declaration gate opens.
+ADISCORD_south_preparing_country = {
+	ADISCORD_south_crisis_open = yes
+	has_global_flag = ADISCORD_south_preparation_started
 	ADISCORD_south_champion_viable = yes
-	has_war = no
-	ADISCORD_south_nam_story_clear = yes
+	ADISCORD_south_declarer_valid = yes
 }
 
 # GLOBAL. The crisis clock runs between the resource war and the final campaign.
@@ -94,25 +158,52 @@ ADISCORD_south_declarer_valid = {
 	}
 }
 
-# A limited Shahrabad war keeps its own settlement. Only NAM can voluntarily
-# waive its preparation period; SHL focuses and the automatic clock cannot.
+# GLOBAL. Every starter waits for the same calendar, focus preparation and warning.
+ADISCORD_south_final_focus_available = {
+	ADISCORD_south_preparation_can_finish = yes
+	has_global_flag = ADISCORD_south_crisis_warned
+}
+
 ADISCORD_south_final_can_start = {
+	ADISCORD_south_preparation_can_finish = yes
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_south_warning_elapsed_tt
+		has_global_flag = {
+			flag = ADISCORD_south_crisis_warned
+			days > 55
+		}
+	}
+}
+
+ADISCORD_south_preparation_can_finish = {
 	ADISCORD_south_crisis_open = yes
 	custom_trigger_tooltip = {
 		tooltip = ADISCORD_south_preparation_ready_tt
-		OR = {
-			ADISCORD_south_preparation_elapsed = yes
-			ADISCORD_south_nam_first_strike = yes
-		}
+		ADISCORD_south_preparation_elapsed = yes
+		ADISCORD_south_both_focus_ready = yes
 	}
 	SHL = {
 		ADISCORD_south_champion_viable = yes
+		has_war = no
 		has_country_flag = SHL_furnaces_initialized
 		NOT = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
 		NOT = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
 		NOT = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
 	}
-	ADISCORD_south_north_candidate_exists = yes
+	OR = {
+		NAM = {
+			ADISCORD_south_declarer_valid = yes
+			has_war = no
+		}
+		EFL = {
+			ADISCORD_south_declarer_valid = yes
+			has_war = no
+		}
+		AZH = {
+			ADISCORD_south_declarer_valid = yes
+			has_war = no
+		}
+	}
 }
 
 # GLOBAL. The northern leader of the current campaign is Svetlogorye itself.

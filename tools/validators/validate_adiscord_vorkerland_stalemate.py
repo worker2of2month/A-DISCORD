@@ -13,6 +13,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.lib.paths import repository_root, source_section
+from tools.validators._vorkerland_release_contract import base_front_controls, validate_adaptive_fronts
 
 
 ROOT = repository_root()
@@ -315,10 +316,15 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(
                 f"AI plan is missing its timed activation flag: {active_flag}"
             )
+    validate_adaptive_fronts(ai, issues)
+    default_orders = "\n".join(
+        order for name in plan_names
+        for order in base_front_controls(_named_block(ai, name))
+    )
+    for token in ("priority = 2000", "execution_type = rush_weak", "manual_attack = no"):
+        if default_orders.count(token) != expected_plan_count:
+            issues.append(f"all stalemate default orders must use {token}")
     for token in (
-        "priority = 2000",
-        "execution_type = rush_weak",
-        "manual_attack = no",
         "has_manpower > 1000",
         "stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
     ):

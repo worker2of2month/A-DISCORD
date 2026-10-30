@@ -1,5 +1,26 @@
 ideas = {
 	country = {
+		TVA_public_confidence = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { stability_factor = 0.03 }
+		}
+
+		TVA_public_accountability_crisis = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { stability_factor = -0.03 }
+		}
+
+		TVA_research_diversion = {
+			picture = generic_research_bonus
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { research_speed_factor = -0.05 }
+		}
+
 		WRK_worx_delta_local_signatures = {
 			picture = generic_central_management
 			allowed = { always = no }
@@ -1493,7 +1514,7 @@ ideas = {
 			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
+			cancel = { ADISCORD_vorkerland_tva_trial_context = no }
 			removal_cost = -1
 			modifier = {
 				industry_repair_factor = 0.15
@@ -1916,6 +1937,7 @@ ideas = {
 		# WKR / Anton: legitimacy through delivered output. Buys a home front
 		# that holds, at the price of offensive punch.
 		ADISCORD_vorkerland_wkr_delivery_mandate = {
+			name = WKR_measured_republic_dynamic
 			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -1946,6 +1968,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_wkr_normative_republic = {
+			name = WKR_measured_republic_dynamic
 			picture = generic_central_management
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2060,8 +2083,56 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
+		VAD_staff_constitution_delta = {
+			picture = generic_army_support
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAD_staff_collective_delta = {
+			picture = generic_army_support
+			allowed = { always = no }
+			modifier = {
+				planning_speed = .10
+				army_org_regain = .03
+				political_power_gain = -.05
+			}
+		}
+
+		VAD_staff_delegation_delta = {
+			picture = generic_army_support
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = .03
+				army_speed_factor = .05
+				supply_consumption_factor = .03
+			}
+		}
+
+		VAD_joint_operational_orders = {
+			picture = generic_army_support
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = {
+				OR = {
+					VAD_joint_programme_context = no
+					has_war = no
+				}
+			}
+			modifier = {
+				planning_speed = 0.05
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
 		# TVA / continuous mobilisation: the scarce resource is time.
 		ADISCORD_vorkerland_tva_continuous_mobilization = {
+			name = TVA_administration_dynamic
 			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2092,6 +2163,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_tva_single_process = {
+			name = TVA_administration_dynamic
 			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2109,6 +2181,7 @@ ideas = {
 
 		# TVA / preservation protocol: the scarce resource is trained people.
 		ADISCORD_vorkerland_tva_preservation_protocol = {
+			name = TVA_administration_dynamic
 			picture = generic_research_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2139,6 +2212,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_tva_certified_cadre = {
+			name = TVA_administration_dynamic
 			picture = generic_army_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2156,8 +2230,8 @@ ideas = {
 
 		# ----------------------------------------------------------------
 		# Claimant depth branches: war economy, variant doctrine, late war,
-		# legitimacy and diplomacy. Every spirit below is earned by exactly
-		# one focus in Vorkerland/iba_norvane/focuses.txt. The doctrine
+		# legitimacy and diplomacy. Each delta belongs to one claimant focus;
+		# permanent TVA policy deltas are previews for its aggregate. The doctrine
 		# pairs are deliberately asymmetric between the two variants of the
 		# same claimant so the two AIs field visibly different armies.
 		# ----------------------------------------------------------------
@@ -2168,6 +2242,7 @@ ideas = {
 
 		# A larger, faster-raised, less experienced army.
 		ADISCORD_vorkerland_wkr_doctrine_armed_people = {
+			name = ADISCORD_vorkerland_wkr_councils
 			picture = generic_manpower_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2182,24 +2257,9 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Breakthrough bought with attrition and defence.
-		ADISCORD_vorkerland_wkr_doctrine_weight_of_numbers = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				breakthrough_factor = 0.10
-				army_morale_factor = 0.05
-				army_core_attack_factor = 0.06
-				attrition = 0.05
-				army_defence_factor = -0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
-
 		# A smaller army that holds ground and eats less supply.
 		ADISCORD_vorkerland_wkr_doctrine_measured_force = {
+			name = WKR_measured_republic_dynamic
 			picture = generic_fortify_the_borders
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2216,6 +2276,7 @@ ideas = {
 
 		# Steel spent instead of men, and slower to raise.
 		ADISCORD_vorkerland_wkr_doctrine_output_over_men = {
+			name = WKR_measured_republic_dynamic
 			picture = generic_production_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2229,12 +2290,12 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# The last levy thrown at the line.
+		# The operation ends with its own central war, not an unrelated foreign war.
 		ADISCORD_vorkerland_wkr_reserves_forward = {
 			picture = generic_war_preparation
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
+			cancel = { WKR_breakthrough_war_active = no }
 			removal_cost = -1
 			modifier = {
 				army_attack_factor = 0.08
@@ -2245,55 +2306,11 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# The last levy buried in the interchange.
-		ADISCORD_vorkerland_wkr_interchange_line = {
-			picture = generic_fortify_the_borders
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				army_defence_factor = 0.12
-				max_dig_in_factor = 0.20
-				army_speed_factor = -0.08
-			}
-			ai_will_do = { factor = 0 }
-		}
 
-		# Local winners armed at the republic's political expense.
-		ADISCORD_vorkerland_wkr_bracket_patronage = {
-			picture = generic_army_support
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				send_volunteer_size = 2
-				army_org_regain = 0.04
-				political_power_gain = -0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		# Recognition abroad, paid for in attention at home.
-		ADISCORD_vorkerland_wkr_outside_recognition = {
-			picture = generic_research_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				trade_opinion_factor = 0.20
-				research_speed_factor = 0.05
-				stability_factor = 0.03
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		# Men and mobilisation bought with the districts' goodwill.
-
-		# A quiet rear bought with a smaller army.
 
 		# A professional officer caste, slow to reproduce.
 		ADISCORD_vorkerland_vad_doctrine_officer_estates = {
+			name = ADISCORD_vorkerland_vad_doctrine
 			picture = generic_army_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2307,23 +2324,11 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Guards quality bought with raising time.
-		ADISCORD_vorkerland_vad_doctrine_guards_regiments = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				army_morale_factor = 0.10
-				army_core_defence_factor = 0.06
-				land_reinforce_rate = 0.02
-				training_time_army_factor = 0.15
-			}
-			ai_will_do = { factor = 0 }
-		}
+
 
 		# Numbers raised fast, at the cost of quality.
 		ADISCORD_vorkerland_vad_doctrine_district_levies = {
+			name = ADISCORD_vorkerland_vad_doctrine
 			picture = generic_manpower_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2337,27 +2342,24 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Militia that hold their own districts and little else.
-		ADISCORD_vorkerland_vad_doctrine_council_militias = {
-			picture = generic_fortify_the_borders
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				army_core_defence_factor = 0.10
-				max_dig_in_factor = 0.15
-				stability_factor = 0.03
-				army_speed_factor = -0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
+
 
 		# The restoration's push for the old capital.
 		ADISCORD_vorkerland_vad_march_on_the_capital = {
 			picture = generic_war_preparation
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
+			cancel = {
+				OR = {
+					VAD_central_campaign_active = no
+					NOT = {
+						any_owned_state = {
+							VAD_final_operations_district = yes
+							has_dynamic_modifier = { modifier = VAD_march_commitment }
+						}
+					}
+				}
+			}
 			removal_cost = -1
 			modifier = {
 				army_attack_factor = 0.08
@@ -2367,48 +2369,13 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# The restoration digging in on what it already holds.
-		ADISCORD_vorkerland_vad_restoration_line = {
-			picture = generic_fortify_the_borders
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				army_defence_factor = 0.12
-				max_dig_in_factor = 0.20
-				army_speed_factor = -0.08
-			}
-			ai_will_do = { factor = 0 }
-		}
+
 
 		# Local winners brought into the restoration's coalition.
-		ADISCORD_vorkerland_vad_bracket_patronage = {
-			picture = generic_army_support
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				send_volunteer_size = 2
-				army_org_regain = 0.04
-				political_power_gain = -0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
+
 
 		# Recognition of the restoration as the lawful state.
-		ADISCORD_vorkerland_vad_legitimist_recognition = {
-			picture = generic_central_management
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				trade_opinion_factor = 0.20
-				stability_factor = 0.03
-				war_support_factor = 0.03
-			}
-			ai_will_do = { factor = 0 }
-		}
+
 
 		# The grid run at war load; the cities pay for it.
 
@@ -2416,6 +2383,7 @@ ideas = {
 
 		# Continuous attack bought with supply and defence.
 		ADISCORD_vorkerland_tva_doctrine_continuous_assault = {
+			name = TVA_administration_dynamic
 			picture = generic_war_preparation
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2432,14 +2400,14 @@ ideas = {
 
 		# Losses replaced straight off the production line.
 		ADISCORD_vorkerland_tva_doctrine_line_replacement = {
-			picture = generic_production_bonus
+			picture = generic_army_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
+			cancel = { TVA_frontline_dispatch_context = no }
 			removal_cost = -1
 			modifier = {
 				land_reinforce_rate = 0.03
-				industrial_capacity_factory = 0.05
-				production_factory_max_efficiency_factor = 0.08
+				army_org_regain = 0.05
 				attrition = 0.03
 			}
 			ai_will_do = { factor = 0 }
@@ -2447,6 +2415,7 @@ ideas = {
 
 		# A deliberate front held by a deliberately small army.
 		ADISCORD_vorkerland_tva_doctrine_measured_front = {
+			name = TVA_administration_dynamic
 			picture = generic_fortify_the_borders
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -2460,17 +2429,16 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Irreplaceable crews, and a very long queue to make more.
+		# Exact delta for one completed crew-training level; never installed.
 		ADISCORD_vorkerland_tva_doctrine_fewer_better_crews = {
+			name = TVA_administration_dynamic
 			picture = generic_research_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				experience_gain_army_factor = 0.20
-				army_leader_start_level = 1
-				research_speed_factor = 0.05
-				training_time_army_factor = 0.20
+				army_org_factor = 0.01
+				experience_loss_factor = -0.03
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -2480,7 +2448,7 @@ ideas = {
 			picture = generic_army_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
+			cancel = { TVA_final_operation_context = no }
 			removal_cost = -1
 			modifier = {
 				army_attack_factor = 0.08
@@ -2495,7 +2463,7 @@ ideas = {
 			picture = generic_research_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
+			cancel = { TVA_final_operation_context = no }
 			removal_cost = -1
 			modifier = {
 				research_speed_factor = 0.10
@@ -2506,68 +2474,18 @@ ideas = {
 		}
 
 		# Knowledge traded outward for knowledge inward.
-		ADISCORD_vorkerland_tva_technical_exchange = {
-			picture = generic_research_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				research_speed_factor = 0.12
-				trade_opinion_factor = 0.15
-				industrial_capacity_factory = -0.03
-			}
-			ai_will_do = { factor = 0 }
-		}
 
 		# Local winners hired rather than persuaded.
-		ADISCORD_vorkerland_tva_bracket_contractors = {
-			picture = generic_manpower_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				send_volunteer_size = 2
-				conscription = 0.01
-				political_power_gain = -0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_wkr_shopfloor_squadrons = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				air_cas_present_factor = 0.08
-				air_cas_efficiency = 0.05
-				air_accidents_factor = 0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_wkr_interchange_sky_screen = {
-			picture = generic_fortify_the_borders
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				air_intercept_efficiency = 0.10
-				army_bonus_air_superiority_factor = 0.06
-				air_range_factor = -0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
 
 		ADISCORD_vorkerland_wkr_republican_volunteers = {
+			name = ADISCORD_vorkerland_wkr_councils
 			picture = generic_manpower_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
 				send_volunteer_size = 2
+				send_volunteers_tension = -1
 				political_power_gain = -0.08
 			}
 			ai_will_do = { factor = 0 }
@@ -2586,69 +2504,15 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		ADISCORD_vorkerland_vad_guards_close_support = {
-			picture = generic_army_support
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				air_cas_present_factor = 0.06
-				air_cas_efficiency = 0.05
-				experience_gain_air_factor = 0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
 
-		ADISCORD_vorkerland_vad_district_air_cover = {
-			picture = generic_fortify_the_borders
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
-			removal_cost = -1
-			modifier = {
-				army_bonus_air_superiority_factor = 0.08
-				air_intercept_efficiency = 0.08
-				air_accidents_factor = -0.04
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_vad_restoration_guarantees = {
-			picture = generic_central_management
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				guarantee_tension = -0.20
-				justify_war_goal_time = -0.10
-				political_power_gain = -0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_vad_observer_missions = {
-			picture = generic_research_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				opinion_gain_monthly_factor = 0.10
-				trade_opinion_factor = 0.10
-				political_power_gain = -0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
 
 		ADISCORD_vorkerland_tva_unattended_strike = {
 			picture = generic_war_preparation
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
 			removal_cost = -1
 			modifier = {
 				air_cas_efficiency = 0.08
-				air_agility_factor = 0.04
 				air_accidents_factor = 0.06
 			}
 			ai_will_do = { factor = 0 }
@@ -2658,37 +2522,10 @@ ideas = {
 			picture = generic_fortify_the_borders
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
-			cancel = { ADISCORD_vorkerland_plan_war_active = no }
 			removal_cost = -1
 			modifier = {
 				air_intercept_efficiency = 0.10
 				air_range_factor = 0.08
-				experience_gain_air_factor = -0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_tva_surplus_export = {
-			picture = generic_manpower_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				trade_opinion_factor = 0.20
-				industrial_capacity_factory = 0.03
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		ADISCORD_vorkerland_tva_imported_specialists = {
-			picture = generic_research_bonus
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				research_speed_factor = 0.08
-				experience_gain_air_factor = 0.05
-				political_power_gain = -0.10
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -2872,6 +2709,15 @@ ideas = {
 				conscription = 0.004
 			}
 		}
+
+		WKR_councils_batch_mobilized_dummy = {
+			name = ADISCORD_vorkerland_wkr_councils
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.06
+				conscription = 0.008
+			}
+		}
 		ADISCORD_vorkerland_vad_war_economy_dummy = {
 			name = ADISCORD_vorkerland_vad_war_economy
 			allowed = { always = no }
@@ -2895,33 +2741,6 @@ ideas = {
 				mobilization_speed = -0.15
 				stability_factor = 0.04
 				political_power_gain = 0.15
-			}
-		}
-		ADISCORD_vorkerland_tva_war_economy_dummy = {
-			name = ADISCORD_vorkerland_tva_war_economy
-			allowed = { always = no }
-			modifier = { }
-		}
-		ADISCORD_vorkerland_tva_war_economy_war_load = {
-			name = ADISCORD_vorkerland_tva_war_economy
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = 0.12
-				production_factory_max_efficiency_factor = 0.05
-				research_speed_factor = -0.05
-				stability_factor = -0.06
-				consumer_goods_factor = -0.06
-			}
-		}
-		ADISCORD_vorkerland_tva_war_economy_civil = {
-			name = ADISCORD_vorkerland_tva_war_economy
-			allowed = { always = no }
-			modifier = {
-				industrial_capacity_factory = -0.12
-				production_factory_max_efficiency_factor = -0.05
-				research_speed_factor = 0.05
-				stability_factor = 0.06
-				consumer_goods_factor = 0.06
 			}
 		}
 
@@ -3243,6 +3062,16 @@ ideas = {
 				army_org_factor = 0.03
 				army_attack_factor = 0.05
 				army_defence_factor = 0.02
+			}
+		}
+
+		WRK_empire_delta_crown_charter = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				political_power_factor = 0.05
 			}
 		}
 
@@ -3624,5 +3453,6 @@ ideas = {
 			}
 			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
 		}
+
 	}
 }

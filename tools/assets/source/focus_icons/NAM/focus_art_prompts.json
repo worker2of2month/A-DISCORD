@@ -1573,6 +1573,18 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_independence_day",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_independence_day",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_independence_day.png"
+    },
+    {
+      "focus_id": "NAM_underground_reports",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_underground_reports",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_underground_reports.png"
+    },
+    {
       "focus_id": "NAM_harbour_service",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_harbour_service",

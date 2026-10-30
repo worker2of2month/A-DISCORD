@@ -60,6 +60,18 @@ ADISCORD_vorkerland_prewar_category = {
 	visible = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 }
 
+ADISCORD_vorkerland_vad_administration = {
+	icon = ADISCORD_deal
+	allowed = { tag = VAD }
+	visible = { VAD_administration_active = yes }
+}
+
+ADISCORD_vorkerland_wkr_administration = {
+	icon = ADISCORD_deal
+	allowed = { tag = WKR }
+	visible = { WKR_administration_active = yes }
+}
+
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	icon = ADISCORD_deal
@@ -95,6 +107,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	}
 	visible = {
 		OR = {
+			ADISCORD_vorkerland_wkr_programmes_open = yes
 			AND = {
 				ADISCORD_vorkerland_prep_reserve_open = yes
 				OR = {
@@ -173,11 +186,17 @@ WRK_worx_research_category = {
 }
 
 # --- world_empire_categories ---
-# Holds the Shadow of Petrishchev balance and the imperial governors.
+# Imperial appointments remain available after the court balance is settled.
 ADISCORD_vorkerland_empire_category = {
 	icon = ADISCORD_deal
 	allowed = { tag = WRK }
-	visible = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+	visible = { ADISCORD_vorkerland_world_empire_active = yes }
 	visible_when_empty = yes
 	priority = 90
+}
+
+ADISCORD_vorkerland_tva_administration = {
+	icon = ADISCORD_science
+	allowed = { tag = TVA }
+	visible = { TVA_administration_active = yes }
 }

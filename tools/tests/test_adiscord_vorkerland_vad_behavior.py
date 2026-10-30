@@ -79,11 +79,16 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                 )
                 self.assertNotIn("OR =", enable)
                 self.assertEqual(block.count("abort_when_not_enabled = yes"), 1)
+                from tools.validators._vorkerland_release_contract import validate_adaptive_fronts
+                issues = []
+                validate_adaptive_fronts(block, issues)
+                self.assertEqual(issues, [])
 
                 self.assertEqual(
                     {
                         compact(strategy)
                         for strategy in named_blocks(block, "ai_strategy")
+                        if "country_trigger" not in strategy
                     },
                     {
                         f"ai_strategy = {{ type = front_unit_request tag = {target} value = 100 }}",
@@ -170,6 +175,10 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                 ):
                     self.assertIn(token, enable)
                 self.assertEqual(block.count("abort_when_not_enabled = yes"), 1)
+                from tools.validators._vorkerland_release_contract import validate_adaptive_fronts
+                issues = []
+                validate_adaptive_fronts(block, issues)
+                self.assertEqual(issues, [])
                 strategies = {
                     compact(strategy) for strategy in named_blocks(block, "ai_strategy")
                 }

@@ -32,6 +32,7 @@ NAM_navy_dynamic = {
 	icon = GFX_idea_generic_coastal_navy
 	enable = { tag = NAM }
 	convoy_escort_efficiency = NAM_gar_convoy_escort
+	navy_org_factor = NAM_navy_organisation
 	repair_speed_factor = NAM_navy_repair_speed
 	amphibious_invasion = NAM_navy_landing_speed
 }
@@ -81,10 +82,11 @@ NAM_fuel_shortage = {
 	army_fuel_consumption_factor = 0.10
 }
 
-# COUNTRY target. Lasts until Svetlogorye lifts it; ends with Svetlogorye.
+# COUNTRY target. Control-loss cleanup removes the modifier and its opinion
+# penalty together. The native enable also disables it without a basin source.
 NAM_fuel_embargo_modifier = {
 	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
-	enable = { always = yes }
+	enable = { NAM = { NAM_fuel_embargo_source = yes } }
 	remove_trigger = { NOT = { country_exists = NAM } }
 	fuel_gain_factor = -0.20
 	army_fuel_consumption_factor = 0.05
@@ -93,9 +95,17 @@ NAM_fuel_embargo_modifier = {
 # STATE island. Regular convoys carry the islands' ore and their supplies.
 NAM_island_convoy_route = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_island_route_operable = yes }
+	remove_trigger = { NOT = { NAM_island_route_operable = yes } }
 	state_resources_factor = 0.15
-	compliance_growth = 0.05
+}
+
+# STATE. A lost district suspends the same levy until recapture or the term ends.
+NAM_island_steel_levy_modifier = {
+	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	enable = { NAM_island_levy_state_active = yes }
+	remove_trigger = { NAM = { NAM_island_levy_running = no } }
+	state_resources_factor = -0.15
 }
 
 # COUNTRY NAM in exile. The coalition's squadrons close the island harbours

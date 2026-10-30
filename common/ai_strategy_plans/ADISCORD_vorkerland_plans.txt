@@ -10,44 +10,20 @@ ADISCORD_vorkerland_tva_experimental_core_plan = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		NOT = {
-			AND = {
-				OR = {
-					has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
-					has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
-					has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
-				}
-				OR = {
-					has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
-					has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
-					has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
-				}
-			}
-		}
-		OR = {
-			has_global_flag = ADISCORD_vorkerland_phase_collapse
-			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-		}
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
+		NOT = { ADISCORD_vorkerland_tva_needs_mandate_priority = yes }
+		NOT = { ADISCORD_vorkerland_tva_needs_political_priority = yes }
+		NOT = { ADISCORD_vorkerland_tva_needs_trial_priority = yes }
 	}
 
 	abort = {
 		OR = {
 			NOT = { tag = TVA }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			AND = {
-				OR = {
-					has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority
-					has_country_flag = ADISCORD_vorkerland_focus_tva_algorithmic_board
-					has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority
-				}
-				OR = {
-					has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
-					has_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
-					has_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
-				}
-			}
+			has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
+			ADISCORD_vorkerland_tva_needs_mandate_priority = yes
+			ADISCORD_vorkerland_tva_needs_political_priority = yes
+			ADISCORD_vorkerland_tva_needs_trial_priority = yes
 		}
 	}
 
@@ -56,9 +32,124 @@ ADISCORD_vorkerland_tva_experimental_core_plan = {
 		TVA_publish_operational_metrics
 		TVA_deploy_field_laboratories
 		TVA_select_trial_protocol
+		TVA_reroute_city_grid
+		TVA_issue_emergency_output_norms
+		TVA_build_mobile_repair_trains
+		TVA_standardize_emergency_administration
+		TVA_integrate_field_results
+		TVA_seal_the_approaches
+		TVA_harden_switching_stations
+		TVA_close_operational_loop
 	}
 
 	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_tva_throughput_mandate_plan = {
+	name = "TVA throughput mandate"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_mandate_priority = yes
+		surrender_progress > 0.05
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_mandate_priority = no }
+	ai_national_focuses = { TVA_declare_continuous_mobilization }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_preservation_mandate_plan = {
+	name = "TVA preservation mandate"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_mandate_priority = yes
+		NOT = { surrender_progress > 0.05 }
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_mandate_priority = no }
+	ai_national_focuses = { TVA_enact_the_preservation_protocol }
+	weight = { factor = 6 }
+}
+
+# Administrative shortages and the selected trial protocol interrupt the common readiness queue.
+ADISCORD_vorkerland_tva_throughput_priority_plan = {
+	name = "TVA throughput priority selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_political_priority = yes
+		has_equipment = { infantry_equipment < 5000 }
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_political_priority = no }
+	ai_national_focuses = { TVA_optimize_for_throughput }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_specialist_priority_plan = {
+	name = "TVA specialist priority selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_political_priority = yes
+		NOT = { has_equipment = { infantry_equipment < 5000 } }
+		has_stability < 0.50
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_political_priority = no }
+	ai_national_focuses = { TVA_protect_irreplaceable_specialists }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_algorithmic_priority_plan = {
+	name = "TVA algorithmic priority selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_political_priority = yes
+		NOT = { has_equipment = { infantry_equipment < 5000 } }
+		NOT = { has_stability < 0.50 }
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_political_priority = no }
+	ai_national_focuses = { TVA_delegate_to_algorithmic_board }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_technical_trial_plan = {
+	name = "TVA technical trial selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_trial_priority = yes
+		has_country_flag = ADISCORD_vorkerland_tva_trial_technical_battalions
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_trial_priority = no }
+	ai_national_focuses = { TVA_raise_technical_battalions }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_adaptive_trial_plan = {
+	name = "TVA adaptive trial selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_trial_priority = yes
+		has_country_flag = ADISCORD_vorkerland_tva_trial_adaptive_logistics
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_trial_priority = no }
+	ai_national_focuses = { TVA_test_adaptive_logistics }
+	weight = { factor = 6 }
+}
+
+ADISCORD_vorkerland_tva_remote_trial_plan = {
+	name = "TVA remote trial selection"
+	desc = ""
+	allowed = { original_tag = TVA }
+	enable = {
+		ADISCORD_vorkerland_tva_needs_trial_priority = yes
+		has_country_flag = ADISCORD_vorkerland_tva_trial_remote_fire_control
+	}
+	abort = { ADISCORD_vorkerland_tva_needs_trial_priority = no }
+	ai_national_focuses = { TVA_test_remote_fire_control }
+	weight = { factor = 6 }
 }
 
 ADISCORD_vorkerland_tva_throughput_technical_depth_plan = {
@@ -66,6 +157,7 @@ ADISCORD_vorkerland_tva_throughput_technical_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -102,6 +194,7 @@ ADISCORD_vorkerland_tva_throughput_remote_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -138,6 +231,7 @@ ADISCORD_vorkerland_tva_throughput_adaptive_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -174,6 +268,7 @@ ADISCORD_vorkerland_tva_algorithm_technical_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -210,6 +305,7 @@ ADISCORD_vorkerland_tva_algorithm_remote_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -246,6 +342,7 @@ ADISCORD_vorkerland_tva_algorithm_adaptive_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -282,6 +379,7 @@ ADISCORD_vorkerland_tva_specialist_technical_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -318,6 +416,7 @@ ADISCORD_vorkerland_tva_specialist_remote_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -354,6 +453,7 @@ ADISCORD_vorkerland_tva_specialist_adaptive_depth_plan = {
 	desc = ""
 	allowed = { original_tag = TVA }
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -506,6 +606,7 @@ ADISCORD_vorkerland_tva_throughput_variant_plan = {
 	}
 
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -557,6 +658,7 @@ ADISCORD_vorkerland_tva_preservation_variant_plan = {
 	}
 
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked
 		tag = TVA
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -567,7 +669,7 @@ ADISCORD_vorkerland_tva_preservation_variant_plan = {
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre }
 		OR = {
 			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
-			surrender_progress < 0.05
+			NOT = { surrender_progress > 0.05 }
 		}
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -620,7 +722,7 @@ ADISCORD_vorkerland_tva_throughput_depth_plan = {
 		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
 		has_country_flag = ADISCORD_vorkerland_focus_tva_single_process
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre }
+		NOT = { has_completed_focus = TVA_spend_the_reserve_cadre }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -635,23 +737,16 @@ ADISCORD_vorkerland_tva_throughput_depth_plan = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_throughput }
-			has_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre
+			has_completed_focus = TVA_spend_the_reserve_cadre
 		}
 	}
 
 	ai_national_focuses = {
-		TVA_convene_the_load_board
 		TVA_run_the_grid_at_war_load
 		TVA_doctrine_of_continuous_assault
-		TVA_replace_losses_from_the_line
-		TVA_certify_the_completed_programmes
 		TVA_divert_the_research_budget
-		TVA_hire_the_bracket_victors
-		TVA_stand_up_the_grid_air_staff
+		TVA_build_the_engineering_service
 		TVA_print_unattended_strike_packages
-		TVA_open_the_exchange_window
-		TVA_export_surplus_output
-		TVA_declare_the_final_iteration
 		TVA_spend_the_reserve_cadre
 	}
 
@@ -682,7 +777,7 @@ ADISCORD_vorkerland_tva_preservation_depth_plan = {
 		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
 		has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core }
+		NOT = { has_completed_focus = TVA_seal_the_technical_core }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -697,23 +792,16 @@ ADISCORD_vorkerland_tva_preservation_depth_plan = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			NOT = { has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_tva_variant_preservation }
-			has_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core
+			has_completed_focus = TVA_seal_the_technical_core
 		}
 	}
 
 	ai_national_focuses = {
-		TVA_convene_the_load_board
 		TVA_hold_back_civil_power
 		TVA_doctrine_of_the_measured_front
-		TVA_hold_with_fewer_better_crews
-		TVA_certify_the_completed_programmes
 		TVA_publish_the_reconstruction_index
 		TVA_open_the_technical_exchange
-		TVA_stand_up_the_grid_air_staff
 		TVA_keep_the_interdictors_on_station
-		TVA_open_the_exchange_window
-		TVA_import_surviving_specialists
-		TVA_declare_the_final_iteration
 		TVA_seal_the_technical_core
 	}
 
@@ -774,11 +862,10 @@ ADISCORD_vorkerland_vad_vlad_core_plan = {
 	allowed = { original_tag = VAD }
 
 	enable = {
+		VAD_imperial_core_course = yes
 		tag = VAD
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -790,9 +877,9 @@ ADISCORD_vorkerland_vad_vlad_core_plan = {
 
 	abort = {
 		OR = {
+			VAD_imperial_core_course = no
 			NOT = { tag = VAD }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 		}
 	}
@@ -803,11 +890,9 @@ ADISCORD_vorkerland_vad_vlad_core_plan = {
 		VAD_establish_mobile_headquarters
 		VAD_inventory_eastern_works
 		VAD_restore_crown_commissions
-		VAD_invite_sol_delegation
 		VAD_reconstitute_district_guard
 		VAD_standardize_district_logistics
 		VAD_bind_officers_to_chancery
-		VAD_dispatch_solland_liaison_mission
 		VAD_assemble_joint_general_staff
 		VAD_reopen_armament_depots
 		VAD_settle_restoration_authority
@@ -824,12 +909,10 @@ ADISCORD_vorkerland_vad_joint_core_plan = {
 	allowed = { original_tag = VAD }
 
 	enable = {
+		VAD_joint_core_course = yes
 		tag = VAD
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		has_global_flag = ADISCORD_vorkerland_joint_government_formed
-		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -841,9 +924,9 @@ ADISCORD_vorkerland_vad_joint_core_plan = {
 
 	abort = {
 		OR = {
+			VAD_joint_core_course = no
 			NOT = { tag = VAD }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 		}
 	}
@@ -854,17 +937,88 @@ ADISCORD_vorkerland_vad_joint_core_plan = {
 		VAD_establish_mobile_headquarters
 		VAD_inventory_eastern_works
 		VAD_guarantee_worker_committees
-		VAD_invite_sol_delegation
 		VAD_reconstitute_district_guard
 		VAD_standardize_district_logistics
 		VAD_ratify_joint_command
-		VAD_dispatch_solland_liaison_mission
 		VAD_assemble_joint_general_staff
 		VAD_reopen_armament_depots
 		VAD_settle_restoration_authority
 		VAD_balance_council_and_command
 	}
 
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_vad_collegial_core_plan = {
+	name = "VAD collegial staff core"
+	desc = ""
+
+	allowed = { original_tag = VAD }
+
+	enable = {
+		VAD_collegial_core_course = yes
+		tag = VAD
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_collapse
+			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
+	}
+
+	abort = {
+		OR = {
+			VAD_collegial_core_course = no
+			NOT = { tag = VAD }
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+			has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
+		}
+	}
+
+	ai_national_focuses = {
+		VAD_proclaim_joint_charter
+		VAD_convene_collegial_staff
+		VAD_establish_mobile_headquarters
+		VAD_inventory_eastern_works
+		VAD_require_collective_directives
+		VAD_reconstitute_district_guard
+		VAD_standardize_district_logistics
+		VAD_codify_staff_mandate
+		VAD_assemble_joint_general_staff
+		VAD_reopen_armament_depots
+		VAD_settle_restoration_authority
+		VAD_balance_council_and_command
+	}
+
+	weight = { factor = 3 }
+}
+
+ADISCORD_vorkerland_vad_collegial_foreign_plan = {
+	name = "VAD collegial observers"
+	desc = ""
+	allowed = { original_tag = VAD }
+	enable = {
+		tag = VAD
+		is_ai = yes
+		VAD_collegial_core_course = yes
+		VAD_administration_active = yes
+		ADISCORD_vorkerland_plan_war_active = yes
+		NOT = { has_completed_focus = VAD_issue_restoration_guarantees }
+		NOT = { has_completed_focus = VAD_seat_the_observer_missions }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = VAD }
+			VAD_collegial_core_course = no
+			VAD_administration_active = no
+			has_completed_focus = VAD_issue_restoration_guarantees
+			has_completed_focus = VAD_seat_the_observer_missions
+		}
+	}
+	ai_national_focuses = { VAD_seat_the_observer_missions }
 	weight = { factor = 3 }
 }
 
@@ -877,22 +1031,26 @@ ADISCORD_vorkerland_vad_vlad_depth_plan = {
 	enable = {
 		tag = VAD
 		is_ai = yes
-		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
 		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
-		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	}
 
 	abort = {
 		OR = {
 			NOT = { tag = VAD }
-			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
-			has_global_flag = ADISCORD_vorkerland_central_showdown_started
-			has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
 		}
 	}
 
@@ -900,6 +1058,8 @@ ADISCORD_vorkerland_vad_vlad_depth_plan = {
 		VAD_restore_prefectural_courts
 		VAD_issue_crown_mobilization_warrants
 		VAD_turn_the_chancery_into_a_war_cabinet
+		VAD_invite_sol_delegation
+		VAD_dispatch_solland_liaison_mission
 		VAD_map_the_solar_corridors
 		VAD_preposition_restoration_columns
 		VAD_define_the_solar_settlement
@@ -921,23 +1081,25 @@ ADISCORD_vorkerland_vad_joint_depth_plan = {
 	enable = {
 		tag = VAD
 		is_ai = yes
-		has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+		OR = {
+			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+		}
 		has_global_flag = ADISCORD_vorkerland_joint_government_formed
 		has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
-		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	}
 
 	abort = {
 		OR = {
 			NOT = { tag = VAD }
-			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-			has_global_flag = ADISCORD_vorkerland_central_showdown_started
-			has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			has_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register
 		}
 	}
 
@@ -945,6 +1107,8 @@ ADISCORD_vorkerland_vad_joint_depth_plan = {
 		VAD_elect_district_commissars
 		VAD_merge_guard_and_worker_rolls
 		VAD_sign_the_dual_authority_protocol
+		VAD_invite_sol_delegation
+		VAD_dispatch_solland_liaison_mission
 		VAD_map_the_solar_corridors
 		VAD_preposition_restoration_columns
 		VAD_define_the_solar_settlement
@@ -1058,6 +1222,7 @@ ADISCORD_vorkerland_vad_imperial_variant_plan = {
 	}
 
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 		tag = VAD
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -1105,6 +1270,7 @@ ADISCORD_vorkerland_vad_joint_variant_plan = {
 	}
 
 	enable = {
+		has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 		tag = VAD
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -1141,9 +1307,36 @@ ADISCORD_vorkerland_vad_joint_variant_plan = {
 	weight = { factor = 4 }
 }
 
+ADISCORD_vorkerland_vad_joint_programme_plan = {
+	name = "VAD joint congress"
+	desc = ""
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = VAD
+		}
+	}
+	enable = {
+		is_ai = yes
+		VAD_joint_programme_context = yes
+		has_completed_focus = VAD_bind_crown_and_council
+		NOT = { has_completed_focus = VAD_convene_joint_congress }
+		NOT = { has_completed_focus = VAD_sign_joint_operational_orders }
+	}
+	abort = {
+		OR = {
+			VAD_joint_programme_context = no
+			has_completed_focus = VAD_convene_joint_congress
+			has_completed_focus = VAD_sign_joint_operational_orders
+		}
+	}
+	ai_national_focuses = { VAD_convene_joint_congress }
+	weight = { factor = 2 }
+}
+
 # ----------------------------------------------------------------------
-# The crowned restoration levies the estates, rebuilds an officer
-# caste and a guards corps, spends weeks on the coronation rites,
+# The imperial restoration levies the estates, rebuilds an officer
+# caste and a guards corps, grants district privileges,
 # and finishes the war by marching on the old capital.
 # ----------------------------------------------------------------------
 ADISCORD_vorkerland_vad_imperial_depth_plan = {
@@ -1165,7 +1358,7 @@ ADISCORD_vorkerland_vad_imperial_depth_plan = {
 		NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 		has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_vad_crowned_restoration
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital }
+		NOT = { has_completed_focus = VAD_march_on_the_old_capital }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1180,7 +1373,7 @@ ADISCORD_vorkerland_vad_imperial_depth_plan = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			NOT = { has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes } }
-			has_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital
+			has_completed_focus = VAD_march_on_the_old_capital
 		}
 	}
 
@@ -1189,14 +1382,10 @@ ADISCORD_vorkerland_vad_imperial_depth_plan = {
 		VAD_levy_the_crown_estates
 		VAD_doctrine_of_the_officer_estates
 		VAD_restore_the_guards_regiments
-		VAD_convene_the_court_of_honours
+
 		VAD_stage_the_coronation_rites
-		VAD_seek_legitimist_recognition
-		VAD_restore_the_restoration_air_arm
 		VAD_task_the_guards_for_close_support
-		VAD_open_the_foreign_chancery
 		VAD_issue_restoration_guarantees
-		VAD_hold_the_historic_capitals
 		VAD_march_on_the_old_capital
 	}
 
@@ -1204,9 +1393,9 @@ ADISCORD_vorkerland_vad_imperial_depth_plan = {
 }
 
 # ----------------------------------------------------------------------
-# The joint government protects the district markets, raises
-# council militias instead of a caste, mortgages the regalia when
-# it needs rifles now, and fortifies what it already holds.
+# The joint government protects district markets, raises council
+# militias, brings district delegations together, and fortifies
+# the territory it already holds.
 # ----------------------------------------------------------------------
 ADISCORD_vorkerland_vad_joint_depth_war_plan = {
 	name = "VAD joint war effort"
@@ -1227,7 +1416,7 @@ ADISCORD_vorkerland_vad_joint_depth_war_plan = {
 		has_global_flag = ADISCORD_vorkerland_joint_government_formed
 		has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_vad_crown_and_council
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line }
+		NOT = { has_completed_focus = VAD_fortify_the_restoration_line }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1242,7 +1431,7 @@ ADISCORD_vorkerland_vad_joint_depth_war_plan = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			NOT = { has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes } }
-			has_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line
+			has_completed_focus = VAD_fortify_the_restoration_line
 		}
 	}
 
@@ -1251,14 +1440,9 @@ ADISCORD_vorkerland_vad_joint_depth_war_plan = {
 		VAD_protect_the_district_markets
 		VAD_doctrine_of_the_district_levies
 		VAD_train_the_council_militias
-		VAD_convene_the_court_of_honours
-		VAD_mortgage_the_regalia
-		VAD_court_the_bracket_victors
-		VAD_restore_the_restoration_air_arm
+
 		VAD_cover_the_district_capitals
-		VAD_open_the_foreign_chancery
 		VAD_seat_the_observer_missions
-		VAD_hold_the_historic_capitals
 		VAD_fortify_the_restoration_line
 	}
 
@@ -1327,14 +1511,11 @@ ADISCORD_vorkerland_wkr_pragmatist_core_plan = {
 	}
 
 	enable = {
+		WKR_presidential_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-		has_government = pragmatism
-		has_country_leader_ideology = neo_vorkerism
-		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -1346,30 +1527,23 @@ ADISCORD_vorkerland_wkr_pragmatist_core_plan = {
 
 	abort = {
 		OR = {
+			WKR_presidential_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			NOT = { has_government = pragmatism }
-			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
 		}
 	}
 
 	ai_national_focuses = {
 		WKR_affirm_worker_mandate
-		WKR_establish_workers_air_command
-		WKR_raise_mobile_fortification_crews
+		WKR_convene_front_soviets
 		WKR_organize_factory_battalions
 		WKR_put_railways_under_councils
-		WKR_keep_frontline_sorties_flying
-		WKR_convene_front_soviets
 		WKR_train_shopfloor_officers
 		WKR_form_revolutionary_supply_commission
-		WKR_secure_the_southern_corridor
 		WKR_open_free_republics_channel
 		WKR_authorize_retreat_levies
 		WKR_reopen_collective_workshops
-		WKR_rehearse_operation_southbound
 		WKR_publish_emergency_constitution
 		WKR_coordinate_counterattack_cells
 		WKR_stockpile_interchange_reserves
@@ -1392,13 +1566,11 @@ ADISCORD_vorkerland_wkr_utilitarian_core_plan = {
 	}
 
 	enable = {
+		WKR_executive_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		has_government = utilitarism
-		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -1410,31 +1582,23 @@ ADISCORD_vorkerland_wkr_utilitarian_core_plan = {
 
 	abort = {
 		OR = {
+			WKR_executive_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			NOT = { has_government = utilitarism }
-			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
 		}
 	}
 
 	ai_national_focuses = {
 		WKR_affirm_worker_mandate
-		WKR_establish_workers_air_command
-		WKR_raise_mobile_fortification_crews
-		WKR_organize_factory_battalions
-		WKR_put_railways_under_councils
-		WKR_keep_frontline_sorties_flying
 		WKR_empower_front_executive
-		WKR_train_shopfloor_officers
-		WKR_form_revolutionary_supply_commission
-		WKR_secure_the_southern_corridor
-		WKR_authorize_normative_command
-		WKR_authorize_retreat_levies
-		WKR_reopen_collective_workshops
-		WKR_rehearse_operation_southbound
 		WKR_bind_workshops_to_directive
+		WKR_put_railways_under_councils
+		WKR_form_revolutionary_supply_commission
+		WKR_reopen_collective_workshops
+		WKR_organize_factory_battalions
+		WKR_train_shopfloor_officers
+		WKR_authorize_retreat_levies
 		WKR_coordinate_counterattack_cells
 		WKR_stockpile_interchange_reserves
 		WKR_settle_front_authority
@@ -1442,6 +1606,42 @@ ADISCORD_vorkerland_wkr_utilitarian_core_plan = {
 	}
 
 	weight = { factor = 3 }
+}
+
+# Air cover and the southern corridor follow the common mobilisation programme.
+ADISCORD_vorkerland_wkr_southern_preparation_plan = {
+	name = "WKR southern preparation"
+	desc = ""
+	allowed = {
+		OR = {
+			original_tag = WRK
+			original_tag = WKR
+		}
+	}
+	enable = {
+		tag = WKR
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
+		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_operation_southbound }
+		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = WKR }
+			has_country_flag = ADISCORD_vorkerland_focus_wkr_operation_southbound
+			has_global_flag = ADISCORD_vorkerland_central_war_finished
+			has_global_flag = ADISCORD_vorkerland_collapse_finished
+		}
+	}
+	ai_national_focuses = {
+		WKR_establish_workers_air_command
+		WKR_raise_mobile_fortification_crews
+		WKR_keep_frontline_sorties_flying
+		WKR_secure_the_southern_corridor
+		WKR_rehearse_operation_southbound
+	}
+	weight = { factor = 4 }
 }
 
 ADISCORD_vorkerland_wkr_solyarino_operation_plan = {
@@ -1504,29 +1704,24 @@ ADISCORD_vorkerland_wkr_pragmatist_showdown_plan = {
 	}
 
 	enable = {
+		WKR_presidential_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 		has_global_flag = ADISCORD_vorkerland_central_showdown_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-		has_government = pragmatism
-		has_country_leader_ideology = neo_vorkerism
-		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated }
 		has_war = yes
 	}
 
 	abort = {
 		OR = {
+			WKR_presidential_course = no
 			NOT = { tag = WKR }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			has_global_flag = ADISCORD_vorkerland_central_war_finished
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			NOT = { has_government = pragmatism }
-			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
 		}
 	}
@@ -1555,28 +1750,24 @@ ADISCORD_vorkerland_wkr_utilitarian_showdown_plan = {
 	}
 
 	enable = {
+		WKR_executive_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 		has_global_flag = ADISCORD_vorkerland_central_showdown_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
-		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		has_government = utilitarism
-		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated }
 		has_war = yes
 	}
 
 	abort = {
 		OR = {
+			WKR_executive_course = no
 			NOT = { tag = WKR }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 			has_global_flag = ADISCORD_vorkerland_central_war_finished
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			NOT = { has_government = utilitarism }
-			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_front_coordinated
 		}
 	}
@@ -1610,14 +1801,12 @@ ADISCORD_vorkerland_wkr_neo_vorkerist_variant_plan = {
 	}
 
 	enable = {
+		WKR_presidential_course = yes
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-		has_government = pragmatism
-		has_country_leader_ideology = neo_vorkerism
-		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_emergency_constitution
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate }
 		OR = {
@@ -1630,10 +1819,9 @@ ADISCORD_vorkerland_wkr_neo_vorkerist_variant_plan = {
 
 	abort = {
 		OR = {
+			WKR_presidential_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
 		}
 	}
@@ -1659,13 +1847,12 @@ ADISCORD_vorkerland_wkr_utilitarian_variant_plan = {
 	}
 
 	enable = {
+		WKR_executive_course = yes
+		has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		has_government = utilitarism
-		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
 		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic }
 		OR = {
@@ -1678,10 +1865,9 @@ ADISCORD_vorkerland_wkr_utilitarian_variant_plan = {
 
 	abort = {
 		OR = {
+			WKR_executive_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
 			has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
 		}
 	}
@@ -1712,14 +1898,13 @@ ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan = {
 	}
 
 	enable = {
+		WKR_presidential_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_chairmans_mandate
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward }
+		NOT = { has_completed_focus = WKR_throw_the_reserves_forward }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1730,11 +1915,10 @@ ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan = {
 
 	abort = {
 		OR = {
+			WKR_presidential_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-			NOT = { has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes } }
-			has_country_flag = ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward
+			has_completed_focus = WKR_throw_the_reserves_forward
 		}
 	}
 
@@ -1746,11 +1930,8 @@ ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan = {
 		WKR_seat_the_factory_councils
 		WKR_requisition_in_the_republics_name
 		WKR_arm_the_bracket_victors
-		WKR_form_the_republican_air_staff
 		WKR_commit_shopfloor_squadrons
-		WKR_open_the_external_desk
 		WKR_send_republican_volunteers
-		WKR_the_last_levy
 		WKR_throw_the_reserves_forward
 	}
 
@@ -1774,14 +1955,13 @@ ADISCORD_vorkerland_wkr_utilitarian_depth_plan = {
 	}
 
 	enable = {
+		WKR_executive_course = yes
 		tag = WKR
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-		NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 		has_country_flag = ADISCORD_vorkerland_focus_wkr_normative_republic
-		NOT = { has_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange }
+		NOT = { has_completed_focus = WKR_dig_in_along_the_interchange }
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_collapse
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1792,11 +1972,10 @@ ADISCORD_vorkerland_wkr_utilitarian_depth_plan = {
 
 	abort = {
 		OR = {
+			WKR_executive_course = no
 			NOT = { tag = WKR }
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-			NOT = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
-			has_country_flag = ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange
+			has_completed_focus = WKR_dig_in_along_the_interchange
 		}
 	}
 
@@ -1808,11 +1987,8 @@ ADISCORD_vorkerland_wkr_utilitarian_depth_plan = {
 		WKR_seat_the_factory_councils
 		WKR_publish_the_production_returns
 		WKR_seek_outside_recognition
-		WKR_form_the_republican_air_staff
 		WKR_screen_the_interchange_sky
-		WKR_open_the_external_desk
 		WKR_license_outside_patterns
-		WKR_the_last_levy
 		WKR_dig_in_along_the_interchange
 	}
 
@@ -1890,6 +2066,9 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
+		WRK_district_emergency_powers
+		WRK_district_treasuries
+		WRK_last_common_budget
 		WRK_reopen_emergency_workshops
 		WRK_preserve_machine_tools
 		WRK_collect_officer_returns
@@ -1922,6 +2101,9 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
+		WRK_emergency_central_budget
+		WRK_requisition_commissions
+		WRK_last_common_budget
 		WRK_reopen_emergency_workshops
 		WRK_prioritize_arsenal_output
 		WRK_collect_officer_returns
@@ -2263,8 +2445,14 @@ ADISCORD_vorkerland_world_empire_plan = {
 	enable = {
 		is_ai = yes
 		ADISCORD_vorkerland_world_empire_active = yes
+		ADISCORD_vorkerland_petrichev_empire = no
 	}
-	abort = { ADISCORD_vorkerland_world_empire_active = no }
+	abort = {
+		OR = {
+			ADISCORD_vorkerland_world_empire_active = no
+			ADISCORD_vorkerland_petrichev_empire = yes
+		}
+	}
 	# One alternative of each exclusive pair: the AI arms quickly for the war,
 	# keeps the officer corps away from a coup and courts the former districts.
 	ai_national_focuses = {
@@ -2289,6 +2477,42 @@ ADISCORD_vorkerland_world_empire_plan = {
 		WRK_empire_imperial_census
 		WRK_empire_state_union
 		WRK_empire_saved_chairman_cult
+		WRK_empire_imperial_peace
+		WRK_empire_tower_coronation
+		WRK_empire_veyran_order
+	}
+	weight = { factor = 100 }
+}
+
+ADISCORD_vorkerland_petrichev_empire_plan = {
+	name = "WRK imperial restoration"
+	desc = ""
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		ADISCORD_vorkerland_petrichev_empire = yes
+	}
+	abort = { ADISCORD_vorkerland_petrichev_empire = no }
+	ai_national_focuses = {
+		WRK_empire_after_the_tribunal
+		WRK_empire_crown_service
+		WRK_empire_crown_charter
+		WRK_empire_military_conventions
+		WRK_empire_district_guarantees
+		WRK_empire_staff_without_petrishchev
+		WRK_empire_imperial_treasury
+		WRK_empire_imperial_works
+		WRK_empire_building_offices
+		WRK_empire_guard_legions
+		WRK_empire_legions_of_the_west
+		WRK_empire_garrison_compact
+		WRK_empire_war_economy
+		WRK_empire_itora_operational_plan
+		WRK_empire_itora_must_fall
+		WRK_empire_imperial_governors
+		WRK_empire_civil_governors
+		WRK_empire_imperial_census
+		WRK_empire_imperial_air_command
 		WRK_empire_imperial_peace
 		WRK_empire_tower_coronation
 		WRK_empire_veyran_order

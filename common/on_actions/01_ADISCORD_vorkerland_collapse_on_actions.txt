@@ -66,18 +66,7 @@ on_actions = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 				}
 				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
-			}
-		}
-	}
-	on_monthly_TVA = {
-		effect = {
-			if = {
-				limit = {
-					ADISCORD_vorkerland_is_live_claimant = yes
-					has_global_flag = ADISCORD_vorkerland_collapse_started
-					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-				}
-				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+				VAD_monthly_district_unrest = yes
 			}
 		}
 	}
@@ -303,6 +292,43 @@ on_actions = {
 		effect = {
 			if = {
 				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+				if = {
+					limit = {
+						ROOT = {
+							ADISCORD_vorkerland_petrichev_empire = yes
+							has_completed_focus = WRK_empire_officer_estates
+						}
+						FROM.FROM = {
+							is_core_of = WRK
+							is_owned_and_controlled_by = WRK
+							has_state_flag = WRK_empire_governor_seat
+							NOT = { has_dynamic_modifier = { modifier = WRK_empire_officer_estate } }
+						}
+					}
+					FROM.FROM = { ADISCORD_vorkerland_empire_grant_estate = yes }
+				}
+				if = {
+					limit = {
+						FROM.FROM = {
+							OR = {
+								has_state_flag = WKR_railway_in_progress
+								has_dynamic_modifier = { modifier = WKR_railway_council }
+							}
+						}
+					}
+					FROM.FROM = { WKR_lose_railway_council = yes }
+				}
+				if = {
+					limit = {
+						FROM.FROM = {
+							OR = {
+								has_state_flag = VAD_oath_in_progress
+								has_state_flag = ADISCORD_vorkerland_vad_district_oath
+							}
+						}
+					}
+					FROM.FROM = { VAD_lose_district_administration = yes }
+				}
 				if = {
 					limit = {
 						ROOT = { tag = RUS }

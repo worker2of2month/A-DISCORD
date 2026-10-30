@@ -2501,6 +2501,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_claimant.15",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 15,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_claimant.20",
       "namespace": "ADISCORD_vorkerland_claimant",
       "number": 20,
@@ -2541,6 +2549,46 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_claimant.25",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 25,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.26",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 26,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.27",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 27,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.28",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 28,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.29",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 29,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_claimant.30",
       "namespace": "ADISCORD_vorkerland_claimant",
       "number": 30,
@@ -2560,6 +2608,14 @@
       "id": "ADISCORD_vorkerland_claimant.32",
       "namespace": "ADISCORD_vorkerland_claimant",
       "number": 32,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant_focus",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.33",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 33,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_claimant_focus",
       "status": "active"
@@ -3197,6 +3253,46 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_diplomacy.17",
+      "namespace": "ADISCORD_vorkerland_diplomacy",
+      "number": 17,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_diplomacy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_diplomacy.18",
+      "namespace": "ADISCORD_vorkerland_diplomacy",
+      "number": 18,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_diplomacy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_diplomacy.19",
+      "namespace": "ADISCORD_vorkerland_diplomacy",
+      "number": 19,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_diplomacy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_diplomacy.20",
+      "namespace": "ADISCORD_vorkerland_diplomacy",
+      "number": 20,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_diplomacy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_diplomacy.21",
+      "namespace": "ADISCORD_vorkerland_diplomacy",
+      "number": 21,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_diplomacy",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_phase.1",
       "namespace": "ADISCORD_vorkerland_phase",
       "number": 1,
@@ -3480,6 +3576,54 @@
       "id": "ADISCORD_vorkerland_story.43",
       "namespace": "ADISCORD_vorkerland_story",
       "number": 43,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.44",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 44,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.45",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 45,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.46",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 46,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.47",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 47,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.48",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 48,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_story.49",
+      "namespace": "ADISCORD_vorkerland_story",
+      "number": 49,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_story",
       "status": "active"
@@ -7786,6 +7930,30 @@
       "number": 41,
       "owner": "events/ADISCORD_RUS_events.txt",
       "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.5",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 5,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_claimant.6",
+      "namespace": "ADISCORD_vorkerland_claimant",
+      "number": 6,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_claimant",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.110",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 110,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
       "status": "active"
     }
   ]

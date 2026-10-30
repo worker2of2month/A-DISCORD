@@ -31,7 +31,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 33
+		x = 44
 		y = 7
 		cost = 1
 		allow_branch = {
@@ -57,6 +57,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_joint_charter }
 		completion_reward = {
+			unlock_decision_tooltip = VAD_give_the_staff_priority
+			unlock_decision_tooltip = VAD_hear_the_district_petitions
 			add_political_power = 15
 			add_stability = 0.02
 			add_manpower = 250
@@ -77,14 +79,17 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 8
+		x = 2
 		y = 1
 		relative_position_id = VAD_proclaim_joint_charter
 		cost = 2
 		prerequisite = { focus = VAD_proclaim_joint_charter }
+		mutually_exclusive = {
+			focus = VAD_form_field_commandantures
+			focus = VAD_convene_collegial_staff
+		}
 		allow_branch = {
 			tag = VAD
-			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -93,19 +98,26 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_imperial_mandate_available_tt
+				VAD_administration_active = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
 			}
 		}
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened }
 		completion_reward = {
+			custom_effect_tooltip = VAD_imperial_mandate_chosen_tt
+			add_power_balance_value = { id = VAD_bop value = 0.10 }
 			add_command_power = 10
 			unlock_decision_tooltip = ADISCORD_vorkerland_vad_grant_district_charter
+			custom_effect_tooltip = VAD_charter_unlock_tt
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_imperial_registers days = 70 }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_registers_opened
@@ -127,14 +139,17 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = -3
+		x = -6
 		y = 1
 		relative_position_id = VAD_proclaim_joint_charter
 		cost = 2
 		prerequisite = { focus = VAD_proclaim_joint_charter }
+		mutually_exclusive = {
+			focus = VAD_open_imperial_registers
+			focus = VAD_convene_collegial_staff
+		}
 		allow_branch = {
 			tag = VAD
-			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -143,21 +158,31 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_joint_mandate_available_tt
+				VAD_administration_active = yes
+				has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+				NOT = { has_completed_focus = VAD_open_imperial_registers }
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
 			}
 		}
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed }
 		completion_reward = {
+			custom_effect_tooltip = VAD_joint_mandate_chosen_tt
+			hidden_effect = { ADISCORD_vorkerland_form_joint_government = yes }
+			add_power_balance_value = { id = VAD_bop value = -0.10 }
 			unlock_decision_tooltip = VAD_form_field_commandantures_activate_plan
 			army_experience = 5
 			unlock_decision_tooltip = ADISCORD_vorkerland_vad_impose_commandant_rule
+			unlock_decision_tooltip = VAD_restore_district_order
+			unlock_decision_tooltip = VAD_withdraw_district_commandant
+			custom_effect_tooltip = VAD_commandant_unlock_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_commandantures_formed
 			}
@@ -189,6 +214,7 @@ focus_tree = {
 		prerequisite = {
 			focus = VAD_open_imperial_registers
 			focus = VAD_form_field_commandantures
+			focus = VAD_convene_collegial_staff
 		}
 		allow_branch = {
 			tag = VAD
@@ -229,7 +255,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = -7
+		x = -12
 		y = 1
 		relative_position_id = VAD_proclaim_joint_charter
 		cost = 2
@@ -254,6 +280,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_mobile_headquarters }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = -0.10 }
 			add_command_power = 20
 			army_experience = 20
 			hidden_effect = {
@@ -320,7 +347,7 @@ focus_tree = {
 			FOCUS_FILTER_RESEARCH
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 1
+		x = 8
 		y = 1
 		relative_position_id = VAD_proclaim_joint_charter
 		cost = 2
@@ -371,7 +398,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = VAD_inventory_eastern_works
-		cost = 3
+		cost = 2
 		prerequisite = { focus = VAD_inventory_eastern_works }
 		allow_branch = {
 			tag = VAD
@@ -415,7 +442,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = VAD_establish_mobile_headquarters
-		cost = 3
+		cost = 2
 		prerequisite = { focus = VAD_establish_mobile_headquarters }
 		allow_branch = {
 			tag = VAD
@@ -468,7 +495,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = VAD_standardize_district_logistics
-		cost = 3
+		cost = 2
 		prerequisite = { focus = VAD_standardize_district_logistics }
 		allow_branch = {
 			tag = VAD
@@ -520,7 +547,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 4
+		x = 0
 		y = 1
 		relative_position_id = VAD_open_imperial_registers
 		cost = 2
@@ -528,6 +555,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -552,6 +580,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.10 }
 			add_political_power = 25
 			custom_effect_tooltip = ADISCORD_vorkerland_vad_charter_slots_tt
 			add_stability = 0.03
@@ -576,6 +605,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -600,6 +630,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.15 }
 			army_experience = 20
 			add_command_power = 10
 			hidden_effect = {
@@ -649,6 +680,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.15 }
 			add_political_power = 40
 			add_stability = 0.04
 			hidden_effect = {
@@ -697,6 +729,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = -0.05 }
 			army_experience = 20
 			add_command_power = 10
 			hidden_effect = {
@@ -719,6 +752,7 @@ focus_tree = {
 		prerequisite = {
 			focus = VAD_bind_officers_to_chancery
 			focus = VAD_ratify_joint_command
+			focus = VAD_codify_staff_mandate
 		}
 		allow_branch = {
 			tag = VAD
@@ -763,11 +797,10 @@ focus_tree = {
 			FOCUS_FILTER_POLITICAL
 		}
 		x = 0
-		y = 1
+		y = 2
 		relative_position_id = VAD_settle_restoration_authority
-		cost = 4
+		cost = 3
 		prerequisite = { focus = VAD_settle_restoration_authority }
-		prerequisite = { focus = VAD_dispatch_solland_liaison_mission }
 		prerequisite = { focus = VAD_assemble_joint_general_staff }
 		prerequisite = { focus = VAD_reopen_armament_depots }
 		allow_branch = {
@@ -801,7 +834,6 @@ focus_tree = {
 			army_experience = 5
 			add_equipment_to_stockpile = { type = support_equipment amount = 75 producer = VAD }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_balanced_command
 				set_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked
 				set_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
 				country_event = { id = ADISCORD_vorkerland_claimant.31 hours = 1 }
@@ -818,9 +850,9 @@ focus_tree = {
 			FOCUS_FILTER_ARMY_XP
 		}
 		x = 0
-		y = 2
+		y = 1
 		relative_position_id = VAD_reconstitute_district_guard
-		cost = 3
+		cost = 2
 		prerequisite = { focus = VAD_reconstitute_district_guard }
 		allow_branch = {
 			tag = VAD
@@ -861,6 +893,192 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAD_convene_collegial_staff
+		icon = GFX_focus_VAD_convene_collegial_staff
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = -10
+		y = 1
+		relative_position_id = VAD_proclaim_joint_charter
+		cost = 2
+		prerequisite = { focus = VAD_proclaim_joint_charter }
+		mutually_exclusive = {
+			focus = VAD_open_imperial_registers
+			focus = VAD_form_field_commandantures
+		}
+		allow_branch = {
+			tag = VAD
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_collapse
+				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_collegial_mandate_available_tt
+				VAD_administration_active = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+				NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAD_collegial_mandate_chosen_tt
+			unlock_decision_tooltip = ADISCORD_vorkerland_vad_impose_commandant_rule
+			unlock_decision_tooltip = VAD_restore_district_order
+			unlock_decision_tooltip = VAD_withdraw_district_commandant
+			custom_effect_tooltip = VAD_commandant_unlock_tt
+			hidden_effect = { VAD_form_collegial_staff = yes }
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = VAD_require_collective_directives
+		icon = GFX_focus_VAD_require_collective_directives
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = VAD_convene_collegial_staff
+		cost = 2
+		prerequisite = { focus = VAD_convene_collegial_staff }
+		mutually_exclusive = { focus = VAD_delegate_to_front_commands }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_collapse
+				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_collegial_government_active_tt
+				VAD_collegial_administration_active = yes
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = VAD_staff_rotation_programme
+			custom_effect_tooltip = VAD_staff_rotation_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = VAD_delegate_to_front_commands
+		icon = GFX_focus_VAD_delegate_to_front_commands
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 2
+		y = 1
+		relative_position_id = VAD_convene_collegial_staff
+		cost = 2
+		prerequisite = { focus = VAD_convene_collegial_staff }
+		mutually_exclusive = { focus = VAD_require_collective_directives }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_collapse
+				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_collegial_government_active_tt
+				VAD_collegial_administration_active = yes
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = VAD_staff_depot_programme
+			custom_effect_tooltip = VAD_staff_depot_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = VAD_codify_staff_mandate
+		icon = GFX_focus_VAD_codify_staff_mandate
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 0
+		y = 1
+		relative_position_id = VAD_require_collective_directives
+		cost = 2
+		prerequisite = {
+			focus = VAD_require_collective_directives
+			focus = VAD_delegate_to_front_commands
+		}
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_collapse
+				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_collegial_government_active_tt
+				VAD_collegial_administration_active = yes
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { has_completed_focus = VAD_require_collective_directives }
+				effect_tooltip = { add_ideas = VAD_staff_collective_delta }
+			}
+			else = {
+				effect_tooltip = { add_ideas = VAD_staff_delegation_delta }
+			}
+			custom_effect_tooltip = VAD_staff_mandate_survives_tt
+			hidden_effect = { VAD_ratify_collegial_mandate = yes }
+		}
+		ai_will_do = { base = 60 }
+	}
+
 	# Vlad's court-and-warrant programme is optional depth. It strengthens the
 	# restoration claimant without becoming a prerequisite of the central capstone.
 	focus = {
@@ -870,7 +1088,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 1
+		x = 2
 		y = 1
 		relative_position_id = VAD_bind_officers_to_chancery
 		cost = 2
@@ -878,6 +1096,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -916,8 +1135,6 @@ focus_tree = {
 		icon = GFX_focus_VAD_issue_crown_mobilization_warrants
 		search_filters = {
 			FOCUS_FILTER_MANPOWER
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_STABILITY
 		}
 		x = 0
 		y = 1
@@ -927,6 +1144,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -936,6 +1154,10 @@ focus_tree = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_crown_recruitment_site_tt
+				any_owned_state = { VAD_crown_recruitment_site = yes }
+			}
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
@@ -948,25 +1170,17 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants }
 		completion_reward = {
-			add_manpower = 1500
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = VAD }
-			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = VAD }
-			add_command_power = 5
-			if = {
-				limit = { has_country_flag = ADISCORD_vorkerland_vad_crown_warrants }
-				add_stability = 0.01
-			}
-			else_if = {
-				limit = { has_country_flag = ADISCORD_vorkerland_vad_chancery_command }
-				army_experience = 5
-			}
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants
+			unlock_decision_tooltip = VAD_crown_district_recruitment
+			custom_effect_tooltip = VAD_crown_recruitment_unlock_tt
+		}
+		ai_will_do = {
+			base = 85
+			modifier = {
+				factor = 2
+				has_manpower < 12000
 			}
 		}
-		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -985,6 +1199,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -1079,8 +1294,6 @@ focus_tree = {
 		icon = GFX_focus_VAD_merge_guard_and_worker_rolls
 		search_filters = {
 			FOCUS_FILTER_MANPOWER
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_STABILITY
 		}
 		x = 0
 		y = 1
@@ -1100,6 +1313,10 @@ focus_tree = {
 			}
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_joint_recruitment_site_tt
+				any_owned_state = { VAD_joint_recruitment_site = yes }
+			}
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
@@ -1113,24 +1330,17 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls }
 		completion_reward = {
-			add_manpower = 1500
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = VAD }
-			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = VAD }
-			if = {
-				limit = { has_country_flag = ADISCORD_vorkerland_vad_joint_civil_guarantees }
-				add_stability = 0.01
-			}
-			else_if = {
-				limit = { has_country_flag = ADISCORD_vorkerland_vad_joint_staff_primacy }
-				army_experience = 5
-			}
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls
+			unlock_decision_tooltip = VAD_joint_district_recruitment
+			custom_effect_tooltip = VAD_joint_recruitment_unlock_tt
+		}
+		ai_will_do = {
+			base = 85
+			modifier = {
+				factor = 2
+				has_manpower < 12000
 			}
 		}
-		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -1285,8 +1495,8 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -1
-		y = 1
+		x = 2
+		y = 2
 		relative_position_id = VAD_preposition_restoration_columns
 		cost = 5
 		prerequisite = { focus = VAD_preposition_restoration_columns }
@@ -1318,7 +1528,15 @@ focus_tree = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined }
+		bypass = {
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_focus_vad_solar_settlement_defined
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_vorkerland_vad_solar_window_closed_tt
+					has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				}
+			}
+		}
 		completion_reward = {
 			ADISCORD_vorkerland_record_regional_diplomacy_outcomes = yes
 			hidden_effect = {
@@ -1336,7 +1554,7 @@ focus_tree = {
 			FOCUS_FILTER_ANNEXATION
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = -1
+		x = 18
 		y = 1
 		relative_position_id = VAD_proclaim_joint_charter
 		cost = 3
@@ -1404,7 +1622,7 @@ focus_tree = {
 	# cheap war goals and better standing with anyone who prefers a legitimist
 	# Vorkerland to a revolutionary one.
 	#
-	# Joint line (ADISCORD_vorkerland_joint_government_formed, the rare roll).
+	# Joint line after the council takes office.
 	# The rescued chairman and the district guard govern together. Play
 	# pattern: trade command quality and political power for reach - broad
 	# conscription, high stability, a surrender limit that makes the state very
@@ -1419,7 +1637,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -1
+		x = 0
 		y = 1
 		relative_position_id = VAD_bind_officers_to_chancery
 		cost = 2
@@ -1428,6 +1646,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1447,6 +1666,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_imperial_mandate }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = -0.20 }
 			add_ideas = ADISCORD_vorkerland_vad_imperial_mandate
 			add_political_power = 25
 			add_stability = -0.02
@@ -1478,6 +1698,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1525,6 +1746,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -1595,6 +1817,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_dual_chamber }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.20 }
 			add_ideas = ADISCORD_vorkerland_vad_dual_chamber
 			add_stability = 0.03
 			add_war_support = 0.03
@@ -1722,8 +1945,8 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 2
-		y = 1
+		x = 0
+		y = 2
 		relative_position_id = VAD_preposition_restoration_columns
 		cost = 2
 		prerequisite = {
@@ -1765,7 +1988,7 @@ focus_tree = {
 			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 2
+		x = 1
 		y = 1
 		relative_position_id = VAD_reconcile_emergency_district_rolls
 		cost = 3
@@ -1855,7 +2078,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = VAD_restore_eastern_supply_corridors
 		cost = 4
@@ -1958,6 +2181,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			has_global_flag = ADISCORD_vorkerland_central_showdown_started
@@ -2067,7 +2291,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 0
+		x = -1
 		y = 1
 		relative_position_id = VAD_seat_front_commissars
 		cost = 3
@@ -2185,7 +2409,7 @@ focus_tree = {
 			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 19
+		x = 2
 		y = 1
 		relative_position_id = VAD_reopen_armament_depots
 		cost = 2
@@ -2210,6 +2434,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_restoration_treasury }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.10 }
 			effect_tooltip = { add_ideas = ADISCORD_vorkerland_vad_war_economy_dummy }
 			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
 			add_political_power = 20
@@ -2257,6 +2482,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_levy_the_crown_estates }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = -0.10 }
 			add_manpower = 500
 			add_stability = -0.03
 			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_vad_war_economy_dummy add_idea = ADISCORD_vorkerland_vad_war_economy_levy } }
@@ -2305,6 +2531,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_protect_the_district_markets }
 		completion_reward = {
+			add_power_balance_value = { id = VAD_bop value = 0.10 }
 			add_stability = 0.03
 			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_vad_war_economy_dummy add_idea = ADISCORD_vorkerland_vad_war_economy_markets } }
 			add_political_power = 15
@@ -2343,6 +2570,7 @@ focus_tree = {
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2350,28 +2578,32 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_guards_doctrine_context_tt
+				VAD_guards_context = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_officer_estates }
+
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_vad_doctrine_officer_estates
-			army_experience = 10
-			add_command_power = 10
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_vad_doctrine_officer_estates }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_officer_estates
+				set_variable = { var = VAD_doctrine_experience_gain_army_factor value = 0.15 }
+				set_variable = { var = VAD_doctrine_army_leader_start_level value = 1 }
+				set_variable = { var = VAD_doctrine_planning_speed value = 0.10 }
+				set_variable = { var = VAD_doctrine_conscription value = -0.015 }
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
 			}
 		}
 		ai_will_do = {
 			base = 110
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
@@ -2379,17 +2611,18 @@ focus_tree = {
 		id = VAD_restore_the_guards_regiments
 		icon = GFX_focus_VAD_restore_the_guards_regiments
 		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_MANPOWER
+			FOCUS_FILTER_MILITARY_CHARACTER
 		}
 		x = 0
 		y = 1
 		relative_position_id = VAD_doctrine_of_the_officer_estates
-		cost = 4
+		cost = 3
 		prerequisite = { focus = VAD_doctrine_of_the_officer_estates }
 		allow_branch = {
 			tag = VAD
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2397,27 +2630,31 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
 			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_guards_doctrine_context_tt
+				VAD_guards_context = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_guards_focus_site_tt
+				any_owned_state = { VAD_guards_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_guards_regiments }
+
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_vad_doctrine_guards_regiments
-			add_war_support = 0.03
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_guards_regiments
-			}
+			unlock_decision_tooltip = VAD_guards_programme
+			custom_effect_tooltip = VAD_guards_unlock_tt
+			hidden_effect = { VAD_lock_guards_template = yes }
 		}
 		ai_will_do = {
 			base = 105
-			modifier = { factor = 2 surrender_progress < 0.30 }
+			modifier = {
+				factor = 2
+				surrender_progress < 0.30
+			}
 		}
 	}
 
@@ -2443,27 +2680,32 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
 			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_local_militia_doctrine_context_tt
+				VAD_local_militia_context = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_district_levies }
+
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_vad_doctrine_district_levies
-			add_manpower = 500
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_vad_doctrine_district_levies }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_doctrine_of_the_district_levies
+				set_variable = { var = VAD_doctrine_conscription value = 0.025 }
+				set_variable = { var = VAD_doctrine_training_time_army_factor value = -0.20 }
+				set_variable = { var = VAD_doctrine_army_org_factor value = -0.04 }
+				set_variable = { var = VAD_doctrine_experience_gain_army_factor value = -0.10 }
+				ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes
 			}
 		}
 		ai_will_do = {
 			base = 110
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
@@ -2477,7 +2719,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = VAD_doctrine_of_the_district_levies
-		cost = 4
+		cost = 3
 		prerequisite = { focus = VAD_doctrine_of_the_district_levies }
 		allow_branch = {
 			tag = VAD
@@ -2489,91 +2731,47 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
 			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_local_militia_doctrine_context_tt
+				VAD_local_militia_context = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_local_militia_focus_site_tt
+				any_owned_state = { VAD_local_militia_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_train_the_council_militias }
+
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_vad_doctrine_council_militias
-			add_stability = 0.03
-			army_experience = 6
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_train_the_council_militias
-			}
+			unlock_decision_tooltip = VAD_local_militia_programme
+			custom_effect_tooltip = VAD_local_militia_unlock_tt
 		}
 		ai_will_do = {
 			base = 105
-			modifier = { factor = 2 has_manpower < 25000 }
+			modifier = {
+				factor = 2
+				has_manpower < 25000
+			}
 		}
 	}
 
 	# ---------------------------------------------------------------------
-	# VAD late war: opens once the war has run eighteen months.
-	#
-	# The restoration's late war is about the historic capitals. Hold them
-	# and the state is legitimate; then either march on the old capital or
-	# fortify what the restoration already owns.
-	# ---------------------------------------------------------------------
-
-	focus = {
-		id = VAD_hold_the_historic_capitals
-		icon = GFX_focus_VAD_hold_the_historic_capitals
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = 2
-		y = 1
-		relative_position_id = VAD_balance_council_and_command
-		cost = 3
-		prerequisite = { focus = VAD_balance_council_and_command }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_hold_the_historic_capitals }
-		completion_reward = {
-			add_war_support = 0.03
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_hold_the_historic_capitals
-			}
-		}
-		ai_will_do = {
-			base = 120
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# District resources support either the central offensive or urban fortifications.
 
 	focus = {
 		id = VAD_march_on_the_old_capital
 		icon = GFX_focus_VAD_march_on_the_old_capital
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = -1
+		x = -9
 		y = 1
-		relative_position_id = VAD_hold_the_historic_capitals
+		relative_position_id = VAD_balance_council_and_command
 		cost = 3
-		prerequisite = { focus = VAD_hold_the_historic_capitals }
+		prerequisite = { focus = VAD_balance_council_and_command }
 		mutually_exclusive = { focus = VAD_fortify_the_restoration_line }
 		allow_branch = {
 			tag = VAD
@@ -2584,22 +2782,33 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_final_operations_context_tt
+				VAD_final_operations_context = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_district_march_site_tt
+				any_owned_state = { VAD_district_march_site = yes }
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital }
+
 		completion_reward = {
-			unlock_decision_tooltip = VAD_march_on_the_old_capital_activate_plan
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_march_on_the_old_capital
-			}
+			unlock_decision_tooltip = VAD_district_march_programme
+			custom_effect_tooltip = VAD_district_march_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
-			modifier = { factor = 2.5 surrender_progress < 0.20 }
-			modifier = { factor = 0.3 surrender_progress > 0.45 }
+			modifier = {
+				factor = 2.5
+				surrender_progress < 0.20
+			}
+			modifier = {
+				factor = 0.3
+				surrender_progress > 0.45
+			}
 		}
 	}
 
@@ -2607,14 +2816,14 @@ focus_tree = {
 		id = VAD_fortify_the_restoration_line
 		icon = GFX_focus_VAD_fortify_the_restoration_line
 		search_filters = {
-			FOCUS_FILTER_STABILITY
+			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 1
+		x = -7
 		y = 1
-		relative_position_id = VAD_hold_the_historic_capitals
+		relative_position_id = VAD_balance_council_and_command
 		cost = 3
-		prerequisite = { focus = VAD_hold_the_historic_capitals }
+		prerequisite = { focus = VAD_balance_council_and_command }
 		mutually_exclusive = { focus = VAD_march_on_the_old_capital }
 		allow_branch = {
 			tag = VAD
@@ -2625,77 +2834,39 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_final_operations_context_tt
+				VAD_final_operations_context = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_city_redoubts_site_tt
+				any_owned_state = { VAD_city_redoubts_site = yes }
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line }
+
 		completion_reward = {
-			unlock_decision_tooltip = VAD_fortify_the_restoration_line_activate_plan
-			add_stability = 0.03
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line
-			}
+			unlock_decision_tooltip = VAD_city_redoubts_programme
+			custom_effect_tooltip = VAD_city_redoubts_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
-			modifier = { factor = 2.5 surrender_progress > 0.40 }
-			modifier = { factor = 0.3 surrender_progress < 0.20 }
+			modifier = {
+				factor = 2.5
+				surrender_progress > 0.40
+			}
+			modifier = {
+				factor = 0.3
+				surrender_progress < 0.20
+			}
 		}
 	}
 
-	# ---------------------------------------------------------------------
-	# VAD legitimacy: earn it slowly or spend it for a battlefield.
-	#
-	# Restoration legitimacy is ceremonial and territorial. The court of
-	# honours opens it; the coronation rites pay in time and require the
-	# old capital, while mortgaging the regalia pays in legitimacy itself.
-	# ---------------------------------------------------------------------
+	# Industrial crown districts: local privileges or military collateral.
 
-	focus = {
-		id = VAD_convene_the_court_of_honours
-		icon = GFX_focus_VAD_convene_the_court_of_honours
-		search_filters = {
-			FOCUS_FILTER_POLITICAL
-			FOCUS_FILTER_POLITICAL_CHARACTER
-		}
-		x = 15
-		y = 1
-		relative_position_id = VAD_proclaim_joint_charter
-		cost = 2
-		prerequisite = { focus = VAD_proclaim_joint_charter }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_court_of_honours }
-		completion_reward = {
-			add_political_power = 15
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_convene_the_court_of_honours
-			}
-		}
-		ai_will_do = {
-			base = 80
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+
 
 	focus = {
 		id = VAD_stage_the_coronation_rites
@@ -2704,13 +2875,15 @@ focus_tree = {
 			FOCUS_FILTER_POLITICAL
 			FOCUS_FILTER_STABILITY
 		}
-		x = -1
+		x = 4
 		y = 1
-		relative_position_id = VAD_convene_the_court_of_honours
-		cost = 4
-		prerequisite = { focus = VAD_convene_the_court_of_honours }
+		relative_position_id = VAD_bind_officers_to_chancery
+		cost = 3
+		prerequisite = { focus = VAD_bind_officers_to_chancery }
 		mutually_exclusive = { focus = VAD_mortgage_the_regalia }
 		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			tag = VAD
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -2720,23 +2893,27 @@ focus_tree = {
 			}
 		}
 		available = {
-			controls_state = 36
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_crown_government_tt
+				VAD_crown_government_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_crown_industrial_district_tt
+				any_owned_state = { VAD_crown_industrial_district = yes }
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_stage_the_coronation_rites }
 		completion_reward = {
-			add_stability = 0.03
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_stage_the_coronation_rites
-			}
+			unlock_decision_tooltip = VAD_crown_privileges_programme
+			custom_effect_tooltip = VAD_crown_privileges_unlock_tt
 		}
 		ai_will_do = {
 			base = 95
@@ -2752,13 +2929,15 @@ focus_tree = {
 			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 1
+		x = 6
 		y = 1
-		relative_position_id = VAD_convene_the_court_of_honours
-		cost = 2
-		prerequisite = { focus = VAD_convene_the_court_of_honours }
+		relative_position_id = VAD_bind_officers_to_chancery
+		cost = 3
+		prerequisite = { focus = VAD_bind_officers_to_chancery }
 		mutually_exclusive = { focus = VAD_stage_the_coronation_rites }
 		allow_branch = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
 			tag = VAD
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
@@ -2768,23 +2947,27 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_crown_government_tt
+				VAD_crown_government_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_crown_industrial_district_tt
+				any_owned_state = { VAD_crown_industrial_district = yes }
+			}
+			hidden_trigger = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_mortgage_the_regalia }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAD }
-			add_command_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_mortgage_the_regalia
-			}
+			unlock_decision_tooltip = VAD_crown_collateral_programme
+			custom_effect_tooltip = VAD_crown_collateral_unlock_tt
 		}
 		ai_will_do = {
 			base = 90
@@ -2794,166 +2977,19 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# VAD diplomacy: the bracket winners and the outside powers.
-	#
-	# The restoration can court a local bracket winner into its coalition
-	# or spend its effort seeking legitimist recognition abroad. Skippable
-	# if the eastern front is already decided.
-	# ---------------------------------------------------------------------
-
-	focus = {
-		id = VAD_court_the_bracket_victors
-		icon = GFX_focus_VAD_court_the_bracket_victors
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_POLITICAL
-		}
-		x = 18
-		y = 1
-		relative_position_id = VAD_proclaim_joint_charter
-		cost = 3
-		prerequisite = { focus = VAD_proclaim_joint_charter }
-		mutually_exclusive = { focus = VAD_seek_legitimist_recognition }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_court_the_bracket_victors }
-		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_vad_bracket_patronage days = 70 }
-			add_political_power = 15
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_court_the_bracket_victors
-			}
-		}
-		ai_will_do = {
-			base = 60
-			modifier = { factor = 2 has_war = yes }
-			modifier = { factor = 0.5 surrender_progress > 0.50 }
-		}
-	}
-
-	focus = {
-		id = VAD_seek_legitimist_recognition
-		icon = GFX_focus_VAD_seek_legitimist_recognition
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_POLITICAL
-		}
-		x = 20
-		y = 1
-		relative_position_id = VAD_proclaim_joint_charter
-		cost = 3
-		prerequisite = { focus = VAD_proclaim_joint_charter }
-		mutually_exclusive = { focus = VAD_court_the_bracket_victors }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_seek_legitimist_recognition }
-		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_vad_legitimist_recognition days = 70 }
-			add_political_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_seek_legitimist_recognition
-			}
-		}
-		ai_will_do = {
-			base = 55
-			modifier = { factor = 2 has_stability < 0.40 }
-		}
-	}
-
-	# Air
-	# The restoration reconstitutes an air arm and then spends it: on the
-	# guards, or over the district capitals.
-
-	focus = {
-		id = VAD_restore_the_restoration_air_arm
-		icon = GFX_focus_VAD_restore_the_restoration_air_arm
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = 9
-		y = 1
-		relative_position_id = VAD_proclaim_joint_charter
-		cost = 2
-		prerequisite = { focus = VAD_proclaim_joint_charter }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_restoration_air_arm }
-		completion_reward = {
-			air_experience = 25
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_restore_the_restoration_air_arm
-			}
-		}
-		ai_will_do = {
-			base = 80
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# District air infrastructure
 
 	focus = {
 		id = VAD_task_the_guards_for_close_support
 		icon = GFX_focus_VAD_task_the_guards_for_close_support
 		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_INDUSTRY
 		}
-		x = -1
+		x = 5
 		y = 1
-		relative_position_id = VAD_restore_the_restoration_air_arm
+		relative_position_id = VAD_standardize_district_logistics
 		cost = 3
-		prerequisite = { focus = VAD_restore_the_restoration_air_arm }
+		prerequisite = { focus = VAD_standardize_district_logistics }
 		mutually_exclusive = { focus = VAD_cover_the_district_capitals }
 		allow_branch = {
 			tag = VAD
@@ -2965,25 +3001,23 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = { VAD_administration_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = VAD_forward_airfield_district_tt
+				any_owned_state = { VAD_forward_airfield_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_task_the_guards_for_close_support }
 		completion_reward = {
-			unlock_decision_tooltip = VAD_task_the_guards_for_close_support_activate_plan
-			air_experience = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_task_the_guards_for_close_support
-			}
+			unlock_decision_tooltip = VAD_forward_airfield_programme
+			custom_effect_tooltip = VAD_forward_airfield_unlock_tt
 		}
 		ai_will_do = {
 			base = 75
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
@@ -2991,14 +3025,13 @@ focus_tree = {
 		id = VAD_cover_the_district_capitals
 		icon = GFX_focus_VAD_cover_the_district_capitals
 		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_INDUSTRY
 		}
-		x = 1
+		x = 7
 		y = 1
-		relative_position_id = VAD_restore_the_restoration_air_arm
+		relative_position_id = VAD_standardize_district_logistics
 		cost = 3
-		prerequisite = { focus = VAD_restore_the_restoration_air_arm }
+		prerequisite = { focus = VAD_standardize_district_logistics }
 		mutually_exclusive = { focus = VAD_task_the_guards_for_close_support }
 		allow_branch = {
 			tag = VAD
@@ -3010,87 +3043,41 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			hidden_trigger = { VAD_administration_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = VAD_district_air_defence_district_tt
+				any_owned_state = { VAD_district_air_defence_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_cover_the_district_capitals }
 		completion_reward = {
-			unlock_decision_tooltip = VAD_cover_the_district_capitals_activate_plan
-			air_experience = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_cover_the_district_capitals
-			}
+			unlock_decision_tooltip = VAD_district_air_defence_programme
+			custom_effect_tooltip = VAD_district_air_defence_unlock_tt
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
-	# Foreign Policy
-	# The foreign chancery either writes guarantees in the old style or
-	# seats observers who do not shoot and do write home.
+	# Coalition entry and military observation require the other government's consent.
 
-	focus = {
-		id = VAD_open_the_foreign_chancery
-		icon = GFX_focus_VAD_open_the_foreign_chancery
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_POLITICAL
-		}
-		x = -5
-		y = 1
-		relative_position_id = VAD_proclaim_joint_charter
-		cost = 2
-		prerequisite = { focus = VAD_proclaim_joint_charter }
-		allow_branch = {
-			tag = VAD
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_open_the_foreign_chancery }
-		completion_reward = {
-			add_political_power = 50
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_open_the_foreign_chancery
-			}
-		}
-		ai_will_do = {
-			base = 50
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
 
 	focus = {
 		id = VAD_issue_restoration_guarantees
 		icon = GFX_focus_VAD_issue_restoration_guarantees
 		search_filters = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_ANNEXATION
+			FOCUS_FILTER_POLITICAL
 		}
-		x = -1
+		x = -17
 		y = 1
-		relative_position_id = VAD_open_the_foreign_chancery
+		relative_position_id = VAD_proclaim_joint_charter
 		cost = 3
-		prerequisite = { focus = VAD_open_the_foreign_chancery }
+		prerequisite = { focus = VAD_proclaim_joint_charter }
 		mutually_exclusive = { focus = VAD_seat_the_observer_missions }
 		allow_branch = {
 			tag = VAD
@@ -3101,22 +3088,19 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = VAD_coalition_guarantees_focus_tt
+				VAD_coalition_host_ready = yes
+				any_country = { VAD_coalition_candidate = yes }
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_issue_restoration_guarantees }
+
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_guarantees days = 70 }
-			add_political_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_issue_restoration_guarantees
-			}
+			unlock_decision_tooltip = VAD_coalition_guarantees
+			custom_effect_tooltip = VAD_coalition_guarantees_unlock_tt
 		}
 		ai_will_do = {
 			base = 45
@@ -3131,11 +3115,11 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 1
+		x = -15
 		y = 1
-		relative_position_id = VAD_open_the_foreign_chancery
+		relative_position_id = VAD_proclaim_joint_charter
 		cost = 3
-		prerequisite = { focus = VAD_open_the_foreign_chancery }
+		prerequisite = { focus = VAD_proclaim_joint_charter }
 		mutually_exclusive = { focus = VAD_issue_restoration_guarantees }
 		allow_branch = {
 			tag = VAD
@@ -3146,7 +3130,42 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
+
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAD_foreign_observers_focus_tt
+				VAD_administration_active = yes
+				ADISCORD_vorkerland_plan_war_active = yes
+				any_country = { VAD_observer_candidate = yes }
+			}
+		}
+		cancel_if_invalid = yes
+
+		completion_reward = {
+			unlock_decision_tooltip = VAD_foreign_observers
+			custom_effect_tooltip = VAD_foreign_observers_unlock_tt
+		}
+		ai_will_do = {
+			base = 40
+			modifier = { factor = 2 has_stability < 0.40 }
+		}
+	}
+
+
+	focus = {
+		id = VAD_convene_joint_congress
+		icon = GFX_focus_VAD_convene_joint_congress
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = -6
+		y = 1
+		relative_position_id = VAD_seat_the_dual_chamber
+		cost = 2
+		prerequisite = { focus = VAD_seat_the_dual_chamber }
+		mutually_exclusive = { focus = VAD_sign_joint_operational_orders }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -3154,19 +3173,84 @@ focus_tree = {
 				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			}
 		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_seat_the_observer_missions }
-		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_vad_observer_missions days = 70 }
-			add_political_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_vad_seat_the_observer_missions
+		available = {
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			hidden_trigger = {
+				has_global_flag = ADISCORD_vorkerland_joint_government_formed
+				has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAD_joint_congress_district_tt
+				any_owned_state = {
+					is_owned_and_controlled_by = ROOT
+					has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
+					check_variable = { var = VAD_district_unrest value = 20 compare = greater_than_or_equals }
+				}
 			}
 		}
-		ai_will_do = {
-			base = 40
-			modifier = { factor = 2 has_stability < 0.40 }
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = VAD_joint_congress_programme
+			custom_effect_tooltip = VAD_joint_congress_unlock_tt
+			hidden_effect = {
+				news_event = { id = ADISCORD_vorkerland_story.46 hours = 1 }
+			}
 		}
+		ai_will_do = { base = 35 }
+	}
+
+	focus = {
+		id = VAD_sign_joint_operational_orders
+		icon = GFX_focus_VAD_sign_joint_operational_orders
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = -4
+		y = 1
+		relative_position_id = VAD_seat_the_dual_chamber
+		cost = 2
+		prerequisite = { focus = VAD_seat_the_dual_chamber }
+		mutually_exclusive = { focus = VAD_convene_joint_congress }
+		allow_branch = {
+			tag = VAD
+			has_global_flag = ADISCORD_vorkerland_joint_government_formed
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_collapse
+				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+		}
+		available = {
+			is_subject = no
+			NOT = { has_capitulated = yes }
+			hidden_trigger = {
+				has_global_flag = ADISCORD_vorkerland_joint_government_formed
+				has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_phase_collapse
+					has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
+					has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+					has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+				}
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = VAD_joint_operations_programme
+			custom_effect_tooltip = VAD_joint_operations_unlock_tt
+			hidden_effect = {
+				news_event = { id = ADISCORD_vorkerland_story.47 hours = 1 }
+			}
+		}
+		ai_will_do = { base = 35 }
 	}
 
 }

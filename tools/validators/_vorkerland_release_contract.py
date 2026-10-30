@@ -1,8 +1,71 @@
-"""Scope-aware structural checks shared by the collapse/recovery gates."""
+"""Scope-aware structural checks shared by the Vorkerland campaign gates."""
 
 from __future__ import annotations
 
 import re
+
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+
+def base_front_controls(profile: str) -> list[str]:
+    """Return country-targeted default orders, excluding difficulty variants."""
+    return [
+        block for block in direct_named_blocks(profile, "ai_strategy")
+        if direct_statements(block, "type") == ["front_control"]
+        and not re.search(r"\b(?:country|state)_trigger\s*=", block)
+    ]
+
+
+def validate_adaptive_fronts(source: str, issues: list[str]) -> None:
+    """Keep adaptive orders inside the parent's target, coverage and priority tier."""
+    def canonical(entries):
+        return sorted(
+            (entry.key, canonical(entry.value) if isinstance(entry.value, list) else entry.value)
+            for entry in entries
+        )
+
+    for profile in parse_clausewitz(source):
+        if not isinstance(profile.value, list):
+            continue
+        controls = [
+            entry.value for entry in profile.value
+            if entry.key == "ai_strategy" and isinstance(entry.value, list)
+            and any(field.key == "type" and field.value == "front_control" for field in entry.value)
+        ]
+        if not controls:
+            continue
+        bases = [body for body in controls if not any(
+            field.key in ("country_trigger", "state_trigger") for field in body
+        )]
+        if len(bases) != 1:
+            issues.append(f"{profile.key}: adaptive fronts need exactly one target-specific default")
+            continue
+        base = {field.key: field.value for field in bases[0]}
+        if (base.get("manual_attack") != "no" or base.get("execution_type") not in
+                ("balanced", "careful", "rush_weak") or not re.fullmatch(r"[A-Z]{3}", str(base.get("tag")))):
+            issues.append(f"{profile.key}: default front bypasses native local attack checks")
+            continue
+        priority = base.get("priority", "")
+        if not isinstance(priority, str) or not priority.isdigit():
+            issues.append(f"{profile.key}: default front needs a numeric priority")
+            continue
+        offset = 2 if profile.key.startswith("ADISCORD_vorkerland_auxiliary_of_") else 1
+        modes = [("allows_push", "careful", "yes")] if base["execution_type"] == "careful" else [
+            ("requires_caution", "careful", "no"), ("allows_push", "rush_weak", "yes")
+        ]
+        if base.get("execute_order") == "no":
+            modes = []
+        expected = []
+        for guard, execution, manual in modes:
+            fields = {**base, "priority": str(int(priority) + offset),
+                      "execution_type": execution, "manual_attack": manual}
+            target = fields.pop("tag")
+            text = "\n".join(f"{key} = {value}" for key, value in fields.items())
+            text += f"\ncountry_trigger = {{ tag = {target} ADISCORD_difficulty_enemy_{guard} = yes }}"
+            expected.append(canonical(parse_clausewitz(text)))
+        actual = [canonical(body) for body in controls if body is not bases[0]]
+        if sorted(actual) != sorted(expected):
+            issues.append(f"{profile.key}: adaptive front must preserve target and bounds with its exact difficulty guard")
 
 
 def _braced_block(text: str, start: int) -> str:

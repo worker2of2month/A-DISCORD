@@ -175,10 +175,7 @@ class NewSaveMaterializationTests(unittest.TestCase):
             immediate.count("ADISCORD_vorkerland_prep_resolve_fate = yes"),
             1,
         )
-        self.assertEqual(
-            immediate.count("ADISCORD_vorkerland_form_joint_government = yes"),
-            1,
-        )
+        self.assertNotIn("ADISCORD_vorkerland_form_joint_government = yes", immediate)
 
     def test_human_handoff_is_exact_ai_safe_and_clears_preferences_before_annex(
         self,
@@ -844,6 +841,22 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
 
 
 class CampaignStateOwnershipTests(unittest.TestCase):
+    def test_doctrine_refresh_is_checked_in_each_owner_not_by_total_call_count(self) -> None:
+        from tools.validators import validate_adiscord_vorkerland_recovery as validator
+
+        self.assertTrue(hasattr(validator, "validate_focus_doctrine_refreshes"))
+        source = "\n".join(read(f"focus_trees/Vorkerland/{tag}/focuses.txt")
+                           for tag in ("wkr", "vad", "tva"))
+        extra = "focus = { id = extra_refresh completion_reward = { ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes } }"
+        self.assertEqual(validator.validate_focus_doctrine_refreshes(source + extra), [])
+        focus_id = "VAD_doctrine_of_the_officer_estates"
+        block = next(block for block in named_blocks(source, "focus")
+                     if re.search(rf"\bid\s*=\s*{focus_id}\b", block))
+        broken = source.replace(block, block.replace("ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes", ""))
+        issues = validator.validate_focus_doctrine_refreshes(broken + extra)
+        self.assertEqual(len(issues), 1)
+        self.assertIn(focus_id, issues[0])
+
     def test_event_driven_campaign_state_contract_is_clean(self) -> None:
         issues = validate_campaign_state()
         self.assertEqual(issues, [], issue_report(issues))

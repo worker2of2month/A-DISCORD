@@ -7740,8 +7740,9 @@ class ValExpandedCampaignTests(unittest.TestCase):
             ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
         ).read_text(encoding="utf-8")
         category = named_block_spans(categories, "STP_military_operations")[0].text
-        for tag in ("STP", "STS", "SRP", "NOD", "VAL"):
+        for tag in ("STP", "STS", "SRP", "NOD"):
             self.assertIn(f"tag = {tag}", category)
+        self.assertNotIn("tag = VAL", category)
         self.assertIn("has_country_flag = STP_cw_postwar", category)
         self.assertIn("scripted_gui = ADISCORD_STP_operations_panel", category)
 

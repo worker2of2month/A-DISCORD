@@ -78,6 +78,14 @@ ADISCORD_scenario_debug_category = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			VAD = { exists = yes }
 		}
+		available = {
+			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
+			VAD = {
+				VAD_administration_active = yes
+				has_completed_focus = VAD_proclaim_joint_charter
+				NOT = { has_completed_focus = VAD_open_imperial_registers }
+			}
+		}
 		cost = 0
 		complete_effect = { ADISCORD_vorkerland_form_joint_government = yes }
 		ai_will_do = { factor = 0 }
@@ -216,7 +224,7 @@ ADISCORD_scenario_debug_category = {
 				tag = SLF
 			}
 		}
-		visible = { NAM_rw_clock_running = yes }
+		visible = { NAM = { NAM_rw_deadline_open = yes } }
 		cost = 0
 		complete_effect = { ADISCORD_nam_debug_add_tension = yes }
 		ai_will_do = { factor = 0 }

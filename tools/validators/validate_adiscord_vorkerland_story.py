@@ -50,6 +50,12 @@ STORY_NUMBERS = (
     41,
     42,
     43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
 )
 STORY_IDS = tuple(f"ADISCORD_vorkerland_story.{number}" for number in STORY_NUMBERS)
 COUNTRY_EVENT_NUMBERS = frozenset((5, 6))

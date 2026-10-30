@@ -23,6 +23,7 @@ FOCUS_SOURCE_GROUPS = {
         "Vorkerland/vad/",
         "Vorkerland/tva/",
         "Vorkerland/settlement/",
+        "Vorkerland/joint_postwar/",
     ),
 }
 

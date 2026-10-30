@@ -3078,14 +3078,14 @@ focus_tree = {
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_shl_house_contracts }
 			custom_effect_tooltip = SHL_south_oil_for_furnaces_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3210,14 +3210,14 @@ focus_tree = {
 			check_variable = { var = SHL_political_course value = 2 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_shl_city_levies }
 			custom_effect_tooltip = SHL_south_war_of_charters_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3347,14 +3347,14 @@ focus_tree = {
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_shl_last_pour }
 			custom_effect_tooltip = SHL_south_last_pour_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3485,14 +3485,14 @@ focus_tree = {
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_shl_promised_fiefs }
 			custom_effect_tooltip = SHL_south_war_of_arms_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3585,14 +3585,14 @@ focus_tree = {
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_shl_oil_uprising }
 			custom_effect_tooltip = SHL_south_oil_uprising_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
 	}

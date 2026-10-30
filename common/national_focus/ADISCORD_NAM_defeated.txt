@@ -455,6 +455,7 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 25
 			add_command_power = 30
+			add_war_support = 0.05
 		}
 		ai_will_do = {
 			base = 10
@@ -481,63 +482,6 @@ focus_tree = {
 				amount = 18000
 				producer = NAM
 			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = NAM_defeat_underground_return
-		icon = GFX_focus_generic_forest_brothers
-		x = 6
-		y = 5
-		cost = 4
-		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = { focus = NAM_defeat_officer_cadres }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			67 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			688 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			689 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			690 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			719 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			700 = {
-				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					add_claim_by = NAM
-				}
-			}
-			add_war_support = 0.05
 		}
 		ai_will_do = {
 			base = 10
@@ -575,10 +519,10 @@ focus_tree = {
 		id = NAM_defeat_war_of_return
 		icon = GFX_goal_generic_major_war
 		x = 6
-		y = 6
+		y = 5
 		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
-		prerequisite = { focus = NAM_defeat_underground_return }
+		prerequisite = { focus = NAM_defeat_officer_cadres }
 		available = {
 			has_capitulated = no
 			is_subject = no
@@ -666,11 +610,13 @@ focus_tree = {
 				add_to_variable = { var = NAM_oil_bonus_units value = 2 }
 				NAM_oil_refresh = yes
 			}
-			custom_effect_tooltip = NAM_grp_defeat_oil_union_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_oil_support value = 6 }
-				add_to_variable = { var = NAM_grp_trade_support value = 4 }
-				NAM_groups_refresh = yes
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+			add_political_power = 50
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_contract_bureau } }
+				unlock_decision_tooltip = NAM_oil_contract_offer
+				custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
 			}
 		}
 		ai_will_do = {
@@ -706,29 +652,6 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_defeat_joint_fields
-		icon = GFX_focus_generic_offshore_oil_rig
-		x = 4
-		y = 4
-		cost = 4
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_defeat_oil_union }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			add_political_power = 50
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
 		id = NAM_defeat_road_south
 		icon = GFX_focus_generic_influence_middle_east
 		x = 2
@@ -737,7 +660,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_defeat_open_border
-			focus = NAM_defeat_joint_fields
+			focus = NAM_defeat_oil_union
 		}
 		bypass = {
 			EFL = { ADISCORD_south_campaign_target_settled = yes }
@@ -775,7 +698,7 @@ focus_tree = {
 		y = 5
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_defeat_joint_fields }
+		prerequisite = { focus = NAM_defeat_oil_union }
 		available = {
 			has_capitulated = no
 			has_war = no
@@ -813,14 +736,14 @@ focus_tree = {
 			has_war = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_defeat_southern_charter_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 			unlock_decision_tooltip = NAM_south_allied_fuel
 			custom_effect_tooltip = NAM_south_allied_fuel_unlock_tt
 			unlock_decision_tooltip = NAM_south_convoy_interdiction

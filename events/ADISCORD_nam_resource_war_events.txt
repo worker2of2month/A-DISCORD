@@ -1,11 +1,7 @@
 add_namespace = ADISCORD_nam_resource_war
 
-# The fresh collapse edge schedules this once as the backstop deadline; the
-# restitution clock and a first strike dispatch it earlier. A signed Klyuchevsk
-# protocol defers the backstop once by 365 days. A temporary third-party war
-# gets one delayed retry. global.NAM_rw_entry_dispatches counts the queued
-# copies: a failed check stops the entry and refunds the orders only when no
-# other copy is queued, so a pending retry owns the final decision.
+# The mission and a voluntary first strike queue the same bounded war entry.
+# A failed check closes preparation only after every queued dispatch is settled.
 country_event = {
 	id = ADISCORD_nam_resource_war.1
 	hidden = yes
@@ -19,42 +15,6 @@ country_event = {
 			max = 100
 		}
 		if = {
-			limit = {
-				has_country_flag = NAM_rw_protocol_signed
-				NOT = { has_country_flag = NAM_rw_war_dispatched }
-				NOT = { has_global_flag = ADISCORD_nam_resource_war_protocol_deferred }
-				NAM_rw_clock_running = yes
-			}
-			set_global_flag = ADISCORD_nam_resource_war_protocol_deferred
-			NAM_rw_count_entry_dispatch = yes
-			country_event = {
-				id = ADISCORD_nam_resource_war.1
-				days = 365
-			}
-		}
-		# Azhar's bought delay: no war starts inside the 75 days, and the
-		# first backstop after the payment moves 75 days later.
-		else_if = {
-			limit = {
-				has_country_flag = NAM_rw_time_bought
-				NOT = { has_country_flag = NAM_rw_first_strike }
-				NAM_rw_clock_running = yes
-				OR = {
-					NAM_rw_time_bought_active = yes
-					AND = {
-						NOT = { has_country_flag = NAM_rw_war_dispatched }
-						NOT = { has_global_flag = ADISCORD_nam_resource_war_time_deferred }
-					}
-				}
-			}
-			set_global_flag = ADISCORD_nam_resource_war_time_deferred
-			NAM_rw_count_entry_dispatch = yes
-			country_event = {
-				id = ADISCORD_nam_resource_war.1
-				days = 75
-			}
-		}
-		else_if = {
 			limit = {
 				has_global_flag = ADISCORD_nam_resource_war_scheduled
 				ADISCORD_nam_resource_war_ready = yes
@@ -673,7 +633,7 @@ country_event = {
 }
 
 # ----- Restitution pressure -----
-# Pressure reaches 40: the neighbours' first formal notes.
+# The first formal notes follow the remaining preparation time.
 country_event = {
 	id = ADISCORD_nam_resource_war.20
 	title = ADISCORD_nam_resource_war.20.t
@@ -705,23 +665,21 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.20.a
 		trigger = { NAM_rw_clock_running = yes }
-		custom_effect_tooltip = NAM_rw_20_a_tt
 		unlock_decision_tooltip = NAM_restitution_note
 		hidden_effect = {
-			set_country_flag = NAM_rw_talks_open
-			add_to_variable = { var = NAM_rw_tension value = -5 }
-			NAM_rw_tension_clamp = yes
+			if = {
+				limit = { NAM_rw_deadline_open = yes }
+				set_country_flag = NAM_rw_talks_open
+			}
 		}
 		ai_chance = { base = 60 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.20.b
 		trigger = { NAM_rw_clock_running = yes }
-		add_war_support = 0.05
-		custom_effect_tooltip = NAM_rw_20_b_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_rw_tension value = 5 }
-			NAM_rw_tension_clamp = yes
+		if = {
+			limit = { hidden_trigger = { NAM_rw_deadline_open = yes } }
+			add_war_support = 0.05
 		}
 		ai_chance = { base = 40 }
 	}
@@ -732,7 +690,7 @@ country_event = {
 	}
 }
 
-# Pressure reaches 70: the joint ultimatum. Rejection is the first option, so
+# The deadline approaches: the joint ultimatum. Rejection is the first option, so
 # an unanswered window keeps the status quo.
 country_event = {
 	id = ADISCORD_nam_resource_war.21
@@ -765,23 +723,16 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.21.a
 		trigger = { NAM_rw_ultimatum_open = yes }
-		add_war_support = 0.10
-		custom_effect_tooltip = NAM_rw_21_a_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_rw_tension value = 10 }
-			NAM_rw_tension_clamp = yes
+		if = {
+			limit = { hidden_trigger = { NAM_rw_ultimatum_open = yes } }
+			add_war_support = 0.10
 		}
 		ai_chance = { base = 45 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.21.b
 		trigger = {
-			NAM_rw_ultimatum_open = yes
-			owns_state = 719
-			AZH = {
-				exists = yes
-				NOT = { has_war_with = NAM }
-			}
+			NAM_rw_can_sign_protocol = yes
 		}
 		custom_effect_tooltip = NAM_rw_21_b_tt
 		hidden_effect = { NAM_rw_sign_klyuchevsk_protocol = yes }
@@ -791,13 +742,8 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.21.c
 		trigger = {
-			NAM_rw_ultimatum_open = yes
-			NOT = { has_country_flag = NAM_rw_time_bought }
+			NAM_rw_can_buy_time = yes
 			NOT = { has_fuel < 12000 }
-			AZH = {
-				exists = yes
-				NOT = { has_war_with = NAM }
-			}
 		}
 		custom_effect_tooltip = NAM_rw_21_c_tt
 		hidden_effect = { NAM_rw_buy_time = yes }
@@ -808,13 +754,17 @@ country_event = {
 		trigger = { NAM_rw_ultimatum_open = yes }
 		custom_effect_tooltip = NAM_rw_21_e_tt
 		hidden_effect = {
-			set_country_flag = NAM_rw_first_strike
-			set_country_flag = NAM_rw_war_dispatched
-			NAM_rw_count_entry_dispatch = yes
-			country_event = {
-				id = ADISCORD_nam_resource_war.1
-				days = 1
-				random_days = 6
+			if = {
+				limit = { NAM_rw_ultimatum_open = yes }
+				remove_mission = NAM_resource_war_deadline
+				set_country_flag = NAM_rw_first_strike
+				set_country_flag = NAM_rw_war_dispatched
+				NAM_rw_count_entry_dispatch = yes
+				country_event = {
+					id = ADISCORD_nam_resource_war.1
+					days = 1
+					random_days = 6
+				}
 			}
 		}
 		ai_chance = {
@@ -1328,15 +1278,21 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.85.d
 	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_country_operable = yes
+		NAM_underground_active = yes
+	}
 
 	immediate = {
 		hidden_effect = {
 			random_owned_controlled_state = {
 				limit = { NAM_field_state = yes }
 				save_event_target_as = NAM_ug_field
+				set_variable = { var = NAM_ug_damage_receipt value = NAM_field_condition }
 				set_temp_variable = { var = NAM_field_damage_amount value = 15 }
 				NAM_field_apply_damage = yes
+				subtract_from_variable = { var = NAM_ug_damage_receipt value = NAM_field_condition }
 			}
 		}
 	}
@@ -1344,49 +1300,170 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.85.a
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-		}
-		custom_effect_tooltip = NAM_ug_85_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 100 }
-			NAM_spend_treasury = yes
-			if = {
-				limit = { has_event_target = NAM_ug_field }
+			NAM_country_operable = yes
+			NAM_underground_active = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_ug_field_repairable_tt
+				has_event_target = NAM_ug_field
 				event_target:NAM_ug_field = {
-					set_temp_variable = { var = NAM_field_repair_amount value = 10 }
-					NAM_field_apply_repair = yes
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+					NOT = { has_state_flag = NAM_wells_scorched }
+					check_variable = { var = NAM_ug_damage_receipt value = 0 compare = greater_than }
 				}
 			}
-			add_to_variable = { var = NAM_grp_oil_support value = 3 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_ug_field_repairable_tt
+						has_event_target = NAM_ug_field
+						event_target:NAM_ug_field = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							NOT = { has_state_flag = NAM_wells_scorched }
+							check_variable = { var = NAM_ug_damage_receipt value = 0 compare = greater_than }
+						}
+					}
+					check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+				}
+			}
+			custom_effect_tooltip = NAM_ug_85_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 100 }
+				NAM_spend_treasury = yes
+				if = {
+					limit = { has_event_target = NAM_ug_field }
+					event_target:NAM_ug_field = {
+						set_temp_variable = { var = NAM_field_repair_amount value = 10 }
+						NAM_field_apply_repair = yes
+					}
+				}
+				add_to_variable = { var = NAM_grp_oil_support value = 3 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.85.b
-		trigger = { NOT = { has_political_power < 25 } }
-		add_political_power = -25
-		custom_effect_tooltip = NAM_ug_85_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -8 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = -6 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
+			NOT = { has_political_power < 25 }
 		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					NOT = { has_political_power < 25 }
+				}
+			}
+			add_political_power = -25
+			custom_effect_tooltip = NAM_ug_85_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -8 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.85.c
-		add_stability = -0.02
-		custom_effect_tooltip = NAM_ug_85_c_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = 3 }
-			NAM_underground_add = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+				}
+			}
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_ug_85_c_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = 3 }
+				NAM_underground_add = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.85.d_option
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
+			has_completed_focus = NAM_field_gendarmes
+			NOT = { command_power < 15 }
+			custom_trigger_tooltip = {
+				tooltip = NAM_ug_field_repairable_tt
+				has_event_target = NAM_ug_field
+				event_target:NAM_ug_field = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+					NOT = { has_state_flag = NAM_wells_scorched }
+					check_variable = { var = NAM_ug_damage_receipt value = 0 compare = greater_than }
+				}
+			}
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					has_completed_focus = NAM_field_gendarmes
+					NOT = { command_power < 15 }
+					custom_trigger_tooltip = {
+						tooltip = NAM_ug_field_repairable_tt
+						has_event_target = NAM_ug_field
+						event_target:NAM_ug_field = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							NOT = { has_state_flag = NAM_wells_scorched }
+							check_variable = { var = NAM_ug_damage_receipt value = 0 compare = greater_than }
+						}
+					}
+				}
+			}
+			add_command_power = -15
+			custom_effect_tooltip = NAM_ug_85_d_tt
+			hidden_effect = {
+				event_target:NAM_ug_field = {
+					set_temp_variable = { var = NAM_field_repair_amount value = NAM_ug_damage_receipt }
+					NAM_field_apply_repair = yes
+				}
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
+		ai_chance = { base = 200 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			OR = {
+				NOT = { NAM_country_operable = yes }
+				NOT = { NAM_underground_active = yes }
+			}
+		}
+		hidden_effect = { NAM_underground_close_event = yes }
+		ai_chance = { base = 100 }
 	}
 }
 
@@ -1397,7 +1474,11 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.86.d
 	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_country_operable = yes
+		NAM_underground_active = yes
+	}
 
 	immediate = {
 		hidden_effect = {
@@ -1409,55 +1490,141 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_resource_war.86.a
-		trigger = { NOT = { has_political_power < 20 } }
-		add_political_power = -20
-		custom_effect_tooltip = NAM_ug_86_a_tt
-		hidden_effect = {
-			random_list = {
-				50 = {
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = NAM }
-					set_temp_variable = { var = NAM_underground_change value = -6 }
-					NAM_underground_add = yes
-				}
-				50 = {
-					add_manpower = -500
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
+			NOT = { has_political_power < 20 }
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					NOT = { has_political_power < 20 }
 				}
 			}
-			NAM_underground_close_event = yes
+			add_political_power = -20
+			custom_effect_tooltip = NAM_ug_86_a_tt
+			hidden_effect = {
+				random_list = {
+					50 = {
+						set_temp_variable = { var = NAM_ug_rifles_recovered value = NAM_ug_rifles_stolen }
+						clamp_temp_variable = { var = NAM_ug_rifles_recovered min = 0 max = 1000 }
+						add_equipment_to_stockpile = { type = infantry_equipment amount = NAM_ug_rifles_recovered producer = NAM }
+						set_temp_variable = { var = NAM_underground_change value = -6 }
+						NAM_underground_add = yes
+					}
+					50 = {
+						add_manpower = -500
+					}
+				}
+				NAM_underground_close_event = yes
+			}
 		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.86.b
 		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
-		custom_effect_tooltip = NAM_ug_86_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 100 }
-			NAM_spend_treasury = yes
-			set_country_flag = {
-				flag = NAM_depots_guarded
-				value = 1
-				days = 180
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+				}
 			}
-			add_to_variable = { var = NAM_grp_garr_support value = 4 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+			custom_effect_tooltip = NAM_ug_86_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 100 }
+				NAM_spend_treasury = yes
+				set_country_flag = {
+					flag = NAM_depots_guarded
+					value = 1
+					days = 180
+				}
+				add_to_variable = { var = NAM_grp_garr_support value = 4 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
 		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.86.c
-		custom_effect_tooltip = NAM_ug_86_c_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = 3 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = 2 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+				}
+			}
+			custom_effect_tooltip = NAM_ug_86_c_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = 3 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 2 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.86.d_option
+		trigger = {
+			NAM_country_operable = yes
+			NAM_underground_active = yes
+			has_completed_focus = NAM_cache_hunters
+			NOT = { command_power < 15 }
+			hidden_trigger = { check_variable = { var = NAM_ug_rifles_stolen value = 0 compare = greater_than } }
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NAM_underground_active = yes
+					has_completed_focus = NAM_cache_hunters
+					NOT = { command_power < 15 }
+					check_variable = { var = NAM_ug_rifles_stolen value = 0 compare = greater_than }
+				}
+			}
+			add_command_power = -15
+			custom_effect_tooltip = NAM_ug_86_d_tt
+			hidden_effect = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = NAM_ug_rifles_stolen
+					producer = NAM
+				}
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
+		ai_chance = { base = 200 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			OR = {
+				NOT = { NAM_country_operable = yes }
+				NOT = { NAM_underground_active = yes }
+			}
+		}
+		hidden_effect = { NAM_underground_close_event = yes }
+		ai_chance = { base = 100 }
 	}
 }
 
@@ -2509,56 +2676,116 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_crisis.1.a
 		trigger = {
+			NAM_crisis_case_1 = yes
 			OR = {
 				has_completed_focus = NAM_field_firefighters
 				check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 			}
 		}
 		if = {
-			limit = { has_completed_focus = NAM_field_firefighters }
-			custom_effect_tooltip = NAM_crisis_free_tt
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_1 = yes
+					OR = {
+						has_completed_focus = NAM_field_firefighters
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+				}
+			}
+			if = {
+				limit = { has_completed_focus = NAM_field_firefighters }
+				custom_effect_tooltip = NAM_crisis_free_tt
+			}
+			else = {
+				custom_effect_tooltip = NAM_crisis_pay_250_tt
+				hidden_effect = { ADISCORD_economy_spend_250 = yes }
+			}
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		else = {
-			custom_effect_tooltip = NAM_crisis_pay_250_tt
-			hidden_effect = { ADISCORD_economy_spend_250 = yes }
+		else_if = {
+			limit = { hidden_trigger = { NAM_crisis_pending_1 = yes } }
+			if = {
+				limit = { hidden_trigger = { NAM_crisis_case_1 = yes } }
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
+					custom_effect_tooltip = NAM_crisis_fund_used_tt
+					hidden_effect = {
+						clr_country_flag = NAM_crisis_fund
+						clr_country_flag = NAM_crisis_open
+					}
+				}
+				else = { NAM_crisis_default_1 = yes }
+			}
+			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
 		}
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_open
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+				NOT = { has_completed_focus = NAM_field_firefighters }
+			}
 		}
-		ai_chance = { base = 50 }
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.1.b
-		custom_effect_tooltip = NAM_crisis_1_b_tt
-		add_fuel = -8000
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_oil_support value = -8 }
-			NAM_groups_refresh = yes
-			# The fire burns out in the Northern Deposits.
-			67 = {
-				if = {
-					limit = { is_controlled_by = NAM }
-					set_temp_variable = { var = NAM_field_damage_amount value = 20 }
-					NAM_field_apply_damage = yes
-				}
-			}
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_1 = yes
 		}
-		ai_chance = { base = 50 }
+		NAM_crisis_default_1 = yes
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+			modifier = {
+				factor = 0
+				has_completed_focus = NAM_field_firefighters
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.1.z
 		trigger = {
+			NAM_crisis_case_1 = yes
 			has_country_flag = NAM_crisis_fund
 		}
-		custom_effect_tooltip = NAM_crisis_fund_used_tt
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_fund
-			clr_country_flag = NAM_crisis_open
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_1 = yes
+					has_country_flag = NAM_crisis_fund
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_fund_used_tt
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_fund
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		ai_chance = { base = 80 }
+		ai_chance = {
+			base = 80
+			modifier = {
+				factor = 0
+				has_completed_focus = NAM_field_firefighters
+			}
+		}
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_1 = no }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_1 = yes }
+				clr_country_flag = NAM_crisis_open
+			}
+		}
 	}
 }
 
@@ -2572,6 +2799,7 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_crisis.2.a
 		trigger = {
+			NAM_crisis_case_2 = yes
 			OR = {
 				AND = {
 					has_completed_focus = NAM_field_firefighters
@@ -2581,47 +2809,107 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { has_completed_focus = NAM_field_firefighters }
-			custom_effect_tooltip = NAM_crisis_pay_100_tt
-			hidden_effect = { ADISCORD_economy_spend_100 = yes }
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_2 = yes
+					OR = {
+						AND = {
+							has_completed_focus = NAM_field_firefighters
+							check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+						}
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+				}
+			}
+			if = {
+				limit = { has_completed_focus = NAM_field_firefighters }
+				custom_effect_tooltip = NAM_crisis_pay_100_tt
+				hidden_effect = { ADISCORD_economy_spend_100 = yes }
+			}
+			else = {
+				custom_effect_tooltip = NAM_crisis_pay_250_tt
+				hidden_effect = { ADISCORD_economy_spend_250 = yes }
+			}
+			custom_effect_tooltip = NAM_crisis_2_a_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				NAM_groups_refresh = yes
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		else = {
-			custom_effect_tooltip = NAM_crisis_pay_250_tt
-			hidden_effect = { ADISCORD_economy_spend_250 = yes }
+		else_if = {
+			limit = { hidden_trigger = { NAM_crisis_pending_2 = yes } }
+			if = {
+				limit = { hidden_trigger = { NAM_crisis_case_2 = yes } }
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
+					custom_effect_tooltip = NAM_crisis_fund_used_tt
+					hidden_effect = {
+						clr_country_flag = NAM_crisis_fund
+						clr_country_flag = NAM_crisis_open
+					}
+				}
+				else = { NAM_crisis_default_2 = yes }
+			}
+			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
 		}
-		custom_effect_tooltip = NAM_crisis_2_a_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_oil_support value = 8 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
 		}
-		ai_chance = { base = 50 }
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.2.b
-		custom_effect_tooltip = NAM_crisis_2_b_tt
-		add_stability = -0.03
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_oil_support value = -12 }
-			add_to_variable = { var = NAM_grp_garr_support value = 4 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_2 = yes
 		}
-		ai_chance = { base = 50 }
+		NAM_crisis_default_2 = yes
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.2.z
 		trigger = {
+			NAM_crisis_case_2 = yes
 			has_country_flag = NAM_crisis_fund
 		}
-		custom_effect_tooltip = NAM_crisis_fund_used_tt
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_fund
-			clr_country_flag = NAM_crisis_open
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_2 = yes
+					has_country_flag = NAM_crisis_fund
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_fund_used_tt
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_fund
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		ai_chance = { base = 80 }
+		ai_chance = {
+			base = 80
+		}
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_2 = no }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_2 = yes }
+				clr_country_flag = NAM_crisis_open
+			}
+		}
 	}
 }
 
@@ -2634,43 +2922,113 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_crisis.3.a
+		trigger = {
+			NAM_crisis_case_3 = yes
+			OR = {
+				AND = {
+					has_completed_focus = NAM_chancellery_purge
+					NOT = { has_political_power < 30 }
+				}
+				NOT = { has_political_power < 60 }
+			}
+		}
 		if = {
-			limit = { has_completed_focus = NAM_chancellery_purge }
-			add_political_power = -30
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_3 = yes
+					OR = {
+						AND = {
+							has_completed_focus = NAM_chancellery_purge
+							NOT = { has_political_power < 30 }
+						}
+						NOT = { has_political_power < 60 }
+					}
+				}
+			}
+			if = {
+				limit = { has_completed_focus = NAM_chancellery_purge }
+				add_political_power = -30
+			}
+			else = {
+				add_political_power = -60
+			}
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		else = {
-			add_political_power = -60
+		else_if = {
+			limit = { hidden_trigger = { NAM_crisis_pending_3 = yes } }
+			if = {
+				limit = { hidden_trigger = { NAM_crisis_case_3 = yes } }
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
+					custom_effect_tooltip = NAM_crisis_fund_used_tt
+					hidden_effect = {
+						clr_country_flag = NAM_crisis_fund
+						clr_country_flag = NAM_crisis_open
+					}
+				}
+				else = { NAM_crisis_default_3 = yes }
+			}
+			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
 		}
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_open
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
 		}
-		ai_chance = { base = 50 }
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.3.b
-		custom_effect_tooltip = NAM_crisis_3_b_tt
-		add_stability = -0.02
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_nam_support value = -8 }
-			add_to_variable = { var = NAM_grp_dist_support value = 6 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_3 = yes
 		}
-		ai_chance = { base = 50 }
+		NAM_crisis_default_3 = yes
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.3.z
 		trigger = {
+			NAM_crisis_case_3 = yes
 			has_country_flag = NAM_crisis_fund
 		}
-		custom_effect_tooltip = NAM_crisis_fund_used_tt
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_fund
-			clr_country_flag = NAM_crisis_open
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_3 = yes
+					has_country_flag = NAM_crisis_fund
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_fund_used_tt
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_fund
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		ai_chance = { base = 80 }
+		ai_chance = {
+			base = 80
+		}
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_3 = no }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_3 = yes }
+				clr_country_flag = NAM_crisis_open
+			}
+		}
 	}
 }
 
@@ -2683,34 +3041,105 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_crisis.4.a
-		custom_effect_tooltip = NAM_crisis_4_a_tt
-		add_stability = -0.02
-		hidden_effect = {
-			if = {
-				limit = { has_completed_focus = NAM_chancellery_purge }
-				NAM_receive_250 = yes
-			}
-			else = {
-				ADISCORD_economy_receive_100 = yes
-			}
-			add_to_variable = { var = NAM_grp_trade_support value = 5 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_4 = yes
 		}
-		ai_chance = { base = 50 }
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_4 = yes
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_4_a_tt
+			add_stability = -0.02
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = NAM_chancellery_purge }
+					NAM_receive_250 = yes
+				}
+				else = {
+					ADISCORD_economy_receive_100 = yes
+				}
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+				clr_country_flag = NAM_crisis_open
+			}
+		}
+		else_if = {
+			limit = { hidden_trigger = { NAM_crisis_pending_4 = yes } }
+			hidden_effect = { clr_country_flag = NAM_crisis_open }
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.4.b
-		custom_effect_tooltip = NAM_crisis_4_b_tt
-		add_political_power = -40
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_trade_support value = -8 }
-			add_to_variable = { var = NAM_grp_oil_support value = 4 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_4 = yes
+			NOT = { has_political_power < 40 }
 		}
-		ai_chance = { base = 50 }
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_4 = yes
+					NOT = { has_political_power < 40 }
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_4_b_tt
+			add_political_power = -40
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = -8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				NAM_groups_refresh = yes
+				clr_country_flag = NAM_crisis_open
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.4.z
+		trigger = {
+			NAM_crisis_case_4 = yes
+			has_country_flag = NAM_crisis_fund
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_4 = yes
+					has_country_flag = NAM_crisis_fund
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_fund_used_tt
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_fund
+				clr_country_flag = NAM_crisis_open
+			}
+		}
+		ai_chance = { base = 80 }
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_4 = no }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_4 = yes }
+				clr_country_flag = NAM_crisis_open
+			}
+		}
 	}
 }
 
@@ -2724,43 +3153,98 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_crisis.5.a
 		trigger = {
+			NAM_crisis_case_5 = yes
 			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 		}
-		custom_effect_tooltip = NAM_crisis_pay_250_tt
-		custom_effect_tooltip = NAM_crisis_5_a_tt
-		hidden_effect = {
-			ADISCORD_economy_spend_250 = yes
-			add_to_variable = { var = NAM_grp_garr_support value = 10 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_5 = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_pay_250_tt
+			custom_effect_tooltip = NAM_crisis_5_a_tt
+			hidden_effect = {
+				ADISCORD_economy_spend_250 = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 10 }
+				NAM_groups_refresh = yes
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		ai_chance = { base = 50 }
+		else_if = {
+			limit = { hidden_trigger = { NAM_crisis_pending_5 = yes } }
+			if = {
+				limit = { hidden_trigger = { NAM_crisis_case_5 = yes } }
+				if = {
+					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
+					custom_effect_tooltip = NAM_crisis_fund_used_tt
+					hidden_effect = {
+						clr_country_flag = NAM_crisis_fund
+						clr_country_flag = NAM_crisis_open
+					}
+				}
+				else = { NAM_crisis_default_5 = yes }
+			}
+			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.5.b
-		custom_effect_tooltip = NAM_crisis_5_b_tt
-		add_stability = -0.02
-		add_manpower = -2000
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_garr_support value = -6 }
-			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+		trigger = {
+			NAM_crisis_case_5 = yes
 		}
-		ai_chance = { base = 50 }
+		NAM_crisis_default_5 = yes
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NAM_crisis_fund
+			}
+		}
 	}
 
 	option = {
 		name = ADISCORD_nam_crisis.5.z
 		trigger = {
+			NAM_crisis_case_5 = yes
 			has_country_flag = NAM_crisis_fund
 		}
-		custom_effect_tooltip = NAM_crisis_fund_used_tt
-		hidden_effect = {
-			clr_country_flag = NAM_crisis_fund
-			clr_country_flag = NAM_crisis_open
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_crisis_case_5 = yes
+					has_country_flag = NAM_crisis_fund
+				}
+			}
+			custom_effect_tooltip = NAM_crisis_fund_used_tt
+			hidden_effect = {
+				clr_country_flag = NAM_crisis_fund
+				clr_country_flag = NAM_crisis_open
+			}
 		}
-		ai_chance = { base = 80 }
+		ai_chance = {
+			base = 80
+		}
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_5 = no }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_5 = yes }
+				clr_country_flag = NAM_crisis_open
+			}
+		}
 	}
 }
 
@@ -2873,16 +3357,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_oil.4.b
-		trigger = {
-			NOT = { has_war_with = NAM }
-			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
-			231 = {
-				is_owned_by = NAM
-				is_controlled_by = NAM
-			}
-			NOT = { VAL = { NAM_steel_concession_holder = yes } }
-			NOT = { GLP = { NAM_steel_concession_holder = yes } }
-		}
+		trigger = { NAM_steel_concession_can_accept = yes }
 		custom_effect_tooltip = NAM_oil_4_b_tt
 		hidden_effect = { NAM_steel_concession_grant = yes }
 		ai_chance = {
@@ -3023,7 +3498,7 @@ country_event = {
 		name = ADISCORD_nam_oil.10.c
 		trigger = {
 			NAM_rus_coalition_member = yes
-			has_completed_focus = NAM_contract_bureau
+			NAM_oil_trade_authorized = yes
 		}
 		custom_effect_tooltip = NAM_oil_10_c_tt
 		hidden_effect = {
@@ -3313,4 +3788,23 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_archive.6.a
 	}
+}
+
+# Each coalition country owns its muster deadline even if NAM changes trees.
+country_event = {
+	id = ADISCORD_nam_resource_war.110
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+		NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		OR = {
+			has_global_flag = ADISCORD_nam_resource_war_scheduled
+			has_global_flag = ADISCORD_nam_resource_war_started
+		}
+	}
+	immediate = { NAM_rw_coalition_muster = yes }
 }

@@ -140,6 +140,22 @@ VAL_trade_route_south_open = {
 				is_owned_by = EFL
 				is_controlled_by = EFL
 			}
+			723 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			724 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			725 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			726 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
 		}
 		has_country_flag = ADISCORD_debug_val_south_route_active
 	}

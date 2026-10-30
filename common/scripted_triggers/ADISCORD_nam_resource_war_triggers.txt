@@ -28,6 +28,10 @@ ADISCORD_nam_resource_war_ready = {
 		controls_state = 701
 		controls_state = 720
 		controls_state = 721
+		controls_state = 723
+		controls_state = 724
+		controls_state = 725
+		controls_state = 726
 	}
 	AZH = {
 		is_subject = no
@@ -35,6 +39,9 @@ ADISCORD_nam_resource_war_ready = {
 		controls_state = 69
 		controls_state = 692
 		controls_state = 722
+		controls_state = 727
+		controls_state = 728
+		controls_state = 729
 	}
 }
 
@@ -180,6 +187,77 @@ NAM_rw_island_state = {
 	}
 }
 
+# STATE. An overseas district currently administered by Svetlogorye.
+NAM_owned_overseas_district = {
+	NAM_rw_island_state = yes
+	is_owned_by = NAM
+	is_controlled_by = NAM
+}
+
+# COUNTRY NAM. Regular shipping can use an island harbour after mainland defeat.
+NAM_overseas_service_operable = {
+	NAM_independent_programmes_operable = yes
+	OR = {
+		225 = { NAM_owned_overseas_district = yes }
+		226 = { NAM_owned_overseas_district = yes }
+		227 = { NAM_owned_overseas_district = yes }
+		228 = { NAM_owned_overseas_district = yes }
+		229 = { NAM_owned_overseas_district = yes }
+		230 = { NAM_owned_overseas_district = yes }
+		231 = { NAM_owned_overseas_district = yes }
+	}
+}
+
+# STATE. The local route ends with loss of the island or its funding government.
+NAM_island_route_operable = {
+	NAM_owned_overseas_district = yes
+	NAM = { NAM_independent_programmes_operable = yes }
+}
+
+NAM_island_public_works_site = {
+	NAM_owned_overseas_district = yes
+	infrastructure < 5
+}
+
+NAM_island_public_works_needed = {
+	OR = {
+		225 = { NAM_island_public_works_site = yes }
+		226 = { NAM_island_public_works_site = yes }
+		227 = { NAM_island_public_works_site = yes }
+		228 = { NAM_island_public_works_site = yes }
+		229 = { NAM_island_public_works_site = yes }
+		230 = { NAM_island_public_works_site = yes }
+		231 = { NAM_island_public_works_site = yes }
+	}
+}
+
+# COUNTRY NAM. Only the three steel districts pay the special levy.
+NAM_island_levy_operable = {
+	NAM_independent_programmes_operable = yes
+	OR = {
+		228 = { NAM_owned_overseas_district = yes }
+		230 = { NAM_owned_overseas_district = yes }
+		231 = { NAM_owned_overseas_district = yes }
+	}
+}
+
+# COUNTRY NAM. The decision owns the term; occupation only suspends a district.
+NAM_island_levy_running = {
+	has_country_flag = NAM_island_levy_active
+	NAM_independent_programmes_operable = yes
+}
+
+# STATE. Only administered steel districts pay and reduce their local output.
+NAM_island_levy_state_active = {
+	OR = {
+		state = 228
+		state = 230
+		state = 231
+	}
+	NAM_owned_overseas_district = yes
+	NAM = { NAM_island_levy_running = yes }
+}
+
 # Any scope. Svetlogorye still owns an overseas district: a lost war ends in
 # the island exile instead of the partition.
 NAM_rw_can_go_into_exile = {
@@ -284,63 +362,53 @@ NAM_rw_clock_running = {
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
 }
 
-# COUNTRY NAM. Fuel bought Azhar's delay: no war is dispatched for 75 days
-# after the payment. The flag is permanent, so the purchase happens once.
-NAM_rw_time_bought_active = {
-	has_country_flag = {
-		flag = NAM_rw_time_bought
-		days < 75
-	}
+# COUNTRY NAM. Delays require the live countdown; the broader preparation
+# phase remains open through the queued entry and its bounded readiness retry.
+NAM_rw_deadline_open = {
+	NAM_rw_clock_running = yes
+	has_active_mission = NAM_resource_war_deadline
+	NOT = { has_country_flag = NAM_rw_war_dispatched }
 }
 
-# COUNTRY NAM. The scheduled flag was set at the collapse edge, so its age is
-# the time since the collapse wars began: 700 days, or 1065 after the protocol.
-# Buying time also moves the earliest window 75 days, even when bought early.
-# The 75 days after payment remain protected when the purchase happens late.
+# COUNTRY NAM. The AI may answer the ultimatum with an attack only near expiry.
 NAM_rw_war_window_open = {
-	NOT = { NAM_rw_time_bought_active = yes }
-	OR = {
-		AND = {
-			NOT = { has_country_flag = NAM_rw_protocol_signed }
-			NOT = { has_country_flag = NAM_rw_time_bought }
-			has_global_flag = {
-				flag = ADISCORD_nam_resource_war_scheduled
-				days > 699
-			}
-		}
-		AND = {
-			NOT = { has_country_flag = NAM_rw_protocol_signed }
-			has_country_flag = NAM_rw_time_bought
-			has_global_flag = {
-				flag = ADISCORD_nam_resource_war_scheduled
-				days > 774
-			}
-		}
-		AND = {
-			has_country_flag = NAM_rw_protocol_signed
-			NOT = { has_country_flag = NAM_rw_time_bought }
-			has_global_flag = {
-				flag = ADISCORD_nam_resource_war_scheduled
-				days > 1064
-			}
-		}
-		AND = {
-			has_country_flag = NAM_rw_protocol_signed
-			has_country_flag = NAM_rw_time_bought
-			has_global_flag = {
-				flag = ADISCORD_nam_resource_war_scheduled
-				days > 1139
-			}
-		}
+	NAM_rw_deadline_open = yes
+	check_variable = { var = days_mission_timeout@NAM_resource_war_deadline value = 30 compare = less_than_or_equals }
+}
+
+NAM_rw_can_sign_protocol = {
+	NAM_independent_programmes_operable = yes
+	NAM_rw_deadline_open = yes
+	NOT = { has_country_flag = NAM_rw_protocol_signed }
+	NOT = { has_country_flag = NAM_rw_first_strike }
+	owns_state = 719
+	controls_state = 719
+	AZH = {
+		exists = yes
+		has_capitulated = no
+		NOT = { has_war_with = NAM }
 	}
 }
 
 # COUNTRY NAM. The ultimatum still has a course to choose.
 NAM_rw_ultimatum_open = {
 	NAM_country_operable = yes
-	NAM_rw_clock_running = yes
+	NAM_rw_deadline_open = yes
 	NOT = { has_country_flag = NAM_rw_war_dispatched }
 	EFL = { exists = yes }
+}
+
+# COUNTRY NAM. Both fuel prices buy the same once-only delay from a live partner.
+NAM_rw_can_buy_time = {
+	NAM_independent_programmes_operable = yes
+	NAM_rw_ultimatum_open = yes
+	NOT = { has_country_flag = NAM_rw_time_bought }
+	NOT = { has_country_flag = NAM_rw_first_strike }
+	AZH = {
+		exists = yes
+		has_capitulated = no
+		NOT = { has_war_with = NAM }
+	}
 }
 
 # ----- Mobilisation and defence lines -----
@@ -394,7 +462,12 @@ NAM_independent_programmes_operable = {
 NAM_ind_border_dossier_possible = {
 	NAM_independent_programmes_operable = yes
 	NAM_rw_ultimatum_open = yes
-	check_variable = { var = NAM_rw_tension value = 0 compare = greater_than }
+}
+
+# A new dossier needs enough time to finish before the current deadline.
+NAM_ind_border_dossier_can_start = {
+	NAM_ind_border_dossier_possible = yes
+	check_variable = { var = days_mission_timeout@NAM_resource_war_deadline value = 21 compare = greater_than }
 }
 
 # Administrative programmes retain their course across war and tree changes.
@@ -404,6 +477,14 @@ NAM_admin_programme_operable = {
 }
 
 # ----- Oil monopoly -----
+# COUNTRY NAM. The compromise route can reopen trade without the prewar bureau.
+NAM_oil_trade_authorized = {
+	OR = {
+		has_completed_focus = NAM_contract_bureau
+		has_completed_focus = NAM_defeat_oil_union
+	}
+}
+
 # COUNTRY. The fixed list of states that may buy Svetlogorye's oil.
 NAM_oil_buyer_tag = {
 	OR = {
@@ -453,6 +534,19 @@ NAM_oil_unit_free_for_buyer = {
 			NAM = { check_variable = { var = NAM_oil_free_units value = 1 compare = greater_than_or_equals } }
 		}
 		NAM = { check_variable = { var = NAM_oil_free_land_units value = 1 compare = greater_than_or_equals } }
+	}
+}
+
+# COUNTRY NAM. Export pressure requires control of a source in the basin;
+# permanent throughput bonuses alone cannot sustain it from the islands.
+NAM_fuel_embargo_source = {
+	exists = yes
+	OR = {
+		controls_state = 67
+		controls_state = 688
+		controls_state = 689
+		controls_state = 690
+		controls_state = 719
 	}
 }
 
@@ -507,6 +601,29 @@ NAM_steel_concession_target_valid = {
 	NOT = { has_war_with = NAM }
 	NOT = { VAL = { NAM_steel_concession_holder = yes } }
 	NOT = { GLP = { NAM_steel_concession_holder = yes } }
+}
+
+# COUNTRY recipient. The pending flag stores the addressee: VAL=1, GLP=2.
+NAM_steel_concession_offer_current = {
+	NAM = { has_country_flag = NAM_concession_231_pending }
+	OR = {
+		AND = {
+			tag = VAL
+			NAM = { has_country_flag = { flag = NAM_concession_231_pending value < 2 } }
+		}
+		AND = {
+			tag = GLP
+			NAM = { has_country_flag = { flag = NAM_concession_231_pending value > 1 } }
+		}
+	}
+}
+
+NAM_steel_concession_can_accept = {
+	NAM_steel_concession_target_valid = yes
+	NAM = { NAM_independent_programmes_operable = yes }
+	231 = { NAM_owned_overseas_district = yes }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	hidden_trigger = { NAM_steel_concession_offer_current = yes }
 }
 
 # COUNTRY. The southern ally may receive Svetlogorye's fuel.
@@ -760,6 +877,20 @@ NAM_war_of_return_active = {
 }
 
 # ----- Exile revolution -----
+
+# COUNTRY NAM. Mining rewards require a site the exile can actually operate.
+NAM_rad_mining_site_available = {
+	OR = {
+		227 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		229 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+	}
+}
 # COUNTRY NAM. The island council of event .100 may still overthrow the
 # namestnik: the choice between the pillars and Veter's humanists is made once
 # per campaign, right after the flight to the islands.
@@ -778,15 +909,21 @@ NAM_exile_revolution_done = {
 	}
 }
 
-# COUNTRY NAM. The exile still prepares its return: marine orders and the
-# landing drill. The programme pauses while an exile war is fought and
-# reopens only if that war closed outside the treaty, for the next attempt.
+# COUNTRY NAM. The exile still prepares its return. The programme pauses during
+# the war and reopens after an external peace for drill and another attempt.
 NAM_exile_return_programme_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM_exile_revolution_done = yes
 	NOT = { NAM_war_of_return_active = yes }
 	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+# COUNTRY NAM. The first landing's delivery receipt closes fixed-price orders;
+# a renewed war uses the standing army and ordinary recruitment.
+NAM_marine_orders_open = {
+	NAM_exile_return_programme_open = yes
+	NOT = { has_variable = NAM_marines_orders_delivered }
 }
 
 # COUNTRY NAM. The landing drill is open in the course's own tree: the junta's
@@ -1105,7 +1242,7 @@ NAM_bw_repair_startable = {
 	check_variable = { var = NAM_field_condition value = 100 compare = less_than }
 	NAM = {
 		NAM_country_operable = yes
-		has_completed_focus = NAM_field_repair_crews
+		NAM_field_repair_unlocked = yes
 		NAM_project_slot_free = yes
 		NAM_bw_can_pay_repair = yes
 	}
@@ -1248,7 +1385,7 @@ NAM_pirate_raid_ready = {
 # the absolute ceiling of three; orders close once the war of return begins.
 # The junta pays in loot, the humanists in corporate capital.
 NAM_marine_order_can_place = {
-	NAM_exile_return_programme_open = yes
+	NAM_marine_orders_open = yes
 	check_variable = { var = NAM_marine_order_cap value = NAM_marine_orders_paid compare = greater_than }
 	check_variable = { var = NAM_marine_orders_paid value = 3 compare = less_than }
 }
@@ -1431,4 +1568,176 @@ NAM_pw_charter_recipient = {
 	has_capitulated = no
 	is_in_faction_with = NAM
 	NOT = { has_war_with = NAM }
+}
+
+# COUNTRY NAM. Only the regional recipients offered by the aid decision count.
+NAM_pw_charter_ally_available = {
+	OR = {
+		EFL = { NAM_pw_charter_recipient = yes }
+		AZH = { NAM_pw_charter_recipient = yes }
+		WEF = { NAM_pw_charter_recipient = yes }
+		KDR = { NAM_pw_charter_recipient = yes }
+		RHM = { NAM_pw_charter_recipient = yes }
+		SDR = { NAM_pw_charter_recipient = yes }
+		MZR = { NAM_pw_charter_recipient = yes }
+		KYZ = { NAM_pw_charter_recipient = yes }
+		GLP = { NAM_pw_charter_recipient = yes }
+	}
+}
+
+# COUNTRY NAM. Either institution authorises the same local repair programme.
+NAM_field_repair_unlocked = {
+	OR = {
+		has_completed_focus = NAM_field_repair_crews
+		has_completed_focus = NAM_field_firefighters
+	}
+}
+
+# STATE project. A paid repair still needs a controlled, damaged, usable field.
+NAM_field_repair_possible = {
+	NAM = { NAM_country_operable = yes }
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_wells_scorched }
+	check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+}
+
+# COUNTRY NAM. The receipt identifies the current incident; unrelated windows
+# cannot settle or discard a newer case. Field incidents need their real site.
+NAM_crisis_fire_operable = {
+	NAM_country_operable = yes
+	controls_state = 67
+	67 = {
+		NOT = { has_state_flag = NAM_wells_scorched }
+		check_variable = { var = NAM_field_condition value = 0 compare = greater_than }
+	}
+}
+
+NAM_crisis_audit_possible = {
+	NAM_independent_programmes_operable = yes
+	NAM_fuel_embargo_source = yes
+	OR = {
+		has_completed_focus = NAM_well_register
+		has_completed_focus = NAM_chancellery_purge
+	}
+	OR = {
+		NOT = { has_completed_focus = NAM_chancellery_purge }
+		check_variable = { var = NAM_grp_trade_support value = 30 compare = greater_than_or_equals }
+	}
+}
+
+NAM_crisis_pending_1 = {
+	has_country_flag = { flag = NAM_crisis_open value < 2 }
+}
+
+NAM_crisis_case_1 = {
+	NAM_country_operable = yes
+	NAM_crisis_pending_1 = yes
+	NAM_crisis_fire_operable = yes
+}
+
+NAM_crisis_pending_2 = {
+	has_country_flag = { flag = NAM_crisis_open value > 1 }
+	has_country_flag = { flag = NAM_crisis_open value < 3 }
+}
+
+NAM_crisis_case_2 = {
+	NAM_country_operable = yes
+	NAM_crisis_pending_2 = yes
+	NAM_fuel_embargo_source = yes
+}
+
+NAM_crisis_pending_3 = {
+	has_country_flag = { flag = NAM_crisis_open value > 2 }
+	has_country_flag = { flag = NAM_crisis_open value < 4 }
+}
+
+NAM_crisis_case_3 = {
+	NAM_country_operable = yes
+	NAM_crisis_pending_3 = yes
+}
+
+NAM_crisis_pending_4 = {
+	has_country_flag = { flag = NAM_crisis_open value > 3 }
+	has_country_flag = { flag = NAM_crisis_open value < 5 }
+}
+
+NAM_crisis_case_4 = {
+	NAM_country_operable = yes
+	NAM_crisis_pending_4 = yes
+	NAM_fuel_embargo_source = yes
+}
+
+NAM_crisis_pending_5 = {
+	has_country_flag = { flag = NAM_crisis_open value > 4 }
+	has_country_flag = { flag = NAM_crisis_open value < 6 }
+}
+
+NAM_crisis_case_5 = {
+	NAM_country_operable = yes
+	NAM_crisis_pending_5 = yes
+}
+
+NAM_rw_coalition_landing_ready = {
+	is_ai = yes
+	has_capitulated = no
+	ADISCORD_nam_resource_war_active = yes
+	has_war_with = NAM
+	NAM = { has_capitulated = no }
+	has_tech = ADISCORD_tech_restored_dockyards
+	has_navy_size = { size > 39 type = convoy }
+	has_navy_size = { size > 0 unit = ADISCORD_coastal_patrol_vessel }
+	NOT = { has_fuel < 1000 }
+	OR = {
+		AND = {
+			tag = EFL
+			num_divisions > 14
+			controls_province = 6495
+			723 = {
+				is_owned_by = EFL
+				naval_base > 0
+			}
+		}
+		AND = {
+			tag = AZH
+			num_divisions > 9
+			controls_province = 493
+			692 = {
+				is_owned_by = AZH
+				naval_base > 0
+			}
+		}
+	}
+}
+
+# ----- National naval procurement -----
+# COUNTRY NAM. The home port remains the delivery site across focus-tree changes.
+NAM_naval_home_port = {
+	NAM_independent_programmes_operable = yes
+	controls_province = 16716
+	700 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+		naval_base > 0
+	}
+}
+
+NAM_naval_observation_ready = {
+	NAM_naval_home_port = yes
+	700 = { radar_station < 2 }
+}
+
+NAM_naval_shipyard_ready = {
+	NAM_naval_home_port = yes
+	700 = { dockyard > 0 }
+}
+
+NAM_naval_marines_ready = {
+	NAM_naval_home_port = yes
+	has_tech = ADISCORD_tech_svetlogorsk_marine_corps
+	check_variable = {
+		var = num_battalions_with_type@ADISCORD_marine_infantry
+		value = 4
+		compare = less_than
+	}
 }

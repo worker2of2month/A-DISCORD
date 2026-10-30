@@ -179,7 +179,7 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         for tag in ("STP", "STS", "SRP", "NOD", "VAL", "RUS"):
             self.assertEqual(
                 matches_conditions(allowed, {}, tag),
-                tag in ("STP", "STS", "SRP", "NOD", "VAL"),
+                tag in ("STP", "STS", "SRP", "NOD"),
             )
         self.assertIn(
             "STP_operations_map_available = yes", named_block(category, "visible")
@@ -276,6 +276,48 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             self.assertNotIn(
                 "VAL_operations_map_refresh_cache", named_block(read(path), hook)
             )
+
+    def test_operations_map_rebuilds_once_and_shares_frames_between_countries(self):
+        from itertools import product
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            selected_effects,
+        )
+
+        hooks = block(parse_clausewitz(read(
+            "common/on_actions/04_ADISCORD_operations_map_on_actions.txt"
+        )), "on_actions")
+        startup = block(block(hooks, "on_startup"), "effect")
+        control = block(block(block(hooks, "on_state_control_changed"), "effect"), "if")
+        for val, sts, stp in product((False, True), repeat=3):
+            facts = {
+                (tag, "exists", "yes"): True for tag in ("VAL", "STS", "STP")
+            }
+            facts.update({
+                ("VAL", "has_country_flag", "VAL_operations_map_unlocked"): val,
+                ("STS", "has_country_flag", "STP_cw_postwar"): sts,
+                ("STP", "STP_operations_map_available", "yes"): stp,
+            })
+            expected = []
+            if val:
+                expected.append(("VAL", "VAL_operations_map_refresh_cache"))
+            if sts:
+                expected.append(("STS", "VAL_operations_map_copy_val_cache" if val
+                                 else "VAL_operations_map_refresh_cache"))
+            if stp:
+                source = "copy_val" if val else "copy_sts" if sts else "refresh"
+                expected.append(("STP", f"VAL_operations_map_{source}_cache"))
+            for callback in (startup, [e for e in control if e.key != "limit"]):
+                with self.subTest(val=val, sts=sts, stp=stp, startup=callback is startup):
+                    calls = [
+                        (scope, e.key) for scope, e in selected_effects(callback, facts)
+                    ]
+                    self.assertEqual(calls, expected)
+                    self.assertEqual(
+                        sum(name == "VAL_operations_map_refresh_cache" for _, name in calls),
+                        int(val or sts or stp),
+                    )
 
     def test_kefreyt_resource_rights_checks_follow_their_states(self) -> None:
         source = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")

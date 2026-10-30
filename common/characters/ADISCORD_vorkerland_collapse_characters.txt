@@ -2,7 +2,7 @@ characters = {
 	WKR_Emergency_Coordination_Committee = {
 		name = WKR_Emergency_Coordination_Committee
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
-		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
+		country_leader = { ideology = neo_vorkerism expire = "2200.1.1.1" id = -1 }
 	}
 	TVA_Dorian_Worx = {
 		name = TVA_Dorian_Worx

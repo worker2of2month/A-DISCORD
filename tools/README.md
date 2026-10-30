@@ -161,3 +161,12 @@ guidance as a licence for its visual content.
 runtime files or third-party reference material: `decisions.psd`,
 `portrait.psd`, `STP_Operation_Last_Banquette.psd`, `terrain_view.psd`,
 `val_ideology.psd`, `wrk_ideology.psd`, and `wrk_ideology_2.psd`.
+
+`tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds` is the authored
+land-colour base for `tools.builders.build_adiscord_coastal_geography`.
+The builder adds only the island land tint to this source. City surfaces use
+the terrain atlas and city masks; do not paint flat city blocks into the
+colourmap, because DXT5 blocks extend beyond the urban footprint. Edit the
+source rather than the runtime DDS. Run the builder with `--check` before
+`--apply`, then repeat `--check` to verify stable output. The base retains
+SHA256 `ff8d76680ef6600e146ca72dc0007643e31bca4fd05c01c686be1a408ee83da6`.

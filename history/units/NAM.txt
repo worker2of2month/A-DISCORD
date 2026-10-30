@@ -70,15 +70,467 @@ units = {
 		start_equipment_factor = 0.38
 	}
 	fleet = {
-		name = "Svetlogorsk Patrol Flotilla"
+		name = "Светлогорский флот"
 		naval_base = 16716
 		task_force = {
-			name = "Northern Basin Patrol"
+			name = "Первая крейсерская эскадра"
 			location = 16716
-			ship = { name = "Svetlogorsk" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
-			ship = { name = "Northern Basin" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
-			ship = { name = "Warden" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
-			ship = { name = "Surveyor" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
+			ship = {
+				name = "NAM-ТК-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ТК-02"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-01"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-02"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-03"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Вторая крейсерская эскадра"
+			location = 16716
+			ship = {
+				name = "NAM-ТК-03"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ТК-04"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-04"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-05"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЛК-06"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-09"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-10"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-11"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-12"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Охрана островных конвоев"
+			location = 16716
+			ship = {
+				name = "NAM-ЭМ-13"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-14"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-15"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-16"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-17"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-18"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-19"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-20"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-21"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ЭМ-22"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Первый подводный дивизион"
+			location = 16716
+			ship = {
+				name = "NAM-ПЛ-01"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-02"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-03"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-04"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Второй подводный дивизион"
+			location = 16716
+			ship = {
+				name = "NAM-ПЛ-05"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-06"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-07"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
+			ship = {
+				name = "NAM-ПЛ-08"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NAM
+					}
+				}
+			}
 		}
 	}
 }
@@ -86,6 +538,7 @@ units = {
 ##### No notable air forces #####
 
 instant_effect = {
+	add_fuel = 45000
 	add_equipment_to_stockpile = { type = convoy_1 amount = 30 producer = NAM }
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "NAM" }

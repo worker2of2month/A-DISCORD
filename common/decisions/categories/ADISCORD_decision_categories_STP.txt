@@ -49,7 +49,6 @@ STP_military_operations = {
 			tag = STS
 			tag = SRP
 			tag = NOD
-			tag = VAL
 		}
 	}
 	visible = {
@@ -61,13 +60,6 @@ STP_military_operations = {
 			AND = {
 				tag = NOD
 				has_country_flag = STP_ps_aid_agreement
-			}
-			AND = {
-				tag = VAL
-				OR = {
-					has_country_flag = STP_ps_val_authorized
-					has_variable = STP_ps_val_receipt_rifles
-				}
 			}
 			has_active_mission = NOD_cw_northern_mobilization
 			AND = {

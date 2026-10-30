@@ -232,6 +232,13 @@ ideas = {
 			}
 		}
 
+		NAM_navy_active_squadron_idea = {
+			name = NAM_navy_dynamic
+			picture = GFX_idea_generic_coastal_navy
+			allowed = { always = no }
+			modifier = { navy_org_factor = 0.10 }
+		}
+
 		NAM_navy_landing_school_idea = {
 			name = NAM_navy_dynamic
 			picture = GFX_idea_generic_coastal_navy
@@ -313,7 +320,7 @@ ideas = {
 			}
 		}
 
-		NAM_adm_public_payroll_idea = {
+		NAM_adm_district_guarantees_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit
 			allowed = { always = no }
@@ -369,17 +376,6 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				convoy_escort_efficiency = 0.1
-			}
-		}
-
-		NAM_adm_island_accounts_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				resistance_growth = -0.05
-				compliance_gain = 0.02
-				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 		}
 

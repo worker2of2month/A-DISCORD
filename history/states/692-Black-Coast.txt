@@ -4,18 +4,15 @@ state={
 	name="STATE_692"
 	resources = {
 		oil = 1
-		chromium = 1
-		tungsten = 1
 	}
 	provinces={
-		493 601 1360 2264 2362 2802 2804 3464 4089 4678 5039 5527
-		5837 6193 6768 7033 7777 8114 8441 8829 9264 9375 9758 10489
-		10626 11445 11630 11734 12498
+		493 1360 2264 2802 3464 4089 5039 5837 7033 8829 9758 10489
+		10626 12498
 	}
-	manpower = 240000
+	manpower = 3100000
 	buildings_max_level_factor = 1.000
 	state_category = town
-	local_supplies = 3.5
+	local_supplies = 2.5
 	history = {
 		owner = AZH
 		add_core_of = AZH
@@ -25,7 +22,7 @@ state={
 			infrastructure = 3
 			industrial_complex = 1
 			dockyard = 1
-			493 = { naval_base = 1 }
+			493 = { naval_base = 5 }
 		}
 	}
 }

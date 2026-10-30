@@ -28,6 +28,19 @@ STARTING_SUPPLY_RAILS = {
     "STP": (1, (119, 1, 16440), (16547, 16440)),
     "YPR": (1, (33, 73, 11), (16372, 11)),
 }
+# Capital, forward depot and embarkation port remain connected inside each country.
+COALITION_SUPPLY_RAILS = {
+    "EFL": (
+        (2, (16717, 8904, 12830, 786, 5934, 10809, 1200, 6514, 9402, 10422)),
+        (2, (10422, 6970, 11035, 9041, 6870, 5979, 6000, 6495)),
+    ),
+    "AZH": (
+        (2, (16893, 16886, 7737, 729, 367, 5555, 6577)),
+        (2, (7737, 9798, 10626, 9758, 8829, 1360, 5039, 3464, 493)),
+    ),
+}
+COALITION_SUPPLY_HUB_STATES = {10422: 70, 6577: 727}
+COALITION_SUPPLY_ENDPOINTS = {"EFL": (16717, 10422, 6495), "AZH": (16893, 6577, 493)}
 # The imperial network joins the northern cities to Montera and the existing
 # southern railway without relying on transit through neighbouring countries.
 MON_CAPITAL_PROVINCE = 2845
@@ -260,6 +273,7 @@ def update_source(source: str) -> str:
         ),
         *(render_rail_line(level, provinces) for level, provinces in MON_SUPPLY_RAILS),
         render_rail_line(*MON_KALTEN_RAIL),
+        *(render_rail_line(level, route) for routes in COALITION_SUPPLY_RAILS.values() for level, route in routes),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -286,7 +300,7 @@ def render_supply_node(province_id: int) -> str:
 
 def update_supply_source(source: str) -> str:
     """Append missing hubs and preserve the formatting of existing records."""
-    hub_states = {**VORKERLAND_SUPPLY_HUB_STATES, **MON_SUPPLY_HUB_STATES}
+    hub_states = {**VORKERLAND_SUPPLY_HUB_STATES, **MON_SUPPLY_HUB_STATES, **COALITION_SUPPLY_HUB_STATES}
     managed = {
         render_supply_node(province_id) for province_id in hub_states
     }
@@ -504,6 +518,32 @@ def validate() -> list[str]:
                 issues.append(
                     f"MON corridor supply hub {hub} is disconnected from the capital without Starolesye"
                 )
+        for tag, routes in COALITION_SUPPLY_RAILS.items():
+            owned_graph = defaultdict(set)
+            for level, route in routes:
+                if source.splitlines().count(render_rail_line(level, route)) != 1:
+                    issues.append(f"{tag} coalition rail must occur exactly once: {route}")
+                for province in route:
+                    if province_types.get(province) != "land" or state_owners.get(state_by_province.get(province)) != tag:
+                        issues.append(f"{tag} coalition rail leaves its own land at {province}")
+                for first, second in zip(route, route[1:]):
+                    if second not in physical.get(first, set()):
+                        issues.append(f"{tag} coalition rail is not adjacent: {first}-{second}")
+                    owned_graph[first].add(second)
+                    owned_graph[second].add(first)
+            capital, hub, port = COALITION_SUPPLY_ENDPOINTS[tag]
+            pending = [capital]
+            reached = {capital}
+            while pending:
+                for neighbour in owned_graph[pending.pop()] - reached:
+                    reached.add(neighbour)
+                    pending.append(neighbour)
+            if not {hub, port} <= reached:
+                issues.append(f"{tag} level-2 capital, hub and port network is disconnected")
+            if supply_lines.count(render_supply_node(hub)) != 1:
+                issues.append(f"{tag} forward supply hub {hub} must occur exactly once")
+            if state_by_province.get(hub) != COALITION_SUPPLY_HUB_STATES[hub]:
+                issues.append(f"{tag} forward supply hub {hub} moved outside its state")
         for tag, (_, route, hubs) in STARTING_SUPPLY_RAILS.items():
             if source.splitlines().count(render_supply_connection(tag)) != 1:
                 issues.append(f"{tag} supply connection must occur exactly once")

@@ -360,8 +360,8 @@ def validate_wkr_semantics() -> list[str]:
             issues.append(
                 f"{WKR_DEFAULT_LEADER} must use an existing generic Forul portrait"
             )
-        if "ideology = pragmatism_ideology" not in default_block:
-            issues.append(f"{WKR_DEFAULT_LEADER} must match WKR's fallback government")
+        if "ideology = neo_vorkerism" not in default_block:
+            issues.append(f"{WKR_DEFAULT_LEADER} must retain the neo-vorkerist role used by the chairman's legacy course")
 
     for relative, expected_dimensions in WKR_FLAGS.items():
         path = ROOT / relative
@@ -776,8 +776,8 @@ def validate_new_save_materialization() -> list[str]:
         != 2
     ):
         issues.append("prepared evacuation and the fallback must each retain the Worker rescue path")
-    if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 1:
-        issues.append("joint government must retain exactly one bounded wartime roll")
+    if "ADISCORD_vorkerland_form_joint_government = yes" in immediate:
+        issues.append("Worker's rescue must not automatically choose VAD's political mandate")
 
     materialization_scopes = [
         block
@@ -815,7 +815,7 @@ def validate_new_save_materialization() -> list[str]:
             "ADISCORD_vorkerland_relocate_legacy_armies = yes"
         ) < materialization.find("annex_country"):
             issues.append("WKR army relocation must occur after WRK annexation")
-        focus_tree = named_block(materialization, "load_focus_tree")
+        focus_tree = materialization
         for token, diagnostic in (
             (
                 "tree = ADISCORD_vorkerland_wkr_focus",
@@ -832,6 +832,10 @@ def validate_new_save_materialization() -> list[str]:
         ):
             if token not in focus_tree:
                 issues.append(diagnostic)
+        preparation = materialization.find("tree = ADISCORD_vorkerland_prewar_focus")
+        wartime = materialization.find("tree = ADISCORD_vorkerland_wkr_focus")
+        if not 0 <= preparation < wartime < materialization.find("annex_country"):
+            issues.append("WKR must copy shared preparation, then load its war tree before consuming WRK")
 
     begin_position = immediate.find("ADISCORD_vorkerland_begin_collapse = yes")
     fate_position = immediate.find("ADISCORD_vorkerland_prep_resolve_fate = yes")
@@ -2588,6 +2592,34 @@ def validate_retired_legacy_events() -> list[str]:
     return issues
 
 
+def validate_focus_doctrine_refreshes(focus: str) -> list[str]:
+    required = (
+        "WKR_declare_the_revolution_unfinished",
+        "WKR_govern_by_delivered_results",
+        "VAD_reclaim_the_imperial_mandate",
+        "VAD_seat_the_dual_chamber",
+        "VAD_doctrine_of_the_officer_estates",
+        "VAD_doctrine_of_the_district_levies",
+        "TVA_declare_continuous_mobilization",
+        "TVA_enact_the_preservation_protocol",
+    )
+    blocks = {}
+    for block in named_blocks(focus, "focus"):
+        identifier = re.search(r"\bid\s*=\s*(\w+)", block)
+        if identifier:
+            blocks[identifier.group(1)] = block
+    issues = []
+    for focus_id in required:
+        reward = named_block(blocks.get(focus_id, ""), "completion_reward")
+        calls = re.findall(
+            r"\bADISCORD_vorkerland_refresh_doctrine_dynamic_state\s*=\s*yes\b",
+            reward,
+        )
+        if len(calls) != 1:
+            issues.append(f"{focus_id} must refresh doctrine immediately and exactly once")
+    return issues
+
+
 def validate_campaign_state() -> list[str]:
     """Validate the event-driven campaign-state ownership split."""
     issues: list[str] = []
@@ -2632,7 +2664,9 @@ def validate_campaign_state() -> list[str]:
     if named_block(on_actions, "on_monthly"):
         issues.append("campaign state must not use a general on_monthly controller")
     economy_call = "ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes"
-    for tag in ("WKR", "VAD", "TVA"):
+    if named_block(on_actions, "on_monthly_TVA"):
+        issues.append("TVA programmes must not use a monthly factory-scaling hook")
+    for tag in ("WKR", "VAD"):
         hooks = named_blocks(on_actions, f"on_monthly_{tag}")
         if len(hooks) != 1:
             issues.append(f"campaign state must define exactly one on_monthly_{tag}")
@@ -2743,10 +2777,13 @@ def validate_campaign_state() -> list[str]:
         )
     reconcile_position = positions[-1]
     for tag in ("WKR", "VAD", "TVA"):
-        initialize = f"{tag} = {{ ADISCORD_vorkerland_initialize_legitimacy = yes }}"
-        initialize_position = outbreak.find(initialize)
+        initialize = "ADISCORD_vorkerland_initialize_legitimacy = yes"
+        scopes = [block for block in named_blocks(outbreak, tag) if initialize in block]
+        initialize_position = (
+            outbreak.find(scopes[0]) + scopes[0].find(initialize) if len(scopes) == 1 else -1
+        )
         if (
-            outbreak.count(initialize) != 1
+            sum(block.count(initialize) for block in scopes) != 1
             or not 0 <= initialize_position < reconcile_position
         ):
             issues.append(
@@ -2775,11 +2812,10 @@ def validate_campaign_state() -> list[str]:
             "central state-control edge must refresh all three claimant coalitions"
         )
 
-    if focus.count("ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes") != 6:
-        issues.append("the six doctrine forks must refresh doctrine immediately")
-    if focus.count(economy_call) != 6:
+    issues.extend(validate_focus_doctrine_refreshes(focus))
+    if focus.count(economy_call) != 4:
         issues.append(
-            "the six war-economy forks must refresh factory scaling immediately"
+            "the four WKR/VAD war-economy forks must refresh factory scaling immediately"
         )
 
     return issues

@@ -13,17 +13,299 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 493 division_template = "Basin Levy" start_experience_factor = 0.10 start_equipment_factor = 0.40 }
 	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 8234 division_template = "Basin Levy" start_experience_factor = 0.10 start_equipment_factor = 0.40 }
 	fleet = {
-		name = "Black Basin Flotilla"
+		name = "Флот Чёрного бассейна"
 		naval_base = 493
 		task_force = {
-			name = "Azhar Coastal Patrol"
+			name = "Ажарская ударная эскадра"
 			location = 493
-			ship = { name = "Black Basin" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = AZH } } }
-			ship = { name = "Azhar" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = AZH } } }
+			ship = {
+				name = "AZH-ТК-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ТК-02"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ТК-03"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЛК-01"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЛК-02"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЛК-03"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЛК-04"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-09"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Охрана Чёрного берега"
+			location = 493
+			ship = {
+				name = "AZH-ЭМ-10"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-11"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-12"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ЭМ-13"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Подводный дивизион Ажара"
+			location = 493
+			ship = {
+				name = "AZH-ПЛ-01"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ПЛ-02"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ПЛ-03"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ПЛ-04"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
+			ship = {
+				name = "AZH-ПЛ-05"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = AZH
+					}
+				}
+			}
 		}
 	}
 }
 
 instant_effect = {
-	add_equipment_to_stockpile = { type = convoy_1 amount = 15 producer = AZH }
+	add_fuel = 30000
+	add_equipment_to_stockpile = { type = convoy_1 amount = 40 producer = AZH }
 }

@@ -1,11 +1,12 @@
-# Воркерланд, этап 3: передача незавершённой работы
+# Воркерланд, этап 3: подготовка и границы проверки
 
-Задание для исполнителя без доступа к исходному разговору. Общий замысел - в
+Контракт подготовительного этапа. Общий замысел - в
 [спецификации](../specs/2026-10-26-vorkerland-civil-war-rework-design.md), разделы
 "Довоенный этап", "Зависимости сдвига срока" и "Этапы реализации". Соблюдать AGENTS.md.
-Чекаут грязный и общий: не делать reset/checkout, не коммитить, править только
-перечисленное. Файлы STP и иконок параллельно правит другая сессия: перед правкой
-перечитать файл и вставлять точечно.
+Подготовка и сдвиг срока реализованы в исходниках. Повторная реализация этих
+пунктов не нужна; незакрытые игровые проверки перечислены ниже. Общая переработка
+сторон продолжается в объёме, указанном в разделе "Границы реализации" спецификации.
+Чекаут грязный и общий: не делать reset/checkout и не включать чужие изменения.
 
 ## Уже сделано (не переделывать)
 
@@ -27,9 +28,11 @@
   (`ADISCORD_vorkerland_prep_slot_free`, clamp в `ADISCORD_vorkerland_prep_release_slot` = 3).
 - Судьба Уоркера: модификаторы весов в `ADISCORD_vorkerland_prep_resolve_fate` от
   `WRK_reinforce_the_tower_guard` / `WRK_disperse_the_government`.
-- 17 фокусов WRK (корень `WRK_face_the_hourglass`, якорь (7,7)) и 5 фокусов автономий
-  (`VAD_assess_central_demands` и далее) в `focus_trees/Vorkerland/prewar/focuses.txt`;
-  `shared_focus = WRK_face_the_hourglass` в дереве WKR. Выходы пересобраны.
+- Подготовка WRK имеет общий корень `WRK_measure_confederation_fault_lines`;
+  бюджет, лагеря и Башня входят в то же дерево. Фокусы автономий
+  (`VAD_assess_central_demands` и далее) находятся в том же исходнике
+  `focus_trees/Vorkerland/prewar/focuses.txt`, но доступны другим тегам.
+  Дерево подготовки передаёт завершённые фокусы и скрывается после распада.
 - Два решения баланса в `ADISCORD_vorkerland_prewar_category`:
   `ADISCORD_vorkerland_prewar_central_levy`, `ADISCORD_vorkerland_prewar_district_mandates`.
 - Диспетчер `ADISCORD_vorkerland_preparation.40` и 8 кризисных событий `.41`-`.48`
@@ -41,45 +44,44 @@
 - Локализация RU/EN всего перечисленного, описание категории с лагерями и балансом.
 - Спрайты и shine 22 фокусов в `interface/ADISCORD_national_focus.gfx` и
   `interface/ADISCORD_focus_shines.gfx` (ванильные текстуры).
-- Манифест `tools/validators/validate_adiscord_vorkerland_civil_war_focus.py` (новые
-  кортежи, 268 определений, 68 иконок WRK, якорь, полосы, `_can_share_view` по деревьям):
-  `collect_issues()` возвращает 0.
+- Манифест `tools/validators/validate_adiscord_vorkerland_civil_war_focus.py`
+  проверяет состав фокусов, якоря, полосы и совместную видимость по деревьям.
+  Числа определений принадлежат текущему манифесту, а не этому плану.
 
-## Осталось сделать
+## Завершённые зависимости подготовки
 
-1. **Старые значения таймера в инструментах** (175/21 → 350/30):
-   `validate_adiscord_vorkerland_recovery.py:581`, `validate_adiscord_vorkerland_collapse.py:1253-1254`,
-   `tests/test_adiscord_vorkerland_recovery.py:131-132`,
-   `tests/test_validate_adiscord_vorkerland_collapse.py:379-380`. Проверить
-   `tests/test_vorkerland_preparation.py:482` (окно подготовки 175 → 350) и
-   `tests/test_adiscord_rus_campaign.py:5075` - относится ли 175 к распаду.
-2. **Тесты дерева:** `test_adiscord_vorkerland_civil_war_focus.py:216` (286 → 308 блоков),
-   `test_wrk_focus_icons.py` (число иконок WRK). Прогнать модули Воркерланда и поправить
-   ожидания, привязанные к старой разметке: варианты `phase.1` (теперь `hidden_effect`),
-   `random_list` в `prep_resolve_fate`, `prep_slot_free`, `prep_release_slot`,
-   `initialize_legitimacy`, `inherit_wrk_prewar_preparations`, порядок в `collapse.1`.
-   Менять тест только если он проверяет старую форму, а не смысл.
-3. **Перенос двух фокусов STP** `STP_cw_seize_vorkerland_stores` / `_accounts` из
-   `focus_trees/STP/preparation/focuses.txt` в военное дерево Шабрата
-   (`focus_trees/STP/civil_war/focuses.txt`, ветка стороны Шабрата) с условием
-   `has_global_flag = ADISCORD_vorkerland_collapse_started`; сохранить ID и награды, обновить
-   `tests/test_adiscord_stp_preparation.py:8011-8059`, `tests/test_adiscord_economy_rebalance.py:1321`
-   и текст `STP_cw_seize_vorkerland_stores_desc`, если он упоминает подготовку. Собрать STP
-   через `--source`.
-4. **Порог наград:** `python -B -m tools.validators.validate_focus_rewards` (или через
-   `validate_tc.py`) для новых фокусов; при слабой награде усилить её, не заменяя механику.
-5. **Документация:** `docs/lore/countries/WRK.md:18` и `:85` ("175-196 дней" → "350-380 дней"),
-   `docs/superpowers/specs/2026-10-22-nam-package-3-design.md:43` (фаза колонии `0 - 350..380`),
-   отметить этап 3 выполненным в спецификации переработки.
-6. **Проверки:** сборщик `--check` → `--apply` → `--check`; модули тестов Воркерланда, NAM,
-   STP preparation/civil_war; `python -B tools/validate_tc.py --limit 300`; `git diff --check`.
-   Сравнивать с базовой линией по HEAD: до этапа падали 282 теста в фокусных модулях
-   (в основном `test_adiscord_country_vehicles`), в NAM - 3 старых падения
-   (`test_tree_selection_and_generated_owner`, новости `.8/.9`).
-7. **Проверка в игре (сообщить, если не делалась):** BOP видна в категории "Наследство
-   Конфедерации"; кризисные события приходят раз в 21-42 дня; решения баланса работают;
-   при распаде (день 350-380) претенденты получают пакеты лагерей; `phase.1` показывает
-   пакеты и прогноз; `error.log` без ошибок BOP, событий и фокусов.
+- Таймер 350/30 согласован в обработчике запуска и валидаторах recovery/collapse.
+- `STP_cw_seize_vorkerland_stores` и `STP_cw_seize_vorkerland_accounts` принадлежат
+  `focus_trees/STP/civil_war/focuses.txt`, а не подготовке STP. Допуск требует
+  распада Воркерланда. Повторно перемещать фокусы не нужно.
+- Лор `docs/lore/countries/WRK.md` и таблица колониальной фазы NAM используют
+  окно 350-380 дней.
+- `UnifiedPrewarTreeTests` проверяет единый корень подготовки;
+  `test_wartime_tree_omits_prewar_branches_but_copies_shared_history_first`
+  проверяет сохранение завершённой подготовки без её показа в военном дереве.
+  `test_prewar_plans_leave_time_for_paid_preparation` учитывает длительность
+  оплачиваемой программы вместе с маршрутом фокусов.
+- Сборщик проверяется через
+  `python -B -X utf8 -m tools.builders.build_adiscord_focus_trees --source Vorkerland/prewar/focuses.txt --check`.
+  При изменении исходника обязательны `--check`, `--apply`, повторный `--check`
+  и доказательство идемпотентности. Актуальный вывод не требует перезаписи.
+
+## Незакрытая проверка в игре
+
+Проверку выполняет пользователь вручную в новой кампании. Автоматизация
+интерфейса, запуск, перезапуск и закрытие игры запрещены правилами репозитория.
+
+- BOP видна в категории "Наследство Конфедерации", решения баланса меняют её.
+- Кризисные события приходят раз в 21-42 дня; подготовительные программы можно
+  оплатить и завершить до самого раннего распада.
+- При распаде на 350-380 день претенденты получают свои пакеты лагерей;
+  `phase.1` показывает пакет и прогноз. Проверяются немедленный выбор и отсутствие
+  ответа до таймаута, владельцы и контролёры стартовых областей, оплаченные войска.
+- После передачи игрока видимо только дерево выбранной стороны, при этом
+  результаты завершённой подготовки сохраняются.
+- Свежие логи не содержат ошибок загрузки соответствующих BOP, событий и фокусов.
+  Перед проверкой фиксируются хеши загруженных исходников. Исходные тесты не
+  заменяют эту проверку и не доказывают симметрию войны в AI-кампании.
 
 ## Не трогать
 

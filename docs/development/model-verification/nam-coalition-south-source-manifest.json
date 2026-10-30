@@ -1,0 +1,335 @@
+{
+  "captured_utc": "2026-10-30T09:25:49.309262+00:00",
+  "verification_scope": "Static source snapshot for a manual new-campaign check. The game was not launched or controlled.",
+  "focused_tests": {
+    "tools.tests.test_adiscord_nam_focus": 197,
+    "tools.tests.test_adiscord_naval_programmes": 24,
+    "tools.tests.test_vorkerland_nam_state_balance": 44,
+    "tools.tests.test_build_adiscord_vorkerland_theatre": 17,
+    "tools.tests.test_adiscord_south_final_war": 45,
+    "tools.tests.test_adiscord_shl_furnaces": 171
+  },
+  "focused_tests_total": 498,
+  "focused_tests_result": "Latest affected-suite run: 242 NAM and southern-war tests passed. Naval/state/theatre suites last passed in the preceding 325-test run; 171 SHL tests are from an earlier run. The cumulative 498 is not a single fresh run.",
+  "total_conversion_validator": "Latest run: four WKR focus-layout findings in concurrent country work (two undocumented two-row links and two horizontal crossings); all other error-check sections are zero. Eleven informational vanilla-token matches remain. Exit code is zero despite findings, so the overall check is not clean.",
+  "builder_checks": "Latest radical source check/apply/check passed; all seven NAM outputs are current. Earlier coalition state and supply transformations were verified byte-idempotent.",
+  "review": "Read-only critic accepted bound NAM participation, selected northern-leader war entry, idempotent assignment and the global-winner comparison in the scenario fixture. Earlier tree reviews remain recorded in the plan. Territorial-course intent, oil-peace neutrality and manual engine checks remain open.",
+  "unrelated_test_blockers": [
+    "Ownership registry source glob tools/assets/source/stp_portraits/*.png is empty.",
+    "Debug localisation: VAL_debug_council_discontent lacks the required red DEBUG prefix."
+  ],
+  "manual_checks_pending": [
+    "New campaign focus-tree loading and warning/declaration timing",
+    "Rail and hub supply under actual army load",
+    "AI naval invasions and paid naval programme delivery",
+    "Tooltip and decision-category rendering",
+    "Island levy extraction and treasury, including occupation, recapture and foreign concession rights",
+    "Native placement of frontier bunkers after victory and standoff",
+    "Corporate focus exclusions, conditional landing previews and occupied-island mining bypass",
+    "Postwar AI order at the 2165 boundary, diplomatic refusals, ally acceptance preview and southern-heritage housing/rearmament delivery",
+    "First marine delivery with zero to three paid orders and an already owned harbour; fixed template across refund/reorder, ordinary recruitment and no renewed-war free units or subsidised GUI orders",
+    "Free-zone cancellation on control loss with a second island pending; district rewards after lost subject status or capital control",
+    "Compromise tree merges, trade unlock with/without the prewar bureau, buyer acceptance/monthly delivery and the 266+42 focus-day AI queue at the southern warning",
+    "Radical tree: six prerequisite lines, merged cadet/pilot rewards and complete descriptions, actual preparation time and the third first-expedition division without a paid order",
+    "Cold-load definitions for the four new naval focuses and three readiness triggers; emergency-defence and punishment idea cleanup without native has_idea errors",
+    "NAM subject of EFL/AZH/SHL: native same-war entry, key-state accounting and winning/losing peace outcomes; sovereign NAM and absent NAM remain unchanged"
+  ],
+  "sha256": {
+    "common/ai_strategy/ADISCORD_nam_resource_war_ai.txt": "7645ccba46b72e9dc65b2002c175217564ee0aeae8e31db83388ff1003a336ce",
+    "common/ai_strategy/ADISCORD_south_final_war_ai.txt": "5fd7b653085f49abc0ed8bebdb89b31c3c5dcf82373c1b439036a7ee84737b4a",
+    "common/ai_strategy_plans/ADISCORD_NAM_plans.txt": "efc85c112153fc28e4377ea902e11e2859fe230ea6185b31a57c27f4b0679d2c",
+    "common/ai_strategy_plans/ADISCORD_SHL_plans.txt": "9f1cd26728e008b3f0b10241e73f51845001fb3ce4b808fad683db1bf0098c1e",
+    "common/autonomous_states/ADISCORD_south_final_war_subjects.txt": "1ee654bdaea73f8e2d32ee3aff0e1fe806815d3d8924b1c4f48a2103e55ea8da",
+    "common/bop/NAM.txt": "cc4b4ff0b2038e156242a09526eab43e88cd6cc381053da5c7ba720f3450bb41",
+    "common/characters/ADISCORD_nam_resource_war_characters.txt": "97a40c7eee8a059881e05f239c451e105811b39e7b44a5aae05614cbd5c28d25",
+    "common/characters/NAM.txt": "80f833483cf6add611f71afe18e15466245330f6ff9b1ede0299aa769129d045",
+    "common/countries/ADISCORD_dynamic_country.txt": "5538216c6f1e6edd8b197de733eaadb85bfa048a78cc58d263f4482616ac61d6",
+    "common/countries/NamestnikLand.txt": "81279fc9c88bb8428495ae8ecb7ce6083b82285467a6f5a9810fa4aee627a318",
+    "common/countries/SHL.txt": "160724fbbd9cad1c18290bd1fcabd444d7bda5a66f52507fa184b6a2889f32ea",
+    "common/country_leader/ADISCORD_traits_NAM.txt": "08a6c949b367e1b5fff7cdb8ee098b0b5aef02d4835b8dd203e369df16367280",
+    "common/country_tags/03_ADISCORD_nam_resource_war_tags.txt": "ee2f138e4f2cff678f7f0df87e606c78c87efb95bf3a738d45c11ded37eeb1b0",
+    "common/country_tags/zz_dynamic_countries.txt": "77afaf67e630fc87ac34b9ad05435e372fc9dd6800d5c1c8232e52ad7846574f",
+    "common/decisions/ADISCORD_SHL_decisions.txt": "481c2693bb170aaeb6e963ed45a9f2a87062afb47fad2e49c6caa15cf38e915d",
+    "common/decisions/ADISCORD_nam_resource_war_decisions.txt": "e787fb4785cd82c1868bfa47df7062e50d5f393ef80a17258687ba9fc3b79663",
+    "common/decisions/categories/ADISCORD_decision_categories_SHL.txt": "9f61fc52c45c847cc0b88cf36ea2093556d18a8ac45af66d0892c8913cde6106",
+    "common/decisions/categories/ADISCORD_nam_resource_war_categories.txt": "e03a5228d060676977f9263f1ffec2af7b666d1a3fca18e5d01c88ff1ca66532",
+    "common/decisions/categories/ADISCORD_south_final_war_categories.txt": "dca67cbe3d691badbc99edadcdeccb2d5c55b447a2dca84266dbadeddbad0f61",
+    "common/dynamic_modifiers/0_dynamic_modifiers.txt": "18121e6ab6216619aeeeaf3ec4d224ee5927baffb9f9dedd046c9fac307291ba",
+    "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt": "438962f93ff8051ee04daae7dc6957bcb857bdb5fbac5108f5f676375d7c6708",
+    "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_IVN.txt": "eee807b32af89a398fb41add0e632ebf56385dab112b6d9567f7eec5c2a6e0de",
+    "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt": "e76f3f7a3f30a2e20406201bba280a336ce180d27cca5475e1901041c58d1b6d",
+    "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt": "bfbeb61566d39a868c214ceae5eb59cc9c3a2671a1bc372f0d62a59570a0b8eb",
+    "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt": "1d1e20add037400ed57383db03dd0ea7d1277640765cac5f3487de390ed0dcbb",
+    "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt": "2930423bdc2867e8262fe78054c283478674e952670dfad51be23189c76eff65",
+    "common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt": "3956610c9243ddb088f69b9050291887645eba3fcb3735230fe23df2bb56fd73",
+    "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt": "baa977361e3572c5a0ef33233add4097325f038efef6bdfd971498733b99c06e",
+    "common/ideas/ADISCORD_nam_resource_war_ideas.txt": "44a05018fc2be954aa0e21f2a705b3716c8fe3d999422985ea45ee13b18919e8",
+    "common/ideas/ADISCORD_south_final_war_ideas.txt": "a181971684348209dc2c0189abb3e3612dae2fe68353977fc75780fc80ddeb50",
+    "common/names/00_names.txt": "dea21eca83eb7f4840c09739b24ca702622aa10cae8a2df460ef231a5444bbac",
+    "common/names/ADISCORD_vorkerland_names.txt": "5d1153f6c3348a1d8edb9f4144ebcfee43b015f3a582bd4664c5fa69ccd3d4cf",
+    "common/national_focus/ADISCORD_NAM_defeated.txt": "92a956f86d0e13920245b10c30469637a01cd2769be4a4c1af30bac8981ce72f",
+    "common/national_focus/ADISCORD_NAM_exile_corporate.txt": "aec97d2f8c01071e60fb87335bc7ed814833340cbae58a702f5824d621b28dfa",
+    "common/national_focus/ADISCORD_NAM_exile_humanist.txt": "033101255c340b1b2e7521754177c99a066a4055daa0bb655013b8c3189f142f",
+    "common/national_focus/ADISCORD_NAM_exile_radical.txt": "a6d56fbbdab55f02813d1ed0eb2e909a4ad285cc22cf09c589da746cc0179de1",
+    "common/national_focus/ADISCORD_NAM_focus.txt": "6633dc404431eddbdf07efc5fd9aa99919f6b1a2ca3148f7229e8d1db1062a5f",
+    "common/national_focus/ADISCORD_NAM_postwar.txt": "efbaab7b145425f7c8c25bdb95e8ba70edc8c9f8be05f38b1ae64cf7eed74b1f",
+    "common/national_focus/ADISCORD_NAM_wartime.txt": "f1eb5182d9a1cced0928d04356621ca1e9fea0da4683ed5a700a74fbedf1ec77",
+    "common/national_focus/ADISCORD_SHL_focus.txt": "db223e4b5fd83c0d8385f1efc7913c518f7879f44ac4fe300956e1e1d0c82991",
+    "common/on_actions/03_ADISCORD_SHL_on_actions.txt": "62eb82c294d6adeeefef1fb07e1c9b99614b4de5af8bb9b902c0e3ac6348a04a",
+    "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt": "a3c50cf75beff30d98343927d17be1bc24930a913ce55a3cf275cbf0b630232a",
+    "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt": "f194728062cc744a94667ceba74e3ea61ee8bafc51e4b7b8c43420de4dc07213",
+    "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt": "dbe32f5654d6cdf2103e01c9b3909a3d75df2b1577e2fe315475d974b7846e98",
+    "common/scripted_effects/ADISCORD_south_final_war_effects.txt": "d55898b96a8dc50dd6863d68d5ca94119f104356355c89af27d085429fb96e06",
+    "common/scripted_effects/ADISCORD_technology_baseline_effects.txt": "fddaa48d5a87bbe5d5ac15c1e423a40bd4c1bdbb5bf4bd61089b71dd501fe7c8",
+    "common/scripted_guis/ADISCORD_NAM_scripted_gui.txt": "1e2dafd18c760d6a3ee92a90b27d25232476d48341d0a3441a14f629abdde959",
+    "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt": "b354e3909a1123bb423bb52c7e1076750d5e556d0599eb906efbc3ffb986892b",
+    "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt": "e0d8d822d80c1f5fb998ada275403b4a7cfcbaacb27c51522e00d36ac635977d",
+    "common/scripted_localisation/ADISCORD_nam_resource_war_scripted_loc.txt": "0929917b082cddd5b261a8b9331fe306129f723164610c4798bd7b7b7c1f9ccd",
+    "common/scripted_localisation/ADISCORD_south_final_war_scripted_loc.txt": "792dda53498ce7acdde446edff1e52a606c06b9c68dc88ed90dd7013cfc15ee4",
+    "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt": "209af2d6f38e06a3fb2995956f27810f746a9abd93ea68b78e41f3fa145909e0",
+    "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt": "8773cc2cfee243b71ef9d823c7cd091861f797e01ef72100315ef616d3e9adaf",
+    "common/scripted_triggers/ADISCORD_south_final_war_triggers.txt": "ce55dbdd4efeffbcbbfd1c8c020ac9b43255ecfe6c946b2d10b91548b9235237",
+    "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt": "254be226659904842dbb3d3fb43f2b5d94ce1710ba6d144c50e6b70eb8bc76d7",
+    "common/technologies/ADISCORD_nam_resource_war_technologies.txt": "aaedbbaeab5bc2d910305114f46707f2d88df909034990edc81e9b49a998639d",
+    "common/units/names/00_names.txt": "9de649103d31f5a12257cd039f79d0c4dbe95530f74b5f2ac738b7e310027de1",
+    "common/units/names_divisions/ADISCORD_generic_names_divisions.txt": "07901954b2778b9f240168e45a0cebb01829d57efc88d76c7217463eb3e3c915",
+    "common/units/names_divisions/ADISCORD_vorkerland_collapse_names_divisions.txt": "b9e416b05875f25bfdb60a6bf0891de726ceffedd6a8bf695532172573c1b38e",
+    "common/units/names_divisions/STP_names_divisions.txt": "c455537a626b6ca3f0da7f78d8b9e32e2d16b89aa316a1761d552cb8d0bbba54",
+    "common/units/names_divisions/VAL_names_divisions.txt": "29bbb09a0adebe636a4d0ef78d27b258a0d69586a2dd072956baeda0ca002483",
+    "common/units/names_divisions/WRK_names_divisions.txt": "95fd464e8bf708e7fe14143a0caba73ec7d73c49af15e07d070ee0a832bbdf2d",
+    "common/units/names_railway_guns/ADISCORD_railway_gun_names.txt": "a45eab44d1daf82485c93397dc57b24da84666d12f539e878183f86275a8c493",
+    "events/ADISCORD_nam_resource_war_events.txt": "710fdc6ac7c0b1adb5fffcff9242e8c802fb54c9998b690f645df65036218af1",
+    "events/ADISCORD_south_final_war_events.txt": "6427ae4c9ec6cbc6413c508410d52666ba56e364a4b0d8ca1d3f2e999f8921ee",
+    "history/countries/AZH - Azhar Black Basin.txt": "361f3149d3ce71dbf5de7d19cae64d317ca0787731a9d2229f7df6eafc3b4e26",
+    "history/countries/EFL - Eflor.txt": "ef5de5f44cccf8b2566ca84d8f591c92e451853706b31a69eb818560eb275ddd",
+    "history/countries/NAM - NamestnikLand.txt": "ef8853cdcfdcc69b72e086abb023d21a5c70d849b21fec3df3d3f4698519c436",
+    "history/states/67-67.txt": "dbd9511621585daa3df1474c2043361e538e9262757679296c07dde636e2ac0c",
+    "history/states/68-68.txt": "f84a9ffbee00edb2af93dea7f13827b44af0655a6badd165b6c319169bd5b42d",
+    "history/states/688-Svetlogorsk.txt": "a176cd6644dea3fec1439787d7a6981d51c744d61504a28f1d949ee0567a9289",
+    "history/states/689-South-Coast.txt": "384d9f188bf374a2c971d70bc4b177e2d24ca8f75bd6280c19ad0524bff2d7b7",
+    "history/states/69-69.txt": "f83fe3fab5eac3d293c4a1dd61eb4dab34c1eb58344395b1bdcce3e34f4c4566",
+    "history/states/690-Dryriver.txt": "759a89857617bd9f2b5f108678e36db85b40870e7bac0c5ddbe3d82a8e6eec84",
+    "history/states/691-Middle-Loren.txt": "91f6db7ec37975fe56c780220fb310164b640f1d1e46519cdc45d48c73ede4c5",
+    "history/states/692-Black-Coast.txt": "535268652909c2205e00473f35f5aa91c335c1131147f844bf1ff70b7c127399",
+    "history/states/70-70.txt": "6c8263862576942325af98bed63f7da89ee1547fa3d1ef2ba6dfc8570f25ac83",
+    "history/states/700-South-Harbour.txt": "769f324cb1b97a7fa88bfdb6cb5dd2d7d88911767f5f21a286cfd04fa3be925f",
+    "history/states/701-Middle-Loren-City.txt": "e1261fa2086af59d122571cfdb3e5b7e4e9314a98636c7872b637470a46ad6f8",
+    "history/states/719-East-Dryriver.txt": "6054ab69ebf0c3ee4e05dba949b40b02353ad69fa18c4eb5cc78868b910c3688",
+    "history/states/720-Moren.txt": "9ccf0772d65dc89a9d8e24713e5e01ccae4c11ae03094a530401396332dae0d5",
+    "history/states/721-Loren-Borderland.txt": "ac1e5cce8304cf55fe9265a54f7f0ff3a5728c6b2c43760e962b7401fa194784",
+    "history/states/722-Azhar-Seaboard.txt": "de94101407c58d3e1183e6ecb88aacb5a3036b77e3bd0df4aacd569dfc0eae84",
+    "history/states/723-Loren-Coast.txt": "cf7a83cb8ca6ab979a5493fa53f5a7c085976a00fba617dd87bf57ff9888c377",
+    "history/states/724-North-Loren.txt": "635b6c590a99a78038687d233058124bb17a1c17b31bf3d003cadbabe1fa4691",
+    "history/states/725-East-Loren.txt": "54499d5df005428dc3c66d858102c0fe494cd88cd851940753ccbf34552b46c1",
+    "history/states/726-Interfluve.txt": "a0c97542fbbfaa48912950477606ebbea423a1a90789823311ddd9cbf6299048",
+    "history/states/727-Western-Oilfields.txt": "edb5cf2fced5f1ff76cf2571290e85e748657405bc711644fbe277259d7de6a7",
+    "history/states/728-South-Cape.txt": "c3706b4b7bb82995190b9e1b7dd23b90cc4cfc18104ce0006ac3c770109eba64",
+    "history/states/729-Eastern-Uplands.txt": "f56e081752a7f004b2e8fc03303d3b25f60d2f9c80c38edda8aa1aa6500480cd",
+    "history/units/AZH.txt": "488342222a76bed26dfc4e39eebed1b1a5ac093921374f5b69009843b2950d1d",
+    "history/units/EFL.txt": "2e68f6fd1e318804fee0632937a7c45963319f96921d5a480b4c28665c8dd4aa",
+    "history/units/NAM.txt": "e73c587be818fb70d52f3d8c25a4c7579ba3a9b694980649787b022df606ad21",
+    "history/units/NAM_resource_war.txt": "23d8566452ef80663d0fd326679328ca0c8748fc6dca72ab27391ec2fb91d474",
+    "interface/ADISCORD_focus_ui.gfx": "6e44987ba1d7c7742d1f4becd9356b1eec32235cbdc3a0137007bfc8d9c9a897",
+    "interface/nationalfocusview.gui": "13729e7fc0bf94e542c9257a90c7d514681e70855f4a6ebf24fc67050c0e5643",
+    "localisation/english/ADISCORD_SHL_l_english.yml": "5e86611e2b4a2fdcae9fe10f8701d12f937d18c3254cb432648ae4d28f00f9e1",
+    "localisation/english/ADISCORD_STP_l_english.yml": "5cf4cbfa9f0ee37fa5706ad267434fa8382a0908ab09a403408b84970e083d1d",
+    "localisation/english/ADISCORD_nam_resource_war_l_english.yml": "d73fb9340f3018c01cf615f431f829a4cd22c843aa1ed2475caba0e73d65722c",
+    "localisation/english/ADISCORD_south_final_war_l_english.yml": "054fcf5f21f6d61638bcdcdc83f8817556fab49e8c7bd50c6e91d33a2a7f2f0d",
+    "localisation/russian/ADISCORD_SHL_l_russian.yml": "69f50e6f80bed3ed919452391b889a08a96ba863944be8d873f75375c53068d4",
+    "localisation/russian/ADISCORD_STP_l_russian.yml": "1449f56dc4def1e69cd434780fc97bd079f7ff1c9249f5d17406dc25f6491142",
+    "localisation/russian/ADISCORD_nam_resource_war_l_russian.yml": "95cff2b2dd51953cc2d83471a4e1d5c0c45037fa5d1919e74753b36e76db0c5d",
+    "localisation/russian/ADISCORD_south_final_war_l_russian.yml": "a4a70615040969b24395cff897532397d19ad6fe76451a3715d16e0b1b3cf894",
+    "map/buildings.txt": "124d3c9feb7d721cd8be4ea03b36f8a30f8df158decf6ecc023d98a74e40b801",
+    "map/railways.txt": "fc6c30026230238d1efc76c483b0954bf37ac8d58de80a2289ceb66726ce3c71",
+    "map/strategicregions/24-mardar-lowlands.txt": "5d32e7bdeafdcaa28935306b54e622db307c068241608c87efa57013ab6749e7",
+    "map/supply_nodes.txt": "d9a9eb44f669c4971ccbb5818b9e448089d166461f785332103fc4bb22a11979"
+  },
+  "temporary_cleanup": "Automatic execution review rejected deletion of the task scratch and preview directories: blocked by policy. The directories remain; no other work was deleted.",
+  "latest_focused_rerun": {
+    "suites": [
+      "tools.tests.test_adiscord_nam_focus",
+      "tools.tests.test_adiscord_south_final_war"
+    ],
+    "tests": 242,
+    "result": "passed in 61.088 seconds",
+    "review": "The new subjugated-NAM scenario failed for all eight pre-fix combinations, then passed after adding NAM to the existing bound-side dispatcher. EFL/AZH/SHL subjects join the selected war once, controlled oil objectives retain their side, and only the losing side receives settlement/release. Existing NAM leadership and an absent NAM are preserved. This is source execution, not a native war or treaty run.",
+    "other_source_changes_since_previous_snapshot": [
+      "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
+    ]
+  },
+  "verification_sources_sha256": {
+    "docs/development/focus-effects.md": "e9e44ce47e4ce4bf2f69f6206cb764c6ee291c0b33b6859476dc754750486cdd",
+    "docs/superpowers/plans/2026-10-30-nam-coalition-naval.md": "c26fe1435cfef81ada79b4b27e5ae3e85a3c9c0ece985c8da94652e404df3645",
+    "docs/testing/vorkerland_and_nam_debug.md": "2c2f9df28144e60597d16f2b332563690bb50e1abf852346f6ab538ba1eae1c0",
+    "focus_trees/NAM/defeated/focuses.txt": "d395761179f82534cbd6ff01d0bb4aea7489a91506ed179bbf344839cc3411d4",
+    "focus_trees/NAM/exile_corporate/focuses.txt": "10e400477c1f1d31404abb3ecc7d1b993b4f64c5e3ff5740dec132ef0b1b528e",
+    "focus_trees/NAM/exile_humanist/focuses.txt": "538fc1bde436a68f2c6bc296f7d26dfa8a7ce8f28e37f7eabb9332c80b527079",
+    "focus_trees/NAM/exile_radical/focuses.txt": "37ef6b7818c2f2428fb521728d5811f22ecc1478ebc7a4bd9b3d2acb8bb0cef5",
+    "focus_trees/NAM/postwar/focuses.txt": "4ad32f0a1eaef444a10d509b6babd8476cd21d903825327e6063f61b19f0f9d1",
+    "tools/tests/test_adiscord_nam_focus.py": "a8bcfe4f7f34e39be1810d0d845bc7c62450c6ad7759871191da4c8624677c01",
+    "tools/tests/test_adiscord_south_final_war.py": "018fce2a1e744be09b9b8f13a6e2bdb46a5f413b3583b3617259791a0fac05c8",
+    "tools/validators/validate_adiscord_nam_resource_war.py": "9377ee7348b21e2b0482f7e9dc2c7daf5c47d3298ae63d56a4960e2501053aa8",
+    "docs/superpowers/specs/2026-10-22-nam-package-3-design.md": "7ed81d4fc5a6f73384c9e3b844b8670d98a3349cd809e0d0c3d2fcd073215f51",
+    "focus_trees/NAM/main/focuses.txt": "f56f82f615630c1bd05894b139e34ab4f74ad0933952e5bcb429df92cedfc482",
+    "focus_trees/NAM/wartime/focuses.txt": "afa0053298b13fba5d90bdfc3059aba37fb96d45eacb23c31636cd12fc8cc8c9"
+  },
+  "design_choices_pending": [
+    {
+      "focus": "NAM_border_revenge",
+      "question": "Preserve the Upper Loren promise as deterrence, a separate northern war, or territorial negotiations; the current claims alone have no scripted acquisition route."
+    },
+    {
+      "focus": "NAM_defeat_oil_peace",
+      "question": "Economic course without a northern offensive but with defence against SHL, or a genuine neutrality treaty that closes the southern war? Current story text is preserved."
+    }
+  ],
+  "requirements_audit": [
+    {
+      "requirement": "Propaganda and narrative text",
+      "source_evidence": "34 propaganda titles per language across NAM/RUS/SHL/STP/VAL use the yellow prefix; 8 belong to NAM. NAM focus and decision descriptions were audited separately from reward tooltips. ASCII-quote source scan and RU/EN BOM/quoted-value checks passed in the prior packet.",
+      "paths": [
+        "localisation/russian/ADISCORD_nam_resource_war_l_russian.yml",
+        "localisation/english/ADISCORD_nam_resource_war_l_english.yml"
+      ],
+      "remaining": "Manual tooltip rendering remains pending."
+    },
+    {
+      "requirement": "Decision unlock previews",
+      "source_evidence": "NAM unlock tests cover summaries beside the actual reward, usable gates and both languages.",
+      "paths": [
+        "tools/tests/test_adiscord_nam_focus.py"
+      ],
+      "remaining": "Native reward rendering remains pending."
+    },
+    {
+      "requirement": "Unity Tower sequence",
+      "source_evidence": "Collapse event .4 performs the explosion and schedules .6 one day later; the legal-collapse announcement is separate.",
+      "paths": [
+        "events/ADISCORD_vorkerland_events.txt"
+      ],
+      "remaining": "Superevent and news ordering remains a manual check."
+    },
+    {
+      "requirement": "Independent military institutions",
+      "source_evidence": "Army, navy and air use country-variable aggregates and exact dummy previews; the port name is Eternal Port.",
+      "paths": [
+        "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt",
+        "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+      ],
+      "remaining": "Native modifier display and within-campaign handoff remain manual checks."
+    },
+    {
+      "requirement": "Colonial timing and independent layout",
+      "source_evidence": "The source scenario completes the three colonial lines and calm gateway in 329 days; the gateway has three AND prerequisites and green text. Independent roots connect to the seal; main layout tests bound span and depth.",
+      "paths": [
+        "focus_trees/NAM/main/focuses.txt",
+        "tools/tests/test_adiscord_nam_focus.py"
+      ],
+      "remaining": "Actual layout and uninterrupted campaign timing remain manual checks."
+    },
+    {
+      "requirement": "Wartime replacement",
+      "source_evidence": "The hidden 12-focus wartime tree loads after actual resource-war entry and retains shared completed history.",
+      "paths": [
+        "focus_trees/NAM/wartime/focuses.txt",
+        "tools/tests/test_adiscord_nam_focus.py"
+      ],
+      "remaining": "Native tree replacement remains pending."
+    },
+    {
+      "requirement": "Meaningful compact rewards",
+      "source_evidence": "Council, underground, military and economic programmes have paid consumers and delivery tests. The seven trees contain 369 focuses; radical and compromise duplicate stages are merged. The remaining territorial and oil-peace promises need user intent.",
+      "paths": [
+        "docs/development/focus-effects.md",
+        "tools/tests/test_adiscord_nam_focus.py"
+      ],
+      "remaining": "Two narrative decisions and manual balance checks remain open."
+    },
+    {
+      "requirement": "Coalition map, population and navies",
+      "source_evidence": "Tests cover fleets 40/25/15, technology before OOB, roughly 12 million residents per coalition country, conserved new districts 723-729, connected rails/hubs and scripted muster accounting.",
+      "paths": [
+        "tools/tests/test_adiscord_naval_programmes.py",
+        "tools/tests/test_vorkerland_nam_state_balance.py",
+        "tools/tests/test_build_adiscord_vorkerland_theatre.py"
+      ],
+      "remaining": "Supply under load and AI invasions require manual play."
+    },
+    {
+      "requirement": "Decision list",
+      "source_evidence": "Manual ground demobilisation is removed; contract visibility follows diplomatic eligibility while prices and shortages remain readable.",
+      "paths": [
+        "common/decisions/ADISCORD_nam_resource_war_decisions.txt"
+      ],
+      "remaining": "Decision-category rendering remains pending."
+    },
+    {
+      "requirement": "Finite resource-war preparation",
+      "source_evidence": "The native 450-day timeout runs independently of introductory focuses. One-use delays add 45/75/45/60 days; the separate territorial protocol adds 365. Scenario tests cover accounting, warning and real order delivery.",
+      "paths": [
+        "common/decisions/ADISCORD_nam_resource_war_decisions.txt",
+        "tools/tests/test_adiscord_nam_focus.py"
+      ],
+      "remaining": "Native mission scheduling remains pending."
+    },
+    {
+      "requirement": "Southern readiness",
+      "source_evidence": "Every starter waits until 2165, all three SHL milestones and the northern route milestones. If NAM cannot lead, EFL/AZH qualify only after the resource war has a result. The 56-day warning and offensive queue are tested. A subjugated NAM is assigned to its champion before the objective snapshot and is included in loser settlement.",
+      "paths": [
+        "common/scripted_triggers/ADISCORD_south_final_war_triggers.txt",
+        "tools/tests/test_adiscord_south_final_war.py"
+      ],
+      "remaining": "Actual warning and declaration timing remain pending."
+    },
+    {
+      "requirement": "Generator and release contract",
+      "source_evidence": "All seven NAM tree outputs matched their authoring sources in the preceding packet; no tree changed in this packet. The affected 242 tests and NAM validator pass. The latest total-conversion run reports four separate WKR layout findings. The game was not launched or controlled.",
+      "paths": [
+        "tools/builders/build_adiscord_focus_trees.py",
+        "tools/validators/validate_adiscord_nam_resource_war.py"
+      ],
+      "remaining": "Static checks do not establish runtime readiness."
+    }
+  ],
+  "existing_native_log_audit": {
+    "checked_utc": "2026-10-30T09:19:31.527343+00:00",
+    "log_path": "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\logs\\error.log",
+    "log_sha256": "67c9bb9cf72749632c2a9834301be7c6e49f0e6459af762f4e36bee3be01b941",
+    "log_last_write_utc": "2026-10-30T04:57:59.748589+00:00",
+    "source_last_write_utc": {
+      "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt": "2026-10-30T08:27:58.506394+00:00",
+      "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt": "2026-10-30T08:41:19.763289+00:00",
+      "common/national_focus/ADISCORD_NAM_focus.txt": "2026-10-30T06:07:54.856833+00:00"
+    },
+    "scope": "Existing log only; no game launch, UI interaction or native reproduction.",
+    "findings": [
+      "The log contains hot reloads and precedes the current NAM effects, triggers and main tree. Loaded hashes are unavailable, so it cannot validate the current package.",
+      "Unknown naval triggers and focus references were reported during that session. Each named definition exists exactly once in the current country source.",
+      "Blank has_idea errors occurred for emergency defence and punishment cleanup. Current referenced idea definitions exist exactly once; native cause and resolution are unproven.",
+      "Island add_compliance warnings refer to an effect no longer present in the current NAM effects file."
+    ],
+    "current_trigger_definitions": [
+      "NAM_naval_observation_ready",
+      "NAM_naval_shipyard_ready",
+      "NAM_naval_marines_ready"
+    ],
+    "current_focus_definitions": [
+      "NAM_basin_reconnaissance",
+      "NAM_active_squadron",
+      "NAM_naval_construction",
+      "NAM_marine_arsenal"
+    ],
+    "current_idea_definitions": [
+      "ADISCORD_nam_last_line_administration",
+      "NAM_ruined_economy",
+      "NAM_army_of_shame"
+    ],
+    "required_followup": "Manual cold-load/new-campaign log with final source hashes, followed by naval programme and settlement checks in the existing playtest guide."
+  },
+  "current_unrelated_validation_findings": [
+    "WKR_affirm_worker_mandate -> WKR_license_outside_patterns: two-row drop without LAYOUT_WIDE_DROPS reason.",
+    "WKR_affirm_worker_mandate -> WKR_send_republican_volunteers: two-row drop without LAYOUT_WIDE_DROPS reason.",
+    "WKR_affirm_worker_mandate -> WKR_license_outside_patterns: row-8 link crosses WKR_organize_factory_battalions and WKR_put_railways_under_councils.",
+    "WKR_affirm_worker_mandate -> WKR_send_republican_volunteers: row-8 link crosses WKR_organize_factory_battalions and WKR_put_railways_under_councils."
+  ]
+}

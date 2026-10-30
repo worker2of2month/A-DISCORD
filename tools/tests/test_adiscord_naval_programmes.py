@@ -42,6 +42,51 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_coalition_muster_has_time_to_deploy_and_survives_tree_changes(self):
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        schedule = block(block(effects, "ADISCORD_nam_resource_war_schedule"), "if")
+        for tag in ("EFL", "AZH"):
+            callback = block(block(block(schedule, tag), "hidden_effect"), "country_event")
+            self.assertEqual(scalar(callback, "id"), "ADISCORD_nam_resource_war.110")
+            self.assertEqual(int(scalar(callback, "days")), 300)
+        muster = block(effects, "NAM_rw_coalition_muster")
+        self.assertFalse({"has_focus_tree", "has_completed_focus", "load_oob"} & {e.key for e in walk(muster)})
+        self.assertIn("NAM_rw_coalition_mobilised", [e.value for e in walk(muster) if e.key == "has_country_flag"])
+        self.assertIn("ADISCORD_nam_resource_war_resolved", [e.value for e in walk(muster) if e.key == "has_global_flag"])
+        self.assertFalse(any(e.key == "add_manpower" and float(e.value) > 0 for e in walk(muster)))
+
+    def test_coalition_regiments_pay_their_actual_template_cost(self):
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        muster = block(block(effects, "NAM_rw_coalition_muster"), "if")
+        template = block(muster, "division_template")
+        composition = Counter(e.key for e in block(template, "regiments"))
+        manpower, equipment = formation_requirements(composition)
+        self.assertEqual((manpower, equipment), (4000, {"infantry_equipment": 3600, "ADISCORD_squad_weapons_equipment": 32}))
+        loop = block(muster, "for_loop_effect")
+        self.assertEqual(scalar(loop, "end"), "15")
+        payload = block(loop, "if")
+        self.assertEqual(float(scalar(payload, "add_manpower")), -manpower)
+        actual = {scalar(e.value, "type"): -float(scalar(e.value, "amount")) for e in payload if e.key == "add_equipment_to_stockpile"}
+        self.assertEqual(actual, equipment)
+        gate = block(payload, "limit")
+        self.assertEqual(scalar(block(gate, "check_variable"), "compare"), "less_than")
+        self.assertEqual(scalar(block(gate, "check_variable"), "value"), "NAM_rw_muster_target")
+        start = block(effects, "ADISCORD_nam_resource_war_start")
+        self.assertFalse(any(e.key == "load_oob" and e.value in ("EFL_nam_resource_war", "AZH_nam_resource_war") for e in walk(start)))
+
+    def test_coalition_invasions_release_buffers_when_the_route_closes(self):
+        policies = entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        for tag, ratio, state in (("EFL", "0.14", "723"), ("AZH", "0.20", "692")):
+            policy = block(policies, "NAM_rw_" + tag.lower() + "_landing_reserve")
+            self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+            self.assertEqual(scalar(block(policy, "enable"), "NAM_rw_coalition_landing_ready"), "yes")
+            reserve = block(policy, "ai_strategy")
+            self.assertEqual(scalar(reserve, "type"), "put_unit_buffers")
+            self.assertEqual(scalar(reserve, "ratio"), ratio)
+            self.assertEqual([e.value for e in block(reserve, "states")], [state])
+            self.assertEqual(scalar(reserve, "subtract_invasions_from_need"), "yes")
+            self.assertEqual(scalar(reserve, "subtract_fronts_from_need"), "no")
+
     def test_generic_naval_categories_require_port_and_cleanup(self):
         for category in ("capital_ship", "screen_ship", "submarine"):
             for strategy_type in (
@@ -122,6 +167,9 @@ class NavalProgrammeTests(unittest.TestCase):
             "STP": (2, 4, 10, 4),
             "VAL": (1, 3, 8, 4),
             "NOD": (2, 4, 10, 4),
+            "NAM": (4, 6, 22, 8),
+            "AZH": (3, 4, 13, 5),
+            "EFL": (1, 2, 9, 3),
         }.items():
             country = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))
             history = parse_clausewitz(country.read_text(encoding="utf-8-sig"))

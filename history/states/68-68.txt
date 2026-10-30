@@ -2,26 +2,25 @@
 state={
 	id=68
 	name="STATE_68"
-	provinces={
-		259 324 865 1658 1950 2254 2734 2822 3089 3226 3977 4014
-		4096 4175 4237 4339 4717 5651 5766 6150 6438 7139 7199 7750
-		7859 8087 8425 9637 9731 10258 10759 10806 10866 10932 11744 12109
-		12135
+	resources = {
+		steel = 2
 	}
-	manpower = 520000
+	provinces={
+		324 1658 2254 2734 3226 4014 4175 4339 4717 5651 5766 6150
+		6438 7199 7750 7859 8087 8425 9637 9731 10258 10759 10806 10932
+		11744 12109 12135
+	}
+	manpower = 3860000
 	buildings_max_level_factor = 1.000
 	state_category = town
-	local_supplies = 4.0
-	resources = {
-		steel = 3
-	}
+	local_supplies = 2.8
 	history = {
 		owner = EFL
 		add_core_of = EFL
 		victory_points = { 6150 1 }
 		buildings = {
 			infrastructure = 3
-			industrial_complex = 2
+			industrial_complex = 1
 			arms_factory = 1
 		}
 	}

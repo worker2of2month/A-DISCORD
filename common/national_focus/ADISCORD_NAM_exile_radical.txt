@@ -378,6 +378,8 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			navy_experience = 10
+			army_experience = 20
+			add_war_support = 0.05
 			custom_effect_tooltip = NAM_exile_harbour_pilots_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_revenge_readiness value = 10 }
@@ -993,33 +995,51 @@ focus_tree = {
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_military_roads }
+		bypass = { NAM_rad_mining_site_available = no }
 		available = {
 			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_mining_site_available_tt
+				NAM_rad_mining_site_available = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			if = {
-				limit = { 227 = { is_owned_by = NAM } }
-				add_resource = {
-					type = tungsten
-					amount = 2
-					state = 227
+				limit = { hidden_trigger = { NAM_rad_mining_site_available = yes } }
+				if = {
+					limit = {
+						227 = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+					}
+					add_resource = {
+						type = tungsten
+						amount = 2
+						state = 227
+					}
 				}
-			}
-			if = {
-				limit = { 229 = { is_owned_by = NAM } }
-				add_resource = {
-					type = chromium
-					amount = 2
-					state = 229
+				if = {
+					limit = {
+						229 = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+					}
+					add_resource = {
+						type = chromium
+						amount = 2
+						state = 229
+					}
 				}
-			}
-			add_stability = -0.02
-			custom_effect_tooltip = NAM_grp_rad_penal_mines_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_dist_support value = -3 }
-				NAM_groups_refresh = yes
+				add_stability = -0.02
+				custom_effect_tooltip = NAM_grp_rad_penal_mines_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_dist_support value = -3 }
+					NAM_groups_refresh = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -1443,34 +1463,8 @@ focus_tree = {
 				category = support_tech
 			}
 			army_experience = 10
-		}
-		ai_will_do = {
-			base = 20
-		}
-	}
-
-	focus = {
-		id = NAM_exile_army_of_return
-		icon = GFX_focus_generic_army_attack
-		x = 16
-		y = 6
-		cost = 7
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = { focus = NAM_rad_cadet_corps }
-		prerequisite = { focus = NAM_exile_landing_craft }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			add_command_power = 20
 			add_war_support = 0.05
-			custom_effect_tooltip = NAM_exile_army_of_return_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_revenge_readiness value = 15 }
-				NAM_revenge_readiness_clamp = yes
-			}
 		}
 		ai_will_do = {
 			base = 20
@@ -1911,36 +1905,9 @@ focus_tree = {
 
 	# ----- The war of return -----
 	# The operation needs the final focus of every exile branch: the return
-	# plan of the underground, the fortress capital, the island arsenal, the
-	# army of return and the corsair admiralty. The war against Eflor and
+	# harbour pilots, fortress capital, island fuel dumps, cadets, landing
+	# craft and corsair admiralty. The war against Eflor and
 	# Azhar lands the marines at South Harbour.
-
-	focus = {
-		id = NAM_rad_return_plan
-		icon = GFX_goal_generic_occupy_start_war
-		x = 10
-		y = 7
-		cost = 6
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_exile_harbour_pilots }
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			army_experience = 20
-			add_war_support = 0.05
-			custom_effect_tooltip = NAM_rad_return_plan_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_revenge_readiness value = 10 }
-				NAM_revenge_readiness_clamp = yes
-			}
-		}
-		ai_will_do = {
-			base = 30
-		}
-	}
 
 	focus = {
 		id = NAM_rad_war_of_return
@@ -1949,10 +1916,11 @@ focus_tree = {
 		y = 8
 		cost = 5
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
-		prerequisite = { focus = NAM_rad_return_plan }
+		prerequisite = { focus = NAM_exile_harbour_pilots }
 		prerequisite = { focus = NAM_rad_fortress_capital }
 		prerequisite = { focus = NAM_rad_island_fuel_dumps }
-		prerequisite = { focus = NAM_exile_army_of_return }
+		prerequisite = { focus = NAM_rad_cadet_corps }
+		prerequisite = { focus = NAM_exile_landing_craft }
 		prerequisite = { focus = NAM_exile_corsair_admiralty }
 		available = {
 			has_capitulated = no

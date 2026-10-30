@@ -217,7 +217,7 @@ LEGACY_OWNER_OVERRIDES = {
 }
 
 CAPITALS = {
-    69: (16893, 5),
+    69: (16893, 10),
     174: (158, 10),
     241: (971, 10),
     253: (443, 10),
@@ -255,10 +255,113 @@ SOUTHERN_CAPITAL_DISTRICTS = {
     300: (708, 79000, 39000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
 }
 
+# Province membership is shared by metadata and bounded regeneration.
+NAM_COALITION_REGIONS = {
+    70: {
+        "parent": 70, "owner": "EFL",
+        "filename": "70-70.txt", "name": "Нижний Лорен",
+        "provinces": (
+            627, 910, 1200, 1444, 2042, 2577, 2986, 3872, 3986, 4067,
+            4478, 4674, 4708, 5926, 5934, 6061, 6409, 6414, 6419, 6514,
+            6521, 6650, 6847, 6970, 7032, 7567, 8618, 8951, 9041, 9308,
+            9402, 9411, 9787, 10068, 10387, 10422, 10438, 10809, 11035, 12366,
+            12419, 12974,
+        ),
+    },
+    723: {
+        "parent": 70, "owner": "EFL",
+        "filename": "723-Loren-Coast.txt", "name": "Лоренский берег",
+        "provinces": (
+            1287, 3113, 3695, 5979, 6000, 6495, 6870, 7302, 7621, 8724,
+            11219,
+        ),
+    },
+    724: {
+        "parent": 70, "owner": "EFL",
+        "filename": "724-North-Loren.txt", "name": "Северный Лорен",
+        "provinces": (
+            1982, 2167, 5249, 6051, 6796, 7220, 7688, 8738, 10847, 11763,
+            12425, 12576, 12577,
+        ),
+    },
+    68: {
+        "parent": 68, "owner": "EFL",
+        "filename": "68-68.txt", "name": "Верхний Лорен",
+        "provinces": (
+            324, 1658, 2254, 2734, 3226, 4014, 4175, 4339, 4717, 5651,
+            5766, 6150, 6438, 7199, 7750, 7859, 8087, 8425, 9637, 9731,
+            10258, 10759, 10806, 10932, 11744, 12109, 12135,
+        ),
+    },
+    725: {
+        "parent": 68, "owner": "EFL",
+        "filename": "725-East-Loren.txt", "name": "Восточный Лорен",
+        "provinces": (
+            259, 865, 1950, 2822, 3089, 3977, 4096, 4237, 7139, 10866,
+        ),
+    },
+    691: {
+        "parent": 691, "owner": "EFL",
+        "filename": "691-Middle-Loren.txt", "name": "Средний Лорен",
+        "provinces": (
+            786, 797, 2473, 3730, 3833, 4060, 5579, 8194, 8904, 10722,
+            11083, 12131, 12218, 12306, 12830,
+        ),
+    },
+    726: {
+        "parent": 691, "owner": "EFL",
+        "filename": "726-Interfluve.txt", "name": "Междуречье",
+        "provinces": (
+            1411, 3046, 3176, 3916, 4424, 5260, 6331, 7502, 10454, 11652,
+        ),
+    },
+    69: {
+        "parent": 69, "owner": "AZH",
+        "filename": "69-69.txt", "name": "Чёрный бассейн",
+        "provinces": (
+            367, 643, 687, 729, 826, 1568, 4380, 5156, 5288, 5305,
+            5483, 6184, 6505, 7079, 7413, 7637, 7692, 7737, 8758, 8821,
+            8836, 9633, 9798, 10077, 12482, 12937, 16868, 16871, 16872, 16877,
+            16883, 16886, 16888, 16889, 16893, 16894,
+        ),
+    },
+    727: {
+        "parent": 69, "owner": "AZH",
+        "filename": "727-Western-Oilfields.txt", "name": "Западные промыслы",
+        "provinces": (
+            2411, 5555, 5683, 6577, 7193, 8234, 8452, 8990, 8997, 9013,
+            9909, 12837,
+        ),
+    },
+    728: {
+        "parent": 69, "owner": "AZH",
+        "filename": "728-South-Cape.txt", "name": "Южный мыс",
+        "provinces": (
+            5594, 9119, 12458, 12601, 13019, 16882, 16891,
+        ),
+    },
+    692: {
+        "parent": 692, "owner": "AZH",
+        "filename": "692-Black-Coast.txt", "name": "Чёрный берег",
+        "provinces": (
+            493, 1360, 2264, 2802, 3464, 4089, 5039, 5837, 7033, 8829,
+            9758, 10489, 10626, 12498,
+        ),
+    },
+    729: {
+        "parent": 692, "owner": "AZH",
+        "filename": "729-Eastern-Uplands.txt", "name": "Восточные увалы",
+        "provinces": (
+            601, 2362, 2804, 4678, 5527, 6193, 6768, 7777, 8114, 8441,
+            9264, 9375, 11445, 11630, 11734,
+        ),
+    },
+}
+
 # Sparse deposits give every southern country something to extract and trade
 # without turning the desert into a self-sufficient industrial heartland.
 STATE_RESOURCES = {
-    69: {"oil": 2, "chromium": 1},
+    69: {"oil": 1, "chromium": 1},
     175: {"steel": 2, "aluminium": 2},
     236: {"steel": 3, "oil": 1},
     255: {"aluminium": 3, "oil": 1},
@@ -269,8 +372,18 @@ STATE_RESOURCES = {
     **SHL_RESOURCES,
 }
 NAM_COALITION_FRONT_RESOURCES = {
-    69: STATE_RESOURCES[69],
-    AZH_BLACK_COAST_STATE_ID: {"oil": 1, "chromium": 1, "tungsten": 1},
+    68: {"steel": 2},
+    69: {"oil": 1, "chromium": 1},
+    70: {"aluminium": 1},
+    691: {"tungsten": 1},
+    692: {"oil": 1},
+    723: {},
+    724: {"aluminium": 1},
+    725: {"steel": 1},
+    726: {"tungsten": 1},
+    727: {"oil": 1},
+    728: {},
+    729: {"chromium": 1, "tungsten": 1},
 }
 
 # The central Vorkerland theatre used to have only one steel-bearing state,
@@ -343,9 +456,7 @@ SVETLOGORYE_RESOURCES = {
     229: {"chromium": 2},
 }
 NAM_NEIGHBOUR_RESOURCES = {
-    68: {"steel": 3},
-    70: {"aluminium": 2},
-    691: {"tungsten": 2},
+    sid: deposits for sid, deposits in NAM_COALITION_FRONT_RESOURCES.items() if deposits
 }
 
 REGIONAL_STATE_RESOURCES = {
@@ -372,7 +483,8 @@ GENERATED_STATE_BUILDINGS = {
     AZH_BLACK_COAST_STATE_ID: {"dockyard": 1},
 }
 GENERATED_PROVINCE_BUILDINGS = {
-    AZH_BLACK_COAST_STATE_ID: ((493, "naval_base", 1),),
+    AZH_BLACK_COAST_STATE_ID: ((493, "naval_base", 5),),
+    723: ((6495, "naval_base", 4),),
 }
 
 # Cities that were victory points before the Vorkerland state split. Keep the
@@ -606,23 +718,46 @@ NAM_STATE_PROFILES = {
     NAM_EAST_DRYRIVER_STATE_ID: {"population": NAM_POPULATION[NAM_EAST_DRYRIVER_STATE_ID], "category": "rural", "infrastructure": 3, "civilian": 0, "supplies": 0.5},
 }
 
-# The three states facing NAM's resource basin need enough population and
-# local logistics for the restoration coalition to launch a real offensive.
-NAM_COALITION_FRONT_PROFILES = {
-    68: {"population": 520_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    69: {"population": 350_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "air_base": 1, "supplies": 3.5},
-    70: {"population": 310_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    EFL_MIDDLE_LOREN_STATE_ID: {"population": 150_000, "category": "rural", "infrastructure": 3, "civilian": 0, "supplies": 1.0},
-    AZH_BLACK_COAST_STATE_ID: {"population": 240_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5, "custom_buildings": {"dockyard": 1}},
+# Population follows the regional settlement weights; factories and deposits stay fixed.
+NAM_COALITION_POPULATION = {
+    68: 3_860_000,
+    69: 4_650_000,
+    70: 1_880_000,
+    691: 940_000,
+    692: 3_100_000,
+    701: 940_000,
+    720: 410_000,
+    721: 410_000,
+    722: 580_000,
+    723: 890_000,
+    724: 470_000,
+    725: 1_570_000,
+    726: 630_000,
+    727: 1_350_000,
+    728: 770_000,
+    729: 1_550_000,
 }
 
-# Border belts carved from those front states keep the parents' totals:
-# 691 190k/1.5, 70 350k/4.0 and 69 380k/4.0 population/local supplies.
-# Their small deposits, factories and other victory points stay with the parents.
+NAM_COALITION_FRONT_PROFILES = {
+    68: {"population": NAM_COALITION_POPULATION[68], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.8},
+    69: {"population": NAM_COALITION_POPULATION[69], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.4, "air_base": 1},
+    70: {"population": NAM_COALITION_POPULATION[70], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.0},
+    691: {"population": NAM_COALITION_POPULATION[691], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.6},
+    692: {"population": NAM_COALITION_POPULATION[692], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 2.5, "custom_buildings": {"dockyard": 1}},
+    723: {"population": NAM_COALITION_POPULATION[723], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.0, "custom_buildings": {"dockyard": 1}},
+    724: {"population": NAM_COALITION_POPULATION[724], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.5},
+    725: {"population": NAM_COALITION_POPULATION[725], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.2},
+    726: {"population": NAM_COALITION_POPULATION[726], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.4},
+    727: {"population": NAM_COALITION_POPULATION[727], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 0.7},
+    728: {"population": NAM_COALITION_POPULATION[728], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.4},
+    729: {"population": NAM_COALITION_POPULATION[729], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
+}
+
+# Treaty border belts retain their province membership and local supplies.
 NAM_VICTORY_BORDER_PROFILES = {
-    EFL_MOREN_STATE_ID: {"population": 40_000, "category": "rural", "infrastructure": 3, "supplies": 0.5},
-    EFL_LOREN_BORDERLAND_STATE_ID: {"population": 40_000, "category": "rural", "infrastructure": 3, "supplies": 0.5},
-    AZH_SEABOARD_STATE_ID: {"population": 30_000, "category": "rural", "infrastructure": 3, "supplies": 0.5},
+    EFL_MOREN_STATE_ID: {"population": NAM_COALITION_POPULATION[720], "category": "rural", "infrastructure": 3, "supplies": 0.5},
+    EFL_LOREN_BORDERLAND_STATE_ID: {"population": NAM_COALITION_POPULATION[721], "category": "rural", "infrastructure": 3, "supplies": 0.5},
+    AZH_SEABOARD_STATE_ID: {"population": NAM_COALITION_POPULATION[722], "category": "rural", "infrastructure": 3, "supplies": 0.5},
 }
 
 # Every state owned and cored by Ivanland at game start receives a coherent
@@ -960,10 +1095,17 @@ NAM_LEGACY_VICTORY_POINTS = {
     67: ((6099, 1), (16890, 5)),
     68: ((6150, 1),),
     69: (
-        (16893, 5), (16883, 5), (16886, 5), (16889, 5), (16894, 5),
-        (8234, 1), (16882, 5), (16888, 5), (16891, 5),
+        (16893, 10), (16883, 5), (16886, 5), (16889, 5), (16894, 5),
+        (16888, 5),
     ),
-    70: ((2986, 1), (6495, 1)),
+    70: ((2986, 1),),
+    723: ((6495, 1),),
+    724: (),
+    725: (),
+    726: (),
+    727: ((8234, 1),),
+    728: ((16882, 5), (16891, 5)),
+    729: (),
     NAM_SVETLOGORSK_STATE_ID: ((16721, 5), (1710, 1)),
     NAM_RESIDUAL_CITY_STATE_ID: (),
     NAM_DRYRIVER_STATE_ID: ((8058, 1), (9016, 1), (16885, 5), (16887, 5)),
@@ -1198,6 +1340,7 @@ VORKERLAND_STATE_NAMES = {
 }
 
 GENERATED_STATE_NAMES = {
+    **{sid: region["name"] for sid, region in NAM_COALITION_REGIONS.items()},
     **VORKERLAND_STATE_NAMES,
     NAM_SVETLOGORSK_STATE_ID: "Светлогорский округ",
     NAM_RESIDUAL_CITY_STATE_ID: "Южнобережный округ",
@@ -1206,7 +1349,7 @@ GENERATED_STATE_NAMES = {
     EFL_MIDDLE_LOREN_STATE_ID: "Средний Лорен",
     EFL_MOREN_STATE_ID: "Моренский округ",
     EFL_LOREN_BORDERLAND_STATE_ID: "Лоренское порубежье",
-    AZH_BLACK_COAST_STATE_ID: "Чёрное побережье",
+    AZH_BLACK_COAST_STATE_ID: "Чёрный берег",
     AZH_SEABOARD_STATE_ID: "Ажарское взморье",
     128: "Иванские нагорья",
     693: "Рейдаль",
@@ -1835,6 +1978,70 @@ def write_resource_war_state(
     (STATE_DIR / filename).write_text(source, encoding="utf-8", newline="\n")
 
 
+def coalition_region_source(state_id: int) -> str:
+    region = NAM_COALITION_REGIONS[state_id]
+    return render_resource_war_state(
+        state_id, region["filename"], region["provinces"], region["owner"],
+        NAM_COALITION_FRONT_PROFILES[state_id], NAM_COALITION_FRONT_RESOURCES[state_id],
+        NAM_LEGACY_VICTORY_POINTS[state_id], GENERATED_PROVINCE_BUILDINGS.get(state_id, ()),
+    )
+
+
+def coalition_region_plan() -> dict[Path, bytes]:
+    """Partition only reviewed territories and reject occupied output IDs."""
+    outputs = {}
+    originals = {
+        68: EFL_UPPER_LOREN_PROVINCES, 69: AZH_CORE_PROVINCES,
+        70: EFL_LOWER_LOREN_PROVINCES, 691: EFL_MIDDLE_LOREN_PROVINCES,
+        692: AZH_BLACK_COAST_PROVINCES,
+    }
+    current = {parent: set() for parent in originals}
+    for sid, region in NAM_COALITION_REGIONS.items():
+        path = STATE_DIR / region["filename"]
+        existing = tuple(STATE_DIR.glob(f"{sid}-*.txt"))
+        if existing and existing != (path,):
+            raise RuntimeError(f"state {sid}: ID occupied by another state")
+        if path.exists():
+            source = path.read_text(encoding="utf-8-sig")
+            match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+            provinces = set(map(int, re.findall(r"\d+", match.group(1))))
+            parent = region["parent"]
+            if current[parent] & provinces:
+                raise RuntimeError(f"state {sid}: duplicate coalition provinces")
+            current[parent].update(provinces)
+        outputs[path] = coalition_region_source(sid).encode("utf-8")
+    for parent, provinces in originals.items():
+        if current[parent] != set(provinces):
+            raise RuntimeError(f"state {parent}: coalition territory drifted")
+    for sid in (701, 720, 721, 722):
+        path = state_path(sid)
+        source = path.read_text(encoding="utf-8-sig")
+        outputs[path] = set_scalar(source, "manpower", str(NAM_COALITION_POPULATION[sid])).encode("utf-8")
+    path = ROOT / "localisation/russian/state_names_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for sid, region in NAM_COALITION_REGIONS.items():
+        source = replace_localisation_value(source, f"STATE_{sid}", region["name"])
+    outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def update_coalition_regions(apply: bool, *, synchronize: bool = True) -> int:
+    outputs = coalition_region_plan()
+    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if synchronize:
+            synchronize_buildings(ROOT, apply=True)
+            if ensure_nam_split_spawn_positions(ROOT):
+                synchronize_buildings(ROOT, apply=True)
+        if any(path.read_bytes() != data for path, data in coalition_region_plan().items()):
+            raise RuntimeError("coalition regions are not idempotent")
+    return int(bool(changed) and not apply)
+
+
 def split_svetlogorsk_from_nam() -> None:
     """Create the connected NAM resource-war theatre and its border belts."""
     current_manifests = {
@@ -1844,20 +2051,9 @@ def split_svetlogorsk_from_nam() -> None:
             frozenset(NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES),
             frozenset(NAM_RESOURCE_BASIN_PROVINCES),
         },
-        68: {frozenset(EFL_ORIGINAL_UPPER_LOREN_PROVINCES), frozenset(EFL_UPPER_LOREN_PROVINCES)},
-        69: {
-            frozenset(AZH_ORIGINAL_PROVINCES),
-            frozenset(AZH_ORIGINAL_CORE_PROVINCES),
-            frozenset(AZH_CORE_PROVINCES),
-        },
-        70: {frozenset(EFL_ORIGINAL_LOWER_LOREN_PROVINCES), frozenset(EFL_LOWER_LOREN_PROVINCES)},
         NAM_DRYRIVER_STATE_ID: {
             frozenset(NAM_ORIGINAL_DRYRIVER_PROVINCES),
             frozenset(NAM_DRYRIVER_PROVINCES),
-        },
-        EFL_MIDDLE_LOREN_STATE_ID: {
-            frozenset(EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES),
-            frozenset(EFL_MIDDLE_LOREN_PROVINCES),
         },
     }
     for state_id, allowed in current_manifests.items():
@@ -1871,27 +2067,13 @@ def split_svetlogorsk_from_nam() -> None:
 
     definitions = (
         (67, "67-67.txt", NAM_RESOURCE_BASIN_PROVINCES, "NAM", NAM_STATE_PROFILES[67], NAM_MAINLAND_STATE_RESOURCES[67]),
-        (68, "68-68.txt", EFL_UPPER_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[68], None),
-        (69, "69-69.txt", AZH_CORE_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[69], STATE_RESOURCES[69]),
         (NAM_SVETLOGORSK_STATE_ID, "688-Svetlogorsk.txt", NAM_SVETLOGORSK_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_SVETLOGORSK_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_SVETLOGORSK_STATE_ID]),
         (NAM_RESIDUAL_CITY_STATE_ID, "689-South-Coast.txt", NAM_RESIDUAL_CITY_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_RESIDUAL_CITY_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_RESIDUAL_CITY_STATE_ID]),
         (NAM_DRYRIVER_STATE_ID, "690-Dryriver.txt", NAM_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_DRYRIVER_STATE_ID]),
         (NAM_EAST_DRYRIVER_STATE_ID, "719-East-Dryriver.txt", NAM_EAST_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_EAST_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_EAST_DRYRIVER_STATE_ID]),
-        (EFL_MIDDLE_LOREN_STATE_ID, "691-Middle-Loren.txt", EFL_MIDDLE_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[EFL_MIDDLE_LOREN_STATE_ID], None),
-        (AZH_BLACK_COAST_STATE_ID, "692-Black-Coast.txt", AZH_BLACK_COAST_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[AZH_BLACK_COAST_STATE_ID], NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID]),
         (EFL_MOREN_STATE_ID, "720-Moren.txt", EFL_MOREN_PROVINCES, "EFL", NAM_VICTORY_BORDER_PROFILES[EFL_MOREN_STATE_ID], None),
         (EFL_LOREN_BORDERLAND_STATE_ID, "721-Loren-Borderland.txt", EFL_LOREN_BORDERLAND_PROVINCES, "EFL", NAM_VICTORY_BORDER_PROFILES[EFL_LOREN_BORDERLAND_STATE_ID], None),
         (AZH_SEABOARD_STATE_ID, "722-Azhar-Seaboard.txt", AZH_SEABOARD_PROVINCES, "AZH", NAM_VICTORY_BORDER_PROFILES[AZH_SEABOARD_STATE_ID], None),
-    )
-    # State 70 keeps its legacy metadata; only its border belt leaves the province list.
-    lower_loren = state_path(70)
-    lower_loren.write_text(
-        replace_state_provinces(
-            lower_loren.read_text(encoding="utf-8-sig", errors="strict"),
-            EFL_LOWER_LOREN_PROVINCES,
-        ),
-        encoding="utf-8",
-        newline="\n",
     )
     province_buildings = {
         NAM_SVETLOGORSK_STATE_ID: ((689, "naval_base", 2),),
@@ -1910,6 +2092,7 @@ def split_svetlogorsk_from_nam() -> None:
             province_buildings.get(state_id, ()),
         )
 
+    update_coalition_regions(True, synchronize=False)
     _, mismatches = audit_buildings(ROOT)
     expected_moves = {
         (67, NAM_SVETLOGORSK_STATE_ID): set(NAM_SVETLOGORSK_PROVINCES),
@@ -1917,14 +2100,13 @@ def split_svetlogorsk_from_nam() -> None:
         (67, NAM_DRYRIVER_STATE_ID): set(NAM_DRYRIVER_PROVINCES),
         (67, NAM_EAST_DRYRIVER_STATE_ID): set(NAM_EAST_DRYRIVER_PROVINCES),
         (NAM_DRYRIVER_STATE_ID, NAM_EAST_DRYRIVER_STATE_ID): set(NAM_EAST_DRYRIVER_PROVINCES),
-        (68, EFL_MIDDLE_LOREN_STATE_ID): set(EFL_MIDDLE_LOREN_PROVINCES),
-        (69, AZH_BLACK_COAST_STATE_ID): set(AZH_BLACK_COAST_PROVINCES),
-        (68, EFL_MOREN_STATE_ID): set(EFL_MOREN_PROVINCES),
-        (EFL_MIDDLE_LOREN_STATE_ID, EFL_MOREN_STATE_ID): set(EFL_MOREN_PROVINCES),
         (70, EFL_LOREN_BORDERLAND_STATE_ID): set(EFL_LOREN_BORDERLAND_PROVINCES),
-        (69, AZH_SEABOARD_STATE_ID): set(AZH_SEABOARD_PROVINCES),
         (71, 91): {3743},
     }
+    expected_moves.update({
+        (region["parent"], sid): set(region["provinces"])
+        for sid, region in NAM_COALITION_REGIONS.items()
+    })
     unexpected = [
         mismatch for mismatch in mismatches
         if mismatch.province not in expected_moves.get(
@@ -2493,7 +2675,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             SHL_INDUSTRY[699]["industrial_complex"], SHL_INDUSTRY[699]["arms_factory"],
         ),
         700: ("700-South-Harbour.txt", "NAM", NAM_POPULATION[700], 3, 2.5, 1, 2),
-        701: ("701-Middle-Loren-City.txt", "EFL", 90_000, 3, 2.0, 1, 0),
+        701: ("701-Middle-Loren-City.txt", "EFL", NAM_COALITION_POPULATION[701], 3, 2.0, 1, 0),
     }
     for state_id, (filename, owner, population, infrastructure, supplies, civilian, military) in profiles.items():
         path = STATE_DIR / filename
@@ -2694,6 +2876,8 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
         provinces = tuple(map(int, re.findall(r"\d+", source[opening:closing])))
         if state_id in STARTING_OWNERS:
             result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
+        elif state_id in NAM_COALITION_REGIONS:
+            result = coalition_region_source(state_id).encode("utf-8")
         elif state_id == 49:
             result = render_resource_war_state(
                 state_id, path.name, provinces, "EXZ", LEGACY_STATE_PROFILES[state_id],
@@ -2791,6 +2975,8 @@ def main() -> int:
     actions.add_argument("--apply-reactor-resources", action="store_true", help="apply only the reactor perimeter resource manifest")
     actions.add_argument("--apply-dirty-zone", action="store_true", help="apply dirty-zone state profiles, VPs and their Russian names")
     actions.add_argument("--check-reactor-resources", action="store_true", help="check the reactor perimeter resource manifest")
+    actions.add_argument("--check-coalition-regions", action="store_true")
+    actions.add_argument("--apply-coalition-regions", action="store_true")
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
     actions.add_argument("--apply-shahrabad-population", action="store_true")
@@ -2814,6 +3000,8 @@ def main() -> int:
         return sync_builder_english_localisation(
             ROOT, "tools.builders.build_adiscord_new_states", apply=args.apply
         )
+    if args.check_coalition_regions or args.apply_coalition_regions:
+        return update_coalition_regions(args.apply_coalition_regions)
     if args.check_reactor_resources or args.apply_reactor_resources:
         return update_reactor_resources(args.apply_reactor_resources)
     if args.check_state_metadata or args.apply_state_metadata:
@@ -2888,12 +3076,13 @@ def main() -> int:
         return 0
     from tools.validators.validate_adiscord_new_states import main as validate_main
 
+    coalition_drift = update_coalition_regions(False)
     island_drift = update_stelander_islands(False)
     port_drift = update_misstana_port(False)
     regional_drift = update_regional_settlements(False)
     shahrabad_drift = update_shahrabad_population(False)
     svetlogorye_drift = update_svetlogorye_homeland(False)
-    return max(island_drift, port_drift, regional_drift, shahrabad_drift, svetlogorye_drift, validate_main())
+    return max(coalition_drift, island_drift, port_drift, regional_drift, shahrabad_drift, svetlogorye_drift, validate_main())
 
 
 if __name__ == "__main__":

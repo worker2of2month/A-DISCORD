@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -63,14 +64,15 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
 
     def test_focus_chrome_matches_its_registered_builder(self) -> None:
         from tools.builders.build_adiscord_focus_ui_assets import expected_outputs
-        from tools.lib.generated_outputs import load_registry
 
         outputs = expected_outputs()
-        family = next(
-            entry
-            for entry in load_registry(ROOT)['families']
-            if entry['id'] == 'focus_ui_assets'
-        )
+        registry = json.loads(read(ROOT / 'tools/data/generated_output_owners.json'))
+        families = [entry for entry in registry['families'] if entry['id'] == 'focus_ui_assets']
+        self.assertEqual(len(families), 1)
+        family = families[0]
+        self.assertEqual(family['owner_module'], 'tools.builders.build_adiscord_focus_ui_assets')
+        for pattern in family['source_inputs']:
+            self.assertTrue(list(ROOT.glob(pattern)), pattern)
         self.assertEqual(
             set(family['output_globs']),
             {path.relative_to(ROOT).as_posix() for path in outputs},

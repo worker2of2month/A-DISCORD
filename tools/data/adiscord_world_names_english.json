@@ -2783,6 +2783,54 @@
         "STATE_722": {
           "russian": "Ажарское взморье",
           "english": "Azhar Seaboard"
+        },
+        "STATE_70": {
+          "russian": "Нижний Лорен",
+          "english": "Lower Loren"
+        },
+        "STATE_723": {
+          "russian": "Лоренский берег",
+          "english": "Loren Coast"
+        },
+        "STATE_724": {
+          "russian": "Северный Лорен",
+          "english": "North Loren"
+        },
+        "STATE_68": {
+          "russian": "Верхний Лорен",
+          "english": "Upper Loren"
+        },
+        "STATE_725": {
+          "russian": "Восточный Лорен",
+          "english": "East Loren"
+        },
+        "STATE_691": {
+          "russian": "Средний Лорен",
+          "english": "Middle Loren"
+        },
+        "STATE_726": {
+          "russian": "Междуречье",
+          "english": "Interfluve"
+        },
+        "STATE_69": {
+          "russian": "Чёрный бассейн",
+          "english": "Black Basin"
+        },
+        "STATE_727": {
+          "russian": "Западные промыслы",
+          "english": "Western Oilfields"
+        },
+        "STATE_728": {
+          "russian": "Южный мыс",
+          "english": "South Cape"
+        },
+        "STATE_692": {
+          "russian": "Чёрный берег",
+          "english": "Black Coast"
+        },
+        "STATE_729": {
+          "russian": "Восточные увалы",
+          "english": "Eastern Uplands"
         }
       }
     },

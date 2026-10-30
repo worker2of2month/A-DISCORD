@@ -7,7 +7,7 @@
  autonomy_NAM_oil_charter: "Oil Charter Member"
 
  ADISCORD_south_final_war_category: "War for the South"
- ADISCORD_south_final_war_category_desc: "§YSOUTHERN CRISIS§!\nTension: §Y[?global.ADISCORD_south_crisis|0] / 100§! £world_tension_texticon\nShahrabad's rival: [ADISCORDSouthNorthSide].\n\n[ADISCORDSouthStatus]"
+ ADISCORD_south_final_war_category_desc: "§YSOUTHERN CRISIS§!\nShahrabad's rival: [ADISCORDSouthNorthSide].\n\n[ADISCORDSouthStatus]"
  ADISCORD_south_north_side_nam: "§YSvetlogorye§!"
  ADISCORD_south_north_side_efl: "§YEflor's Restitution Alliance§!"
  ADISCORD_south_north_side_azh: "§YAzhar§!"
@@ -16,7 +16,7 @@
  ADISCORD_south_north_side_efl_plain: "Eflor's Restitution Alliance"
  ADISCORD_south_north_side_azh_plain: "Azhar"
  ADISCORD_south_north_side_unknown_plain: "no one"
- ADISCORD_south_status_crisis: "§YCRISIS GROWTH§!\n- §R+4§! each 28-day furnace cycle.\n- §R+15§! per successful limited Shahrabad war.\n- §R+10§! per successful neighbour consolidation.\nAt §R100§! and after the 490-day respite, Shahrabad may attack on the next cycle. Unfinished exile campaigns and Shahrabad limited wars block the start."
+ ADISCORD_south_status_crisis: "§YSOUTHERN CRISIS§!\nThe warning begins from §Y2165§! once both sides complete their key focuses.\n\n[ADISCORDSouthShlReadiness]\n\n[ADISCORDSouthNorthReadiness]"
  ADISCORD_south_status_war: "§RWAR FOR THE SOUTH§!\nA champion's capitulation decides the outcome. After §Y900§! days, compare captured key states held by the opposing side at the start. Initial holdings, neutral land and late ally alignment do not score. Equal gains mean peace without a hegemon and a new respite."
  ADISCORD_south_status_no_rival: "Shahrabad has no northern rival left. At the end of the next furnace cycle it will be recognised as suzerain of the south."
  ADISCORD_south_status_closed: "The crisis opens once Svetlogorye's resource war has an outcome."
@@ -121,12 +121,26 @@
  ADISCORD_south.45.a: "The fire has reached the wells."
  ADISCORD_south_status_resolved: "The war for the South is over. The region has one suzerain."
 
- ADISCORD_south_preparation: "Respite before the southern war"
- ADISCORD_south_preparation_desc: "Peace grants §Y490§! days for focuses, paid programmes and deployment. Shahrabad cannot start the shared war before this period ends, even at 100 tension. Svetlogorye may voluntarily strike earlier through its final war focus. The exile return and further exile campaign must finish before a new respite begins. Expiry permits an attack; it does not itself declare war."
- ADISCORD_south_preparation_ready_tt: "490 days of postwar preparation have elapsed, or Svetlogorye voluntarily starts the war through its final focus."
- ADISCORD_south_status_return: "§YSVETLOGORYE RETURNS§!\nThe shared southern campaign and new submission demands wait for the return and further exile campaign. Accumulated tension cannot override this protection."
- ADISCORD_south_status_preparation: "§YPOSTWAR PREPARATION§!\nRespite: §Y490§! days from peace or completion of the return and further exile campaign. The mission below shows the remaining time. Tension continues to accumulate, but an external attack must wait. Svetlogorye may strike earlier through its own war focus."
+ ADISCORD_south_preparation: "Final preparations for the War for the South"
+ ADISCORD_south_preparation_desc: "Headquarters finish deployment, ambassadors wind down negotiations, and border garrisons receive sealed orders."
+ ADISCORD_south_preparation_ready_tt: "The year is 2165 or later; both sides have completed their key preparation focuses. The War for the South category lists the requirements and each side's readiness."
+ ADISCORD_south_status_return: "§YSVETLOGORYE RETURNS§!\nThe shared southern campaign and new submission demands wait for the return and further exile campaign. Preparation for the shared war resumes after that campaign ends."
+ ADISCORD_south_status_preparation: "§YPREPARATION FOR THE WAR FOR THE SOUTH§!\nWar becomes possible from §Y2165§! after both sides complete their key focuses. A §Y56§!-day deployment warning follows. Unfinished preparation postpones the war.\n\n[ADISCORDSouthShlReadiness]\n\n[ADISCORDSouthNorthReadiness]\n\nReadiness is checked every 28 days. An offensive focus can be completed during the warning; its declaration waits for the shared deadline."
  ADISCORD_south.40.closed: "The circumstances of these negotiations must be reassessed."
  ADISCORD_south.32.d_nam: "Svetlogorye and Shahrabad end their campaign without a decisive advantage. Neither side has secured enough of the key districts to claim the South.\n\nThe armies return behind the prewar lines. Peace establishes no hegemon and transfers no defeated territory. Both sides gain time to rebuild before another confrontation."
 
  ADISCORD_south_story_ready_tt: "The exile campaign is complete: victory in the return, followed by victory in the great war or no remaining opponents."
+
+ ADISCORD_south_warning_elapsed_tt: "56 days have passed since the war warning."
+
+ ADISCORD_south_warning_notice_tt: "The War for the South can begin in 56 days. Its countdown is shown in the decisions category. A completed offensive focus issues its order after 56 days; without orders, the automatic attack waits another 28 days."
+
+ ADISCORD_south_status_warning: "§RWAR WARNING§!\nBoth sides have completed preparation. All declarations remain blocked until the §Y56§!-day warning ends. The mission shows the time remaining. The attack can then begin on the next furnace cycle; ongoing wars and unfinished return campaigns still block it. A completed offensive focus issues its order after 56 days; without orders, the automatic attack waits another 28 days."
+
+ ADISCORD_south_shl_ready: "§GShahrabad is ready.§! Its key industrial and army focuses are complete."
+
+ ADISCORD_south_shl_pending: "§YShahrabad is preparing.§! All three focuses are required: $SHL_conclave_rules$, $SHL_metal_market$ and $SHL_conclave_army$. Any political course remains available."
+
+ ADISCORD_south_north_ready: "§GThe northern side is ready.§! Svetlogorye has completed its route's focuses; Eflor or Azhar requires a settled resource war."
+
+ ADISCORD_south_north_pending: "§YSvetlogorye is preparing.§!\n- Normal postwar route: $NAM_svetlogorye$, $NAM_oil_exchange$ and either $NAM_ladder_of_seals$ or $NAM_common_fuel_market$.\n- Compromise: $NAM_defeat_rump_cabinet$, $NAM_defeat_harbour_economy$ and $NAM_defeat_road_south$.\n- Compromise revenge: $NAM_defeat_revenge$ and $NAM_defeat_second_chapter$.\n- Return from exile: $NAM_rad_great_war_plan$, $NAM_hum_union_call$ or $NAM_board_stock_mobilisation$; the return campaigns must be over.\n- If resource-war entry is finally cancelled: $NAM_seal_courts$, $NAM_civilian_combine$ and $NAM_officer_courses$."

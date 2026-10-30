@@ -961,6 +961,18 @@ class DiplomacyGuiContractTests(unittest.TestCase):
 
 
 class NationalFocusGuiContractTests(unittest.TestCase):
+    def test_focus_bookmark_has_native_hover_sprite_when_core_is_overridden(self):
+        local = (ROOT / 'interface/ADISCORD_focus_ui.gfx').read_text(
+            encoding='utf-8-sig'
+        )
+        native = Path(
+            'Z:/SteamLibrary/steamapps/common/Hearts of Iron IV/interface/core.gfx'
+        ).read_text(encoding='utf-8-sig')
+        self.assertEqual(
+            re.sub(r'\s+', '', gui_node_body(local, 'GFX_focus_shortcut_button')),
+            re.sub(r'\s+', '', gui_node_body(native, 'GFX_focus_shortcut_button')),
+        )
+
     def test_native_controls_keep_their_types_and_parent_paths(self):
         local_gui = ROOT / 'interface' / 'nationalfocusview.gui'
         vanilla_gui = Path(
@@ -1037,6 +1049,11 @@ class NationalFocusGuiContractTests(unittest.TestCase):
             'exclusive_positioning',
             'zoom_slider_container',
             'find_view',
+            'cycle_focus_next',
+            'cycle_focus_prev',
+            'mini_map_clip',
+            'toggle_shortcuts',
+            'focus_tree_shortcut_item',
         ):
             self.assertEqual(
                 re.sub(r'\s+', '', gui_node_body(local, name)),

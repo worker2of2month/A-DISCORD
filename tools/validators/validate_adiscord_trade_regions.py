@@ -15,7 +15,7 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 63, 2: 65, 3: 84, 4: 8, 5: 100, 6: 42, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 87, 4: 8, 5: 100, 6: 42, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
     1: 623,
     2: 752,

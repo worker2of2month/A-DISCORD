@@ -424,12 +424,12 @@ class CoastalSeaRegionTests(unittest.TestCase):
             self.assertTrue(memberships[capital] <= provinces)
 
     def test_large_city_splits_preserve_population_and_industry(self) -> None:
-        for parent, city, population in (
-            (290, 699, 29510),
-            (689, 700, states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
-            (691, 701, 280000 - states.NAM_VICTORY_BORDER_PROFILES[720]["population"]),
+        for members, population in (
+            ((290, 699), states.SHL_POPULATION[290] + states.SHL_POPULATION[699]),
+            ((689, 700), states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
+            ((691, 701, 726), 2510000),
         ):
-            sources = [states.state_path(state).read_text() for state in (parent, city)]
+            sources = [states.state_path(state).read_text() for state in members]
             self.assertEqual(
                 sum(
                     int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1])
@@ -437,7 +437,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 ),
                 population,
             )
-        for state_ids, civilian, military in (((689, 700), 1, 2), ((691, 701), 1, 0)):
+        for state_ids, civilian, military in (((689, 700), 1, 2), ((691, 701, 726), 1, 0)):
             source = "\n".join(
                 states.state_path(state).read_text() for state in state_ids
             )

@@ -14,6 +14,29 @@ def normalized_rail_source() -> str:
 
 
 class VorkerlandTheatreBuilderTests(unittest.TestCase):
+    def test_coalition_capitals_supply_front_and_port_at_level_two(self):
+        from collections import defaultdict
+
+        graph = defaultdict(set)
+        for line in normalized_rail_source().splitlines():
+            fields = list(map(int, line.split()))
+            if fields[0] < 2:
+                continue
+            for first, second in zip(fields[2:], fields[3:]):
+                graph[first].add(second)
+                graph[second].add(first)
+        hubs = {int(line.split()[1]) for line in theatre.SUPPLY_NODES_PATH.read_text().splitlines() if line.strip()}
+        for capital, hub, port in ((16717, 10422, 6495), (16893, 6577, 493)):
+            self.assertIn(hub, hubs)
+            pending = [capital]
+            reached = {capital}
+            while pending:
+                current = pending.pop()
+                for neighbour in graph[current] - reached:
+                    reached.add(neighbour)
+                    pending.append(neighbour)
+            self.assertTrue({hub, port} <= reached, (capital, hub, port))
+
     def test_current_generated_rail_record_is_valid(self) -> None:
         self.assertEqual(theatre.validate(), [])
 

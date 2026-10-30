@@ -317,17 +317,13 @@ ADISCORD_difficulty_south_campaign_supply = {
 		ADISCORD_difficulty_ai_advanced = yes
 		ADISCORD_south_final_war_enabled = yes
 		OR = {
-			tag = SHL
-			has_country_flag = ADISCORD_south_north_leader
-		}
-		OR = {
-			AND = {
-				ADISCORD_south_crisis_open = yes
-				ADISCORD_south_final_can_start = yes
-				has_global_flag = ADISCORD_south_crisis_warned
-			}
+			ADISCORD_south_preparing_country = yes
 			AND = {
 				ADISCORD_south_final_active = yes
+				OR = {
+					tag = SHL
+					has_country_flag = ADISCORD_south_north_leader
+				}
 				OR = {
 					has_war_with = SHL
 					has_war_with = NAM

@@ -147,7 +147,7 @@ class ImperialReclamationContracts(unittest.TestCase):
 
     def test_decision_keeps_postwar_unlock_and_joint_council_exclusion(self):
         expected = parse_clausewitz(
-            "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_route_joint has_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_unlocked NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }"
+            "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_route_joint has_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_unlocked NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }"
         )
         self.assertEqual(
             canonical(body(self.decision(), "visible")), canonical(expected)

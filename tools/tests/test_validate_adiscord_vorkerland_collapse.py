@@ -32,6 +32,7 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 
 
 from tools.lib.paths import source_section
+from tools.validators._vorkerland_release_contract import base_front_controls, validate_adaptive_fronts
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1216,7 +1217,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
             read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
         )
         self.assertNotIn("ADISCORD_vorkerland_dynamic_regional_front_commitment", ai)
-        self.assertNotIn("country_trigger = {", ai)
+        issues = []
+        validate_adaptive_fronts(ai, issues)
+        self.assertEqual(issues, [])
 
     def test_central_wars_have_target_specific_ai_fronts(self) -> None:
         ai = source_section(
@@ -2350,7 +2353,7 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
             self.assertNotIn("value = 80", front)
-            self.assertNotIn("execution_type = rush", front)
+            self.assertNotIn("execution_type = rush", "\n".join(base_front_controls(front)))
 
         for attacker, defender in (
             ("VLA", "EBA"),
@@ -2386,8 +2389,8 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn(f"front_unit_request tag = {defender} value = 75", front)
             self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
-            self.assertNotIn("execution_type = rush", front)
-            self.assertNotIn("manual_attack = yes", front)
+            self.assertNotIn("execution_type = rush", "\n".join(base_front_controls(front)))
+            self.assertNotIn("manual_attack = yes", "\n".join(base_front_controls(front)))
 
     def test_global_ai_preserves_native_readiness_and_supply_checks(self) -> None:
         defines = read("common/defines/ADISCORD_defines_changes.lua")
@@ -3170,74 +3173,33 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(f" {focus_id}_desc: ", russian)
         self.assertTrue(russian_path.read_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_rescue_creates_joint_government_without_another_roll(self) -> None:
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-
+    def test_rescue_opens_a_joint_mandate_chosen_by_focus_without_another_roll(self) -> None:
         opening = event_block(
-            read("events/ADISCORD_vorkerland_events.txt"),
-            "ADISCORD_vorkerland_collapse.1",
+            read("events/ADISCORD_vorkerland_events.txt"), "ADISCORD_vorkerland_collapse.1"
         )
-        opening_body = parse_clausewitz(opening)[0].value
-        immediate = next(entry.value for entry in opening_body if entry.key == "immediate")
-        keys = [entry.key for entry in immediate]
         form = "ADISCORD_vorkerland_form_joint_government"
-        self.assertEqual(keys.count(form), 1)
-        self.assertLess(keys.index("ADISCORD_vorkerland_apply_initial_map"), keys.index(form))
-        self.assertLess(keys.index("ADISCORD_vorkerland_prepare_claimant_characters"), keys.index(form))
-        self.assertEqual(keys.count("ADISCORD_vorkerland_prep_resolve_fate"), 1)
-        self.assertLess(keys.index("ADISCORD_vorkerland_prep_resolve_fate"), keys.index(form))
-
-        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        definition = parse_clausewitz(named_block(effects, form))[0].value
-        formed = "ADISCORD_vorkerland_joint_government_formed"
-        appointment = "ADISCORD_vorkerland_appoint_joint_council"
-
-        def matches(body, flags, countries):
-            for entry in body:
-                if entry.key == "has_global_flag":
-                    valid = entry.value in flags
-                elif entry.key == "country_exists":
-                    valid = entry.value in countries
-                elif entry.key == "NOT":
-                    valid = not matches(entry.value, flags, countries)
-                else:
-                    self.fail(f"Unsupported formation condition: {entry.key}")
-                if not valid:
-                    return False
-            return True
-
-        def execute(body, flags, countries, actions, scope="WRK"):
-            for entry in body:
-                if entry.key == "if":
-                    limit = next(child.value for child in entry.value if child.key == "limit")
-                    if matches(limit, flags, countries):
-                        execute([child for child in entry.value if child.key != "limit"],
-                                flags, countries, actions, scope)
-                elif entry.key == "VAD":
-                    execute(entry.value, flags, countries, actions, "VAD")
-                elif entry.key == "set_global_flag":
-                    flags.add(entry.value)
-                elif entry.key in ("set_cosmetic_tag", appointment, "country_event"):
-                    actions.append((scope, entry.key))
-                else:
-                    self.fail(f"Unsupported formation effect: {entry.key}")
-
-        for fate in ("safe_with_loyalists", "rescued_by_vlad", "missing", "killed"):
-            for countries in ({"WKR", "VAD"}, {"WKR"}, {"VAD"}):
-                with self.subTest(fate=fate, countries=countries):
-                    flags = {f"ADISCORD_vorkerland_worker_{fate}"}
-                    actions = []
-                    execute(definition, flags, countries, actions)
-                    expected = fate == "rescued_by_vlad" and len(countries) == 2
-                    self.assertEqual(formed in flags, expected)
-                    self.assertEqual(actions, [
-                        ("VAD", "set_cosmetic_tag"),
-                        ("VAD", appointment),
-                        ("VAD", "country_event"),
-                    ] if expected else [])
-                    first_actions = list(actions)
-                    execute(definition, flags, countries, actions)
-                    self.assertEqual(actions, first_actions)
+        self.assertNotIn(form, opening)
+        self.assertEqual(opening.count("ADISCORD_vorkerland_prep_resolve_fate = yes"), 1)
+        from tools.tests.test_vorkerland_preparation import ClaimantPreparationScheduleTests, fields
+        schedule = ClaimantPreparationScheduleTests()
+        schedule.setUpClass()
+        reward = fields(schedule.focuses["VAD_form_field_commandantures"])["completion_reward"]
+        hidden = [body for key, _, body in reward if key == "hidden_effect"]
+        self.assertEqual(sum(body.count((form, "=", "yes")) for body in hidden), 1)
+        definition = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), form)
+        self.assertNotIn("random", definition)
+        self.assertNotIn("country_exists = WKR", definition)
+        for token in (
+            "has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }",
+            "VAD_administration_active = yes",
+            "has_completed_focus = VAD_proclaim_joint_charter",
+            "NOT = { has_completed_focus = VAD_open_imperial_registers }",
+            "ADISCORD_vorkerland_appoint_joint_council = yes",
+            "news_event = { id = ADISCORD_vorkerland_story.44 hours = 1 }",
+        ):
+            self.assertIn(token, definition)
 
     def test_joint_government_starts_with_reduced_frontier(self) -> None:
         effects = source_section(
@@ -3404,7 +3366,16 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         worker_formation = named_block(
             phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
         )
-        worker_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+        completion = named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+        self.assertRegex(
+            completion,
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*"
+            r"ADISCORD_vorkerland_worker_utilitarian_outcome\s*\}\s*WKR_appoint_executive\s*=\s*yes",
+        )
+        worker_formation += completion
+        worker_formation += named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "WKR_appoint_executive"
+        )
         recovery_en = source_section(
             read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
             'recovery_l_english',

@@ -619,3 +619,528 @@ defined_text = {
 	}
 	text = { localization_key = WRK_worx_title_ordinary }
 }
+
+defined_text = {
+	name = GetTVAPendingTrial
+	text = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_tva_trial_paid }
+		localization_key = TVA_trial_pending
+	}
+	text = { localization_key = TVA_trial_idle }
+}
+
+defined_text = {
+	name = GetVADOathProject
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 1 compare = equals } }
+		localization_key = VAD_oath_pending_charter
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 2 compare = equals } }
+		localization_key = VAD_oath_pending_commandant
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 3 compare = equals } }
+		localization_key = VAD_oath_pending_order
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 4 compare = equals } }
+		localization_key = VAD_oath_pending_crown_recruitment
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 5 compare = equals } }
+		localization_key = VAD_oath_pending_joint_recruitment
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 6 compare = equals } }
+		localization_key = VAD_oath_pending_joint_congress
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 7 compare = equals } }
+		localization_key = VAD_oath_pending_joint_operations
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 8 compare = equals } }
+		localization_key = VAD_oath_pending_staff_rotation
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 9 compare = equals } }
+		localization_key = VAD_oath_pending_staff_depot
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 10 compare = equals } }
+		localization_key = VAD_oath_pending_crown_privileges
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 11 compare = equals } }
+		localization_key = VAD_oath_pending_crown_collateral
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 12 compare = equals } }
+		localization_key = VAD_oath_pending_forward_airfield
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 13 compare = equals } }
+		localization_key = VAD_oath_pending_district_air_defence
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 14 compare = equals } }
+		localization_key = VAD_oath_pending_guards
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 15 compare = equals } }
+		localization_key = VAD_oath_pending_local_militia
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 16 compare = equals } }
+		localization_key = VAD_oath_pending_district_march
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 17 compare = equals } }
+		localization_key = VAD_oath_pending_city_redoubts
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 18 compare = equals } }
+		localization_key = VAD_oath_pending_coalition_guarantees
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 19 compare = equals } }
+		localization_key = VAD_oath_pending_foreign_observers
+	}
+	text = { localization_key = VAD_oath_idle }
+}
+
+
+defined_text = {
+	name = GetWKRCouncilOrder
+	text = {
+		trigger = {
+			has_variable = WKR_council_order_pp
+			check_variable = { var = WKR_council_order_kind value = 3 compare = equals }
+		}
+		localization_key = WKR_assault_column_pending
+	}
+	text = {
+		trigger = { has_variable = WKR_council_order_pp }
+		localization_key = WKR_council_order_pending
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = WKR_council_order_idle
+	}
+}
+
+defined_text = {
+	name = GetWKRPoliticalMandate
+	text = {
+		trigger = { has_completed_focus = WKR_convene_front_soviets }
+		localization_key = WKR_mandate_presidential_status
+	}
+	text = {
+		trigger = { has_completed_focus = WKR_empower_front_executive }
+		localization_key = WKR_mandate_executive_status
+	}
+	text = { localization_key = WKR_mandate_open_status }
+}
+
+defined_text = {
+	name = GetWKRRailwayOrder
+	text = {
+		trigger = {
+			has_variable = WKR_railway_order_pp
+			check_variable = { var = WKR_railway_order_kind value = 1 compare = equals }
+		}
+		localization_key = WKR_railway_order_pending
+	}
+	text = {
+		trigger = {
+			has_variable = WKR_railway_order_pp
+			check_variable = { var = WKR_railway_order_kind value = 2 compare = equals }
+		}
+		localization_key = WKR_railway_order_airfield_workshop
+	}
+	text = {
+		trigger = { WKR_armoured_train_order_matches = yes }
+		localization_key = WKR_railway_order_armoured_train
+	}
+	text = {
+		trigger = {
+			WKR_breakthrough_order_matches = yes
+		}
+		localization_key = WKR_railway_order_breakthrough
+	}
+	text = {
+		trigger = {
+			has_variable = WKR_railway_order_pp
+			check_variable = { var = WKR_railway_order_kind value = 5 compare = equals }
+		}
+		localization_key = WKR_railway_order_interchange_defence
+	}
+	text = { localization_key = WKR_railway_order_idle }
+}
+
+# Imperial founding cabinets keep their own public narrative.
+defined_text = {
+	name = GetVorkerlandEmpireFoundationName
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_after_the_tribunal_petrichev
+	}
+	text = { localization_key = WRK_empire_after_the_tribunal_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireFoundationDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_after_the_tribunal_desc_petrichev
+	}
+	text = { localization_key = WRK_empire_after_the_tribunal_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCourtName
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_court_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_court_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCourtDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_court_desc_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_court_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireBalanceName
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_bop_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_bop_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCourtSide
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_bop_court_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_bop_court_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCategoryName
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_category_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_category_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCategoryDesc
+	text = {
+		trigger = { NOT = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } } }
+		localization_key = ADISCORD_vorkerland_empire_settled_category_desc
+	}
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_empire_category_desc_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_empire_category_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireGovernorsDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_imperial_governors_desc_petrichev
+	}
+	text = { localization_key = WRK_empire_imperial_governors_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireStaffName
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_staff_without_petrishchev_petrichev
+	}
+	text = { localization_key = WRK_empire_staff_without_petrishchev_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireStaffDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_staff_without_petrishchev_desc_petrichev
+	}
+	text = { localization_key = WRK_empire_staff_without_petrishchev_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireCoronationDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_tower_coronation_desc_petrichev
+	}
+	text = { localization_key = WRK_empire_tower_coronation_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireOrderDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_veyran_order_desc_petrichev
+	}
+	text = { localization_key = WRK_empire_veyran_order_desc_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireOrderTooltip
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = WRK_empire_veyran_order_tt_petrichev
+	}
+	text = { localization_key = WRK_empire_veyran_order_tt_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireProclamationTitle
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_postwar.5.t_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_postwar.5.t_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireProclamationDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_postwar.5.d_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_postwar.5.d_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireProclamationResponse
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_postwar.5.a_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_postwar.5.a_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireConspiracyDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_postwar.60.d_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_postwar.60.d_worcker }
+}
+
+defined_text = {
+	name = GetVorkerlandEmpireWesternVictoryDesc
+	text = {
+		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+		localization_key = ADISCORD_vorkerland_postwar.61.d_empire_petrichev
+	}
+	text = { localization_key = ADISCORD_vorkerland_postwar.61.d_empire_worcker }
+}
+
+defined_text = {
+	name = GetTVACadreTrainingGain
+	text = {
+		trigger = { has_completed_focus = TVA_build_the_engineering_service }
+		localization_key = TVA_cadre_training_gain_engineering
+	}
+	text = { localization_key = TVA_cadre_training_gain_standard }
+}
+
+defined_text = {
+	name = GetTVAMaintenanceReduction
+	text = {
+		trigger = { has_completed_focus = TVA_hold_back_civil_power }
+		localization_key = TVA_maintenance_reduction_civil
+	}
+	text = { localization_key = TVA_maintenance_reduction_standard }
+}
+
+# A paid standard series keeps its original quotation after a course change.
+defined_text = {
+	name = GetTVASeriesProgramme
+	text = {
+		trigger = { check_variable = { var = TVA_programme_kind value = 3 compare = equals } }
+		localization_key = TVA_emergency_series_programme_standard_tt
+	}
+	text = {
+		trigger = { has_completed_focus = TVA_run_the_grid_at_war_load }
+		localization_key = TVA_emergency_series_programme_war_tt
+	}
+	text = { localization_key = TVA_emergency_series_programme_standard_tt }
+}
+
+defined_text = {
+	name = GetTVASeriesRequirements
+	text = {
+		trigger = { check_variable = { var = TVA_programme_kind value = 3 compare = equals } }
+		localization_key = TVA_emergency_series_standard_available_tt
+	}
+	text = {
+		trigger = { has_completed_focus = TVA_run_the_grid_at_war_load }
+		localization_key = TVA_emergency_series_war_available_tt
+	}
+	text = { localization_key = TVA_emergency_series_standard_available_tt }
+}
+
+defined_text = {
+	name = GetTVATrialProtocol
+	text = {
+		trigger = { TVA_trial_is_battalion = yes }
+		localization_key = TVA_trial_battalion_name
+	}
+	text = {
+		trigger = { TVA_trial_is_fire_control = yes }
+		localization_key = TVA_trial_fire_control_name
+	}
+	text = {
+		trigger = { TVA_trial_is_logistics = yes }
+		localization_key = TVA_trial_logistics_name
+	}
+	text = { localization_key = TVA_trial_baseline_name }
+}
+
+defined_text = {
+	name = GetTVATrialCost
+	text = {
+		trigger = { TVA_trial_is_battalion = yes }
+		localization_key = TVA_trial_battalion_cost
+	}
+	text = {
+		trigger = { TVA_trial_is_fire_control = yes }
+		localization_key = TVA_trial_fire_control_cost
+	}
+	text = {
+		trigger = { TVA_trial_is_logistics = yes }
+		localization_key = TVA_trial_logistics_cost
+	}
+	text = { localization_key = TVA_trial_baseline_cost }
+}
+
+defined_text = {
+	name = GetTVATrialCostBlocked
+	text = {
+		trigger = { TVA_trial_is_battalion = yes }
+		localization_key = TVA_trial_battalion_cost_blocked
+	}
+	text = {
+		trigger = { TVA_trial_is_fire_control = yes }
+		localization_key = TVA_trial_fire_control_cost_blocked
+	}
+	text = {
+		trigger = { TVA_trial_is_logistics = yes }
+		localization_key = TVA_trial_logistics_cost_blocked
+	}
+	text = { localization_key = TVA_trial_baseline_cost_blocked }
+}
+
+defined_text = {
+	name = GetVADUnrestRate
+	text = {
+		trigger = { power_balance_value = { id = VAD_bop value > 0.10 } }
+		localization_key = VAD_unrest_rate_chancery
+	}
+	text = {
+		trigger = { power_balance_value = { id = VAD_bop value < -0.60 } }
+		localization_key = VAD_unrest_rate_staff
+	}
+	text = { localization_key = VAD_unrest_rate_regular }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestFrontierCommands
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_frontier_commands_staff
+	}
+	text = { localization_key = WRK_joint_west_frontier_commands_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestFrontierCommandsDesc
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_frontier_commands_desc_staff
+	}
+	text = { localization_key = WRK_joint_west_frontier_commands_desc_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestImperialColumns
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_imperial_columns_staff
+	}
+	text = { localization_key = WRK_joint_west_imperial_columns_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestImperialColumnsDesc
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_imperial_columns_desc_staff
+	}
+	text = { localization_key = WRK_joint_west_imperial_columns_desc_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestReturnOfTheMarches
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_return_of_the_marches_staff
+	}
+	text = { localization_key = WRK_joint_west_return_of_the_marches_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestReturnOfTheMarchesDesc
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_return_of_the_marches_desc_staff
+	}
+	text = { localization_key = WRK_joint_west_return_of_the_marches_desc_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestImperialSettlement
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_imperial_settlement_staff
+	}
+	text = { localization_key = WRK_joint_west_imperial_settlement_restoration }
+}
+
+defined_text = {
+	name = GetVADStaffWrkJointWestImperialSettlementDesc
+	text = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
+		localization_key = WRK_joint_west_imperial_settlement_desc_staff
+	}
+	text = { localization_key = WRK_joint_west_imperial_settlement_desc_restoration }
+}
+
+defined_text = {
+	name = GetTVAPublicAuditAssessment
+	text = {
+		trigger = { TVA_public_audit_healthy = yes }
+		localization_key = TVA_public_audit_assessment_good
+	}
+	text = { localization_key = TVA_public_audit_assessment_bad }
+}

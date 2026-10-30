@@ -4093,8 +4093,8 @@ class CivilWarContracts(unittest.TestCase):
 
     def test_val_retains_its_separate_timer_and_nod_refusal_stays_final(self):
         category = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_military_operations",
+            entries("common/decisions/ADISCORD_VAL_decisions.txt"),
+            "VAL_military_operations",
         )
         for name in ("VAL_cw_intervention_preparation",):
             mission = ast_block(category, name)

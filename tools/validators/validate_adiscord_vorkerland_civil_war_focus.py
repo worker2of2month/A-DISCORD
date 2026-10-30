@@ -14,7 +14,7 @@ from tools.lib.paths import source_section
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# The former monolith path is a tooling view over the five native trees below.
+# The former monolith path is an explicit tooling view over these native trees.
 FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 LIFECYCLE_TREES = {
     "ADISCORD_vorkerland_prewar_focus": (
@@ -35,6 +35,10 @@ LIFECYCLE_TREES = {
     ),
     "ADISCORD_vorkerland_settlement_focus": (
         Path("common/national_focus/ADISCORD_Vorkerland_settlement.txt"),
+        frozenset({"WRK"}),
+    ),
+    "ADISCORD_vorkerland_joint_postwar_focus": (
+        Path("common/national_focus/ADISCORD_Vorkerland_joint_postwar.txt"),
         frozenset({"WRK"}),
     ),
 }
@@ -72,6 +76,25 @@ WKR_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
 VAD_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
 TVA_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
 
+VAD_DISTRICT_RECRUITMENT_FOCUSES = {
+    "VAD_issue_crown_mobilization_warrants": "VAD_crown_district_recruitment",
+    "VAD_merge_guard_and_worker_rolls": "VAD_joint_district_recruitment",
+}
+
+VAD_JOINT_PROGRAMME_FOCUSES = {
+    "VAD_convene_joint_congress": "VAD_joint_congress_programme",
+    "VAD_sign_joint_operational_orders": "VAD_joint_operations_programme",
+}
+VAD_STAFF_PROGRAMME_FOCUSES = {
+    "VAD_require_collective_directives": "VAD_staff_rotation_programme",
+    "VAD_delegate_to_front_commands": "VAD_staff_depot_programme",
+}
+VAD_PAID_PROGRAMME_FOCUSES = {
+    **VAD_STAFF_PROGRAMME_FOCUSES,
+    **VAD_DISTRICT_RECRUITMENT_FOCUSES,
+    **VAD_JOINT_PROGRAMME_FOCUSES,
+}
+
 PREWAR_WRK_BASE_FOCUSES = (
     "WRK_measure_confederation_fault_lines",
     "WRK_convene_council_of_republics",
@@ -99,9 +122,8 @@ PREWAR_WRK_PROGRAMME_FOCUSES = (
     "WRK_prepare_military_evacuation",
 )
 
-# The hourglass branch: the centre-district balance, the camps and the tower.
+# Preparation institutions: centre-district balance, camps and tower protection.
 PREWAR_WRK_HOURGLASS_FOCUSES = (
-    "WRK_face_the_hourglass",
     "WRK_emergency_central_budget",
     "WRK_district_emergency_powers",
     "WRK_requisition_commissions",
@@ -163,6 +185,13 @@ PREWAR_VAD_FOCUSES = (
     *PREWAR_VAD_HOURGLASS_FOCUSES,
 )
 
+VAD_STAFF_FOCUSES = (
+    "VAD_convene_collegial_staff",
+    "VAD_require_collective_directives",
+    "VAD_delegate_to_front_commands",
+    "VAD_codify_staff_mandate",
+)
+
 WARTIME_ROUTE_FOCUSES = {
     "WKR": (
         "WKR_affirm_worker_mandate",
@@ -201,6 +230,10 @@ WARTIME_ROUTE_FOCUSES = {
         "VAD_settle_restoration_authority",
         "VAD_balance_council_and_command",
         "VAD_assemble_joint_general_staff",
+        "VAD_convene_collegial_staff",
+        "VAD_require_collective_directives",
+        "VAD_delegate_to_front_commands",
+        "VAD_codify_staff_mandate",
     ),
     "TVA": (
         "TVA_codify_utilitarian_directorate",
@@ -245,6 +278,7 @@ VAD_OPTIONAL_WARTIME_FOCUSES = (
     "VAD_preposition_restoration_columns",
     "VAD_define_the_solar_settlement",
     "VAD_open_the_remaining_fronts",
+    *VAD_JOINT_PROGRAMME_FOCUSES,
 )
 
 VAD_LATE_WAR_BRIDGE_FOCUSES = (
@@ -331,10 +365,10 @@ SHOWDOWN_FOCUSES = {
 }
 
 PREWAR_EXPANSION_POSITIONS = {
-    "WRK_open_worker_vadl_backchannel": (10, 4),
-    "WRK_offer_emergency_compact": (10, 5),
-    "WRK_mobilize_loyal_republics": (8, 4),
-    "WRK_place_reserves_under_worker": (8, 5),
+    "WRK_open_worker_vadl_backchannel": (23, 4),
+    "WRK_offer_emergency_compact": (23, 5),
+    "WRK_mobilize_loyal_republics": (21, 4),
+    "WRK_place_reserves_under_worker": (21, 5),
     "VAD_prepare_vadl_worker_terms": (28, 4),
     "VAD_ratify_emergency_compact": (28, 5),
     "VAD_activate_eastern_mandate": (26, 4),
@@ -401,16 +435,16 @@ SHOWDOWN_POSITIONS = {
     "WKR_reopen_night_freight_corridors": (18, 15),
     "WKR_arm_the_mobile_reserve": (16, 16),
     "WKR_coordinate_the_rolling_front": (16, 17),
-    "VAD_convene_campaign_directorate": (41, 16),
-    "VAD_issue_prefectural_field_decrees": (40, 17),
-    "VAD_seat_front_commissars": (42, 17),
-    "VAD_standardize_restoration_columns": (42, 18),
-    "VAD_advance_under_one_register": (42, 19),
-    "TVA_merge_iteration_with_field_command": (62, 17),
-    "TVA_mass_produce_assault_modules": (62, 18),
-    "TVA_link_observers_to_fire_control": (60, 18),
-    "TVA_turn_repair_trains_into_supply_web": (64, 18),
-    "TVA_run_live_front_validation": (64, 19),
+    "VAD_convene_campaign_directorate": (42, 17),
+    "VAD_issue_prefectural_field_decrees": (41, 18),
+    "VAD_seat_front_commissars": (43, 18),
+    "VAD_standardize_restoration_columns": (42, 19),
+    "VAD_advance_under_one_register": (42, 20),
+    "TVA_merge_iteration_with_field_command": (72, 17),
+    "TVA_mass_produce_assault_modules": (72, 18),
+    "TVA_link_observers_to_fire_control": (70, 18),
+    "TVA_turn_repair_trains_into_supply_web": (74, 18),
+    "TVA_run_live_front_validation": (72, 19),
 }
 
 SHOWDOWN_COSTS = {
@@ -540,200 +574,121 @@ FOCUS_EXPANSION_IDEAS = (
     "ADISCORD_vorkerland_tva_evacuated_bureaus",
     "ADISCORD_vorkerland_tva_certified_cadre",
     "ADISCORD_vorkerland_wkr_doctrine_armed_people",
-    "ADISCORD_vorkerland_wkr_doctrine_weight_of_numbers",
     "ADISCORD_vorkerland_wkr_doctrine_measured_force",
     "ADISCORD_vorkerland_wkr_doctrine_output_over_men",
     "ADISCORD_vorkerland_vad_doctrine_officer_estates",
-    "ADISCORD_vorkerland_vad_doctrine_guards_regiments",
     "ADISCORD_vorkerland_vad_doctrine_district_levies",
-    "ADISCORD_vorkerland_vad_doctrine_council_militias",
     "ADISCORD_vorkerland_tva_doctrine_continuous_assault",
     "ADISCORD_vorkerland_tva_doctrine_line_replacement",
     "ADISCORD_vorkerland_tva_doctrine_measured_front",
     "ADISCORD_vorkerland_tva_doctrine_fewer_better_crews",
     "ADISCORD_vorkerland_wkr_reserves_forward",
-    "ADISCORD_vorkerland_wkr_interchange_line",
-    "ADISCORD_vorkerland_wkr_bracket_patronage",
-    "ADISCORD_vorkerland_wkr_outside_recognition",
     "ADISCORD_vorkerland_vad_march_on_the_capital",
-    "ADISCORD_vorkerland_vad_restoration_line",
-    "ADISCORD_vorkerland_vad_bracket_patronage",
-    "ADISCORD_vorkerland_vad_legitimist_recognition",
     "ADISCORD_vorkerland_tva_reserve_cadre_spent",
     "ADISCORD_vorkerland_tva_technical_core_sealed",
-    "ADISCORD_vorkerland_tva_technical_exchange",
-    "ADISCORD_vorkerland_tva_bracket_contractors",
-    "ADISCORD_vorkerland_wkr_shopfloor_squadrons",
-    "ADISCORD_vorkerland_wkr_interchange_sky_screen",
     "ADISCORD_vorkerland_wkr_republican_volunteers",
     "ADISCORD_vorkerland_wkr_licensed_patterns",
-    "ADISCORD_vorkerland_vad_guards_close_support",
-    "ADISCORD_vorkerland_vad_district_air_cover",
-    "ADISCORD_vorkerland_vad_restoration_guarantees",
-    "ADISCORD_vorkerland_vad_observer_missions",
     "ADISCORD_vorkerland_tva_unattended_strike",
     "ADISCORD_vorkerland_tva_interdictor_station",
-    "ADISCORD_vorkerland_tva_surplus_export",
-    "ADISCORD_vorkerland_tva_imported_specialists",
 )
 
 # Full contract for the claimant variant branches. Everything here is checked
 # against the focus tree, the expansion ideas file, the wartime AI plans and
 # both localisation languages.
-VARIANT_BRANCHES = (
-    {
-        "tag": "WKR",
-        "key": "neo_vorkerist",
-        "focuses": (
-            "WKR_declare_the_revolution_unfinished",
-            "WKR_raise_the_worker_levy",
-            "WKR_vest_all_power_in_the_chairman",
-        ),
-        "positions": ((0, 11), (0, 12), (0, 13)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "WKR_publish_emergency_constitution",
-        "branch_tokens": (
-            "has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",
-        ),
-        "identity_tokens": (
-            "has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }",
-        ),
-        "sibling": "WKR_govern_by_delivered_results",
-        "variant_flag": "ADISCORD_vorkerland_wkr_variant_neo_vorkerist",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_wkr_unfinished_revolution",
-            "ADISCORD_vorkerland_wkr_chairmans_mandate",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_wkr_worker_levy",
-        "ai_plan": "ADISCORD_vorkerland_wkr_neo_vorkerist_variant_plan",
-    },
-    {
-        "tag": "WKR",
-        "key": "utilitarian",
-        "focuses": (
-            "WKR_govern_by_delivered_results",
-            "WKR_publish_the_ration_ledger",
-            "WKR_bind_the_republic_to_its_norms",
-        ),
-        "positions": ((4, 11), (4, 12), (4, 13)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "WKR_bind_workshops_to_directive",
-        "branch_tokens": (
-            "NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }",
-        ),
-        "identity_tokens": (
-            "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
-        ),
-        "sibling": "WKR_declare_the_revolution_unfinished",
-        "variant_flag": "ADISCORD_vorkerland_wkr_variant_utilitarian",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_wkr_delivery_mandate",
-            "ADISCORD_vorkerland_wkr_normative_republic",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_wkr_ration_ledger",
-        "ai_plan": "ADISCORD_vorkerland_wkr_utilitarian_variant_plan",
-    },
-    {
-        "tag": "VAD",
-        "key": "imperial",
-        "focuses": (
-            "VAD_reclaim_the_imperial_mandate",
-            "VAD_recall_the_officer_estates",
-            "VAD_crown_the_restoration",
-        ),
-        "positions": ((44, 11), (44, 12), (44, 13)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "VAD_bind_officers_to_chancery",
-        "branch_tokens": (
-            "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
-        ),
-        "identity_tokens": (
-            "has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }",
-        ),
-        "sibling": "VAD_seat_the_dual_chamber",
-        "variant_flag": "ADISCORD_vorkerland_vad_variant_imperial",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_vad_imperial_mandate",
-            "ADISCORD_vorkerland_vad_crowned_restoration",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_vad_officer_estates",
-        "ai_plan": "ADISCORD_vorkerland_vad_imperial_variant_plan",
-    },
-    {
-        "tag": "VAD",
-        "key": "joint",
-        "focuses": (
-            "VAD_seat_the_dual_chamber",
-            "VAD_open_the_district_rolls",
-            "VAD_bind_crown_and_council",
-        ),
-        "positions": ((30, 11), (30, 12), (30, 13)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "VAD_ratify_joint_command",
-        "branch_tokens": (
-            "has_global_flag = ADISCORD_vorkerland_joint_government_formed",
-        ),
-        "identity_tokens": (
-            "has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }",
-        ),
-        "sibling": "VAD_reclaim_the_imperial_mandate",
-        "variant_flag": "ADISCORD_vorkerland_vad_variant_joint",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_vad_dual_chamber",
-            "ADISCORD_vorkerland_vad_crown_and_council",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_vad_district_rolls",
-        "ai_plan": "ADISCORD_vorkerland_vad_joint_variant_plan",
-    },
-    {
-        "tag": "TVA",
-        "key": "throughput",
-        "focuses": (
-            "TVA_declare_continuous_mobilization",
-            "TVA_convert_the_civil_grid",
-            "TVA_run_the_republic_as_one_process",
-        ),
-        "positions": ((56, 8), (56, 9), (56, 10)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "TVA_codify_utilitarian_directorate",
-        "branch_tokens": (),
-        "identity_tokens": (
-            "has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }",
-        ),
-        "sibling": "TVA_enact_the_preservation_protocol",
-        "variant_flag": "ADISCORD_vorkerland_tva_variant_throughput",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_tva_continuous_mobilization",
-            "ADISCORD_vorkerland_tva_single_process",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_tva_converted_grid",
-        "ai_plan": "ADISCORD_vorkerland_tva_throughput_variant_plan",
-    },
-    {
-        "tag": "TVA",
-        "key": "preservation",
-        "focuses": (
-            "TVA_enact_the_preservation_protocol",
-            "TVA_evacuate_the_design_bureaus",
-            "TVA_certify_the_surviving_cadre",
-        ),
-        "positions": ((58, 8), (58, 9), (58, 10)),
-        "costs": (2, 3, 3),
-        "root_prerequisite": "TVA_codify_utilitarian_directorate",
-        "branch_tokens": (),
-        "identity_tokens": (
-            "has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }",
-        ),
-        "sibling": "TVA_declare_continuous_mobilization",
-        "variant_flag": "ADISCORD_vorkerland_tva_variant_preservation",
-        "permanent_ideas": (
-            "ADISCORD_vorkerland_tva_preservation_protocol",
-            "ADISCORD_vorkerland_tva_certified_cadre",
-        ),
-        "timed_idea": "ADISCORD_vorkerland_tva_evacuated_bureaus",
-        "ai_plan": "ADISCORD_vorkerland_tva_preservation_variant_plan",
-    },
-)
+VARIANT_BRANCHES = ({'tag': 'WKR',
+  'key': 'neo_vorkerist',
+  'focuses': ('WKR_declare_the_revolution_unfinished',
+              'WKR_raise_the_worker_levy',
+              'WKR_vest_all_power_in_the_chairman'),
+  'positions': ((0, 11), (0, 12), (0, 13)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'WKR_publish_emergency_constitution',
+  'branch_tokens': (),
+  'identity_tokens': ('WKR_presidential_course = yes',),
+  'sibling': 'WKR_govern_by_delivered_results',
+  'variant_flag': 'ADISCORD_vorkerland_wkr_variant_neo_vorkerist',
+  'permanent_ideas': ('ADISCORD_vorkerland_wkr_unfinished_revolution',
+                      'ADISCORD_vorkerland_wkr_chairmans_mandate'),
+  'timed_idea': 'ADISCORD_vorkerland_wkr_worker_levy',
+  'ai_plan': 'ADISCORD_vorkerland_wkr_neo_vorkerist_variant_plan'},
+ {'tag': 'WKR',
+  'key': 'utilitarian',
+  'focuses': ('WKR_govern_by_delivered_results',
+              'WKR_publish_the_ration_ledger',
+              'WKR_bind_the_republic_to_its_norms'),
+  'positions': ((4, 11), (4, 12), (4, 13)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'WKR_bind_workshops_to_directive',
+  'branch_tokens': (),
+  'identity_tokens': ('WKR_executive_course = yes',),
+  'sibling': 'WKR_declare_the_revolution_unfinished',
+  'variant_flag': 'ADISCORD_vorkerland_wkr_variant_utilitarian',
+  'permanent_ideas': ('ADISCORD_vorkerland_wkr_delivery_mandate',
+                      'ADISCORD_vorkerland_wkr_normative_republic'),
+  'timed_idea': 'ADISCORD_vorkerland_wkr_ration_ledger',
+  'ai_plan': 'ADISCORD_vorkerland_wkr_utilitarian_variant_plan'},
+ {'tag': 'VAD',
+  'key': 'imperial',
+  'focuses': ('VAD_reclaim_the_imperial_mandate',
+              'VAD_recall_the_officer_estates',
+              'VAD_crown_the_restoration'),
+  'positions': ((46, 11), (46, 12), (46, 13)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'VAD_bind_officers_to_chancery',
+  'branch_tokens': ('NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }',),
+  'identity_tokens': ('has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }',),
+  'sibling': 'VAD_seat_the_dual_chamber',
+  'variant_flag': 'ADISCORD_vorkerland_vad_variant_imperial',
+  'permanent_ideas': ('ADISCORD_vorkerland_vad_imperial_mandate',
+                      'ADISCORD_vorkerland_vad_crowned_restoration'),
+  'timed_idea': 'ADISCORD_vorkerland_vad_officer_estates',
+  'ai_plan': 'ADISCORD_vorkerland_vad_imperial_variant_plan'},
+ {'tag': 'VAD',
+  'key': 'joint',
+  'focuses': ('VAD_seat_the_dual_chamber', 'VAD_open_the_district_rolls', 'VAD_bind_crown_and_council'),
+  'positions': ((38, 11), (38, 12), (38, 13)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'VAD_ratify_joint_command',
+  'branch_tokens': ('has_global_flag = ADISCORD_vorkerland_joint_government_formed',),
+  'identity_tokens': ('has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }',),
+  'sibling': 'VAD_reclaim_the_imperial_mandate',
+  'variant_flag': 'ADISCORD_vorkerland_vad_variant_joint',
+  'permanent_ideas': ('ADISCORD_vorkerland_vad_dual_chamber',
+                      'ADISCORD_vorkerland_vad_crown_and_council'),
+  'timed_idea': 'ADISCORD_vorkerland_vad_district_rolls',
+  'ai_plan': 'ADISCORD_vorkerland_vad_joint_variant_plan'},
+ {'tag': 'TVA',
+  'key': 'throughput',
+  'focuses': ('TVA_declare_continuous_mobilization',
+              'TVA_convert_the_civil_grid',
+              'TVA_run_the_republic_as_one_process'),
+  'positions': ((58, 8), (58, 9), (58, 10)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'TVA_codify_utilitarian_directorate',
+  'branch_tokens': (),
+  'identity_tokens': ('has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }',),
+  'sibling': 'TVA_enact_the_preservation_protocol',
+  'variant_flag': 'ADISCORD_vorkerland_tva_variant_throughput',
+  'permanent_ideas': ('ADISCORD_vorkerland_tva_continuous_mobilization',
+                      'ADISCORD_vorkerland_tva_single_process'),
+  'timed_idea': 'ADISCORD_vorkerland_tva_converted_grid',
+  'ai_plan': 'ADISCORD_vorkerland_tva_throughput_variant_plan'},
+ {'tag': 'TVA',
+  'key': 'preservation',
+  'focuses': ('TVA_enact_the_preservation_protocol',
+              'TVA_evacuate_the_design_bureaus',
+              'TVA_certify_the_surviving_cadre'),
+  'positions': ((60, 8), (60, 9), (60, 10)),
+  'costs': (2, 3, 3),
+  'root_prerequisite': 'TVA_codify_utilitarian_directorate',
+  'branch_tokens': (),
+  'identity_tokens': ('has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }',),
+  'sibling': 'TVA_declare_continuous_mobilization',
+  'variant_flag': 'ADISCORD_vorkerland_tva_variant_preservation',
+  'permanent_ideas': ('ADISCORD_vorkerland_tva_preservation_protocol',
+                      'ADISCORD_vorkerland_tva_certified_cadre'),
+  'timed_idea': 'ADISCORD_vorkerland_tva_evacuated_bureaus',
+  'ai_plan': 'ADISCORD_vorkerland_tva_preservation_variant_plan'})
 
 VARIANT_IDEAS = tuple(
     idea
@@ -833,6 +788,7 @@ POSTWAR_ROUTE_FOCUSES = {
         "WRK_joint_codify_single_chain_of_command",
         "WRK_joint_impose_reunification_settlement",
         "WRK_joint_restore_unity_tower",
+        "WRK_joint_ratify_staff_constitution",
     ),
     "ADISCORD_vorkerland_route_utilitarian": (
         "WRK_utilitarian_form_reconstruction_directorate",
@@ -951,15 +907,12 @@ FOCUS_IDS = (
     *PREWAR_VAD_BASE_FOCUSES,
     *PREWAR_VAD_EXPANSION_FOCUSES,
     *PREWAR_VAD_HOURGLASS_FOCUSES,
-    RETIRED_WARTIME_FOCUSES[0],
-    RETIRED_WARTIME_FOCUSES[1],
-    RETIRED_WARTIME_FOCUSES[2],
     *WARTIME_ROUTE_FOCUSES["WKR"],
     *SHOWDOWN_FOCUSES["WKR"],
     *WKR_OPTIONAL_WARTIME_FOCUSES,
     *WKR_VARIANT_FOCUSES,
     *WARTIME_ROUTE_FOCUSES["VAD"],
-    *VAD_OPTIONAL_WARTIME_FOCUSES,
+    *(focus_id for focus_id in VAD_OPTIONAL_WARTIME_FOCUSES if focus_id not in VAD_JOINT_PROGRAMME_FOCUSES),
     *VAD_VARIANT_FOCUSES,
     *VAD_LATE_WAR_BRIDGE_FOCUSES,
     *SHOWDOWN_FOCUSES["VAD"],
@@ -977,7 +930,6 @@ FOCUS_IDS = (
     "WKR_break_them_with_numbers",
     "WKR_doctrine_of_measured_force",
     "WKR_replace_men_with_output",
-    "WKR_the_last_levy",
     "WKR_throw_the_reserves_forward",
     "WKR_dig_in_along_the_interchange",
     "WKR_seat_the_factory_councils",
@@ -985,10 +937,8 @@ FOCUS_IDS = (
     "WKR_requisition_in_the_republics_name",
     "WKR_arm_the_bracket_victors",
     "WKR_seek_outside_recognition",
-    "WKR_form_the_republican_air_staff",
     "WKR_commit_shopfloor_squadrons",
     "WKR_screen_the_interchange_sky",
-    "WKR_open_the_external_desk",
     "WKR_send_republican_volunteers",
     "WKR_license_outside_patterns",
     "VAD_convene_the_restoration_treasury",
@@ -998,41 +948,27 @@ FOCUS_IDS = (
     "VAD_restore_the_guards_regiments",
     "VAD_doctrine_of_the_district_levies",
     "VAD_train_the_council_militias",
-    "VAD_hold_the_historic_capitals",
     "VAD_march_on_the_old_capital",
     "VAD_fortify_the_restoration_line",
-    "VAD_convene_the_court_of_honours",
     "VAD_stage_the_coronation_rites",
     "VAD_mortgage_the_regalia",
-    "VAD_court_the_bracket_victors",
-    "VAD_seek_legitimist_recognition",
-    "VAD_restore_the_restoration_air_arm",
     "VAD_task_the_guards_for_close_support",
     "VAD_cover_the_district_capitals",
-    "VAD_open_the_foreign_chancery",
     "VAD_issue_restoration_guarantees",
     "VAD_seat_the_observer_missions",
-    "TVA_convene_the_load_board",
+    *VAD_JOINT_PROGRAMME_FOCUSES,
     "TVA_run_the_grid_at_war_load",
     "TVA_hold_back_civil_power",
     "TVA_doctrine_of_continuous_assault",
-    "TVA_replace_losses_from_the_line",
     "TVA_doctrine_of_the_measured_front",
-    "TVA_hold_with_fewer_better_crews",
-    "TVA_declare_the_final_iteration",
     "TVA_spend_the_reserve_cadre",
     "TVA_seal_the_technical_core",
-    "TVA_certify_the_completed_programmes",
     "TVA_publish_the_reconstruction_index",
     "TVA_divert_the_research_budget",
     "TVA_open_the_technical_exchange",
-    "TVA_hire_the_bracket_victors",
-    "TVA_stand_up_the_grid_air_staff",
+    "TVA_build_the_engineering_service",
     "TVA_print_unattended_strike_packages",
     "TVA_keep_the_interdictors_on_station",
-    "TVA_open_the_exchange_window",
-    "TVA_export_surplus_output",
-    "TVA_import_surviving_specialists",
 )
 
 PREWAR_PHASE = "ADISCORD_vorkerland_phase_prewar"
@@ -1084,7 +1020,6 @@ WARTIME_TERMINALS = {
         "VAD_balance_council_and_command",
         (
             frozenset({"VAD_settle_restoration_authority"}),
-            frozenset({"VAD_dispatch_solland_liaison_mission"}),
             frozenset({"VAD_assemble_joint_general_staff"}),
             frozenset({"VAD_reopen_armament_depots"}),
         ),
@@ -1165,9 +1100,11 @@ POSTWAR_EXPANSION_CHOICES = (
 
 def lifecycle_tree(focus_id: str) -> str:
     """Native tree that defines a lifecycle focus."""
-    if focus_id in PREWAR_VAD_FOCUSES or focus_id in RETIRED_WARTIME_FOCUSES:
+    if focus_id in PREWAR_VAD_FOCUSES:
         return "ADISCORD_vorkerland_prewar_focus"
-    if focus_id.startswith(("WRK_worker_", "WRK_joint_", "WRK_utilitarian_")):
+    if focus_id.startswith("WRK_joint_"):
+        return "ADISCORD_vorkerland_joint_postwar_focus"
+    if focus_id.startswith(("WRK_worker_", "WRK_utilitarian_")):
         return "ADISCORD_vorkerland_settlement_focus"
     if focus_id.startswith("WRK_"):
         return "ADISCORD_vorkerland_prewar_focus"
@@ -1179,6 +1116,8 @@ def lifecycle_order() -> tuple[str, ...]:
     order = list(FOCUS_IDS)
     for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
         index = order.index(POSTWAR_ROUTE_TERMINALS[route_flag]) + 1
+        if route_flag == "ADISCORD_vorkerland_route_joint":
+            index += 1
         order[index:index] = (*RECONSTRUCTION_ROUTE_FOCUSES[route_flag], *focus_ids)
     extension_index = order.index("WKR_convene_the_production_soviet")
     order[extension_index:extension_index] = POSTWAR_EXPANSION_IDS
@@ -1217,24 +1156,31 @@ VAD_OPTIONAL_OUTCOME_FOCUSES = (
             "VAD_elect_district_commissars",
             "VAD_merge_guard_and_worker_rolls",
             "VAD_sign_the_dual_authority_protocol",
+            *VAD_JOINT_PROGRAMME_FOCUSES,
             "VAD_map_the_solar_corridors",
             "VAD_preposition_restoration_columns",
             "VAD_define_the_solar_settlement",
         }
     ),
+    *(frozenset({
+        "VAD_map_the_solar_corridors", "VAD_preposition_restoration_columns",
+        "VAD_define_the_solar_settlement",
+    }),) * 2,
 )
 
 VAD_OPTIONAL_POSITIONS = {
-    "VAD_restore_prefectural_courts": (46, 11),
-    "VAD_issue_crown_mobilization_warrants": (46, 12),
-    "VAD_turn_the_chancery_into_a_war_cabinet": (46, 14),
-    "VAD_elect_district_commissars": (28, 11),
-    "VAD_merge_guard_and_worker_rolls": (28, 12),
-    "VAD_sign_the_dual_authority_protocol": (28, 14),
-    "VAD_map_the_solar_corridors": (37, 11),
-    "VAD_preposition_restoration_columns": (37, 12),
-    "VAD_define_the_solar_settlement": (36, 13),
-    "VAD_open_the_remaining_fronts": (32, 8),
+    "VAD_restore_prefectural_courts": (48, 11),
+    "VAD_issue_crown_mobilization_warrants": (48, 12),
+    "VAD_turn_the_chancery_into_a_war_cabinet": (48, 14),
+    "VAD_elect_district_commissars": (36, 11),
+    "VAD_merge_guard_and_worker_rolls": (36, 12),
+    "VAD_sign_the_dual_authority_protocol": (36, 14),
+    "VAD_map_the_solar_corridors": (42, 11),
+    "VAD_preposition_restoration_columns": (42, 12),
+    "VAD_define_the_solar_settlement": (44, 14),
+    "VAD_open_the_remaining_fronts": (62, 8),
+    "VAD_convene_joint_congress": (32, 12),
+    "VAD_sign_joint_operational_orders": (34, 12),
 }
 
 VAD_OPTIONAL_COSTS = {
@@ -1248,13 +1194,15 @@ VAD_OPTIONAL_COSTS = {
     "VAD_preposition_restoration_columns": 3,
     "VAD_define_the_solar_settlement": 5,
     "VAD_open_the_remaining_fronts": 3,
+    "VAD_convene_joint_congress": 2,
+    "VAD_sign_joint_operational_orders": 2,
 }
 
 VAD_LATE_WAR_BRIDGE_POSITIONS = {
-    "VAD_reconcile_emergency_district_rolls": (39, 13),
-    "VAD_restore_eastern_supply_corridors": (41, 14),
-    "VAD_convert_emergency_workshops": (38, 14),
-    "VAD_publish_interim_restoration_register": (41, 15),
+    "VAD_reconcile_emergency_district_rolls": (42, 14),
+    "VAD_restore_eastern_supply_corridors": (43, 15),
+    "VAD_convert_emergency_workshops": (41, 15),
+    "VAD_publish_interim_restoration_register": (42, 16),
 }
 
 VAD_LATE_WAR_BRIDGE_COSTS = {
@@ -1339,17 +1287,17 @@ TVA_OPTIONAL_OUTCOME_FOCUSES = tuple(
 )
 
 TVA_OPTIONAL_POSITIONS = {
-    "TVA_unattended_shifts": (74, 10),
-    "TVA_delegate_fire_plans_to_board": (72, 10),
-    "TVA_bunker_specialist_cadres": (76, 10),
-    "TVA_standardize_assault_teams": (62, 11),
-    "TVA_network_observation_posts": (70, 11),
-    "TVA_mandate_modular_repair": (66, 11),
-    "TVA_print_interchangeable_repair_modules": (62, 13),
-    "TVA_preposition_switching_crews": (62, 14),
-    "TVA_cross_validate_trial_logs": (62, 15),
-    "TVA_authorize_iteration_two": (62, 16),
-    "TVA_open_the_remaining_fronts": (69, 8),
+    "TVA_unattended_shifts": (80, 10),
+    "TVA_delegate_fire_plans_to_board": (78, 10),
+    "TVA_bunker_specialist_cadres": (82, 10),
+    "TVA_standardize_assault_teams": (68, 11),
+    "TVA_network_observation_posts": (72, 11),
+    "TVA_mandate_modular_repair": (70, 11),
+    "TVA_print_interchangeable_repair_modules": (68, 13),
+    "TVA_preposition_switching_crews": (68, 14),
+    "TVA_cross_validate_trial_logs": (68, 15),
+    "TVA_authorize_iteration_two": (68, 16),
+    "TVA_open_the_remaining_fronts": (90, 8),
 }
 
 TVA_OPTIONAL_COSTS = {
@@ -1513,6 +1461,7 @@ WARTIME_OUTCOME_EXCLUSIONS = {
                 "VAD_form_field_commandantures",
                 "VAD_guarantee_worker_committees",
                 "VAD_ratify_joint_command",
+                *VAD_STAFF_FOCUSES,
             }
         ),
         frozenset(
@@ -1520,8 +1469,14 @@ WARTIME_OUTCOME_EXCLUSIONS = {
                 "VAD_open_imperial_registers",
                 "VAD_restore_crown_commissions",
                 "VAD_bind_officers_to_chancery",
+                *VAD_STAFF_FOCUSES,
             }
         ),
+        *(frozenset({
+            "VAD_open_imperial_registers", "VAD_restore_crown_commissions",
+            "VAD_bind_officers_to_chancery", "VAD_form_field_commandantures",
+            "VAD_guarantee_worker_committees", "VAD_ratify_joint_command", excluded_policy,
+        }) for excluded_policy in ("VAD_delegate_to_front_commands", "VAD_require_collective_directives")),
     ),
     "TVA": tuple(
         frozenset(({*metric_choices} - {metric}) | ({*trial_choices} - {trial}))
@@ -1582,6 +1537,14 @@ WARTIME_OUTCOME_FALSE_GATE_TOKENS = {
             "character = TVA_Dorian_Worx",
             "has_government = technocracy",
         ),
+        *((
+            "character = WRK_VAD_Joint_Council",
+            "character = WRK_Nikita_Worcker",
+            "character = WRK_Anton_Bagley",
+            "character = TVA_Dorian_Worx",
+            "has_government = technocracy",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }",
+        ),) * 2,
     ),
     "TVA": tuple(
         (
@@ -1596,14 +1559,10 @@ WARTIME_OUTCOME_FALSE_GATE_TOKENS = {
     ),
 }
 
-# Claimant identity gating is split deliberately.
-#
-# allow_branch may only test the collapse roll flag, which is written once and
-# never rewritten, so exactly one political line of each claimant is always
-# structurally present and the shared convergence focus can never be orphaned.
-# The volatile identity state (ruling party and the cached country leader) is
-# tested in available instead, so a transient character-cache mismatch greys a
-# focus out for a day rather than deleting half of the tree permanently.
+# Visibility is structural. WKR exposes both mandates, with actual leadership
+# checked in available and exclusive entry focuses fixing the chosen course.
+# VAD exposes both entry choices. Its descendants use the government selected
+# by the entry reward, with a layout refresh when the joint council takes office.
 WARTIME_ROUTE_IDENTITIES = (
     (
         (
@@ -1611,11 +1570,9 @@ WARTIME_ROUTE_IDENTITIES = (
             "WKR_open_free_republics_channel",
             "WKR_publish_emergency_constitution",
         ),
-        ("has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",),
+        (),
         (
-            "has_government = pragmatism",
-            "has_country_leader_ideology = neo_vorkerism",
-            "has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }",
+            "WKR_presidential_course = yes",
         ),
     ),
     (
@@ -1624,10 +1581,9 @@ WARTIME_ROUTE_IDENTITIES = (
             "WKR_authorize_normative_command",
             "WKR_bind_workshops_to_directive",
         ),
-        ("NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }",),
+        (),
         (
-            "has_government = utilitarism",
-            "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
+            "WKR_executive_course = yes",
         ),
     ),
     (
@@ -1653,13 +1609,24 @@ WARTIME_ROUTE_IDENTITIES = (
     ),
 )
 
-# Complementary allow_branch pairs: for every claimant the union of the two
-# political lines must cover every collapse roll, so the convergence focus that
-# consumes both lines is reachable from any identity the collapse can produce.
+# Political convergences accept either line in one prerequisite group.
+# Exclusive entry focuses fix the mandate before these branches can merge.
 WARTIME_ROUTE_CONVERGENCE = (
     ("WKR_settle_front_authority", 0, 1),
     ("VAD_settle_restoration_authority", 2, 3),
 )
+
+VAD_MANDATE_ENTRIES = {
+    "VAD_open_imperial_registers": (
+        "VAD_administration_active = yes",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
+    ),
+    "VAD_form_field_commandantures": (
+        "VAD_administration_active = yes",
+        "has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad",
+        "NOT = { has_completed_focus = VAD_open_imperial_registers }",
+    ),
+}
 
 NEW_WARTIME_FOCUSES = {
     "WKR": set(WARTIME_ROUTE_FOCUSES["WKR"][10:16]),
@@ -1728,7 +1695,6 @@ POSTWAR_SETTLEMENT_IDEAS = {
 
 CENTRAL_PREPARED_FLAG = "ADISCORD_vorkerland_focus_central_front_prepared"
 CLAIMANT_FOCUS_EVENT_IDS = (
-    "ADISCORD_vorkerland_claimant.1",
     "ADISCORD_vorkerland_claimant.2",
     "ADISCORD_vorkerland_claimant.3",
     "ADISCORD_vorkerland_claimant.4",
@@ -1751,6 +1717,23 @@ CLAIMANT_NEWS_EVENT_IDS = (
     "ADISCORD_vorkerland_claimant.101",
     "ADISCORD_vorkerland_claimant.102",
 )
+CLAIMANT_PROGRAMME_EVENT_IDS = (
+    "ADISCORD_vorkerland_claimant.15",
+    "ADISCORD_vorkerland_claimant.25",
+    "ADISCORD_vorkerland_claimant.26",
+    "ADISCORD_vorkerland_claimant.27",
+    "ADISCORD_vorkerland_claimant.28",
+    "ADISCORD_vorkerland_claimant.29",
+)
+CLAIMANT_MANDATE_EVENT_IDS = (
+    "ADISCORD_vorkerland_claimant.1",
+    "ADISCORD_vorkerland_claimant.5",
+    "ADISCORD_vorkerland_claimant.6",
+)
+CLAIMANT_OWNED_EVENT_IDS = tuple(sorted(
+    (*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_PROGRAMME_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS, *CLAIMANT_MANDATE_EVENT_IDS),
+    key=lambda event_id: int(event_id.rsplit(".", 1)[1]),
+))
 CLAIMANT_TWO_OPTION_EVENT_IDS = (
     "ADISCORD_vorkerland_claimant.1",
     "ADISCORD_vorkerland_claimant.2",
@@ -1914,36 +1897,7 @@ CORE_DECISIONS = {
 }
 
 POSTWAR_HOOKS = {
-    "ADISCORD_vorkerland_focus_worker_postwar_congress",
-    "ADISCORD_vorkerland_focus_worker_erased_archives",
-    "ADISCORD_vorkerland_focus_worker_displaced_councils",
-    "ADISCORD_vorkerland_focus_worker_constitutional_guarantees",
     "ADISCORD_vorkerland_focus_worker_free_republics",
-    "ADISCORD_vorkerland_focus_worker_cooperative_reconstruction",
-    "ADISCORD_vorkerland_focus_worker_homecoming_commissions",
-    "ADISCORD_vorkerland_focus_worker_housing_guarantees",
-    "ADISCORD_vorkerland_focus_worker_reconstruction_grants",
-    "ADISCORD_vorkerland_focus_worker_republican_compact",
-    "ADISCORD_vorkerland_focus_joint_postwar_council",
-    "ADISCORD_vorkerland_focus_joint_amnesty_registers",
-    "ADISCORD_vorkerland_focus_joint_military_districts",
-    "ADISCORD_vorkerland_focus_joint_rail_commands",
-    "ADISCORD_vorkerland_focus_joint_integration_warrants",
-    "ADISCORD_vorkerland_focus_joint_restored_chancery",
-    "ADISCORD_vorkerland_focus_joint_civilian_police",
-    "ADISCORD_vorkerland_focus_joint_emergency_inspectorate",
-    "ADISCORD_vorkerland_focus_joint_single_chain_of_command",
-    "ADISCORD_vorkerland_focus_joint_order_settlement",
-    "ADISCORD_vorkerland_focus_utilitarian_postwar_directorate",
-    "ADISCORD_vorkerland_focus_utilitarian_power_standard",
-    "ADISCORD_vorkerland_focus_utilitarian_machine_tools",
-    "ADISCORD_vorkerland_focus_utilitarian_national_laboratories",
-    "ADISCORD_vorkerland_focus_utilitarian_integration_metrics",
-    "ADISCORD_vorkerland_focus_utilitarian_rationalized_districts",
-    "ADISCORD_vorkerland_focus_utilitarian_public_utilities",
-    "ADISCORD_vorkerland_focus_utilitarian_industrial_recovery",
-    "ADISCORD_vorkerland_focus_utilitarian_reconstruction_ledger",
-    "ADISCORD_vorkerland_focus_utilitarian_measurable_republic",
 }
 
 # Documented column allocation of the lifecycle canvas. Bands are disjoint in y
@@ -1975,7 +1929,6 @@ DEPTH_MODULE_FOCUSES = {
         "WKR_replace_men_with_output",
     ),
     ("WKR", "late_war"): (
-        "WKR_the_last_levy",
         "WKR_throw_the_reserves_forward",
         "WKR_dig_in_along_the_interchange",
     ),
@@ -1989,12 +1942,10 @@ DEPTH_MODULE_FOCUSES = {
         "WKR_seek_outside_recognition",
     ),
     ("WKR", "air"): (
-        "WKR_form_the_republican_air_staff",
         "WKR_commit_shopfloor_squadrons",
         "WKR_screen_the_interchange_sky",
     ),
     ("WKR", "foreign_policy"): (
-        "WKR_open_the_external_desk",
         "WKR_send_republican_volunteers",
         "WKR_license_outside_patterns",
     ),
@@ -2010,63 +1961,44 @@ DEPTH_MODULE_FOCUSES = {
         "VAD_train_the_council_militias",
     ),
     ("VAD", "late_war"): (
-        "VAD_hold_the_historic_capitals",
         "VAD_march_on_the_old_capital",
         "VAD_fortify_the_restoration_line",
     ),
     ("VAD", "legitimacy"): (
-        "VAD_convene_the_court_of_honours",
         "VAD_stage_the_coronation_rites",
         "VAD_mortgage_the_regalia",
     ),
-    ("VAD", "diplomacy"): (
-        "VAD_court_the_bracket_victors",
-        "VAD_seek_legitimist_recognition",
-    ),
     ("VAD", "air"): (
-        "VAD_restore_the_restoration_air_arm",
         "VAD_task_the_guards_for_close_support",
         "VAD_cover_the_district_capitals",
     ),
     ("VAD", "foreign_policy"): (
-        "VAD_open_the_foreign_chancery",
         "VAD_issue_restoration_guarantees",
         "VAD_seat_the_observer_missions",
     ),
     ("TVA", "war_economy"): (
-        "TVA_convene_the_load_board",
         "TVA_run_the_grid_at_war_load",
         "TVA_hold_back_civil_power",
     ),
     ("TVA", "doctrine"): (
         "TVA_doctrine_of_continuous_assault",
-        "TVA_replace_losses_from_the_line",
         "TVA_doctrine_of_the_measured_front",
-        "TVA_hold_with_fewer_better_crews",
     ),
     ("TVA", "late_war"): (
-        "TVA_declare_the_final_iteration",
         "TVA_spend_the_reserve_cadre",
         "TVA_seal_the_technical_core",
     ),
     ("TVA", "legitimacy"): (
-        "TVA_certify_the_completed_programmes",
         "TVA_publish_the_reconstruction_index",
         "TVA_divert_the_research_budget",
     ),
     ("TVA", "diplomacy"): (
         "TVA_open_the_technical_exchange",
-        "TVA_hire_the_bracket_victors",
+        "TVA_build_the_engineering_service",
     ),
     ("TVA", "air"): (
-        "TVA_stand_up_the_grid_air_staff",
         "TVA_print_unattended_strike_packages",
         "TVA_keep_the_interdictors_on_station",
-    ),
-    ("TVA", "foreign_policy"): (
-        "TVA_open_the_exchange_window",
-        "TVA_export_surplus_output",
-        "TVA_import_surviving_specialists",
     ),
 }
 
@@ -2082,62 +2014,44 @@ DEPTH_POSITIONS = {
     "WKR_break_them_with_numbers": (0, 15),
     "WKR_doctrine_of_measured_force": (4, 14),
     "WKR_replace_men_with_output": (4, 15),
-    "WKR_the_last_levy": (22, 13),
-    "WKR_throw_the_reserves_forward": (21, 14),
-    "WKR_dig_in_along_the_interchange": (23, 14),
+    "WKR_throw_the_reserves_forward": (21, 13),
+    "WKR_dig_in_along_the_interchange": (23, 13),
     "WKR_seat_the_factory_councils": (12, 12),
     "WKR_publish_the_production_returns": (11, 13),
     "WKR_requisition_in_the_republics_name": (13, 13),
-    "WKR_arm_the_bracket_victors": (5, 10),
-    "WKR_seek_outside_recognition": (7, 10),
-    "WKR_form_the_republican_air_staff": (17, 8),
-    "WKR_commit_shopfloor_squadrons": (16, 9),
-    "WKR_screen_the_interchange_sky": (18, 9),
-    "WKR_open_the_external_desk": (22, 8),
-    "WKR_send_republican_volunteers": (21, 9),
-    "WKR_license_outside_patterns": (23, 9),
-    "VAD_convene_the_restoration_treasury": (53, 11),
-    "VAD_levy_the_crown_estates": (52, 12),
-    "VAD_protect_the_district_markets": (54, 12),
-    "VAD_doctrine_of_the_officer_estates": (44, 14),
-    "VAD_restore_the_guards_regiments": (44, 15),
-    "VAD_doctrine_of_the_district_levies": (30, 14),
-    "VAD_train_the_council_militias": (30, 15),
-    "VAD_hold_the_historic_capitals": (34, 13),
-    "VAD_march_on_the_old_capital": (33, 14),
-    "VAD_fortify_the_restoration_line": (35, 14),
-    "VAD_convene_the_court_of_honours": (48, 8),
-    "VAD_stage_the_coronation_rites": (47, 9),
-    "VAD_mortgage_the_regalia": (49, 9),
-    "VAD_court_the_bracket_victors": (51, 8),
-    "VAD_seek_legitimist_recognition": (53, 8),
-    "VAD_restore_the_restoration_air_arm": (42, 8),
-    "VAD_task_the_guards_for_close_support": (41, 9),
-    "VAD_cover_the_district_capitals": (43, 9),
-    "VAD_open_the_foreign_chancery": (28, 8),
-    "VAD_issue_restoration_guarantees": (27, 9),
-    "VAD_seat_the_observer_missions": (29, 9),
-    "TVA_convene_the_load_board": (82, 10),
-    "TVA_run_the_grid_at_war_load": (81, 11),
-    "TVA_hold_back_civil_power": (83, 11),
-    "TVA_doctrine_of_continuous_assault": (56, 11),
-    "TVA_replace_losses_from_the_line": (56, 12),
-    "TVA_doctrine_of_the_measured_front": (58, 11),
-    "TVA_hold_with_fewer_better_crews": (58, 12),
-    "TVA_declare_the_final_iteration": (74, 14),
-    "TVA_spend_the_reserve_cadre": (73, 15),
-    "TVA_seal_the_technical_core": (75, 15),
-    "TVA_certify_the_completed_programmes": (70, 12),
-    "TVA_publish_the_reconstruction_index": (69, 13),
-    "TVA_divert_the_research_budget": (71, 13),
-    "TVA_open_the_technical_exchange": (82, 9),
-    "TVA_hire_the_bracket_victors": (84, 9),
-    "TVA_stand_up_the_grid_air_staff": (63, 8),
-    "TVA_print_unattended_strike_packages": (62, 9),
-    "TVA_keep_the_interdictors_on_station": (64, 9),
-    "TVA_open_the_exchange_window": (70, 8),
-    "TVA_export_surplus_output": (69, 9),
-    "TVA_import_surviving_specialists": (71, 9),
+    "WKR_arm_the_bracket_victors": (7, 12),
+    "WKR_seek_outside_recognition": (9, 12),
+    "WKR_commit_shopfloor_squadrons": (17, 9),
+    "WKR_screen_the_interchange_sky": (19, 9),
+    "WKR_send_republican_volunteers": (21, 8),
+    "WKR_license_outside_patterns": (23, 8),
+    "VAD_convene_the_restoration_treasury": (54, 11),
+    "VAD_levy_the_crown_estates": (53, 12),
+    "VAD_protect_the_district_markets": (55, 12),
+    "VAD_doctrine_of_the_officer_estates": (46, 14),
+    "VAD_restore_the_guards_regiments": (46, 15),
+    "VAD_doctrine_of_the_district_levies": (38, 14),
+    "VAD_train_the_council_militias": (38, 15),
+    "VAD_march_on_the_old_capital": (31, 14),
+    "VAD_fortify_the_restoration_line": (33, 14),
+    "VAD_stage_the_coronation_rites": (50, 11),
+    "VAD_mortgage_the_regalia": (52, 11),
+    "VAD_task_the_guards_for_close_support": (57, 10),
+    "VAD_cover_the_district_capitals": (59, 10),
+    "VAD_issue_restoration_guarantees": (27, 8),
+    "VAD_seat_the_observer_missions": (29, 8),
+    "TVA_run_the_grid_at_war_load": (86, 10),
+    "TVA_hold_back_civil_power": (88, 10),
+    "TVA_doctrine_of_continuous_assault": (58, 11),
+    "TVA_doctrine_of_the_measured_front": (60, 11),
+    "TVA_spend_the_reserve_cadre": (79, 14),
+    "TVA_seal_the_technical_core": (81, 14),
+    "TVA_publish_the_reconstruction_index": (75, 13),
+    "TVA_divert_the_research_budget": (77, 13),
+    "TVA_open_the_technical_exchange": (68, 9),
+    "TVA_build_the_engineering_service": (70, 9),
+    "TVA_print_unattended_strike_packages": (63, 9),
+    "TVA_keep_the_interdictors_on_station": (65, 9),
 }
 
 DEPTH_COSTS = {
@@ -2145,10 +2059,9 @@ DEPTH_COSTS = {
     "WKR_strip_the_civil_economy": 3,
     "WKR_keep_the_bread_ration": 3,
     "WKR_doctrine_of_the_armed_people": 3,
-    "WKR_break_them_with_numbers": 4,
+    "WKR_break_them_with_numbers": 3,
     "WKR_doctrine_of_measured_force": 3,
     "WKR_replace_men_with_output": 4,
-    "WKR_the_last_levy": 3,
     "WKR_throw_the_reserves_forward": 3,
     "WKR_dig_in_along_the_interchange": 3,
     "WKR_seat_the_factory_councils": 2,
@@ -2160,50 +2073,33 @@ DEPTH_COSTS = {
     "VAD_levy_the_crown_estates": 3,
     "VAD_protect_the_district_markets": 3,
     "VAD_doctrine_of_the_officer_estates": 3,
-    "VAD_restore_the_guards_regiments": 4,
+    "VAD_restore_the_guards_regiments": 3,
     "VAD_doctrine_of_the_district_levies": 3,
-    "VAD_train_the_council_militias": 4,
-    "VAD_hold_the_historic_capitals": 3,
+    "VAD_train_the_council_militias": 3,
     "VAD_march_on_the_old_capital": 3,
     "VAD_fortify_the_restoration_line": 3,
-    "VAD_convene_the_court_of_honours": 2,
-    "VAD_stage_the_coronation_rites": 4,
-    "VAD_mortgage_the_regalia": 2,
-    "VAD_court_the_bracket_victors": 3,
-    "VAD_seek_legitimist_recognition": 3,
-    "TVA_convene_the_load_board": 2,
+    "VAD_stage_the_coronation_rites": 3,
+    "VAD_mortgage_the_regalia": 3,
     "TVA_run_the_grid_at_war_load": 3,
     "TVA_hold_back_civil_power": 3,
     "TVA_doctrine_of_continuous_assault": 3,
-    "TVA_replace_losses_from_the_line": 4,
     "TVA_doctrine_of_the_measured_front": 3,
-    "TVA_hold_with_fewer_better_crews": 4,
-    "TVA_declare_the_final_iteration": 3,
     "TVA_spend_the_reserve_cadre": 3,
     "TVA_seal_the_technical_core": 3,
-    "TVA_certify_the_completed_programmes": 2,
-    "TVA_publish_the_reconstruction_index": 4,
-    "TVA_divert_the_research_budget": 2,
+    "TVA_publish_the_reconstruction_index": 3,
+    "TVA_divert_the_research_budget": 3,
     "TVA_open_the_technical_exchange": 3,
-    "TVA_hire_the_bracket_victors": 3,
-    "WKR_form_the_republican_air_staff": 2,
+    "TVA_build_the_engineering_service": 3,
     "WKR_commit_shopfloor_squadrons": 3,
     "WKR_screen_the_interchange_sky": 3,
-    "WKR_open_the_external_desk": 2,
     "WKR_send_republican_volunteers": 3,
     "WKR_license_outside_patterns": 3,
-    "VAD_restore_the_restoration_air_arm": 2,
     "VAD_task_the_guards_for_close_support": 3,
     "VAD_cover_the_district_capitals": 3,
-    "VAD_open_the_foreign_chancery": 2,
     "VAD_issue_restoration_guarantees": 3,
     "VAD_seat_the_observer_missions": 3,
-    "TVA_stand_up_the_grid_air_staff": 2,
     "TVA_print_unattended_strike_packages": 3,
     "TVA_keep_the_interdictors_on_station": 3,
-    "TVA_open_the_exchange_window": 2,
-    "TVA_export_surplus_output": 3,
-    "TVA_import_surviving_specialists": 3,
 }
 
 DEPTH_AI_BASES = {
@@ -2214,7 +2110,6 @@ DEPTH_AI_BASES = {
     "WKR_break_them_with_numbers": 105,
     "WKR_doctrine_of_measured_force": 110,
     "WKR_replace_men_with_output": 105,
-    "WKR_the_last_levy": 120,
     "WKR_throw_the_reserves_forward": 100,
     "WKR_dig_in_along_the_interchange": 100,
     "WKR_seat_the_factory_councils": 80,
@@ -2229,47 +2124,30 @@ DEPTH_AI_BASES = {
     "VAD_restore_the_guards_regiments": 105,
     "VAD_doctrine_of_the_district_levies": 110,
     "VAD_train_the_council_militias": 105,
-    "VAD_hold_the_historic_capitals": 120,
     "VAD_march_on_the_old_capital": 100,
     "VAD_fortify_the_restoration_line": 100,
-    "VAD_convene_the_court_of_honours": 80,
     "VAD_stage_the_coronation_rites": 95,
     "VAD_mortgage_the_regalia": 90,
-    "VAD_court_the_bracket_victors": 60,
-    "VAD_seek_legitimist_recognition": 55,
-    "TVA_convene_the_load_board": 90,
     "TVA_run_the_grid_at_war_load": 85,
     "TVA_hold_back_civil_power": 70,
     "TVA_doctrine_of_continuous_assault": 110,
-    "TVA_replace_losses_from_the_line": 105,
     "TVA_doctrine_of_the_measured_front": 110,
-    "TVA_hold_with_fewer_better_crews": 105,
-    "TVA_declare_the_final_iteration": 120,
     "TVA_spend_the_reserve_cadre": 100,
     "TVA_seal_the_technical_core": 100,
-    "TVA_certify_the_completed_programmes": 80,
     "TVA_publish_the_reconstruction_index": 95,
     "TVA_divert_the_research_budget": 90,
     "TVA_open_the_technical_exchange": 60,
-    "TVA_hire_the_bracket_victors": 55,
-    "WKR_form_the_republican_air_staff": 80,
+    "TVA_build_the_engineering_service": 55,
     "WKR_commit_shopfloor_squadrons": 75,
     "WKR_screen_the_interchange_sky": 70,
-    "WKR_open_the_external_desk": 50,
     "WKR_send_republican_volunteers": 45,
     "WKR_license_outside_patterns": 40,
-    "VAD_restore_the_restoration_air_arm": 80,
     "VAD_task_the_guards_for_close_support": 75,
     "VAD_cover_the_district_capitals": 70,
-    "VAD_open_the_foreign_chancery": 50,
     "VAD_issue_restoration_guarantees": 45,
     "VAD_seat_the_observer_missions": 40,
-    "TVA_stand_up_the_grid_air_staff": 80,
     "TVA_print_unattended_strike_packages": 75,
     "TVA_keep_the_interdictors_on_station": 70,
-    "TVA_open_the_exchange_window": 50,
-    "TVA_export_surplus_output": 45,
-    "TVA_import_surviving_specialists": 40,
 }
 
 DEPTH_ANCHORS = {
@@ -2280,14 +2158,11 @@ DEPTH_ANCHORS = {
     "WKR_break_them_with_numbers": "WKR_doctrine_of_the_armed_people",
     "WKR_doctrine_of_measured_force": "WKR_bind_the_republic_to_its_norms",
     "WKR_replace_men_with_output": "WKR_doctrine_of_measured_force",
-    "WKR_the_last_levy": "WKR_republic_fights_as_one",
-    "WKR_throw_the_reserves_forward": "WKR_the_last_levy",
-    "WKR_dig_in_along_the_interchange": "WKR_the_last_levy",
     "WKR_seat_the_factory_councils": "WKR_coordinate_counterattack_cells",
     "WKR_publish_the_production_returns": "WKR_seat_the_factory_councils",
     "WKR_requisition_in_the_republics_name": "WKR_seat_the_factory_councils",
-    "WKR_arm_the_bracket_victors": "WKR_open_free_republics_channel",
-    "WKR_seek_outside_recognition": "WKR_open_free_republics_channel",
+    "WKR_arm_the_bracket_victors": "WKR_settle_front_authority",
+    "WKR_seek_outside_recognition": "WKR_settle_front_authority",
     "VAD_convene_the_restoration_treasury": "VAD_reopen_armament_depots",
     "VAD_levy_the_crown_estates": "VAD_convene_the_restoration_treasury",
     "VAD_protect_the_district_markets": "VAD_convene_the_restoration_treasury",
@@ -2295,59 +2170,42 @@ DEPTH_ANCHORS = {
     "VAD_restore_the_guards_regiments": "VAD_doctrine_of_the_officer_estates",
     "VAD_doctrine_of_the_district_levies": "VAD_bind_crown_and_council",
     "VAD_train_the_council_militias": "VAD_doctrine_of_the_district_levies",
-    "VAD_hold_the_historic_capitals": "VAD_balance_council_and_command",
-    "VAD_march_on_the_old_capital": "VAD_hold_the_historic_capitals",
-    "VAD_fortify_the_restoration_line": "VAD_hold_the_historic_capitals",
-    "VAD_convene_the_court_of_honours": "VAD_proclaim_joint_charter",
-    "VAD_stage_the_coronation_rites": "VAD_convene_the_court_of_honours",
-    "VAD_mortgage_the_regalia": "VAD_convene_the_court_of_honours",
-    "VAD_court_the_bracket_victors": "VAD_proclaim_joint_charter",
-    "VAD_seek_legitimist_recognition": "VAD_proclaim_joint_charter",
-    "TVA_convene_the_load_board": "TVA_issue_emergency_output_norms",
-    "TVA_run_the_grid_at_war_load": "TVA_convene_the_load_board",
-    "TVA_hold_back_civil_power": "TVA_convene_the_load_board",
+    "VAD_march_on_the_old_capital": "VAD_balance_council_and_command",
+    "VAD_fortify_the_restoration_line": "VAD_balance_council_and_command",
+    "VAD_stage_the_coronation_rites": "VAD_bind_officers_to_chancery",
+    "VAD_mortgage_the_regalia": "VAD_bind_officers_to_chancery",
+    "TVA_run_the_grid_at_war_load": "TVA_issue_emergency_output_norms",
+    "TVA_hold_back_civil_power": "TVA_issue_emergency_output_norms",
     "TVA_doctrine_of_continuous_assault": "TVA_run_the_republic_as_one_process",
-    "TVA_replace_losses_from_the_line": "TVA_doctrine_of_continuous_assault",
     "TVA_doctrine_of_the_measured_front": "TVA_certify_the_surviving_cadre",
-    "TVA_hold_with_fewer_better_crews": "TVA_doctrine_of_the_measured_front",
-    "TVA_declare_the_final_iteration": "TVA_close_operational_loop",
-    "TVA_spend_the_reserve_cadre": "TVA_declare_the_final_iteration",
-    "TVA_seal_the_technical_core": "TVA_declare_the_final_iteration",
-    "TVA_certify_the_completed_programmes": "TVA_integrate_field_results",
-    "TVA_publish_the_reconstruction_index": "TVA_certify_the_completed_programmes",
-    "TVA_divert_the_research_budget": "TVA_certify_the_completed_programmes",
+    "TVA_spend_the_reserve_cadre": "TVA_close_operational_loop",
+    "TVA_seal_the_technical_core": "TVA_close_operational_loop",
+    "TVA_publish_the_reconstruction_index": "TVA_integrate_field_results",
+    "TVA_divert_the_research_budget": "TVA_integrate_field_results",
     "TVA_open_the_technical_exchange": "TVA_publish_operational_metrics",
-    "TVA_hire_the_bracket_victors": "TVA_publish_operational_metrics",
-    "WKR_form_the_republican_air_staff": "WKR_affirm_worker_mandate",
-    "WKR_commit_shopfloor_squadrons": "WKR_form_the_republican_air_staff",
-    "WKR_screen_the_interchange_sky": "WKR_form_the_republican_air_staff",
-    "WKR_open_the_external_desk": "WKR_affirm_worker_mandate",
-    "WKR_send_republican_volunteers": "WKR_open_the_external_desk",
-    "WKR_license_outside_patterns": "WKR_open_the_external_desk",
-    "VAD_restore_the_restoration_air_arm": "VAD_proclaim_joint_charter",
-    "VAD_task_the_guards_for_close_support": "VAD_restore_the_restoration_air_arm",
-    "VAD_cover_the_district_capitals": "VAD_restore_the_restoration_air_arm",
-    "VAD_open_the_foreign_chancery": "VAD_proclaim_joint_charter",
-    "VAD_issue_restoration_guarantees": "VAD_open_the_foreign_chancery",
-    "VAD_seat_the_observer_missions": "VAD_open_the_foreign_chancery",
-    "TVA_stand_up_the_grid_air_staff": "TVA_codify_utilitarian_directorate",
-    "TVA_print_unattended_strike_packages": "TVA_stand_up_the_grid_air_staff",
-    "TVA_keep_the_interdictors_on_station": "TVA_stand_up_the_grid_air_staff",
-    "TVA_open_the_exchange_window": "TVA_codify_utilitarian_directorate",
-    "TVA_export_surplus_output": "TVA_open_the_exchange_window",
-    "TVA_import_surviving_specialists": "TVA_open_the_exchange_window",
+    "TVA_build_the_engineering_service": "TVA_publish_operational_metrics",
+    "WKR_commit_shopfloor_squadrons": "WKR_put_railways_under_councils",
+    "WKR_screen_the_interchange_sky": "WKR_put_railways_under_councils",
+    "WKR_throw_the_reserves_forward": "WKR_republic_fights_as_one",
+    "WKR_dig_in_along_the_interchange": "WKR_republic_fights_as_one",
+    "WKR_send_republican_volunteers": "WKR_affirm_worker_mandate",
+    "WKR_license_outside_patterns": "WKR_affirm_worker_mandate",
+    "VAD_task_the_guards_for_close_support": "VAD_standardize_district_logistics",
+    "VAD_cover_the_district_capitals": "VAD_standardize_district_logistics",
+    "VAD_issue_restoration_guarantees": "VAD_proclaim_joint_charter",
+    "VAD_seat_the_observer_missions": "VAD_proclaim_joint_charter",
+    "TVA_print_unattended_strike_packages": "TVA_deploy_field_laboratories",
+    "TVA_keep_the_interdictors_on_station": "TVA_deploy_field_laboratories",
 }
 
 # Every fork is drawn as the symmetric V the layout contract requires:
 # both halves on one row, one cell either side of the focus that gates them.
 DEPTH_EXCLUSIVE_PAIRS = (
     ("TVA_divert_the_research_budget", "TVA_publish_the_reconstruction_index"),
-    ("TVA_hire_the_bracket_victors", "TVA_open_the_technical_exchange"),
+    ("TVA_build_the_engineering_service", "TVA_open_the_technical_exchange"),
     ("TVA_keep_the_interdictors_on_station", "TVA_print_unattended_strike_packages"),
-    ("TVA_export_surplus_output", "TVA_import_surviving_specialists"),
     ("TVA_hold_back_civil_power", "TVA_run_the_grid_at_war_load"),
     ("TVA_seal_the_technical_core", "TVA_spend_the_reserve_cadre"),
-    ("VAD_court_the_bracket_victors", "VAD_seek_legitimist_recognition"),
     ("VAD_cover_the_district_capitals", "VAD_task_the_guards_for_close_support"),
     ("VAD_issue_restoration_guarantees", "VAD_seat_the_observer_missions"),
     ("VAD_fortify_the_restoration_line", "VAD_march_on_the_old_capital"),
@@ -2365,13 +2223,10 @@ DEPTH_EXCLUSIVE_PAIRS = (
 # when the central showdown begins.
 DEPTH_LATE_WAR_FOCUSES = frozenset(
     {
-        "WKR_the_last_levy",
         "WKR_throw_the_reserves_forward",
         "WKR_dig_in_along_the_interchange",
-        "VAD_hold_the_historic_capitals",
         "VAD_march_on_the_old_capital",
         "VAD_fortify_the_restoration_line",
-        "TVA_declare_the_final_iteration",
         "TVA_spend_the_reserve_cadre",
         "TVA_seal_the_technical_core",
     }
@@ -2383,70 +2238,36 @@ DEPTH_LEGITIMACY_DELTAS = {
     "WKR_seat_the_factory_councils": 0.06,
     "WKR_publish_the_production_returns": 0.1,
     "WKR_requisition_in_the_republics_name": -0.05,
-    "WKR_seek_outside_recognition": 0.06,
-    "VAD_hold_the_historic_capitals": 0.1,
-    "VAD_convene_the_court_of_honours": 0.06,
-    "VAD_stage_the_coronation_rites": 0.1,
-    "VAD_mortgage_the_regalia": -0.05,
-    "VAD_seek_legitimist_recognition": 0.06,
-    "TVA_spend_the_reserve_cadre": -0.05,
-    "TVA_certify_the_completed_programmes": 0.06,
-    "TVA_publish_the_reconstruction_index": 0.1,
-    "TVA_divert_the_research_budget": -0.05,
-    "TVA_open_the_technical_exchange": 0.06,
 }
 
 DEPTH_VARIANT_IDENTITY = {
-    "WKR_doctrine_of_the_armed_people": "has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }",
-    "WKR_break_them_with_numbers": "has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }",
-    "WKR_doctrine_of_measured_force": "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
-    "WKR_replace_men_with_output": "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
+    "WKR_doctrine_of_the_armed_people": "WKR_presidential_course = yes",
+    "WKR_break_them_with_numbers": "WKR_presidential_course = yes",
+    "WKR_doctrine_of_measured_force": "WKR_executive_course = yes",
+    "WKR_replace_men_with_output": "WKR_executive_course = yes",
     "VAD_doctrine_of_the_officer_estates": "has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }",
     "VAD_restore_the_guards_regiments": "has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }",
     "VAD_doctrine_of_the_district_levies": "has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }",
     "VAD_train_the_council_militias": "has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }",
     "TVA_doctrine_of_continuous_assault": "has_country_flag = ADISCORD_vorkerland_tva_variant_throughput",
-    "TVA_replace_losses_from_the_line": "has_country_flag = ADISCORD_vorkerland_tva_variant_throughput",
     "TVA_doctrine_of_the_measured_front": "has_country_flag = ADISCORD_vorkerland_tva_variant_preservation",
-    "TVA_hold_with_fewer_better_crews": "has_country_flag = ADISCORD_vorkerland_tva_variant_preservation",
 }
 
 # Spirits earned by exactly one depth focus each. The permanent half must be
 # cleared by every postwar capstone; the timed half expires on its own.
 DEPTH_PERMANENT_IDEAS = {
-    "ADISCORD_vorkerland_wkr_doctrine_armed_people": "WKR_doctrine_of_the_armed_people",
-    "ADISCORD_vorkerland_wkr_doctrine_weight_of_numbers": "WKR_break_them_with_numbers",
+    "ADISCORD_vorkerland_tva_interdictor_station": "TVA_keep_the_interdictors_on_station",
+    "ADISCORD_vorkerland_tva_unattended_strike": "TVA_print_unattended_strike_packages",
     "ADISCORD_vorkerland_wkr_doctrine_measured_force": "WKR_doctrine_of_measured_force",
     "ADISCORD_vorkerland_wkr_doctrine_output_over_men": "WKR_replace_men_with_output",
-    "ADISCORD_vorkerland_vad_doctrine_officer_estates": "VAD_doctrine_of_the_officer_estates",
-    "ADISCORD_vorkerland_vad_doctrine_guards_regiments": "VAD_restore_the_guards_regiments",
-    "ADISCORD_vorkerland_vad_doctrine_district_levies": "VAD_doctrine_of_the_district_levies",
-    "ADISCORD_vorkerland_vad_doctrine_council_militias": "VAD_train_the_council_militias",
     "ADISCORD_vorkerland_tva_doctrine_continuous_assault": "TVA_doctrine_of_continuous_assault",
-    "ADISCORD_vorkerland_tva_doctrine_line_replacement": "TVA_replace_losses_from_the_line",
     "ADISCORD_vorkerland_tva_doctrine_measured_front": "TVA_doctrine_of_the_measured_front",
-    "ADISCORD_vorkerland_tva_doctrine_fewer_better_crews": "TVA_hold_with_fewer_better_crews",
 }
 
 DEPTH_TIMED_IDEAS = {
-    "ADISCORD_vorkerland_wkr_reserves_forward": ("WKR_throw_the_reserves_forward", 70),
-    "ADISCORD_vorkerland_wkr_interchange_line": (
-        "WKR_dig_in_along_the_interchange",
-        70,
-    ),
-    "ADISCORD_vorkerland_wkr_bracket_patronage": ("WKR_arm_the_bracket_victors", 70),
-    "ADISCORD_vorkerland_wkr_outside_recognition": ("WKR_seek_outside_recognition", 70),
+    "ADISCORD_vorkerland_wkr_reserves_forward": ("WKR_throw_the_reserves_forward", 35),
     "ADISCORD_vorkerland_vad_march_on_the_capital": (
         "VAD_march_on_the_old_capital",
-        70,
-    ),
-    "ADISCORD_vorkerland_vad_restoration_line": (
-        "VAD_fortify_the_restoration_line",
-        70,
-    ),
-    "ADISCORD_vorkerland_vad_bracket_patronage": ("VAD_court_the_bracket_victors", 70),
-    "ADISCORD_vorkerland_vad_legitimist_recognition": (
-        "VAD_seek_legitimist_recognition",
         70,
     ),
     "ADISCORD_vorkerland_tva_reserve_cadre_spent": ("TVA_spend_the_reserve_cadre", 70),
@@ -2454,85 +2275,50 @@ DEPTH_TIMED_IDEAS = {
         "TVA_seal_the_technical_core",
         70,
     ),
-    "ADISCORD_vorkerland_tva_technical_exchange": (
-        "TVA_open_the_technical_exchange",
-        70,
-    ),
-    "ADISCORD_vorkerland_tva_bracket_contractors": ("TVA_hire_the_bracket_victors", 70),
-    "ADISCORD_vorkerland_wkr_shopfloor_squadrons": (
-        "WKR_commit_shopfloor_squadrons",
-        70,
-    ),
-    "ADISCORD_vorkerland_wkr_interchange_sky_screen": (
-        "WKR_screen_the_interchange_sky",
-        70,
-    ),
-    "ADISCORD_vorkerland_wkr_republican_volunteers": (
-        "WKR_send_republican_volunteers",
-        70,
-    ),
     "ADISCORD_vorkerland_wkr_licensed_patterns": ("WKR_license_outside_patterns", 70),
-    "ADISCORD_vorkerland_vad_guards_close_support": (
-        "VAD_task_the_guards_for_close_support",
-        70,
-    ),
-    "ADISCORD_vorkerland_vad_district_air_cover": (
-        "VAD_cover_the_district_capitals",
-        70,
-    ),
-    "ADISCORD_vorkerland_vad_restoration_guarantees": (
-        "VAD_issue_restoration_guarantees",
-        70,
-    ),
-    "ADISCORD_vorkerland_vad_observer_missions": ("VAD_seat_the_observer_missions", 70),
-    "ADISCORD_vorkerland_tva_unattended_strike": (
-        "TVA_print_unattended_strike_packages",
-        70,
-    ),
-    "ADISCORD_vorkerland_tva_interdictor_station": (
-        "TVA_keep_the_interdictors_on_station",
-        70,
-    ),
-    "ADISCORD_vorkerland_tva_surplus_export": ("TVA_export_surplus_output", 70),
-    "ADISCORD_vorkerland_tva_imported_specialists": (
-        "TVA_import_surviving_specialists",
-        70,
-    ),
 }
 
 DEPTH_IDEAS = (*DEPTH_PERMANENT_IDEAS, *DEPTH_TIMED_IDEAS)
+
+# These ideas show deltas in focus tooltips; the directorate owns their totals.
+TVA_AGGREGATE_PREVIEWS = frozenset(
+    idea for branch in VARIANT_BRANCHES if branch["tag"] == "TVA"
+    for idea in branch["permanent_ideas"]
+) | frozenset(
+    idea for idea in DEPTH_PERMANENT_IDEAS if idea.startswith("ADISCORD_vorkerland_tva_")
+)
 
 # A branch head hangs a whole module off a trunk focus, so it is allowed the
 # same wide horizontal reach the lifecycle block anchors get.
 DEPTH_BRANCH_HEADS = frozenset(
     {
+        "VAD_march_on_the_old_capital",
+        "VAD_fortify_the_restoration_line",
+        "WKR_throw_the_reserves_forward",
+        "WKR_dig_in_along_the_interchange",
+        "WKR_commit_shopfloor_squadrons",
+        "WKR_screen_the_interchange_sky",
+        "VAD_task_the_guards_for_close_support",
+        "VAD_cover_the_district_capitals",
+        "TVA_print_unattended_strike_packages",
+        "TVA_keep_the_interdictors_on_station",
+        "VAD_stage_the_coronation_rites",
+        "VAD_mortgage_the_regalia",
         "WKR_convene_the_production_soviet",
         "WKR_doctrine_of_the_armed_people",
         "WKR_doctrine_of_measured_force",
-        "WKR_the_last_levy",
         "WKR_seat_the_factory_councils",
         "WKR_arm_the_bracket_victors",
         "WKR_seek_outside_recognition",
+        "VAD_issue_restoration_guarantees",
+        "VAD_seat_the_observer_missions",
         "VAD_convene_the_restoration_treasury",
         "VAD_doctrine_of_the_officer_estates",
         "VAD_doctrine_of_the_district_levies",
-        "VAD_hold_the_historic_capitals",
-        "VAD_convene_the_court_of_honours",
-        "VAD_court_the_bracket_victors",
-        "VAD_seek_legitimist_recognition",
-        "TVA_convene_the_load_board",
         "TVA_doctrine_of_continuous_assault",
         "TVA_doctrine_of_the_measured_front",
-        "TVA_declare_the_final_iteration",
-        "TVA_certify_the_completed_programmes",
         "TVA_open_the_technical_exchange",
-        "TVA_hire_the_bracket_victors",
-        "WKR_form_the_republican_air_staff",
-        "WKR_open_the_external_desk",
-        "VAD_restore_the_restoration_air_arm",
-        "VAD_open_the_foreign_chancery",
-        "TVA_stand_up_the_grid_air_staff",
-        "TVA_open_the_exchange_window",
+        "TVA_build_the_engineering_service",
     }
 )
 
@@ -2547,7 +2333,8 @@ DEPTH_AI_PLANS = {
     "ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan": {
         "file": "wkr",
         "tag": "WKR",
-        "terminal": "ADISCORD_vorkerland_focus_wkr_throw_the_reserves_forward",
+        "terminal": "WKR_throw_the_reserves_forward",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
             "WKR_convene_the_production_soviet",
             "WKR_strip_the_civil_economy",
@@ -2556,18 +2343,16 @@ DEPTH_AI_PLANS = {
             "WKR_seat_the_factory_councils",
             "WKR_requisition_in_the_republics_name",
             "WKR_arm_the_bracket_victors",
-            "WKR_form_the_republican_air_staff",
             "WKR_commit_shopfloor_squadrons",
-            "WKR_open_the_external_desk",
             "WKR_send_republican_volunteers",
-            "WKR_the_last_levy",
             "WKR_throw_the_reserves_forward",
         ),
     },
     "ADISCORD_vorkerland_wkr_utilitarian_depth_plan": {
         "file": "wkr",
         "tag": "WKR",
-        "terminal": "ADISCORD_vorkerland_focus_wkr_dig_in_along_the_interchange",
+        "terminal": "WKR_dig_in_along_the_interchange",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
             "WKR_convene_the_production_soviet",
             "WKR_keep_the_bread_ration",
@@ -2576,111 +2361,86 @@ DEPTH_AI_PLANS = {
             "WKR_seat_the_factory_councils",
             "WKR_publish_the_production_returns",
             "WKR_seek_outside_recognition",
-            "WKR_form_the_republican_air_staff",
             "WKR_screen_the_interchange_sky",
-            "WKR_open_the_external_desk",
             "WKR_license_outside_patterns",
-            "WKR_the_last_levy",
             "WKR_dig_in_along_the_interchange",
         ),
     },
     "ADISCORD_vorkerland_vad_imperial_depth_plan": {
         "file": "vad",
         "tag": "VAD",
-        "terminal": "ADISCORD_vorkerland_focus_vad_march_on_the_old_capital",
+        "terminal": "VAD_march_on_the_old_capital",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
             "VAD_convene_the_restoration_treasury",
             "VAD_levy_the_crown_estates",
             "VAD_doctrine_of_the_officer_estates",
             "VAD_restore_the_guards_regiments",
-            "VAD_convene_the_court_of_honours",
             "VAD_stage_the_coronation_rites",
-            "VAD_seek_legitimist_recognition",
-            "VAD_restore_the_restoration_air_arm",
             "VAD_task_the_guards_for_close_support",
-            "VAD_open_the_foreign_chancery",
             "VAD_issue_restoration_guarantees",
-            "VAD_hold_the_historic_capitals",
             "VAD_march_on_the_old_capital",
         ),
     },
     "ADISCORD_vorkerland_vad_joint_depth_war_plan": {
         "file": "vad",
         "tag": "VAD",
-        "terminal": "ADISCORD_vorkerland_focus_vad_fortify_the_restoration_line",
+        "terminal": "VAD_fortify_the_restoration_line",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
             "VAD_convene_the_restoration_treasury",
             "VAD_protect_the_district_markets",
             "VAD_doctrine_of_the_district_levies",
             "VAD_train_the_council_militias",
-            "VAD_convene_the_court_of_honours",
-            "VAD_mortgage_the_regalia",
-            "VAD_court_the_bracket_victors",
-            "VAD_restore_the_restoration_air_arm",
             "VAD_cover_the_district_capitals",
-            "VAD_open_the_foreign_chancery",
             "VAD_seat_the_observer_missions",
-            "VAD_hold_the_historic_capitals",
             "VAD_fortify_the_restoration_line",
         ),
     },
     "ADISCORD_vorkerland_tva_throughput_depth_plan": {
         "file": "tva",
         "tag": "TVA",
-        "terminal": "ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre",
+        "terminal": "TVA_spend_the_reserve_cadre",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
-            "TVA_convene_the_load_board",
             "TVA_run_the_grid_at_war_load",
             "TVA_doctrine_of_continuous_assault",
-            "TVA_replace_losses_from_the_line",
-            "TVA_certify_the_completed_programmes",
             "TVA_divert_the_research_budget",
-            "TVA_hire_the_bracket_victors",
-            "TVA_stand_up_the_grid_air_staff",
+            "TVA_build_the_engineering_service",
             "TVA_print_unattended_strike_packages",
-            "TVA_open_the_exchange_window",
-            "TVA_export_surplus_output",
-            "TVA_declare_the_final_iteration",
             "TVA_spend_the_reserve_cadre",
         ),
     },
     "ADISCORD_vorkerland_tva_preservation_depth_plan": {
         "file": "tva",
         "tag": "TVA",
-        "terminal": "ADISCORD_vorkerland_focus_tva_seal_the_technical_core",
+        "terminal": "TVA_seal_the_technical_core",
+        "terminal_trigger": "has_completed_focus",
         "focuses": (
-            "TVA_convene_the_load_board",
             "TVA_hold_back_civil_power",
             "TVA_doctrine_of_the_measured_front",
-            "TVA_hold_with_fewer_better_crews",
-            "TVA_certify_the_completed_programmes",
             "TVA_publish_the_reconstruction_index",
             "TVA_open_the_technical_exchange",
-            "TVA_stand_up_the_grid_air_staff",
             "TVA_keep_the_interdictors_on_station",
-            "TVA_open_the_exchange_window",
-            "TVA_import_surviving_specialists",
-            "TVA_declare_the_final_iteration",
             "TVA_seal_the_technical_core",
         ),
     },
 }
 
 LAYOUT_BANDS = {
-    "postwar_expansion": ((0, 60), (22, 45)),
-    "prewar_WRK": ((0, 14), (0, 10)),
+    "postwar_expansion": ((8, 28), (1, 17)),
+    "prewar_WRK": ((0, 29), (0, 5)),
     "prewar_VAD": ((24, 32), (0, 8)),
-    "retired": ((20, 24), (0, 6)),
     "war_WKR": ((0, 24), (7, 20)),
-    "war_VAD": ((26, 54), (7, 20)),
-    "war_TVA": ((56, 84), (7, 20)),
+    "war_VAD": ((26, 64), (7, 20)),
+    "war_TVA": ((56, 90), (7, 20)),
     "postwar_worker": ((0, 10), (21, 29)),
-    "postwar_joint": ((12, 22), (21, 29)),
+    "postwar_joint": ((0, 10), (0, 9)),
     "postwar_utilitarian": ((24, 34), (21, 29)),
     "reconstruction_worker": ((0, 10), (29, 34)),
     "west_worker": ((0, 10), (34, 38)),
-    "reconstruction_joint": ((12, 22), (29, 34)),
-    "west_joint": ((12, 22), (34, 38)),
+    "reconstruction_joint": ((0, 10), (8, 13)),
+    "west_joint": ((0, 10), (13, 17)),
     "reconstruction_utilitarian": ((24, 34), (29, 34)),
     "west_utilitarian": ((24, 34), (34, 38)),
 }
@@ -2692,15 +2452,13 @@ POSTWAR_BAND_BY_ROUTE = {
 }
 
 LAYOUT_ANCHORS = {
-    "WRK_measure_confederation_fault_lines": (7, 0),
-    "WRK_face_the_hourglass": (7, 7),
+    "WRK_measure_confederation_fault_lines": (15, 0),
     "VAD_review_district_obligations": (25, 0),
-    "ADISCORD_vorkerland_stabilize_claimant_regime": (21, 0),
     "WKR_affirm_worker_mandate": (8, 7),
-    "VAD_proclaim_joint_charter": (33, 7),
-    "TVA_codify_utilitarian_directorate": (68, 7),
+    "VAD_proclaim_joint_charter": (44, 7),
+    "TVA_codify_utilitarian_directorate": (74, 7),
     "WRK_worker_convene_reunification_congress": (2, 21),
-    "WRK_joint_convene_restoration_council": (14, 21),
+    "WRK_joint_convene_restoration_council": (2, 0),
     "WRK_utilitarian_form_reconstruction_directorate": (25, 21),
 }
 
@@ -2713,103 +2471,167 @@ LAYOUT_MIN_UNIT_DROP_SHARE = 0.85
 # bought to keep a horizontal run off an occupied row: an odd drop moves the
 # run into the gap between two rows, an even drop moves it onto a clear row.
 LAYOUT_WIDE_DROPS = {
-    ("TVA_build_mobile_repair_trains", "TVA_harden_switching_stations"): (
-        2,
-        "keeps the switching-station chain clear of the load board beside it",
-    ),
-    ("TVA_bunker_specialist_cadres", "TVA_print_interchangeable_repair_modules"): (
-        3,
-        "odd drop puts a 14-column run into a row gap instead of across row 12",
-    ),
-    ("TVA_close_operational_loop", "TVA_merge_iteration_with_field_command"): (
-        4,
-        "clears the late-war capstone below the whole iteration cluster",
-    ),
-    ("TVA_delegate_fire_plans_to_board", "TVA_print_interchangeable_repair_modules"): (
-        3,
-        "odd drop puts a 10-column run into a row gap instead of across row 12",
-    ),
-    ("TVA_mandate_modular_repair", "TVA_print_interchangeable_repair_modules"): (
-        2,
-        "routes the 4-column run along row 12, which is clear over that span",
-    ),
-    ("TVA_network_observation_posts", "TVA_print_interchangeable_repair_modules"): (
-        2,
-        "documented routing exception; see LAYOUT_ROUTING_EXCEPTIONS",
-    ),
-    ("TVA_standardize_assault_teams", "TVA_print_interchangeable_repair_modules"): (
-        2,
-        "straight drop into the convergence node the other five links share",
-    ),
-    ("TVA_standardize_emergency_administration", "TVA_close_operational_loop"): (
-        3,
-        "odd drop puts a 10-column run into a row gap instead of across row 12",
-    ),
-    ("TVA_unattended_shifts", "TVA_print_interchangeable_repair_modules"): (
-        3,
-        "odd drop puts a 12-column run into a row gap instead of across row 11",
-    ),
-    ("VAD_dispatch_solland_liaison_mission", "VAD_balance_council_and_command"): (
-        2,
-        "routes the 5-column run along row 11, which is clear over that span",
-    ),
-    (
-        "VAD_issue_crown_mobilization_warrants",
-        "VAD_turn_the_chancery_into_a_war_cabinet",
-    ): (
-        2,
-        "straight drop into the war-cabinet node shared with the chancery link",
-    ),
-    ("VAD_merge_guard_and_worker_rolls", "VAD_sign_the_dual_authority_protocol"): (
-        2,
-        "straight drop into the protocol node shared with the settlement link",
-    ),
-    ("VAD_reconstitute_district_guard", "VAD_assemble_joint_general_staff"): (
-        2,
-        "general staff sits a row lower to clear its own 6-column outgoing run",
-    ),
-    ("VAD_reopen_armament_depots", "VAD_balance_council_and_command"): (
-        2,
-        "routes the 2-column run along row 11, which is clear over that span",
-    ),
-    ("VAD_settle_restoration_authority", "VAD_define_the_solar_settlement"): (
-        2,
-        "routes the 4-column run along row 12, which is clear over that span",
-    ),
-    ("VAD_settle_restoration_authority", "VAD_sign_the_dual_authority_protocol"): (
-        3,
-        "odd drop puts the run into a row gap instead of across the district rolls",
-    ),
-    ("VAD_settle_restoration_authority", "VAD_turn_the_chancery_into_a_war_cabinet"): (
-        3,
-        "odd drop puts a 14-column run into a row gap instead of across row 12",
-    ),
-    ("WKR_reopen_night_freight_corridors", "WKR_coordinate_the_rolling_front"): (
-        2,
-        "routes the 2-column run along row 16, which is clear over that span",
-    ),
-    ("WRK_joint_publish_amnesty_registers", "WRK_joint_issue_integration_warrants"): (
-        2,
-        "routes the 3-column run along row 23, which is clear over that span",
-    ),
-    (
-        "WRK_utilitarian_expand_national_laboratories",
-        "WRK_utilitarian_publish_integration_metrics",
-    ): (
-        2,
-        "routes the 3-column run along row 23, which is clear over that span",
-    ),
-}
+    ("TVA_integrate_field_results", "TVA_publish_the_reconstruction_index"): (2, "keeps both policy cards below the occupied defensive-survey row"),
+    ("TVA_integrate_field_results", "TVA_divert_the_research_budget"): (2, "aligns the conversion alternative with the public report below the defensive survey"),
+('WRK_factory_committee_councils', 'WRK_stake_on_one_pillar'): (3,
+                                                                 'joins the industrial and staff '
+                                                                 'programmes below their delivery row'),
+ ('WRK_factory_committee_councils', 'WRK_balance_the_pillars'): (3,
+                                                                 'places the political alternatives on '
+                                                                 'the common camp settlement row'),
+ ('WKR_empower_front_executive', 'WKR_authorize_normative_command'): (2,
+                                                                      'places both priorities below '
+                                                                      'the empty staff corridor on row '
+                                                                      '9'),
+ ('WKR_empower_front_executive', 'WKR_bind_workshops_to_directive'): (2,
+                                                                      'places the production '
+                                                                      'alternative beside the staff '
+                                                                      'priority'),
+ ('WKR_reopen_night_freight_corridors', 'WKR_coordinate_the_rolling_front'): (2,
+                                                                              'routes the 2-column run '
+                                                                              'along row 16, which is '
+                                                                              'clear over that span'),
+ ('WRK_joint_publish_amnesty_registers', 'WRK_joint_issue_integration_warrants'): (2,
+                                                                                   'routes the '
+                                                                                   '3-column run along '
+                                                                                   'row 23, which is '
+                                                                                   'clear over that '
+                                                                                   'span'),
+ ('WRK_utilitarian_expand_national_laboratories', 'WRK_utilitarian_publish_integration_metrics'): (2,
+                                                                                                   'routes '
+                                                                                                   'the '
+                                                                                                   '3-column '
+                                                                                                   'run '
+                                                                                                   'along '
+                                                                                                   'row '
+                                                                                                   '23, '
+                                                                                                   'which '
+                                                                                                   'is '
+                                                                                                   'clear '
+                                                                                                   'over '
+                                                                                                   'that '
+                                                                                                   'span'),
+ ('VAD_settle_restoration_authority', 'VAD_balance_council_and_command'): (2,
+                                                                           'keeps the common programme '
+                                                                           'below the branch outcomes '
+                                                                           'and its connector between '
+                                                                           'occupied rows'),
+ ('VAD_assemble_joint_general_staff', 'VAD_balance_council_and_command'): (3,
+                                                                           'keeps the common programme '
+                                                                           'below the branch outcomes '
+                                                                           'and its connector between '
+                                                                           'occupied rows'),
+ ('VAD_reopen_armament_depots', 'VAD_balance_council_and_command'): (3,
+                                                                     'keeps the common programme below '
+                                                                     'the branch outcomes and its '
+                                                                     'connector between occupied rows'),
+ ('VAD_issue_crown_mobilization_warrants', 'VAD_turn_the_chancery_into_a_war_cabinet'): (2,
+                                                                                         'keeps the '
+                                                                                         'common '
+                                                                                         'programme '
+                                                                                         'below the '
+                                                                                         'branch '
+                                                                                         'outcomes and '
+                                                                                         'its '
+                                                                                         'connector '
+                                                                                         'between '
+                                                                                         'occupied '
+                                                                                         'rows'),
+ ('VAD_settle_restoration_authority', 'VAD_turn_the_chancery_into_a_war_cabinet'): (3,
+                                                                                    'keeps the common '
+                                                                                    'programme below '
+                                                                                    'the branch '
+                                                                                    'outcomes and its '
+                                                                                    'connector between '
+                                                                                    'occupied rows'),
+ ('VAD_merge_guard_and_worker_rolls', 'VAD_sign_the_dual_authority_protocol'): (2,
+                                                                                'keeps the common '
+                                                                                'programme below the '
+                                                                                'branch outcomes and '
+                                                                                'its connector between '
+                                                                                'occupied rows'),
+ ('VAD_settle_restoration_authority', 'VAD_sign_the_dual_authority_protocol'): (3,
+                                                                                'keeps the common '
+                                                                                'programme below the '
+                                                                                'branch outcomes and '
+                                                                                'its connector between '
+                                                                                'occupied rows'),
+ ('VAD_preposition_restoration_columns', 'VAD_define_the_solar_settlement'): (2,
+                                                                              'keeps the common '
+                                                                              'programme below the '
+                                                                              'branch outcomes and its '
+                                                                              'connector between '
+                                                                              'occupied rows'),
+ ('VAD_settle_restoration_authority', 'VAD_define_the_solar_settlement'): (3,
+                                                                           'keeps the common programme '
+                                                                           'below the branch outcomes '
+                                                                           'and its connector between '
+                                                                           'occupied rows'),
+ ('VAD_preposition_restoration_columns', 'VAD_reconcile_emergency_district_rolls'): (2,
+                                                                                     'keeps the common '
+                                                                                     'programme below '
+                                                                                     'the branch '
+                                                                                     'outcomes and its '
+                                                                                     'connector '
+                                                                                     'between occupied '
+                                                                                     'rows'),
+ ('TVA_build_mobile_repair_trains', 'TVA_harden_switching_stations'): (2,
+                                                                       'keeps the common programme '
+                                                                       'below the branch outcomes and '
+                                                                       'its connector between occupied '
+                                                                       'rows'),
+ ('TVA_standardize_emergency_administration', 'TVA_close_operational_loop'): (3,
+                                                                              'keeps the common '
+                                                                              'programme below the '
+                                                                              'branch outcomes and its '
+                                                                              'connector between '
+                                                                              'occupied rows'),
+ ('TVA_unattended_shifts', 'TVA_print_interchangeable_repair_modules'): (3,
+                                                                         'keeps the common programme '
+                                                                         'below the branch outcomes '
+                                                                         'and its connector between '
+                                                                         'occupied rows'),
+ ('TVA_delegate_fire_plans_to_board', 'TVA_print_interchangeable_repair_modules'): (3,
+                                                                                    'keeps the common '
+                                                                                    'programme below '
+                                                                                    'the branch '
+                                                                                    'outcomes and its '
+                                                                                    'connector between '
+                                                                                    'occupied rows'),
+ ('TVA_bunker_specialist_cadres', 'TVA_print_interchangeable_repair_modules'): (3,
+                                                                                'keeps the common '
+                                                                                'programme below the '
+                                                                                'branch outcomes and '
+                                                                                'its connector between '
+                                                                                'occupied rows'),
+ ('TVA_standardize_assault_teams', 'TVA_print_interchangeable_repair_modules'): (2,
+                                                                                 'keeps the common '
+                                                                                 'programme below the '
+                                                                                 'branch outcomes and '
+                                                                                 'its connector '
+                                                                                 'between occupied '
+                                                                                 'rows'),
+ ('TVA_network_observation_posts', 'TVA_print_interchangeable_repair_modules'): (2,
+                                                                                 'keeps the common '
+                                                                                 'programme below the '
+                                                                                 'branch outcomes and '
+                                                                                 'its connector '
+                                                                                 'between occupied '
+                                                                                 'rows'),
+ ('TVA_mandate_modular_repair', 'TVA_print_interchangeable_repair_modules'): (2,
+                                                                              'keeps the common '
+                                                                              'programme below the '
+                                                                              'branch outcomes and its '
+                                                                              'connector between '
+                                                                              'occupied rows'),
+ ('TVA_close_operational_loop', 'TVA_merge_iteration_with_field_command'): (4,
+                                                                            'keeps the common '
+                                                                            'programme below the '
+                                                                            'branch outcomes and its '
+                                                                            'connector between '
+                                                                            'occupied rows')}
 
-# The one link whose horizontal run cannot be routed clear.
-# TVA_print_interchangeable_repair_modules is a convergence node taking six
-# prerequisites split across two adjacent rows, so whatever row it sits on, one
-# half of its parents produces an odd drop and the other an even one. Moving
-# TVA_seal_the_approaches out of the way is not possible either: it is the
-# middle link of a straight vertical chain whose head and tail are both fixed.
-LAYOUT_ROUTING_EXCEPTIONS = {
-    ("TVA_network_observation_posts", "TVA_print_interchangeable_repair_modules"),
-}
+LAYOUT_ROUTING_EXCEPTIONS: set[tuple[str, str]] = set()
 
 # Vanilla focus search filters. The tree may only advertise filters the base
 # game actually renders in the focus search box.
@@ -3006,6 +2828,39 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_wkr_councils",
         "ADISCORD_vorkerland_wkr_councils_tt",
         "ADISCORD_vorkerland_wkr_mobilize_council",
+        "ADISCORD_vorkerland_wkr_administration",
+        "ADISCORD_vorkerland_wkr_administration_desc",
+        "WKR_mobilize_factory_columns",
+        "WKR_mobilize_factory_columns_desc",
+        "WKR_council_context_tt",
+        "WKR_council_order_free_tt",
+        "WKR_council_seats_1_tt",
+        "WKR_council_seats_2_tt",
+        "WKR_council_unlock_tt",
+        "WKR_council_order_1_tt",
+        "WKR_council_order_2_tt",
+        "WKR_council_order_cancellation_tt",
+        "WKR_council_delivered_tt",
+        "WKR_council_order_pending",
+        "WKR_council_order_idle",
+        "WKR_factory_battalion_unit",
+        "WKR_councils_batch_mobilized_dummy",
+        "WKR_council_order_cost",
+        "WKR_council_order_cost_blocked",
+        "WKR_council_order_cost_tooltip",
+        "WKR_council_batch_cost",
+        "WKR_council_batch_cost_blocked",
+        "WKR_council_batch_cost_tooltip",
+        "WKR_assault_column_programme",
+        "WKR_assault_column_programme_desc",
+        "WKR_assault_column_unlock_tt",
+        "WKR_assault_column_order_tt",
+        "WKR_assault_column_result_tt",
+        "WKR_assault_column_pending",
+        "WKR_assault_column_unit",
+        "WKR_assault_column_cost",
+        "WKR_assault_column_cost_blocked",
+        "WKR_assault_column_cost_tooltip",
         "ADISCORD_vorkerland_wkr_mobilize_council_desc",
         "ADISCORD_vorkerland_wkr_requisition_councils_tt",
         "ADISCORD_vorkerland_wkr_working_council_tt",
@@ -3025,6 +2880,457 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_tva_trial_cost",
         "ADISCORD_vorkerland_tva_trial_cost_blocked",
         "ADISCORD_vorkerland_tva_trial_cost_tooltip",
+        "ADISCORD_vorkerland_tva_administration",
+        "ADISCORD_vorkerland_tva_administration_desc",
+        "TVA_administration_dynamic",
+        "ADISCORD_vorkerland_vad_administration",
+        "ADISCORD_vorkerland_vad_administration_desc",
+        "VAD_bop",
+        "VAD_bop_staff",
+        "VAD_bop_chancery",
+        "VAD_bop_even",
+        "VAD_bop_staff_influence",
+        "VAD_bop_staff_dominance",
+        "VAD_bop_chancery_influence",
+        "VAD_bop_chancery_dominance",
+        "VAD_administration_active_tt",
+        "VAD_imperial_mandate_available_tt",
+        "VAD_joint_mandate_available_tt",
+        "VAD_imperial_mandate_chosen_tt",
+        "VAD_joint_mandate_chosen_tt",
+        "VAD_oath_slot_tt",
+        "VAD_crown_government_tt",
+        "VAD_crown_industrial_district_tt",
+        "VAD_crown_policy_available_tt",
+        "VAD_crown_policy_cancellation_tt",
+        "VAD_forward_airfield_programme",
+        "VAD_forward_airfield_programme_desc",
+        "VAD_district_air_defence_programme",
+        "VAD_district_air_defence_programme_desc",
+        "VAD_forward_airfield_district_tt",
+        "VAD_district_air_defence_district_tt",
+        "VAD_forward_airfield_available_tt",
+        "VAD_district_air_defence_available_tt",
+        "VAD_forward_airfield_unlock_tt",
+        "VAD_district_air_defence_unlock_tt",
+        "VAD_forward_airfield_result_tt",
+        "VAD_district_air_defence_result_tt",
+        "VAD_air_infrastructure_cancellation_tt",
+        "VAD_oath_pending_crown_privileges",
+        "VAD_oath_pending_crown_collateral",
+        "VAD_oath_pending_forward_airfield",
+        "VAD_oath_pending_district_air_defence",
+        "VAD_forward_airfield_cost",
+        "VAD_forward_airfield_cost_blocked",
+        "VAD_forward_airfield_cost_tooltip",
+        "VAD_district_air_defence_cost",
+        "VAD_district_air_defence_cost_blocked",
+        "VAD_district_air_defence_cost_tooltip",
+        "WKR_breakthrough_available_tt",
+        "WKR_breakthrough_cost",
+        "WKR_breakthrough_cost_blocked",
+        "WKR_breakthrough_cost_tooltip",
+        "WKR_breakthrough_programme",
+        "WKR_breakthrough_programme_desc",
+        "WKR_breakthrough_result_tt",
+        "WKR_breakthrough_unlock_tt",
+        "WKR_final_operation_cancellation_tt",
+        "WKR_final_operation_council_tt",
+        "WKR_interchange_defence_available_tt",
+        "WKR_interchange_defence_cost",
+        "WKR_interchange_defence_cost_blocked",
+        "WKR_interchange_defence_cost_tooltip",
+        "WKR_interchange_defence_programme",
+        "WKR_interchange_defence_programme_desc",
+        "WKR_interchange_defence_result_tt",
+        "WKR_interchange_defence_site_tt",
+        "WKR_interchange_defence_unlock_tt",
+        "WKR_prepared_interchange",
+        "WKR_prepared_interchange_desc",
+        "WKR_railway_order_breakthrough",
+        "WKR_railway_order_interchange_defence",
+        "WKR_airfield_workshop_programme",
+        "WKR_airfield_workshop_programme_desc",
+        "WKR_armoured_train_programme",
+        "WKR_armoured_train_programme_desc",
+        "WKR_airfield_workshop",
+        "WKR_airfield_workshop_desc",
+        "WKR_airfield_workshop_district_tt",
+        "WKR_armoured_train_district_tt",
+        "WKR_airfield_workshop_available_tt",
+        "WKR_armoured_train_available_tt",
+        "WKR_airfield_workshop_unlock_tt",
+        "WKR_armoured_train_unlock_tt",
+        "WKR_volunteer_expedition_unlock_tt",
+        "WKR_pattern_contract_unlock_tt",
+        "VAD_guards_programme",
+        "VAD_final_operations_context_tt",
+        "VAD_district_march_site_tt",
+        "VAD_city_redoubts_site_tt",
+        "VAD_district_march_programme",
+        "VAD_district_march_programme_desc",
+        "VAD_city_redoubts_programme",
+        "VAD_city_redoubts_programme_desc",
+        "VAD_district_march_available_tt",
+        "VAD_city_redoubts_available_tt",
+        "VAD_district_march_unlock_tt",
+        "VAD_city_redoubts_unlock_tt",
+        "VAD_district_march_result_tt",
+        "VAD_city_redoubts_result_tt",
+        "VAD_final_operations_cancellation_tt",
+        "VAD_march_commitment",
+        "VAD_march_commitment_desc",
+        "VAD_oath_pending_district_march",
+        "VAD_oath_pending_city_redoubts",
+        "VAD_coalition_guarantees",
+        "VAD_coalition_guarantees_desc",
+        "VAD_foreign_observers",
+        "VAD_foreign_observers_desc",
+        "VAD_coalition_guarantees_focus_tt",
+        "VAD_foreign_observers_focus_tt",
+        "VAD_coalition_guarantees_available_tt",
+        "VAD_foreign_observers_available_tt",
+        "VAD_coalition_guarantees_unlock_tt",
+        "VAD_foreign_observers_unlock_tt",
+        "VAD_coalition_guarantees_result_tt",
+        "VAD_foreign_observers_result_tt",
+        "VAD_foreign_offer_refund_tt",
+        "VAD_coalition_guarantees_accept_tt",
+        "VAD_foreign_observers_accept_tt",
+        "VAD_oath_pending_coalition_guarantees",
+        "VAD_oath_pending_foreign_observers",
+        "VAD_coalition_guarantees_cost",
+        "VAD_coalition_guarantees_cost_blocked",
+        "VAD_coalition_guarantees_cost_tooltip",
+        "VAD_foreign_observers_cost",
+        "VAD_foreign_observers_cost_blocked",
+        "VAD_foreign_observers_cost_tooltip",
+        "VAD_district_march_cost",
+        "VAD_district_march_cost_blocked",
+        "VAD_district_march_cost_tooltip",
+        "VAD_city_redoubts_cost",
+        "VAD_city_redoubts_cost_blocked",
+        "VAD_city_redoubts_cost_tooltip",
+        "VAD_local_militia_programme",
+        "VAD_guards_doctrine_context_tt",
+        "VAD_local_militia_doctrine_context_tt",
+        "VAD_guards_focus_site_tt",
+        "VAD_local_militia_focus_site_tt",
+        "VAD_guards_available_tt",
+        "VAD_local_militia_available_tt",
+        "VAD_guards_unlock_tt",
+        "VAD_local_militia_unlock_tt",
+        "VAD_guards_result_tt",
+        "VAD_local_militia_result_tt",
+        "VAD_doctrine_order_cancellation_tt",
+        "VAD_local_militia",
+        "VAD_local_militia_tt",
+        "VAD_guard_regiment_unit",
+        "VAD_oath_pending_guards",
+        "VAD_oath_pending_local_militia",
+        "VAD_guards_cost",
+        "VAD_guards_cost_blocked",
+        "VAD_guards_cost_tooltip",
+        "VAD_local_militia_cost",
+        "VAD_local_militia_cost_blocked",
+        "VAD_local_militia_cost_tooltip",
+        "VAD_guards_programme_desc",
+        "VAD_local_militia_programme_desc",
+        "VAD_local_militia_desc",
+        "WKR_airfield_workshop_result_tt",
+        "WKR_armoured_train_result_tt",
+        "WKR_air_rail_cancellation_tt",
+        "WKR_railway_order_airfield_workshop",
+        "WKR_railway_order_armoured_train",
+        "WKR_airfield_workshop_cost",
+        "WKR_airfield_workshop_cost_blocked",
+        "WKR_airfield_workshop_cost_tooltip",
+        "WKR_armoured_train_cost",
+        "WKR_armoured_train_cost_blocked",
+        "WKR_armoured_train_cost_tooltip",
+        "VAD_crown_privileges_programme",
+        "VAD_crown_privileges_programme_desc",
+        "VAD_crown_privileges_cost",
+        "VAD_crown_privileges_cost_blocked",
+        "VAD_crown_privileges_cost_tooltip",
+        "VAD_crown_privileges_legitimacy_tt",
+        "VAD_crown_privileges_unlock_tt",
+        "VAD_crown_district_privileges",
+        "VAD_crown_district_privileges_desc",
+        "VAD_crown_collateral_programme",
+        "VAD_crown_collateral_programme_desc",
+        "VAD_crown_collateral_cost",
+        "VAD_crown_collateral_cost_blocked",
+        "VAD_crown_collateral_cost_tooltip",
+        "VAD_crown_collateral_legitimacy_tt",
+        "VAD_crown_collateral_unlock_tt",
+        "VAD_crown_district_collateral",
+        "VAD_crown_district_collateral_desc",
+        "VAD_oath_target_tt",
+        "VAD_charter_available_tt",
+        "VAD_commandant_available_tt",
+        "VAD_oath_pending_charter",
+        "VAD_oath_pending_commandant",
+        "VAD_oath_idle",
+        "VAD_oath_cancellation_tt",
+        "VAD_charter_programme_tt",
+        "VAD_commandant_programme_tt",
+        "VAD_charter_unlock_tt",
+        "VAD_commandant_unlock_tt",
+        "VAD_give_the_staff_priority",
+        "VAD_give_the_staff_priority_desc",
+        "VAD_hear_the_district_petitions",
+        "VAD_hear_the_district_petitions_desc",
+        "VAD_charter_cost",
+        "VAD_charter_cost_blocked",
+        "VAD_charter_cost_tooltip",
+        "VAD_commandant_cost",
+        "VAD_commandant_cost_blocked",
+        "VAD_commandant_cost_tooltip",
+        "VAD_restore_district_order",
+        "VAD_restore_district_order_desc",
+        "VAD_withdraw_district_commandant",
+        "VAD_withdraw_district_commandant_desc",
+        "VAD_oath_pending_order",
+        "VAD_crown_district_recruitment",
+        "VAD_crown_district_recruitment_desc",
+        "VAD_joint_district_recruitment",
+        "VAD_joint_district_recruitment_desc",
+        "VAD_crown_recruitment_available_tt",
+        "VAD_joint_recruitment_available_tt",
+        "VAD_crown_recruitment_site_tt",
+        "VAD_joint_recruitment_site_tt",
+        "VAD_crown_recruitment_unlock_tt",
+        "VAD_joint_recruitment_unlock_tt",
+        "VAD_crown_recruitment_result_tt",
+        "VAD_joint_recruitment_result_tt",
+        "VAD_recruitment_cancellation_tt",
+        "VAD_crown_recruitment_disruption",
+        "VAD_crown_recruitment_disruption_tt",
+        "VAD_joint_recruitment_unrest_tt",
+        "VAD_oath_pending_crown_recruitment",
+        "VAD_oath_pending_joint_recruitment",
+        "VAD_collegial_mandate_available_tt",
+        "VAD_collegial_government_active_tt",
+        "VAD_collegial_mandate_chosen_tt",
+        "VAD_staff_mandate_survives_tt",
+        "VAD_staff_republic_tt",
+        "WRK_joint_west_frontier_commands_staff",
+        "WRK_joint_west_frontier_commands_restoration",
+        "WRK_joint_west_frontier_commands_desc_staff",
+        "WRK_joint_west_frontier_commands_desc_restoration",
+        "WRK_joint_west_imperial_columns_staff",
+        "WRK_joint_west_imperial_columns_restoration",
+        "WRK_joint_west_imperial_columns_desc_staff",
+        "WRK_joint_west_imperial_columns_desc_restoration",
+        "WRK_joint_west_return_of_the_marches_staff",
+        "WRK_joint_west_return_of_the_marches_restoration",
+        "WRK_joint_west_return_of_the_marches_desc_staff",
+        "WRK_joint_west_return_of_the_marches_desc_restoration",
+        "WRK_joint_west_imperial_settlement_staff",
+        "WRK_joint_west_imperial_settlement_restoration",
+        "WRK_joint_west_imperial_settlement_desc_staff",
+        "WRK_joint_west_imperial_settlement_desc_restoration",
+        "VAD_staff_party",
+        "VAD_staff_party_long",
+        "VAD_vorkerland_staff_republic",
+        "VAD_vorkerland_staff_republic_DEF",
+        "VAD_vorkerland_staff_republic_ADJ",
+        "VAD_collegial_staff_dynamic",
+        "VAD_collegial_staff_dynamic_desc",
+        "VAD_staff_collective_delta",
+        "VAD_staff_delegation_delta",
+        "VAD_staff_constitution_delta",
+        "VAD_staff_rotation_programme",
+        "VAD_staff_rotation_programme_desc",
+        "VAD_staff_depot_programme",
+        "VAD_staff_depot_programme_desc",
+        "VAD_staff_rotation_unlock_tt",
+        "VAD_staff_depot_unlock_tt",
+        "VAD_staff_rotation_available_tt",
+        "VAD_staff_depot_available_tt",
+        "VAD_staff_rotation_result_tt",
+        "VAD_staff_depot_result_tt",
+        "VAD_staff_programme_cancellation_tt",
+        "VAD_staff_rotated_garrison",
+        "VAD_staff_field_depot",
+        "VAD_oath_pending_staff_rotation",
+        "VAD_oath_pending_staff_depot",
+        "VAD_staff_rotation_cost",
+        "VAD_staff_rotation_cost_blocked",
+        "VAD_staff_rotation_cost_tooltip",
+        "VAD_staff_depot_cost",
+        "VAD_staff_depot_cost_blocked",
+        "VAD_staff_depot_cost_tooltip",
+        "VAD_vorkerland_collegial_staff",
+        "VAD_vorkerland_collegial_staff_DEF",
+        "VAD_vorkerland_collegial_staff_ADJ",
+        "VAD_collegial_petrichev_desc",
+        "ADISCORD_vorkerland_claimant.13.staff.a",
+        "ADISCORD_vorkerland_claimant.13.staff.d",
+        "VAD_joint_congress_programme",
+        "VAD_joint_congress_programme_desc",
+        "VAD_joint_operations_programme",
+        "VAD_joint_operations_programme_desc",
+        "VAD_joint_congress_district_tt",
+        "VAD_joint_congress_available_tt",
+        "VAD_joint_operations_available_tt",
+        "VAD_joint_congress_unlock_tt",
+        "VAD_joint_operations_unlock_tt",
+        "VAD_joint_congress_result_tt",
+        "VAD_joint_operations_result_tt",
+        "VAD_joint_programme_cancellation_tt",
+        "VAD_joint_operational_orders",
+        "VAD_joint_operational_orders_desc",
+        "VAD_oath_pending_joint_congress",
+        "VAD_oath_pending_joint_operations",
+        "VAD_joint_congress_cost",
+        "VAD_joint_congress_cost_blocked",
+        "VAD_joint_congress_cost_tooltip",
+        "VAD_joint_operations_cost",
+        "VAD_joint_operations_cost_blocked",
+        "VAD_joint_operations_cost_tooltip",
+        "VAD_crown_recruitment_cost",
+        "VAD_crown_recruitment_cost_blocked",
+        "VAD_crown_recruitment_cost_tooltip",
+        "VAD_joint_recruitment_cost",
+        "VAD_joint_recruitment_cost_blocked",
+        "VAD_joint_recruitment_cost_tooltip",
+        "VAD_district_unrest_status_tt",
+        "VAD_district_order_available_tt",
+        "VAD_district_order_result_tt",
+        "VAD_district_order_cost",
+        "VAD_district_order_cost_blocked",
+        "VAD_district_order_cost_tooltip",
+        "VAD_withdraw_commandant_available_tt",
+        "VAD_withdraw_commandant_result_tt",
+        "VAD_commandant_unrest_modifier_tt",
+        "VAD_district_uprising_tt",
+        "VAD_unrest_rate_chancery",
+        "VAD_unrest_rate_staff",
+        "VAD_unrest_rate_regular",
+        "ADISCORD_vorkerland_vad_district_uprising",
+        "ADISCORD_vorkerland_claimant.15.t",
+        "ADISCORD_vorkerland_claimant.15.d",
+        "ADISCORD_vorkerland_claimant.15.a",
+        "TVA_administration_status_tt",
+        "TVA_bop",
+        "TVA_bop_calculation",
+        "TVA_bop_consent",
+        "TVA_bop_even",
+        "TVA_bop_calculation_influence",
+        "TVA_bop_calculation_dominance",
+        "TVA_bop_consent_influence",
+        "TVA_bop_consent_dominance",
+        "TVA_trial_pending",
+        "TVA_trial_idle",
+        "TVA_trial_wear_tt",
+        "TVA_programme_slot_tt",
+        "TVA_administration_active_tt",
+        "TVA_maintenance_available_tt",
+        "TVA_cadre_training_available_tt",
+        "TVA_emergency_series_available_tt",
+        "TVA_programme_cancellation_tt",
+        "TVA_public_audit_healthy_tt",
+        "TVA_public_audit_assessment_good",
+        "TVA_public_audit_assessment_bad",
+        "TVA_public_audit_success_tt",
+        "TVA_aircraft_cancellation_tt",
+        "TVA_strike_aircraft_programme",
+        "TVA_strike_aircraft_programme_desc",
+        "TVA_strike_aircraft_available_tt",
+        "TVA_strike_aircraft_result_tt",
+        "TVA_strike_aircraft_unlock_tt",
+        "TVA_strike_aircraft_cost",
+        "TVA_strike_aircraft_cost_blocked",
+        "TVA_strike_aircraft_cost_tooltip",
+        "TVA_interceptor_reserve_programme",
+        "TVA_interceptor_reserve_programme_desc",
+        "TVA_interceptor_reserve_available_tt",
+        "TVA_interceptor_reserve_result_tt",
+        "TVA_interceptor_reserve_unlock_tt",
+        "TVA_interceptor_reserve_cost",
+        "TVA_interceptor_reserve_cost_blocked",
+        "TVA_interceptor_reserve_cost_tooltip",
+        "TVA_public_audit_failure_tt",
+        "TVA_public_audit_programme",
+        "TVA_public_audit_programme_desc",
+        "TVA_public_audit_programme_tt",
+        "TVA_public_audit_available_tt",
+        "TVA_public_audit_unlock_tt",
+        "TVA_public_audit_cost",
+        "TVA_public_audit_cost_blocked",
+        "TVA_public_audit_cost_tooltip",
+        "TVA_research_conversion_programme",
+        "TVA_research_conversion_programme_desc",
+        "TVA_research_conversion_programme_tt",
+        "TVA_research_conversion_available_tt",
+        "TVA_research_conversion_unlock_tt",
+        "TVA_research_conversion_cost",
+        "TVA_research_conversion_cost_blocked",
+        "TVA_research_conversion_cost_tooltip",
+        "TVA_research_conversion_result_tt",
+        "TVA_public_confidence",
+        "TVA_public_confidence_desc",
+        "TVA_public_accountability_crisis",
+        "TVA_public_accountability_crisis_desc",
+        "TVA_research_diversion",
+        "TVA_research_diversion_desc",
+        "ADISCORD_vorkerland_claimant.27.t",
+        "ADISCORD_vorkerland_claimant.27.d",
+        "ADISCORD_vorkerland_claimant.27.a",
+        "ADISCORD_vorkerland_claimant.28.t",
+        "ADISCORD_vorkerland_claimant.28.d",
+        "ADISCORD_vorkerland_claimant.28.a",
+        "ADISCORD_vorkerland_claimant.29.t",
+        "ADISCORD_vorkerland_claimant.29.d",
+        "ADISCORD_vorkerland_claimant.29.a",
+        "TVA_maintenance_programme",
+        "TVA_maintenance_programme_desc",
+        "TVA_maintenance_programme_tt",
+        "TVA_maintenance_result_tt",
+        "TVA_cadre_training_programme",
+        "TVA_cadre_training_programme_desc",
+        "TVA_cadre_training_programme_tt",
+        "TVA_cadre_training_result_tt",
+        "TVA_emergency_series_programme",
+        "TVA_emergency_series_programme_desc",
+        "TVA_emergency_series_programme_tt",
+        "TVA_emergency_series_result_tt",
+        "TVA_confirm_schedule",
+        "TVA_confirm_schedule_desc",
+        "TVA_hear_councils",
+        "TVA_hear_councils_desc",
+        "ADISCORD_vorkerland_claimant.25.t",
+        "ADISCORD_vorkerland_claimant.25.d",
+        "ADISCORD_vorkerland_claimant.25.a",
+        "ADISCORD_vorkerland_claimant.26.t",
+        "ADISCORD_vorkerland_claimant.26.d",
+        "ADISCORD_vorkerland_claimant.26.a",
+        "TVA_reroute_city_grid_metrics_tt",
+        "TVA_deploy_field_laboratories_metrics_tt",
+        "TVA_optimize_for_throughput_metrics_tt",
+        "TVA_protect_irreplaceable_specialists_metrics_tt",
+        "TVA_delegate_to_algorithmic_board_metrics_tt",
+        "TVA_build_mobile_repair_trains_metrics_tt",
+        "TVA_harden_switching_stations_metrics_tt",
+        "TVA_declare_continuous_mobilization_metrics_tt",
+        "TVA_enact_the_preservation_protocol_metrics_tt",
+        "TVA_issue_emergency_output_norms_metrics_tt",
+        "TVA_run_the_grid_at_war_load_metrics_tt",
+        "TVA_hold_back_civil_power_metrics_tt",
+        "TVA_evacuate_the_design_bureaus_metrics_tt",
+        "TVA_maintenance_cost",
+        "TVA_maintenance_cost_blocked",
+        "TVA_maintenance_cost_tooltip",
+        "TVA_cadre_training_cost",
+        "TVA_cadre_training_cost_blocked",
+        "TVA_cadre_training_cost_tooltip",
+        "TVA_emergency_series_cost",
+        "TVA_emergency_series_cost_blocked",
+        "TVA_emergency_series_cost_tooltip",
+        "ADISCORD_vorkerland_tva_trial_context_tt",
+        "ADISCORD_vorkerland_tva_trial_settlement_tt",
         "ADISCORD_vorkerland_tva_trial_chance_tt",
         "ADISCORD_vorkerland_tva_iteration_tt",
         "ADISCORD_vorkerland_tva_trial_legitimacy_tt",
@@ -3036,6 +3342,7 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_pw_amnesty_manpower_tt",
         "ADISCORD_vorkerland_pw_iteration_efficiency_tt",
         "ADISCORD_vorkerland_tva_iteration_prerequisite_tt",
+        "ADISCORD_vorkerland_vad_solar_window_closed_tt",
         "ADISCORD_vorkerland_showdown_focus_live_war_tt",
         *FOCUS_EXPANSION_IDEAS,
         *(f"{idea_id}_desc" for idea_id in FOCUS_EXPANSION_IDEAS),
@@ -3051,7 +3358,7 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_tva_doctrine_desc",
         *(
             f"{event_id}.{suffix}"
-            for event_id in (*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS)
+            for event_id in (*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS, "ADISCORD_vorkerland_claimant.1")
             if event_id
             not in {
                 "ADISCORD_vorkerland_claimant.4",
@@ -3068,6 +3375,9 @@ def expected_localisation_keys() -> set[str]:
 
 
 def _phase_flags(block: str) -> set[str]:
+    if "VAD_final_operations_context = yes" in block:
+        triggers = read(Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
+        block += "\n" + "\n".join(_blocks(triggers, "VAD_final_operations_context"))
     return set(
         re.findall(
             r"\bhas_global_flag\s*=\s*(ADISCORD_vorkerland_phase_[A-Za-z0-9_]+)",
@@ -3151,11 +3461,20 @@ def _postwar_completion_paths(
     return tuple(sorted(minimal, key=lambda path: tuple(sorted(path))))
 
 
+def _count_timed_rewards(text: str, idea: str, days: int) -> int:
+    for preview in _blocks(text, "effect_tooltip"):
+        text = text.replace(preview, "")
+    token = f"add_timed_idea = {{ idea = {idea} days = {days} }}"
+    return " ".join(text.split()).count(token)
+
+
 def _plan_reward_contract(text: str) -> str:
     """Include real decision payloads when auditing rewards unlocked by focuses."""
     plan_ids = set(re.findall(
-        r"\bunlock_decision_tooltip\s*=\s*([A-Za-z0-9_]+_activate_plan)\b", text
+        r"\bunlock_decision_tooltip\s*=\s*([A-Za-z0-9_]+(?:_activate_plan|_contract)|TVA_[A-Za-z0-9_]+_programme|WKR_staff_course|WKR_(?:airfield_workshop|armoured_train|breakthrough|interchange_defence|assault_column)_programme|VAD_(?:coalition_guarantees|foreign_observers)|VAD_(?:crown|joint)_district_recruitment|VAD_joint_(?:congress|operations)_programme|VAD_staff_(?:rotation|depot)_programme|VAD_crown_(?:privileges|collateral)_programme|VAD_(?:forward_airfield|district_air_defence|guards|local_militia|district_march|city_redoubts)_programme)\b", text
     ))
+    if "VAD_ratify_staff_constitution = yes" in text:
+        text += "\n" + "\n".join(_blocks(read(PHASE_EFFECTS_FILE), "VAD_ratify_staff_constitution"))
     if not plan_ids:
         return text
     decisions = read(DIPLOMACY_DECISIONS_FILE)
@@ -3164,6 +3483,44 @@ def _plan_reward_contract(text: str) -> str:
         definitions = _blocks(decisions, decision_id)
         if len(definitions) == 1:
             payloads.extend(_blocks(definitions[0], "complete_effect"))
+            payloads.extend(_blocks(definitions[0], "remove_effect"))
+    programme_effects = {
+        "VAD_coalition_guarantees": ("VAD_accept_coalition_guarantees", "VAD_settle_coalition_guarantees", "ADISCORD_vorkerland_join_coalition_of_FROM"),
+        "VAD_foreign_observers": ("VAD_accept_foreign_observers",),
+        "WKR_assault_column_programme": ("WKR_finish_council_order", "WKR_create_assault_column"),
+        "WKR_airfield_workshop_programme": ("WKR_finish_airfield_workshop",),
+        "WKR_armoured_train_programme": ("WKR_finish_armoured_train",),
+        "WKR_breakthrough_programme": ("WKR_finish_breakthrough",),
+        "WKR_interchange_defence_programme": ("WKR_finish_interchange_defence",),
+        "VAD_guards_programme": ("VAD_finish_guards",),
+        "VAD_local_militia_programme": ("VAD_finish_local_militia",),
+        "VAD_district_march_programme": ("VAD_finish_district_march",),
+        "VAD_city_redoubts_programme": ("VAD_finish_city_redoubts",),
+        "VAD_forward_airfield_programme": ("VAD_finish_forward_airfield",),
+        "VAD_district_air_defence_programme": ("VAD_finish_district_air_defence",),
+        "TVA_strike_aircraft_programme": ("TVA_finish_strike_aircraft",),
+        "TVA_interceptor_reserve_programme": ("TVA_finish_interceptor_reserve",),
+        "VAD_crown_privileges_programme": ("VAD_finish_crown_privileges",),
+        "VAD_crown_collateral_programme": ("VAD_finish_crown_collateral",),
+        "VAD_staff_rotation_programme": ("VAD_finish_staff_rotation",),
+        "VAD_staff_depot_programme": ("VAD_finish_staff_depot",),
+        "VAD_joint_congress_programme": ("VAD_finish_joint_congress",),
+        "VAD_joint_operations_programme": ("VAD_finish_joint_operations",),
+        "VAD_crown_district_recruitment": ("VAD_finish_crown_recruitment", "VAD_finish_district_recruitment"),
+        "VAD_joint_district_recruitment": ("VAD_finish_joint_recruitment", "VAD_finish_district_recruitment"),
+        "TVA_maintenance_programme": ("TVA_finish_maintenance",),
+        "TVA_public_audit_programme": ("TVA_finish_public_audit",),
+        "TVA_research_conversion_programme": ("TVA_finish_research_conversion",),
+        "TVA_cadre_training_programme": ("TVA_finish_cadre_training",),
+        "TVA_emergency_series_programme": (
+            "TVA_finish_emergency_series", "TVA_frontline_dispatch_reward",
+        ),
+    }
+    if plan_ids & programme_effects.keys():
+        effects = read(PHASE_EFFECTS_FILE)
+        for decision_id in sorted(plan_ids & programme_effects.keys()):
+            for effect_id in programme_effects[decision_id]:
+                payloads.extend(_blocks(effects, effect_id))
     return text + "\n" + "\n".join(payloads)
 
 
@@ -3171,11 +3528,12 @@ def _postwar_reward_categories(block: str) -> set[str]:
     rewards = _blocks(block, "completion_reward")
     reward = _plan_reward_contract(rewards[0]) if len(rewards) == 1 else ""
     token_groups = {
+        "district_relief": ("subtract_from_variable = { var = VAD_district_unrest value = 20 }",),
         "political": ("add_political_power",),
-        "legitimacy": ("add_stability", "add_war_support"),
+        "legitimacy": ("add_stability", "add_war_support", "set_variable = { var = VAD_staff_stability"),
         "institution": ("add_ideas", "add_timed_idea"),
         "cleanup": ("remove_ideas", "swap_ideas"),
-        "command": ("add_command_power",),
+        "command": ("add_command_power", "set_variable = { var = VAD_staff_command"),
         "experience": ("army_experience", "air_experience", "navy_experience"),
         "manpower": ("add_manpower",),
         "material": ("add_equipment_to_stockpile", "add_building_construction"),
@@ -3255,7 +3613,10 @@ def _reachable_vad_optional_outcome(
         blocks, "VAD", outcome_index
     )
     all_reachable = set(core_reachable)
-    pending = set(eligible)
+    pending = set(eligible) | {
+        focus_id for focus_id in VAD_VARIANT_FOCUSES
+        if not any(token in _wartime_gate_source(blocks.get(focus_id, "")) for token in false_gate_tokens)
+    }
     while pending:
         newly_reachable = {
             focus_id
@@ -3478,23 +3839,31 @@ def collect_issues() -> list[str]:
         collapse_gate = "has_global_flag = ADISCORD_vorkerland_collapse_started"
         if tree_id == "ADISCORD_vorkerland_prewar_focus" and f"NOT = {{ {collapse_gate} }}" not in country:
             issues.append("the prewar tree selector must end at the collapse")
-        if tree_id == "ADISCORD_vorkerland_settlement_focus" and (
+        if tree_id in ("ADISCORD_vorkerland_settlement_focus", "ADISCORD_vorkerland_joint_postwar_focus") and (
             collapse_gate not in country or f"NOT = {{ {collapse_gate} }}" in country
         ):
-            issues.append("the settlement tree selector must start at the collapse")
-        # copy_completed_from = WRK only carries focuses defined in WKR's tree.
-        if tree_id == "ADISCORD_vorkerland_wkr_focus" and not re.search(
-            rf"(?m)^\tshared_focus\s*=\s*{WRK_PREWAR_ROOT}\s*$", tree
+            issues.append(f"{tree_id} selector must start at the collapse")
+        joint_route = "has_country_flag = ADISCORD_vorkerland_route_joint"
+        if tree_id == "ADISCORD_vorkerland_joint_postwar_focus" and joint_route not in country:
+            issues.append("the restoration postwar tree must select the VAD successor")
+        if tree_id == "ADISCORD_vorkerland_settlement_focus" and f"NOT = {{ {joint_route} }}" not in country:
+            issues.append("the worker/technical settlement tree must exclude the VAD successor")
+        # Completed preparation is copied through its owner before loading WKR.
+        if tree_id == "ADISCORD_vorkerland_wkr_focus" and re.search(
+            r"(?m)^\tshared_focus\s*=\s*WRK_", tree
         ):
-            issues.append(f"the WKR tree must include the shared WRK prewar root {WRK_PREWAR_ROOT}")
+            issues.append("the WKR tree must not display the shared prewar branches")
 
     if tuple(blocks) != lifecycle_order():
         issues.append(
             f"focus IDs/order differ from the lifecycle manifest: {tuple(blocks)}"
         )
-    if len(FOCUS_IDS) != 268:
+    for focus_id in RETIRED_WARTIME_FOCUSES:
+        if focus_id in blocks:
+            issues.append(f"retired wartime filler must be removed: {focus_id}")
+    if len(FOCUS_IDS) != 253:
         issues.append(
-            f"validator manifest must contain 268 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain 253 definitions, found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 
@@ -3654,8 +4023,6 @@ def collect_issues() -> list[str]:
         category_by_focus[focus_id] = ("prewar", "WRK")
     for focus_id in PREWAR_VAD_FOCUSES:
         category_by_focus[focus_id] = ("prewar", "districts")
-    for focus_id in RETIRED_WARTIME_FOCUSES:
-        category_by_focus[focus_id] = ("retired", None)
     for tag, focus_ids in WARTIME_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("wartime", tag)
@@ -3718,21 +4085,6 @@ def collect_issues() -> list[str]:
             if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != expected_tags:
                 issues.append(f"{focus_id} must expose only the prewar {gate} block")
             cost_expected = {1, 2, 3, 4, 5}
-        elif category == "retired":
-            if flags:
-                issues.append(
-                    f"retired focus {focus_id} must not keep lifecycle phase gates"
-                )
-            if not re.search(r"\balways\s*=\s*no\b", allow):
-                issues.append(
-                    f"retired focus {focus_id} must be hidden by allow_branch"
-                )
-            available = _blocks(block, "available")
-            if len(available) != 1 or not re.search(
-                r"\balways\s*=\s*no\b", available[0]
-            ):
-                issues.append(f"retired focus {focus_id} must remain unavailable")
-            cost_expected = {3, 4}
         elif category == "wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
             if flags != expected_flags:
@@ -3748,8 +4100,9 @@ def collect_issues() -> list[str]:
                     f"{focus_id} branch tags {sorted(branch_tags)} != {sorted(expected_tags)}"
                 )
             cost_expected = {1, 2, 3, 4}
-            if len(_blocks(block, "bypass")) != 1:
-                issues.append(f"{focus_id} must define one old-save/progression bypass")
+            expected_bypasses = 0 if focus_id in VAD_STAFF_FOCUSES else 1
+            if len(_blocks(block, "bypass")) != expected_bypasses:
+                issues.append(f"{focus_id} must define {expected_bypasses} progression bypasses")
         elif category == "depth_wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
             if flags != expected_flags:
@@ -3767,10 +4120,6 @@ def collect_issues() -> list[str]:
                     f"{focus_id} depth branch tags {sorted(branch_tags)} != {[gate]}"
                 )
             cost_expected = {2, 3, 4}
-            if len(_blocks(block, "bypass")) != 1:
-                issues.append(
-                    f"{focus_id} must define one idempotent depth-branch bypass"
-                )
         elif category == "optional_wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
             if flags != expected_flags:
@@ -3788,7 +4137,7 @@ def collect_issues() -> list[str]:
                     f"{focus_id} optional branch tags {sorted(branch_tags)} != {[gate]}"
                 )
             cost_expected = {2, 3} if gate == "WKR" else {2, 3, 5}
-            if len(_blocks(block, "bypass")) != 1:
+            if focus_id not in VAD_PAID_PROGRAMME_FOCUSES and len(_blocks(block, "bypass")) != 1:
                 issues.append(
                     f"{focus_id} must define one idempotent optional-branch bypass"
                 )
@@ -4234,7 +4583,7 @@ def collect_issues() -> list[str]:
             "VAD emergency chancery must be a bundled 21-day convergence focus"
         )
 
-    expected_wartime_sizes = {"WKR": 17, "VAD": 17, "TVA": 18}
+    expected_wartime_sizes = {"WKR": 17, "VAD": 21, "TVA": 18}
     for tag, expected_size in expected_wartime_sizes.items():
         authored = len(WARTIME_ROUTE_FOCUSES[tag])
         if authored != expected_size:
@@ -4273,11 +4622,8 @@ def collect_issues() -> list[str]:
                     continue
                 dx = abs(position[0] - parent_position[0])
                 dy = position[1] - parent_position[1]
-                # The canvas uses a two-row spine pitch, so a child sits two
-                # rows below its anchor and stays in its column. Two edges may
-                # reach further sideways: the fan-out from a block anchor to
-                # the head of each thematic branch, and a convergence edge that
-                # re-joins a second column into the spine.
+                # Branch heads and convergences may span neighbouring columns;
+                # a direct spine stays within four horizontal cells.
                 spine_edge = (
                     prerequisite == anchor and prerequisite not in LAYOUT_ANCHORS
                 )
@@ -4316,17 +4662,6 @@ def collect_issues() -> list[str]:
             if capstone not in reachable:
                 issues.append(
                     f"{tag} outcome {outcome_index + 1} cannot reach its capstone {capstone}"
-                )
-
-        capstone_flag = CENTRAL_CAPSTONES[tag][1]
-        for focus_id in NEW_WARTIME_FOCUSES[tag]:
-            bypasses = _blocks(blocks.get(focus_id, ""), "bypass")
-            if (
-                len(bypasses) != 1
-                or f"has_country_flag = {capstone_flag}" not in bypasses[0]
-            ):
-                issues.append(
-                    f"new focus {focus_id} lacks old-save capstone bypass {capstone_flag}"
                 )
 
     if len(WKR_OPTIONAL_WARTIME_FOCUSES) != 7:
@@ -4401,26 +4736,18 @@ def collect_issues() -> list[str]:
     expected_wkr_core_plans = {
         "ADISCORD_vorkerland_wkr_pragmatist_core_plan": (
             (
-                "has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",
-                "has_government = pragmatism",
-                "has_country_leader_ideology = neo_vorkerism",
-                "character = WRK_Nikita_Worcker",
+                "WKR_presidential_course = yes",
             ),
             (
                 "WKR_affirm_worker_mandate",
-                "WKR_establish_workers_air_command",
-                "WKR_raise_mobile_fortification_crews",
+                "WKR_convene_front_soviets",
                 "WKR_organize_factory_battalions",
                 "WKR_put_railways_under_councils",
-                "WKR_keep_frontline_sorties_flying",
-                "WKR_convene_front_soviets",
                 "WKR_train_shopfloor_officers",
                 "WKR_form_revolutionary_supply_commission",
-                "WKR_secure_the_southern_corridor",
                 "WKR_open_free_republics_channel",
                 "WKR_authorize_retreat_levies",
                 "WKR_reopen_collective_workshops",
-                "WKR_rehearse_operation_southbound",
                 "WKR_publish_emergency_constitution",
                 "WKR_coordinate_counterattack_cells",
                 "WKR_stockpile_interchange_reserves",
@@ -4430,26 +4757,18 @@ def collect_issues() -> list[str]:
         ),
         "ADISCORD_vorkerland_wkr_utilitarian_core_plan": (
             (
-                "NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }",
-                "has_government = utilitarism",
-                "character = WRK_Anton_Bagley",
+                "WKR_executive_course = yes",
             ),
             (
                 "WKR_affirm_worker_mandate",
-                "WKR_establish_workers_air_command",
-                "WKR_raise_mobile_fortification_crews",
-                "WKR_organize_factory_battalions",
-                "WKR_put_railways_under_councils",
-                "WKR_keep_frontline_sorties_flying",
                 "WKR_empower_front_executive",
-                "WKR_train_shopfloor_officers",
-                "WKR_form_revolutionary_supply_commission",
-                "WKR_secure_the_southern_corridor",
-                "WKR_authorize_normative_command",
-                "WKR_authorize_retreat_levies",
-                "WKR_reopen_collective_workshops",
-                "WKR_rehearse_operation_southbound",
                 "WKR_bind_workshops_to_directive",
+                "WKR_put_railways_under_councils",
+                "WKR_form_revolutionary_supply_commission",
+                "WKR_reopen_collective_workshops",
+                "WKR_organize_factory_battalions",
+                "WKR_train_shopfloor_officers",
+                "WKR_authorize_retreat_levies",
                 "WKR_coordinate_counterattack_cells",
                 "WKR_stockpile_interchange_reserves",
                 "WKR_settle_front_authority",
@@ -4717,12 +5036,13 @@ def collect_issues() -> list[str]:
                     f"{focus_id} bridge contains forbidden diplomacy payload {forbidden}"
                 )
 
-    if len(VAD_OPTIONAL_WARTIME_FOCUSES) != 10:
+    if len(VAD_OPTIONAL_WARTIME_FOCUSES) != 12:
         issues.append(
-            "VAD optional depth must contain exactly ten definitions, "
+            "VAD optional depth must contain exactly twelve definitions, "
             f"found {len(VAD_OPTIONAL_WARTIME_FOCUSES)}"
         )
     vad_optional_prerequisites = {
+        **{focus_id: {"VAD_seat_the_dual_chamber"} for focus_id in VAD_JOINT_PROGRAMME_FOCUSES},
         "VAD_restore_prefectural_courts": {"VAD_bind_officers_to_chancery"},
         "VAD_issue_crown_mobilization_warrants": {"VAD_restore_prefectural_courts"},
         "VAD_turn_the_chancery_into_a_war_cabinet": {
@@ -4770,6 +5090,11 @@ def collect_issues() -> list[str]:
             minimum_payload = 1
         if focus_id == "VAD_open_the_remaining_fronts":
             minimum_payload = 0
+        if focus_id in VAD_PAID_PROGRAMME_FOCUSES:
+            minimum_payload = 1
+            expected_unlock = VAD_PAID_PROGRAMME_FOCUSES[focus_id]
+            if f"unlock_decision_tooltip = {expected_unlock}" not in block:
+                issues.append(f"{focus_id} must unlock its paid programme")
         if len(payload) < minimum_payload:
             issues.append(
                 f"VAD optional focus {focus_id} cost {cost} has only "
@@ -4973,11 +5298,9 @@ def collect_issues() -> list[str]:
                 "VAD_establish_mobile_headquarters",
                 "VAD_inventory_eastern_works",
                 "VAD_restore_crown_commissions",
-                "VAD_invite_sol_delegation",
                 "VAD_reconstitute_district_guard",
                 "VAD_standardize_district_logistics",
                 "VAD_bind_officers_to_chancery",
-                "VAD_dispatch_solland_liaison_mission",
                 "VAD_assemble_joint_general_staff",
                 "VAD_reopen_armament_depots",
                 "VAD_settle_restoration_authority",
@@ -4993,11 +5316,9 @@ def collect_issues() -> list[str]:
                 "VAD_establish_mobile_headquarters",
                 "VAD_inventory_eastern_works",
                 "VAD_guarantee_worker_committees",
-                "VAD_invite_sol_delegation",
                 "VAD_reconstitute_district_guard",
                 "VAD_standardize_district_logistics",
                 "VAD_ratify_joint_command",
-                "VAD_dispatch_solland_liaison_mission",
                 "VAD_assemble_joint_general_staff",
                 "VAD_reopen_armament_depots",
                 "VAD_settle_restoration_authority",
@@ -5007,13 +5328,17 @@ def collect_issues() -> list[str]:
         ),
         "ADISCORD_vorkerland_vad_vlad_depth_plan": (
             "WRK_Vlad_Petrichev",
-            tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (0, 1, 2, 6, 7, 8))
+            tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (0, 1, 2))
+            + ("VAD_invite_sol_delegation", "VAD_dispatch_solland_liaison_mission")
+            + tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (6, 7, 8))
             + VAD_LATE_WAR_BRIDGE_FOCUSES,
             True,
         ),
         "ADISCORD_vorkerland_vad_joint_depth_plan": (
             "WRK_VAD_Joint_Council",
-            tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (3, 4, 5, 6, 7, 8))
+            tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (3, 4, 5))
+            + ("VAD_invite_sol_delegation", "VAD_dispatch_solland_liaison_mission")
+            + tuple(VAD_OPTIONAL_WARTIME_FOCUSES[index] for index in (6, 7, 8))
             + VAD_LATE_WAR_BRIDGE_FOCUSES,
             True,
         ),
@@ -5034,14 +5359,18 @@ def collect_issues() -> list[str]:
             issues.append(
                 f"VAD AI plan {plan_id} focus order {actual_focuses} != {expected_focuses}"
             )
+        course = "VAD_imperial_core_course" if leader == "WRK_Vlad_Petrichev" else "VAD_joint_core_course"
+        identity_gate = f"character = {leader}" if is_depth else f"{course} = yes"
         for token in (
             "allowed = { original_tag = VAD }",
             "tag = VAD",
             "is_ai = yes",
-            f"character = {leader}",
+            identity_gate,
         ):
             if token not in plan:
                 issues.append(f"VAD AI plan {plan_id} lacks {token}")
+        if not is_depth and f"{course} = no" not in "\n".join(_blocks(plan, "abort")):
+            issues.append(f"VAD AI plan {plan_id} must abort after the other mandate is chosen")
         capstone_gate = (
             "has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked"
         )
@@ -5301,6 +5630,14 @@ def collect_issues() -> list[str]:
             "TVA_publish_operational_metrics",
             "TVA_deploy_field_laboratories",
             "TVA_select_trial_protocol",
+            "TVA_reroute_city_grid",
+            "TVA_issue_emergency_output_norms",
+            "TVA_build_mobile_repair_trains",
+            "TVA_standardize_emergency_administration",
+            "TVA_integrate_field_results",
+            "TVA_seal_the_approaches",
+            "TVA_harden_switching_stations",
+            "TVA_close_operational_loop",
         )
         if actual_core_focuses != expected_core_focuses:
             issues.append(
@@ -5405,12 +5742,14 @@ def collect_issues() -> list[str]:
             block = blocks.get(focus_id, "")
             allow = _allow_branch(block)
             available = "\n".join(_blocks(block, "available"))
-            for token in branch_tokens:
+            expected_branch = () if focus_id in VAD_MANDATE_ENTRIES else branch_tokens
+            expected_identity = VAD_MANDATE_ENTRIES.get(focus_id, identity_tokens)
+            for token in expected_branch:
                 if token not in allow:
                     issues.append(
                         f"{focus_id} route gate lacks exact branch token {token}"
                     )
-            for token in identity_tokens:
+            for token in expected_identity:
                 if token not in available:
                     issues.append(
                         f"{focus_id} route gate lacks exact identity token {token}"
@@ -5423,22 +5762,26 @@ def collect_issues() -> list[str]:
     for convergence_id, left_index, right_index in WARTIME_ROUTE_CONVERGENCE:
         left_tokens = WARTIME_ROUTE_IDENTITIES[left_index][1]
         right_tokens = WARTIME_ROUTE_IDENTITIES[right_index][1]
-        if len(left_tokens) != 1 or len(right_tokens) != 1:
+        if convergence_id == "WKR_settle_front_authority":
+            if left_tokens or right_tokens:
+                issues.append("WKR political courses must remain visible independently of the initial fate")
+        elif len(left_tokens) != 1 or len(right_tokens) != 1:
             issues.append(
-                f"{convergence_id} political lines must branch on exactly one roll flag"
+                f"{convergence_id} political descendants must use one mandate flag"
             )
             continue
-        left_token = left_tokens[0]
-        right_token = right_tokens[0]
-        complementary = (
-            f"NOT = {{ {left_token} }}" == right_token
-            or f"NOT = {{ {right_token} }}" == left_token
-        )
-        if not complementary:
-            issues.append(
-                f"{convergence_id} political lines must branch on complementary roll flags, "
-                f"found {left_token!r} and {right_token!r}"
+        else:
+            left_token = left_tokens[0]
+            right_token = right_tokens[0]
+            complementary = (
+                f"NOT = {{ {left_token} }}" == right_token
+                or f"NOT = {{ {right_token} }}" == left_token
             )
+            if not complementary:
+                issues.append(
+                    f"{convergence_id} political descendants must use complementary mandate gates, "
+                    f"found {left_token!r} and {right_token!r}"
+                )
         prerequisite_groups = _prerequisite_groups(blocks.get(convergence_id, ""))
         left_route = set(WARTIME_ROUTE_IDENTITIES[left_index][0])
         right_route = set(WARTIME_ROUTE_IDENTITIES[right_index][0])
@@ -5460,6 +5803,8 @@ def collect_issues() -> list[str]:
             )
 
     mex_pairs = (
+        ("WKR_convene_front_soviets", "WKR_empower_front_executive"),
+        ("VAD_open_imperial_registers", "VAD_form_field_commandantures"),
         ("WRK_convene_council_of_republics", "WRK_inventory_emergency_stores"),
         ("VAD_open_continuity_registers", "VAD_drill_district_guard"),
         ("TVA_optimize_for_throughput", "TVA_protect_irreplaceable_specialists"),
@@ -5575,11 +5920,13 @@ def collect_issues() -> list[str]:
             issues.append(f"Worx wartime spirit {idea_id} must have one definition")
 
     adaptive_reward = (
-        f"add_timed_idea = {{ idea = {WORX_ADAPTIVE_LOGISTICS_IDEA} days = 90 }}"
+        f"add_timed_idea = {{ idea = {WORX_ADAPTIVE_LOGISTICS_IDEA} days = 70 }}"
     )
-    if _plan_reward_contract(blocks.get("TVA_test_adaptive_logistics", "")).count(adaptive_reward) != 1:
+    trial_effects = source_section(read(PHASE_EFFECTS_FILE), "war_economy_effects")
+    trial_success = _blocks(trial_effects, "ADISCORD_vorkerland_tva_field_trial_success")
+    if len(trial_success) != 1 or trial_success[0].count(adaptive_reward) != 1:
         issues.append(
-            "TVA adaptive-logistics trial must grant its bounded 90-day spirit"
+            "a successful TVA logistics trial must grant its bounded 70-day spirit"
         )
     if len(_blocks(collapse_ideas, WORX_ADAPTIVE_LOGISTICS_IDEA)) != 1:
         issues.append("Worx adaptive-logistics trial spirit must have one definition")
@@ -5673,9 +6020,10 @@ def collect_issues() -> list[str]:
     )
 
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
-        if len(focus_ids) != 11:
+        expected_count = 12 if route_flag.endswith("_joint") else 11
+        if len(focus_ids) != expected_count:
             issues.append(
-                f"postwar route {route_flag} must contain eleven authored definitions, "
+                f"postwar route {route_flag} must contain {expected_count} authored definitions, "
                 f"found {len(focus_ids)}"
             )
         terminal_id = POSTWAR_ROUTE_TERMINALS[route_flag]
@@ -5689,8 +6037,14 @@ def collect_issues() -> list[str]:
                 f"postwar route {route_flag} must expose two terminal policy paths, "
                 f"found {len(paths)}"
             )
-        if paths and set().union(*paths) != set(focus_ids):
-            missing = sorted(set(focus_ids) - set().union(*paths))
+        all_paths = paths
+        if route_flag.endswith("_joint"):
+            staff_paths = _postwar_completion_paths(blocks, focus_ids, "WRK_joint_ratify_staff_constitution")
+            if len(staff_paths) != 2 or {len(path) for path in staff_paths} != {11}:
+                issues.append("The staff constitution must follow both complete restoration paths")
+            all_paths = (*paths, *staff_paths)
+        if all_paths and set().union(*all_paths) != set(focus_ids):
+            missing = sorted(set(focus_ids) - set().union(*all_paths))
             issues.append(
                 f"postwar route {route_flag} has nodes outside every terminal path {missing}"
             )
@@ -5970,10 +6324,16 @@ def collect_issues() -> list[str]:
     )
     if missing_focus_events:
         issues.append(f"claimant focus event hooks are missing {missing_focus_events}")
-    if "news_event" in source:
-        issues.append(
-            "focus tree must route news through bounded claimant capstone events"
-        )
+    joint_course_news = dict(zip(VAD_JOINT_PROGRAMME_FOCUSES, (46, 47)))
+    for focus_id, block in blocks.items():
+        dispatches = _blocks(block, "news_event")
+        expected = joint_course_news.get(focus_id)
+        if expected is None and dispatches:
+            issues.append(f"{focus_id} has an unbounded news dispatch")
+        elif expected is not None:
+            event_id = f"ADISCORD_vorkerland_story.{expected}"
+            if len(dispatches) != 1 or f"id = {event_id}" not in dispatches[0]:
+                issues.append(f"{focus_id} must report its own joint-government course once")
 
     event_definitions = tuple(
         block
@@ -5986,7 +6346,7 @@ def collect_issues() -> list[str]:
         for block in event_definitions
         if (match := re.search(r"(?m)^\s*id\s*=\s*([A-Za-z0-9_.]+)\s*$", block))
     ]
-    expected_event_ids = [*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS]
+    expected_event_ids = list(CLAIMANT_OWNED_EVENT_IDS)
     if defined_event_ids != expected_event_ids:
         issues.append(
             f"claimant event definitions differ from the owned manifest: {defined_event_ids}"
@@ -5999,16 +6359,19 @@ def collect_issues() -> list[str]:
         )
     if len(event_definitions) != len(expected_event_ids):
         issues.append("claimant event file has missing or extra event definitions")
-    if claimant_events.count("fire_only_once = yes") != len(expected_event_ids):
-        issues.append("every claimant focus/news event must be one-shot")
+    if claimant_events.count("fire_only_once = yes") != len(CLAIMANT_FOCUS_EVENT_IDS) + len(CLAIMANT_NEWS_EVENT_IDS) + 1:
+        issues.append("claimant focus/news events and the opening mandate must be one-shot")
     event_blocks_by_id = {
         match.group(1): block
         for block in event_definitions
         if (match := re.search(r"(?m)^\s*id\s*=\s*([A-Za-z0-9_.]+)\s*$", block))
     }
     for event_id, expected_options in {
+        "ADISCORD_vorkerland_claimant.1": 3,
+        "ADISCORD_vorkerland_claimant.5": 1,
+        "ADISCORD_vorkerland_claimant.6": 1,
         "ADISCORD_vorkerland_claimant.4": 4,
-        "ADISCORD_vorkerland_claimant.13": 4,
+        "ADISCORD_vorkerland_claimant.13": 5,
         "ADISCORD_vorkerland_claimant.14": 2,
         "ADISCORD_vorkerland_claimant.23": 3,
         "ADISCORD_vorkerland_claimant.24": 3,
@@ -6295,8 +6658,8 @@ def collect_issues() -> list[str]:
     referenced_tooltips = set(
         re.findall(r"\b(?:custom_effect_tooltip|tooltip)\s*=\s*([A-Za-z0-9_]+)", source)
     )
-    for language, text in (("English", english), ("Russian", russian)):
-        entries = localisation_entries(text)
+    for language, path in (("English", ENGLISH_LOCALISATION), ("Russian", RUSSIAN_LOCALISATION)):
+        entries = localisation_entries(read(path))
         missing = sorted(referenced_tooltips - set(entries))
         if missing:
             issues.append(
@@ -6433,8 +6796,6 @@ def resolved_positions(blocks: dict[str, str]) -> dict[str, tuple[int, int]]:
 def _layout_band(focus_id: str, block: str) -> str:
     """Which documented band a focus belongs to, derived from its own gating."""
 
-    if focus_id in RETIRED_WARTIME_FOCUSES:
-        return "retired"
     flags = _phase_flags(block)
     tag = focus_id.split("_")[0]
     if flags == {PREWAR_PHASE}:
@@ -6526,11 +6887,17 @@ def _check_depth_branches(
         available_text = available[0] if available else ""
         allow = _allow_branch(block)
         if focus_id in DEPTH_LATE_WAR_FOCUSES:
-            if _phase_flags(available_text) != LATE_WAR_AVAILABLE_PHASE_FLAGS:
+            expected_phases = LATE_WAR_AVAILABLE_PHASE_FLAGS
+            if focus_id.startswith(("TVA_", "WKR_", "VAD_")):
+                expected_phases = {
+                    "ADISCORD_vorkerland_phase_central_preparation",
+                    SHOWDOWN_PHASE,
+                }
+            if _phase_flags(available_text) != expected_phases:
                 issues.append(
                     f"late-war depth focus {focus_id} available phases "
                     f"{sorted(_phase_flags(available_text))} != "
-                    f"{sorted(LATE_WAR_AVAILABLE_PHASE_FLAGS)}"
+                    f"{sorted(expected_phases)}"
                 )
 
         identity = DEPTH_VARIANT_IDENTITY.get(focus_id)
@@ -6596,20 +6963,23 @@ def _check_depth_branches(
             )
 
     for idea_id, focus_id in DEPTH_PERMANENT_IDEAS.items():
-        if source.count(f"add_ideas = {idea_id}\n") != 1:
+        if len(re.findall(rf"\badd_ideas\s*=\s*{re.escape(idea_id)}\b", source)) != 1:
             issues.append(
                 f"depth spirit {idea_id} must be granted by exactly one focus"
             )
         for capstone_id in DEPTH_POSTWAR_CAPSTONES:
             capstone = blocks.get(capstone_id, "")
+            if idea_id in TVA_AGGREGATE_PREVIEWS:
+                if f"remove_ideas = {idea_id}" in capstone:
+                    issues.append(f"postwar capstone {capstone_id} must not remove preview {idea_id}")
+                continue
             if f"remove_ideas = {idea_id}" not in capstone:
                 issues.append(
                     f"postwar capstone {capstone_id} must clear wartime depth "
                     f"spirit {idea_id}"
                 )
     for idea_id, (focus_id, days) in DEPTH_TIMED_IDEAS.items():
-        token = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
-        if _plan_reward_contract(source).count(token) != 1:
+        if _count_timed_rewards(_plan_reward_contract(source), idea_id, days) != 1:
             issues.append(
                 f"depth spirit {idea_id} must be granted once as a {days}-day idea"
             )
@@ -6639,16 +7009,10 @@ WAR_ECONOMY_DYNAMIC = {
         "ADISCORD_vorkerland_focus_vad_levy_the_crown_estates",
         "ADISCORD_vorkerland_focus_vad_protect_the_district_markets",
     ),
-    "TVA": (
-        "TVA_convene_the_load_board",
-        "ADISCORD_vorkerland_tva_war_economy",
-        "ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load",
-        "ADISCORD_vorkerland_focus_tva_hold_back_civil_power",
-    ),
 }
 
 # The settlement focus on each of the three postwar routes. Whichever claimant
-# wins, one of these fires, so each has to clear all three war economies.
+# wins, one of these fires, so each has to clear both factory-scaled war economies.
 WAR_ECONOMY_CAPSTONES = (
     "WRK_worker_write_constitutional_guarantees",
     "WRK_joint_impose_reunification_settlement",
@@ -6816,7 +7180,7 @@ def _check_depth_ai_plans() -> list[str]:
         enable = _blocks(body, "enable")
         if len(enable) != 1 or f"tag = {plan['tag']}" not in enable[0]:
             issues.append(f"depth AI plan {plan_id} must enable only for {plan['tag']}")
-        elif f"NOT = {{ has_country_flag = {plan['terminal']} }}" not in enable[0]:
+        elif f"NOT = {{ {plan.get('terminal_trigger', 'has_country_flag')} = {plan['terminal']} }}" not in enable[0]:
             issues.append(
                 f"depth AI plan {plan_id} must stop once {plan['terminal']} is set"
             )
@@ -6868,6 +7232,10 @@ def _postwar_route_of(focus_id: str) -> str | None:
 def _can_share_view(left: str, right: str) -> bool:
     # Focuses of different native trees are never drawn on one canvas.
     if lifecycle_tree(left) != lifecycle_tree(right):
+        return False
+    # WRK and autonomous-district preparation use disjoint tag gates.
+    if ((left in PREWAR_WRK_FOCUSES and right in PREWAR_VAD_FOCUSES)
+            or (right in PREWAR_WRK_FOCUSES and left in PREWAR_VAD_FOCUSES)):
         return False
     left_route = _postwar_route_of(left)
     right_route = _postwar_route_of(right)
@@ -7118,7 +7486,10 @@ def _check_variant_branches(
             expected_prerequisite = (
                 branch["root_prerequisite"] if index == 0 else chain[index - 1]
             )
-            if _prerequisites(block) != {expected_prerequisite}:
+            expected_prerequisites = {expected_prerequisite}
+            if focus_id == "WKR_govern_by_delivered_results":
+                expected_prerequisites.add("WKR_authorize_normative_command")
+            if _prerequisites(block) != expected_prerequisites:
                 issues.append(
                     f"{focus_id} must depend only on {expected_prerequisite}, "
                     f"found {sorted(_prerequisites(block))}"
@@ -7153,7 +7524,7 @@ def _check_variant_branches(
                 if idea_id == branch["timed_idea"]
                 else f"add_ideas = {idea_id}"
             )
-            if _plan_reward_contract(block).count(grant) != 1:
+            if " ".join(_plan_reward_contract(block).split()).count(grant) != 1:
                 issues.append(
                     f"{focus_id} must grant its variant spirit exactly once: {grant}"
                 )
@@ -7217,6 +7588,10 @@ def _check_variant_branches(
     for focus_id in VARIANT_CLEANUP_FOCUSES:
         block = blocks.get(focus_id, "")
         for idea_id in VARIANT_PERMANENT_IDEAS:
+            if idea_id in TVA_AGGREGATE_PREVIEWS:
+                if f"remove_ideas = {idea_id}" in block:
+                    issues.append(f"{focus_id} must not remove preview {idea_id}")
+                continue
             if f"remove_ideas = {idea_id}" not in block:
                 issues.append(
                     f"{focus_id} must clear the wartime variant spirit {idea_id}"

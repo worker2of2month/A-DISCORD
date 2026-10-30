@@ -71,19 +71,20 @@ class SouthFinalWarContractTests(unittest.TestCase):
             for field in entry.value
             if field.key == "var"
         }
-        for name in ("crisis", "declarer_side", "winner_side", "terms", "subject_type"):
+        for name in ("declarer_side", "winner_side", "terms", "subject_type"):
             self.assertIn(f"global.ADISCORD_south_{name}", written)
             self.assertNotIn(f"ADISCORD_south_{name}", written)
 
     def test_every_regional_state_is_woken_bound_offered_and_settled(self):
         for name in (
             "ADISCORD_south_wake_regional_countries",
-            "ADISCORD_south_assign_bound_sides",
             "ADISCORD_south_offer_side_choices",
             "ADISCORD_south_faction_partners_follow",
         ):
             calls = set(re.findall(r"\b([A-Z]{3}) = \{", body(EFFECTS, name)))
             self.assertEqual(calls, set(REGIONAL), name)
+        bound = scope_calls(body(EFFECTS, "ADISCORD_south_assign_bound_sides"), "ADISCORD_south_bind_to_champion")
+        self.assertEqual(bound, set(REGIONAL) | {"NAM"})
         for name, effect in (
             ("ADISCORD_south_end_final_wars", "ADISCORD_south_end_member_wars"),
             ("ADISCORD_south_mark_losers", "ADISCORD_south_mark_loser"),
@@ -156,12 +157,12 @@ class SouthFinalWarContractTests(unittest.TestCase):
                 if e.key == "check_variable" and any(i.key == "var" and i.value == "SHL_political_course" for i in e.value)
             ]
             self.assertEqual(courses, [course], identifier)
-            self.assertIn("ADISCORD_south_final_war_start", text, identifier)
+            self.assertIn("ADISCORD_south_prepare_offensive", text, identifier)
         nam = focus_blocks(ROOT / "focus_trees/NAM/postwar/focuses.txt")
         for identifier, path in (("NAM_south_seal_over_furnaces", "NAM_service_state"), ("NAM_south_oil_charter", "NAM_federal_charter")):
             available = repr(next(e.value for e in nam[identifier] if e.key == "available"))
             self.assertIn(path, available, identifier)
-            self.assertIn("ADISCORD_south_final_can_start", available, identifier)
+            self.assertIn("ADISCORD_south_final_focus_available", available, identifier)
 
     def test_champion_capitulation_owns_the_settlement(self):
         text = PEACE.read_text(encoding="utf-8")
@@ -177,7 +178,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
         shl = (ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt").read_text(encoding="utf-8")
         self.assertEqual(shl.count("ADISCORD_south_crisis_cycle = yes"), 1)
         self.assertIn("ADISCORD_south_crisis_cycle = yes", body(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", "SHL_run_cycle"))
-        self.assertEqual(shl.count("ADISCORD_south_crisis_add_campaign = yes"), 3)
+        self.assertNotIn("ADISCORD_south_crisis_add_campaign", shl)
         for path in (ROOT / "common/on_actions").glob("*.txt"):
             self.assertNotIn("ADISCORD_south_crisis", path.read_text(encoding="utf-8-sig"), path.name)
 
@@ -270,6 +271,7 @@ class SouthLifecycleTests(unittest.TestCase):
         self.facts = {}
         self.arrays = {}
         self.calls = []
+        self.start_scopes = []
         self.event_root = "SHL"
         self.event_sender = "SHL"
         self.targets = {}
@@ -277,6 +279,13 @@ class SouthLifecycleTests(unittest.TestCase):
             self.facts.update({(tag, "exists", "yes"): True, (tag, "is_subject", "no"): True,
                                (tag, "has_capitulated", "no"): True, (tag, "has_war", "no"): True,
                                (tag, "is_in_faction", "no"): True})
+            self.facts[(tag, "numeric", "date")] = 21650101
+        for tag, names in {
+            "SHL": ("SHL_conclave_army", "SHL_metal_market", "SHL_conclave_rules"),
+            "NAM": ("NAM_svetlogorye", "NAM_oil_exchange", "NAM_ladder_of_seals"),
+        }.items():
+            for name in names:
+                self.facts[(tag, "has_completed_focus", name)] = True
         self.facts[("SHL", "has_country_flag", "SHL_furnaces_initialized")] = True
         for flag in ("ADISCORD_fresh_campaign_contract_v1", "ADISCORD_nam_resource_war_resolved"):
             self.flag(flag)
@@ -291,7 +300,10 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def expand(self, entries):
         result = []
-        for entry in entries:
+        for index, entry in enumerate(entries):
+            if index >= 2 and entries[index - 2].key == "" and entries[index - 2].value == "date":
+                year, month, day = entry.value.split(".")
+                entry = replace(entry, value=str(int(year) * 10000 + int(month) * 100 + int(day)))
             if entry.key in self.triggers:
                 self.assertIn(entry.value, ("yes", "no"))
                 predicate = replace(entry, key="AND", value=self.expand(self.triggers[entry.key]))
@@ -302,6 +314,13 @@ class SouthLifecycleTests(unittest.TestCase):
                 fields = [replace(e, value=e.value.removeprefix("global.")) if isinstance(e.value, str) else e
                           for e in entry.value]
                 result.append(replace(entry, key="GLB", value=[replace(entry, value=fields)]))
+            elif entry.key == "check_variable" and scalar(entry.value, "value").startswith("global."):
+                fields = [
+                    replace(field, value=str(self.facts.get(("GLB", "variable", field.value.removeprefix("global.")), 0)))
+                    if field.key == "value" else field
+                    for field in entry.value
+                ]
+                result.append(replace(entry, value=fields))
             elif entry.key in ("ROOT", "FROM") or entry.key.startswith("event_target:"):
                 target = (self.event_root if entry.key == "ROOT" else self.event_sender if entry.key == "FROM"
                           else self.targets[entry.key.split(":", 1)[1]])
@@ -328,7 +347,11 @@ class SouthLifecycleTests(unittest.TestCase):
                      "ADISCORD_south_final_resolve_without_hegemon", "ADISCORD_south_final_repel",
                      "ADISCORD_south_final_war_start"}
         for current, entry in selected_effects(self.expand(entries), self.facts, scope):
-            if entry.key in terminals:
+            if entry.key == "ADISCORD_south_final_war_start":
+                if self.trigger_matches("ADISCORD_south_final_can_start", current) and self.trigger_matches("ADISCORD_south_declarer_valid", current):
+                    self.calls.append(entry.key)
+                    self.start_scopes.append(current)
+            elif entry.key in terminals:
                 self.calls.append(entry.key)
             elif entry.key in self.effects:
                 self.execute(entry.key, current)
@@ -370,22 +393,184 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.targets[entry.value] = current
             elif entry.key == "country_event":
                 self.calls.append((current, "country_event", scalar(entry.value, "id"), self.event_root, dict(self.targets)))
+            elif entry.key == "add_to_war":
+                self.calls.append((current, "add_to_war", scalar(entry.value, "targeted_alliance"), scalar(entry.value, "enemy")))
             else:
-                self.assertIn(entry.key, ("news_event", "mark_focus_tree_layout_dirty"), entry.key)
+                self.assertIn(entry.key, ("news_event", "mark_focus_tree_layout_dirty", "ADISCORD_release_non_participating_minor_optimization"), entry.key)
 
-    def test_window_blocks_maximum_pressure_and_all_external_starters(self):
+    def test_date_and_focus_readiness_block_every_starter(self):
         self.variable("ADISCORD_south_crisis", 100)
         self.execute("ADISCORD_south_begin_preparation")
-        for age in (0, 489, 490):
-            self.flag("ADISCORD_south_preparation_started", age=age)
-            self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start"), age >= 490)
-            self.assertTrue(self.trigger_matches("ADISCORD_south_final_can_start", "NAM"))
+        self.flag("ADISCORD_south_crisis_warned", age=84)
+        for date, expected in ((21641231, False), (21650101, True)):
+            for tag in ("NAM", "SHL", "EFL", "AZH"):
+                self.facts[(tag, "numeric", "date")] = date
+                self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start", tag), expected)
             self.calls.clear()
             self.execute("ADISCORD_south_crisis_cycle")
-            self.assertEqual("ADISCORD_south_final_war_start" in self.calls, age >= 490)
-        self.facts[("NAM", "has_war", "no")] = False
-        self.flag("ADISCORD_south_preparation_started", age=20)
+            self.assertEqual("ADISCORD_south_final_war_start" in self.calls, expected)
+        for tag, focus in (("NAM", "NAM_svetlogorye"), ("NAM", "NAM_oil_exchange"), ("SHL", "SHL_conclave_army"), ("SHL", "SHL_metal_market")):
+            self.facts[(tag, "has_completed_focus", focus)] = False
+            for declarer in ("NAM", "SHL", "EFL", "AZH"):
+                self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start", declarer), (tag, focus, declarer))
+            self.facts[(tag, "has_completed_focus", focus)] = True
+
+    def test_focus_completion_opens_warning_without_new_postwar_timer(self):
+        self.execute("ADISCORD_south_begin_preparation")
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertTrue(self.facts[("GLB", "has_global_flag", "ADISCORD_south_crisis_warned")])
+        self.assertNotIn("ADISCORD_south_final_war_start", self.calls)
+        for age in (0, 55, 56):
+            self.flag("ADISCORD_south_crisis_warned", age=age)
+            self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start"), age >= 56)
+
+    def test_cancelled_resource_entry_has_attainable_main_tree_milestones(self):
+        for key in list(self.facts):
+            if key[0] == "NAM" and key[1] == "has_completed_focus":
+                self.facts[key] = False
+        self.flag("ADISCORD_nam_resource_war_resolved", False)
+        self.flag("ADISCORD_nam_resource_war_retry_used")
+        for name in ("NAM_seal_courts", "NAM_civilian_combine", "NAM_officer_courses"):
+            self.facts[("NAM", "has_completed_focus", name)] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        self.flag("ADISCORD_nam_resource_war_scheduled")
+        self.assertFalse(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+
+    def test_offensive_focus_fits_warning_and_selects_northern_declarer(self):
+        self.execute("ADISCORD_south_begin_preparation")
+        self.execute("ADISCORD_south_crisis_cycle")
+        for tree in ("NAM/postwar", "NAM/defeated", "SHL/main"):
+            for name, focus in focus_blocks(ROOT / f"focus_trees/{tree}/focuses.txt").items():
+                if "ADISCORD_south_prepare_offensive" not in repr(block(focus, "completion_reward")):
+                    continue
+                self.assertIn("ADISCORD_south_final_focus_available", repr(block(focus, "available")), name)
+                self.assertLessEqual(float(scalar(focus, "cost")) * 7, 56, name)
+        self.assertTrue(self.trigger_matches("ADISCORD_south_final_focus_available", "NAM"))
         self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start", "NAM"))
+        self.execute("ADISCORD_south_prepare_offensive", "NAM")
+        self.assertTrue(self.facts[("NAM", "has_country_flag", "ADISCORD_south_offensive_order")])
+        for age in (42, 55, 56):
+            self.calls.clear()
+            self.flag("ADISCORD_south_crisis_warned", age=age)
+            self.execute("ADISCORD_south_crisis_cycle")
+            self.assertEqual("ADISCORD_south_final_war_start" in self.calls, age >= 56)
+        dispatcher = body(EFFECTS, "ADISCORD_south_dispatch_prepared_war")
+        self.assertIn("has_country_flag = ADISCORD_south_offensive_order", dispatcher)
+        self.assertIn("NAM = { ADISCORD_south_final_war_start = yes }", dispatcher)
+        self.assertEqual(self.start_scopes, ["NAM"])
+        self.execute("ADISCORD_south_suspend_preparation")
+        self.assertFalse(self.facts[("NAM", "has_country_flag", "ADISCORD_south_offensive_order")])
+        self.execute("ADISCORD_south_begin_preparation")
+        self.flag("ADISCORD_south_crisis_warned", age=56)
+        self.start_scopes.clear()
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertEqual(self.start_scopes, [])
+        self.flag("ADISCORD_south_crisis_warned", age=84)
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertEqual(self.start_scopes, ["SHL"], "A historical or bypassed focus cannot repeat an expired order")
+
+    def test_shl_order_starts_after_warning_instead_of_waiting_for_automatic_attack(self):
+        self.execute("ADISCORD_south_begin_preparation")
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.execute("ADISCORD_south_prepare_offensive", "SHL")
+        self.assertEqual(self.start_scopes, [])
+        self.flag("ADISCORD_south_crisis_warned", age=56)
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertEqual(self.start_scopes, ["SHL"])
+
+    def test_missing_focus_is_not_replaced_by_a_date_or_spare_equipment(self):
+        self.execute("ADISCORD_south_begin_preparation")
+        self.facts[("SHL", "has_completed_focus", "SHL_conclave_army")] = False
+        self.variable("ADISCORD_south_crisis", 100)
+        self.facts[("SHL", "numeric", "date")] = 21700101
+        self.flag("ADISCORD_south_preparation_started", age=3000)
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertFalse(self.facts.get(("GLB", "has_global_flag", "ADISCORD_south_crisis_warned"), False))
+        self.facts[("SHL", "has_completed_focus", "SHL_conclave_army")] = True
+        self.facts[("NAM", "numeric", "has_manpower")] = 0
+        self.facts[("SHL", "equipment", "infantry_equipment")] = 0
+        self.execute("ADISCORD_south_crisis_cycle")
+        self.assertTrue(self.facts[("GLB", "has_global_flag", "ADISCORD_south_crisis_warned")])
+
+    def test_focus_routes_and_successors_have_reachable_alternatives(self):
+        self.facts[("NAM", "has_completed_focus", "NAM_ladder_of_seals")] = False
+        self.facts[("NAM", "has_completed_focus", "NAM_common_fuel_market")] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        for key in list(self.facts):
+            if key[0] == "NAM" and key[1] == "has_completed_focus":
+                self.facts[key] = False
+        for focus in ("NAM_rad_great_war_plan", "NAM_hum_union_call", "NAM_board_stock_mobilisation"):
+            self.facts[("NAM", "has_completed_focus", focus)] = True
+            self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"), focus)
+            self.facts[("NAM", "has_completed_focus", focus)] = False
+        for focus in ("NAM_defeat_revenge", "NAM_defeat_second_chapter"):
+            self.facts[("NAM", "has_completed_focus", focus)] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        self.facts[("NAM", "has_completed_focus", "NAM_defeat_second_chapter")] = False
+        for focus in ("NAM_defeat_rump_cabinet", "NAM_defeat_harbour_economy", "NAM_defeat_road_south"):
+            self.facts[("NAM", "has_completed_focus", focus)] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        self.facts[("NAM", "exists", "yes")] = False
+        self.assertTrue(self.trigger_matches("ADISCORD_south_both_focus_ready"))
+        self.facts[("EFL", "exists", "yes")] = False
+        self.assertTrue(self.trigger_matches("ADISCORD_south_both_focus_ready"))
+        self.facts[("AZH", "exists", "yes")] = False
+        self.assertFalse(self.trigger_matches("ADISCORD_south_both_focus_ready"))
+
+    def test_compromise_preparation_waits_for_diplomacy_before_the_warning(self):
+        for key in list(self.facts):
+            if key[0] == "NAM" and key[1] == "has_completed_focus":
+                self.facts[key] = False
+        for name in ("NAM_defeat_rump_cabinet", "NAM_defeat_harbour_economy",
+                     "NAM_defeat_open_border", "NAM_defeat_oil_union", "NAM_defeat_oil_peace"):
+            self.facts[("NAM", "has_completed_focus", name)] = True
+        self.assertFalse(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        self.facts[("NAM", "has_completed_focus", "NAM_defeat_road_south")] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        tree = focus_blocks(ROOT / "focus_trees/NAM/defeated/focuses.txt")
+        offensive = tree["NAM_defeat_southern_charter"]
+        for prerequisite in (entry.value for entry in offensive if entry.key == "prerequisite"):
+            self.assertTrue(any(self.facts.get(("NAM", "has_completed_focus", child.value), False)
+                                for child in prerequisite))
+        self.assertLessEqual(float(scalar(offensive, "cost")) * 7, 56)
+
+    def test_northern_successors_require_resource_war_settlement(self):
+        self.facts[("NAM", "exists", "yes")] = False
+        self.flag("ADISCORD_nam_resource_war_resolved", False)
+        self.flag("ADISCORD_nam_resource_war_retry_used")
+        for leader in ("EFL", "AZH"):
+            with self.subTest(leader=leader):
+                self.facts[("EFL", "exists", "yes")] = leader == "EFL"
+                self.assertTrue(self.trigger_matches("ADISCORD_south_declarer_valid", leader))
+                self.assertFalse(self.trigger_matches("ADISCORD_south_north_focus_ready", leader))
+                self.flag("ADISCORD_nam_resource_war_resolved")
+                self.assertTrue(self.trigger_matches("ADISCORD_south_north_focus_ready", leader))
+                self.flag("ADISCORD_nam_resource_war_resolved", False)
+
+    def test_northern_successors_wait_for_2165_and_every_shl_milestone(self):
+        self.facts[("NAM", "exists", "yes")] = False
+        self.execute("ADISCORD_south_begin_preparation")
+        self.flag("ADISCORD_south_crisis_warned", age=84)
+        for leader in ("EFL", "AZH"):
+            with self.subTest(leader=leader):
+                self.facts[("EFL", "exists", "yes")] = leader == "EFL"
+                for date, expected in ((21641231, False), (21650101, True)):
+                    for starter in (leader, "SHL"):
+                        self.facts[(starter, "numeric", "date")] = date
+                        self.assertEqual(self.trigger_matches("ADISCORD_south_final_focus_available", starter), expected)
+                        self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start", starter), expected)
+                    self.calls.clear()
+                    self.execute("ADISCORD_south_crisis_cycle")
+                    self.assertEqual("ADISCORD_south_final_war_start" in self.calls, expected)
+                for focus in ("SHL_conclave_rules", "SHL_metal_market", "SHL_conclave_army"):
+                    self.facts[("SHL", "has_completed_focus", focus)] = False
+                    for starter in (leader, "SHL"):
+                        self.assertFalse(self.trigger_matches("ADISCORD_south_final_focus_available", starter), focus)
+                        self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start", starter), focus)
+                    self.calls.clear()
+                    self.execute("ADISCORD_south_crisis_cycle")
+                    self.assertNotIn("ADISCORD_south_final_war_start", self.calls, focus)
+                    self.facts[("SHL", "has_completed_focus", focus)] = True
 
     def test_repeated_initialization_preserves_age_and_does_not_reactivate_missions(self):
         self.execute("ADISCORD_south_begin_preparation")
@@ -403,6 +588,7 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_exile_return_and_great_war_block_every_clock_and_first_strike(self):
         self.flag("ADISCORD_nam_resource_war_island_exile")
         self.flag("ADISCORD_south_preparation_started", age=2000)
+        self.flag("ADISCORD_south_crisis_warned", age=84)
         self.variable("ADISCORD_south_crisis", 100)
         self.facts.update({("RHM", "exists", "yes"): True, ("RHM", "is_subject", "no"): True,
                            ("RHM", "has_capitulated", "no"): True})
@@ -433,7 +619,8 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertTrue(self.facts[("EFL", "has_country_flag", "ADISCORD_south_north_leader")])
         self.assertFalse(self.facts[("NAM", "has_country_flag", "ADISCORD_south_north_leader")])
         self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start"))
-        self.flag("ADISCORD_south_preparation_started", age=490)
+        self.flag("ADISCORD_south_preparation_started", age=1460)
+        self.flag("ADISCORD_south_crisis_warned", age=56)
         self.assertTrue(self.trigger_matches("ADISCORD_south_final_can_start"))
 
     def objectives(self, north="NAM", capital="700"):
@@ -447,6 +634,56 @@ class SouthLifecycleTests(unittest.TestCase):
         for state in ("699", "707"):
             self.facts[(state, "controller")] = "SHL"
         self.execute("ADISCORD_south_record_key_states")
+
+    def test_subjugated_nam_joins_its_champion_and_counts_for_objectives_and_settlement(self):
+        for north, capital in (("EFL", "68"), ("AZH", "69")):
+            for overlord in (north, "SHL"):
+                for already_fighting in (False, True):
+                    with self.subTest(north=north, overlord=overlord, already_fighting=already_fighting):
+                        self.setUp()
+                        self.facts[("NAM", "is_subject", "no")] = False
+                        self.facts[("NAM", "is_subject", "yes")] = True
+                        self.facts[("NAM", "is_subject_of", overlord)] = True
+                        self.objectives(north, capital)
+                        enemy = north if overlord == "SHL" else "SHL"
+                        side = 1 if overlord == "SHL" else 2
+                        self.facts[("NAM", "has_war_with", enemy)] = already_fighting
+                        self.execute("ADISCORD_south_assign_bound_sides")
+                        self.assertEqual(self.facts.get(("NAM", "variable", "ADISCORD_south_side")), side)
+                        expected_calls = [] if already_fighting else [("NAM", "add_to_war", overlord, enemy)]
+                        self.assertEqual(self.calls, expected_calls)
+                        self.calls.clear()
+                        self.execute("ADISCORD_south_assign_bound_sides")
+                        self.assertEqual(self.calls, [], "An assigned participant must not join again")
+
+                        self.facts[("688", "controller")] = "NAM"
+                        self.execute("ADISCORD_south_record_key_states")
+                        self.assertEqual(self.facts[("688", "variable", "ADISCORD_south_initial_side")], side)
+                        for winner in (1, 2):
+                            self.variable("ADISCORD_south_winner_side", winner)
+                            selected = list(selected_effects(self.expand(self.effects["ADISCORD_south_mark_loser"]), self.facts, "NAM"))
+                            pending = [(tag, item.value) for tag, item in selected if item.key == "set_country_flag"]
+                            expected = [] if winner == side else [("NAM", "ADISCORD_south_settlement_pending")]
+                            self.assertEqual(pending, expected)
+                            release = [item.value for _, item in selected if item.key == "overlord"]
+                            self.assertEqual(len(release), int(winner != side))
+                            if release:
+                                autonomy = block(release[0], "set_autonomy")
+                                self.assertEqual(scalar(autonomy, "target"), "PREV")
+                                self.assertEqual(scalar(autonomy, "autonomy_state"), "autonomy_free")
+
+    def test_bound_assignment_preserves_nam_leadership_and_ignores_absent_nam(self):
+        for exists in (False, True):
+            with self.subTest(exists=exists):
+                self.setUp()
+                self.facts[("NAM", "exists", "yes")] = exists
+                if exists:
+                    self.objectives()
+                else:
+                    self.objectives("EFL", "68")
+                self.execute("ADISCORD_south_assign_bound_sides")
+                self.assertEqual(self.calls, [])
+                self.assertEqual(self.facts.get(("NAM", "variable", "ADISCORD_south_side")), 2 if exists else None)
 
     def test_static_front_never_creates_a_hegemon_for_either_declarer(self):
         for north, capital in (("NAM", "700"), ("EFL", "688"), ("AZH", "69")):
@@ -494,7 +731,7 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_mission_cannot_succeed_early_or_lose_its_clock_on_liberation(self):
         decisions = definitions(ROOT / "common/decisions/ADISCORD_nam_resource_war_decisions.txt")
         mission = block(decisions["ADISCORD_south_final_war_category"], "ADISCORD_south_preparation")
-        self.assertEqual(scalar(mission, "days_mission_timeout"), "490")
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "56")
         self.assertFalse(self.matches(block(mission, "available")))
         self.flag("ADISCORD_south_preparation_started", age=150)
         self.flag("ADISCORD_nam_resource_war_island_exile")
@@ -509,7 +746,7 @@ class SouthLifecycleTests(unittest.TestCase):
                 reward = repr(block(focus, "completion_reward"))
                 if any(effect in reward for effect in ("ADISCORD_south_demand_submission", "ADISCORD_south_offer_alliance", "ADISCORD_south_demand_annexation")):
                     self.assertIn("ADISCORD_south_nam_story_clear", repr(block(focus, "available")), name)
-                if "ADISCORD_south_final_war_start" in reward:
+                if "ADISCORD_south_prepare_offensive" in reward:
                     self.assertIn("ADISCORD_south_final_started", repr(block(focus, "bypass")), name)
         for name in ("ADISCORD_south_accept_offer", "ADISCORD_south_refuse_offer", "ADISCORD_south_finalize_submission"):
             self.assertIn("ADISCORD_south_nam_story_clear", body(EFFECTS, name))
@@ -648,6 +885,7 @@ class FocusAggregateTests(unittest.TestCase):
     )
     TREES = (
         ROOT / "focus_trees/NAM/main/focuses.txt",
+        ROOT / "focus_trees/NAM/wartime/focuses.txt",
         ROOT / "focus_trees/NAM/postwar/focuses.txt",
         ROOT / "focus_trees/NAM/defeated/focuses.txt",
         ROOT / "focus_trees/SHL/main/focuses.txt",

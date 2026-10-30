@@ -41,8 +41,8 @@ oil must matter to other countries.
 | Phase | Days (approx.) | Content |
 | --- | --- | --- |
 | Colony | 0 - 350..380 | Metropolitan oil quotas, concealed reserve, first pillar demands, memoir 1 |
-| Independence | collapse event | Declaration event sets the starting ladder balance and opens the tension clock |
-| Restitution pressure | collapse - war | Tension clock, notes, ultimatum, oil contracts, mobilisation orders, defence lines, underground, rivals |
+| Independence | collapse event | The collapse callback sets the starting ladder balance and opens the 450-day mission |
+| Restitution preparation | 450 days after collapse, plus paid extensions | Mission deadline, notes, ultimatum, oil contracts, mobilisation orders, defence lines, underground, rivals |
 | Resource war | up to 420 | Front missions, scorched wells, seal discipline, oil-score settlement |
 | Victory | after war | Border belts and punishment, then `NAM_postwar_focus`: recognition, course, endings, South, EFL/AZH aftermath, RUS crisis |
 | Standoff | after war | Pre-war border, no treaty or punishment, then the same `NAM_postwar_focus` |
@@ -59,52 +59,36 @@ are the border belts of EFL and AZH; together with Middle Loren City (701),
 which touches NAM only through 720, they are the victory award.
 Field capacity units: 67 = 8, 688 = 2, 689 = 4, 690 = 3, 719 = 1.
 
-## M1. Restitution pressure (tension clock)
+## M1. Restitution deadline and finite diplomacy
 
-Owner: core phase 1.
+The collapse starts `NAM_resource_war_deadline`, a timeout-only 450-day
+mission. It advances independently of NAM's introductory focuses. Its
+`available` condition is always false, so the native mission cannot succeed
+and skip its timeout. The same collapse callback proclaims independence;
+the super event and Tower news are not readiness gates.
 
-- Country variable `NAM_rw_tension` on NAM, 0..100. Set to 10 by
-  `ADISCORD_nam_resource_war_schedule`. Recomputed only in `on_monthly_NAM`
-  while `ADISCORD_nam_resource_war_scheduled` is set.
-- Monthly change: base +6; -4 while the tribute (`NAM_rw_tribute`) runs;
-  -2 for each active fuel contract with
-  EFL or AZH; +1 for each active embargo on EFL or AZH; +1 while two or more
-  mobilisation orders are paid. Clamp 0..100.
-- One-shot changes: diplomatic note decision -8 (cooldown 60 days);
-  each mobilisation order +2; ultimatum answers as below.
-- Thresholds (each fires once): 40 -> event `ADISCORD_nam_resource_war.20`
-  "Notes of restitution" (open talks: -5 and unlock note decisions;
-  reject: +5 and +5% war support). 70 -> event `ADISCORD_nam_resource_war.21`
-  ultimatum with four answers:
-  - **Klyuchevsk protocol**: cede state 719 to AZH and sign a 365-day tribute
-    contract to EFL and AZH (M3). Tension -40. Sets
-    `NAM_rw_protocol_signed` and pushes the earliest war date by 365 days.
-    Once per campaign.
-  - **Buy time from Azhar**: 12000 fuel goes to AZH (`NAM_rw_buy_time`,
-    once per campaign, permanent flag `NAM_rw_time_bought` dating the
-    payment). For 75 days `NAM_rw_time_bought_active` closes the war window,
-    and event `.1` moves the first backstop after the payment (or any copy
-    firing inside the window) 75 days later
-    (`ADISCORD_nam_resource_war_time_deferred`). AZH stays in the alliance and
-    always joins the war. The former AZH-neutrality treaty and its events
-    `.22`/`.23` are retired; their IDs are reserved.
-  - **Reject**: +10 tension, +10% war support.
-  - **Strike first**: hostilities start within 7 days, NAM is the declarer,
-    `ADISCORD_nam_extraction_defence_corps` is replaced by its half-strength
-    variant `ADISCORD_nam_first_strike_corps` and the coalition gets +10% war support.
-- War start: when tension reaches 100 and more than 299 days have passed since
-  the collapse (more than 664 after the protocol; the age of the
-  `ADISCORD_nam_resource_war_scheduled` flag set at the collapse edge), dispatch
-  `ADISCORD_nam_resource_war.1` in 7-21 days. The backstop is event `.1`
-  scheduled at the collapse for 420+0..60 days; with `NAM_rw_protocol_signed`
-  it reschedules itself once by 365 days instead of starting the war.
-- A failed readiness check retries once after 120+0..90 days; when no other
-  dispatch is queued, the entry stops: the scheduled flag is cleared without
-  starting or resolving the war and the paid orders are refunded. Main-tree
-  focuses that wait for the restitution clock bypass once the collapse has
-  happened and the scheduled flag is gone, so a stopped entry never locks them.
-- The clock and the next threshold are shown in scripted localisation and in
-  the basin window (M6).
+- The ordinary once-only extensions total 225 days: the restitution desk
+  adds 45; the Azhar focus transfers 6000 fuel for 75; the diplomatic note
+  costs 25 political power for 45; a paid 21-day border dossier adds 60.
+  The dossier must finish while the deadline remains open.
+- The ultimatum's 12000-fuel payment and the Azhar focus share the same
+  `NAM_rw_time_bought` receipt. Both transfer fuel to AZH and add 75 days;
+  they cannot be combined. AZH remains a coalition participant.
+- The separate Klyuchevsk protocol transfers state 719 to AZH, starts one
+  year of fuel tribute and adds 365 days to the active mission. It can be
+  signed once, after rechecking the current deadline and recipient.
+- The existing monthly callback sends the notes at no more than 300 days
+  remaining and the ultimatum at no more than 90. Each notice is sent once;
+  monthly cadence gives roughly 60-90 days after the ultimatum.
+- EFL and AZH schedule their own mobilisation callbacks 300 days after the
+  collapse. Their paid recruits and equipment survive NAM's tree changes.
+- Timeout and a voluntary first strike use the same bounded event `.1`.
+  A failed readiness check retries once after 120 plus 0-90 days. The entry
+  closes only when every queued dispatch is settled; paid orders survive
+  until actual hostilities or the final refund.
+- There is no pressure-driven second clock or independent calendar backstop.
+  Ending the threat removes the mission and settles undelivered orders.
+  The category and basin window read the native mission's remaining days.
 
 ## M2. Mobilisation, defence lines and the war
 
@@ -117,8 +101,9 @@ Owner: core phase 1.
   `custom_cost_text`, `cost = 0`, explicit debit once in `complete_effect`):
   `NAM_order_resource_guard`, `NAM_order_field_infantry`,
   `NAM_order_motor_column`, `NAM_order_coastal_battalion`.
-  Each order reserves its price in escrow variables, can be cancelled with a
-  refund before the war, and is delivered by `NAM_deliver_mobilisation_orders`
+  Each order reserves its price in escrow variables. A closed threat or lost
+  programme returns it automatically; there is no manual demobilisation decision.
+  `NAM_deliver_mobilisation_orders` delivers the paid formations
   at hostilities: prepared formations claim manpower and equipment first.
   Maximum six paid orders. `Capital Guard` and `Line Infantry Brigade` in
   `NAM.txt` remain editable. `NAM_order_ensure_templates` creates separate
@@ -253,8 +238,10 @@ Owner: core phase 2.
   `NAM_project_sea_terminal` (state 700, +1 unit usable only by overseas
   buyers VAL, STP, STS, RUS, 90 days). One project per state at a time; two in parallel.
 - Islands category `NAM_overseas_districts`: steel levy (monthly treasury,
-  compliance cost on 228, 230, 231), convoy service (convoys and island
-  supply), the 231 steel concession offered to VAL or GLP with consent, and
+  -15% local resource extraction on 228, 230, 231 during its 180-day term),
+  convoy service (eight convoys and +15% island extraction for 180 days),
+  paid road works (+1 infrastructure in 42 days),
+  the 231 steel concession offered to VAL or GLP with consent, and
   renegotiation of VAL's 230 concession (VAL consents or loses it with a
   relation penalty). The islands also carry the exiled government after a
   lost war (M2); there is no separate island independence movement.
@@ -307,42 +294,50 @@ Owner: core phase 3.
 
 ## M5. Focus trees
 
-Owner: focus phase.
+The seven authored NAM trees contain 369 distinct focuses:
 
-- `NAM_focus` (`focus_trees/NAM/main/focuses.txt`): colony and independence,
-  administration and ladder, oil and islands, pillars and rivals, underground,
-  mobilisation and lines, harbour, an expanded war branch (about ten focuses)
-  with `bypass` once the war has passed. The post-war branch moves out.
-  Target about 110 focuses, one route fitting the ~1000-day window; every major
-  branch has a mutually exclusive pair with different play.
-- `NAM_postwar_focus` (`focus_trees/NAM/postwar/focuses.txt` ->
-  `common/national_focus/ADISCORD_NAM_postwar.txt`): loaded by the victory
-  and standoff settlements with `keep_completed = yes`. Contains the moved post-war focuses
-  with their IDs preserved plus EFL/AZH aftermath (normalisation or border
-  revenge pair), oil expansion, the South-war branch, RUS-crisis participation
-  and the endings. About 60 focuses.
-- `NAM_defeated_focus` (`focus_trees/NAM/defeated/focuses.txt` ->
-  `common/national_focus/ADISCORD_NAM_defeated.txt`): revenge (rebuild,
-  underground return, a scripted war of return after preparation, symmetric)
-  or accommodation (tribute ends early, oil union with the coalition, path to
-  the South). About 25 focuses.
-- AI plan `common/ai_strategy_plans/ADISCORD_NAM_plans.txt` choosing one
-  alternative of every pair.
-- Builder `SOURCES`, `tools/data/generated_output_owners.json` and the tree
-  selection test are updated for the two new trees.
+| Tree | Focuses | Campaign role |
+| --- | --- | --- |
+| `NAM_focus` | 102 | Colony, independence and parallel preparation programmes |
+| `NAM_wartime_focus` | 12 | Replaces preparation during the resource war |
+| `NAM_postwar_focus` | 54 | Victory/standoff, domestic courses, southern campaign and regional settlement |
+| `NAM_defeated_focus` | 22 | Compromise, revenge or accommodation |
+| `NAM_exile_radical_focus` | 72 | Radical island government and return |
+| `NAM_exile_humanist_focus` | 73 | Humanist island government, districts and return |
+| `NAM_exile_corporate_focus` | 34 | Corporate takeover and its military/economic choices |
+
+All three colonial chains, choosing one alternative in each pair, reach
+`NAM_letters_to_the_centre` in 329 focus-days. The gateway requires the
+three endings in separate prerequisite blocks and displays the green unlock
+message. Independent branch roots depend directly on `NAM_independence_day`;
+the gateway exposes those branches without a chain between unrelated programmes.
+The main tree spans at most 73 horizontal coordinate units and reaches row 13.
+Visual spacing and legibility still require a manual in-game check.
+
+The war tree is selected at actual hostilities. Completed preparation remains
+shared history, and paid programmes retain their own receipts through tree
+replacement. Settlement selects the postwar, defeated or exile tree and keeps
+completed focuses. The 12-node navy branch has a shared landing programme and
+an exclusive escort/squadron strategy. Country variables hold the army, navy
+and air aggregates; dummy ideas preview deltas without being installed.
+
+Main preparation uses the 450-day deadline and finite extensions described in
+M1, not an assumed fixed 1000-day window. `ADISCORD_NAM_plans.txt` names one
+alternative of each exclusive choice. Authoring, generated outputs and shared
+history are owned by `build_adiscord_focus_trees` and the output registry.
+See the focus-effects guide for paid-programme budgets, exact delivery/refund
+contracts, route-specific southern readiness and the remaining design choices.
 
 ## M6. Basin window
 
-Owner: GUI phase.
-
-Scripted GUI opened from the `NAM_national_programmes` category, compact
-template (one card definition reused per state through state scopes rather
-than copied per button): tension or seal discipline, underground, ladder
-balance, five node cards (67, 688, 689, 690, 700) with condition, capacity,
-committed units and the project in progress, the islands card and the
-contract list. Buttons call the same effects and triggers as the decisions
-and show an "After:" preview. Files: `interface/ADISCORD_NAM_basin.gui`,
-`interface/ADISCORD_NAM_basin.gfx`, `common/scripted_guis/ADISCORD_NAM_scripted_gui.txt`.
+The scripted GUI opens from `NAM_national_programmes`. It shows the resource
+mission's remaining days or wartime seal discipline, the underground and
+ladder, field/harbour cards for 67, 688, 689, 690, 719 and 700, islands and
+contracts. Ownership, control, condition, capacity and paid work remain visible.
+Buttons share the decision predicates and settlement effects; the interface
+is not another simulation timer. Files: `interface/ADISCORD_NAM_basin.gui`,
+`interface/ADISCORD_NAM_basin.gfx` and
+`common/scripted_guis/ADISCORD_NAM_scripted_gui.txt`.
 
 ## M7. Cross-country links
 
@@ -355,7 +350,7 @@ Owner: foreign phase (VAL, South, RUS files) and core phases (NAM-side events).
   convoy interdiction, negotiations). The post-war tree opens one of
   `NAM_south_allied_fuel` and `NAM_south_convoy_interdiction` through an
   exclusive pair; the defeat tree's `NAM_defeat_southern_charter`, which
-  starts the South war itself, opens both.
+  queues its offensive for the shared warning deadline, opens both.
 - RUS crisis: a NAM event to supply the coalition with oil or demand a share.
 - EFL/AZH after a NAM victory: normalisation or border incidents (post-war tree).
 
@@ -379,10 +374,10 @@ Owner: core phase 4 (third playtest batch).
 
 - Colony phase (`NAM_colony_phase`: no `NAM_center_vanished`, no
   `ADISCORD_vorkerland_collapse_wars_started`). Category `NAM_colony`:
-  `NAM_wrk_fuel_shipment` (4000 fuel, 45-day cooldown; treasury
-  120 + 30 x `NAM_wrk_trade_level`, WRK opinion, namestniks +4, oil -3),
-  `NAM_wrk_trade_concession` (50 PP + 200 treasury in escrow, 45 days; then
-  25 + 15 x level treasury a month in `on_monthly_NAM` until the collapse),
+  `NAM_wrk_fuel_shipment` (4000 fuel, 30-day cooldown; treasury
+  180 + 40 x `NAM_wrk_trade_level`, WRK opinion, namestniks +4, oil -3),
+  `NAM_wrk_trade_concession` (50 PP + 200 treasury in escrow, 21 days; then
+  40 + 20 x level treasury a month in `on_monthly_NAM` until the collapse),
   `NAM_counterinsurgency_sweep` (state-targeted 67/688/689/690/719/700,
   20 PP + 75 treasury in a state escrow, 21 days, one at a time, 120-day
   state cooldown; underground -8, -12 in 688, districts -4, 30% excesses).
@@ -429,14 +424,19 @@ Owner: core phase 4 (third playtest batch).
   75, punitive raid .93.
 - Marines: `NAM_order_marines` (50 loot + 4300 manpower, escrow
   `NAM_marine_orders_paid`, cap `NAM_marine_order_cap` base 1 max 3,
-  `NAM_order_marines_release` refunds before the war of return). Template
+  `NAM_order_marines_release` refunds before the first war of return). Template
   `Island Marines` (4 `ADISCORD_marine_infantry`, engineer) through the
-  script-only tech `ADISCORD_tech_svetlogorsk_marine_corps`.
+  script-only tech `ADISCORD_tech_svetlogorsk_marine_corps`. Its composition
+  stays fixed while orders are open; ordinary recruitment remains available.
+  The delivery receipt closes subsidised orders even when its value is zero.
 - Revenge landing: `NAM_war_of_return_start` from exile calls
-  `NAM_wor_revenge_landing` after the declaration: 2 marine divisions plus a
-  third for a paid order or `NAM_revenge_readiness` >= 70 spawn in state 700
-  (`prioritize_location = 16716`, enemy provinces allowed); further paid
-  orders form on the island capital; report .94.
+  `NAM_wor_revenge_landing` after the declaration. The first expedition has
+  2 marine divisions plus a third for a paid order or
+  `NAM_revenge_readiness` >= 70; further paid orders form on the island
+  capital. Delivery also works when NAM already controls state 700, or falls
+  back to the island when the harbour is unavailable. Report .94 requires
+  actual hostile capture. The delivery receipt prevents a renewed war from
+  issuing another free expedition or reopening subsidised orders.
 
 ## M10. Exile revolution: radicals or humanists
 
@@ -593,13 +593,15 @@ returned south and the great war against the rest of the south.
 
 ## Shared contract for focus rewards
 
-Focus rewards may only use native effects and the identifiers below. A focus
-changes a value with `add_to_variable` and then calls the named clamp or
-refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
+Focus rewards use native output and the existing country helpers. The table
+below identifies the shared systems; it is not a closed list of allowed
+programmes. New country mechanics extend their existing files and follow the
+[focus-effects guide](../../development/focus-effects.md). Variable changes
+call their clamp or refresh in `hidden_effect` and show the exact delta.
 
 | Value or hook | Owner phase | Meaning |
 | --- | --- | --- |
-| `NAM_rw_tension` + `NAM_rw_tension_clamp = yes` | core 1 | Restitution pressure 0..100 |
+| `days_mission_timeout@NAM_resource_war_deadline` | core 1 | Read-only native remaining days; once-only extensions use `add_days_mission_timeout` |
 | `NAM_seal_discipline` + `NAM_seal_discipline_clamp = yes` | core 1 | War discipline 0..100 |
 | `NAM_line_slots` (base 2) | core 1 | Parallel defence-line preparations |
 | `NAM_order_cap` (base 4, max 6) | core 1 | Mobilisation orders allowed |
@@ -610,7 +612,7 @@ refresh effect inside `hidden_effect`, with a visible tooltip of the delta.
 | `add_power_balance_value = { id = NAM_ladder_bop value = <x> }` | core 3 | Ladder balance, negative toward vertical |
 | `NAM_apply_ending_iron`, `NAM_apply_ending_service`, `NAM_apply_ending_federation`, `NAM_apply_ending_oil_union` | core 3 | Ending effects called by the ending focuses |
 | `NAM_wrk_trade_level` + `NAM_wrk_trade_refresh = yes` | core 4 | Trade houses in the metropole 0..3 |
-| `NAM_center_vanished` country flag | core 4 | Set by event .80 at the collapse; `allow_branch` of post-collapse branches |
+| `NAM_center_vanished` country flag | core 4 | Colony closure; independent `allow_branch` conditions read completed `NAM_letters_to_the_centre` |
 | `NAM_pirate_loot` via temp `NAM_pirate_loot_change` + `NAM_pirate_loot_add = yes` | core 4 | Exile loot |
 | `NAM_pirate_notoriety` + `NAM_pirate_notoriety_clamp = yes` | core 4 | Coalition attention 0..100 |
 | `NAM_pirate_raid_slots` (base 1, max 3) | core 4 | Parallel raids |
@@ -635,8 +637,9 @@ core 2 - `NAM_oil_contract_offer`, `NAM_fuel_embargo`, `NAM_project_repair_wells
 `NAM_renegotiate_val_concession`, `NAM_south_allied_fuel`, `NAM_south_convoy_interdiction`;
 core 3 - `NAM_favour_nam`, `NAM_favour_oil`, `NAM_favour_dist`, `NAM_favour_garr`,
 `NAM_favour_trade`, `NAM_weber_talks_1`, `NAM_hunt_caches`.
-A focus that needs anything else lists the request in its author's report; the
-lead assigns it to the next core phase instead of inventing a call.
+Additional programme IDs are defined in the existing NAM decisions file.
+An unlock must be available on its actual route and keep its full price,
+duration and delivery contract in the decision.
 
 ## File ownership
 
@@ -648,6 +651,9 @@ Russian text goes to `localisation/russian/ADISCORD_nam_resource_war_l_russian.y
 
 ## Verification
 
-Static only unless the user asks: builder `--check` then `--apply` and a second
-idempotent `--check`, the NAM validator, `git diff --check`. The game is not
-restarted by agents; runtime behaviour remains unproven until the user plays it.
+Use builder `--check`, explicit `--apply` and a second idempotent `--check`
+for generated changes; run affected tests, the NAM validator,
+`python -B tools/validate_tc.py --limit 300` and `git diff --check`.
+Computer Use and agent-controlled game launches are prohibited. Native loading,
+UI and campaign behaviour remain unverified until a manual new-campaign check
+with the recorded source hashes.

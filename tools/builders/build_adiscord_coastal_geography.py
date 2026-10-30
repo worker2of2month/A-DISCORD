@@ -233,6 +233,7 @@ NUDGE_SPLIT_DONORS = frozenset({
 })
 DISPLACED_PROVINCES |= NUDGE_SPLIT_DONORS
 COLOURMAP = Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
+COLOURMAP_SOURCE = Path("tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds")
 SEA_FLOOR_HEIGHT = 89
 
 
@@ -725,8 +726,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             encoded = BytesIO()
             normal.save(encoded, format="BMP")
             outputs[normal_path] = encoded.getvalue()
-    outputs[COLOURMAP] = patch_colourmap(read(COLOURMAP), islands)
-    outputs[COLOURMAP] = patch_colourmap(outputs[COLOURMAP], cities, (102, 99, 88, 1))
+    # Full compression blocks are safe under island water, but city blocks
+    # extend onto visible rural ground. Preserve the authored mainland tint.
+    outputs[COLOURMAP] = patch_colourmap(read(COLOURMAP_SOURCE), islands)
     tree_path = Path("map/trees.bmp")
     original = read(tree_path)
     with Image.open(BytesIO(original)) as source:

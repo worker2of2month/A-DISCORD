@@ -696,18 +696,19 @@
       "profiles": [
         "common",
         "fragment_low_tech",
-        "naval"
+        "naval",
+        "naval_taskforce"
       ],
       "common_only": false,
       "rationale": "Black Basin levy couples a small field formation with an operating dockyard and coastal flotilla.",
       "evidence": {
-        "states": 3,
+        "states": 6,
         "civilian_factories": 3,
         "military_factories": 1,
         "dockyards": 1,
         "air_bases": 1,
         "power_sites": 0,
-        "infrastructure_levels": 9,
+        "infrastructure_levels": 18,
         "research_slots": 2,
         "convoys": 0,
         "oob_divisions": 3,
@@ -731,6 +732,7 @@
         "ADISCORD_tech_homing_torpedoes",
         "ADISCORD_tech_improvised_air_defense",
         "ADISCORD_tech_industrial_organization_baseline",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
@@ -1813,18 +1815,19 @@
         "common",
         "fragment_low_tech",
         "land",
-        "naval"
+        "naval",
+        "naval_taskforce"
       ],
       "common_only": false,
       "rationale": "Small regional state maintains a standing army, an operating dockyard, and a coastal flotilla despite limited industrial depth.",
       "evidence": {
-        "states": 6,
+        "states": 10,
         "civilian_factories": 5,
         "military_factories": 2,
         "dockyards": 1,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 18,
+        "infrastructure_levels": 30,
         "research_slots": 2,
         "convoys": 0,
         "oob_divisions": 4,
@@ -1851,6 +1854,7 @@
         "ADISCORD_tech_homing_torpedoes",
         "ADISCORD_tech_improvised_air_defense",
         "ADISCORD_tech_industrial_organization_baseline",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
@@ -3421,7 +3425,8 @@
       "profiles": [
         "common",
         "fragment_low_tech",
-        "naval"
+        "naval",
+        "naval_taskforce"
       ],
       "common_only": false,
       "rationale": "Thinly industrialized regional administration retains an operating dockyard and coastal fleet beside its small field force.",
@@ -3456,6 +3461,7 @@
         "ADISCORD_tech_homing_torpedoes",
         "ADISCORD_tech_improvised_air_defense",
         "ADISCORD_tech_industrial_organization_baseline",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",

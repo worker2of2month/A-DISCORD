@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 from tools.lib.paths import source_section
+from tools.validators._vorkerland_release_contract import base_front_controls, validate_adaptive_fronts
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,6 +17,33 @@ AI_FILES = (
 
 
 class VorkerlandFrontControlRatioTests(unittest.TestCase):
+    def test_adaptive_front_validation_rejects_unbounded_overrides(self) -> None:
+        from tools.validators._vorkerland_release_contract import validate_adaptive_fronts
+        from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block
+
+        source = AI_FILES[0].read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_vorkerland_front_central_against_eyr")
+        issues = []
+        validate_adaptive_fronts(profile, issues)
+        self.assertEqual(issues, [])
+        for old, new in (
+            ("ADISCORD_difficulty_enemy_requires_caution = yes", "always = yes"),
+            ("ADISCORD_difficulty_enemy_allows_push = yes", "ADISCORD_difficulty_enemy_allows_push = no"),
+            ("tag = EYR\n", "tag = REV\n"),
+            ("priority = 1251", "priority = 2001"),
+            ("execution_type = rush_weak", "execution_type = rush"),
+            ("manual_attack = yes", "manual_attack = no"),
+            ("ratio = 0.01\n", "ratio = 0.50\n"),
+            ("execute_order = yes\n", "execute_order = no\n"),
+            ("manual_attack = no }", "manual_attack = yes }"),
+        ):
+            with self.subTest(mutation=new):
+                mutated = profile.replace(old, new, 1)
+                self.assertNotEqual(mutated, profile)
+                issues = []
+                validate_adaptive_fronts(mutated, issues)
+                self.assertTrue(issues)
+
     def test_front_control_thresholds_can_activate(self) -> None:
         for path in AI_FILES:
             source = path.read_text(encoding="utf-8-sig")
@@ -42,9 +70,10 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
         checked = 0
         for name in re.findall(r"(?m)^(ADISCORD_vorkerland_\w+)\s*=\s*\{", source):
             profile = named_block(source, name)
-            for strategy in named_blocks(profile, "ai_strategy"):
-                if not re.search(r"\btype\s*=\s*front_control\b", strategy):
-                    continue
+            issues = []
+            validate_adaptive_fronts(profile, issues)
+            self.assertEqual(issues, [])
+            for strategy in base_front_controls(profile):
                 checked += 1
                 with self.subTest(profile=name):
                     self.assertIn("manual_attack = no", strategy)
@@ -134,9 +163,10 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
         checked = 0
         for name in re.findall(r"(?m)^(ADISCORD_vorkerland_\w+)\s*=\s*\{", source):
             profile = named_block(source, name)
-            for strategy in named_blocks(profile, "ai_strategy"):
-                if not re.search(r"\btype\s*=\s*front_control\b", strategy):
-                    continue
+            issues = []
+            validate_adaptive_fronts(profile, issues)
+            self.assertEqual(issues, [])
+            for strategy in base_front_controls(profile):
                 checked += 1
                 with self.subTest(profile=name):
                     self.assertRegex(strategy, r"\bratio\s*=\s*0\.01\b")

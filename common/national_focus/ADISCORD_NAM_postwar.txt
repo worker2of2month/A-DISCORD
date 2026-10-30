@@ -755,7 +755,7 @@ focus_tree = {
 			has_completed_focus = NAM_service_state
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -763,7 +763,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_nam_emergency_writs }
 			custom_effect_tooltip = NAM_south_seal_over_furnaces_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = {
 			base = 5
@@ -812,6 +812,8 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			69 = { remove_claim_by = NAM }
+			727 = { remove_claim_by = NAM }
+			728 = { remove_claim_by = NAM }
 			add_stability = 0.05
 			EFL = {
 				if = {
@@ -862,6 +864,7 @@ focus_tree = {
 			add_war_support = 0.08
 			army_experience = 20
 			68 = { add_claim_by = NAM }
+			725 = { add_claim_by = NAM }
 			custom_effect_tooltip = NAM_grp_border_revenge_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_garr_support value = 6 }
@@ -940,15 +943,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			every_state = {
+			every_owned_state = {
 				limit = {
 					OR = {
+						state = 67
+						state = 688
+						state = 689
+						state = 690
+						state = 700
+						state = 719
 						state = 701
 						state = 720
 						state = 721
 						state = 722
 					}
-					is_owned_by = NAM
 					is_controlled_by = NAM
 				}
 				add_building_construction = {
@@ -1390,8 +1398,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
 				NAM_refresh_administration = yes
 			}
-			unlock_decision_tooltip = NAM_charter_fuel_aid
-			custom_effect_tooltip = NAM_charter_fuel_aid_unlock_tt
+			if = {
+				limit = { hidden_trigger = { NAM_pw_charter_ally_available = yes } }
+				unlock_decision_tooltip = NAM_charter_fuel_aid
+				custom_effect_tooltip = NAM_charter_fuel_aid_unlock_tt
+			}
+			else = { custom_effect_tooltip = NAM_charter_fuel_aid_future_tt }
 			custom_effect_tooltip = NAM_grp_oil_fund_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_oil_support value = 6 }
@@ -1680,7 +1692,7 @@ focus_tree = {
 			has_completed_focus = NAM_federal_charter
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_ready_tt
-				ADISCORD_south_final_can_start = yes
+				ADISCORD_south_final_focus_available = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -1688,7 +1700,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = ADISCORD_south_nam_charter_levies }
 			custom_effect_tooltip = NAM_south_oil_charter_tt
-			hidden_effect = { ADISCORD_south_final_war_start = yes }
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = {
 			base = 5
@@ -1913,6 +1925,16 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_compliance_gain value = 0.05 }
 				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
 				NAM_refresh_administration = yes
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_civil_dividend } } }
+				unlock_decision_tooltip = NAM_veteran_housing
+				custom_effect_tooltip = NAM_veteran_housing_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_armed_peace } } }
+				unlock_decision_tooltip = NAM_postwar_rearmament
+				custom_effect_tooltip = NAM_postwar_rearmament_unlock_tt
 			}
 		}
 		ai_will_do = {

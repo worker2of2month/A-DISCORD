@@ -102,7 +102,7 @@ NAM_overseas_districts = {
 		OR = {
 			has_completed_focus = NAM_island_levy_office
 			has_completed_focus = NAM_island_concession
-			has_completed_focus = NAM_island_convoys
+			has_completed_focus = NAM_harbour_service
 			has_completed_focus = NAM_reclaim_230
 		}
 	}
@@ -150,4 +150,16 @@ NAM_treasury = {
 	}
 	visible_when_empty = yes
 	priority = 19
+}
+
+NAM_coalition_logistics = {
+	icon = generic_industry
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	visible = { has_country_flag = NAM_rw_coalition_mobilised }
+	priority = 20
 }

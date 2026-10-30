@@ -8070,7 +8070,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "APH": ("fragment_low_tech",),
     "ARS": ("fragment_low_tech",),
     "AUR": ("fragment_low_tech",),
-    "AZH": ("fragment_low_tech", "naval"),
+    "AZH": ("fragment_low_tech", "naval", "naval_taskforce"),
     "BBV": ("fragment_low_tech",),
     "BCM": ("fragment_low_tech",),
     "BGT": ("fragment_low_tech",),
@@ -8086,7 +8086,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "DOL": ("fragment_low_tech",),
     "DRV": ("fragment_low_tech",),
     "VEL": ("fragment_low_tech",),
-    "EFL": ("fragment_low_tech", "land", "naval"),
+    "EFL": ("fragment_low_tech", "land", "naval", "naval_taskforce"),
     "ELN": ("institutional",),
     "EXZ": (),
     "RSV": (),
@@ -8103,7 +8103,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "LYS": ("fragment_low_tech", "institutional"),
     "MON": ("industrial", "institutional", "land", "air"),
     "MZR": ("fragment_low_tech", "energy"),
-    "NAM": ("fragment_low_tech", "naval"),
+    "NAM": ("fragment_low_tech", "naval", "naval_taskforce"),
     "NOD": (
         "industrial",
         "energy",
@@ -12886,6 +12886,7 @@ def main() -> int:
         action="store_true",
         help="write technology files, manifests, GUI and localisation",
     )
+    actions.add_argument("--check-starting-profiles", action="store_true")
     actions.add_argument(
         "--apply-starting-profiles",
         action="store_true",
@@ -13168,10 +13169,17 @@ def main() -> int:
         for path in changed:
             print(path.relative_to(ROOT))
         return int(bool(changed) and not args.apply)
-    if args.apply_starting_profiles:
-        write_starting_technology_effect()
-        write_starting_technology_profile_manifest()
-        return 0
+    if args.check_starting_profiles or args.apply_starting_profiles:
+        outputs = {
+            ROOT / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt": render_starting_technology_effect().encode("utf-8"),
+            ROOT / "tools/data/adiscord_starting_technology_profiles.json": render_starting_technology_profile_manifest().encode("utf-8"),
+        }
+        changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+        for path in changed:
+            print(f"{'WRITE' if args.apply_starting_profiles else 'STALE'} {path.relative_to(ROOT)}")
+            if args.apply_starting_profiles:
+                path.write_bytes(outputs[path])
+        return int(bool(changed) and not args.apply_starting_profiles)
     if args.apply:
         apply()
         return 0

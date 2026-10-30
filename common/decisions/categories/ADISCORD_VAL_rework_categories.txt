@@ -17,6 +17,7 @@ VAL_military_operations = {
 		OR = {
 			has_country_flag = VAL_operations_map_unlocked
 			has_completed_focus = VAL_Different_Views_On_Freedom
+			has_country_flag = VAL_cw_mobilizing
 		}
 	}
 	visible_when_empty = yes
@@ -87,6 +88,10 @@ VAL_foreign_sales = {
 			has_country_flag = VAL_cw_trade_course
 			has_country_flag = VAL_operation_sell_rifles_to_cin
 			has_country_flag = VAL_operation_sell_rifles_to_osf
+			has_country_flag = STP_ps_val_authorized
+			has_variable = STP_ps_val_receipt_rifles
+			has_active_mission = STP_ps_val_departure
+			has_active_mission = STP_ps_val_route_wait
 		}
 	}
 	visible_when_empty = yes

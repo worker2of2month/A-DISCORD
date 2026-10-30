@@ -1,9 +1,5 @@
-# The joint-victory succession loads this separate imperial campaign tree.
-# Five branches meet the war with Itora: the court after the tribunal, the
-# district governors, the legions, the imperial economy and the western
-# treaties. Every branch holds one exclusive choice; most of them move the
-# Shadow of Petrishchev balance between Worcker's court and the officer corps.
-# The imperial peace branch opens only after the western victory.
+# Imperial institutions share a military campaign; their founding cabinets
+# retain separate political branches and settlements.
 focus_tree = {
 	id = ADISCORD_vorkerland_world_empire_focus
 	country = {
@@ -50,16 +46,21 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_empire_after_the_tribunal }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = no }
 		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = no }
 			is_subject = no
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 75
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.10
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_court_of_the_chairman }
 			hidden_effect = {
@@ -79,16 +80,21 @@ focus_tree = {
 		prerequisite = { focus = WRK_empire_court_of_the_chairman }
 		mutually_exclusive = { focus = WRK_empire_posthumous_rehabilitation }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = no }
 		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = no }
 			is_subject = no
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_stability = 0.05
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.15
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.15
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_erase_petrishchev }
 			hidden_effect = {
@@ -108,7 +114,9 @@ focus_tree = {
 		prerequisite = { focus = WRK_empire_court_of_the_chairman }
 		mutually_exclusive = { focus = WRK_empire_erase_petrishchev }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = no }
 		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = no }
 			is_subject = no
 			has_capitulated = no
 		}
@@ -116,9 +124,12 @@ focus_tree = {
 		completion_reward = {
 			add_war_support = 0.10
 			army_experience = 25
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.15
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.15
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_posthumous_rehabilitation }
 			hidden_effect = {
@@ -140,7 +151,9 @@ focus_tree = {
 			focus = WRK_empire_posthumous_rehabilitation
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = no }
 		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = no }
 			is_subject = no
 			has_capitulated = no
 		}
@@ -164,16 +177,21 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_empire_state_union }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = no }
 		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = no }
 			is_subject = no
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.10
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.10
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_saved_chairman_cult }
 			hidden_effect = {
@@ -182,6 +200,100 @@ focus_tree = {
 			}
 		}
 		ai_will_do = { base = 5 }
+	}
+
+	# The restoration charter sets the relationship between service and land.
+	focus = {
+		id = WRK_empire_crown_service
+		icon = GFX_focus_generic_worker_administration
+		x = 0
+		y = 1
+		cost = 4
+		prerequisite = { focus = WRK_empire_after_the_tribunal }
+		mutually_exclusive = { focus = WRK_empire_officer_estates }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
+			custom_effect_tooltip = WRK_empire_crown_service_tt
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = { id = ADISCORD_vorkerland_empire_bop value = -0.15 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = WRK_empire_officer_estates
+		icon = GFX_focus_generic_military_dictatorship
+		x = 4
+		y = 1
+		cost = 4
+		prerequisite = { focus = WRK_empire_after_the_tribunal }
+		mutually_exclusive = { focus = WRK_empire_crown_service }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_empire_appoint_governor
+			custom_effect_tooltip = WRK_empire_officer_estates_tt
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = { id = ADISCORD_vorkerland_empire_bop value = 0.15 }
+			}
+			hidden_effect = {
+				every_owned_state = {
+					limit = {
+						is_core_of = ROOT
+						is_controlled_by = ROOT
+						has_state_flag = WRK_empire_governor_seat
+					}
+					ADISCORD_vorkerland_empire_grant_estate = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = WRK_empire_crown_charter
+		icon = GFX_goal_generic_national_unity
+		x = 2
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = WRK_empire_crown_service
+			focus = WRK_empire_officer_estates
+		}
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = WRK_empire_delta_crown_charter }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_stability value = 0.05 }
+				add_to_variable = { var = WRK_empire_politics value = 0.05 }
+				ADISCORD_vorkerland_empire_refresh_court = yes
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	# ----- Imperial governors -----
@@ -222,9 +334,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.05
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.10
+				}
 			}
 			custom_effect_tooltip = WRK_empire_military_governors_tt
 		}
@@ -247,9 +362,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_stability = 0.05
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.10
+				}
 			}
 			custom_effect_tooltip = WRK_empire_civil_governors_tt
 		}
@@ -295,9 +413,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.05
+				}
 			}
 			custom_effect_tooltip = WRK_empire_staff_advisor_tt
 			effect_tooltip = { add_ideas = WRK_empire_delta_staff_without_petrishchev }
@@ -328,9 +449,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 3000 producer = WRK }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 2000 producer = WRK }
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.10
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_guard_legions }
 			hidden_effect = {
@@ -359,9 +483,12 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 60000
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 producer = WRK }
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.05
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_imperial_levy }
 			hidden_effect = {
@@ -465,9 +592,12 @@ focus_tree = {
 			add_political_power = 150
 			add_stability = -0.05
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = WRK }
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.05
+				}
 			}
 		}
 		ai_will_do = { base = 10 }
@@ -516,9 +646,12 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.05
+				}
 			}
 			unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district
 			custom_effect_tooltip = WRK_pw_reconstruction_unlock_tt
@@ -670,9 +803,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.10
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.05
+				}
 			}
 			custom_effect_tooltip = WRK_empire_western_ultimatum_tt
 			effect_tooltip = { add_ideas = WRK_empire_delta_western_ultimatum }
@@ -700,9 +836,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.05
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.05
+				}
 			}
 			custom_effect_tooltip = WRK_empire_district_guarantees_tt
 			hidden_effect = {
@@ -837,9 +976,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = -0.20
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = -0.20
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_tower_coronation }
 			hidden_effect = {
@@ -867,9 +1009,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 50
-			add_power_balance_value = {
-				id = ADISCORD_vorkerland_empire_bop
-				value = 0.10
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = {
+					id = ADISCORD_vorkerland_empire_bop
+					value = 0.10
+				}
 			}
 			effect_tooltip = { add_ideas = WRK_empire_delta_marshals_council }
 			hidden_effect = {

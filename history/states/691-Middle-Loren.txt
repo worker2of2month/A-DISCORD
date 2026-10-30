@@ -2,18 +2,17 @@
 state={
 	id=691
 	name="STATE_691"
-	provinces={
-		786 797 1411 2473 3046 3176 3730 3833 3916 4060 4424 5260
-		5579 6331 7502 8194 8904 10454 10722 11083 11652 12131 12218 12306
-		12830
+	resources = {
+		tungsten = 1
 	}
-	manpower = 150000
+	provinces={
+		786 797 2473 3730 3833 4060 5579 8194 8904 10722 11083 12131
+		12218 12306 12830
+	}
+	manpower = 940000
 	buildings_max_level_factor = 1.000
 	state_category = rural
-	local_supplies = 1.0
-	resources = {
-		tungsten = 2
-	}
+	local_supplies = 0.6
 	history = {
 		owner = EFL
 		add_core_of = EFL

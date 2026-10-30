@@ -103,7 +103,7 @@ defined_text = {
 		trigger = {
 			ADISCORD_south_crisis_open = yes
 			has_global_flag = ADISCORD_south_preparation_started
-			ADISCORD_south_preparation_elapsed = no
+			NOT = { has_global_flag = ADISCORD_south_crisis_warned }
 		}
 		localization_key = ADISCORD_south_status_preparation
 	}
@@ -113,6 +113,10 @@ defined_text = {
 			NOT = { ADISCORD_south_north_candidate_exists = yes }
 		}
 		localization_key = ADISCORD_south_status_no_rival
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_south_crisis_warned }
+		localization_key = ADISCORD_south_status_warning
 	}
 	text = {
 		trigger = { ADISCORD_south_crisis_open = yes }
@@ -125,4 +129,22 @@ defined_text = {
 	text = {
 		localization_key = ADISCORD_south_status_closed
 	}
+}
+
+defined_text = {
+	name = ADISCORDSouthShlReadiness
+	text = {
+		trigger = { SHL = { ADISCORD_south_shl_focus_ready = yes } }
+		localization_key = ADISCORD_south_shl_ready
+	}
+	text = { localization_key = ADISCORD_south_shl_pending }
+}
+
+defined_text = {
+	name = ADISCORDSouthNorthReadiness
+	text = {
+		trigger = { ADISCORD_south_north_focus_ready = yes }
+		localization_key = ADISCORD_south_north_ready
+	}
+	text = { localization_key = ADISCORD_south_north_pending }
 }

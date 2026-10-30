@@ -1,5 +1,11 @@
 capital = 701
 
+ADISCORD_grant_technology_profile_common = yes
+ADISCORD_grant_technology_profile_fragment_low_tech = yes
+ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
+
 oob = "EFL"
 ####### Characters
 

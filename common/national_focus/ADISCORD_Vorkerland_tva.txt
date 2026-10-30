@@ -37,7 +37,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 68
+		x = 74
 		y = 7
 		cost = 1
 		allow_branch = {
@@ -65,6 +65,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_utilitarian_directorate }
 		completion_reward = {
+			unlock_decision_tooltip = TVA_confirm_schedule
+			unlock_decision_tooltip = TVA_hear_councils
 			add_political_power = 20
 			add_stability = 0.02
 			add_manpower = 250
@@ -111,6 +113,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_grid_rerouted }
 		completion_reward = {
+			custom_effect_tooltip = TVA_reroute_city_grid_metrics_tt
+			unlock_decision_tooltip = TVA_maintenance_programme
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = -10 }
+				TVA_refresh_administration = yes
+			}
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_grid_rerouting days = 35 }
 			add_command_power = 5
 			hidden_effect = {
@@ -129,7 +137,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -3
+		x = -2
 		y = 1
 		relative_position_id = TVA_codify_utilitarian_directorate
 		cost = 2
@@ -154,6 +162,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_laboratories_deployed }
 		completion_reward = {
+			custom_effect_tooltip = TVA_deploy_field_laboratories_metrics_tt
+			unlock_decision_tooltip = TVA_cadre_training_programme
+			hidden_effect = {
+				add_to_variable = { var = TVA_cadre_reserve value = 10 }
+				TVA_refresh_administration = yes
+			}
 			unlock_decision_tooltip = TVA_deploy_field_laboratories_activate_plan
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_laboratories_deployed
@@ -174,7 +188,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = TVA_deploy_field_laboratories
-		cost = 2
+		cost = 1
 		prerequisite = { focus = TVA_deploy_field_laboratories }
 		allow_branch = {
 			tag = TVA
@@ -217,10 +231,10 @@ focus_tree = {
 			FOCUS_FILTER_MANPOWER
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = -3
+		x = -4
 		y = 1
 		relative_position_id = TVA_select_trial_protocol
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_select_trial_protocol }
 		mutually_exclusive = {
 			focus = TVA_test_remote_fire_control
@@ -247,8 +261,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions }
 		completion_reward = {
-			add_manpower = 3000
-			army_experience = 15
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_run_field_trial
+			custom_effect_tooltip = TVA_trial_battalion_unlock_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_technical_battalions
 			}
@@ -267,7 +281,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = TVA_reroute_city_grid
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_reroute_city_grid }
 		allow_branch = {
 			tag = TVA
@@ -289,6 +303,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_output_norms }
 		completion_reward = {
+			custom_effect_tooltip = TVA_issue_emergency_output_norms_metrics_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 10 }
+				TVA_refresh_administration = yes
+			}
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_emergency_output_board days = 70 }
 			if = {
 				limit = { controls_state = 36 }
@@ -316,10 +335,10 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
+		x = -2
 		y = 1
 		relative_position_id = TVA_issue_emergency_output_norms
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_issue_emergency_output_norms }
 		allow_branch = {
 			tag = TVA
@@ -341,6 +360,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_mobile_repair_trains }
 		completion_reward = {
+			custom_effect_tooltip = TVA_build_mobile_repair_trains_metrics_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = -10 }
+				TVA_refresh_administration = yes
+			}
 			army_experience = 5
 			add_command_power = 5
 			unlock_decision_tooltip = TVA_build_mobile_repair_trains_activate_plan
@@ -364,7 +388,7 @@ focus_tree = {
 		x = 6
 		y = 1
 		relative_position_id = TVA_codify_utilitarian_directorate
-		cost = 2
+		cost = 1
 		prerequisite = { focus = TVA_codify_utilitarian_directorate }
 		allow_branch = {
 			tag = TVA
@@ -409,7 +433,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = TVA_publish_operational_metrics
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_publish_operational_metrics }
 		mutually_exclusive = {
 			focus = TVA_delegate_to_algorithmic_board
@@ -437,6 +461,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority }
 		completion_reward = {
+			custom_effect_tooltip = TVA_optimize_for_throughput_metrics_tt
+			unlock_decision_tooltip = TVA_emergency_series_programme
+			add_power_balance_value = { id = TVA_bop value = -0.20 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 15 }
+				add_to_variable = { var = TVA_cadre_reserve value = -5 }
+				TVA_refresh_administration = yes
+			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
 				amount = 9000
@@ -462,10 +494,10 @@ focus_tree = {
 			FOCUS_FILTER_ARMY_XP
 			FOCUS_FILTER_STABILITY
 		}
-		x = 3
+		x = 2
 		y = 1
 		relative_position_id = TVA_publish_operational_metrics
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_publish_operational_metrics }
 		mutually_exclusive = {
 			focus = TVA_optimize_for_throughput
@@ -491,6 +523,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_specialist_priority }
 		completion_reward = {
+			custom_effect_tooltip = TVA_protect_irreplaceable_specialists_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = 0.20 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = -5 }
+				add_to_variable = { var = TVA_cadre_reserve value = 15 }
+				TVA_refresh_administration = yes
+			}
 			add_stability = 0.01
 			army_experience = 5
 			add_tech_bonus = {
@@ -516,10 +555,10 @@ focus_tree = {
 			FOCUS_FILTER_WAR_SUPPORT
 			FOCUS_FILTER_POLITICAL
 		}
-		x = 1
+		x = -4
 		y = 1
-		relative_position_id = TVA_protect_irreplaceable_specialists
-		cost = 3
+		relative_position_id = TVA_optimize_for_throughput
+		cost = 2
 		prerequisite = {
 			focus = TVA_optimize_for_throughput
 			focus = TVA_delegate_to_algorithmic_board
@@ -611,6 +650,12 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = TVA_delegate_to_algorithmic_board_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = -0.25 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 10 }
+				TVA_refresh_administration = yes
+			}
 			add_political_power = 25
 			custom_effect_tooltip = ADISCORD_vorkerland_tva_iteration_tt
 			hidden_effect = { ADISCORD_vorkerland_tva_add_iteration = yes }
@@ -631,10 +676,10 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 4
+		x = 0
 		y = 1
 		relative_position_id = TVA_select_trial_protocol
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_select_trial_protocol }
 		mutually_exclusive = {
 			focus = TVA_raise_technical_battalions
@@ -669,13 +714,8 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			army_experience = 25
-			add_command_power = 10
-			add_equipment_to_stockpile = {
-				type = support_equipment_1
-				amount = 200
-				producer = TVA
-			}
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_run_field_trial
+			custom_effect_tooltip = TVA_trial_fire_control_unlock_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_remote_fire_control
 			}
@@ -689,10 +729,10 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 1
+		x = -2
 		y = 1
 		relative_position_id = TVA_select_trial_protocol
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_select_trial_protocol }
 		mutually_exclusive = {
 			focus = TVA_raise_technical_battalions
@@ -727,9 +767,8 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			army_experience = 5
-			unlock_decision_tooltip = TVA_test_adaptive_logistics_activate_plan
-			add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_run_field_trial
+			custom_effect_tooltip = TVA_trial_logistics_unlock_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_adaptive_logistics
 			}
@@ -747,10 +786,10 @@ focus_tree = {
 			FOCUS_FILTER_ARMY_XP
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = -1
+		x = 2
 		y = 1
 		relative_position_id = TVA_test_remote_fire_control
-		cost = 2
+		cost = 1
 		prerequisite = {
 			focus = TVA_raise_technical_battalions
 			focus = TVA_test_remote_fire_control
@@ -800,7 +839,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = TVA_integrate_field_results
-		cost = 3
+		cost = 2
 		prerequisite = { focus = TVA_integrate_field_results }
 		allow_branch = {
 			tag = TVA
@@ -849,7 +888,7 @@ focus_tree = {
 		x = 0
 		y = 2
 		relative_position_id = TVA_build_mobile_repair_trains
-		cost = 2
+		cost = 1
 		prerequisite = { focus = TVA_build_mobile_repair_trains }
 		allow_branch = {
 			tag = TVA
@@ -876,6 +915,11 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = TVA_harden_switching_stations_metrics_tt
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = -10 }
+				TVA_refresh_administration = yes
+			}
 			add_command_power = 10
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
@@ -896,10 +940,10 @@ focus_tree = {
 			FOCUS_FILTER_ARMY_XP
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = 0
+		x = -4
 		y = 1
-		relative_position_id = TVA_seal_the_approaches
-		cost = 4
+		relative_position_id = TVA_harden_switching_stations
+		cost = 2
 		prerequisite = { focus = TVA_standardize_emergency_administration }
 		prerequisite = { focus = TVA_seal_the_approaches }
 		prerequisite = { focus = TVA_harden_switching_stations }
@@ -1040,7 +1084,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_MANPOWER
 		}
-		x = -1
+		x = 0
 		y = 1
 		relative_position_id = TVA_protect_irreplaceable_specialists
 		cost = 3
@@ -1136,7 +1180,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 1
+		x = 0
 		y = 1
 		relative_position_id = TVA_test_remote_fire_control
 		cost = 3
@@ -1436,7 +1480,7 @@ focus_tree = {
 			FOCUS_FILTER_ANNEXATION
 			FOCUS_FILTER_WAR_SUPPORT
 		}
-		x = 1
+		x = 16
 		y = 1
 		relative_position_id = TVA_codify_utilitarian_directorate
 		cost = 3
@@ -1519,7 +1563,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -12
+		x = -16
 		y = 1
 		relative_position_id = TVA_codify_utilitarian_directorate
 		cost = 2
@@ -1547,7 +1591,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_continuous_mobilization }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_continuous_mobilization
+			custom_effect_tooltip = TVA_declare_continuous_mobilization_metrics_tt
+			unlock_decision_tooltip = TVA_emergency_series_programme
+			add_power_balance_value = { id = TVA_bop value = -0.25 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = 15 }
+				add_to_variable = { var = TVA_cadre_reserve value = -10 }
+				add_to_variable = { var = TVA_policy_industrial_capacity_factory value = 0.10 }
+				add_to_variable = { var = TVA_policy_conscription value = 0.02 }
+				add_to_variable = { var = TVA_policy_production_factory_max_efficiency_factor value = 0.05 }
+				add_to_variable = { var = TVA_policy_stability_factor value = -0.08 }
+				add_to_variable = { var = TVA_policy_research_speed_factor value = -0.05 }
+				add_to_variable = { var = TVA_policy_attrition value = 0.03 }
+				TVA_refresh_administration = yes
+			}
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_continuous_mobilization }
 			add_war_support = 0.03
 			add_stability = -0.03
 			hidden_effect = {
@@ -1646,7 +1704,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_single_process }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_single_process
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_single_process }
+			hidden_effect = {
+				add_to_variable = { var = TVA_policy_production_factory_efficiency_gain_factor value = 0.12 }
+				add_to_variable = { var = TVA_policy_line_change_production_efficiency_factor value = 0.15 }
+				add_to_variable = { var = TVA_policy_army_speed_factor value = 0.03 }
+				add_to_variable = { var = TVA_policy_breakthrough_factor value = 0.05 }
+				add_to_variable = { var = TVA_policy_stability_factor value = -0.05 }
+				add_to_variable = { var = TVA_policy_army_morale_factor value = -0.03 }
+				TVA_refresh_administration = yes
+			}
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_single_process bonus = 0.5 uses = 1 category = industry }
 			army_experience = 10
 			hidden_effect = {
@@ -1667,7 +1734,7 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_POLITICAL
 		}
-		x = -10
+		x = -14
 		y = 1
 		relative_position_id = TVA_codify_utilitarian_directorate
 		cost = 2
@@ -1695,7 +1762,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_preservation_protocol }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_preservation_protocol
+			custom_effect_tooltip = TVA_enact_the_preservation_protocol_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = 0.25 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_network_load value = -10 }
+				add_to_variable = { var = TVA_cadre_reserve value = 10 }
+				add_to_variable = { var = TVA_policy_research_speed_factor value = 0.08 }
+				add_to_variable = { var = TVA_policy_army_defence_factor value = 0.06 }
+				add_to_variable = { var = TVA_policy_experience_loss_factor value = -0.20 }
+				add_to_variable = { var = TVA_policy_stability_factor value = 0.05 }
+				add_to_variable = { var = TVA_policy_industrial_capacity_factory value = -0.05 }
+				add_to_variable = { var = TVA_policy_conscription value = -0.01 }
+				TVA_refresh_administration = yes
+			}
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_preservation_protocol }
 			add_stability = 0.03
 			add_political_power = 15
 			hidden_effect = {
@@ -1747,6 +1827,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_evacuated_bureaus }
 		completion_reward = {
+			custom_effect_tooltip = TVA_evacuate_the_design_bureaus_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = 0.10 }
+			hidden_effect = {
+				add_to_variable = { var = TVA_cadre_reserve value = 15 }
+				TVA_refresh_administration = yes
+			}
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_evacuated_bureaus days = 70 }
 			add_tech_bonus = { name = ADISCORD_vorkerland_tva_evacuated_bureaus bonus = 0.5 uses = 1 category = electronics }
 			add_political_power = 10
@@ -1795,7 +1881,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_certified_cadre }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_certified_cadre
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_certified_cadre }
+			hidden_effect = {
+				add_to_variable = { var = TVA_policy_army_defence_factor value = 0.07 }
+				add_to_variable = { var = TVA_policy_max_dig_in_factor value = 0.10 }
+				add_to_variable = { var = TVA_policy_army_org_regain value = 0.06 }
+				add_to_variable = { var = TVA_policy_experience_gain_army_factor value = 0.10 }
+				add_to_variable = { var = TVA_policy_army_speed_factor value = -0.03 }
+				add_to_variable = { var = TVA_policy_breakthrough_factor value = -0.03 }
+				TVA_refresh_administration = yes
+			}
 			army_experience = 10
 			add_stability = 0.02
 			hidden_effect = {
@@ -1818,7 +1913,7 @@ focus_tree = {
 		search_filters = {
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
+		x = 4
 		y = 1
 		relative_position_id = TVA_authorize_iteration_two
 		cost = 2
@@ -2050,7 +2145,7 @@ focus_tree = {
 			FOCUS_FILTER_RESEARCH
 			FOCUS_FILTER_ARMY_XP
 		}
-		x = 0
+		x = -2
 		y = 1
 		relative_position_id = TVA_turn_repair_trains_into_supply_web
 		cost = 4
@@ -2110,59 +2205,7 @@ focus_tree = {
 		ai_will_do = { base = 180 modifier = { factor = 2 has_war = yes } }
 	}
 
-	# ---------------------------------------------------------------------
-	# TVA war economy: what the war is allowed to cost the rear.
-	#
-	# Directorate war economy is a load-allocation problem. Run the grid at
-	# war load and the factories eat the cities; hold back civil power and
-	# the cities keep working while the line goes short.
-	# ---------------------------------------------------------------------
-
-	focus = {
-		id = TVA_convene_the_load_board
-		icon = GFX_focus_TVA_convene_the_load_board
-		search_filters = {
-			FOCUS_FILTER_INDUSTRY
-			FOCUS_FILTER_RESEARCH
-		}
-		x = 2
-		y = 1
-		relative_position_id = TVA_issue_emergency_output_norms
-		cost = 2
-		prerequisite = { focus = TVA_issue_emergency_output_norms }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_convene_the_load_board }
-		completion_reward = {
-			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_war_economy_dummy }
-			add_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_war_economy }
-			add_political_power = 20
-			add_tech_bonus = { name = ADISCORD_vorkerland_tva_load_board bonus = 0.5 uses = 1 category = industry }
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_convene_the_load_board
-			}
-		}
-		ai_will_do = {
-			base = 90
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# Production surges and network maintenance compete for one programme slot.
 
 	focus = {
 		id = TVA_run_the_grid_at_war_load
@@ -2171,11 +2214,11 @@ focus_tree = {
 			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_STABILITY
 		}
-		x = -1
+		x = 0
 		y = 1
-		relative_position_id = TVA_convene_the_load_board
+		relative_position_id = TVA_issue_emergency_output_norms
 		cost = 3
-		prerequisite = { focus = TVA_convene_the_load_board }
+		prerequisite = { focus = TVA_issue_emergency_output_norms }
 		mutually_exclusive = { focus = TVA_hold_back_civil_power }
 		allow_branch = {
 			tag = TVA
@@ -2187,21 +2230,19 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load }
 		completion_reward = {
-			add_stability = -0.03
-			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_tva_war_economy_dummy add_idea = ADISCORD_vorkerland_tva_war_economy_war_load } }
+			unlock_decision_tooltip = TVA_emergency_series_programme
+			custom_effect_tooltip = TVA_run_the_grid_at_war_load_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = -0.10 }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_run_the_grid_at_war_load
-				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+				add_to_variable = { var = TVA_network_load value = 20 }
+				TVA_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -2218,11 +2259,11 @@ focus_tree = {
 			FOCUS_FILTER_STABILITY
 			FOCUS_FILTER_RESEARCH
 		}
-		x = 1
+		x = 2
 		y = 1
-		relative_position_id = TVA_convene_the_load_board
+		relative_position_id = TVA_issue_emergency_output_norms
 		cost = 3
-		prerequisite = { focus = TVA_convene_the_load_board }
+		prerequisite = { focus = TVA_issue_emergency_output_norms }
 		mutually_exclusive = { focus = TVA_run_the_grid_at_war_load }
 		allow_branch = {
 			tag = TVA
@@ -2234,21 +2275,19 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power }
 		completion_reward = {
-			add_stability = 0.03
-			effect_tooltip = { swap_ideas = { remove_idea = ADISCORD_vorkerland_tva_war_economy_dummy add_idea = ADISCORD_vorkerland_tva_war_economy_civil } }
+			unlock_decision_tooltip = TVA_maintenance_programme
+			custom_effect_tooltip = TVA_hold_back_civil_power_metrics_tt
+			add_power_balance_value = { id = TVA_bop value = 0.10 }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_hold_back_civil_power
-				ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes
+				add_to_variable = { var = TVA_network_load value = -15 }
+				TVA_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -2298,63 +2337,22 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_continuous_assault }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_doctrine_continuous_assault
-			army_experience = 10
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_doctrine_continuous_assault }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_continuous_assault
+				add_to_variable = { var = TVA_policy_army_attack_factor value = 0.07 }
+				add_to_variable = { var = TVA_policy_breakthrough_factor value = 0.08 }
+				add_to_variable = { var = TVA_policy_army_org_regain value = 0.05 }
+				add_to_variable = { var = TVA_policy_supply_consumption_factor value = 0.05 }
+				add_to_variable = { var = TVA_policy_army_defence_factor value = -0.05 }
+				TVA_refresh_administration = yes
 			}
+			unlock_decision_tooltip = TVA_emergency_series_programme
+			custom_effect_tooltip = TVA_assault_programme_unlock_tt
 		}
 		ai_will_do = {
 			base = 110
 			modifier = { factor = 2 has_war = yes }
-		}
-	}
-
-	focus = {
-		id = TVA_replace_losses_from_the_line
-		icon = GFX_focus_TVA_replace_losses_from_the_line
-		search_filters = {
-			FOCUS_FILTER_INDUSTRY
-			FOCUS_FILTER_MANPOWER
-		}
-		x = 0
-		y = 1
-		relative_position_id = TVA_doctrine_of_continuous_assault
-		cost = 4
-		prerequisite = { focus = TVA_doctrine_of_continuous_assault }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
-			has_country_flag = ADISCORD_vorkerland_tva_variant_throughput
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line }
-		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_doctrine_line_replacement
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = TVA }
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line
-			}
-		}
-		ai_will_do = {
-			base = 105
-			modifier = { factor = 2 num_of_military_factories > 20 }
 		}
 	}
 
@@ -2390,13 +2388,17 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_the_measured_front }
 		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_doctrine_measured_front
-			army_experience = 8
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_doctrine_measured_front }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_doctrine_of_the_measured_front
+				add_to_variable = { var = TVA_policy_army_defence_factor value = 0.10 }
+				add_to_variable = { var = TVA_policy_army_org_factor value = 0.05 }
+				add_to_variable = { var = TVA_policy_army_speed_factor value = -0.06 }
+				add_to_variable = { var = TVA_policy_conscription value = -0.02 }
+				TVA_refresh_administration = yes
 			}
+			unlock_decision_tooltip = TVA_cadre_training_programme
+			custom_effect_tooltip = TVA_measured_programme_unlock_tt
 		}
 		ai_will_do = {
 			base = 110
@@ -2404,98 +2406,7 @@ focus_tree = {
 		}
 	}
 
-	focus = {
-		id = TVA_hold_with_fewer_better_crews
-		icon = GFX_focus_TVA_hold_with_fewer_better_crews
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_RESEARCH
-		}
-		x = 0
-		y = 1
-		relative_position_id = TVA_doctrine_of_the_measured_front
-		cost = 4
-		prerequisite = { focus = TVA_doctrine_of_the_measured_front }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
-			has_country_flag = ADISCORD_vorkerland_tva_variant_preservation
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_hold_with_fewer_better_crews }
-		completion_reward = {
-			add_ideas = ADISCORD_vorkerland_tva_doctrine_fewer_better_crews
-			army_experience = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_hold_with_fewer_better_crews
-			}
-		}
-		ai_will_do = {
-			base = 105
-			modifier = { factor = 2 surrender_progress > 0.30 }
-		}
-	}
-
-	# ---------------------------------------------------------------------
-	# TVA late war: opens once the war has run eighteen months.
-	#
-	# The directorate's late war is a final iteration: one more research
-	# push, then either spend the reserve cadre on it or seal the technical
-	# core and accept a slower finish.
-	# ---------------------------------------------------------------------
-
-	focus = {
-		id = TVA_declare_the_final_iteration
-		icon = GFX_focus_TVA_declare_the_final_iteration
-		search_filters = {
-			FOCUS_FILTER_RESEARCH
-			FOCUS_FILTER_INDUSTRY
-		}
-		x = 6
-		y = 1
-		relative_position_id = TVA_close_operational_loop
-		cost = 3
-		prerequisite = { focus = TVA_close_operational_loop }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_declare_the_final_iteration }
-		completion_reward = {
-			add_political_power = 20
-			add_tech_bonus = { name = ADISCORD_vorkerland_tva_final_iteration bonus = 0.5 uses = 1 category = electronics }
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_declare_the_final_iteration
-			}
-		}
-		ai_will_do = {
-			base = 120
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# The personnel course is prepared before the showdown; applying it requires that war.
 
 	focus = {
 		id = TVA_spend_the_reserve_cadre
@@ -2506,9 +2417,9 @@ focus_tree = {
 		}
 		x = -1
 		y = 1
-		relative_position_id = TVA_declare_the_final_iteration
+		relative_position_id = TVA_close_operational_loop
 		cost = 3
-		prerequisite = { focus = TVA_declare_the_final_iteration }
+		prerequisite = { focus = TVA_close_operational_loop }
 		mutually_exclusive = { focus = TVA_seal_the_technical_core }
 		allow_branch = {
 			tag = TVA
@@ -2520,19 +2431,19 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre }
 		completion_reward = {
 			unlock_decision_tooltip = TVA_spend_the_reserve_cadre_activate_plan
-			add_manpower = 500
-			add_command_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_spend_the_reserve_cadre
-			}
+			custom_effect_tooltip = TVA_frontline_cadre_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
@@ -2550,9 +2461,9 @@ focus_tree = {
 		}
 		x = 1
 		y = 1
-		relative_position_id = TVA_declare_the_final_iteration
+		relative_position_id = TVA_close_operational_loop
 		cost = 3
-		prerequisite = { focus = TVA_declare_the_final_iteration }
+		prerequisite = { focus = TVA_close_operational_loop }
 		mutually_exclusive = { focus = TVA_spend_the_reserve_cadre }
 		allow_branch = {
 			tag = TVA
@@ -2564,16 +2475,19 @@ focus_tree = {
 			}
 		}
 		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			}
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
+			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core }
 		completion_reward = {
 			unlock_decision_tooltip = TVA_seal_the_technical_core_activate_plan
-			add_stability = 0.03
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_seal_the_technical_core
-			}
+			custom_effect_tooltip = TVA_protected_core_unlock_tt
 		}
 		ai_will_do = {
 			base = 100
@@ -2582,58 +2496,7 @@ focus_tree = {
 		}
 	}
 
-	# ---------------------------------------------------------------------
-	# TVA legitimacy: earn it slowly or spend it for a battlefield.
-	#
-	# Directorate legitimacy comes from finished work. Certify the completed
-	# programmes, then either publish a reconstruction index that requires
-	# real civilian capacity, or divert the research budget to the front.
-	# ---------------------------------------------------------------------
-
-	focus = {
-		id = TVA_certify_the_completed_programmes
-		icon = GFX_focus_TVA_certify_the_completed_programmes
-		search_filters = {
-			FOCUS_FILTER_RESEARCH
-			FOCUS_FILTER_POLITICAL
-		}
-		x = 2
-		y = 1
-		relative_position_id = TVA_integrate_field_results
-		cost = 2
-		prerequisite = { focus = TVA_integrate_field_results }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_certify_the_completed_programmes }
-		completion_reward = {
-			add_political_power = 15
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_certify_the_completed_programmes
-			}
-		}
-		ai_will_do = {
-			base = 80
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+	# Public accountability and military conversion share the administration slot.
 
 	focus = {
 		id = TVA_publish_the_reconstruction_index
@@ -2642,11 +2505,11 @@ focus_tree = {
 			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_RESEARCH
 		}
-		x = -1
-		y = 1
-		relative_position_id = TVA_certify_the_completed_programmes
-		cost = 4
-		prerequisite = { focus = TVA_certify_the_completed_programmes }
+		x = 1
+		y = 2
+		relative_position_id = TVA_integrate_field_results
+		cost = 3
+		prerequisite = { focus = TVA_integrate_field_results }
 		mutually_exclusive = { focus = TVA_divert_the_research_budget }
 		allow_branch = {
 			tag = TVA
@@ -2658,7 +2521,6 @@ focus_tree = {
 			}
 		}
 		available = {
-			num_of_civilian_factories > 10
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_phase_collapse
 				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -2667,18 +2529,13 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_publish_the_reconstruction_index }
 		completion_reward = {
-			add_political_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.1 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_publish_the_reconstruction_index
-			}
+			unlock_decision_tooltip = TVA_public_audit_programme
+			custom_effect_tooltip = TVA_public_audit_unlock_tt
 		}
 		ai_will_do = {
 			base = 95
-			modifier = { factor = 2 num_of_civilian_factories > 16 }
+			modifier = { factor = 2 TVA_public_audit_healthy = yes }
 			modifier = { factor = 0.5 surrender_progress > 0.40 }
 		}
 	}
@@ -2690,11 +2547,11 @@ focus_tree = {
 			FOCUS_FILTER_ARMY_XP
 			FOCUS_FILTER_INDUSTRY
 		}
-		x = 1
-		y = 1
-		relative_position_id = TVA_certify_the_completed_programmes
-		cost = 2
-		prerequisite = { focus = TVA_certify_the_completed_programmes }
+		x = 3
+		y = 2
+		relative_position_id = TVA_integrate_field_results
+		cost = 3
+		prerequisite = { focus = TVA_integrate_field_results }
 		mutually_exclusive = { focus = TVA_publish_the_reconstruction_index }
 		allow_branch = {
 			tag = TVA
@@ -2714,15 +2571,9 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_divert_the_research_budget }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = TVA }
-			army_experience = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_divert_the_research_budget
-			}
+			unlock_decision_tooltip = TVA_research_conversion_programme
+			custom_effect_tooltip = TVA_research_conversion_unlock_tt
 		}
 		ai_will_do = {
 			base = 90
@@ -2731,27 +2582,22 @@ focus_tree = {
 		}
 	}
 
-	# ---------------------------------------------------------------------
-	# TVA diplomacy: the bracket winners and the outside powers.
-	#
-	# The directorate trades knowledge, not volunteers. It can open a
-	# technical exchange abroad or hire a bracket winner outright. A
-	# directorate that is out-researching everyone can skip this.
-	# ---------------------------------------------------------------------
+	# Technical personnel: negotiated exchange or domestic training.
 
 	focus = {
 		id = TVA_open_the_technical_exchange
 		icon = GFX_focus_TVA_open_the_technical_exchange
 		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_RESEARCH
+			FOCUS_FILTER_MANPOWER
 		}
-		x = 8
+		x = -12
 		y = 1
 		relative_position_id = TVA_publish_operational_metrics
 		cost = 3
 		prerequisite = { focus = TVA_publish_operational_metrics }
-		mutually_exclusive = { focus = TVA_hire_the_bracket_victors }
+		prerequisite = { focus = TVA_deploy_field_laboratories }
+		mutually_exclusive = { focus = TVA_build_the_engineering_service }
 		allow_branch = {
 			tag = TVA
 			OR = {
@@ -2762,42 +2608,42 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_has_partner_tt
+				TVA_exchange_has_partner = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_open_the_technical_exchange }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_exchange days = 70 }
-			add_political_power = 10
-			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.06 }
-			ADISCORD_vorkerland_add_legitimacy = yes
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_technical_exchange
-			}
+			unlock_decision_tooltip = TVA_offer_specialist_exchange
+			custom_effect_tooltip = TVA_exchange_unlock_tt
 		}
 		ai_will_do = {
 			base = 60
-			modifier = { factor = 2 has_stability < 0.40 }
+			modifier = {
+				factor = 2
+				check_variable = { var = TVA_cadre_reserve value = 40 compare = less_than }
+			}
 		}
 	}
 
 	focus = {
-		id = TVA_hire_the_bracket_victors
-		icon = GFX_focus_TVA_hire_the_bracket_victors
+		id = TVA_build_the_engineering_service
+		icon = GFX_focus_TVA_build_the_engineering_service
 		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
+			FOCUS_FILTER_RESEARCH
 			FOCUS_FILTER_MANPOWER
 		}
-		x = 10
+		x = -10
 		y = 1
 		relative_position_id = TVA_publish_operational_metrics
 		cost = 3
 		prerequisite = { focus = TVA_publish_operational_metrics }
+		prerequisite = { focus = TVA_deploy_field_laboratories }
 		mutually_exclusive = { focus = TVA_open_the_technical_exchange }
 		allow_branch = {
 			tag = TVA
@@ -2809,89 +2655,40 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_exchange_active_tt
+				TVA_administration_active = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_hire_the_bracket_victors }
 		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_tva_bracket_contractors days = 70 }
-			add_political_power = 15
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_hire_the_bracket_victors
-			}
+			unlock_decision_tooltip = TVA_cadre_training_programme
+			custom_effect_tooltip = TVA_engineering_service_unlock_tt
 		}
 		ai_will_do = {
 			base = 55
-			modifier = { factor = 2 has_war = yes }
-			modifier = { factor = 0.5 surrender_progress > 0.50 }
+			modifier = {
+				factor = 2
+				check_variable = { var = TVA_cadre_reserve value = 40 compare = less_than }
+			}
 		}
 	}
 
 	# Air
-	# Sorties scheduled like load. Unattended strike packages, or
-	# interdictors held on station over the generating plants.
+	# Laboratory controllers assign network capacity to strike guidance
+	# or to the interceptor reserve protecting the grid.
 
-	focus = {
-		id = TVA_stand_up_the_grid_air_staff
-		icon = GFX_focus_TVA_stand_up_the_grid_air_staff
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_RESEARCH
-		}
-		x = -5
-		y = 1
-		relative_position_id = TVA_codify_utilitarian_directorate
-		cost = 2
-		prerequisite = { focus = TVA_codify_utilitarian_directorate }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_stand_up_the_grid_air_staff }
-		completion_reward = {
-			air_experience = 25
-			add_command_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_stand_up_the_grid_air_staff
-			}
-		}
-		ai_will_do = {
-			base = 80
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
+
 
 	focus = {
 		id = TVA_print_unattended_strike_packages
 		icon = GFX_focus_TVA_print_unattended_strike_packages
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = -1
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		x = -9
 		y = 1
-		relative_position_id = TVA_stand_up_the_grid_air_staff
+		relative_position_id = TVA_deploy_field_laboratories
 		cost = 3
-		prerequisite = { focus = TVA_stand_up_the_grid_air_staff }
+		prerequisite = { focus = TVA_deploy_field_laboratories }
 		mutually_exclusive = { focus = TVA_keep_the_interdictors_on_station }
 		allow_branch = {
 			tag = TVA
@@ -2903,40 +2700,40 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_administration_active_tt
+				TVA_administration_active = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_print_unattended_strike_packages }
 		completion_reward = {
-			unlock_decision_tooltip = TVA_print_unattended_strike_packages_activate_plan
-			air_experience = 10
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_unattended_strike }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_print_unattended_strike_packages
+				add_to_variable = { var = TVA_policy_air_cas_efficiency value = 0.08 }
+				add_to_variable = { var = TVA_policy_air_accidents_factor value = 0.06 }
+				TVA_refresh_administration = yes
 			}
+			unlock_decision_tooltip = TVA_strike_aircraft_programme
+			custom_effect_tooltip = TVA_strike_aircraft_unlock_tt
 		}
 		ai_will_do = {
 			base = 75
-			modifier = { factor = 2 has_war = yes }
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
 		}
 	}
 
 	focus = {
 		id = TVA_keep_the_interdictors_on_station
 		icon = GFX_focus_TVA_keep_the_interdictors_on_station
-		search_filters = {
-			FOCUS_FILTER_ARMY_XP
-			FOCUS_FILTER_WAR_SUPPORT
-		}
-		x = 1
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		x = -7
 		y = 1
-		relative_position_id = TVA_stand_up_the_grid_air_staff
+		relative_position_id = TVA_deploy_field_laboratories
 		cost = 3
-		prerequisite = { focus = TVA_stand_up_the_grid_air_staff }
+		prerequisite = { focus = TVA_deploy_field_laboratories }
 		mutually_exclusive = { focus = TVA_print_unattended_strike_packages }
 		allow_branch = {
 			tag = TVA
@@ -2948,161 +2745,28 @@ focus_tree = {
 			}
 		}
 		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			custom_trigger_tooltip = {
+				tooltip = TVA_administration_active_tt
+				TVA_administration_active = yes
 			}
 		}
 		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_keep_the_interdictors_on_station }
 		completion_reward = {
-			unlock_decision_tooltip = TVA_keep_the_interdictors_on_station_activate_plan
-			air_experience = 10
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_tva_interdictor_station }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_keep_the_interdictors_on_station
+				add_to_variable = { var = TVA_policy_air_intercept_efficiency value = 0.10 }
+				add_to_variable = { var = TVA_policy_air_range_factor value = 0.08 }
+				TVA_refresh_administration = yes
 			}
+			unlock_decision_tooltip = TVA_interceptor_reserve_programme
+			custom_effect_tooltip = TVA_interceptor_reserve_unlock_tt
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
-
-	# Foreign Policy
-	# An exchange window: surplus out, or surviving specialists in.
-
-	focus = {
-		id = TVA_open_the_exchange_window
-		icon = GFX_focus_TVA_open_the_exchange_window
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_RESEARCH
-		}
-		x = 2
-		y = 1
-		relative_position_id = TVA_codify_utilitarian_directorate
-		cost = 2
-		prerequisite = { focus = TVA_codify_utilitarian_directorate }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			modifier = {
+				factor = 2
+				has_war = yes
 			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_open_the_exchange_window }
-		completion_reward = {
-			add_political_power = 50
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_open_the_exchange_window
-			}
-		}
-		ai_will_do = {
-			base = 50
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
-
-	focus = {
-		id = TVA_export_surplus_output
-		icon = GFX_focus_TVA_export_surplus_output
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_INDUSTRY
-		}
-		x = -1
-		y = 1
-		relative_position_id = TVA_open_the_exchange_window
-		cost = 3
-		prerequisite = { focus = TVA_open_the_exchange_window }
-		mutually_exclusive = { focus = TVA_import_surviving_specialists }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_export_surplus_output }
-		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_tva_surplus_export days = 70 }
-			add_political_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_export_surplus_output
-			}
-		}
-		ai_will_do = {
-			base = 45
-			modifier = { factor = 2 has_war = yes }
-		}
-	}
-
-	focus = {
-		id = TVA_import_surviving_specialists
-		icon = GFX_focus_TVA_import_surviving_specialists
-		search_filters = {
-			FOCUS_FILTER_INTERNATIONAL_TRADE
-			FOCUS_FILTER_RESEARCH
-		}
-		x = 1
-		y = 1
-		relative_position_id = TVA_open_the_exchange_window
-		cost = 3
-		prerequisite = { focus = TVA_open_the_exchange_window }
-		mutually_exclusive = { focus = TVA_export_surplus_output }
-		allow_branch = {
-			tag = TVA
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		available = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_collapse
-				has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
-				has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			}
-		}
-		cancel_if_invalid = yes
-		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_import_surviving_specialists }
-		completion_reward = {
-			add_timed_idea = { idea = ADISCORD_vorkerland_tva_imported_specialists days = 70 }
-			add_political_power = 10
-			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_focus_tva_import_surviving_specialists
-			}
-		}
-		ai_will_do = {
-			base = 40
-			modifier = { factor = 2 has_stability < 0.40 }
 		}
 	}
 

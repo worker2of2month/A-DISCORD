@@ -14,14 +14,11 @@ ADISCORD_south_begin_preparation = {
 			NOT = { has_global_flag = ADISCORD_south_preparation_started }
 		}
 		set_global_flag = ADISCORD_south_preparation_started
-		NAM = { ADISCORD_south_show_preparation = yes }
-		SHL = { ADISCORD_south_show_preparation = yes }
-		EFL = { ADISCORD_south_show_preparation = yes }
-		AZH = { ADISCORD_south_show_preparation = yes }
+		ADISCORD_south_wake_regional_countries = yes
 	}
 }
 
-# COUNTRY. These simultaneous missions display the single global deadline.
+# COUNTRY. Simultaneous missions display the dated global warning.
 ADISCORD_south_show_preparation = {
 	if = {
 		limit = { exists = yes }
@@ -33,22 +30,27 @@ ADISCORD_south_show_preparation = {
 # Ordinary load, focus completion and periodic checks never call this reset.
 ADISCORD_south_suspend_preparation = {
 	clr_global_flag = ADISCORD_south_preparation_started
-	NAM = { remove_mission = ADISCORD_south_preparation }
-	SHL = { remove_mission = ADISCORD_south_preparation }
-	EFL = { remove_mission = ADISCORD_south_preparation }
-	AZH = { remove_mission = ADISCORD_south_preparation }
+	clr_global_flag = ADISCORD_south_crisis_warned
+	NAM = { ADISCORD_south_clear_preparation = yes }
+	SHL = { ADISCORD_south_clear_preparation = yes }
+	EFL = { ADISCORD_south_clear_preparation = yes }
+	AZH = { ADISCORD_south_clear_preparation = yes }
 }
 
-# GLOBAL. Each settled consolidation campaign; pressure accumulates before the
-# clock opens and stops once the final campaign has begun.
-ADISCORD_south_crisis_add_campaign = {
+ADISCORD_south_clear_preparation = {
+	remove_mission = ADISCORD_south_preparation
+	clr_country_flag = ADISCORD_south_offensive_order
+}
+
+# COUNTRY. The order belongs to this warning, not to historical focus completion.
+ADISCORD_south_prepare_offensive = {
 	if = {
 		limit = {
-			NOT = { has_global_flag = ADISCORD_south_final_started }
-			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+			ADISCORD_south_final_focus_available = yes
+			ADISCORD_south_declarer_valid = yes
 		}
-		add_to_variable = { var = global.ADISCORD_south_crisis value = 15 }
-		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
+		set_country_flag = ADISCORD_south_offensive_order
+		ADISCORD_south_final_war_start = yes
 	}
 }
 
@@ -63,6 +65,7 @@ ADISCORD_south_crisis_cycle = {
 			SHL = { ADISCORD_south_champion_viable = yes }
 		}
 		set_global_flag = ADISCORD_south_final_resolved
+		ADISCORD_south_suspend_preparation = yes
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		set_global_flag = ADISCORD_south_unopposed
 		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
@@ -71,22 +74,53 @@ ADISCORD_south_crisis_cycle = {
 	}
 	else_if = {
 		limit = { ADISCORD_south_crisis_open = yes }
-		add_to_variable = { var = global.ADISCORD_south_crisis value = 4 }
-		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
 		if = {
 			limit = {
 				NOT = { has_global_flag = ADISCORD_south_crisis_warned }
-				check_variable = { var = global.ADISCORD_south_crisis value = 50 compare = greater_than_or_equals }
+				ADISCORD_south_preparation_can_finish = yes
 			}
 			set_global_flag = ADISCORD_south_crisis_warned
+			NAM = { ADISCORD_south_show_preparation = yes }
+			SHL = { ADISCORD_south_show_preparation = yes }
+			EFL = { ADISCORD_south_show_preparation = yes }
+			AZH = { ADISCORD_south_show_preparation = yes }
 			news_event = { id = ADISCORD_south.3 hours = 1 }
 		}
 		if = {
 			limit = {
-				check_variable = { var = global.ADISCORD_south_crisis value = 100 compare = greater_than_or_equals }
 				ADISCORD_south_final_can_start = yes
 			}
-			ADISCORD_south_final_war_start = yes
+			ADISCORD_south_dispatch_prepared_war = yes
+		}
+	}
+}
+
+# COUNTRY SHL. Orders take effect after the warning; an unordered automatic
+# attack waits one additional furnace cycle.
+ADISCORD_south_dispatch_prepared_war = {
+	if = {
+		limit = { ADISCORD_south_final_can_start = yes }
+		if = {
+			limit = {
+				NAM = {
+					ADISCORD_south_declarer_valid = yes
+					has_country_flag = ADISCORD_south_offensive_order
+				}
+			}
+			NAM = { ADISCORD_south_final_war_start = yes }
+		}
+		else_if = {
+			limit = { SHL = { has_country_flag = ADISCORD_south_offensive_order } }
+			SHL = { ADISCORD_south_final_war_start = yes }
+		}
+		else_if = {
+			limit = {
+				has_global_flag = {
+					flag = ADISCORD_south_crisis_warned
+					days > 83
+				}
+			}
+			SHL = { ADISCORD_south_final_war_start = yes }
 		}
 	}
 }
@@ -121,6 +155,7 @@ ADISCORD_south_final_war_start = {
 			ADISCORD_south_declarer_valid = yes
 		}
 		set_global_flag = ADISCORD_south_final_started
+		ADISCORD_south_suspend_preparation = yes
 		ADISCORD_south_select_north_leader = yes
 		if = {
 			limit = { tag = SHL }
@@ -320,8 +355,10 @@ ADISCORD_south_prepare_champion = {
 	}
 }
 
-# GLOBAL. Subjects and faction partners enter with their champion.
+# GLOBAL. Subjects and faction partners enter with their champion. NAM can
+# remain a subject when EFL or AZH leads the north.
 ADISCORD_south_assign_bound_sides = {
+	NAM = { ADISCORD_south_bind_to_champion = yes }
 	EFL = { ADISCORD_south_bind_to_champion = yes }
 	AZH = { ADISCORD_south_bind_to_champion = yes }
 	WEF = { ADISCORD_south_bind_to_champion = yes }
@@ -585,6 +622,7 @@ ADISCORD_south_final_resolve_shl_victory = {
 		limit = { ADISCORD_south_final_active = yes }
 		# The resolved flag precedes white peace so on_peace cannot re-enter.
 		set_global_flag = ADISCORD_south_final_resolved
+		ADISCORD_south_suspend_preparation = yes
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
 		set_variable = { var = global.ADISCORD_south_terms value = 1 }
@@ -619,6 +657,7 @@ ADISCORD_south_final_resolve_north_victory = {
 			ADISCORD_south_north_is_nam = yes
 		}
 		set_global_flag = ADISCORD_south_final_resolved
+		ADISCORD_south_suspend_preparation = yes
 		set_global_flag = ADISCORD_south_hegemon_NAM
 		NAM = { mark_focus_tree_layout_dirty = yes }
 		set_variable = { var = global.ADISCORD_south_winner_side value = 2 }
@@ -650,7 +689,6 @@ ADISCORD_south_final_resolve_north_victory = {
 # neither coalition obtains annexations merely by retaining its starting land.
 ADISCORD_south_final_repel = {
 	clr_global_flag = ADISCORD_south_final_started
-	set_variable = { var = global.ADISCORD_south_crisis value = 50 }
 	ADISCORD_south_end_final_wars = yes
 	ADISCORD_south_close_campaign_state = yes
 	ADISCORD_south_clear_participants = yes
@@ -884,6 +922,7 @@ ADISCORD_south_mark_loser = {
 
 # GLOBAL. Campaign-only status ends on every terminal path.
 ADISCORD_south_close_campaign_state = {
+	ADISCORD_south_suspend_preparation = yes
 	clr_global_flag = ADISCORD_south_final_started
 	ADISCORD_south_clear_key_states = yes
 	# Campaign columns and the used course mandate end with the war, as after a limited war.
@@ -1047,18 +1086,6 @@ ADISCORD_south_apply_subject_type = {
 # Offer kinds stored on the target: 1 = submission (refusal means war),
 # 2 = annexation demand (refusal means war), 3 = alliance invitation.
 
-# GLOBAL. A neighbour submitted, joined a champion, or was annexed after refusing.
-ADISCORD_south_crisis_add_settlement = {
-	if = {
-		limit = {
-			NOT = { has_global_flag = ADISCORD_south_final_started }
-			NOT = { has_global_flag = ADISCORD_south_final_resolved }
-		}
-		add_to_variable = { var = global.ADISCORD_south_crisis value = 10 }
-		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
-	}
-}
-
 # COUNTRY target, ROOT champion. Local event targets travel with the delayed
 # dispatcher, preserving the original sender through a conflicting campaign.
 ADISCORD_south_queue_offer = {
@@ -1136,13 +1163,11 @@ ADISCORD_south_accept_offer = {
 					ADISCORD_south_ensure_campaign_faction = yes
 					add_to_faction = PREV
 				}
-				ADISCORD_south_crisis_add_settlement = yes
 			}
 		}
 		else_if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
 			clear_variable = ADISCORD_south_offer_kind
-			ADISCORD_south_crisis_add_settlement = yes
 			FROM = { annex_country = { target = PREV transfer_troops = yes } }
 		}
 		else = {
@@ -1166,7 +1191,6 @@ ADISCORD_south_accept_offer = {
 				set_country_flag = ADISCORD_south_submits_to_NAM
 			}
 			country_event = { id = ADISCORD_south.41 days = 1 }
-			ADISCORD_south_crisis_add_settlement = yes
 		}
 	}
 	clear_variable = ADISCORD_south_offer_kind
@@ -1327,7 +1351,6 @@ ADISCORD_south_note_campaign_annexation = {
 			}
 		}
 		FROM = { clr_country_flag = ADISCORD_south_campaign_target }
-		ADISCORD_south_crisis_add_settlement = yes
 	}
 }
 

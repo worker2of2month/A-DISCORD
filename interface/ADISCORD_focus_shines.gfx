@@ -1,5 +1,43 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_independence_day_shine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_independence_day.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/GFX_focus_NAM_independence_day.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_underground_reports_shine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_underground_reports.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/GFX_focus_NAM_underground_reports.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_harbour_service_shine"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_harbour_service.png"
 		effectFile = "gfx/FX/buttonstate.lua"
@@ -6186,10 +6224,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_affirm_worker_mandate_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_treaty.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6205,10 +6243,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_convene_front_soviets_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_treaty.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6224,10 +6262,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_organize_factory_battalions_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_manpower.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6243,10 +6281,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_put_railways_under_councils_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_railroad.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6262,10 +6300,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_authorize_retreat_levies_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_manpower.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6281,10 +6319,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_form_revolutionary_supply_commission_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6300,10 +6338,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_train_shopfloor_officers_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6319,10 +6357,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_open_free_republics_channel_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_treaty.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6338,10 +6376,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_empower_front_executive_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6357,10 +6395,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_reopen_collective_workshops_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_industry.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6376,10 +6414,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_publish_emergency_constitution_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_treaty.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6395,10 +6433,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_authorize_normative_command_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6414,10 +6452,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_bind_workshops_to_directive_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6433,10 +6471,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_settle_front_authority_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6452,10 +6490,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_coordinate_counterattack_cells_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6471,10 +6509,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_stockpile_interchange_reserves_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6490,10 +6528,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_republic_fights_as_one_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6509,10 +6547,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_establish_front_operations_bureau_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6528,10 +6566,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_authorize_republican_mission_commands_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6547,10 +6585,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_issue_normative_campaign_tables_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6566,10 +6604,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_form_rolling_factory_groups_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6585,10 +6623,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_reopen_night_freight_corridors_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_railroad.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6604,10 +6642,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_arm_the_mobile_reserve_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_manpower.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6623,10 +6661,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_coordinate_the_rolling_front_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6642,10 +6680,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_establish_workers_air_command_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_air_bases.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6661,10 +6699,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_keep_frontline_sorties_flying_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6680,10 +6718,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_raise_mobile_fortification_crews_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6699,10 +6737,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_secure_the_southern_corridor_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6718,10 +6756,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_rehearse_operation_southbound_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6737,10 +6775,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_intervene_in_solyarino_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6756,10 +6794,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_open_the_remaining_fronts_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6775,10 +6813,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_declare_the_revolution_unfinished_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_manpower.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6794,10 +6832,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_raise_the_worker_levy_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_manpower.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6813,10 +6851,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_vest_all_power_in_the_chairman_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6832,10 +6870,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_govern_by_delivered_results_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_1.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_1.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6851,10 +6889,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_publish_the_ration_ledger_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6870,10 +6908,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_bind_the_republic_to_its_norms_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_3.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_3.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6889,10 +6927,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_convene_the_production_soviet_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6908,10 +6946,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_strip_the_civil_economy_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_industry.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6927,10 +6965,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_keep_the_bread_ration_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6946,10 +6984,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_doctrine_of_the_armed_people_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6965,10 +7003,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_break_them_with_numbers_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -6984,10 +7022,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_doctrine_of_measured_force_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7003,10 +7041,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_replace_men_with_output_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_industry.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7020,31 +7058,14 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_WKR_the_last_levy_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
+
 
 	SpriteType = {
 		name = "GFX_focus_WKR_throw_the_reserves_forward_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7060,10 +7081,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_dig_in_along_the_interchange_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/goal_generic_fortify_city.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7079,10 +7100,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_seat_the_factory_councils_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_1.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_1.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7098,10 +7119,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_publish_the_production_returns_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7117,10 +7138,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_requisition_in_the_republics_name_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_industry.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7136,10 +7157,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_arm_the_bracket_victors_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7155,29 +7176,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_seek_outside_recognition_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_WKR_form_the_republican_air_staff_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_treaty.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7193,11 +7195,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_commit_shopfloor_squadrons_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_aircraft_production.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7212,11 +7214,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_screen_the_interchange_sky_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_railroad.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_railroad.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7229,31 +7231,13 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_WKR_open_the_external_desk_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
 	SpriteType = {
 		name = "GFX_focus_WKR_send_republican_volunteers_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7269,10 +7253,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_WKR_license_outside_patterns_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_industry_investment.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -7552,25 +7536,6 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	spriteType = {
-		name = "GFX_focus_VAD_district_emergency_council_shine"
-		texturefile = "gfx/interface/goals/focus_generic_concessions.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_generic_concessions.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
 	SpriteType = {
 		name = "GFX_focus_VAD_proclaim_joint_charter_shine"
 		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
@@ -7592,11 +7557,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_open_imperial_registers_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_monarchy_1.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_monarchy_1.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7611,11 +7576,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_form_field_commandantures_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/goal_generic_national_unity.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_national_unity.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7915,11 +7880,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_issue_crown_mobilization_warrants_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7934,11 +7899,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_turn_the_chancery_into_a_war_cabinet_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7953,11 +7918,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_elect_district_commissars_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7972,11 +7937,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_merge_guard_and_worker_rolls_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -7991,11 +7956,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_sign_the_dual_authority_protocol_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8010,11 +7975,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_map_the_solar_corridors_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8029,11 +7994,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_preposition_restoration_columns_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8048,11 +8013,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_define_the_solar_settlement_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8067,11 +8032,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_open_the_remaining_fronts_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8086,11 +8051,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_reclaim_the_imperial_mandate_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8105,11 +8070,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_recall_the_officer_estates_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8124,11 +8089,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_crown_the_restoration_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8143,11 +8108,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_seat_the_dual_chamber_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8162,11 +8127,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_open_the_district_rolls_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8181,11 +8146,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_bind_crown_and_council_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8200,11 +8165,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_reconcile_emergency_district_rolls_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8219,11 +8184,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_restore_eastern_supply_corridors_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8238,11 +8203,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_convert_emergency_workshops_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8257,11 +8222,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_publish_interim_restoration_register_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8276,11 +8241,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_convene_campaign_directorate_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8295,11 +8260,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_issue_prefectural_field_decrees_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8314,11 +8279,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_seat_front_commissars_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8333,11 +8298,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_standardize_restoration_columns_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8352,11 +8317,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_advance_under_one_register_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8371,11 +8336,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_convene_the_restoration_treasury_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8390,11 +8355,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_levy_the_crown_estates_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8409,11 +8374,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_protect_the_district_markets_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_mobilization_register.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8428,11 +8393,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_officer_estates_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_advanced_military_studies.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_advanced_military_studies.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8447,11 +8412,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_restore_the_guards_regiments_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8466,11 +8431,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_district_levies_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_diverse_army.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_diverse_army.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8485,11 +8450,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_train_the_council_militias_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_home_defense.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_home_defense.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8502,32 +8467,14 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_VAD_hold_the_historic_capitals_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
 	SpriteType = {
 		name = "GFX_focus_VAD_march_on_the_old_capital_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_army_attack.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_attack.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8542,11 +8489,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_fortify_the_restoration_line_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8559,32 +8506,15 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_VAD_convene_the_court_of_honours_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
+
 
 	SpriteType = {
 		name = "GFX_focus_VAD_stage_the_coronation_rites_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_concessions.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_concessions.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8599,11 +8529,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_mortgage_the_regalia_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_SWI_issue_war_bonds.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_SWI_issue_war_bonds.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8616,70 +8546,15 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_VAD_court_the_bracket_victors_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
-	SpriteType = {
-		name = "GFX_focus_VAD_seek_legitimist_recognition_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAD_restore_the_restoration_air_arm_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
 	SpriteType = {
 		name = "GFX_focus_VAD_task_the_guards_for_close_support_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_air_bases.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8694,11 +8569,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_cover_the_district_capitals_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_PRC_anti_air_effort.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_PRC_anti_air_effort.dds"
+			animationtexturefile = "gfx/interface/goals/focus_PRC_anti_air_effort.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8711,32 +8586,14 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_VAD_open_the_foreign_chancery_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
 	SpriteType = {
 		name = "GFX_focus_VAD_issue_restoration_guarantees_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8751,11 +8608,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_VAD_seat_the_observer_missions_shine"
-		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
-			animationtexturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_mission.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -8827,10 +8684,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_raise_technical_battalions_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_allies_build_infantry.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9017,10 +8874,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_test_remote_fire_control_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_army_artillery2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_army_artillery2.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9036,10 +8893,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_test_adaptive_logistics_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_army_motorized.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_army_motorized.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9549,10 +9406,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_run_the_grid_at_war_load_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_energy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_energy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9568,10 +9425,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_hold_back_civil_power_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_hydroelectric_energy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_hydroelectric_energy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9587,7 +9444,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_doctrine_of_continuous_assault_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
@@ -9625,7 +9482,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_doctrine_of_the_measured_front_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_CHI_formalise_training_regime.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
@@ -9682,10 +9539,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_spend_the_reserve_cadre_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_special_forces.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_special_forces.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9701,10 +9558,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_seal_the_technical_core_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_military_academy.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9718,31 +9575,14 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_TVA_certify_the_completed_programmes_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
+
 
 	SpriteType = {
 		name = "GFX_focus_TVA_publish_the_reconstruction_index_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_education.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_education.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9758,10 +9598,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_divert_the_research_budget_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_reorient_production.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_reorient_production.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9777,10 +9617,29 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_open_the_technical_exchange_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/goal_generic_scientific_exchange.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_scientific_exchange.dds"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_TVA_build_the_engineering_service_shine"
+		texturefile = "gfx/interface/goals/goal_generic_production.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/goal_generic_production.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -9813,32 +9672,15 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_TVA_stand_up_the_grid_air_staff_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
+
 
 	SpriteType = {
 		name = "GFX_focus_TVA_print_unattended_strike_packages_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_cas_aircraft.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_cas_aircraft.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_cas_aircraft.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -9853,11 +9695,11 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_TVA_keep_the_interdictors_on_station_shine"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+		texturefile = "gfx/interface/goals/focus_generic_air_defense.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationmaskfile = "gfx/interface/goals/focus_generic_air_defense.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_air_defense.dds"
 			animationrotation = -90.0
 			animationlooping = no
 			animationtime = 0.75
@@ -9927,62 +9769,8 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
-	SpriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_stabilize_claimant_regime_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
-	SpriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_mobilize_field_forces_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
-	SpriteType = {
-		name = "GFX_focus_ADISCORD_vorkerland_fortify_home_region_shine"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
 
 	SpriteType = {
 		name = "GFX_focus_STP_ps_permanent_security_shine"
@@ -11828,6 +11616,158 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_convene_joint_congress_shine"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_sign_joint_operational_orders_shine"
+		texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
+			animationtexturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_convene_collegial_staff_shine"
+		texturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+			animationtexturefile = "gfx/interface/goals/goal_generic_army_doctrines.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_require_collective_directives_shine"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_delegate_to_front_commands_shine"
+		texturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_supply_line.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_supply_line.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_codify_staff_mandate_shine"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_WRK_joint_ratify_staff_constitution_shine"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationtexturefile = "gfx/interface/goals/focus_generic_self_management.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAD_district_emergency_council_shine"
+		texturefile = "gfx/interface/goals/focus_generic_concessions.dds"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/focus_generic_concessions.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

@@ -70,6 +70,146 @@ ADISCORD_vorkerland_prewar_bop = {
 	}
 }
 
+# Calculation is negative; consent is positive. Focuses and paid mandates
+# move the balance. There is no passive drift or periodic reset.
+TVA_bop = {
+	initial_value = 0
+	left_side = TVA_bop_calculation
+	right_side = TVA_bop_consent
+	decision_category = ADISCORD_vorkerland_tva_administration
+	range = {
+		id = TVA_bop_even
+		min = -0.10
+		max = 0.10
+		modifier = { stability_factor = 0.01 }
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = TVA_bop_calculation
+		icon = GFX_idea_generic_central_management
+		range = {
+			id = TVA_bop_calculation_influence
+			min = -0.50
+			max = -0.10
+			modifier = {
+				industrial_capacity_factory = 0.05
+				stability_factor = -0.02
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = TVA_bop_calculation_dominance
+			min = -1.00
+			max = -0.50
+			modifier = {
+				industrial_capacity_factory = 0.10
+				stability_factor = -0.04
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = TVA_bop_consent
+		icon = GFX_bop_SWI_centralization_council_side
+		range = {
+			id = TVA_bop_consent_influence
+			min = 0.10
+			max = 0.50
+			modifier = {
+				industrial_capacity_factory = -0.03
+				stability_factor = 0.05
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = TVA_bop_consent_dominance
+			min = 0.50
+			max = 1.00
+			modifier = {
+				industrial_capacity_factory = -0.06
+				stability_factor = 0.10
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}
+
+VAD_bop = {
+	initial_value = -0.15
+	left_side = VAD_bop_staff
+	right_side = VAD_bop_chancery
+	decision_category = ADISCORD_vorkerland_vad_administration
+	range = {
+		id = VAD_bop_even
+		min = -0.10
+		max = 0.10
+		modifier = { stability_factor = 0.01 }
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = VAD_bop_staff
+		icon = GFX_modifiers_generic_military_plans
+		range = {
+			id = VAD_bop_staff_influence
+			min = -0.60
+			max = -0.10
+			modifier = {
+				army_org_regain = 0.04
+				conscription = 0.005
+				stability_factor = -0.03
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = VAD_bop_staff_dominance
+			min = -1.00
+			max = -0.60
+			modifier = {
+				army_org_regain = 0.08
+				conscription = 0.01
+				stability_factor = -0.06
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = VAD_bop_chancery
+		icon = GFX_bop_SWI_centralization_council_side
+		range = {
+			id = VAD_bop_chancery_influence
+			min = 0.10
+			max = 0.60
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.04
+				conscription = -0.005
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = VAD_bop_chancery_dominance
+			min = 0.60
+			max = 1.00
+			modifier = {
+				political_power_gain = 0.20
+				stability_factor = 0.08
+				conscription = -0.01
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}
+
 # Shadow of Petrishchev: Worcker's court (negative) against the officer corps
 # (positive). ADISCORD_vorkerland_establish_world_empire creates it once; the
 # corps starts ahead because the army still remembers the executed co-ruler.
@@ -159,6 +299,87 @@ ADISCORD_vorkerland_empire_bop = {
 			on_activate = {
 				ADISCORD_economy_mark_dirty = yes
 				ADISCORD_vorkerland_empire_schedule_coup = yes
+			}
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}
+
+WKR_bop = {
+	initial_value = 0
+	left_side = WKR_bop_chairman
+	right_side = WKR_bop_councils
+	decision_category = ADISCORD_vorkerland_wkr_administration
+	range = {
+		id = WKR_bop_even
+		min = -0.10
+		max = 0.10
+		modifier = { political_power_gain = 0.05 }
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = WKR_bop_chairman
+		icon = GFX_bop_ETH_communist_side
+		range = {
+			id = WKR_bop_chairman_influence
+			min = -0.60
+			max = -0.10
+			modifier = {
+				conscription = 0.005
+				war_support_factor = 0.05
+				stability_factor = -0.03
+			}
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = WKR_bop_chairman_dominance
+			min = -1.00
+			max = -0.60
+			modifier = {
+				conscription = 0.01
+				war_support_factor = 0.1
+				stability_factor = -0.06
+			}
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+				WKR_resolve_balance = yes
+			}
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = WKR_bop_councils
+		icon = GFX_bop_SWI_centralization_council_side
+		range = {
+			id = WKR_bop_councils_influence
+			min = 0.10
+			max = 0.60
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = 0.025
+				conscription = -0.0025
+			}
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = WKR_bop_councils_dominance
+			min = 0.60
+			max = 1.00
+			modifier = {
+				industrial_capacity_factory = 0.06
+				stability_factor = 0.05
+				conscription = -0.005
+			}
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+				WKR_resolve_balance = yes
 			}
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
