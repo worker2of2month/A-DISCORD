@@ -326,6 +326,9 @@ class FinalSettlementFixture:
                 self.execute(self.effects[key], scope)
             elif key == "log":
                 pass
+            elif key == "ADISCORD_nam_resource_war_record_uncapitulation":
+                # Only EFL and AZH records exist, and only during NAM's resource war.
+                assert scope not in ("EFL", "AZH")
             else:
                 raise AssertionError(f"Unmodelled settlement effect: {key}")
 
@@ -444,8 +447,11 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
                 section = section.split(f"# END kefreyt:{hook}", 1)[0]
                 entries = parse_clausewitz(section)
                 if hook == "on_annex":
-                    self.assertEqual(entries[0].key, "FROM")
-                    entries = entries[0].value
+                    # The annexed country is FROM; order refunds precede its receipt.
+                    scoped = [entry for entry in entries if entry.key == "FROM"
+                              and "VAL_clear_final_defeat_receipt" in repr(entry.value)]
+                    self.assertEqual(len(scoped), 1)
+                    entries = scoped[0].value
                     scope = "STP"
                 receipts = [entry for entry in entries if entry.key == "VAL_clear_final_defeat_receipt"]
                 self.assertEqual(len(receipts), 1)

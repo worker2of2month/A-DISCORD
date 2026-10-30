@@ -3375,7 +3375,6 @@ VAD_staff_depot_affordable = {
 	NOT = { has_equipment = { support_equipment < 100 } }
 }
 
-
 VAD_crown_government_active = {
 	VAD_administration_active = yes
 	has_completed_focus = VAD_open_imperial_registers
@@ -3570,7 +3569,6 @@ WKR_armoured_train_affordable = {
 	NOT = { has_manpower < 600 }
 }
 
-
 WKR_breakthrough_war_active = {
 	WKR_administration_active = yes
 	has_global_flag = ADISCORD_vorkerland_phase_central_showdown
@@ -3620,7 +3618,6 @@ WKR_interchange_defence_affordable = {
 	NOT = { has_equipment = { support_equipment < 100 } }
 	NOT = { has_manpower < 800 }
 }
-
 
 VAD_guards_context = {
 	VAD_administration_active = yes
@@ -3673,7 +3670,6 @@ VAD_local_militia_affordable = {
 	NOT = { has_equipment = { infantry_equipment < 900 } }
 	NOT = { has_equipment = { support_equipment < 60 } }
 }
-
 
 VAD_final_operations_context = {
 	VAD_administration_active = yes
@@ -3771,7 +3767,6 @@ VAD_city_redoubts_order_matches = {
 		has_state_flag = VAD_oath_in_progress
 	}
 }
-
 
 VAD_coalition_host_ready = {
 	VAD_administration_active = yes

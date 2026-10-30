@@ -3661,3 +3661,16 @@
  TVA_measured_programme_unlock_tt:0 "Cadre training also improves crew coordination, up to three levels. Training remains available at a full cadre reserve until this limit is reached."
  TVA_crew_training_level_tt:0 "Crew coordination: §G+1§! level, up to §Y3§!. Each level strengthens the technical administration:"
  TVA_frontline_dispatch_delivery_tt:0 "A shipment delivered during a war against a civil-conflict participant activates frontline replenishment. The next shipment restarts its duration instead of adding to it. The regime ends with that war or the independent directorate."
+
+ # Research bonus sources
+ ADISCORD_vorkerland_machine_tool_reconstruction_bonus:0 "$WRK_utilitarian_rebuild_machine_tool_pool$"
+ ADISCORD_vorkerland_public_engineering_bonus:0 "$WRK_utilitarian_expand_national_laboratories$"
+ ADISCORD_vorkerland_vad_restoration_treasury:0 "$VAD_convene_the_restoration_treasury$"
+ ADISCORD_vorkerland_wkr_production_soviet:0 "$WKR_convene_the_production_soviet$"
+ TVA_cross_validate_trial_logs_bonus:0 "$TVA_cross_validate_trial_logs$"
+ TVA_live_front_electronics_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_live_front_industry_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_live_front_infantry_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_print_interchangeable_repair_modules_bonus:0 "$TVA_print_interchangeable_repair_modules$"
+ TVA_protect_irreplaceable_specialists_bonus:0 "$TVA_protect_irreplaceable_specialists$"
+ VAD_eastern_works_industry_bonus:0 "$VAD_inventory_eastern_works$"

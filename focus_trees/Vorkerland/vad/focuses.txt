@@ -2866,8 +2866,6 @@ focus_tree = {
 
 	# Industrial crown districts: local privileges or military collateral.
 
-
-
 	focus = {
 		id = VAD_stage_the_coronation_rites
 		icon = GFX_focus_VAD_stage_the_coronation_rites
@@ -3065,7 +3063,6 @@ focus_tree = {
 
 	# Coalition entry and military observation require the other government's consent.
 
-
 	focus = {
 		id = VAD_issue_restoration_guarantees
 		icon = GFX_focus_VAD_issue_restoration_guarantees
@@ -3150,7 +3147,6 @@ focus_tree = {
 			modifier = { factor = 2 has_stability < 0.40 }
 		}
 	}
-
 
 	focus = {
 		id = VAD_convene_joint_congress

@@ -94,6 +94,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "ADISCORD_south_final_active": False,
             "ADISCORD_south_crisis_open": False,
             "ADISCORD_south_final_can_start": False,
+            "ADISCORD_south_preparing_country": False,
             "convoys": 30,
         }
         context.update(changes)
@@ -296,6 +297,11 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         self.assertFalse(self.enabled(name, context))
         context.update(ADISCORD_south_final_war_enabled=True)
         self.assertTrue(self.enabled(name, context))
+        # Production preparation precedes the declaration and still respects the switch.
+        preparing = self.context("NAM", wars=set(), ADISCORD_south_preparing_country=True)
+        self.assertFalse(self.enabled(name, preparing))
+        preparing.update(ADISCORD_south_final_war_enabled=True)
+        self.assertTrue(self.enabled(name, preparing))
 
     def test_west_preparation_expires_if_the_other_champion_is_unavailable(self):
         for tag, opponent in (("WRK", "IVN"), ("IVN", "WRK")):

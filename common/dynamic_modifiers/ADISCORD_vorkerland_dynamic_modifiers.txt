@@ -137,7 +137,6 @@ WKR_airfield_workshop = {
 	local_factories = -0.05
 }
 
-
 ADISCORD_vorkerland_vad_commandant_district = {
 	icon = GFX_modifiers_generic_military_plans
 	enable = {
@@ -173,7 +172,6 @@ ADISCORD_vorkerland_vad_war_economy = {
 	stability_factor = ADISCORD_vorkerland_war_economy_unrest
 	political_power_gain = ADISCORD_vorkerland_war_economy_authority
 }
-
 
 # Variant doctrine
 # Country-scoped doctrine values follow the variant and current legitimacy.
@@ -448,7 +446,6 @@ VAD_crown_district_collateral = {
 	local_factories = -0.20
 }
 
-
 WKR_prepared_interchange = {
 	icon = GFX_idea_generic_fortify_the_borders
 	enable = {
@@ -460,7 +457,6 @@ WKR_prepared_interchange = {
 	enemy_attrition = 0.10
 	local_factories = -0.10
 }
-
 
 VAD_local_militia = {
 	icon = GFX_idea_generic_manpower_bonus
@@ -474,7 +470,6 @@ VAD_local_militia = {
 	local_manpower = 0.10
 	local_factories = -0.05
 }
-
 
 VAD_march_commitment = {
 	icon = GFX_idea_generic_production_bonus

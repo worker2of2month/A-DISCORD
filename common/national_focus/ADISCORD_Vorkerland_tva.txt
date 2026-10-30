@@ -2678,8 +2678,6 @@ focus_tree = {
 	# Laboratory controllers assign network capacity to strike guidance
 	# or to the interceptor reserve protecting the grid.
 
-
-
 	focus = {
 		id = TVA_print_unattended_strike_packages
 		icon = GFX_focus_TVA_print_unattended_strike_packages

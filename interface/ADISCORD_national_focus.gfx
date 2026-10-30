@@ -2139,8 +2139,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/focus_SWI_issue_war_bonds.dds"
 	}
 
-
-
 	spriteType = {
 		name = "GFX_focus_VAD_task_the_guards_for_close_support"
 		texturefile = "gfx/interface/goals/focus_generic_air_bases.dds"
@@ -2322,10 +2320,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
-		name = "GFX_focus_TVA_convene_the_load_board"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
 		name = "GFX_focus_TVA_run_the_grid_at_war_load"
 		texturefile = "gfx/interface/goals/focus_generic_energy.dds"
 	}
@@ -2338,20 +2332,8 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
 	}
 	spriteType = {
-		name = "GFX_focus_TVA_replace_losses_from_the_line"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
 		name = "GFX_focus_TVA_doctrine_of_the_measured_front"
 		texturefile = "gfx/interface/goals/focus_CHI_formalise_training_regime.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_TVA_hold_with_fewer_better_crews"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
-		name = "GFX_focus_TVA_declare_the_final_iteration"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
 	}
 	spriteType = {
 		name = "GFX_focus_TVA_spend_the_reserve_cadre"
@@ -2378,11 +2360,6 @@ spriteTypes = {
 		name = "GFX_focus_TVA_build_the_engineering_service"
 		texturefile = "gfx/interface/goals/goal_generic_production.dds"
 	}
-	spriteType = {
-		name = "GFX_focus_TVA_hire_the_bracket_victors"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-
 
 	spriteType = {
 		name = "GFX_focus_TVA_print_unattended_strike_packages"
@@ -2392,23 +2369,8 @@ spriteTypes = {
 		name = "GFX_focus_TVA_keep_the_interdictors_on_station"
 		texturefile = "gfx/interface/goals/focus_generic_air_defense.dds"
 	}
-	spriteType = {
-		name = "GFX_focus_TVA_open_the_exchange_window"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
-		name = "GFX_focus_TVA_export_surplus_output"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
-	spriteType = {
-		name = "GFX_focus_TVA_import_surviving_specialists"
-		texturefile = "gfx/interface/goals/TVA/GFX_focus_TVA.png"
-	}
 
 	###ADISCORD
-
-
-
 
 	spriteType = {
 		name = "GFX_focus_STP_ps_permanent_security"
@@ -2851,10 +2813,6 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_WRK_prepare_military_evacuation"
 		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
-	}
-	spriteType = {
-		name = "GFX_focus_WRK_face_the_hourglass"
-		texturefile = "gfx/interface/goals/goal_generic_political_pressure.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_emergency_central_budget"

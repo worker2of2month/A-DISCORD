@@ -2306,8 +2306,6 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-
 		# A professional officer caste, slow to reproduce.
 		ADISCORD_vorkerland_vad_doctrine_officer_estates = {
 			name = ADISCORD_vorkerland_vad_doctrine
@@ -2324,8 +2322,6 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-
 		# Numbers raised fast, at the cost of quality.
 		ADISCORD_vorkerland_vad_doctrine_district_levies = {
 			name = ADISCORD_vorkerland_vad_doctrine
@@ -2341,8 +2337,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
-
 
 		# The restoration's push for the old capital.
 		ADISCORD_vorkerland_vad_march_on_the_capital = {
@@ -2368,18 +2362,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
-
-
-		# Local winners brought into the restoration's coalition.
-
-
-		# Recognition of the restoration as the lawful state.
-
-
-		# The grid run at war load; the cities pay for it.
-
-		# Civil power protected; the line goes short instead.
 
 		# Continuous attack bought with supply and defence.
 		ADISCORD_vorkerland_tva_doctrine_continuous_assault = {
@@ -2503,9 +2485,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
-
-
 		ADISCORD_vorkerland_tva_unattended_strike = {
 			picture = generic_war_preparation
 			allowed = { always = no }

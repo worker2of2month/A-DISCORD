@@ -2894,6 +2894,11 @@ class RusCrisisContracts(unittest.TestCase):
         # Furnace equipment cleanup has its own tests; this scenario exercises
         # actual regional war closure, major ownership and deferred deadlines.
         world.effects["SHL_clean_campaign"] = []
+        if region == "south":
+            from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+            # NAM's own war of return is covered by the NAM suites; here it is settled.
+            world.triggers["NAM_south_story_pending"] = parse_clausewitz("always = no")
 
     def test_parallel_major_owners_release_in_every_order(self):
         from itertools import permutations
@@ -2926,10 +2931,10 @@ class RusCrisisContracts(unittest.TestCase):
             world = self.peaceful_empire()
             self.load_regional_lifecycle(world, region)
             if region == "south":
-                self.assertFalse(world.matches(world.triggers["ADISCORD_south_final_war_enabled"], ["RUS"]))
-                if enabled:
-                    # Exercise epilogue cleanup even while this regional route is disabled.
-                    world.triggers["ADISCORD_south_final_war_enabled"] = parse_clausewitz("always = yes")
+                self.assertTrue(world.matches(world.triggers["ADISCORD_south_final_war_enabled"], ["RUS"]))
+                if not enabled:
+                    # The campaign switch alone closes the southern crisis.
+                    world.triggers["ADISCORD_south_final_war_enabled"] = parse_clausewitz("always = no")
             world.global_flags.update(("ADISCORD_fresh_campaign_contract_v1", "ADISCORD_vorkerland_collapse_finished", "ADISCORD_nam_resource_war_resolved"))
             world.owners["wrk_capital"] = "WRK"
             world.flags["WRK"].add("ADISCORD_vorkerland_central_unifier")
@@ -3471,7 +3476,11 @@ class RusCrisisContracts(unittest.TestCase):
 
         shared = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
         hooks = self.block(parse_clausewitz(read_scripted_peace(shared, "vorkerland_collapse")), "on_actions")
-        late = self.block(self.block(hooks, "on_capitulation"), "effect")[2:4]
+        # The crisis reservation pair, located by content: country programme
+        # settlement and other Vorkerland handlers precede it in the same hook.
+        late = [entry for entry in self.block(self.block(hooks, "on_capitulation"), "effect")
+                if entry.key == "if" and "RUS_crisis_capitulation_reserved" in repr(entry.value[0])]
+        self.assertEqual(len(late), 2)
         for loser, victor in (("VAL", "RUS"), ("RUS", "VAL")):
             world = RusCrisisFixture()
             world.capitulated.add("NOD")

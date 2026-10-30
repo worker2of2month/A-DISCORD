@@ -54,7 +54,7 @@ def starting_template_role(name: str) -> str:
         return "armor"
     if "shield" in lowered or "urban breacher" in lowered:
         return "shield"
-    if "marine" in lowered or "морск" in lowered:
+    if "marine" in lowered or "морск" in lowered or "naval landing" in lowered:
         return "marine"
     if "coastal battalion" in lowered or "abandoned columns" in lowered:
         return "bunker"

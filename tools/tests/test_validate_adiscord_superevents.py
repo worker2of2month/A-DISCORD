@@ -206,9 +206,12 @@ class SupereventContractTests(unittest.TestCase):
         nam = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
         effects = (ROOT / "common/scripted_effects/ADISCORD_RUS_scripted_effects.txt").read_text(encoding="utf-8")
         war = blocks(nam, r"^ADISCORD_nam_resource_war_begin_hostilities\s*=\s*\{")[0]
-        peace = blocks(nam, r"^ADISCORD_nam_resource_war_resolve_peaceful_withdrawal\s*=\s*\{")[0]
+        settlements = blocks(nam, r"^ADISCORD_nam_resource_war_resolve_\w+\s*=\s*\{")
+        self.assertTrue(settlements)
         self.assertLess(war.index("declare_war_on"), war.index("ADISCORD_nam_show_resource_war_superevent"))
-        self.assertNotIn("ADISCORD_nam_show_resource_war_superevent", peace)
+        # Only the actual outbreak announces the war; no settlement replays it.
+        for settlement in settlements:
+            self.assertNotIn("ADISCORD_nam_show_resource_war_superevent", settlement)
         empire = blocks(effects, r"^ADISCORD_vorkerland_rus_proclaim_last_empire\s*=\s*\{")[0]
         self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }", empire)
         self.assertLess(empire.index("set_cosmetic_tag"), empire.index("ADISCORD_vorkerland_show_last_empire_superevent"))
@@ -604,7 +607,8 @@ class SupereventContractTests(unittest.TestCase):
             contents = localisation.read_text(encoding="utf-8-sig")
             values = []
             for key in quote_keys:
-                matches = re.findall(rf'^\s*{key}:\d* "([^"\r\n]+)"$', contents, re.MULTILINE)
+                # Values may contain escaped ASCII quotes around titles.
+                matches = re.findall(rf'^\s*{key}:\d* "((?:[^"\\\r\n]|\\.)+)"$', contents, re.MULTILINE)
                 self.assertEqual(len(matches), 1, (language, key))
                 self.assertIn(r"\n\n- ", matches[0])
                 values.append(matches[0])
@@ -666,6 +670,12 @@ class SupereventContractTests(unittest.TestCase):
                     matched = matches(limit, flags)
                     if matched:
                         execute([child for child in entry.value if child.key != "limit"], flags, shown)
+                elif entry.key == "else_if":
+                    if not matched:
+                        limit = next(child.value for child in entry.value if child.key == "limit")
+                        matched = matches(limit, flags)
+                        if matched:
+                            execute([child for child in entry.value if child.key != "limit"], flags, shown)
                 elif entry.key == "else":
                     if not matched:
                         execute(entry.value, flags, shown)
@@ -681,6 +691,16 @@ class SupereventContractTests(unittest.TestCase):
                     flags.add("ADISCORD_vorkerland_central_victory_announced")
                 else:
                     self.fail(f"Unsupported victory effect: {entry.key}")
+
+        # The collegial staff is a non-imperial course: it has no restoration
+        # superevent, but its victory still closes the announcement.
+        flags = {"ADISCORD_vorkerland_collegial_staff_formed"}
+        shown = []
+        scheduled = []
+        execute([entry for entry in route if entry.key != "limit"], flags, shown)
+        self.assertEqual(shown, [])
+        self.assertEqual(scheduled, [])
+        self.assertIn("ADISCORD_vorkerland_central_victory_announced", flags)
 
         for joint in (False, True):
             for announced in (False, True):

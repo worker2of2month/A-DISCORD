@@ -11779,7 +11779,7 @@ WKR_lock_assault_column_template = {
 		limit = { NOT = { has_template = "Worker Assault Column" } }
 		division_template = {
 			name = "Worker Assault Column"
-			template_counter = 78
+			template_counter = 4
 			division_names_group = WRK_INF_01
 			is_locked = yes
 			force_allow_recruiting = yes
@@ -16110,7 +16110,6 @@ VAD_ratify_staff_constitution = {
 	}
 }
 
-
 # State scope, invoked when the charter or the wartime district system ends.
 VAD_clear_crown_programmes = {
 	if = {
@@ -16461,7 +16460,6 @@ WKR_finish_armoured_train = {
 	}
 }
 
-
 WKR_clear_prepared_interchange = {
 	if = {
 		limit = { has_dynamic_modifier = { modifier = WKR_prepared_interchange } }
@@ -16537,7 +16535,6 @@ WKR_finish_interchange_defence = {
 		else = { WKR_refund_railway_order = yes }
 	}
 }
-
 
 VAD_clear_local_militia = {
 	if = {
@@ -16665,7 +16662,6 @@ VAD_finish_local_militia = {
 	}
 }
 
-
 # State scope. There can be only one district sustaining the national march plan.
 VAD_clear_march_commitment = {
 	if = {
@@ -16759,7 +16755,6 @@ VAD_finish_city_redoubts = {
 		else = { VAD_refund_oath = yes }
 	}
 }
-
 
 # An open recipient event owns its pending marker until dismissal. This prevents
 # a later offer to the same country from being mistaken for that open event.

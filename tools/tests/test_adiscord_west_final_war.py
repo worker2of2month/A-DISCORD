@@ -418,8 +418,13 @@ class WestFinalWarContractTests(unittest.TestCase):
         for name, enemy_side in profiles:
             profile = body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name)
             self.assertIn("abort_when_not_enabled = yes", profile)
-            # The corridor separates the champions; requests cover the whole opposing side.
-            self.assertEqual(profile.count(f"ADISCORD_west_on_{enemy_side}_side = yes"), 2, name)
+            # The corridor separates the champions; every request and front order,
+            # including the difficulty variants, covers the whole opposing side.
+            strategies = profile.split("ai_strategy = {")[1:]
+            self.assertGreaterEqual(len(strategies), 2, name)
+            for strategy in strategies:
+                self.assertIn(f"ADISCORD_west_on_{enemy_side}_side = yes", strategy, name)
+                self.assertIn("has_war_with = FROM", strategy, name)
         offensives = ("ADISCORD_west_wrk_front_ivn", "ADISCORD_west_ivn_front_wrk")
         manual = {
             re.search(r"manual_attack = (\w+)", body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name))[1]
@@ -742,6 +747,13 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                 self.assertEqual([(e.key, e.value) for e in gate], [("always", "no")])
 
     def test_southern_heritage_keeps_its_rewards_without_an_annexation_unlock(self):
+        decisions = {}
+        for decision_path in (ROOT / "common/decisions").glob("*.txt"):
+            for category in parse_clausewitz(decision_path.read_text(encoding="utf-8-sig")):
+                if isinstance(category.value, list):
+                    decisions.update(
+                        (d.key, d.value) for d in category.value if isinstance(d.value, list)
+                    )
         for country, tree, identifier in (
             ("NAM", "postwar", "NAM_south_heritage"),
             ("SHL", "main", "SHL_south_crown_of_the_south"),
@@ -750,7 +762,13 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                 path = ROOT / f"focus_trees/{country}/{tree}/focuses.txt"
                 reward = block(focus_blocks(path)[identifier], "completion_reward")
                 self.assertTrue(reward)
-                self.assertNotIn("unlock_decision_tooltip", repr(reward))
+                # Ordinary postwar programmes may be unlocked; none of them annexes a subject.
+                unlocked = {e.value for e in flatten(reward) if e.key == "unlock_decision_tooltip"}
+                for decision in unlocked:
+                    self.assertFalse(
+                        any(e.key == "annex_country" for e in flatten(decisions[decision])),
+                        decision,
+                    )
 
 
 class ItoranAggregateTests(unittest.TestCase):

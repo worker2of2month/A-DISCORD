@@ -710,7 +710,6 @@ defined_text = {
 	text = { localization_key = VAD_oath_idle }
 }
 
-
 defined_text = {
 	name = GetWKRCouncilOrder
 	text = {

@@ -3062,7 +3062,6 @@ ADISCORD_vorkerland_prewar_category = {
 	}
 }
 
-
 ADISCORD_vorkerland_wkr_administration = {
 	WKR_supply_coalition_partner = {
 		icon = generic_army_support
@@ -3436,8 +3435,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		ai_will_do = { factor = 300 }
 	}
 
-
-
 	ADISCORD_vorkerland_wrk_requisition_rail_stock = {
 		icon = generic_production
 		allowed = { tag = WKR }
@@ -3453,8 +3450,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		}
 		ai_will_do = { factor = 250 }
 	}
-
-
 
 	ADISCORD_vorkerland_wkr_mobilize_council = {
 		icon = generic_manpower
@@ -3507,8 +3502,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		}
 	}
 
-
-
 	WKR_mobilize_factory_columns = {
 		icon = generic_manpower
 		allowed = { tag = WKR }
@@ -3559,8 +3552,6 @@ ADISCORD_vorkerland_wkr_administration = {
 			}
 		}
 	}
-
-
 
 	WKR_assault_column_programme = {
 		icon = generic_manpower
@@ -3636,8 +3627,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		ai_will_do = { factor = 400 }
 	}
 
-
-
 	ADISCORD_vorkerland_wrk_adopt_front_charter = {
 		icon = generic_political_pressure
 		allowed = { tag = WKR }
@@ -3657,8 +3646,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		ai_will_do = { factor = 350 }
 	}
 
-
-
 	ADISCORD_vorkerland_wrk_open_erased_archives = {
 		icon = generic_political_pressure
 		allowed = { tag = WKR }
@@ -3673,8 +3660,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		}
 		ai_will_do = { factor = 350 }
 	}
-
-
 
 	ADISCORD_vorkerland_wrk_restore_displaced_councils = {
 		icon = generic_political_pressure
@@ -3691,8 +3676,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		ai_will_do = { factor = 350 }
 	}
 
-
-
 	ADISCORD_vorkerland_wrk_enact_constitutional_guarantees = {
 		icon = generic_political_pressure
 		allowed = { tag = WKR }
@@ -3707,8 +3690,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		}
 		ai_will_do = { factor = 350 }
 	}
-
-
 
 	WKR_rehearse_operation_southbound_activate_plan = {
 		icon = generic_army_support
@@ -3736,16 +3717,6 @@ ADISCORD_vorkerland_wkr_administration = {
 		}
 		ai_will_do = { base = 100 }
 	}
-
-
-
-
-
-
-
-
-
-
 
 	WKR_solar_counter_activate_plan = {
 		icon = generic_army_support
@@ -3856,8 +3827,6 @@ ADISCORD_vorkerland_vad_administration = {
 		ai_will_do = { base = 4 }
 	}
 
-
-
 	ADISCORD_vorkerland_vad_grant_district_charter = {
 		icon = generic_political_pressure
 		allowed = { tag = VAD }
@@ -3912,7 +3881,6 @@ ADISCORD_vorkerland_vad_administration = {
 			}
 		}
 	}
-
 
 	ADISCORD_vorkerland_vad_impose_commandant_rule = {
 		icon = generic_territory_or_war
@@ -4341,7 +4309,6 @@ ADISCORD_vorkerland_vad_administration = {
 			}
 		}
 	}
-
 
 	VAD_crown_privileges_programme = {
 		icon = generic_political_pressure
@@ -4794,7 +4761,6 @@ ADISCORD_vorkerland_vad_administration = {
 		}
 		ai_will_do = { base = 100 }
 	}
-
 
 	VAD_give_the_staff_priority = {
 		icon = generic_political_pressure

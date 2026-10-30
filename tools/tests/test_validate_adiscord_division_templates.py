@@ -110,11 +110,11 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
                 "ADISCORD_INF_01",
                 [child.value for child in template if child.key == "division_names_group"],
             )
-            oob = (root / f"history/units/{tag}_nam_resource_war.txt").read_text(
-                encoding="utf-8"
-            )
-            self.assertNotIn("division_template = {", oob)
-            self.assertEqual(oob.count(f'division_template = "{name}"'), 3)
+            # The resource-war divisions start in the national OOB and keep one template.
+            self.assertFalse((root / f"history/units/{tag}_nam_resource_war.txt").exists())
+            source = (root / f"history/units/{tag}.txt").read_text(encoding="utf-8")
+            self.assertEqual(source.count(f'name = "{name}"'), 1)
+            self.assertGreaterEqual(source.count(f'division_template = "{name}"'), 2)
         effects = (root / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(
             encoding="utf-8"
         )

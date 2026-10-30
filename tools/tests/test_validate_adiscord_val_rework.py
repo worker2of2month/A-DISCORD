@@ -500,7 +500,7 @@ class ValTradeMapTests(unittest.TestCase):
         self.assertEqual(builder.trade_route_states()["west"], (59, 60, 61))
         self.assertEqual(builder.trade_route_states()["north"], ())
         self.assertEqual(builder.trade_route_states()["vorkerland"], (33,))
-        self.assertEqual(builder.trade_route_states()["south"], (68, 691, 701, 70))
+        self.assertEqual(builder.trade_route_states()["south"], (68, 691, 701, 70, 723, 724, 725, 726))
 
     def test_debug_category_exposes_south_route_controls_only_in_debug_mode(self):
         source = (
@@ -2790,16 +2790,17 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
             "Sergei_Volkov": "VAL_Veterans_Of_The_Campaign",
         }
         for name, focus_id in unlocks.items():
+            # These generals command from the start; their focus improves them.
             self.assertIn("recruit_character = VAL_" + name, history)
             definition = only_named_block(self, characters, "VAL_" + name)
-            self.assertNotIn("corps_commander =", definition)
-            self.assertNotIn("field_marshal =", definition)
+            self.assertRegex(definition, r"(corps_commander|field_marshal) =")
             focus = next(
                 f for f in named_blocks(focus_text, "focus") if f"id = {focus_id}" in f
             )
             self.assertNotIn("recruit_character =", focus)
-            self.assertIn("character = VAL_" + name, focus)
-            self.assertRegex(focus, r"add_(corps_commander|field_marshal)_role\s*=")
+            self.assertNotRegex(focus, r"add_(corps_commander|field_marshal)_role\s*=")
+            self.assertIn("has_character = VAL_" + name, focus)
+            self.assertIn("VAL_" + name + " = {", focus)
         self.assertNotIn(
             "The_Weaponry_Baron",
             only_named_block(self, characters, "VAL_Valera_Solgalov"),
@@ -4029,15 +4030,20 @@ class ValContractFormationTests(unittest.TestCase):
         )
         self.assertEqual(
             {
-                scalar(e.value, "decision")
+                # Compact `unlock_decision_tooltip = <id>` and the block form are equivalent.
+                e.value if isinstance(e.value, str) else scalar(e.value, "decision")
                 for e in trade
                 if e.key == "unlock_decision_tooltip"
             },
             {
                 "VAL_cw_sell_arms_to_resistance",
                 "VAL_cw_offer_contract_formations",
-                "VAL_cw_begin_mobilization",
             },
+        )
+        # Mobilization is opened by the government's focus, not by this answer.
+        self.assertIn(
+            ("custom_effect_tooltip", "VAL_cw_mobilization_focus_required_tt"),
+            [(e.key, e.value) for e in trade],
         )
         offer = next(
             e.value
@@ -7024,14 +7030,14 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("VAL_Resource_War_Contracts", str(allow))
         self.assertIn("ADISCORD_nam_resource_war_active", str(allow))
         available = self.getblock(support, "available")
-        self.assertIn("VAL_nam_concession_negotiable", str(available))
+        self.assertIn("VAL_support_viceroy_possible", str(available))
         reward = self.getblock(support, "completion_reward")
         reward_text = str(reward)
+        # The focus only asks NAM; aid starts after NAM accepts in val_contract.349.
         self.assertIn("VAL_nam_concession_negotiable", reward_text)
-        self.assertIn("VAL_nam_concession_agreed", reward_text)
-        self.assertIn("VAL_resource_aid_side", reward_text)
-        self.assertIn("VAL_start_resource_aid", reward_text)
-        self.assertIn("VAL_begin_partner_contract_year", reward_text)
+        self.assertIn("VAL_nam_concession_offer_pending", reward_text)
+        self.assertIn("val_contract.349", reward_text)
+        self.assertNotIn("VAL_start_resource_aid", reward_text)
         self.assertNotIn("VAL_commit_nam_resource_aid", reward_text)
 
         effects_text = EFFECTS_PATH.read_text(encoding="utf-8")
@@ -7059,7 +7065,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
         effects_text = EFFECTS_PATH.read_text(encoding="utf-8")
         for text in (focus_text, events_text, effects_text):
             self.assertNotIn("VAL_commit_nam_resource_aid", text)
-        self.assertIn("VAL_start_resource_aid = yes", focus_text)
+        # Aid begins only from NAM's answer, never directly from the focus.
+        self.assertNotIn("VAL_start_resource_aid = yes", focus_text)
         self.assertIn("VAL_start_resource_aid = yes", events_text)
 
     def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(
@@ -7074,7 +7081,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         )
         for suffix in (
             "begin_hostilities",
-            "resolve_peaceful_withdrawal",
+            "resolve_compromise",
             "resolve_coalition_victory",
             "resolve_nam_victory",
         ):
@@ -9205,8 +9212,18 @@ class ValFormationAndCommandTests(unittest.TestCase):
             "VAL_command_balance_category",
         )
         for decision in decisions:
-            self.assertGreater(float(scalar(decision.value, "cost")), 0)
-            self.assertGreater(float(scalar(decision.value, "days_re_enable")), 0)
+            keys = {e.key for e in decision.value}
+            if "days_mission_timeout" in keys:
+                continue
+            if "custom_cost_text" in keys:
+                # Consolidations price several currencies; the shared receipt
+                # variable blocks a second order instead of a re-enable delay.
+                self.assertEqual(scalar(decision.value, "cost"), "0", decision.key)
+                self.assertIn("custom_cost_trigger", keys, decision.key)
+                self.assertIn("VAL_command_consolidation_kind", repr(decision.value), decision.key)
+                continue
+            self.assertGreater(float(scalar(decision.value, "cost")), 0, decision.key)
+            self.assertGreater(float(scalar(decision.value, "days_re_enable")), 0, decision.key)
         init = only_named_block(
             self,
             EFFECTS_PATH.read_text(encoding="utf-8"),

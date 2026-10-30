@@ -393,7 +393,10 @@ class DorianIdeologyContracts(unittest.TestCase):
         worx = one(characters, "TVA_Dorian_Worx")
         self.assertEqual(one(one(worx, "country_leader"), "ideology"), "dorian_technocracy")
         history = parse_clausewitz(read("history/countries/TVA - Vorkerland Technical Administration.txt"))
-        self.assertEqual(one(history, "recruit_character"), "TVA_Dorian_Worx")
+        # The staff officers are recruited after the leader.
+        recruits = [entry.value for entry in history if entry.key == "recruit_character"]
+        self.assertEqual(recruits[0], "TVA_Dorian_Worx")
+        self.assertEqual(recruits.count("TVA_Dorian_Worx"), 1)
         self.assertEqual(one(one(history, "set_politics"), "ruling_party"), "technocracy")
         effects = parse_clausewitz(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"))
         appointments = []

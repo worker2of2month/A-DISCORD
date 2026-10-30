@@ -75,6 +75,19 @@ class WartimeRewardsTests(unittest.TestCase):
         for country in countries:
             facts[(tag, "has_war_with", country)] = country == enemy
             facts[(country, "tag", country)] = True
+        if tag == "TVA":
+            # Paid final operations also need the live administration, the showdown
+            # phase and their price; the enemy relation remains the only variable.
+            facts.update({
+                (tag, "exists", "yes"): True,
+                (tag, "is_subject", "no"): True,
+                (tag, "has_country_flag", "TVA_administration_initialized"): True,
+                (tag, "has_global_flag", "ADISCORD_vorkerland_phase_central_showdown"): True,
+                (tag, "numeric", "has_political_power"): 100,
+                (tag, "numeric", "command_power"): 100,
+                (tag, "equipment", "support_equipment"): 500,
+                (tag, "variable", "TVA_cadre_reserve"): 60,
+            })
         return facts
 
     def test_focus_plans_keep_full_duration_for_their_own_war(self):
@@ -82,7 +95,18 @@ class WartimeRewardsTests(unittest.TestCase):
             key: value for key, value in self.decisions.items()
             if key.endswith("_activate_plan") and key != "WKR_solar_counter_activate_plan"
         }
-        self.assertEqual(len(plans), 33)
+        # Air, final-operation and guard plans of WKR/VAD/TVA are paid programmes,
+        # not free activation decisions.
+        self.assertEqual(len(plans), 22)
+        for retired in (
+            "TVA_keep_the_interdictors_on_station", "TVA_print_unattended_strike_packages",
+            "TVA_test_adaptive_logistics", "VAD_cover_the_district_capitals",
+            "VAD_fortify_the_restoration_line", "VAD_march_on_the_old_capital",
+            "VAD_task_the_guards_for_close_support", "WKR_commit_shopfloor_squadrons",
+            "WKR_dig_in_along_the_interchange", "WKR_screen_the_interchange_sky",
+            "WKR_throw_the_reserves_forward",
+        ):
+            self.assertNotIn(retired + "_activate_plan", self.decisions)
         native_focuses = {}
         for filename in (
             "ADISCORD_STP_civil_war.txt", "ADISCORD_Vorkerland_wkr.txt",
@@ -123,6 +147,8 @@ class WartimeRewardsTests(unittest.TestCase):
                     ), not expected)
             facts = self.facts(tag, enemy, focus)
             facts[(tag, "has_idea", idea)] = True
+            # The sealed core keeps its protected reserve after the timed idea.
+            facts[(tag, "variable", "TVA_protected_cadre")] = 30
             self.assertFalse(matches_conditions(
                 self.expand_plan_triggers(one(decision, "available")), facts, tag
             ))

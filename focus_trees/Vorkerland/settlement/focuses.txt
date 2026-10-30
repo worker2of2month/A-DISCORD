@@ -320,17 +320,28 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_vad_crown_and_council
 			# Wartime depth spirits: war economy and variant doctrine do not
 			# survive the settlement that ends the war they were raised for.
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine }
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine }
+			}
 			remove_ideas = ADISCORD_vorkerland_wkr_doctrine_measured_force
 			remove_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
-
-
-
-
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
+			}
 			add_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
 			add_stability = 0.03
 			add_political_power = 25
@@ -366,7 +377,7 @@ focus_tree = {
 
 	# ---------------------------------------------------------------------
 	# Postwar Worx route: technical reconstruction, public engineering and a
-	# permanent technocratic settlement. Retired IDs remain inert and reserved.
+	# permanent technocratic settlement.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -674,17 +685,28 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_vad_crown_and_council
 			# Wartime depth spirits: war economy and variant doctrine do not
 			# survive the settlement that ends the war they were raised for.
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine }
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_war_economy }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine }
+			}
 			remove_ideas = ADISCORD_vorkerland_wkr_doctrine_measured_force
 			remove_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
-
-
-
-
-			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_war_economy }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } }
+				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
+			}
 			add_ideas = ADISCORD_vorkerland_measurable_republic
 			add_stability = 0.03
 			add_political_power = 25

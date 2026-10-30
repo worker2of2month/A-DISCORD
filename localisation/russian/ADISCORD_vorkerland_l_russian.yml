@@ -3653,3 +3653,16 @@
  TVA_measured_programme_unlock_tt:0 "Подготовка кадров также повышает слаженность расчётов, до трёх уровней. Обучение доступно и при полном кадровом резерве, пока не достигнут этот предел."
  TVA_crew_training_level_tt:0 "Слаженность расчётов: §G+1§! уровень, до предела §Y3§!. Каждый уровень усиливает техническую администрацию:"
  TVA_frontline_dispatch_delivery_tt:0 "При выдаче партии во время войны с участником гражданского конфликта включится режим фронтового пополнения. Следующая поставка заново отсчитает срок; длительность не складывается. Режим заканчивается вместе с этой войной или работой независимого директората."
+
+ # Источники бонусов исследований
+ ADISCORD_vorkerland_machine_tool_reconstruction_bonus:0 "$WRK_utilitarian_rebuild_machine_tool_pool$"
+ ADISCORD_vorkerland_public_engineering_bonus:0 "$WRK_utilitarian_expand_national_laboratories$"
+ ADISCORD_vorkerland_vad_restoration_treasury:0 "$VAD_convene_the_restoration_treasury$"
+ ADISCORD_vorkerland_wkr_production_soviet:0 "$WKR_convene_the_production_soviet$"
+ TVA_cross_validate_trial_logs_bonus:0 "$TVA_cross_validate_trial_logs$"
+ TVA_live_front_electronics_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_live_front_industry_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_live_front_infantry_bonus:0 "$TVA_run_live_front_validation$"
+ TVA_print_interchangeable_repair_modules_bonus:0 "$TVA_print_interchangeable_repair_modules$"
+ TVA_protect_irreplaceable_specialists_bonus:0 "$TVA_protect_irreplaceable_specialists$"
+ VAD_eastern_works_industry_bonus:0 "$VAD_inventory_eastern_works$"

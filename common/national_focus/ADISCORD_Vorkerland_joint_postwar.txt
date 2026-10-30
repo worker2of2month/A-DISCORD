@@ -343,10 +343,6 @@ shared_focus = {
 				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
 				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine }
 			}
-
-
-
-
 			if = {
 				limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine } }
 				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
