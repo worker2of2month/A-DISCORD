@@ -223,6 +223,32 @@ NKA_STS_administration = {
 	color_ui = rgb { 88 99 72 }
 }
 
+# Shahrabad after a ratified course: one name per course tree.
+SHL_conclave_of_ten = {
+	color = rgb { 168 124 40 }
+	color_ui = rgb { 214 180 102 }
+}
+
+SHL_southern_compact = {
+	color = rgb { 31 105 95 }
+	color_ui = rgb { 77 173 153 }
+}
+
+SHL_iron_directorate = {
+	color = rgb { 82 86 90 }
+	color_ui = rgb { 140 146 152 }
+}
+
+SHL_hereditary_republic = {
+	color = rgb { 110 20 36 }
+	color_ui = rgb { 170 60 76 }
+}
+
+SHL_commune_of_fire = {
+	color = rgb { 58 14 14 }
+	color_ui = rgb { 164 36 30 }
+}
+
 # Svetlogorye political endings.
 NAM_iron_ladder = {
 	color = rgb { 128 38 52 }

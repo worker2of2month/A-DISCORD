@@ -32,8 +32,8 @@ characters = {
 		name = NAM_Arseny_Klyuch
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_8
-				small = GFX_Portrait_Forul_Generic_8_small
+				large = GFX_portrait_NAM_Arseny_Klyuch
+				small = GFX_portrait_NAM_Arseny_Klyuch_small
 			}
 		}
 		advisor = {
@@ -57,8 +57,8 @@ characters = {
 		name = NAM_Lev_Gavanov
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_7
-				small = GFX_Portrait_Forul_Generic_7_small
+				large = GFX_portrait_NAM_Lev_Gavanov
+				small = GFX_portrait_NAM_Lev_Gavanov_small
 			}
 		}
 		advisor = {
@@ -82,8 +82,8 @@ characters = {
 		name = NAM_Taras_Shtyk
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_3
-				small = GFX_Portrait_Forul_Generic_3_small
+				large = GFX_portrait_NAM_Taras_Shtyk
+				small = GFX_portrait_NAM_Taras_Shtyk_small
 			}
 		}
 		advisor = {
@@ -107,8 +107,8 @@ characters = {
 		name = NAM_Vera_Pechat
 		portraits = {
 			civilian = {
-				large = GFX_portrait_unknown_female
-				small = GFX_portrait_unknown_female_small
+				large = GFX_portrait_NAM_Vera_Pechat
+				small = GFX_portrait_NAM_Vera_Pechat_small
 			}
 		}
 		advisor = {
@@ -134,8 +134,8 @@ characters = {
 		name = NAM_Nadezhda_Okrug
 		portraits = {
 			civilian = {
-				large = GFX_portrait_unknown_female
-				small = GFX_portrait_unknown_female_small
+				large = GFX_portrait_NAM_Nadezhda_Okrug
+				small = GFX_portrait_NAM_Nadezhda_Okrug_small
 			}
 		}
 	}
@@ -144,8 +144,8 @@ characters = {
 		name = NAM_Kirill_Vykup
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_1
-				small = GFX_Portrait_Forul_Generic_1_small
+				large = GFX_portrait_NAM_Kirill_Vykup
+				small = GFX_portrait_NAM_Kirill_Vykup_small
 			}
 		}
 	}
@@ -157,8 +157,8 @@ characters = {
 		name = NAM_Rostislav_Karamyshev
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_4
-				small = GFX_Portrait_Forul_Generic_4_small
+				large = GFX_portrait_NAM_Rostislav_Karamyshev
+				small = GFX_portrait_NAM_Rostislav_Karamyshev_small
 			}
 		}
 	}
@@ -167,8 +167,8 @@ characters = {
 		name = NAM_Mark_Olshansky
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_5
-				small = GFX_Portrait_Forul_Generic_5_small
+				large = GFX_portrait_NAM_Mark_Olshansky
+				small = GFX_portrait_NAM_Mark_Olshansky_small
 			}
 		}
 	}
@@ -263,8 +263,8 @@ characters = {
 		name = NAM_Matvei_Prichal
 		portraits = {
 			navy = {
-				large = GFX_Portrait_Forul_Generic_2
-				small = GFX_Portrait_Forul_Generic_2_small
+				large = GFX_portrait_NAM_Matvei_Prichal
+				small = GFX_portrait_NAM_Matvei_Prichal_small
 			}
 		}
 		navy_leader = {
@@ -286,7 +286,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Gennady_Panov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_NAM_staff_Gennady_Panov_small
 			}
 		}
 		advisor = {
@@ -307,7 +307,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Viktor_Belousov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_NAM_staff_Viktor_Belousov_small
 			}
 		}
 		advisor = {
@@ -328,7 +328,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Andrei_Krasnov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_NAM_staff_Andrei_Krasnov_small
 			}
 		}
 		advisor = {
@@ -349,7 +349,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Dmitri_Rogov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_navy_chief_decisive_bat_western_european_2d
+				small = GFX_portrait_NAM_staff_Dmitri_Rogov_small
 			}
 		}
 		advisor = {
@@ -370,7 +370,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Dmitri_Sazonov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_air_air_combat_trainer_western_european_2d
+				small = GFX_portrait_NAM_staff_Dmitri_Sazonov_small
 			}
 		}
 		advisor = {
@@ -391,7 +391,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Ilya_Tumanov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				small = GFX_portrait_NAM_staff_Ilya_Tumanov_small
 			}
 		}
 		advisor = {
@@ -413,7 +413,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Konstantin_Uvarov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_log_western_european_2d
+				small = GFX_portrait_NAM_staff_Konstantin_Uvarov_small
 			}
 		}
 		advisor = {
@@ -435,7 +435,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Maksim_Frolov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_art_western_european_2d
+				small = GFX_portrait_NAM_staff_Maksim_Frolov_small
 			}
 		}
 		advisor = {
@@ -457,7 +457,7 @@ characters = {
 		name = ADISCORD_staff_NAM_Petr_Chernov
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_off_western_european_2d
+				small = GFX_portrait_NAM_staff_Petr_Chernov_small
 			}
 		}
 		advisor = {

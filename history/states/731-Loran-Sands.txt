@@ -1,0 +1,19 @@
+state = {
+	id = 731
+	name = "STATE_731"
+	manpower = 400000
+	state_category = rural
+	history = {
+		owner = SHL
+		add_core_of = SHL
+		victory_points = { 11295 1 }
+		buildings = {
+			infrastructure = 2
+		}
+	}
+	provinces = {
+		2030 3416 9568 9976 11295
+	}
+	buildings_max_level_factor = 1.000
+	local_supplies = 1.5
+}

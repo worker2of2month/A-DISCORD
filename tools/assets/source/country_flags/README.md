@@ -40,19 +40,27 @@ Use case: precise-object-edit / logo-brand. Redesign the supplied existing natio
 
 Itora's ordinary flag uses a silver lion breaking a gold chain. The emergency cabinet uses a gold eagle and ivory sword on a charcoal shield. Both retain the emerald field and two inset gold vertical bands. Symbolism references are `../party_texticons/IVN_roar_of_freedom_source.png` and `../party_texticons/IVN_emergency_committee_source.png`; those reference assets are not modified by flag export.
 
-The native `IVN_etatism` filename selects the cabinet flag while the country has the `etatism` government. Other governments use `IVN`. The island administration's `IIA` triplet remains a byte-identical copy of ordinary `IVN`, independent of the overlord's government. The existing island-administration builder owns all three triplets and only resizes and encodes the source artwork.
+The native `IVN_etatism` filename selects the cabinet flag while the country has the `etatism` government; `IVN_chauvinism` selects the legion's state flag under `chauvinism`. Other governments use `IVN`. The island administration uses its own `IIA` flag independently of the overlord's government. The existing island-administration builder owns these triplets and only resizes and encodes the source artwork.
 
 Regular flag prompt: Create ONE final national flag artwork for fictional Itora, for a Hearts of Iron IV mod. Landscape aspect ratio 82:52. Full bleed perfectly flat flag; no cloth, folds, lighting, gradients, shadows, texture, perspective, lettering, watermark, borders or exterior margins. Refined heraldic vector-like flat shapes. Large confident emblem, readable at 82x52. Retain the current flag's deep emerald field and two narrow antique gold vertical stripes at x=12% and x=88%, with green outer edges. Between them one bold ivory rampant lion facing left, holding a broken gold chain with a few thick readable links; raised forepaws, curved tail, stylized angular mane. Emblem about 68% of flag height, no circle, wreath, shield, rifles or sunburst. Simplify the republican party symbol into clean heraldry. Use only deep emerald green, antique gold and ivory silver, strong negative space. Elegant restrained republican flag.
 
 Emergency flag prompt: Create ONE final national flag artwork for fictional Itora under its emergency cabinet, for a Hearts of Iron IV mod. Landscape aspect ratio 82:52. Full bleed perfectly flat flag; no cloth, folds, lighting, gradients, shadows, texture, perspective, lettering, watermark, frame or exterior margins. Refined heraldic vector-like flat shapes, readable at 82x52. Retain deep emerald green field with narrow antique gold vertical stripes at x=12% and x=88%, green outer edges. Simplify the emergency cabinet's official emblem radically. In the center put one large angular charcoal shield outlined in gold, bearing a bold gold heraldic eagle with spread wings facing left. One simple ivory vertical sword lies along eagle's axis, point DOWN, hilt above eagle head. Eagle dominates, three broad feather shapes per wing, no tiny feather lines. Shield emblem about 72% flag height. Restrained stern state heraldry, distinct from a republican lion flag while sharing its gold-striped green field. Use only emerald, antique gold, ivory and charcoal. No gears, towers, wreaths, coins, stars, crossed rifles, extra emblems. The flag must be usable directly as game source artwork.
 
-## IVC and IVN_chauvinism
+## IIA, IVC and IVN_chauvinism
 
-Placeholder artwork until dedicated flags exist: the emergency cabinet flag with
-its emerald field recoloured to deep crimson. `IVC` is the Marches Legion during
-Itora's revolt; the native `IVN_chauvinism` filename shows the same flag while
-Itora has the `chauvinism` government after the legion wins. Both are exported by
-the island-administration builder with the other Itoran flags.
+`IIA` uses an ivory lion holding a gold anchor on navy, an emerald upper band
+and three ivory lozenges for its administrative regions. `IVC`, the Marches
+Legion during Itora's revolt, uses a gold lion's head and upright ivory sword
+on crimson with a black hoist triangle. `IVN_chauvinism` is the victorious
+regime's state banner: a gold lion on a black shield, upright ivory sword,
+oak branches and two inset gold bands on crimson.
+
+The island-administration builder imports these three flags through repeatable
+`--import-flag TAG PATH` arguments. Run `--check` with the imports, then `--apply`
+with the same arguments, then `--check` without imports. Each 82x52 runtime TGA
+is the master for its smaller sizes, so rebuilds need no external original.
+High-resolution originals remain user-owned. Existing source PNGs are preserved;
+the active generation prompts are in `political_variants_prompts.json`.
 
 ## SFR
 

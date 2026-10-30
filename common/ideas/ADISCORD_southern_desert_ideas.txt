@@ -220,6 +220,138 @@ ideas = {
 				army_org_regain = 0.05
 			}
 		}
+		# Course programme spirits. Timed ones carry their duration from the
+		# decision; the occupation charter ends with the War for the South.
+		SHL_insured_cargo = {
+			picture = generic_build_infrastructure
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+		SHL_charter_occupation = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = { NOT = { ADISCORD_south_final_active = yes } }
+			modifier = {
+				resistance_target = -0.20
+			}
+		}
+		SHL_general_governorate = {
+			picture = generic_central_management
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				resistance_target = -0.10
+				compliance_gain = 0.05
+			}
+		}
+		# Course charters (ratified constitutions) and victory spirits of the
+		# War for the South, one pair per course.
+		SHL_conclave_of_ten_spirit = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+				production_factory_efficiency_gain_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+		SHL_crown_of_trade_spirit = {
+			picture = generic_national_unity
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				trade_opinion_factor = 0.10
+				political_power_gain = 0.05
+				war_support_factor = 0.05
+			}
+		}
+		SHL_southern_compact_spirit = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = -0.05
+				monthly_population = 0.02
+			}
+		}
+		SHL_treaty_of_the_south_spirit = {
+			picture = generic_national_unity
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+		SHL_iron_directorate_spirit = {
+			picture = generic_central_management
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.10
+				army_org_factor = 0.05
+				stability_factor = -0.05
+			}
+		}
+		SHL_hereditary_republic_spirit = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+				production_factory_efficiency_gain_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+		SHL_crown_of_crests_spirit = {
+			picture = generic_national_unity
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.03
+				consumer_goods_factor = -0.02
+			}
+		}
+		SHL_commune_of_fire_spirit = {
+			picture = generic_manpower_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				conscription_factor = 0.05
+				political_power_gain = -0.05
+			}
+		}
+		SHL_fire_of_the_south_spirit = {
+			picture = generic_national_unity
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				conscription_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
 		WEF_frontier_municipalism = {
 			picture = ger_rebuild_the_nation
 			allowed = { original_tag = WEF }
@@ -541,6 +673,148 @@ ideas = {
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.04
 				production_factory_max_efficiency_factor = 0.06
+			}
+		}
+
+		# Course-tree deltas: houses.
+		SHL_pow_h_cartel_price_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		SHL_pow_h_guild_schools_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.02
+			}
+		}
+
+		SHL_pow_h_veyr_harbour_share_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				trade_opinion_factor = 0.1
+			}
+		}
+
+		# Course-tree deltas: cities.
+		SHL_pow_c_compact_army_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		SHL_pow_c_open_ledger_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_c_compact_court_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		# Course-tree deltas: directorate.
+		SHL_pow_d_state_furnaces_law_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.04
+			}
+		}
+
+		SHL_pow_d_military_directorate_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_pow_d_industrial_directorate_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_infrastructure_factor = 0.1
+			}
+		}
+
+		SHL_pow_d_iron_crown_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				stability_factor = 0.05
+				political_power_gain = 0.05
+			}
+		}
+
+		# Course-tree deltas: regency.
+		SHL_pow_r_crest_press_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_r_hereditary_seats_restored_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		SHL_pow_r_tolls_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		# Course-tree deltas: commune.
+		SHL_pow_k_rotating_smelting_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_k_standing_council_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
 			}
 		}
 

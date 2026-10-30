@@ -10,6 +10,7 @@ state = {
 		owner = SHL
 		add_core_of = SHL
 		victory_points = { 4182 1 }
+		victory_points = { 1693 1 }
 		buildings = {
 			infrastructure = 2
 			arms_factory = 1

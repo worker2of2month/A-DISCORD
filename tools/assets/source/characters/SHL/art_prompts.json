@@ -1,0 +1,432 @@
+{
+  "tool": "built-in image_gen",
+  "style": "Use case: stylized-concept. Create ONE fictional character portrait for A-Discord, closely MATCHING THE TWO PROVIDED STYLE REFERENCES. Both images are STYLE REFERENCES ONLY, not identity targets. Match their HOI4/TFR mod photomontage look: cutout realistic photograph of head and shoulders, heavily processed crunchy sharp edges, deep shadows, strong contrast, slightly posterized gritty photoreal shading, muted skin and clothing, pale lavender at top shading to dark purple at bottom background, fine tightly spaced horizontal CRT scanlines uniformly across the entire image including the person. Digital game portrait collage, NOT oil painting, NOT fine-art portrait, NOT a soft studio photograph. Vertical 156:210 aspect ratio. VERY TIGHT framing: head almost fills width, top of head near upper edge, eyes around upper third, upper chest cut by bottom edge. Photo-collage with subtly dark cutout edge. The supplied references define finishing, colors, scanline texture and framing. The new person has their own fictional identity; do not copy the reference people's faces, sunglasses, cigarette, real flags, military insignia or uniform emblems. No text, border, watermark, insignia, symbols or decorative props. Setting: Shahrabad, a Persian-flavoured industrial oligarchy of furnace-owning houses in a desert country; faces and names are Iranian in character, clothing is modern industrial-era civilian dress with restrained Persian cut (high collars, long dark coats, plain shawl collars, no turbans, no robes, no jewellery except a single signet ring where noted). Furnace light and desert sun have marked the skin. ",
+  "runtime": {
+    "large": "gfx/leaders/SHL/portrait_SHL_<Name>.png",
+    "small": "gfx/interface/ideas/SHL/portrait_SHL_<Name>_small.png",
+    "sprites": "GFX_portrait_SHL_<Name> and GFX_portrait_SHL_<Name>_small, registered in interface/ADISCORD_leader_portraits.gfx once the PNG files exist",
+    "sizes": {
+      "large": [
+        156,
+        210
+      ],
+      "small": [
+        62,
+        67
+      ]
+    },
+    "placeholders": "Large civilian portraits still use shared Forul and Europe assets. Small civilian and military advisor portraits are individually bound in the character and minister definitions."
+  },
+  "portraits": [
+    {
+      "character": "SHL_Khosrow_Arbin",
+      "house": "I Arbin (287), western furnaces by the qanats",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Khosrow_Arbin.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Khosrow_Arbin_small.png",
+      "sprite_large": "GFX_portrait_SHL_Khosrow_Arbin",
+      "sprite_small": "GFX_portrait_SHL_Khosrow_Arbin_small",
+      "subject": "Khosrow Arbin, male patriarch of a furnace house that depends on irrigation channels. About 66, long gaunt face, sun-cracked olive skin, white close-trimmed beard, heavy white eyebrows, deep-set dark eyes, hooked nose. Severe, unforgiving expression of a father at odds with his daughter. Dark charcoal long coat with a high stand collar over a plain ash-grey shirt, no tie, one plain signet ring not visible in frame.",
+      "prompt": "Khosrow Arbin, male patriarch of a furnace house that depends on irrigation channels. About 66, long gaunt face, sun-cracked olive skin, white close-trimmed beard, heavy white eyebrows, deep-set dark eyes, hooked nose. Severe, unforgiving expression of a father at odds with his daughter. Dark charcoal long coat with a high stand collar over a plain ash-grey shirt, no tie. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Darius_Safir",
+      "house": "II Safir (288), richest crest and future regent",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Darius_Safir.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png",
+      "sprite_large": "GFX_portrait_SHL_Darius_Safir",
+      "sprite_small": "GFX_portrait_SHL_Darius_Safir_small",
+      "subject": "Darius Safir, male head of the wealthiest furnace house and prospective regent. About 58, broad smooth face, heavy jaw, black hair combed straight back with silver at the temples, neatly trimmed short black beard with grey streaks, dark calculating eyes, faint closed-mouth smile of a man who has already counted the votes. Expensive deep-blue wool coat with a silk-faced shawl collar over a cream high-collared shirt, no tie, no visible jewellery.",
+      "prompt": "Darius Safir, male head of the wealthiest furnace house and prospective regent. About 58, broad smooth face, heavy jaw, black hair combed straight back with silver at the temples, neatly trimmed short black beard with grey streaks, dark calculating eyes, faint closed-mouth smile. Expensive deep-blue wool coat with a silk-faced shawl collar over a cream high-collared shirt, no tie. Slight three-quarter turn."
+    },
+    {
+      "character": "SHL_Golshan_Loran",
+      "house": "III Loran (289), export house of the Golden Gates",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Golshan_Loran.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Golshan_Loran_small.png",
+      "sprite_large": "GFX_portrait_SHL_Golshan_Loran",
+      "sprite_small": "GFX_portrait_SHL_Golshan_Loran_small",
+      "subject": "Golshan Loran, female head of the export house that sells the Conclave's metal abroad. About 49, oval face, olive skin, strong straight brows, dark almond eyes, thin precise mouth, black hair drawn back tightly into a low knot with a plain dark headscarf worn loosely over the back of the head and shoulders, not covering the face or hairline. Composed mercantile expression. Tailored dark bronze-brown jacket with a high closed collar, no jewellery.",
+      "prompt": "Golshan Loran, female head of the export house that sells the Conclave's metal abroad. About 49, oval face, olive skin, strong straight brows, dark almond eyes, thin precise mouth, black hair drawn back tightly into a low knot with a plain dark headscarf worn loosely over the back of the head and shoulders, not covering the face or hairline. Composed mercantile expression. Tailored dark bronze-brown jacket with a high closed collar, no jewellery. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Kamran_Nur",
+      "house": "IV Nur (290 Nuran), small house of the mediator",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Kamran_Nur.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Kamran_Nur_small.png",
+      "sprite_large": "GFX_portrait_SHL_Kamran_Nur",
+      "sprite_small": "GFX_portrait_SHL_Kamran_Nur_small",
+      "subject": "Kamran Nur, male nephew of the ruling mediator and spokesman of the poorest furnace house. About 36, narrow intelligent face, light olive skin, short wavy black hair, clean shaven, thin rectangular metal spectacles, attentive patient eyes, slight tired smile. Plain dark grey wool coat with a small stand collar over a white collarless shirt, modest and worn rather than rich.",
+      "prompt": "Kamran Nur, male nephew of the ruling mediator and spokesman of the poorest furnace house. About 36, narrow intelligent face, light olive skin, short wavy black hair, clean shaven, thin rectangular metal spectacles, attentive patient eyes, slight tired smile. Plain dark grey wool coat with a small stand collar over a white collarless shirt, modest and worn rather than rich. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Tahmuras_Bayrat",
+      "house": "V Bayrat (291), mines and ore for all furnaces",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Tahmuras_Bayrat.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Tahmuras_Bayrat_small.png",
+      "sprite_large": "GFX_portrait_SHL_Tahmuras_Bayrat",
+      "sprite_small": "GFX_portrait_SHL_Tahmuras_Bayrat_small",
+      "subject": "Tahmuras Bayrat, male master of the mining house that feeds every furnace. About 61, massive square head, thick neck, weathered dark olive skin with dust-worn lines, full grey beard cut short, bald crown with cropped grey side hair, small hard dark eyes under heavy brows. Silent stubborn expression. Heavy dark brown canvas work coat with a wide plain collar over a rough grey shirt, no tie.",
+      "prompt": "Tahmuras Bayrat, male master of the mining house that feeds every furnace. About 61, massive square head, thick neck, weathered dark olive skin with dust-worn lines, full grey beard cut short, bald crown with cropped grey side hair, small hard dark eyes under heavy brows. Silent stubborn expression. Heavy dark brown canvas work coat with a wide plain collar over a rough grey shirt, no tie. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Fereydun_Kerdan",
+      "house": "VI Kerdan (292), road to the sea and the dispute with Veyr",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Fereydun_Kerdan.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Fereydun_Kerdan_small.png",
+      "sprite_large": "GFX_portrait_SHL_Fereydun_Kerdan",
+      "sprite_small": "GFX_portrait_SHL_Fereydun_Kerdan_small",
+      "subject": "Fereydun Kerdan, male head of the house that keeps the road to the coast. About 52, lean long face, tanned olive skin, salt-and-pepper hair cut short, neat grey moustache, clean-shaven chin, grey-brown eyes narrowed against sun and wind. Impatient, practical expression of a man who pays tolls he resents. Dark olive travelling coat with a turned-down collar over a faded khaki shirt, no tie or insignia.",
+      "prompt": "Fereydun Kerdan, male head of the house that keeps the road to the coast. About 52, lean long face, tanned olive skin, salt-and-pepper hair cut short, neat grey moustache, clean-shaven chin, grey-brown eyes narrowed against sun and wind. Impatient, practical expression. Dark olive travelling coat with a turned-down collar over a faded khaki shirt, no tie or insignia. Slight turn to viewer's right."
+    },
+    {
+      "character": "SHL_Shirin_Sharim",
+      "house": "VII Sharim (293), heaviest shifts; infirmaries at the workshops",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Shirin_Sharim.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Shirin_Sharim_small.png",
+      "sprite_large": "GFX_portrait_SHL_Shirin_Sharim",
+      "sprite_small": "GFX_portrait_SHL_Shirin_Sharim_small",
+      "subject": "Shirin Sharim, female head of the house with the heaviest furnace shifts. About 55, strong angular face, olive skin, prominent cheekbones, dark eyes with a hard direct stare, firm mouth, black hair with grey strands pulled back severely under a plain dark headscarf worn loosely over the back of the head, not covering the face or hairline. Stern disciplined expression. Dark slate-grey high-collared jacket buttoned to the throat, no jewellery.",
+      "prompt": "Shirin Sharim, female head of the house with the heaviest furnace shifts. About 55, strong angular face, olive skin, prominent cheekbones, dark eyes with a hard direct stare, firm mouth, black hair with grey strands pulled back severely under a plain dark headscarf worn loosely over the back of the head, not covering the face or hairline. Stern disciplined expression. Dark slate-grey high-collared jacket buttoned to the throat, no jewellery. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Rauf_Darban",
+      "house": "VIII Darban (294 Devyatipechye), engineering house, tenth furnace, directorate",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Rauf_Darban.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png",
+      "sprite_large": "GFX_portrait_SHL_Rauf_Darban",
+      "sprite_small": "GFX_portrait_SHL_Rauf_Darban_small",
+      "subject": "Rauf Darban, male engineer, head of the engineering house and dispatch administrator of the directorate course. About 47, broad forehead, short black hair with a widow's peak, clean shaven, olive skin, dark focused eyes, slightly pursed mouth of a man checking a schedule. Precise, unsmiling expression. Dark charcoal engineer's tunic with a narrow stand collar and plain buttons over a grey shirt, no insignia.",
+      "prompt": "Rauf Darban, male engineer, head of the engineering house and dispatch administrator of the directorate course. About 47, broad forehead, short black hair with a widow's peak, clean shaven, olive skin, dark focused eyes, slightly pursed mouth. Precise, unsmiling expression. Dark charcoal engineer's tunic with a narrow stand collar and plain buttons over a grey shirt, no insignia. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Behruz_Veyran",
+      "house": "IX Veyran (295), border house with private guards",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Behruz_Veyran.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Behruz_Veyran_small.png",
+      "sprite_large": "GFX_portrait_SHL_Behruz_Veyran",
+      "sprite_small": "GFX_portrait_SHL_Behruz_Veyran_small",
+      "subject": "Behruz Veyran, male head of the border house that keeps its own guards. About 44, hard rectangular face, dark olive skin, close-cropped black hair, short dense black beard, thick brows, pale scar across the left cheekbone, watchful dark eyes. Guarded, combative expression. Dark sand-brown guard coat with a high closed collar and plain unmarked shoulder straps, no cap, no insignia.",
+      "prompt": "Behruz Veyran, male head of the border house that keeps its own guards. About 44, hard rectangular face, dark olive skin, close-cropped black hair, short dense black beard, thick brows, pale scar across the left cheekbone, watchful dark eyes. Guarded, combative expression. Dark sand-brown guard coat with a high closed collar and plain unmarked shoulder straps, no cap, no insignia. Slight turn to viewer's left."
+    },
+    {
+      "character": "SHL_Mariam_Arbin",
+      "house": "course leader of the Open Conclave (Southern Compact); daughter of Khosrow Arbin",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png",
+      "sprite_large": "GFX_portrait_SHL_Mariam_Arbin",
+      "sprite_small": "GFX_portrait_SHL_Mariam_Arbin_small",
+      "subject": "Mariam Arbin, female chair of the city assemblies and leader of the city course, daughter of a furnace patriarch. About 38, oval face with her father's hooked nose softened, light olive skin, thick dark brows, clear brown eyes, black hair in a loose low braid over one shoulder, no headscarf. Resolute, open, slightly challenging expression, no smile. Plain dark teal wool jacket with a small stand collar over a light grey blouse, no jewellery.",
+      "prompt": "Mariam Arbin, female chair of the city assemblies and leader of the city course, daughter of a furnace patriarch. About 38, oval face with a softened hooked nose, light olive skin, thick dark brows, clear brown eyes, black hair in a loose low braid over one shoulder, no headscarf. Resolute, open, slightly challenging expression, no smile. Plain dark teal wool jacket with a small stand collar over a light grey blouse, no jewellery. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Salima_Darzi",
+      "house": "duty master from Sharim; head of the commune cabinet",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Salima_Darzi.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png",
+      "sprite_large": "GFX_portrait_SHL_Salima_Darzi",
+      "sprite_small": "GFX_portrait_SHL_Salima_Darzi_small",
+      "subject": "Salima Darzi, female furnace duty master who signs for the shift councils. About 42, broad strong face, olive skin reddened by furnace heat, short practical black hair cut above the collar, no headscarf, dark steady eyes, small healed burn mark on the right jaw. Tired but unyielding expression. Worn dark grey work jacket with rolled collar over a soot-darkened shirt, no jewellery.",
+      "prompt": "Salima Darzi, female furnace duty master who signs for the shift councils. About 42, broad strong face, olive skin reddened by furnace heat, short practical black hair cut above the collar, no headscarf, dark steady eyes, small healed burn mark on the right jaw. Tired but unyielding expression. Worn dark grey work jacket with rolled collar over a soot-darkened shirt, no jewellery. Nearly frontal pose."
+    },
+    {
+      "character": "SHL_Amin_Rashad",
+      "house": "secretary of the Conclave; keeper of the seal",
+      "runtime_large": "gfx/leaders/SHL/portrait_SHL_Amin_Rashad.png",
+      "runtime_small": "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png",
+      "sprite_large": "GFX_portrait_SHL_Amin_Rashad",
+      "sprite_small": "GFX_portrait_SHL_Amin_Rashad_small",
+      "subject": "Amin Rashad, male secretary of the Conclave who keeps its seal. About 59, thin bookish face, light olive skin, receding grey hair combed flat, trimmed grey goatee, small round spectacles, pale shrewd eyes, thin lips. Discreet, unreadable expression. Black high-collared secretary's coat buttoned to the throat over a white shirt collar, no jewellery.",
+      "prompt": "Amin Rashad, male secretary of the Conclave who keeps its seal. About 59, thin bookish face, light olive skin, receding grey hair combed flat, trimmed grey goatee, small round spectacles, pale shrewd eyes, thin lips. Discreet, unreadable expression. Black high-collared secretary's coat buttoned to the throat over a white shirt collar, no jewellery. Nearly frontal pose."
+    }
+  ],
+  "advisor_variant": {
+    "tool": "built-in image_gen",
+    "frame_source": "tools/assets/source/portar idea.psd",
+    "background": "Soft grey-violet gradient matched to minister_generic examples",
+    "export": "Perspective at 8x size, then Lanczos reduction; native frame preserved",
+    "prompt": "Edit the FIRST image only. Preserve this fictional person's exact identity, age, hairstyle, facial hair, spectacles and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that person's identity or frame. Crop closely to the head and collar, shorten the visible torso so the head occupies about 75 percent of image height. Do not add a frame. Transparent background."
+  },
+  "military_staff": {
+    "tool": "built-in image_gen",
+    "frame_source": "tools/assets/source/portar idea.psd",
+    "frame_layer": 4,
+    "size": [
+      62,
+      67
+    ],
+    "background": "Opaque grey-violet gradient inside frame; transparent exterior. Top RGB (72,67,81) to (95,89,106), bottom (49,45,58) to (64,59,75).",
+    "export": "Crop alpha > 200 bounds, fit to 624x840 centered (0.5,0.3). Perspective interior corners (8,10),(43,7),(47,56),(11,60), render at 8x and downsample Lanczos. Composite PSD frame layer 4 at (3,2).",
+    "portraits": [
+      {
+        "id": "ADISCORD_staff_SHL_Farid_Rahmani",
+        "label": "Рахмани",
+        "subject": "Farid Rahmani, fictional army chief of an industrial city-state, man about 56, olive skin, broad angular face, short charcoal hair with grey temples, thick straight eyebrows, brown eyes, clean shaven. Firm measured expression. Plain warm-grey officer tunic with a high collar. Looking slightly to viewer's right.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Farid Rahmani, fictional army chief of an industrial city-state, man about 56, olive skin, broad angular face, short charcoal hair with grey temples, thick straight eyebrows, brown eyes, clean shaven. Firm measured expression. Plain warm-grey officer tunic with a high collar. Looking slightly to viewer's right.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Farid_Rahmani_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Farid_Rahmani_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Rashid_Farrokh",
+        "label": "Фаррох",
+        "subject": "Rashid Farrokh, fictional senior army organizer, man about 64, warm tan skin, long narrow face, receding silver hair, long carefully trimmed silver moustache, deep-set dark eyes and high cheekbones. Quietly authoritative expression. Plain dark sand-brown officer jacket and khaki shirt. Looking slightly left.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Rashid Farrokh, fictional senior army organizer, man about 64, warm tan skin, long narrow face, receding silver hair, long carefully trimmed silver moustache, deep-set dark eyes and high cheekbones. Quietly authoritative expression. Plain dark sand-brown officer jacket and khaki shirt. Looking slightly left.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Rashid_Farrokh_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Rashid_Farrokh_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Kamran_Daryan",
+        "label": "Дарьян",
+        "subject": "Kamran Daryan, fictional navy chief, man about 48, medium olive complexion, strong rounded jaw, short black curly hair, short full black beard streaked grey at chin, dark brown eyes. Calm watchful expression. Dark navy uniform jacket, cream shirt, black tie, no cap. Near frontal view.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Kamran Daryan, fictional navy chief, man about 48, medium olive complexion, strong rounded jaw, short black curly hair, short full black beard streaked grey at chin, dark brown eyes. Calm watchful expression. Dark navy uniform jacket, cream shirt, black tie, no cap. Near frontal view.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Kamran_Daryan_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Kamran_Daryan_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Nadir_Rostami",
+        "label": "Ростами",
+        "subject": "Nadir Rostami, fictional aviation chief, man about 52, light olive complexion, thin face, prominent long nose, brushed-back salt-and-pepper hair, clean-shaven, hazel eyes. Precise attentive expression. Plain blue-grey aviation officer jacket. Looking slightly right.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Nadir Rostami, fictional aviation chief, man about 52, light olive complexion, thin face, prominent long nose, brushed-back salt-and-pepper hair, clean-shaven, hazel eyes. Precise attentive expression. Plain blue-grey aviation officer jacket. Looking slightly right.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Nadir_Rostami_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Nadir_Rostami_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Navid_Azari",
+        "label": "Азари",
+        "subject": "Navid Azari, fictional younger air-defence specialist, man about 37, warm medium complexion, broad high cheekbones, short dark auburn hair, dark green eyes, clean-shaven, pronounced chin. Alert energetic expression. Plain slate-grey flight-service uniform with a dark collar. Looking slightly left.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Navid Azari, fictional younger air-defence specialist, man about 37, warm medium complexion, broad high cheekbones, short dark auburn hair, dark green eyes, clean-shaven, pronounced chin. Alert energetic expression. Plain slate-grey flight-service uniform with a dark collar. Looking slightly left.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Navid_Azari_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Navid_Azari_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Bahram_Sadri",
+        "label": "Садри",
+        "subject": "Bahram Sadri, fictional infantry specialist, man about 59, tan skin, heavy square jaw, close-cropped grey-black hair, thick black moustache and dark eyes, broad nose. Patient stern expression. Worn khaki high-collared field tunic, no medals. Near frontal view.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Bahram Sadri, fictional infantry specialist, man about 59, tan skin, heavy square jaw, close-cropped grey-black hair, thick black moustache and dark eyes, broad nose. Patient stern expression. Worn khaki high-collared field tunic, no medals. Near frontal view.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Bahram_Sadri_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Bahram_Sadri_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Reza_Mehrabi",
+        "label": "Мехраби",
+        "subject": "Reza Mehrabi, fictional military logistics administrator, man about 51, olive complexion, oval face with full cheeks, thinning dark hair, small oval wire spectacles, brown eyes and clean-shaven chin. Thoughtful restrained expression. Brown-grey military staff jacket over pale shirt. Looking slightly right.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Reza Mehrabi, fictional military logistics administrator, man about 51, olive complexion, oval face with full cheeks, thinning dark hair, small oval wire spectacles, brown eyes and clean-shaven chin. Thoughtful restrained expression. Brown-grey military staff jacket over pale shirt. Looking slightly right.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Reza_Mehrabi_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Reza_Mehrabi_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Arman_Kaviani",
+        "label": "Кавиани",
+        "subject": "Arman Kaviani, fictional training and recuperation specialist, man about 43, warm tan skin, long oblong face, thick wavy black hair swept to one side, short neat goatee, amber-brown eyes. Serious compassionate expression. Plain olive-grey officer jacket with open collar. Looking slightly left.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Arman Kaviani, fictional training and recuperation specialist, man about 43, warm tan skin, long oblong face, thick wavy black hair swept to one side, short neat goatee, amber-brown eyes. Serious compassionate expression. Plain olive-grey officer jacket with open collar. Looking slightly left.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Arman_Kaviani_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Arman_Kaviani_small"
+      },
+      {
+        "id": "ADISCORD_staff_SHL_Dara_Farzan",
+        "label": "Фарзан",
+        "subject": "Dara Farzan, fictional senior military theorist, man about 68, light olive skin, bald crown and white side hair, thin white beard and moustache, round black-rimmed glasses, grey eyes, narrow face. Inquisitive scholarly expression. Charcoal high-collared staff tunic, no symbols. Near frontal view.",
+        "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Dara Farzan, fictional senior military theorist, man about 68, light olive skin, bald crown and white side hair, thin white beard and moustache, round black-rimmed glasses, grey eyes, narrow face. Inquisitive scholarly expression. Charcoal high-collared staff tunic, no symbols. Near frontal view.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_staff_Dara_Farzan_small.png",
+        "sprite": "GFX_portrait_SHL_staff_Dara_Farzan_small"
+      }
+    ]
+  },
+  "civilian_advisors": {
+    "tool": "built-in image_gen",
+    "frame_source": "tools/assets/source/portar idea.psd",
+    "frame_layer": 4,
+    "size": [
+      62,
+      67
+    ],
+    "background": "Opaque grey-violet gradient inside frame; transparent exterior. Top RGB (72,67,81) to (95,89,106), bottom (49,45,58) to (64,59,75).",
+    "export": "Crop alpha > 200 bounds, fit to 624x840 centered (0.5,0.3). Perspective interior corners (8,10),(43,7),(47,56),(11,60), render at 8x and downsample Lanczos. Composite PSD frame layer 4 at (3,2).",
+    "portraits": [
+      {
+        "id": "SHL_Khosrow_Arbin",
+        "label": "Хосров Арбин",
+        "subject": "Khosrow Arbin, male patriarch of a furnace house that depends on irrigation channels. About 66, long gaunt face, sun-cracked olive skin, white close-trimmed beard, heavy white eyebrows, deep-set dark eyes, hooked nose. Severe, unforgiving expression of a father at odds with his daughter. Dark charcoal long coat with a high stand collar over a plain ash-grey shirt, no tie, one plain signet ring not visible in frame.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Khosrow Arbin, male patriarch of a furnace house that depends on irrigation channels. About 66, long gaunt face, sun-cracked olive skin, white close-trimmed beard, heavy white eyebrows, deep-set dark eyes, hooked nose. Severe, unforgiving expression of a father at odds with his daughter. Dark charcoal long coat with a high stand collar over a plain ash-grey shirt, no tie. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Khosrow_Arbin_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Khosrow_Arbin_small"
+        ]
+      },
+      {
+        "id": "SHL_Darius_Safir",
+        "label": "Дарий Сафир",
+        "subject": "Darius Safir, male head of the wealthiest furnace house and prospective regent. About 58, broad smooth face, heavy jaw, black hair combed straight back with silver at the temples, neatly trimmed short black beard with grey streaks, dark calculating eyes, faint closed-mouth smile of a man who has already counted the votes. Expensive deep-blue wool coat with a silk-faced shawl collar over a cream high-collared shirt, no tie, no visible jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Darius Safir, male head of the wealthiest furnace house and prospective regent. About 58, broad smooth face, heavy jaw, black hair combed straight back with silver at the temples, neatly trimmed short black beard with grey streaks, dark calculating eyes, faint closed-mouth smile. Expensive deep-blue wool coat with a silk-faced shawl collar over a cream high-collared shirt, no tie. Slight three-quarter turn.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Darius_Safir_small",
+          "GFX_idea_SHL_Darius_Safir"
+        ]
+      },
+      {
+        "id": "SHL_Golshan_Loran",
+        "label": "Голшан Лоран",
+        "subject": "Golshan Loran, female head of the export house that sells the Conclave's metal abroad. About 49, oval face, olive skin, strong straight brows, dark almond eyes, thin precise mouth, black hair drawn back tightly into a low knot with a plain dark headscarf worn loosely over the back of the head and shoulders, not covering the face or hairline. Composed mercantile expression. Tailored dark bronze-brown jacket with a high closed collar, no jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Golshan Loran, female head of the export house that sells the Conclave's metal abroad. About 49, oval face, olive skin, strong straight brows, dark almond eyes, thin precise mouth, black hair drawn back tightly into a low knot with a plain dark headscarf worn loosely over the back of the head and shoulders, not covering the face or hairline. Composed mercantile expression. Tailored dark bronze-brown jacket with a high closed collar, no jewellery. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Golshan_Loran_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Golshan_Loran_small"
+        ]
+      },
+      {
+        "id": "SHL_Kamran_Nur",
+        "label": "Камран Нур",
+        "subject": "Kamran Nur, male nephew of the ruling mediator and spokesman of the poorest furnace house. About 36, narrow intelligent face, light olive skin, short wavy black hair, clean shaven, thin rectangular metal spectacles, attentive patient eyes, slight tired smile. Plain dark grey wool coat with a small stand collar over a white collarless shirt, modest and worn rather than rich.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Kamran Nur, male nephew of the ruling mediator and spokesman of the poorest furnace house. About 36, narrow intelligent face, light olive skin, short wavy black hair, clean shaven, thin rectangular metal spectacles, attentive patient eyes, slight tired smile. Plain dark grey wool coat with a small stand collar over a white collarless shirt, modest and worn rather than rich. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Kamran_Nur_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Kamran_Nur_small"
+        ]
+      },
+      {
+        "id": "SHL_Tahmuras_Bayrat",
+        "label": "Тахмурас Байрат",
+        "subject": "Tahmuras Bayrat, male master of the mining house that feeds every furnace. About 61, massive square head, thick neck, weathered dark olive skin with dust-worn lines, full grey beard cut short, bald crown with cropped grey side hair, small hard dark eyes under heavy brows. Silent stubborn expression. Heavy dark brown canvas work coat with a wide plain collar over a rough grey shirt, no tie.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Tahmuras Bayrat, male master of the mining house that feeds every furnace. About 61, massive square head, thick neck, weathered dark olive skin with dust-worn lines, full grey beard cut short, bald crown with cropped grey side hair, small hard dark eyes under heavy brows. Silent stubborn expression. Heavy dark brown canvas work coat with a wide plain collar over a rough grey shirt, no tie. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Tahmuras_Bayrat_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Tahmuras_Bayrat_small"
+        ]
+      },
+      {
+        "id": "SHL_Fereydun_Kerdan",
+        "label": "Ферейдун Кердан",
+        "subject": "Fereydun Kerdan, male head of the house that keeps the road to the coast. About 52, lean long face, tanned olive skin, salt-and-pepper hair cut short, neat grey moustache, clean-shaven chin, grey-brown eyes narrowed against sun and wind. Impatient, practical expression of a man who pays tolls he resents. Dark olive travelling coat with a turned-down collar over a faded khaki shirt, no tie or insignia.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Fereydun Kerdan, male head of the house that keeps the road to the coast. About 52, lean long face, tanned olive skin, salt-and-pepper hair cut short, neat grey moustache, clean-shaven chin, grey-brown eyes narrowed against sun and wind. Impatient, practical expression. Dark olive travelling coat with a turned-down collar over a faded khaki shirt, no tie or insignia. Slight turn to viewer's right.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Fereydun_Kerdan_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Fereydun_Kerdan_small"
+        ]
+      },
+      {
+        "id": "SHL_Shirin_Sharim",
+        "label": "Ширин Шарим",
+        "subject": "Shirin Sharim, female head of the house with the heaviest furnace shifts. About 55, strong angular face, olive skin, prominent cheekbones, dark eyes with a hard direct stare, firm mouth, black hair with grey strands pulled back severely under a plain dark headscarf worn loosely over the back of the head, not covering the face or hairline. Stern disciplined expression. Dark slate-grey high-collared jacket buttoned to the throat, no jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Shirin Sharim, female head of the house with the heaviest furnace shifts. About 55, strong angular face, olive skin, prominent cheekbones, dark eyes with a hard direct stare, firm mouth, black hair with grey strands pulled back severely under a plain dark headscarf worn loosely over the back of the head, not covering the face or hairline. Stern disciplined expression. Dark slate-grey high-collared jacket buttoned to the throat, no jewellery. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Shirin_Sharim_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Shirin_Sharim_small"
+        ]
+      },
+      {
+        "id": "SHL_Rauf_Darban",
+        "label": "Рауф Дарбан",
+        "subject": "Rauf Darban, male engineer, head of the engineering house and dispatch administrator of the directorate course. About 47, broad forehead, short black hair with a widow's peak, clean shaven, olive skin, dark focused eyes, slightly pursed mouth of a man checking a schedule. Precise, unsmiling expression. Dark charcoal engineer's tunic with a narrow stand collar and plain buttons over a grey shirt, no insignia.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Rauf Darban, male engineer, head of the engineering house and dispatch administrator of the directorate course. About 47, broad forehead, short black hair with a widow's peak, clean shaven, olive skin, dark focused eyes, slightly pursed mouth. Precise, unsmiling expression. Dark charcoal engineer's tunic with a narrow stand collar and plain buttons over a grey shirt, no insignia. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Rauf_Darban_small",
+          "GFX_idea_SHL_Rauf_Darban"
+        ]
+      },
+      {
+        "id": "SHL_Behruz_Veyran",
+        "label": "Бехруз Вейран",
+        "subject": "Behruz Veyran, male head of the border house that keeps its own guards. About 44, hard rectangular face, dark olive skin, close-cropped black hair, short dense black beard, thick brows, pale scar across the left cheekbone, watchful dark eyes. Guarded, combative expression. Dark sand-brown guard coat with a high closed collar and plain unmarked shoulder straps, no cap, no insignia.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Behruz Veyran, male head of the border house that keeps its own guards. About 44, hard rectangular face, dark olive skin, close-cropped black hair, short dense black beard, thick brows, pale scar across the left cheekbone, watchful dark eyes. Guarded, combative expression. Dark sand-brown guard coat with a high closed collar and plain unmarked shoulder straps, no cap, no insignia. Slight turn to viewer's left.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Behruz_Veyran_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Behruz_Veyran_small"
+        ]
+      },
+      {
+        "id": "SHL_Mariam_Arbin",
+        "label": "Мариам Арбин",
+        "subject": "Mariam Arbin, female chair of the city assemblies and leader of the city course, daughter of a furnace patriarch. About 38, oval face with her father's hooked nose softened, light olive skin, thick dark brows, clear brown eyes, black hair in a loose low braid over one shoulder, no headscarf. Resolute, open, slightly challenging expression, no smile. Plain dark teal wool jacket with a small stand collar over a light grey blouse, no jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Mariam Arbin, female chair of the city assemblies and leader of the city course, daughter of a furnace patriarch. About 38, oval face with a softened hooked nose, light olive skin, thick dark brows, clear brown eyes, black hair in a loose low braid over one shoulder, no headscarf. Resolute, open, slightly challenging expression, no smile. Plain dark teal wool jacket with a small stand collar over a light grey blouse, no jewellery. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Mariam_Arbin_small",
+          "GFX_idea_SHL_Mariam_Arbin"
+        ]
+      },
+      {
+        "id": "SHL_Salima_Darzi",
+        "label": "Салима Дарзи",
+        "subject": "Salima Darzi, female furnace duty master who signs for the shift councils. About 42, broad strong face, olive skin reddened by furnace heat, short practical black hair cut above the collar, no headscarf, dark steady eyes, small healed burn mark on the right jaw. Tired but unyielding expression. Worn dark grey work jacket with rolled collar over a soot-darkened shirt, no jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Salima Darzi, female furnace duty master who signs for the shift councils. About 42, broad strong face, olive skin reddened by furnace heat, short practical black hair cut above the collar, no headscarf, dark steady eyes, small healed burn mark on the right jaw. Tired but unyielding expression. Worn dark grey work jacket with rolled collar over a soot-darkened shirt, no jewellery. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Salima_Darzi_small",
+          "GFX_idea_SHL_Salima_Darzi"
+        ]
+      },
+      {
+        "id": "SHL_Amin_Rashad",
+        "label": "Амин Рашад",
+        "subject": "Amin Rashad, male secretary of the Conclave who keeps its seal. About 59, thin bookish face, light olive skin, receding grey hair combed flat, trimmed grey goatee, small round spectacles, pale shrewd eyes, thin lips. Discreet, unreadable expression. Black high-collared secretary's coat buttoned to the throat over a white shirt collar, no jewellery.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Amin Rashad, male secretary of the Conclave who keeps its seal. About 59, thin bookish face, light olive skin, receding grey hair combed flat, trimmed grey goatee, small round spectacles, pale shrewd eyes, thin lips. Discreet, unreadable expression. Black high-collared secretary's coat buttoned to the throat over a white shirt collar, no jewellery. Nearly frontal pose.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png",
+        "bindings": [
+          "GFX_portrait_SHL_Amin_Rashad_small",
+          "GFX_idea_SHL_Amin_Rashad"
+        ]
+      },
+      {
+        "id": "SHL_Arman_Teymur",
+        "label": "Арман Теймур",
+        "subject": "Arman Teymur, fictional coordinator of house guards, man about 46, olive skin, square jaw, very short black hair with grey temples, clean shaven, heavy eyebrows and alert brown eyes. Plain brown high-collared civilian security coat, no insignia. Slight leftward turn.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Arman Teymur, fictional coordinator of house guards, man about 46, olive skin, square jaw, very short black hair with grey temples, clean shaven, heavy eyebrows and alert brown eyes. Plain brown high-collared civilian security coat, no insignia. Slight leftward turn.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Arman_Teymur_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Arman_Teymur"
+        ]
+      },
+      {
+        "id": "SHL_Leyla_Nadiri",
+        "label": "Лейла Надири",
+        "subject": "Leyla Nadiri, fictional furnace accountant, woman about 44, light olive skin, narrow oval face, black hair in a smooth low bun, thin rectangular glasses, brown eyes, calm exacting expression. Tailored muted plum civilian jacket and cream blouse. Slight rightward turn.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Leyla Nadiri, fictional furnace accountant, woman about 44, light olive skin, narrow oval face, black hair in a smooth low bun, thin rectangular glasses, brown eyes, calm exacting expression. Tailored muted plum civilian jacket and cream blouse. Slight rightward turn.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Leyla_Nadiri_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Leyla_Nadiri"
+        ]
+      },
+      {
+        "id": "SHL_Samira_Hadi",
+        "label": "Самира Хади",
+        "subject": "Samira Hadi, fictional physician serving industrial shifts, woman about 51, warm olive skin, round face, short salt-and-pepper curly hair, hazel eyes, kind serious expression. Grey-blue civilian jacket over off-white shirt, no symbols. Near frontal.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Samira Hadi, fictional physician serving industrial shifts, woman about 51, warm olive skin, round face, short salt-and-pepper curly hair, hazel eyes, kind serious expression. Grey-blue civilian jacket over off-white shirt, no symbols. Near frontal.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Samira_Hadi_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Samira_Hadi"
+        ]
+      },
+      {
+        "id": "SHL_Farid_Mehr",
+        "label": "Фарид Мехр",
+        "subject": "Farid Mehr, fictional master instructor at industrial workshops, man about 57, tan skin, broad flat face, thick greying black hair combed to one side, bushy greying moustache, dark eyes, patient practical expression. Worn blue-grey work coat and tan shirt. Slight leftward turn.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Farid Mehr, fictional master instructor at industrial workshops, man about 57, tan skin, broad flat face, thick greying black hair combed to one side, bushy greying moustache, dark eyes, patient practical expression. Worn blue-grey work coat and tan shirt. Slight leftward turn.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Farid_Mehr_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Farid_Mehr"
+        ]
+      },
+      {
+        "id": "SHL_Bahram_Kaveh",
+        "label": "Бахрам Каве",
+        "subject": "Bahram Kaveh, fictional railway observer and intelligence coordinator, man about 40, medium olive skin, lean angular face, black hair swept back, short neat black beard, long straight nose and watchful brown eyes. Charcoal civilian travel coat, pale grey open-neck shirt. Slight rightward turn.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Bahram Kaveh, fictional railway observer and intelligence coordinator, man about 40, medium olive skin, lean angular face, black hair swept back, short neat black beard, long straight nose and watchful brown eyes. Charcoal civilian travel coat, pale grey open-neck shirt. Slight rightward turn.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Bahram_Kaveh_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Bahram_Kaveh"
+        ]
+      },
+      {
+        "id": "SHL_Ramin_Farzan",
+        "label": "Рамин Фарзан",
+        "subject": "Ramin Farzan, fictional foreign minister of industrial Shahrabad, man about 62, light olive complexion, high forehead with receding silver hair, clean shaven, long face, deep-set hazel eyes, composed diplomatic expression. Formal dark blue suit, pale cream shirt, muted burgundy tie. Near frontal.",
+        "prompt": "Create ONE original fictional civilian political advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Setting: fictional Persian-influenced industrial city-state Shahrabad. Ramin Farzan, fictional foreign minister of industrial Shahrabad, man about 62, light olive complexion, high forehead with receding silver hair, clean shaven, long face, deep-set hazel eyes, composed diplomatic expression. Formal dark blue suit, pale cream shirt, muted burgundy tie. Near frontal.",
+        "runtime": "gfx/interface/ideas/SHL/portrait_SHL_Ramin_Farzan_small.png",
+        "bindings": [
+          "GFX_idea_SHL_Ramin_Farzan"
+        ]
+      }
+    ]
+  }
+}

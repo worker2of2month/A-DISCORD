@@ -26,3 +26,12 @@ SHL_conclave_power_dynamic = {
 	production_factory_max_efficiency_factor = SHL_pow_max_efficiency
 	conscription_factor = SHL_pow_conscription_factor
 }
+
+# COUNTRY buyer of Shahrabad metal. The cycle settlement clears the flag on
+# war or arrears; the remove_trigger covers Shahrabad's disappearance.
+SHL_metal_supply = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { has_country_flag = SHL_metal_client }
+	remove_trigger = { NOT = { country_exists = SHL } }
+	production_factory_efficiency_gain_factor = 0.02
+}

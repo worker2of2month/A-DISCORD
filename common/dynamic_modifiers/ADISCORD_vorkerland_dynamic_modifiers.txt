@@ -50,6 +50,7 @@ ADISCORD_vorkerland_civil_war_attrition = {
 	icon = GFX_modifiers_generic_military_plans
 	attacker_modifier = yes
 	enable = { always = yes }
+	enable = { always = yes }
 	remove_trigger = { always = no }
 
 	air_cas_present_factor = -0.20

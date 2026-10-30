@@ -1,0 +1,12 @@
+# Shahrabad course programmes. Permanent opinions granted by course focuses.
+opinion_modifiers = {
+	SHL_compact_court_opinion = {
+		value = 20
+	}
+	ADISCORD_SHL_harbour_share = {
+		value = 20
+	}
+	ADISCORD_SHL_junior_partner = {
+		value = 30
+	}
+}

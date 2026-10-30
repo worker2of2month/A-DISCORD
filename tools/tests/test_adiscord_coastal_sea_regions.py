@@ -450,6 +450,57 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 military,
             )
 
+    def test_shahrabad_hinterlands_are_connected_and_parents_keep_scripted_borders(self) -> None:
+        memberships = builder.load_states()
+        owners = {}
+        for path in (ROOT / "history/states").glob("*.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            owner = re.search(r"\bowner\s*=\s*(\w+)", source)
+            if owner:
+                owners[int(re.search(r"\bid\s*=\s*(\d+)", source)[1])] = owner[1]
+        state_by_province = {
+            province: state_id
+            for state_id, provinces in memberships.items()
+            for province in provinces
+        }
+
+        def neighbours(state_id: int) -> set[str]:
+            return {
+                owners[state_by_province[other]]
+                for province in memberships[state_id]
+                for other in self.physical[province]
+                if other in state_by_province and state_by_province[other] != state_id
+            }
+
+        # Every scripted neighbour war addresses the parent state, so the parent
+        # must still touch that country after the hinterland is carved out.
+        kept_borders = {288: {"KYZ"}, 289: {"KYZ"}, 295: {"GLP"}}
+        for parent, (child, original, carved) in states.SHL_SPLIT_FAMILIES.items():
+            self.assertEqual(memberships[parent] | memberships[child], set(original))
+            self.assertEqual(memberships[child], set(carved))
+            for state_id in (parent, child):
+                self.assertEqual(
+                    len(builder.connected_components(memberships[state_id], self.physical)),
+                    1,
+                    f"state {state_id} is not connected",
+                )
+                self.assertEqual(owners[state_id], "SHL")
+            self.assertTrue(kept_borders.get(parent, set()) <= neighbours(parent))
+            # Both halves stay inside strategic region 42, so weather and naval
+            # assignments do not straddle the new border.
+            for state_id in (parent, child):
+                self.assertTrue(memberships[state_id] <= set(self.regions[42]["provinces"]))
+        self.assertTrue({16738, 16790, 16791, 16792} <= memberships[288])
+        self.assertIn(7825, memberships[291])
+        self.assertIn(16739, memberships[294])
+        self.assertEqual(
+            sum(
+                int(re.search(r"\bmanpower\s*=\s*(\d+)", states.state_path(state).read_text())[1])
+                for state in states.SHL_POPULATION
+            ),
+            20_000_000,
+        )
+
     def test_stelander_approaches_are_a_compact_connected_region(self) -> None:
         self.assert_region(231, {13256, 13493, 13596, 14089, 14414, 15500})
 

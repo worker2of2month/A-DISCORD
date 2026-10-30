@@ -1,0 +1,75 @@
+# Conclave balance: the nine houses' crests (negative) against the city
+# quarters and shift councils (positive). SHL_initialize_furnaces creates it
+# once; focuses, decisions, crises and course ratifications move it through
+# SHL_balance_shift or direct literals.
+SHL_conclave_balance = {
+	initial_value = -0.20
+	left_side = SHL_bop_crests
+	right_side = SHL_bop_quarters
+	decision_category = SHL_quarters_and_borders
+	range = {
+		id = SHL_balance_equilibrium
+		min = -0.10
+		max = 0.10
+		modifier = {
+			stability_factor = 0.02
+		}
+		on_activate = { ADISCORD_economy_mark_dirty = yes }
+		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+	}
+	side = {
+		id = SHL_bop_crests
+		icon = GFX_bop_SHL_crests
+		range = {
+			id = SHL_balance_crests_influence
+			min = -0.50
+			max = -0.10
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = -0.02
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = SHL_balance_crests_dominance
+			min = -1.00
+			max = -0.50
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = -0.05
+				consumer_goods_factor = 0.03
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	side = {
+		id = SHL_bop_quarters
+		icon = GFX_bop_SHL_quarters
+		range = {
+			id = SHL_balance_quarters_influence
+			min = 0.10
+			max = 0.50
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = -0.05
+				monthly_population = 0.02
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+		range = {
+			id = SHL_balance_quarters_dominance
+			min = 0.50
+			max = 1.00
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = -0.10
+				production_factory_efficiency_gain_factor = -0.02
+			}
+			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}

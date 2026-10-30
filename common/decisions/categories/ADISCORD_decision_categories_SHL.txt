@@ -42,5 +42,6 @@ SHL_treasury = {
 			has_completed_focus = SHL_incident_office
 		}
 	}
+	visible_when_empty = yes
 	priority = 20
 }

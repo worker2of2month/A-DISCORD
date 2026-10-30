@@ -1,0 +1,130 @@
+# Общий слой Шахрабада: фронт Юга (виден по ADISCORD_south_final_started) и
+# корона Юга (по ADISCORD_south_hegemon_SHL). Каждое дерево курса ссылается на
+# SHL_south_furnaces_to_front и SHL_south_crown_of_the_south; остальные фокусы
+# фронта входят через свои prerequisite. Позиции общие для всех деревьев курса:
+# колонки 9-11, строки 0-4.
+
+shared_focus = {
+	id = SHL_south_furnaces_to_front
+	icon = GFX_goal_generic_construct_mil_factory
+	x = 10
+	y = 0
+	cost = 2
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	allow_branch = { has_global_flag = ADISCORD_south_final_started }
+	available = {
+		SHL_country_operable = yes
+		ADISCORD_south_final_active = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_command_power = 25
+		unlock_decision_tooltip = SHL_south_war_pour
+	}
+	ai_will_do = { base = 200 }
+}
+
+shared_focus = {
+	id = SHL_south_raid_oil_fields
+	icon = GFX_goal_generic_occupy_states_ongoing_war
+	x = 9
+	y = 1
+	cost = 2
+	search_filters = { FOCUS_FILTER_ARMY_XP }
+	allow_branch = { has_global_flag = ADISCORD_south_final_started }
+	prerequisite = {
+		focus = SHL_south_furnaces_to_front
+	}
+	available = {
+		SHL_country_operable = yes
+		ADISCORD_south_final_active = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_south_raid_oil_tt
+		hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
+		unlock_decision_tooltip = SHL_south_raid_oil
+	}
+	ai_will_do = { base = 150 }
+}
+
+shared_focus = {
+	id = SHL_south_desert_convoys
+	icon = GFX_focus_generic_camel_corps
+	x = 11
+	y = 1
+	cost = 2
+	search_filters = { FOCUS_FILTER_ARMY_XP }
+	allow_branch = { has_global_flag = ADISCORD_south_final_started }
+	prerequisite = {
+		focus = SHL_south_furnaces_to_front
+	}
+	available = {
+		SHL_country_operable = yes
+		ADISCORD_south_final_active = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_timed_idea = {
+			idea = SHL_south_desert_convoys_idea
+			days = 150
+		}
+	}
+	ai_will_do = { base = 150 }
+}
+
+shared_focus = {
+	id = SHL_south_storm_oil_belt
+	icon = GFX_goal_generic_position_armies
+	x = 10
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_ARMY_XP }
+	allow_branch = { has_global_flag = ADISCORD_south_final_started }
+	prerequisite = {
+		focus = SHL_south_raid_oil_fields
+		focus = SHL_south_desert_convoys
+	}
+	available = {
+		SHL_country_operable = yes
+		ADISCORD_south_final_active = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_timed_idea = {
+			idea = SHL_south_storm_idea
+			days = 120
+		}
+		army_experience = 15
+	}
+	ai_will_do = { base = 120 }
+}
+
+shared_focus = {
+	id = SHL_south_crown_of_the_south
+	icon = GFX_focus_generic_the_giant_wakes
+	x = 10
+	y = 4
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+	available = {
+		SHL_country_operable = yes
+		has_global_flag = ADISCORD_south_hegemon_SHL
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = SHL_conclave_power_dummy_idea
+				add_idea = SHL_pow_south_crown_of_the_south_idea
+			}
+		}
+		hidden_effect = {
+			add_to_variable = { var = SHL_pow_stability_factor value = 0.03 }
+			add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
+			SHL_refresh_conclave_power = yes
+		}
+	}
+	ai_will_do = { base = 50 }
+}

@@ -1,3 +1,7 @@
+# Preparation runs in the main tree until a course is ratified; the ratification
+# effect loads the course tree, so every plan below aborts on the course value
+# it no longer serves. The three preparation plans run beside the industrial
+# programme and only differ in the preliminary course they add to it.
 SHL_furnaces_plan = {
 	name = "SHL industrial programme"
 	desc = ""
@@ -5,20 +9,23 @@ SHL_furnaces_plan = {
 	enable = {
 		tag = SHL
 		is_ai = yes
+		check_variable = { var = SHL_political_course value = 0 compare = equals }
 	}
-	abort = { NOT = { tag = SHL } }
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		}
+	}
 	ai_national_focuses = {
 		SHL_law_of_continuous_fire
 		SHL_census_of_nine
 		SHL_reserve_for_next_shift
 		SHL_conclave_rules
-		SHL_open_conclave
 		SHL_railway_guard
 		SHL_factory_militia
 		SHL_campaign_logistics
 		SHL_southern_watch
-		SHL_city_charters
-		SHL_city_war_mandate
 		SHL_no_more_rations
 		SHL_houses_railway
 		SHL_school_of_masters
@@ -33,20 +40,11 @@ SHL_furnaces_plan = {
 		SHL_right_to_land
 		SHL_own_transport
 		SHL_common_fund
-		SHL_workers_charter
-		SHL_rights_without_fire
-		SHL_build_tenth_complex
-		SHL_first_pour_focus
-		SHL_tenth_voice
 		SHL_quarter_listening
 		SHL_heralds_table
 		SHL_shift_arbitration
 		SHL_water_question
 		SHL_veyr_duties
-		SHL_council_of_cities
-		SHL_fire_and_water
-		SHL_workers_brigades
-		SHL_southern_compact
 		SHL_peace_has_a_price
 		SHL_southern_horizon
 		SHL_factory_air_defence
@@ -58,7 +56,406 @@ SHL_furnaces_plan = {
 		SHL_metal_market
 		SHL_incident_office
 		SHL_counting_chamber
+		SHL_workers_charter
+		SHL_build_tenth_complex
+		SHL_first_pour_focus
+		SHL_tenth_voice
+	}
+	weight = { factor = 20 }
+}
+
+# ----- Preliminary course by the Conclave balance -----
+# Each plan is weighted by the balance range its ratification requires; the
+# first completed preliminary focus aborts the other two.
+
+SHL_prepare_houses_plan = {
+	name = "SHL preparation: tenth house"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 0 compare = equals }
+		NOT = { has_completed_focus = SHL_open_conclave }
+		NOT = { has_completed_focus = SHL_nur_directorate }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+			has_completed_focus = SHL_open_conclave
+			has_completed_focus = SHL_nur_directorate
+		}
+	}
+	ai_national_focuses = {
+		SHL_new_house
+		SHL_house_compromise
+		SHL_house_war_mandate
+		SHL_admit_tenth_house
+	}
+	weight = {
+		factor = 30
+		modifier = {
+			factor = 0.1
+			NOT = {
+				is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_crests_influence }
+				is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_crests_dominance }
+			}
+		}
+	}
+}
+
+SHL_prepare_cities_plan = {
+	name = "SHL preparation: open Conclave"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 0 compare = equals }
+		NOT = { has_completed_focus = SHL_new_house }
+		NOT = { has_completed_focus = SHL_nur_directorate }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+			has_completed_focus = SHL_new_house
+			has_completed_focus = SHL_nur_directorate
+		}
+	}
+	ai_national_focuses = {
+		SHL_open_conclave
+		SHL_city_charters
+		SHL_city_war_mandate
+		SHL_rights_without_fire
+	}
+	weight = {
+		factor = 30
+		modifier = {
+			factor = 0.1
+			NOT = {
+				is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_quarters_influence }
+				is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_quarters_dominance }
+			}
+		}
+	}
+}
+
+SHL_prepare_directorate_plan = {
+	name = "SHL preparation: Nur directorate"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 0 compare = equals }
+		NOT = { has_completed_focus = SHL_new_house }
+		NOT = { has_completed_focus = SHL_open_conclave }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+			has_completed_focus = SHL_new_house
+			has_completed_focus = SHL_open_conclave
+		}
+	}
+	ai_national_focuses = {
+		SHL_nur_directorate
+		SHL_common_dispatch
+		SHL_directorate_war_mandate
+		SHL_state_furnaces
+	}
+	weight = {
+		factor = 30
+		modifier = {
+			factor = 0.1
+			NOT = {
+				is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_equilibrium }
+			}
+		}
+	}
+}
+
+# ----- Course trees -----
+
+SHL_houses_plan = {
+	name = "SHL course: Conclave of ten"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 1 compare = equals }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		}
+	}
+	ai_national_focuses = {
+		SHL_golden_gate_cartel
+		SHL_h_cartel_price
+		SHL_house_guards
+		SHL_veyr_partnership
+		SHL_h_export_houses
+		SHL_h_rail_to_sea
+		SHL_h_house_guards_charter
+		SHL_h_guild_schools
+		SHL_h_cargo_insurance
+		SHL_h_house_credit
+		SHL_conclave_of_ten
+		SHL_h_heralds_court
+		SHL_houses_prog_ending_b
+		SHL_h_council_of_ten
+		SHL_h_bank_of_houses
+		SHL_h_tenth_house_seat
+		SHL_south_debt_network
+		SHL_h_debt_term
+		SHL_south_trade_protectorates
+		SHL_h_kerdan_trading_house
+		SHL_south_great_road
+		SHL_h_road_stations
+		SHL_h_golden_gate_festival
+		SHL_h_veyr_harbour_share
+		SHL_south_oil_for_furnaces
+		SHL_south_furnaces_to_front
+		SHL_south_raid_oil_fields
+		SHL_h_hired_contracts
+		SHL_h_buy_garrisons
+		SHL_south_desert_convoys
+		SHL_south_storm_oil_belt
+		SHL_south_crown_of_the_south
+		SHL_h_concession_of_svetlogorye
+		SHL_h_southern_bank
+		SHL_h_crown_of_trade
+		SHL_h_ten_crests_forever
+		SHL_h_veyr_junior_partner
+	}
+	weight = { factor = 20 }
+}
+
+SHL_cities_plan = {
+	name = "SHL course: Southern compact"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		}
+	}
+	ai_national_focuses = {
+		SHL_council_of_cities
+		SHL_c_mariam_cabinet
+		SHL_fire_and_water
+		SHL_workers_brigades
+		SHL_c_shift_assembly
+		SHL_c_civic_orders_plus
+		SHL_southern_compact
+		SHL_c_regular_elections
+		SHL_c_furnace_schools
+		SHL_c_quarter_hospitals
 		SHL_cities_prog_ending_b
+		SHL_c_compact_army
+		SHL_south_wells_charters
+		SHL_c_charter_round
+		SHL_c_cooperative_bank
+		SHL_c_registry_of_all
+		SHL_c_open_ledger
+		SHL_south_compact_staff
+		SHL_c_compact_court
+		SHL_c_water_works
+		SHL_c_charter_of_cities
+		SHL_south_free_road
+		SHL_c_cistern_charter
+		SHL_c_common_rail
+		SHL_south_war_of_charters
+		SHL_south_furnaces_to_front
+		SHL_south_raid_oil_fields
+		SHL_south_desert_convoys
+		SHL_c_charters_for_occupied
+		SHL_c_compact_volunteers
+		SHL_south_storm_oil_belt
+		SHL_south_crown_of_the_south
+		SHL_c_svetlogorye_charter
+		SHL_c_southern_council
+		SHL_c_compact_assembly
+		SHL_c_treaty_of_the_south
+	}
+	weight = { factor = 20 }
+}
+
+SHL_directorate_plan = {
+	name = "SHL course: Iron Shahrabad"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		}
+	}
+	ai_national_focuses = {
+		SHL_war_directorate
+		SHL_d_nur_director
+		SHL_right_to_water
+		SHL_key_to_sea
+		SHL_d_state_furnaces_law
+		SHL_d_darban_engineers
+		SHL_d_directorate_railway
+		SHL_d_state_bank
+		SHL_d_arsenal_orders_plus
+		SHL_iron_shahrabad
+		SHL_directorate_prog_ending_b
+		SHL_d_military_directorate
+		SHL_d_directorate_courts
+		SHL_d_quotas_law
+		SHL_d_iron_charter
+		SHL_d_fuel_depots
+		SHL_d_cannon_works
+		SHL_d_evacuation_plan
+		SHL_south_water_and_sea
+		SHL_d_ultimatum_term
+		SHL_d_march_logistics
+		SHL_south_last_ration
+		SHL_south_iron_march
+		SHL_d_occupation_administration
+		SHL_south_last_pour
+		SHL_south_furnaces_to_front
+		SHL_south_raid_oil_fields
+		SHL_south_desert_convoys
+		SHL_south_storm_oil_belt
+		SHL_d_war_orders_all
+		SHL_d_guard_to_front
+		SHL_south_crown_of_the_south
+		SHL_d_general_governorate
+		SHL_d_iron_south_rail
+		SHL_d_iron_crown
+		SHL_d_directorate_eternal
+		SHL_d_nur_legacy
+	}
+	weight = { factor = 20 }
+}
+
+SHL_regency_plan = {
+	name = "SHL course: hereditary republic"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 4 compare = equals }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		}
+	}
+	ai_national_focuses = {
+		SHL_regency_council
+		SHL_r_safir_cabinet
+		SHL_restore_privileges
+		SHL_regent_war_mandate
+		SHL_private_armies
+		SHL_debt_shifts
+		SHL_r_sell_concessions
+		SHL_hereditary_republic
+		SHL_r_crest_press
+		SHL_r_debt_courts
+		SHL_regency_prog_ending_a
+		SHL_r_regency_charter
+		SHL_r_pledge_plus
+		SHL_r_crest_bank
+		SHL_r_house_mines
+		SHL_r_hereditary_seats_restored
+		SHL_south_throne_and_crests
+		SHL_r_kadir_marriage
+		SHL_south_toll_debtors
+		SHL_r_toll_term
+		SHL_south_veyr_debt
+		SHL_r_fief_promises
+		SHL_r_tolls
+		SHL_south_war_of_arms
+		SHL_south_furnaces_to_front
+		SHL_r_hire_armies
+		SHL_south_raid_oil_fields
+		SHL_south_desert_convoys
+		SHL_south_storm_oil_belt
+		SHL_r_sell_future
+		SHL_south_crown_of_the_south
+		SHL_r_kadir_junior
+		SHL_r_fiefs_of_the_south
+		SHL_r_crest_empire
+		SHL_r_crown_of_crests
+		SHL_r_regent_forever
+	}
+	weight = { factor = 20 }
+}
+
+SHL_commune_plan = {
+	name = "SHL course: commune of fire"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		check_variable = { var = SHL_political_course value = 5 compare = equals }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+	}
+	ai_national_focuses = {
+		SHL_shift_councils
+		SHL_k_delegates
+		SHL_furnaces_to_workers
+		SHL_k_no_crests
+		SHL_common_smelting
+		SHL_qanat_brotherhood
+		SHL_commune_war_mandate
+		SHL_k_shift_school
+		SHL_k_common_treasury
+		SHL_k_brotherly_supply
+		SHL_commune_of_fire
+		SHL_k_commune_charter
+		SHL_commune_prog_ending_a
+		SHL_k_cauldron_plus
+		SHL_k_workers_rail
+		SHL_k_arms_for_shifts
+		SHL_south_councils_abroad
+		SHL_k_councils_term
+		SHL_k_weber_contact
+		SHL_k_strike_support
+		SHL_south_oil_underground
+		SHL_south_oil_uprising
+		SHL_south_furnaces_to_front
+		SHL_south_raid_oil_fields
+		SHL_south_desert_convoys
+		SHL_south_storm_oil_belt
+		SHL_k_shift_brigades
+		SHL_k_strikes_on_fields
+		SHL_south_crown_of_the_south
+		SHL_k_union_of_councils
+		SHL_k_furnace_commune
+		SHL_k_no_more_crests
+		SHL_k_duty_master
+		SHL_k_fire_of_the_south
 	}
 	weight = { factor = 20 }
 }

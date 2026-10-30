@@ -373,8 +373,9 @@ ADISCORD_south_fights_north_leader = {
 
 # COUNTRY target; ROOT is the champion sending a consolidation offer. Offers stop
 # once the final campaign has begun; a pending answer blocks a second offer.
+# The NAM story gate is checked at the answer and by the deferred dispatcher,
+# so a demand sent while the story is pending is queued, not dropped.
 ADISCORD_south_campaign_target_valid = {
-	ADISCORD_south_nam_story_clear = yes
 	ADISCORD_south_offer_target_open = yes
 	NOT = { tag = ROOT }
 	NOT = { tag = SHL }

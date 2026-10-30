@@ -2831,6 +2831,22 @@
         "STATE_729": {
           "russian": "Восточные увалы",
           "english": "Eastern Uplands"
+        },
+        "STATE_730": {
+          "russian": "Сафирское взморье",
+          "english": "Safir Coast"
+        },
+        "STATE_731": {
+          "russian": "Лоранские пески",
+          "english": "Loran Sands"
+        },
+        "STATE_732": {
+          "russian": "Байратские копи",
+          "english": "Bayrat Mines"
+        },
+        "STATE_733": {
+          "russian": "Вейранская граница",
+          "english": "Veyran Border"
         }
       }
     },
@@ -3487,6 +3503,70 @@
         "VICTORY_POINTS_16831": {
           "russian": "Салемар",
           "english": "Salemar"
+        },
+        "VICTORY_POINTS_1693": {
+          "russian": "Арбин-дашт",
+          "english": "Arbin-Dasht"
+        },
+        "VICTORY_POINTS_960": {
+          "russian": "Сафирабад",
+          "english": "Safirabad"
+        },
+        "VICTORY_POINTS_1149": {
+          "russian": "Лоран-кала",
+          "english": "Loran-Kala"
+        },
+        "VICTORY_POINTS_11806": {
+          "russian": "Нуран",
+          "english": "Nuran"
+        },
+        "VICTORY_POINTS_6582": {
+          "russian": "Кердан",
+          "english": "Kerdan"
+        },
+        "VICTORY_POINTS_5350": {
+          "russian": "Верхний Кердан",
+          "english": "Upper Kerdan"
+        },
+        "VICTORY_POINTS_330": {
+          "russian": "Шарим",
+          "english": "Sharim"
+        },
+        "VICTORY_POINTS_1285": {
+          "russian": "Нижний Шарим",
+          "english": "Lower Sharim"
+        },
+        "VICTORY_POINTS_8582": {
+          "russian": "Вейран",
+          "english": "Veyran"
+        },
+        "VICTORY_POINTS_1846": {
+          "russian": "Салик-бандар",
+          "english": "Salik-Bandar"
+        },
+        "VICTORY_POINTS_1198": {
+          "russian": "Зархан",
+          "english": "Zarkhan"
+        },
+        "VICTORY_POINTS_9294": {
+          "russian": "Зархан-кала",
+          "english": "Zarkhan-Kala"
+        },
+        "VICTORY_POINTS_3234": {
+          "russian": "Сафир-бандар",
+          "english": "Safir-Bandar"
+        },
+        "VICTORY_POINTS_11295": {
+          "russian": "Лоран-дех",
+          "english": "Loran-Deh"
+        },
+        "VICTORY_POINTS_9890": {
+          "russian": "Байрат-кан",
+          "english": "Bayrat-Kan"
+        },
+        "VICTORY_POINTS_6126": {
+          "russian": "Вейран-кала",
+          "english": "Veyran-Kala"
         }
       }
     }

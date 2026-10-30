@@ -63,6 +63,13 @@
  WEF_mayor_of_the_last_bridge: "Координатор восстановления"
  WEF_mayor_of_the_last_bridge_desc: "Элина направляет ограниченные ресурсы туда, где отремонтированная дорога или мост дадут наибольший общий результат."
  # END CONSOLIDATED: ADISCORD_southern_desert_l_russian
+ # Shahrabad course leaders
+ SHL_voice_of_the_cities: "Голос городов"
+ SHL_voice_of_the_cities_desc: "Мариам говорит от имени самостоятельных городов и требует, чтобы каждую ведомость Конклава прочитали в кварталах, которые её оплачивают. Такое правление медленнее, но улицы Хазара ему верят."
+ SHL_duty_masters: "Дежурные мастера"
+ SHL_duty_masters_desc: "Салима подписывает решения советов смен так же, как подписывала журнал в Шариме: после проверки у печи. Цеха отвечают ей людьми и выработкой, а не быстрыми указами."
+ SHL_director_of_furnaces: "Директор печей"
+ SHL_director_of_furnaces_desc: "Джалиль больше не мирит дома, а отдаёт им приказы. Дирекция связывает цех, склад и фронт единой ведомостью и считает каждую новую плавку обязательством перед армией."
 
 # BEGIN CONSOLIDATED: ADISORD_minister_traits_l_russian.yml
  # Minister traits - Head of State

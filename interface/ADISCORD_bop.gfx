@@ -69,4 +69,16 @@ spriteTypes = {
 		texturefile = "gfx/interface/bop/STP_bop_heg_resentment.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_bop_SHL_crests"
+		texturefile = "gfx/interface/bop/SHL_bop_crests.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_SHL_quarters"
+		texturefile = "gfx/interface/bop/SHL_bop_quarters.png"
+		legacy_lazy_load = no
+	}
 }

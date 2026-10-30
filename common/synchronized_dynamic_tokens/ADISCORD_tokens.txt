@@ -165,3 +165,13 @@ transport_plane_equipment
 NAM_resource_war_deadline
 ADISCORD_marine_infantry
 train_equipment
+SHL_strike_mission
+SHL_conspiracy_mission
+SHL_mazar_deadline
+SHL_cons_debt_term
+SHL_council_election
+SHL_cons_charter_round
+SHL_cons_ultimatum
+SHL_cons_toll_term
+SHL_cons_councils
+SHL_house_demand

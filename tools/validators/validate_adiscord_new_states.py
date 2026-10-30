@@ -787,9 +787,11 @@ def validate_states() -> None:
 
 def validate_countries() -> None:
     tags = text(ROOT / "common/country_tags/02_ADISCORD_southern_desert_tags.txt")
+    # Shahrabad keeps its own character registry; the other desert leaders
+    # share the regional file.
     characters = text(
         ROOT / "common/characters/ADISCORD_southern_desert_characters.txt"
-    )
+    ) + text(ROOT / "common/characters/SHL.txt")
     ideas = text(ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt")
     traits = text(ROOT / "common/country_leader/ADISCORD_southern_desert_traits.txt")
     portraits_gfx = text(ROOT / "interface/ADISCORD_southern_desert_portraits.gfx")

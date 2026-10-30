@@ -1284,4 +1284,316 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/RUS/portrait_RUS_staff_20.png"
 	}
 
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Nadezhda_Okrug"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Nadezhda_Okrug_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Vera_Pechat"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Vera_Pechat.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Vera_Pechat_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Vera_Pechat_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Arseny_Klyuch"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Arseny_Klyuch.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Arseny_Klyuch_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Arseny_Klyuch_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Lev_Gavanov"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Lev_Gavanov.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Lev_Gavanov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Lev_Gavanov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Taras_Shtyk"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Taras_Shtyk.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Taras_Shtyk_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Taras_Shtyk_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Kirill_Vykup"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Kirill_Vykup.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Kirill_Vykup_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Kirill_Vykup_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Rostislav_Karamyshev"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Rostislav_Karamyshev_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Mark_Olshansky"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Mark_Olshansky_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Matvei_Prichal"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Matvei_Prichal_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Kirill_Vykup"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Kirill_Vykup_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Gennady_Panov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Gennady_Panov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Viktor_Belousov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Viktor_Belousov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Andrei_Krasnov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Andrei_Krasnov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Dmitri_Rogov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Rogov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Dmitri_Sazonov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Sazonov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Ilya_Tumanov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Ilya_Tumanov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Konstantin_Uvarov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Konstantin_Uvarov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Maksim_Frolov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Maksim_Frolov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_staff_Petr_Chernov_small"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_staff_Petr_Chernov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Farid_Rahmani_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Farid_Rahmani_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Rashid_Farrokh_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Rashid_Farrokh_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Kamran_Daryan_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Kamran_Daryan_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Nadir_Rostami_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Nadir_Rostami_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Navid_Azari_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Navid_Azari_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Bahram_Sadri_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Bahram_Sadri_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Reza_Mehrabi_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Reza_Mehrabi_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Arman_Kaviani_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Arman_Kaviani_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Dara_Farzan_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Dara_Farzan_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Khosrow_Arbin_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Khosrow_Arbin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Darius_Safir_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Darius_Safir"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Golshan_Loran_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Golshan_Loran_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Kamran_Nur_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Kamran_Nur_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Tahmuras_Bayrat_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Tahmuras_Bayrat_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Fereydun_Kerdan_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Fereydun_Kerdan_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Shirin_Sharim_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Shirin_Sharim_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Rauf_Darban_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Rauf_Darban"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Behruz_Veyran_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Behruz_Veyran_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Mariam_Arbin_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Mariam_Arbin"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Salima_Darzi_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Salima_Darzi"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Amin_Rashad_small"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Amin_Rashad"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Arman_Teymur"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Arman_Teymur_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Leyla_Nadiri"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Leyla_Nadiri_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Samira_Hadi"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Samira_Hadi_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Farid_Mehr"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Farid_Mehr_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Bahram_Kaveh"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Bahram_Kaveh_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_Ramin_Farzan"
+		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Ramin_Farzan_small.png"
+	}
 }

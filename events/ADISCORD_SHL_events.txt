@@ -283,12 +283,11 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.21.a
 		trigger = { SHL_can_back_shift_councils = yes }
-		custom_effect_tooltip = SHL_commune_course_tt
-		hidden_effect = {
-			if = {
-				limit = { SHL_can_back_shift_councils = yes }
-				SHL_commit_commune_course = yes
-			}
+		if = {
+			limit = { hidden_trigger = { SHL_can_back_shift_councils = yes } }
+			add_power_balance_value = { id = SHL_conclave_balance value = 0.25 }
+			custom_effect_tooltip = SHL_commune_course_tt
+			hidden_effect = { SHL_commit_commune_course = yes }
 		}
 		ai_chance = {
 			base = 5
@@ -362,7 +361,7 @@ country_event = {
 		name = ADISCORD_SHL.30.c
 		trigger = {
 			has_country_flag = SHL_conspiracy_active
-			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			SHL_can_arrest_crests = yes
 		}
 		if = {
 			limit = { hidden_trigger = { has_country_flag = SHL_conspiracy_active } }
@@ -418,12 +417,11 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.31.a
 		trigger = { SHL_can_back_crests = yes }
-		custom_effect_tooltip = SHL_regency_course_tt
-		hidden_effect = {
-			if = {
-				limit = { SHL_can_back_crests = yes }
-				SHL_commit_regency_course = yes
-			}
+		if = {
+			limit = { hidden_trigger = { SHL_can_back_crests = yes } }
+			add_power_balance_value = { id = SHL_conclave_balance value = -0.25 }
+			custom_effect_tooltip = SHL_regency_course_tt
+			hidden_effect = { SHL_commit_regency_course = yes }
 		}
 		ai_chance = { base = 20 }
 	}
@@ -1306,6 +1304,200 @@ country_event = {
 	}
 }
 
+# ---------------------------------------------------------------------------
+# Second act: the house demand. Fired by SHL_house_demand_tick every fourth
+# cycle after ratification; SHL_demand_site holds the most worn lit furnace of
+# a house (or of a quarter in the city and commune courses). The refusal
+# starts the 45-day mission SHL_house_demand. The first option is the
+# unattended answer; the pending flag expires on its own after 30 days.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.140
+	title = ADISCORD_SHL.140.t
+	desc = ADISCORD_SHL.140.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_demand_pending
+		check_variable = { var = SHL_demand_site value = 0 compare = greater_than }
+	}
+	option = {
+		name = ADISCORD_SHL.140.b
+		custom_effect_tooltip = SHL_house_demand_refuse_tt
+		hidden_effect = { SHL_house_demand_refuse = yes }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 2
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.140.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_house_demand_pay_tt
+		hidden_effect = { SHL_house_demand_pay = yes }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 250 compare = less_than }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.140.c
+		trigger = { has_power_balance = { id = SHL_conclave_balance } }
+		custom_effect_tooltip = SHL_house_demand_yield_tt
+		hidden_effect = { SHL_house_demand_yield = yes }
+		ai_chance = { base = 30 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Neighbour revanche. Scheduled 365 days after a won limited war by the
+# *_war_victory effects. SHL_resolve_revanche picks the neighbour whose due
+# flag has aged and lays its claim on the ceded land; the revision buys the
+# claim back. The first option is the unattended answer.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.76
+	title = ADISCORD_SHL.76.t
+	desc = ADISCORD_SHL.76.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		SHL_country_operable = yes
+		SHL_revanche_ready = yes
+	}
+	immediate = {
+		hidden_effect = { SHL_resolve_revanche = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.76.b
+		custom_effect_tooltip = SHL_revanche_refuse_tt
+		hidden_effect = { SHL_revanche_refuse = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_SHL.76.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_revanche_revision_tt
+		hidden_effect = { SHL_revanche_revision = yes }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Metal contracts. ADISCORD_SHL.130 goes to the buyer (FROM is Shahrabad) and
+# dies with its 40-day pending flag; 131-133 return to Shahrabad with the
+# buyer in FROM. The first option of 130 is the unattended answer.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.130
+	title = ADISCORD_SHL.130.t
+	desc = ADISCORD_SHL.130.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = SHL_metal_offer_pending }
+	option = {
+		name = ADISCORD_SHL.130.b
+		custom_effect_tooltip = SHL_metal_decline_tt
+		hidden_effect = { SHL_metal_decline_contract = yes }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 5
+				has_war_with = SHL
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.130.a
+		trigger = {
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		custom_effect_tooltip = SHL_metal_accept_tt
+		hidden_effect = { SHL_metal_sign_contract = yes }
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 30
+				NOT = { tag = NAM }
+				has_opinion = {
+					target = SHL
+					value > 0
+				}
+			}
+			modifier = {
+				factor = 0
+				has_war_with = SHL
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.131
+	title = ADISCORD_SHL.131.t
+	desc = ADISCORD_SHL.131.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.131.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.132
+	title = ADISCORD_SHL.132.t
+	desc = {
+		trigger = { FROM = { has_country_flag = SHL_metal_offer_lapsed } }
+		text = ADISCORD_SHL.132.d_lapsed
+	}
+	desc = {
+		trigger = { FROM = { NOT = { has_country_flag = SHL_metal_offer_lapsed } } }
+		text = ADISCORD_SHL.132.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.132.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.133
+	title = ADISCORD_SHL.133.t
+	desc = {
+		trigger = { FROM = { has_war_with = SHL } }
+		text = ADISCORD_SHL.133.d_war
+	}
+	desc = {
+		trigger = { FROM = { NOT = { has_war_with = SHL } } }
+		text = ADISCORD_SHL.133.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.133.a }
+}
+
 add_namespace = ADISCORD_shl_fire
 
 country_event = {
@@ -1615,4 +1807,780 @@ country_event = {
 		}
 		ai_chance = { base = 50 }
 	}
+}
+
+# The Book of Furnaces: five chapters, each with an optional second page.
+# Every page closes completely; nothing in gameplay depends on reading them.
+# SHL_initialize_furnaces seeds SHL_book_next = 1 and the first dispatcher call.
+add_namespace = ADISCORD_shl_book
+
+# Hidden dispatcher: one chapter every 90 days for a human ruler.
+# AI or an inoperable country skips the chapter and keeps the clock running.
+country_event = {
+	id = ADISCORD_shl_book.99
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	immediate = {
+		if = {
+			limit = {
+				is_ai = no
+				SHL_country_operable = yes
+			}
+			if = {
+				limit = { check_variable = { var = SHL_book_next value = 1 compare = equals } }
+				country_event = { id = ADISCORD_shl_book.1 }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_book_next value = 2 compare = equals } }
+				country_event = { id = ADISCORD_shl_book.2 }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_book_next value = 3 compare = equals } }
+				country_event = { id = ADISCORD_shl_book.3 }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_book_next value = 4 compare = equals } }
+				country_event = { id = ADISCORD_shl_book.4 }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_book_next value = 5 compare = equals } }
+				country_event = { id = ADISCORD_shl_book.5 }
+			}
+			add_to_variable = { var = SHL_book_next value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_book_next value = 6 compare = less_than } }
+			country_event = {
+				id = ADISCORD_shl_book.99
+				days = 90
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.1
+	title = ADISCORD_shl_book.1.t
+	desc = ADISCORD_shl_book.1.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_shl_book.read_on
+		hidden_effect = { country_event = { id = ADISCORD_shl_book.11 } }
+	}
+	option = {
+		name = ADISCORD_shl_book.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.11
+	title = ADISCORD_shl_book.1.t
+	desc = ADISCORD_shl_book.11.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	option = {
+		name = ADISCORD_shl_book.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.2
+	title = ADISCORD_shl_book.2.t
+	desc = ADISCORD_shl_book.2.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_shl_book.read_on
+		hidden_effect = { country_event = { id = ADISCORD_shl_book.12 } }
+	}
+	option = {
+		name = ADISCORD_shl_book.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.12
+	title = ADISCORD_shl_book.2.t
+	desc = ADISCORD_shl_book.12.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	option = {
+		name = ADISCORD_shl_book.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.3
+	title = ADISCORD_shl_book.3.t
+	desc = ADISCORD_shl_book.3.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_shl_book.read_on
+		hidden_effect = { country_event = { id = ADISCORD_shl_book.13 } }
+	}
+	option = {
+		name = ADISCORD_shl_book.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.13
+	title = ADISCORD_shl_book.3.t
+	desc = ADISCORD_shl_book.13.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	option = {
+		name = ADISCORD_shl_book.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.4
+	title = ADISCORD_shl_book.4.t
+	desc = ADISCORD_shl_book.4.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_shl_book.read_on
+		hidden_effect = { country_event = { id = ADISCORD_shl_book.14 } }
+	}
+	option = {
+		name = ADISCORD_shl_book.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.14
+	title = ADISCORD_shl_book.4.t
+	desc = ADISCORD_shl_book.14.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	option = {
+		name = ADISCORD_shl_book.close
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.5
+	title = ADISCORD_shl_book.5.t
+	desc = ADISCORD_shl_book.5.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+
+	option = {
+		name = ADISCORD_shl_book.read_on
+		hidden_effect = { country_event = { id = ADISCORD_shl_book.15 } }
+	}
+	option = {
+		name = ADISCORD_shl_book.put_away
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_book.15
+	title = ADISCORD_shl_book.5.t
+	desc = ADISCORD_shl_book.15.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+
+	option = {
+		name = ADISCORD_shl_book.close
+	}
+}
+
+# News sent to neighbours and the North. Ratification (.1-.5) is fired by the
+# matching SHL_commit_*_course effect; .6 by the first limited-war start,
+# .7 by the Crown of the South settlement, .8 when the Mazar march is repelled.
+add_namespace = ADISCORD_SHL_news
+
+news_event = {
+	id = ADISCORD_SHL_news.1
+	title = ADISCORD_SHL_news.1.t
+	desc = ADISCORD_SHL_news.1.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.1.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.2
+	title = ADISCORD_SHL_news.2.t
+	desc = ADISCORD_SHL_news.2.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.2.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.3
+	title = ADISCORD_SHL_news.3.t
+	desc = ADISCORD_SHL_news.3.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.3.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.4
+	title = ADISCORD_SHL_news.4.t
+	desc = ADISCORD_SHL_news.4.d
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.4.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.5
+	title = ADISCORD_SHL_news.5.t
+	desc = ADISCORD_SHL_news.5.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.5.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.6
+	title = ADISCORD_SHL_news.6.t
+	desc = ADISCORD_SHL_news.6.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.6.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.7
+	title = ADISCORD_SHL_news.7.t
+	desc = ADISCORD_SHL_news.7.d
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.7.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_SHL_news.8
+	title = ADISCORD_SHL_news.8.t
+	desc = ADISCORD_SHL_news.8.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.8.a
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Life of the furnaces. Archive vignettes 1-8 are fired by main-tree focuses;
+# ambient events 20-27 come from SHL_life_draw once per cycle and close the
+# channel for 120 days; 30 is the festival settlement. Human player only.
+# ---------------------------------------------------------------------------
+
+add_namespace = ADISCORD_shl_life
+
+country_event = {
+	id = ADISCORD_shl_life.1
+	title = ADISCORD_shl_life.1.t
+	desc = ADISCORD_shl_life.1.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.1.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.2
+	title = ADISCORD_shl_life.2.t
+	desc = ADISCORD_shl_life.2.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.2.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.3
+	title = ADISCORD_shl_life.3.t
+	desc = ADISCORD_shl_life.3.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.3.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.4
+	title = ADISCORD_shl_life.4.t
+	desc = ADISCORD_shl_life.4.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.4.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.5
+	title = ADISCORD_shl_life.5.t
+	desc = ADISCORD_shl_life.5.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.5.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.6
+	title = ADISCORD_shl_life.6.t
+	desc = ADISCORD_shl_life.6.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.6.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.7
+	title = ADISCORD_shl_life.7.t
+	desc = ADISCORD_shl_life.7.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.7.a }
+}
+
+country_event = {
+	id = ADISCORD_shl_life.8
+	title = ADISCORD_shl_life.8.t
+	desc = ADISCORD_shl_life.8.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.8.a }
+}
+
+# Ambient events. The paid option re-checks its price before the debit; the
+# option trigger hides it when the treasury or power is short.
+country_event = {
+	id = ADISCORD_shl_life.20
+	title = ADISCORD_shl_life.20.t
+	desc = ADISCORD_shl_life.20.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.20.a
+	}
+	option = {
+		name = ADISCORD_shl_life.20.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_20_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
+				ADISCORD_economy_mark_dirty = yes
+				subtract_from_variable = { var = SHL_unrest value = 2 }
+				SHL_clamp_tensions = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.21
+	title = ADISCORD_shl_life.21.t
+	desc = ADISCORD_shl_life.21.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.21.a
+	}
+	option = {
+		name = ADISCORD_shl_life.21.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+			check_variable = { var = SHL_reserve_stock value = 10 compare = less_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_21_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+					check_variable = { var = SHL_reserve_stock value = 10 compare = less_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_reserve_stock value = 1 }
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.22
+	title = ADISCORD_shl_life.22.t
+	desc = ADISCORD_shl_life.22.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.22.a
+	}
+	option = {
+		name = ADISCORD_shl_life.22.b
+		trigger = {
+			NOT = { has_political_power < 15 }
+		}
+		add_political_power = -15
+		custom_effect_tooltip = SHL_life_22_b_tt
+		hidden_effect = {
+			subtract_from_variable = { var = SHL_house_pressure value = 2 }
+			SHL_clamp_tensions = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.23
+	title = ADISCORD_shl_life.23.t
+	desc = ADISCORD_shl_life.23.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.23.a
+	}
+	option = {
+		name = ADISCORD_shl_life.23.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_23_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 20 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_city_support value = 2 }
+				SHL_clamp_tensions = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.24
+	title = ADISCORD_shl_life.24.t
+	desc = ADISCORD_shl_life.24.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.24.a
+	}
+	option = {
+		name = ADISCORD_shl_life.24.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_24_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 25 }
+				ADISCORD_economy_mark_dirty = yes
+				subtract_from_variable = { var = SHL_unrest value = 2 }
+				SHL_clamp_tensions = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.25
+	title = ADISCORD_shl_life.25.t
+	desc = ADISCORD_shl_life.25.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.25.a
+	}
+	option = {
+		name = ADISCORD_shl_life.25.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_25_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
+				ADISCORD_economy_mark_dirty = yes
+				subtract_from_variable = { var = SHL_house_pressure value = 2 }
+				SHL_clamp_tensions = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.26
+	title = ADISCORD_shl_life.26.t
+	desc = ADISCORD_shl_life.26.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.26.a
+	}
+	option = {
+		name = ADISCORD_shl_life.26.b
+		trigger = {
+			NOT = { has_political_power < 10 }
+		}
+		add_political_power = -10
+		custom_effect_tooltip = SHL_life_26_b_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_city_support value = 2 }
+			SHL_clamp_tensions = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_life.27
+	title = ADISCORD_shl_life.27.t
+	desc = ADISCORD_shl_life.27.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = { flag = SHL_life_cooldown value = 1 days = 120 }
+		}
+	}
+	option = {
+		name = ADISCORD_shl_life.27.a
+	}
+	option = {
+		name = ADISCORD_shl_life.27.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_life_27_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 20 }
+				ADISCORD_economy_mark_dirty = yes
+				add_political_power = 25
+			}
+		}
+	}
+}
+
+# Festival settlement, fired by SHL_festival_of_fire when its fourteen days end.
+country_event = {
+	id = ADISCORD_shl_life.30
+	title = ADISCORD_shl_life.30.t
+	desc = ADISCORD_shl_life.30.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	fire_only_once = no
+	trigger = {
+		tag = SHL
+		is_ai = no
+	}
+	option = { name = ADISCORD_shl_life.30.a }
 }

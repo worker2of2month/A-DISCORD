@@ -1,0 +1,65 @@
+{
+  "tool": "built-in image_gen",
+  "export": {
+    "format": "uncompressed RGBA TGA, fully opaque",
+    "sizes": {
+      "normal": [
+        82,
+        52
+      ],
+      "medium": [
+        41,
+        26
+      ],
+      "small": [
+        10,
+        7
+      ]
+    },
+    "resampling": "Lanczos"
+  },
+  "flags": [
+    {
+      "id": "SDR_NAM_federal_district",
+      "label": "Федеральный округ",
+      "design": "Federal district flag: deep navy field. Broad ivory horizontal stripe across the lower third containing a narrow orange angular zigzag river, recalling Sardan's river flag. In the upper center one large orange rising sun with five broad rectangular rays, its lower half hidden behind a simple ivory two-peak mountain silhouette. Clean balanced official heraldry. Navy #102c40, orange #f49617, ivory #f3eedc. The sun and mountains occupy upper two-thirds, the river stripe occupies lower third.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Federal district flag: deep navy field. Broad ivory horizontal stripe across the lower third containing a narrow orange angular zigzag river, recalling Sardan's river flag. In the upper center one large orange rising sun with five broad rectangular rays, its lower half hidden behind a simple ivory two-peak mountain silhouette. Clean balanced official heraldry. Navy #102c40, orange #f49617, ivory #f3eedc. The sun and mountains occupy upper two-thirds, the river stripe occupies lower third."
+    },
+    {
+      "id": "SDR_NAM_corp_1",
+      "label": "Южнефть",
+      "design": "Oil concern Yuzhneft district flag: orange upper two-thirds, charcoal lower third. A single very large charcoal-black oil drop centered in the orange area, containing a simple small ivory rising half-sun without rays. Bold industrial petroleum emblem. In the charcoal lower band one thin ivory angular zigzag river across full width. Orange #ec8718, charcoal #19232b, ivory #f3eedc.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Oil concern Yuzhneft district flag: orange upper two-thirds, charcoal lower third. A single very large charcoal-black oil drop centered in the orange area, containing a simple small ivory rising half-sun without rays. Bold industrial petroleum emblem. In the charcoal lower band one thin ivory angular zigzag river across full width. Orange #ec8718, charcoal #19232b, ivory #f3eedc."
+    },
+    {
+      "id": "SDR_NAM_corp_2",
+      "label": "Островная сталь",
+      "design": "Island Steel trust district flag: dark crimson field, broad steel-grey horizontal band at bottom fifth. One oversized ivory blacksmith anvil silhouette centered, supported by a short orange rectangular plinth. Behind the anvil a simple grey semicircular industrial cog with just six broad square teeth visible above it. Bold symmetrical severe industrial heraldry, no fine details. Crimson #762e35, steel #8f9fa8, ivory #eee9d8, orange #ef971b.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Island Steel trust district flag: dark crimson field, broad steel-grey horizontal band at bottom fifth. One oversized ivory blacksmith anvil silhouette centered, supported by a short orange rectangular plinth. Behind the anvil a simple grey semicircular industrial cog with just six broad square teeth visible above it. Bold symmetrical severe industrial heraldry, no fine details. Crimson #762e35, steel #8f9fa8, ivory #eee9d8, orange #ef971b."
+    },
+    {
+      "id": "SDR_NAM_corp_3",
+      "label": "Морская линия",
+      "design": "Sea Line shipping company district flag: teal field, broad ivory horizontal band in lower third split by one navy wave stripe. One oversized ivory anchor silhouette centered in upper two-thirds, thick shaft and broad curved flukes, a small orange disk inside the anchor's top ring. Strong simple nautical geometry. Teal #176b79, navy #112e45, ivory #f3eedc, orange #ee971d.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Sea Line shipping company district flag: teal field, broad ivory horizontal band in lower third split by one navy wave stripe. One oversized ivory anchor silhouette centered in upper two-thirds, thick shaft and broad curved flukes, a small orange disk inside the anchor's top ring. Strong simple nautical geometry. Teal #176b79, navy #112e45, ivory #f3eedc, orange #ee971d."
+    },
+    {
+      "id": "SDR_NAM_corp_4",
+      "label": "Береговой арсенал",
+      "design": "Coastal Arsenal company district flag: quartered dark navy and burnt orange field (top left navy, top right orange, bottom left orange, bottom right navy). One large ivory geometric fortress tower centered with three broad square battlements and a dark navy rectangular doorway. Across the tower's lower part a simple thick horizontal cannon-barrel silhouette in dark navy facing right, without wheel details. Bold strongly recognizable defensive industrial emblem. Navy #142a3c, burnt orange #c56c28, ivory #eee7d3.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Coastal Arsenal company district flag: quartered dark navy and burnt orange field (top left navy, top right orange, bottom left orange, bottom right navy). One large ivory geometric fortress tower centered with three broad square battlements and a dark navy rectangular doorway. Across the tower's lower part a simple thick horizontal cannon-barrel silhouette in dark navy facing right, without wheel details. Bold strongly recognizable defensive industrial emblem. Navy #142a3c, burnt orange #c56c28, ivory #eee7d3."
+    },
+    {
+      "id": "SDR_NAM_corp_5",
+      "label": "Артель",
+      "design": "Artel agency district flag: deep forest-green field, ivory vertical stripe covering the hoist quarter on the left. In the green field centered at 60% canvas width a bold orange emblem of three interlocking broad rectangular chain links arranged horizontally, the middle link ivory, representing collective labor. Large extremely simple geometric links, no hands or tiny details. Green #285144, ivory #eee9d7, orange #e69a2b. A narrow navy line separates the ivory hoist stripe and green field.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Artel agency district flag: deep forest-green field, ivory vertical stripe covering the hoist quarter on the left. In the green field centered at 60% canvas width a bold orange emblem of three interlocking broad rectangular chain links arranged horizontally, the middle link ivory, representing collective labor. Large extremely simple geometric links, no hands or tiny details. Green #285144, ivory #eee9d7, orange #e69a2b. A narrow navy line separates the ivory hoist stripe and green field."
+    },
+    {
+      "id": "SDR_NAM_corp_6",
+      "label": "Островной кредит",
+      "design": "Island Credit bank district flag: deep muted purple field. Broad gold diagonal sash from bottom left to top right. Centered a large ivory circular medallion containing three deep-purple solid rectangular pillars resting on one purple base line, a minimal bank-vault/credit emblem, no roof or text. Circle has a thick purple outline so it separates cleanly from diagonal gold band. Purple #44344e, gold #d6ad4d, ivory #f4efdc. Formal restrained financial heraldry.",
+      "prompt": "Create ONE finished flat rectangular flag texture for the fictional strategy-game country Sardan as a district of Svetlogorye. Landscape aspect ratio 82:52. The flag fills the ENTIRE canvas edge to edge. Flat clean vector-like heraldic shapes, solid opaque colors, crisp straight edges, bold geometric emblem, readable at 82x52 pixels and distinct even at 10x7. No fabric, folds, lighting, texture, gradients, frame, shadow, letters, numbers, text, watermark, flagpole, perspective or mockup. Restrained original fictional symbolism; no real-world brands. Island Credit bank district flag: deep muted purple field. Broad gold diagonal sash from bottom left to top right. Centered a large ivory circular medallion containing three deep-purple solid rectangular pillars resting on one purple base line, a minimal bank-vault/credit emblem, no roof or text. Circle has a thick purple outline so it separates cleanly from diagonal gold band. Purple #44344e, gold #d6ad4d, ivory #f4efdc. Formal restrained financial heraldry."
+    }
+  ]
+}

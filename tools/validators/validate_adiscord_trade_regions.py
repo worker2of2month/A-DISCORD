@@ -15,7 +15,7 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 87, 4: 8, 5: 100, 6: 42, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 91, 4: 8, 5: 100, 6: 42, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
     1: 623,
     2: 752,
@@ -41,6 +41,10 @@ GEOGRAPHIC_STATE_ANCHORS = {
     691: (24, 1),  # EFL's split district remains in Eastern Forul.
     692: (24, 3),  # AZH's split coast remains in the Southern Deserts.
     699: (42, 3),
+    730: (42, 3),  # Shahrabad hinterlands stay in the Southern Deserts with their furnaces.
+    731: (42, 3),
+    732: (42, 3),
+    733: (42, 3),
     700: (24, 5),
     701: (24, 1),
     719: (24, 5),  # The Azhar border strip stays in Vorkerland when ceded.

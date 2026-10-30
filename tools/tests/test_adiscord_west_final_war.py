@@ -756,7 +756,7 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                     )
         for country, tree, identifier in (
             ("NAM", "postwar", "NAM_south_heritage"),
-            ("SHL", "main", "SHL_south_crown_of_the_south"),
+            ("SHL", "shared", "SHL_south_crown_of_the_south"),
         ):
             with self.subTest(country=country):
                 path = ROOT / f"focus_trees/{country}/{tree}/focuses.txt"

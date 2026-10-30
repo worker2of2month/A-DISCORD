@@ -436,7 +436,7 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
         self.assertIn("GFX_autonomy_island_administration_icon", gfx)
         self.assertIn("autonomy_island_administration_icon.png", gfx)
         for directory in ("gfx/flags", "gfx/flags/medium", "gfx/flags/small"):
-            self.assertEqual(
+            self.assertNotEqual(
                 (ROOT / directory / "IIA.tga").read_bytes(),
                 (ROOT / directory / "IVN.tga").read_bytes(),
             )

@@ -149,6 +149,105 @@ class ShahrabadPopulationTests(unittest.TestCase):
                     self.assertEqual(int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]), builder.SHL_POPULATION[state_id])
 
 
+class ShahrabadSplitTests(unittest.TestCase):
+    """The four hinterland states conserve their parents' people, deposits and borders."""
+
+    ORIGINAL_POPULATION = {288: 2_400_000, 289: 1_100_000, 291: 1_600_000, 295: 1_500_000}
+    ORIGINAL_RESOURCES = {
+        288: {},
+        289: {"tungsten": 3},
+        291: {"steel": 8, "chromium": 3},
+        295: {"chromium": 2},
+    }
+    ORIGINAL_CIVILIAN = {288: 2, 289: 0, 291: 1, 295: 0}
+    # Furnace cities (and their painted sectors) that the scripts address through
+    # the parent state id, so they must never move to a child.
+    FURNACE_PROVINCES = {288: {16738, 16790, 16791, 16792, 834}, 291: {7825}}
+
+    @staticmethod
+    def file_provinces(state_id: int) -> set[int]:
+        return set(builder.state_file_provinces(builder.state_path(state_id)))
+
+    def test_children_partition_their_parents_exactly(self):
+        for parent, (child, original, carved) in builder.SHL_SPLIT_FAMILIES.items():
+            self.assertTrue(set(carved) < set(original))
+            self.assertEqual(self.file_provinces(parent) | self.file_provinces(child), set(original))
+            self.assertTrue(self.file_provinces(parent).isdisjoint(self.file_provinces(child)))
+            self.assertEqual(self.file_provinces(child), set(carved))
+            self.assertEqual(builder.state_path(child).name, builder.SHL_SPLIT_FILENAMES[child])
+            self.assertTrue(self.FURNACE_PROVINCES.get(parent, set()) <= self.file_provinces(parent))
+            self.assertIn(child, builder.SHL_STATES)
+            self.assertEqual(builder.STARTING_OWNERS[child], "SHL")
+            self.assertIn(child, builder.GENERATED_STATE_NAMES)
+            self.assertIn(child, builder.REGIONAL_SETTLEMENTS)
+
+    def test_population_industry_and_deposits_are_conserved(self):
+        for parent, (child, _original, _carved) in builder.SHL_SPLIT_FAMILIES.items():
+            self.assertEqual(
+                builder.SHL_POPULATION[parent] + builder.SHL_POPULATION[child],
+                self.ORIGINAL_POPULATION[parent],
+            )
+            combined: dict[str, int] = {}
+            for state_id in (parent, child):
+                for resource, amount in builder.SHL_RESOURCES.get(state_id, {}).items():
+                    combined[resource] = combined.get(resource, 0) + amount
+            self.assertEqual(combined, self.ORIGINAL_RESOURCES[parent])
+            civilian = sum(
+                builder.SHL_INDUSTRY.get(state_id, {}).get("industrial_complex", 0)
+                for state_id in (parent, child)
+            )
+            self.assertEqual(civilian, self.ORIGINAL_CIVILIAN[parent])
+            self.assertEqual(builder.SHL_INDUSTRY.get(child, {}).get("arms_factory", 0), 0)
+            self.assertEqual(builder.category(child), "rural")
+        self.assertEqual(sum(builder.SHL_POPULATION.values()), 20_000_000)
+        self.assertEqual(sum(sum(deposit.values()) for deposit in builder.SHL_RESOURCES.values()), 27)
+
+    def test_every_shahrabad_state_has_a_named_town_and_the_plan_is_current(self):
+        definitions = {
+            int(row[0]): row[4]
+            for line in (builder.ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+            if len(row := line.split(";")) > 4 and row[0].isdigit()
+        }
+        districts = {builder.SOUTHERN_CAPITAL_DISTRICTS[294][0]}
+        russian = (builder.ROOT / "localisation/russian/victory_points_l_russian.yml").read_text(encoding="utf-8-sig")
+        english = (builder.ROOT / "localisation/english/victory_points_l_english.yml").read_text(encoding="utf-8-sig")
+        for state_id in (*builder.SHL_STATES, 699, *districts):
+            source = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+            points = re.findall(r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source)
+            self.assertTrue(points, f"state {state_id} has no victory point")
+            provinces = builder.state_file_provinces(builder.state_path(state_id))
+            if len(provinces) >= 11:
+                self.assertGreaterEqual(len(points), 2, f"state {state_id} needs a second settlement")
+            for province, value, name in builder.REGIONAL_SETTLEMENTS.get(state_id, ()):
+                self.assertIn(province, provinces)
+                self.assertEqual(definitions[province], "land")
+                self.assertIn((str(province), str(value)), points)
+                self.assertRegex(russian, rf'(?m)^\s*VICTORY_POINTS_{province}:\s*"{re.escape(name)}"')
+                self.assertRegex(english, rf'(?m)^\s*VICTORY_POINTS_{province}:\s*".+"')
+        self.assertEqual(builder.REGIONAL_SETTLEMENTS[730][0][1], 2)
+        for path, expected in builder.shahrabad_split_plan().items():
+            self.assertEqual(path.read_bytes(), expected, str(path))
+        for path, expected in builder.shahrabad_population_plan().items():
+            self.assertEqual(path.read_bytes(), expected, str(path))
+
+    def test_split_rejects_unreviewed_province_drift(self):
+        with tempfile.TemporaryDirectory() as temp:
+            state_dir = Path(temp)
+            for state_id in builder.SHL_STATES:
+                shutil.copy(builder.state_path(state_id), state_dir / builder.state_path(state_id).name)
+            shutil.copy(builder.state_path(707), state_dir / builder.state_path(707).name)
+            drifted = state_dir / builder.state_path(289).name
+            drifted.write_text(
+                builder.replace_state_provinces(
+                    drifted.read_text(encoding="utf-8"), (*builder.SHL_LORAN_SANDS_PROVINCES, 1149)
+                ),
+                encoding="utf-8",
+            )
+            with patch.object(builder, "STATE_DIR", state_dir):
+                with self.assertRaisesRegex(RuntimeError, "state 289: Shahrabad split manifest drifted"):
+                    builder.shahrabad_split_plan()
+
+
 class DirtyRepublicPopulationTests(unittest.TestCase):
     def test_profile_population_and_non_population_metadata_are_exact(self):
         self.assertEqual(

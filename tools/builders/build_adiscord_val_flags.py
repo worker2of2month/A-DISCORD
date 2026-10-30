@@ -14,10 +14,13 @@ FLAGS = ("OCA", "OSF_VAL_commissariat", "BJK_VAL_administration")
 FLAG_ALIASES = {
     "ECA": "NOD_VAL_administration",
     "DCA": "YPR",
-    "YPR_VAL_administration": "YPR",
-    "VAL_kefreyt_state": "VAL",
 }
-IMPORTED_FLAGS = ("VAL_valden_republic", "VAL_united_military_districts")
+IMPORTED_FLAGS = (
+    "YPR_VAL_administration",
+    "VAL_kefreyt_state",
+    "VAL_valden_republic",
+    "VAL_united_military_districts",
+)
 SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
 
 

@@ -1,0 +1,65 @@
+SHL_INF_01 = {
+	name = "Furnace Levies"
+
+	for_countries = { SHL }
+
+	can_use = { always = yes }
+
+	division_types = { infantry }
+
+	fallback_name = "%d Furnace Levy"
+
+	# Names drawn from the nine houses, the Khazar quarters and the furnace
+	# district. It's okay to have gaps in numbering.
+	ordered = {
+		1 = { "1st Arbin House Guard" }
+		2 = { "Safir Crest Guard" }
+		3 = { "Khazar Registry Battalion" }
+		4 = { "Golden Gates Watch" }
+		5 = { "Loran Export Escort" }
+		6 = { "Nuran Furnace Column" }
+		7 = { "Bayrat Miners' Regiment" }
+		8 = { "Kerdan Sea Road Guard" }
+		9 = { "Sharim Shift Column" }
+		10 = { "Devyatipechye Engineers' Brigade" }
+		11 = { "Veyran Border Guard" }
+		12 = { "Zarkhan Pass Guard" }
+		13 = { "2nd Arbin House Guard" }
+		14 = { "Qanat Watch Battalion" }
+		15 = { "Tenth Furnace Volunteers" }
+		16 = { "Khazar Quarter Levies" }
+		17 = { "Continuous Fire Regiment" }
+		18 = { "Conclave Seal Guard" }
+		19 = { "Mediator's Escort Battalion" }
+		20 = { "Slag Road Column" }
+		21 = { "Ore Convoy Guard" }
+		22 = { "Night Shift Regiment" }
+		23 = { "Furnace Masters' Column" }
+		24 = { "Southern District Levies" }
+	}
+}
+
+SHL_GAR_01 = {
+	name = "Furnace Guard"
+
+	for_countries = { SHL }
+
+	can_use = { always = yes }
+
+	division_types = { infantry }
+
+	fallback_name = "%d Furnace Guard"
+
+	# One garrison per main furnace, in the order of the nine houses.
+	ordered = {
+		1 = { "Arbin Furnace Guard" }
+		2 = { "Safir Furnace Guard" }
+		3 = { "Loran Furnace Guard" }
+		4 = { "Nuran Furnace Guard" }
+		5 = { "Bayrat Furnace Guard" }
+		6 = { "Kerdan Furnace Guard" }
+		7 = { "Sharim Furnace Guard" }
+		8 = { "Darban Furnace Guard" }
+		9 = { "Veyran Furnace Guard" }
+	}
+}

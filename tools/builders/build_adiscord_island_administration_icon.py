@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import io
-import shutil
 from pathlib import Path
 
 from PIL import Image, ImageFilter
@@ -14,12 +13,9 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "tools/assets/source/autonomy_island_administration_source.png"
 ICON = ROOT / "gfx/interface/autonomy/autonomy_island_administration_icon.png"
 FLAG_SOURCE = ROOT / "tools/assets/source/country_flags"
-FLAG_IDS = ("IVN", "IVN_etatism", "IVN_chauvinism", "IVC")
+FLAG_IDS = ("IVN", "IVN_etatism")
+IMPORTED_FLAGS = ("IIA", "IVC", "IVN_chauvinism")
 FLAG_SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
-FLAG_PAIRS = tuple(
-    (ROOT / directory / "IVN.tga", ROOT / directory / "IIA.tga")
-    for directory in ("gfx/flags", "gfx/flags/medium", "gfx/flags/small")
-)
 
 
 def render_icon() -> bytes:
@@ -43,7 +39,16 @@ def render_icon() -> bytes:
         return output.getvalue()
 
 
-def render_flags() -> dict[Path, bytes]:
+def encode_flag(source: Image.Image, size: tuple[int, int]) -> bytes:
+    buffer = io.BytesIO()
+    source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(
+        buffer, format="TGA"
+    )
+    return buffer.getvalue()
+
+
+def render_flags(imports: dict[str, Path] | None = None) -> dict[Path, bytes]:
+    imports = imports or {}
     outputs = {}
     for flag_id in FLAG_IDS:
         with Image.open(FLAG_SOURCE / f"{flag_id}.png") as source:
@@ -53,32 +58,41 @@ def render_flags() -> dict[Path, bytes]:
                     buffer, format="TGA"
                 )
                 outputs[ROOT / "gfx/flags" / folder / f"{flag_id}.tga"] = buffer.getvalue()
+    for flag_id in IMPORTED_FLAGS:
+        base = ROOT / "gfx/flags" / f"{flag_id}.tga"
+        if flag_id in imports:
+            with Image.open(imports[flag_id]) as source:
+                base_data = encode_flag(source, FLAG_SIZES[""])
+        else:
+            base_data = base.read_bytes()
+        outputs[base] = base_data
+        # The runtime master keeps rebuilds independent of user-owned originals.
+        with Image.open(io.BytesIO(base_data)) as source:
+            for folder, size in FLAG_SIZES.items():
+                if folder:
+                    outputs[ROOT / "gfx/flags" / folder / f"{flag_id}.tga"] = encode_flag(source, size)
     return outputs
 
 
-def drift() -> list[str]:
+def drift(imports: dict[str, Path] | None = None) -> list[str]:
     expected_icon = render_icon()
     problems = []
     if not ICON.is_file() or ICON.read_bytes() != expected_icon:
         problems.append(str(ICON.relative_to(ROOT)))
-    flags = render_flags()
-    for source, target in FLAG_PAIRS:
-        flags[target] = flags[source]
+    flags = render_flags(imports)
     for target, expected in flags.items():
         if not target.is_file() or target.read_bytes() != expected:
             problems.append(str(target.relative_to(ROOT)))
     return problems
 
 
-def apply() -> None:
+def apply(imports: dict[str, Path] | None = None) -> None:
+    flags = render_flags(imports)
     ICON.parent.mkdir(parents=True, exist_ok=True)
     ICON.write_bytes(render_icon())
-    for path, data in render_flags().items():
+    for path, data in flags.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(data)
-    for source, target in FLAG_PAIRS:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, target)
 
 
 def main() -> int:
@@ -92,12 +106,19 @@ def main() -> int:
     actions.add_argument(
         "--apply", action="store_true", help="write the generated runtime assets"
     )
+    parser.add_argument("--import-flag", nargs=2, action="append", default=[], metavar=("TAG", "PATH"))
     args = parser.parse_args()
+    imports = {tag: Path(path) for tag, path in args.import_flag}
+    if len(imports) != len(args.import_flag):
+        parser.error("Each imported flag must be supplied once.")
+    for tag, path in imports.items():
+        if tag not in IMPORTED_FLAGS or not path.is_file():
+            parser.error(f"Invalid flag import: {tag} {path}")
     if args.apply:
-        apply()
+        apply(imports)
         print("Built Itora's political flags, island-administration icon and IIA flags.")
         return 0
-    problems = drift()
+    problems = drift(imports)
     if problems:
         print("Island-administration asset drift: " + ", ".join(problems))
         return 1

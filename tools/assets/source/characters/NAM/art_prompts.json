@@ -68,5 +68,191 @@
       "subject": "Matvei Severtsev, male admiral of the South Harbour escort squadron. About 54, long weathered face, full neat salt-and-pepper beard, dark wavy hair graying at temples, blue eyes with crow's feet. Steady experienced expression. Plain dark navy double-breasted naval coat with simple brass buttons, light shirt and black tie, no hat, badges or insignia.",
       "prompt": "Use case: stylized-concept. Create ONE fictional character portrait for A-Discord, closely MATCHING THE TWO PROVIDED STYLE REFERENCES. Both images are STYLE REFERENCES ONLY, not identity targets. Match their HOI4/TFR mod photomontage look: cutout realistic photograph of head and shoulders, heavily processed crunchy sharp edges, deep shadows, strong contrast, slightly posterized gritty photoreal shading, muted skin and clothing, pale lavender at top shading to dark purple at bottom background, fine tightly spaced horizontal CRT scanlines uniformly across the entire image including the person. Digital game portrait collage, NOT oil painting, NOT fine-art portrait, NOT a soft studio photograph. Vertical 156:210 aspect ratio. VERY TIGHT framing: head almost fills width, top of head near upper edge, eyes around upper third, upper chest cut by bottom edge. Photo-collage with subtly dark cutout edge. The supplied references define finishing, colors, scanline texture and framing. The new person has their own fictional identity; do not copy the reference people's faces, sunglasses, cigarette, real flags, military insignia or uniform emblems. No text, border, watermark, insignia, symbols or decorative props. Modern clothing appropriate to described role. Matvei Severtsev, male admiral of the South Harbour escort squadron. About 54, long weathered face, full neat salt-and-pepper beard, dark wavy hair graying at temples, blue eyes with crow's feet. Steady experienced expression. Plain dark navy double-breasted naval coat with simple brass buttons, light shirt and black tie, no hat, badges or insignia."
     }
+  ],
+  "portrait_batches": [
+    {
+      "tool": "built-in image_gen",
+      "advisor_frame": "tools/assets/source/portar idea.psd",
+      "frame_layer": 4,
+      "advisor_background": "dark neutral charcoal; frame only from PSD",
+      "large_size": [
+        156,
+        210
+      ],
+      "advisor_size": [
+        62,
+        67
+      ],
+      "portraits": [
+        {
+          "character": "NAM_Nadezhda_Okrug",
+          "prompt": "Original fictional Nadezhda Okrug, elected council chair, 42, chestnut bob, hazel eyes, dark teal blazer and grey blouse. Tight head-and-shoulders portrait matching supplied Levashov and Weber style references: processed photo collage, muted lavender background, horizontal scanlines, no frame or text.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png",
+          "advisor": false
+        },
+        {
+          "character": "NAM_Vera_Pechat",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Vera Pechat, a senior female intelligence registrar about 53. Long narrow face, high cheekbones, thin lips, arched brows, grey-green eyes; dark brown hair with grey temples in a neat low bun, small round wire spectacles. Cool exacting expression. Modern charcoal high-collared blazer and ivory blouse. Almost frontal with a slight turn. TRANSPARENT background, isolated head and shoulders cutout, opaque clothing and hair. No coloured background.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Vera_Pechat.png",
+          "advisor": true
+        },
+        {
+          "character": "NAM_Arseny_Klyuch",
+          "prompt": "Create an original fictional male civilian economist portrait for a strategy videogame. Age around 60, rounded heavy face, thinning silver hair, thin rectangular eyeglasses, clean shaven, brown eyes and thoughtful serious expression. Brown suit, pale shirt, burgundy tie. Head and upper shoulders, close framing, vertical 156:210 aspect. Gritty realistic photo-collage illustration with muted colours, sharp shadows and subtle horizontal scanline texture. Transparent background. No text, symbols, badges, frame or resemblance to a real public figure.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Arseny_Klyuch.png",
+          "advisor": true
+        },
+        {
+          "character": "NAM_Lev_Gavanov",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Lev Gavanov, fictional civilian harbour trade minister, man about 49, long face, prominent hooked nose, dark wavy hair silver at temples, neatly trimmed short dark beard, brown eyes. Confident restrained expression with slight head turn. Navy business suit, white open collar shirt, no tie, no jewelry. TRANSPARENT background, isolated opaque head and shoulders cutout.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Lev_Gavanov.png",
+          "advisor": true
+        },
+        {
+          "character": "NAM_Taras_Shtyk",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Taras Shtyk, fictional defence minister and former garrison officer, about 58, heavy angular jaw, short buzz-cut greying hair, thick eyebrows, grey eyes, broad flattened nose, clean shaven. Stern patient expression, weathered face. Plain dark olive officer tunic with unmarked collar and no insignia, no hat. Head turned slightly left. TRANSPARENT background, isolated opaque head and shoulders cutout.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Taras_Shtyk.png",
+          "advisor": true
+        },
+        {
+          "character": "NAM_Kirill_Vykup",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Kirill Vykup, fictional civilian negotiator and pragmatic compromise ruler, about 43. Slender face, high forehead, closely combed sandy-brown hair, pale blue eyes, small neat moustache, narrow chin. Alert calculating expression. Worn charcoal civilian suit, white shirt, plain slate tie. Grey lavender background fading to dark purple at bottom exactly as reference. No spectacles, no uniform.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Kirill_Vykup.png",
+          "advisor": false
+        },
+        {
+          "character": "NAM_Rostislav_Karamyshev",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Rostislav Karamyshev, fictional island military ruler, about 64. Very lean angular weathered face, deep wrinkles, bald crown with short white side hair, dark eyes, thick grey walrus moustache. Proud stiff posture and severe determined expression. Dark grey military greatcoat with plain collar tabs without symbols, no cap. Nearly frontal pose. Muted lavender top to dark purple bottom background as reference.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png",
+          "advisor": false
+        },
+        {
+          "character": "NAM_Mark_Olshansky",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Mark Olshansky, fictional corporate board chairman and island ruler, man about 47. Smooth clean-shaven broad face, thick slicked-back black hair, strong rounded jaw, dark attentive eyes, distinctive slightly asymmetrical mouth, faint confident closed-mouth smile. Expensive dark navy suit, cream shirt, muted patterned blue tie, no jewellery, no glasses. Upright polished posture. Muted lavender top to dark purple bottom background as reference.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png",
+          "advisor": false
+        },
+        {
+          "character": "NAM_Matvei_Prichal",
+          "prompt": "ONE fictional character portrait for Hearts of Iron IV mod A-Discord. Match the supplied reference portraits' gritty processed photographic collage style, sharp contrasted faces, muted colours and fine horizontal scanlines. The references are STYLE ONLY; create a different fictional face. Vertical 156:210 composition, very tight head and upper shoulders, head near top, shoulders cut by bottom. No text, emblems, decorations, border or watermark. Matvei Prichal, fictional admiral commanding a small industrial republic's coastal navy. Man about 57, long weather-beaten face, deep-set grey eyes, swept-back silver hair, short full salt-and-pepper beard. Calm vigilant expression. Black naval reefer coat, white shirt, plain black tie and modest plain gold shoulder stripes without national symbols, no hat. Slight three-quarter turn facing viewer's left. Muted lavender top to dark purple bottom background as reference.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png",
+          "advisor": false
+        },
+        {
+          "character": "NAM_Kirill_Vykup",
+          "variant": "advisor cutout for dark background",
+          "prompt": "Remove only the lavender background from this supplied portrait. Preserve exactly the same fictional man's identity, face, hairstyle, moustache, pose, clothing, lighting, colour and scanline texture. Output the man as an isolated head-and-shoulders cutout on a transparent background. No frame or additional objects. This cutout will be used inside a tiny dark advisor icon.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Kirill_Vykup_small.png",
+          "advisor": true
+        }
+      ]
+    },
+    {
+      "tool": "built-in image_gen",
+      "variant": "clean advisor icons",
+      "frame_source": "tools/assets/source/portar idea.psd",
+      "background": "Soft grey-violet gradient matched to minister_generic examples",
+      "export": "Perspective at 8x size, then Lanczos reduction; native frame preserved",
+      "portraits": [
+        {
+          "character": "NAM_Vera_Pechat",
+          "prompt": "Edit the FIRST image only. Preserve this fictional woman's exact identity, age, hairstyle, glasses and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that man's identity or frame. Crop closely to the head and collar, shorten the visible torso so her head occupies about 75 percent of image height. Do not add a frame. Transparent background.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Vera_Pechat_small.png"
+        },
+        {
+          "character": "NAM_Arseny_Klyuch",
+          "prompt": "Edit the FIRST image only. Preserve this fictional man's exact identity, age, hairstyle, glasses and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that man's identity or frame. Crop closely to the head and collar, shorten the visible torso so his head occupies about 75 percent of image height. Do not add a frame. Transparent background.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Arseny_Klyuch_small.png"
+        },
+        {
+          "character": "NAM_Lev_Gavanov",
+          "prompt": "Edit the FIRST image only. Preserve this fictional man's exact identity, age, hairstyle, beard and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that man's identity or frame. Crop closely to the head and collar, shorten the visible torso so his head occupies about 75 percent of image height. Do not add a frame. Transparent background.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Lev_Gavanov_small.png"
+        },
+        {
+          "character": "NAM_Taras_Shtyk",
+          "prompt": "Edit the FIRST image only. Preserve this fictional man's exact identity, age, short hairstyle, clean-shaven face and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that man's identity or frame. Crop closely to the head and collar, shorten the visible torso so his head occupies about 75 percent of image height. Do not add a frame. Transparent background.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Taras_Shtyk_small.png"
+        },
+        {
+          "character": "NAM_Kirill_Vykup",
+          "prompt": "Edit the FIRST image only. Preserve this fictional man's exact identity, age, hairstyle, moustache and clothing. Make a clean readable Hearts of Iron IV advisor portrait intended to be viewed at only 36 by 48 pixels. Remove ALL scanlines, grain, high-frequency skin texture, excessive sharpening and harsh black contour detail. Use broad smooth natural facial midtones and restrained painterly shading, readable eyes and mouth, comparable to the SECOND reference's clean face rendering. The SECOND image is style reference ONLY, do not copy that man's identity or frame. Crop closely to the head and collar, shorten the visible torso so his head occupies about 75 percent of image height. Do not add a frame. Transparent background.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Kirill_Vykup_small.png"
+        }
+      ]
+    },
+    {
+      "tool": "built-in image_gen",
+      "variant": "NAM military leadership small portraits",
+      "frame_source": "tools/assets/source/portar idea.psd",
+      "frame_layer": 4,
+      "background": "Soft grey-violet gradient matched to minister_generic examples",
+      "export": "62x67; perspective at 8x size then Lanczos reduction; original frame",
+      "portraits": [
+        {
+          "id": "ADISCORD_staff_NAM_Gennady_Panov",
+          "subject": "Gennady Panov, army chief of staff, man about 57. Long rectangular face, tall forehead, receding dark-grey hair, clean-shaven, brown eyes, narrow straight nose. Thoughtful reserved expression. Plain charcoal-olive staff uniform with neat collar. Three-quarter view looking toward the viewer's right.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Gennady Panov, army chief of staff, man about 57. Long rectangular face, tall forehead, receding dark-grey hair, clean-shaven, brown eyes, narrow straight nose. Thoughtful reserved expression. Plain charcoal-olive staff uniform with neat collar. Three-quarter view looking toward the viewer's right.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Gennady_Panov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Gennady_Panov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Viktor_Belousov",
+          "subject": "Viktor Belousov, defensive army chief, man about 63. Broad round face, completely bald head, thick white moustache, blue-grey eyes, heavy cheeks. Calm stubborn expression. Dark olive military tunic with simple unmarked shoulder boards. Three-quarter view looking toward the viewer's left.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Viktor Belousov, defensive army chief, man about 63. Broad round face, completely bald head, thick white moustache, blue-grey eyes, heavy cheeks. Calm stubborn expression. Dark olive military tunic with simple unmarked shoulder boards. Three-quarter view looking toward the viewer's left.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Viktor_Belousov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Viktor_Belousov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Andrei_Krasnov",
+          "subject": "Andrei Krasnov, mobile warfare army chief, man about 41. Narrow angular face, high cheekbones, short reddish-brown cropped hair, pale green eyes, clean-shaven, pronounced chin. Energetic alert expression. Dark field jacket over a plain military shirt. Almost frontal view.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Andrei Krasnov, mobile warfare army chief, man about 41. Narrow angular face, high cheekbones, short reddish-brown cropped hair, pale green eyes, clean-shaven, pronounced chin. Energetic alert expression. Dark field jacket over a plain military shirt. Almost frontal view.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Andrei_Krasnov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Andrei_Krasnov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Dmitri_Rogov",
+          "subject": "Dmitri Rogov, navy chief of staff, man about 59. Large hooked nose, deeply set dark eyes, thick wavy silver hair swept back, short full white-grey beard. Weathered but composed face. Black naval jacket, white shirt and black tie, no cap. Three-quarter view toward viewer's left.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Dmitri Rogov, navy chief of staff, man about 59. Large hooked nose, deeply set dark eyes, thick wavy silver hair swept back, short full white-grey beard. Weathered but composed face. Black naval jacket, white shirt and black tie, no cap. Three-quarter view toward viewer's left.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Rogov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Dmitri_Rogov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Dmitri_Sazonov",
+          "subject": "Dmitri Sazonov, air force chief, man about 46. Oval face, high forehead, black hair in a neat side part, small black moustache, brown eyes. Confident relaxed expression. Slate-blue air officer's uniform with plain collar and light shirt, no hat. Three-quarter view toward viewer's right.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Dmitri Sazonov, air force chief, man about 46. Oval face, high forehead, black hair in a neat side part, small black moustache, brown eyes. Confident relaxed expression. Slate-blue air officer's uniform with plain collar and light shirt, no hat. Three-quarter view toward viewer's right.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Sazonov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Dmitri_Sazonov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Ilya_Tumanov",
+          "subject": "Ilya Tumanov, infantry inspector, man about 52. Wide square face, flattened nose, close-cropped salt-and-pepper hair, thick dark eyebrows, brown eyes, clean-shaven. Rugged calm expression. Plain olive high-collared field tunic. Almost frontal view.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Ilya Tumanov, infantry inspector, man about 52. Wide square face, flattened nose, close-cropped salt-and-pepper hair, thick dark eyebrows, brown eyes, clean-shaven. Rugged calm expression. Plain olive high-collared field tunic. Almost frontal view.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Ilya_Tumanov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Ilya_Tumanov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Konstantin_Uvarov",
+          "subject": "Konstantin Uvarov, military logistics chief, man about 56. Pear-shaped face, round cheeks, thinning sandy-grey hair, small rectangular glasses, grey eyes, clean-shaven. Attentive practical expression. Brown-olive staff jacket and tan shirt. Three-quarter view toward viewer's left.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Konstantin Uvarov, military logistics chief, man about 56. Pear-shaped face, round cheeks, thinning sandy-grey hair, small rectangular glasses, grey eyes, clean-shaven. Attentive practical expression. Brown-olive staff jacket and tan shirt. Three-quarter view toward viewer's left.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Konstantin_Uvarov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Konstantin_Uvarov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Maksim_Frolov",
+          "subject": "Maksim Frolov, military training director, man about 39. Lean oblong face, dark wavy hair, distinctive short pointed beard, dark blue eyes, pronounced cheekbones. Focused serious expression. Plain deep-green officer jacket, no decorations. Three-quarter view toward viewer's right.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Maksim Frolov, military training director, man about 39. Lean oblong face, dark wavy hair, distinctive short pointed beard, dark blue eyes, pronounced cheekbones. Focused serious expression. Plain deep-green officer jacket, no decorations. Three-quarter view toward viewer's right.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Maksim_Frolov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Maksim_Frolov_small"
+        },
+        {
+          "id": "ADISCORD_staff_NAM_Petr_Chernov",
+          "subject": "Petr Chernov, military theorist, man about 67. Thin elongated face, receding white hair, round wire spectacles, small neatly trimmed grey moustache, pale eyes. Intelligent quietly skeptical expression. Charcoal staff tunic and light high-neck shirt. Almost frontal view.",
+          "prompt": "Create ONE original fictional military staff advisor portrait for the strategy game mod A-Discord. The supplied images are STYLE REFERENCES ONLY; do not copy either face or the picture frame. Clean restrained painterly realism, natural broad facial midtones, soft readable shadows. Designed for a final face area only 36x48 pixels: NO scanlines, grain, pores, distressed texture, excessive sharpening or intricate decoration. Head and collar close-up, head occupies about 75% of height, very little torso, aspect ratio 3:4. Transparent background, opaque subject. No frame, text, watermark, flags, real-world medals or insignia. Petr Chernov, military theorist, man about 67. Thin elongated face, receding white hair, round wire spectacles, small neatly trimmed grey moustache, pale eyes. Intelligent quietly skeptical expression. Charcoal staff tunic and light high-neck shirt. Almost frontal view.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_staff_Petr_Chernov_small.png",
+          "sprite": "GFX_portrait_NAM_staff_Petr_Chernov_small"
+        }
+      ]
+    }
   ]
 }

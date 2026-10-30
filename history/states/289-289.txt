@@ -1,7 +1,7 @@
 state = {
 	id = 289
 	name = "STATE_289"
-	manpower = 1100000
+	manpower = 700000
 	state_category = rural
 	resources = {
 		tungsten = 3
@@ -9,13 +9,13 @@ state = {
 	history = {
 		owner = SHL
 		add_core_of = SHL
+		victory_points = { 1149 1 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
-		1149 2030 2412 2869 3416 4995 9568 9742 9976 10107 10927 11295
-		12500 16794 16795
+		1149 2412 2869 4995 9742 10107 10927 12500 16794 16795
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

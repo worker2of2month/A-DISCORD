@@ -23,6 +23,12 @@ SOURCES = {
     "NAM/exile_humanist/focuses.txt": "ADISCORD_NAM_exile_humanist.txt",
     "NAM/exile_corporate/focuses.txt": "ADISCORD_NAM_exile_corporate.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
+    "SHL/houses/focuses.txt": "ADISCORD_SHL_houses.txt",
+    "SHL/cities/focuses.txt": "ADISCORD_SHL_cities.txt",
+    "SHL/directorate/focuses.txt": "ADISCORD_SHL_directorate.txt",
+    "SHL/regency/focuses.txt": "ADISCORD_SHL_regency.txt",
+    "SHL/commune/focuses.txt": "ADISCORD_SHL_commune.txt",
+    "SHL/shared/focuses.txt": "ADISCORD_SHL_shared.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
     "VAL/main/focuses.txt": "ADISCORD_national_focus_VAL.txt",
@@ -53,9 +59,11 @@ SECTION = re.compile(r"(?m)^# @section (\w+)\n")
 # WKR copies WRK completion through the prewar tree before loading its own tree.
 # Shared history retains preparation rewards without displaying the old branches.
 # Restoration programmes keep their unlocks through a later cabinet transition.
+# SHL ratification loads a course tree; the preparation tree stays readable.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
+    "SHL/main/focuses.txt",
     "NAM/wartime/focuses.txt",
     "NAM/exile_humanist/focuses.txt",
     "Vorkerland/prewar/focuses.txt",

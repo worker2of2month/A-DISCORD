@@ -227,14 +227,30 @@ defined_text = {
 	}
 }
 
+# The packet quote (SHL_packet_price) follows Svetlogorye's oil contract or embargo.
 defined_text = {
-	name = SHLGetPrice25
+	name = SHLGetPacketPrice
 	text = {
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } }
-		localization_key = SHL_price_25
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_packet_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_packet
 	}
 	text = {
-		localization_key = SHL_price_25_red
+		localization_key = SHL_price_packet_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPacketPriceNote
+	text = {
+		trigger = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+		localization_key = SHL_packet_price_embargo
+	}
+	text = {
+		trigger = { has_country_flag = NAM_oil_client }
+		localization_key = SHL_packet_price_contract
+	}
+	text = {
+		localization_key = SHL_packet_price_base
 	}
 }
 
@@ -1211,6 +1227,271 @@ defined_text = {
 		localization_key = SHL_recipient_compensation
 	}
 	text = { localization_key = SHL_recipient_export }
+}
+
+# ----- Course programmes -----
+
+defined_text = {
+	name = SHLGetPrice50
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals } }
+		localization_key = SHL_price_50
+	}
+	text = {
+		localization_key = SHL_price_50_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPP20
+	text = {
+		trigger = { NOT = { has_political_power < 20 } }
+		localization_key = SHL_pp20
+	}
+	text = {
+		localization_key = SHL_pp20_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPP40
+	text = {
+		trigger = { NOT = { has_political_power < 40 } }
+		localization_key = SHL_pp40
+	}
+	text = {
+		localization_key = SHL_pp40_red
+	}
+}
+
+defined_text = {
+	name = SHLGetRaidOilPP
+	text = {
+		trigger = { NOT = { has_political_power < SHL_raid_oil_pp } }
+		localization_key = SHL_price_raid_oil
+	}
+	text = {
+		localization_key = SHL_price_raid_oil_red
+	}
+}
+
+defined_text = {
+	name = SHLGetGuardPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_guard
+	}
+	text = {
+		localization_key = SHL_price_guard_red
+	}
+}
+
+defined_text = {
+	name = SHLGetWellsPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_wells_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_wells
+	}
+	text = {
+		localization_key = SHL_price_wells_red
+	}
+}
+
+defined_text = {
+	name = SHLGetHarbourPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_harbour_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_harbour
+	}
+	text = {
+		localization_key = SHL_price_harbour_red
+	}
+}
+
+defined_text = {
+	name = SHLGetConvoyPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_convoy_deposit compare = greater_than_or_equals } }
+		localization_key = SHL_price_convoy
+	}
+	text = {
+		localization_key = SHL_price_convoy_red
+	}
+}
+
+defined_text = {
+	name = SHLGetExportMode
+	text = {
+		trigger = { check_variable = { var = SHL_export_mode value = 1 compare = equals } }
+		localization_key = SHL_export_mode_exchange
+	}
+	text = {
+		localization_key = SHL_export_mode_cartel
+	}
+}
+
+# The demanding house, or its quarter in the city and commune courses.
+defined_text = {
+	name = SHLGetDemandHouse
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 287 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_287
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 288 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_288
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 289 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_289
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 290 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_290
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 291 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_291
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 292 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_292
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 293 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_293
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 294 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_294
+	}
+	text = {
+		trigger = {
+			SHL_quarter_demand_course = yes
+			check_variable = { var = SHL_demand_site value = 295 compare = equals }
+		}
+		localization_key = SHL_demand_quarter_295
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 287 compare = equals } }
+		localization_key = SHL_demand_house_287
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 288 compare = equals } }
+		localization_key = SHL_demand_house_288
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 289 compare = equals } }
+		localization_key = SHL_demand_house_289
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 290 compare = equals } }
+		localization_key = SHL_demand_house_290
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 291 compare = equals } }
+		localization_key = SHL_demand_house_291
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 292 compare = equals } }
+		localization_key = SHL_demand_house_292
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 293 compare = equals } }
+		localization_key = SHL_demand_house_293
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_demand_site value = 294 compare = equals } }
+		localization_key = SHL_demand_house_294
+	}
+	text = {
+		localization_key = SHL_demand_house_295
+	}
+}
+
+defined_text = {
+	name = SHLGetHouseDemandStatus
+	text = {
+		trigger = { has_active_mission = SHL_house_demand }
+		localization_key = SHL_demand_status_running
+	}
+	text = {
+		trigger = { has_country_flag = SHL_demand_pending }
+		localization_key = SHL_demand_status_pending
+	}
+	text = {
+		localization_key = SHL_demand_status_quiet
+	}
+}
+
+defined_text = {
+	name = SHLGetConsolidationStatus
+	text = {
+		trigger = { has_active_mission = SHL_cons_debt_term }
+		localization_key = SHL_cons_status_debt_term
+	}
+	text = {
+		trigger = { has_active_mission = SHL_cons_charter_round }
+		localization_key = SHL_cons_status_charter_round
+	}
+	text = {
+		trigger = { has_active_mission = SHL_cons_ultimatum }
+		localization_key = SHL_cons_status_ultimatum
+	}
+	text = {
+		trigger = { has_active_mission = SHL_cons_toll_term }
+		localization_key = SHL_cons_status_toll_term
+	}
+	text = {
+		trigger = { has_active_mission = SHL_cons_councils }
+		localization_key = SHL_cons_status_councils
+	}
+	text = {
+		trigger = { has_active_mission = SHL_council_election }
+		localization_key = SHL_cons_status_election
+	}
+	text = {
+		localization_key = SHL_cons_status_quiet
+	}
+}
+
+defined_text = {
+	name = SHLGetRevancheNeighbour
+	text = {
+		trigger = { check_variable = { var = SHL_revanche_neighbour value = 1 compare = equals } }
+		localization_key = SHL_revanche_kyz
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_revanche_neighbour value = 2 compare = equals } }
+		localization_key = SHL_revanche_glp
+	}
+	text = {
+		localization_key = SHL_revanche_mzr
+	}
 }
 
 defined_text = {

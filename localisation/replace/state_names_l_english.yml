@@ -292,7 +292,7 @@
  STATE_287: "Arbin"
  STATE_288: "Safir"
  STATE_289: "Loran"
- STATE_290: "Khazar"
+ STATE_290: "Nuran"
  STATE_291: "Bayrat"
  STATE_292: "Kerdan"
  STATE_293: "Sharim"
@@ -737,4 +737,8 @@
  STATE_728: "South Cape"
  STATE_692: "Black Coast"
  STATE_729: "Eastern Uplands"
+ STATE_730: "Safir Coast"
+ STATE_731: "Loran Sands"
+ STATE_732: "Bayrat Mines"
+ STATE_733: "Veyran Border"
  # END GENERATED: tools.builders.build_adiscord_new_states

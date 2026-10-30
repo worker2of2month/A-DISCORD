@@ -1,0 +1,599 @@
+characters = {
+	# Conclave of the Nine Furnaces. Jalil Nur is the starting mediator; the
+	# hidden courses promote Darius Safir or the Shift Councils instead of
+	# recruiting them, so their leader roles stay dormant until then.
+	SHL_Jalil_Nur = {
+		name = SHL_Jalil_Nur
+		portraits = { civilian = { large = GFX_portrait_SHL_Jalil_Nur } }
+		country_leader = {
+			ideology = industrial_aristocratism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Jalil_Nur_desc
+			traits = { SHL_mediator_of_nine_furnaces }
+		}
+	}
+
+	# Head of House Safir (furnace II, state 288) and regent of the crests.
+	# The regency course promotes him; the advisor seat belongs to the house
+	# and closes while he rules or while furnace II is cold or taken.
+	SHL_Darius_Safir = {
+		name = SHL_Darius_Safir
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_5
+				small = GFX_portrait_SHL_Darius_Safir_small
+			}
+		}
+		country_leader = {
+			ideology = industrial_aristocratism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Darius_Safir_desc
+			traits = { SHL_regent_of_the_crests }
+		}
+		advisor = {
+			slot = political_advisor_minister_of_foreign_affairs
+			idea_token = SHL_Darius_Safir_advisor
+			desc = SHL_Darius_Safir_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				NOT = { has_country_leader = { character = SHL_Darius_Safir ruling_only = yes } }
+				288 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_chancellor }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Shift_Councils = {
+		name = SHL_Shift_Councils
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Shift_Councils_desc
+			traits = { SHL_voice_of_the_shifts }
+		}
+	}
+
+	# Heads of the nine houses. Each seat reads the house's main furnace:
+	# the state must be owned by Shahrabad, held by the house
+	# (SHL_furnace_owner = 0) and running (SHL_furnace_running = 1). Both are
+	# state variables written by SHL_initialize_furnaces and the furnace cycle,
+	# so a cold or transferred furnace removes the house from the cabinet.
+	# Large portraits use shared assets; cabinet icons have individual portraits.
+	SHL_Khosrow_Arbin = {
+		name = SHL_Khosrow_Arbin
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_1
+				small = GFX_portrait_SHL_Khosrow_Arbin_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_economy
+			idea_token = SHL_Khosrow_Arbin_advisor
+			desc = SHL_Khosrow_Arbin_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				287 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_construction }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Golshan_Loran = {
+		name = SHL_Golshan_Loran
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_4
+				small = GFX_portrait_SHL_Golshan_Loran_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_foreign_affairs
+			idea_token = SHL_Golshan_Loran_advisor
+			desc = SHL_Golshan_Loran_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				289 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { minister_trait_foreign_trade }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Kamran_Nur = {
+		name = SHL_Kamran_Nur
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_6
+				small = GFX_portrait_SHL_Kamran_Nur_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_chief_of_intelligence
+			idea_token = SHL_Kamran_Nur_advisor
+			desc = SHL_Kamran_Nur_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				290 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_registrar }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Tahmuras_Bayrat = {
+		name = SHL_Tahmuras_Bayrat
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_2
+				small = GFX_portrait_SHL_Tahmuras_Bayrat_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_economy
+			idea_token = SHL_Tahmuras_Bayrat_advisor
+			desc = SHL_Tahmuras_Bayrat_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				291 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_industrial_planner }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Fereydun_Kerdan = {
+		name = SHL_Fereydun_Kerdan
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+				small = GFX_portrait_SHL_Fereydun_Kerdan_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_defense
+			idea_token = SHL_Fereydun_Kerdan_advisor
+			desc = SHL_Fereydun_Kerdan_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				292 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_quartermaster }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Shirin_Sharim = {
+		name = SHL_Shirin_Sharim
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_9
+				small = GFX_portrait_SHL_Shirin_Sharim_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_health
+			idea_token = SHL_Shirin_Sharim_advisor
+			desc = SHL_Shirin_Sharim_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				293 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_medical }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# Head of House Darban (furnace VIII, state 294) and dispatcher of the
+	# directorate course. His head-of-state idea replaces this seat while the
+	# directorate cabinet holds it.
+	SHL_Rauf_Darban = {
+		name = SHL_Rauf_Darban
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_1
+				small = GFX_portrait_SHL_Rauf_Darban_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_minister_of_education
+			idea_token = SHL_Rauf_Darban_advisor
+			desc = SHL_Rauf_Darban_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				NOT = { has_idea = minister_SHL_Rauf_Darban }
+				294 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_education }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Behruz_Veyran = {
+		name = SHL_Behruz_Veyran
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_land_1
+				small = GFX_portrait_SHL_Behruz_Veyran_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_chief_of_intelligence
+			idea_token = SHL_Behruz_Veyran_advisor
+			desc = SHL_Behruz_Veyran_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				295 = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+					NOT = { has_state_flag = SHL_house_opposed }
+				}
+			}
+			traits = { ADISCORD_qol_security }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# Heads of the ratified courses. Their head-of-state ideas in
+	# ADISCORD_ministers_all_countries.txt remain the cabinet seats of their
+	# courses; these advisor roles are closed while that idea is installed.
+	# Mariam Arbin also carries the pragmatist leader role of the city course,
+	# which the course commit promotes.
+	SHL_Mariam_Arbin = {
+		name = SHL_Mariam_Arbin
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_2
+				small = GFX_portrait_SHL_Mariam_Arbin_small
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Mariam_Arbin_desc
+			traits = { SHL_voice_of_the_cities }
+		}
+		advisor = {
+			slot = political_advisor_minister_of_economy
+			idea_token = SHL_Mariam_Arbin_advisor
+			desc = SHL_Mariam_Arbin_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				NOT = { has_idea = minister_SHL_Mariam_Arbin }
+				NOT = { has_country_leader = { character = SHL_Mariam_Arbin ruling_only = yes } }
+			}
+			traits = { ADISCORD_qol_registrar }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Salima_Darzi = {
+		name = SHL_Salima_Darzi
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Europe_Generic_3
+				small = GFX_portrait_SHL_Salima_Darzi_small
+			}
+		}
+		country_leader = {
+			desc = SHL_Salima_Darzi_desc
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			traits = { SHL_duty_masters }
+		}
+		advisor = {
+			slot = political_advisor_minister_of_health
+			idea_token = SHL_Salima_Darzi_advisor
+			desc = SHL_Salima_Darzi_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				NOT = { has_idea = minister_SHL_Salima_Darzi }
+				NOT = { has_country_leader = { character = SHL_Salima_Darzi ruling_only = yes } }
+			}
+			traits = { ADISCORD_qol_medical }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	SHL_Amin_Rashad = {
+		name = SHL_Amin_Rashad
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_3
+				small = GFX_portrait_SHL_Amin_Rashad_small
+			}
+		}
+		advisor = {
+			slot = political_advisor_chief_of_intelligence
+			idea_token = SHL_Amin_Rashad_advisor
+			desc = SHL_Amin_Rashad_desc
+			cost = 75
+			removal_cost = 0
+			allowed = { original_tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				NOT = { has_idea = minister_SHL_Amin_Rashad }
+			}
+			traits = { ADISCORD_qol_chancellor }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	# SHL military leadership.
+	ADISCORD_staff_SHL_Farid_Rahmani = {
+		name = ADISCORD_staff_SHL_Farid_Rahmani
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Farid_Rahmani_small
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_SHL_Farid_Rahmani
+			desc = ADISCORD_staff_SHL_Farid_Rahmani_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Rashid_Farrokh = {
+		name = ADISCORD_staff_SHL_Rashid_Farrokh
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Rashid_Farrokh_small
+			}
+		}
+		advisor = {
+			slot = army_chief
+			idea_token = ADISCORD_staff_SHL_Rashid_Farrokh
+			desc = ADISCORD_staff_SHL_Rashid_Farrokh_desc
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { has_completed_focus = SHL_conclave_army }
+			traits = { army_chief_organizational_2 }
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Kamran_Daryan = {
+		name = ADISCORD_staff_SHL_Kamran_Daryan
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Kamran_Daryan_small
+			}
+		}
+		advisor = {
+			slot = navy_chief
+			idea_token = ADISCORD_staff_SHL_Kamran_Daryan
+			desc = ADISCORD_staff_SHL_Kamran_Daryan_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Nadir_Rostami = {
+		name = ADISCORD_staff_SHL_Nadir_Rostami
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Nadir_Rostami_small
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_SHL_Nadir_Rostami
+			desc = ADISCORD_staff_SHL_Nadir_Rostami_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Navid_Azari = {
+		name = ADISCORD_staff_SHL_Navid_Azari
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Navid_Azari_small
+			}
+		}
+		advisor = {
+			slot = air_chief
+			idea_token = ADISCORD_staff_SHL_Navid_Azari
+			desc = ADISCORD_staff_SHL_Navid_Azari_desc
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { has_completed_focus = SHL_factory_air_defence }
+			traits = { air_chief_all_weather_2 }
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Bahram_Sadri = {
+		name = ADISCORD_staff_SHL_Bahram_Sadri
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Bahram_Sadri_small
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_SHL_Bahram_Sadri
+			desc = ADISCORD_staff_SHL_Bahram_Sadri_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Reza_Mehrabi = {
+		name = ADISCORD_staff_SHL_Reza_Mehrabi
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Reza_Mehrabi_small
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_SHL_Reza_Mehrabi
+			desc = ADISCORD_staff_SHL_Reza_Mehrabi_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Arman_Kaviani = {
+		name = ADISCORD_staff_SHL_Arman_Kaviani
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Arman_Kaviani_small
+			}
+		}
+		advisor = {
+			slot = high_command
+			idea_token = ADISCORD_staff_SHL_Arman_Kaviani
+			desc = ADISCORD_staff_SHL_Arman_Kaviani_desc
+			ledger = army
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_staff_SHL_Dara_Farzan = {
+		name = ADISCORD_staff_SHL_Dara_Farzan
+		portraits = {
+			army = {
+				small = GFX_portrait_SHL_staff_Dara_Farzan_small
+			}
+		}
+		advisor = {
+			slot = theorist
+			idea_token = ADISCORD_staff_SHL_Dara_Farzan
+			desc = ADISCORD_staff_SHL_Dara_Farzan_desc
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			ai_will_do = { factor = 1 }
+		}
+	}
+}

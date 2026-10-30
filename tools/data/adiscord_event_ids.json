@@ -5509,6 +5509,38 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_SHL.130",
+      "namespace": "ADISCORD_SHL",
+      "number": 130,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_metal_contracts",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.131",
+      "namespace": "ADISCORD_SHL",
+      "number": 131,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_metal_contracts",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.132",
+      "namespace": "ADISCORD_SHL",
+      "number": 132,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_metal_contracts",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.133",
+      "namespace": "ADISCORD_SHL",
+      "number": 133,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_metal_contracts",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_shl_fire.3",
       "namespace": "ADISCORD_shl_fire",
       "number": 3,
@@ -5578,6 +5610,294 @@
       "number": 5,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.1",
+      "namespace": "ADISCORD_shl_book",
+      "number": 1,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.2",
+      "namespace": "ADISCORD_shl_book",
+      "number": 2,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.3",
+      "namespace": "ADISCORD_shl_book",
+      "number": 3,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.4",
+      "namespace": "ADISCORD_shl_book",
+      "number": 4,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.5",
+      "namespace": "ADISCORD_shl_book",
+      "number": 5,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.11",
+      "namespace": "ADISCORD_shl_book",
+      "number": 11,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.12",
+      "namespace": "ADISCORD_shl_book",
+      "number": 12,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.13",
+      "namespace": "ADISCORD_shl_book",
+      "number": 13,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.14",
+      "namespace": "ADISCORD_shl_book",
+      "number": 14,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.15",
+      "namespace": "ADISCORD_shl_book",
+      "number": 15,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_book.99",
+      "namespace": "ADISCORD_shl_book",
+      "number": 99,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_book_of_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.1",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 1,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.2",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 2,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.3",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 3,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.4",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 4,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.5",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 5,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.6",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 6,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.7",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 7,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.8",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 8,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.1",
+      "namespace": "ADISCORD_shl_life",
+      "number": 1,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.2",
+      "namespace": "ADISCORD_shl_life",
+      "number": 2,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.3",
+      "namespace": "ADISCORD_shl_life",
+      "number": 3,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.4",
+      "namespace": "ADISCORD_shl_life",
+      "number": 4,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.5",
+      "namespace": "ADISCORD_shl_life",
+      "number": 5,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.6",
+      "namespace": "ADISCORD_shl_life",
+      "number": 6,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.7",
+      "namespace": "ADISCORD_shl_life",
+      "number": 7,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.8",
+      "namespace": "ADISCORD_shl_life",
+      "number": 8,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.20",
+      "namespace": "ADISCORD_shl_life",
+      "number": 20,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.21",
+      "namespace": "ADISCORD_shl_life",
+      "number": 21,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.22",
+      "namespace": "ADISCORD_shl_life",
+      "number": 22,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.23",
+      "namespace": "ADISCORD_shl_life",
+      "number": 23,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.24",
+      "namespace": "ADISCORD_shl_life",
+      "number": 24,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.25",
+      "namespace": "ADISCORD_shl_life",
+      "number": 25,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.26",
+      "namespace": "ADISCORD_shl_life",
+      "number": 26,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.27",
+      "namespace": "ADISCORD_shl_life",
+      "number": 27,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_life.30",
+      "namespace": "ADISCORD_shl_life",
+      "number": 30,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_life",
       "status": "active"
     },
     {
@@ -7954,6 +8274,22 @@
       "number": 110,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.140",
+      "namespace": "ADISCORD_SHL",
+      "number": 140,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_house_demand",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.76",
+      "namespace": "ADISCORD_SHL",
+      "number": 76,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_neighbour_revanche",
       "status": "active"
     }
   ]

@@ -3,7 +3,7 @@ ideas = {
 
 		minister_SHL_Salima_Darzi = {
 			name = minister_SHL_Salima_Darzi
-			picture = generic_political_advisor_female_europe
+			picture = SHL_Salima_Darzi
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -21,7 +21,7 @@ ideas = {
 
 		minister_SHL_Darius_Safir = {
 			name = minister_SHL_Darius_Safir
-			picture = generic_political_advisor_arab_3
+			picture = SHL_Darius_Safir
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -39,7 +39,7 @@ ideas = {
 
 		minister_SHL_Rauf_Darban = {
 			name = minister_SHL_Rauf_Darban
-			picture = generic_political_advisor_arab_2
+			picture = SHL_Rauf_Darban
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -57,7 +57,7 @@ ideas = {
 
 		minister_SHL_Mariam_Arbin = {
 			name = minister_SHL_Mariam_Arbin
-			picture = generic_political_advisor_female_arab
+			picture = SHL_Mariam_Arbin
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -75,7 +75,7 @@ ideas = {
 
 		minister_SHL_Amin_Rashad = {
 			name = minister_SHL_Amin_Rashad
-			picture = generic_political_advisor_arab_1
+			picture = SHL_Amin_Rashad
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -145,7 +145,7 @@ ideas = {
 			name = minister_NAM_Kirill_Vykup
 			default = no
 			cost = 75
-			picture = generic_political_advisor_south_america_1
+			picture = NAM_Kirill_Vykup
 			allowed = { tag = NAM }
 			visible = { tag = NAM }
 			allowed_to_remove = { }
@@ -357,7 +357,7 @@ ideas = {
 
 		minister_SHL_Arman_Teymur = {
 			name = minister_SHL_Arman_Teymur
-			picture = generic_political_advisor_arab_1
+			picture = SHL_Arman_Teymur
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -658,7 +658,7 @@ ideas = {
 
 		minister_SHL_Leyla_Nadiri = {
 			name = minister_SHL_Leyla_Nadiri
-			picture = generic_political_advisor_female_arab
+			picture = SHL_Leyla_Nadiri
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -959,7 +959,7 @@ ideas = {
 
 		minister_SHL_Samira_Hadi = {
 			name = minister_SHL_Samira_Hadi
-			picture = generic_political_advisor_female_europe
+			picture = SHL_Samira_Hadi
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -1268,7 +1268,7 @@ ideas = {
 
 		minister_SHL_Farid_Mehr = {
 			name = minister_SHL_Farid_Mehr
-			picture = generic_political_advisor_arab_2
+			picture = SHL_Farid_Mehr
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -1577,7 +1577,7 @@ ideas = {
 
 		minister_SHL_Bahram_Kaveh = {
 			name = minister_SHL_Bahram_Kaveh
-			picture = generic_political_advisor_arab_3
+			picture = SHL_Bahram_Kaveh
 			cost = 75
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
@@ -4075,7 +4075,7 @@ ideas = {
 
 		minister_SHL_Ramin_Farzan = {
 			name = minister_SHL_Ramin_Farzan
-			picture = generic_political_advisor_europe_1
+			picture = SHL_Ramin_Farzan
 			cost = 75
 			removal_cost = -1
 			allowed = { tag = SHL }

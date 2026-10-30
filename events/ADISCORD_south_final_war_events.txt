@@ -512,6 +512,11 @@ country_event = {
 			}
 			modifier = {
 				add = 30
+				has_country_flag = SHL_cons_councils_backed
+				FROM = { tag = SHL }
+			}
+			modifier = {
+				add = 30
 				has_country_flag = ADISCORD_south_indebted_to_SHL
 				FROM = { tag = SHL }
 			}

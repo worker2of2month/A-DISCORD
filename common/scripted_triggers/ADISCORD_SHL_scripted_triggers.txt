@@ -120,16 +120,25 @@ SHL_conspiracy_ready = {
 	check_variable = { var = SHL_cycle_number value = SHL_conspiracy_ready_cycle compare = greater_than_or_equals }
 }
 
+# Hidden courses need an open crisis and the matching dominance range.
 SHL_can_back_shift_councils = {
 	SHL_country_operable = yes
 	has_country_flag = SHL_strike_active
 	check_variable = { var = SHL_political_course value = 4 compare = less_than }
+	is_power_balance_in_range = {
+		id = SHL_conclave_balance
+		range = SHL_balance_quarters_dominance
+	}
 }
 
 SHL_can_back_crests = {
 	SHL_country_operable = yes
 	has_country_flag = SHL_conspiracy_active
 	check_variable = { var = SHL_political_course value = 4 compare = less_than }
+	is_power_balance_in_range = {
+		id = SHL_conclave_balance
+		range = SHL_balance_crests_dominance
+	}
 }
 
 SHL_can_lead_alliance = {
@@ -411,7 +420,7 @@ SHL_can_prepare_columns = {
 	has_completed_focus = SHL_campaign_logistics
 	SHL_obligation_idle = yes
 	NOT = { has_variable = SHL_campaign_reserve }
-	check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = SHL_convoy_deposit compare = greater_than_or_equals }
 }
 
 SHL_can_march_on_mazar = {
@@ -568,13 +577,31 @@ SHL_can_settle_cisterns = {
 }
 
 SHL_can_offer_cistern_charter = {
-	SHL_can_settle_cisterns = yes
 	SHL_can_lead_alliance = yes
 	OR = {
 		SHL_city_mandate_current = yes
 		SHL_commune_mandate_current = yes
 	}
 	MZR = { is_in_faction = no }
+	OR = {
+		SHL_can_settle_cisterns = yes
+		SHL_can_offer_early_charter = yes
+	}
+}
+
+# The open Conclave may offer the charter before any war with Mazar.
+SHL_can_offer_early_charter = {
+	SHL_country_operable = yes
+	has_completed_focus = SHL_c_cistern_charter
+	has_war = no
+	check_variable = { var = SHL_war_mzr value = 0 compare = equals }
+	check_variable = { var = SHL_mzr_outcome value = 0 compare = equals }
+	NOT = { has_variable = SHL_south_deposit }
+	MZR = {
+		exists = yes
+		is_subject = no
+		NOT = { has_war_with = SHL }
+	}
 }
 
 SHL_south_country_ready = {
@@ -773,6 +800,7 @@ SHL_can_assign_delivery = {
 			287 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -780,6 +808,7 @@ SHL_can_assign_delivery = {
 			288 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -787,6 +816,7 @@ SHL_can_assign_delivery = {
 			289 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -794,6 +824,7 @@ SHL_can_assign_delivery = {
 			290 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -801,6 +832,7 @@ SHL_can_assign_delivery = {
 			291 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -808,6 +840,7 @@ SHL_can_assign_delivery = {
 			292 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -815,6 +848,7 @@ SHL_can_assign_delivery = {
 			293 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -822,6 +856,7 @@ SHL_can_assign_delivery = {
 			294 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -829,6 +864,7 @@ SHL_can_assign_delivery = {
 			295 = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
+				NOT = { has_state_flag = SHL_quota_site }
 			}
 		}
 		AND = {
@@ -836,5 +872,187 @@ SHL_can_assign_delivery = {
 			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
 			294 = { SHL_furnace_site_controlled = yes }
 		}
+	}
+}
+
+# ----- Course programmes -----
+
+# Crest arrests belong to the directorate or to the houses' court of heralds.
+SHL_can_arrest_crests = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+		has_completed_focus = SHL_h_heralds_court
+	}
+}
+
+# In the city and commune courses the second-act demand comes from a quarter.
+SHL_quarter_demand_course = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+		check_variable = { var = SHL_political_course value = 5 compare = equals }
+	}
+}
+
+# Mission goal: the demanding furnace was repaired below 40 wear.
+SHL_demand_site_repaired = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_demand_site value = 287 compare = equals }
+			287 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 288 compare = equals }
+			288 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 289 compare = equals }
+			289 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 290 compare = equals }
+			290 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 291 compare = equals }
+			291 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 292 compare = equals }
+			292 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 293 compare = equals }
+			293 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 294 compare = equals }
+			294 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+		AND = {
+			check_variable = { var = SHL_demand_site value = 295 compare = equals }
+			295 = { check_variable = { var = SHL_furnace_wear value = 40 compare = less_than } }
+		}
+	}
+}
+
+# COUNTRY neighbour; ROOT is SHL. A revanche needs an independent neighbour
+# that is neither a consolidation result nor an ally.
+SHL_revanche_neighbour_open = {
+	exists = yes
+	is_subject = no
+	NOT = { has_war_with = SHL }
+	NOT = { is_in_faction_with = SHL }
+	ADISCORD_south_campaign_target_settled = no
+}
+
+# The due flag's age selects the neighbour when several revanches overlap.
+SHL_revanche_kyz_ready = {
+	has_country_flag = {
+		flag = SHL_revanche_due_KYZ
+		days > 364
+	}
+	KYZ = { SHL_revanche_neighbour_open = yes }
+	OR = {
+		280 = { is_owned_by = SHL }
+		284 = { is_owned_by = SHL }
+		285 = { is_owned_by = SHL }
+		286 = { is_owned_by = SHL }
+	}
+}
+
+SHL_revanche_glp_ready = {
+	has_country_flag = {
+		flag = SHL_revanche_due_GLP
+		days > 364
+	}
+	GLP = { SHL_revanche_neighbour_open = yes }
+	OR = {
+		297 = { is_owned_by = SHL }
+		298 = { is_owned_by = SHL }
+		299 = { is_owned_by = SHL }
+		708 = { is_owned_by = SHL }
+	}
+}
+
+SHL_revanche_mzr_ready = {
+	has_country_flag = {
+		flag = SHL_revanche_due_MZR
+		days > 364
+	}
+	MZR = { SHL_revanche_neighbour_open = yes }
+	OR = {
+		269 = { is_owned_by = SHL }
+		273 = { is_owned_by = SHL }
+	}
+}
+
+SHL_revanche_ready = {
+	OR = {
+		SHL_revanche_kyz_ready = yes
+		SHL_revanche_glp_ready = yes
+		SHL_revanche_mzr_ready = yes
+	}
+}
+
+# COUNTRY SHL. Satellite integration reads the regional tags only.
+SHL_has_satellite = {
+	OR = {
+		NAM = { is_subject_of = SHL }
+		EFL = { is_subject_of = SHL }
+		AZH = { is_subject_of = SHL }
+		WEF = { is_subject_of = SHL }
+		KDR = { is_subject_of = SHL }
+		RHM = { is_subject_of = SHL }
+		SDR = { is_subject_of = SHL }
+		MZR = { is_subject_of = SHL }
+		KYZ = { is_subject_of = SHL }
+		GLP = { is_subject_of = SHL }
+	}
+}
+
+SHL_integration_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+}
+
+# COUNTRY. Readers of Shahrabad's regional news (show_major of the news
+# events): Shahrabad, the southern neighbours, Svetlogorye and the desert states.
+SHL_southern_news_reader = {
+	exists = yes
+	OR = {
+		tag = SHL
+		tag = KYZ
+		tag = GLP
+		tag = MZR
+		tag = NAM
+		tag = KDR
+		tag = RHM
+		tag = SDR
+		tag = EFL
+		tag = AZH
+	}
+}
+
+# ----- Metal contracts -----
+
+# STATE furnace site. A lit export furnace that no order or obligation claims.
+SHL_metal_export_site_free = {
+	SHL_furnace_site_controlled = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+	NOT = { SHL_obligation_here = yes }
+}
+
+# COUNTRY SHL. The Golden Gates promise metal only from a free export furnace.
+SHL_metal_export_furnace_free = {
+	OR = {
+		287 = { SHL_metal_export_site_free = yes }
+		288 = { SHL_metal_export_site_free = yes }
+		289 = { SHL_metal_export_site_free = yes }
+		290 = { SHL_metal_export_site_free = yes }
+		291 = { SHL_metal_export_site_free = yes }
+		292 = { SHL_metal_export_site_free = yes }
+		293 = { SHL_metal_export_site_free = yes }
+		294 = { SHL_metal_export_site_free = yes }
+		295 = { SHL_metal_export_site_free = yes }
 	}
 }

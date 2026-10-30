@@ -11,18 +11,23 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[2]
 SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
-SUBJECTS = ("NOD", "VAL", "BJK")
-SOURCE_FLAGS = ("SLI", "SLI_mandate", "STS_hegemony")
+SOURCE_FLAGS = ("SLI", "STS_hegemony")
 ADMINISTRATION_FLAGS = ("NOD", "VAL", "YPR", "TFF")
-# Great Stelander keeps the revolutionary banner until it receives its own source.
-STP_IDENTITIES = ("STP_revolution_capital", "STP_great_stelander")
+STP_IDENTITIES = ("STP_revolution_capital",)
+IMPORTED_FLAGS = (
+    "STP_great_stelander",
+    "BJK_STP_revolution",
+    "VAL_STP_revolution",
+    "NOD_STP_revolution",
+    "SLI_mandate",
+)
 UNION_FLAG = "STS_stelander_union"
 ALL_FLAGS = (
     *SOURCE_FLAGS,
     *STP_IDENTITIES,
+    *IMPORTED_FLAGS,
     *(f"{tag}_STS_administration" for tag in ADMINISTRATION_FLAGS),
     "NKA_STS_administration",
-    *(f"{tag}_STP_revolution" for tag in SUBJECTS),
     UNION_FLAG,
 )
 
@@ -67,8 +72,32 @@ def stelander_union_flag():
     return image
 
 
-def outputs(tags=None):
+def encode_flag(source, size):
+    buffer = BytesIO()
+    source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(
+        buffer, format="TGA"
+    )
+    return buffer.getvalue()
+
+
+def outputs(tags=None, imports=None):
     selected = set(ALL_FLAGS if tags is None else tags)
+    imports = imports or {}
+    for tag in IMPORTED_FLAGS:
+        if tag not in selected:
+            continue
+        base = ROOT / "gfx/flags" / f"{tag}.tga"
+        if tag in imports:
+            with Image.open(imports[tag]) as source:
+                base_data = encode_flag(source, SIZES[""])
+        else:
+            base_data = base.read_bytes()
+        yield base, base_data
+        # The runtime master keeps rebuilds independent of user-owned originals.
+        with Image.open(BytesIO(base_data)) as source:
+            for folder, size in SIZES.items():
+                if folder:
+                    yield ROOT / "gfx/flags" / folder / f"{tag}.tga", encode_flag(source, size)
     if UNION_FLAG in selected:
         source = stelander_union_flag()
         for folder, size in SIZES.items():
@@ -112,12 +141,6 @@ def outputs(tags=None):
                 for cosmetic in STP_IDENTITIES:
                     if cosmetic in selected:
                         yield ROOT / "gfx/flags" / folder / f"{cosmetic}.tga", buffer.getvalue()
-    for tag in SUBJECTS:
-        if f"{tag}_STP_revolution" not in selected:
-            continue
-        for folder in SIZES:
-            source = ROOT / "gfx/flags" / folder / "STP.tga"
-            yield ROOT / "gfx/flags" / folder / f"{tag}_STP_revolution.tga", source.read_bytes()
 
 
 def main():
@@ -126,10 +149,20 @@ def main():
     mode.add_argument("--apply", action="store_true")
     mode.add_argument("--check", action="store_true")
     parser.add_argument("--flags-only", nargs="+", choices=ALL_FLAGS)
+    parser.add_argument("--import-flag", nargs=2, action="append", default=[], metavar=("TAG", "PATH"))
     args = parser.parse_args()
+    imports = dict(args.import_flag)
+    if len(imports) != len(args.import_flag):
+        parser.error("Each imported flag must be supplied once.")
+    for tag, path in imports.items():
+        if tag not in IMPORTED_FLAGS or not Path(path).is_file():
+            parser.error(f"Invalid flag import: {tag} {path}")
+        if args.flags_only and tag not in args.flags_only:
+            parser.error(f"Imported flag is outside --flags-only: {tag}")
     changed = []
     texture_count = 0
-    for path, data in outputs(args.flags_only):
+    planned = list(outputs(args.flags_only, imports))
+    for path, data in planned:
         texture_count += 1
         if not path.exists() or path.read_bytes() != data:
             changed.append(path)

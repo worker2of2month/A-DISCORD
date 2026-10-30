@@ -17,6 +17,7 @@ from pathlib import Path
 from tools.builders.build_adiscord_map_buildings import (
     audit_buildings,
     ensure_nam_split_spawn_positions,
+    ensure_state_spawn_positions,
     synchronize_buildings,
 )
 from tools.lib.adiscord_core_state_balance_manifest import EXPECTED_RESOURCES, TARGET_STATES
@@ -140,42 +141,95 @@ RHM_STATES = (248, 249, 252, 253, 254, 255, 256, 257, 258)
 SDR_STATES = (243, 250, 251, 259, 260, 261, 262, 263)
 MZR_STATES = (264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275)
 KYZ_STATES = tuple(range(276, 287))
-SHL_STATES = (287, 288, 289, 290, 291, 292, 293, 294, 295, 296)
+# The four largest furnace districts are split into a furnace state and a
+# rural hinterland. The parent keeps its id (the furnace scripts address
+# 287-295 directly), its furnace city and every province that touches the
+# neighbour whose scripted war depends on that border: Safir keeps the single
+# KYZ contact 5497, Loran keeps all KYZ contacts, Veyran keeps the GLP
+# contacts 10937/11938/12321 while the border state takes the GLP 297/298 belt.
+SHL_SAFIR_COAST_STATE_ID = 730
+SHL_LORAN_SANDS_STATE_ID = 731
+SHL_BAYRAT_MINES_STATE_ID = 732
+SHL_VEYRAN_BORDER_STATE_ID = 733
+SHL_SPLIT_FILENAMES = {
+    SHL_SAFIR_COAST_STATE_ID: "730-Safir-Coast.txt",
+    SHL_LORAN_SANDS_STATE_ID: "731-Loran-Sands.txt",
+    SHL_BAYRAT_MINES_STATE_ID: "732-Bayrat-Mines.txt",
+    SHL_VEYRAN_BORDER_STATE_ID: "733-Veyran-Border.txt",
+}
+SHL_ORIGINAL_SAFIR_PROVINCES = (
+    834, 960, 2675, 3234, 4883, 5433, 5497, 5929, 6008, 6082, 6137, 7739,
+    8034, 8976, 9095, 10490, 12352, 16707, 16708, 16738, 16790, 16791, 16792,
+)
+SHL_SAFIR_COAST_PROVINCES = (3234, 5433, 6008, 8034, 9095, 16707, 16708)
+SHL_ORIGINAL_LORAN_PROVINCES = (
+    1149, 2030, 2412, 2869, 3416, 4995, 9568, 9742, 9976, 10107, 10927, 11295,
+    12500, 16794, 16795,
+)
+SHL_LORAN_SANDS_PROVINCES = (2030, 3416, 9568, 9976, 11295)
+SHL_ORIGINAL_BAYRAT_PROVINCES = (
+    946, 2056, 2694, 4247, 4537, 5042, 5634, 5805, 6737, 7825, 8197, 9890,
+    11773, 12681,
+)
+SHL_BAYRAT_MINES_PROVINCES = (2694, 4247, 4537, 5042, 9890)
+SHL_ORIGINAL_VEYRAN_PROVINCES = (
+    931, 1114, 2242, 4301, 4495, 5801, 6126, 7994, 8582, 10148, 10937, 11938,
+    12321,
+)
+SHL_VEYRAN_BORDER_PROVINCES = (2242, 4301, 4495, 5801, 6126)
+# parent -> (child, original parent provinces, provinces carved for the child)
+SHL_SPLIT_FAMILIES = {
+    288: (SHL_SAFIR_COAST_STATE_ID, SHL_ORIGINAL_SAFIR_PROVINCES, SHL_SAFIR_COAST_PROVINCES),
+    289: (SHL_LORAN_SANDS_STATE_ID, SHL_ORIGINAL_LORAN_PROVINCES, SHL_LORAN_SANDS_PROVINCES),
+    291: (SHL_BAYRAT_MINES_STATE_ID, SHL_ORIGINAL_BAYRAT_PROVINCES, SHL_BAYRAT_MINES_PROVINCES),
+    295: (SHL_VEYRAN_BORDER_STATE_ID, SHL_ORIGINAL_VEYRAN_PROVINCES, SHL_VEYRAN_BORDER_PROVINCES),
+}
+SHL_STATES = (287, 288, 289, 290, 291, 292, 293, 294, 295, 296, *sorted(SHL_SPLIT_FILENAMES))
+# Residents are conserved across every split: the twelve original states and
+# the four hinterlands still sum to 20,000,000.
 SHL_POPULATION = {
     287: 1_800_000,
-    288: 2_400_000,
-    289: 1_100_000,
+    288: 1_500_000,
+    289: 700_000,
     290: 800_000,
-    291: 1_600_000,
+    291: 1_000_000,
     292: 800_000,
     293: 1_000_000,
     294: 2_200_000,
-    295: 1_500_000,
+    295: 900_000,
     296: 1_300_000,
     699: 4_000_000,
     707: 1_500_000,
+    SHL_SAFIR_COAST_STATE_ID: 900_000,
+    SHL_LORAN_SANDS_STATE_ID: 400_000,
+    SHL_BAYRAT_MINES_STATE_ID: 600_000,
+    SHL_VEYRAN_BORDER_STATE_ID: 600_000,
 }
 # The Nine Furnaces are the south's industrial core: the capital and the
 # furnace towns carry the factories, the rural districts keep free slots for
 # focus construction. Values are exact state-level counts.
 SHL_INDUSTRY = {
     287: {"industrial_complex": 0, "arms_factory": 1},
-    288: {"industrial_complex": 2, "arms_factory": 0},
+    288: {"industrial_complex": 1, "arms_factory": 0},
     291: {"industrial_complex": 1, "arms_factory": 1},
     293: {"industrial_complex": 1, "arms_factory": 0},
     294: {"industrial_complex": 2, "arms_factory": 1},
     699: {"industrial_complex": 2, "arms_factory": 1},
+    SHL_SAFIR_COAST_STATE_ID: {"industrial_complex": 1, "arms_factory": 0},
 }
 # Metallurgical deposits feed the furnaces; oil remains the northern resource
-# that drives the war for the South.
+# that drives the war for the South. The Bayrat mines sit in the hills the
+# split carves off, so the hinterland takes half the steel and all chromium.
 SHL_RESOURCES = {
     287: {"steel": 4},
     289: {"tungsten": 3},
-    291: {"steel": 8, "chromium": 3},
+    291: {"steel": 4},
     292: {"steel": 2},
     293: {"aluminium": 3},
-    295: {"chromium": 2},
+    295: {"chromium": 1},
     296: {"tungsten": 2},
+    SHL_BAYRAT_MINES_STATE_ID: {"steel": 4, "chromium": 3},
+    SHL_VEYRAN_BORDER_STATE_ID: {"chromium": 1},
 }
 GLP_STATES =(297, 298, 299, 300, 301, 302, 304, 305)
 
@@ -595,12 +649,21 @@ REGIONAL_SETTLEMENTS = {
     279: ((5549, 1, "Ридан"),),
     282: ((7947, 1, "Мейрук"),),
     285: ((6233, 1, "Нарван"),),
-    287: ((4182, 1, "Арбин"),),
+    # Shahrabad: every district has a named town; districts of eleven or more
+    # provinces also carry a second settlement. Furnace cities keep their VPs.
+    287: ((4182, 1, "Арбин"), (1693, 1, "Арбин-дашт")),
+    288: ((960, 1, "Сафирабад"),),
+    289: ((1149, 1, "Лоран-кала"),),
+    290: ((11806, 1, "Нуран"),),
     291: ((7825, 1, "Байрат"),),
-    296: ((10949, 1, "Салик"),),
+    292: ((6582, 1, "Кердан"), (5350, 1, "Верхний Кердан")),
+    293: ((330, 1, "Шарим"), (1285, 1, "Нижний Шарим")),
+    295: ((8582, 1, "Вейран"),),
+    296: ((10949, 1, "Салик"), (1846, 1, "Салик-бандар")),
     297: ((3415, 1, "Норан"),),
     299: ((10975, 1, "Кассен"),),
     305: ((10842, 1, "Лерис"),),
+    707: ((1198, 1, "Зархан"), (9294, 1, "Зархан-кала")),
     709: (
         (16807, 1, "Островная гавань"),
         (16804, 1, "Малый Стеланд"),
@@ -610,6 +673,10 @@ REGIONAL_SETTLEMENTS = {
         (16709, 1, "Порт Мисстаны"),
         (16712, 1, "Порт Каван"),
     ),
+    SHL_SAFIR_COAST_STATE_ID: ((3234, 2, "Сафир-бандар"),),
+    SHL_LORAN_SANDS_STATE_ID: ((11295, 1, "Лоран-дех"),),
+    SHL_BAYRAT_MINES_STATE_ID: ((9890, 1, "Байрат-кан"),),
+    SHL_VEYRAN_BORDER_STATE_ID: ((6126, 1, "Вейран-кала"),),
 }
 
 # Explicit profiles replace the old pseudo-random 24-72k population formula
@@ -1376,6 +1443,10 @@ GENERATED_STATE_NAMES = {
     710: "Северная пустошь",
     711: "Западная пустошь",
     712: "Южная пустошь",
+    SHL_SAFIR_COAST_STATE_ID: "Сафирское взморье",
+    SHL_LORAN_SANDS_STATE_ID: "Лоранские пески",
+    SHL_BAYRAT_MINES_STATE_ID: "Байратские копи",
+    SHL_VEYRAN_BORDER_STATE_ID: "Вейранская граница",
 }
 
 COASTAL_CITY_POINTS = {
@@ -1558,13 +1629,19 @@ def buildings(state_id: int, owner: str) -> list[str]:
     return lines
 
 
-def render_state(state_id: int, owner: str) -> str:
-    path = state_path(state_id)
-    old = path.read_text(encoding="utf-8-sig", errors="strict")
-    province_match = re.search(r"provinces\s*=\s*\{([^}]*)\}", old, re.DOTALL)
-    if not province_match:
-        raise RuntimeError(f"state {state_id}: missing provinces block")
-    provinces = [int(value) for value in re.findall(r"\d+", province_match.group(1))]
+def render_state(
+    state_id: int, owner: str, manifest: tuple[int, ...] | None = None
+) -> str:
+    """Render one state; `manifest` replaces the province list read from its file."""
+    if manifest is None:
+        path = state_path(state_id)
+        old = path.read_text(encoding="utf-8-sig", errors="strict")
+        province_match = re.search(r"provinces\s*=\s*\{([^}]*)\}", old, re.DOTALL)
+        if not province_match:
+            raise RuntimeError(f"state {state_id}: missing provinces block")
+        provinces = [int(value) for value in re.findall(r"\d+", province_match.group(1))]
+    else:
+        provinces = list(manifest)
     provinces = sorted(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ())))
     if state_id in SOUTHERN_CITY_POINTS:
         provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
@@ -2493,39 +2570,54 @@ state = {
     return int(bool(changed) and not apply)
 
 
+def southern_district_path(capital: int) -> Path:
+    district = SOUTHERN_CAPITAL_DISTRICTS[capital][0]
+    path = STATE_DIR / f"{district}-Southern-District.txt"
+    existing = tuple(STATE_DIR.glob(f"{district}-*.txt"))
+    if existing and existing != (path,):
+        raise RuntimeError(f"state {district}: ID occupied by another state")
+    return path
+
+
+def render_southern_district(capital: int) -> str:
+    """Render the rural district carved from a southern capital."""
+    district, _city_population, rural_population, provinces = SOUTHERN_CAPITAL_DISTRICTS[capital]
+    rural_population = SHL_POPULATION.get(district, rural_population)
+    owner = STARTING_OWNERS[capital]
+    history = [f"\t\towner = {owner}", f"\t\tadd_core_of = {owner}"]
+    for province, value, _name in REGIONAL_SETTLEMENTS.get(district, ()):
+        if province not in provinces:
+            raise RuntimeError(f"state {district}: regional VP {province} is outside the district")
+        history.append(f"\t\tvictory_points = {{ {province} {value} }}")
+    history.append("\t\tbuildings = { infrastructure = 2 }")
+    lines = [
+        "# Generated by tools/build_adiscord_new_states.py",
+        "state = {",
+        f"\tid = {district}",
+        f'\tname = "STATE_{district}"',
+        f"\tmanpower = {rural_population}",
+        "\tstate_category = rural",
+        "\tlocal_supplies = 1.0",
+        "\thistory = {",
+        *history,
+        "\t}",
+        "\tprovinces = {",
+        "\t\t" + " ".join(map(str, provinces)),
+        "\t}",
+        "\tbuildings_max_level_factor = 1.000",
+        "}",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def southern_settlement_plan() -> dict[Path, bytes]:
     """Keep capital references stable and conserve their rural population."""
     outputs = {}
     for state_id in sorted(set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}):
         outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
-    for capital, (district, _city_population, rural_population, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items():
-        rural_population = SHL_POPULATION.get(district, rural_population)
-        path = STATE_DIR / f"{district}-Southern-District.txt"
-        existing = tuple(STATE_DIR.glob(f"{district}-*.txt"))
-        if existing and existing != (path,):
-            raise RuntimeError(f"state {district}: ID occupied by another state")
-        owner = STARTING_OWNERS[capital]
-        lines = [
-            "# Generated by tools/build_adiscord_new_states.py",
-            "state = {",
-            f"\tid = {district}",
-            f'\tname = "STATE_{district}"',
-            f"\tmanpower = {rural_population}",
-            "\tstate_category = rural",
-            "\tlocal_supplies = 1.0",
-            "\thistory = {",
-            f"\t\towner = {owner}",
-            f"\t\tadd_core_of = {owner}",
-            "\t\tbuildings = { infrastructure = 2 }",
-            "\t}",
-            "\tprovinces = {",
-            "\t\t" + " ".join(map(str, provinces)),
-            "\t}",
-            "\tbuildings_max_level_factor = 1.000",
-            "}",
-            "",
-        ]
-        outputs[path] = "\n".join(lines).encode("utf-8")
+    for capital in SOUTHERN_CAPITAL_DISTRICTS:
+        outputs[southern_district_path(capital)] = render_southern_district(capital).encode("utf-8")
     path = ROOT / "localisation/russian/state_names_l_russian.yml"
     source = path.read_text(encoding="utf-8-sig")
     for district, *_rest in SOUTHERN_CAPITAL_DISTRICTS.values():
@@ -2580,6 +2672,103 @@ def update_shahrabad_population(apply: bool) -> int:
     if apply:
         if any(path.read_bytes() != data for path, data in shahrabad_population_plan().items()):
             raise RuntimeError("Shahrabad population is not idempotent")
+        return 0
+    return int(bool(changed))
+
+
+def state_file_provinces(path: Path) -> frozenset[int]:
+    source = path.read_text(encoding="utf-8-sig", errors="strict")
+    match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+    if not match:
+        raise RuntimeError(f"{path.name}: missing provinces block")
+    return frozenset(map(int, re.findall(r"\d+", match.group(1))))
+
+
+def shahrabad_split_plan() -> dict[Path, bytes]:
+    """Split the four largest furnace districts and name every Shahrabad town.
+
+    Parents keep their ids, furnace cities and scripted neighbour borders; the
+    carved hinterlands become rural states. A parent is accepted only in its
+    original or already split form so unreviewed province drift is rejected.
+    """
+    outputs = {}
+    manifests: dict[int, tuple[int, ...]] = {}
+    for parent, (child, original, carved) in SHL_SPLIT_FAMILIES.items():
+        if not set(carved) < set(original):
+            raise RuntimeError(f"state {parent}: child provinces must be a proper subset")
+        remainder = tuple(sorted(set(original) - set(carved)))
+        current = state_file_provinces(state_path(parent))
+        if current not in {frozenset(original), frozenset(remainder)}:
+            raise RuntimeError(f"state {parent}: Shahrabad split manifest drifted")
+        child_path = STATE_DIR / SHL_SPLIT_FILENAMES[child]
+        existing = tuple(STATE_DIR.glob(f"{child}-*.txt"))
+        if existing and existing != (child_path,):
+            raise RuntimeError(f"state {child}: ID occupied by another state")
+        if child_path.exists() and state_file_provinces(child_path) != frozenset(carved):
+            raise RuntimeError(f"state {child}: Shahrabad split manifest drifted")
+        manifests[parent] = remainder
+        manifests[child] = tuple(sorted(carved))
+    for state_id in SHL_STATES:
+        if state_id in SOUTHERN_CAPITAL_DISTRICTS:
+            continue
+        path = STATE_DIR / SHL_SPLIT_FILENAMES[state_id] if state_id in SHL_SPLIT_FILENAMES else state_path(state_id)
+        outputs[path] = render_state(state_id, "SHL", manifests.get(state_id)).encode("utf-8")
+    for capital in SOUTHERN_CAPITAL_DISTRICTS:
+        if STARTING_OWNERS[capital] == "SHL":
+            outputs[southern_district_path(capital)] = render_southern_district(capital).encode("utf-8")
+
+    path = ROOT / "localisation/russian/state_names_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for state_id in SHL_SPLIT_FILENAMES:
+        source = replace_localisation_value(source, f"STATE_{state_id}", GENERATED_STATE_NAMES[state_id])
+    outputs[path] = source.encode("utf-8-sig")
+    path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    districts = {SOUTHERN_CAPITAL_DISTRICTS[capital][0] for capital in SOUTHERN_CAPITAL_DISTRICTS if STARTING_OWNERS[capital] == "SHL"}
+    for state_id in (*SHL_STATES, *sorted(districts)):
+        for province, _value, name in REGIONAL_SETTLEMENTS.get(state_id, ()):
+            source = replace_localisation_value(source, f"VICTORY_POINTS_{province}", name)
+    outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def synchronize_shahrabad_split_buildings() -> None:
+    """Move building anchors with their provinces and complete each new state's set."""
+    expected_moves = {
+        (parent, child): set(carved)
+        for parent, (child, _original, carved) in SHL_SPLIT_FAMILIES.items()
+    }
+    _, mismatches = audit_buildings(ROOT)
+    unexpected = [
+        mismatch for mismatch in mismatches
+        if mismatch.province not in expected_moves.get(
+            (mismatch.recorded_state, mismatch.actual_state), set()
+        )
+    ]
+    if unexpected:
+        raise RuntimeError(f"unrelated map/buildings state mismatches: {unexpected[:5]}")
+    if mismatches:
+        synchronize_buildings(ROOT, apply=True)
+    split_states = set(SHL_SPLIT_FAMILIES) | set(SHL_SPLIT_FILENAMES)
+    if ensure_state_spawn_positions(ROOT, split_states):
+        # Added anchors take unit-stack heights; relief provinces need the surface height.
+        synchronize_buildings(ROOT, apply=True)
+    _, remaining = audit_buildings(ROOT)
+    if remaining:
+        raise RuntimeError(f"Shahrabad split spawn-position repair drifted: {remaining[:5]}")
+
+
+def update_shahrabad_split(apply: bool) -> int:
+    outputs = shahrabad_split_plan()
+    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        synchronize_shahrabad_split_buildings()
+        if any(path.read_bytes() != data for path, data in shahrabad_split_plan().items()):
+            raise RuntimeError("Shahrabad split is not idempotent")
         return 0
     return int(bool(changed))
 
@@ -2786,6 +2975,7 @@ def apply() -> None:
     apply_legacy_owner_overrides()
     split_svetlogorsk_from_nam()
     split_ivanland_overhaul_states()
+    update_shahrabad_split(True)
     for state_id, owner in sorted(STARTING_OWNERS.items()):
         state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
     apply_legacy_state_profiles()
@@ -2980,6 +3170,16 @@ def main() -> int:
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
     actions.add_argument("--apply-shahrabad-population", action="store_true")
+    actions.add_argument(
+        "--check-shahrabad-split",
+        action="store_true",
+        help="validate the Shahrabad district split and town manifest without writing files",
+    )
+    actions.add_argument(
+        "--apply-shahrabad-split",
+        action="store_true",
+        help="split the four largest Shahrabad districts and name every Shahrabad town",
+    )
     actions.add_argument("--check-svetlogorye-homeland", action="store_true")
     actions.add_argument("--apply-svetlogorye-homeland", action="store_true")
     actions.add_argument("--apply-coastal-cities", action="store_true")
@@ -3011,6 +3211,8 @@ def main() -> int:
         )
     if args.check_shahrabad_population or args.apply_shahrabad_population:
         return update_shahrabad_population(args.apply_shahrabad_population)
+    if args.check_shahrabad_split or args.apply_shahrabad_split:
+        return update_shahrabad_split(args.apply_shahrabad_split)
     if args.check_svetlogorye_homeland or args.apply_svetlogorye_homeland:
         return update_svetlogorye_homeland(args.apply_svetlogorye_homeland)
     if args.check_regional_settlements or args.apply_regional_settlements:
@@ -3081,8 +3283,12 @@ def main() -> int:
     port_drift = update_misstana_port(False)
     regional_drift = update_regional_settlements(False)
     shahrabad_drift = update_shahrabad_population(False)
+    shahrabad_split_drift = update_shahrabad_split(False)
     svetlogorye_drift = update_svetlogorye_homeland(False)
-    return max(coalition_drift, island_drift, port_drift, regional_drift, shahrabad_drift, svetlogorye_drift, validate_main())
+    return max(
+        coalition_drift, island_drift, port_drift, regional_drift, shahrabad_drift,
+        shahrabad_split_drift, svetlogorye_drift, validate_main(),
+    )
 
 
 if __name__ == "__main__":

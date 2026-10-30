@@ -44,7 +44,7 @@
     "common/autonomous_states/ADISCORD_south_final_war_subjects.txt": "1ee654bdaea73f8e2d32ee3aff0e1fe806815d3d8924b1c4f48a2103e55ea8da",
     "common/bop/NAM.txt": "cc4b4ff0b2038e156242a09526eab43e88cd6cc381053da5c7ba720f3450bb41",
     "common/characters/ADISCORD_nam_resource_war_characters.txt": "97a40c7eee8a059881e05f239c451e105811b39e7b44a5aae05614cbd5c28d25",
-    "common/characters/NAM.txt": "80f833483cf6add611f71afe18e15466245330f6ff9b1ede0299aa769129d045",
+    "common/characters/NAM.txt": "3fc0bfbdd3c3e6e45ef08059ba1ed32de159b4ed3d29571fc728abd7e054dd7c",
     "common/countries/ADISCORD_dynamic_country.txt": "5538216c6f1e6edd8b197de733eaadb85bfa048a78cc58d263f4482616ac61d6",
     "common/countries/NamestnikLand.txt": "81279fc9c88bb8428495ae8ecb7ce6083b82285467a6f5a9810fa4aee627a318",
     "common/countries/SHL.txt": "160724fbbd9cad1c18290bd1fcabd444d7bda5a66f52507fa184b6a2889f32ea",
@@ -144,7 +144,32 @@
     "map/buildings.txt": "124d3c9feb7d721cd8be4ea03b36f8a30f8df158decf6ecc023d98a74e40b801",
     "map/railways.txt": "fc6c30026230238d1efc76c483b0954bf37ac8d58de80a2289ceb66726ce3c71",
     "map/strategicregions/24-mardar-lowlands.txt": "5d32e7bdeafdcaa28935306b54e622db307c068241608c87efa57013ab6749e7",
-    "map/supply_nodes.txt": "d9a9eb44f669c4971ccbb5818b9e448089d166461f785332103fc4bb22a11979"
+    "map/supply_nodes.txt": "d9a9eb44f669c4971ccbb5818b9e448089d166461f785332103fc4bb22a11979",
+    "interface/ADISCORD_leader_portraits.gfx": "fbe9668c04d4954340d9dca9ec58bc6bcbd098000f45ce19d5055d4c958ee196",
+    "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png": "c05afddc53a61abe773f1b408ac1fe2af1166d9f28423ee3efe76e783f509732",
+    "gfx/leaders/NAM/portrait_NAM_Vera_Pechat.png": "2f2c9374d5dc363ce58bf8d3ae8a4891ed105df33f016a38a14259e19e03e2ae",
+    "gfx/interface/ideas/NAM/portrait_NAM_Vera_Pechat_small.png": "17b8c4c50dd84bdda2ba4aed638dcc0e93a207c05d951ee76ea6ace3e5cc61ed",
+    "gfx/leaders/NAM/portrait_NAM_Arseny_Klyuch.png": "445153dd7fb80d8c8b4c2ef759ad8c1424cfb6777d49def4b2afa2994c4995a5",
+    "gfx/interface/ideas/NAM/portrait_NAM_Arseny_Klyuch_small.png": "7f9f1ed9bf8acbdecbe5510f123d932ee99024c1224031cf87956b7b0ce1f1ed",
+    "gfx/leaders/NAM/portrait_NAM_Lev_Gavanov.png": "0734d89ddcbf3942c2e34984e9de25a851ff93ea1b1de1eeb321da4a06926119",
+    "gfx/interface/ideas/NAM/portrait_NAM_Lev_Gavanov_small.png": "d6f33774ffc89e9ec7b268bd7d094b78976f6643700052785856d6f542da5100",
+    "gfx/leaders/NAM/portrait_NAM_Taras_Shtyk.png": "15816515dcc47314cac4d238ff845a1b52ea14b705cc070eedb6d8291716f441",
+    "gfx/interface/ideas/NAM/portrait_NAM_Taras_Shtyk_small.png": "f53c6becb44b9c569bb3b1890c8dbf325f1ad78c6bbb19a3f5e2c137d9317f19",
+    "gfx/leaders/NAM/portrait_NAM_Kirill_Vykup.png": "2842e9a73d495593ebbe235b82c721f4a536de5436f7219af4fbac1aab7addd9",
+    "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png": "cd3bcdbf68c493ecbd1e319d34dfa1b33068ed7f2908e8049c15ac4d2420d30d",
+    "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png": "b96fe13f9a50de02efc514cd1ab75815a0629d01b24ac5e9e70a0b7a49a2ce1e",
+    "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png": "4f1d57d0fa8c4eb9cef5b381ec18781bebd6526f6af69779e4c706d264dbc488",
+    "gfx/interface/ideas/NAM/portrait_NAM_Kirill_Vykup_small.png": "809e771be71597203cb95fc5edd590af96e3b2d6849afcfe2ec6e3551e393228",
+    "common/ideas/ADISCORD_ministers_all_countries.txt": "d69483e8f5f5cd3d68bf136fdb1b038aade04a206fcf40e87b20c232d26bd9a0",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Gennady_Panov_small.png": "31d286965deac55b97f5acb509afa48972b2245712a9e9fa140f914e52be0b23",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Viktor_Belousov_small.png": "18742250c5c4b37c83c670f54046ae0b9fabe1f99b4e045c89f207522690281e",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Andrei_Krasnov_small.png": "561104b29aa6cc971999f783903386f576b92ecb095cf7462eb121477756c8c5",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Rogov_small.png": "6019beb4f84ed6554f1327bce49836f4ad1a98089c3e605a364aafc7b8337f68",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Dmitri_Sazonov_small.png": "0cee3dcd0e4d38e029418ca232d7671167da298e6c31838dda7a5151c2d45f94",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Ilya_Tumanov_small.png": "ff223e5fbf647810953327c26f87b8f66874b5b1e2d27b1b9fa4502563a72a88",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Konstantin_Uvarov_small.png": "f83ed967a6f287aee9ce07b68df8780c06234064df9ae274b6ce394029d86191",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Maksim_Frolov_small.png": "372af85e3efd322b7ab320ee25df32d7f37957c0deb5ee6e56b41f035ae9dcf9",
+    "gfx/interface/ideas/NAM/portrait_NAM_staff_Petr_Chernov_small.png": "bc4035755068df7aa06363844c8b2f1c0a27813144e6ccd6178f3a258c968681"
   },
   "temporary_cleanup": "Automatic execution review rejected deletion of the task scratch and preview directories: blocked by policy. The directories remain; no other work was deleted.",
   "latest_focused_rerun": {
@@ -321,5 +346,43 @@
     ],
     "targeted_test": "passed",
     "runtime_compatibility_suite": "27 passed, 1 unrelated VAL failure: test_viceroy_focus_has_no_hot_reload_only_scripted_effect expects VAL_start_resource_aid in the current VAL tree."
+  },
+  "portrait_artwork": {
+    "portraits": 9,
+    "framed_advisors": 5,
+    "large_dimensions": [
+      156,
+      210
+    ],
+    "advisor_dimensions": [
+      62,
+      67
+    ],
+    "frame_source": "tools/assets/source/portar idea.psd",
+    "frame_layer": 4,
+    "background": "Soft grey-violet gradient matched to generic minister reference, with clean advisor-only portraits and antialiased perspective.",
+    "checks": "Five updated icons checked at native size beside existing ministers; visible opaque interior, transparent exterior and unchanged 62x67 dimensions. Large portraits unchanged. In-game readability awaits user check.",
+    "native_check": "Pending manual in-game display; game was not controlled."
+  },
+  "military_staff_artwork": {
+    "characters": [
+      "ADISCORD_staff_NAM_Gennady_Panov",
+      "ADISCORD_staff_NAM_Viktor_Belousov",
+      "ADISCORD_staff_NAM_Andrei_Krasnov",
+      "ADISCORD_staff_NAM_Dmitri_Rogov",
+      "ADISCORD_staff_NAM_Dmitri_Sazonov",
+      "ADISCORD_staff_NAM_Ilya_Tumanov",
+      "ADISCORD_staff_NAM_Konstantin_Uvarov",
+      "ADISCORD_staff_NAM_Maksim_Frolov",
+      "ADISCORD_staff_NAM_Petr_Chernov"
+    ],
+    "icons": 9,
+    "dimensions": [
+      62,
+      67
+    ],
+    "style": "Clean faces, grey-violet background and supplied advisor frame.",
+    "checks": "Native-size contact sheet inspected; all references unique, all files load, alpha and dimensions verified.",
+    "native_check": "Pending user in-game inspection."
   }
 }

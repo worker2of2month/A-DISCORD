@@ -1,0 +1,22 @@
+# Shahrabad naming pool for generated commanders, aces and operatives.
+# Surnames reuse the nine houses and the authored cabinet so random officers
+# read as members of the same families as the Conclave.
+
+SHL = {
+	male = {
+		names = {
+			Jalil Darius Khosrow Kamran Tahmuras Fereydun Behruz Amin Arman Farid Bahram Ramin Rauf Reza Nadir Navid Dara Rashid Kaveh Farzad Hormoz Jamshid Kasra Mehrdad Omid Parviz Payam Rostam Sohrab Siavash Shapur Teymur Yashar Zal Ardashir Babak Bijan Cyrus Ehsan Faraz
+		}
+	}
+	female = {
+		names = {
+			Golshan Shirin Mariam Salima Leyla Samira Anahita Azadeh Banu Dorsa Elnaz Farah Firuzeh Golnar Katayun Laleh Mahin Mahnaz Mitra Nahid Nasrin Niloufar Parisa Parvaneh Roshanak Roya Sahar Setareh Soraya Yasaman
+		}
+	}
+	surnames = {
+		Nur Safir Arbin Loran Bayrat Kerdan Sharim Darban Veyran Rashad Teymur Nadiri Hadi Mehr Kaveh Farzan Darzi Rahmani Farrokh Daryan Rostami Azari Sadri Mehrabi Kaviani Ahangar Zargar Mesgar Khazari Zarkhani Atashgar Karvani Sarraf Dabir Sepehri Nikpur Yazdani Peyman Kavir Shahri
+	}
+	callsigns = {
+		"Furnace" "Slag" "Ember" "Cinder" "Qanat" "Sirocco" "Dune Hawk" "Night Shift" "Golden Gate" "Crucible" "Tenth Fire" "Dry Wind"
+	}
+}

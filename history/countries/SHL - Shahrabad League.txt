@@ -5,6 +5,21 @@ recruit_character = SHL_Jalil_Nur
 recruit_character = SHL_Darius_Safir
 recruit_character = SHL_Shift_Councils
 
+# Heads of the nine houses: their advisor seats follow the state of each
+# house's main furnace. Course heads are recruited dormant; the ratified
+# course installs their cabinet ideas and promotes the city leader.
+recruit_character = SHL_Khosrow_Arbin
+recruit_character = SHL_Golshan_Loran
+recruit_character = SHL_Kamran_Nur
+recruit_character = SHL_Tahmuras_Bayrat
+recruit_character = SHL_Fereydun_Kerdan
+recruit_character = SHL_Shirin_Sharim
+recruit_character = SHL_Rauf_Darban
+recruit_character = SHL_Behruz_Veyran
+recruit_character = SHL_Mariam_Arbin
+recruit_character = SHL_Salima_Darzi
+recruit_character = SHL_Amin_Rashad
+
 set_politics = {
 	ruling_party = hedonism
 	last_election = "2159.9.2"

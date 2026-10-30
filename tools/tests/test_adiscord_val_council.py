@@ -1800,7 +1800,9 @@ class CouncilIdentityTests(unittest.TestCase):
                 self.assertEqual(texture.mode, "RGBA")
                 self.assertEqual(texture.getchannel("A").getextrema(), (255, 255))
             if path.stem == "VAL_kefreyt_state":
-                self.assertEqual(expected, path.with_name("VAL.tga").read_bytes())
+                self.assertIn(path.stem, build_adiscord_val_flags.IMPORTED_FLAGS)
+                self.assertNotIn(path.stem, build_adiscord_val_flags.FLAG_ALIASES)
+                self.assertNotEqual(expected, path.with_name("VAL.tga").read_bytes())
 
 
 if __name__ == "__main__":

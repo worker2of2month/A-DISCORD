@@ -1,0 +1,28 @@
+leader_traits = {
+	# Mariam Arbin's pragmatist leader role of the city course.
+	SHL_voice_of_the_cities = {
+		random = no
+		sprite = 1
+		stability_factor = 0.03
+		political_power_gain = -0.05
+		monthly_population = 0.02
+	}
+
+	# Salima Darzi's anarchist leader role; the commune focus promotes her.
+	SHL_duty_masters = {
+		random = no
+		sprite = 1
+		conscription_factor = 0.05
+		production_factory_efficiency_gain_factor = 0.03
+		political_power_gain = -0.10
+	}
+
+	# Jalil Nur's etatist leader role written by the directorate course in
+	# ADISCORD_SHL_scripted_effects.txt; it replaces the mediator trait there.
+	SHL_director_of_furnaces = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.05
+		production_speed_arms_factory_factor = 0.05
+	}
+}

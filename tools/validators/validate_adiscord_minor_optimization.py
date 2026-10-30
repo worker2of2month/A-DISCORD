@@ -173,9 +173,18 @@ EVENT_AWAKENED_PARTICIPATION["RLY"] = {
 
 # KYZ and GLP stay dormant until a Shahrabad crisis wakes them; the Shahrabad
 # effects release each country before its first event, alliance or war.
+# The five course trees carry the partnership and consolidation offers.
+SHAHRABAD_COURSE_TREES = {
+    Path("common/national_focus/ADISCORD_SHL_houses.txt"),
+    Path("common/national_focus/ADISCORD_SHL_cities.txt"),
+    Path("common/national_focus/ADISCORD_SHL_directorate.txt"),
+    Path("common/national_focus/ADISCORD_SHL_regency.txt"),
+    Path("common/national_focus/ADISCORD_SHL_commune.txt"),
+}
 SHAHRABAD_NEIGHBOUR_FILES = {
     Path("common/decisions/ADISCORD_SHL_decisions.txt"),
     Path("common/national_focus/ADISCORD_SHL_focus.txt"),
+    *SHAHRABAD_COURSE_TREES,
     Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
     Path("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"),
@@ -193,6 +202,7 @@ SOUTH_FINAL_WAR_FILES = {
     Path("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"),
     Path("common/national_focus/ADISCORD_NAM_postwar.txt"),
     Path("common/national_focus/ADISCORD_SHL_focus.txt"),
+    *SHAHRABAD_COURSE_TREES,
     Path("common/scripted_effects/ADISCORD_south_final_war_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_south_final_war_triggers.txt"),
     Path("events/ADISCORD_south_final_war_events.txt"),
