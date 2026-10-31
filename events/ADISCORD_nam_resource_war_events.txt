@@ -440,6 +440,8 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.11.a
+		custom_effect_tooltip = NAM_captured_wells_warning_tt
+		custom_effect_tooltip = NAM_prewar_mandate_result_tt
 		# The paid mobilisation report: every formation delivered at hostilities.
 		if = {
 			limit = { check_variable = { NAM_orders_delivered > 0 } }
@@ -2672,6 +2674,7 @@ country_event = {
 	desc = ADISCORD_nam_crisis.1.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
+	timeout_days = 22
 
 	option = {
 		name = ADISCORD_nam_crisis.1.a
@@ -2701,7 +2704,7 @@ country_event = {
 				hidden_effect = { ADISCORD_economy_spend_250 = yes }
 			}
 			hidden_effect = {
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		else_if = {
@@ -2713,12 +2716,12 @@ country_event = {
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
 						clr_country_flag = NAM_crisis_fund
-						clr_country_flag = NAM_crisis_open
+						NAM_crisis_close = yes
 					}
 				}
 				else = { NAM_crisis_default_1 = yes }
 			}
-			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
+			else = { hidden_effect = { NAM_crisis_close = yes } }
 		}
 		ai_chance = {
 			base = 50
@@ -2765,7 +2768,7 @@ country_event = {
 			custom_effect_tooltip = NAM_crisis_fund_used_tt
 			hidden_effect = {
 				clr_country_flag = NAM_crisis_fund
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = {
@@ -2783,7 +2786,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_1 = yes }
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 	}
@@ -2795,6 +2798,7 @@ country_event = {
 	desc = ADISCORD_nam_crisis.2.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
+	timeout_days = 22
 
 	option = {
 		name = ADISCORD_nam_crisis.2.a
@@ -2834,7 +2838,7 @@ country_event = {
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_oil_support value = 8 }
 				NAM_groups_refresh = yes
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		else_if = {
@@ -2846,12 +2850,12 @@ country_event = {
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
 						clr_country_flag = NAM_crisis_fund
-						clr_country_flag = NAM_crisis_open
+						NAM_crisis_close = yes
 					}
 				}
 				else = { NAM_crisis_default_2 = yes }
 			}
-			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
+			else = { hidden_effect = { NAM_crisis_close = yes } }
 		}
 		ai_chance = {
 			base = 50
@@ -2893,7 +2897,7 @@ country_event = {
 			custom_effect_tooltip = NAM_crisis_fund_used_tt
 			hidden_effect = {
 				clr_country_flag = NAM_crisis_fund
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = {
@@ -2907,7 +2911,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_2 = yes }
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 	}
@@ -2919,6 +2923,7 @@ country_event = {
 	desc = ADISCORD_nam_crisis.3.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
+	timeout_days = 22
 
 	option = {
 		name = ADISCORD_nam_crisis.3.a
@@ -2953,7 +2958,7 @@ country_event = {
 				add_political_power = -60
 			}
 			hidden_effect = {
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		else_if = {
@@ -2965,12 +2970,12 @@ country_event = {
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
 						clr_country_flag = NAM_crisis_fund
-						clr_country_flag = NAM_crisis_open
+						NAM_crisis_close = yes
 					}
 				}
 				else = { NAM_crisis_default_3 = yes }
 			}
-			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
+			else = { hidden_effect = { NAM_crisis_close = yes } }
 		}
 		ai_chance = {
 			base = 50
@@ -3012,7 +3017,7 @@ country_event = {
 			custom_effect_tooltip = NAM_crisis_fund_used_tt
 			hidden_effect = {
 				clr_country_flag = NAM_crisis_fund
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = {
@@ -3026,7 +3031,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_3 = yes }
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 	}
@@ -3038,6 +3043,7 @@ country_event = {
 	desc = ADISCORD_nam_crisis.4.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
+	timeout_days = 22
 
 	option = {
 		name = ADISCORD_nam_crisis.4.a
@@ -3062,12 +3068,12 @@ country_event = {
 				}
 				add_to_variable = { var = NAM_grp_trade_support value = 5 }
 				NAM_groups_refresh = yes
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		else_if = {
 			limit = { hidden_trigger = { NAM_crisis_pending_4 = yes } }
-			hidden_effect = { clr_country_flag = NAM_crisis_open }
+			hidden_effect = { NAM_crisis_close = yes }
 		}
 		ai_chance = {
 			base = 50
@@ -3097,7 +3103,7 @@ country_event = {
 				add_to_variable = { var = NAM_grp_trade_support value = -8 }
 				add_to_variable = { var = NAM_grp_oil_support value = 4 }
 				NAM_groups_refresh = yes
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = {
@@ -3125,7 +3131,7 @@ country_event = {
 			custom_effect_tooltip = NAM_crisis_fund_used_tt
 			hidden_effect = {
 				clr_country_flag = NAM_crisis_fund
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = { base = 80 }
@@ -3137,7 +3143,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_4 = yes }
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 	}
@@ -3149,6 +3155,7 @@ country_event = {
 	desc = ADISCORD_nam_crisis.5.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
+	timeout_days = 22
 
 	option = {
 		name = ADISCORD_nam_crisis.5.a
@@ -3169,7 +3176,7 @@ country_event = {
 				ADISCORD_economy_spend_250 = yes
 				add_to_variable = { var = NAM_grp_garr_support value = 10 }
 				NAM_groups_refresh = yes
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		else_if = {
@@ -3181,12 +3188,12 @@ country_event = {
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
 						clr_country_flag = NAM_crisis_fund
-						clr_country_flag = NAM_crisis_open
+						NAM_crisis_close = yes
 					}
 				}
 				else = { NAM_crisis_default_5 = yes }
 			}
-			else = { hidden_effect = { clr_country_flag = NAM_crisis_open } }
+			else = { hidden_effect = { NAM_crisis_close = yes } }
 		}
 		ai_chance = {
 			base = 50
@@ -3228,7 +3235,7 @@ country_event = {
 			custom_effect_tooltip = NAM_crisis_fund_used_tt
 			hidden_effect = {
 				clr_country_flag = NAM_crisis_fund
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 		ai_chance = {
@@ -3242,7 +3249,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_5 = yes }
-				clr_country_flag = NAM_crisis_open
+				NAM_crisis_close = yes
 			}
 		}
 	}
@@ -3807,4 +3814,27 @@ country_event = {
 		}
 	}
 	immediate = { NAM_rw_coalition_muster = yes }
+}
+
+# Settlement is independent of this notification and its unattended timeout.
+country_event = {
+	id = ADISCORD_nam_resource_war.88
+	title = ADISCORD_nam_resource_war.88.t
+	desc = ADISCORD_nam_resource_war.88.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = NAM }
+	option = {
+		name = ADISCORD_nam_resource_war.88.a
+		custom_effect_tooltip = NAM_metropolitan_flight_result_tt
+	}
+}
+
+# Re-evaluate the live burn flag after its expiry; a newer demolition keeps its own term.
+country_event = {
+	id = ADISCORD_nam_resource_war.89
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { NAM_oil_refresh = yes }
 }

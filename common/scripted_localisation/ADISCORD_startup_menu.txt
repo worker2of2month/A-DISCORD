@@ -160,6 +160,13 @@ defined_text = {
 defined_text = {
 	name = ADISCORDGetStartupPageTitle3
 	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = NAM_startup_path_3_title
+	}
+	text = {
 		trigger = { tag = STP }
 		localization_key = STP_startup_guide_shabrat_title
 	}
@@ -191,4 +198,40 @@ defined_text = {
 		localization_key = ADISCORD_startup_hide_spoilers
 	}
 	text = { localization_key = ADISCORD_startup_spoilers }
+}
+
+defined_text = {
+	name = ADISCORDGetStartupPageTitle4
+	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = NAM_startup_path_4_title
+	}
+	text = { localization_key = ADISCORD_startup_unsupported }
+}
+
+defined_text = {
+	name = ADISCORDGetStartupPageTitle5
+	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = NAM_startup_path_5_title
+	}
+	text = { localization_key = ADISCORD_startup_unsupported }
+}
+
+defined_text = {
+	name = ADISCORDGetStartupPageTitle6
+	text = {
+		trigger = {
+			tag = NAM
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = NAM_startup_path_6_title
+	}
+	text = { localization_key = ADISCORD_startup_unsupported }
 }

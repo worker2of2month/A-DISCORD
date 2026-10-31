@@ -5799,6 +5799,7 @@ STP_pc_lock_hegemony = {
 		ideology = chauvinism
 		portrait = GFX_portrait_STP_Maksim_Shabrat_hegemony
 	}
+	STS_party_representatives_hegemony = yes
 }
 
 # Appointment records the cabinet without paying any of its focus rewards.
@@ -6373,6 +6374,7 @@ STP_pc_lock_freedom = {
 		}
 		add_popularity = { ideology = humanism popularity = 0.15 }
 	}
+	STS_party_representatives_freedom = yes
 }
 
 # STS: lock course 3 for Sotnikov or Barchel.
@@ -6405,6 +6407,7 @@ STP_pc_lock_directory = {
 		limit = { STP_pc_sword_directory_branch = yes }
 		STP_sdir_reorganize_districts = yes
 	}
+	STS_party_representatives_directory = yes
 }
 
 # COUNTRY STS: the temporary input applies the choice inside its own focus reward.
@@ -15058,6 +15061,7 @@ STP_ch_leader_1 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_1 = yes
 }
 
 STP_ch_leader_2 = {
@@ -15127,6 +15131,7 @@ STP_ch_leader_2 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_2 = yes
 }
 
 # Veil as head of state: leader portrait, and he leaves the generals list.
@@ -15204,6 +15209,7 @@ STP_ch_leader_3 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_3 = yes
 }
 
 STP_ch_leader_4 = {
@@ -15230,6 +15236,7 @@ STP_ch_leader_4 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_4 = yes
 }
 
 STP_ch_elect_4 = {
@@ -15287,6 +15294,7 @@ STP_ch_leader_5 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_5 = yes
 }
 
 STP_ch_elect_5 = {
@@ -15339,6 +15347,7 @@ STP_ch_leader_6 = {
 		limit = { has_country_flag = STP_pi_initialized }
 		STP_pi_refresh = yes
 	}
+	STP_party_representatives_constitution_6 = yes
 }
 
 STP_ch_restore_independent_leader = {
@@ -21270,6 +21279,256 @@ STP_pi_case_property_full_finish = {
 		}
 		else = {
 			STP_pi_case_property_refund = yes
+		}
+	}
+}
+
+# Route-specific names belong only to non-story party representatives.
+STP_party_representatives_constitution_1 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_1_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_1_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_1_technocracy
+			}
+		}
+	}
+}
+
+STP_party_representatives_constitution_2 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_2_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_2_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_2_technocracy
+			}
+		}
+	}
+}
+
+STP_party_representatives_constitution_3 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_3_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_3_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_3_technocracy
+			}
+		}
+	}
+}
+
+STP_party_representatives_constitution_4 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_4_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_4_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_4_technocracy
+			}
+		}
+	}
+}
+
+STP_party_representatives_constitution_5 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_5_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_5_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_5_technocracy
+			}
+		}
+	}
+}
+
+STP_party_representatives_constitution_6 = {
+	if = {
+		limit = {
+			tag = STP
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_pragmatism
+				NAME = STP_party_representatives_constitution_6_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_anarchism
+				NAME = STP_party_representatives_constitution_6_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STP_party_representative_technocracy
+				NAME = STP_party_representatives_constitution_6_technocracy
+			}
+		}
+	}
+}
+
+STS_party_representatives_hegemony = {
+	if = {
+		limit = {
+			tag = STS
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_humanism
+				NAME = STS_party_representatives_hegemony_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_utilitarism
+				NAME = STS_party_representatives_hegemony_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_pragmatism
+				NAME = STS_party_representatives_hegemony_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_anarchism
+				NAME = STS_party_representatives_hegemony_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_technocracy
+				NAME = STS_party_representatives_hegemony_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_etatism
+				NAME = STS_party_representatives_hegemony_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_hedonism
+				NAME = STS_party_representatives_hegemony_hedonism
+			}
+		}
+	}
+}
+
+STS_party_representatives_freedom = {
+	if = {
+		limit = {
+			tag = STS
+			check_variable = { var = STP_pc_course value = 2 compare = equals }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_humanism
+				NAME = STS_party_representatives_freedom_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_utilitarism
+				NAME = STS_party_representatives_freedom_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_pragmatism
+				NAME = STS_party_representatives_freedom_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_anarchism
+				NAME = STS_party_representatives_freedom_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_technocracy
+				NAME = STS_party_representatives_freedom_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_etatism
+				NAME = STS_party_representatives_freedom_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_hedonism
+				NAME = STS_party_representatives_freedom_hedonism
+			}
+		}
+	}
+}
+
+STS_party_representatives_directory = {
+	if = {
+		limit = {
+			tag = STS
+			check_variable = { var = STP_pc_course value = 3 compare = equals }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_humanism
+				NAME = STS_party_representatives_directory_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_utilitarism
+				NAME = STS_party_representatives_directory_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_pragmatism
+				NAME = STS_party_representatives_directory_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_anarchism
+				NAME = STS_party_representatives_directory_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_technocracy
+				NAME = STS_party_representatives_directory_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_etatism
+				NAME = STS_party_representatives_directory_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = STS_party_representative_hedonism
+				NAME = STS_party_representatives_directory_hedonism
+			}
 		}
 	}
 }

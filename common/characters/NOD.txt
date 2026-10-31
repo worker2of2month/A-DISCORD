@@ -233,4 +233,96 @@ characters = {
 			ai_will_do = { factor = 1 }
 		}
 	}
+
+	# Party representatives outside the appointed government.
+	NOD_party_representative_humanism = {
+		name = NOD_party_representative_humanism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_5
+			}
+		}
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_utilitarism = {
+		name = NOD_party_representative_utilitarism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_6
+			}
+		}
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_chauvinism = {
+		name = NOD_party_representative_chauvinism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+			}
+		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_pragmatism = {
+		name = NOD_party_representative_pragmatism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_8
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_anarchism = {
+		name = NOD_party_representative_anarchism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_9
+			}
+		}
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_technocracy = {
+		name = NOD_party_representative_technocracy
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_1
+			}
+		}
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	NOD_party_representative_etatism = {
+		name = NOD_party_representative_etatism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_2
+			}
+		}
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
 }

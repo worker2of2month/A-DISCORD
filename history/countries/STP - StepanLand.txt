@@ -167,3 +167,8 @@ activate_advisor = ADISCORD_staff_STP_Georgy_Losev
 activate_advisor = ADISCORD_staff_STP_Denis_Malinin
 activate_advisor = ADISCORD_staff_STP_Yevgeny_Nekrasov
 activate_advisor = ADISCORD_staff_STP_Igor_Ostretsov
+
+# Parliamentary and opposition representatives.
+recruit_character = STP_party_representative_pragmatism
+recruit_character = STP_party_representative_anarchism
+recruit_character = STP_party_representative_technocracy

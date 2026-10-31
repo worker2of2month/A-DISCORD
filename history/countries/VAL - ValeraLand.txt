@@ -155,3 +155,10 @@ activate_advisor = ADISCORD_staff_VAL_Nikolai_Malinin
 activate_advisor = ADISCORD_staff_VAL_Oleg_Nekrasov
 activate_advisor = ADISCORD_staff_VAL_Pavel_Ostretsov
 activate_advisor = ADISCORD_staff_VAL_Roman_Panov
+
+# Parliamentary and opposition representatives.
+recruit_character = VAL_party_representative_humanism
+recruit_character = VAL_party_representative_utilitarism
+recruit_character = VAL_party_representative_chauvinism
+recruit_character = VAL_party_representative_anarchism
+recruit_character = VAL_party_representative_technocracy

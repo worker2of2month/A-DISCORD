@@ -149,7 +149,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_NAM_basin_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 724 }
+		size = { width = 460 height = 824 }
 		clipping = no
 		containerWindowType = {
 			name = "NAM_bw_phase"
@@ -552,7 +552,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "NAM_bw_card_background"
 			position = { x = 12 y = 358 }
-			size = { width = 436 height = 186 }
+			size = { width = 436 height = 286 }
 			background = {
 				name = "NAM_bw_card_background_texture"
 				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
@@ -573,13 +573,13 @@ guiTypes = {
 			text = "NAM_bw_card_67_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_67_tt"
 		}
 		buttonType = {
 			name = "NAM_bw_67_repair"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_repair_label"
@@ -589,7 +589,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_repair_price"
-			position = { x = 26 y = 508 }
+			position = { x = 26 y = 528 }
 			text = "NAM_bw_repair_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -599,7 +599,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_repair_duration"
-			position = { x = 26 y = 524 }
+			position = { x = 26 y = 544 }
 			text = "NAM_bw_repair_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -609,7 +609,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_67_refinery"
-			position = { x = 164 y = 478 }
+			position = { x = 164 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_refinery_label"
@@ -619,7 +619,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_refinery_price"
-			position = { x = 166 y = 508 }
+			position = { x = 166 y = 528 }
 			text = "NAM_bw_refinery_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -629,7 +629,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_refinery_duration"
-			position = { x = 166 y = 524 }
+			position = { x = 166 y = 544 }
 			text = "NAM_bw_refinery_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -639,7 +639,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_67_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -649,7 +649,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -659,7 +659,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_67_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -682,13 +682,13 @@ guiTypes = {
 			text = "NAM_bw_card_688_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_688_tt"
 		}
 		buttonType = {
 			name = "NAM_bw_688_repair"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_repair_label"
@@ -698,7 +698,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_repair_price"
-			position = { x = 26 y = 508 }
+			position = { x = 26 y = 528 }
 			text = "NAM_bw_repair_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -708,7 +708,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_repair_duration"
-			position = { x = 26 y = 524 }
+			position = { x = 26 y = 544 }
 			text = "NAM_bw_repair_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -718,7 +718,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_688_refinery"
-			position = { x = 164 y = 478 }
+			position = { x = 164 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_refinery_label"
@@ -728,7 +728,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_refinery_price"
-			position = { x = 166 y = 508 }
+			position = { x = 166 y = 528 }
 			text = "NAM_bw_refinery_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -738,7 +738,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_refinery_duration"
-			position = { x = 166 y = 524 }
+			position = { x = 166 y = 544 }
 			text = "NAM_bw_refinery_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -748,7 +748,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_688_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -758,7 +758,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -768,7 +768,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_688_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -791,13 +791,13 @@ guiTypes = {
 			text = "NAM_bw_card_689_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_689_tt"
 		}
 		buttonType = {
 			name = "NAM_bw_689_repair"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_repair_label"
@@ -807,7 +807,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_repair_price"
-			position = { x = 26 y = 508 }
+			position = { x = 26 y = 528 }
 			text = "NAM_bw_repair_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -817,7 +817,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_repair_duration"
-			position = { x = 26 y = 524 }
+			position = { x = 26 y = 544 }
 			text = "NAM_bw_repair_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -827,7 +827,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_689_refinery"
-			position = { x = 164 y = 478 }
+			position = { x = 164 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_refinery_label"
@@ -837,7 +837,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_refinery_price"
-			position = { x = 166 y = 508 }
+			position = { x = 166 y = 528 }
 			text = "NAM_bw_refinery_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -847,7 +847,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_refinery_duration"
-			position = { x = 166 y = 524 }
+			position = { x = 166 y = 544 }
 			text = "NAM_bw_refinery_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -857,7 +857,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_689_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -867,7 +867,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -877,7 +877,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_689_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -900,13 +900,13 @@ guiTypes = {
 			text = "NAM_bw_card_690_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_690_tt"
 		}
 		buttonType = {
 			name = "NAM_bw_690_repair"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_repair_label"
@@ -916,7 +916,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_repair_price"
-			position = { x = 26 y = 508 }
+			position = { x = 26 y = 528 }
 			text = "NAM_bw_repair_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -926,7 +926,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_repair_duration"
-			position = { x = 26 y = 524 }
+			position = { x = 26 y = 544 }
 			text = "NAM_bw_repair_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -936,7 +936,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_690_refinery"
-			position = { x = 164 y = 478 }
+			position = { x = 164 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_refinery_label"
@@ -946,7 +946,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_refinery_price"
-			position = { x = 166 y = 508 }
+			position = { x = 166 y = 528 }
 			text = "NAM_bw_refinery_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -956,7 +956,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_refinery_duration"
-			position = { x = 166 y = 524 }
+			position = { x = 166 y = 544 }
 			text = "NAM_bw_refinery_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -966,7 +966,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_690_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -976,7 +976,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -986,7 +986,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_690_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1009,13 +1009,13 @@ guiTypes = {
 			text = "NAM_bw_card_719_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_719_tt"
 		}
 		buttonType = {
 			name = "NAM_bw_719_repair"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_repair_label"
@@ -1025,7 +1025,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_repair_price"
-			position = { x = 26 y = 508 }
+			position = { x = 26 y = 528 }
 			text = "NAM_bw_repair_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1035,7 +1035,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_repair_duration"
-			position = { x = 26 y = 524 }
+			position = { x = 26 y = 544 }
 			text = "NAM_bw_repair_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1045,7 +1045,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_719_refinery"
-			position = { x = 164 y = 478 }
+			position = { x = 164 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_refinery_label"
@@ -1055,7 +1055,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_refinery_price"
-			position = { x = 166 y = 508 }
+			position = { x = 166 y = 528 }
 			text = "NAM_bw_refinery_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1065,7 +1065,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_refinery_duration"
-			position = { x = 166 y = 524 }
+			position = { x = 166 y = 544 }
 			text = "NAM_bw_refinery_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1075,7 +1075,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_719_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -1085,7 +1085,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1095,7 +1095,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_719_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1118,13 +1118,13 @@ guiTypes = {
 			text = "NAM_bw_card_700_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 80
+			maxHeight = 100
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_700_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_port_guidance"
-			position = { x = 24 y = 478 }
+			position = { x = 24 y = 498 }
 			text = "NAM_bw_port_guidance"
 			font = "hoi_16mbs"
 			maxWidth = 270
@@ -1134,7 +1134,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "NAM_bw_700_line"
-			position = { x = 304 y = 478 }
+			position = { x = 304 y = 498 }
 			size = { x = 132 y = 26 }
 			quadTextureSprite = "GFX_NAM_bw_button"
 			buttonText = "NAM_bw_line_label"
@@ -1144,7 +1144,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_700_line_price"
-			position = { x = 306 y = 508 }
+			position = { x = 306 y = 528 }
 			text = "NAM_bw_line_price"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1154,7 +1154,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_700_line_duration"
-			position = { x = 306 y = 524 }
+			position = { x = 306 y = 544 }
 			text = "NAM_bw_line_duration"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -1162,9 +1162,220 @@ guiTypes = {
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_700_line_tt"
 		}
+		buttonType = {
+			name = "NAM_bw_67_drilling"
+			position = { x = 24 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_drilling_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_67_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_67_drilling_price"
+			position = { x = 26 y = 602 }
+			text = "NAM_bw_drilling_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_67_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_67_drilling_duration"
+			position = { x = 26 y = 618 }
+			text = "NAM_bw_drilling_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_67_drilling_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_688_drilling"
+			position = { x = 24 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_drilling_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_688_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_688_drilling_price"
+			position = { x = 26 y = 602 }
+			text = "NAM_bw_drilling_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_688_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_688_drilling_duration"
+			position = { x = 26 y = 618 }
+			text = "NAM_bw_drilling_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_688_drilling_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_689_drilling"
+			position = { x = 24 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_drilling_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_689_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_689_drilling_price"
+			position = { x = 26 y = 602 }
+			text = "NAM_bw_drilling_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_689_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_689_drilling_duration"
+			position = { x = 26 y = 618 }
+			text = "NAM_bw_drilling_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_689_drilling_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_690_drilling"
+			position = { x = 24 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_drilling_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_690_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_690_drilling_price"
+			position = { x = 26 y = 602 }
+			text = "NAM_bw_drilling_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_690_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_690_drilling_duration"
+			position = { x = 26 y = 618 }
+			text = "NAM_bw_drilling_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_690_drilling_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_719_drilling"
+			position = { x = 24 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_drilling_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_719_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_719_drilling_price"
+			position = { x = 26 y = 602 }
+			text = "NAM_bw_drilling_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_719_drilling_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_719_drilling_duration"
+			position = { x = 26 y = 618 }
+			text = "NAM_bw_drilling_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_719_drilling_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_688_hydroelectric"
+			position = { x = 164 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_hydroelectric_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_688_hydroelectric_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_688_hydroelectric_price"
+			position = { x = 166 y = 602 }
+			text = "NAM_bw_hydroelectric_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_688_hydroelectric_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_688_hydroelectric_duration"
+			position = { x = 166 y = 618 }
+			text = "NAM_bw_hydroelectric_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_688_hydroelectric_tt"
+		}
+		buttonType = {
+			name = "NAM_bw_67_chromium"
+			position = { x = 164 y = 572 }
+			size = { x = 132 y = 26 }
+			quadTextureSprite = "GFX_NAM_bw_button"
+			buttonText = "NAM_bw_chromium_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_67_chromium_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_67_chromium_price"
+			position = { x = 166 y = 602 }
+			text = "NAM_bw_chromium_price"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_67_chromium_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_67_chromium_duration"
+			position = { x = 166 y = 618 }
+			text = "NAM_bw_chromium_duration"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 16
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_67_chromium_tt"
+		}
+
 		containerWindowType = {
 			name = "NAM_bw_summary"
-			position = { x = 12 y = 552 }
+			position = { x = 12 y = 652 }
 			size = { width = 436 height = 164 }
 			background = {
 				name = "NAM_bw_summary_background"

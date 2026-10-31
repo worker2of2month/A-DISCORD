@@ -7,6 +7,7 @@ from pathlib import Path
 
 
 from tools.lib.paths import source_section
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -278,10 +279,16 @@ SCRIPT_ROOTS = ("common", "events", "history")
 EXPECTED_TRANSITIONS = Counter(
     {
         (
-            "history/countries/WRK - WorkerLand.txt",
+            "events/ADISCORD_vorkerland_events.txt",
+            "puppet",
+            "SOL",
+            "",
+        ): 1,
+        (
+            "events/ADISCORD_vorkerland_events.txt",
             "set_autonomy",
-            "VAD",
-            "autonomy_district_in_Vorkerland",
+            "SOL",
+            "autonomy_puppet",
         ): 1,
         (
             "history/countries/WRK - WorkerLand.txt",
@@ -378,7 +385,7 @@ EXPECTED_TRANSITIONS = Counter(
             "set_autonomy",
             "SOL",
             "autonomy_free",
-        ): 7,
+        ): 8,
         (
             "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
             "set_autonomy",
@@ -402,7 +409,7 @@ EXPECTED_TRANSITIONS = Counter(
             "puppet",
             "SOL",
             "",
-        ): 4,
+        ): 5,
         (
             "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
             "release_autonomy",
@@ -420,7 +427,7 @@ EXPECTED_TRANSITIONS = Counter(
             "set_autonomy",
             "SOL",
             "autonomy_puppet",
-        ): 2,
+        ): 3,
         (
             "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
             "set_autonomy",
@@ -446,7 +453,11 @@ EXPECTED_SYNC_CALLERS = Counter(
         (
             "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
             "ADISCORD_vorkerland_sync_party_identity",
-        ): 16,
+        ): 17,
+        (
+            "events/ADISCORD_vorkerland_events.txt",
+            "ADISCORD_vorkerland_sync_party_identity",
+        ): 1,
     }
 )
 
@@ -597,6 +608,20 @@ def named_blocks(text: str, name: str) -> list[str]:
     return blocks
 
 
+def direct_sync_after(text: str, end: int, tag: str) -> bool:
+    """Allow presentation effects before sync, but not conditional or foreign scopes."""
+    match = re.match(rf"\s*{tag}\s*=\s*\{{", text[end:])
+    if match is None:
+        return False
+    block, _ = block_at(text, end + match.start())
+    entries = parse_clausewitz(block)[0].value
+    return any(
+        entry.key == "ADISCORD_vorkerland_sync_party_identity"
+        and entry.value == "yes"
+        for entry in entries
+    )
+
+
 class PartyTexticonContractTests(unittest.TestCase):
     def test_all_new_sprites_resolve_to_generated_icons(self) -> None:
         gfx = read("interface/parties_texticons.gfx")
@@ -673,28 +698,30 @@ class PartyTexticonContractTests(unittest.TestCase):
             len({key for _, key, _ in LOCALISATION_TEXTICON_KEYS}),
             len(LOCALISATION_TEXTICON_KEYS),
         )
-        occurrences: dict[str, list[tuple[str, str]]] = {}
-        entry = re.compile(r'(?m)^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"\r\n]*)"\s*$')
-        for path in sorted((ROOT / "localisation").rglob("*.yml")):
-            relative = path.relative_to(ROOT).as_posix()
-            text = path.read_text(encoding="utf-8-sig")
-            for match in entry.finditer(text):
-                occurrences.setdefault(match.group(1), []).append(
-                    (relative, match.group(2))
-                )
-
         gfx = read("interface/parties_texticons.gfx")
-        for expected_file, key, sprite in LOCALISATION_TEXTICON_KEYS:
-            with self.subTest(key=key):
-                self.assertEqual(
-                    len(occurrences.get(key, [])), 1, f"localisation count: {key}"
-                )
-                actual_file, value = occurrences[key][0]
-                self.assertEqual(actual_file, expected_file)
-                self.assertTrue(
-                    value.startswith(f"£{sprite} "),
-                    f"{key} must start with £{sprite}, got {value!r}",
-                )
+        for language in ("russian", "english"):
+            occurrences: dict[str, list[tuple[str, str]]] = {}
+            entry = re.compile(r'(?m)^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"\r\n]*)"\s*$')
+            for path in sorted((ROOT / "localisation" / language).rglob("*.yml")):
+                relative = path.relative_to(ROOT).as_posix()
+                text = path.read_text(encoding="utf-8-sig")
+                for match in entry.finditer(text):
+                    occurrences.setdefault(match.group(1), []).append(
+                        (relative, match.group(2))
+                    )
+
+            for expected_file, key, sprite in LOCALISATION_TEXTICON_KEYS:
+                expected_file = expected_file.replace("russian", language)
+                with self.subTest(language=language, key=key):
+                    self.assertEqual(
+                        len(occurrences.get(key, [])), 1, f"localisation count: {key}"
+                    )
+                    actual_file, value = occurrences[key][0]
+                    self.assertEqual(actual_file, expected_file)
+                    self.assertTrue(
+                        value.startswith(f"£{sprite} "),
+                        f"{key} must start with £{sprite}, got {value!r}",
+                    )
         for sprite in sorted({sprite for _, _, sprite in LOCALISATION_TEXTICON_KEYS}):
             with self.subTest(sprite=sprite):
                 self.assertEqual(
@@ -714,6 +741,65 @@ class PartyTexticonContractTests(unittest.TestCase):
 
 
 class PartyIdentityLifecycleTests(unittest.TestCase):
+    def test_solar_invitation_rejects_missing_or_wrong_scope_sync(self) -> None:
+        text = mask_script_non_code(read("events/ADISCORD_vorkerland_events.txt"))
+        option = next(
+            block for block in named_blocks(text, "option")
+            if "name = ADISCORD_vorkerland_diplomacy.2.a" in block
+        )
+        sync = "ADISCORD_vorkerland_sync_party_identity = yes"
+        self.assertEqual(option.count(sync), 1)
+        for replacement in ("", f"VAD = {{ {sync} }}"):
+            broken = option.replace(sync, replacement)
+            with self.subTest(replacement=replacement):
+                with self.assertRaises(AssertionError):
+                    self.assert_solar_invitation_sync(broken, broken.index("puppet = SOL"))
+
+    def test_direct_sync_requires_unconditional_recipient_scope(self) -> None:
+        sync = "ADISCORD_vorkerland_sync_party_identity = yes"
+        self.assertTrue(direct_sync_after(
+            f"SOL = {{ set_cosmetic_tag = SOL_restored {sync} }}", 0, "SOL"
+        ))
+        for text in (
+            f"VAD = {{ {sync} }}",
+            f"SOL = {{ if = {{ limit = {{ always = yes }} {sync} }} }}",
+            f"SOL = {{ VAD = {{ {sync} }} }}",
+            "SOL = { set_cosmetic_tag = SOL_restored }",
+        ):
+            with self.subTest(text=text):
+                self.assertFalse(direct_sync_after(text, 0, "SOL"))
+
+    def assert_solar_invitation_sync(self, text: str, position: int) -> None:
+        options = []
+        for match in re.finditer(r"\boption\s*=\s*\{", text):
+            block, end = block_at(text, match.start())
+            if match.start() <= position < end:
+                options.append(parse_clausewitz(block)[0].value)
+        self.assertEqual(len(options), 1)
+        option = options[0]
+        self.assertIn(
+            ("name", "ADISCORD_vorkerland_diplomacy.2.a"),
+            [(entry.key, entry.value) for entry in option if isinstance(entry.value, str)],
+        )
+        donor_index = next(index for index, entry in enumerate(option) if entry.key == "VAD")
+        donor = option[donor_index].value
+        self.assertIn(("puppet", "SOL"), [(entry.key, entry.value) for entry in donor])
+        autonomy = next(entry.value for entry in donor if entry.key == "set_autonomy")
+        self.assertIn(("target", "SOL"), [(entry.key, entry.value) for entry in autonomy])
+        self.assertIn(
+            ("autonomy_state", "autonomy_puppet"),
+            [(entry.key, entry.value) for entry in autonomy],
+        )
+        self.assertTrue(any(
+            entry.key == "ADISCORD_vorkerland_sync_party_identity" and entry.value == "yes"
+            for entry in option[donor_index + 1:]
+        ), "SOL must synchronize in the recipient scope after VAD's settlement")
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        self.assertRegex(
+            mask_script_non_code(effects),
+            r"SOL\s*=\s*\{\s*country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_diplomacy\.2\s",
+        )
+
     def test_sync_effect_covers_exact_successors_and_never_changes_politics(
         self,
     ) -> None:
@@ -829,6 +915,10 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
         for relative, command, tag, autonomy, start, end in sites:
             text = sources[relative]
             location = script_location(relative, text, start)
+            if relative == "events/ADISCORD_vorkerland_events.txt":
+                self.assertEqual(tag, "SOL")
+                self.assert_solar_invitation_sync(text, start)
+                continue
             if command == "puppet":
                 autonomy_match = re.match(r"\s*set_autonomy\s*=\s*\{", text[end:])
                 self.assertIsNotNone(
@@ -838,15 +928,13 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
                 autonomy_start = end + autonomy_match.start()
                 autonomy_block, autonomy_end = block_at(text, autonomy_start)
                 self.assertRegex(autonomy_block, rf"\btarget\s*=\s*{tag}\b")
-                self.assertRegex(
-                    text[autonomy_end : autonomy_end + 250],
-                    rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
+                self.assertTrue(
+                    direct_sync_after(text, autonomy_end, tag),
                     f"unsynchronized scripted puppet at {location}: {tag}",
                 )
             elif command == "release_autonomy":
-                self.assertRegex(
-                    text[end : end + 250],
-                    rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
+                self.assertTrue(
+                    direct_sync_after(text, end, tag),
                     f"unsynchronized scripted release at {location}: {tag}",
                 )
             elif autonomy == "autonomy_free":
@@ -868,9 +956,8 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
                     "ADISCORD_vorkerland_sync_all_party_identities = yes", text[end:]
                 )
             else:
-                self.assertRegex(
-                    text[end : end + 250],
-                    rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
+                self.assertTrue(
+                    direct_sync_after(text, end, tag),
                     f"unsynchronized set_autonomy at {location}: {tag}:{autonomy}",
                 )
 

@@ -2681,6 +2681,42 @@
         "STRATEGICREGION_237": {
           "russian": "Туманные врата Течения",
           "english": "Fog Gate of the Current"
+        },
+        "STRATEGICREGION_238": {
+          "russian": "Светлогорский залив",
+          "english": "Svetlogorye Gulf"
+        },
+        "STRATEGICREGION_239": {
+          "russian": "Светлогорские морские подступы",
+          "english": "Svetlogorye Approaches"
+        },
+        "STRATEGICREGION_240": {
+          "russian": "Ажарское море",
+          "english": "Azhar Sea"
+        },
+        "STRATEGICREGION_241": {
+          "russian": "Море Чёрного берега",
+          "english": "Black Coast Sea"
+        },
+        "STRATEGICREGION_242": {
+          "russian": "Море западных островов Светлогорья",
+          "english": "Western Svetlogorye Islands Sea"
+        },
+        "STRATEGICREGION_243": {
+          "russian": "Светлогорские островные проливы",
+          "english": "Svetlogorye Island Straits"
+        },
+        "STRATEGICREGION_244": {
+          "russian": "Море южных островов Светлогорья",
+          "english": "Southern Svetlogorye Islands Sea"
+        },
+        "STRATEGICREGION_245": {
+          "russian": "Восточные подступы к Светлогорью",
+          "english": "Eastern Svetlogorye Approaches"
+        },
+        "STRATEGICREGION_246": {
+          "russian": "Дальний Южный океан",
+          "english": "Far Southern Ocean"
         }
       }
     }
@@ -2885,16 +2921,16 @@
           "english": "El-Mina"
         },
         "VICTORY_POINTS_16883": {
-          "russian": "Южный Ажар",
-          "english": "South Azhar"
+          "russian": "Дар-Салим",
+          "english": "Dar-Salim"
         },
         "VICTORY_POINTS_16885": {
           "russian": "Каменка",
           "english": "Kamenka"
         },
         "VICTORY_POINTS_16886": {
-          "russian": "Северный Ажар",
-          "english": "North Azhar"
+          "russian": "Бир-Нахиль",
+          "english": "Bir-Nakhil"
         },
         "VICTORY_POINTS_16887": {
           "russian": "Сухой Лог",
@@ -2905,8 +2941,8 @@
           "english": "Bir-Kasim"
         },
         "VICTORY_POINTS_16889": {
-          "russian": "Западный Ажар",
-          "english": "West Azhar"
+          "russian": "Каср-Сахиль",
+          "english": "Qasr-Sahil"
         },
         "VICTORY_POINTS_16890": {
           "russian": "Нефтегорск",
@@ -2925,8 +2961,12 @@
           "english": "Umm-Azhar"
         },
         "VICTORY_POINTS_16894": {
-          "russian": "Восточный Ажар",
-          "english": "East Azhar"
+          "russian": "Эль-Хадид",
+          "english": "El-Hadid"
+        },
+        "VICTORY_POINTS_4089": {
+          "russian": "Рас-Сафир",
+          "english": "Ras-Safir"
         },
         "VICTORY_POINTS_16717": {
           "russian": "Средний Лорен",
@@ -2967,6 +3007,10 @@
         "VICTORY_POINTS_16726": {
           "russian": "Рахма",
           "english": "Rahma"
+        },
+        "VICTORY_POINTS_443": {
+          "russian": "Рахма-дех",
+          "english": "Rahma-Deh"
         },
         "VICTORY_POINTS_16727": {
           "russian": "Сардан",
@@ -3520,7 +3564,15 @@
           "russian": "Нуран",
           "english": "Nuran"
         },
+        "VICTORY_POINTS_16895": {
+          "russian": "Нуран",
+          "english": "Nuran"
+        },
         "VICTORY_POINTS_6582": {
+          "russian": "Кердан",
+          "english": "Kerdan"
+        },
+        "VICTORY_POINTS_16896": {
           "russian": "Кердан",
           "english": "Kerdan"
         },
@@ -3532,6 +3584,10 @@
           "russian": "Шарим",
           "english": "Sharim"
         },
+        "VICTORY_POINTS_16897": {
+          "russian": "Шарим",
+          "english": "Sharim"
+        },
         "VICTORY_POINTS_1285": {
           "russian": "Нижний Шарим",
           "english": "Lower Sharim"
@@ -3540,11 +3596,19 @@
           "russian": "Вейран",
           "english": "Veyran"
         },
+        "VICTORY_POINTS_16898": {
+          "russian": "Вейран",
+          "english": "Veyran"
+        },
         "VICTORY_POINTS_1846": {
           "russian": "Салик-бандар",
           "english": "Salik-Bandar"
         },
         "VICTORY_POINTS_1198": {
+          "russian": "Зархан",
+          "english": "Zarkhan"
+        },
+        "VICTORY_POINTS_16899": {
           "russian": "Зархан",
           "english": "Zarkhan"
         },

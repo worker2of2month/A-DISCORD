@@ -1,7 +1,103 @@
+# COUNTRY NAM. The native balance is sampled once before wartime rewards or losses.
+# The stored value determines the mandate even if the live ladder later moves.
+NAM_freeze_prewar_mandate = {
+	if = {
+		limit = { NOT = { has_variable = NAM_prewar_balance } }
+		set_variable = { var = NAM_prewar_balance value = 0 }
+		if = {
+			limit = { has_power_balance = { id = NAM_ladder_bop } }
+			set_variable = { var = NAM_prewar_balance value = power_balance_value }
+		}
+		if = {
+			limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
+			if = {
+				limit = { check_variable = { NAM_prewar_balance > 0.25 } }
+				NAM_rom_take_humanism = yes
+				set_portraits = {
+					character = NAM_Egor_Rom
+					civilian = { large = GFX_portrait_NAM_Egor_Rom_republic }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { NAM_prewar_balance < -0.25 } }
+				NAM_rom_take_etatism = yes
+				set_portraits = {
+					character = NAM_Egor_Rom
+					civilian = { large = GFX_portrait_NAM_Egor_Rom_state }
+				}
+			}
+			else = {
+				NAM_rom_take_pragmatism = yes
+				set_portraits = {
+					character = NAM_Egor_Rom
+					civilian = { large = GFX_portrait_NAM_Egor_Rom_republic }
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. District authority gives Rom the humanist leadership during the war.
+NAM_rom_take_humanism = {
+	if = {
+		limit = {
+			has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+			NOT = { has_country_leader_ideology = humanism_ideology }
+		}
+		NAM_rom_step_down = yes
+		set_politics = {
+			ruling_party = humanism
+			elections_allowed = no
+		}
+		add_country_leader_role = {
+			character = NAM_Egor_Rom
+			promote_leader = yes
+			country_leader = {
+				desc = NAM_Egor_Rom_desc
+				ideology = humanism_ideology
+				traits = {
+					NAM_trait_keeper_of_seals
+					NAM_trait_oil_ledger
+				}
+				expire = "2200.1.1.1"
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. A balanced mandate keeps Rom as a pragmatic arbiter.
+NAM_rom_take_pragmatism = {
+	if = {
+		limit = {
+			has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+			NOT = { has_country_leader_ideology = pragmatism_ideology }
+		}
+		NAM_rom_step_down = yes
+		set_politics = {
+			ruling_party = pragmatism
+			elections_allowed = no
+		}
+		add_country_leader_role = {
+			character = NAM_Egor_Rom
+			promote_leader = yes
+			country_leader = {
+				desc = NAM_Egor_Rom_desc
+				ideology = pragmatism_ideology
+				traits = {
+					NAM_trait_keeper_of_seals
+					NAM_trait_oil_ledger
+				}
+				expire = "2200.1.1.1"
+			}
+		}
+	}
+}
+
 # COUNTRY scope. Repeated confederation teardown must preserve the current leader.
 NAM_adopt_service_etatism = {
 	if = {
 		limit = {
+			NOT = { has_variable = NAM_prewar_balance }
 			has_country_leader = {
 				character = NAM_Egor_Rom
 				ruling_only = yes
@@ -10,6 +106,41 @@ NAM_adopt_service_etatism = {
 		}
 		NAM_Egor_Rom = {
 			remove_country_leader_role = { ideology = etatism_ideology }
+		}
+		add_country_leader_role = {
+			character = NAM_Egor_Rom
+			promote_leader = yes
+			country_leader = {
+				desc = NAM_Egor_Rom_desc
+				ideology = service_etatism
+				traits = {
+					NAM_trait_keeper_of_seals
+					NAM_trait_oil_ledger
+				}
+				expire = "2200.1.1.1"
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. An explicit constitutional choice may restore the service course.
+NAM_rom_take_service_etatism = {
+	if = {
+		limit = {
+			has_country_leader = {
+				character = NAM_Egor_Rom
+				ruling_only = yes
+			}
+			OR = {
+				has_country_leader_ideology = etatism_ideology
+				has_country_leader_ideology = humanism_ideology
+				has_country_leader_ideology = pragmatism_ideology
+			}
+		}
+		NAM_rom_step_down = yes
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
 		}
 		add_country_leader_role = {
 			character = NAM_Egor_Rom
@@ -220,6 +351,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 
 	NAM = {
+		NAM_freeze_prewar_mandate = yes
 		remove_mission = NAM_resource_war_deadline
 		clr_country_flag = NAM_rw_war_dispatched
 		if = {
@@ -1601,22 +1733,65 @@ NAM_rw_compute_oil_score = {
 # Compact entry points for the shared debug category. They deliberately call
 # the production effects instead of duplicating any resource-war mechanics.
 ADISCORD_nam_debug_start_resource_war = {
-	set_global_flag = ADISCORD_vorkerland_collapse_wars_started
-	clr_global_flag = ADISCORD_nam_resource_war_started
-	clr_global_flag = ADISCORD_nam_resource_war_resolved
-	ADISCORD_nam_resource_war_start = yes
+	if = {
+		limit = { ADISCORD_nam_resource_war_ready = yes }
+		ADISCORD_nam_resource_war_start = yes
+	}
 }
 
 ADISCORD_nam_debug_resolve_coalition_victory = {
-	ADISCORD_nam_resource_war_resolve_coalition_victory = yes
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		ADISCORD_nam_resource_war_resolve_coalition_victory = yes
+	}
 }
 
 ADISCORD_nam_debug_resolve_nam_victory = {
-	ADISCORD_nam_resource_war_resolve_nam_victory = yes
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		ADISCORD_nam_resource_war_resolve_nam_victory = yes
+	}
 }
 
 ADISCORD_nam_debug_resolve_compromise = {
-	ADISCORD_nam_resource_war_resolve_compromise = yes
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		ADISCORD_nam_resource_war_resolve_compromise = yes
+	}
+}
+
+ADISCORD_nam_debug_resolve_standoff = {
+	if = {
+		limit = { ADISCORD_nam_resource_war_active = yes }
+		ADISCORD_nam_resource_war_resolve_standoff = yes
+	}
+}
+
+ADISCORD_nam_debug_prepare_etatism = {
+	NAM = {
+		if = {
+			limit = { ADISCORD_nam_debug_mandate_open = yes }
+			set_power_balance = { id = NAM_ladder_bop set_value = -0.5 }
+		}
+	}
+}
+
+ADISCORD_nam_debug_prepare_pragmatism = {
+	NAM = {
+		if = {
+			limit = { ADISCORD_nam_debug_mandate_open = yes }
+			set_power_balance = { id = NAM_ladder_bop set_value = 0 }
+		}
+	}
+}
+
+ADISCORD_nam_debug_prepare_humanism = {
+	NAM = {
+		if = {
+			limit = { ADISCORD_nam_debug_mandate_open = yes }
+			set_power_balance = { id = NAM_ladder_bop set_value = 0.5 }
+		}
+	}
 }
 
 ADISCORD_nam_debug_add_tension = {
@@ -1720,6 +1895,8 @@ NAM_close_war_programmes = {
 	remove_ideas = NAM_wartime_entrenchment
 	remove_ideas = NAM_counterstroke_staff
 	remove_ideas = NAM_rebel_depot_maps
+
+	NAM_oil_refresh = yes
 }
 
 # COUNTRY principal. Preserve major status owned by another campaign.
@@ -1880,6 +2057,8 @@ NAM_groups_initialize = {
 	if = {
 		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
 		set_country_flag = NAM_groups_initialized
+		set_variable = { var = NAM_hidden_fuel value = 0 }
+		set_variable = { var = NAM_open_fuel_reserve value = 0 }
 		set_variable = { var = NAM_navy_repair_speed value = 0 }
 		set_variable = { var = NAM_navy_landing_speed value = 0 }
 		set_variable = { var = NAM_navy_organisation value = 0 }
@@ -1904,6 +2083,7 @@ NAM_groups_initialize = {
 		set_variable = { var = NAM_line_slots value = 2 }
 		set_variable = { var = NAM_project_slots value = 1 }
 		NAM_oil_initialize = yes
+		NAM_crisis_draw = yes
 		# Weber's network works from the first day of the colony; focuses may
 		# already have changed it, so only a missing value is seeded.
 		if = {
@@ -2341,21 +2521,18 @@ NAM_crisis_draw = {
 	if = {
 		limit = {
 			NAM_country_operable = yes
-			NOT = { has_country_flag = NAM_crisis_cooldown }
+			NOT = { has_active_mission = NAM_incident_countdown }
 			NOT = { has_country_flag = NAM_crisis_open }
+		}
+		activate_mission = NAM_incident_countdown
+		random_list = {
+			1 = { }
+			1 = { add_days_mission_timeout = { mission = NAM_incident_countdown days = 30 } }
+			1 = { add_days_mission_timeout = { mission = NAM_incident_countdown days = 60 } }
 		}
 		if = {
 			limit = { has_completed_focus = NAM_crisis_office }
-			random = {
-				chance = 4
-				NAM_crisis_select = yes
-			}
-		}
-		else = {
-			random = {
-				chance = 8
-				NAM_crisis_select = yes
-			}
+			add_days_mission_timeout = { mission = NAM_incident_countdown days = 60 }
 		}
 	}
 }
@@ -2363,7 +2540,6 @@ NAM_crisis_draw = {
 # COUNTRY NAM. Only the selected case reserves the incident receipt. The event
 # still opens after a context change so its safe closing answer can release it.
 NAM_crisis_select = {
-	set_country_flag = { flag = NAM_crisis_cooldown value = 1 days = 120 }
 	random_list = {
 		20 = {
 			modifier = {
@@ -2402,6 +2578,11 @@ NAM_crisis_select = {
 			country_event = { id = ADISCORD_nam_crisis.5 hours = 1 }
 		}
 	}
+	activate_mission = NAM_incident_response
+	if = {
+		limit = { has_completed_focus = NAM_crisis_office }
+		add_days_mission_timeout = { mission = NAM_incident_response days = 7 }
+	}
 }
 
 # COUNTRY NAM. Unpaid first answers fall back to the same guarded outcome
@@ -2426,7 +2607,7 @@ NAM_crisis_default_1 = {
 					NAM_field_apply_damage = yes
 				}
 			}
-			clr_country_flag = NAM_crisis_open
+			NAM_crisis_close = yes
 		}
 	}
 }
@@ -2444,7 +2625,7 @@ NAM_crisis_default_2 = {
 			add_to_variable = { var = NAM_grp_oil_support value = -12 }
 			add_to_variable = { var = NAM_grp_garr_support value = 4 }
 			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+			NAM_crisis_close = yes
 		}
 	}
 }
@@ -2462,7 +2643,7 @@ NAM_crisis_default_3 = {
 			add_to_variable = { var = NAM_grp_nam_support value = -8 }
 			add_to_variable = { var = NAM_grp_dist_support value = 6 }
 			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+			NAM_crisis_close = yes
 		}
 	}
 }
@@ -2480,7 +2661,7 @@ NAM_crisis_default_5 = {
 		hidden_effect = {
 			add_to_variable = { var = NAM_grp_garr_support value = -6 }
 			NAM_groups_refresh = yes
-			clr_country_flag = NAM_crisis_open
+			NAM_crisis_close = yes
 		}
 	}
 }
@@ -2521,23 +2702,23 @@ NAM_wrk_trade_refresh = {
 	set_variable = { var = NAM_wrk_trade_income value = NAM_wrk_trade_level }
 	multiply_variable = { var = NAM_wrk_trade_income value = 20 }
 	add_to_variable = { var = NAM_wrk_trade_income value = 40 }
+	# The economy settles weekly: twelve monthly payments equal fifty-two weeks.
+	set_variable = { var = NAM_wrk_trade_weekly_income value = NAM_wrk_trade_income }
+	multiply_variable = { var = NAM_wrk_trade_weekly_income value = 3 }
+	divide_variable = { var = NAM_wrk_trade_weekly_income value = 13 }
 	if = {
 		limit = { has_country_flag = NAM_wrk_concession_active }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_wrk_concession_income } } }
+			add_dynamic_modifier = { modifier = NAM_wrk_concession_income }
+		}
+		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
-# COUNTRY NAM. on_monthly_NAM: the concession pays while the metropole exists.
+# COUNTRY NAM. on_monthly_NAM: only the concealed reserve uses a monthly payment.
 NAM_colony_monthly = {
-	if = {
-		limit = {
-			has_country_flag = NAM_wrk_concession_active
-			NAM_colony_phase = yes
-			WRK = { exists = yes }
-		}
-		set_temp_variable = { var = NAM_treasury_amount value = NAM_wrk_trade_income }
-		NAM_add_treasury = yes
-	}
 	# The second ledger hides the metropole's share, not the colony's own income.
 	if = {
 		limit = {
@@ -2560,7 +2741,7 @@ NAM_wrk_echelon_deliver = {
 		}
 		clear_variable = NAM_wrk_echelon_deposit
 		add_to_variable = { var = NAM_wrk_echelons_delivered value = 1 }
-		WRK = { add_fuel = 3000 }
+		WRK = { add_fuel = 90000 }
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
 			amount = 6000
@@ -2583,13 +2764,166 @@ NAM_wrk_echelon_deliver = {
 NAM_wrk_echelon_refund = {
 	if = {
 		limit = { check_variable = { NAM_wrk_echelon_deposit > 0 } }
-		add_fuel = 3000
+		add_to_variable = { var = NAM_open_fuel_reserve value = 90000 }
+		NAM_open_fuel_release = yes
 	}
 	clear_variable = NAM_wrk_echelon_deposit
 }
 
-# COUNTRY NAM. Option of event .80: the hourglass rewards prepared before the
-# collapse reach the independent country once. Visible through native output.
+# Paid colonial orders return their full price once if preparation is interrupted.
+NAM_colonial_artillery_contract_refund = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = NAM_colonial_artillery_contract_paid } }
+		hidden_effect = {
+			clr_country_flag = NAM_colonial_artillery_contract_paid
+			set_temp_variable = { var = NAM_treasury_amount value = 450 }
+			NAM_add_treasury = yes
+		}
+		custom_effect_tooltip = NAM_colonial_artillery_contract_refund_tt
+	}
+}
+
+NAM_colonial_local_register_refund = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = NAM_colonial_local_register_paid } }
+		hidden_effect = {
+			clr_country_flag = NAM_colonial_local_register_paid
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+		}
+		add_political_power = 50
+		custom_effect_tooltip = NAM_colonial_local_register_refund_tt
+	}
+}
+
+NAM_colonial_emergency_stocks_refund = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = NAM_colonial_emergency_stocks_paid } }
+		hidden_effect = {
+			clr_country_flag = NAM_colonial_emergency_stocks_paid
+			set_temp_variable = { var = NAM_treasury_amount value = 650 }
+			NAM_add_treasury = yes
+		}
+		custom_effect_tooltip = NAM_colonial_emergency_stocks_refund_tt
+	}
+}
+
+# A shelter under preparation is still an official asset. Refunds consume its receipt.
+NAM_colonial_reserve_fund_refund = {
+	if = {
+		limit = { has_country_flag = NAM_colonial_reserve_fund_paid }
+		clr_country_flag = NAM_colonial_reserve_fund_paid
+		add_political_power = 15
+		set_temp_variable = { var = NAM_treasury_amount value = 250 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_colonial_fuel_reserve_refund = {
+	if = {
+		limit = { has_country_flag = NAM_colonial_fuel_reserve_paid }
+		clr_country_flag = NAM_colonial_fuel_reserve_paid
+		add_political_power = 25
+		add_to_variable = { var = NAM_open_fuel_reserve value = 40000 }
+		NAM_open_fuel_release = yes
+	}
+}
+
+# Native fuel variables use thousands; reserve ledgers use individual fuel units.
+# Only available storage is filled. The remaining stock stays in its original ledger.
+NAM_hidden_fuel_release = {
+	if = {
+		limit = { check_variable = { NAM_hidden_fuel > 0 } }
+		set_temp_variable = { var = NAM_fuel_room value = max_fuel_k }
+		subtract_from_temp_variable = { var = NAM_fuel_room value = fuel_k }
+		multiply_temp_variable = { var = NAM_fuel_room value = 1000 }
+		clamp_temp_variable = { var = NAM_fuel_room min = 0 max = NAM_hidden_fuel }
+		add_fuel = NAM_fuel_room
+		subtract_from_variable = { var = NAM_hidden_fuel value = NAM_fuel_room }
+	}
+}
+
+NAM_open_fuel_release = {
+	if = {
+		limit = { check_variable = { NAM_open_fuel_reserve > 0 } }
+		set_temp_variable = { var = NAM_fuel_room value = max_fuel_k }
+		subtract_from_temp_variable = { var = NAM_fuel_room value = fuel_k }
+		multiply_temp_variable = { var = NAM_fuel_room value = 1000 }
+		clamp_temp_variable = { var = NAM_fuel_room min = 0 max = NAM_open_fuel_reserve }
+		add_fuel = NAM_fuel_room
+		subtract_from_variable = { var = NAM_open_fuel_reserve value = NAM_fuel_room }
+	}
+}
+
+# COUNTRY NAM, after the central successor exists. Clear colonial receipts before
+# seizing open assets, then release completed shelters. Repeated teardown calls are inert.
+NAM_metropolitan_flight = {
+	if = {
+		limit = {
+			exists = yes
+			WKR = { exists = yes }
+			NOT = { has_country_flag = NAM_metropolitan_evacuated }
+		}
+		set_country_flag = NAM_metropolitan_evacuated
+		NAM_colonial_artillery_contract_refund = yes
+		NAM_colonial_local_register_refund = yes
+		NAM_colonial_emergency_stocks_refund = yes
+		NAM_colonial_reserve_fund_refund = yes
+		NAM_wrk_concession_refund = yes
+		67 = { NAM_sweep_release = yes }
+		688 = { NAM_sweep_release = yes }
+		689 = { NAM_sweep_release = yes }
+		690 = { NAM_sweep_release = yes }
+		719 = { NAM_sweep_release = yes }
+		700 = { NAM_sweep_release = yes }
+		ADISCORD_economy_initialize_country = yes
+		set_variable = { var = NAM_evacuated_treasury value = ADISCORD_economy_treasury }
+		if = {
+			limit = { check_variable = { NAM_evacuated_treasury < 0 } }
+			set_variable = { var = NAM_evacuated_treasury value = 0 }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = NAM_evacuated_treasury }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = NAM_evacuated_treasury }
+		set_variable = { var = NAM_evacuated_fuel value = fuel_k }
+		multiply_variable = { var = NAM_evacuated_fuel value = 1000 }
+		add_to_variable = { var = NAM_evacuated_fuel value = NAM_open_fuel_reserve }
+		clear_variable = NAM_open_fuel_reserve
+		# In-transit fuel is seized directly so refunding cannot overflow the depots.
+		if = {
+			limit = { check_variable = { NAM_wrk_echelon_deposit > 0 } }
+			add_to_variable = { var = NAM_evacuated_fuel value = 90000 }
+			clear_variable = NAM_wrk_echelon_deposit
+		}
+		if = {
+			limit = { has_country_flag = NAM_colonial_fuel_reserve_paid }
+			clr_country_flag = NAM_colonial_fuel_reserve_paid
+			add_political_power = 25
+			add_to_variable = { var = NAM_evacuated_fuel value = 40000 }
+		}
+		set_fuel = 0
+		WKR = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = NAM.NAM_evacuated_treasury }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = NAM.NAM_evacuated_treasury }
+			add_to_variable = { var = WKR_evacuated_fuel_reserve value = NAM.NAM_evacuated_fuel }
+			ADISCORD_vorkerland_release_evacuated_fuel = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		set_variable = { var = NAM_sheltered_treasury value = 0 }
+		if = {
+			limit = { has_variable = NAM_hidden_reserve }
+			set_variable = { var = NAM_sheltered_treasury value = NAM_hidden_reserve }
+		}
+		set_variable = { var = NAM_sheltered_fuel value = NAM_hidden_fuel }
+		NAM_colony_hourglass_payout = yes
+		NAM_hidden_fuel_release = yes
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = ADISCORD_nam_resource_war.88 hours = 1 }
+	}
+}
+
+# COUNTRY NAM. Completed shelters and officer lists settle once at independence.
+# Clearing the receipts also makes a later narrative answer harmless.
 NAM_colony_hourglass_payout = {
 	if = {
 		limit = { check_variable = { NAM_hidden_reserve > 0 } }
@@ -2636,6 +2970,12 @@ NAM_colony_close = {
 		clr_country_flag = NAM_wrk_concession_active
 		ADISCORD_economy_mark_dirty = yes
 	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_wrk_concession_income } }
+		remove_dynamic_modifier = { modifier = NAM_wrk_concession_income }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	clear_variable = NAM_wrk_trade_weekly_income
 	mark_focus_tree_layout_dirty = yes
 }
 
@@ -2654,6 +2994,7 @@ NAM_sweep_complete = {
 	if = {
 		limit = {
 			has_state_flag = NAM_sweep_in_progress
+			NAM = { NAM_colonial_programme_operable = yes }
 			is_owned_by = NAM
 			is_controlled_by = NAM
 		}
@@ -3449,18 +3790,10 @@ NAM_seal_discipline_monthly = {
 	}
 }
 
-# COUNTRY NAM. A field state fell to the enemy.
-NAM_seal_discipline_field_lost = {
-	if = {
-		limit = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
-		add_to_variable = { var = NAM_seal_discipline value = -10 }
-		NAM_seal_discipline_clamp = yes
-	}
-}
-
 # ----- Field missions -----
 # COUNTRY NAM. Hostilities: a 120-day hold order for each field still in hand.
 NAM_activate_field_missions = {
+	NAM_oil_refresh = yes
 	if = {
 		limit = { controls_state = 67 }
 		activate_mission = NAM_hold_field_67
@@ -3496,26 +3829,166 @@ NAM_hold_field_reward = {
 # COUNTRY NAM. One-time setup from NAM_groups_initialize.
 NAM_oil_initialize = {
 	67 = {
-		set_variable = { var = NAM_field_capacity value = 8 }
+		set_variable = { var = NAM_field_capacity value = 5 }
+		set_variable = { var = NAM_field_max_capacity value = 11 }
 		set_variable = { var = NAM_field_condition value = 80 }
+		set_variable = { var = NAM_field_applied_oil value = 40 }
 	}
 	688 = {
-		set_variable = { var = NAM_field_capacity value = 2 }
+		set_variable = { var = NAM_field_capacity value = 1 }
+		set_variable = { var = NAM_field_max_capacity value = 3 }
 		set_variable = { var = NAM_field_condition value = 80 }
+		set_variable = { var = NAM_field_applied_oil value = 8 }
 	}
 	689 = {
-		set_variable = { var = NAM_field_capacity value = 4 }
+		set_variable = { var = NAM_field_capacity value = 3 }
+		set_variable = { var = NAM_field_max_capacity value = 7 }
 		set_variable = { var = NAM_field_condition value = 80 }
+		set_variable = { var = NAM_field_applied_oil value = 24 }
 	}
 	690 = {
-		set_variable = { var = NAM_field_capacity value = 3 }
+		set_variable = { var = NAM_field_capacity value = 2 }
+		set_variable = { var = NAM_field_max_capacity value = 5 }
 		set_variable = { var = NAM_field_condition value = 80 }
+		set_variable = { var = NAM_field_applied_oil value = 16 }
 	}
 	719 = {
 		set_variable = { var = NAM_field_capacity value = 1 }
+		set_variable = { var = NAM_field_max_capacity value = 3 }
 		set_variable = { var = NAM_field_condition value = 80 }
+		set_variable = { var = NAM_field_applied_oil value = 8 }
 	}
 	NAM_oil_refresh = yes
+}
+
+# STATE field. The finite burn remains after peace; only its military penalties change.
+NAM_scorched_field_refresh = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+		set_temp_variable = { var = NAM_enemy_speed_next value = 0 }
+		if = {
+			limit = {
+				has_state_flag = NAM_wells_scorched
+				ADISCORD_nam_resource_war_active = yes
+				controller = { has_war_with = NAM }
+			}
+			set_temp_variable = { var = NAM_enemy_speed_next value = -0.20 }
+		}
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = NAM_scorched_enemy_speed }
+					NOT = { check_variable = { var = NAM_scorched_enemy_speed value = NAM_enemy_speed_next compare = equals } }
+				}
+			}
+			set_variable = { var = NAM_scorched_enemy_speed value = NAM_enemy_speed_next }
+			set_variable = { var = NAM_scorched_enemy_attrition value = NAM_enemy_speed_next }
+			multiply_variable = { var = NAM_scorched_enemy_attrition value = -0.75 }
+			set_variable = { var = NAM_scorched_enemy_supply value = NAM_enemy_speed_next }
+			multiply_variable = { var = NAM_scorched_enemy_supply value = 5 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+# STATE field. The focus calls this directly before its completion is committed.
+NAM_guarded_field_apply = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NOT = { has_dynamic_modifier = { modifier = NAM_guarded_wells_modifier } }
+		}
+		add_dynamic_modifier = { modifier = NAM_guarded_wells_modifier }
+	}
+}
+
+# STATE field. Controller changes and peace use the same current-state predicate.
+NAM_guarded_field_refresh = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NAM = { has_completed_focus = NAM_wells_under_guard }
+		}
+		NAM_guarded_field_apply = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_guarded_wells_modifier } }
+		remove_dynamic_modifier = { modifier = NAM_guarded_wells_modifier }
+	}
+}
+
+# STATE field. Capacity remains in the denominator even after damage or occupation.
+# Only working, unburnt wells in enemy hands contribute to the numerator.
+NAM_count_captured_field = {
+	if = {
+		limit = { has_variable = NAM_field_capacity }
+		NAM = { add_to_variable = { var = NAM_basin_capacity value = PREV.NAM_field_capacity } }
+		if = {
+			limit = {
+				ADISCORD_nam_resource_war_active = yes
+				controller = { has_war_with = NAM }
+				NOT = { has_state_flag = NAM_wells_scorched }
+			}
+			set_variable = { var = NAM_captured_working_capacity value = NAM_field_capacity }
+			multiply_variable = { var = NAM_captured_working_capacity value = NAM_field_condition }
+			divide_variable = { var = NAM_captured_working_capacity value = 100 }
+			NAM = { add_to_variable = { var = NAM_captured_capacity value = PREV.NAM_captured_working_capacity } }
+		}
+	}
+}
+
+# COUNTRY NAM. Recompute current losses; repeated captures never accumulate a penalty.
+NAM_captured_fields_refresh = {
+	set_variable = { var = NAM_basin_capacity value = 0 }
+	set_variable = { var = NAM_captured_capacity value = 0 }
+	67 = { NAM_count_captured_field = yes }
+	688 = { NAM_count_captured_field = yes }
+	689 = { NAM_count_captured_field = yes }
+	690 = { NAM_count_captured_field = yes }
+	719 = { NAM_count_captured_field = yes }
+	set_temp_variable = { var = NAM_captured_share_next value = 0 }
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			exists = yes
+			check_variable = { NAM_basin_capacity > 0 }
+		}
+		set_temp_variable = { var = NAM_captured_share_next value = NAM_captured_capacity }
+		divide_temp_variable = { var = NAM_captured_share_next value = NAM_basin_capacity }
+		clamp_temp_variable = { var = NAM_captured_share_next min = 0 max = 1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = NAM_captured_share }
+				NOT = { check_variable = { var = NAM_captured_share value = NAM_captured_share_next compare = equals } }
+			}
+		}
+		set_variable = { var = NAM_captured_share value = NAM_captured_share_next }
+		set_variable = { var = NAM_captured_war_support value = NAM_captured_share }
+		multiply_variable = { var = NAM_captured_war_support value = -0.30 }
+		set_variable = { var = NAM_captured_factory_output value = NAM_captured_share }
+		multiply_variable = { var = NAM_captured_factory_output value = -0.20 }
+		ADISCORD_economy_mark_dirty = yes
+		force_update_dynamic_modifier = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_captured_share > 0 } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_captured_wells_shock } } }
+			add_dynamic_modifier = { modifier = NAM_captured_wells_shock }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_captured_wells_shock } }
+		remove_dynamic_modifier = { modifier = NAM_captured_wells_shock }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # COUNTRY NAM. Throughput counts only fields Svetlogorye controls. Overseas
@@ -3569,14 +4042,39 @@ NAM_oil_refresh = {
 	subtract_from_variable = { var = NAM_oil_free_land_units value = NAM_oil_committed }
 	add_to_variable = { var = NAM_oil_free_land_units value = NAM_oil_overseas_committed }
 	subtract_from_variable = { var = NAM_oil_free_land_units value = NAM_oil_overflow }
+
+	NAM_captured_fields_refresh = yes
 }
 
 # STATE field. Units = capacity x condition / 100, rounded down, plus the
-# refinery and pipeline built here; zero while another country controls it.
+# refinery and pipeline built here; zero during fires or foreign control.
 NAM_field_update_units = {
+	NAM_scorched_field_refresh = yes
+	NAM_guarded_field_refresh = yes
+	# Physical extraction follows the field even when NAM loses control. Apply only
+	# its delta so unrelated resource rewards in this state remain intact.
+	set_variable = { var = NAM_field_oil value = NAM_field_capacity }
+	multiply_variable = { var = NAM_field_oil value = NAM_field_condition }
+	divide_variable = { var = NAM_field_oil value = 10 }
+	subtract_from_variable = { var = NAM_field_oil value = 0.499 }
+	round_variable = NAM_field_oil
+	clamp_variable = { var = NAM_field_oil min = 0 max = 200 }
+	set_temp_variable = { var = NAM_field_oil_delta value = NAM_field_oil }
+	subtract_from_temp_variable = { var = NAM_field_oil_delta value = NAM_field_applied_oil }
+	if = {
+		limit = { NOT = { check_variable = { var = NAM_field_oil_delta value = 0 compare = equals } } }
+		add_resource = { type = oil amount = NAM_field_oil_delta }
+		owner = { ADISCORD_economy_mark_dirty = yes }
+		controller = { ADISCORD_economy_mark_dirty = yes }
+		set_variable = { var = NAM_field_applied_oil value = NAM_field_oil }
+	}
+
 	set_variable = { var = NAM_field_units value = 0 }
 	if = {
-		limit = { is_controlled_by = NAM }
+		limit = {
+			is_controlled_by = NAM
+			NOT = { has_state_flag = NAM_wells_scorched }
+		}
 		set_variable = { var = NAM_field_units value = NAM_field_capacity }
 		multiply_variable = { var = NAM_field_units value = NAM_field_condition }
 		divide_variable = { var = NAM_field_units value = 100 }
@@ -3801,11 +4299,11 @@ NAM_oil_settle_client = {
 	if = {
 		limit = {
 			has_country_flag = NAM_oil_client
-			NAM = { NOT = { has_fuel < 1500 } }
+			NAM = { NOT = { has_fuel < 15000 } }
 		}
-		add_fuel = 1500
+		add_fuel = 15000
 		NAM = {
-			add_fuel = -1500
+			add_fuel = -15000
 			add_to_temp_variable = { var = NAM_oil_month_revenue value = 40 }
 			if = {
 				limit = {
@@ -4419,6 +4917,16 @@ NAM_ladder_declare_independence = {
 			NOT = { has_country_flag = NAM_independence_declared }
 		}
 		set_country_flag = NAM_independence_declared
+		set_popularities = {
+			etatism = 45
+			humanism = 20
+			pragmatism = 15
+			anarchism = 7
+			technocracy = 5
+			chauvinism = 4
+			utilitarism = 2
+			hedonism = 2
+		}
 		if = {
 			limit = { NOT = { has_power_balance = { id = NAM_ladder_bop } } }
 			set_power_balance = { id = NAM_ladder_bop set_value = 0 }
@@ -4739,7 +5247,7 @@ NAM_rival_remove_current = {
 	remove_mission = NAM_rival_demand
 }
 
-# COUNTRY NAM. Egor Rom leaves the leadership of the etatist party.
+# COUNTRY NAM. Remove the active role before installing a successor of either party.
 NAM_rom_step_down = {
 	if = {
 		limit = {
@@ -4761,6 +5269,22 @@ NAM_rom_step_down = {
 		}
 		NAM_Egor_Rom = { remove_country_leader_role = { ideology = etatism_ideology } }
 	}
+
+	else_if = {
+		limit = {
+			has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+			has_country_leader_ideology = humanism_ideology
+		}
+		NAM_Egor_Rom = { remove_country_leader_role = { ideology = humanism_ideology } }
+	}
+
+	else_if = {
+		limit = {
+			has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+			has_country_leader_ideology = pragmatism_ideology
+		}
+		NAM_Egor_Rom = { remove_country_leader_role = { ideology = pragmatism_ideology } }
+	}
 }
 
 # COUNTRY NAM. The rival takes the seals for the rest of Svetlogorye's route.
@@ -4770,6 +5294,10 @@ NAM_coup_install = {
 	set_country_flag = NAM_coup_succeeded
 	remove_mission = NAM_rival_demand
 	NAM_rom_step_down = yes
+	set_politics = {
+		ruling_party = etatism
+		elections_allowed = no
+	}
 	if = {
 		limit = { check_variable = { NAM_rival_current = 1 } }
 		if = {
@@ -5163,9 +5691,17 @@ NAM_rom_take_etatism = {
 				character = NAM_Egor_Rom
 				ruling_only = yes
 			}
-			has_country_leader_ideology = service_etatism
+			OR = {
+				has_country_leader_ideology = service_etatism
+				has_country_leader_ideology = humanism_ideology
+				has_country_leader_ideology = pragmatism_ideology
+			}
 		}
-		NAM_Egor_Rom = { remove_country_leader_role = { ideology = service_etatism } }
+		NAM_rom_step_down = yes
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
 		add_country_leader_role = {
 			character = NAM_Egor_Rom
 			promote_leader = yes
@@ -5217,6 +5753,7 @@ NAM_apply_ending_iron = {
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+	NAM_party_representatives_iron = yes
 }
 
 NAM_apply_ending_service = {
@@ -5227,7 +5764,7 @@ NAM_apply_ending_service = {
 	}
 	else = {
 		custom_effect_tooltip = NAM_ending_service_leader_tt
-		hidden_effect = { NAM_adopt_service_etatism = yes }
+		hidden_effect = { NAM_rom_take_service_etatism = yes }
 	}
 	custom_effect_tooltip = NAM_ending_service_name_tt
 	hidden_effect = { set_cosmetic_tag = NAM_service_republic }
@@ -5254,6 +5791,7 @@ NAM_apply_ending_service = {
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+	NAM_party_representatives_service = yes
 }
 
 NAM_apply_ending_federation = {
@@ -5265,6 +5803,7 @@ NAM_apply_ending_federation = {
 	else = {
 		custom_effect_tooltip = NAM_ending_federation_leader_tt
 		hidden_effect = {
+			NAM_rom_step_down = yes
 			set_popularities = {
 				humanism = 60
 				etatism = 40
@@ -5294,6 +5833,7 @@ NAM_apply_ending_federation = {
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+	NAM_party_representatives_federation = yes
 }
 
 NAM_apply_ending_oil_union = {
@@ -5306,6 +5846,10 @@ NAM_apply_ending_oil_union = {
 		custom_effect_tooltip = NAM_ending_oil_union_leader_tt
 		hidden_effect = {
 			NAM_rom_step_down = yes
+			set_politics = {
+				ruling_party = etatism
+				elections_allowed = no
+			}
 			add_country_leader_role = {
 				character = NAM_Kirill_Vykup
 				promote_leader = yes
@@ -5327,6 +5871,7 @@ NAM_apply_ending_oil_union = {
 		NAM_ladder_shift = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+	NAM_party_representatives_oil_union = yes
 }
 
 # ----- Victory treaty: border award and punishment -----
@@ -6263,6 +6808,7 @@ NAM_exile_choose_radical = {
 	NAM_revenge_readiness_clamp = yes
 	ADISCORD_economy_mark_dirty = yes
 	log = "[ADISCORD][NAM][EXILE] The pillars overthrow the namestnik."
+	NAM_party_representatives_exile_radical = yes
 }
 
 # COUNTRY NAM. Yaroslav Weber's humanists take power and open the islands to
@@ -6293,6 +6839,7 @@ NAM_exile_choose_humanist = {
 	NAM_corp_initialize = yes
 	ADISCORD_economy_mark_dirty = yes
 	log = "[ADISCORD][NAM][EXILE] Veter's humanists overthrow the namestnik."
+	NAM_party_representatives_exile_humanist = yes
 }
 
 # COUNTRY NAM. Both political routes use the dormant startup character.
@@ -6731,6 +7278,7 @@ NAM_corp_takeover = {
 		keep_completed = yes
 	}
 	log = "[ADISCORD][NAM][CORP] The corporate boards take power."
+	NAM_party_representatives_corporate = yes
 }
 
 # ----- Corporate state: the districts of the corporations -----
@@ -8268,7 +8816,7 @@ NAM_pw_export_shipment_refund = {
 		clr_country_flag = NAM_pw_export_shipment_paid
 		clr_country_flag = NAM_pw_civil_busy
 		add_political_power = 25
-		add_fuel = 5000
+		add_fuel = 60000
 	}
 }
 
@@ -8412,4 +8960,566 @@ NAM_marine_detachment_order_settle = {
 		}
 	}
 	else = { NAM_marine_detachment_order_refund = yes }
+}
+
+# Route-specific names belong only to non-story party representatives.
+NAM_party_representatives_iron = {
+	if = {
+		limit = {
+			tag = NAM
+			has_cosmetic_tag = NAM_iron_ladder
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_iron_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_iron_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_iron_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_iron_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_iron_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_iron_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_iron_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_service = {
+	if = {
+		limit = {
+			tag = NAM
+			has_cosmetic_tag = NAM_service_republic
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_service_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_service_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_service_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_service_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_service_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_service_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_service_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_federation = {
+	if = {
+		limit = {
+			tag = NAM
+			has_cosmetic_tag = NAM_federation
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_federation_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_federation_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_federation_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_federation_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_federation_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_federation_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_federation_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_oil_union = {
+	if = {
+		limit = {
+			tag = NAM
+			has_cosmetic_tag = NAM_oil_union
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_oil_union_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_oil_union_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_oil_union_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_oil_union_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_oil_union_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_oil_union_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_oil_union_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_corporate = {
+	if = {
+		limit = {
+			tag = NAM
+			has_cosmetic_tag = NAM_corporate_state
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_corporate_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_corporate_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_corporate_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_corporate_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_corporate_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_corporate_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_corporate_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_exile_radical = {
+	if = {
+		limit = {
+			tag = NAM
+			has_country_flag = NAM_exile_radical
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_exile_radical_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_exile_radical_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_exile_radical_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_exile_radical_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_exile_radical_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_exile_radical_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_exile_radical_hedonism
+			}
+		}
+	}
+}
+
+NAM_party_representatives_exile_humanist = {
+	if = {
+		limit = {
+			tag = NAM
+			has_country_flag = NAM_exile_humanist
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_humanism
+				NAME = NAM_party_representatives_exile_humanist_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_utilitarism
+				NAME = NAM_party_representatives_exile_humanist_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_chauvinism
+				NAME = NAM_party_representatives_exile_humanist_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_pragmatism
+				NAME = NAM_party_representatives_exile_humanist_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_anarchism
+				NAME = NAM_party_representatives_exile_humanist_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_technocracy
+				NAME = NAM_party_representatives_exile_humanist_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = NAM_party_representative_hedonism
+				NAME = NAM_party_representatives_exile_humanist_hedonism
+			}
+		}
+	}
+}
+
+# STATE. Only this project's receipt may complete or cancel the hydroelectric works.
+NAM_project_complete_hydroelectric = {
+	if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 1200 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 50 compare = equals }
+		}
+		if = {
+			limit = { NAM_hydroelectric_site = yes }
+			NAM_project_close = yes
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+			add_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower }
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else = { NAM_project_release = yes }
+	}
+}
+
+# COUNTRY NAM. Consume the case before removing its mission; the cancellation
+# callback cannot settle it twice. A new clock starts after each resolution.
+NAM_crisis_close = {
+	clr_country_flag = NAM_crisis_open
+	if = {
+		limit = { has_active_mission = NAM_incident_response }
+		remove_mission = NAM_incident_response
+	}
+	NAM_crisis_draw = yes
+}
+
+NAM_crisis_response_timeout = {
+	if = {
+		limit = {
+			has_country_flag = NAM_crisis_fund
+			OR = {
+				NAM_crisis_case_1 = yes
+				NAM_crisis_case_2 = yes
+				NAM_crisis_case_3 = yes
+				NAM_crisis_case_4 = yes
+				NAM_crisis_case_5 = yes
+			}
+		}
+		clr_country_flag = NAM_crisis_fund
+		NAM_crisis_close = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_1 = yes }
+		NAM_crisis_default_1 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_2 = yes }
+		NAM_crisis_default_2 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_3 = yes }
+		NAM_crisis_default_3 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_4 = yes }
+		add_stability = -0.02
+		if = {
+			limit = { has_completed_focus = NAM_chancellery_purge }
+			NAM_receive_250 = yes
+		}
+		else = { ADISCORD_economy_receive_100 = yes }
+		add_to_variable = { var = NAM_grp_trade_support value = 5 }
+		NAM_groups_refresh = yes
+		NAM_crisis_close = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_5 = yes }
+		NAM_crisis_default_5 = yes
+	}
+	else = { NAM_crisis_close = yes }
+}
+
+NAM_project_complete_chromium = {
+	if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 400 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 30 compare = equals }
+		}
+		if = {
+			limit = { NAM_chromium_site = yes }
+			NAM_project_close = yes
+			set_state_flag = NAM_chromium_mine_expanded
+			add_resource = { type = chromium amount = 6 }
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else = { NAM_project_release = yes }
+	}
+}
+
+NAM_project_complete_steel = {
+	if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 600 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 40 compare = equals }
+		}
+		if = {
+			limit = { NAM_steel_site = yes }
+			NAM_project_close = yes
+			set_state_flag = NAM_steel_mine_expanded
+			add_resource = { type = steel amount = 12 }
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else = { NAM_project_release = yes }
+	}
+}
+
+NAM_pw_industrial_schedule_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_industrial_schedule_paid }
+		clr_country_flag = NAM_pw_industrial_schedule_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 40
+		set_temp_variable = { var = NAM_treasury_amount value = 450 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_industrial_schedule_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_industrial_schedule_paid
+			NAM_pw_industrial_schedule_ready = yes
+		}
+		clr_country_flag = NAM_pw_industrial_schedule_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_industrial_schedule_idea days = 180 }
+	}
+	else = { NAM_pw_industrial_schedule_refund = yes }
+}
+
+NAM_pw_regional_contracts_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_regional_contracts_paid }
+		clr_country_flag = NAM_pw_regional_contracts_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 400 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_regional_contracts_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_regional_contracts_paid
+			NAM_pw_regional_contracts_ready = yes
+		}
+		clr_country_flag = NAM_pw_regional_contracts_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_regional_contracts_idea days = 180 }
+	}
+	else = { NAM_pw_regional_contracts_refund = yes }
+}
+
+NAM_pw_public_utilities_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_public_utilities_paid }
+		clr_country_flag = NAM_pw_public_utilities_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 40
+		set_temp_variable = { var = NAM_treasury_amount value = 500 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_public_utilities_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_public_utilities_paid
+			NAM_pw_public_utilities_ready = yes
+		}
+		clr_country_flag = NAM_pw_public_utilities_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_public_utilities_idea days = 180 }
+	}
+	else = { NAM_pw_public_utilities_refund = yes }
+}
+
+NAM_pw_municipal_services_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_municipal_services_paid }
+		clr_country_flag = NAM_pw_municipal_services_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 350 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_municipal_services_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_municipal_services_paid
+			NAM_pw_municipal_services_ready = yes
+		}
+		clr_country_flag = NAM_pw_municipal_services_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_municipal_services_idea days = 180 }
+	}
+	else = { NAM_pw_municipal_services_refund = yes }
+}
+
+NAM_pw_export_clearing_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_export_clearing_paid }
+		clr_country_flag = NAM_pw_export_clearing_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 30
+		set_temp_variable = { var = NAM_treasury_amount value = 400 }
+		NAM_add_treasury = yes
+		add_to_variable = { var = NAM_open_fuel_reserve value = 60000 }
+		NAM_open_fuel_release = yes
+	}
+}
+
+NAM_pw_export_clearing_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_export_clearing_paid
+			NAM_pw_export_clearing_ready = yes
+		}
+		clr_country_flag = NAM_pw_export_clearing_paid
+		clr_country_flag = NAM_pw_civil_busy
+		set_temp_variable = { var = NAM_treasury_amount value = 1000 }
+		NAM_add_treasury = yes
+	}
+	else = { NAM_pw_export_clearing_refund = yes }
+}
+
+NAM_pw_import_machine_tools_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_import_machine_tools_paid }
+		clr_country_flag = NAM_pw_import_machine_tools_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 40
+		set_temp_variable = { var = NAM_treasury_amount value = 600 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_import_machine_tools_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_import_machine_tools_paid
+			NAM_pw_import_machine_tools_ready = yes
+		}
+		clr_country_flag = NAM_pw_import_machine_tools_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_import_machine_tools_idea days = 180 }
+	}
+	else = { NAM_pw_import_machine_tools_refund = yes }
+}
+
+NAM_pw_contract_arbitration_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_contract_arbitration_paid }
+		clr_country_flag = NAM_pw_contract_arbitration_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 350 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_contract_arbitration_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_contract_arbitration_paid
+			NAM_pw_contract_arbitration_ready = yes
+		}
+		clr_country_flag = NAM_pw_contract_arbitration_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_timed_idea = { idea = NAM_pw_contract_arbitration_idea days = 180 }
+	}
+	else = { NAM_pw_contract_arbitration_refund = yes }
 }

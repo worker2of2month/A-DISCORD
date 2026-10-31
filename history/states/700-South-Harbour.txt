@@ -19,6 +19,7 @@ state = {
 			infrastructure = 3
 			industrial_complex = 1
 			arms_factory = 2
+			fuel_silo = 2
 			16716 = { naval_base = 1 }
 		}
 	}

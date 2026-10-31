@@ -857,5 +857,145 @@ ideas = {
 				stability_factor = 0.02
 			}
 		}
-	}
+
+		NAM_pw_industrial_schedule_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = 0.15
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		NAM_pw_regional_contracts_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.2
+				ADISCORD_economy_trade_income_factor = 0.15
+			}
+		}
+
+		NAM_pw_public_utilities_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.15
+				consumer_goods_factor = -0.05
+			}
+		}
+
+		NAM_pw_municipal_services_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.1
+				research_speed_factor = 0.1
+				ADISCORD_economy_admin_expense_factor = 0.05
+			}
+		}
+
+		NAM_pw_import_machine_tools_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.25
+				production_factory_max_efficiency_factor = 0.1
+			}
+		}
+
+		NAM_pw_contract_arbitration_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.15
+				ADISCORD_economy_trade_income_factor = 0.15
+			}
+		}
+
+		NAM_adm_civic_audit_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.08
+				ADISCORD_economy_tax_collection_factor = 0.1
+			}
+		}
+
+		NAM_adm_contract_register_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.1
+				stability_factor = 0.05
+			}
+		}
+
+		NAM_prag_convoy_insurance_idea = {
+			name = NAM_navy_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				convoy_escort_efficiency = 0.15
+				repair_speed_factor = 0.10
+			}
+		}
+
+		NAM_adm_balanced_accounts_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.15
+				research_speed_factor = 0.05
+			}
+		}
+
+		NAM_adm_prag_ending_republic_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.1
+				ADISCORD_economy_admin_expense_factor = -0.1
+			}
+		}
+
+		NAM_adm_prag_ending_directorate_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.15
+				industrial_capacity_factory = 0.1
+				stability_factor = -0.05
+			}
+		}
+}
 }

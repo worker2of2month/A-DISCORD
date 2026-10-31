@@ -90,3 +90,10 @@ activate_advisor = ADISCORD_staff_SHL_Bahram_Sadri
 activate_advisor = ADISCORD_staff_SHL_Reza_Mehrabi
 activate_advisor = ADISCORD_staff_SHL_Arman_Kaviani
 activate_advisor = ADISCORD_staff_SHL_Dara_Farzan
+
+# Parliamentary and opposition representatives.
+recruit_character = SHL_party_representative_humanism
+recruit_character = SHL_party_representative_utilitarism
+recruit_character = SHL_party_representative_chauvinism
+recruit_character = SHL_party_representative_technocracy
+recruit_character = SHL_party_representative_etatism

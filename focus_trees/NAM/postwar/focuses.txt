@@ -20,7 +20,7 @@ focus_tree = {
 	focus = {
 		id = NAM_recognition
 		icon = GFX_goal_generic_national_unity
-		x = 20
+		x = 32
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -56,7 +56,7 @@ focus_tree = {
 	focus = {
 		id = NAM_law_after_war
 		icon = GFX_focus_generic_court
-		x = 30
+		x = 52
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -79,8 +79,6 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			add_political_power = 50
-			custom_effect_tooltip = NAM_campaign_second_slot_tt
-			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 		}
 		ai_will_do = {
 			base = 5
@@ -90,7 +88,7 @@ focus_tree = {
 	focus = {
 		id = NAM_veterans_return
 		icon = GFX_focus_generic_soldier_salute
-		x = 29
+		x = 51
 		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
@@ -116,7 +114,7 @@ focus_tree = {
 	focus = {
 		id = NAM_civil_repair
 		icon = GFX_focus_generic_economic_recovery
-		x = 34
+		x = 56
 		y = 1
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -148,7 +146,7 @@ focus_tree = {
 	focus = {
 		id = NAM_civil_dividend
 		icon = GFX_focus_generic_low_cost_housing
-		x = 33
+		x = 55
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -191,7 +189,7 @@ focus_tree = {
 	focus = {
 		id = NAM_armed_peace
 		icon = GFX_focus_generic_military_industry
-		x = 35
+		x = 57
 		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -232,7 +230,7 @@ focus_tree = {
 	focus = {
 		id = NAM_national_university
 		icon = GFX_focus_generic_university_2
-		x = 34
+		x = 56
 		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_RESEARCH }
@@ -257,7 +255,7 @@ focus_tree = {
 	focus = {
 		id = NAM_svetlogorye
 		icon = GFX_focus_generic_phoenix
-		x = 32
+		x = 54
 		y = 4
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -294,7 +292,7 @@ focus_tree = {
 	focus = {
 		id = NAM_svetlogorsk_shipyards
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 33
+		x = 55
 		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -334,16 +332,22 @@ focus_tree = {
 	focus = {
 		id = NAM_service_state
 		icon = GFX_focus_generic_military_dictatorship
-		x = 19
+		x = 18
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_recognition }
-		mutually_exclusive = { focus = NAM_federal_charter }
+		mutually_exclusive = {
+			focus = NAM_federal_charter
+			focus = NAM_pragmatic_compact
+		}
 		available = {
 			has_capitulated = no
 			has_war = no
-			NOT = { has_completed_focus = NAM_districts }
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -384,7 +388,7 @@ focus_tree = {
 	focus = {
 		id = NAM_seal_registry
 		icon = GFX_focus_generic_printing_press
-		x = 17
+		x = 16
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -425,7 +429,7 @@ focus_tree = {
 	focus = {
 		id = NAM_namestnik_garrisons
 		icon = GFX_focus_generic_home_defense
-		x = 16
+		x = 15
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -467,7 +471,7 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_quotas
 		icon = GFX_focus_generic_price_controls
-		x = 18
+		x = 17
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -510,11 +514,12 @@ focus_tree = {
 		id = NAM_ladder_of_seals
 		icon = GFX_goal_generic_political_pressure
 		x = 17
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_namestnik_garrisons }
 		prerequisite = { focus = NAM_oil_quotas }
+		prerequisite = { focus = NAM_unified_standards }
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
@@ -548,7 +553,7 @@ focus_tree = {
 		id = NAM_ladder_ending_iron
 		icon = GFX_goal_generic_propaganda
 		x = 16
-		y = 5
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_ladder_of_seals }
@@ -608,7 +613,7 @@ focus_tree = {
 		id = NAM_ladder_ending_service
 		icon = GFX_focus_generic_improve_the_administration_2
 		x = 18
-		y = 5
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_ladder_of_seals }
@@ -658,7 +663,7 @@ focus_tree = {
 	focus = {
 		id = NAM_south_black_basin
 		icon = GFX_goal_generic_more_territorial_claims
-		x = 14
+		x = 13
 		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
@@ -694,7 +699,7 @@ focus_tree = {
 	focus = {
 		id = NAM_south_desert_offices
 		icon = GFX_focus_generic_subjugation
-		x = 14
+		x = 13
 		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
@@ -732,7 +737,7 @@ focus_tree = {
 	focus = {
 		id = NAM_south_seal_over_furnaces
 		icon = GFX_goal_generic_demand_territory
-		x = 14
+		x = 13
 		y = 8
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
@@ -1088,20 +1093,28 @@ focus_tree = {
 	focus = {
 		id = NAM_federal_charter
 		icon = GFX_focus_generic_universal_suffrage
-		x = 21
+		x = 41
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_recognition }
-		mutually_exclusive = { focus = NAM_service_state }
+		mutually_exclusive = {
+			focus = NAM_service_state
+			focus = NAM_pragmatic_compact
+		}
 		available = {
 			has_capitulated = no
 			has_war = no
-			NOT = { has_completed_focus = NAM_vertical }
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_campaign_charter_of_districts
+			custom_effect_tooltip = NAM_campaign_charter_of_districts_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -1137,7 +1150,7 @@ focus_tree = {
 	focus = {
 		id = NAM_district_council
 		icon = GFX_focus_generic_vote
-		x = 23
+		x = 39
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1177,7 +1190,7 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_fund
 		icon = GFX_focus_generic_stockpile_fuel
-		x = 22
+		x = 38
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -1224,7 +1237,7 @@ focus_tree = {
 	focus = {
 		id = NAM_district_militia
 		icon = GFX_goal_generic_small_arms
-		x = 24
+		x = 40
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -1265,12 +1278,13 @@ focus_tree = {
 	focus = {
 		id = NAM_common_fuel_market
 		icon = GFX_focus_generic_energy
-		x = 23
-		y = 4
+		x = 39
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_oil_fund }
 		prerequisite = { focus = NAM_district_militia }
+		prerequisite = { focus = NAM_civic_audit }
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
@@ -1302,8 +1316,8 @@ focus_tree = {
 	focus = {
 		id = NAM_charter_ending_federation
 		icon = GFX_focus_generic_the_council_of_europe
-		x = 22
-		y = 5
+		x = 38
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_common_fuel_market }
@@ -1349,8 +1363,8 @@ focus_tree = {
 	focus = {
 		id = NAM_charter_ending_oil_union
 		icon = GFX_focus_generic_industrialists
-		x = 24
-		y = 5
+		x = 40
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_common_fuel_market }
@@ -1400,7 +1414,7 @@ focus_tree = {
 	focus = {
 		id = NAM_south_oil_for_water
 		icon = GFX_focus_generic_concessions
-		x = 26
+		x = 35
 		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
@@ -1441,7 +1455,7 @@ focus_tree = {
 	focus = {
 		id = NAM_south_fenn_guarantee
 		icon = GFX_focus_generic_treaty
-		x = 26
+		x = 35
 		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
@@ -1477,8 +1491,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_oil_charter
 		icon = GFX_goal_generic_forceful_treaty
-		x = 26
-		y = 7
+		x = 35
+		y = 8
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
@@ -1517,8 +1531,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_war_council
 		icon = GFX_goal_generic_army_doctrines
-		x = 43
-		y = 0
+		x = 53
+		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1545,8 +1559,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_allied_fuel_office
 		icon = GFX_focus_generic_supply_line
-		x = 40
-		y = 1
+		x = 50
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1573,8 +1587,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_oil_tap
 		icon = GFX_focus_ADISCORD_sabotage
-		x = 44
-		y = 1
+		x = 54
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1600,8 +1614,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_field_fortresses
 		icon = GFX_focus_generic_mountain_fortification
-		x = 46
-		y = 1
+		x = 56
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1642,8 +1656,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_convoy_hunters
 		icon = GFX_focus_generic_trade_interdiction
-		x = 42
-		y = 1
+		x = 52
+		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1675,8 +1689,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_counteroffensive
 		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 45
-		y = 2
+		x = 55
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1707,8 +1721,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_heritage
 		icon = GFX_focus_generic_the_giant_wakes
-		x = 43
-		y = 3
+		x = 53
+		y = 11
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_NAM }
@@ -1752,8 +1766,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_crisis_watch
 		icon = GFX_focus_generic_radio_communication
-		x = 50
-		y = 0
+		x = 62
+		y = 8
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		available = {
@@ -1774,8 +1788,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_fuel_for_coalition
 		icon = GFX_focus_generic_stockpile_fuel
-		x = 49
-		y = 1
+		x = 61
+		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rus_crisis_watch }
@@ -1809,8 +1823,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_demand_share
 		icon = GFX_focus_generic_price_controls
-		x = 51
-		y = 1
+		x = 63
+		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rus_crisis_watch }
@@ -1840,8 +1854,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_expedition_staff
 		icon = GFX_focus_generic_military_mission
-		x = 50
-		y = 2
+		x = 62
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -1865,5 +1879,779 @@ focus_tree = {
 		ai_will_do = {
 			base = 10
 		}
+	}
+
+	# The hydroelectric works are an optional reconstruction project on either civil course.
+	focus = {
+		id = NAM_svetlogorsk_dam
+		icon = GFX_focus_generic_hydroelectric_energy
+		x = 59
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_dividend
+			focus = NAM_armed_peace
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_svetlogorsk_dam_authorised_tt
+				NAM_pw_operable = yes
+				has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+			}
+			owns_state = 688
+			controls_state = 688
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_project_hydroelectric
+			custom_effect_tooltip = NAM_project_hydroelectric_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_state_plan
+		icon = GFX_focus_generic_military_industry
+		x = 20
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = { focus = NAM_regional_trusts }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_industrial_schedule
+			custom_effect_tooltip = NAM_pw_industrial_schedule_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_regional_trusts
+		icon = GFX_goal_generic_production2
+		x = 22
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = { focus = NAM_state_plan }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_regional_contracts
+			custom_effect_tooltip = NAM_pw_regional_contracts_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_unified_standards
+		icon = GFX_goal_generic_scientific_exchange
+		x = 21
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_state_plan
+			focus = NAM_regional_trusts
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_unified_standards_bonus
+				bonus = 0.75
+				uses = 2
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_state_logistics_grid
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 23
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_unified_standards
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			owns_state = 67
+			controls_state = 67
+			owns_state = 688
+			controls_state = 688
+			owns_state = 700
+			controls_state = 700
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			67 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			688 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			700 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_state_project_bureaus
+		icon = GFX_goal_generic_scientific_exchange
+		x = 22
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_unified_standards
+		}
+		prerequisite = {
+			focus = NAM_state_logistics_grid
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_research_slot = 1
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_public_utilities
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 43
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_federal_charter
+		}
+		mutually_exclusive = { focus = NAM_municipal_services }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_public_utilities
+			custom_effect_tooltip = NAM_pw_public_utilities_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_municipal_services
+		icon = GFX_focus_generic_vote
+		x = 45
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_federal_charter
+		}
+		mutually_exclusive = { focus = NAM_public_utilities }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_municipal_services
+			custom_effect_tooltip = NAM_pw_municipal_services_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_civic_audit
+		icon = GFX_focus_generic_printing_press
+		x = 44
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_public_utilities
+			focus = NAM_municipal_services
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_civic_audit_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.08 }
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.1 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_district_workshops
+		icon = GFX_goal_generic_production2
+		x = 42
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_district_council
+		}
+		prerequisite = {
+			focus = NAM_civic_audit
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			owns_state = 689
+			controls_state = 689
+			owns_state = 690
+			controls_state = 690
+			689 = { free_building_slots = { building = industrial_complex size = 1 include_locked = yes } }
+			690 = { free_building_slots = { building = industrial_complex size = 1 include_locked = yes } }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			689 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+			}
+			690 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_open_libraries
+		icon = GFX_goal_generic_scientific_exchange
+		x = 46
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civic_audit
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_open_libraries_bonus
+				bonus = 1.0
+				uses = 2
+				category = electronics
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pragmatic_compact
+		icon = GFX_focus_generic_treaty
+		x = 29
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_recognition
+		}
+		mutually_exclusive = {
+			focus = NAM_service_state
+			focus = NAM_federal_charter
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_commercial_courts
+		icon = GFX_focus_generic_court
+		x = 27
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pragmatic_compact
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_contract_arbitration
+			custom_effect_tooltip = NAM_pw_contract_arbitration_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_export_clearing
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 25
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_commercial_courts
+		}
+		mutually_exclusive = { focus = NAM_machine_tool_contracts }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_export_clearing
+			custom_effect_tooltip = NAM_pw_export_clearing_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_machine_tool_contracts
+		icon = GFX_goal_generic_production2
+		x = 29
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_commercial_courts
+		}
+		mutually_exclusive = { focus = NAM_export_clearing }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_import_machine_tools
+			custom_effect_tooltip = NAM_pw_import_machine_tools_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_contract_register
+		icon = GFX_focus_generic_printing_press
+		x = 27
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_export_clearing
+			focus = NAM_machine_tool_contracts
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_contract_register_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.1 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_port_agreement
+		icon = GFX_goal_generic_navy_cruiser
+		x = 33
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pragmatic_compact
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			owns_state = 700
+			controls_state = 700
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 40
+				producer = NAM
+			}
+			700 = { add_building_construction = { type = naval_base level = 1 instant_build = yes province = 16716 } }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_warehouse_receipts
+		icon = GFX_goal_generic_oil_refinery
+		x = 33
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_port_agreement
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			owns_state = 700
+			controls_state = 700
+			700 = { free_building_slots = { building = fuel_silo size = 2 include_locked = no } }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			700 = { add_building_construction = { type = fuel_silo level = 2 instant_build = yes } }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_insured_caravans
+		icon = GFX_goal_generic_navy_cruiser
+		x = 33
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_port_agreement
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = { remove_idea = NAM_navy_dummy_idea add_idea = NAM_prag_convoy_insurance_idea }
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_convoy_escort value = 0.15 }
+				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
+				NAM_refresh_navy = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_commercial_reserve
+		icon = GFX_goal_generic_consumer_goods
+		x = 29
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_contract_register
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_commercial_reserve_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_balanced_accounts
+		icon = GFX_focus_generic_treaty
+		x = 29
+		y = 7
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_commercial_reserve
+		}
+		prerequisite = {
+			focus = NAM_insured_caravans
+		}
+		prerequisite = { focus = NAM_prag_partner_supply }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_balanced_accounts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.15 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_ending_republic
+		icon = GFX_focus_generic_treaty
+		x = 28
+		y = 8
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_balanced_accounts
+		}
+		mutually_exclusive = { focus = NAM_prag_ending_directorate }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_prag_ending_republic_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.1 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.1 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_pragmatic_ending_tt
+			hidden_effect = {
+				set_country_flag = NAM_ladder_settled
+				NAM_rom_take_pragmatism = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_ending_directorate
+		icon = GFX_focus_generic_treaty
+		x = 30
+		y = 8
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_balanced_accounts
+		}
+		mutually_exclusive = { focus = NAM_prag_ending_republic }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_prag_ending_directorate_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.15 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.1 }
+				add_to_variable = { var = NAM_adm_stability_factor value = -0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_pragmatic_ending_tt
+			hidden_effect = {
+				set_country_flag = NAM_ladder_settled
+				NAM_rom_take_pragmatism = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_settlement_agreements
+		icon = GFX_focus_generic_treaty
+		x = 23
+		y = 5
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_contract_register
+		}
+		bypass = {
+			EFL = { ADISCORD_south_campaign_target_settled = yes }
+			AZH = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_prag_settlement_agreements_tt
+			hidden_effect = {
+				EFL = { ADISCORD_south_offer_economic_contract = yes }
+				AZH = { ADISCORD_south_offer_economic_contract = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_partner_supply
+		icon = GFX_focus_generic_treaty
+		x = 23
+		y = 6
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_settlement_agreements
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 15
+				producer = NAM
+			}
+			if = {
+				limit = { NAM_pw_charter_ally_available = yes }
+				unlock_decision_tooltip = NAM_charter_fuel_aid
+				custom_effect_tooltip = NAM_charter_fuel_aid_unlock_tt
+			}
+			else = { custom_effect_tooltip = NAM_charter_fuel_aid_future_tt }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_south_guarantees
+		icon = GFX_focus_generic_treaty
+		x = 23
+		y = 9
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_svetlogorye
+		}
+		prerequisite = {
+			focus = NAM_prag_partner_supply
+		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
+		}
+		prerequisite = { focus = NAM_balanced_accounts }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_ready_tt
+				ADISCORD_south_final_focus_available = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_nam_contract_logistics }
+			custom_effect_tooltip = NAM_prag_south_guarantees_tt
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
+		}
+		ai_will_do = { base = 5 }
 	}
 }

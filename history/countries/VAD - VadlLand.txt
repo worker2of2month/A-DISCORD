@@ -56,3 +56,12 @@ activate_advisor = ADISCORD_staff_VAD_Aleksei_Uvarov
 activate_advisor = ADISCORD_staff_VAD_Andrei_Frolov
 activate_advisor = ADISCORD_staff_VAD_Boris_Chernov
 activate_advisor = ADISCORD_staff_VAD_Viktor_Vedenin
+
+# Parliamentary and opposition representatives.
+recruit_character = VAD_party_representative_humanism
+recruit_character = VAD_party_representative_utilitarism
+recruit_character = VAD_party_representative_chauvinism
+recruit_character = VAD_party_representative_anarchism
+recruit_character = VAD_party_representative_technocracy
+recruit_character = VAD_party_representative_etatism
+recruit_character = VAD_party_representative_hedonism

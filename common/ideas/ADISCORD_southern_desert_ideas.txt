@@ -830,6 +830,16 @@ ideas = {
 			}
 		}
 
+		SHL_metal_supply_preview = {
+			name = SHL_metal_supply
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.15
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
 		SHL_pow_metal_market_idea = {
 			name = SHL_conclave_power_dynamic
 			picture = GFX_idea_generic_production_bonus

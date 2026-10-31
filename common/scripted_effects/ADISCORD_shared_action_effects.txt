@@ -72,3 +72,22 @@ ADISCORD_campaign_slot_consume = {
 ADISCORD_campaign_slot_release = {
 	add_to_variable = { var = ADISCORD_available_campaign_slots value = 1 }
 }
+
+# COUNTRY scope. An elected representative must retain the ruler's identity.
+ADISCORD_rename_party_representative = {
+	if = {
+		limit = {
+			has_character = $CHARACTER$
+			NOT = {
+				has_country_leader = {
+					character = $CHARACTER$
+					ruling_only = yes
+				}
+			}
+		}
+		set_character_name = {
+			character = $CHARACTER$
+			name = $NAME$
+		}
+	}
+}

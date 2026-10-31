@@ -213,3 +213,64 @@
 цель. Фокусы `SHL_c_regular_elections`, `SHL_k_arms_for_shifts`,
 `SHL_d_state_bank`, `SHL_d_cannon_works`, `SHL_d_truck_works` получили
 усиленные награды по редакторскому порогу `validate_focus_rewards`.
+
+## Этап 4. Награды фокусов: действие вместо дельты
+
+Образец - ранние политические фокусы TFR (USA, 5-дневные): почти каждый
+открывает решение, запускает или сдвигает миссию, даёт временный дух или
+событие с выбором; дельта агрегата - только добавка. В SHL 41 фокус давал
+лишь дельту, сдвиг BOP, скидку или подсказку. Контракт ниже закрывает их.
+
+### Контракт решений (автор скрипта)
+
+Категория `SHL_measures` "Меры Конклава" (видна после ратификации), иконка
+как у `SHL_quarters_and_borders`. Все цены через `custom_cost_text`/`cost = 0`
+либо нативный PP; кулдауны `days_re_enable`.
+
+| ID | Открывает фокус | Цена / срок | Результат |
+| --- | --- | --- | --- |
+| `SHL_convene_conclave` | `SHL_house_compromise` | 40 PP, раз в 120 дн. | +1 пакет каждой домовой работающей печи (9 фиксированных проверок), давление -5 |
+| `SHL_quarter_charter` | `SHL_city_charters` | цель печь, 60 казны, 21 дн., не больше трёх (`SHL_charters_active`) | флаг области `SHL_quarter_charter`; в `SHL_update_tensions` за каждую хартию работающей печи +1 опоры городов и -1 недовольства за цикл; утрата печи снимает хартию и счётчик |
+| `SHL_dispatch_order` | `SHL_common_dispatch` | цель печь-донор (запас >= 2), 0, 7 дн. | пакет переносится печи с наименьшим запасом (`SHL_pick_worst_site` по запасу) |
+| `SHL_arbitration_act` | `SHL_shift_arbitration` | 15 PP, раз в 90 дн. | недовольство -6 |
+| `SHL_house_audit` | `SHL_counting_chamber` | цель печь, 30 PP, 21 дн. | износ -10, недостачи обнулены, давление +5 |
+| `SHL_reserve_price` | `SHL_common_fund` | переменная 60 -> 45 | `SHL_buy_reserve` читает переменную |
+| `SHL_desert_embassy` | `SHL_southern_horizon` | цели KDR RHM SDR MZR KYZ GLP, 50 казны, 14 дн., один раз на цель | флаг `SHL_embassy` на цели, мнение +20 (`ADISCORD_SHL_embassy`); `ADISCORD_south.40.a` ai_chance +15 при флаге и FROM = SHL |
+| `SHL_measure_crest_patronage` | `SHL_h_council_of_ten` | 50 казны, 60 дн. | BOP -0.05, давление -5 |
+| `SHL_measure_golden_fair` | `SHL_h_cartel_price` | 25 PP, 60 дн. | +30 казны за каждую работающую экспортную печь |
+| `SHL_measure_quarter_assembly` | `SHL_c_council_delegates` / `SHL_c_shift_assembly` | 25 PP, 60 дн. | BOP +0.05, опора +3 |
+| `SHL_measure_open_books` | `SHL_c_compact_assembly` | 40 казны, 60 дн. | недовольство -5, стабильность +1% |
+| `SHL_measure_directorate_decree` | `SHL_d_nur_director` | 30 PP, 60 дн. | давление -5, недовольство +3, +1 пакет государственной печи с наименьшим запасом |
+| `SHL_measure_war_bonds` | `SHL_d_iron_crown` | 60 дн. | +200 казны, долг +300 |
+| `SHL_measure_crest_court` | `SHL_r_tolls` | 20 PP, 60 дн. | BOP -0.05, недовольство +4 |
+| `SHL_measure_fief_grant` | `SHL_r_hereditary_seats_restored` | 60 казны, 60 дн. | давление -10, BOP -0.03 |
+| `SHL_measure_common_assembly` | `SHL_k_delegates` / `SHL_k_standing_council` | 20 PP, 60 дн. | BOP +0.05, недовольство -4 |
+| `SHL_measure_shift_reserve` | `SHL_k_no_more_crests` | 30 казны, 60 дн. | резерв +2 пакета |
+| `SHL_war_orders_all` | `SHL_iron_shahrabad` | 40 PP, 28 дн. | все работающие печи на один цикл получают получателя "арсенал" (флаг `SHL_quota_site` на 9 областях) |
+| `SHL_integrate_satellite_decision` | `SHL_south_crown_of_the_south` | цель сателлит SHL; цена по курсу (дома 300 казны, города 0 и согласие, дирекция 100 PP, регентство 200 казны, коммуна 50 PP) | `SHL_integrate_satellite` |
+
+Эффекты для авторов деревьев: `SHL_repair_worst_site` (-30 износа печи с
+наибольшим износом), `SHL_stock_city_sites` (+1 пакет каждой городской печи),
+`SHL_prog_first_batch` (первая партия по `SHL_prog_ending`: дома - аванс 90
+казны, города a - +1 инфраструктура 699, b - 750 винтовок, дирекция - 750
+винтовок и 5 комплектов, регентство - 150 казны, коммуна - ремонт худшей печи).
+`SHL_country_operable`: проверка `SHL_furnaces_initialized` под `hidden_trigger`.
+
+### Правка фокусов (авторы деревьев)
+
+- Главное дерево: семь фокусов из таблицы получают `unlock_decision_tooltip`
+  соответствующего решения и одну строку результата; дельта агрегата
+  остаётся второй строкой.
+- `*_prog_ending_a/b`: вместо превью агрегата - существующая подсказка
+  условий поставок `SHL_delivery_<курс>_<a|b>_tt` и `SHL_prog_first_batch`
+  с нативным выводом материальной части.
+- Политические фокусы курсов из таблицы открывают свои меры; сдвиг BOP
+  сохраняется.
+- Скидочные фокусы получают немедленный результат той же программы:
+  `SHL_c_civic_orders_plus` +1 инфраструктура 699, `SHL_d_arsenal_orders_plus`
+  750 винтовок + 5 комплектов, `SHL_r_pledge_plus` +150 казны,
+  `SHL_h_export_houses` +90 казны, `SHL_k_cauldron_plus` ремонт худшей печи,
+  `SHL_h_cartel_price` +60 казны, `SHL_k_strikes_on_fields` немедленный
+  `ADISCORD_south_raid_north_fuel`.
+- `SHL_shift_councils` (корень коммуны): `SHL_stock_city_sites`;
+  `SHL_iron_shahrabad`: `SHL_war_orders_all` + `SHL_raise_paid_levies_2`.

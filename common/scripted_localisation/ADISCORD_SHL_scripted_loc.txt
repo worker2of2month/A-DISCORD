@@ -268,22 +268,103 @@ defined_text = {
 defined_text = {
 	name = SHLGetPrice60
 	text = {
-		trigger = {
-			has_country_flag = SHL_supplier_premium
-			check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals }
-		}
-		localization_key = SHL_price_70
-	}
-	text = {
-		trigger = { has_country_flag = SHL_supplier_premium }
-		localization_key = SHL_price_70_red
-	}
-	text = {
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
 		localization_key = SHL_price_60
 	}
 	text = {
 		localization_key = SHL_price_60_red
+	}
+}
+
+# Reserve quote: SHL_reserve_price (60, 45 after the common fund) or the
+# premium quote while the supplier surcharge of ADISCORD_SHL.8 is pending.
+defined_text = {
+	name = SHLGetReservePrice
+	text = {
+		trigger = {
+			has_country_flag = SHL_supplier_premium
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price_premium compare = greater_than_or_equals }
+		}
+		localization_key = SHL_price_reserve_premium
+	}
+	text = {
+		trigger = { has_country_flag = SHL_supplier_premium }
+		localization_key = SHL_price_reserve_premium_red
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_reserve
+	}
+	text = {
+		localization_key = SHL_price_reserve_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice30
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals } }
+		localization_key = SHL_price_30
+	}
+	text = {
+		localization_key = SHL_price_30_red
+	}
+}
+
+# Integration price by ratified course: houses 300, directorate 100 PP,
+# regency 200, commune 50 PP; the cities need only the satellite's consent.
+defined_text = {
+	name = SHLGetIntegrationPrice
+	text = {
+		trigger = {
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		localization_key = SHL_price_integration_houses
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		localization_key = SHL_price_integration_houses_red
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		localization_key = SHL_price_integration_cities
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			NOT = { has_political_power < 100 }
+		}
+		localization_key = SHL_price_integration_directorate
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		localization_key = SHL_price_integration_directorate_red
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		localization_key = SHL_price_integration_regency
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		localization_key = SHL_price_integration_regency_red
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			NOT = { has_political_power < 50 }
+		}
+		localization_key = SHL_price_integration_commune
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_price_integration_commune_red
+	}
+	text = {
+		localization_key = SHL_price_integration_cities
 	}
 }
 

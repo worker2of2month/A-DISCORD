@@ -47,6 +47,7 @@ on_actions = {
 	}
 	on_monthly_WKR = {
 		effect = {
+			ADISCORD_vorkerland_release_evacuated_fuel = yes
 			if = {
 				limit = {
 					ADISCORD_vorkerland_is_live_claimant = yes

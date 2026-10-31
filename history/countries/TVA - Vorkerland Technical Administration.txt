@@ -1,5 +1,14 @@
 set_politics = { ruling_party = technocracy elections_allowed = no }
-set_popularities = { etatism = 0 chauvinism = 0 humanism = 0 pragmatism = 0 technocracy = 100 }
+set_popularities = {
+	technocracy = 70
+	pragmatism = 15
+	etatism = 8
+	humanism = 5
+	chauvinism = 2
+	utilitarism = 0
+	anarchism = 0
+	hedonism = 0
+}
 recruit_character = TVA_Dorian_Worx
 set_research_slots = 2
 add_ideas = { limited_conscription }
@@ -20,3 +29,12 @@ activate_advisor = ADISCORD_staff_TVA_Leon_Kessler
 activate_advisor = ADISCORD_staff_TVA_Bruno_Adler
 activate_advisor = ADISCORD_staff_TVA_Kurt_Heinemann
 activate_advisor = ADISCORD_staff_TVA_Felix_Wendt
+
+# Parliamentary and opposition representatives.
+recruit_character = TVA_party_representative_humanism
+recruit_character = TVA_party_representative_utilitarism
+recruit_character = TVA_party_representative_chauvinism
+recruit_character = TVA_party_representative_pragmatism
+recruit_character = TVA_party_representative_anarchism
+recruit_character = TVA_party_representative_etatism
+recruit_character = TVA_party_representative_hedonism

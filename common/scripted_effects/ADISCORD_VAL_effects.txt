@@ -5241,6 +5241,7 @@ VAL_frontier_settle_defeat = {
 		clear_temp_array = VAL_frontier_returned_cores
 		clear_temp_array = VAL_frontier_core_donors
 	}
+	VAL_party_representatives_defeat = yes
 }
 
 # COUNTRY VAL. All enrolled cannibal states receive their own declaration in the
@@ -6068,6 +6069,11 @@ VAL_enter_stelander_defeat = {
 			VAL_frontier_close = yes
 		}
 		VAL_clear_foreign_operation = yes
+		# A council that seized power before this defeat already announced Solgalov's fall.
+		if = {
+			limit = { has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes } }
+			news_event = { id = val_council.29 hours = 1 }
+		}
 		if = {
 			limit = { has_character = VAL_Valera_Solgalov }
 			retire_character = VAL_Valera_Solgalov
@@ -8712,6 +8718,7 @@ VAL_adopt_commonwealth = {
 		VAL_sync_solgalov_portrait = yes
 		VAL_grant_contract_warlord = yes
 	}
+	VAL_party_representatives_commonwealth = yes
 }
 
 # Country VAL. Initialize once; loading a save must preserve earned progress.
@@ -11686,6 +11693,9 @@ VAL_council_apply_identity = {
 		}
 	}
 	VAL_council_tint_administrations = yes
+	VAL_party_representatives_kefreyt_state = yes
+	VAL_party_representatives_valden_republic = yes
+	VAL_party_representatives_united_military_districts = yes
 }
 
 VAL_council_offer_identity = {
@@ -12850,5 +12860,161 @@ VAL_reform_political_payroll = {
 		}
 		set_country_flag = VAL_political_payroll_reformed
 		VAL_reform_mercenary_payroll = yes
+	}
+}
+
+# Route-specific names belong only to non-story party representatives.
+VAL_party_representatives_kefreyt_state = {
+	if = {
+		limit = {
+			tag = VAL
+			has_cosmetic_tag = VAL_kefreyt_state
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_humanism
+				NAME = VAL_party_representatives_kefreyt_state_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_utilitarism
+				NAME = VAL_party_representatives_kefreyt_state_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_chauvinism
+				NAME = VAL_party_representatives_kefreyt_state_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_anarchism
+				NAME = VAL_party_representatives_kefreyt_state_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_technocracy
+				NAME = VAL_party_representatives_kefreyt_state_technocracy
+			}
+		}
+	}
+}
+
+VAL_party_representatives_valden_republic = {
+	if = {
+		limit = {
+			tag = VAL
+			has_cosmetic_tag = VAL_valden_republic
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_humanism
+				NAME = VAL_party_representatives_valden_republic_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_utilitarism
+				NAME = VAL_party_representatives_valden_republic_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_chauvinism
+				NAME = VAL_party_representatives_valden_republic_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_anarchism
+				NAME = VAL_party_representatives_valden_republic_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_technocracy
+				NAME = VAL_party_representatives_valden_republic_technocracy
+			}
+		}
+	}
+}
+
+VAL_party_representatives_united_military_districts = {
+	if = {
+		limit = {
+			tag = VAL
+			has_cosmetic_tag = VAL_united_military_districts
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_humanism
+				NAME = VAL_party_representatives_united_military_districts_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_utilitarism
+				NAME = VAL_party_representatives_united_military_districts_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_chauvinism
+				NAME = VAL_party_representatives_united_military_districts_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_anarchism
+				NAME = VAL_party_representatives_united_military_districts_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_technocracy
+				NAME = VAL_party_representatives_united_military_districts_technocracy
+			}
+		}
+	}
+}
+
+VAL_party_representatives_commonwealth = {
+	if = {
+		limit = {
+			tag = VAL
+			has_cosmetic_tag = VAL_commonwealth
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_humanism
+				NAME = VAL_party_representatives_commonwealth_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_utilitarism
+				NAME = VAL_party_representatives_commonwealth_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_chauvinism
+				NAME = VAL_party_representatives_commonwealth_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_anarchism
+				NAME = VAL_party_representatives_commonwealth_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_technocracy
+				NAME = VAL_party_representatives_commonwealth_technocracy
+			}
+		}
+	}
+}
+
+VAL_party_representatives_defeat = {
+	if = {
+		limit = {
+			tag = VAL
+			has_cosmetic_tag = VAL_dopotroydsk
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_humanism
+				NAME = VAL_party_representatives_defeat_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_utilitarism
+				NAME = VAL_party_representatives_defeat_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_chauvinism
+				NAME = VAL_party_representatives_defeat_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_anarchism
+				NAME = VAL_party_representatives_defeat_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAL_party_representative_technocracy
+				NAME = VAL_party_representatives_defeat_technocracy
+			}
+		}
 	}
 }

@@ -1431,10 +1431,13 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.130.a
 		trigger = {
+			has_country_flag = SHL_metal_offer_pending
+			NOT = { has_country_flag = SHL_metal_client }
 			NOT = { has_war_with = SHL }
 			SHL = { SHL_country_operable = yes }
 		}
 		custom_effect_tooltip = SHL_metal_accept_tt
+		effect_tooltip = { add_ideas = SHL_metal_supply_preview }
 		hidden_effect = { SHL_metal_sign_contract = yes }
 		ai_chance = {
 			base = 40
@@ -1452,6 +1455,26 @@ country_event = {
 			}
 		}
 	}
+	option = {
+		name = ADISCORD_SHL.130.c
+		trigger = {
+			has_country_flag = SHL_metal_offer_pending
+			NOT = { has_country_flag = SHL_metal_client }
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		custom_effect_tooltip = SHL_metal_accept_two_years_tt
+		effect_tooltip = { add_ideas = SHL_metal_supply_preview }
+		hidden_effect = { SHL_metal_sign_contract_two_years = yes }
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 0
+				has_war_with = SHL
+			}
+		}
+	}
+
 }
 
 country_event = {

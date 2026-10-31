@@ -23,8 +23,8 @@
         "english": "Ingvar Solm"
       },
       "party": {
-        "russian": "Совет ледовых гаваней",
-        "english": "Ice Harbour Council"
+        "russian": "£GFX_generic_pragmatism_regional_establishment_party_texticon Совет ледовых гаваней",
+        "english": "£GFX_generic_pragmatism_regional_establishment_party_texticon Ice Harbour Council"
       },
       "description": {
         "russian": "Полярные гавани живут рыболовством, метеонаблюдением и проводкой судов среди льдов. Ингвар Сольм связывает островные советы общими складами и спасательными станциями.",
@@ -89,8 +89,8 @@
         "english": "Edvard Maren"
       },
       "party": {
-        "russian": "Союз северных муниципалитетов",
-        "english": "Northern Municipal Union"
+        "russian": "£GFX_generic_humanism_civic_party_texticon Союз северных муниципалитетов",
+        "english": "£GFX_generic_humanism_civic_party_texticon Northern Municipal Union"
       },
       "description": {
         "russian": "Морвен контролирует северный выход из Равена к океану. Эдвард Марен опирается на портовые муниципалитеты, выборные советы и договор о совместном содержании маяков.",
@@ -155,8 +155,8 @@
         "english": "Arsen Rovel"
       },
       "party": {
-        "russian": "Федеральный союз округов",
-        "english": "Federal District Union"
+        "russian": "£GFX_generic_etatism_state_party_party_texticon Федеральный союз округов",
+        "english": "£GFX_generic_etatism_state_party_party_texticon Federal District Union"
       },
       "description": {
         "russian": "Равен объединяет широкие внутренние равнины восточного материка. Арсен Ровель удерживает округа общим зерновым резервом, железнодорожной администрацией и федеральными гарнизонами.",
@@ -225,8 +225,8 @@
         "english": "Radan Falk"
       },
       "party": {
-        "russian": "Береговая директория",
-        "english": "Coastal Directorate"
+        "russian": "£GFX_generic_etatism_state_party_party_texticon Береговая директория",
+        "english": "£GFX_generic_etatism_state_party_party_texticon Coastal Directorate"
       },
       "description": {
         "russian": "Директория занимает южный полуостров Равена и близлежащие острова. Радан Фальк управляет портами как единой службой снабжения, обменивая порядок на обязательную береговую службу.",
@@ -296,8 +296,8 @@
         "english": "Miren Tal"
       },
       "party": {
-        "russian": "Союз водных округов",
-        "english": "Water District Union"
+        "russian": "£GFX_generic_utilitarism_planning_party_texticon Союз водных округов",
+        "english": "£GFX_generic_utilitarism_planning_party_texticon Water District Union"
       },
       "description": {
         "russian": "Фалорский союз вырос вокруг земледельческих долин юго-востока. Мирен Таль распределяет воду и материалы через советы округов; право на власть здесь подтверждают работающие каналы и дороги.",
@@ -363,8 +363,8 @@
         "english": "Leon Perr"
       },
       "party": {
-        "russian": "Палата четырёх портов",
-        "english": "Chamber of Four Ports"
+        "russian": "£GFX_generic_hedonism_aristocratic_houses_party_texticon Палата четырёх портов",
+        "english": "£GFX_generic_hedonism_aristocratic_houses_party_texticon Chamber of Four Ports"
       },
       "description": {
         "russian": "Четыре островных порта Перрина живут перевалкой грузов между центральными и восточными берегами. Леон Перр сохраняет их союз едиными сборами и независимым морским арбитражем.",
@@ -431,8 +431,8 @@
         "english": "Sayr Ulv"
       },
       "party": {
-        "russian": "Совет верфей",
-        "english": "Shipyard Council"
+        "russian": "£GFX_generic_technocracy_scientific_collegium_party_texticon Совет верфей",
+        "english": "£GFX_generic_technocracy_scientific_collegium_party_texticon Shipyard Council"
       },
       "description": {
         "russian": "Ульвенская лига связывает цепь островных мастерских у южных берегов центрального материка. Сайр Ульв поддерживает общий стандарт ремонта судов и обучение инженеров.",
@@ -498,8 +498,8 @@
         "english": "Taren Lur"
       },
       "party": {
-        "russian": "Собрание капитанов",
-        "english": "Captains Assembly"
+        "russian": "£GFX_generic_pragmatism_administrative_coalition_party_texticon Собрание капитанов",
+        "english": "£GFX_generic_pragmatism_administrative_coalition_party_texticon Captains Assembly"
       },
       "description": {
         "russian": "Луренские острова охраняют морские пути между Ульвеном, Фалором и Шарденом. Тарен Лур избирается капитанами и общинами для содержания общих портов и береговой стражи.",
@@ -570,8 +570,8 @@
         "english": "Amir Shar"
       },
       "party": {
-        "russian": "Союз островных общин",
-        "english": "Island Communities Union"
+        "russian": "£GFX_generic_humanism_solidarity_party_texticon Союз островных общин",
+        "english": "£GFX_generic_humanism_solidarity_party_texticon Island Communities Union"
       },
       "description": {
         "russian": "Шарденская конфедерация объединяет большой южный остров и западные прибрежные общины. Амир Шар защищает самоуправление островов, собирая общие средства только на оборону, медицину и морское сообщение.",
@@ -635,8 +635,8 @@
         "english": "Oskar Even"
       },
       "party": {
-        "russian": "Союз южных гаваней",
-        "english": "Southern Harbour Union"
+        "russian": "£GFX_generic_pragmatism_regional_establishment_party_texticon Союз южных гаваней",
+        "english": "£GFX_generic_pragmatism_regional_establishment_party_texticon Southern Harbour Union"
       },
       "description": {
         "russian": "Эвенор занимает длинный остров на дальнем юго-востоке. Оскар Эвен опирается на рыбацкие кооперативы и ремонтные гавани, поддерживая морское сообщение с Фалором даже в сезон штормов.",
@@ -701,8 +701,8 @@
         "english": "Noren Olr"
       },
       "party": {
-        "russian": "Вольные островные советы",
-        "english": "Free Island Councils"
+        "russian": "£GFX_generic_anarchism_frontier_movement_party_texticon Вольные островные советы",
+        "english": "£GFX_generic_anarchism_frontier_movement_party_texticon Free Island Councils"
       },
       "description": {
         "russian": "Ольринские острова лежат у восточных морских подступов к Равену. Норен Ольр представляет союз самостоятельных общин, совместно содержащих причалы, склады и добровольную береговую охрану.",

@@ -45,7 +45,9 @@ def apc_states(vehicle=False):
         ("attack", "attack"), ("defend", "attack"), ("support_attack", "attack"),
     ):
         text += f'\tstate = {{\n\t\tname = "{state}"\n\t\tanimation = "{clip}"\n'
-        text += '\t\tanimation_blend_time = 0.3\n\t\tanimation_speed = 1.0\n'
+        # Muzzle particles start at time zero, so the aiming pose must be immediate.
+        blend = "0.0" if clip == "attack" else "0.3"
+        text += f'\t\tanimation_blend_time = {blend}\n\t\tanimation_speed = 1.0\n'
         if vehicle and clip == "move":
             for node in ("left_wheel", "right_wheel"):
                 text += ('\t\tevent = {\n\t\t\ttime = 0\n'

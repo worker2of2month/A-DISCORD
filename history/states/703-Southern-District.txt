@@ -8,6 +8,7 @@ state = {
 	history = {
 		owner = RHM
 		add_core_of = RHM
+		victory_points = { 443 1 }
 		buildings = { infrastructure = 2 }
 	}
 	provinces = {

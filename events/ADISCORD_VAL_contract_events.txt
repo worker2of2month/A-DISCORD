@@ -4129,3 +4129,16 @@ news_event = {
 		name = val_council.28.a
 	}
 }
+
+news_event = {
+	id = val_council.29
+	title = val_council.29.t
+	desc = val_council.29.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_council.29.a
+	}
+}

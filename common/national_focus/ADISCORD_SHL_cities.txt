@@ -192,16 +192,19 @@ focus_tree = {
 					add_idea = SHL_pow_cities_prog_ending_a_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_cities_a_tt
+			custom_effect_tooltip = SHL_prog_first_batch_cities_a_tt
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_infrastructure_speed value = 0.1 }
 				add_to_variable = { var = SHL_pow_stability_factor value = 0.06 }
 				SHL_refresh_conclave_power = yes
 			}
+			# Первая партия читает курс из SHL_prog_ending: переменная ставится раньше вызова.
 			hidden_effect = {
 				set_variable = { var = SHL_prog_ending value = 21 }
+				SHL_prog_first_batch = yes
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_delivery_cities_a_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -231,16 +234,19 @@ focus_tree = {
 					add_idea = SHL_pow_cities_prog_ending_b_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_cities_b_tt
+			custom_effect_tooltip = SHL_prog_first_batch_cities_b_tt
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_arms_speed value = 0.05 }
 				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.06 }
 				SHL_refresh_conclave_power = yes
 			}
+			# Первая партия читает курс из SHL_prog_ending: переменная ставится раньше вызова.
 			hidden_effect = {
 				set_variable = { var = SHL_prog_ending value = 22 }
+				SHL_prog_first_batch = yes
 				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
 			}
-			custom_effect_tooltip = SHL_delivery_cities_b_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -266,6 +272,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_campaign_a_voice_for_every_shift
 			add_political_power = 50
 		}
 		ai_will_do = { base = 5 }
@@ -289,6 +296,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_quarter_assembly
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.10 }
 			add_stability = 0.03
 		}
@@ -313,6 +321,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_quarter_assembly
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.20 }
 			custom_effect_tooltip = SHL_c_shift_assembly_tt
 			hidden_effect = {
@@ -471,7 +480,6 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
 				SHL_refresh_conclave_power = yes
-				set_country_flag = SHL_open_ledger
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -518,6 +526,19 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						infrastructure < 5
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			custom_effect_tooltip = SHL_c_civic_orders_plus_tt
 		}
 		ai_will_do = { base = 5 }
@@ -1106,6 +1127,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_open_books
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.10 }
 		}
 		ai_will_do = { base = 50 }
@@ -1128,7 +1150,13 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.05
+			custom_effect_tooltip = SHL_c_open_seats_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_city_support value = 20 }
+				clamp_variable = { var = SHL_city_support min = 0 max = 100 }
+				subtract_from_variable = { var = SHL_unrest value = 15 }
+				SHL_clamp_tensions = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}

@@ -29,6 +29,9 @@ PREVIEWS = ROOT / "docs/development/previews/country-apc"
 REPORT = ROOT / "docs/development/model-verification/country_apc.json"
 TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
 CLIPS = ("idle", "move", "attack")
+# The native motorized frame parks its vehicle at this yaw in every attack frame.
+# Counter-rotate the turret so the barrel follows the escort's combat heading.
+ATTACK_TURRET_YAW = math.radians(54.57114218169362)
 PAINTS = {
     "VAL": ((77, 94, 112), (39, 49, 61), (185, 194, 199)),
     "STP": ((88, 96, 64), (44, 52, 37), (188, 184, 150)),
@@ -424,6 +427,7 @@ def animate(model, rig, clip):
             rig.pose.bones[name].rotation_euler.x = math.tau * 2 * t if clip == "move" else 0
         rig.pose.bones["hull"].location.z = .025 * math.sin(math.tau * 2 * t) if clip == "move" else 0
         recoil = max(0, 1 - abs(t - .1) / .1) if clip == "attack" else 0
+        rig.pose.bones["turret"].rotation_euler.z = ATTACK_TURRET_YAW if clip == "attack" else 0
         rig.pose.bones["gun"].location.y = .15 * recoil
         for bone in rig.pose.bones:
             bone.keyframe_insert("location", frame=frame)
@@ -515,7 +519,7 @@ def verify(tag):
         rig = next(o for o in bpy.context.scene.objects if o.type == "ARMATURE")
         end = bpy.context.scene.frame_end
         samples, poses = [], []
-        for frame in sorted({1, 2, max(2, end // 10), max(2, end // 4), end // 2, end}):
+        for frame in sorted({1, 2, 1 + round((end - 1) * .1), max(2, end // 4), end // 2, end}):
             bpy.context.scene.frame_set(frame)
             graph = bpy.context.evaluated_depsgraph_get()
             points = [o.matrix_world @ v.co for o in objects for v in o.evaluated_get(graph).data.vertices]
@@ -527,6 +531,14 @@ def verify(tag):
         loop_error = max((a - b).length for a, b in zip(samples[0], samples[-1]))
         assert loop_error < .001, (name, clip, loop_error)
         metrics = {"max_vertex_motion": motion, "loop_error": loop_error}
+        if clip == "attack":
+            # Compose the native wrapper yaw with the reimported gun transform.
+            wrapper = Matrix.Rotation(-ATTACK_TURRET_YAW, 3, "Z")
+            forward = Vector((0, -1, 0))
+            error = max((wrapper @ (pose["gun"].to_3x3() @ forward)).angle(forward)
+                        for pose in poses)
+            assert error < .001, (name, "combat heading", error)
+            metrics["combat_heading_error_degrees"] = math.degrees(error)
         if clip == "idle":
             assert motion > .05, (name, clip, motion)
         if clip != "idle":
@@ -534,8 +546,12 @@ def verify(tag):
             prefix = "wheel_" if clip == "move" else "gun"
             selected = [n for n in poses[0] if n.startswith(prefix)]
             for bone in selected:
-                delta = max(abs(a - b) for pose in poses[1:]
-                            for row0, row1 in zip(poses[0][bone], pose[bone]) for a, b in zip(row0, row1))
+                if clip == "attack":
+                    delta = max((pose[bone].translation - poses[0][bone].translation).length
+                                for pose in poses[1:])
+                else:
+                    delta = max(abs(a - b) for pose in poses[1:]
+                                for row0, row1 in zip(poses[0][bone], pose[bone]) for a, b in zip(row0, row1))
                 assert delta > .10, (name, clip, bone, delta)
             metrics["moving_bones"] = selected
         report["animations"][clip] = metrics

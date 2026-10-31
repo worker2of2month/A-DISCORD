@@ -9,4 +9,7 @@ opinion_modifiers = {
 	ADISCORD_SHL_junior_partner = {
 		value = 30
 	}
+	ADISCORD_SHL_embassy = {
+		value = 20
+	}
 }

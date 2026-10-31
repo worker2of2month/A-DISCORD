@@ -47,17 +47,14 @@ NAM_prewar_plan = {
 		NAM_engineer_depots
 		NAM_line_survey
 		NAM_line_engineers
+		NAM_tax_rolls
 		NAM_one_budget
 		NAM_neutral_basin
-		NAM_supports_council
 		NAM_supports_oil_compact
 		NAM_garrison_assembly
-		NAM_hear_klyuchevsk
-		NAM_hear_the_commandant
 		NAM_pillar_arbitration
 		NAM_restitution_desk
 		NAM_court_azhar
-		NAM_district_assemblies
 		NAM_seal_courts
 		NAM_machine_shops
 		NAM_civilian_combine
@@ -94,7 +91,6 @@ NAM_prewar_plan = {
 		NAM_island_levy_office
 		NAM_crisis_office
 		NAM_field_firefighters
-		NAM_tax_rolls
 		NAM_basin_roads
 	}
 	weight = { factor = 20 }
@@ -118,12 +114,12 @@ NAM_resource_war_district_plan = {
 	}
 	ai_national_focuses = {
 		NAM_alarm
+		NAM_wells_under_guard
 		NAM_hold_basin
 		NAM_relief_columns
 		NAM_discipline_of_seals
 		NAM_counterstroke
 		NAM_volunteer_levies
-		NAM_wells_under_guard
 		NAM_last_reserve
 		NAM_district_volunteers
 		NAM_oil_score
@@ -149,12 +145,12 @@ NAM_resource_war_vertical_plan = {
 	}
 	ai_national_focuses = {
 		NAM_alarm
+		NAM_wells_under_guard
 		NAM_hold_basin
 		NAM_relief_columns
 		NAM_discipline_of_seals
 		NAM_counterstroke
 		NAM_volunteer_levies
-		NAM_wells_under_guard
 		NAM_last_reserve
 		NAM_martial_seals
 		NAM_oil_score
@@ -170,27 +166,31 @@ NAM_postwar_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_postwar_focus
-		NOT = { has_completed_focus = NAM_vertical }
+		NAM_prewar_district_mandate = yes
 		NOT = { has_completed_focus = NAM_service_state }
 	}
 	abort = {
 		OR = {
 			NOT = { tag = NAM }
 			NOT = { has_focus_tree = NAM_postwar_focus }
-			has_completed_focus = NAM_vertical
+			NAM_prewar_district_mandate = no
 			has_completed_focus = NAM_service_state
 		}
 	}
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_federal_charter
+		NAM_public_utilities
+		NAM_civic_audit
 		NAM_district_council
 		NAM_law_after_war
 		NAM_civil_repair
 		NAM_armed_peace
 		NAM_oil_fund
 		NAM_district_militia
+		NAM_district_workshops
 		NAM_common_fuel_market
+		NAM_open_libraries
 		NAM_normalisation
 		NAM_oil_ministry
 		NAM_export_consortium
@@ -198,6 +198,7 @@ NAM_postwar_plan = {
 		NAM_reclaim_230
 		NAM_oil_exchange
 		NAM_national_university
+		NAM_svetlogorsk_dam
 		NAM_charter_ending_federation
 		NAM_veterans_return
 		NAM_south_oil_for_water
@@ -226,27 +227,29 @@ NAM_postwar_vertical_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_postwar_focus
-		OR = {
-			has_completed_focus = NAM_vertical
-			has_completed_focus = NAM_service_state
-		}
+		NAM_prewar_service_mandate = yes
 	}
 	abort = {
 		OR = {
 			NOT = { tag = NAM }
 			NOT = { has_focus_tree = NAM_postwar_focus }
+			NAM_prewar_service_mandate = no
 		}
 	}
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_service_state
+		NAM_state_plan
+		NAM_unified_standards
 		NAM_seal_registry
 		NAM_law_after_war
 		NAM_civil_repair
 		NAM_armed_peace
 		NAM_oil_quotas
 		NAM_namestnik_garrisons
+		NAM_state_logistics_grid
 		NAM_ladder_of_seals
+		NAM_state_project_bureaus
 		NAM_normalisation
 		NAM_oil_ministry
 		NAM_state_refineries
@@ -254,6 +257,7 @@ NAM_postwar_vertical_plan = {
 		NAM_reclaim_230
 		NAM_oil_exchange
 		NAM_national_university
+		NAM_svetlogorsk_dam
 		NAM_ladder_ending_service
 		NAM_veterans_return
 		NAM_south_black_basin
@@ -536,6 +540,63 @@ NAM_exile_corporate_plan = {
 		NAM_board_rakhma_oil
 		NAM_board_kadir_bank
 		NAM_board_union_of_boards
+	}
+	weight = { factor = 20 }
+}
+
+NAM_postwar_pragmatic_plan = {
+	name = "NAM pragmatic compact"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_postwar_focus
+		NAM_prewar_pragmatic_mandate = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_postwar_focus }
+			NAM_prewar_pragmatic_mandate = no
+		}
+	}
+	ai_national_focuses = {
+		NAM_recognition
+		NAM_pragmatic_compact
+		NAM_commercial_courts
+		NAM_export_clearing
+		NAM_contract_register
+		NAM_port_agreement
+		NAM_warehouse_receipts
+		NAM_insured_caravans
+		NAM_commercial_reserve
+		NAM_prag_settlement_agreements
+		NAM_prag_partner_supply
+		NAM_balanced_accounts
+		NAM_law_after_war
+		NAM_civil_repair
+		NAM_civil_dividend
+		NAM_national_university
+		NAM_oil_ministry
+		NAM_export_consortium
+		NAM_oil_exchange
+		NAM_normalisation
+		NAM_svetlogorye
+		NAM_prag_ending_republic
+		NAM_svetlogorsk_dam
+		NAM_prag_south_guarantees
+		NAM_svetlogorsk_shipyards
+		NAM_veterans_return
+		NAM_south_war_council
+		NAM_south_allied_fuel_office
+		NAM_south_oil_tap
+		NAM_south_field_fortresses
+		NAM_south_counteroffensive
+		NAM_south_heritage
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
 	}
 	weight = { factor = 20 }
 }

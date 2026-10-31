@@ -255,15 +255,95 @@ class CoastalSeaRegionTests(unittest.TestCase):
         for entry in states.SOUTHERN_CITIES:
             count = color_counts[tuple(entry["rgb"])]
             self.assertGreaterEqual(count, 9)
-            self.assertLessEqual(count, 28)
+            self.assertLessEqual(count, 40)
             self.assertIn(entry["parent"], self.physical[entry["province"]])
             sectors = {
                 entry["parent"],
                 *(sector["province"] for sector in entry.get("sectors", ())),
             }
-            self.assertGreaterEqual(len(self.physical[entry["province"]] & sectors), 3)
+            if "sectors" in entry:
+                self.assertGreaterEqual(len(self.physical[entry["province"]] & sectors), 3)
+            else:
+                # A town carved without sectors lies wholly inside its parent
+                # unless it grew into the parent's remnant.
+                self.assertEqual(
+                    self.physical[entry["province"]],
+                    self.HOUSE_TOWN_NEIGHBOURS.get(entry["province"], {entry["parent"]}),
+                )
             counts[entry["province"]] = count
-        self.assertEqual(len(counts), 20)
+        self.assertEqual(len(counts), 25)
+
+    SHL_HOUSE_TOWNS = {
+        16895: (290, 11806, 3, "Нуран"),
+        16896: (292, 6582, 2, "Кердан"),
+        16897: (293, 330, 2, "Шарим"),
+        16898: (295, 8582, 2, "Вейран"),
+        16899: (707, 2407, 3, "Зархан"),
+    }
+    # Zarkhan absorbed the whole remnant of its former rural parent, so it
+    # borders the Devyatipechye cluster besides its mountain parent 2407.
+    HOUSE_TOWN_NEIGHBOURS = {16899: {2407, 16739, 16793, 16794}}
+
+    def test_shahrabad_house_towns_are_urban_provinces_inside_their_parents(self) -> None:
+        from scipy.ndimage import label
+
+        definitions = {}
+        colours = []
+        for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines():
+            fields = line.split(";")
+            if len(fields) >= 8 and fields[0].isdigit():
+                definitions[int(fields[0])] = fields
+                colours.append(tuple(fields[1:4]))
+        self.assertEqual(len(colours), len(set(colours)))
+        entries = {entry["province"]: entry for entry in states.SOUTHERN_CITIES}
+        memberships = builder.load_states()
+        stacks = (ROOT / "map/unitstacks.txt").read_text(encoding="utf-8").splitlines()
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image.convert("RGB"))
+        for province, (state_id, parent, value, name) in self.SHL_HOUSE_TOWNS.items():
+            with self.subTest(province=province):
+                entry = entries[province]
+                self.assertEqual(
+                    (entry["state"], entry["parent"], entry["value"], entry["name"]),
+                    (state_id, parent, value, name),
+                )
+                self.assertNotIn("sectors", entry)
+                self.assertEqual(definitions[province][4:8], ["land", "false", "urban", "3"])
+                # The painted blob is exactly the authored mask; the parent keeps
+                # one connected body and is the town's only neighbour unless the
+                # town grew into its parent's remnant.
+                painted = np.all(rgb == tuple(entry["rgb"]), axis=2)
+                expected = np.zeros_like(painted)
+                left, top = entry["origin"]
+                for y, row in enumerate(entry["mask"], top):
+                    for x, pixel in enumerate(row, left):
+                        expected[y, x] = pixel == "1"
+                self.assertTrue(np.array_equal(painted, expected))
+                parent_colour = tuple(map(int, definitions[parent][1:4]))
+                self.assertEqual(label(np.all(rgb == parent_colour, axis=2))[1], 1)
+                self.assertEqual(
+                    self.physical[province], self.HOUSE_TOWN_NEIGHBOURS.get(province, {parent})
+                )
+                self.assertIn(province, memberships[state_id])
+                self.assertIn(parent, memberships[state_id])
+                self.assertIn(province, set(self.regions[42]["provinces"]))
+                source = states.state_path(state_id).read_text(encoding="utf-8-sig")
+                self.assertRegex(source, rf"victory_points\s*=\s*\{{\s*{province}\s+{value}\s*\}}")
+                self.assertNotRegex(source, rf"victory_points\s*=\s*\{{\s*{parent}\s+\d+\s*\}}")
+                self.assertIn((province, value, name), states.REGIONAL_SETTLEMENTS[state_id])
+                anchors = [line.split(";") for line in stacks if line.startswith(f"{province};")]
+                self.assertEqual(
+                    {int(row[1]) for row in anchors},
+                    geography.native_slots("land", len(self.physical[province])),
+                )
+                for row in anchors:
+                    x = round(float(row[2]))
+                    y = rgb.shape[0] - 1 - round(float(row[4]))
+                    self.assertTrue(painted[y, x], f"anchor {row[1]} outside {province}")
+        self.assertEqual(states.SOUTHERN_CAPITAL_DISTRICTS[294][3][-1], 16899)
+        for state_id, residents in states.SHL_POPULATION.items():
+            source = states.state_path(state_id).read_text(encoding="utf-8-sig")
+            self.assertEqual(int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]), residents)
 
     def test_svetlogorye_massif_is_on_the_mainland_with_snowy_peaks(self) -> None:
         memberships = builder.load_states()
@@ -544,13 +624,60 @@ class CoastalSeaRegionTests(unittest.TestCase):
     def test_local_cuts_preserve_every_other_macro_ocean_boundary(self) -> None:
         ocean = builder.connected_components(self.sea, self.navigable)[0]
         macro = builder.partition_connected_sea(ocean, self.navigable, self.positions)
-        dedicated = set().union(*builder.DEDICATED_SEA_PROVINCES.values())
+        for southern in (False, True):
+            dedicated = set().union(*(
+                provinces for region_id, provinces in builder.DEDICATED_SEA_PROVINCES.items()
+                if (region_id in builder.SOUTHERN_SEA_REGION_IDS) == southern
+            ))
+            for provinces in macro.values():
+                provinces.difference_update(dedicated)
+            builder.rehome_detached_macro_fragments(macro, self.navigable)
         for region in builder.SEA_REGIONS:
             with self.subTest(region=region.region_id):
                 self.assertEqual(
                     set(self.regions[region.region_id]["provinces"]),
-                    macro[region.region_id] - dedicated,
+                    macro[region.region_id],
                 )
+
+    def test_southern_theatres_only_subdivide_the_southern_ocean(self) -> None:
+        ocean = builder.connected_components(self.sea, self.navigable)[0]
+        original = builder.partition_connected_sea(ocean, self.navigable, self.positions)
+        previous_cuts = set().union(*(
+            provinces for region_id, provinces in builder.DEDICATED_SEA_PROVINCES.items()
+            if region_id < 238
+        ))
+        for provinces in original.values():
+            provinces.difference_update(previous_cuts)
+        builder.rehome_detached_macro_fragments(original, self.navigable)
+        southern = set(self.regions[38]["provinces"])
+        for region_id in range(238, 247):
+            provinces = set(self.regions[region_id]["provinces"])
+            self.assert_region(region_id, set(builder.DEDICATED_SEA_PROVINCES[region_id]))
+            self.assertFalse(southern & provinces)
+            southern.update(provinces)
+        self.assertEqual(southern, original[38])
+        for region_id, provinces in original.items():
+            if region_id != 38:
+                self.assertEqual(set(self.regions[region_id]["provinces"]), provinces)
+
+    def test_southern_ports_and_islands_have_distinct_operating_waters(self) -> None:
+        region_by_province = {
+            province: region_id for region_id, region in self.regions.items()
+            for province in region["provinces"]
+        }
+        # Svetlogorsk, the Azhar seaboard and Black Coast retain sea access.
+        for port, expected in ((689, 238), (2443, 240), (493, 241)):
+            neighbours = {p for p in self.physical[port] if p in self.sea}
+            self.assertTrue(neighbours, port)
+            self.assertIn(expected, {region_by_province[p] for p in neighbours})
+        island_waters = {
+            region_by_province[sea]
+            for state in range(225, 232)
+            for province in builder.load_states()[state]
+            for sea in self.physical[province] if sea in self.sea
+        }
+        self.assertTrue({242, 243, 244} <= island_waters)
+        self.assertNotIn(38, island_waters)
 
     def test_all_naval_regions_are_connected_and_cover_the_ocean_once(self) -> None:
         seen: set[int] = set()
@@ -584,14 +711,14 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     re.M,
                 )
             )
-            for region_id in range(228, 233):
+            for region_id in (*range(228, 233), *range(238, 247)):
                 self.assertIn(f"STRATEGICREGION_{region_id}", names)
         weather_ids = {
             int(line.split(";", 1)[0])
             for line in (ROOT / "map/weatherpositions.txt").read_text().splitlines()
             if line.strip()
         }
-        self.assertTrue(set(range(228, 233)) <= weather_ids)
+        self.assertTrue(set((*range(228, 233), *range(238, 247))) <= weather_ids)
         self.assertEqual(
             sync_builder_english_localisation(
                 ROOT, "tools.builders.build_adiscord_strategic_regions", apply=False

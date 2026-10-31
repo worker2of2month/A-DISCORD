@@ -89,3 +89,12 @@ activate_advisor = ADISCORD_staff_RUS_Fedor_Sazonov
 activate_advisor = ADISCORD_staff_RUS_Yuri_Tumanov
 activate_advisor = ADISCORD_staff_RUS_Arkady_Uvarov
 activate_advisor = ADISCORD_staff_RUS_Vladimir_Frolov
+
+# Parliamentary and opposition representatives.
+recruit_character = RUS_party_representative_humanism
+recruit_character = RUS_party_representative_utilitarism
+recruit_character = RUS_party_representative_chauvinism
+recruit_character = RUS_party_representative_pragmatism
+recruit_character = RUS_party_representative_anarchism
+recruit_character = RUS_party_representative_technocracy
+recruit_character = RUS_party_representative_hedonism

@@ -35,3 +35,12 @@ activate_advisor = ADISCORD_staff_WKR_Roman_Borodin
 activate_advisor = ADISCORD_staff_WKR_Alexei_Zubarev
 activate_advisor = ADISCORD_staff_WKR_Mikhail_Greben
 activate_advisor = ADISCORD_staff_WKR_Anton_Vedeneyev
+
+# Parliamentary and opposition representatives.
+recruit_character = WKR_party_representative_humanism
+recruit_character = WKR_party_representative_utilitarism
+recruit_character = WKR_party_representative_chauvinism
+recruit_character = WKR_party_representative_anarchism
+recruit_character = WKR_party_representative_technocracy
+recruit_character = WKR_party_representative_etatism
+recruit_character = WKR_party_representative_hedonism

@@ -3047,6 +3047,9 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		RUS_morale_begin = yes
 		RUS_crisis_check_start = yes
 	}
+	RUS_party_representatives_black_banner_empire = yes
+	RUS_party_representatives_restoration_state = yes
+	RUS_party_representatives_last_empire = yes
 }
 
 # Coalition membership survives the replacement of the claimant country object.
@@ -5731,5 +5734,123 @@ RUS_last_sky_clear_offers = {
 			}
 		}
 		clear_variable = RUS_last_sky_districts
+	}
+}
+
+# Route-specific names belong only to non-story party representatives.
+RUS_party_representatives_black_banner_empire = {
+	if = {
+		limit = {
+			tag = RUS
+			has_cosmetic_tag = RUS_black_banner_empire
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_humanism
+				NAME = RUS_party_representatives_black_banner_empire_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_utilitarism
+				NAME = RUS_party_representatives_black_banner_empire_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_chauvinism
+				NAME = RUS_party_representatives_black_banner_empire_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_pragmatism
+				NAME = RUS_party_representatives_black_banner_empire_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_anarchism
+				NAME = RUS_party_representatives_black_banner_empire_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_technocracy
+				NAME = RUS_party_representatives_black_banner_empire_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_hedonism
+				NAME = RUS_party_representatives_black_banner_empire_hedonism
+			}
+		}
+	}
+}
+
+RUS_party_representatives_restoration_state = {
+	if = {
+		limit = {
+			tag = RUS
+			has_cosmetic_tag = RUS_restoration_state
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_humanism
+				NAME = RUS_party_representatives_restoration_state_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_utilitarism
+				NAME = RUS_party_representatives_restoration_state_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_chauvinism
+				NAME = RUS_party_representatives_restoration_state_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_pragmatism
+				NAME = RUS_party_representatives_restoration_state_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_anarchism
+				NAME = RUS_party_representatives_restoration_state_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_technocracy
+				NAME = RUS_party_representatives_restoration_state_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_hedonism
+				NAME = RUS_party_representatives_restoration_state_hedonism
+			}
+		}
+	}
+}
+
+RUS_party_representatives_last_empire = {
+	if = {
+		limit = {
+			tag = RUS
+			has_cosmetic_tag = RUS_last_empire
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_humanism
+				NAME = RUS_party_representatives_last_empire_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_utilitarism
+				NAME = RUS_party_representatives_last_empire_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_chauvinism
+				NAME = RUS_party_representatives_last_empire_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_pragmatism
+				NAME = RUS_party_representatives_last_empire_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_anarchism
+				NAME = RUS_party_representatives_last_empire_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_technocracy
+				NAME = RUS_party_representatives_last_empire_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = RUS_party_representative_hedonism
+				NAME = RUS_party_representatives_last_empire_hedonism
+			}
+		}
 	}
 }

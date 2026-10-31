@@ -48,11 +48,11 @@ AZH_BLACK_COAST_STATE_ID = 692
 # it without cutting the NAM mainland in half.
 NAM_EAST_DRYRIVER_STATE_ID = 719
 NAM_MAINLAND_STATE_RESOURCES = {
-    67: {"oil": 80, "chromium": 6},
-    NAM_SVETLOGORSK_STATE_ID: {"oil": 12, "chromium": 1},
-    NAM_RESIDUAL_CITY_STATE_ID: {"oil": 36, "chromium": 5},
-    NAM_DRYRIVER_STATE_ID: {"oil": 24, "chromium": 3},
-    NAM_EAST_DRYRIVER_STATE_ID: {"oil": 12},
+    67: {"oil": 40, "chromium": 6},
+    NAM_SVETLOGORSK_STATE_ID: {"oil": 8, "chromium": 1},
+    NAM_RESIDUAL_CITY_STATE_ID: {"oil": 24, "chromium": 5},
+    NAM_DRYRIVER_STATE_ID: {"oil": 16, "chromium": 3},
+    NAM_EAST_DRYRIVER_STATE_ID: {"oil": 8},
 }
 NAM_ORIGINAL_MAINLAND_PROVINCES = (
     176, 334, 461, 689, 1015, 1710, 2038, 2231, 2299, 2935,
@@ -105,14 +105,18 @@ AZH_BLACK_COAST_PROVINCES = (
     5039, 5527, 5837, 6193, 6768, 7033, 7777, 8114, 8441, 8829,
     9264, 9375, 9758, 10489, 10626, 11445, 11630, 11734, 12498,
 )
+# Lower Loren also holds three hand-painted urban provinces around Fenn:
+# 1198 (recycled from the former Zarkhan hinterland), 16900 and 16901.
+LOWER_LOREN_PAINTED_PROVINCES = frozenset({1198, 16900, 16901})
 EFL_ORIGINAL_LOWER_LOREN_PROVINCES = (
-    627, 910, 1200, 1287, 1444, 1982, 2042, 2167, 2577, 2627,
+    627, 910, 1198, 1200, 1287, 1444, 1982, 2042, 2167, 2577, 2627,
     2986, 3113, 3695, 3872, 3986, 4067, 4478, 4674, 4708, 5249,
     5926, 5934, 5979, 6000, 6051, 6061, 6409, 6414, 6419, 6495,
     6514, 6521, 6650, 6796, 6847, 6870, 6970, 7032, 7220, 7302,
     7456, 7567, 7621, 7688, 7908, 8618, 8724, 8738, 8951, 9041,
     9308, 9402, 9411, 9787, 10068, 10167, 10387, 10422, 10438, 10809,
     10847, 11035, 11219, 11763, 12366, 12419, 12425, 12576, 12577, 12974,
+    16900, 16901,
 )
 EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES)))
 AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_ORIGINAL_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES)))
@@ -139,7 +143,7 @@ AZH_CORE_PROVINCES = tuple(
 KDR_STATES = (234, 235, 236, 237, 238, 239, 240, 241, 242, 244, 245, 246, 247)
 RHM_STATES = (248, 249, 252, 253, 254, 255, 256, 257, 258)
 SDR_STATES = (243, 250, 251, 259, 260, 261, 262, 263)
-MZR_STATES = (264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275)
+MZR_STATES = (265, 266, 267, 268, 269, 270, 271, 272, 274, 275)
 KYZ_STATES = tuple(range(276, 287))
 # The four largest furnace districts are split into a furnace state and a
 # rural hinterland. The parent keeps its id (the furnace scripts address
@@ -174,7 +178,7 @@ SHL_ORIGINAL_BAYRAT_PROVINCES = (
 SHL_BAYRAT_MINES_PROVINCES = (2694, 4247, 4537, 5042, 9890)
 SHL_ORIGINAL_VEYRAN_PROVINCES = (
     931, 1114, 2242, 4301, 4495, 5801, 6126, 7994, 8582, 10148, 10937, 11938,
-    12321,
+    12321, 16898,
 )
 SHL_VEYRAN_BORDER_PROVINCES = (2242, 4301, 4495, 5801, 6126)
 # parent -> (child, original parent provinces, provinces carved for the child)
@@ -231,7 +235,7 @@ SHL_RESOURCES = {
     SHL_BAYRAT_MINES_STATE_ID: {"steel": 4, "chromium": 3},
     SHL_VEYRAN_BORDER_STATE_ID: {"chromium": 1},
 }
-GLP_STATES =(297, 298, 299, 300, 301, 302, 304, 305)
+GLP_STATES = (264, 273, 297, 298, 299, 300, 301, 302, 304, 305)
 
 STARTING_OWNERS = {
     69: "AZH",
@@ -287,7 +291,7 @@ SECONDARY_CENTRES = {
     301: (251, 3),
 }
 
-# Smaller settlements spread VPs across the wide MZR and KYZ territories
+# Smaller settlements spread VPs across the wide desert territories
 # without also granting the population and industry of a secondary city.
 MINOR_VPS = {
     265: (3465, 1), 270: (2504, 2), 273: (3643, 2),
@@ -305,7 +309,7 @@ SOUTHERN_CAPITAL_DISTRICTS = {
     260: (704, 48000, 24000, (1396, 1784, 3967, 5123, 5590, 6040, 9572, 9817, 12578)),
     275: (705, 97000, 48000, (2249, 2303, 4397, 5458, 6904, 9006, 9830, 11177, 11348)),
     283: (706, 75000, 37000, (1534, 1555, 4186, 4804, 5921, 6571, 6685, 9184, 9302, 10206, 10920, 10998, 12033)),
-    294: (707, 85000, 43000, (1198, 2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793)),
+    294: (707, 85000, 43000, (2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793, 16899)),
     300: (708, 79000, 39000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
 }
 
@@ -315,11 +319,11 @@ NAM_COALITION_REGIONS = {
         "parent": 70, "owner": "EFL",
         "filename": "70-70.txt", "name": "Нижний Лорен",
         "provinces": (
-            627, 910, 1200, 1444, 2042, 2577, 2986, 3872, 3986, 4067,
-            4478, 4674, 4708, 5926, 5934, 6061, 6409, 6414, 6419, 6514,
-            6521, 6650, 6847, 6970, 7032, 7567, 8618, 8951, 9041, 9308,
-            9402, 9411, 9787, 10068, 10387, 10422, 10438, 10809, 11035, 12366,
-            12419, 12974,
+            627, 910, 1198, 1200, 1444, 2042, 2577, 2986, 3872, 3986,
+            4067, 4478, 4674, 4708, 5926, 5934, 6061, 6409, 6414, 6419,
+            6514, 6521, 6650, 6847, 6970, 7032, 7567, 8618, 8951, 9041,
+            9308, 9402, 9411, 9787, 10068, 10387, 10422, 10438, 10809, 11035,
+            12366, 12419, 12974, 16900, 16901,
         ),
     },
     723: {
@@ -651,19 +655,22 @@ REGIONAL_SETTLEMENTS = {
     285: ((6233, 1, "Нарван"),),
     # Shahrabad: every district has a named town; districts of eleven or more
     # provinces also carry a second settlement. Furnace cities keep their VPs.
+    # House towns carved as urban provinces (adiscord_southern_cities.json)
+    # carry the town's VP instead of their rural parent province.
     287: ((4182, 1, "Арбин"), (1693, 1, "Арбин-дашт")),
     288: ((960, 1, "Сафирабад"),),
     289: ((1149, 1, "Лоран-кала"),),
-    290: ((11806, 1, "Нуран"),),
+    290: ((16895, 3, "Нуран"),),
     291: ((7825, 1, "Байрат"),),
-    292: ((6582, 1, "Кердан"), (5350, 1, "Верхний Кердан")),
-    293: ((330, 1, "Шарим"), (1285, 1, "Нижний Шарим")),
-    295: ((8582, 1, "Вейран"),),
+    292: ((16896, 2, "Кердан"), (5350, 1, "Верхний Кердан")),
+    293: ((16897, 2, "Шарим"), (1285, 1, "Нижний Шарим")),
+    295: ((16898, 2, "Вейран"),),
     296: ((10949, 1, "Салик"), (1846, 1, "Салик-бандар")),
     297: ((3415, 1, "Норан"),),
     299: ((10975, 1, "Кассен"),),
     305: ((10842, 1, "Лерис"),),
-    707: ((1198, 1, "Зархан"), (9294, 1, "Зархан-кала")),
+    703: ((443, 1, "Рахма-дех"),),
+    707: ((16899, 3, "Зархан"), (9294, 1, "Зархан-кала")),
     709: (
         (16807, 1, "Островная гавань"),
         (16804, 1, "Малый Стеланд"),
@@ -1180,7 +1187,7 @@ NAM_LEGACY_VICTORY_POINTS = {
     EFL_MIDDLE_LOREN_STATE_ID: (),
     EFL_MOREN_STATE_ID: ((8057, 1),),
     EFL_LOREN_BORDERLAND_STATE_ID: (),
-    AZH_BLACK_COAST_STATE_ID: ((493, 1), (5039, 1)),
+    AZH_BLACK_COAST_STATE_ID: ((493, 25), (5039, 1), (4089, 10)),
     AZH_SEABOARD_STATE_ID: (),
     700: ((16716, 5), (16881, 5), (16884, 5), (16892, 5)),
     701: ((16717, 5),),
@@ -1202,6 +1209,7 @@ NAM_VICTORY_POINT_NAMES = {
     6150: "Высокий Лорен",
     16893: "Умм-Ажар",
     493: "Чёрная гавань",
+    4089: "Рас-Сафир",
     8234: "Карас",
     2986: "Фенн",
     6495: "Лорен",
@@ -1210,15 +1218,15 @@ NAM_VICTORY_POINT_NAMES = {
     689: "Светлогорск",
     2038: "Южная гавань",
     16882: "Эль-Мина",
-    16883: "Южный Ажар",
+    16883: "Дар-Салим",
     16885: "Каменка",
-    16886: "Северный Ажар",
+    16886: "Бир-Нахиль",
     16887: "Сухой Лог",
     16888: "Бир-Касим",
-    16889: "Западный Ажар",
+    16889: "Каср-Сахиль",
     16890: "Нефтегорск",
     16891: "Рас-Нур",
-    16894: "Восточный Ажар",
+    16894: "Эль-Хадид",
 }
 
 # Every playable dirty-zone state is a war objective of its republic. Capitals
@@ -2088,7 +2096,8 @@ def coalition_region_plan() -> dict[Path, bytes]:
             current[parent].update(provinces)
         outputs[path] = coalition_region_source(sid).encode("utf-8")
     for parent, provinces in originals.items():
-        if current[parent] != set(provinces):
+        # Hand-painted provinces count as present before their first regeneration.
+        if current[parent] - set(provinces) or set(provinces) - current[parent] - LOWER_LOREN_PAINTED_PROVINCES:
             raise RuntimeError(f"state {parent}: coalition territory drifted")
     for sid in (701, 720, 721, 722):
         path = state_path(sid)
@@ -2426,6 +2435,42 @@ def apply_generated_victory_point_localisation() -> None:
     path.write_text(source.rstrip() + "\n", encoding="utf-8-sig", newline="\n")
 
 
+def nam_victory_point_plan() -> dict[Path, bytes]:
+    """Update authored NAM-theatre points while preserving other settlement layers."""
+    outputs = {}
+    for state_id, points in NAM_LEGACY_VICTORY_POINTS.items():
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        provinces = state_file_provinces(path)
+        if any(province not in provinces for province, _value in points):
+            raise RuntimeError(f"state {state_id}: NAM victory point outside the state")
+        existing = {
+            int(province): int(value)
+            for province, value in re.findall(r"\bvictory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source)
+        }
+        existing.update(points)
+        updated = replace_history_victory_points(source, tuple(existing.items())) if points else source
+        outputs[path] = updated.encode("utf-8") if updated != source else path.read_bytes()
+    path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for province, name in NAM_VICTORY_POINT_NAMES.items():
+        source = replace_localisation_value(source, f"VICTORY_POINTS_{province}", name)
+    outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def update_nam_victory_points(apply: bool) -> int:
+    outputs = nam_victory_point_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply and any(path.read_bytes() != data for path, data in nam_victory_point_plan().items()):
+        raise RuntimeError("NAM victory points are not idempotent")
+    return int(bool(changed) and not apply)
+
+
 def apply_vorkerland_victory_points() -> None:
     """Apply only the exact central-theatre VP and Russian-name manifest."""
     for state_id, protected_points in VORKERLAND_PROTECTED_LANDMARK_VPS.items():
@@ -2614,7 +2659,8 @@ def render_southern_district(capital: int) -> str:
 def southern_settlement_plan() -> dict[Path, bytes]:
     """Keep capital references stable and conserve their rural population."""
     outputs = {}
-    for state_id in sorted(set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}):
+    districts = {district for district, *_rest in SOUTHERN_CAPITAL_DISTRICTS.values()}
+    for state_id in sorted((set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}) - districts):
         outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
     for capital in SOUTHERN_CAPITAL_DISTRICTS:
         outputs[southern_district_path(capital)] = render_southern_district(capital).encode("utf-8")
@@ -2698,6 +2744,9 @@ def shahrabad_split_plan() -> dict[Path, bytes]:
             raise RuntimeError(f"state {parent}: child provinces must be a proper subset")
         remainder = tuple(sorted(set(original) - set(carved)))
         current = state_file_provinces(state_path(parent))
+        if parent in SOUTHERN_CITY_POINTS:
+            # The city province counts as present before the geography pass paints it.
+            current |= {SOUTHERN_CITY_POINTS[parent][0]}
         if current not in {frozenset(original), frozenset(remainder)}:
             raise RuntimeError(f"state {parent}: Shahrabad split manifest drifted")
         child_path = STATE_DIR / SHL_SPLIT_FILENAMES[child]
@@ -2895,6 +2944,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
         if military:
             lines.append(f"\t\t\tarms_factory = {military}")
         if state_id == 700:
+            lines.append("\t\t\tfuel_silo = 2")
             lines.append("\t\t\t16716 = { naval_base = 1 }")
         lines.extend(["\t\t}", "\t}", "}", ""])
         outputs[path] = "\n".join(lines).encode("utf-8")
@@ -3167,6 +3217,8 @@ def main() -> int:
     actions.add_argument("--check-reactor-resources", action="store_true", help="check the reactor perimeter resource manifest")
     actions.add_argument("--check-coalition-regions", action="store_true")
     actions.add_argument("--apply-coalition-regions", action="store_true")
+    actions.add_argument("--check-nam-vps", action="store_true")
+    actions.add_argument("--apply-nam-vps", action="store_true")
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
     actions.add_argument("--apply-shahrabad-population", action="store_true")
@@ -3202,6 +3254,8 @@ def main() -> int:
         )
     if args.check_coalition_regions or args.apply_coalition_regions:
         return update_coalition_regions(args.apply_coalition_regions)
+    if args.check_nam_vps or args.apply_nam_vps:
+        return update_nam_victory_points(args.apply_nam_vps)
     if args.check_reactor_resources or args.apply_reactor_resources:
         return update_reactor_resources(args.apply_reactor_resources)
     if args.check_state_metadata or args.apply_state_metadata:

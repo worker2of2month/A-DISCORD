@@ -156,6 +156,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_war_orders_all
+			custom_effect_tooltip = SHL_iron_shahrabad_levies_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -195,16 +200,19 @@ focus_tree = {
 					add_idea = SHL_pow_directorate_prog_ending_a_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_directorate_a_tt
+			custom_effect_tooltip = SHL_prog_first_batch_directorate_tt
+			hidden_effect = {
+				# The first batch reads SHL_prog_ending, so the course is set before it.
+				set_variable = { var = SHL_prog_ending value = 31 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_max_efficiency value = 0.05 }
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.08 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 31 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_directorate_a_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -234,17 +242,20 @@ focus_tree = {
 					add_idea = SHL_pow_directorate_prog_ending_b_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_directorate_b_tt
+			custom_effect_tooltip = SHL_prog_first_batch_directorate_tt
+			hidden_effect = {
+				# The first batch reads SHL_prog_ending, so the course is set before it.
+				set_variable = { var = SHL_prog_ending value = 32 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_war_support value = 0.05 }
 				add_to_variable = { var = SHL_pow_army_org value = 0.05 }
 				add_to_variable = { var = SHL_pow_army_defence value = 0.03 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 32 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_directorate_b_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -270,6 +281,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_directorate_decree
 			add_political_power = 50
 			add_stability = 0.03
 		}
@@ -646,6 +658,16 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 750
+				producer = SHL
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 5
+				producer = SHL
+			}
 			custom_effect_tooltip = SHL_d_arsenal_orders_plus_tt
 			hidden_effect = {
 				# SHL_refresh_delivery_terms owns SHL_arsenal_price and reads this
@@ -1166,6 +1188,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_war_bonds
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1199,7 +1222,19 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_stability = 0.05
+			custom_effect_tooltip = SHL_d_directorate_eternal_tt
+			hidden_effect = {
+				287 = { SHL_train_site = yes }
+				288 = { SHL_train_site = yes }
+				289 = { SHL_train_site = yes }
+				290 = { SHL_train_site = yes }
+				291 = { SHL_train_site = yes }
+				292 = { SHL_train_site = yes }
+				293 = { SHL_train_site = yes }
+				294 = { SHL_train_site = yes }
+				295 = { SHL_train_site = yes }
+				SHL_refresh_furnaces = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -1221,7 +1256,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 100
+			add_research_slot = 1
 		}
 		ai_will_do = { base = 50 }
 	}

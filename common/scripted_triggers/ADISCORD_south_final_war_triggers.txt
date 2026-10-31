@@ -44,8 +44,18 @@ ADISCORD_south_nam_focus_ready = {
 			has_completed_focus = NAM_svetlogorye
 			has_completed_focus = NAM_oil_exchange
 			OR = {
-				has_completed_focus = NAM_ladder_of_seals
-				has_completed_focus = NAM_common_fuel_market
+				AND = {
+					has_completed_focus = NAM_ladder_of_seals
+					has_completed_focus = NAM_south_desert_offices
+				}
+				AND = {
+					has_completed_focus = NAM_common_fuel_market
+					has_completed_focus = NAM_south_fenn_guarantee
+				}
+				AND = {
+					has_completed_focus = NAM_balanced_accounts
+					has_completed_focus = NAM_prag_partner_supply
+				}
 			}
 		}
 		AND = {
@@ -198,6 +208,11 @@ ADISCORD_south_preparation_can_finish = {
 		ADISCORD_south_preparation_elapsed = yes
 		ADISCORD_south_both_focus_ready = yes
 	}
+	ADISCORD_south_participants_ready = yes
+}
+
+# GLOBAL. Physical readiness shared by normal and explicit debug starts.
+ADISCORD_south_participants_ready = {
 	SHL = {
 		ADISCORD_south_champion_viable = yes
 		has_war = no
@@ -405,6 +420,10 @@ ADISCORD_south_offer_terms_valid = {
 		check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
 		check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
 		AND = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			NAM = { has_completed_focus = NAM_pragmatic_compact }
+		}
+		AND = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
 			OR = {
 				is_in_faction = no
@@ -427,6 +446,14 @@ ADISCORD_south_offer_answer_valid = {
 				is_in_faction = no
 				is_faction_leader = yes
 			}
+		}
+	}
+
+	OR = {
+		NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+		FROM = {
+			tag = NAM
+			has_completed_focus = NAM_pragmatic_compact
 		}
 	}
 }
@@ -481,4 +508,11 @@ ADISCORD_south_campaign_target_settled = {
 		is_subject_of = ROOT
 		is_in_faction_with = ROOT
 	}
+}
+
+# GLOBAL. A debug start skips the calendar and focuses, not country lifecycle.
+ADISCORD_south_debug_start_ready = {
+	ADISCORD_south_crisis_open = yes
+	ADISCORD_south_participants_ready = yes
+	NAM = { ADISCORD_south_champion_viable = yes }
 }

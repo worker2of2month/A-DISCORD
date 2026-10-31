@@ -422,6 +422,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                 expected_wheels = {"VAL_apc": 8, "STP_apc": 6, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 4}
                 self.assertEqual(len(wheels), expected_wheels[name])
                 self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
+                self.assertLess(row["animations"]["attack"]["combat_heading_error_degrees"], .06)
         self.assertEqual(len(hashes), 5)
 
     def test_carriers_resolve_for_equipment_levels_and_country_identities(self):
@@ -469,6 +470,8 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                                ("defend", "attack"), ("support_attack", "attack")):
                 for entity in (wrapper, vehicle):
                     self.assertRegex(entity, rf'name = "{name}"\s+animation = "{clip}"')
+                    if clip == "attack":
+                        self.assertRegex(entity, rf'name = "{name}"\s+animation = "attack"\s+animation_blend_time = 0\.0')
             for node in ("barrel", "left_wheel", "right_wheel"):
                 self.assertIn(f'node = "{node}"', vehicle)
         self.assertNotIn("mechanized_entity", entities)

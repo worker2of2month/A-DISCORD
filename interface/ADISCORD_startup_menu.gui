@@ -148,7 +148,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "ADISCORD_startup_page_1"
-			position = { x = 34 y = 206 }
+			position = { x = 34 y = 194 }
 			size = { x = 359 y = 36 }
 			quadTextureSprite = "GFX_ADISCORD_startup_page"
 			buttonText = "[ADISCORDGetStartupPageTitle1]"
@@ -157,7 +157,7 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "ADISCORD_startup_page_2"
-			position = { x = 34 y = 260 }
+			position = { x = 34 y = 236 }
 			size = { x = 359 y = 36 }
 			quadTextureSprite = "GFX_ADISCORD_startup_page"
 			buttonText = "[ADISCORDGetStartupPageTitle2]"
@@ -166,10 +166,37 @@ guiTypes = {
 		}
 		buttonType = {
 			name = "ADISCORD_startup_page_3"
-			position = { x = 34 y = 314 }
+			position = { x = 34 y = 278 }
 			size = { x = 359 y = 36 }
 			quadTextureSprite = "GFX_ADISCORD_startup_page"
 			buttonText = "[ADISCORDGetStartupPageTitle3]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_4"
+			position = { x = 34 y = 320 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle4]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_5"
+			position = { x = 34 y = 362 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle5]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_6"
+			position = { x = 34 y = 404 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle6]"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 		}
@@ -190,6 +217,16 @@ guiTypes = {
 			text = "ADISCORD_startup_paths_note"
 			maxWidth = 396
 			maxHeight = 180
+			format = left
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_nam_paths_note"
+			position = { x = 34 y = 456 }
+			font = "hoi_16mbs"
+			text = "NAM_startup_paths_note"
+			maxWidth = 359
+			maxHeight = 48
 			format = left
 			alwaystransparent = yes
 		}
@@ -726,6 +763,94 @@ guiTypes = {
 			position = { x = 460 y = 152 }
 			font = "hoi_18mbs"
 			text = "NAM_startup_path_2_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_3"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_3"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_3_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_3_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_4"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_4"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_4_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_4_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_5"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_5"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_5_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_5_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_6"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_6"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_NAM_startup_path_6_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "NAM_startup_path_6_details"
 			maxWidth = 500
 			maxHeight = 388
 			format = left

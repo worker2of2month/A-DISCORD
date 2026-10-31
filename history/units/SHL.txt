@@ -50,8 +50,8 @@ division_template = {
 # Garrisons face the three neighbours of the Conclave: Mazar beyond the
 # Southern District, Keizan beyond Arbin and Veyr beyond Sharim.
 units = {
-	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 1198 division_template = "Furnace Guard" start_experience_factor = 0.20 start_equipment_factor = 0.55 }
-	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 1198 division_template = "Furnace Guard" start_experience_factor = 0.10 start_equipment_factor = 0.45 }
+	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 16899 division_template = "Furnace Guard" start_experience_factor = 0.20 start_equipment_factor = 0.55 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 16899 division_template = "Furnace Guard" start_experience_factor = 0.10 start_equipment_factor = 0.45 }
 	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 16713 division_template = "Khazar Guard" start_experience_factor = 0.25 start_equipment_factor = 0.70 }
 	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 16739 division_template = "Conclave Line Brigade" start_experience_factor = 0.15 start_equipment_factor = 0.60 }
 	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4182 division_template = "Conclave Line Brigade" start_experience_factor = 0.10 start_equipment_factor = 0.55 }

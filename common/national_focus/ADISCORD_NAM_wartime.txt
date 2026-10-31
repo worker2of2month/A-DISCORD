@@ -44,6 +44,7 @@ shared_focus = {
 		completion_reward = {
 			add_command_power = 20
 			custom_effect_tooltip = NAM_war_objective_tt
+			custom_effect_tooltip = NAM_captured_wells_warning_tt
 		}
 		ai_will_do = {
 			base = 200
@@ -221,11 +222,11 @@ shared_focus = {
 shared_focus = {
 		id = NAM_scorched_wells
 		icon = GFX_focus_ADISCORD_sabotage
-		x = 1
-		y = 3
+		x = 5
+		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_counterstroke }
+		prerequisite = { focus = NAM_alarm }
 		mutually_exclusive = { focus = NAM_wells_under_guard }
 		available = {
 			has_capitulated = no
@@ -250,11 +251,11 @@ shared_focus = {
 shared_focus = {
 		id = NAM_wells_under_guard
 		icon = GFX_goal_generic_fortify_city
-		x = 3
-		y = 3
+		x = 7
+		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_counterstroke }
+		prerequisite = { focus = NAM_alarm }
 		mutually_exclusive = { focus = NAM_scorched_wells }
 		available = {
 			has_capitulated = no
@@ -285,6 +286,14 @@ shared_focus = {
 					add_building_construction = { type = bunker level = 1 instant_build = yes province = 16721 }
 				}
 			}
+			custom_effect_tooltip = NAM_guarded_wells_tt
+			hidden_effect = {
+				67 = { NAM_guarded_field_apply = yes }
+				688 = { NAM_guarded_field_apply = yes }
+				689 = { NAM_guarded_field_apply = yes }
+				690 = { NAM_guarded_field_apply = yes }
+				719 = { NAM_guarded_field_apply = yes }
+			}
 			custom_effect_tooltip = NAM_wells_under_guard_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_seal_discipline value = 10 }
@@ -299,8 +308,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_last_reserve
 		icon = GFX_goal_generic_army_artillery
-		x = 2
-		y = 4
+		x = 6
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
@@ -338,8 +347,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_district_volunteers
 		icon = GFX_focus_generic_forest_brothers
-		x = 1
-		y = 5
+		x = 5
+		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_last_reserve }
@@ -371,8 +380,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_martial_seals
 		icon = GFX_focus_generic_total_war
-		x = 3
-		y = 5
+		x = 7
+		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_last_reserve }
@@ -404,8 +413,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_oil_score
 		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 2
-		y = 6
+		x = 6
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_INDUSTRY }
 		prerequisite = {

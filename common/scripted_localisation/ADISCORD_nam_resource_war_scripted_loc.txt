@@ -28,7 +28,7 @@ defined_text = {
 		localization_key = NAM_bw_favour_active
 	}
 	text = {
-		trigger = { NOT = { has_completed_focus = NAM_namestnik_circuits } }
+		trigger = { NOT = { has_completed_focus = NAM_emergency_writ } }
 		localization_key = NAM_bw_favour_nam_locked
 	}
 	text = {
@@ -120,7 +120,7 @@ defined_text = {
 		localization_key = NAM_bw_favour_active
 	}
 	text = {
-		trigger = { NOT = { has_completed_focus = NAM_district_assemblies } }
+		trigger = { NOT = { has_completed_focus = NAM_district_guarantees } }
 		localization_key = NAM_bw_favour_dist_locked
 	}
 	text = {
@@ -284,13 +284,13 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMGetCost_fuel_5000
+	name = NAMGetCost_fuel_60000
 	text = {
-		trigger = { NOT = { has_fuel < 5000 } }
-		localization_key = NAM_amount_fuel_5000
+		trigger = { NOT = { has_fuel < 60000 } }
+		localization_key = NAM_amount_fuel_60000
 	}
 	text = {
-		localization_key = NAM_amount_fuel_5000_blocked
+		localization_key = NAM_amount_fuel_60000_blocked
 	}
 }
 
@@ -1108,6 +1108,30 @@ defined_text = {
 	text = {
 		trigger = {
 			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 1200 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 50 compare = equals }
+		}
+		localization_key = NAM_project_hydroelectric
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 400 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 30 compare = equals }
+		}
+		localization_key = NAM_project_chromium
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 600 compare = equals }
+			check_variable = { var = NAM_project_pp_deposit value = 40 compare = equals }
+		}
+		localization_key = NAM_project_steel
+	}
+	text = {
+		trigger = {
+			has_state_flag = NAM_project_in_progress
 			check_variable = { var = NAM_project_pp_deposit value = 30 compare = equals }
 			check_variable = { var = NAM_project_deposit value = 200 compare = equals }
 		}
@@ -1892,4 +1916,73 @@ defined_text = {
 		localization_key = NAM_mobilisation_active_desc
 	}
 	text = { localization_key = NAM_mobilisation_border_desc }
+}
+
+defined_text = {
+	name = NAMGetCapturedWellsReport
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_captured_wells_report
+	}
+	text = { localization_key = NAM_captured_wells_report_none }
+}
+
+# Stored mandate takes precedence over live balance after war entry.
+defined_text = {
+	name = NAMGetPrewarCourse
+	text = {
+		trigger = {
+			has_variable = NAM_prewar_balance
+			check_variable = { NAM_prewar_balance > 0.25 }
+		}
+		localization_key = NAM_prewar_course_districts
+	}
+	text = {
+		trigger = {
+			has_variable = NAM_prewar_balance
+			check_variable = { NAM_prewar_balance < -0.25 }
+		}
+		localization_key = NAM_prewar_course_vertical
+	}
+	text = {
+		trigger = { has_variable = NAM_prewar_balance }
+		localization_key = NAM_prewar_course_service
+	}
+	text = {
+		trigger = {
+			has_power_balance = { id = NAM_ladder_bop }
+			power_balance_value = { id = NAM_ladder_bop value > 0.25 }
+		}
+		localization_key = NAM_prewar_course_districts
+	}
+	text = {
+		trigger = {
+			has_power_balance = { id = NAM_ladder_bop }
+			power_balance_value = { id = NAM_ladder_bop value < -0.25 }
+		}
+		localization_key = NAM_prewar_course_vertical
+	}
+	text = { localization_key = NAM_prewar_course_service }
+}
+
+defined_text = {
+	name = NAMGetPrewarMandateRecord
+	text = {
+		trigger = { has_variable = NAM_prewar_balance }
+		localization_key = NAM_prewar_mandate_record
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetAdministrationTitle
+	text = {
+		trigger = { has_completed_focus = NAM_prag_ending_republic }
+		localization_key = NAM_administration_prag_republic_title
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_prag_ending_directorate }
+		localization_key = NAM_administration_prag_directorate_title
+	}
+	text = { localization_key = NAM_administration_default_title }
 }

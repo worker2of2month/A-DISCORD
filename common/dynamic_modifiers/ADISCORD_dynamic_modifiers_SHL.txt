@@ -33,5 +33,6 @@ SHL_metal_supply = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
 	enable = { has_country_flag = SHL_metal_client }
 	remove_trigger = { NOT = { country_exists = SHL } }
-	production_factory_efficiency_gain_factor = 0.02
+	production_factory_efficiency_gain_factor = SHL_metal_efficiency_growth
+	production_factory_max_efficiency_factor = SHL_metal_efficiency_cap
 }

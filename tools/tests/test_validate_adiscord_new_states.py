@@ -676,5 +676,26 @@ class NudgeMetadataTests(unittest.TestCase):
         self.assertEqual(path.read_bytes(), original)
 
 
+class MazarBorderTests(unittest.TestCase):
+    SHL_SCRIPTS = (
+        "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt",
+        "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt",
+        "common/decisions/ADISCORD_SHL_decisions.txt",
+        "events/ADISCORD_SHL_events.txt",
+        "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt",
+    )
+
+    def test_veir_holds_the_coast_and_cistern_scripts_read_dalir(self) -> None:
+        for state_id, owner in ((264, "GLP"), (273, "GLP"), (268, "MZR"), (269, "MZR")):
+            self.assertEqual(builder.STARTING_OWNERS[state_id], owner)
+            source = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+            self.assertIn(f"owner = {owner}", source)
+            self.assertIn(f"add_core_of = {owner}", source)
+            self.assertNotIn("add_core_of = MZR" if owner == "GLP" else "add_core_of = GLP", source)
+        for relative in self.SHL_SCRIPTS:
+            source = (builder.ROOT / relative).read_text(encoding="utf-8")
+            self.assertEqual(re.findall(r"(?<![\d.])273(?![\d.])", source), [], relative)
+
+
 if __name__ == "__main__":
     unittest.main()

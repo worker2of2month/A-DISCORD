@@ -4848,7 +4848,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_position_armies
-		x = 44
+		x = 56
 		y = 2
 		cost = 1
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
@@ -4889,7 +4889,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_defence
-		x = 42
+		x = 54
 		y = 3
 		cost = 1
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
@@ -4936,7 +4936,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_major_war
-		x = 44
+		x = 56
 		y = 3
 		cost = 1
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
@@ -4983,7 +4983,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_small_arms
-		x = 46
+		x = 58
 		y = 3
 		cost = 1
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
@@ -5026,7 +5026,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_self_management
-		x = 40
+		x = 38
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5190,7 +5190,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_treaty
-		x = 38
+		x = 36
 		y = 5
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5272,7 +5272,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_treaty
-		x = 42
+		x = 40
 		y = 5
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5305,8 +5305,8 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_self_management
-		x = 40
-		y = 8
+		x = 38
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
@@ -5384,7 +5384,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_political_pressure
-		x = 48
+		x = 44
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5429,7 +5429,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_political_pressure
-		x = 48
+		x = 44
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5462,7 +5462,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_production
-		x = 46
+		x = 42
 		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5496,7 +5496,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_secret_service_agency
-		x = 50
+		x = 46
 		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5538,7 +5538,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_production
-		x = 48
+		x = 44
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5572,8 +5572,8 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_political_pressure
-		x = 46
-		y = 8
+		x = 42
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
@@ -5629,8 +5629,8 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_treaty
-		x = 50
-		y = 8
+		x = 46
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {
@@ -5905,7 +5905,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_secret_service_agency
-		x = 56
+		x = 50
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5941,7 +5941,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_secret_service_agency
-		x = 54
+		x = 52
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -5991,7 +5991,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_self_management
-		x = 58
+		x = 48
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -6045,7 +6045,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_goal_generic_political_pressure
-		x = 54
+		x = 52
 		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -6082,7 +6082,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_self_management
-		x = 58
+		x = 48
 		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -6129,7 +6129,7 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_secret_service_agency
-		x = 54
+		x = 52
 		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
@@ -6170,8 +6170,8 @@ shared_focus = {
 			VAL_council_governs = yes
 		}
 		icon = GFX_focus_generic_treaty
-		x = 58
-		y = 6
+		x = 48
+		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = {

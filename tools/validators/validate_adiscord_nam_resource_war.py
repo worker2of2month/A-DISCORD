@@ -170,7 +170,7 @@ OIL_BUYERS = {
     "EFL", "AZH", "VAL", "STP", "STS", "RHM", "MZR",
     "SHL", "RUS", "WEF", "KDR", "SDR", "GLP", "KYZ",
 }
-FIELD_CAPACITY = {67: 8, 688: 2, 689: 4, 690: 3, 719: 1}
+FIELD_CAPACITY = {67: 5, 688: 1, 689: 3, 690: 2, 719: 1}
 PROJECT_PRICES = {
     "NAM_project_repair_wells": (25, 150, 45, "NAM_project_complete_repair"),
     "NAM_project_refinery": (40, 300, 90, "NAM_project_complete_refinery"),
@@ -286,11 +286,11 @@ def check_oil_monopoly(
     )
     settle = named_block(effects, "NAM_oil_settle_client")
     check(
-        "NOT = { has_fuel < 1500 }" in settle
-        and "add_fuel = 1500" in settle
-        and "add_fuel = -1500" in settle
+        "NOT = { has_fuel < 15000 }" in settle
+        and "add_fuel = 15000" in settle
+        and "add_fuel = -15000" in settle
         and "value = 40" in settle,
-        "monthly settlement must move 1500 fuel from stock and earn 40 treasury",
+        "monthly settlement must move 15000 fuel from stock and earn 40 treasury",
     )
     check(
         "NAM_add_treasury = yes" in named_block(effects, "NAM_oil_settle_clients"),
@@ -420,9 +420,10 @@ def check_oil_monopoly(
             f"{decision_name} must recheck its custom price before the single debit",
         )
     check(
-        "NAM_overseas_districts = {" in categories
+        "NAM_overseas_districts = {" not in categories
+        and "NAM_island_convoy_service = {" in named_block(decisions, "NAM_national_programmes")
         and "ADISCORD_nam_resource_war_compromise" in named_block(categories, "NAM_national_programmes"),
-        "the islands category and the defeat-route programme visibility are required",
+        "island decisions must share national programmes with defeat-route visibility",
     )
     for event_id in (
         "ADISCORD_nam_oil.1",
@@ -465,9 +466,9 @@ def check_oil_monopoly(
 
 
 FAVOUR_FOCUSES = {
-    "nam": "NAM_namestnik_circuits",
+    "nam": "NAM_emergency_writ",
     "oil": "NAM_supports_oil_compact",
-    "dist": "NAM_district_assemblies",
+    "dist": "NAM_district_guarantees",
     "garr": "NAM_garrison_assembly",
     "trade": "NAM_supports_export_houses",
 }
@@ -527,9 +528,17 @@ def check_ladder(
         "the vanished-centre event must close the colony, reveal the tree and open the declaration .12",
     )
     runtime = "\n".join((effects, events, decisions))
+    for course, value in (("etatism", "-0.5"), ("pragmatism", "0"), ("humanism", "0.5")):
+        preset = named_block(effects, "ADISCORD_nam_debug_prepare_" + course)
+        check(
+            "ADISCORD_nam_debug_mandate_open = yes" in preset
+            and has_script_fragment(preset, "set_power_balance = { id = NAM_ladder_bop set_value = " + value + " }"),
+            f"debug {course} preset must use the guarded prewar balance",
+        )
+        runtime = runtime.replace(preset, "", 1)
     check(
         runtime.count("set_power_balance") == 1,
-        "only the declaration may set the ladder balance; later writers add to it",
+        "outside explicit prewar debug presets, only the declaration may set the ladder balance",
     )
     declaration_event = event_block(events, "ADISCORD_nam_groups.12")
     check(
@@ -2407,6 +2416,10 @@ def main() -> int:
         "ADISCORD_nam_debug_resolve_coalition_victory",
         "ADISCORD_nam_debug_resolve_nam_victory",
         "ADISCORD_nam_debug_resolve_compromise",
+        "ADISCORD_nam_debug_resolve_standoff",
+        "ADISCORD_nam_debug_prepare_etatism",
+        "ADISCORD_nam_debug_prepare_pragmatism",
+        "ADISCORD_nam_debug_prepare_humanism",
         "ADISCORD_nam_debug_add_tension",
     ):
         decision = named_block(debug_decisions, decision_name)
@@ -2869,11 +2882,11 @@ def main() -> int:
         "AZH is not NAM's actual eastern neighbour",
     )
     expected_resources = {
-        67: {"oil": 80, "chromium": 6},
-        688: {"oil": 12, "chromium": 1},
-        689: {"oil": 36, "chromium": 5},
-        690: {"oil": 24, "chromium": 3},
-        719: {"oil": 12},
+        67: {"oil": 40, "chromium": 6},
+        688: {"oil": 8, "chromium": 1},
+        689: {"oil": 24, "chromium": 5},
+        690: {"oil": 16, "chromium": 3},
+        719: {"oil": 8},
     }
     for state_id, resources in expected_resources.items():
         state = state_source(state_id)
@@ -2883,10 +2896,10 @@ def main() -> int:
                 f"state {state_id} must contain {amount} {resource}",
             )
     check(
-        sum(resources["oil"] for resources in expected_resources.values()) == 164
+        sum(resources["oil"] for resources in expected_resources.values()) == 96
         and sum(resources.get("chromium", 0) for resources in expected_resources.values())
         == 15,
-        "NAM resource redistribution changed the theatre's total deposits",
+        "NAM initial mainland oil or chromium differs from the development baseline",
     )
     azh_resources = {69: {"oil": 1, "chromium": 1}, 692: {"oil": 1}, 727: {"oil": 1}, 729: {"chromium": 1, "tungsten": 1}}
     for state_id, resources in azh_resources.items():
@@ -3004,7 +3017,7 @@ def main() -> int:
         689: {},
         690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
         691: {},
-        692: {493: 1, 5039: 1},
+        692: {493: 25, 5039: 1, 4089: 10},
         700: {16716: 5, 16881: 5, 16884: 5, 16892: 5},
         701: {16717: 5},
         719: {},
@@ -3035,8 +3048,8 @@ def main() -> int:
         "EFL mainland VP total must be 9",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 48,
-        "AZH mainland VP total must be 48",
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 82,
+        "AZH mainland VP total must be 82",
     )
 
     localisation = (
@@ -3061,7 +3074,11 @@ def main() -> int:
         "SLF ideology name must remain an uprising before victory",
     )
     check(
-        'SLF_humanism_party: "Временный штаб восстания"' in loc,
+        re.search(
+            r'^\s*SLF_humanism_party:\d*\s*"(?:£GFX_\w+(?:\|\d+)?£?\s+)?Временный штаб восстания"\s*$',
+            loc,
+            re.MULTILINE,
+        ) is not None,
         "SLF party must be the Provisional Uprising Headquarters",
     )
     for obsolete in (
@@ -3095,6 +3112,10 @@ def main() -> int:
         "ADISCORD_nam_debug_resolve_coalition_victory",
         "ADISCORD_nam_debug_resolve_nam_victory",
         "ADISCORD_nam_debug_resolve_compromise",
+        "ADISCORD_nam_debug_resolve_standoff",
+        "ADISCORD_nam_debug_prepare_etatism",
+        "ADISCORD_nam_debug_prepare_pragmatism",
+        "ADISCORD_nam_debug_prepare_humanism",
         "ADISCORD_nam_debug_add_tension",
         "NAM_restitution",
         "NAM_restitution_desc",
@@ -3134,8 +3155,8 @@ def main() -> int:
         "obsolete uprising-victory debug localisation remains",
     )
     check(
-        loc.count("§RDEBUG:§!") == 9,
-        "all nine debug entry points need the red DEBUG prefix",
+        loc.count("§RDEBUG:§!") == 13,
+        "all thirteen debug entry points need the red DEBUG prefix",
     )
     for weber_key in (
         "ADISCORD_nam_resource_war.2.d",

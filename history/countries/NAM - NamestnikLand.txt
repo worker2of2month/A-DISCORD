@@ -29,7 +29,14 @@ set_politics = {
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 100
+	etatism = 65
+	humanism = 10
+	pragmatism = 10
+	anarchism = 4
+	technocracy = 4
+	chauvinism = 4
+	utilitarism = 1
+	hedonism = 2
 }
 
 set_stability = -0.15
@@ -88,3 +95,12 @@ activate_advisor = ADISCORD_staff_NAM_Ilya_Tumanov
 activate_advisor = ADISCORD_staff_NAM_Konstantin_Uvarov
 activate_advisor = ADISCORD_staff_NAM_Maksim_Frolov
 activate_advisor = ADISCORD_staff_NAM_Petr_Chernov
+
+# Parliamentary and opposition representatives.
+recruit_character = NAM_party_representative_humanism
+recruit_character = NAM_party_representative_utilitarism
+recruit_character = NAM_party_representative_chauvinism
+recruit_character = NAM_party_representative_pragmatism
+recruit_character = NAM_party_representative_anarchism
+recruit_character = NAM_party_representative_technocracy
+recruit_character = NAM_party_representative_hedonism

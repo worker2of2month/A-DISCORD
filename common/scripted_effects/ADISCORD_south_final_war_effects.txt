@@ -1,7 +1,7 @@
 # Southern final war. Side numbers: 1 = Shahrabad, 2 = the northern champion.
 # Settlement terms: 1 = annexation, 2 = subjects. Subject types follow the
 # winner's path: 0 ordinary puppet, 1 house concession for the defeated leader,
-# 2 compact charter, 3 namestnik office, 4 oil charter.
+# 2 compact charter, 3 namestnik office, 4 oil charter, 5 economic contract.
 
 # ----- Crisis clock -----
 
@@ -154,6 +154,18 @@ ADISCORD_south_final_war_start = {
 	if = {
 		limit = {
 			ADISCORD_south_final_can_start = yes
+			ADISCORD_south_declarer_valid = yes
+		}
+		ADISCORD_south_begin_hostilities = yes
+	}
+}
+
+# COUNTRY declarer. Shared setup keeps debug wars on the same settlement path.
+ADISCORD_south_begin_hostilities = {
+	if = {
+		limit = {
+			ADISCORD_south_crisis_open = yes
+			ADISCORD_south_participants_ready = yes
 			ADISCORD_south_declarer_valid = yes
 		}
 		set_global_flag = ADISCORD_south_final_started
@@ -596,6 +608,10 @@ ADISCORD_south_add_path_spirit = {
 			limit = { has_completed_focus = NAM_federal_charter }
 			add_ideas = ADISCORD_south_nam_charter_levies
 		}
+		else_if = {
+			limit = { has_completed_focus = NAM_pragmatic_compact }
+			add_ideas = ADISCORD_south_nam_contract_logistics
+		}
 	}
 	else = {
 		add_ideas = ADISCORD_south_restitution_line
@@ -612,6 +628,7 @@ ADISCORD_south_remove_path_spirit = {
 	remove_ideas = ADISCORD_south_shl_oil_uprising
 	remove_ideas = ADISCORD_south_nam_emergency_writs
 	remove_ideas = ADISCORD_south_nam_charter_levies
+	remove_ideas = ADISCORD_south_nam_contract_logistics
 	remove_ideas = ADISCORD_south_restitution_line
 	ADISCORD_economy_mark_dirty = yes
 }
@@ -673,6 +690,10 @@ ADISCORD_south_final_resolve_north_victory = {
 		else_if = {
 			limit = { NAM = { has_completed_focus = NAM_federal_charter } }
 			set_variable = { var = global.ADISCORD_south_subject_type value = 4 }
+		}
+		else_if = {
+			limit = { NAM = { has_completed_focus = NAM_pragmatic_compact } }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 5 }
 		}
 		ADISCORD_south_end_final_wars = yes
 		ADISCORD_south_mark_losers = yes
@@ -1080,6 +1101,18 @@ ADISCORD_south_apply_subject_type = {
 			}
 		}
 	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 5 compare = equals } }
+		ROOT = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_NAM_economic_contract
+				freedom_level = 0.60
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
 	else = {
 		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no } }
 	}
@@ -1087,7 +1120,8 @@ ADISCORD_south_apply_subject_type = {
 
 # ----- Consolidation campaigns -----
 # Offer kinds stored on the target: 1 = submission (refusal means war),
-# 2 = annexation demand (refusal means war), 3 = alliance invitation.
+# 2 = annexation demand (refusal means war), 3 = alliance invitation,
+# 4 = voluntary economic contract with Svetlogorye.
 
 # COUNTRY target, ROOT champion. Local event targets travel with the delayed
 # dispatcher, preserving the original sender through a conflicting campaign.
@@ -1207,7 +1241,10 @@ ADISCORD_south_refuse_offer = {
 	if = {
 		limit = {
 			ADISCORD_south_nam_story_clear = yes
-			NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			OR = {
+				check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+				check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			}
 			ADISCORD_south_offer_answer_valid = yes
 		}
 		set_country_flag = ADISCORD_south_campaign_target
@@ -1309,6 +1346,17 @@ ADISCORD_south_finalize_submission = {
 					end_wars = no
 					end_civil_wars = no
 				}
+			}
+			else_if = {
+				limit = { has_completed_focus = NAM_pragmatic_compact }
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_NAM_economic_contract
+					freedom_level = 0.60
+					end_wars = no
+					end_civil_wars = no
+				}
+				country_event = { id = ADISCORD_south.42 hours = 1 }
 			}
 			else = {
 				set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no }
@@ -1450,5 +1498,49 @@ ADISCORD_south_raid_north_fuel = {
 			set_temp_variable = { var = NAM_field_damage_amount value = 15 }
 			NAM_field_apply_damage = yes
 		}
+	}
+}
+
+# COUNTRY target, ROOT NAM. Refusal of this contract never declares a war.
+ADISCORD_south_offer_economic_contract = {
+	if = {
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			ROOT = {
+				tag = NAM
+				has_completed_focus = NAM_pragmatic_compact
+			}
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_variable = { var = ADISCORD_south_offer_kind value = 4 }
+		ADISCORD_south_queue_offer = yes
+	}
+}
+
+# Explicit debug starts use Shahrabad as declarer, including defensive NAM routes.
+ADISCORD_south_debug_start_war = {
+	if = {
+		limit = { ADISCORD_south_debug_start_ready = yes }
+		SHL = { ADISCORD_south_begin_hostilities = yes }
+	}
+}
+
+ADISCORD_south_debug_win_nam = {
+	if = {
+		limit = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_north_is_nam = yes
+		}
+		ADISCORD_south_final_resolve_north_victory = yes
+	}
+}
+
+ADISCORD_south_debug_win_shl = {
+	if = {
+		limit = {
+			ADISCORD_south_final_active = yes
+			SHL = { exists = yes }
+		}
+		ADISCORD_south_final_resolve_shl_victory = yes
 	}
 }

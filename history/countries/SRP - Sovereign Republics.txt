@@ -29,3 +29,12 @@ activate_advisor = ADISCORD_staff_SRP_Ruslan_Malinin
 activate_advisor = ADISCORD_staff_SRP_Semyon_Nekrasov
 activate_advisor = ADISCORD_staff_SRP_Stanislav_Ostretsov
 activate_advisor = ADISCORD_staff_SRP_Aleksei_Panov
+
+# Parliamentary and opposition representatives.
+recruit_character = SRP_party_representative_humanism
+recruit_character = SRP_party_representative_utilitarism
+recruit_character = SRP_party_representative_chauvinism
+recruit_character = SRP_party_representative_anarchism
+recruit_character = SRP_party_representative_technocracy
+recruit_character = SRP_party_representative_etatism
+recruit_character = SRP_party_representative_hedonism

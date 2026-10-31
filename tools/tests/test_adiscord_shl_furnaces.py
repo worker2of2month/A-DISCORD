@@ -17,7 +17,7 @@ REGIONAL = NEIGHBOURS + ("RHM", "SDR", "KDR", "NAM", "EFL", "AZH", "WEF")
 NEIGHBOUR_STATES = {
     "KYZ": (280, 284, 285, 286),
     "GLP": (297, 298, 299, 708),
-    "MZR": (269, 273, 275),
+    "MZR": (268, 269, 275),
 }
 EFFECT_PATH = ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"
 TRIGGER_PATH = ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"
@@ -597,7 +597,7 @@ class ScriptMachine:
                 self.event_days[scalar(e.value, "id")] = int(scalar(e.value, "days", "0"))
             elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_clamp_treasury"):
                 self.calls.append(e.key)
-            elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience"):
+            elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience", "ADISCORD_rename_party_representative"):
                 self.calls.append(e.key)
             else:
                 raise AssertionError("Unsupported effect: " + e.key)
@@ -1994,7 +1994,7 @@ class SouthernCampaignTests(unittest.TestCase):
 
     def captured_cisterns(self, course):
         self.ready(course, 1)
-        for state in ("269", "273"):
+        for state in ("269", "268"):
             self.m.ownership[state] = "SHL"
             self.m.control[state] = "SHL"
 
@@ -2184,7 +2184,7 @@ class SouthernCampaignTests(unittest.TestCase):
         self.country()["SHL_mazar_state"] = 5
         self.m.factions.update({"SHL": "SHL", "KYZ": "SHL"})
         self.m.run("SHL_start_mzr_war")
-        self.m.control.update({"269": "KYZ", "273": "SHL", "707": "KYZ"})
+        self.m.control.update({"269": "KYZ", "268": "SHL", "707": "KYZ"})
         trigger = self.m.triggers["SHL_mzr_objectives_held"]
         self.assertTrue(self.m.matches(trigger, "SHL"))
         self.m.wars.discard(frozenset(("KYZ", "MZR")))
@@ -3982,7 +3982,7 @@ class CourseProgrammeTests(unittest.TestCase):
         self.c["SHL_house_votes"] = 9
         self.m.run("SHL_update_tensions")
         self.assertEqual(self.c["SHL_house_pressure"], 25)
-        self.m.flags["SHL"].add("SHL_no_crests")
+        self.m.focuses.add("SHL_k_no_crests")
         self.c["SHL_house_pressure"] = 0
         self.m.run("SHL_update_tensions")
         self.m.run("SHL_update_tensions")
@@ -3990,13 +3990,13 @@ class CourseProgrammeTests(unittest.TestCase):
         draw = self.m.effects["SHL_crisis_draw"]
         guarded = [
             e for e in walk_entries(draw)
-            if e.key == "modifier" and ("has_country_flag", "SHL_open_ledger") in [(c.key, c.value) for c in e.value]
+            if e.key == "modifier" and ("has_completed_focus", "SHL_c_open_ledger") in [(c.key, c.value) for c in e.value]
         ]
         self.assertEqual(len(guarded), 2)
         text = repr(draw)
-        self.assertLess(text.index("SHL_open_ledger"), text.index("ADISCORD_shl_crisis.4"))
-        self.assertGreater(text.rindex("SHL_open_ledger"), text.index("ADISCORD_shl_crisis.4"))
-        self.assertLess(text.rindex("SHL_open_ledger"), text.index("ADISCORD_shl_crisis.5"))
+        self.assertLess(text.index("SHL_c_open_ledger"), text.index("ADISCORD_shl_crisis.4"))
+        self.assertGreater(text.rindex("SHL_c_open_ledger"), text.index("ADISCORD_shl_crisis.4"))
+        self.assertLess(text.rindex("SHL_c_open_ledger"), text.index("ADISCORD_shl_crisis.5"))
 
     def test_neighbour_revanche_is_scheduled_a_year_after_victory_and_the_revision_buys_the_claim_once(self):
         self.c["SHL_water_crisis"] = 1
@@ -4244,12 +4244,13 @@ class ExternalContractTests(unittest.TestCase):
         self.assertIn("SHL_metal_offer_pending", self.m.flags["VAL"])
         self.assertIn(("ADISCORD_release_non_participating_minor_optimization", "VAL"), self.m.calls)
         self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.130"), 1)
-        self.assertFalse(self.m.matches(block(decision, "target_trigger"), "SHL", "VAL"))
+        self.assertFalse(self.m.matches(block(decision, "visible"), "SHL", "VAL"))
+        self.assertFalse(self.m.matches(block(decision, "available"), "SHL", "VAL"))
         self.assertTrue(self.m.matches(block(decision, "target_trigger"), "SHL", "STP"))
         self.m.wars.add(frozenset(("STP", "SHL")))
         self.assertFalse(self.m.matches(block(decision, "target_trigger"), "SHL", "STP"))
         self.m.flags["RUS"].add("SHL_metal_client")
-        self.assertFalse(self.m.matches(block(decision, "target_trigger"), "SHL", "RUS"))
+        self.assertFalse(self.m.matches(block(decision, "visible"), "SHL", "RUS"))
         self.c["SHL_metal_clients"] = 3
         self.assertFalse(self.m.matches(block(decision, "available"), "SHL", "GLP"))
         self.c["SHL_metal_clients"] = 0
@@ -4360,7 +4361,7 @@ class ExternalContractTests(unittest.TestCase):
         self.sign("RUS")
         decision = decision_definition("SHL_metal_contract_end")
         self.assertTrue(self.m.matches(block(decision, "target_trigger"), "SHL", "RUS"))
-        self.assertFalse(self.m.matches(block(decision, "target_trigger"), "SHL", "VAL"))
+        self.assertFalse(self.m.matches(block(decision, "visible"), "SHL", "VAL"))
         self.m.execute(block(decision, "complete_effect"), "SHL", "RUS")
         self.m.execute(block(decision, "complete_effect"), "SHL", "RUS")
         self.assertNotIn("SHL_metal_client", self.m.flags["RUS"])
@@ -4368,9 +4369,42 @@ class ExternalContractTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_metal_clients"], 0)
         self.assertNotIn("ADISCORD_SHL.133", self.m.scheduled)
         modifier = shared_definitions("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt", ("SHL_metal_supply",))["SHL_metal_supply"]
-        self.assertEqual(scalar(modifier, "production_factory_efficiency_gain_factor"), "0.02")
+        self.assertEqual(scalar(modifier, "production_factory_efficiency_gain_factor"), "SHL_metal_efficiency_growth")
+        self.assertEqual(scalar(modifier, "production_factory_max_efficiency_factor"), "SHL_metal_efficiency_cap")
         self.assertIn("SHL_metal_client", repr(block(modifier, "enable")))
         self.assertIn("country_exists", repr(block(modifier, "remove_trigger")))
+
+    def test_metal_terms_expire_without_further_payments_or_duplicate_slots(self):
+        for suffix, duration in (("year", "365"), ("two_years", "730")):
+            with self.subTest(term=suffix):
+                self.setUp()
+                self.m.flags["VAL"].add("SHL_metal_offer_pending")
+                effect = "SHL_metal_sign_contract_two_years" if suffix == "two_years" else "SHL_metal_sign_contract"
+                self.m.run(effect, scope="VAL")
+                mission_id = "SHL_metal_contract_" + suffix
+                self.assertIn(mission_id, self.m.missions)
+                self.assertEqual(self.c["SHL_metal_clients"], 1)
+                mission = decision_definition(mission_id)
+                self.assertEqual(self.m.variables["VAL"]["SHL_metal_efficiency_growth"], 0.15)
+                self.assertEqual(self.m.variables["VAL"]["SHL_metal_efficiency_cap"], 0.05)
+                ideas = parse_clausewitz((ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8"))
+                preview = block(block(block(ideas, "ideas"), "country"), "SHL_metal_supply_preview")
+                modifiers = block(preview, "modifier")
+                self.assertEqual(float(scalar(modifiers, "production_factory_efficiency_gain_factor")), self.m.variables["VAL"]["SHL_metal_efficiency_growth"])
+                self.assertEqual(float(scalar(modifiers, "production_factory_max_efficiency_factor")), self.m.variables["VAL"]["SHL_metal_efficiency_cap"])
+                self.assertEqual(scalar(mission, "days_mission_timeout"), duration)
+                self.assertIn("always", repr(block(mission, "available")))
+                self.assertIn("no", repr(block(mission, "available")))
+                self.m.run(effect, scope="VAL")
+                self.assertEqual(self.c["SHL_metal_clients"], 1)
+                self.m.execute(block(mission, "timeout_effect"), "VAL")
+                self.assertNotIn("SHL_metal_client", self.m.flags["VAL"])
+                self.assertNotIn("SHL_metal_supply", self.m.dynamic)
+                self.assertNotIn(mission_id, self.m.missions)
+                self.assertEqual(self.c["SHL_metal_clients"], 0)
+                treasury = self.m.variables["VAL"]["ADISCORD_economy_treasury"]
+                self.m.run("SHL_metal_settle_client", scope="VAL")
+                self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], treasury)
 
     def test_every_new_key_is_localised_in_both_languages(self):
         CrisisLayerTests.test_every_crisis_event_and_decision_key_is_localised(self)
@@ -4399,6 +4433,516 @@ class ExternalContractTests(unittest.TestCase):
                         self.assertTrue(400 <= len(defined[key]) <= 800, (key, len(defined[key])))
                         self.assertNotRegex(defined[key], "[–—«»]", key)
         self.assertNotRegex(scripted, r"SHLGetPrice25\b")
+
+
+class ConclaveLeversTests(unittest.TestCase):
+    """Conclave levers: exact prices, single debits, the measure lockout, charters and war orders."""
+
+    # Localisation fragments of the stage-4 script author until the lead merges them into the hubs.
+    LOC_FRAGMENTS = Path(
+        r"C:\Users\Admin\AppData\Local\Temp\claude\C--Users-Admin-Documents-Paradox-Interactive-Hearts-of-Iron-IV-mod-A-Discord"
+        r"\59918be6-08c2-4e8e-a861-910d8d665f4f\scratchpad\loc"
+    )
+    STATES = tuple(str(state) for state in range(287, 296))
+    MEASURES = {
+        # id: (visible focus, native PP cost or None, treasury price, finish effect)
+        "SHL_measure_crest_patronage": ("SHL_h_council_of_ten", None, 50, "SHL_finish_crest_patronage"),
+        "SHL_measure_golden_fair": ("SHL_h_cartel_price", 25, 0, "SHL_finish_golden_fair"),
+        "SHL_measure_quarter_assembly": ("SHL_c_council_delegates", 25, 0, "SHL_finish_quarter_assembly"),
+        "SHL_measure_open_books": ("SHL_c_compact_assembly", None, 40, "SHL_finish_open_books"),
+        "SHL_measure_directorate_decree": ("SHL_d_nur_director", 30, 0, "SHL_finish_directorate_decree"),
+        "SHL_measure_war_bonds": ("SHL_d_iron_crown", 0, 0, "SHL_finish_war_bonds"),
+        "SHL_measure_crest_court": ("SHL_r_tolls", 20, 0, "SHL_finish_crest_court"),
+        "SHL_measure_fief_grant": ("SHL_r_hereditary_seats_restored", None, 60, "SHL_finish_fief_grant"),
+        "SHL_measure_common_assembly": ("SHL_k_delegates", 20, 0, "SHL_finish_common_assembly"),
+        "SHL_measure_shift_reserve": ("SHL_k_no_more_crests", None, 30, "SHL_finish_shift_reserve"),
+    }
+
+    class Machine(ScriptMachine):
+        """Records opinion changes, which the shared machine does not model."""
+
+        def execute(self, items, scope, target=None):
+            remaining = []
+            for entry in items:
+                if entry.key == "add_opinion_modifier":
+                    self.calls.append(("add_opinion_modifier", scope, scalar(entry.value, "target"), scalar(entry.value, "modifier")))
+                else:
+                    remaining.append(entry)
+            super().execute(remaining, scope, target)
+
+    def setUp(self):
+        effects = parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))
+        triggers = parse_clausewitz(TRIGGER_PATH.read_text(encoding="utf-8"))
+        self.m = self.Machine(effects, triggers)
+        self.c = self.m.variables["SHL"]
+        self.c["SHL_packet_price"] = 25.0
+        self.c["SHL_shift_policy"] = 0.0
+        self.c["SHL_political_course"] = 0.0
+        self.c["SHL_unrest"] = 30.0
+        self.c["SHL_house_pressure"] = 30.0
+        self.c["SHL_city_support"] = 20.0
+        self.c["SHL_reserve_stock"] = 2.0
+        for state in self.STATES:
+            self.m.variables[state].update({
+                "SHL_furnace_stock": 2.0,
+                "SHL_furnace_wear": 20.0,
+                "SHL_furnace_owner": 0.0,
+                "SHL_furnace_running": 1.0,
+                "SHL_furnace_training": 0.0,
+                "SHL_furnace_shortages": 0.0,
+                "SHL_furnace_recipient": 0.0,
+            })
+        self.m.flags["SHL"].add("SHL_furnaces_initialized")
+        self.m.power_balance[BALANCE] = 0.0
+
+    def available(self, identifier, target=None):
+        return self.m.matches(block(decision_definition(identifier), "available"), "SHL", target)
+
+    def run_block(self, identifier, name, target=None):
+        self.m.target_scope = target
+        self.m.execute(block(decision_definition(identifier), name), "SHL", target)
+
+    def test_country_operable_hides_the_initialisation_flag(self):
+        text = TRIGGER_PATH.read_text(encoding="utf-8")
+        for name in ("SHL_country_operable", "SHL_furnace_site_controlled"):
+            body = re.search(r"^" + name + r" = \{\n(.*?)\n\}", text, re.M | re.S).group(1)
+            self.assertIn("hidden_trigger = { has_country_flag = SHL_furnaces_initialized }", body, name)
+            self.assertNotRegex(body, r"^\s*has_country_flag = SHL_furnaces_initialized", name)
+        self.assertTrue(self.m.matches(self.m.triggers["SHL_country_operable"], "SHL"))
+
+    def test_native_prices_and_cooldowns_are_declared_once(self):
+        expected = {
+            "SHL_convene_conclave": ("40", "120"),
+            "SHL_arbitration_act": ("15", "90"),
+            "SHL_house_audit": ("30", "1"),
+            "SHL_war_orders_all": ("40", "28"),
+        }
+        for identifier, (cost, cooldown) in expected.items():
+            decision = decision_definition(identifier)
+            self.assertEqual(scalar(decision, "cost"), cost, identifier)
+            self.assertEqual(scalar(decision, "days_re_enable"), cooldown, identifier)
+            self.assertIsNone(scalar(decision, "custom_cost_text"), identifier)
+        for identifier in ("SHL_quarter_charter", "SHL_desert_embassy", "SHL_integrate_satellite_decision"):
+            decision = decision_definition(identifier)
+            self.assertEqual(scalar(decision, "cost"), "0", identifier)
+            self.assertIsNotNone(scalar(decision, "custom_cost_text"), identifier)
+            self.assertTrue(block(decision, "custom_cost_trigger"), identifier)
+        for identifier, (_, pp_cost, treasury_price, _) in self.MEASURES.items():
+            decision = decision_definition(identifier)
+            self.assertEqual(scalar(decision, "days_re_enable"), "60", identifier)
+            self.assertEqual(scalar(decision, "days_remove"), "60", identifier)
+            self.assertTrue(block(decision, "modifier"), identifier)
+            if treasury_price:
+                self.assertEqual(scalar(decision, "cost"), "0", identifier)
+                self.assertIsNotNone(scalar(decision, "custom_cost_text"), identifier)
+            else:
+                self.assertEqual(scalar(decision, "cost"), str(pp_cost), identifier)
+
+    def test_convene_feeds_only_house_run_furnaces_and_caps_the_bunker(self):
+        m = self.m
+        m.variables["288"]["SHL_furnace_owner"] = 1
+        m.variables["289"]["SHL_furnace_running"] = 0
+        m.variables["290"]["SHL_furnace_stock"] = 3
+        m.control["291"] = "KYZ"
+        self.c["SHL_house_votes"] = 1
+        self.assertTrue(self.available("SHL_convene_conclave"))
+        self.run_block("SHL_convene_conclave", "complete_effect")
+        self.assertEqual(m.values["political_power"], 200, "the native cost is the only debit")
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 3)
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["289"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["290"]["SHL_furnace_stock"], 3)
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["295"]["SHL_furnace_stock"], 3)
+        self.assertEqual(self.c["SHL_house_pressure"], 25)
+        m.flags["SHL"].add("SHL_political_action")
+        self.assertFalse(self.available("SHL_convene_conclave"))
+        self.assertFalse(self.available("SHL_arbitration_act"))
+
+    def test_arbitration_lowers_unrest_without_a_second_debit(self):
+        self.assertTrue(self.available("SHL_arbitration_act"))
+        self.run_block("SHL_arbitration_act", "complete_effect")
+        self.assertEqual(self.c["SHL_unrest"], 24)
+        self.assertEqual(self.m.values["political_power"], 200)
+
+    def test_charter_is_paid_once_at_the_exact_boundary_and_counted_at_most_three_times(self):
+        m = self.m
+        self.c["ADISCORD_economy_treasury"] = 59.99
+        self.assertFalse(self.available("SHL_quarter_charter", "287"))
+        m.run("SHL_begin_charter", target="287")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 59.99)
+        self.c["ADISCORD_economy_treasury"] = 1000
+        for state in ("287", "288", "289"):
+            self.assertTrue(self.available("SHL_quarter_charter", state))
+            m.run("SHL_begin_charter", target=state)
+            m.run("SHL_begin_charter", target=state)
+            m.run("SHL_finish_charter", target=state)
+            m.run("SHL_finish_charter", target=state)
+            self.assertIn("SHL_quarter_charter", m.flags[state])
+            self.assertNotIn("SHL_operation", m.variables[state])
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 820)
+        self.assertEqual(self.c["SHL_charters_active"], 3)
+        self.assertFalse(self.available("SHL_quarter_charter", "290"))
+        # A fourth charter paid before the third completed is refunded, never granted.
+        m.run("SHL_begin_charter", target="290")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 820)
+        m.variables["290"].update({"SHL_operation": 9.0, "SHL_operation_deposit": 60.0, "SHL_operation_pp": 0.0})
+        self.c["ADISCORD_economy_treasury"] = 760
+        m.run("SHL_finish_charter", target="290")
+        self.assertNotIn("SHL_quarter_charter", m.flags["290"])
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 820)
+        self.assertEqual(self.c["SHL_charters_active"], 3)
+        # Loss of the district and a state takeover both drop the charter.
+        m.ownership["287"] = "KYZ"
+        m.control["287"] = "KYZ"
+        m.variables["288"]["SHL_furnace_owner"] = 2
+        m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_charters_active"], 1)
+        self.assertNotIn("SHL_quarter_charter", m.flags["287"])
+        self.assertNotIn("SHL_quarter_charter", m.flags["288"])
+        self.assertIn("SHL_quarter_charter", m.flags["289"])
+        self.assertTrue(self.available("SHL_quarter_charter", "290"))
+
+    def test_charter_rule_counts_only_lit_chartered_furnaces(self):
+        m = self.m
+        m.flags["287"].add("SHL_quarter_charter")
+        m.flags["288"].add("SHL_quarter_charter")
+        m.flags["289"].add("SHL_quarter_charter")
+        m.variables["288"]["SHL_furnace_running"] = 0
+        m.control["289"] = "AZH"
+        baseline = deepcopy(m)
+        for flagged in ("287", "288", "289"):
+            baseline.flags[flagged].discard("SHL_quarter_charter")
+        for machine in (m, baseline):
+            machine.run("SHL_refresh_furnaces")
+            machine.run("SHL_update_tensions")
+        self.assertEqual(self.c["SHL_charters_active"], 3)
+        self.assertEqual(self.c["SHL_charters_running"], 1)
+        self.assertEqual(self.c["SHL_city_support"] - baseline.variables["SHL"]["SHL_city_support"], 1)
+        self.assertEqual(baseline.variables["SHL"]["SHL_unrest"] - self.c["SHL_unrest"], 1)
+
+    def test_dispatch_moves_exactly_one_packet_from_the_donor_to_the_lowest_stock(self):
+        m = self.m
+        m.variables["287"]["SHL_furnace_stock"] = 3
+        m.variables["288"]["SHL_furnace_stock"] = 1
+        m.variables["289"]["SHL_furnace_stock"] = 0
+        m.variables["289"]["SHL_furnace_running"] = 0
+        m.variables["290"]["SHL_furnace_stock"] = 1.5
+        self.assertFalse(self.available("SHL_dispatch_order", "290"))
+        self.assertTrue(self.available("SHL_dispatch_order", "287"))
+        total = sum(m.variables[state]["SHL_furnace_stock"] for state in self.STATES)
+        m.run("SHL_begin_dispatch", target="287")
+        m.run("SHL_begin_dispatch", target="287")
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 2)
+        self.assertFalse(self.available("SHL_dispatch_order", "287"), "the donor is busy while the packet travels")
+        m.run("SHL_finish_dispatch", target="287")
+        m.run("SHL_finish_dispatch", target="287")
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 2, "the lit furnace with the smallest stock receives it")
+        self.assertEqual(m.variables["289"]["SHL_furnace_stock"], 0, "a cold furnace is never the recipient")
+        self.assertEqual(sum(m.variables[state]["SHL_furnace_stock"] for state in self.STATES), total)
+        self.assertNotIn("SHL_operation", m.variables["287"])
+        self.assertNotIn("SHL_pick_site", self.c)
+
+    def test_audit_reduces_wear_resets_shortages_and_refunds_on_loss(self):
+        m = self.m
+        m.variables["287"].update({"SHL_furnace_wear": 50.0, "SHL_furnace_shortages": 1.0})
+        self.assertTrue(self.available("SHL_house_audit", "287"))
+        m.run("SHL_begin_audit", target="287")
+        self.assertFalse(self.available("SHL_house_audit", "287"))
+        m.run("SHL_finish_audit", target="287")
+        m.run("SHL_finish_audit", target="287")
+        self.assertEqual(m.variables["287"]["SHL_furnace_wear"], 40)
+        self.assertEqual(m.variables["287"]["SHL_furnace_shortages"], 0)
+        self.assertEqual(self.c["SHL_house_pressure"], 35)
+        self.assertEqual(m.values["political_power"], 200, "the native 30 PP is the only price")
+        m.run("SHL_begin_audit", target="288")
+        m.control["288"] = "AZH"
+        self.assertTrue(m.matches(block(decision_definition("SHL_house_audit"), "cancel_trigger"), "SHL", "288"))
+        m.run("SHL_cancel_operation", target="288")
+        self.assertEqual(m.values["political_power"], 230, "the escrow returns the native price once")
+        self.assertEqual(m.variables["288"]["SHL_furnace_wear"], 20)
+
+    def test_embassy_is_paid_once_opens_once_and_feeds_the_southern_offer(self):
+        m = self.m
+        self.c["ADISCORD_economy_treasury"] = 49.99
+        self.assertFalse(self.available("SHL_desert_embassy", "KDR"))
+        self.c["ADISCORD_economy_treasury"] = 50
+        self.assertTrue(self.available("SHL_desert_embassy", "KDR"))
+        m.run("SHL_begin_embassy", target="KDR")
+        m.run("SHL_begin_embassy", target="KDR")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 0)
+        self.assertFalse(self.m.matches(block(decision_definition("SHL_desert_embassy"), "target_trigger"), "SHL", "KDR"))
+        self.assertFalse(self.available("SHL_desert_embassy", "RHM"), "one mission travels at a time")
+        m.run("SHL_finish_embassy", target="KDR")
+        m.run("SHL_finish_embassy", target="KDR")
+        self.assertIn("SHL_embassy", m.flags["KDR"])
+        self.assertNotIn("SHL_embassy_pending", m.flags["KDR"])
+        self.assertEqual(m.calls.count(("add_opinion_modifier", "KDR", "SHL", "ADISCORD_SHL_embassy")), 1)
+        self.assertNotIn("SHL_embassy_deposit", self.c)
+        self.assertFalse(self.m.matches(block(decision_definition("SHL_desert_embassy"), "target_trigger"), "SHL", "KDR"))
+        # A war before arrival returns the deposit.
+        self.c["ADISCORD_economy_treasury"] = 50
+        m.run("SHL_begin_embassy", target="RHM")
+        m.wars.add(frozenset(("SHL", "RHM")))
+        self.assertTrue(m.matches(block(decision_definition("SHL_desert_embassy"), "cancel_trigger"), "SHL", "RHM"))
+        m.run("SHL_cancel_embassy", target="RHM")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 50)
+        self.assertNotIn("SHL_embassy_pending", m.flags["RHM"])
+        events = (ROOT / "events/ADISCORD_south_final_war_events.txt").read_text(encoding="utf-8")
+        option = re.search(r"name = ADISCORD_south\.40\.a\n(.*?)\n\s*option = \{", events, re.S).group(1)
+        self.assertRegex(option, r"add = 15\s+has_country_flag = SHL_embassy\s+FROM = \{ tag = SHL \}")
+        modifiers = shared_definitions("common/opinion_modifiers/ADISCORD_SHL_opinion_modifiers.txt", ("opinion_modifiers",))["opinion_modifiers"]
+        self.assertEqual(scalar(block(modifiers, "ADISCORD_SHL_embassy"), "value"), "20")
+
+    def test_reserve_price_is_60_or_45_plus_the_supplier_premium(self):
+        m = self.m
+        for focus, price in ((None, 60), ("SHL_common_fund", 45)):
+            if focus:
+                m.focuses.add(focus)
+            for premium in (False, True):
+                m.flags["SHL"].discard("SHL_supplier_premium")
+                if premium:
+                    m.flags["SHL"].add("SHL_supplier_premium")
+                quote = price + (10 if premium else 0)
+                self.c["SHL_reserve_stock"] = 2
+                self.c["ADISCORD_economy_treasury"] = quote - 0.01
+                m.run("SHL_purchase_reserve")
+                self.assertEqual(self.c["SHL_reserve_stock"], 2, (focus, premium))
+                self.assertEqual(self.c["SHL_reserve_price"], price)
+                self.assertEqual(self.c["SHL_reserve_price_premium"], price + 10)
+                self.c["ADISCORD_economy_treasury"] = quote
+                m.run("SHL_purchase_reserve")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 0, (focus, premium))
+                self.assertEqual(self.c["SHL_reserve_stock"], 4, (focus, premium))
+                self.assertNotIn("SHL_supplier_premium", m.flags["SHL"])
+        self.assertEqual(scalar(decision_definition("SHL_buy_reserve"), "custom_cost_text"), "SHL_cost_reserve")
+
+    def test_war_orders_flag_every_open_lit_furnace_for_exactly_one_cycle(self):
+        m = self.m
+        m.variables["288"]["SHL_furnace_running"] = 0
+        m.variables["289"]["SHL_furnace_recipient"] = 2
+        m.run("SHL_begin_quota", target="290")
+        self.assertTrue(self.available("SHL_war_orders_all"))
+        self.run_block("SHL_war_orders_all", "complete_effect")
+        self.assertEqual(m.values["political_power"], 200)
+        flagged = [state for state in self.STATES if "SHL_quota_site" in m.flags[state]]
+        self.assertEqual(flagged, [state for state in self.STATES if state != "288"])
+        self.assertEqual(m.variables["289"]["SHL_furnace_recipient"], 1)
+        self.assertEqual(m.variables["289"]["SHL_war_orders_prev_recipient"], 2)
+        self.assertNotIn("SHL_war_orders_prev_recipient", m.variables["290"], "a running quota keeps its own lifecycle")
+        self.assertFalse(self.available("SHL_war_orders_all"), "no open furnace remains this cycle")
+        unrest = self.c["SHL_unrest"]
+        m.run("SHL_produce_period")
+        self.assertEqual(self.c["SHL_unrest"], unrest, "war orders add no quota unrest")
+        self.assertEqual([state for state in self.STATES if "SHL_quota_site" in m.flags[state]], ["290"])
+        self.assertEqual(m.variables["289"]["SHL_furnace_recipient"], 2)
+        self.assertEqual(m.variables["287"]["SHL_furnace_recipient"], 0)
+        self.assertNotIn("SHL_war_orders_prev_recipient", m.variables["289"])
+        m.run("SHL_finish_quota", target="290")
+        self.assertNotIn("SHL_quota_site", m.flags["290"])
+
+    def test_integration_prices_follow_the_course_and_refund_when_the_satellite_leaves(self):
+        m = self.m
+        m.countries["KDR"]["subject_of"] = "SHL"
+        m.countries["KDR"]["is_subject"] = True
+        self.assertTrue(m.matches(block(decision_definition("SHL_integrate_satellite_decision"), "target_trigger"), "SHL", "KDR"))
+        prices = {1: (300, 0), 2: (0, 0), 3: (0, 100), 4: (200, 0), 5: (0, 50)}
+        for course, (treasury, power) in prices.items():
+            with self.subTest(course=course):
+                self.c["SHL_political_course"] = course
+                self.c["ADISCORD_economy_treasury"] = max(treasury - 0.01, 0)
+                m.values["political_power"] = power - 1
+                if treasury or power:
+                    self.assertFalse(self.available("SHL_integrate_satellite_decision", "KDR"))
+                self.c["ADISCORD_economy_treasury"] = treasury
+                m.values["political_power"] = power
+                self.assertTrue(self.available("SHL_integrate_satellite_decision", "KDR"))
+                m.run("SHL_begin_integration", target="KDR")
+                m.run("SHL_begin_integration", target="KDR")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 0)
+                self.assertEqual(m.values["political_power"], 0)
+                self.assertIn("SHL_integration_pending", m.flags["KDR"])
+                self.assertFalse(self.available("SHL_integrate_satellite_decision", "RHM"), "one accession at a time")
+                m.run("SHL_cancel_integration", target="KDR")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], treasury)
+                self.assertEqual(m.values["political_power"], power)
+                self.assertNotIn("SHL_integration_pending", m.flags["KDR"])
+        self.c["SHL_political_course"] = 2
+        m.run("SHL_begin_integration", target="KDR")
+        m.countries["KDR"]["subject_of"] = None
+        self.assertTrue(m.matches(block(decision_definition("SHL_integrate_satellite_decision"), "cancel_trigger"), "SHL", "KDR"))
+        m.run("SHL_finish_integration_decision", target="KDR")
+        self.assertTrue(m.countries["KDR"]["exists"], "a satellite that left is not annexed")
+        self.assertNotIn("SHL_integration_deposit", self.c)
+        m.countries["KDR"]["subject_of"] = "SHL"
+        self.c["SHL_political_course"] = 1
+        self.c["ADISCORD_economy_treasury"] = 300
+        m.run("SHL_begin_integration", target="KDR")
+        m.run("SHL_finish_integration_decision", target="KDR")
+        self.assertEqual(m.calls.count(("annex_country", "SHL", "KDR")), 1)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 0, "the course price is the only debit")
+        self.assertNotIn("SHL_integration_deposit", self.c)
+        self.assertNotIn("SHL_integration_price", self.c)
+
+    def test_one_measure_at_a_time_and_results_only_in_remove_effect(self):
+        m = self.m
+        for identifier, (focus, _, _, finish) in self.MEASURES.items():
+            m.focuses.add(focus)
+            decision = decision_definition(identifier)
+            self.assertNotIn(finish, repr(block(decision, "complete_effect")), identifier)
+            self.assertIn(finish, repr(block(decision, "remove_effect")), identifier)
+            self.assertIn("SHL_end_measure", repr(block(decision, "cancel_effect")), identifier)
+        self.c["ADISCORD_economy_treasury"] = 1000
+        self.assertTrue(self.available("SHL_measure_golden_fair"))
+        self.run_block("SHL_measure_golden_fair", "complete_effect")
+        self.assertIn("SHL_political_action", m.flags["SHL"])
+        for identifier in self.MEASURES:
+            self.assertFalse(self.available(identifier), identifier)
+        self.assertFalse(self.available("SHL_convene_conclave"))
+        self.assertTrue(self.available("SHL_war_orders_all"), "war orders stay outside the lockout")
+        self.run_block("SHL_measure_golden_fair", "cancel_effect")
+        self.assertNotIn("SHL_political_action", m.flags["SHL"])
+        self.assertTrue(self.available("SHL_measure_crest_patronage"))
+        # Treasury measures debit exactly once at the start and nothing at the end.
+        before = dict(self.c)
+        self.run_block("SHL_measure_crest_patronage", "complete_effect")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 950)
+        self.assertEqual(self.c["SHL_house_pressure"], before["SHL_house_pressure"])
+        self.assertEqual(m.power_balance[BALANCE], 0.0)
+        self.run_block("SHL_measure_crest_patronage", "remove_effect")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 950)
+        self.assertEqual(self.c["SHL_house_pressure"], before["SHL_house_pressure"] - 5)
+        self.assertEqual(m.power_balance[BALANCE], -0.05)
+        self.assertNotIn("SHL_political_action", m.flags["SHL"])
+
+    def test_measure_results_match_the_contract(self):
+        m = self.m
+        self.c["ADISCORD_economy_treasury"] = 1000
+        m.variables["288"]["SHL_furnace_recipient"] = 1
+        m.variables["289"]["SHL_furnace_running"] = 0
+        m.run("SHL_finish_golden_fair")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1000 + 30 * 7)
+        m.run("SHL_finish_war_bonds")
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1210 + 200)
+        self.assertEqual(self.c["ADISCORD_economy_debt"], 300)
+        m.run("SHL_finish_shift_reserve")
+        self.assertEqual(self.c["SHL_reserve_stock"], 4)
+        m.run("SHL_finish_quarter_assembly")
+        self.assertEqual(m.power_balance[BALANCE], 0.05)
+        self.assertEqual(self.c["SHL_city_support"], 23)
+        m.run("SHL_finish_open_books")
+        self.assertEqual(self.c["SHL_unrest"], 25)
+        self.assertEqual(m.values["stability"], 0.01)
+        m.run("SHL_finish_crest_court")
+        self.assertEqual(m.power_balance[BALANCE], 0.0)
+        self.assertEqual(self.c["SHL_unrest"], 29)
+        m.run("SHL_finish_fief_grant")
+        self.assertEqual(m.power_balance[BALANCE], -0.03)
+        self.assertEqual(self.c["SHL_house_pressure"], 20)
+        m.run("SHL_finish_common_assembly")
+        self.assertEqual(m.power_balance[BALANCE], 0.02)
+        self.assertEqual(self.c["SHL_unrest"], 25)
+        # The decree feeds the state furnace with the smallest stock only.
+        m.variables["290"].update({"SHL_furnace_owner": 2.0, "SHL_furnace_stock": 2.0})
+        m.variables["291"].update({"SHL_furnace_owner": 2.0, "SHL_furnace_stock": 1.0})
+        m.variables["292"]["SHL_furnace_stock"] = 0
+        m.run("SHL_finish_directorate_decree")
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["290"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["292"]["SHL_furnace_stock"], 0)
+        self.assertEqual(self.c["SHL_house_pressure"], 15)
+        self.assertEqual(self.c["SHL_unrest"], 28)
+        self.assertNotIn("SHL_pick_site", self.c)
+
+    def test_tree_helpers_repair_stock_and_deliver_the_first_batch(self):
+        m = self.m
+        m.variables["289"]["SHL_furnace_wear"] = 70
+        m.variables["290"]["SHL_furnace_wear"] = 95
+        m.variables["290"]["SHL_furnace_running"] = 0
+        m.run("SHL_repair_worst_site")
+        self.assertEqual(m.variables["289"]["SHL_furnace_wear"], 40)
+        self.assertEqual(m.variables["290"]["SHL_furnace_wear"], 95, "a cold furnace is not repaired")
+        m.variables["287"]["SHL_furnace_owner"] = 1
+        m.variables["288"]["SHL_furnace_owner"] = 1
+        m.variables["288"]["SHL_furnace_stock"] = 3
+        m.run("SHL_stock_city_sites")
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 3)
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 3)
+        self.assertEqual(m.variables["289"]["SHL_furnace_stock"], 2)
+        expectations = {
+            11: lambda: self.assertEqual(self.c["ADISCORD_economy_treasury"], 1090),
+            21: lambda: self.assertEqual(m.infrastructure, 1),
+            22: lambda: self.assertEqual(m.equipment[("SHL", "infantry_equipment")], 750),
+            32: lambda: self.assertEqual(m.equipment[("SHL", "ADISCORD_squad_weapons_equipment_0")], 5),
+            41: lambda: self.assertEqual(self.c["ADISCORD_economy_treasury"], 1150),
+            52: lambda: self.assertEqual(m.variables["289"]["SHL_furnace_wear"], 10),
+        }
+        for ending, check in expectations.items():
+            with self.subTest(ending=ending):
+                self.c["ADISCORD_economy_treasury"] = 1000
+                self.c["SHL_prog_ending"] = ending
+                m.run("SHL_prog_first_batch")
+                check()
+        m.infrastructure = 5
+        self.c["SHL_prog_ending"] = 21
+        m.run("SHL_prog_first_batch")
+        self.assertEqual(m.infrastructure, 5, "a full capital is not overbuilt")
+
+    def test_measures_category_opens_with_ratification(self):
+        categories = shared_definitions("common/decisions/categories/ADISCORD_decision_categories_SHL.txt", ("SHL_measures",))
+        visible = block(categories["SHL_measures"], "visible")
+        self.assertFalse(self.m.matches(visible, "SHL"))
+        self.c["SHL_political_course"] = 3
+        self.assertTrue(self.m.matches(visible, "SHL"))
+        decisions = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        measures = re.search(r"^SHL_measures = \{\n(.*?)\n\}", decisions, re.M | re.S).group(1)
+        for identifier in self.MEASURES:
+            self.assertIn("\t" + identifier + " = {", measures)
+        levers = re.search(r"^SHL_quarters_and_borders = \{\n(.*?)\n\}", decisions, re.M | re.S).group(1)
+        self.assertIn("# ----- Conclave levers -----", levers)
+        for identifier in ("SHL_convene_conclave", "SHL_quarter_charter", "SHL_dispatch_order", "SHL_arbitration_act", "SHL_house_audit", "SHL_desert_embassy", "SHL_integrate_satellite_decision"):
+            self.assertIn("\t" + identifier + " = {", levers)
+        conclave = re.search(r"^SHL_conclave = \{\n(.*?)\n\}", decisions, re.M | re.S).group(1)
+        self.assertIn("\tSHL_war_orders_all = {", conclave)
+
+    def test_every_new_key_is_localised_in_both_languages(self):
+        decisions = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        effects = EFFECT_PATH.read_text(encoding="utf-8")
+        scripted = (ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt").read_text(encoding="utf-8")
+        identifiers = [
+            "SHL_convene_conclave", "SHL_quarter_charter", "SHL_dispatch_order", "SHL_arbitration_act",
+            "SHL_house_audit", "SHL_desert_embassy", "SHL_integrate_satellite_decision", "SHL_war_orders_all",
+            *self.MEASURES,
+        ]
+        keys = set()
+        for identifier in identifiers:
+            keys |= {identifier, identifier + "_desc"}
+            for entry in walk_entries(decision_definition(identifier)):
+                if entry.key in ("custom_effect_tooltip", "tooltip"):
+                    keys.add(entry.value)
+                elif entry.key == "custom_cost_text":
+                    keys |= {entry.value + suffix for suffix in ("", "_blocked", "_tooltip")}
+        for name in ("SHLGetReservePrice", "SHLGetPrice30", "SHLGetIntegrationPrice"):
+            definition = re.search(r"name = " + name + r"\n(.*?)\n\}", scripted, re.S).group(1)
+            keys |= set(re.findall(r"localization_key = (\w+)", definition))
+        keys |= {"SHL_measures", "SHL_measures_desc", "ADISCORD_SHL_embassy", "SHL_cost_reserve", "SHL_cost_reserve_blocked", "SHL_cost_reserve_tooltip"}
+        self.assertIn("SHL_cost_integration_blocked", keys)
+        self.assertIn("SHL_price_reserve_premium_red", keys)
+        for language, suffix in (("russian", "ru"), ("english", "en")):
+            text = (ROOT / f"localisation/{language}/ADISCORD_SHL_l_{language}.yml").read_text(encoding="utf-8-sig")
+            fragment = self.LOC_FRAGMENTS / f"stage4_script_{suffix}.yml"
+            if fragment.exists():
+                raw = fragment.read_bytes()
+                self.assertFalse(raw.startswith(b"\xef\xbb\xbf"), "fragments carry no BOM")
+                text += raw.decode("utf-8")
+            defined = dict(re.findall(r"^ ([\w.]+): \"(.*)\"$", text, re.M))
+            self.assertEqual(sorted(keys - set(defined)), [], language)
+            for key in keys:
+                self.assertNotRegex(defined[key], "[\u2013\u2014\u00ab\u00bb]", key)
+                self.assertNotRegex(defined[key], r"£\w+_texticon\s*§[YRG]\d", key)
+            for identifier in identifiers:
+                self.assertNotRegex(defined[identifier + "_desc"], r"§[GRY][+-]?\d", identifier + " description restates an effect")
+        self.assertIn("SHL_political_action", effects)
 
 
 if __name__ == "__main__":

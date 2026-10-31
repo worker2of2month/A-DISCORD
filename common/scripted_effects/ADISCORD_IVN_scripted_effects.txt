@@ -30,6 +30,7 @@ IVN_adopt_emergency_order = {
 		}
 		set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
 	}
+	IVN_party_representatives_emergency = yes
 }
 
 # ----- Chauvinist revolt of the marches -----
@@ -117,6 +118,7 @@ IVN_hand_power_to_legion = {
 		character = IVN_Rostislav_Karn
 		ideology = chauvinism_ideology
 	}
+	IVN_party_representatives_legion = yes
 }
 
 # COUNTRY IVN. Every terminal path reunites the marches under IVN.
@@ -141,5 +143,84 @@ IVN_resolve_marches_revolt = {
 	}
 	else = {
 		news_event = { id = ADISCORD_ivn.4 hours = 2 }
+	}
+}
+
+# Route-specific names belong only to non-story party representatives.
+IVN_party_representatives_emergency = {
+	if = {
+		limit = {
+			tag = IVN
+			has_government = etatism
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_utilitarism
+				NAME = IVN_party_representatives_emergency_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_chauvinism
+				NAME = IVN_party_representatives_emergency_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_pragmatism
+				NAME = IVN_party_representatives_emergency_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_anarchism
+				NAME = IVN_party_representatives_emergency_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_technocracy
+				NAME = IVN_party_representatives_emergency_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_etatism
+				NAME = IVN_party_representatives_emergency_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_hedonism
+				NAME = IVN_party_representatives_emergency_hedonism
+			}
+		}
+	}
+}
+
+IVN_party_representatives_legion = {
+	if = {
+		limit = {
+			tag = IVN
+			has_government = chauvinism
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_utilitarism
+				NAME = IVN_party_representatives_legion_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_chauvinism
+				NAME = IVN_party_representatives_legion_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_pragmatism
+				NAME = IVN_party_representatives_legion_pragmatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_anarchism
+				NAME = IVN_party_representatives_legion_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_technocracy
+				NAME = IVN_party_representatives_legion_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_etatism
+				NAME = IVN_party_representatives_legion_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = IVN_party_representative_hedonism
+				NAME = IVN_party_representatives_legion_hedonism
+			}
+		}
 	}
 }

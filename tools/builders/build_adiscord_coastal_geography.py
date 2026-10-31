@@ -51,12 +51,21 @@ DISPLACED_PROVINCES = frozenset({6008, 7739, 11627})
 CITIES = frozenset(range(16713, 16722)) | frozenset(province for province, _value in SOUTHERN_CITY_POINTS.values())
 ARAB_CITIES = frozenset({16713, 16714, 16715, 16718, 16719, 16720}) | frozenset(entry["province"] for entry in SOUTHERN_CITIES)
 # Urban growth authored in Nudge: expanded southern cities and their new
-# districts receive city rasters without becoming manifest cities.
+# districts receive city rasters without becoming manifest cities. The
+# hand-painted parents and rural sectors of the southern cities Damir, Arsan,
+# Rahma, Haret, Sekhvan, Ormis and Veyr are urban as well.
 ARAB_URBAN_GROWTH = frozenset({
     488, 971, 1349, 4089, 16745, 16746, 16751, 16753, 16784, 16785, 16786,
     16882, 16883, 16886, 16888, 16889, 16891, 16893, 16894,
+    274, 443, 492, 2309, 2504, 3643, 7903,
+    16742, 16743, 16744, 16748, 16749, 16750, 16754, 16755, 16756,
+    16766, 16767, 16768, 16769, 16770, 16771, 16787, 16788, 16789,
+    16796, 16797, 16798,
 })
-URBAN_GROWTH = ARAB_URBAN_GROWTH | frozenset({16881, 16884, 16885, 16887, 16890, 16892})
+# Lower Loren's hand-painted urban provinces use the northern city raster.
+URBAN_GROWTH = ARAB_URBAN_GROWTH | frozenset({
+    1198, 16881, 16884, 16885, 16887, 16890, 16892, 16900, 16901,
+})
 RURAL_SECTORS = tuple(
     {**sector, "parent": city["parent"], "parent_terrain": city["parent_terrain"], "terrain": city["parent_terrain"]}
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
@@ -67,8 +76,9 @@ SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS)
 PROVINCE_PIXEL_REPAIRS = {
     (3971, 1447): (971, 16746),
     (3805, 1171): (10375, 16777),
-    (3957, 1149): (16788, 16787),
     (3959, 1034): (834, 16738),
+    # Lower Loren: the hand-painted corner of 1198, 627, 16901 and 5926.
+    (3704, 1345): (16901, 1198),
     # Keep a three-pixel-wide approach from 6099 to the southern edge of 4287.
     (3674, 1433): (4287, 6099),
     (3675, 1433): (4287, 6099),
@@ -232,6 +242,15 @@ NUDGE_SPLIT_DONORS = frozenset({
     13248, 13382, 13882, 16745, 16746, 16747, 16752, 16753,
 })
 DISPLACED_PROVINCES |= NUDGE_SPLIT_DONORS
+# Provinces whose borders the hand-painted urban pass moved: the Lower Loren
+# cities with their neighbours and the enlarged cores and sectors of Haret,
+# Sekhvan, Ormis and Zarkhan. They follow the same anchor rules as the donors.
+HAND_PAINTED_PROVINCES = frozenset({
+    627, 1198, 1444, 2412, 2504, 3643, 3872, 4478, 5926, 6514, 6847, 7903,
+    9402, 10845, 12974, 16730, 16731, 16737, 16766, 16767, 16768, 16769,
+    16770, 16771, 16787, 16788, 16789, 16899,
+})
+DISPLACED_PROVINCES |= HAND_PAINTED_PROVINCES
 COLOURMAP = Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
 COLOURMAP_SOURCE = Path("tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds")
 SEA_FLOOR_HEIGHT = 89
@@ -443,26 +462,41 @@ def unit_anchors(
     A province has slots 0, 9, 10, 21 and 38 plus up to eight slots per border
     row (two rows on land, four at sea), sized by its neighbour count. A slot
     set copied from another province or left over from an older border is
-    unsafe at game start, so every province around the southern Nudge pass
-    keeps its valid rows, loses slots for borders it no longer has and gains
-    the slots its new borders need. Rows stay grouped by slot type in the
-    native order.
+    unsafe at game start, so every province around the southern Nudge and
+    hand-painted passes keeps its valid rows, loses slots for borders it no
+    longer has and gains the slots its new borders need. A province moved
+    wholesale keeps no anchor inside its pixels and receives a fresh native
+    set. Rows stay grouped by slot type in the native order.
     """
     rows = [line.split(";") for line in original.decode("utf-8").splitlines()]
     neighbours = province_neighbours(grid)
     slots = defaultdict(dict)
     for row in rows:
         slots[int(row[0])][int(row[1])] = row
-    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES
+    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES | HAND_PAINTED_PROVINCES
+    # A city carved without rural sectors has no anchors yet: it receives a
+    # native set, and its parent (a neighbour here) gains the new border slots.
+    touched |= {province for province in masks if province not in slots}
     scope = touched | {neighbour for province in touched for neighbour in neighbours[province]}
     map_height = heights.shape[0]
+
+    def anchor_inside(province: int, row: list[str]) -> bool:
+        return bool(masks[province][map_height - 1 - round(float(row[4])), round(float(row[2]))])
+
+    relocated = {
+        province for province in touched & set(masks)
+        if slots[province] and not any(anchor_inside(province, row) for row in slots[province].values())
+    }
     rebuilt = {}
     for province in sorted(scope):
         kind = kinds.get(province)
-        if kind not in ("land", "sea") or set(slots[province]) == native_slots(kind, len(neighbours[province])):
+        if kind not in ("land", "sea"):
             continue
+        if set(slots[province]) == native_slots(kind, len(neighbours[province])) and province not in relocated:
+            continue
+        existing = {} if province in relocated else slots[province]
         rebuilt[province] = complete_native_anchors(
-            province, kind, slots[province], grid, heights, sorted(neighbours[province])
+            province, kind, existing, grid, heights, sorted(neighbours[province])
         )
     points = {province: np.argwhere(mask) for province, mask in masks.items()}
 
@@ -501,7 +535,9 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
     groups = {}
     for city in SOUTHERN_CITIES:
         members = {city["parent"], city["province"], *(sector["province"] for sector in city.get("sectors", ()))}
-        groups.update({province: members for province in members})
+        # A parent carved twice keeps the crossings of both families.
+        for province in members:
+            groups[province] = groups.get(province, set()) | members
     split_members = set(NUDGE_SPLIT_PARENTS) | set(NUDGE_SPLIT_PARENTS.values()) | DISPLACED_PROVINCES
     groups.update({province: groups.get(province, set()) | split_members for province in split_members})
     lookup = np.zeros(1 << 24, dtype=np.uint16)

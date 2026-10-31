@@ -129,7 +129,56 @@ scripted_gui = {
 					activate_targeted_decision = { target = 700 decision = NAM_prepare_line }
 				}
 			}
-		}
+
+			NAM_bw_67_drilling_click = {
+				if = {
+					limit = { 67 = { NAM_bw_drilling_startable = yes } }
+					activate_targeted_decision = { target = 67 decision = NAM_econ_deep_drilling }
+				}
+			}
+
+			NAM_bw_688_drilling_click = {
+				if = {
+					limit = { 688 = { NAM_bw_drilling_startable = yes } }
+					activate_targeted_decision = { target = 688 decision = NAM_econ_deep_drilling }
+				}
+			}
+
+			NAM_bw_689_drilling_click = {
+				if = {
+					limit = { 689 = { NAM_bw_drilling_startable = yes } }
+					activate_targeted_decision = { target = 689 decision = NAM_econ_deep_drilling }
+				}
+			}
+
+			NAM_bw_690_drilling_click = {
+				if = {
+					limit = { 690 = { NAM_bw_drilling_startable = yes } }
+					activate_targeted_decision = { target = 690 decision = NAM_econ_deep_drilling }
+				}
+			}
+
+			NAM_bw_719_drilling_click = {
+				if = {
+					limit = { 719 = { NAM_bw_drilling_startable = yes } }
+					activate_targeted_decision = { target = 719 decision = NAM_econ_deep_drilling }
+				}
+			}
+
+			NAM_bw_688_hydroelectric_click = {
+				if = {
+					limit = { 688 = { NAM_bw_hydroelectric_startable = yes } }
+					activate_targeted_decision = { target = 688 decision = NAM_project_hydroelectric }
+				}
+			}
+
+			NAM_bw_67_chromium_click = {
+				if = {
+					limit = { 67 = { NAM_bw_chromium_startable = yes } }
+					activate_targeted_decision = { target = 67 decision = NAM_project_chromium }
+				}
+			}
+}
 		# A button is shown where its decision is visible and enabled where the
 		# decision can start; the tooltip names the first blocking condition.
 		triggers = {
@@ -695,7 +744,156 @@ scripted_gui = {
 				700 = { NAM_bw_line_startable = yes }
 			}
 
-		}
+
+			NAM_bw_67_drilling_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_67_drilling_price_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_67_drilling_duration_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_67_drilling_click_enabled = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				67 = { NAM_bw_drilling_startable = yes }
+			}
+
+			NAM_bw_688_drilling_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_688_drilling_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_688_drilling_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_688_drilling_click_enabled = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				688 = { NAM_bw_drilling_startable = yes }
+			}
+
+			NAM_bw_689_drilling_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_689_drilling_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_689_drilling_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_689_drilling_click_enabled = {
+				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
+				689 = { NAM_bw_drilling_startable = yes }
+			}
+
+			NAM_bw_690_drilling_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_690_drilling_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_690_drilling_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_690_drilling_click_enabled = {
+				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
+				690 = { NAM_bw_drilling_startable = yes }
+			}
+
+			NAM_bw_719_drilling_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_719_drilling_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_719_drilling_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				has_completed_focus = NAM_deep_wells
+			}
+			NAM_bw_719_drilling_click_enabled = {
+				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
+				719 = { NAM_bw_drilling_startable = yes }
+			}
+
+			NAM_bw_688_hydroelectric_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_svetlogorsk_dam
+				688 = { NOT = { has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower } } }
+			}
+			NAM_bw_688_hydroelectric_price_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_svetlogorsk_dam
+				688 = { NOT = { has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower } } }
+			}
+			NAM_bw_688_hydroelectric_duration_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				has_completed_focus = NAM_svetlogorsk_dam
+				688 = { NOT = { has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower } } }
+			}
+			NAM_bw_688_hydroelectric_click_enabled = {
+				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
+				688 = { NAM_bw_hydroelectric_startable = yes }
+			}
+
+			NAM_bw_67_chromium_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+				67 = { NOT = { has_state_flag = NAM_chromium_mine_expanded } }
+			}
+			NAM_bw_67_chromium_price_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+				67 = { NOT = { has_state_flag = NAM_chromium_mine_expanded } }
+			}
+			NAM_bw_67_chromium_duration_visible = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				has_completed_focus = NAM_deep_wells
+				67 = { NOT = { has_state_flag = NAM_chromium_mine_expanded } }
+			}
+			NAM_bw_67_chromium_click_enabled = {
+				OR = {
+					NOT = { has_variable = NAM_bw_selected_state }
+					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
+				}
+				67 = { NAM_bw_chromium_startable = yes }
+			}
+}
 	}
 
 	ADISCORD_NAM_supports = {

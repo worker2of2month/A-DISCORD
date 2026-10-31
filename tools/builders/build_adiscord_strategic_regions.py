@@ -173,8 +173,98 @@ DEDICATED_SEA_REGIONS = (
         1,
         "water_strongest_current",
     ),
+    SeaRegion(
+        238, "svetlogorye-gulf", "Светлогорский залив",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        239, "svetlogorye-approaches", "Светлогорские морские подступы",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        240, "azhar-sea", "Ажарское море",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        241, "black-coast-sea", "Море Чёрного берега",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        242, "western-svetlogorye-islands", "Море западных островов Светлогорья",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        243, "svetlogorye-island-straits", "Светлогорские островные проливы",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        244, "southern-svetlogorye-islands", "Море южных островов Светлогорья",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        245, "eastern-svetlogorye-approaches", "Восточные подступы к Светлогорью",
+        "tropical_ocean", 4, 1,
+    ),
+    SeaRegion(
+        246, "far-southern-ocean", "Дальний Южный океан",
+        "tropical_ocean", 4, 1,
+    ),
 )
 DEDICATED_SEA_PROVINCES = {
+    # Coastal and island theatres use explicit province sets so port access
+    # and the surrounding ocean boundaries stay stable when land states change.
+    238: frozenset(
+        {
+            13123, 13149, 13439, 15872, 16109, 16125,
+        }
+    ),
+    239: frozenset(
+        {
+            13125, 13335, 14426, 15022, 15718,
+        }
+    ),
+    240: frozenset(
+        {
+            13309, 13478, 13770, 14006, 14301, 15053, 16104,
+        }
+    ),
+    241: frozenset(
+        {
+            13129, 13248, 13381, 13882, 14849, 15595, 15965, 16095,
+        }
+    ),
+    242: frozenset(
+        {
+            13032, 13313, 13382, 13612, 13881, 13924, 14037, 14075, 14190, 14289,
+            14640, 14792, 14987, 15347, 15884,
+        }
+    ),
+    243: frozenset(
+        {
+            13297, 13366, 13521, 13920, 13990, 14388, 14399, 14740, 15030, 15651,
+            15704,
+        }
+    ),
+    244: frozenset(
+        {
+            13177, 13703, 13806, 14130, 14145, 14359, 14374, 14834, 14985, 15617,
+            15624, 15876, 16118,
+        }
+    ),
+    245: frozenset(
+        {
+            13178, 13513, 13588, 14270, 15594, 15687, 15929, 16015, 16087, 16165,
+        }
+    ),
+    246: frozenset(
+        {
+            13042, 13043, 13060, 13186, 13282, 13420, 13445, 13459, 13461, 13484,
+            13535, 13544, 13553, 13725, 13828, 13921, 13932, 13934, 13979, 13986,
+            14081, 14198, 14215, 14427, 14432, 14448, 14459, 14508, 14665, 14831,
+            14858, 14893, 14958, 14968, 15080, 15447, 15459, 15463, 15545, 15640,
+            15701, 15717, 15989, 16120, 16124, 16213,
+        }
+    ),
     228: frozenset({16262, 16264, 16265}),
     229: frozenset({16258, 16266, 16268}),
     230: frozenset({13389, 14721, 15477}),
@@ -261,6 +351,7 @@ DEDICATED_SEA_PROVINCES = {
         }
     ),
 }
+SOUTHERN_SEA_REGION_IDS = frozenset(range(238, 247))
 ALL_SEA_REGIONS = (*SEA_REGIONS, *DEDICATED_SEA_REGIONS)
 # Reference only: the Strongest Current line drawn by the author on 2026-10-01,
 # in map pixels with y counted from the top. DEDICATED_SEA_PROVINCES[233..237]
@@ -1819,18 +1910,24 @@ def build_sea_partition(
     # Partition the complete navigable ocean first, then cut the local basins
     # out of their macro regions. This keeps every unrelated boundary stable.
     macro_partition = partition_connected_sea(main_ocean, adjacency, positions)
-    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
-        source_regions = {
-            macro_region_id
-            for macro_region_id, macro_provinces in macro_partition.items()
-            if macro_provinces & set(provinces)
-        }
-        if len(source_regions) != 1:
-            raise ValueError(
-                f"dedicated sea region {region_id} crosses macro-ocean boundaries: {sorted(source_regions)}"
-            )
-        macro_partition[next(iter(source_regions))].difference_update(provinces)
-    rehome_detached_macro_fragments(macro_partition, adjacency)
+    # Resolve fragments beside the current before cutting the southern seas.
+    # Otherwise the remote fragment can become larger than the coastal remnant
+    # and take its macro ID, changing unrelated ocean boundaries.
+    for southern in (False, True):
+        for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
+            if (region_id in SOUTHERN_SEA_REGION_IDS) != southern:
+                continue
+            source_regions = {
+                macro_region_id
+                for macro_region_id, macro_provinces in macro_partition.items()
+                if macro_provinces & set(provinces)
+            }
+            if len(source_regions) != 1:
+                raise ValueError(
+                    f"dedicated sea region {region_id} crosses macro-ocean boundaries: {sorted(source_regions)}"
+                )
+            macro_partition[next(iter(source_regions))].difference_update(provinces)
+        rehome_detached_macro_fragments(macro_partition, adjacency)
     region_provinces = {
         region_id: set(provinces)
         for region_id, provinces in DEDICATED_SEA_PROVINCES.items()

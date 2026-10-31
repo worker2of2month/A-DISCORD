@@ -1,33 +1,5 @@
-ID Changes 2026-10-23 23:26:02
-- Assigned ID 16894 to new province
-- Assigned ID 16893 to new province
-- Assigned ID 16892 to new province
-- Assigned ID 16891 to new province
-- Assigned ID 16890 to new province
-- Assigned ID 16889 to new province
-- Assigned ID 16888 to new province
-- Assigned ID 16887 to new province
-- Assigned ID 16886 to new province
-- Assigned ID 16885 to new province
-- Assigned ID 16884 to new province
-- Assigned ID 16883 to new province
-- Assigned ID 16882 to new province
-- Assigned ID 16881 to new province
-- Assigned ID 16880 to new province
-- Assigned ID 16879 to new province
-- Assigned ID 16878 to new province
-- Assigned ID 16877 to new province
-- Assigned ID 16876 to new province
-- Assigned ID 16875 to new province
-- Assigned ID 16874 to new province
-- Assigned ID 16873 to new province
-- Assigned ID 16872 to new province
-- Assigned ID 16871 to new province
-- Assigned ID 16870 to new province
-- Assigned ID 16869 to new province
-- Assigned ID 16868 to new province
-- Assigned ID 16867 to new province
-- Assigned ID 16866 to new province
-- Assigned ID 16865 to new province
-- Assigned ID 16864 to new province
-- Created IDs 16864 through 16894
+ID Changes 2026-10-31 22:01:39
+- Assigned ID 16901 to new province
+- Assigned ID 16900 to new province
+- Assigned ID 1198 to new province
+- Created IDs 16900 through 16901

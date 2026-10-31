@@ -1,4 +1,21 @@
 # Svetlogorye focus aggregates. Country variables hold the accumulated values.
+NAM_wrk_concession_income = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = {
+		has_country_flag = NAM_wrk_concession_active
+		NAM_colony_phase = yes
+		WRK = { exists = yes }
+	}
+	remove_trigger = {
+		OR = {
+			NOT = { has_country_flag = NAM_wrk_concession_active }
+			NAM_colony_phase = no
+			WRK = { exists = no }
+		}
+	}
+	ADISCORD_economy_weekly_income = NAM_wrk_trade_weekly_income
+}
+
 NAM_administration_dynamic = {
 	icon = GFX_idea_NAM_national_spirit
 	enable = { tag = NAM }
@@ -71,6 +88,9 @@ NAM_scorched_wells_modifier = {
 	icon = GFX_modifiers_sabotaged_resource
 	enable = { always = yes }
 	state_resources_factor = -1.0
+	army_speed_factor_for_controller = NAM_scorched_enemy_speed
+	attrition_for_controller = NAM_scorched_enemy_attrition
+	local_supplies_for_controller = NAM_scorched_enemy_supply
 }
 
 # COUNTRY former client. A contract voided by war leaves its fuel plan empty
@@ -286,4 +306,33 @@ NAM_mil_forward_depot = {
 	}
 	local_supplies = 0.20
 	local_org_regain = 0.10
+}
+
+# STATE. Grid capacity belongs to the physical hydroelectric works.
+NAM_svetlogorsk_hydropower = {
+	icon = GFX_focus_generic_hydroelectric_energy
+	enable = { always = yes }
+	state_production_speed_buildings_factor = 0.15
+}
+
+NAM_captured_wells_shock = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = {
+		tag = NAM
+		ADISCORD_nam_resource_war_active = yes
+	}
+	war_support_factor = NAM_captured_war_support
+	industrial_capacity_factory = NAM_captured_factory_output
+}
+
+NAM_guarded_wells_modifier = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
+	local_supplies = 0.5
+	enemy_army_speed_factor = -0.10
+	state_repair_speed_infrastructure_factor = 0.25
 }

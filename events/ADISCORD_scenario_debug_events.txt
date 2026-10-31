@@ -173,3 +173,85 @@ country_event = {
 }
 
 # END ADISCORD orbital laser test
+
+# Console entry points share the guarded decision effects.
+add_namespace = ADISCORD_nam_debug
+
+country_event = {
+	id = ADISCORD_nam_debug.1
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_resolve_nam_victory = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.2
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_resolve_coalition_victory = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.3
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_resolve_compromise = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.4
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_resolve_standoff = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.5
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_start_resource_war = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.6
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_prepare_etatism = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.7
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_prepare_pragmatism = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_debug.8
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_nam_debug_prepare_humanism = yes }
+}
+
+add_namespace = ADISCORD_south_debug
+
+country_event = {
+	id = ADISCORD_south_debug.1
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_south_debug_start_war = yes }
+}
+
+country_event = {
+	id = ADISCORD_south_debug.2
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_south_debug_win_nam = yes }
+}
+
+country_event = {
+	id = ADISCORD_south_debug.3
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_south_debug_win_shl = yes }
+}

@@ -855,7 +855,7 @@ def validate_countries() -> None:
         ),
         "SHL": (
             699,
-            1198,
+            16899,
             "SHL_Jalil_Nur",
             "SHL_nine_furnaces_compact",
             "SHL_mediator_of_nine_furnaces",

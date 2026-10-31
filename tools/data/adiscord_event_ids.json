@@ -7661,6 +7661,14 @@
       "status": "active"
     },
     {
+      "id": "val_council.29",
+      "namespace": "val_council",
+      "number": 29,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.86",
       "namespace": "ADISCORD_STP_pc",
       "number": 86,
@@ -8290,6 +8298,110 @@
       "number": 76,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_neighbour_revanche",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.88",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 88,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.89",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 89,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.1",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 1,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.2",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 2,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.3",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 3,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.4",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 4,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.5",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 5,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.6",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 6,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.7",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 7,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_debug.8",
+      "namespace": "ADISCORD_nam_debug",
+      "number": 8,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "nam_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south_debug.1",
+      "namespace": "ADISCORD_south_debug",
+      "number": 1,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "south_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south_debug.2",
+      "namespace": "ADISCORD_south_debug",
+      "number": 2,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "south_debug",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south_debug.3",
+      "namespace": "ADISCORD_south_debug",
+      "number": 3,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "south_debug",
       "status": "active"
     }
   ]

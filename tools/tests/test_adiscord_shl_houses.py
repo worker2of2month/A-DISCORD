@@ -156,5 +156,197 @@ class ShlHouseCharacterTests(unittest.TestCase):
                 self.assertEqual(value, "Нуран" if language == "russian" else "Nuran")
 
 
+DEBUG_DECISIONS = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+DEBUG_LOCALISATION = {
+    "russian": RUSSIAN / "ADISCORD_scenario_debug_l_russian.yml",
+    "english": ROOT / "localisation/english/ADISCORD_scenario_debug_l_english.yml",
+}
+SHL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"
+SHL_EVENTS = ROOT / "events/ADISCORD_SHL_events.txt"
+SHL_DECISIONS = ROOT / "common/decisions/ADISCORD_SHL_decisions.txt"
+SHL_DEBUG_DECISIONS = (
+    "ADISCORD_shl_debug_fund_treasury",
+    "ADISCORD_shl_debug_balance_crests",
+    "ADISCORD_shl_debug_balance_quarters",
+    "ADISCORD_shl_debug_ratify_houses",
+    "ADISCORD_shl_debug_ratify_cities",
+    "ADISCORD_shl_debug_ratify_directorate",
+    "ADISCORD_shl_debug_regency",
+    "ADISCORD_shl_debug_commune",
+    "ADISCORD_shl_debug_house_demand",
+    "ADISCORD_shl_debug_life_vignette",
+    "ADISCORD_shl_debug_south_hegemon",
+    "ADISCORD_shl_debug_advance_cycle",
+)
+COURSE_COMMITS = {
+    "ADISCORD_shl_debug_ratify_houses": "SHL_commit_house_course",
+    "ADISCORD_shl_debug_ratify_cities": "SHL_commit_city_course",
+    "ADISCORD_shl_debug_ratify_directorate": "SHL_commit_state_course",
+    "ADISCORD_shl_debug_regency": "SHL_commit_regency_course",
+    "ADISCORD_shl_debug_commune": "SHL_commit_commune_course",
+}
+# Native effects and triggers the debug block calls with a bare `= yes`.
+NATIVE_BOOLEANS = {"mark_focus_tree_layout_dirty", "is_ai"}
+LOCALISATION_VALUE = re.compile(r'^\s*([A-Za-z0-9_.]+):\d*\s*"((?:[^"\\]|\\.)*)"', re.M)
+TOP_LEVEL_DEFINITION = re.compile(r"^(\w+) = \{", re.M)
+
+
+def walk(items):
+    for entry in items:
+        yield entry
+        if isinstance(entry.value, list):
+            yield from walk(entry.value)
+
+
+def boolean_calls(items):
+    return [e.key for e in walk(items) if e.value == "yes" and not isinstance(e.value, list)]
+
+
+class ShahrabadDebugDecisionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.decisions = {}
+        cls.category_of = {}
+        for category in parse_clausewitz(read(DEBUG_DECISIONS)):
+            if not isinstance(category.value, list):
+                continue
+            for decision in category.value:
+                if isinstance(decision.value, list) and decision.key.startswith("ADISCORD_shl_debug_"):
+                    cls.decisions[decision.key] = decision.value
+                    cls.category_of[decision.key] = category.key
+        cls.effects = {}
+        for path in (ROOT / "common/scripted_effects").glob("*.txt"):
+            for entry in parse_clausewitz(read(path)):
+                if isinstance(entry.value, list):
+                    cls.effects[entry.key] = entry.value
+        cls.triggers = set()
+        for path in (ROOT / "common/scripted_triggers").glob("*.txt"):
+            cls.triggers.update(TOP_LEVEL_DEFINITION.findall(read(path)))
+        cls.localised = {
+            language: dict(LOCALISATION_VALUE.findall(read(path)))
+            for language, path in DEBUG_LOCALISATION.items()
+        }
+        cls.shl_effects_text = read(SHL_EFFECTS)
+        cls.shl_events_text = read(SHL_EVENTS)
+
+    def test_every_shortcut_exists_once_inside_a_debug_category(self):
+        self.assertEqual(sorted(self.decisions), sorted(SHL_DEBUG_DECISIONS))
+        for name, category in self.category_of.items():
+            with self.subTest(decision=name):
+                self.assertIn("debug", category.lower())
+        self.assertEqual(read(DEBUG_DECISIONS).count("ADISCORD_shl_debug_fund_treasury = {"), 1)
+        self.assertFalse(DEBUG_DECISIONS.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_shortcuts_are_free_repeatable_shl_only_and_ignored_by_ai(self):
+        for name, body in self.decisions.items():
+            with self.subTest(decision=name):
+                self.assertEqual(scalar(body, "cost"), "0")
+                self.assertEqual(scalar(body, "fire_only_once"), "no")
+                self.assertEqual([e.key for e in block(body, "allowed")], ["tag"])
+                self.assertEqual(scalar(block(body, "allowed"), "tag"), "SHL")
+                self.assertEqual(scalar(block(body, "ai_will_do"), "factor"), "0")
+                self.assertTrue(block(body, "complete_effect"))
+
+    def test_names_and_descriptions_carry_the_red_prefix_in_both_languages(self):
+        for language, path in DEBUG_LOCALISATION.items():
+            values = self.localised[language]
+            with self.subTest(language=language):
+                self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
+                self.assertNotIn(b"\n", path.read_bytes().replace(b"\r\n", b""))
+            for name in SHL_DEBUG_DECISIONS:
+                with self.subTest(language=language, decision=name):
+                    self.assertTrue(values[name].startswith("§RDEBUG:§! "), values.get(name))
+                    self.assertTrue(values.get(name + "_desc"))
+                    for text in (values[name], values[name + "_desc"]):
+                        self.assertNotRegex(text, "[–—«»]")
+            tooltips = [
+                scalar(e.value, "tooltip") for body in self.decisions.values()
+                for e in walk(body) if e.key == "custom_trigger_tooltip"
+            ]
+            self.assertTrue(tooltips)
+            for key in tooltips:
+                with self.subTest(language=language, tooltip=key):
+                    self.assertTrue(values.get(key))
+
+    def test_called_effects_triggers_events_and_ids_exist(self):
+        for name, body in self.decisions.items():
+            with self.subTest(decision=name):
+                for call in boolean_calls(block(body, "complete_effect")):
+                    if call not in NATIVE_BOOLEANS:
+                        self.assertIn(call, self.effects, call)
+                for section in ("visible", "available"):
+                    for call in boolean_calls(block(body, section)):
+                        if call not in NATIVE_BOOLEANS:
+                            self.assertIn(call, self.triggers, call)
+                for entry in walk(body):
+                    if entry.key == "country_event":
+                        self.assertIn(f"id = {scalar(entry.value, 'id')}\n", self.shl_events_text)
+                    elif entry.key in ("has_power_balance", "add_power_balance_value"):
+                        self.assertRegex(read(ROOT / "common/bop/SHL.txt"), rf"(?m)^{scalar(entry.value, 'id')} = \{{")
+                    elif entry.key == "has_active_mission":
+                        self.assertIn(f"\t{entry.value} = {{", read(SHL_DECISIONS))
+                    elif entry.key in ("has_idea", "remove_ideas"):
+                        self.assertIn(f"\t\t{entry.value} = {{", read(ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt"))
+                    elif entry.key in ("set_variable", "add_to_variable"):
+                        self.assertIn(f"var = {scalar(entry.value, 'var')}", self.shl_effects_text)
+                    elif entry.key == "clr_country_flag":
+                        self.assertIn(f"flag = {entry.value} ", self.shl_events_text)
+                    elif entry.key == "has_country_flag":
+                        self.assertIn(f"has_country_flag = {entry.value}", self.shl_effects_text)
+
+    def test_course_shortcuts_call_their_guarded_commit_effects(self):
+        for name, commit in COURSE_COMMITS.items():
+            with self.subTest(decision=name):
+                body = self.decisions[name]
+                self.assertIn(commit, boolean_calls(block(body, "complete_effect")))
+                guard = block(self.effects[commit][0].value, "limit")
+                self.assertTrue(guard, commit)
+                course_checks = [
+                    scalar(e.value, "value") for e in walk(guard)
+                    if e.key == "check_variable" and scalar(e.value, "var") == "SHL_political_course"
+                ]
+                self.assertTrue(course_checks, commit)
+        for name in ("ADISCORD_shl_debug_ratify_houses", "ADISCORD_shl_debug_ratify_cities", "ADISCORD_shl_debug_ratify_directorate"):
+            visible = block(self.decisions[name], "visible")
+            checks = [e for e in walk(visible) if e.key == "check_variable"]
+            self.assertEqual([(scalar(c.value, "value"), scalar(c.value, "compare")) for c in checks], [("0", "equals")])
+            self.assertIn("remove_ideas", [e.key for e in walk(block(self.decisions[name], "complete_effect"))])
+        for name in ("ADISCORD_shl_debug_regency", "ADISCORD_shl_debug_commune"):
+            visible = block(self.decisions[name], "visible")
+            checks = [e for e in walk(visible) if e.key == "check_variable"]
+            self.assertEqual([(scalar(c.value, "value"), scalar(c.value, "compare")) for c in checks], [("4", "less_than")])
+            self.assertNotIn("remove_ideas", [e.key for e in walk(block(self.decisions[name], "complete_effect"))])
+
+    def test_advance_cycle_mirrors_the_run_cycle_body_without_the_clock(self):
+        run_cycle = self.effects["SHL_run_cycle"]
+        outer = next(e for e in run_cycle if e.key == "if")
+        inner = next(e for e in outer.value if e.key == "if")
+        expected = [e.key for e in inner.value if e.key != "limit"]
+        actual = [e.key for e in block(self.decisions["ADISCORD_shl_debug_advance_cycle"], "complete_effect")]
+        self.assertEqual(actual, expected)
+        self.assertNotIn("SHL_cycle_pending", str([e.value for e in walk(self.decisions["ADISCORD_shl_debug_advance_cycle"])]))
+
+    def test_house_demand_shortcut_reaches_the_demand_threshold(self):
+        body = self.decisions["ADISCORD_shl_debug_house_demand"]
+        effect = block(body, "complete_effect")
+        forced = next(scalar(e.value, "value") for e in effect if e.key == "set_variable" and scalar(e.value, "var") == "SHL_demand_cycle")
+        threshold = re.search(r"var = SHL_demand_cycle value = (\d+) compare = greater_than_or_equals", self.shl_effects_text).group(1)
+        self.assertGreaterEqual(int(forced) + 1, int(threshold))
+        self.assertEqual([e.key for e in effect], ["set_variable", "SHL_house_demand_tick"])
+        missions = [e.value for e in walk(block(body, "available")) if e.key == "has_active_mission"]
+        self.assertEqual(missions, ["SHL_house_demand"])
+
+    def test_south_hegemon_flags_unlock_the_postwar_sections_of_every_course_tree(self):
+        body = self.decisions["ADISCORD_shl_debug_south_hegemon"]
+        flags = [e.value for e in block(body, "complete_effect") if e.key == "set_global_flag"]
+        self.assertEqual(sorted(flags), ["ADISCORD_south_final_resolved", "ADISCORD_south_hegemon_SHL"])
+        self.assertEqual(sorted(e.value for e in walk(block(body, "visible")) if e.key == "has_global_flag"), sorted(flags))
+        self.assertIn("mark_focus_tree_layout_dirty", [e.key for e in block(body, "complete_effect")])
+        for course in ("houses", "cities", "directorate", "regency", "commune"):
+            with self.subTest(course=course):
+                source = read(ROOT / f"focus_trees/SHL/{course}/focuses.txt")
+                self.assertIn("allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }", source)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1815,6 +1815,7 @@ ADISCORD_vorkerland_teardown_confederation = {
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
 	}
 	NAM = {
+		NAM_metropolitan_flight = yes
 		if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } } }
 		if = { limit = { is_in_faction = yes } leave_faction = yes }
 		NAM_adopt_service_etatism = yes
@@ -4069,6 +4070,8 @@ VAD_appoint_collegial_staff = {
 		}
 		VAD_apply_collegial_mandate = yes
 	}
+	VAD_party_representatives_staff = yes
+	VAD_party_representatives_republic = yes
 }
 
 # ROOT is the successor before VAD is annexed or its administration closes.
@@ -4142,6 +4145,9 @@ ADISCORD_vorkerland_form_joint_government = {
 			news_event = { id = ADISCORD_vorkerland_story.44 hours = 1 }
 		}
 	}
+	WRK_party_representatives_technocracy = yes
+	WRK_party_representatives_joint_government = yes
+	WRK_party_representatives_world_empire = yes
 }
 
 # State ownership changes do not reliably path legacy armies out of the newly
@@ -10166,6 +10172,7 @@ ADISCORD_vorkerland_wrk_elect_worcker = {
 		chauvinism = 18
 		technocracy = 12
 	}
+	WRK_party_representatives_worcker = yes
 }
 
 ADISCORD_vorkerland_wrk_elect_yastrebtsev = {
@@ -10181,6 +10188,7 @@ ADISCORD_vorkerland_wrk_elect_yastrebtsev = {
 		chauvinism = 14
 		technocracy = 12
 	}
+	WRK_party_representatives_yastrebtsev = yes
 }
 
 ADISCORD_vorkerland_wrk_elect_filopo = {
@@ -10196,6 +10204,7 @@ ADISCORD_vorkerland_wrk_elect_filopo = {
 		humanism = 14
 		technocracy = 12
 	}
+	WRK_party_representatives_filopo = yes
 }
 
 # change_tag_from invalidates the executing country scope. Each formation
@@ -10220,6 +10229,9 @@ ADISCORD_vorkerland_finish_delayed_wrk_handoff = {
 			ADISCORD_vorkerland_complete_wrk_from_tva = yes
 		}
 	}
+	WRK_party_representatives_technocracy = yes
+	WRK_party_representatives_joint_government = yes
+	WRK_party_representatives_world_empire = yes
 }
 
 ADISCORD_vorkerland_verify_reunified_wrk = {
@@ -11878,6 +11890,7 @@ WKR_appoint_chairman = {
 		set_politics = { ruling_party = pragmatism elections_allowed = no }
 	}
 	set_cosmetic_tag = WRK_vorkerland_emergency
+	WKR_party_representatives_chairman = yes
 }
 
 WKR_appoint_executive = {
@@ -11888,6 +11901,7 @@ WKR_appoint_executive = {
 		ideology = utilitarism
 		portrait = GFX_portrait_WRK_Anton_Bagley
 	}
+	WKR_party_representatives_executive = yes
 }
 
 # Range entry dispatches the leadership event; there is no periodic election.
@@ -12300,6 +12314,9 @@ ADISCORD_vorkerland_establish_world_empire = {
 		ADISCORD_vorkerland_initialize_world_empire = yes
 		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
 	}
+	WRK_party_representatives_technocracy = yes
+	WRK_party_representatives_joint_government = yes
+	WRK_party_representatives_world_empire = yes
 }
 
 # Both imperial founders enter through guarded transitions. Keep the cabinet
@@ -12333,6 +12350,9 @@ ADISCORD_vorkerland_establish_petrichev_empire = {
 		ADISCORD_vorkerland_initialize_world_empire = yes
 		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
 	}
+	WRK_party_representatives_technocracy = yes
+	WRK_party_representatives_joint_government = yes
+	WRK_party_representatives_world_empire = yes
 }
 
 # COUNTRY WRK at its route's Unity Tower. The delayed callback reads the
@@ -16108,6 +16128,7 @@ VAD_ratify_staff_constitution = {
 		set_cosmetic_tag = VAD_vorkerland_staff_republic
 		news_event = { id = ADISCORD_vorkerland_story.49 }
 	}
+	VAD_party_representatives_republic = yes
 }
 
 # State scope, invoked when the charter or the wartime district system ends.
@@ -16919,5 +16940,362 @@ VAD_dispatch_foreign_observers = {
 			}
 		}
 		else = { VAD_refund_oath = yes }
+	}
+}
+
+# Route-specific names belong only to non-story party representatives.
+WRK_party_representatives_worcker = {
+	if = {
+		limit = {
+			tag = WRK
+			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_worcker_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_worcker_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_worcker_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_worcker_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_worcker_hedonism
+			}
+		}
+	}
+}
+
+WRK_party_representatives_yastrebtsev = {
+	if = {
+		limit = {
+			tag = WRK
+			has_country_leader = { character = WRK_Mark_Yastrebtsev ruling_only = yes }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_yastrebtsev_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_yastrebtsev_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_yastrebtsev_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_yastrebtsev_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_yastrebtsev_hedonism
+			}
+		}
+	}
+}
+
+WRK_party_representatives_filopo = {
+	if = {
+		limit = {
+			tag = WRK
+			has_country_leader = { character = WRK_Necro_Filopo ruling_only = yes }
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_filopo_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_filopo_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_filopo_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_filopo_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_filopo_hedonism
+			}
+		}
+	}
+}
+
+WRK_party_representatives_technocracy = {
+	if = {
+		limit = {
+			tag = WRK
+			has_cosmetic_tag = WRK_vorkerland_technocracy
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_technocracy_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_technocracy_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_technocracy_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_technocracy_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_technocracy_hedonism
+			}
+		}
+	}
+}
+
+WRK_party_representatives_joint_government = {
+	if = {
+		limit = {
+			tag = WRK
+			has_cosmetic_tag = WRK_vorkerland_joint_government
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_joint_government_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_joint_government_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_joint_government_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_joint_government_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_joint_government_hedonism
+			}
+		}
+	}
+}
+
+WRK_party_representatives_world_empire = {
+	if = {
+		limit = {
+			tag = WRK
+			has_cosmetic_tag = WRK_vorkerland_world_empire
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_utilitarism
+				NAME = WRK_party_representatives_world_empire_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_anarchism
+				NAME = WRK_party_representatives_world_empire_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_technocracy
+				NAME = WRK_party_representatives_world_empire_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_etatism
+				NAME = WRK_party_representatives_world_empire_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WRK_party_representative_hedonism
+				NAME = WRK_party_representatives_world_empire_hedonism
+			}
+		}
+	}
+}
+
+WKR_party_representatives_chairman = {
+	if = {
+		limit = {
+			tag = WKR
+			has_cosmetic_tag = WRK_vorkerland_emergency
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_humanism
+				NAME = WKR_party_representatives_chairman_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_utilitarism
+				NAME = WKR_party_representatives_chairman_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_chauvinism
+				NAME = WKR_party_representatives_chairman_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_anarchism
+				NAME = WKR_party_representatives_chairman_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_technocracy
+				NAME = WKR_party_representatives_chairman_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_etatism
+				NAME = WKR_party_representatives_chairman_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_hedonism
+				NAME = WKR_party_representatives_chairman_hedonism
+			}
+		}
+	}
+}
+
+WKR_party_representatives_executive = {
+	if = {
+		limit = {
+			tag = WKR
+			has_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_humanism
+				NAME = WKR_party_representatives_executive_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_utilitarism
+				NAME = WKR_party_representatives_executive_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_chauvinism
+				NAME = WKR_party_representatives_executive_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_anarchism
+				NAME = WKR_party_representatives_executive_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_technocracy
+				NAME = WKR_party_representatives_executive_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_etatism
+				NAME = WKR_party_representatives_executive_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = WKR_party_representative_hedonism
+				NAME = WKR_party_representatives_executive_hedonism
+			}
+		}
+	}
+}
+
+VAD_party_representatives_staff = {
+	if = {
+		limit = {
+			tag = VAD
+			has_cosmetic_tag = VAD_vorkerland_collegial_staff
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_humanism
+				NAME = VAD_party_representatives_staff_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_utilitarism
+				NAME = VAD_party_representatives_staff_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_chauvinism
+				NAME = VAD_party_representatives_staff_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_anarchism
+				NAME = VAD_party_representatives_staff_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_technocracy
+				NAME = VAD_party_representatives_staff_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_etatism
+				NAME = VAD_party_representatives_staff_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_hedonism
+				NAME = VAD_party_representatives_staff_hedonism
+			}
+		}
+	}
+}
+
+VAD_party_representatives_republic = {
+	if = {
+		limit = {
+			tag = VAD
+			has_cosmetic_tag = VAD_vorkerland_staff_republic
+		}
+		hidden_effect = {
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_humanism
+				NAME = VAD_party_representatives_republic_humanism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_utilitarism
+				NAME = VAD_party_representatives_republic_utilitarism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_chauvinism
+				NAME = VAD_party_representatives_republic_chauvinism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_anarchism
+				NAME = VAD_party_representatives_republic_anarchism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_technocracy
+				NAME = VAD_party_representatives_republic_technocracy
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_etatism
+				NAME = VAD_party_representatives_republic_etatism
+			}
+			ADISCORD_rename_party_representative = {
+				CHARACTER = VAD_party_representative_hedonism
+				NAME = VAD_party_representatives_republic_hedonism
+			}
+		}
+	}
+}
+
+# COUNTRY WKR. Evacuated fuel waits outside normal depots until storage is available.
+# The existing monthly country hook draws only from this finite shipment.
+ADISCORD_vorkerland_release_evacuated_fuel = {
+	if = {
+		limit = { check_variable = { WKR_evacuated_fuel_reserve > 0 } }
+		set_temp_variable = { var = WKR_evacuated_fuel_room value = max_fuel_k }
+		subtract_from_temp_variable = { var = WKR_evacuated_fuel_room value = fuel_k }
+		multiply_temp_variable = { var = WKR_evacuated_fuel_room value = 1000 }
+		clamp_temp_variable = { var = WKR_evacuated_fuel_room min = 0 max = WKR_evacuated_fuel_reserve }
+		add_fuel = WKR_evacuated_fuel_room
+		subtract_from_variable = { var = WKR_evacuated_fuel_reserve value = WKR_evacuated_fuel_room }
 	}
 }

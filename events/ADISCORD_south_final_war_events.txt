@@ -66,6 +66,7 @@ country_event = {
 			tag = NAM
 			NOT = { has_completed_focus = NAM_service_state }
 			NOT = { has_completed_focus = NAM_federal_charter }
+			NOT = { has_completed_focus = NAM_pragmatic_compact }
 		}
 	}
 	desc = {
@@ -73,6 +74,13 @@ country_event = {
 		trigger = {
 			NOT = { tag = SHL }
 			NOT = { tag = NAM }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_nam_contracts
+		trigger = {
+			tag = NAM
+			has_completed_focus = NAM_pragmatic_compact
 		}
 	}
 	picture = GFX_event_adiscord_military_headquarters
@@ -362,6 +370,13 @@ news_event = {
 			check_variable = { var = global.ADISCORD_south_subject_type value = 0 compare = equals }
 		}
 	}
+	desc = {
+		text = ADISCORD_south.31.d_nam_contracts
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			check_variable = { var = global.ADISCORD_south_subject_type value = 5 compare = equals }
+		}
+	}
 	picture = GFX_news_event_adiscord_imperial_proclamation
 	major = yes
 	is_triggered_only = yes
@@ -469,6 +484,14 @@ country_event = {
 			FROM = { tag = NAM }
 		}
 	}
+	title = {
+		text = ADISCORD_south.40.t_contract
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.40.d_contract
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 
@@ -493,15 +516,26 @@ country_event = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
 			custom_effect_tooltip = ADISCORD_south_offer_annex_accept_tt
 		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+			custom_effect_tooltip = ADISCORD_south_offer_contract_accept_tt
+		}
 		else = {
 			custom_effect_tooltip = ADISCORD_south_offer_submit_accept_tt
 		}
 		hidden_effect = {
-			FROM = { country_event = { id = ADISCORD_south.42 hours = 1 } }
+			if = {
+				limit = { NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
+				FROM = { country_event = { id = ADISCORD_south.42 hours = 1 } }
+			}
 			ADISCORD_south_accept_offer = yes
 		}
 		ai_chance = {
 			base = 10
+			modifier = {
+				add = 30
+				check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			}
 			modifier = {
 				add = 40
 				strength_ratio = { tag = FROM ratio < 0.5 }
@@ -518,6 +552,11 @@ country_event = {
 			modifier = {
 				add = 30
 				has_country_flag = ADISCORD_south_indebted_to_SHL
+				FROM = { tag = SHL }
+			}
+			modifier = {
+				add = 15
+				has_country_flag = SHL_embassy
 				FROM = { tag = SHL }
 			}
 			modifier = {
@@ -552,6 +591,10 @@ country_event = {
 		if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_refuse_tt
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+			custom_effect_tooltip = ADISCORD_south_offer_contract_refuse_tt
 		}
 		else_if = {
 			limit = { is_in_faction = yes }
@@ -631,7 +674,7 @@ country_event = {
 			limit = {
 				hidden_trigger = {
 					tag = NAM
-					has_completed_focus = NAM_oil_fund
+					NAM_pw_fuel_aid_unlocked = yes
 					FROM = { NAM_pw_charter_recipient = yes }
 				}
 			}
@@ -644,7 +687,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_south.43
 	title = ADISCORD_south.43.t
-	desc = ADISCORD_south.43.d
+	desc = {
+		trigger = { has_completed_focus = NAM_pragmatic_compact }
+		text = ADISCORD_south.43.d_contract
+	}
+	desc = {
+		trigger = { NOT = { has_completed_focus = NAM_pragmatic_compact } }
+		text = ADISCORD_south.43.d
+	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 

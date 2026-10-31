@@ -58,6 +58,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_campaign_honour_of_crests
 			add_political_power = 50
 		}
 		ai_will_do = { base = 5 }
@@ -385,6 +386,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_fief_grant
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -421,17 +423,19 @@ focus_tree = {
 					add_idea = SHL_pow_regency_prog_ending_a_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_regency_a_tt
+			custom_effect_tooltip = SHL_prog_first_batch_regency_tt
+			hidden_effect = {
+				set_variable = { var = SHL_prog_ending value = 41 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_war_support value = 0.05 }
 				add_to_variable = { var = SHL_pow_army_org value = 0.05 }
 				add_to_variable = { var = SHL_pow_max_dig_in value = 1 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 41 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_regency_a_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -461,16 +465,18 @@ focus_tree = {
 					add_idea = SHL_pow_regency_prog_ending_b_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_regency_b_tt
+			custom_effect_tooltip = SHL_prog_first_batch_regency_tt
+			hidden_effect = {
+				set_variable = { var = SHL_prog_ending value = 42 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_trade_opinion value = 0.1 }
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.1 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 42 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_regency_b_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -538,8 +544,11 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_r_pledge_plus_now_tt
 			custom_effect_tooltip = SHL_r_pledge_plus_tt
 			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				ADISCORD_economy_mark_dirty = yes
 				SHL_refresh_furnaces = yes
 			}
 		}
@@ -659,6 +668,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_crest_court
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1101,6 +1111,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_fief_grant
 			add_power_balance_value = { id = SHL_conclave_balance value = -0.20 }
 			add_stability = 0.05
 		}
@@ -1147,7 +1158,14 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 100
+			custom_effect_tooltip = SHL_r_regent_forever_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_debt value = 500 }
+				clamp_variable = { var = ADISCORD_economy_debt min = 0 }
+				ADISCORD_economy_mark_dirty = yes
+				subtract_from_variable = { var = SHL_house_pressure value = 20 }
+				SHL_clamp_tensions = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}

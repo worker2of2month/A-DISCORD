@@ -1261,4 +1261,135 @@ characters = {
 			ai_will_do = { factor = 2 }
 		}
 	}
+
+	# Party representatives outside the appointed government.
+	STP_party_representative_pragmatism = {
+		name = STP_party_representative_pragmatism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_5
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STP_party_representative_anarchism = {
+		name = STP_party_representative_anarchism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_6
+			}
+		}
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STP_party_representative_technocracy = {
+		name = STP_party_representative_technocracy
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+			}
+		}
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_humanism = {
+		name = STS_party_representative_humanism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_3
+			}
+		}
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_utilitarism = {
+		name = STS_party_representative_utilitarism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_4
+			}
+		}
+		country_leader = {
+			ideology = utilitarism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_pragmatism = {
+		name = STS_party_representative_pragmatism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_6
+			}
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_anarchism = {
+		name = STS_party_representative_anarchism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_7
+			}
+		}
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_technocracy = {
+		name = STS_party_representative_technocracy
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_8
+			}
+		}
+		country_leader = {
+			ideology = technocracy_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_etatism = {
+		name = STS_party_representative_etatism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_9
+			}
+		}
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	STS_party_representative_hedonism = {
+		name = STS_party_representative_hedonism
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_1
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
 }

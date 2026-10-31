@@ -494,6 +494,7 @@ NAM_admin_programme_operable = {
 # COUNTRY NAM. The compromise route can reopen trade without the prewar bureau.
 NAM_oil_trade_authorized = {
 	OR = {
+		has_completed_focus = NAM_supports_export_houses
 		has_completed_focus = NAM_contract_bureau
 		has_completed_focus = NAM_defeat_oil_union
 		has_completed_focus = NAM_normalisation
@@ -708,19 +709,19 @@ NAM_rival_current_heard = {
 	OR = {
 		AND = {
 			check_variable = { NAM_rival_current = 1 }
-			has_completed_focus = NAM_hear_the_registrar
+			has_completed_focus = NAM_tax_rolls
 		}
 		AND = {
 			check_variable = { NAM_rival_current = 2 }
-			has_completed_focus = NAM_hear_klyuchevsk
+			has_completed_focus = NAM_supports_oil_compact
 		}
 		AND = {
 			check_variable = { NAM_rival_current = 3 }
-			has_completed_focus = NAM_hear_the_commandant
+			has_completed_focus = NAM_garrison_assembly
 		}
 		AND = {
 			check_variable = { NAM_rival_current = 4 }
-			has_completed_focus = NAM_hear_the_harbour
+			has_completed_focus = NAM_supports_export_houses
 		}
 	}
 }
@@ -1594,7 +1595,10 @@ NAM_pw_export_shipment_ready = {
 NAM_pw_charter_recipient = {
 	exists = yes
 	has_capitulated = no
-	is_in_faction_with = NAM
+	OR = {
+		is_in_faction_with = NAM
+		is_subject_of = NAM
+	}
 	NOT = { has_war_with = NAM }
 }
 
@@ -1616,6 +1620,7 @@ NAM_pw_charter_ally_available = {
 # COUNTRY NAM. Either institution authorises the same local repair programme.
 NAM_field_repair_unlocked = {
 	OR = {
+		has_completed_focus = NAM_supports_oil_compact
 		has_completed_focus = NAM_field_repair_crews
 		has_completed_focus = NAM_field_firefighters
 	}
@@ -1768,4 +1773,127 @@ NAM_naval_marines_ready = {
 		value = 4
 		compare = less_than
 	}
+}
+
+# STATE. The commissioned plant stays with its site through ownership changes.
+NAM_hydroelectric_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NAM = { NAM_pw_operable = yes }
+	NOT = { has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower } }
+	free_building_slots = { building = industrial_complex size > 1 include_locked = yes }
+}
+
+NAM_chromium_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NAM = { NAM_independent_programmes_operable = yes }
+	NOT = { has_state_flag = NAM_chromium_mine_expanded }
+}
+
+NAM_steel_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NAM = { NAM_independent_programmes_operable = yes }
+	NOT = { has_state_flag = NAM_steel_mine_expanded }
+}
+
+NAM_bw_drilling_startable = {
+	NAM_project_state_ready = yes
+	NOT = { has_state_flag = NAM_wells_scorched }
+	check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
+	NAM = {
+		NAM_independent_programmes_operable = yes
+		has_completed_focus = NAM_deep_wells
+		NAM_project_slot_free = yes
+		NOT = { has_political_power < 30 }
+		check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	}
+}
+
+NAM_bw_hydroelectric_startable = {
+	NAM_hydroelectric_site = yes
+	NAM_project_state_ready = yes
+	NAM = {
+		has_completed_focus = NAM_svetlogorsk_dam
+		NAM_project_slot_free = yes
+		NOT = { has_political_power < 50 }
+		check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+	}
+}
+
+NAM_bw_chromium_startable = {
+	NAM_chromium_site = yes
+	NAM_project_state_ready = yes
+	NAM = {
+		has_completed_focus = NAM_deep_wells
+		NAM_project_slot_free = yes
+		NOT = { has_political_power < 30 }
+		check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	}
+}
+
+# COUNTRY NAM. The postwar constitution follows the mandate fixed at war entry.
+NAM_prewar_district_mandate = {
+	has_variable = NAM_prewar_balance
+	check_variable = { NAM_prewar_balance > 0.25 }
+}
+
+NAM_prewar_service_mandate = {
+	has_variable = NAM_prewar_balance
+	check_variable = { NAM_prewar_balance < -0.25 }
+}
+
+NAM_prewar_pragmatic_mandate = {
+	has_variable = NAM_prewar_balance
+	NOT = { check_variable = { NAM_prewar_balance < -0.25 } }
+	NOT = { check_variable = { NAM_prewar_balance > 0.25 } }
+}
+
+NAM_pw_industrial_schedule_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_regional_contracts_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_public_utilities_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_municipal_services_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_export_clearing_ready = {
+	NAM_pw_operable = yes
+	controls_state = 700
+	700 = { naval_base > 0 }
+}
+
+NAM_pw_import_machine_tools_ready = {
+	NAM_pw_operable = yes
+	controls_state = 700
+	700 = { naval_base > 0 }
+}
+
+NAM_pw_contract_arbitration_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_fuel_aid_unlocked = {
+	OR = {
+		has_completed_focus = NAM_oil_fund
+		has_completed_focus = NAM_prag_partner_supply
+	}
+}
+
+# COUNTRY NAM. Debug presets edit the live balance only before its war snapshot.
+ADISCORD_nam_debug_mandate_open = {
+	NAM_country_operable = yes
+	has_power_balance = { id = NAM_ladder_bop }
+	NOT = { has_variable = NAM_prewar_balance }
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
 }

@@ -47,3 +47,12 @@ recruit_character = ADISCORD_staff_EFL_Walter_Hartwig
 recruit_character = ADISCORD_staff_EFL_Georg_Kramer
 recruit_character = ADISCORD_staff_EFL_Dietrich_Lorenz
 recruit_character = ADISCORD_staff_EFL_Emil_Meiner
+
+# Parliamentary and opposition representatives.
+recruit_character = EFL_party_representative_humanism
+recruit_character = EFL_party_representative_utilitarism
+recruit_character = EFL_party_representative_pragmatism
+recruit_character = EFL_party_representative_anarchism
+recruit_character = EFL_party_representative_technocracy
+recruit_character = EFL_party_representative_etatism
+recruit_character = EFL_party_representative_hedonism

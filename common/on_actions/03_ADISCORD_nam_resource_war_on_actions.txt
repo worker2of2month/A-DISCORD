@@ -52,37 +52,10 @@ on_actions = {
 				}
 				FROM.FROM = { clr_state_flag = NAM_line_prepared }
 			}
-			# Only the original oilfields shake seal discipline during the resource war.
-			if = {
-				limit = {
-					FROM = { tag = NAM }
-					FROM.FROM = {
-						OR = {
-							state = 67
-							state = 688
-							state = 689
-							state = 690
-							state = 719
-							state = 700
-						}
-					}
-				}
-				if = {
-					limit = {
-						ADISCORD_nam_resource_war_active = yes
-						FROM.FROM = { NOT = { state = 700 } }
-					}
-					NAM = { NAM_seal_discipline_field_lost = yes }
-				}
-			}
 			# Oil throughput counts controlled fields, the pipeline end and the
 			# sea terminal; the island steel concession needs Svetlogorsk control.
 			if = {
 				limit = {
-					OR = {
-						ROOT = { tag = NAM }
-						FROM = { tag = NAM }
-					}
 					FROM.FROM = {
 						OR = {
 							state = 67

@@ -9,13 +9,13 @@ state = {
 	history = {
 		owner = SHL
 		add_core_of = SHL
-		victory_points = { 8582 1 }
+		victory_points = { 16898 2 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
-		931 1114 7994 8582 10148 10937 11938 12321
+		931 1114 7994 8582 10148 10937 11938 12321 16898
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

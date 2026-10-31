@@ -233,6 +233,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_common_fund_tt
+			custom_effect_tooltip = SHL_common_fund_price_tt
 			hidden_effect = {
 				add_to_variable = { var = SHL_reserve_stock value = 2 }
 				country_event = { id = ADISCORD_SHL.6 days = 1 }
@@ -794,6 +795,8 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_arbitration_act
+			custom_effect_tooltip = SHL_shift_arbitration_act_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -842,6 +845,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_house_audit
 			custom_effect_tooltip = SHL_counting_chamber_tt
 		}
 		ai_will_do = { base = 5 }
@@ -891,6 +895,8 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_convene_conclave
+			custom_effect_tooltip = SHL_house_compromise_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -967,6 +973,8 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_quarter_charter
+			custom_effect_tooltip = SHL_city_charters_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1042,6 +1050,8 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_dispatch_order
+			custom_effect_tooltip = SHL_common_dispatch_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1532,6 +1542,8 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_desert_embassy
+			custom_effect_tooltip = SHL_southern_horizon_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea

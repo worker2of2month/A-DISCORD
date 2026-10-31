@@ -40,6 +40,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_shift_councils_stock_tt
+			hidden_effect = { SHL_stock_city_sites = yes }
 			add_political_power = 50
 			add_war_support = 0.05
 		}
@@ -64,6 +66,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_common_assembly
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.10 }
 			add_stability = 0.03
 		}
@@ -91,6 +94,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_common_assembly
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -204,7 +208,6 @@ focus_tree = {
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.10 }
 			custom_effect_tooltip = SHL_k_no_crests_tt
 			hidden_effect = {
-				set_country_flag = SHL_no_crests
 				set_variable = { var = SHL_house_pressure value = 0 }
 				SHL_clamp_tensions = yes
 			}
@@ -442,16 +445,18 @@ focus_tree = {
 					add_idea = SHL_pow_commune_prog_ending_a_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_commune_a_tt
+			custom_effect_tooltip = SHL_prog_first_batch_commune_tt
+			hidden_effect = {
+				set_variable = { var = SHL_prog_ending value = 51 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_conscription_factor value = 0.08 }
 				add_to_variable = { var = SHL_pow_stability_factor value = 0.06 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 51 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_commune_a_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -481,16 +486,18 @@ focus_tree = {
 					add_idea = SHL_pow_commune_prog_ending_b_idea
 				}
 			}
+			custom_effect_tooltip = SHL_delivery_commune_b_tt
+			custom_effect_tooltip = SHL_prog_first_batch_commune_tt
+			hidden_effect = {
+				set_variable = { var = SHL_prog_ending value = 52 }
+				SHL_prog_first_batch = yes
+				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
+			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.04 }
 				add_to_variable = { var = SHL_pow_max_efficiency value = 0.06 }
 				SHL_refresh_conclave_power = yes
 			}
-			hidden_effect = {
-				set_variable = { var = SHL_prog_ending value = 52 }
-				country_event = { id = ADISCORD_shl_fire.11 hours = 1 }
-			}
-			custom_effect_tooltip = SHL_delivery_commune_b_tt
 			hidden_effect = {
 				SHL_refresh_furnaces = yes
 			}
@@ -538,6 +545,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_k_cauldron_plus_now_tt
+			hidden_effect = { SHL_repair_worst_site = yes }
 			custom_effect_tooltip = SHL_k_cauldron_plus_tt
 		}
 		ai_will_do = { base = 5 }
@@ -898,6 +907,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_k_strikes_on_fields_now_tt
+			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
 			custom_effect_tooltip = SHL_k_strikes_on_fields_tt
 		}
 		ai_will_do = { base = 120 }
@@ -1041,6 +1052,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_measure_shift_reserve
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.20 }
 		}
 		ai_will_do = { base = 50 }
@@ -1063,7 +1075,73 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 100
+			custom_effect_tooltip = SHL_k_duty_master_tt
+			hidden_effect = {
+				287 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				288 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				289 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				290 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				291 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				292 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				293 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				294 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				295 = {
+					if = {
+						limit = { check_variable = { var = SHL_furnace_running value = 1 compare = equals } }
+						add_to_variable = { var = SHL_furnace_stock value = 1 }
+						clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+					}
+				}
+				SHL_refresh_furnaces = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}

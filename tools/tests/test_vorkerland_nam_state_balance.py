@@ -531,7 +531,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 resources["oil"]
                 for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()
             ),
-            164,
+            96,
         )
         self.assertEqual(
             sum(
@@ -853,7 +853,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             689: {},
             690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
             691: {},
-            692: {493: 1, 5039: 1},
+            692: {493: 25, 5039: 1, 4089: 10},
             700: {16716: 5, 16881: 5, 16884: 5, 16892: 5},
             701: {16717: 5},
             719: {},
@@ -887,7 +887,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             9,
         )
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 48
+            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 82
         )
 
         localisation = (
@@ -924,6 +924,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_residual_nam_city_has_port_supply_capital_and_localisation(self) -> None:
         source = state_source(700)
+        self.assertEqual(int(scalar(source, "fuel_silo")), 2)
         self.assertRegex(source, r"(?m)^\s*owner\s*=\s*NAM\s*$")
         self.assertRegex(source, r"(?m)^\s*add_core_of\s*=\s*NAM\s*$")
         self.assertEqual(scalar(source, "state_category"), "city")

@@ -4,6 +4,11 @@
 `build_motorized.py` owns the five wheeled APC meshes, textures, animation
 clips and packed Blender scenes in this family. It uses the native geometry
 helpers in `build_country_cas.py` and `build_taran.py`.
+The native `motorized_frame_attack.anim` parks the vehicle at -54.571142 degrees
+relative to its escort throughout the clip. APC attack animations counter-rotate
+the turret by +54.571142 degrees, including the gun and its muzzle locator.
+Attack, defend and support-attack states share this aiming pose. Recoil is
+validated by translation length so its check is independent of turret yaw.
 `build_idle.py` owns the shared idle motion for these five APCs, the VAL/NOD/STP
 tanks and STS Taran. The APC and Taran geometry builders call its exporter.
 

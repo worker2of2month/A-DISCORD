@@ -237,7 +237,7 @@ Owner: core phase 2.
   `NAM_project_pipeline` (690 -> 700, +1 unit, needs both states, 120 days),
   `NAM_project_sea_terminal` (state 700, +1 unit usable only by overseas
   buyers VAL, STP, STS, RUS, 90 days). One project per state at a time; two in parallel.
-- Islands category `NAM_overseas_districts`: steel levy (monthly treasury,
+- Island programmes in `NAM_national_programmes`: steel levy (monthly treasury,
   -15% local resource extraction on 228, 230, 231 during its 180-day term),
   convoy service (eight convoys and +15% island extraction for 180 days),
   paid road works (+1 infrastructure in 42 days),

@@ -3,7 +3,7 @@ SHL_furnace_site_controlled = {
 	is_owned_by = SHL
 	is_controlled_by = SHL
 	SHL = {
-		has_country_flag = SHL_furnaces_initialized
+		hidden_trigger = { has_country_flag = SHL_furnaces_initialized }
 		has_capitulated = no
 	}
 }
@@ -15,7 +15,7 @@ SHL_furnace_site_idle = {
 
 SHL_country_operable = {
 	tag = SHL
-	has_country_flag = SHL_furnaces_initialized
+	hidden_trigger = { has_country_flag = SHL_furnaces_initialized }
 	has_capitulated = no
 }
 
@@ -28,15 +28,16 @@ SHL_project_idle = {
 	}
 }
 
+# The quote comes from SHL_refresh_reserve_price; the supplier premium adds 10.
 SHL_reserve_affordable = {
 	OR = {
 		AND = {
 			has_country_flag = SHL_supplier_premium
-			check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price_premium compare = greater_than_or_equals }
 		}
 		AND = {
 			NOT = { has_country_flag = SHL_supplier_premium }
-			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price compare = greater_than_or_equals }
 		}
 	}
 }
@@ -211,7 +212,7 @@ SHL_mazar_can_threaten = {
 		NOT = { is_in_faction_with = SHL }
 	}
 	269 = { is_owned_by = MZR }
-	273 = { is_owned_by = MZR }
+	268 = { is_owned_by = MZR }
 }
 
 # The sixth-cycle warning precedes the tenth-cycle demand by four cycles.
@@ -439,7 +440,7 @@ SHL_mzr_objectives_held = {
 	check_variable = { var = SHL_war_mzr value = 1 compare = equals }
 	has_war_with = MZR
 	269 = { SHL_cistern_coalition_control = yes }
-	273 = { SHL_cistern_coalition_control = yes }
+	268 = { SHL_cistern_coalition_control = yes }
 	707 = {
 		is_owned_by = SHL
 		SHL_cistern_coalition_control = yes
@@ -565,7 +566,7 @@ SHL_can_settle_cisterns = {
 		is_owned_by = SHL
 		is_controlled_by = SHL
 	}
-	273 = {
+	268 = {
 		is_owned_by = SHL
 		is_controlled_by = SHL
 	}
@@ -640,7 +641,7 @@ SHL_south_site_has_result = {
 			SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			OR = {
 				state = 269
-				state = 273
+				state = 268
 				state = 707
 				state = 287
 				state = 288
@@ -657,7 +658,7 @@ SHL_south_site_has_result = {
 			SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
 			OR = {
 				state = 269
-				state = 273
+				state = 268
 				state = 707
 				state = 287
 				state = 288
@@ -674,7 +675,7 @@ SHL_south_site_has_result = {
 			SHL = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
 			OR = {
 				state = 269
-				state = 273
+				state = 268
 				state = 707
 				state = 287
 				state = 288
@@ -695,7 +696,7 @@ SHL_south_site_has_result = {
 			SHL = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 			OR = {
 				state = 269
-				state = 273
+				state = 268
 				state = 707
 				state = 287
 				state = 288
@@ -719,8 +720,8 @@ SHL_south_receipt_here = {
 			SHL = { check_variable = { var = SHL_south_site value = 269 compare = equals } }
 		}
 		AND = {
-			state = 273
-			SHL = { check_variable = { var = SHL_south_site value = 273 compare = equals } }
+			state = 268
+			SHL = { check_variable = { var = SHL_south_site value = 268 compare = equals } }
 		}
 		AND = {
 			state = 707
@@ -982,7 +983,7 @@ SHL_revanche_mzr_ready = {
 	MZR = { SHL_revanche_neighbour_open = yes }
 	OR = {
 		269 = { is_owned_by = SHL }
-		273 = { is_owned_by = SHL }
+		268 = { is_owned_by = SHL }
 	}
 }
 
@@ -1054,5 +1055,95 @@ SHL_metal_export_furnace_free = {
 		293 = { SHL_metal_export_site_free = yes }
 		294 = { SHL_metal_export_site_free = yes }
 		295 = { SHL_metal_export_site_free = yes }
+	}
+}
+
+# ----- Conclave levers -----
+
+# COUNTRY SHL. One measure at a time holds the Conclave's political attention;
+# the flag is timed to the measure and cleared on every terminal path.
+SHL_conclave_attention_free = {
+	NOT = { has_country_flag = SHL_political_action }
+}
+
+# STATE furnace site. A charter needs a lit furnace that the quarters or a
+# house still run and that no other paid operation occupies.
+SHL_charter_site_ready = {
+	SHL_furnace_site_idle = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	check_variable = { var = SHL_furnace_owner value = 2 compare = less_than }
+	NOT = { has_state_flag = SHL_quarter_charter }
+}
+
+# STATE furnace site. A granted charter survives while Shahrabad owns the
+# district and the furnace is not taken over by the state.
+SHL_charter_site_valid = {
+	is_owned_by = SHL
+	check_variable = { var = SHL_furnace_owner value = 2 compare = less_than }
+}
+
+# STATE furnace site. A lit furnace that no quota, order or obligation already claims.
+SHL_war_order_site_open = {
+	SHL_furnace_site_controlled = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	NOT = { has_state_flag = SHL_quota_site }
+	NOT = { SHL_obligation_here = yes }
+}
+
+# STATE furnace site. A dispatch donor keeps at least one packet after giving one.
+SHL_dispatch_donor_ready = {
+	SHL_furnace_site_idle = yes
+	check_variable = { var = SHL_furnace_stock value = 2 compare = greater_than_or_equals }
+}
+
+# COUNTRY neighbour. An embassy is opened once and not during a war with Shahrabad.
+SHL_embassy_target_open = {
+	exists = yes
+	NOT = { has_country_flag = SHL_embassy }
+	NOT = { has_country_flag = SHL_embassy_pending }
+	NOT = { has_war_with = SHL }
+}
+
+# COUNTRY satellite. Junior partners chosen by a postwar focus are never integrated.
+SHL_integration_target = {
+	exists = yes
+	is_subject_of = SHL
+	NOT = { has_country_flag = SHL_integration_pending }
+	NOT = {
+		AND = {
+			tag = KDR
+			SHL = { has_completed_focus = SHL_r_kadir_junior }
+		}
+	}
+	NOT = {
+		AND = {
+			tag = GLP
+			SHL = { has_completed_focus = SHL_h_veyr_junior_partner }
+		}
+	}
+}
+
+# COUNTRY SHL. The integration price follows the ratified course: houses buy
+# (300), the directorate decrees (100 PP), the regency pays (200), the commune
+# votes (50 PP) and the cities wait for the satellite's consent for free.
+SHL_integration_affordable = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			NOT = { has_political_power < 100 }
+		}
+		AND = {
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			NOT = { has_political_power < 50 }
+		}
 	}
 }

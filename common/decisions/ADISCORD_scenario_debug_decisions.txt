@@ -164,9 +164,21 @@ ADISCORD_scenario_debug_category = {
 				tag = SLF
 			}
 		}
-		visible = { NOT = { has_global_flag = ADISCORD_nam_resource_war_started } }
+		visible = {
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_nam_debug_start_ready_tt
+				ADISCORD_nam_resource_war_ready = yes
+			}
+		}
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_start_resource_war = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_start_resource_war_tt
+			hidden_effect = { ADISCORD_nam_debug_start_resource_war = yes }
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -179,9 +191,12 @@ ADISCORD_scenario_debug_category = {
 				tag = SLF
 			}
 		}
-		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		visible = { ADISCORD_nam_resource_war_active = yes }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_resolve_coalition_victory = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_resolve_coalition_victory_tt
+			hidden_effect = { ADISCORD_nam_debug_resolve_coalition_victory = yes }
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -194,9 +209,12 @@ ADISCORD_scenario_debug_category = {
 				tag = SLF
 			}
 		}
-		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		visible = { ADISCORD_nam_resource_war_active = yes }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_resolve_nam_victory = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_resolve_nam_victory_tt
+			hidden_effect = { ADISCORD_nam_debug_resolve_nam_victory = yes }
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -209,9 +227,87 @@ ADISCORD_scenario_debug_category = {
 				tag = SLF
 			}
 		}
-		visible = { has_global_flag = ADISCORD_nam_resource_war_started }
+		visible = { ADISCORD_nam_resource_war_active = yes }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_resolve_compromise = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_resolve_compromise_tt
+			hidden_effect = { ADISCORD_nam_debug_resolve_compromise = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_resolve_standoff = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { ADISCORD_nam_resource_war_active = yes }
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_resolve_standoff_tt
+			hidden_effect = { ADISCORD_nam_debug_resolve_standoff = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_prepare_etatism = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { NAM = { ADISCORD_nam_debug_mandate_open = yes } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_prepare_etatism_tt
+			hidden_effect = { ADISCORD_nam_debug_prepare_etatism = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_prepare_pragmatism = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { NAM = { ADISCORD_nam_debug_mandate_open = yes } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_prepare_pragmatism_tt
+			hidden_effect = { ADISCORD_nam_debug_prepare_pragmatism = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_prepare_humanism = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SLF
+			}
+		}
+		visible = { NAM = { ADISCORD_nam_debug_mandate_open = yes } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_prepare_humanism_tt
+			hidden_effect = { ADISCORD_nam_debug_prepare_humanism = yes }
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -292,6 +388,274 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = { ADISCORD_nam_debug_war_of_return = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_south_debug_start_war = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = SHL
+			}
+		}
+		visible = {
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_debug_start_war_available_tt
+				ADISCORD_south_debug_start_ready = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_debug_start_war_tt
+			hidden_effect = { ADISCORD_south_debug_start_war = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_south_debug_win_nam = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = SHL
+			}
+		}
+		visible = {
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_debug_win_nam_available_tt
+				ADISCORD_south_north_is_nam = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_debug_win_nam_tt
+			hidden_effect = { ADISCORD_south_debug_win_nam = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_south_debug_win_shl = {
+		allowed = {
+			OR = {
+				tag = NAM
+				tag = SHL
+			}
+		}
+		visible = {
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_debug_win_shl_available_tt
+				SHL = { exists = yes }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_debug_win_shl_tt
+			hidden_effect = { ADISCORD_south_debug_win_shl = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	# SHL shortcuts call the production course, balance and cycle effects. The
+	# ratification entries skip the main-tree prerequisites and the BOP range of
+	# the real finals; the commit effects keep their own course guards.
+	ADISCORD_shl_debug_fund_treasury = {
+		allowed = { tag = SHL }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+			ADISCORD_economy_mark_dirty = yes
+			add_political_power = 200
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_balance_crests = {
+		allowed = { tag = SHL }
+		visible = { has_power_balance = { id = SHL_conclave_balance } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = { id = SHL_conclave_balance value = -0.30 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_balance_quarters = {
+		allowed = { tag = SHL }
+		visible = { has_power_balance = { id = SHL_conclave_balance } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = { id = SHL_conclave_balance value = 0.30 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_ratify_houses = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { has_idea = SHL_hereditary_seats }
+				remove_ideas = SHL_hereditary_seats
+				ADISCORD_economy_mark_dirty = yes
+			}
+			SHL_commit_house_course = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_ratify_cities = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { has_idea = SHL_hereditary_seats }
+				remove_ideas = SHL_hereditary_seats
+				ADISCORD_economy_mark_dirty = yes
+			}
+			SHL_commit_city_course = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_ratify_directorate = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { has_idea = SHL_hereditary_seats }
+				remove_ideas = SHL_hereditary_seats
+				ADISCORD_economy_mark_dirty = yes
+			}
+			SHL_commit_state_course = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	# The hidden courses keep SHL_hereditary_seats: their own trees remove it.
+	ADISCORD_shl_debug_regency = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = less_than }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = { SHL_commit_regency_course = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_commune = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = less_than }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = { SHL_commit_commune_course = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_house_demand = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = greater_than }
+		}
+		available = {
+			NOT = { has_active_mission = SHL_house_demand }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_shl_debug_demand_idle_tt
+				NOT = { has_country_flag = SHL_demand_pending }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_variable = { var = SHL_demand_cycle value = 4 }
+			SHL_house_demand_tick = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_life_vignette = {
+		allowed = { tag = SHL }
+		visible = {
+			is_ai = no
+			SHL_country_operable = yes
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			clr_country_flag = SHL_life_cooldown
+			country_event = { id = ADISCORD_shl_life.20 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_shl_debug_south_hegemon = {
+		allowed = { tag = SHL }
+		visible = {
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+			NOT = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_global_flag = ADISCORD_south_final_resolved
+			set_global_flag = ADISCORD_south_hegemon_SHL
+			mark_focus_tree_layout_dirty = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	# Runs the cycle body in SHL_run_cycle order without touching
+	# SHL_cycle_pending, so the scheduled 28-day clock keeps its date.
+	ADISCORD_shl_debug_advance_cycle = {
+		allowed = { tag = SHL }
+		visible = { SHL_country_operable = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			SHL_produce_period = yes
+			SHL_refresh_furnaces = yes
+			SHL_update_tensions = yes
+			SHL_check_obligation_deadline = yes
+			SHL_check_crises = yes
+			ADISCORD_south_crisis_cycle = yes
+			SHL_crisis_draw = yes
+			SHL_life_draw = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 

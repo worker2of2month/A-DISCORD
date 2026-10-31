@@ -13,10 +13,24 @@ from tools.builders import build_adiscord_party_texticons as builder
 ROOT = Path(__file__).resolve().parents[2]
 PARTIES_LOCALISATION = ROOT / "localisation/russian/parties_l_russian.yml"
 ENTRY_PATTERN = re.compile(r'(?m)^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"\r\n]*)"\s*$')
-EXPECTED_COUNTRY_NAME_PAYLOAD_SHA256 = (
-    # Verified unchanged at 0a88a287, 141b91cb, c377214b, and the Task 5 base.
-    "fce0498af76397d36fc155f10fbf9353509e624fb97bb68cb4835c350c4f5792"
-)
+EXPECTED_COUNTRY_NAMES = {
+    "BBV_chauvinism_party": "Союз Копья Вашаита",
+    "BCM_chauvinism_party": "Межанский Стяг",
+    "BGT_chauvinism_party": "Крайтский Орден",
+    "BHG_chauvinism_party": "Хачоевская Дружина",
+    "BJK_chauvinism_party": "Столичный Стяг Бежайска",
+    "BLD_chauvinism_party": "Дворянский Щит Ландроса",
+    "BTL_etatism_party": "Республиканский Совет Порядка",
+    "COF_anarchism_party": "Вольные Друиды",
+    "DAN_etatism_party": "Командование Группы",
+    "EFL_chauvinism_party": "Партия Единой Земли",
+    "NAM_etatism_party": "Администрация Автономной Зоны",
+    "PIV_hedonism_party": "Клуб Сахарных Баронов",
+    "RUS_etatism_party": "Держава Хана",
+    "TFF_anarchism_party": "Вольные Рейнджеры",
+    "WIT_hedonism_party": "Союз Ночных Ламп",
+    "YPR_utilitarism_party": "Юборский Комитет Производства",
+}
 
 
 def party_entries() -> dict[str, str]:
@@ -41,7 +55,7 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                         f"{key}: {entries[key]!r}",
                     )
 
-    def test_country_assignment_name_payload_sha_is_unchanged(self) -> None:
+    def test_country_assignment_names_match_authored_parties(self) -> None:
         entries = party_entries()
         selected: dict[str, str] = {}
         for assignment in builder.ASSIGNMENTS:
@@ -49,11 +63,12 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                 self.assertIn(key, entries)
                 selected[key] = re.sub(r"^£GFX_[^ ]+ ", "", entries[key], count=1)
         self.assertEqual(len(selected), 32)
-        payload = "\n".join(f"{key}={selected[key]}" for key in sorted(selected))
-        self.assertEqual(
-            hashlib.sha256(payload.encode("utf-8")).hexdigest(),
-            EXPECTED_COUNTRY_NAME_PAYLOAD_SHA256,
-        )
+        expected = dict(EXPECTED_COUNTRY_NAMES)
+        expected.update({
+            key + "_long": value for key, value in EXPECTED_COUNTRY_NAMES.items()
+        })
+        expected["RUS_etatism_party_long"] = "Государственная партия Хана"
+        self.assertDictEqual(selected, expected)
 
     def test_parties_localisation_keeps_utf8_bom(self) -> None:
         self.assertTrue(PARTIES_LOCALISATION.read_bytes().startswith(b"\xef\xbb\xbf"))
@@ -156,11 +171,61 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
             any("/NOD/" in item.output.as_posix().upper() for item in builder.ASSETS)
         )
 
-    def test_generic_sprites_are_registered_but_not_assigned_in_localisation_yet(
-        self,
-    ) -> None:
-        localisation = PARTIES_LOCALISATION.read_text(encoding="utf-8-sig")
-        self.assertNotIn("GFX_generic_", localisation)
+    def test_playable_parties_and_minor_governments_have_names_and_icons(self) -> None:
+        playable = set(
+            "STP STS SRP VAL WRK WKR TVA SHL IVN IVC NAM RUS NOD VAD ZAO "
+            "IBA EGC EYR RIV YOR".split()
+        )
+        ideologies = (
+            "humanism utilitarism chauvinism pragmatism anarchism "
+            "technocracy etatism hedonism"
+        ).split()
+        sprites = set()
+        for path in (ROOT / "interface").glob("*.gfx"):
+            sprites.update(re.findall(
+                r'\bname\s*=\s*"(GFX_[^"]+)"',
+                path.read_text(encoding="utf-8-sig"),
+            ))
+        required = []
+        for path in (ROOT / "history/countries").glob("*.txt"):
+            tag = path.name[:3]
+            # These territorial placeholders intentionally conceal their politics.
+            if tag in {"RSV", "EXZ"}:
+                continue
+            ruling = re.search(
+                r"ruling_party\s*=\s*(\w+)",
+                path.read_text(encoding="utf-8-sig"),
+            )
+            if ruling:
+                required.extend(
+                    f"{tag}_{ideology}_party"
+                    for ideology in (ideologies if tag in playable else [ruling[1]])
+                )
+        language_icons = {}
+        for language in ("russian", "english"):
+            entries = {}
+            for path in (ROOT / "localisation" / language).glob("*.yml"):
+                text = path.read_text(encoding="utf-8-sig")
+                for key, value in ENTRY_PATTERN.findall(text):
+                    entries[key] = value
+            for base in required:
+                icons = []
+                for key in (base, base + "_long"):
+                    with self.subTest(language=language, key=key):
+                        self.assertIn(key, entries)
+                        match = re.fullmatch(r"£(GFX_\w+) (\S.*)", entries[key])
+                        self.assertIsNotNone(match, entries[key])
+                        self.assertIn(match[1], sprites)
+                        self.assertNotEqual(match[1], "GFX_unknown_party_texticon")
+                        icons.append(match[1])
+                self.assertEqual(icons[0], icons[1], base)
+                language_icons[language, base] = icons[0]
+        for base in required:
+            self.assertEqual(
+                language_icons["russian", base],
+                language_icons["english", base],
+                base,
+            )
         self.assertEqual(
             len([asset for asset in builder.ASSETS if asset.asset_class == "generic"]),
             24,

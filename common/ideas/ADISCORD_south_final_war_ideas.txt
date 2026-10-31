@@ -107,5 +107,19 @@ ideas = {
 				war_support_factor = 0.05
 			}
 		}
-	}
+
+		ADISCORD_south_nam_contract_logistics = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				supply_consumption_factor = -0.10
+				army_fuel_consumption_factor = -0.15
+				convoy_escort_efficiency = 0.15
+			}
+		}
+}
 }
