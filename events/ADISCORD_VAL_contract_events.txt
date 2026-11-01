@@ -1275,7 +1275,10 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_record_partner_refusal = yes
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
 			if = {
 				limit = { has_country_flag = VAL_export_offer_advisors }
 				clr_country_flag = VAL_export_offer_advisors
@@ -1741,13 +1744,20 @@ country_event = {
 	option = {
 		name = val_contract.349.refuse
 		ai_chance = { base = 20 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
 		hidden_effect = {
+			VAL_record_contract_rejection = yes
 			if = {
-				limit = { VAL = { has_country_flag = VAL_nam_concession_offer_pending } }
+				limit = {
+					VAL = { has_country_flag = VAL_nam_concession_offer_pending }
+				}
 				VAL_record_partner_refusal = yes
 				VAL = {
 					clr_country_flag = VAL_nam_concession_offer_pending
-					country_event = { id = val_contract.378 hours = 1 }
+					country_event = {
+						id = val_contract.378
+						hours = 1
+					}
 				}
 			}
 		}
@@ -2087,10 +2097,14 @@ country_event = {
 	option = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
+		ai_chance = { base = 100 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
 		# The AI is settled directly by VAL_dispatch_partner_trade_offer. If a player
 		# leaves the reply unanswered, the timeout choice must refuse and refund it.
-		ai_chance = { base = 100 }
-		hidden_effect = { VAL_decline_partner_trade = yes }
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_decline_partner_trade = yes
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2112,7 +2126,11 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_decline_partner_hire = yes }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_decline_partner_hire = yes
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2134,7 +2152,15 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_record_partner_refusal = yes  if = { limit = { has_country_flag = VAL_partner_offer_arms } VAL_close_partner_arms_offer = yes } }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			if = {
+				limit = { has_country_flag = VAL_partner_offer_arms }
+				VAL_close_partner_arms_offer = yes
+			}
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2155,7 +2181,15 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_record_partner_refusal = yes  if = { limit = { has_country_flag = VAL_partner_offer_bulk } VAL_close_partner_bulk_offer = yes } }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			if = {
+				limit = { has_country_flag = VAL_partner_offer_bulk }
+				VAL_close_partner_bulk_offer = yes
+			}
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2176,7 +2210,15 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_record_partner_refusal = yes  if = { limit = { has_country_flag = VAL_partner_offer_arsenal } VAL_close_partner_arsenal_offer = yes } }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			if = {
+				limit = { has_country_flag = VAL_partner_offer_arsenal }
+				VAL_close_partner_arsenal_offer = yes
+			}
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2197,7 +2239,15 @@ country_event = {
 		name = VAL_export_decline
 		trigger = { is_ai = no }
 		ai_chance = { base = 0 }
-		hidden_effect = { VAL_record_partner_refusal = yes  if = { limit = { has_country_flag = VAL_partner_offer_strategic } VAL_close_partner_strategic_offer = yes } }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			if = {
+				limit = { has_country_flag = VAL_partner_offer_strategic }
+				VAL_close_partner_strategic_offer = yes
+			}
+		}
 	}
 	option = {
 		name = VAL_export_accept
@@ -2217,7 +2267,12 @@ country_event = {
 	option = {
 		name = val_contract.349.refuse
 		ai_chance = { base = 20 }
-		hidden_effect = { VAL_record_partner_refusal = yes  VAL = { clr_country_flag = VAL_efl_concession_offer_pending } }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL = { clr_country_flag = VAL_efl_concession_offer_pending }
+		}
 	}
 	option = {
 		name = val_contract.349.accept
@@ -2321,7 +2376,14 @@ country_event = {
 				has_manpower < 2000
 			}
 		}
-		hidden_effect = { VAL_decline_nam_aid_request = yes }
+		custom_effect_tooltip = VAL_nam_aid_refusal_final_tt
+		hidden_effect = {
+			if = {
+				limit = { has_variable = VAL_nam_request_terms }
+				set_country_flag = VAL_nam_aid_requests_declined
+			}
+			VAL_decline_nam_aid_request = yes
+		}
 	}
 	option = {
 		name = val_contract.375.accept
@@ -2395,7 +2457,17 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
-	option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  VAL_close_order_offer = yes } }
+	option = {
+		name = VAL_export_decline
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL_close_order_offer = yes
+		}
+	}
 	option = { name = VAL_export_accept ai_chance = { base = 100 } hidden_effect = { VAL_accept_order = yes } }
 }
 country_event = {
@@ -2405,7 +2477,17 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
-	option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  VAL_close_order_offer = yes } }
+	option = {
+		name = VAL_export_decline
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL_close_order_offer = yes
+		}
+	}
 	option = { name = VAL_export_accept ai_chance = { base = 100 } hidden_effect = { VAL_accept_order = yes } }
 }
 country_event = {
@@ -2415,7 +2497,17 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
-	option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  VAL_close_order_offer = yes } }
+	option = {
+		name = VAL_export_decline
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL_close_order_offer = yes
+		}
+	}
 	option = { name = VAL_export_accept ai_chance = { base = 100 } hidden_effect = { VAL_accept_order = yes } }
 }
 country_event = {
@@ -2425,7 +2517,17 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
-	option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  VAL_close_order_offer = yes } }
+	option = {
+		name = VAL_export_decline
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL_close_order_offer = yes
+		}
+	}
 	option = { name = VAL_export_accept ai_chance = { base = 100 } hidden_effect = { VAL_accept_order = yes } }
 }
 
@@ -2436,7 +2538,17 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 35
-	option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  VAL_close_military_offer = yes } }
+	option = {
+		name = VAL_export_decline
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			VAL_record_contract_rejection = yes
+			VAL_record_partner_refusal = yes
+			VAL_close_military_offer = yes
+		}
+	}
 	option = { name = VAL_export_accept ai_chance = { base = 100 } hidden_effect = { VAL_accept_military_contract = yes } }
 }
 
@@ -2694,9 +2806,14 @@ country_event = {
 		name = VAL_export_decline
 		ai_chance = {
 			base = 0
-			modifier = { add = 100 NOT = { VAL_transit_charter_can_accept = yes } }
+			modifier = {
+				add = 100
+				NOT = { VAL_transit_charter_can_accept = yes }
+			}
 		}
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
 		hidden_effect = {
+			VAL_record_contract_rejection = yes
 			if = {
 				limit = {
 					has_country_flag = VAL_transit_offer
@@ -3133,6 +3250,10 @@ country_event = {
 	desc = val_rework.125.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	trigger = {
+		has_country_flag = VAL_nw_offer_pending
+		NOT = { has_country_flag = VAL_nw_offer_declined }
+	}
 	timeout_days = 14
 	option = {
 		name = val_rework.125.a
@@ -3142,6 +3263,7 @@ country_event = {
 				factor = 0
 				has_country_flag = VAL_nw_sovereignty_recognized
 				has_country_flag = VAL_nw_offer_pending
+			NOT = { has_country_flag = VAL_nw_offer_declined }
 				NOT = { has_country_flag = VAL_nw_concession }
 				VAL_nw_partner_eligible = yes
 				VAL = {
@@ -3150,12 +3272,20 @@ country_event = {
 				}
 			}
 		}
-		hidden_effect = { clr_country_flag = VAL_nw_offer_pending }
+		custom_effect_tooltip = VAL_contract_refusal_final_tt
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = VAL_nw_offer_pending }
+				set_country_flag = VAL_nw_offer_declined
+				clr_country_flag = VAL_nw_offer_pending
+			}
+		}
 	}
 	option = {
 		name = val_rework.125.b
 		trigger = {
 			has_country_flag = VAL_nw_offer_pending
+			NOT = { has_country_flag = VAL_nw_offer_declined }
 			NOT = { has_country_flag = VAL_nw_concession }
 			VAL_nw_partner_eligible = yes
 			VAL = {

@@ -563,6 +563,24 @@ ideas = {
 			}
 		}
 
+		SHL_pow_desert_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				local_resources_factor = 0.05
+			}
+		}
+
+		SHL_pow_written_fire_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.05
+			}
+		}
+
 		SHL_pow_south_crown_of_the_south_idea = {
 			name = SHL_conclave_power_dynamic
 			picture = GFX_idea_generic_production_bonus

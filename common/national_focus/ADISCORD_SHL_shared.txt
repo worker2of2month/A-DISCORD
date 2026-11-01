@@ -5,13 +5,14 @@
 # корона Юга (по ADISCORD_south_hegemon_SHL). Каждое дерево курса ссылается на
 # SHL_south_furnaces_to_front и SHL_south_crown_of_the_south; остальные фокусы
 # фронта входят через свои prerequisite. Позиции общие для всех деревьев курса:
-# колонки 9-11, строки 0-4.
+# колонки 9-11, строки 0-4. Второй ряд веток (округа, внешние дела, Книга
+# печей) ниже подключается и к главному дереву; его корни стоят в x 33-67.
 
 shared_focus = {
 	id = SHL_south_furnaces_to_front
 	icon = GFX_goal_generic_construct_mil_factory
-	x = 10
-	y = 0
+	x = 97
+	y = 15
 	cost = 2
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -30,8 +31,8 @@ shared_focus = {
 shared_focus = {
 	id = SHL_south_raid_oil_fields
 	icon = GFX_goal_generic_occupy_states_ongoing_war
-	x = 9
-	y = 1
+	x = 96
+	y = 16
 	cost = 2
 	search_filters = { FOCUS_FILTER_ARMY_XP }
 	allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -54,8 +55,8 @@ shared_focus = {
 shared_focus = {
 	id = SHL_south_desert_convoys
 	icon = GFX_focus_generic_camel_corps
-	x = 11
-	y = 1
+	x = 98
+	y = 16
 	cost = 2
 	search_filters = { FOCUS_FILTER_ARMY_XP }
 	allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -79,8 +80,8 @@ shared_focus = {
 shared_focus = {
 	id = SHL_south_storm_oil_belt
 	icon = GFX_goal_generic_position_armies
-	x = 10
-	y = 2
+	x = 97
+	y = 17
 	cost = 3
 	search_filters = { FOCUS_FILTER_ARMY_XP }
 	allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -106,8 +107,8 @@ shared_focus = {
 shared_focus = {
 	id = SHL_south_crown_of_the_south
 	icon = GFX_focus_generic_the_giant_wakes
-	x = 10
-	y = 4
+	x = 97
+	y = 19
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -130,4 +131,1400 @@ shared_focus = {
 		}
 	}
 	ai_will_do = { base = 50 }
+}
+
+# ----- Branch A: the four districts (x 33-47) -----
+# The second row of branches is referenced by the main tree and by all five
+# course trees, so it stays visible before and after ratification. Positions
+# are absolute and lie right of both layouts (main x 0-31, courses x 0-19).
+# The roots have no prerequisite: the trees share no focus that could anchor
+# them, and the branch order is set by available and the chains themselves.
+
+shared_focus = {
+	id = SHL_four_districts
+	icon = GFX_goal_generic_construct_civilian
+	x = 40
+	y = 0
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_four_districts_tt
+		730 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		731 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		732 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		733 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_salt_pans_of_safir
+	icon = GFX_goal_generic_construct_civ_factory
+	x = 34
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_four_districts
+	}
+	available = {
+		SHL_country_operable = yes
+		730 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		730 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = no
+					}
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 10 }
+			SHL_add_cycle_income = yes
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_safir_customs
+	icon = GFX_focus_generic_price_controls
+	x = 33
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_salt_pans_of_safir
+	}
+	mutually_exclusive = {
+		focus = SHL_safir_smugglers
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_cycle_income_plus_8_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 8 }
+			SHL_add_cycle_income = yes
+		}
+		GLP = {
+			add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_customs_dispute }
+		}
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_safir_smugglers
+	icon = GFX_focus_generic_smugglers
+	x = 35
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_salt_pans_of_safir
+	}
+	mutually_exclusive = {
+		focus = SHL_safir_customs
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_smuggler_fuel_tt
+		hidden_effect = {
+			set_country_flag = SHL_smuggler_fuel
+			SHL_refresh_programme_prices = yes
+		}
+		add_stability = -0.03
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_safir_bandar_port
+	icon = GFX_goal_generic_construct_naval_dockyard
+	x = 34
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_safir_customs
+		focus = SHL_safir_smugglers
+	}
+	available = {
+		SHL_country_operable = yes
+		730 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		730 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_building_construction = {
+					type = naval_base
+					level = 1
+					instant_build = no
+					province = 3234
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 10 }
+			SHL_add_cycle_income = yes
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_loran_cisterns
+	icon = GFX_goal_generic_construct_infrastructure
+	x = 38
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_four_districts
+	}
+	available = {
+		SHL_country_operable = yes
+		731 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		731 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_wells_discount_tt
+		hidden_effect = { SHL_refresh_programme_prices = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_desert_caravanserai
+	icon = GFX_focus_generic_camel_corps
+	x = 37
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_loran_cisterns
+	}
+	mutually_exclusive = {
+		focus = SHL_sand_patrols
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 10 }
+			SHL_add_cycle_income = yes
+		}
+		707 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_sand_patrols
+	icon = GFX_focus_generic_desert_training
+	x = 39
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_MANPOWER }
+	prerequisite = {
+		focus = SHL_loran_cisterns
+	}
+	mutually_exclusive = {
+		focus = SHL_desert_caravanserai
+	}
+	available = {
+		SHL_country_operable = yes
+		731 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_sand_patrols_tt
+		hidden_effect = { SHL_create_sand_patrol = yes }
+		add_command_power = 20
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_loran_deh_growth
+	icon = GFX_focus_generic_low_cost_housing
+	x = 38
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_MANPOWER }
+	prerequisite = {
+		focus = SHL_desert_caravanserai
+		focus = SHL_sand_patrols
+	}
+	available = {
+		SHL_country_operable = yes
+		731 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		731 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				set_state_category = town
+				add_manpower = 4000
+			}
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_bayrat_copi_survey
+	icon = GFX_focus_generic_mineral_prospecting
+	x = 42
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_four_districts
+	}
+	available = {
+		SHL_country_operable = yes
+		732 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		if = {
+			limit = { 732 = { is_owned_by = SHL } }
+			add_resource = {
+				type = steel
+				amount = 2
+				state = 732
+			}
+		}
+		unlock_decision_tooltip = SHL_prospect_copi
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_mine_colonies
+	icon = GFX_focus_generic_mining_industry
+	x = 41
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_bayrat_copi_survey
+	}
+	mutually_exclusive = {
+		focus = SHL_nomad_leases
+	}
+	available = {
+		SHL_country_operable = yes
+		732 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		732 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = no
+					}
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = no
+				}
+			}
+			if = {
+				limit = { is_owned_by = SHL }
+				add_manpower = 6000
+			}
+		}
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_nomad_leases
+	icon = GFX_focus_generic_concessions
+	x = 43
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_bayrat_copi_survey
+	}
+	mutually_exclusive = {
+		focus = SHL_mine_colonies
+	}
+	available = {
+		SHL_country_operable = yes
+		732 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		if = {
+			limit = { 732 = { is_owned_by = SHL } }
+			add_resource = {
+				type = steel
+				amount = 2
+				state = 732
+			}
+			add_resource = {
+				type = chromium
+				amount = 1
+				state = 732
+			}
+		}
+		custom_effect_tooltip = SHL_cycle_income_minus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = -5 }
+			SHL_add_cycle_income = yes
+		}
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_copi_railway
+	icon = GFX_focus_generic_railroad
+	x = 42
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_mine_colonies
+		focus = SHL_nomad_leases
+	}
+	available = {
+		SHL_country_operable = yes
+		732 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		732 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		291 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		if = {
+			limit = { 732 = { is_owned_by = SHL } }
+			add_resource = {
+				type = steel
+				amount = 2
+				state = 732
+			}
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_veyran_forts
+	icon = GFX_goal_generic_fortify_city
+	x = 46
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_STABILITY }
+	prerequisite = {
+		focus = SHL_four_districts
+	}
+	available = {
+		SHL_country_operable = yes
+		733 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		733 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = no
+					province = {
+						all_provinces = yes
+						limit_to_border = yes
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_border_watch
+	icon = GFX_focus_generic_home_defense
+	x = 45
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_MANPOWER }
+	prerequisite = {
+		focus = SHL_veyran_forts
+	}
+	mutually_exclusive = {
+		focus = SHL_border_market
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		unlock_decision_tooltip = SHL_raise_border_watch
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_border_market
+	icon = GFX_goal_generic_trade
+	x = 47
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_veyran_forts
+	}
+	mutually_exclusive = {
+		focus = SHL_border_watch
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		MZR = {
+			add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_border_market }
+		}
+		custom_effect_tooltip = SHL_cycle_income_plus_8_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 8 }
+			SHL_add_cycle_income = yes
+		}
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_veyran_kala
+	icon = GFX_focus_generic_reinforcing_the_supply_network
+	x = 46
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_border_watch
+		focus = SHL_border_market
+	}
+	available = {
+		SHL_country_operable = yes
+		733 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		733 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_building_construction = {
+					type = supply_node
+					level = 1
+					instant_build = no
+					province = 6126
+				}
+			}
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_desert_assembly
+	icon = GFX_goal_generic_national_unity
+	x = 40
+	y = 4
+	cost = 4
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_safir_bandar_port
+		focus = SHL_loran_deh_growth
+		focus = SHL_copi_railway
+		focus = SHL_veyran_kala
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		730 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		731 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		732 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		733 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		add_power_balance_value = { id = SHL_conclave_balance value = 0.05 }
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = SHL_conclave_power_dummy_idea
+				add_idea = SHL_pow_desert_idea
+			}
+		}
+		hidden_effect = {
+			add_to_variable = { var = SHL_pow_resource_factor value = 0.05 }
+			SHL_refresh_conclave_power = yes
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+# ----- Branch B: foreign affairs (x 49-59) -----
+# Same absolute placement rule as branch A; the root has no prerequisite.
+
+shared_focus = {
+	id = SHL_chancery_of_the_gate
+	icon = GFX_focus_generic_diplomatic_treaty
+	x = 54
+	y = 0
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		unlock_decision_tooltip = SHL_trade_mission
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_damir_road
+	icon = GFX_focus_generic_road_investment
+	x = 50
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_chancery_of_the_gate
+	}
+	available = {
+		SHL_country_operable = yes
+		EFL = { exists = yes }
+		NOT = { has_war_with = EFL }
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		288 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		# The Damir road continues into Eflor's own state; the partner keeps the road.
+		240 = {
+			if = {
+				limit = {
+					is_owned_by = EFL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		EFL = {
+			add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_damir_road }
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_eflor_investment
+	icon = GFX_focus_generic_industry_investment
+	x = 49
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_damir_road
+	}
+	mutually_exclusive = {
+		focus = SHL_damir_customs
+	}
+	available = {
+		SHL_country_operable = yes
+		EFL = { exists = yes }
+		NOT = { has_war_with = EFL }
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_eflor_investment_tt
+		hidden_effect = { SHL_eflor_offer_investment = yes }
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_damir_customs
+	icon = GFX_focus_generic_stockpile_currency
+	x = 51
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_damir_road
+	}
+	mutually_exclusive = {
+		focus = SHL_eflor_investment
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 10 }
+			SHL_add_cycle_income = yes
+		}
+		EFL = {
+			add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_damir_customs }
+		}
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_eflor_accord
+	icon = GFX_focus_generic_treaty
+	x = 50
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_eflor_investment
+		focus = SHL_damir_customs
+	}
+	available = {
+		SHL_country_operable = yes
+		EFL = { exists = yes }
+		NOT = { has_war_with = EFL }
+		custom_trigger_tooltip = {
+			tooltip = SHL_eflor_accord_price_tt
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_eflor_accord_tt
+		hidden_effect = { SHL_eflor_offer_accord = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_fuel_ledger
+	icon = GFX_focus_generic_stockpile_fuel
+	x = 54
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_chancery_of_the_gate
+	}
+	available = {
+		SHL_country_operable = yes
+		699 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		699 = {
+			if = {
+				limit = { is_owned_by = SHL }
+				add_building_construction = {
+					type = fuel_silo
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_reserve_discount_tt
+		hidden_effect = { SHL_refresh_programme_prices = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_nam_fuel_treaty
+	icon = GFX_goal_generic_positive_trade_relations
+	x = 53
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_fuel_ledger
+	}
+	mutually_exclusive = {
+		focus = SHL_own_distillery
+	}
+	available = {
+		SHL_country_operable = yes
+		NAM = { exists = yes }
+		NOT = { has_war_with = NAM }
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_fuel_treaty_tt
+		hidden_effect = { SHL_nam_offer_fuel_treaty = yes }
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_own_distillery
+	icon = GFX_goal_generic_oil_refinery
+	x = 55
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_fuel_ledger
+	}
+	mutually_exclusive = {
+		focus = SHL_nam_fuel_treaty
+	}
+	available = {
+		SHL_country_operable = yes
+		699 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		699 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					free_building_slots = {
+						building = synthetic_refinery
+						size = 1
+						include_locked = no
+					}
+				}
+				add_building_construction = {
+					type = synthetic_refinery
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_distillery_fuel_tt
+		hidden_effect = { SHL_refresh_programme_prices = yes }
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_northern_road
+	icon = GFX_focus_generic_improve_roads
+	x = 54
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_nam_fuel_treaty
+		focus = SHL_own_distillery
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		707 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		699 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = no
+				}
+			}
+		}
+		custom_effect_tooltip = SHL_convoy_discount_tt
+		hidden_effect = { SHL_refresh_programme_prices = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_table_of_treaties
+	icon = GFX_focus_generic_league_of_nations
+	x = 58
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_chancery_of_the_gate
+	}
+	available = {
+		SHL_country_operable = yes
+		custom_trigger_tooltip = {
+			tooltip = SHL_treaty_closed_tt
+			SHL_neighbour_dispute_closed = yes
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_stability = 0.05
+		custom_effect_tooltip = SHL_cycle_income_plus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 5 }
+			SHL_add_cycle_income = yes
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_kyz_communities_seat
+	icon = GFX_focus_generic_immigration
+	x = 57
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+	prerequisite = {
+		focus = SHL_table_of_treaties
+	}
+	mutually_exclusive = {
+		focus = SHL_veyr_glass_contract
+	}
+	available = {
+		SHL_country_operable = yes
+		custom_trigger_tooltip = {
+			tooltip = SHL_kyz_settled_tt
+			SHL_kyz_settled = yes
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		if = {
+			limit = { KYZ = { exists = yes } }
+			KYZ = {
+				add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_kyz_seat }
+			}
+		}
+		add_manpower = 8000
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_veyr_glass_contract
+	icon = GFX_focus_generic_license_production
+	x = 59
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_table_of_treaties
+	}
+	mutually_exclusive = {
+		focus = SHL_kyz_communities_seat
+	}
+	available = {
+		SHL_country_operable = yes
+		custom_trigger_tooltip = {
+			tooltip = SHL_glp_settled_tt
+			SHL_glp_settled = yes
+		}
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_cycle_income_plus_12_tt
+		hidden_effect = {
+			set_temp_variable = { var = SHL_income_delta value = 12 }
+			SHL_add_cycle_income = yes
+		}
+		if = {
+			limit = { GLP = { exists = yes } }
+			GLP = {
+				add_opinion_modifier = { target = SHL modifier = ADISCORD_SHL_glass_contract }
+			}
+		}
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_southern_customs_union
+	icon = GFX_focus_generic_monetary_union
+	x = 58
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+	prerequisite = {
+		focus = SHL_kyz_communities_seat
+		focus = SHL_veyr_glass_contract
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_metal_clients_plus_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_metal_max_clients value = 1 }
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_voice_of_the_south
+	icon = GFX_focus_generic_influence_middle_east
+	x = 54
+	y = 4
+	cost = 4
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_eflor_accord
+		focus = SHL_northern_road
+		focus = SHL_southern_customs_union
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		unlock_decision_tooltip = SHL_desert_embassy
+		custom_effect_tooltip = SHL_voice_of_the_south_tt
+		hidden_effect = { SHL_announce_voice_of_the_south = yes }
+		add_political_power = 50
+	}
+	ai_will_do = { base = 4 }
+}
+
+# ----- Branch C: the Book of Furnaces (x 61-67) -----
+# Same absolute placement rule as branch A; the root has no prerequisite.
+
+shared_focus = {
+	id = SHL_written_fire
+	icon = GFX_focus_generic_phoenix
+	x = 64
+	y = 0
+	cost = 3
+	search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_RESEARCH }
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_stability = 0.05
+		unlock_decision_tooltip = SHL_festival_of_fire
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_archive_of_the_conclave
+	icon = GFX_goal_generic_scientific_exchange
+	x = 62
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_RESEARCH }
+	prerequisite = {
+		focus = SHL_written_fire
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_tech_bonus = {
+			name = SHL_archive_of_the_conclave
+			bonus = 0.5
+			uses = 1
+			category = industry
+		}
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_masters_university
+	icon = GFX_focus_generic_university_1
+	x = 61
+	y = 2
+	cost = 5
+	search_filters = { FOCUS_FILTER_RESEARCH }
+	prerequisite = {
+		focus = SHL_archive_of_the_conclave
+	}
+	mutually_exclusive = {
+		focus = SHL_apprentice_decree
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		add_research_slot = 1
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_apprentice_decree
+	icon = GFX_focus_generic_education
+	x = 63
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
+	prerequisite = {
+		focus = SHL_archive_of_the_conclave
+	}
+	mutually_exclusive = {
+		focus = SHL_masters_university
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		swap_ideas = {
+			remove_idea = ADISCORD_education_apprenticeship
+			add_idea = ADISCORD_education_technical_institutes
+		}
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_engineers_of_the_tenth
+	icon = GFX_focus_generic_electrification
+	x = 62
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+	prerequisite = {
+		focus = SHL_masters_university
+		focus = SHL_apprentice_decree
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_engineers_discount_tt
+		hidden_effect = { SHL_refresh_programme_prices = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_heralds_press
+	icon = GFX_focus_generic_printing_press
+	x = 66
+	y = 1
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_written_fire
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		unlock_decision_tooltip = SHL_campaign_fire_never_sleeps
+		unlock_decision_tooltip = SHL_campaign_bread_from_furnaces
+		add_political_power = 25
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_open_press
+	icon = GFX_focus_generic_social_democracy
+	x = 65
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_heralds_press
+	}
+	mutually_exclusive = {
+		focus = SHL_conclave_bulletins
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		swap_ideas = {
+			remove_idea = ADISCORD_information_licensed_press
+			add_idea = ADISCORD_information_open_press
+		}
+		add_power_balance_value = { id = SHL_conclave_balance value = 0.05 }
+	}
+	ai_will_do = { base = 2 }
+}
+
+shared_focus = {
+	id = SHL_conclave_bulletins
+	icon = GFX_goal_generic_propaganda
+	x = 67
+	y = 2
+	cost = 3
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = {
+		focus = SHL_heralds_press
+	}
+	mutually_exclusive = {
+		focus = SHL_open_press
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		swap_ideas = {
+			remove_idea = ADISCORD_information_licensed_press
+			add_idea = ADISCORD_information_state_bulletins
+		}
+		add_power_balance_value = { id = SHL_conclave_balance value = -0.05 }
+	}
+	ai_will_do = { base = 3 }
+}
+
+shared_focus = {
+	id = SHL_chronicle_of_the_south
+	icon = GFX_focus_generic_commission
+	x = 66
+	y = 3
+	cost = 4
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+	prerequisite = {
+		focus = SHL_open_press
+		focus = SHL_conclave_bulletins
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_book_second_volume_tt
+		hidden_effect = { SHL_open_second_volume = yes }
+		add_war_support = 0.05
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_law_of_the_written_fire
+	icon = GFX_focus_generic_university_2
+	x = 64
+	y = 4
+	cost = 4
+	search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_STABILITY }
+	prerequisite = {
+		focus = SHL_engineers_of_the_tenth
+		focus = SHL_chronicle_of_the_south
+	}
+	available = {
+		SHL_country_operable = yes
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = SHL_conclave_power_dummy_idea
+				add_idea = SHL_pow_written_fire_idea
+			}
+		}
+		hidden_effect = {
+			add_to_variable = { var = SHL_pow_research_speed value = 0.05 }
+			SHL_refresh_conclave_power = yes
+		}
+		add_stability = 0.03
+	}
+	ai_will_do = { base = 4 }
 }

@@ -68,14 +68,15 @@ def shl_focus_blocks():
     return result
 
 
+SHL_COURSE_SECTIONS = {"houses": "1", "cities": "2", "directorate": "3", "regency": "4", "commune": "5"}
+
+
 def shl_tree_course(path):
-    """Course value selecting one SHL course tree, or None for the main tree."""
-    tree = next(e.value for e in parse_clausewitz(path.read_text(encoding="utf-8")) if e.key == "focus_tree")
-    modifier = block(block(tree, "country"), "modifier")
-    check = next((e.value for e in modifier if e.key == "check_variable"), None)
-    if check is None or scalar(check, "var") != "SHL_political_course":
+    """Course value of one SHL course section of the single tree, or None for the main tree."""
+    header = path.read_text(encoding="utf-8").split("\n", 1)[0]
+    if not header.startswith("# @section "):
         return None
-    return scalar(check, "value")
+    return SHL_COURSE_SECTIONS[header[len("# @section "):].strip()]
 
 
 def flatten(items):
@@ -1118,6 +1119,9 @@ class FocusAggregateTests(unittest.TestCase):
                 if not swaps:
                     continue
                 swap = {e.key: e.value for e in swaps[0]}
+                if swap["remove_idea"] not in self.display:
+                    # A policy swap between real ideas, not a preview of the aggregate.
+                    continue
                 base_name, base = self.display[swap["remove_idea"]]
                 delta_name, delta = self.display[swap["add_idea"]]
                 self.assertEqual(base, {}, identifier)
@@ -1137,7 +1141,7 @@ class FocusAggregateTests(unittest.TestCase):
                 self.assertEqual(applied, delta, identifier)
                 self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
                 checked += 1
-        self.assertEqual(checked, 90)
+        self.assertEqual(checked, 108)
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)

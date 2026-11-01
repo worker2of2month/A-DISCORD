@@ -5569,6 +5569,39 @@ class VADDistrictRecruitmentTests(unittest.TestCase):
 
 
 class UnifiedPrewarTreeTests(unittest.TestCase):
+    def test_new_campaign_ai_can_enter_both_evacuation_plans_without_completed_focuses(self):
+        plans = fields(parse(read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")))
+        routes = (("compact", "military"), ("hardline", "civil"))
+        for outcome, (course, evacuation) in enumerate(routes):
+            with self.subTest(course=course):
+                script = Script()
+                script.scopes["WRK"].focuses.clear()
+                script.random_index = outcome
+                script.effect(V + "prewar_crisis_initialize")
+                self.assertEqual(script.random_weights, [(35, 65)])
+                self.assertEqual(script.scopes["WRK"].flags, {V + "prewar_wrk_" + course + "_course"})
+                enabled = []
+                for candidate, _ in routes:
+                    plan = fields(plans[V + "wrk_prewar_" + candidate + "_plan"])
+                    if script.conditions(plan["enable"]):
+                        enabled.append(candidate)
+                        self.assertFalse(script.conditions(plan["abort"]))
+                        focuses = [value for _, _, value in plan["ai_national_focuses"]]
+                        self.assertIn("WRK_prepare_" + evacuation + "_evacuation", focuses)
+                self.assertEqual(enabled, [course])
+                before = deepcopy((script.scopes, script.globals, script.calls))
+                script.random_index = 1 - outcome
+                script.effect(V + "prewar_crisis_initialize")
+                self.assertEqual((script.scopes, script.globals, script.calls), before)
+                self.assertEqual(script.random_weights, [(35, 65)])
+
+    def test_new_campaign_leaves_human_course_unselected(self):
+        script = Script()
+        script.scopes["WRK"].ai = False
+        script.effect(V + "prewar_crisis_initialize")
+        self.assertFalse(script.random_weights)
+        self.assertFalse(script.scopes["WRK"].flags)
+
     def test_wrk_preparation_has_one_entry_and_every_focus_reaches_it(self):
         focuses = {fields(value)["id"]: fields(value)
                    for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))

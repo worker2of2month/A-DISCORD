@@ -251,8 +251,8 @@ class ShahrabadDebugDecisionTests(unittest.TestCase):
         for language, path in DEBUG_LOCALISATION.items():
             values = self.localised[language]
             with self.subTest(language=language):
+                # Line endings follow the working copy's autocrlf state; only the BOM is a contract.
                 self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
-                self.assertNotIn(b"\n", path.read_bytes().replace(b"\r\n", b""))
             for name in SHL_DEBUG_DECISIONS:
                 with self.subTest(language=language, decision=name):
                     self.assertTrue(values[name].startswith("§RDEBUG:§! "), values.get(name))

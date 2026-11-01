@@ -1,36 +1,14 @@
-focus_tree = {
-	id = SHL_houses_focus
-	country = {
-		factor = 0
-		modifier = {
-			add = 100
-			original_tag = SHL
-			check_variable = { var = SHL_political_course value = 1 compare = equals }
-		}
-	}
-	default = no
-	continuous_focus_position = { x = 50 y = 1200 }
-
-	# Курс 1: Десятый дом (Конклав десяти). Дерево загружает SHL_commit_house_course
-	# с keep_completed = yes; главное дерево собрано как общая история, поэтому
-	# его завершённые фокусы подготовки читаются через has_completed_focus.
-	# Раскладка: устройство и консолидация курса - колонки 0-8 (корень в колонке 3,
-	# ствол консолидации в колонке 6); общий слой фронта и короны Юга определён в
-	# focus_trees/SHL/shared и занимает колонки 9-11, строки 0-4; военные фокусы
-	# курса стоят в колонке 8 под началом фронта; хозяйство - отдельный корень в
-	# колонках 13-15; послевоенная секция - под короной Юга в колонках 9-11,
-	# строки 5-8. Между соседями по строке всегда остаётся свободная клетка.
-
-	shared_focus = SHL_south_furnaces_to_front
-	shared_focus = SHL_south_crown_of_the_south
-
-	# ----- Устройство: Конклав десяти -----
-
+# @section houses
+# Курс 1: Десятый дом (Конклав десяти). Секция главного дерева SHL_focus: корень SHL_golden_gate_cartel следует за
+# SHL_admit_tenth_house; координаты абсолютные, блок курса стоит под стволом
+# (x 16-31, y 15-23). Фронт Юга и корона Юга подключены
+# в главном дереве как shared_focus.
 	focus = {
 		id = SHL_golden_gate_cartel
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 3
-		y = 0
+		x = 19
+		y = 15
+		prerequisite = { focus = SHL_admit_tenth_house }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		available = {
@@ -52,8 +30,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_cartel_price
 		icon = GFX_focus_generic_price_controls
-		x = 0
-		y = 1
+		x = 16
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -90,8 +68,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_metal_exchange
 		icon = GFX_focus_generic_industry_investment
-		x = 2
-		y = 1
+		x = 18
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -117,8 +95,8 @@ focus_tree = {
 	focus = {
 		id = SHL_house_guards
 		icon = GFX_focus_generic_commonwealth_build_infantry
-		x = 4
-		y = 1
+		x = 20
+		y = 16
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -142,8 +120,8 @@ focus_tree = {
 	focus = {
 		id = SHL_veyr_partnership
 		icon = GFX_focus_generic_treaty
-		x = 6
-		y = 1
+		x = 22
+		y = 16
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -183,8 +161,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_guild_schools
 		icon = GFX_focus_generic_university_1
-		x = 1
-		y = 2
+		x = 17
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 		prerequisite = {
@@ -220,8 +198,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_house_guards_charter
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 3
-		y = 2
+		x = 19
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -252,8 +230,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_conclave_mercenaries
 		icon = GFX_focus_generic_military_mission
-		x = 5
-		y = 2
+		x = 21
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -276,8 +254,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_golden_gate_festival
 		icon = GFX_focus_generic_happy_cheer
-		x = 1
-		y = 3
+		x = 17
+		y = 18
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -297,8 +275,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_heralds_court
 		icon = GFX_focus_generic_sympathetic_judges
-		x = 4
-		y = 3
+		x = 20
+		y = 18
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -322,8 +300,8 @@ focus_tree = {
 	focus = {
 		id = SHL_conclave_of_ten
 		icon = GFX_focus_ADISCORD_industrial_development
-		x = 6
-		y = 3
+		x = 22
+		y = 18
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -373,8 +351,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_council_of_ten
 		icon = GFX_focus_generic_vote
-		x = 3
-		y = 4
+		x = 19
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -405,8 +383,8 @@ focus_tree = {
 	focus = {
 		id = SHL_houses_prog_ending_a
 		icon = GFX_focus_generic_monarchy_1
-		x = 5
-		y = 4
+		x = 21
+		y = 19
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = SHL_conclave_of_ten }
@@ -443,8 +421,8 @@ focus_tree = {
 	focus = {
 		id = SHL_houses_prog_ending_b
 		icon = GFX_goal_generic_major_alliance
-		x = 7
-		y = 4
+		x = 23
+		y = 19
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = SHL_conclave_of_ten }
@@ -480,8 +458,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_tenth_house_seat
 		icon = GFX_focus_generic_monarchy_2
-		x = 3
-		y = 5
+		x = 19
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -504,8 +482,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_export_houses
 		icon = GFX_focus_generic_industrialists
-		x = 14
-		y = 1
+		x = 30
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -530,8 +508,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_rail_to_sea
 		icon = GFX_focus_generic_railroad
-		x = 13
-		y = 2
+		x = 29
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -586,8 +564,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_rail_to_qanats
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 15
-		y = 2
+		x = 31
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -642,8 +620,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_cargo_insurance
 		icon = GFX_focus_generic_merchant_fleet
-		x = 13
-		y = 3
+		x = 29
+		y = 18
 		cost = 3
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -664,8 +642,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_house_credit
 		icon = GFX_focus_generic_money_for_equipment
-		x = 15
-		y = 3
+		x = 31
+		y = 18
 		cost = 3
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -686,8 +664,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_veyr_harbour_share
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 13
-		y = 4
+		x = 29
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -734,8 +712,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_bank_of_houses
 		icon = GFX_focus_generic_currency_reforms
-		x = 14
-		y = 5
+		x = 30
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -765,8 +743,8 @@ focus_tree = {
 	focus = {
 		id = SHL_south_debt_network
 		icon = GFX_goal_generic_trade
-		x = 6
-		y = 5
+		x = 22
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -803,8 +781,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_debt_term
 		icon = GFX_focus_generic_stockpile_currency
-		x = 4
-		y = 6
+		x = 20
+		y = 21
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -831,8 +809,8 @@ focus_tree = {
 	focus = {
 		id = SHL_south_trade_protectorates
 		icon = GFX_goal_generic_dangerous_deal
-		x = 6
-		y = 6
+		x = 22
+		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -861,8 +839,8 @@ focus_tree = {
 	focus = {
 		id = SHL_south_great_road
 		icon = GFX_focus_generic_improve_roads
-		x = 6
-		y = 7
+		x = 22
+		y = 22
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -879,7 +857,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			234 = { add_claim_by = SHL }
-			240 = { add_claim_by = SHL }
+			242 = { add_claim_by = SHL }
 			custom_effect_tooltip = SHL_south_great_road_tt
 			hidden_effect = {
 				KDR = { ADISCORD_south_demand_submission = yes }
@@ -892,8 +870,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_kerdan_trading_house
 		icon = GFX_goal_generic_improve_relations
-		x = 8
-		y = 7
+		x = 24
+		y = 22
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -932,8 +910,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_road_stations
 		icon = GFX_focus_generic_supply_line
-		x = 4
-		y = 8
+		x = 20
+		y = 23
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -954,7 +932,7 @@ focus_tree = {
 						is_owned_by = SHL
 						is_controlled_by = SHL
 					}
-					240 = {
+					242 = {
 						is_owned_by = SHL
 						is_controlled_by = SHL
 					}
@@ -969,8 +947,8 @@ focus_tree = {
 					}
 				}
 				if = {
-					limit = { 240 = { infrastructure < 5 } }
-					240 = {
+					limit = { 242 = { infrastructure < 5 } }
+					242 = {
 						add_building_construction = {
 							type = infrastructure
 							level = 1
@@ -991,8 +969,8 @@ focus_tree = {
 	focus = {
 		id = SHL_south_oil_for_furnaces
 		icon = GFX_goal_generic_forceful_treaty
-		x = 6
-		y = 8
+		x = 22
+		y = 23
 		cost = 5
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
@@ -1025,8 +1003,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_hired_contracts
 		icon = GFX_focus_generic_desert_training
-		x = 8
-		y = 2
+		x = 24
+		y = 17
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1048,8 +1026,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_buy_garrisons
 		icon = GFX_focus_generic_home_defense
-		x = 8
-		y = 3
+		x = 24
+		y = 18
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1081,8 +1059,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_concession_of_svetlogorye
 		icon = GFX_focus_generic_concessions
-		x = 10
-		y = 5
+		x = 26
+		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1107,8 +1085,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_southern_exchange
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 9
-		y = 6
+		x = 25
+		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1154,8 +1132,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_southern_bank
 		icon = GFX_focus_generic_economic_recovery
-		x = 11
-		y = 6
+		x = 27
+		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1186,8 +1164,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_crown_of_trade
 		icon = GFX_goal_generic_national_unity
-		x = 10
-		y = 7
+		x = 26
+		y = 22
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1209,8 +1187,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_ten_crests_forever
 		icon = GFX_focus_generic_monarchist_sentiment
-		x = 9
-		y = 8
+		x = 25
+		y = 23
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1238,8 +1216,8 @@ focus_tree = {
 	focus = {
 		id = SHL_h_veyr_junior_partner
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 11
-		y = 8
+		x = 27
+		y = 23
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
@@ -1266,4 +1244,3 @@ focus_tree = {
 		}
 		ai_will_do = { base = 50 }
 	}
-}

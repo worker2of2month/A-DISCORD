@@ -1147,3 +1147,38 @@ SHL_integration_affordable = {
 		}
 	}
 }
+
+# ----- Second row: disputes with the neighbours -----
+
+# COUNTRY SHL. The water dispute is settled by the quota treaty (value 2, also
+# imposed after a lost war), victory (4) or the brotherhood (5 or its flag when
+# the brotherhood came after the wells).
+SHL_kyz_settled = {
+	OR = {
+		check_variable = { var = SHL_water_crisis value = 2 compare = equals }
+		check_variable = { var = SHL_water_crisis value = 4 compare = equals }
+		check_variable = { var = SHL_water_crisis value = 5 compare = equals }
+		has_country_flag = SHL_kyz_brotherhood
+	}
+}
+
+# COUNTRY SHL. The Veyr dispute is settled by the union, the finished harbour
+# (3) or victory (4).
+SHL_glp_settled = {
+	OR = {
+		has_country_flag = SHL_veyr_partner
+		check_variable = { var = SHL_veyr_crisis value = 3 compare = equals }
+		check_variable = { var = SHL_veyr_crisis value = 4 compare = equals }
+	}
+}
+
+# COUNTRY SHL. Any closed dispute with KYZ or GLP, including a lost war or an
+# armistice (SHL_close_*_war flags).
+SHL_neighbour_dispute_closed = {
+	OR = {
+		SHL_kyz_settled = yes
+		SHL_glp_settled = yes
+		has_country_flag = SHL_kyz_war_closed
+		has_country_flag = SHL_glp_war_closed
+	}
+}

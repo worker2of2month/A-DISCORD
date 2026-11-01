@@ -4086,6 +4086,78 @@ class ValRecipientVisibilityTests(ValHireReceiptTests):
         )
 
 
+class ValContractRejectionTests(unittest.TestCase):
+    setUpClass = classmethod(ValPartnerSettlementTests.setUpClass.__func__)
+    matches = ValPartnerSettlementTests.matches
+    execute = ValPartnerSettlementTests.execute
+    facts = ValPartnerSettlementTests.facts
+
+    def test_explicit_trade_or_hire_refusal_survives_the_contact_interval(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        for kind, event_id in (("trade", "val_contract.362"), ("hire", "val_contract.364")):
+            with self.subTest(contract=kind):
+                facts = self.facts(kind)
+                facts["VAL", "numeric", "has_political_power"] = 500
+                facts["CIN", "numeric", "has_manpower"] = 5000
+                event = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == event_id)
+                refusal = next(e.value for e in event if e.key == "option" and scalar(e.value, "name") == "VAL_export_decline")
+                self.effects["test_explicit_refusal"] = block(refusal, "hidden_effect")
+                self.execute("test_explicit_refusal", facts)
+                self.assertTrue(facts["CIN", "has_country_flag", f"VAL_{kind}_offers_declined"])
+                facts["CIN", "has_country_flag", "VAL_partner_contact_cooldown"] = False
+                self.assertFalse(self.matches(f"VAL_{kind}_recipient_ready", facts, "CIN"))
+                self.assertFalse(self.matches(f"VAL_partner_{kind}_can_offer", facts, "CIN"))
+                other = "hire" if kind == "trade" else "trade"
+                self.assertTrue(self.matches(f"VAL_{other}_recipient_ready", facts, "CIN"))
+                after = dict(facts)
+                self.execute("test_explicit_refusal", facts)
+                self.assertEqual(facts, after)
+
+    def test_paid_trade_retry_is_a_manual_one_off_and_requires_fresh_consent(self):
+        facts = self.facts("trade")
+        facts["CIN", "has_country_flag", "VAL_trade_offers_declined"] = True
+        facts["CIN", "has_country_flag", "VAL_council_retry_offer"] = True
+        self.assertTrue(self.matches("VAL_partner_trade_can_accept", facts, "CIN"))
+        self.execute("VAL_settle_partner_trade", facts)
+        self.assertFalse(facts["CIN", "has_country_flag", "VAL_trade_offers_declined"])
+        self.assertTrue(facts["CIN", "has_country_flag", "VAL_market_term_started"])
+        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_council_reopen_talks")
+        self.assertIn("VAL_council_retry_used", decision)
+        self.assertIn("factor = 0", named_block(decision, "ai_will_do"))
+        self.assertIn("VAL_trade_offers_declined", named_block(decision, "ai_will_do"))
+
+    def test_only_the_offered_contract_family_is_rejected(self):
+        for marker, kind in (
+            ("VAL_partner_offer_arms", "arms"),
+            ("VAL_partner_offer_bulk", "arms"),
+            ("VAL_partner_offer_arsenal", "arms"),
+            ("VAL_partner_offer_strategic", "arms"),
+            ("VAL_order_offer", "order"),
+            ("VAL_military_offer", "military"),
+            ("VAL_transit_offer", "transit"),
+            ("VAL_export_offer_advisors", "advisors"),
+        ):
+            with self.subTest(offer=marker):
+                facts = {("CIN", "has_country_flag", marker): True}
+                self.execute("VAL_record_contract_rejection", facts)
+                self.assertEqual(
+                    [key[2] for key in facts if key[1] == "has_country_flag" and key[2].endswith("_offers_declined")],
+                    [f"VAL_{kind}_offers_declined"],
+                )
+        facts = {}
+        self.execute("VAL_record_contract_rejection", facts)
+        self.assertEqual(facts, {})
+
+    def test_failed_settlement_does_not_permanently_close_negotiations(self):
+        for kind in ("trade", "hire"):
+            facts = self.facts(kind)
+            self.execute(f"VAL_decline_partner_{kind}", facts)
+            self.assertFalse(facts.get(("CIN", "has_country_flag", f"VAL_{kind}_offers_declined"), False))
+
+
 class ValTradeReplyTests(unittest.TestCase):
     def test_player_timeout_refuses_trade_and_ai_settles_without_reply_event(self):
         source = read("events/ADISCORD_VAL_contract_events.txt")

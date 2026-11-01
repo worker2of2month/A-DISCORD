@@ -25,6 +25,8 @@ SHL_conclave_power_dynamic = {
 	consumer_goods_factor = SHL_pow_consumer_goods
 	production_factory_max_efficiency_factor = SHL_pow_max_efficiency
 	conscription_factor = SHL_pow_conscription_factor
+	local_resources_factor = SHL_pow_resource_factor
+	research_speed_factor = SHL_pow_research_speed
 }
 
 # COUNTRY buyer of Shahrabad metal. The cycle settlement clears the flag on

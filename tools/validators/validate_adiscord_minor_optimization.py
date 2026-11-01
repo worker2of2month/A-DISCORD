@@ -173,13 +173,10 @@ EVENT_AWAKENED_PARTICIPATION["RLY"] = {
 
 # KYZ and GLP stay dormant until a Shahrabad crisis wakes them; the Shahrabad
 # effects release each country before its first event, alliance or war.
-# The five course trees carry the partnership and consolidation offers.
+# The course branches of the single Shahrabad tree carry the partnership and
+# consolidation offers; the shared layer holds the southern front.
 SHAHRABAD_COURSE_TREES = {
-    Path("common/national_focus/ADISCORD_SHL_houses.txt"),
-    Path("common/national_focus/ADISCORD_SHL_cities.txt"),
-    Path("common/national_focus/ADISCORD_SHL_directorate.txt"),
-    Path("common/national_focus/ADISCORD_SHL_regency.txt"),
-    Path("common/national_focus/ADISCORD_SHL_commune.txt"),
+    Path("common/national_focus/ADISCORD_SHL_shared.txt"),
 }
 SHAHRABAD_NEIGHBOUR_FILES = {
     Path("common/decisions/ADISCORD_SHL_decisions.txt"),

@@ -1400,6 +1400,18 @@ defined_text = {
 	}
 }
 
+# Engineers' commission quote (SHL_engineers_price: 100, 75 after the tenth's engineers).
+defined_text = {
+	name = SHLGetEngineersPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price compare = greater_than_or_equals } }
+		localization_key = SHL_price_engineers
+	}
+	text = {
+		localization_key = SHL_price_engineers_red
+	}
+}
+
 defined_text = {
 	name = SHLGetExportMode
 	text = {

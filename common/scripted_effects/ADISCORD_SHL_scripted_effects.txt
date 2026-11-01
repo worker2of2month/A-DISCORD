@@ -281,6 +281,10 @@ SHL_produce_period = {
 		limit = { check_variable = { var = SHL_metal_clients value = 0 compare = greater_than } }
 		SHL_metal_settle_clients = yes
 	}
+	# District and treaty income of the second-row focuses: once per cycle, in
+	# country scope, never through the nine site scopes above. May be negative.
+	add_to_variable = { var = ADISCORD_economy_treasury value = SHL_cycle_bonus_income }
+	add_to_variable = { var = SHL_last_cycle_income value = SHL_cycle_bonus_income }
 	ADISCORD_economy_clamp_treasury = yes
 }
 
@@ -914,17 +918,18 @@ SHL_refresh_furnaces = {
 }
 
 SHL_begin_engineers = {
+	SHL_refresh_programme_prices = yes
 	if = {
 		limit = {
 			SHL_project_idle = yes
 			has_completed_focus = SHL_engineer_society
 			check_variable = { var = SHL_project_stage value = 0 compare = equals }
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price compare = greater_than_or_equals }
 			NOT = { has_political_power < 25 }
 		}
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price }
 		add_political_power = -25
-		set_variable = { var = SHL_project_deposit value = 100 }
+		set_variable = { var = SHL_project_deposit value = SHL_engineers_price }
 		set_variable = { var = SHL_project_pp value = 25 }
 		set_variable = { var = SHL_project_operation value = 1 }
 		add_to_variable = { var = SHL_gui_dirty value = 1 }
@@ -1384,7 +1389,6 @@ SHL_commit_house_course = {
 			set_cosmetic_tag = SHL_conclave_of_ten
 			SHL_announce_course_news = yes
 		}
-		load_focus_tree = { tree = SHL_houses_focus keep_completed = yes }
 	}
 	SHL_party_representatives_house = yes
 }
@@ -1491,7 +1495,6 @@ SHL_commit_city_course = {
 			set_cosmetic_tag = SHL_southern_compact
 			SHL_announce_course_news = yes
 		}
-		load_focus_tree = { tree = SHL_cities_focus keep_completed = yes }
 	}
 	SHL_party_representatives_city = yes
 }
@@ -1595,7 +1598,6 @@ SHL_commit_state_course = {
 			set_cosmetic_tag = SHL_iron_directorate
 			SHL_announce_course_news = yes
 		}
-		load_focus_tree = { tree = SHL_directorate_focus keep_completed = yes }
 	}
 	SHL_party_representatives_state = yes
 }
@@ -2046,7 +2048,13 @@ SHL_commit_regency_course = {
 			set_cosmetic_tag = SHL_hereditary_republic
 			SHL_announce_course_news = yes
 		}
-		load_focus_tree = { tree = SHL_regency_focus keep_completed = yes }
+		# One native tree: the entry focus opens the course section even when the
+		# course was committed by the crisis event or the backing decision. The
+		# course value is already set, so the entry reward cannot commit again.
+		if = {
+			limit = { NOT = { has_completed_focus = SHL_regency_of_crests } }
+			complete_national_focus = SHL_regency_of_crests
+		}
 	}
 	SHL_party_representatives_regency = yes
 }
@@ -2095,7 +2103,13 @@ SHL_commit_commune_course = {
 			set_cosmetic_tag = SHL_commune_of_fire
 			SHL_announce_course_news = yes
 		}
-		load_focus_tree = { tree = SHL_commune_focus keep_completed = yes }
+		# One native tree: the entry focus opens the course section even when the
+		# course was committed by the crisis event or the backing decision. The
+		# course value is already set, so the entry reward cannot commit again.
+		if = {
+			limit = { NOT = { has_completed_focus = SHL_commune_of_shift_councils } }
+			complete_national_focus = SHL_commune_of_shift_councils
+		}
 	}
 	SHL_party_representatives_commune = yes
 }
@@ -2350,6 +2364,7 @@ SHL_sign_water_treaty = {
 		clr_country_flag = SHL_water_offer_pending
 		if = {
 			limit = {
+				NOT = { has_country_flag = SHL_water_offer_declined }
 				check_variable = { var = SHL_water_crisis value = 1 compare = equals }
 				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
@@ -2498,6 +2513,8 @@ SHL_close_kyz_war = {
 	}
 	set_variable = { var = SHL_war_kyz value = 0 }
 	clr_country_flag = SHL_war_kyz_clock
+	# Permanent trace of a finished war; defeat and armistice leave no other marker.
+	set_country_flag = SHL_kyz_war_closed
 	SHL_clean_campaign = yes
 }
 
@@ -2576,6 +2593,7 @@ SHL_sign_veyr_union = {
 		clr_country_flag = SHL_veyr_offer_pending
 		if = {
 			limit = {
+				NOT = { has_country_flag = SHL_veyr_offer_declined }
 				check_variable = { var = SHL_war_glp value = 0 compare = equals }
 				NOT = { has_war_with = GLP }
 			}
@@ -2723,6 +2741,8 @@ SHL_close_glp_war = {
 	}
 	set_variable = { var = SHL_war_glp value = 0 }
 	clr_country_flag = SHL_war_glp_clock
+	# Permanent trace of a finished war; defeat and armistice leave no other marker.
+	set_country_flag = SHL_glp_war_closed
 	SHL_clean_campaign = yes
 }
 
@@ -5757,6 +5777,11 @@ SHL_refresh_programme_prices = {
 		limit = { has_completed_focus = SHL_c_water_works }
 		set_variable = { var = SHL_wells_price value = 200 }
 	}
+	if = {
+		limit = { has_completed_focus = SHL_loran_cisterns }
+		subtract_from_variable = { var = SHL_wells_price value = 50 }
+	}
+	clamp_variable = { var = SHL_wells_price min = 0 max = 250 }
 	# The workers' wells are drilled once for free; the flag is set at payment.
 	if = {
 		limit = {
@@ -5764,6 +5789,11 @@ SHL_refresh_programme_prices = {
 			NOT = { has_country_flag = SHL_free_well_used }
 		}
 		set_variable = { var = SHL_wells_price value = 0 }
+	}
+	set_variable = { var = SHL_engineers_price value = 100 }
+	if = {
+		limit = { has_completed_focus = SHL_engineers_of_the_tenth }
+		set_variable = { var = SHL_engineers_price value = 75 }
 	}
 	set_variable = { var = SHL_harbour_price value = 300 }
 	if = {
@@ -5780,6 +5810,11 @@ SHL_refresh_programme_prices = {
 		limit = { has_completed_focus = SHL_d_march_logistics }
 		set_variable = { var = SHL_convoy_deposit value = 90 }
 	}
+	if = {
+		limit = { has_completed_focus = SHL_northern_road }
+		subtract_from_variable = { var = SHL_convoy_deposit value = 30 }
+	}
+	clamp_variable = { var = SHL_convoy_deposit min = 30 max = 120 }
 	set_variable = { var = SHL_cauldron_repair value = 30 }
 	if = {
 		limit = { has_completed_focus = SHL_k_cauldron_plus }
@@ -5794,14 +5829,19 @@ SHL_refresh_programme_prices = {
 	SHL_refresh_packet_price = yes
 }
 
-# The common fund lowers the reserve quote from 60 to 45; the supplier premium
-# of ADISCORD_SHL.8 adds 10 on top of either. SHL_purchase_reserve re-reads
-# the quote before the debit so a focus completed mid-cycle applies at once.
+# The common fund lowers the reserve quote from 60 to 45 and the fuel ledger
+# takes 5 off either; the supplier premium of ADISCORD_SHL.8 adds 10 on top.
+# SHL_purchase_reserve re-reads the quote before the debit so a focus completed
+# mid-cycle applies at once.
 SHL_refresh_reserve_price = {
 	set_variable = { var = SHL_reserve_price value = 60 }
 	if = {
 		limit = { has_completed_focus = SHL_common_fund }
 		set_variable = { var = SHL_reserve_price value = 45 }
+	}
+	if = {
+		limit = { has_completed_focus = SHL_fuel_ledger }
+		subtract_from_variable = { var = SHL_reserve_price value = 5 }
 	}
 	set_variable = { var = SHL_reserve_price_premium value = SHL_reserve_price }
 	add_to_variable = { var = SHL_reserve_price_premium value = 10 }
@@ -5812,7 +5852,9 @@ SHL_refresh_reserve_price = {
 # when both markers are present). Svetlogorye's files have no hook into SHL,
 # so a change made mid-cycle applies at the next purchase: the cycle re-reads
 # the quote through SHL_refresh_delivery_terms before the planned supply, and
-# SHL_begin_supply re-reads it before the debit.
+# SHL_begin_supply re-reads it before the debit. Shahrabad's own discounts
+# (smugglers, distillery, fuel treaty) come off that quote; the treaty is
+# suspended by the embargo or a war with Svetlogorye. Floor 10.
 SHL_refresh_packet_price = {
 	set_variable = { var = SHL_packet_price value = 25 }
 	if = {
@@ -5823,11 +5865,31 @@ SHL_refresh_packet_price = {
 		limit = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
 		set_variable = { var = SHL_packet_price value = 35 }
 	}
+	if = {
+		limit = { has_country_flag = SHL_smuggler_fuel }
+		subtract_from_variable = { var = SHL_packet_price value = 5 }
+	}
+	if = {
+		limit = { has_completed_focus = SHL_own_distillery }
+		subtract_from_variable = { var = SHL_packet_price value = 5 }
+	}
+	if = {
+		limit = {
+			has_country_flag = SHL_nam_fuel_treaty
+			NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+			NOT = { has_war_with = NAM }
+		}
+		subtract_from_variable = { var = SHL_packet_price value = 10 }
+	}
+	clamp_variable = { var = SHL_packet_price min = 10 max = 35 }
 }
 
 SHL_initialize_programmes = {
 	SHL_refresh_programme_prices = yes
 	set_variable = { var = SHL_metal_clients value = 0 }
+	set_variable = { var = SHL_metal_max_clients value = 3 }
+	set_variable = { var = SHL_cycle_bonus_income value = 0 }
+	set_variable = { var = SHL_copi_prospected value = 0 }
 	set_variable = { var = SHL_export_mode value = 0 }
 	set_variable = { var = SHL_exchange_price value = 60 }
 	set_variable = { var = SHL_credit_cycles value = 0 }
@@ -6826,7 +6888,7 @@ SHL_sell_road_stations = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
-			240 = {
+			242 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
@@ -6837,10 +6899,10 @@ SHL_sell_road_stations = {
 		ADISCORD_economy_mark_dirty = yes
 		KDR = {
 			transfer_state = 234
-			transfer_state = 240
+			transfer_state = 242
 		}
 		234 = { set_state_controller_to = KDR }
-		240 = { set_state_controller_to = KDR }
+		242 = { set_state_controller_to = KDR }
 	}
 }
 
@@ -7287,11 +7349,12 @@ SHL_metal_establish_contract = {
 		limit = {
 			has_country_flag = SHL_metal_offer_pending
 			NOT = { has_country_flag = SHL_metal_client }
+			NOT = { has_country_flag = SHL_metal_offer_declined }
 			NOT = { has_war_with = SHL }
 			SHL = {
 				SHL_country_operable = yes
 				SHL_metal_export_furnace_free = yes
-				check_variable = { var = SHL_metal_clients value = 3 compare = less_than }
+				check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
 			}
 		}
 		clr_country_flag = SHL_metal_offer_pending
@@ -7356,11 +7419,19 @@ SHL_metal_sign_contract_two_years = {
 
 # COUNTRY buyer, ROOT of ADISCORD_SHL.130.
 SHL_metal_decline_contract = {
-	clr_country_flag = SHL_metal_offer_pending
-	SHL = {
-		if = {
-			limit = { SHL_country_operable = yes }
-			country_event = { id = ADISCORD_SHL.132 hours = 6 }
+	if = {
+		limit = {
+			has_country_flag = SHL_metal_offer_pending
+			NOT = { has_country_flag = SHL_metal_client }
+			NOT = { has_country_flag = SHL_metal_offer_declined }
+		}
+		clr_country_flag = SHL_metal_offer_pending
+		set_country_flag = SHL_metal_offer_declined
+		SHL = {
+			if = {
+				limit = { SHL_country_operable = yes }
+				country_event = { id = ADISCORD_SHL.132 hours = 6 }
+			}
 		}
 	}
 }
@@ -8278,5 +8349,381 @@ SHL_party_representatives_commune = {
 				NAME = SHL_party_representatives_commune_etatism
 			}
 		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Second row of shared branches: the four districts, foreign affairs and the
+# Book of Furnaces. The shared focuses call these effects; the decisions of the
+# "Four districts and foreign affairs" section keep their own escrows.
+# ---------------------------------------------------------------------------
+
+# COUNTRY SHL. Input: temp SHL_income_delta (may be negative). The running
+# total is paid once per cycle by SHL_produce_period in country scope.
+SHL_add_cycle_income = {
+	add_to_variable = { var = SHL_cycle_bonus_income value = SHL_income_delta }
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# ----- District garrisons -----
+
+SHL_ensure_border_watch_template = {
+	if = {
+		limit = { NOT = { has_template = "Border Watch" } }
+		division_template = {
+			name = "Border Watch"
+			template_counter = 9
+			division_names_group = SHL_GAR_01
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				infantry = {
+					x = 0
+					y = 0
+				}
+				infantry = {
+					x = 0
+					y = 1
+				}
+				ADISCORD_militia = {
+					x = 1
+					y = 0
+				}
+			}
+		}
+	}
+}
+
+# STATE scope, owner PREV. Rifles come from the owner's stockpile; the caller
+# has already settled the treasury price.
+SHL_create_border_watch_unit = {
+	create_unit = {
+		division = "division_template = \"Border Watch\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		owner = PREV
+		allow_spawning_on_enemy_provs = no
+	}
+}
+
+# COUNTRY SHL. One garrison division in the Loran sands (731); a district that
+# is not held sends the patrol to the capital instead.
+SHL_create_sand_patrol = {
+	SHL_ensure_border_watch_template = yes
+	if = {
+		limit = {
+			731 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		731 = { SHL_create_border_watch_unit = yes }
+	}
+	else = { capital_scope = { SHL_create_border_watch_unit = yes } }
+}
+
+# COUNTRY SHL. One garrison division on the Veyran border (733), same fallback.
+SHL_create_border_watch = {
+	SHL_ensure_border_watch_template = yes
+	if = {
+		limit = {
+			733 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		733 = { SHL_create_border_watch_unit = yes }
+	}
+	else = { capital_scope = { SHL_create_border_watch_unit = yes } }
+}
+
+# ----- Border watch order (SHL_raise_border_watch) -----
+
+SHL_begin_border_watch_order = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			NOT = { has_variable = SHL_border_watch_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+		set_variable = { var = SHL_border_watch_deposit value = 60 }
+	}
+}
+
+SHL_cancel_border_watch_order = {
+	if = {
+		limit = { has_variable = SHL_border_watch_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_border_watch_deposit }
+		clear_variable = SHL_border_watch_deposit
+	}
+}
+
+# A border district lost during the thirty days refunds the order.
+SHL_finish_border_watch_order = {
+	if = {
+		limit = { has_variable = SHL_border_watch_deposit }
+		if = {
+			limit = {
+				SHL_country_operable = yes
+				733 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			SHL_create_border_watch = yes
+			clear_variable = SHL_border_watch_deposit
+		}
+		else = { SHL_cancel_border_watch_order = yes }
+	}
+}
+
+# ----- Bayrat prospecting (SHL_prospect_copi) -----
+
+# COUNTRY SHL. The deposit blocks a second expedition until settlement; the
+# counter SHL_copi_prospected caps the programme at two deliveries.
+SHL_begin_copi_prospecting = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			NOT = { has_variable = SHL_copi_deposit }
+			check_variable = { var = SHL_copi_prospected value = 2 compare = less_than }
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		set_variable = { var = SHL_copi_deposit value = 120 }
+	}
+}
+
+SHL_cancel_copi_prospecting = {
+	if = {
+		limit = { has_variable = SHL_copi_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_copi_deposit }
+		clear_variable = SHL_copi_deposit
+	}
+}
+
+# The chromium is booked only while Shahrabad still holds the Bayrat mines.
+SHL_finish_copi_prospecting = {
+	if = {
+		limit = { has_variable = SHL_copi_deposit }
+		if = {
+			limit = {
+				SHL_country_operable = yes
+				732 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			732 = {
+				add_resource = {
+					type = chromium
+					amount = 3
+				}
+			}
+			add_to_variable = { var = SHL_copi_prospected value = 1 }
+			clear_variable = SHL_copi_deposit
+		}
+		else = { SHL_cancel_copi_prospecting = yes }
+	}
+}
+
+# ----- Eflor deposits and accord (ADISCORD_SHL.150-152) -----
+
+# COUNTRY SHL. Eflor answers in ADISCORD_SHL.150 (FROM is Shahrabad); a missing
+# or hostile Eflor is an immediate refusal.
+SHL_eflor_offer_investment = {
+	if = {
+		limit = {
+			EFL = {
+				exists = yes
+				NOT = { has_war_with = SHL }
+			}
+		}
+		EFL = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			country_event = { id = ADISCORD_SHL.150 days = 3 }
+		}
+	}
+	else = { country_event = { id = ADISCORD_SHL.152 days = 3 } }
+}
+
+# COUNTRY EFL, option a of ADISCORD_SHL.150. The Safir site is rechecked at
+# delivery; a full state receives the slot the investor pays for.
+SHL_eflor_accept_investment = {
+	if = {
+		limit = {
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		288 = {
+			if = {
+				limit = {
+					NOT = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = no
+						}
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
+		ADISCORD_economy_clamp_treasury = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY SHL. The 80 wait in SHL_accord_deposit until Eflor answers .151;
+# every refusal path returns them through SHL_eflor_refuse_accord.
+SHL_eflor_offer_accord = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_accord_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+			EFL = {
+				exists = yes
+				NOT = { has_war_with = SHL }
+			}
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		set_variable = { var = SHL_accord_deposit value = 80 }
+		EFL = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			country_event = { id = ADISCORD_SHL.151 days = 3 }
+		}
+	}
+	else = { country_event = { id = ADISCORD_SHL.152 days = 3 } }
+}
+
+# COUNTRY EFL, option a of ADISCORD_SHL.151. The deposit becomes Eflor's fee;
+# the two Safir factories are queued in Shahrabad's construction line.
+SHL_eflor_accept_accord = {
+	if = {
+		limit = {
+			NOT = { has_war_with = SHL }
+			SHL = {
+				SHL_country_operable = yes
+				has_variable = SHL_accord_deposit
+			}
+		}
+		730 = {
+			if = {
+				limit = {
+					NOT = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = no
+						}
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+			}
+			if = {
+				limit = {
+					NOT = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 2
+							include_locked = no
+						}
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL.SHL_accord_deposit }
+		ADISCORD_economy_clamp_treasury = yes
+		ADISCORD_economy_mark_dirty = yes
+		add_opinion_modifier = {
+			target = SHL
+			modifier = ADISCORD_SHL_eflor_partner
+		}
+		SHL = {
+			clear_variable = SHL_accord_deposit
+			add_opinion_modifier = {
+				target = EFL
+				modifier = ADISCORD_SHL_eflor_partner
+			}
+		}
+	}
+	else = { SHL_eflor_refuse_accord = yes }
+}
+
+# COUNTRY EFL (option b) or SHL. Returns the accord deposit once.
+SHL_eflor_refuse_accord = {
+	SHL = {
+		if = {
+			limit = { has_variable = SHL_accord_deposit }
+			add_to_variable = { var = ADISCORD_economy_treasury value = SHL_accord_deposit }
+			clear_variable = SHL_accord_deposit
+		}
+	}
+}
+
+# ----- Fuel treaty with Svetlogorye (ADISCORD_SHL.153-155) -----
+
+# COUNTRY SHL. Svetlogorye answers in ADISCORD_SHL.153 (FROM is Shahrabad).
+SHL_nam_offer_fuel_treaty = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = SHL_nam_fuel_treaty }
+			NAM = {
+				exists = yes
+				NOT = { has_war_with = SHL }
+			}
+		}
+		NAM = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			country_event = { id = ADISCORD_SHL.153 days = 3 }
+		}
+	}
+	else = { country_event = { id = ADISCORD_SHL.154 days = 3 } }
+}
+
+# COUNTRY NAM, option a of ADISCORD_SHL.153. The flag is read by
+# SHL_refresh_packet_price; the embargo and a war suspend it without clearing it.
+SHL_nam_accept_fuel_treaty = {
+	if = {
+		limit = {
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		SHL = {
+			set_country_flag = SHL_nam_fuel_treaty
+			SHL_refresh_programme_prices = yes
+			add_to_variable = { var = SHL_gui_dirty value = 1 }
+			country_event = { id = ADISCORD_SHL.155 }
+		}
+	}
+	else = { SHL = { country_event = { id = ADISCORD_SHL.154 } } }
+}
+
+# ----- Voice of the South and the Book of Furnaces -----
+
+# COUNTRY SHL. The Voice of the South, announced to the region.
+SHL_announce_voice_of_the_south = {
+	news_event = { id = ADISCORD_SHL_news.9 hours = 6 }
+}
+
+# COUNTRY SHL. The second page of the first chapter opens at once while the
+# 90-day dispatcher has not reached chapter one (SHL_book_next = 1). After that
+# ADISCORD_shl_book.1 offers the page itself and hides it once the focus is done.
+SHL_open_second_volume = {
+	if = {
+		limit = {
+			is_ai = no
+			check_variable = { var = SHL_book_next value = 2 compare = less_than }
+		}
+		country_event = { id = ADISCORD_shl_book.11 }
 	}
 }

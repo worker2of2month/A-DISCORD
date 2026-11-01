@@ -533,6 +533,7 @@ NAM_oil_overseas_buyer = {
 
 # COUNTRY buyer. A new contract may be offered to it.
 NAM_oil_buyer_eligible = {
+	NOT = { has_country_flag = NAM_oil_offer_declined }
 	NAM_oil_buyer_tag = yes
 	exists = yes
 	has_capitulated = no
@@ -608,6 +609,7 @@ NAM_steel_concession_holder = {
 
 # COUNTRY. The steel concession may be offered to it.
 NAM_steel_concession_target_valid = {
+	NOT = { has_country_flag = NAM_steel_concession_declined }
 	OR = {
 		tag = VAL
 		tag = GLP
@@ -1896,4 +1898,20 @@ ADISCORD_nam_debug_mandate_open = {
 	NOT = { has_variable = NAM_prewar_balance }
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+}
+
+NAM_pw_development_works_ready = {
+	NAM_pw_operable = yes
+	NAM_pw_capital_civil_site = yes
+}
+
+NAM_pw_merchant_order_ready = {
+	NAM_pw_operable = yes
+}
+
+NAM_pw_rural_electrification_ready = {
+	NAM_pw_operable = yes
+	owns_state = 690
+	controls_state = 690
+	690 = { infrastructure < 5 }
 }

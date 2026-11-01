@@ -4150,54 +4150,74 @@ NAM_field_apply_repair = {
 
 # COUNTRY buyer (decision FROM). The buyer answers in ADISCORD_nam_oil.1.
 NAM_oil_offer_contract = {
-	# A dormant desert minor answers and trades only after it is woken.
-	ADISCORD_release_non_participating_minor_optimization = yes
-	set_country_flag = {
-		flag = NAM_oil_offer_pending
-		value = 1
-		days = 40
+	if = {
+		limit = {
+			NAM_oil_buyer_eligible = yes
+			NAM = { NAM_country_operable = yes }
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = {
+			flag = NAM_oil_offer_pending
+			value = 1
+			days = 40
+		}
+		country_event = { id = ADISCORD_nam_oil.1 hours = 6 }
 	}
-	country_event = { id = ADISCORD_nam_oil.1 hours = 6 }
 }
 
 # COUNTRY buyer, ROOT of ADISCORD_nam_oil.1. Capacity is rechecked at the answer.
 NAM_oil_sign_contract = {
-	clr_country_flag = NAM_oil_offer_pending
-	NAM = { NAM_oil_refresh = yes }
 	if = {
 		limit = {
-			NAM_oil_unit_free_for_buyer = yes
-			NOT = { has_war_with = NAM }
-			NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
-			NAM = { NAM_country_operable = yes }
+			has_country_flag = NAM_oil_offer_pending
+			NOT = { has_country_flag = NAM_oil_offer_declined }
+			NOT = { has_country_flag = NAM_oil_client }
 		}
-		ADISCORD_release_non_participating_minor_optimization = yes
-		set_country_flag = NAM_oil_client
+		clr_country_flag = NAM_oil_offer_pending
+		NAM = { NAM_oil_refresh = yes }
 		if = {
-			limit = { has_dynamic_modifier = { modifier = NAM_fuel_shortage } }
-			remove_dynamic_modifier = { modifier = NAM_fuel_shortage }
+			limit = {
+				NAM_oil_unit_free_for_buyer = yes
+				NOT = { has_war_with = NAM }
+				NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+				NAM = { NAM_country_operable = yes }
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			set_country_flag = NAM_oil_client
+			if = {
+				limit = { has_dynamic_modifier = { modifier = NAM_fuel_shortage } }
+				remove_dynamic_modifier = { modifier = NAM_fuel_shortage }
+			}
+			NAM = {
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+				NAM_oil_refresh = yes
+			}
 		}
-		NAM = {
-			add_to_variable = { var = NAM_grp_oil_support value = 5 }
-			add_to_variable = { var = NAM_grp_trade_support value = 5 }
-			NAM_groups_refresh = yes
-			NAM_oil_refresh = yes
+		else = {
+			set_country_flag = {
+				flag = NAM_oil_offer_lapsed
+				value = 1
+				days = 7
+			}
 		}
+		NAM = { country_event = { id = ADISCORD_nam_oil.2 hours = 6 } }
 	}
-	else = {
-		set_country_flag = {
-			flag = NAM_oil_offer_lapsed
-			value = 1
-			days = 7
-		}
-	}
-	NAM = { country_event = { id = ADISCORD_nam_oil.2 hours = 6 } }
 }
 
 # COUNTRY buyer, ROOT of ADISCORD_nam_oil.1.
 NAM_oil_decline_contract = {
-	clr_country_flag = NAM_oil_offer_pending
-	NAM = { country_event = { id = ADISCORD_nam_oil.2 hours = 6 } }
+	if = {
+		limit = {
+			has_country_flag = NAM_oil_offer_pending
+			NOT = { has_country_flag = NAM_oil_client }
+			NOT = { has_country_flag = NAM_oil_offer_declined }
+		}
+		set_country_flag = NAM_oil_offer_declined
+		clr_country_flag = NAM_oil_offer_pending
+		NAM = { country_event = { id = ADISCORD_nam_oil.2 hours = 6 } }
+	}
 }
 
 # COUNTRY client. Svetlogorye ends the contract in peace.
@@ -4754,6 +4774,7 @@ NAM_steel_concession_grant = {
 NAM_steel_concession_decline = {
 	if = {
 		limit = { NAM_steel_concession_offer_current = yes }
+		set_country_flag = NAM_steel_concession_declined
 		NAM = {
 			clr_country_flag = NAM_concession_231_pending
 			country_event = { id = ADISCORD_nam_oil.5 hours = 6 }
@@ -9522,4 +9543,97 @@ NAM_pw_contract_arbitration_settle = {
 		add_timed_idea = { idea = NAM_pw_contract_arbitration_idea days = 180 }
 	}
 	else = { NAM_pw_contract_arbitration_refund = yes }
+}
+
+NAM_pw_development_works_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_development_works_paid }
+		clr_country_flag = NAM_pw_development_works_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 50
+		set_temp_variable = { var = NAM_treasury_amount value = 900 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_development_works_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_development_works_paid
+			NAM_pw_development_works_ready = yes
+		}
+		clr_country_flag = NAM_pw_development_works_paid
+		clr_country_flag = NAM_pw_civil_busy
+		700 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+	else = { NAM_pw_development_works_refund = yes }
+}
+
+NAM_pw_merchant_order_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_merchant_order_paid }
+		clr_country_flag = NAM_pw_merchant_order_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 35
+		set_temp_variable = { var = NAM_treasury_amount value = 650 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_merchant_order_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_merchant_order_paid
+			NAM_pw_merchant_order_ready = yes
+		}
+		clr_country_flag = NAM_pw_merchant_order_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_equipment_to_stockpile = {
+			type = convoy
+			amount = 30
+			producer = NAM
+		}
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 300
+			producer = NAM
+		}
+	}
+	else = { NAM_pw_merchant_order_refund = yes }
+}
+
+NAM_pw_rural_electrification_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_rural_electrification_paid }
+		clr_country_flag = NAM_pw_rural_electrification_paid
+		clr_country_flag = NAM_pw_civil_busy
+		add_political_power = 40
+		set_temp_variable = { var = NAM_treasury_amount value = 550 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_rural_electrification_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_rural_electrification_paid
+			NAM_pw_rural_electrification_ready = yes
+		}
+		clr_country_flag = NAM_pw_rural_electrification_paid
+		clr_country_flag = NAM_pw_civil_busy
+		690 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+	else = { NAM_pw_rural_electrification_refund = yes }
 }

@@ -754,13 +754,13 @@ SHL_tenth_project = {
 		}
 		available = {
 			SHL_project_idle = yes
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price compare = greater_than_or_equals }
 			NOT = { has_political_power < 25 }
 		}
 		cost = 0
-		custom_cost_text = SHL_cost_100_25pp
+		custom_cost_text = SHL_cost_engineers
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price compare = greater_than_or_equals }
 			NOT = { has_political_power < 25 }
 		}
 		days_remove = 35
@@ -1342,6 +1342,7 @@ SHL_quarters_and_borders = {
 	SHL_offer_water_treaty = {
 		icon = generic_diplomatic_treaty
 		visible = {
+			NOT = { has_country_flag = SHL_water_offer_declined }
 			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
 			check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 		}
@@ -1350,6 +1351,7 @@ SHL_quarters_and_borders = {
 			custom_trigger_tooltip = {
 				tooltip = SHL_offer_pending_tt
 				NOT = { has_country_flag = SHL_water_offer_pending }
+				NOT = { has_country_flag = SHL_water_offer_declined }
 			}
 			custom_trigger_tooltip = {
 				tooltip = SHL_water_treaty_money_tt
@@ -1366,8 +1368,14 @@ SHL_quarters_and_borders = {
 		complete_effect = {
 			custom_effect_tooltip = SHL_offer_water_treaty_tt
 			hidden_effect = {
-				set_country_flag = SHL_water_offer_pending
-				KYZ = { country_event = { id = ADISCORD_SHL.52 } }
+				if = {
+					limit = {
+						NOT = { has_country_flag = SHL_water_offer_pending }
+						NOT = { has_country_flag = SHL_water_offer_declined }
+					}
+					set_country_flag = SHL_water_offer_pending
+					KYZ = { country_event = { id = ADISCORD_SHL.52 } }
+				}
 			}
 		}
 		ai_will_do = {
@@ -1951,6 +1959,7 @@ SHL_quarters_and_borders = {
 	SHL_renew_veyr_partnership = {
 		icon = generic_diplomatic_treaty
 		visible = {
+			NOT = { has_country_flag = SHL_veyr_offer_declined }
 			has_completed_focus = SHL_veyr_partnership
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 			GLP = { exists = yes }
@@ -1961,6 +1970,7 @@ SHL_quarters_and_borders = {
 			custom_trigger_tooltip = {
 				tooltip = SHL_alliance_offer_free_tt
 				NOT = { has_country_flag = SHL_veyr_offer_pending }
+				NOT = { has_country_flag = SHL_veyr_offer_declined }
 			}
 			GLP = { NOT = { has_war_with = SHL } }
 		}
@@ -1970,10 +1980,16 @@ SHL_quarters_and_borders = {
 		complete_effect = {
 			custom_effect_tooltip = SHL_veyr_partnership_tt
 			hidden_effect = {
-				set_country_flag = SHL_veyr_offer_pending
-				GLP = {
-					ADISCORD_release_non_participating_minor_optimization = yes
-					country_event = { id = ADISCORD_SHL.61 }
+				if = {
+					limit = {
+						NOT = { has_country_flag = SHL_veyr_offer_pending }
+						NOT = { has_country_flag = SHL_veyr_offer_declined }
+					}
+					set_country_flag = SHL_veyr_offer_pending
+					GLP = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						country_event = { id = ADISCORD_SHL.61 }
+					}
 				}
 			}
 		}
@@ -2494,7 +2510,7 @@ SHL_quarters_and_borders = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
-			240 = {
+			242 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
@@ -2927,12 +2943,14 @@ SHL_quarters_and_borders = {
 			FROM = {
 				NOT = { has_country_flag = SHL_metal_client }
 				NOT = { has_country_flag = SHL_metal_offer_pending }
+				NOT = { has_country_flag = SHL_metal_offer_declined }
 			}
 		}
 		available = {
 			FROM = {
 				NOT = { has_country_flag = SHL_metal_client }
 				NOT = { has_country_flag = SHL_metal_offer_pending }
+				NOT = { has_country_flag = SHL_metal_offer_declined }
 			}
 			SHL_country_operable = yes
 			custom_trigger_tooltip = {
@@ -2941,7 +2959,7 @@ SHL_quarters_and_borders = {
 			}
 			custom_trigger_tooltip = {
 				tooltip = SHL_metal_clients_limit_tt
-				check_variable = { var = SHL_metal_clients value = 3 compare = less_than }
+				check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
 			}
 		}
 		cost = 0
@@ -2950,14 +2968,28 @@ SHL_quarters_and_borders = {
 		complete_effect = {
 			custom_effect_tooltip = SHL_metal_offer_tt
 			hidden_effect = {
-				FROM = {
-					ADISCORD_release_non_participating_minor_optimization = yes
-					set_country_flag = {
-						flag = SHL_metal_offer_pending
-						value = 1
-						days = 40
+				if = {
+					limit = {
+						SHL_country_operable = yes
+						SHL_metal_export_furnace_free = yes
+						check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
+						FROM = {
+							exists = yes
+							NOT = { has_war_with = SHL }
+							NOT = { has_country_flag = SHL_metal_client }
+							NOT = { has_country_flag = SHL_metal_offer_pending }
+							NOT = { has_country_flag = SHL_metal_offer_declined }
+						}
 					}
-					country_event = { id = ADISCORD_SHL.130 hours = 6 }
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						set_country_flag = {
+							flag = SHL_metal_offer_pending
+							value = 1
+							days = 40
+						}
+						country_event = { id = ADISCORD_SHL.130 hours = 6 }
+					}
 				}
 			}
 		}
@@ -3190,7 +3222,12 @@ SHL_quarters_and_borders = {
 		icon = generic_diplomatic_treaty
 		targets = { KDR RHM SDR MZR KYZ GLP }
 		target_trigger = { FROM = { SHL_embassy_target_open = yes } }
-		visible = { has_completed_focus = SHL_southern_horizon }
+		visible = {
+			OR = {
+				has_completed_focus = SHL_southern_horizon
+				has_completed_focus = SHL_voice_of_the_south
+			}
+		}
 		available = {
 			SHL_country_operable = yes
 			custom_trigger_tooltip = {
@@ -3269,6 +3306,147 @@ SHL_quarters_and_borders = {
 		}
 		cancel_effect = { hidden_effect = { SHL_cancel_integration = yes } }
 		ai_will_do = { base = 10 }
+	}
+
+	# ----- Four districts and foreign affairs -----
+	# Prospecting and the border watch hold their own escrows (SHL_copi_deposit,
+	# SHL_border_watch_deposit) until remove_effect settles them; the trade
+	# mission pays its political power natively and needs no escrow.
+
+	SHL_prospect_copi = {
+		icon = generic_construction
+		allowed = { tag = SHL }
+		visible = { has_completed_focus = SHL_bayrat_copi_survey }
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_copi_prospected_tt
+				check_variable = { var = SHL_copi_prospected value = 2 compare = less_than }
+			}
+			hidden_trigger = { NOT = { has_variable = SHL_copi_deposit } }
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_copi
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_remove = 70
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_prospect_copi_tt
+			hidden_effect = { SHL_begin_copi_prospecting = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_copi_prospecting = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				732 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_copi_prospecting = yes } }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	SHL_raise_border_watch = {
+		icon = generic_border_conflict
+		allowed = { tag = SHL }
+		visible = { has_completed_focus = SHL_border_watch }
+		available = {
+			SHL_country_operable = yes
+			733 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+			hidden_trigger = { NOT = { has_variable = SHL_border_watch_deposit } }
+			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_60
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_raise_border_watch_tt
+			hidden_effect = { SHL_begin_border_watch_order = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_border_watch_order = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				733 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_border_watch_order = yes } }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 200 compare = less_than }
+			}
+		}
+	}
+
+	SHL_trade_mission = {
+		icon = generic_diplomatic_treaty
+		allowed = { tag = SHL }
+		targets = { EFL KYZ GLP MZR NAM VAL STP }
+		target_root_trigger = { original_tag = SHL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		visible = { has_completed_focus = SHL_chancery_of_the_gate }
+		available = { SHL_country_operable = yes }
+		cost = 25
+		days_remove = 30
+		days_re_enable = 90
+		fire_only_once = no
+		remove_effect = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = ADISCORD_SHL_trade_mission
+			}
+			FROM = {
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = ADISCORD_SHL_trade_mission
+				}
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				OR = {
+					exists = no
+					has_war_with = ROOT
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
 	}
 }
 
@@ -3637,7 +3815,10 @@ SHL_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = SHL }
 		visible = {
-			has_completed_focus = SHL_quarter_listening
+			OR = {
+				has_completed_focus = SHL_quarter_listening
+				has_completed_focus = SHL_heralds_press
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -3699,7 +3880,10 @@ SHL_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = SHL }
 		visible = {
-			has_completed_focus = SHL_quarter_listening
+			OR = {
+				has_completed_focus = SHL_quarter_listening
+				has_completed_focus = SHL_heralds_press
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -4103,7 +4287,10 @@ SHL_public_campaigns = {
 		icon = generic_civil_support
 		allowed = { tag = SHL }
 		visible = {
-			has_completed_focus = SHL_quarter_listening
+			OR = {
+				has_completed_focus = SHL_quarter_listening
+				has_completed_focus = SHL_written_fire
+			}
 		}
 		available = {
 			SHL_country_operable = yes

@@ -372,7 +372,12 @@ class FurnaceLifeTests(unittest.TestCase):
         self.assertEqual(scalar(decision, "custom_cost_text"), "SHL_cost_festival")
         self.assertEqual(scalar(decision, "days_remove"), "14")
         self.assertEqual(scalar(decision, "days_re_enable"), "365")
-        self.assertEqual([(e.key, e.value) for e in block(decision, "visible")], [("has_completed_focus", "SHL_quarter_listening")])
+        visible = block(decision, "visible")
+        self.assertEqual([e.key for e in visible], ["OR"])
+        self.assertEqual(
+            [(e.key, e.value) for e in visible[0].value],
+            [("has_completed_focus", "SHL_quarter_listening"), ("has_completed_focus", "SHL_written_fire")],
+        )
         for language in LANGUAGES:
             values = self.values[language]
             for key in ("SHL_festival_of_fire", "SHL_festival_of_fire_desc", "SHL_cost_festival",

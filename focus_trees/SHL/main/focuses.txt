@@ -9,6 +9,15 @@ focus_tree = {
 	}
 	continuous_focus_position = { x = 100 y = 555555 }
 
+	# The second row of branches (focus_trees/SHL/shared, x 33-67) is visible from
+	# the first day and survives ratification because every course tree references
+	# the same roots.
+	shared_focus = SHL_south_furnaces_to_front
+	shared_focus = SHL_south_crown_of_the_south
+	shared_focus = SHL_four_districts
+	shared_focus = SHL_chancery_of_the_gate
+	shared_focus = SHL_written_fire
+
 	# ----- Law of continuous fire and the tenth furnace -----
 
 	focus = {
@@ -1557,6 +1566,12 @@ focus_tree = {
 		x = 10
 		y = 13
 		cost = 4
+		mutually_exclusive = {
+			focus = SHL_commune_of_shift_councils
+			focus = SHL_rights_without_fire
+			focus = SHL_state_furnaces
+			focus = SHL_regency_of_crests
+		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_house_compromise
@@ -1597,6 +1612,12 @@ focus_tree = {
 		x = 16
 		y = 13
 		cost = 4
+		mutually_exclusive = {
+			focus = SHL_commune_of_shift_councils
+			focus = SHL_admit_tenth_house
+			focus = SHL_state_furnaces
+			focus = SHL_regency_of_crests
+		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_city_charters
@@ -1641,6 +1662,12 @@ focus_tree = {
 		x = 19
 		y = 13
 		cost = 4
+		mutually_exclusive = {
+			focus = SHL_commune_of_shift_councils
+			focus = SHL_admit_tenth_house
+			focus = SHL_rights_without_fire
+			focus = SHL_regency_of_crests
+		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_common_dispatch
@@ -1668,4 +1695,87 @@ focus_tree = {
 		}
 		ai_will_do = { base = 1 }
 	}
+
+	# ----- Visible entries of the hidden courses: the same checks as the decisions
+	# SHL_back_crests / SHL_back_shift_councils, which remain available -----
+
+	focus = {
+		id = SHL_regency_of_crests
+		icon = GFX_focus_generic_monarchy_1
+		x = 22
+		y = 13
+		cost = 1
+		mutually_exclusive = {
+			focus = SHL_commune_of_shift_councils
+			focus = SHL_admit_tenth_house
+			focus = SHL_rights_without_fire
+			focus = SHL_state_furnaces
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_workers_charter
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_regency_entry_tt
+				SHL_can_back_crests = yes
+			}
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_regency_course_tt
+			hidden_effect = {
+				if = {
+					limit = { SHL_can_back_crests = yes }
+					SHL_commit_regency_course = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	focus = {
+		id = SHL_commune_of_shift_councils
+		icon = GFX_focus_generic_red_flags
+		x = 7
+		y = 13
+		cost = 1
+		mutually_exclusive = {
+			focus = SHL_admit_tenth_house
+			focus = SHL_rights_without_fire
+			focus = SHL_state_furnaces
+			focus = SHL_regency_of_crests
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_workers_charter
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_commune_entry_tt
+				SHL_can_back_shift_councils = yes
+			}
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_commune_course_tt
+			hidden_effect = {
+				if = {
+					limit = { SHL_can_back_shift_councils = yes }
+					SHL_commit_commune_course = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+# @include SHL/commune/focuses.txt#commune
+# @include SHL/houses/focuses.txt#houses
+# @include SHL/cities/focuses.txt#cities
+# @include SHL/directorate/focuses.txt#directorate
+# @include SHL/regency/focuses.txt#regency
 }

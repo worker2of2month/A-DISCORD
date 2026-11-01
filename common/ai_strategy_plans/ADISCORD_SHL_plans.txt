@@ -60,6 +60,40 @@ SHL_furnaces_plan = {
 		SHL_build_tenth_complex
 		SHL_first_pour_focus
 		SHL_tenth_voice
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }
@@ -233,6 +267,40 @@ SHL_houses_plan = {
 		SHL_h_crown_of_trade
 		SHL_h_ten_crests_forever
 		SHL_h_veyr_junior_partner
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }
@@ -289,6 +357,40 @@ SHL_cities_plan = {
 		SHL_c_southern_council
 		SHL_c_compact_assembly
 		SHL_c_treaty_of_the_south
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }
@@ -346,6 +448,40 @@ SHL_directorate_plan = {
 		SHL_d_iron_crown
 		SHL_d_directorate_eternal
 		SHL_d_nur_legacy
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }
@@ -402,6 +538,40 @@ SHL_regency_plan = {
 		SHL_r_crest_empire
 		SHL_r_crown_of_crests
 		SHL_r_regent_forever
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }
@@ -456,6 +626,40 @@ SHL_commune_plan = {
 		SHL_k_no_more_crests
 		SHL_k_duty_master
 		SHL_k_fire_of_the_south
+		# Second row of shared branches, one alternative of each exclusive pair.
+		SHL_four_districts
+		SHL_salt_pans_of_safir
+		SHL_safir_customs
+		SHL_safir_bandar_port
+		SHL_loran_cisterns
+		SHL_desert_caravanserai
+		SHL_loran_deh_growth
+		SHL_bayrat_copi_survey
+		SHL_mine_colonies
+		SHL_copi_railway
+		SHL_veyran_forts
+		SHL_border_watch
+		SHL_veyran_kala
+		SHL_desert_assembly
+		SHL_chancery_of_the_gate
+		SHL_damir_road
+		SHL_damir_customs
+		SHL_eflor_accord
+		SHL_fuel_ledger
+		SHL_own_distillery
+		SHL_northern_road
+		SHL_table_of_treaties
+		SHL_veyr_glass_contract
+		SHL_southern_customs_union
+		SHL_voice_of_the_south
+		SHL_written_fire
+		SHL_archive_of_the_conclave
+		SHL_masters_university
+		SHL_engineers_of_the_tenth
+		SHL_heralds_press
+		SHL_conclave_bulletins
+		SHL_chronicle_of_the_south
+		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
 }

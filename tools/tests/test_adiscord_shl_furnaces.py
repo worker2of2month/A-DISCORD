@@ -50,14 +50,21 @@ FOCUS_TREE_SOURCES = {
 SHARED_FOCUS_SOURCE = ROOT / "focus_trees/SHL/shared/focuses.txt"
 FOCUS_OUTPUTS = {
     "main": "ADISCORD_SHL_focus.txt",
-    "houses": "ADISCORD_SHL_houses.txt",
-    "cities": "ADISCORD_SHL_cities.txt",
-    "directorate": "ADISCORD_SHL_directorate.txt",
-    "regency": "ADISCORD_SHL_regency.txt",
-    "commune": "ADISCORD_SHL_commune.txt",
     "shared": "ADISCORD_SHL_shared.txt",
 }
+# Course sections of the single tree; each root follows its commit focus.
 COURSE_TREES = {"houses": 1, "cities": 2, "directorate": 3, "regency": 4, "commune": 5}
+COURSE_COMMIT_FOCUSES = {
+    "houses": "SHL_admit_tenth_house",
+    "cities": "SHL_rights_without_fire",
+    "directorate": "SHL_state_furnaces",
+    "regency": "SHL_regency_of_crests",
+    "commune": "SHL_commune_of_shift_councils",
+}
+SOUTHERN_SHARED = (
+    "SHL_south_crown_of_the_south", "SHL_south_desert_convoys", "SHL_south_furnaces_to_front",
+    "SHL_south_raid_oil_fields", "SHL_south_storm_oil_belt",
+)
 # commit effect suffix -> (course tree, cosmetic tag)
 COURSE_COMMITS = {
     "house": ("houses", "SHL_conclave_of_ten"),
@@ -70,14 +77,27 @@ COURSE_COMMITS = {
 
 @lru_cache(maxsize=None)
 def focus_tree(name):
-    """Parsed body of one authored SHL focus_tree."""
+    """Parsed body of the authored SHL focus_tree (only the main source is a tree)."""
     return block(parse_clausewitz(FOCUS_TREE_SOURCES[name].read_text(encoding="utf-8")), "focus_tree")
 
 
 @lru_cache(maxsize=None)
 def tree_focuses(name):
-    """id -> body of the focuses authored inside one tree."""
-    return {scalar(entry.value, "id"): entry.value for entry in focus_tree(name) if entry.key == "focus"}
+    """id -> body of the focuses authored in the main tree or in one course section."""
+    if name == "main":
+        entries = focus_tree("main")
+    else:
+        entries = parse_clausewitz(FOCUS_TREE_SOURCES[name].read_text(encoding="utf-8"))
+    return {scalar(entry.value, "id"): entry.value for entry in entries if entry.key == "focus"}
+
+
+def whole_tree_focuses():
+    """id -> body of every focus the native SHL tree shows: main, course sections, shared layer."""
+    focuses = {}
+    for name in FOCUS_TREE_SOURCES:
+        focuses.update(tree_focuses(name))
+    focuses.update(shared_focuses())
+    return focuses
 
 
 @lru_cache(maxsize=None)
@@ -516,6 +536,8 @@ class ScriptMachine:
                 self.calls.append((e.key, scope))
             elif e.key == "load_focus_tree":
                 self.loaded_trees.append(scalar(e.value, "tree"))
+            elif e.key == "complete_national_focus":
+                self.focuses.add(e.value)
             elif e.key == "set_cosmetic_tag":
                 self.cosmetic_tags.append(e.value)
             elif e.key in (
@@ -876,43 +898,52 @@ class FurnaceAccountingTests(unittest.TestCase):
         shared = shared_focuses()
         ids = []
         for name in FOCUS_TREE_SOURCES:
-            with self.subTest(tree=name):
-                focuses = dict(tree_focuses(name))
-                ids.extend(focuses)
-                if name != "main":
-                    # The front of the South and the crown are placed in every course tree.
-                    references = [e.value for e in focus_tree(name) if e.key == "shared_focus"]
-                    self.assertEqual(sorted(references), ["SHL_south_crown_of_the_south", "SHL_south_furnaces_to_front"])
-                    focuses.update(shared)
-                cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in focuses.values()]
-                self.assertEqual(len(cells), len(set(cells)))
-                for focus in focuses.values():
-                    for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
-                        for item in prerequisite:
-                            self.assertIn(item.value, focuses)
-                    for exclusive in block(focus, "mutually_exclusive"):
-                        self.assertIn(exclusive.value, focuses)
+            ids.extend(tree_focuses(name))
         ids.extend(shared)
-        # Preparation (57) plus five course trees and the shared front layer.
-        self.assertGreaterEqual(len(ids), 240)
+        # Preparation, five course sections and the shared layer form one native tree.
+        self.assertGreaterEqual(len(ids), 280)
         self.assertEqual(len(set(ids)), len(ids))
+        focuses = whole_tree_focuses()
+        roots = sorted(identifier for identifier, focus in shared.items() if not block(focus, "prerequisite"))
+        references = [e.value for e in focus_tree("main") if e.key == "shared_focus"]
+        self.assertEqual(sorted(references), roots)
+        main_source = FOCUS_TREE_SOURCES["main"].read_text(encoding="utf-8")
+        for name in COURSE_TREES:
+            self.assertIn(f"# @include SHL/{name}/focuses.txt#{name}\n", main_source)
+            self.assertTrue(FOCUS_TREE_SOURCES[name].read_text(encoding="utf-8").startswith(f"# @section {name}\n"), name)
+        cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in focuses.values()]
+        self.assertEqual(len(cells), len(set(cells)))
+        for focus in focuses.values():
+            for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
+                for item in prerequisite:
+                    self.assertIn(item.value, focuses)
+            for exclusive in block(focus, "mutually_exclusive"):
+                self.assertIn(exclusive.value, focuses)
         for name, output in FOCUS_OUTPUTS.items():
             self.assertTrue((ROOT / "common/national_focus" / output).is_file(), name)
+        for name in COURSE_TREES:
+            self.assertFalse((ROOT / f"common/national_focus/ADISCORD_SHL_{name}.txt").exists(), name)
 
     def test_hidden_courses_are_gated_by_their_crisis_flags(self):
-        # The regency and commune trees are selected by the course value that only
-        # the crisis events and their backing decisions can set; no focus commits them.
-        for tree, course in (("regency", 4), ("commune", 5)):
-            modifier = block(block(focus_tree(tree), "country"), "modifier")
-            check = block(modifier, "check_variable")
-            self.assertEqual((scalar(check, "var"), scalar(check, "value"), scalar(check, "compare")), ("SHL_political_course", str(course), "equals"))
-            self.assertEqual(scalar(block(focus_tree(tree), "country"), "factor"), "0")
-            self.assertEqual(scalar(focus_tree(tree), "default"), "no")
-        self.assertNotIn("SHL_regency_council", tree_focuses("main"))
-        self.assertNotIn("SHL_shift_councils", tree_focuses("main"))
+        # The regency and commune sections hang from entry focuses that only the
+        # crisis trigger opens; the crisis events and backing decisions commit the
+        # same course and complete the entry so the section stays reachable.
+        main = tree_focuses("main")
+        for tree, trigger in (("regency", "SHL_can_back_crests"), ("commune", "SHL_can_back_shift_councils")):
+            entry = main[COURSE_COMMIT_FOCUSES[tree]]
+            available = block(entry, "available")
+            self.assertIn((trigger, "yes"), [(e.key, e.value) for e in walk_entries(available)], tree)
+            self.assertFalse(block(entry, "bypass"), tree)
+            self.assertEqual(scalar(block(entry, "ai_will_do"), "base"), "0", tree)
+            reward = block(entry, "completion_reward")
+            commits = [e for e in walk_entries(reward) if e.key == f"SHL_commit_{tree}_course"]
+            self.assertEqual(len(commits), 1, tree)
+            self.assertNotIn(f"SHL_{tree}_prog_ending_a", main)
+        self.assertNotIn("SHL_regency_council", main)
+        self.assertNotIn("SHL_shift_councils", main)
         focuses = shl_focus_text()
-        self.assertNotIn("SHL_commit_regency_course = yes", focuses)
-        self.assertNotIn("SHL_commit_commune_course = yes", focuses)
+        self.assertEqual(focuses.count("SHL_commit_regency_course = yes"), 1)
+        self.assertEqual(focuses.count("SHL_commit_commune_course = yes"), 1)
         events = (ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8")
         decisions = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
         self.assertIn("SHL_commit_regency_course = yes", events)
@@ -1457,6 +1488,29 @@ class CrisisLayerTests(unittest.TestCase):
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["287"]["SHL_furnace_wear"], 30)
         self.assertEqual(self.m.variables["290"]["SHL_furnace_wear"], 26)
+
+    def test_refused_water_and_port_agreements_do_not_send_new_offers(self):
+        events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
+        for name, number, recipient, stem in (
+            ("SHL_offer_water_treaty", 52, "KYZ", "water"),
+            ("SHL_renew_veyr_partnership", 61, "GLP", "veyr"),
+        ):
+            with self.subTest(agreement=name):
+                self.setUp()
+                decision = decision_definition(name)
+                event = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == f"ADISCORD_SHL.{number}")
+                refusal = next(e.value for e in event if e.key == "option" and scalar(e.value, "name") == f"ADISCORD_SHL.{number}.b")
+                self.m.execute(block(decision, "complete_effect"), "SHL", None)
+                self.assertTrue(self.m.matches(block(event, "trigger"), recipient, "SHL"))
+                self.m.execute(block(refusal, "hidden_effect"), recipient, "SHL")
+                self.assertIn(f"SHL_{stem}_offer_declined", self.m.flags["SHL"])
+                self.assertNotIn(f"SHL_{stem}_offer_pending", self.m.flags["SHL"])
+                after = list(self.m.scheduled)
+                self.m.execute(block(decision, "complete_effect"), "SHL", None)
+                self.m.execute(block(refusal, "hidden_effect"), recipient, "SHL")
+                self.assertEqual(self.m.scheduled, after)
+                self.assertFalse(self.m.matches(block(event, "trigger"), recipient, "SHL"))
+                self.assertFalse(self.m.matches(block(decision, "visible"), "SHL", None))
 
     def test_water_treaty_is_paid_only_after_keyzan_accepts(self):
         c = self.country()
@@ -3418,15 +3472,22 @@ class CourseTreeStructureTests(unittest.TestCase):
                 self.setUp()
                 self.m.run(f"SHL_commit_{suffix}_course")
                 self.m.run(f"SHL_commit_{suffix}_course")
-                self.assertEqual(self.m.loaded_trees, [f"SHL_{tree}_focus"])
+                # One native tree: the commit completes the entry focus of a hidden
+                # course so its section opens without a tree change.
+                self.assertEqual(self.m.loaded_trees, [])
+                if tree in ("regency", "commune"):
+                    self.assertIn(COURSE_COMMIT_FOCUSES[tree], self.m.focuses)
+                else:
+                    self.assertEqual(self.m.focuses, set())
                 self.assertEqual(self.m.cosmetic_tags, [tag])
                 self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.123"), 1)
                 self.assertEqual(self.m.variables["SHL"]["SHL_political_course"], COURSE_TREES[tree])
-                self.assertEqual(scalar(focus_tree(tree), "id"), f"SHL_{tree}_focus")
                 effect = self.m.effects[f"SHL_commit_{suffix}_course"]
                 guard = [e for e in block(effect, "if") if e.key != "limit"]
-                self.assertEqual(guard[-1].key, "load_focus_tree")
-                self.assertEqual(scalar(guard[-1].value, "keep_completed"), "yes")
+                self.assertNotIn("load_focus_tree", [e.key for e in guard])
+                if tree in ("regency", "commune"):
+                    completion = [e for e in walk_entries(guard[-1].value) if e.key == "complete_national_focus"]
+                    self.assertEqual([e.value for e in completion], [COURSE_COMMIT_FOCUSES[tree]])
                 # The visible rename precedes the hidden tag write.
                 hidden = [e for e in guard if e.key == "hidden_effect" and any(c.key == "set_cosmetic_tag" for c in e.value)]
                 self.assertEqual(len(hidden), 1)
@@ -3463,36 +3524,40 @@ class CourseTreeStructureTests(unittest.TestCase):
                 for folder in ("", "medium/", "small/"):
                     self.assertTrue((ROOT / f"gfx/flags/{folder}{tag}.tga").is_file(), folder)
 
-    def test_shared_front_is_defined_once_and_referenced_by_every_course_tree(self):
+    def test_shared_layer_is_defined_once_and_referenced_by_the_main_tree(self):
         shared = shared_focuses()
         source = SHARED_FOCUS_SOURCE.read_text(encoding="utf-8")
-        self.assertEqual(sorted(shared), [
-            "SHL_south_crown_of_the_south", "SHL_south_desert_convoys", "SHL_south_furnaces_to_front",
-            "SHL_south_raid_oil_fields", "SHL_south_storm_oil_belt",
-        ])
-        self.assertEqual(source.count("shared_focus = {"), 5)
+        self.assertTrue(set(SOUTHERN_SHARED) <= set(shared))
+        self.assertEqual(source.count("shared_focus = {"), len(shared))
         self.assertNotIn("\nfocus = {", source)
         for identifier in shared:
             self.assertEqual(sum(identifier in focuses for focuses in map(tree_focuses, FOCUS_TREE_SOURCES)), 0, identifier)
         roots = {identifier for identifier, focus in shared.items() if not block(focus, "prerequisite")}
-        self.assertEqual(roots, {"SHL_south_furnaces_to_front", "SHL_south_crown_of_the_south"})
-        for name in COURSE_TREES:
-            references = [e.value for e in focus_tree(name) if e.key == "shared_focus"]
-            self.assertEqual(set(references), roots, name)
-            self.assertEqual(len(references), len(roots), name)
-        self.assertEqual([e.key for e in focus_tree("main") if e.key == "shared_focus"], [])
+        self.assertEqual(roots, {
+            "SHL_south_furnaces_to_front", "SHL_south_crown_of_the_south",
+            "SHL_four_districts", "SHL_chancery_of_the_gate", "SHL_written_fire",
+        })
+        references = [e.value for e in focus_tree("main") if e.key == "shared_focus"]
+        self.assertEqual(set(references), roots)
+        self.assertEqual(len(references), len(roots))
         allow = block(shared["SHL_south_crown_of_the_south"], "allow_branch")
         self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_hegemon_SHL")])
-        for identifier in roots - {"SHL_south_crown_of_the_south"}:
-            allow = block(shared[identifier], "allow_branch")
-            self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_final_started")])
+        allow = block(shared["SHL_south_furnaces_to_front"], "allow_branch")
+        self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_final_started")])
+        # The second-row branches are open all campaign: no allow_branch, every root at row 0.
+        for identifier in roots - {"SHL_south_furnaces_to_front", "SHL_south_crown_of_the_south"}:
+            self.assertFalse(block(shared[identifier], "allow_branch"), identifier)
+            self.assertEqual(scalar(shared[identifier], "y"), "0", identifier)
+            self.assertGreaterEqual(int(scalar(shared[identifier], "x")), 33, identifier)
 
     def test_course_focuses_keep_operability_without_redundant_course_gates(self):
+        main = tree_focuses("main")
+        commits = set(COURSE_COMMIT_FOCUSES.values())
+        for commit in commits:
+            exclusive = {e.value for e in block(main[commit], "mutually_exclusive")}
+            self.assertEqual(exclusive, commits - {commit}, commit)
         for name, course in COURSE_TREES.items():
             with self.subTest(tree=name):
-                selector = block(block(focus_tree(name), "country"), "modifier")
-                self.assertEqual(scalar(block(selector, "check_variable"), "value"), str(course))
-                self.assertEqual(scalar(selector, "original_tag"), "SHL")
                 roots = []
                 for identifier, focus in tree_focuses(name).items():
                     available = block(focus, "available")
@@ -3503,17 +3568,26 @@ class CourseTreeStructureTests(unittest.TestCase):
                     ), identifier)
                     self.assertNotIn("SHL_regency_path", repr(focus), identifier)
                     self.assertNotIn("SHL_commune_path", repr(focus), identifier)
-                    if not block(focus, "prerequisite"):
+                    parents = [
+                        {e.value for e in b.value} for b in focus if b.key == "prerequisite"
+                    ]
+                    if parents == [{COURSE_COMMIT_FOCUSES[name]}]:
                         roots.append(identifier)
+                    else:
+                        self.assertTrue(parents, identifier)
+                        self.assertNotIn(COURSE_COMMIT_FOCUSES[name], set().union(*parents), identifier)
                 self.assertEqual(len(roots), 1, roots)
-        for identifier in ("SHL_admit_tenth_house", "SHL_rights_without_fire", "SHL_state_furnaces"):
-            self.assertIn(identifier, tree_focuses("main"))
-            reward = block(focus_definition(identifier), "completion_reward")
-            self.assertTrue(any(e.key.startswith("SHL_commit_") for e in walk_entries(reward)), identifier)
         native = (ROOT / "common/national_focus/ADISCORD_SHL_focus.txt").read_text(encoding="utf-8")
-        self.assertIn("shared focus history", native)
-        for identifier in ("SHL_admit_tenth_house", "SHL_rights_without_fire", "SHL_state_furnaces"):
-            self.assertIn(f"\tid = {identifier}\n", native)
+        self.assertNotIn("shared focus history", native)
+        self.assertNotIn("load_focus_tree", EFFECT_PATH.read_text(encoding="utf-8"))
+        for identifier in COURSE_COMMIT_FOCUSES.values():
+            self.assertIn(identifier, main)
+            reward = block(main[identifier], "completion_reward")
+            self.assertTrue(any(e.key.startswith("SHL_commit_") for e in walk_entries(reward)), identifier)
+            self.assertIn(f"\t\tid = {identifier}\n", native)
+        for name in COURSE_TREES:
+            for identifier in tree_focuses(name):
+                self.assertIn(f"\t\tid = {identifier}\n", native)
 
     def test_ai_plans_name_existing_focuses_and_one_alternative_per_exclusive_pair(self):
         definitions = all_focus_definitions()
@@ -3542,7 +3616,13 @@ class CourseTreeStructureTests(unittest.TestCase):
             check = block(block(plan, "enable"), "check_variable")
             self.assertEqual((scalar(check, "var"), scalar(check, "value")), ("SHL_political_course", str(course)))
             queue = set(e.value for e in block(plan, "ai_national_focuses"))
-            focuses = tree_focuses(tree)
+            # The course section plus the second-row shared branches; the southern
+            # front is queued whole.
+            focuses = dict(tree_focuses(tree))
+            focuses.update({
+                identifier: focus for identifier, focus in shared_focuses().items()
+                if identifier not in SOUTHERN_SHARED
+            })
             # The queue may leave out the unchosen half of each exclusive pair
             # and every focus reachable only through an omitted one.
             omitted = {f"SHL_{tree}_prog_ending_a", f"SHL_{tree}_prog_ending_b"}
@@ -3558,7 +3638,7 @@ class CourseTreeStructureTests(unittest.TestCase):
                         omitted.add(name)
                         changed = True
             self.assertEqual(set(focuses) - queue - omitted, set(), tree)
-            self.assertTrue(set(shared_focuses()) <= queue, tree)
+            self.assertTrue(set(SOUTHERN_SHARED) <= queue, tree)
         for tree, ranges in (
             ("houses", {"SHL_balance_crests_influence", "SHL_balance_crests_dominance"}),
             ("cities", {"SHL_balance_quarters_influence", "SHL_balance_quarters_dominance"}),
@@ -4057,12 +4137,12 @@ class CourseProgrammeTests(unittest.TestCase):
         self.assertEqual(self.m.idea_days["SHL_general_governorate"], 365)
 
     def test_sell_stations_pays_once_and_returns_the_stations_to_an_existing_kadir(self):
-        self.m.ownership.update({"234": "SHL", "240": "SHL"})
-        self.m.control.update({"234": "SHL", "240": "SHL"})
+        self.m.ownership.update({"234": "SHL", "242": "SHL"})
+        self.m.control.update({"234": "SHL", "242": "SHL"})
         self.m.run("SHL_sell_road_stations")
         self.m.run("SHL_sell_road_stations")
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 1150)
-        self.assertEqual((self.m.ownership["234"], self.m.control["240"]), ("KDR", "KDR"))
+        self.assertEqual((self.m.ownership["234"], self.m.control["242"]), ("KDR", "KDR"))
         self.assertEqual(scalar(self.decision("SHL_sell_stations"), "fire_only_once"), "yes")
 
     def test_concession_sales_keep_their_interval_outside_the_south_war(self):
@@ -4261,6 +4341,60 @@ class ExternalContractTests(unittest.TestCase):
         self.assertTrue(self.m.matches(block(decision, "available"), "SHL", "GLP"))
         self.c["SHL_obligation_site"] = 291
         self.assertFalse(self.m.matches(block(decision, "available"), "SHL", "GLP"))
+
+    def test_refusal_closes_repeat_offers_for_each_buyer(self):
+        decision = decision_definition("SHL_metal_contract_offer")
+        events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
+        offer = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_SHL.130")
+        decline = next(e.value for e in offer if e.key == "option")
+        self.assertEqual(scalar(decline, "name"), "ADISCORD_SHL.130.b")
+        for tag in self.BUYERS:
+            with self.subTest(buyer=tag):
+                self.setUp()
+                self.m.execute(block(decision, "complete_effect"), "SHL", tag)
+                self.assertTrue(self.m.matches(block(offer, "trigger"), tag, "SHL"))
+                # Re-entry while the first offer is pending cannot queue a second window.
+                self.m.execute(block(decision, "complete_effect"), "SHL", tag)
+                self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.130"), 1)
+                # The first option also handles an unattended event.
+                self.m.execute(block(decline, "hidden_effect"), tag, "SHL")
+                self.assertIn("SHL_metal_offer_declined", self.m.flags[tag])
+                self.assertNotIn("SHL_metal_offer_pending", self.m.flags[tag])
+                self.assertFalse(self.m.matches(block(offer, "trigger"), tag, "SHL"))
+                for section in ("visible", "available"):
+                    self.assertFalse(self.m.matches(block(decision, section), "SHL", tag))
+                self.m.execute(block(decision, "complete_effect"), "SHL", tag)
+                self.m.run("SHL_metal_decline_contract", scope=tag)
+                self.assertEqual(self.m.scheduled, ["ADISCORD_SHL.130", "ADISCORD_SHL.132"])
+                self.assertEqual(self.c["SHL_metal_clients"], 0)
+                self.assertEqual(self.m.variables[tag]["ADISCORD_economy_treasury"], 500)
+                other = next(buyer for buyer in self.BUYERS if buyer != tag)
+                self.assertTrue(self.m.matches(block(decision, "visible"), "SHL", other))
+                self.assertTrue(self.m.matches(block(decision, "available"), "SHL", other))
+                # A stale pending offer cannot bypass the recorded refusal at settlement.
+                self.m.flags[tag].add("SHL_metal_offer_pending")
+                self.assertFalse(self.m.matches(block(offer, "trigger"), tag, "SHL"))
+                self.m.run("SHL_metal_sign_contract", scope=tag)
+                self.assertNotIn("SHL_metal_client", self.m.flags[tag])
+                self.assertEqual(self.c["SHL_metal_clients"], 0)
+
+    def test_completed_contract_remains_eligible_for_renewal(self):
+        decision = decision_definition("SHL_metal_contract_offer")
+        for effect in ("SHL_metal_sign_contract", "SHL_metal_sign_contract_two_years"):
+            with self.subTest(term=effect):
+                self.setUp()
+                self.m.execute(block(decision, "complete_effect"), "SHL", "NAM")
+                self.m.run(effect, scope="NAM")
+                self.assertIn("SHL_metal_client", self.m.flags["NAM"])
+                # Closing an obsolete refusal option cannot revoke an accepted contract.
+                self.m.run("SHL_metal_decline_contract", scope="NAM")
+                self.assertNotIn("SHL_metal_offer_declined", self.m.flags["NAM"])
+                self.assertIn("SHL_metal_client", self.m.flags["NAM"])
+                self.m.run("SHL_metal_drop_client", scope="NAM")
+                self.assertTrue(self.m.matches(block(decision, "visible"), "SHL", "NAM"))
+                self.assertTrue(self.m.matches(block(decision, "available"), "SHL", "NAM"))
+                self.m.execute(block(decision, "complete_effect"), "SHL", "NAM")
+                self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.130"), 2)
 
     def test_signing_rechecks_war_and_a_free_export_furnace(self):
         self.m.wars.add(frozenset(("VAL", "SHL")))

@@ -205,6 +205,15 @@ NAM_postwar_plan = {
 		NAM_south_fenn_guarantee
 		NAM_svetlogorye
 		NAM_south_oil_charter
+		NAM_rural_grid
+		NAM_returnee_offices
+		NAM_district_scholarships
+		NAM_municipal_land
+		NAM_water_boards
+		NAM_public_credit
+		NAM_workers_inspection
+		NAM_regional_university
+		NAM_common_citizenship
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
@@ -264,6 +273,14 @@ NAM_postwar_vertical_plan = {
 		NAM_south_desert_offices
 		NAM_svetlogorye
 		NAM_south_seal_over_furnaces
+		NAM_civil_service_exam
+		NAM_building_code
+		NAM_works_commission
+		NAM_development_bank
+		NAM_basin_reservoirs
+		NAM_engineering_collegium
+		NAM_district_inspectorate
+		NAM_reconstruction_statute
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
@@ -586,6 +603,14 @@ NAM_postwar_pragmatic_plan = {
 		NAM_prag_ending_republic
 		NAM_svetlogorsk_dam
 		NAM_prag_south_guarantees
+		NAM_merchant_charter
+		NAM_domestic_designs
+		NAM_customs_clearinghouse
+		NAM_freight_exchange
+		NAM_repair_depots
+		NAM_port_polytechnic
+		NAM_municipal_bonds
+		NAM_commercial_commonwealth
 		NAM_svetlogorsk_shipyards
 		NAM_veterans_return
 		NAM_south_war_council

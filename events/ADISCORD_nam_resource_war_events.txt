@@ -3266,6 +3266,11 @@ country_event = {
 	desc = ADISCORD_nam_oil.1.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_oil_offer_pending
+		NOT = { has_country_flag = NAM_oil_client }
+		NOT = { has_country_flag = NAM_oil_offer_declined }
+	}
 
 	option = {
 		name = ADISCORD_nam_oil.1.a
@@ -3285,6 +3290,9 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_oil.1.b
 		trigger = {
+			has_country_flag = NAM_oil_offer_pending
+			NOT = { has_country_flag = NAM_oil_offer_declined }
+			NOT = { has_country_flag = NAM_oil_client }
 			NOT = { has_war_with = NAM }
 			NAM = { NAM_country_operable = yes }
 		}
@@ -3351,6 +3359,10 @@ country_event = {
 	desc = ADISCORD_nam_oil.4.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	trigger = {
+		NAM_steel_concession_offer_current = yes
+		NOT = { has_country_flag = NAM_steel_concession_declined }
+	}
 
 	immediate = {
 		hidden_effect = { ADISCORD_economy_initialize_country = yes }

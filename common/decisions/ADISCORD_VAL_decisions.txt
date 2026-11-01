@@ -3075,12 +3075,13 @@ VAL_foreign_sales = {
 	VAL_cw_sell_arms_to_resistance = {
 		icon = ADISCORD_deal
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		visible = { NOT = { has_country_flag = VAL_cw_arms_offer_declined } has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_arms_channel_free_tt
 				NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+				NOT = { has_country_flag = VAL_cw_arms_offer_declined }
 				NOT = { has_variable = STP_ps_val_receipt_rifles }
 			}
 			NOT = { has_war_with = STS }
@@ -3107,12 +3108,13 @@ VAL_foreign_sales = {
 	VAL_cw_offer_contract_formations = {
 		icon = ADISCORD_deal
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		visible = { NOT = { has_country_flag = VAL_cw_arms_offer_declined } has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_arms_channel_free_tt
 				NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+				NOT = { has_country_flag = VAL_cw_arms_offer_declined }
 				NOT = { has_variable = STP_ps_val_receipt_rifles }
 			}
 			NOT = { has_war_with = STS }
@@ -3207,6 +3209,7 @@ VAL_foreign_sales = {
 			NOT = { has_country_flag = VAL_export_offer_pending }
 			FROM = {
 				VAL_export_customer = yes
+				NOT = { has_country_flag = VAL_advisors_offers_declined }
 				ADISCORD_economy_can_spend_100 = yes
 				NOT = { has_country_flag = VAL_export_customer_cooldown }
 			}
@@ -3226,6 +3229,7 @@ VAL_foreign_sales = {
 						NOT = { has_country_flag = VAL_export_offer_pending }
 						FROM = {
 							VAL_export_customer = yes
+							NOT = { has_country_flag = VAL_advisors_offers_declined }
 							ADISCORD_economy_can_spend_100 = yes
 							NOT = { has_country_flag = VAL_export_customer_cooldown }
 						}
@@ -4558,12 +4562,14 @@ VAL_new_world_category = {
 			FROM = {
 				exists = yes
 				NOT = { has_country_flag = VAL_nw_concession }
+				NOT = { has_country_flag = VAL_nw_offer_declined }
 			}
 		}
 		available = {
 			VAL_nw_operational = yes
 			FROM = {
 				VAL_nw_partner_eligible = yes
+				NOT = { has_country_flag = VAL_nw_offer_declined }
 				custom_trigger_tooltip = {
 					tooltip = VAL_nw_offer_idle_tt
 					NOT = { has_country_flag = VAL_nw_offer_pending }
@@ -4587,6 +4593,7 @@ VAL_new_world_category = {
 						FROM = {
 							VAL_nw_partner_eligible = yes
 							NOT = { has_country_flag = VAL_nw_concession }
+							NOT = { has_country_flag = VAL_nw_offer_declined }
 							NOT = { has_country_flag = VAL_nw_offer_pending }
 							NOT = { has_country_flag = VAL_nw_offer_cooldown }
 						}
@@ -6247,6 +6254,10 @@ VAL_council_government_category = {
 		}
 		ai_will_do = {
 			base = 2
+			modifier = {
+				factor = 0
+				FROM = { has_country_flag = VAL_trade_offers_declined }
+			}
 		}
 		targets = { CIN OSF APH COF TFF YPR }
 		target_trigger = {

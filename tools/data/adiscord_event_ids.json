@@ -8293,6 +8293,62 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_SHL.150",
+      "namespace": "ADISCORD_SHL",
+      "number": 150,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.151",
+      "namespace": "ADISCORD_SHL",
+      "number": 151,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.152",
+      "namespace": "ADISCORD_SHL",
+      "number": 152,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.153",
+      "namespace": "ADISCORD_SHL",
+      "number": 153,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.154",
+      "namespace": "ADISCORD_SHL",
+      "number": 154,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.155",
+      "namespace": "ADISCORD_SHL",
+      "number": 155,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_foreign_affairs",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.9",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 9,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SHL.76",
       "namespace": "ADISCORD_SHL",
       "number": 76,

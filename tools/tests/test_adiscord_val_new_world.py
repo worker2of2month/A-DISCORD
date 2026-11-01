@@ -136,7 +136,7 @@ class ContractWorld:
                 result.append(False)
             elif key == "is_in_faction":
                 result.append(value == "no")
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "FROM", "owner", "controller", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")):
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")):
                 result.append(self.matches(value, self.scope(key, scope)))
             else:
                 raise AssertionError(("unsupported condition", scope, key, value))
@@ -226,7 +226,7 @@ class ContractWorld:
                 self.events.append((scope, scalar(value, "id")))
             elif key == "custom_effect_tooltip":
                 pass
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "FROM", "owner", "controller")):
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller")):
                 self.execute(value, self.scope(key, scope))
             else:
                 raise AssertionError(("unsupported effect", scope, key, value))
@@ -473,7 +473,45 @@ class NewWorldAccountingTests(unittest.TestCase):
                 self.assertEqual(state["buildings"]["industrial_complex"], 1)
                 self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1200)
 
-    def test_recognition_updates_open_offer_but_keeps_player_refusal_and_cooldown(self):
+    def test_nam_aid_refusal_is_final_but_failed_settlement_is_not(self):
+        event = next(e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
+                     if e.key == "country_event" and scalar(e.value, "id") == "val_contract.375")
+        refusal = next(e.value for e in event if e.key == "option" and scalar(e.value, "name") == "val_contract.375.decline")
+        for explicit in (True, False):
+            with self.subTest(explicit=explicit):
+                world = ContractWorld()
+                world.data["VAL"]["vars"]["VAL_nam_request_terms"] = 2
+                if explicit:
+                    world.execute(block(refusal, "hidden_effect"), "VAL")
+                else:
+                    world.run("VAL_decline_nam_aid_request")
+                self.assertEqual("VAL_nam_aid_requests_declined" in world.data["VAL"]["flags"], explicit)
+                self.assertNotIn("VAL_nam_request_terms", world.data["VAL"]["vars"])
+                self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+                after = list(world.events)
+                world.execute(block(refusal, "hidden_effect"), "VAL")
+                self.assertEqual(world.events, after)
+
+    def test_stelander_refusal_closes_both_arms_packages(self):
+        world = ContractWorld()
+        world.data["VAL"]["flags"].update({"VAL_cw_arms_offer_pending", "VAL_cw_trade_course"})
+        event = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
+                     if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.50")
+        refusal = next(e.value for e in event if e.key == "option" and scalar(e.value, "name") == "ADISCORD_STP_cw.50.b")
+        world.execute(block(refusal, "hidden_effect"), "STS")
+        self.assertIn("VAL_cw_arms_offer_declined", world.data["VAL"]["flags"])
+        self.assertNotIn("VAL_cw_arms_offer_pending", world.data["VAL"]["flags"])
+        after = list(world.events)
+        world.execute(block(refusal, "hidden_effect"), "STS")
+        self.assertEqual(world.events, after)
+        for category in entries(DECISIONS):
+            if not isinstance(category.value, list):
+                continue
+            for decision in category.value:
+                if decision.key in ("VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"):
+                    self.assertFalse(world.matches(block(decision.value, "visible")))
+
+    def test_recognition_preserves_refusal_after_the_offer_cooldown_expires(self):
         world = ContractWorld()
         world.data["VAL"]["rifles"] = {"VAL": 5400}
         world.target = "SLA"
@@ -496,11 +534,15 @@ class NewWorldAccountingTests(unittest.TestCase):
         decision = block(block(entries(DECISIONS), "VAL_new_world_category"), "VAL_nw_offer_concession")
         self.assertFalse(world.matches(block(decision, "available")))
         partner["flags"].discard("VAL_nw_offer_cooldown")
-        self.assertTrue(world.matches(block(decision, "available")))
+        self.assertIn("VAL_nw_offer_declined", partner["flags"])
+        self.assertFalse(world.matches(block(decision, "available")))
+        self.assertFalse(world.matches(block(decision, "visible")))
+        world.execute(block(decision, "complete_effect"), "VAL")
+        self.assertNotIn("VAL_nw_offer_pending", partner["flags"])
         partner["flags"].add("VAL_nw_offer_pending")
         world.execute(block(acceptance, "hidden_effect"), "SLA")
-        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1800)
-        self.assertIn("VAL_nw_concession", partner["flags"])
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+        self.assertNotIn("VAL_nw_concession", partner["flags"])
 
     def test_project_and_resource_rights_invalidate_the_actual_owners_budget(self):
         world = ContractWorld()

@@ -2365,7 +2365,7 @@ class StartupGuideContractTests(unittest.TestCase):
             for _, name, _ in named_gui_nodes(gui)
             if name.startswith('ADISCORD_startup_text_')
         }
-        self.assertEqual(len(pages), 63)
+        self.assertEqual(len(pages), 71)
         for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             topics = {
                 'STP': ('history', 'nodrul', 'party'),
@@ -2401,7 +2401,7 @@ class StartupGuideContractTests(unittest.TestCase):
                     spoiler,
                     f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''),
                 )
-                for i in range({'NAM': 7, 'VAL': 3}.get(tag, 2))
+                for i in range({'NAM': 7, 'SHL': 6, 'VAL': 3}.get(tag, 2))
                 for spoiler in (0, 1)
             ]
             for tab, page, spoilers, expected in cases:
@@ -2420,7 +2420,7 @@ class StartupGuideContractTests(unittest.TestCase):
                 if tab in (3, 4):
                     hidden_controls = (
                         'page_0', 'page_1', 'page_2', 'page_3',
-                        'page_4', 'page_5', 'page_6', 'nam_paths_note', 'spoilers',
+                        'page_4', 'page_5', 'page_6', 'nam_paths_note', 'shl_paths_note', 'spoilers',
                         'intro_note', 'guide_note', 'paths_note',
                         'stp_picture', 'val_picture', 'rus_picture',
                         'shl_picture', 'nam_picture',
@@ -2444,7 +2444,7 @@ class StartupGuideContractTests(unittest.TestCase):
                         facts,
                         tag,
                     ),
-                    tab == 1 or (tag in ('VAL', 'NAM') and tab == 2),
+                    tab == 1 or (tag in ('VAL', 'NAM', 'SHL') and tab == 2),
                     (tag, tab, page, spoilers),
                 )
 
@@ -2456,7 +2456,7 @@ class StartupGuideContractTests(unittest.TestCase):
                         facts,
                         tag,
                     ),
-                    tab == 1 or (tag == 'NAM' and tab == 2),
+                    tab == 1 or (tag in ('NAM', 'SHL') and tab == 2),
                     (tag, tab, page, spoilers),
                 )
 
@@ -2469,7 +2469,7 @@ class StartupGuideContractTests(unittest.TestCase):
                             facts,
                             tag,
                         ),
-                        tag == 'NAM' and tab == 2,
+                        tab == 2 and (tag == 'NAM' or (tag == 'SHL' and extra_page < 6)),
                         (tag, tab, page, spoilers, extra_page),
                     )
 

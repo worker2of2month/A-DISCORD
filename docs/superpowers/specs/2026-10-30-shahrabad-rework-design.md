@@ -210,7 +210,8 @@
 
 ## M3. Деревья фокусов
 
-Владелец: ядро, этап 2.
+Владелец: ядро, этап 2. Таблица ниже описывает состояние до M13: с 2026-11-01
+курсы - секции одного дерева `SHL_focus`, `load_focus_tree` не используется.
 
 | Дерево | Источник | Состав |
 | --- | --- | --- |
@@ -617,6 +618,22 @@ AI-план `ADISCORD_SHL_plans.txt` получает по одному план
 перерисованы `--apply-state-metadata`. Стратегические регионы 40/41
 определяются диапазонами номеров областей и не менялись.
 
+### Ручные правки карты от 2026-10-31
+
+Автор перекрасил карту вручную: Зархан 16899 вырос до 24 пикселей и
+поглотил остаток провинции 1198; id 1198 переиспользован для новой городской
+провинции в Нижнем Лорене (область 70, EFL) вместе с новыми 16900 и 16901;
+около 30 провинций южных городов переведены в urban. Генераторы приведены к
+растровой карте: маски городов в `adiscord_southern_cities.json`
+пересчитаны из provinces.bmp, urban-рост добавлен в наборы
+`build_adiscord_coastal_geography`, terrain/cities/trees дорисованы, область
+703 получила поселение "Рахма-дех" (443), гарнизон Зархана перенесён на
+16899. Хеши provinces.bmp в валидаторе IVN обновлены.
+Область 240 Дамир передана Эфлору (владелец и ядро EFL в `STARTING_OWNERS`);
+станции тракта Кадира в сценариях SHL - 234 Нарет и 242 Рават.
+В 240 добавлено поселение "Нижний Дамир" / "Lower Damir" (16743, VP 1)
+через `REGIONAL_SETTLEMENTS` рядом с городом Дамир (16722, VP 3).
+
 ## M9. Flavour
 
 - Имена дивизий `SHL_INF_01` "Furnace Levies" и `SHL_GAR_01` "Furnace Guard"
@@ -697,3 +714,159 @@ USB, APA, NSM, FRA фокусов "только дельта агрегата" �
   корона Юга открывает целевое `SHL_integrate_satellite_decision` с ценой
   по курсу.
 - `SHL_country_operable` скрывает технический флаг инициализации.
+
+## M12. Второй ряд веток: округа, внешние дела, Книга печей
+
+Диагноз 2026-11-01: до ратификации игрок видит 57 фокусов, пять курсов
+(34-37 фокусов) скрыты за `load_focus_tree`, у регентства и коммуны нет входа
+из дерева. Слияние деревьев в один видимый ствол описано в M13; этот этап
+добавляет содержимое, которое остаётся видимым всю кампанию.
+
+Принцип: новые ветки авторятся как `shared_focus` в
+`focus_trees/SHL/shared/focuses.txt` и подключаются к главному дереву и ко
+всем пяти деревьям курсов строкой `shared_focus = <корень>`. Так они видны с
+первого дня и не пропадают после ратификации. Координаты абсолютные, правее
+обоих деревьев: главное занимает x 0-31, курсы x 0-19, новые ветки x 33-68.
+Корни веток не имеют `prerequisite` (общего фокуса у деревьев нет); порядок
+задают `available` и собственные цепочки. Между соседними фокусами одной
+строки остаётся свободная клетка.
+
+Хронология: ветки доступны всю кампанию (0-1200+), поэтому их стоимости
+3-5 и они не соревнуются с политическим стволом за первые 252 дня.
+Награды следуют общему контракту (M11): действие, программа или
+политическое изменение; агрегат `SHL_pow_*` с dummy-превью - не более
+одного на ветку, только в финале.
+
+### Ветка A. "Четыре округа" (x 33-47) - 18 фокусов
+
+Корень `SHL_four_districts` (40,0; стоимость 3): 730, 731, 732, 733 получают
+`add_extra_state_shared_building_slots = 1`; `custom_effect_tooltip`
+`SHL_four_districts_tt` называет четыре колонки.
+
+| Колонка | y1 | y2 (пара `mutually_exclusive`) | y3 |
+| --- | --- | --- | --- |
+| 730 Сафирское взморье, x 34 | `SHL_salt_pans_of_safir` (34,1): 730 `industrial_complex` +1 стройкой, `SHL_cycle_bonus_income` +10 | `SHL_safir_customs` (33,2): доход +8 за цикл, GLP мнение -20 (`ADISCORD_SHL_customs_dispute`) / `SHL_safir_smugglers` (35,2): флаг `SHL_smuggler_fuel` -> `SHL_packet_price` -5, стабильность -3% | `SHL_safir_bandar_port` (34,3): `naval_base` 1 в провинции 3234 (coastal = true), доход +10 за цикл |
+| 731 Лоранские пески, x 38 | `SHL_loran_cisterns` (38,1): 731 `infrastructure` +1 стройкой, `SHL_wells_price` -50 через `has_completed_focus` в `SHL_refresh_programme_prices` | `SHL_desert_caravanserai` (37,2): доход +10 за цикл, 707 `infrastructure` +1 / `SHL_sand_patrols` (39,2): гарнизонная дивизия в 731 через новый `SHL_create_border_watch` (шаблон `SHL_ensure_levy_template`), +20 командной силы | `SHL_loran_deh_growth` (38,3): 731 `set_state_category = town`, `add_manpower = 4000` |
+| 732 Байратские копи, x 42 | `SHL_bayrat_copi_survey` (42,1): 732 `add_resource` сталь +2; `unlock_decision_tooltip = SHL_prospect_copi` | `SHL_mine_colonies` (41,2): 732 `industrial_complex` +1 стройкой, `add_manpower = 6000` / `SHL_nomad_leases` (43,2): 732 сталь +2 и хром +1 сразу, `SHL_cycle_bonus_income` -5 (аренда) | `SHL_copi_railway` (42,3): 732 и 291 `infrastructure` +1 стройкой, 732 сталь +2 |
+| 733 Вейранская граница, x 46 | `SHL_veyran_forts` (46,1): 733 `bunker` уровень 2 на всех пограничных провинциях (`province = { all_provinces = yes limit_to_border = yes }`) | `SHL_border_watch` (45,2): `unlock_decision_tooltip = SHL_raise_border_watch` / `SHL_border_market` (47,2): MZR мнение +20 (`ADISCORD_SHL_border_market`), доход +8 за цикл | `SHL_veyran_kala` (46,3): `supply_node` в провинции 6126 |
+
+Финал `SHL_desert_assembly` (40,4; стоимость 4): `prerequisite` - любой из
+четырёх y3; 730-733 ещё +1 слот; BOP `SHL_conclave_balance` +0.05 (новые
+округа - рабочие); единственный агрегат ветки `SHL_pow_resource_factor`
++0.05 (`local_resources_factor` в `SHL_conclave_power_dynamic`) с
+dummy-превью `SHL_pow_desert_idea`.
+
+Новые решения (категория `SHL_quarters_and_borders`, секция "Четыре
+округа"): `SHL_prospect_copi` - 120 казны, 70 дней, 732 хром +3, не более
+двух раз (счётчик `SHL_copi_prospected`); `SHL_raise_border_watch` - 60
+казны, 30 дней, гарнизонная дивизия в 733 (эскроу `SHL_border_watch_deposit`,
+возврат при отмене). Доход за цикл: переменная `SHL_cycle_bonus_income`
+прибавляется к `ADISCORD_economy_treasury` в `SHL_produce_period` рядом с
+доходом печей; превью в тултипах фокусов `§G+10§! £ADISCORD_economy_treasury_texticon за цикл`.
+
+### Ветка B. "Внешние дела" (x 49-59) - 14 фокусов
+
+Корень `SHL_chancery_of_the_gate` (54,0; стоимость 3):
+`unlock_decision_tooltip = SHL_trade_mission` - решение с целью (EFL, KYZ,
+GLP, MZR, NAM, VAL, STP): 25 ПО, 30 дней, по завершении +15 мнения в обе
+стороны (`ADISCORD_SHL_trade_mission`), `days_re_enable = 90`.
+
+| Колонка | y1 | y2 (пара) | y3 |
+| --- | --- | --- | --- |
+| Эфлор, x 50 | `SHL_damir_road` (50,1): 288 и 240 `infrastructure` +1 стройкой, EFL мнение +20 (`ADISCORD_SHL_damir_road`) | `SHL_eflor_investment` (49,2): событие EFL `ADISCORD_SHL.150` (ИИ соглашается при мнении > 0): согласие - 288 `industrial_complex` +1 стройкой, EFL получает 60 казны; отказ - `ADISCORD_SHL.152` / `SHL_damir_customs` (51,2): доход +10 за цикл, EFL мнение -30 | `SHL_eflor_accord` (50,3): цена 80 казны (проверка в `available`); событие EFL `.151`: согласие - 730 `industrial_complex` +2 стройкой за счёт Эфлора, EFL +80 казны; отказ - возврат |
+| Светлогорье, x 54 | `SHL_fuel_ledger` (54,1): 699 `fuel_silo` +1 стройкой, `SHL_reserve_price` -5 через `has_completed_focus` в `SHL_refresh_reserve_price` | `SHL_nam_fuel_treaty` (53,2): событие NAM `.153`; согласие - флаг `SHL_nam_fuel_treaty` -> `SHL_packet_price` -10, пока нет эмбарго и войны / `SHL_own_distillery` (55,2): 699 `synthetic_refinery` +1 стройкой, `SHL_packet_price` -5 безусловно | `SHL_northern_road` (54,3): 707 и 699 `infrastructure` +1, `SHL_convoy_deposit` -30 через `has_completed_focus` |
+| После споров, x 58 | `SHL_table_of_treaties` (58,1): `available` - закрыт хотя бы один спор с KYZ или GLP (любой исход: договор, братство, союз, победа, перемирие); стабильность +5%, доход +5 за цикл | `SHL_kyz_communities_seat` (57,2): `available` - договор "вода за металл", братство кяризов или победа над KYZ; KYZ мнение +30, `add_manpower = 8000` / `SHL_veyr_glass_contract` (59,2): `available` - союз с Вейром, достроенная гавань или победа над GLP; доход +12 за цикл, GLP мнение +20 | `SHL_southern_customs_union` (58,3): `SHL_metal_max_clients` 3 -> 4 (литерал 3 в `SHL_metal_establish_contract` и решениях заменяется переменной, инициализация в `SHL_initialize_programmes`) |
+
+Финал `SHL_voice_of_the_south` (54,4; стоимость 4): любой y3;
+`SHL_desert_embassy` становится видимым и без `SHL_southern_horizon`;
+новость `ADISCORD_SHL_news.9` южным читателям; +50 ПО.
+
+### Ветка C. "Книга печей" (x 61-67) - 10 фокусов
+
+Корень `SHL_written_fire` (64,0; стоимость 3): стабильность +5%;
+`SHL_festival_of_fire` виден также по этому фокусу.
+
+| Колонка | y1 | y2 (пара) | y3 |
+| --- | --- | --- | --- |
+| Знание, x 62 | `SHL_archive_of_the_conclave` (62,1): `add_tech_bonus` 50% x1 на `industry` | `SHL_masters_university` (61,2; стоимость 5): `add_research_slot = 1` / `SHL_apprentice_decree` (63,2): `swap_ideas` `ADISCORD_education_apprenticeship` -> `ADISCORD_education_technical_institutes` | `SHL_engineers_of_the_tenth` (62,3): цена `SHL_project_engineers` -25% через `has_completed_focus` в выводе цены (если цена литеральная - ввести переменную), иначе `add_tech_bonus` 50% x1 на `electronics` |
+| Слово, x 66 | `SHL_heralds_press` (66,1): кампании `SHL_campaign_fire_never_sleeps` и `SHL_campaign_bread_from_furnaces` видны также по этому фокусу; +25 ПО | `SHL_open_press` (65,2): `swap_ideas` -> `ADISCORD_information_open_press`, BOP +0.05 / `SHL_conclave_bulletins` (67,2): `swap_ideas` -> `ADISCORD_information_state_bulletins`, BOP -0.05 | `SHL_chronicle_of_the_south` (66,3): открывает второй том книги (`ADISCORD_shl_book.11`) немедленно, если его гейт ещё не сработал; +5% поддержки войны |
+
+Финал `SHL_law_of_the_written_fire` (64,4; стоимость 4): любой y3;
+агрегат `SHL_pow_research_speed` +0.05 (`research_speed_factor` в
+`SHL_conclave_power_dynamic`) с dummy-превью `SHL_pow_written_fire_idea`;
+стабильность +3%.
+
+### D. Видимые входы скрытых курсов (главное дерево) - 2 фокуса
+
+`SHL_regency_of_crests` (22,13) и `SHL_commune_of_shift_councils` (7,13) в
+`focus_trees/SHL/main/focuses.txt`: `prerequisite = SHL_workers_charter`
+(тот же ряд, что финалы), стоимость 1, `available` - `SHL_can_back_crests` /
+`SHL_can_back_shift_councils` под `custom_trigger_tooltip` с объяснением
+(кризис и доминирование своей стороны), `check_variable SHL_political_course = 0`;
+`bypass` - курс уже выбран; награда - `custom_effect_tooltip`
+`SHL_regency_course_tt` / `SHL_commune_course_tt` и скрытый
+`SHL_commit_regency_course` / `SHL_commit_commune_course` под той же
+проверкой, как в решениях `SHL_back_crests` / `SHL_back_shift_councils`
+(решения остаются); `ai_will_do = { base = 0 }`.
+
+### Итог и проверка M12
+
+Главное дерево: 57 + 2 + 42 общих = 101 видимых фокусов; дерево курса:
+34-37 + 5 + 42. Планы ИИ (`ADISCORD_SHL_plans.txt`) получают новые фокусы с
+одной альтернативой каждой пары. Проверка: сборка `--check`/`--apply`,
+`test_adiscord_shl_furnaces`, `test_adiscord_shl_houses`, `validate_tc.py`;
+в игре - видимость блока x 33-67 в главном дереве и после ратификации,
+`naval_base` в Сафир-бандаре, доход за цикл в казне, события EFL/NAM.
+
+## M13. Единое дерево: курсы как видимые ветки
+
+Принято 2026-11-01 (вариант 4 = M12 + слияние). Пять деревьев курсов
+перестают быть отдельными `focus_tree`; `load_focus_tree` из
+`SHL_commit_*_course` удалён. Таблица M3 и строки хронологии о загрузке
+дерева устарели: ратификация меняет лидера, название, кабинет и новости,
+но дерево остаётся одним.
+
+### Устройство
+
+- Источники курсов `focus_trees/SHL/<курс>/focuses.txt` стали секциями
+  `# @section <курс>`, которые главное дерево подключает строками
+  `# @include SHL/<курс>/focuses.txt#<курс>` перед закрывающей скобкой
+  `SHL_focus`. Сборщик собирает один вывод `ADISCORD_SHL_focus.txt`
+  (240 фокусов) и общий слой `ADISCORD_SHL_shared.txt` (47 `shared_focus`);
+  пять выводов курсов удалены, `SHL/main` исключён из `SHARED_HISTORY_SOURCES`.
+- Координаты абсолютные. Блоки курсов стоят под стволом в порядке своих
+  коммитов слева направо: коммуна x 0-13, десятый дом x 16-31, открытый
+  Конклав x 34-50, дирекция x 53-72, регентство x 76-92; строки 15-25.
+  Фронт Юга и корона Юга (общий слой) перенесены в колонки 96-98, строки
+  15-19 и подключены в главном дереве. Ветки второго ряда (M12) занимают
+  x 33-67, строки 0-4.
+- Корень каждого курса получил `prerequisite` на свой коммит-фокус:
+  `SHL_admit_tenth_house`, `SHL_rights_without_fire`, `SHL_state_furnaces`,
+  `SHL_regency_of_crests`, `SHL_commune_of_shift_councils`. Пять
+  коммит-фокусов взаимно исключительны (`mutually_exclusive` на четыре
+  остальных); их `available` по-прежнему требует `SHL_political_course = 0`.
+  У входов скрытых курсов нет `bypass`: обойдённый фокус открыл бы чужую
+  ветку.
+- Скрытые курсы коммитятся также событиями кризиса и решениями
+  `SHL_back_crests` / `SHL_back_shift_councils`; `SHL_commit_regency_course`
+  и `SHL_commit_commune_course` завершают свой входной фокус через
+  `complete_national_focus`, если он ещё не завершён, чтобы секция курса
+  открылась. Повторный коммит из награды входа невозможен: значение курса
+  уже записано, а `SHL_can_back_*` требует курс ниже своего.
+- Планы ИИ не меняются: `SHL_<курс>_plan` включаются по `SHL_political_course`
+  и теперь дополнительно ведут ветки второго ряда (одна альтернатива каждой
+  пары).
+
+### Инструменты и проверки
+
+- `tools/data/generated_output_owners.json` и
+  `validate_adiscord_minor_optimization.py` читают только
+  `ADISCORD_SHL_focus.txt` и `ADISCORD_SHL_shared.txt`.
+- `test_adiscord_shl_furnaces.py`: `tree_focuses(<курс>)` читает секцию;
+  структура проверяется для всего дерева (уникальные клетки, достижимость,
+  пять корней общего слоя, исключительность коммитов, отсутствие
+  `load_focus_tree`); `test_adiscord_south_final_war.py` определяет курс
+  секции по заголовку `# @section`.
+- В игре: один экран дерева с пятью серыми блоками курсов до ратификации,
+  открытие своего блока после финала или события кризиса, фронт Юга справа
+  от регентства, отсутствие пропавших фокусов после ратификации.

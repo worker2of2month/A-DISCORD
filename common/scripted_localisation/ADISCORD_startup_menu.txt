@@ -122,6 +122,13 @@ defined_text = {
 	name = ADISCORDGetStartupPageTitle2
 	text = {
 		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = SHL_startup_path_2_title
+	}
+	text = {
+		trigger = {
 			tag = NAM
 			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 		}
@@ -159,6 +166,13 @@ defined_text = {
 
 defined_text = {
 	name = ADISCORDGetStartupPageTitle3
+	text = {
+		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = SHL_startup_path_3_title
+	}
 	text = {
 		trigger = {
 			tag = NAM
@@ -204,6 +218,13 @@ defined_text = {
 	name = ADISCORDGetStartupPageTitle4
 	text = {
 		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = SHL_startup_path_4_title
+	}
+	text = {
+		trigger = {
 			tag = NAM
 			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 		}
@@ -214,6 +235,13 @@ defined_text = {
 
 defined_text = {
 	name = ADISCORDGetStartupPageTitle5
+	text = {
+		trigger = {
+			tag = SHL
+			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+		}
+		localization_key = SHL_startup_path_5_title
+	}
 	text = {
 		trigger = {
 			tag = NAM

@@ -229,6 +229,15 @@ guiTypes = {
 			maxHeight = 48
 			format = left
 			alwaystransparent = yes
+		}		instantTextboxType = {
+			name = "ADISCORD_startup_shl_paths_note"
+			position = { x = 34 y = 456 }
+			font = "hoi_16mbs"
+			text = "SHL_startup_paths_note"
+			maxWidth = 359
+			maxHeight = 48
+			format = left
+			alwaystransparent = yes
 		}
 		# Static page keys let the text scrollbar measure the complete localised text.
 		# Each page owns its visibility so hidden tabs cannot draw another copy.
@@ -643,6 +652,94 @@ guiTypes = {
 			position = { x = 460 y = 152 }
 			font = "hoi_18mbs"
 			text = "SHL_startup_path_1_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_2"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_2"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_2_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_2_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_3"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_3"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_3_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_3_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_4"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_4"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_4_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_4_details"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_5"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_5"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			scrollbarType = standardtext_slider
+		}
+
+		instantTextboxType = {
+			name = "ADISCORD_startup_text_SHL_startup_path_5_details"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "SHL_startup_path_5_details"
 			maxWidth = 500
 			maxHeight = 388
 			format = left

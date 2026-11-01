@@ -698,6 +698,7 @@ VAL_nw_accept_concession = {
 	if = {
 		limit = {
 			has_country_flag = VAL_nw_offer_pending
+			NOT = { has_country_flag = VAL_nw_offer_declined }
 			NOT = { has_country_flag = VAL_nw_concession }
 			VAL_nw_partner_eligible = yes
 			VAL = {
@@ -2637,6 +2638,7 @@ VAL_settle_partner_trade = {
 			limit = { NOT = { has_country_flag = VAL_council_retry_offer } }
 			VAL = { add_political_power = -100 }
 		}
+		clr_country_flag = VAL_trade_offers_declined
 		VAL_start_market_year = yes
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
@@ -2679,6 +2681,84 @@ VAL_reserve_partner_hire_fee = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
+	}
+}
+
+# COUNTRY recipient. Only an explicit refusal closes future offers of that kind;
+# expired receipts and failed settlement retain their ordinary retry interval.
+VAL_record_contract_rejection = {
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = VAL_partner_offer_trade
+				has_country_flag = VAL_trade_fee_paid
+			}
+		}
+		set_country_flag = VAL_trade_offers_declined
+	}
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = VAL_partner_offer_hire
+				has_country_flag = VAL_hire_fee_paid
+				VAL_partner_hire_fee_reserved = yes
+			}
+		}
+		set_country_flag = VAL_hire_offers_declined
+	}
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = VAL_partner_offer_arms
+				has_country_flag = VAL_partner_offer_bulk
+				has_country_flag = VAL_partner_offer_arsenal
+				has_country_flag = VAL_partner_offer_strategic
+			}
+		}
+		set_country_flag = VAL_arms_offers_declined
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_order_offer
+		}
+		set_country_flag = VAL_order_offers_declined
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_military_offer
+		}
+		set_country_flag = VAL_military_offers_declined
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_export_offer_advisors
+		}
+		set_country_flag = VAL_advisors_offers_declined
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_transit_offer
+		}
+		set_country_flag = VAL_transit_offers_declined
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					tag = NAM
+					VAL = {
+						has_country_flag = VAL_nam_concession_offer_pending
+					}
+				}
+				AND = {
+					tag = EFL
+					VAL = {
+						has_country_flag = VAL_efl_concession_offer_pending
+					}
+				}
+			}
+		}
+		set_country_flag = VAL_island_concession_offers_declined
 	}
 }
 

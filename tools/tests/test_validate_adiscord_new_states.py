@@ -697,5 +697,37 @@ class MazarBorderTests(unittest.TestCase):
             self.assertEqual(re.findall(r"(?<![\d.])273(?![\d.])", source), [], relative)
 
 
+class DamirTransferTests(unittest.TestCase):
+    SHL_ROAD_SOURCES = (
+        *MazarBorderTests.SHL_SCRIPTS,
+        "focus_trees/SHL/houses/focuses.txt",
+    )
+
+    def test_damir_starts_as_an_eflor_town_with_both_settlements(self) -> None:
+        self.assertEqual(builder.STARTING_OWNERS[240], "EFL")
+        self.assertNotIn(240, builder.KDR_STATES)
+        source = builder.state_path(240).read_text(encoding="utf-8-sig")
+        self.assertIn("owner = EFL", source)
+        self.assertIn("add_core_of = EFL", source)
+        self.assertNotIn("KDR", source)
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+3\s*\}")
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16743\s+1\s*\}")
+        self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 1, "Нижний Дамир"),))
+        for path, expected in builder.state_metadata_plan({240}).items():
+            self.assertEqual(path.read_bytes(), expected, str(path))
+
+    def test_kadir_road_stations_are_naret_and_ravat(self) -> None:
+        for relative in self.SHL_ROAD_SOURCES:
+            source = (builder.ROOT / relative).read_text(encoding="utf-8")
+            self.assertEqual(re.findall(r"(?<![\d.])240(?![\d.])", source), [], relative)
+        effects = (builder.ROOT / self.SHL_ROAD_SOURCES[0]).read_text(encoding="utf-8")
+        sale = effects.split("SHL_sell_road_stations = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("transfer_state = 234", sale)
+        self.assertIn("transfer_state = 242", sale)
+        focuses = (builder.ROOT / self.SHL_ROAD_SOURCES[-1]).read_text(encoding="utf-8")
+        self.assertIn("234 = { add_claim_by = SHL }", focuses)
+        self.assertIn("242 = { add_claim_by = SHL }", focuses)
+
+
 if __name__ == "__main__":
     unittest.main()

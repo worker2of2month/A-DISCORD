@@ -997,5 +997,157 @@ ideas = {
 				stability_factor = -0.05
 			}
 		}
-}
+
+		NAM_adm_civil_service_exam_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.06
+				research_speed_factor = 0.02
+			}
+		}
+
+		NAM_adm_appointed_prefects_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				stability_factor = 0.04
+			}
+		}
+
+		NAM_adm_building_code_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.12
+			}
+		}
+
+		NAM_adm_distribution_board_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.1
+			}
+		}
+
+		NAM_adm_district_inspectorate_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = -0.04
+			}
+		}
+
+		NAM_adm_reconstruction_statute_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		NAM_adm_domestic_designs_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.035
+			}
+		}
+
+		NAM_adm_customs_clearinghouse_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = -0.04
+			}
+		}
+
+		NAM_adm_repair_depots_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		NAM_adm_municipal_bonds_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.1
+				ADISCORD_economy_tax_collection_factor = 0.05
+			}
+		}
+
+		NAM_adm_commercial_commonwealth_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.1
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_adm_municipal_land_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.12
+			}
+		}
+
+		NAM_adm_tenant_councils_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		NAM_adm_workers_inspection_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+			}
+		}
+
+		NAM_adm_regional_university_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_common_citizenship_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.08
+				stability_factor = 0.04
+			}
+		}	}
 }

@@ -13028,6 +13028,19 @@ ADISCORD_vorkerland_prewar_crisis_initialize = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_prewar_crisis_initialized }
 		}
 		set_global_flag = ADISCORD_vorkerland_prewar_crisis_initialized
+		# Choose the AI course before its focus plan starts; focus selection keeps
+		# the same course flags authoritative if a player takes over the country.
+		if = {
+			limit = { is_ai = yes }
+			random_list = {
+				35 = {
+					set_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course
+				}
+				65 = {
+					set_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+				}
+			}
+		}
 		set_power_balance = { id = ADISCORD_vorkerland_prewar_bop set_value = 0 }
 		set_variable = { var = global.ADISCORD_vorkerland_camp_committees value = 30 }
 		set_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 30 }

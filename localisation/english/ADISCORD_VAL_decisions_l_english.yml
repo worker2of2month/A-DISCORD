@@ -3158,3 +3158,5 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_council_garrison_execute_desc:0 "The Council prepared a plan at the delegation's request. Apply it once for free during war. Its combat bonus lasts 90 days or until peace; the prepared plan does not expire before activation."
  VAL_council_front_execute:0 "Apply the Plan of the Frontline Captains"
  VAL_council_front_execute_desc:0 "The Council prepared a plan at the delegation's request. Apply it once for free during war. Its combat bonus lasts 90 days or until peace; the prepared plan does not expire before activation."
+ VAL_contract_refusal_final_tt:0 "Kefreyt will no longer offer us contracts of this kind."
+ VAL_nam_aid_refusal_final_tt:0 "Svetlogorye will no longer request this aid agreement."

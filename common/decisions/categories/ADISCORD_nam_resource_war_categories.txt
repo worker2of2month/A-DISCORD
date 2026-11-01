@@ -87,6 +87,8 @@ NAM_national_programmes = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
+			has_active_mission = NAM_incident_countdown
+			has_active_mission = NAM_incident_response
 			has_completed_focus = NAM_inventory
 			ADISCORD_nam_resource_war_active = yes
 			NAM_independence_recognised = yes
@@ -164,12 +166,4 @@ NAM_colonial_campaigns = {
 	}
 	visible_when_empty = yes
 	priority = 20
-}
-
-NAM_incidents = {
-	icon = generic_political_pressure
-	allowed = { tag = NAM }
-	visible = { has_country_flag = NAM_groups_initialized }
-	visible_when_empty = no
-	priority = 22
 }

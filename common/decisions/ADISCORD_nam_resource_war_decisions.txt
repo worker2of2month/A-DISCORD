@@ -554,6 +554,7 @@ NAM_colony = {
 		fire_only_once = yes
 		days_remove = 28
 		complete_effect = {
+			custom_effect_tooltip = NAM_colonial_local_register_result_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -564,16 +565,20 @@ NAM_colony = {
 						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 					}
 				}
-				add_political_power = -50
 				hidden_effect = {
+					add_political_power = -50
 					set_country_flag = NAM_colonial_local_register_paid
 					set_temp_variable = { var = NAM_treasury_amount value = 300 }
 					NAM_spend_treasury = yes
 				}
-				custom_effect_tooltip = NAM_colonial_local_register_result_tt
 			}
 		}
-		cancel_trigger = { NAM_colonial_programme_operable = no }
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_colonial_programme_ended_tt
+				NAM_colonial_programme_operable = no
+			}
+		}
 		remove_effect = {
 			if = {
 				limit = {
@@ -1774,6 +1779,51 @@ NAM_mobilisation = {
 }
 
 NAM_national_programmes = {
+	NAM_incident_countdown = {
+		icon = generic_political_pressure
+		allowed = { tag = NAM }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 90
+		fire_only_once = no
+		cancel_trigger = { NAM_country_operable = no }
+		timeout_effect = {
+			custom_effect_tooltip = NAM_incident_draw_tt
+			hidden_effect = {
+				if = {
+					limit = { NAM_country_operable = yes }
+					NAM_crisis_select = yes
+				}
+			}
+		}
+	}
+
+	NAM_incident_response = {
+		icon = generic_political_pressure
+		allowed = { tag = NAM }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 14
+		fire_only_once = no
+		cancel_trigger = {
+			OR = {
+				NAM_country_operable = no
+				NOT = { has_country_flag = NAM_crisis_open }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = { clr_country_flag = NAM_crisis_open }
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_incident_response_timeout_tt
+			hidden_effect = { NAM_crisis_response_timeout = yes }
+		}
+	}
+
 	NAM_coast_observation_order = {
 		icon = generic_naval
 		allowed = { tag = NAM }
@@ -8841,6 +8891,192 @@ NAM_national_programmes = {
 		}
 		ai_will_do = { base = 8 }
 	}
+
+	NAM_pw_development_works = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_development_bank }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_development_works_ready_tt
+				NAM_pw_development_works_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_development_works_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 70
+		days_re_enable = 365
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_development_bank
+						NAM_pw_development_works_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_development_works_paid }
+						NOT = { has_political_power < 50 }
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -50
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 900 }
+					NAM_spend_treasury = yes
+					set_country_flag = NAM_pw_development_works_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_development_works_result_tt
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_development_works_cancel_tt
+				NAM_pw_development_works_ready = no
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_development_works_result_tt
+			hidden_effect = { NAM_pw_development_works_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_development_works_refund_tt
+			hidden_effect = { NAM_pw_development_works_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_merchant_order = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_merchant_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_merchant_order_ready_tt
+				NAM_pw_merchant_order_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_merchant_order_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = { var = ADISCORD_economy_treasury value = 650 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 42
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_merchant_charter
+						NAM_pw_merchant_order_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_merchant_order_paid }
+						NOT = { has_political_power < 35 }
+						check_variable = { var = ADISCORD_economy_treasury value = 650 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -35
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 650 }
+					NAM_spend_treasury = yes
+					set_country_flag = NAM_pw_merchant_order_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_merchant_order_result_tt
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_merchant_order_cancel_tt
+				NAM_pw_merchant_order_ready = no
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_merchant_order_result_tt
+			hidden_effect = { NAM_pw_merchant_order_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_merchant_order_refund_tt
+			hidden_effect = { NAM_pw_merchant_order_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_rural_electrification = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_rural_grid }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_rural_electrification_ready_tt
+				NAM_pw_rural_electrification_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_rural_electrification_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 40 }
+			check_variable = { var = ADISCORD_economy_treasury value = 550 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 56
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_rural_grid
+						NAM_pw_rural_electrification_ready = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_rural_electrification_paid }
+						NOT = { has_political_power < 40 }
+						check_variable = { var = ADISCORD_economy_treasury value = 550 compare = greater_than_or_equals }
+					}
+				}
+				add_political_power = -40
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 550 }
+					NAM_spend_treasury = yes
+					set_country_flag = NAM_pw_rural_electrification_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+				custom_effect_tooltip = NAM_pw_rural_electrification_result_tt
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_rural_electrification_cancel_tt
+				NAM_pw_rural_electrification_ready = no
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_rural_electrification_result_tt
+			hidden_effect = { NAM_pw_rural_electrification_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_rural_electrification_refund_tt
+			hidden_effect = { NAM_pw_rural_electrification_refund = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
 }
 
 # Overseas districts: the island levy, convoys and the steel concessions.
@@ -12194,53 +12430,6 @@ NAM_colonial_campaigns = {
 		}
 		ai_will_do = {
 			base = 3
-		}
-	}
-}
-
-NAM_incidents = {
-	NAM_incident_countdown = {
-		icon = generic_political_pressure
-		allowed = { tag = NAM }
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		is_good = no
-		selectable_mission = no
-		days_mission_timeout = 90
-		fire_only_once = no
-		cancel_trigger = { NAM_country_operable = no }
-		timeout_effect = {
-			custom_effect_tooltip = NAM_incident_draw_tt
-			hidden_effect = {
-				if = {
-					limit = { NAM_country_operable = yes }
-					NAM_crisis_select = yes
-				}
-			}
-		}
-	}
-
-	NAM_incident_response = {
-		icon = generic_political_pressure
-		allowed = { tag = NAM }
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		is_good = no
-		selectable_mission = no
-		days_mission_timeout = 14
-		fire_only_once = no
-		cancel_trigger = {
-			OR = {
-				NAM_country_operable = no
-				NOT = { has_country_flag = NAM_crisis_open }
-			}
-		}
-		cancel_effect = {
-			hidden_effect = { clr_country_flag = NAM_crisis_open }
-		}
-		timeout_effect = {
-			custom_effect_tooltip = NAM_incident_response_timeout_tt
-			hidden_effect = { NAM_crisis_response_timeout = yes }
 		}
 	}
 }

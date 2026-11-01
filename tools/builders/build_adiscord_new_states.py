@@ -140,7 +140,9 @@ AZH_CORE_PROVINCES = tuple(
     sorted(set(AZH_ORIGINAL_CORE_PROVINCES) - set(AZH_SEABOARD_PROVINCES))
 )
 
-KDR_STATES = (234, 235, 236, 237, 238, 239, 240, 241, 242, 244, 245, 246, 247)
+# Damir (240) lies on the Eflor side of the desert edge and starts as an
+# Eflor town; the Kadir road stations are 234 and 242.
+KDR_STATES = (234, 235, 236, 237, 238, 239, 241, 242, 244, 245, 246, 247)
 RHM_STATES = (248, 249, 252, 253, 254, 255, 256, 257, 258)
 SDR_STATES = (243, 250, 251, 259, 260, 261, 262, 263)
 MZR_STATES = (265, 266, 267, 268, 269, 270, 271, 272, 274, 275)
@@ -241,6 +243,7 @@ STARTING_OWNERS = {
     69: "AZH",
     174: "WEF",
     175: "WEF",
+    240: "EFL",
     **{state_id: "KDR" for state_id in KDR_STATES},
     **{state_id: "RHM" for state_id in RHM_STATES},
     **{state_id: "SDR" for state_id in SDR_STATES},
@@ -640,6 +643,7 @@ REGIONAL_SETTLEMENTS = {
     231: ((13018, 2, "Среднеостровск"), (12732, 1, "Западный мыс")),
     235: ((3924, 1, "Караль"),),
     239: ((4349, 1, "Белис"),),
+    240: ((16743, 1, "Нижний Дамир"),),
     246: ((7497, 1, "Керим"),),
     251: ((12517, 1, "Маран"),),
     252: ((11429, 1, "Тазир"),),

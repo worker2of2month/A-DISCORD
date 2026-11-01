@@ -516,7 +516,13 @@ country_event = {
 	desc = ADISCORD_SHL.52.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = KYZ }
+	trigger = {
+		tag = KYZ
+		SHL = {
+			has_country_flag = SHL_water_offer_pending
+			NOT = { has_country_flag = SHL_water_offer_declined }
+		}
+	}
 	option = {
 		name = ADISCORD_SHL.52.a
 		custom_effect_tooltip = SHL_kyz_accepts_treaty_tt
@@ -525,11 +531,15 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.52.b
-		custom_effect_tooltip = SHL_kyz_refuses_tt
+		custom_effect_tooltip = SHL_agreement_refusal_final_tt
 		hidden_effect = {
 			SHL = {
-				clr_country_flag = SHL_water_offer_pending
-				country_event = { id = ADISCORD_SHL.54 }
+				if = {
+					limit = { has_country_flag = SHL_water_offer_pending }
+					set_country_flag = SHL_water_offer_declined
+					clr_country_flag = SHL_water_offer_pending
+					country_event = { id = ADISCORD_SHL.54 }
+				}
 			}
 		}
 		ai_chance = { base = 20 }
@@ -657,7 +667,13 @@ country_event = {
 	desc = ADISCORD_SHL.61.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = GLP }
+	trigger = {
+		tag = GLP
+		SHL = {
+			has_country_flag = SHL_veyr_offer_pending
+			NOT = { has_country_flag = SHL_veyr_offer_declined }
+		}
+	}
 	option = {
 		name = ADISCORD_SHL.61.a
 		custom_effect_tooltip = SHL_glp_accepts_union_tt
@@ -666,11 +682,15 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.61.b
-		custom_effect_tooltip = SHL_glp_refuses_tt
+		custom_effect_tooltip = SHL_agreement_refusal_final_tt
 		hidden_effect = {
 			SHL = {
-				clr_country_flag = SHL_veyr_offer_pending
-				country_event = { id = ADISCORD_SHL.63 }
+				if = {
+					limit = { has_country_flag = SHL_veyr_offer_pending }
+					set_country_flag = SHL_veyr_offer_declined
+					clr_country_flag = SHL_veyr_offer_pending
+					country_event = { id = ADISCORD_SHL.63 }
+				}
 			}
 		}
 		ai_chance = { base = 20 }
@@ -1415,7 +1435,11 @@ country_event = {
 	desc = ADISCORD_SHL.130.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { has_country_flag = SHL_metal_offer_pending }
+	trigger = {
+		has_country_flag = SHL_metal_offer_pending
+		NOT = { has_country_flag = SHL_metal_offer_declined }
+		NOT = { has_country_flag = SHL_metal_client }
+	}
 	option = {
 		name = ADISCORD_SHL.130.b
 		custom_effect_tooltip = SHL_metal_decline_tt
@@ -1433,6 +1457,7 @@ country_event = {
 		trigger = {
 			has_country_flag = SHL_metal_offer_pending
 			NOT = { has_country_flag = SHL_metal_client }
+			NOT = { has_country_flag = SHL_metal_offer_declined }
 			NOT = { has_war_with = SHL }
 			SHL = { SHL_country_operable = yes }
 		}
@@ -1460,6 +1485,7 @@ country_event = {
 		trigger = {
 			has_country_flag = SHL_metal_offer_pending
 			NOT = { has_country_flag = SHL_metal_client }
+			NOT = { has_country_flag = SHL_metal_offer_declined }
 			NOT = { has_war_with = SHL }
 			SHL = { SHL_country_operable = yes }
 		}
@@ -1897,6 +1923,8 @@ country_event = {
 
 	option = {
 		name = ADISCORD_shl_book.read_on
+		# The chronicle focus opens this page itself (SHL_open_second_volume).
+		trigger = { NOT = { has_completed_focus = SHL_chronicle_of_the_south } }
 		hidden_effect = { country_event = { id = ADISCORD_shl_book.11 } }
 	}
 	option = {
@@ -2606,4 +2634,192 @@ country_event = {
 		is_ai = no
 	}
 	option = { name = ADISCORD_shl_life.30.a }
+}
+
+# ---------------------------------------------------------------------------
+# Foreign affairs of the second row. 150 and 151 go to Eflor, 153 to
+# Svetlogorye (FROM is Shahrabad); 152, 154 and 155 return to Shahrabad with
+# the partner in FROM. The first option of each offer is the unattended answer
+# only where the AI weights make it so; refusals refund through the effects.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.150
+	title = ADISCORD_SHL.150.t
+	desc = ADISCORD_SHL.150.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = EFL }
+
+	option = {
+		name = ADISCORD_SHL.150.a
+		trigger = {
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		SHL_eflor_accept_investment = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				has_opinion = {
+					target = SHL
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.150.b
+		hidden_effect = {
+			SHL = { country_event = { id = ADISCORD_SHL.152 } }
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_opinion = {
+					target = SHL
+					value > 0
+				}
+				NOT = { has_war_with = SHL }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.151
+	title = ADISCORD_SHL.151.t
+	desc = ADISCORD_SHL.151.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = EFL }
+
+	option = {
+		name = ADISCORD_SHL.151.a
+		trigger = {
+			NOT = { has_war_with = SHL }
+			SHL = {
+				SHL_country_operable = yes
+				has_variable = SHL_accord_deposit
+			}
+		}
+		SHL_eflor_accept_accord = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				has_opinion = {
+					target = SHL
+					value > 0
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.151.b
+		hidden_effect = {
+			SHL_eflor_refuse_accord = yes
+			SHL = { country_event = { id = ADISCORD_SHL.152 } }
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_opinion = {
+					target = SHL
+					value > 0
+				}
+				NOT = { has_war_with = SHL }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.152
+	title = ADISCORD_SHL.152.t
+	desc = ADISCORD_SHL.152.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.152.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.153
+	title = ADISCORD_SHL.153.t
+	desc = ADISCORD_SHL.153.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = NAM }
+
+	option = {
+		name = ADISCORD_SHL.153.a
+		trigger = {
+			NOT = { has_war_with = SHL }
+			SHL = { SHL_country_operable = yes }
+		}
+		custom_effect_tooltip = SHL_nam_fuel_treaty_tt
+		hidden_effect = { SHL_nam_accept_fuel_treaty = yes }
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				SHL = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.153.b
+		hidden_effect = {
+			SHL = { country_event = { id = ADISCORD_SHL.154 } }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				OR = {
+					has_war_with = SHL
+					SHL = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.154
+	title = ADISCORD_SHL.154.t
+	desc = ADISCORD_SHL.154.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.154.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.155
+	title = ADISCORD_SHL.155.t
+	desc = ADISCORD_SHL.155.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.155.a }
+}
+
+# The Voice of the South (SHL_announce_voice_of_the_south).
+news_event = {
+	id = ADISCORD_SHL_news.9
+	title = ADISCORD_SHL_news.9.t
+	desc = ADISCORD_SHL_news.9.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.9.a
+	}
 }
