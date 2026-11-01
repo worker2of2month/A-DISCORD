@@ -23,7 +23,7 @@ focus_tree = {
 	focus = {
 		id = NAM_recognition
 		icon = GFX_goal_generic_national_unity
-		x = 32
+		x = 28
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -54,12 +54,10 @@ focus_tree = {
 		}
 	}
 
-	# ----- Law, repair and the national university -----
-
 	focus = {
 		id = NAM_law_after_war
 		icon = GFX_focus_generic_court
-		x = 44
+		x = 2
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -91,7 +89,7 @@ focus_tree = {
 	focus = {
 		id = NAM_veterans_return
 		icon = GFX_focus_generic_soldier_salute
-		x = 43
+		x = 6
 		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
@@ -117,7 +115,7 @@ focus_tree = {
 	focus = {
 		id = NAM_civil_repair
 		icon = GFX_focus_generic_economic_recovery
-		x = 48
+		x = 10
 		y = 1
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -149,8 +147,8 @@ focus_tree = {
 	focus = {
 		id = NAM_civil_dividend
 		icon = GFX_focus_generic_low_cost_housing
-		x = 47
-		y = 2
+		x = 2
+		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_civil_repair }
@@ -192,8 +190,8 @@ focus_tree = {
 	focus = {
 		id = NAM_armed_peace
 		icon = GFX_focus_generic_military_industry
-		x = 49
-		y = 2
+		x = 6
+		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_civil_repair }
@@ -233,8 +231,8 @@ focus_tree = {
 	focus = {
 		id = NAM_national_university
 		icon = GFX_focus_generic_university_2
-		x = 48
-		y = 3
+		x = 10
+		y = 4
 		cost = 4
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		prerequisite = {
@@ -258,8 +256,8 @@ focus_tree = {
 	focus = {
 		id = NAM_svetlogorye
 		icon = GFX_focus_generic_phoenix
-		x = 46
-		y = 4
+		x = 2
+		y = 5
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_law_after_war }
@@ -271,6 +269,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_pw_south_preparation_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -286,6 +285,7 @@ focus_tree = {
 				id = ADISCORD_nam_resource_war.13
 				hours = 1
 			}
+				hidden_effect = { mark_focus_tree_layout_dirty = yes }
 		}
 		ai_will_do = {
 			base = 5
@@ -295,8 +295,8 @@ focus_tree = {
 	focus = {
 		id = NAM_svetlogorsk_shipyards
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 47
-		y = 5
+		x = 46
+		y = 17
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_svetlogorye }
@@ -328,20 +328,12 @@ focus_tree = {
 		}
 	}
 
-	# ----- Service state and the ladder of seals -----
-	# The post-war course follows the pre-war one; a country that chose
-	# neither may pick either, but only one.
-
 	focus = {
 		id = NAM_service_state
 		icon = GFX_focus_generic_military_dictatorship
-		x = 18
+		x = 28
 		y = 1
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_recognition }
@@ -396,13 +388,9 @@ focus_tree = {
 	focus = {
 		id = NAM_seal_registry
 		icon = GFX_focus_generic_printing_press
-		x = 14
-		y = 2
+		x = 32
+		y = 3
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_service_state }
@@ -442,13 +430,9 @@ focus_tree = {
 	focus = {
 		id = NAM_namestnik_garrisons
 		icon = GFX_focus_generic_home_defense
-		x = 13
-		y = 3
+		x = 20
+		y = 17
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_seal_registry }
@@ -489,13 +473,9 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_quotas
 		icon = GFX_focus_generic_price_controls
-		x = 15
-		y = 3
+		x = 24
+		y = 17
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_seal_registry }
@@ -536,13 +516,9 @@ focus_tree = {
 	focus = {
 		id = NAM_ladder_of_seals
 		icon = GFX_goal_generic_political_pressure
-		x = 14
-		y = 5
+		x = 24
+		y = 18
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_namestnik_garrisons }
@@ -580,13 +556,9 @@ focus_tree = {
 	focus = {
 		id = NAM_ladder_ending_iron
 		icon = GFX_goal_generic_propaganda
-		x = 13
-		y = 6
+		x = 28
+		y = 19
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_ladder_of_seals }
@@ -645,13 +617,9 @@ focus_tree = {
 	focus = {
 		id = NAM_ladder_ending_service
 		icon = GFX_focus_generic_improve_the_administration_2
-		x = 15
-		y = 6
+		x = 20
+		y = 19
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_ladder_of_seals }
@@ -696,18 +664,12 @@ focus_tree = {
 		}
 	}
 
-	# ----- War for the South along the service course -----
-
 	focus = {
 		id = NAM_south_black_basin
 		icon = GFX_goal_generic_more_territorial_claims
-		x = 11
-		y = 7
+		x = 20
+		y = 25
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_ladder_of_seals }
@@ -742,13 +704,9 @@ focus_tree = {
 	focus = {
 		id = NAM_south_desert_offices
 		icon = GFX_focus_generic_subjugation
-		x = 11
-		y = 8
+		x = 24
+		y = 26
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_south_black_basin }
@@ -785,13 +743,9 @@ focus_tree = {
 	focus = {
 		id = NAM_south_seal_over_furnaces
 		icon = GFX_goal_generic_demand_territory
-		x = 11
-		y = 10
+		x = 28
+		y = 27
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
@@ -825,13 +779,11 @@ focus_tree = {
 		}
 	}
 
-	# ----- Eflor and Azhar after the war -----
-
 	focus = {
 		id = NAM_normalisation
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 14
-		y = 1
+		x = 2
+		y = 30
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_recognition }
@@ -886,8 +838,8 @@ focus_tree = {
 	focus = {
 		id = NAM_border_revenge
 		icon = GFX_focus_generic_mountain_fortification
-		x = 16
-		y = 1
+		x = 6
+		y = 30
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_recognition }
@@ -915,14 +867,11 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
-	# ----- Oil after the victory -----
-	# Contracts and state projects are alternative uses of the new capacity.
-
 	focus = {
 		id = NAM_oil_ministry
 		icon = GFX_focus_generic_offshore_oil_rig
-		x = 8
-		y = 1
+		x = 2
+		y = 9
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_recognition }
@@ -948,8 +897,8 @@ focus_tree = {
 	focus = {
 		id = NAM_middle_loren_wells
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 5
-		y = 2
+		x = 6
+		y = 10
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_oil_ministry }
@@ -992,8 +941,8 @@ focus_tree = {
 	focus = {
 		id = NAM_reclaim_230
 		icon = GFX_focus_generic_steel
-		x = 11
-		y = 2
+		x = 10
+		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_oil_ministry }
@@ -1023,8 +972,8 @@ focus_tree = {
 	focus = {
 		id = NAM_export_consortium
 		icon = GFX_goal_generic_trade
-		x = 7
-		y = 2
+		x = 2
+		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_oil_ministry }
@@ -1058,8 +1007,8 @@ focus_tree = {
 	focus = {
 		id = NAM_state_refineries
 		icon = GFX_goal_generic_oil_refinery
-		x = 9
-		y = 2
+		x = 6
+		y = 11
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_oil_ministry }
@@ -1116,8 +1065,8 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_exchange
 		icon = GFX_focus_generic_stockpile_currency
-		x = 8
-		y = 3
+		x = 10
+		y = 12
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1131,28 +1080,28 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_pw_south_preparation_unlock_tt
 			custom_effect_tooltip = NAM_receive_250_tt
 			hidden_effect = { NAM_receive_250 = yes }
 			add_political_power = 60
 			add_fuel = 8000
+				hidden_effect = { mark_focus_tree_layout_dirty = yes }
 		}
 		ai_will_do = {
 			base = 5
 		}
 	}
 
-	# ----- Federal charter of the districts -----
-
 	focus = {
 		id = NAM_federal_charter
 		icon = GFX_focus_generic_universal_suffrage
-		x = 110
+		x = 88
 		y = 1
-		allow_branch = { NAM_prewar_district_mandate = yes }
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_recognition }
@@ -1208,13 +1157,13 @@ focus_tree = {
 	focus = {
 		id = NAM_district_council
 		icon = GFX_focus_generic_vote
-		x = 106
-		y = 2
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 80
+		y = 3
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_federal_charter }
@@ -1253,13 +1202,13 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_fund
 		icon = GFX_focus_generic_stockpile_fuel
-		x = 105
-		y = 3
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 84
+		y = 4
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_district_council }
@@ -1305,13 +1254,13 @@ focus_tree = {
 	focus = {
 		id = NAM_district_militia
 		icon = GFX_goal_generic_small_arms
-		x = 107
-		y = 3
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 88
+		y = 4
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_district_council }
@@ -1351,13 +1300,13 @@ focus_tree = {
 	focus = {
 		id = NAM_common_fuel_market
 		icon = GFX_focus_generic_energy
-		x = 106
-		y = 5
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 92
+		y = 7
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_oil_fund }
@@ -1394,13 +1343,13 @@ focus_tree = {
 	focus = {
 		id = NAM_charter_ending_federation
 		icon = GFX_focus_generic_the_council_of_europe
-		x = 105
-		y = 6
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 96
+		y = 8
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_common_fuel_market }
@@ -1446,13 +1395,13 @@ focus_tree = {
 	focus = {
 		id = NAM_charter_ending_oil_union
 		icon = GFX_focus_generic_industrialists
-		x = 107
-		y = 6
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 80
+		y = 8
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_common_fuel_market }
@@ -1497,18 +1446,16 @@ focus_tree = {
 		}
 	}
 
-	# ----- War for the South along the charter course -----
-
 	focus = {
 		id = NAM_south_oil_for_water
 		icon = GFX_focus_generic_concessions
-		x = 103
-		y = 7
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 84
+		y = 8
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_common_fuel_market }
@@ -1548,13 +1495,13 @@ focus_tree = {
 	focus = {
 		id = NAM_south_fenn_guarantee
 		icon = GFX_focus_generic_treaty
-		x = 103
-		y = 8
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 88
+		y = 9
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_south_oil_for_water }
@@ -1589,13 +1536,13 @@ focus_tree = {
 	focus = {
 		id = NAM_south_oil_charter
 		icon = GFX_goal_generic_forceful_treaty
-		x = 103
+		x = 92
 		y = 10
-		allow_branch = { NAM_prewar_district_mandate = yes }
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
@@ -1629,13 +1576,11 @@ focus_tree = {
 		}
 	}
 
-	# ----- Front of the South: available while the final campaign lasts -----
-
 	focus = {
 		id = NAM_south_war_council
 		icon = GFX_goal_generic_army_doctrines
-		x = 45
-		y = 8
+		x = 24
+		y = 49
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1662,8 +1607,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_allied_fuel_office
 		icon = GFX_focus_generic_supply_line
-		x = 42
-		y = 9
+		x = 22
+		y = 51
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1690,8 +1635,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_oil_tap
 		icon = GFX_focus_ADISCORD_sabotage
-		x = 46
-		y = 9
+		x = 32
+		y = 50
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1717,8 +1662,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_field_fortresses
 		icon = GFX_focus_generic_mountain_fortification
-		x = 48
-		y = 9
+		x = 24
+		y = 50
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1759,8 +1704,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_convoy_hunters
 		icon = GFX_focus_generic_trade_interdiction
-		x = 44
-		y = 9
+		x = 34
+		y = 51
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1792,8 +1737,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_counteroffensive
 		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 47
-		y = 10
+		x = 32
+		y = 51
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		allow_branch = { has_global_flag = ADISCORD_south_final_started }
@@ -1824,8 +1769,8 @@ focus_tree = {
 	focus = {
 		id = NAM_south_heritage
 		icon = GFX_focus_generic_the_giant_wakes
-		x = 45
-		y = 11
+		x = 24
+		y = 51
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		allow_branch = { has_global_flag = ADISCORD_south_hegemon_NAM }
@@ -1864,13 +1809,11 @@ focus_tree = {
 		}
 	}
 
-	# ----- The Khan's project: oil for the coalition or a share of the victory -----
-
 	focus = {
 		id = NAM_rus_crisis_watch
 		icon = GFX_focus_generic_radio_communication
-		x = 45
-		y = 12
+		x = 24
+		y = 52
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_south_heritage }
@@ -1901,8 +1844,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_fuel_for_coalition
 		icon = GFX_focus_generic_stockpile_fuel
-		x = 44
-		y = 13
+		x = 22
+		y = 53
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_rus_crisis_watch }
@@ -1945,8 +1888,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_demand_share
 		icon = GFX_focus_generic_price_controls
-		x = 46
-		y = 13
+		x = 26
+		y = 53
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rus_crisis_watch }
@@ -1985,8 +1928,8 @@ focus_tree = {
 	focus = {
 		id = NAM_rus_expedition_staff
 		icon = GFX_focus_generic_military_mission
-		x = 45
-		y = 14
+		x = 24
+		y = 54
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -2021,12 +1964,11 @@ focus_tree = {
 		}
 	}
 
-	# The hydroelectric works are an optional reconstruction project on either civil course.
 	focus = {
 		id = NAM_svetlogorsk_dam
 		icon = GFX_focus_generic_hydroelectric_energy
-		x = 51
-		y = 3
+		x = 2
+		y = 16
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2055,12 +1997,8 @@ focus_tree = {
 		id = NAM_state_plan
 		icon = GFX_focus_generic_military_industry
 		x = 20
-		y = 2
+		y = 10
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2084,12 +2022,8 @@ focus_tree = {
 		id = NAM_regional_trusts
 		icon = GFX_goal_generic_production2
 		x = 24
-		y = 2
+		y = 10
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2112,13 +2046,9 @@ focus_tree = {
 	focus = {
 		id = NAM_unified_standards
 		icon = GFX_goal_generic_scientific_exchange
-		x = 22
-		y = 3
+		x = 28
+		y = 11
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2145,13 +2075,9 @@ focus_tree = {
 	focus = {
 		id = NAM_state_logistics_grid
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 22
-		y = 4
+		x = 36
+		y = 18
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2185,13 +2111,9 @@ focus_tree = {
 	focus = {
 		id = NAM_state_project_bureaus
 		icon = GFX_goal_generic_scientific_exchange
-		x = 22
-		y = 5
+		x = 20
+		y = 20
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2215,13 +2137,13 @@ focus_tree = {
 	focus = {
 		id = NAM_public_utilities
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 112
-		y = 2
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 96
+		y = 5
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2244,13 +2166,13 @@ focus_tree = {
 	focus = {
 		id = NAM_municipal_services
 		icon = GFX_focus_generic_vote
-		x = 116
-		y = 2
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 80
+		y = 5
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2273,13 +2195,13 @@ focus_tree = {
 	focus = {
 		id = NAM_civic_audit
 		icon = GFX_focus_generic_printing_press
-		x = 114
-		y = 3
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 84
+		y = 6
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2311,13 +2233,13 @@ focus_tree = {
 	focus = {
 		id = NAM_district_workshops
 		icon = GFX_goal_generic_production2
-		x = 108
-		y = 4
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 88
+		y = 7
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2354,13 +2276,13 @@ focus_tree = {
 	focus = {
 		id = NAM_open_libraries
 		icon = GFX_goal_generic_scientific_exchange
-		x = 116
-		y = 4
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 92
+		y = 8
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2386,13 +2308,13 @@ focus_tree = {
 	focus = {
 		id = NAM_pragmatic_compact
 		icon = GFX_focus_generic_treaty
-		x = 80
+		x = 148
 		y = 1
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2421,13 +2343,13 @@ focus_tree = {
 	focus = {
 		id = NAM_commercial_courts
 		icon = GFX_focus_generic_court
-		x = 76
-		y = 2
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 140
+		y = 3
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2449,13 +2371,13 @@ focus_tree = {
 	focus = {
 		id = NAM_export_clearing
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 74
-		y = 3
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 144
+		y = 4
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2478,13 +2400,13 @@ focus_tree = {
 	focus = {
 		id = NAM_machine_tool_contracts
 		icon = GFX_goal_generic_production2
-		x = 78
-		y = 3
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 148
+		y = 4
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2507,13 +2429,13 @@ focus_tree = {
 	focus = {
 		id = NAM_contract_register
 		icon = GFX_focus_generic_printing_press
-		x = 76
-		y = 4
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 152
+		y = 5
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2545,13 +2467,13 @@ focus_tree = {
 	focus = {
 		id = NAM_port_agreement
 		icon = GFX_goal_generic_navy_cruiser
-		x = 84
-		y = 2
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 156
+		y = 3
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2579,13 +2501,13 @@ focus_tree = {
 	focus = {
 		id = NAM_warehouse_receipts
 		icon = GFX_goal_generic_oil_refinery
-		x = 83
-		y = 3
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 140
+		y = 4
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2609,13 +2531,13 @@ focus_tree = {
 	focus = {
 		id = NAM_insured_caravans
 		icon = GFX_goal_generic_navy_cruiser
-		x = 85
-		y = 4
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 144
+		y = 5
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2643,13 +2565,13 @@ focus_tree = {
 	focus = {
 		id = NAM_commercial_reserve
 		icon = GFX_goal_generic_consumer_goods
-		x = 76
-		y = 5
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 148
+		y = 6
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2674,13 +2596,13 @@ focus_tree = {
 	focus = {
 		id = NAM_balanced_accounts
 		icon = GFX_focus_generic_treaty
-		x = 79
-		y = 7
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 152
+		y = 8
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2715,13 +2637,13 @@ focus_tree = {
 	focus = {
 		id = NAM_prag_ending_republic
 		icon = GFX_focus_generic_treaty
-		x = 78
-		y = 8
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 156
+		y = 9
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2758,13 +2680,13 @@ focus_tree = {
 	focus = {
 		id = NAM_prag_ending_directorate
 		icon = GFX_focus_generic_treaty
-		x = 80
-		y = 8
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 140
+		y = 9
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2802,13 +2724,13 @@ focus_tree = {
 	focus = {
 		id = NAM_prag_settlement_agreements
 		icon = GFX_focus_generic_treaty
-		x = 73
-		y = 5
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 144
+		y = 6
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2842,13 +2764,13 @@ focus_tree = {
 	focus = {
 		id = NAM_prag_partner_supply
 		icon = GFX_focus_generic_treaty
-		x = 73
-		y = 6
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 148
+		y = 7
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2879,13 +2801,13 @@ focus_tree = {
 	focus = {
 		id = NAM_prag_south_guarantees
 		icon = GFX_focus_generic_treaty
-		x = 73
-		y = 10
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 152
+		y = 9
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2923,13 +2845,9 @@ focus_tree = {
 	focus = {
 		id = NAM_civil_service_exam
 		icon = GFX_focus_generic_printing_press
-		x = 12
+		x = 36
 		y = 4
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -2962,13 +2880,9 @@ focus_tree = {
 	focus = {
 		id = NAM_appointed_prefects
 		icon = GFX_goal_generic_national_unity
-		x = 16
+		x = 40
 		y = 4
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3001,13 +2915,9 @@ focus_tree = {
 	focus = {
 		id = NAM_building_code
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 20
-		y = 6
+		x = 32
+		y = 21
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3039,13 +2949,9 @@ focus_tree = {
 	focus = {
 		id = NAM_distribution_board
 		icon = GFX_goal_generic_production2
-		x = 24
-		y = 6
+		x = 28
+		y = 21
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3077,13 +2983,9 @@ focus_tree = {
 	focus = {
 		id = NAM_works_commission
 		icon = GFX_goal_generic_scientific_exchange
-		x = 22
-		y = 7
+		x = 36
+		y = 22
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3111,13 +3013,9 @@ focus_tree = {
 	focus = {
 		id = NAM_development_bank
 		icon = GFX_goal_generic_production2
-		x = 20
-		y = 8
+		x = 24
+		y = 23
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3140,13 +3038,9 @@ focus_tree = {
 	focus = {
 		id = NAM_basin_reservoirs
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 24
-		y = 8
+		x = 40
+		y = 23
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3177,13 +3071,9 @@ focus_tree = {
 	focus = {
 		id = NAM_engineering_collegium
 		icon = GFX_goal_generic_scientific_exchange
-		x = 22
-		y = 9
+		x = 32
+		y = 23
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3210,13 +3100,9 @@ focus_tree = {
 	focus = {
 		id = NAM_district_inspectorate
 		icon = GFX_focus_generic_printing_press
-		x = 18
-		y = 9
+		x = 32
+		y = 24
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3252,13 +3138,9 @@ focus_tree = {
 	focus = {
 		id = NAM_reconstruction_statute
 		icon = GFX_goal_generic_national_unity
-		x = 20
-		y = 10
+		x = 40
+		y = 25
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		offset = {
-			x = 10
-			trigger = { NAM_prewar_service_mandate = yes }
-		}
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3293,13 +3175,13 @@ focus_tree = {
 	focus = {
 		id = NAM_merchant_charter
 		icon = GFX_goal_generic_production2
-		x = 87
-		y = 3
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 156
+		y = 5
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3322,13 +3204,13 @@ focus_tree = {
 	focus = {
 		id = NAM_foreign_patents
 		icon = GFX_goal_generic_scientific_exchange
-		x = 74
-		y = 6
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 140
+		y = 7
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3356,13 +3238,13 @@ focus_tree = {
 	focus = {
 		id = NAM_domestic_designs
 		icon = GFX_goal_generic_scientific_exchange
-		x = 78
-		y = 6
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 144
+		y = 7
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3394,13 +3276,13 @@ focus_tree = {
 	focus = {
 		id = NAM_customs_clearinghouse
 		icon = GFX_focus_generic_printing_press
-		x = 75
-		y = 7
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 148
+		y = 8
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3433,13 +3315,13 @@ focus_tree = {
 	focus = {
 		id = NAM_freight_exchange
 		icon = GFX_goal_generic_production2
-		x = 87
-		y = 5
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 152
+		y = 6
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3469,13 +3351,13 @@ focus_tree = {
 	focus = {
 		id = NAM_repair_depots
 		icon = GFX_goal_generic_production2
-		x = 83
-		y = 6
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 156
+		y = 8
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3508,13 +3390,13 @@ focus_tree = {
 	focus = {
 		id = NAM_licensed_assembly
 		icon = GFX_goal_generic_production2
-		x = 87
-		y = 6
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 140
+		y = 8
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3546,13 +3428,13 @@ focus_tree = {
 	focus = {
 		id = NAM_port_polytechnic
 		icon = GFX_goal_generic_scientific_exchange
-		x = 85
-		y = 7
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		x = 144
+		y = 9
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3583,13 +3465,13 @@ focus_tree = {
 	focus = {
 		id = NAM_municipal_bonds
 		icon = GFX_focus_generic_printing_press
-		x = 82
+		x = 148
 		y = 9
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3624,13 +3506,13 @@ focus_tree = {
 	focus = {
 		id = NAM_commercial_commonwealth
 		icon = GFX_goal_generic_national_unity
-		x = 83
+		x = 152
 		y = 10
-		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		offset = {
-			x = -52
+			x = -120
 			trigger = { NAM_prewar_pragmatic_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3665,13 +3547,13 @@ focus_tree = {
 	focus = {
 		id = NAM_rural_grid
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 112
-		y = 4
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 96
+		y = 6
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3695,13 +3577,13 @@ focus_tree = {
 	focus = {
 		id = NAM_returnee_offices
 		icon = GFX_goal_generic_national_unity
-		x = 110
-		y = 5
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 80
+		y = 6
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3724,13 +3606,13 @@ focus_tree = {
 	focus = {
 		id = NAM_district_scholarships
 		icon = GFX_goal_generic_scientific_exchange
-		x = 116
-		y = 5
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 84
+		y = 9
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3757,13 +3639,13 @@ focus_tree = {
 	focus = {
 		id = NAM_municipal_land
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 111
-		y = 6
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 88
+		y = 11
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3798,13 +3680,13 @@ focus_tree = {
 	focus = {
 		id = NAM_tenant_councils
 		icon = GFX_goal_generic_national_unity
-		x = 115
-		y = 6
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 92
+		y = 11
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3840,13 +3722,13 @@ focus_tree = {
 	focus = {
 		id = NAM_water_boards
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 113
-		y = 7
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 96
+		y = 12
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3896,13 +3778,13 @@ focus_tree = {
 	focus = {
 		id = NAM_public_credit
 		icon = GFX_goal_generic_production2
-		x = 110
-		y = 8
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 80
+		y = 9
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3936,13 +3818,13 @@ focus_tree = {
 	focus = {
 		id = NAM_workers_inspection
 		icon = GFX_goal_generic_production2
-		x = 114
-		y = 8
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 84
+		y = 13
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -3973,13 +3855,13 @@ focus_tree = {
 	focus = {
 		id = NAM_regional_university
 		icon = GFX_goal_generic_scientific_exchange
-		x = 116
-		y = 9
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 88
+		y = 14
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -4013,13 +3895,13 @@ focus_tree = {
 	focus = {
 		id = NAM_common_citizenship
 		icon = GFX_goal_generic_national_unity
-		x = 112
-		y = 10
-		allow_branch = { NAM_prewar_district_mandate = yes }
+		x = 92
+		y = 15
 		offset = {
-			x = -82
+			x = -60
 			trigger = { NAM_prewar_district_mandate = yes }
 		}
+		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -4052,11 +3934,11 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
-	 focus = {
+	focus = {
 		id = NAM_border_administration
 		icon = GFX_goal_generic_political_pressure
-		x = 8
-		y = 4
+		x = 10
+		y = 30
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -4080,11 +3962,11 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
-	 focus = {
+	focus = {
 		id = NAM_border_security
 		icon = GFX_goal_generic_political_pressure
-		x = 6
-		y = 5
+		x = 2
+		y = 31
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -4112,11 +3994,11 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
-	 focus = {
+	focus = {
 		id = NAM_border_compacts
 		icon = GFX_goal_generic_political_pressure
-		x = 10
-		y = 5
+		x = 6
+		y = 31
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -4142,13 +4024,11 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
-
-
-	 focus = {
+	focus = {
 		id = NAM_border_citizenship
 		icon = GFX_goal_generic_political_pressure
-		x = 8
-		y = 6
+		x = 10
+		y = 32
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -4169,6 +4049,4659 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_border_incorporation
 			custom_effect_tooltip = NAM_border_incorporation_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_constitutional_committee
+		icon = GFX_focus_generic_court
+		x = 24
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_constitutional_committee_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_political_power_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_cabinet_statute
+		icon = GFX_focus_generic_court
+		x = 28
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_state_chamber
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_cabinet_statute_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_state_chamber
+		icon = GFX_focus_generic_court
+		x = 20
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_cabinet_statute
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_state_chamber_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_tax_collection
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_regional_conference
+		icon = GFX_focus_generic_court
+		x = 24
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_cabinet_statute
+			focus = NAM_pw_state_chamber
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_regional_conference_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_succession_statute
+		icon = GFX_focus_generic_court
+		x = 28
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_cabinet_statute
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_succession_statute_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_political_power_gain
+					value = 0.05
+				}
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_public_accounts
+		icon = GFX_focus_generic_court
+		x = 20
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_state_chamber
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_public_accounts_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.04
+				}
+				add_to_variable = {
+					var = NAM_adm_tax_collection
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_cadastre
+		icon = GFX_focus_generic_printing_press
+		x = 36
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_seal_registry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_cadastre
+			custom_effect_tooltip = NAM_program_cadastre_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_civil_payroll
+		icon = GFX_focus_generic_printing_press
+		x = 40
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_seal_registry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_civil_payroll_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = 0.02
+				}
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_provincial_records
+		icon = GFX_focus_generic_printing_press
+		x = 32
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_seal_registry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_provincial_records_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_administrative_courts
+		icon = GFX_focus_generic_printing_press
+		x = 36
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_cadastre
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_administrative_courts_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_resistance_growth
+					value = -0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_public_procurement
+		icon = GFX_focus_generic_printing_press
+		x = 40
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_civil_payroll
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_public_procurement_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_central_treasury
+		icon = GFX_focus_generic_printing_press
+		x = 32
+		y = 7
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_administrative_courts
+			focus = NAM_pw_public_procurement
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_central_treasury_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_tax_collection
+					value = 0.05
+				}
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_industrial_commission
+		icon = GFX_focus_generic_military_industry
+		x = 28
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_industrial_commission
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_tool_reserve
+		icon = GFX_focus_generic_military_industry
+		x = 20
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_tool_reserve
+			custom_effect_tooltip = NAM_program_tool_reserve_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_public_supply
+		icon = GFX_focus_generic_military_industry
+		x = 24
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_public_supply_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.04
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_industrial_credit
+		icon = GFX_focus_generic_military_industry
+		x = 28
+		y = 13
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_industrial_commission
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_export_guarantees
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_industrial_credit_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = 0.06
+				}
+				add_to_variable = {
+					var = NAM_adm_trade_income
+					value = -0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_export_guarantees
+		icon = GFX_focus_generic_military_industry
+		x = 20
+		y = 13
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_tool_reserve
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_industrial_credit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_export_guarantees_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_trade_income
+					value = 0.08
+				}
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = -0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_labour_code
+		icon = GFX_focus_generic_low_cost_housing
+		x = 32
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_labour_code_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_company_housing
+		icon = GFX_focus_generic_low_cost_housing
+		x = 36
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_insurance_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			owns_state = 688
+			controls_state = 688
+			688 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_company_housing
+			custom_effect_tooltip = NAM_program_company_housing_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_insurance_fund
+		icon = GFX_focus_generic_low_cost_housing
+		x = 40
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_company_housing
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_insurance_fund_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.06
+				}
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_technical_training
+		icon = GFX_focus_generic_low_cost_housing
+		x = 32
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_company_housing
+			focus = NAM_pw_insurance_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_technical_training
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_family_pensions
+		icon = GFX_focus_generic_low_cost_housing
+		x = 36
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_company_housing
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_family_pensions_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.04
+				}
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_labour_inspection
+		icon = GFX_focus_generic_low_cost_housing
+		x = 40
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_insurance_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_labour_inspection_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_employment_offices
+		icon = GFX_focus_generic_low_cost_housing
+		x = 32
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_labour_code
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 4000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_arbitration_commissions
+		icon = GFX_focus_generic_low_cost_housing
+		x = 36
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_technical_training
+			focus = NAM_pw_family_pensions
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_arbitration_commissions_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.03
+				}
+				add_to_variable = {
+					var = NAM_adm_industrial_capacity_factory
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_public_works_contract
+		icon = GFX_focus_generic_low_cost_housing
+		x = 40
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_labour_inspection
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			owns_state = 690
+			controls_state = 690
+			690 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_public_works_contract
+			custom_effect_tooltip = NAM_program_public_works_contract_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_social_budget
+		icon = GFX_focus_generic_low_cost_housing
+		x = 32
+		y = 13
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_employment_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_social_budget_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.03
+				}
+				add_to_variable = {
+					var = NAM_adm_tax_collection
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_military_governors
+		icon = GFX_goal_generic_political_pressure
+		x = 20
+		y = 21
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_civil_police
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_military_governors_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_resistance_growth
+					value = -0.08
+				}
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = -0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_civil_police
+		icon = GFX_goal_generic_political_pressure
+		x = 24
+		y = 21
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_military_governors
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_civil_police_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_resistance_growth
+					value = -0.04
+				}
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = 0.02
+				}
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_mobilisation_register
+		icon = GFX_goal_generic_political_pressure
+		x = 28
+		y = 22
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_military_governors
+			focus = NAM_pw_civil_police
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 3000
+			army_experience = 15
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_armament_inspectorate
+		icon = GFX_goal_generic_political_pressure
+		x = 20
+		y = 22
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_military_governors
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_armament_inspectorate
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_officer_appointments
+		icon = GFX_goal_generic_political_pressure
+		x = 24
+		y = 22
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_civil_police
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_officer_appointments_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_planning_speed
+					value = 0.05
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_strategic_guard
+		icon = GFX_goal_generic_political_pressure
+		x = 28
+		y = 23
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_mobilisation_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_strategic_guard_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_army_defence
+					value = 0.04
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_defence_accounts
+		icon = GFX_goal_generic_political_pressure
+		x = 20
+		y = 23
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_military_governors
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_defence_accounts_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_survey_corps
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 32
+		y = 19
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_survey_corps
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_state_warehouses
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 36
+		y = 19
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			owns_state = 719
+			controls_state = 719
+			719 = {
+				free_building_slots = {
+					building = fuel_silo
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_state_warehouses
+			custom_effect_tooltip = NAM_program_state_warehouses_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_standard_projects
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 40
+		y = 20
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_service_state
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_local_design_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_standard_projects_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_local_design_offices
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 32
+		y = 20
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_survey_corps
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_standard_projects
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_local_design_offices_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_research_speed_factor
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_budget
+		icon = GFX_goal_generic_demand_territory
+		x = 20
+		y = 26
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_south_black_basin
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_budget
+			custom_effect_tooltip = NAM_program_southern_budget_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_intelligence
+		icon = GFX_goal_generic_demand_territory
+		x = 24
+		y = 27
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_south_black_basin
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_southern_intelligence_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_planning_speed
+					value = 0.08
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_civil_service
+		icon = GFX_goal_generic_demand_territory
+		x = 28
+		y = 26
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_south_black_basin
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_civil_service_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_military_rule
+		icon = GFX_goal_generic_demand_territory
+		x = 20
+		y = 28
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_budget
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_southern_local_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_military_rule_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_resistance_growth
+					value = -0.08
+				}
+				add_to_variable = {
+					var = NAM_adm_trade_income
+					value = -0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_local_offices
+		icon = GFX_goal_generic_demand_territory
+		x = 24
+		y = 28
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_intelligence
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_southern_military_rule
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_local_offices_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.05
+				}
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_supply_plan
+		icon = GFX_goal_generic_demand_territory
+		x = 28
+		y = 29
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_military_rule
+			focus = NAM_pw_southern_local_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_southern_supply_plan_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.05
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_reserve
+		icon = GFX_goal_generic_demand_territory
+		x = 20
+		y = 29
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_budget
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_reserve
+			custom_effect_tooltip = NAM_program_southern_reserve_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_postwar_commission
+		icon = GFX_focus_generic_court
+		x = 32
+		y = 52
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_south_heritage
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_postwar_commission_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_political_power_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_strategic_reserve
+		icon = GFX_focus_generic_court
+		x = 36
+		y = 52
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_south_heritage
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_development_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_strategic_reserve
+			custom_effect_tooltip = NAM_program_strategic_reserve_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_development_fund
+		icon = GFX_focus_generic_court
+		x = 40
+		y = 52
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_south_heritage
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_strategic_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_development_fund
+			custom_effect_tooltip = NAM_program_development_fund_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_war_accounts
+		icon = GFX_focus_generic_court
+		x = 32
+		y = 53
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_strategic_reserve
+			focus = NAM_pw_development_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_war_accounts_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_schools
+		icon = GFX_focus_generic_court
+		x = 36
+		y = 53
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_strategic_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_schools_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_research_speed_factor
+					value = 0.025
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_unified_budget
+		icon = GFX_focus_generic_court
+		x = 40
+		y = 53
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_development_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_unified_budget_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_tax_collection
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_demobilisation_board
+		icon = GFX_focus_generic_court
+		x = 32
+		y = 54
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_postwar_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 4000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_industrial_repair
+		icon = GFX_focus_generic_court
+		x = 36
+		y = 54
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_war_accounts
+			focus = NAM_pw_southern_schools
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_industrial_repair_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_civil_administration
+		icon = GFX_focus_generic_court
+		x = 40
+		y = 54
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_unified_budget
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_civil_administration_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.04
+				}
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_permanent_institutions
+		icon = GFX_focus_generic_court
+		x = 32
+		y = 55
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		prerequisite = {
+			focus = NAM_pw_demobilisation_board
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_permanent_institutions_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_admin_expense
+					value = -0.03
+				}
+				add_to_variable = {
+					var = NAM_adm_political_power_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_municipal_repair
+		icon = GFX_focus_generic_economic_recovery
+		x = 6
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_municipal_repair
+			custom_effect_tooltip = NAM_program_municipal_repair_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_returnee_registration
+		icon = GFX_focus_generic_economic_recovery
+		x = 10
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 4000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_oil_laboratories
+		icon = GFX_goal_generic_oil_refinery
+		x = 2
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_oil_ministry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_oil_laboratories
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_oil_equipment
+		icon = GFX_goal_generic_oil_refinery
+		x = 6
+		y = 12
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_oil_ministry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_oil_equipment_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_refinery_engineering
+		icon = GFX_goal_generic_oil_refinery
+		x = 10
+		y = 11
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_oil_ministry
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_refinery_engineering
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_fuel_reservoirs
+		icon = GFX_goal_generic_oil_refinery
+		x = 40
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_freight_depots
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 67
+			controls_state = 67
+			67 = {
+				free_building_slots = {
+					building = fuel_silo
+					size = 2
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_fuel_reservoirs
+			custom_effect_tooltip = NAM_program_fuel_reservoirs_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_energy_commission
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_energy_commission
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_regional_power
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 690
+			controls_state = 690
+			690 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_regional_power
+			custom_effect_tooltip = NAM_program_regional_power_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_power_grid
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 17
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_civil_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_power_grid_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_oilfield_substations
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 17
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_energy_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 67
+			controls_state = 67
+			67 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_oilfield_substations
+			custom_effect_tooltip = NAM_program_oilfield_substations_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_water_intakes
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 18
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_regional_power
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_irrigation_works
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_water_intakes_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_stability_factor
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_irrigation_works
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 18
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_power_grid
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_water_intakes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 689
+			controls_state = 689
+			689 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_irrigation_works
+			custom_effect_tooltip = NAM_program_irrigation_works_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_reservoir_survey
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 19
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_water_intakes
+			focus = NAM_pw_irrigation_works
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_reservoir_survey
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_power_reserve
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 50
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_airfield_network
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_power_reserve_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_grid_dispatch
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 19
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_irrigation_works
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_grid_dispatch_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_industrial_capacity_factory
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_industrial_recovery
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 46
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_recognition
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_industrial_recovery
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_civil_engineering
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 50
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_recognition
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_arms_engineering
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_civil_engineering
+			custom_effect_tooltip = NAM_program_civil_engineering_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_arms_engineering
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 54
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_recognition
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_civil_engineering
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = {
+					building = arms_factory
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_arms_engineering
+			custom_effect_tooltip = NAM_program_arms_engineering_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_toolmaking
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_civil_engineering
+			focus = NAM_pw_arms_engineering
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_toolmaking_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_machine_repair
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 50
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_civil_engineering
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_machine_repair
+			custom_effect_tooltip = NAM_program_machine_repair_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_chemical_works
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 54
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_arms_engineering
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_chemical_works
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_testing_facilities
+		icon = GFX_goal_generic_scientific_exchange
+		x = 46
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_industrial_recovery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_testing_facilities_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_research_speed_factor
+					value = 0.025
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_industrial_sites
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 50
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_toolmaking
+			focus = NAM_pw_machine_repair
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_industrial_sites_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_civilian_speed
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_components
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 54
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_chemical_works
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_components_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_industrial_capacity_factory
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_production_cycle
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 46
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_testing_facilities
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_production_cycle_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.05
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_transport_commission
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 28
+		y = 38
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_svetlogorye
+		}
+		prerequisite = {
+			focus = NAM_oil_exchange
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_transport_commission
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_rail_priority
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 40
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_road_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_rail_priority
+			custom_effect_tooltip = NAM_program_rail_priority_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_road_priority
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 40
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_rail_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_road_priority
+			custom_effect_tooltip = NAM_program_road_priority_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_rail_workshops
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_rail_priority
+			focus = NAM_pw_road_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_rail_workshops_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_efficiency_gain
+					value = 0.03
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_river_crossings
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_rail_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 689
+			controls_state = 689
+			689 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_river_crossings
+			custom_effect_tooltip = NAM_program_river_crossings_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_freight_depots
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_road_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 719
+			controls_state = 719
+			719 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_freight_depots
+			custom_effect_tooltip = NAM_program_freight_depots_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_transport_maintenance
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_transport_maintenance_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.03
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_logistics_depots
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_rail_workshops
+			focus = NAM_pw_river_crossings
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 690
+			controls_state = 690
+			690 = {
+				free_building_slots = {
+					building = fuel_silo
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_logistics_depots
+			custom_effect_tooltip = NAM_program_logistics_depots_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_corridor
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_freight_depots
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 688
+			controls_state = 688
+			688 = {
+				infrastructure < 5
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_corridor
+			custom_effect_tooltip = NAM_program_southern_corridor_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_freight_schedule
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_maintenance
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_freight_schedule_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.04
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_district_hospitals
+		icon = GFX_focus_generic_university_2
+		x = 2
+		y = 32
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_law_after_war
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 4000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_school_network
+		icon = GFX_focus_generic_university_2
+		x = 6
+		y = 33
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_law_after_war
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_civil_communications
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_school_network_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_research_speed_factor
+					value = 0.02
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_civil_communications
+		icon = GFX_focus_generic_university_2
+		x = 10
+		y = 33
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_law_after_war
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_school_network
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_civil_communications
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_regional_reconstruction
+		icon = GFX_focus_generic_university_2
+		x = 2
+		y = 34
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_school_network
+			focus = NAM_pw_civil_communications
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 719
+			controls_state = 719
+			719 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_regional_reconstruction
+			custom_effect_tooltip = NAM_program_regional_reconstruction_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_army_review
+		icon = GFX_goal_generic_army_doctrines
+		x = 16
+		y = 40
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 40
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_breakthrough_army
+		icon = GFX_goal_generic_army_tanks
+		x = 20
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_army_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_mobile_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_breakthrough_army_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_army_org
+					value = 0.04
+				}
+				add_to_variable = {
+					var = NAM_gar_army_speed
+					value = -0.02
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_mobile_army
+		icon = GFX_goal_generic_army_motorized
+		x = 24
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_army_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_breakthrough_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_mobile_army_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_army_speed
+					value = 0.06
+				}
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = 0.03
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_reserve_centres
+		icon = GFX_goal_generic_small_arms
+		x = 16
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_breakthrough_army
+			focus = NAM_pw_mobile_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_reserve_centres
+			custom_effect_tooltip = NAM_program_reserve_centres_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_engineer_units
+		icon = GFX_goal_generic_army_doctrines
+		x = 20
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_breakthrough_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_engineer_units
+			custom_effect_tooltip = NAM_program_engineer_units_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_field_workshops
+		icon = GFX_goal_generic_army_doctrines
+		x = 24
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_mobile_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_field_workshops_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.04
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_artillery_observers
+		icon = GFX_goal_generic_army_artillery2
+		x = 16
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_army_review
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_artillery_observers
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_staff_exercises
+		icon = GFX_goal_generic_army_doctrines
+		x = 20
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_reserve_centres
+			focus = NAM_pw_engineer_units
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 30
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_staff_exercises_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_planning_speed
+					value = 0.04
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_combined_arms
+		icon = GFX_goal_generic_small_arms
+		x = 24
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_field_workshops
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_combined_arms
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_army
+		icon = GFX_goal_generic_army_doctrines
+		x = 16
+		y = 44
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_artillery_observers
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_southern_army_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_army_defence
+					value = 0.04
+				}
+				add_to_variable = {
+					var = NAM_gar_army_org
+					value = 0.03
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_naval_review
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 32
+		y = 40
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			navy_experience = 40
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_escort_fleet
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 36
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_naval_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_strike_fleet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_pw_escort_fleet_navy_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_convoy_escort
+					value = 0.1
+				}
+				add_to_variable = {
+					var = NAM_navy_organisation
+					value = -0.03
+				}
+				NAM_refresh_navy = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_strike_fleet
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 40
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_naval_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_escort_fleet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_pw_strike_fleet_navy_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_navy_organisation
+					value = 0.08
+				}
+				add_to_variable = {
+					var = NAM_gar_convoy_escort
+					value = -0.04
+				}
+				NAM_refresh_navy = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_naval_workshops
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 32
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_escort_fleet
+			focus = NAM_pw_strike_fleet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_pw_naval_workshops_navy_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_navy_repair_speed
+					value = 0.1
+				}
+				NAM_refresh_navy = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_crew_schools
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 36
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_escort_fleet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			navy_experience = 40
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_naval_fuel_depots
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 40
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_strike_fleet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 688
+			controls_state = 688
+			688 = {
+				free_building_slots = {
+					building = fuel_silo
+					size = 2
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_naval_fuel_depots
+			custom_effect_tooltip = NAM_program_naval_fuel_depots_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_landing_supply
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 32
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_naval_review
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_landing_supply
+			custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_naval_service
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 36
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_naval_workshops
+			focus = NAM_pw_crew_schools
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_pw_naval_service_navy_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_navy_landing_speed
+					value = 0.08
+				}
+				add_to_variable = {
+					var = NAM_navy_repair_speed
+					value = 0.05
+				}
+				NAM_refresh_navy = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_air_review
+		icon = GFX_goal_generic_air_doctrine
+		x = 46
+		y = 40
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			air_experience = 40
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_air_defence
+		icon = GFX_goal_generic_air_fighter2
+		x = 50
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_air_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_frontline_air
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_air_defence_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_air_intercept_efficiency
+					value = 0.1
+				}
+				add_to_variable = {
+					var = NAM_air_cas_efficiency
+					value = -0.04
+				}
+				NAM_refresh_air = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_frontline_air
+		icon = GFX_goal_generic_air_bomber
+		x = 54
+		y = 41
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_air_review
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_air_defence
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_frontline_air_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_air_cas_efficiency
+					value = 0.1
+				}
+				add_to_variable = {
+					var = NAM_air_intercept_efficiency
+					value = -0.04
+				}
+				NAM_refresh_air = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_airfield_network
+		icon = GFX_goal_generic_air_doctrine
+		x = 46
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_air_defence
+			focus = NAM_pw_frontline_air
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				air_base < 9
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_airfield_network
+			custom_effect_tooltip = NAM_program_airfield_network_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_flight_schools
+		icon = GFX_goal_generic_air_doctrine
+		x = 50
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_air_defence
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			air_experience = 20
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_flight_schools_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_air_accidents
+					value = -0.08
+				}
+				NAM_refresh_air = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_radar_posts
+		icon = GFX_goal_generic_air_doctrine
+		x = 54
+		y = 42
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_frontline_air
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				radar_station < 6
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_radar_posts
+			custom_effect_tooltip = NAM_program_radar_posts_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_engine_workshops
+		icon = GFX_goal_generic_air_production
+		x = 46
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_air_review
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_pw_engine_workshops
+				bonus = 0.5
+				uses = 1
+				category = air_equipment
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_air_supply
+		icon = GFX_goal_generic_air_doctrine
+		x = 50
+		y = 44
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_airfield_network
+			focus = NAM_pw_flight_schools
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			700 = {
+				free_building_slots = {
+					building = fuel_silo
+					size = 1
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_air_supply
+			custom_effect_tooltip = NAM_program_air_supply_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_ground_control
+		icon = GFX_goal_generic_air_doctrine
+		x = 54
+		y = 43
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_radar_posts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_ground_control_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_air_mission_efficiency
+					value = 0.05
+				}
+				NAM_refresh_air = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_air_command
+		icon = GFX_goal_generic_air_doctrine
+		x = 46
+		y = 44
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		prerequisite = {
+			focus = NAM_pw_engine_workshops
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			air_experience = 30
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_southern_air_command_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_air_mission_efficiency
+					value = 0.03
+				}
+				NAM_refresh_air = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

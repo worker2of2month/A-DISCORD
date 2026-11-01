@@ -222,6 +222,12 @@ NAM_postwar_plan = {
 		NAM_south_oil_for_water
 		NAM_south_fenn_guarantee
 		NAM_svetlogorye
+		NAM_pw_transport_commission
+		NAM_pw_army_review
+		NAM_pw_artillery_observers
+		NAM_pw_southern_army
+		NAM_pw_transport_maintenance
+		NAM_pw_freight_schedule
 		NAM_south_oil_charter
 		NAM_rural_grid
 		NAM_returnee_offices
@@ -242,6 +248,51 @@ NAM_postwar_plan = {
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
+		NAM_pw_municipal_repair
+		NAM_pw_returnee_registration
+		NAM_pw_oil_laboratories
+		NAM_pw_oil_equipment
+		NAM_pw_refinery_engineering
+		NAM_pw_road_priority
+		NAM_pw_freight_depots
+		NAM_pw_fuel_reservoirs
+		NAM_pw_energy_commission
+		NAM_pw_regional_power
+		NAM_pw_power_grid
+		NAM_pw_oilfield_substations
+		NAM_pw_water_intakes
+		NAM_pw_reservoir_survey
+		NAM_pw_air_review
+		NAM_pw_air_defence
+		NAM_pw_airfield_network
+		NAM_pw_power_reserve
+		NAM_pw_industrial_recovery
+		NAM_pw_civil_engineering
+		NAM_pw_toolmaking
+		NAM_pw_machine_repair
+		NAM_pw_testing_facilities
+		NAM_pw_industrial_sites
+		NAM_pw_production_cycle
+		NAM_pw_rail_workshops
+		NAM_pw_logistics_depots
+		NAM_pw_southern_corridor
+		NAM_pw_district_hospitals
+		NAM_pw_school_network
+		NAM_pw_regional_reconstruction
+		NAM_pw_breakthrough_army
+		NAM_pw_reserve_centres
+		NAM_pw_engineer_units
+		NAM_pw_staff_exercises
+		NAM_pw_naval_review
+		NAM_pw_escort_fleet
+		NAM_pw_naval_workshops
+		NAM_pw_crew_schools
+		NAM_pw_landing_supply
+		NAM_pw_naval_service
+		NAM_pw_flight_schools
+		NAM_pw_engine_workshops
+		NAM_pw_air_supply
+		NAM_pw_southern_air_command
 	}
 	weight = { factor = 20 }
 }
@@ -293,6 +344,12 @@ NAM_postwar_vertical_plan = {
 		NAM_south_black_basin
 		NAM_south_desert_offices
 		NAM_svetlogorye
+		NAM_pw_transport_commission
+		NAM_pw_army_review
+		NAM_pw_artillery_observers
+		NAM_pw_southern_army
+		NAM_pw_transport_maintenance
+		NAM_pw_freight_schedule
 		NAM_south_seal_over_furnaces
 		NAM_civil_service_exam
 		NAM_building_code
@@ -312,6 +369,93 @@ NAM_postwar_vertical_plan = {
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
+		NAM_pw_constitutional_committee
+		NAM_pw_cabinet_statute
+		NAM_pw_regional_conference
+		NAM_pw_succession_statute
+		NAM_pw_cadastre
+		NAM_pw_civil_payroll
+		NAM_pw_provincial_records
+		NAM_pw_administrative_courts
+		NAM_pw_public_procurement
+		NAM_pw_central_treasury
+		NAM_pw_industrial_commission
+		NAM_pw_tool_reserve
+		NAM_pw_public_supply
+		NAM_pw_industrial_credit
+		NAM_pw_labour_code
+		NAM_pw_company_housing
+		NAM_pw_technical_training
+		NAM_pw_family_pensions
+		NAM_pw_employment_offices
+		NAM_pw_arbitration_commissions
+		NAM_pw_social_budget
+		NAM_pw_military_governors
+		NAM_pw_mobilisation_register
+		NAM_pw_armament_inspectorate
+		NAM_pw_strategic_guard
+		NAM_pw_defence_accounts
+		NAM_pw_survey_corps
+		NAM_pw_state_warehouses
+		NAM_pw_standard_projects
+		NAM_pw_southern_budget
+		NAM_pw_southern_intelligence
+		NAM_pw_southern_civil_service
+		NAM_pw_southern_military_rule
+		NAM_pw_southern_supply_plan
+		NAM_pw_southern_reserve
+		NAM_pw_postwar_commission
+		NAM_pw_strategic_reserve
+		NAM_pw_war_accounts
+		NAM_pw_southern_schools
+		NAM_pw_demobilisation_board
+		NAM_pw_southern_industrial_repair
+		NAM_pw_permanent_institutions
+		NAM_pw_municipal_repair
+		NAM_pw_returnee_registration
+		NAM_pw_oil_laboratories
+		NAM_pw_oil_equipment
+		NAM_pw_refinery_engineering
+		NAM_pw_road_priority
+		NAM_pw_freight_depots
+		NAM_pw_fuel_reservoirs
+		NAM_pw_energy_commission
+		NAM_pw_regional_power
+		NAM_pw_power_grid
+		NAM_pw_oilfield_substations
+		NAM_pw_water_intakes
+		NAM_pw_reservoir_survey
+		NAM_pw_air_review
+		NAM_pw_air_defence
+		NAM_pw_airfield_network
+		NAM_pw_power_reserve
+		NAM_pw_industrial_recovery
+		NAM_pw_civil_engineering
+		NAM_pw_toolmaking
+		NAM_pw_machine_repair
+		NAM_pw_testing_facilities
+		NAM_pw_industrial_sites
+		NAM_pw_production_cycle
+		NAM_pw_rail_workshops
+		NAM_pw_logistics_depots
+		NAM_pw_southern_corridor
+		NAM_pw_district_hospitals
+		NAM_pw_school_network
+		NAM_pw_regional_reconstruction
+		NAM_pw_breakthrough_army
+		NAM_pw_reserve_centres
+		NAM_pw_engineer_units
+		NAM_pw_staff_exercises
+		NAM_pw_naval_review
+		NAM_pw_escort_fleet
+		NAM_pw_naval_workshops
+		NAM_pw_crew_schools
+		NAM_pw_landing_supply
+		NAM_pw_naval_service
+		NAM_pw_flight_schools
+		NAM_pw_engine_workshops
+		NAM_pw_air_supply
+		NAM_pw_southern_air_command
 	}
 	weight = { factor = 20 }
 }
@@ -623,6 +767,12 @@ NAM_postwar_pragmatic_plan = {
 		NAM_border_compacts
 		NAM_normalisation
 		NAM_svetlogorye
+		NAM_pw_transport_commission
+		NAM_pw_army_review
+		NAM_pw_artillery_observers
+		NAM_pw_southern_army
+		NAM_pw_transport_maintenance
+		NAM_pw_freight_schedule
 		NAM_prag_ending_republic
 		NAM_svetlogorsk_dam
 		NAM_prag_south_guarantees
@@ -645,6 +795,51 @@ NAM_postwar_pragmatic_plan = {
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
+		NAM_pw_municipal_repair
+		NAM_pw_returnee_registration
+		NAM_pw_oil_laboratories
+		NAM_pw_oil_equipment
+		NAM_pw_refinery_engineering
+		NAM_pw_road_priority
+		NAM_pw_freight_depots
+		NAM_pw_fuel_reservoirs
+		NAM_pw_energy_commission
+		NAM_pw_regional_power
+		NAM_pw_power_grid
+		NAM_pw_oilfield_substations
+		NAM_pw_water_intakes
+		NAM_pw_reservoir_survey
+		NAM_pw_air_review
+		NAM_pw_air_defence
+		NAM_pw_airfield_network
+		NAM_pw_power_reserve
+		NAM_pw_industrial_recovery
+		NAM_pw_civil_engineering
+		NAM_pw_toolmaking
+		NAM_pw_machine_repair
+		NAM_pw_testing_facilities
+		NAM_pw_industrial_sites
+		NAM_pw_production_cycle
+		NAM_pw_rail_workshops
+		NAM_pw_logistics_depots
+		NAM_pw_southern_corridor
+		NAM_pw_district_hospitals
+		NAM_pw_school_network
+		NAM_pw_regional_reconstruction
+		NAM_pw_breakthrough_army
+		NAM_pw_reserve_centres
+		NAM_pw_engineer_units
+		NAM_pw_staff_exercises
+		NAM_pw_naval_review
+		NAM_pw_escort_fleet
+		NAM_pw_naval_workshops
+		NAM_pw_crew_schools
+		NAM_pw_landing_supply
+		NAM_pw_naval_service
+		NAM_pw_flight_schools
+		NAM_pw_engine_workshops
+		NAM_pw_air_supply
+		NAM_pw_southern_air_command
 	}
 	weight = { factor = 20 }
 }

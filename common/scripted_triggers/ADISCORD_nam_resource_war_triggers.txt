@@ -2143,3 +2143,14 @@ NAM_agreement_district_order_open = {
 		any_owned_state = { has_state_flag = NAM_agreement_building }
 	}
 }
+
+NAM_pw_southern_preparation_open = {
+	NAM_pw_operable = yes
+	OR = {
+		AND = {
+			has_completed_focus = NAM_svetlogorye
+			has_completed_focus = NAM_oil_exchange
+		}
+		has_global_flag = ADISCORD_south_final_started
+	}
+}

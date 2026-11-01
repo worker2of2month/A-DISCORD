@@ -352,7 +352,8 @@ class SouthLifecycleTests(unittest.TestCase):
             self.facts[(tag, "numeric", "date")] = 21650101
         for tag, names in {
             "SHL": ("SHL_conclave_army", "SHL_metal_market", "SHL_conclave_rules"),
-            "NAM": ("NAM_svetlogorye", "NAM_oil_exchange", "NAM_ladder_of_seals", "NAM_south_desert_offices"),
+            "NAM": ("NAM_svetlogorye", "NAM_oil_exchange", "NAM_ladder_of_seals", "NAM_south_desert_offices",
+                    "NAM_pw_transport_commission", "NAM_pw_southern_army", "NAM_pw_freight_schedule"),
         }.items():
             for name in names:
                 self.facts[(tag, "has_completed_focus", name)] = True
@@ -619,7 +620,8 @@ class SouthLifecycleTests(unittest.TestCase):
             for key in list(self.facts):
                 if key[0] == "NAM" and key[1] == "has_completed_focus":
                     self.facts[key] = False
-            for name in ("NAM_svetlogorye", "NAM_oil_exchange", capstone):
+            for name in ("NAM_svetlogorye", "NAM_oil_exchange", capstone,
+                         "NAM_pw_transport_commission", "NAM_pw_southern_army", "NAM_pw_freight_schedule"):
                 self.facts[("NAM", "has_completed_focus", name)] = True
             self.assertFalse(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"), capstone)
             self.facts[("NAM", "has_completed_focus", foreign)] = True
@@ -1141,7 +1143,7 @@ class FocusAggregateTests(unittest.TestCase):
                 self.assertEqual(applied, delta, identifier)
                 self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
                 checked += 1
-        self.assertEqual(checked, 108)
+        self.assertEqual(checked, 175)
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)

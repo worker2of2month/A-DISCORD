@@ -10022,3 +10022,1272 @@ NAM_agreement_check_crisis = {
 		country_event = { id = ADISCORD_nam_groups.22 hours = 1 }
 	}
 }
+
+# Paid postwar orders settle once and release their shared channel.
+NAM_program_cadastre_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_cadastre_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 500
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_cadastre_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_cadastre_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_cadastre_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					infrastructure < 5
+				}
+			}
+			700 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_cadastre_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_cadastre_refund = yes
+		}
+	}
+}
+
+NAM_program_tool_reserve_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_tool_reserve_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 900
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_tool_reserve_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_tool_reserve_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_tool_reserve_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			700 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_tool_reserve_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_tool_reserve_refund = yes
+		}
+	}
+}
+
+NAM_program_company_housing_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_company_housing_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 850
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_company_housing_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_company_housing_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_company_housing_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 688
+				controls_state = 688
+				688 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			688 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_company_housing_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_company_housing_refund = yes
+		}
+	}
+}
+
+NAM_program_public_works_contract_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_public_works_contract_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 650
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_public_works_contract_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_public_works_contract_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_public_works_contract_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 690
+				controls_state = 690
+				690 = {
+					infrastructure < 5
+				}
+			}
+			690 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_public_works_contract_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_public_works_contract_refund = yes
+		}
+	}
+}
+
+NAM_program_state_warehouses_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_state_warehouses_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 500
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_state_warehouses_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_state_warehouses_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_state_warehouses_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 719
+				controls_state = 719
+				719 = {
+					free_building_slots = {
+						building = fuel_silo
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			719 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fuel_silo
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_state_warehouses_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_state_warehouses_refund = yes
+		}
+	}
+}
+
+NAM_program_southern_budget_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_budget_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 750
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_southern_budget_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_southern_budget_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_budget_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 500
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_southern_budget_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_southern_budget_refund = yes
+		}
+	}
+}
+
+NAM_program_southern_reserve_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_reserve_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 800
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_southern_reserve_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_southern_reserve_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_reserve_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 400
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_southern_reserve_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_southern_reserve_refund = yes
+		}
+	}
+}
+
+NAM_program_strategic_reserve_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_strategic_reserve_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 900
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_strategic_reserve_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_strategic_reserve_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_strategic_reserve_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 36000
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_strategic_reserve_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_strategic_reserve_refund = yes
+		}
+	}
+}
+
+NAM_program_development_fund_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_development_fund_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 1000
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_development_fund_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_development_fund_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_development_fund_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			700 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_development_fund_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_development_fund_refund = yes
+		}
+	}
+}
+
+NAM_program_municipal_repair_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_municipal_repair_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 600
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_municipal_repair_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_municipal_repair_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_municipal_repair_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					infrastructure < 5
+				}
+			}
+			700 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_municipal_repair_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_municipal_repair_refund = yes
+		}
+	}
+}
+
+NAM_program_fuel_reservoirs_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_fuel_reservoirs_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 700
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_fuel_reservoirs_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_fuel_reservoirs_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_fuel_reservoirs_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 67
+				controls_state = 67
+				67 = {
+					free_building_slots = {
+						building = fuel_silo
+						size = 2
+						include_locked = yes
+					}
+				}
+			}
+			67 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = fuel_silo
+					level = 2
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_fuel_reservoirs_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_fuel_reservoirs_refund = yes
+		}
+	}
+}
+
+NAM_program_regional_power_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_regional_power_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 900
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_regional_power_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_regional_power_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_regional_power_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 690
+				controls_state = 690
+				690 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			690 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_regional_power_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_regional_power_refund = yes
+		}
+	}
+}
+
+NAM_program_oilfield_substations_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_oilfield_substations_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 600
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_oilfield_substations_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_oilfield_substations_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_oilfield_substations_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 67
+				controls_state = 67
+				67 = {
+					infrastructure < 5
+				}
+			}
+			67 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_oilfield_substations_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_oilfield_substations_refund = yes
+		}
+	}
+}
+
+NAM_program_irrigation_works_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_irrigation_works_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 600
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_irrigation_works_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_irrigation_works_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_irrigation_works_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 689
+				controls_state = 689
+				689 = {
+					infrastructure < 5
+				}
+			}
+			689 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_irrigation_works_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_irrigation_works_refund = yes
+		}
+	}
+}
+
+NAM_program_civil_engineering_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_civil_engineering_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 1000
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_civil_engineering_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_civil_engineering_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_civil_engineering_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			700 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_civil_engineering_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_civil_engineering_refund = yes
+		}
+	}
+}
+
+NAM_program_arms_engineering_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_arms_engineering_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 1100
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_arms_engineering_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_arms_engineering_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_arms_engineering_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					free_building_slots = {
+						building = arms_factory
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			700 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_arms_engineering_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_arms_engineering_refund = yes
+		}
+	}
+}
+
+NAM_program_machine_repair_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_machine_repair_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 650
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_machine_repair_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_machine_repair_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_machine_repair_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 400
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_machine_repair_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_machine_repair_refund = yes
+		}
+	}
+}
+
+NAM_program_rail_priority_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_rail_priority_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 650
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_rail_priority_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_rail_priority_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_rail_priority_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 30
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_rail_priority_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_rail_priority_refund = yes
+		}
+	}
+}
+
+NAM_program_road_priority_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_road_priority_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 650
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_road_priority_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_road_priority_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_road_priority_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 450
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_road_priority_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_road_priority_refund = yes
+		}
+	}
+}
+
+NAM_program_river_crossings_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_river_crossings_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 700
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_river_crossings_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_river_crossings_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_river_crossings_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 689
+				controls_state = 689
+				689 = {
+					infrastructure < 5
+				}
+			}
+			689 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_river_crossings_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_river_crossings_refund = yes
+		}
+	}
+}
+
+NAM_program_freight_depots_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_freight_depots_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 550
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_freight_depots_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_freight_depots_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_freight_depots_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 719
+				controls_state = 719
+				719 = {
+					infrastructure < 5
+				}
+			}
+			719 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_freight_depots_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_freight_depots_refund = yes
+		}
+	}
+}
+
+NAM_program_logistics_depots_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_logistics_depots_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 550
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_logistics_depots_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_logistics_depots_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_logistics_depots_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 690
+				controls_state = 690
+				690 = {
+					free_building_slots = {
+						building = fuel_silo
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			690 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fuel_silo
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_logistics_depots_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_logistics_depots_refund = yes
+		}
+	}
+}
+
+NAM_program_southern_corridor_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_corridor_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 750
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_southern_corridor_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_southern_corridor_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_southern_corridor_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 688
+				controls_state = 688
+				688 = {
+					infrastructure < 5
+				}
+			}
+			688 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_southern_corridor_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_southern_corridor_refund = yes
+		}
+	}
+}
+
+NAM_program_regional_reconstruction_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_regional_reconstruction_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 950
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_regional_reconstruction_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_regional_reconstruction_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_regional_reconstruction_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 719
+				controls_state = 719
+				719 = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			719 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_regional_reconstruction_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_regional_reconstruction_refund = yes
+		}
+	}
+}
+
+NAM_program_reserve_centres_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_reserve_centres_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 850
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_reserve_centres_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_reserve_centres_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_reserve_centres_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 27000
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_reserve_centres_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_reserve_centres_refund = yes
+		}
+	}
+}
+
+NAM_program_engineer_units_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_engineer_units_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 700
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_engineer_units_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_engineer_units_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_engineer_units_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 350
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_engineer_units_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_engineer_units_refund = yes
+		}
+	}
+}
+
+NAM_program_naval_fuel_depots_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_naval_fuel_depots_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 650
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_naval_fuel_depots_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_naval_fuel_depots_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_naval_fuel_depots_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 688
+				controls_state = 688
+				688 = {
+					free_building_slots = {
+						building = fuel_silo
+						size = 2
+						include_locked = yes
+					}
+				}
+			}
+			688 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = fuel_silo
+					level = 2
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_naval_fuel_depots_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_naval_fuel_depots_refund = yes
+		}
+	}
+}
+
+NAM_program_landing_supply_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_landing_supply_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 700
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_landing_supply_paid
+		clr_country_flag = NAM_pw_military_busy
+	}
+}
+
+NAM_program_landing_supply_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_landing_supply_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+			}
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 40
+				producer = NAM
+			}
+			clr_country_flag = NAM_program_landing_supply_paid
+			clr_country_flag = NAM_pw_military_busy
+		}
+		else = {
+			NAM_program_landing_supply_refund = yes
+		}
+	}
+}
+
+NAM_program_airfield_network_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_airfield_network_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 600
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_airfield_network_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_airfield_network_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_airfield_network_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					air_base < 9
+				}
+			}
+			700 = {
+				add_building_construction = {
+					type = air_base
+					level = 2
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_airfield_network_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_airfield_network_refund = yes
+		}
+	}
+}
+
+NAM_program_radar_posts_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_radar_posts_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 600
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_radar_posts_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_radar_posts_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_radar_posts_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					radar_station < 6
+				}
+			}
+			700 = {
+				add_building_construction = {
+					type = radar_station
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_radar_posts_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_radar_posts_refund = yes
+		}
+	}
+}
+
+NAM_program_air_supply_refund = {
+	if = {
+		limit = { has_country_flag = NAM_program_air_supply_paid }
+		set_temp_variable = {
+			var = NAM_treasury_amount
+			value = 500
+		}
+		NAM_add_treasury = yes
+		clr_country_flag = NAM_program_air_supply_paid
+		clr_country_flag = NAM_pw_civil_busy
+	}
+}
+
+NAM_program_air_supply_settle = {
+	if = {
+		limit = { has_country_flag = NAM_program_air_supply_paid }
+		if = {
+			limit = {
+				NAM_pw_operable = yes
+				owns_state = 700
+				controls_state = 700
+				700 = {
+					free_building_slots = {
+						building = fuel_silo
+						size = 1
+						include_locked = yes
+					}
+				}
+			}
+			700 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = fuel_silo
+					level = 1
+					instant_build = yes
+				}
+			}
+			clr_country_flag = NAM_program_air_supply_paid
+			clr_country_flag = NAM_pw_civil_busy
+		}
+		else = {
+			NAM_program_air_supply_refund = yes
+		}
+	}
+}
