@@ -820,6 +820,19 @@ ideas = {
 	}
 
 	hidden_ideas = {
+		# AI-only edge in the scripted campaigns on advanced difficulty; the weekly
+		# hook installs and removes it through VAL_ai_scripted_war_bonus_active.
+		VAL_ai_scripted_war_command = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				army_org_factor = 0.05
+				supply_consumption_factor = -0.10
+			}
+		}
+
 		VAL_contract_reputation_3 = {
 			picture = VAL_contract_state
 			allowed = { original_tag = VAL }

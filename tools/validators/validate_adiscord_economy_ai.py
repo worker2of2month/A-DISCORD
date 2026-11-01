@@ -3831,9 +3831,9 @@ def validate(root: Path = ROOT) -> list[str]:
             is not None,
             f"{effect_name} does not keep {idea_name} active for exactly 30 days",
         )
-    legacy_cleanup = block(effects, "ADISCORD_economy_clear_one_month_action_ideas")
+    monthly_update = block(effects, "ADISCORD_economy_monthly_update")
     require(
-        "remove_ideas" not in legacy_cleanup,
+        "remove_ideas" not in monthly_update,
         "monthly cleanup still shortens 30-day action ideas at the calendar boundary",
     )
     for trigger_name, idea_name in (

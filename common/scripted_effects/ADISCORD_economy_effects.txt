@@ -784,7 +784,6 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_initialize_country = yes
 	set_variable = { var = ADISCORD_economy_tick_scale value = 1 }
 	ADISCORD_economy_update_postwar_demobilization = yes
-	ADISCORD_economy_clear_one_month_action_ideas = yes
 	add_to_variable = { var = ADISCORD_economy_building_recount_months value = 1 }
 	set_temp_variable = { var = ADISCORD_economy_policy_refreshed_temp value = 1 }
 	if = {
@@ -1374,7 +1373,6 @@ ADISCORD_economy_calculate_expenses = {
 	ADISCORD_economy_calculate_research_expenses = yes
 	ADISCORD_economy_calculate_construction_expenses = yes
 	ADISCORD_economy_calculate_admin_expenses = yes
-	ADISCORD_economy_calculate_debt_service = yes
 	set_variable = { var = ADISCORD_economy_repair_expenses value = ADISCORD_economy_bombing_disruption_level }
 	multiply_variable = { var = ADISCORD_economy_repair_expenses value = 2 }
 	ADISCORD_economy_apply_expense_modifier_factors = yes
@@ -1631,11 +1629,6 @@ ADISCORD_economy_calculate_admin_expenses = {
 	clamp_variable = { var = ADISCORD_economy_admin_expenses min = 0 max = 5000 }
 }
 
-
-ADISCORD_economy_calculate_debt_service = {
-	# Interest and debt service are derived before the expense pass.
-	# Keep this wrapper for compatibility with existing callers.
-}
 
 ADISCORD_economy_calculate_macro_indicators = {
 	ADISCORD_economy_calculate_debt_metrics = yes
@@ -2730,12 +2723,6 @@ ADISCORD_economy_calculate_development_multiplier = {
 	set_variable = { var = ADISCORD_economy_development_progress value = ADISCORD_economic_development_progress }
 }
 
-ADISCORD_economy_apply_development_progress = {
-	add_to_variable = { var = ADISCORD_economic_development_progress value = ADISCORD_economy_monthly_development_gain }
-	ADISCORD_economy_check_economic_development_upgrade = yes
-	set_variable = { var = ADISCORD_economy_development_progress value = ADISCORD_economic_development_progress }
-}
-
 ADISCORD_economy_check_economic_development_upgrade = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = greater_than_or_equals } }
@@ -3384,18 +3371,6 @@ ADISCORD_economy_early_repay_debt = {
 	}
 }
 
-ADISCORD_economy_reduce_inflation = {
-	if = {
-		limit = {
-			check_variable = { var = ADISCORD_economy_inflation value = 0 compare = greater_than }
-			check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals }
-			check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = less_than }
-		}
-		add_to_variable = { var = ADISCORD_economy_inflation value = -1 }
-	}
-	clamp_variable = { var = ADISCORD_economy_inflation min = 0 max = 100 }
-}
-
 ADISCORD_economy_apply_tax_burden_side_effects = {
 	# Taxation levels affect the tax base first and should not directly create runaway inflation.
 	# Extreme taxation creates mild price-shock/fiscal-pressure only; inflation is handled by ADISCORD_economy_update_inflation.
@@ -3420,10 +3395,6 @@ ADISCORD_economy_apply_tax_burden_side_effects = {
 	clamp_variable = { var = ADISCORD_economy_war_fatigue_score min = 0 max = 100 }
 }
 
-
-ADISCORD_economy_recover_starting_building_counters = {
-	# Compatibility no-op retained for existing callers.
-}
 
 ADISCORD_economy_recount_economic_buildings = {
 	# V24: one owned-state pass counts economic buildings and calculates the
@@ -4043,11 +4014,6 @@ ADISCORD_economy_refresh_spending_ideas = {
 		else_if = { limit = { check_variable = { var = ADISCORD_industrial_cluster_count value = 2 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_industrial_network_2 }
 		else_if = { limit = { check_variable = { var = ADISCORD_industrial_cluster_count value = 1 compare = greater_than_or_equals } } add_ideas = ADISCORD_economy_industrial_network_1 }
 	}
-}
-
-ADISCORD_economy_clear_one_month_action_ideas = {
-	# Compatibility wrapper. Action spirits now use add_timed_idea so their
-	# duration is 30 days regardless of the day on which the action was taken.
 }
 
 ADISCORD_economy_clear_recent_action_flags = {

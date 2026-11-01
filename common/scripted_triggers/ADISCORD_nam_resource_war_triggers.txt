@@ -687,23 +687,7 @@ NAM_rival_gavanov_free = {
 	NOT = { has_country_leader = { character = NAM_Lev_Gavanov ruling_only = yes } }
 }
 
-# COUNTRY NAM. The demand cycle may open a new demand.
-NAM_rival_cycle_open = {
-	NAM_country_operable = yes
-	NAM_ladder_formed = yes
-	NOT = { has_country_flag = NAM_coup_succeeded }
-	NOT = { has_country_flag = NAM_rival_cooldown }
-	NOT = { has_country_flag = NAM_political_petition_cooldown }
-	NOT = { has_country_flag = NAM_grp_event_pending }
-	NOT = { has_country_flag = NAM_rival_event_pending }
-	NOT = { has_active_mission = NAM_rival_demand }
-	OR = {
-		NAM_rival_pechat_free = yes
-		NAM_rival_klyuch_free = yes
-		NAM_rival_shtyk_free = yes
-		NAM_rival_gavanov_free = yes
-	}
-}
+
 
 # COUNTRY NAM. The current rival's pillar received its hearing focus: a heard
 # rival never stakes the seals on a refusal.
@@ -750,28 +734,7 @@ NAM_rival_current_pillar_broken = {
 	}
 }
 
-# COUNTRY NAM. The promised term of the current demand is in hand; the
-# mission collects it at once.
-NAM_rival_demand_met = {
-	OR = {
-		AND = {
-			check_variable = { NAM_rival_current = 1 }
-			NOT = { has_political_power < 100 }
-		}
-		AND = {
-			check_variable = { NAM_rival_current = 2 }
-			NOT = { has_fuel < 8000 }
-		}
-		AND = {
-			check_variable = { NAM_rival_current = 3 }
-			NOT = { has_manpower < 5000 }
-		}
-		AND = {
-			check_variable = { NAM_rival_current = 4 }
-			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
-		}
-	}
-}
+
 
 # COUNTRY NAM. The garrisons will arrest a rival, unless he commands them.
 NAM_rival_can_arrest = {
@@ -793,6 +756,7 @@ NAM_rival_can_rally_districts = {
 # ----- Underground -----
 NAM_underground_open = {
 	NOT = { has_country_flag = NAM_weber_amnesty }
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
 }
 
 # COUNTRY NAM. Weber's network grows and strikes on the mainland until the
@@ -1806,7 +1770,7 @@ NAM_bw_drilling_startable = {
 	check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
 	NAM = {
 		NAM_independent_programmes_operable = yes
-		has_completed_focus = NAM_deep_wells
+		NAM_deep_drilling_unlocked = yes
 		NAM_project_slot_free = yes
 		NOT = { has_political_power < 30 }
 		check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
@@ -1914,4 +1878,268 @@ NAM_pw_rural_electrification_ready = {
 	owns_state = 690
 	controls_state = 690
 	690 = { infrastructure < 5 }
+}
+
+NAM_war_transport_purchase_ready = {
+	NAM_country_operable = yes
+	is_subject = no
+	ADISCORD_nam_resource_war_active = yes
+	has_war = yes
+}
+
+NAM_war_refugee_registration_ready = {
+	NAM_country_operable = yes
+	is_subject = no
+	ADISCORD_nam_resource_war_active = yes
+	has_war = yes
+}
+
+# STATE. Only the negotiated northern acquisitions enter this programme.
+NAM_border_integration_region = {
+	OR = {
+		state = 701
+		state = 720
+		state = 721
+		state = 722
+		state = 723
+		state = 727
+	}
+}
+
+NAM_border_integration_site = {
+	NAM_border_integration_region = yes
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { is_core_of = NAM }
+	NAM = { NAM_pw_operable = yes }
+}
+
+NAM_border_citizenship_ready = {
+	NAM_border_integration_site = yes
+	NAM = { has_completed_focus = NAM_border_security }
+	NOT = { compliance < 80 }
+	NOT = { resistance > 20 }
+}
+
+# COUNTRY. The same six treaty sites bound visibility without scanning other land.
+NAM_border_acquisitions_held = {
+	OR = {
+		owns_state = 701
+		owns_state = 720
+		owns_state = 721
+		owns_state = 722
+		owns_state = 723
+		owns_state = 727
+	}
+}
+
+# Civil agreements use one country contract and one cooldown. A settled
+# constitution closes coups, not economic programmes.
+NAM_agreement_peace = {
+	NAM_independent_programmes_operable = yes
+	has_country_flag = NAM_independence_declared
+	has_country_flag = NAM_groups_initialized
+	has_war = no
+}
+
+NAM_agreement_offer_open = {
+	NAM_agreement_peace = yes
+	has_country_flag = NAM_agreement_offer_pending
+	NOT = { has_country_flag = NAM_rival_event_pending }
+	NOT = { has_variable = NAM_agreement_current }
+}
+
+NAM_agreement_district_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_agreement_building }
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+		include_locked = yes
+	}
+	infrastructure < 5
+}
+
+NAM_agreement_nam_possible = {
+	NAM_agreement_peace = yes
+}
+
+NAM_agreement_nam_active = {
+	NAM_agreement_peace = yes
+	check_variable = { NAM_agreement_current = 1 }
+	has_active_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_oil_possible = {
+	NAM_agreement_peace = yes
+	any_owned_state = {
+		NAM_field_state = yes
+		is_controlled_by = NAM
+		NOT = { has_state_flag = NAM_wells_scorched }
+		check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
+	}
+}
+
+NAM_agreement_oil_active = {
+	NAM_agreement_peace = yes
+	check_variable = { NAM_agreement_current = 2 }
+	has_active_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_dist_possible = {
+	NAM_agreement_peace = yes
+	OR = {
+		67 = { NAM_agreement_district_site = yes }
+		688 = { NAM_agreement_district_site = yes }
+		689 = { NAM_agreement_district_site = yes }
+		690 = { NAM_agreement_district_site = yes }
+		719 = { NAM_agreement_district_site = yes }
+		700 = { NAM_agreement_district_site = yes }
+	}
+}
+
+NAM_agreement_dist_active = {
+	NAM_agreement_peace = yes
+	check_variable = { NAM_agreement_current = 3 }
+	has_active_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_garr_possible = {
+	NAM_agreement_peace = yes
+}
+
+NAM_agreement_garr_active = {
+	NAM_agreement_peace = yes
+	check_variable = { NAM_agreement_current = 4 }
+	has_active_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_trade_possible = {
+	NAM_agreement_peace = yes
+	check_variable = { var = max_fuel_k value = 100 compare = greater_than_or_equals }
+	700 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
+}
+
+NAM_agreement_trade_active = {
+	NAM_agreement_peace = yes
+	check_variable = { NAM_agreement_current = 5 }
+	has_active_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_goal_met = {
+	OR = {
+		AND = {
+			check_variable = { NAM_agreement_current = 1 }
+			has_country_flag = NAM_agreement_audit_done
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 2 }
+			check_variable = { var = NAM_agreement_progress value = NAM_agreement_target compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 3 }
+			check_variable = { NAM_agreement_progress > 0 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 4 }
+			has_country_flag = NAM_agreement_training_done
+			NOT = { has_equipment = { infantry_equipment < 1000 } }
+			NOT = { has_equipment = { support_equipment < 100 } }
+			NOT = { has_equipment = { motorized_equipment < 200 } }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 5 }
+			check_variable = { NAM_agreement_progress > 2 }
+		}
+	}
+}
+
+NAM_agreement_support_recovered = {
+	OR = {
+		AND = {
+			check_variable = { NAM_agreement_current = 1 }
+			check_variable = { var = NAM_grp_nam_support value = 40 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 2 }
+			check_variable = { var = NAM_grp_oil_support value = 40 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 3 }
+			check_variable = { var = NAM_grp_dist_support value = 40 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 4 }
+			check_variable = { var = NAM_grp_garr_support value = 40 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 5 }
+			check_variable = { var = NAM_grp_trade_support value = 40 compare = greater_than_or_equals }
+		}
+	}
+}
+
+NAM_agreement_support_broken = {
+	OR = {
+		AND = {
+			check_variable = { NAM_agreement_current = 1 }
+			check_variable = { NAM_grp_nam_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 2 }
+			check_variable = { NAM_grp_oil_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 3 }
+			check_variable = { NAM_grp_dist_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 4 }
+			check_variable = { NAM_grp_garr_support < 25 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_current = 5 }
+			check_variable = { NAM_grp_trade_support < 25 }
+		}
+	}
+}
+
+
+NAM_agreement_audit_ready = {
+	NAM_agreement_nam_active = yes
+	NOT = { has_country_flag = NAM_agreement_audit_done }
+	NOT = { has_variable = NAM_agreement_cash_deposit }
+	NOT = { has_country_flag = NAM_pw_civil_busy }
+	NOT = { has_political_power < 75 }
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+}
+
+
+NAM_agreement_training_ready = {
+	NAM_agreement_garr_active = yes
+	NOT = { has_country_flag = NAM_agreement_training_done }
+	NOT = { has_variable = NAM_agreement_cash_deposit }
+	NOT = { has_country_flag = NAM_pw_civil_busy }
+	NOT = { has_political_power < 75 }
+	check_variable = { var = ADISCORD_economy_treasury value = 800 compare = greater_than_or_equals }
+}
+
+
+NAM_deep_drilling_unlocked = {
+	OR = {
+		has_completed_focus = NAM_deep_wells
+		NAM_agreement_oil_active = yes
+	}
+}
+
+NAM_agreement_district_order_open = {
+	NAM_agreement_dist_active = yes
+	NOT = {
+		any_owned_state = { has_state_flag = NAM_agreement_building }
+	}
 }

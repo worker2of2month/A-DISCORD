@@ -1200,11 +1200,6 @@ def validate_events(root: Path, issues: list[str]) -> None:
         (root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
         'vorkerland_collapse',
     )
-    template_migration_on_actions = read(
-        root,
-        "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt",
-        issues,
-    )
     rom_tru_on_actions = read(
         root,
         "common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt",
@@ -4036,10 +4031,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_combat_platform = {",
     ):
         if token not in wkr_force_templates:
-            issues.append(f"WKR force-template v2 migration is missing {token}")
+            issues.append(f"WKR force-template v2 package is missing {token}")
     if wkr_force_templates.count("division_template =") != 2:
         issues.append(
-            "WKR force-template v2 migration must create exactly two templates"
+            "WKR force-template v2 package must create exactly two templates"
         )
     wkr_home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
     for token in (
@@ -4096,23 +4091,6 @@ def validate_events(root: Path, issues: list[str]) -> None:
         )
     if "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes" not in wkr_home_guard:
         issues.append("fresh WKR split does not apply the force-template v2 package")
-    template_migration_startup = named_block(
-        template_migration_on_actions, "on_startup"
-    )
-    if (
-        "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes"
-        not in template_migration_startup
-    ):
-        issues.append("older WKR saves do not receive the force-template v2 migration")
-    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in template_migration_startup:
-        issues.append(
-            "old-save template migration must not duplicate the WKR Home Guard"
-        )
-    for cadence in ("on_daily", "on_weekly", "on_monthly"):
-        if cadence in template_migration_on_actions:
-            issues.append(
-                f"WKR force-template migration must not poll through {cadence}"
-            )
     if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in named_block(
         on_actions, "on_monthly"
     ):

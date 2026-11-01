@@ -1,26 +1,8 @@
-# The deterministic capitulation fallback still needs a single country to
-# receive unoccupied land and dissolve the defeated tag. Before that happens,
-# preserve the front line: every independent co-belligerent keeps states that
-# it actually controls. Subjects leave their gains to their overlord, matching
-# normal peace-conference ownership and protecting scripted subject borders.
-ADISCORD_distribute_occupied_states_to_cobelligerents = {
-	every_owned_state = {
-		limit = {
-			CONTROLLER = {
-				exists = yes
-				is_subject = no
-				NOT = { has_capitulated = yes }
-				NOT = { tag = FROM }
-				has_war_together_with = FROM
-			}
-		}
-		CONTROLLER = { transfer_state = PREV }
-	}
-}
-
 # Central Vorkerland outcomes require all central states to remain reachable by
-# the claimant war graph. Restrict the same occupation split to central actors;
-# an unrelated regional intervention cannot strand a required victory state.
+# the claimant war graph. Before the defeated shell is reserved, every
+# independent main claimant fighting beside FROM keeps the states it controls.
+# Subjects leave their gains to their overlord, and an unrelated regional
+# intervention cannot strand a required victory state.
 ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 	every_owned_state = {
 		limit = {

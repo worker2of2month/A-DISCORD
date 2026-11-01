@@ -254,7 +254,7 @@ focus_tree = {
 				limit = {
 					OR = {
 						check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
-						SHL_kyz_counterpart = no
+						SHL_qanat_counterpart = no
 					}
 					OR = {
 						check_variable = { var = SHL_veyr_crisis value = 2 compare = greater_than_or_equals }
@@ -1494,13 +1494,13 @@ focus_tree = {
 		y = 5
 		cost = 2
 		prerequisite = { focus = SHL_southern_watch }
-		bypass = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+		bypass = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
 		available = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = SHL_march_on_mazar
+			unlock_decision_tooltip = SHL_march_on_keizan
 			unlock_decision_tooltip = SHL_secure_cistern_corridor
 		}
 		ai_will_do = { base = 5 }
@@ -1515,7 +1515,7 @@ focus_tree = {
 		prerequisite = { focus = SHL_no_more_rations }
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+			check_variable = { var = SHL_keizan_state value = 3 compare = equals }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -1536,7 +1536,7 @@ focus_tree = {
 		available = {
 			SHL_country_operable = yes
 			has_war = no
-			check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+			check_variable = { var = SHL_keizan_state value = 3 compare = equals }
 			custom_trigger_tooltip = {
 				tooltip = SHL_southern_programme_complete_tt
 				check_variable = { var = SHL_southern_programme value = 1 compare = greater_than_or_equals }
@@ -5445,7 +5445,7 @@ focus_tree = {
 					check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
 					AND = {
 						check_variable = { var = SHL_water_crisis value = 0 compare = equals }
-						SHL_kyz_counterpart = no
+						SHL_qanat_counterpart = no
 					}
 				}
 				OR = {

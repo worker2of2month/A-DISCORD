@@ -4048,4 +4048,125 @@ focus_tree = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
+	 focus = {
+		id = NAM_border_administration
+		icon = GFX_goal_generic_political_pressure
+		x = 8
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_oil_exchange
+		}
+		allow_branch = {
+			NAM_border_acquisitions_held = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_border_reconstruction
+			custom_effect_tooltip = NAM_border_reconstruction_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	 focus = {
+		id = NAM_border_security
+		icon = GFX_goal_generic_political_pressure
+		x = 6
+		y = 5
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_border_administration
+		}
+		mutually_exclusive = { focus = NAM_border_compacts }
+		allow_branch = {
+			NAM_border_acquisitions_held = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			every_owned_state = {
+				limit = { NAM_border_integration_site = yes }
+				add_resistance = -30
+				add_compliance = 5
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	 focus = {
+		id = NAM_border_compacts
+		icon = GFX_goal_generic_political_pressure
+		x = 10
+		y = 5
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_border_administration
+		}
+		mutually_exclusive = { focus = NAM_border_security }
+		allow_branch = {
+			NAM_border_acquisitions_held = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_border_autonomy_agreement
+			custom_effect_tooltip = NAM_border_autonomy_agreement_unlock_tt
+			hidden_effect = { mark_focus_tree_layout_dirty = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+
+
+	 focus = {
+		id = NAM_border_citizenship
+		icon = GFX_goal_generic_political_pressure
+		x = 8
+		y = 6
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_border_security
+		}
+		allow_branch = {
+			NOT = { has_completed_focus = NAM_border_compacts }
+			NAM_border_acquisitions_held = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_border_incorporation
+			custom_effect_tooltip = NAM_border_incorporation_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
 }

@@ -189,6 +189,8 @@ ADISCORD_territorial_templates = {
 				tag = TFF
 				tag = VAL
 			}
+			# Advanced-difficulty Kefreyt keeps its line brigades; see STP_cw_border_territorial_armies.
+			NOT = { AND = { tag = VAL difficulty > 2 } }
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }

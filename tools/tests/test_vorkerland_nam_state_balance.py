@@ -152,7 +152,7 @@ class NamTreatyCityTransferTests(unittest.TestCase):
         from itertools import product
 
         for state, owner, has_owner, has_controller in product(
-            ("701", "720", "721", "722"), ("EFL", "AZH", "VAL"), (False, True), (False, True)
+            ("701", "720", "721", "722", "723", "727"), ("EFL", "AZH", "VAL"), (False, True), (False, True)
         ):
             facts = {
                 (state, "is_owned_by", owner): True,
@@ -164,8 +164,6 @@ class NamTreatyCityTransferTests(unittest.TestCase):
             if owner in ("EFL", "AZH") and has_owner and has_controller:
                 expected = [
                     ("NAM", "transfer_state", state),
-                    (state, "remove_core_of", owner),
-                    (state, "add_core_of", "NAM"),
                     (state, "set_state_controller_to", "NAM"),
                 ]
             self.assertEqual(selected, expected, (state, owner, has_owner, has_controller))
@@ -220,7 +218,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_coalition_capital_and_naval_bases(self):
         self.assertIn(16893, self.states[69])
-        self.assertIn("victory_points = { 16893 10 }", state_source(69))
+        self.assertIn("victory_points = { 16893 25 }", state_source(69))
         for sid, province, level in ((723, 6495, 4), (692, 493, 5)):
             self.assertIn(province, self.states.get(sid, set()))
             self.assertRegex(state_source(sid), rf"{province}\s*=\s*\{{\s*naval_base\s*=\s*{level}\s*\}}")
@@ -554,7 +552,8 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         awards = {int(state) for state in re.findall(
             r"(\d+)\s*=\s*\{\s*NAM_rw_award_border_state\s*=\s*yes\s*\}", victory
         )}
-        self.assertEqual(awards, {720, 721, 701, 722})
+        self.assertEqual(awards, {720, 721, 701, 722, 723, 727})
+        self.assertIn("limit = { NAM = { NAM_prewar_service_mandate = yes } }", victory)
         self.assertNotIn("NAM = { transfer_state = 68 }", victory)
 
         nam_mainland = {
@@ -581,7 +580,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         decisions = (builder.ROOT / "common/decisions/ADISCORD_nam_resource_war_decisions.txt").read_text(encoding="utf-8-sig")
         decision = named_block(decisions, "NAM_prepare_line")
-        self.assertEqual({int(value) for value in named_block(decision, "targets").split()}, {67, 688, 689, 690, 719, 700})
+        self.assertEqual({int(value) for value in named_block(decision, "targets").split()}, {67, 688, 689, 690, 719, 700, 701, 720, 721, 722, 723, 727})
         self.assertIn("any_neighbor_state", named_block(decision, "visible"))
         self.assertIn("NAM_line_complete = yes", named_block(decision, "remove_effect"))
         effects = parse_clausewitz((builder.ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8-sig"))
@@ -835,31 +834,28 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_nam_resource_war_has_distributed_named_victory_points(self) -> None:
         expected = {
-            67: {6099: 1, 16890: 5},
-            68: {6150: 1},
-            69: {
-                16893: 10, 16883: 5, 16886: 5, 16889: 5, 16894: 5,
-                16888: 5,
-            },
-            70: {2986: 1},
-            723: {6495: 1},
-            724: {},
-            725: {},
-            726: {},
-            727: {8234: 1},
+            67: {6099: 10, 16890: 15},
+            68: {6150: 10},
+            69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
+            70: {2986: 15},
+            723: {6495: 10},
+            724: {6796: 5},
+            725: {259: 10},
+            726: {6331: 5},
+            727: {8234: 10},
             728: {16882: 5, 16891: 5},
-            729: {},
-            688: {16721: 5, 1710: 1},
-            689: {},
-            690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
-            691: {},
-            692: {493: 25, 5039: 1, 4089: 10},
-            700: {16716: 5, 16881: 5, 16884: 5, 16892: 5},
-            701: {16717: 5},
-            719: {},
-            720: {8057: 1},
-            721: {},
-            722: {},
+            729: {6193: 5},
+            688: {16721: 25, 1710: 5},
+            689: {7618: 5},
+            690: {8058: 5, 9016: 10, 16885: 5, 16887: 5},
+            719: {6961: 5},
+            691: {8194: 10},
+            720: {8057: 5},
+            721: {7908: 5},
+            692: {493: 25, 5039: 5, 4089: 10},
+            722: {2443: 5},
+            700: {16716: 20, 16881: 5, 16884: 5, 16892: 5},
+            701: {16717: 25},
         }
         self.assertEqual(
             {
@@ -880,14 +876,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
-            44,
+            125,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726)),
-            9,
+            100,
         )
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 82
+            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 120
         )
 
         localisation = (
@@ -929,7 +925,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertRegex(source, r"(?m)^\s*add_core_of\s*=\s*NAM\s*$")
         self.assertEqual(scalar(source, "state_category"), "city")
         self.assertGreaterEqual(float(scalar(source, "local_supplies")), 2.5)
-        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16716\s+5\s*\}")
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16716\s+20\s*\}")
         self.assertRegex(source, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
 
         country = (
@@ -1054,7 +1050,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertRegex(source, r"(?m)^\s*add_core_of\s*=\s*NAM\s*$")
         self.assertEqual(scalar(source, "state_category"), "town")
         self.assertGreaterEqual(float(scalar(source, "local_supplies")), 3.0)
-        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16721\s+5\s*\}")
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16721\s+25\s*\}")
         self.assertRegex(source, r"689\s*=\s*\{\s*naval_base\s*=\s*2\s*\}")
         self.assertIn(
             3127,

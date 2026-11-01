@@ -1408,18 +1408,6 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
         self.assertNotIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", startup)
         self.assertNotIn("ADISCORD_vorkerland_wkr_home_guard_deployed_v1", startup)
-        template_startup = named_block(
-            read(
-                "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt"
-            ),
-            "on_startup",
-        )
-        self.assertIn(
-            "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes",
-            template_startup,
-        )
-        for cadence in ("on_daily", "on_weekly", "on_monthly"):
-            self.assertNotIn(cadence, template_startup)
         self.assertNotIn(
             "ADISCORD_vorkerland_ensure_wkr_home_guard = yes",
             named_block(

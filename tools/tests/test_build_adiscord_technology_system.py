@@ -511,7 +511,9 @@ class AssaultRifleBranchTests(unittest.TestCase):
                 }
                 for name, amount in previous_resources.items():
                     self.assertGreaterEqual(resources.get(name, 0), amount)
-                self.assertGreater(sum(resources.values()), sum(previous_resources.values()))
+                # Rifles before 2170 are steel-only mass weapons, so a generation
+                # may keep its predecessor's material bill; it never shrinks it.
+                self.assertGreaterEqual(sum(resources.values()), sum(previous_resources.values()))
                 previous_cost = cost
                 previous_resources = resources
 

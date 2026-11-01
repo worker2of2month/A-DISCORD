@@ -1207,17 +1207,6 @@ VAL_refresh_contract_modifier = {
 	set_variable = { var = VAL_contract_max_efficiency_factor value = 0.0 }
 	set_variable = { var = VAL_contract_resource_penalty_factor value = 0.0 }
 
-	# Legacy specialization ideas used to carry these stats. Strip them so old saves do not double-count.
-	remove_ideas = VAL_contract_administration_1
-	remove_ideas = VAL_contract_administration_2
-	remove_ideas = VAL_contract_administration_3
-	remove_ideas = VAL_contract_army_1
-	remove_ideas = VAL_contract_army_2
-	remove_ideas = VAL_contract_army_3
-	remove_ideas = VAL_contract_industry_1
-	remove_ideas = VAL_contract_industry_2
-	remove_ideas = VAL_contract_industry_3
-
 	# Administration specialization is now part of the visible contract-state dynamic modifier.
 	if = {
 		limit = { check_variable = { var = VAL_contract_administration_level value = 3 compare = equals } }
@@ -1653,104 +1642,12 @@ VAL_clear_foreign_operation = {
 	clr_country_flag = VAL_operation_APH_prepare_separate_terms
 }
 
-VAL_debit_foreign_operation = {
-	add_political_power = -10
-	ADISCORD_economy_spend_50 = yes
-}
-
 VAL_refund_foreign_operation_deposit = {
 	if = {
 		limit = { has_country_flag = VAL_foreign_operation_deposit }
 		ADISCORD_economy_receive_50 = yes
 	}
 	VAL_clear_foreign_operation = yes
-}
-
-VAL_begin_cin_operation = {
-	set_country_flag = VAL_foreign_operation_active
-	set_country_flag = VAL_foreign_operation_deposit
-	if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
-		set_country_flag = VAL_operation_CIN_study_market
-		country_event = { id = val_contract.200 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
-		set_country_flag = VAL_operation_CIN_arms_brokerage
-		country_event = { id = val_contract.201 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
-		set_country_flag = VAL_operation_CIN_infrastructure_concession
-		country_event = { id = val_contract.202 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
-		set_country_flag = VAL_operation_CIN_hire_local_captain
-		country_event = { id = val_contract.203 days = 21 }
-	}
-	else = {
-		set_country_flag = VAL_operation_CIN_prepare_separate_terms
-		country_event = { id = val_contract.204 days = 21 }
-	}
-}
-
-VAL_begin_osf_operation = {
-	set_country_flag = VAL_foreign_operation_active
-	set_country_flag = VAL_foreign_operation_deposit
-	if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
-		set_country_flag = VAL_operation_OSF_study_market
-		country_event = { id = val_contract.210 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
-		set_country_flag = VAL_operation_OSF_arms_brokerage
-		country_event = { id = val_contract.211 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
-		set_country_flag = VAL_operation_OSF_infrastructure_concession
-		country_event = { id = val_contract.212 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
-		set_country_flag = VAL_operation_OSF_hire_local_captain
-		country_event = { id = val_contract.213 days = 21 }
-	}
-	else = {
-		set_country_flag = VAL_operation_OSF_prepare_separate_terms
-		country_event = { id = val_contract.214 days = 21 }
-	}
-}
-
-VAL_begin_aph_operation = {
-	set_country_flag = VAL_foreign_operation_active
-	set_country_flag = VAL_foreign_operation_deposit
-	if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } }
-		set_country_flag = VAL_operation_APH_study_market
-		country_event = { id = val_contract.220 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } }
-		set_country_flag = VAL_operation_APH_arms_brokerage
-		country_event = { id = val_contract.221 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } }
-		set_country_flag = VAL_operation_APH_infrastructure_concession
-		country_event = { id = val_contract.222 days = 21 }
-	}
-	else_if = {
-		limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } }
-		set_country_flag = VAL_operation_APH_hire_local_captain
-		country_event = { id = val_contract.223 days = 21 }
-	}
-	else = {
-		set_country_flag = VAL_operation_APH_prepare_separate_terms
-		country_event = { id = val_contract.224 days = 21 }
-	}
 }
 
 VAL_resolve_cin_operation = {
@@ -4792,10 +4689,6 @@ VAL_reclamation_reconcile_state_project = {
 VAL_reclamation_refresh_state = {
 	if = {
 		limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
-		if = {
-			limit = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } }
-			remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
-		}
 		if = {
 			limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
 			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
@@ -10018,21 +9911,6 @@ VAL_check_efl_concession = {
 	}
 }
 
-# Startup-only compatibility: a fulfilled pledge cannot lose before the campaign ends.
-VAL_restore_fulfilled_northern_aid = {
-	if = {
-		limit = {
-			check_variable = { var = VAL_northern_aid_state value = 3 compare = equals }
-			has_idea = VAL_northern_aid_failure
-			VAL_northern_aid_sufficient = yes
-			NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-		}
-		remove_ideas = VAL_northern_aid_failure
-		set_variable = { var = VAL_northern_aid_state value = 2 }
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
 # The campaign result is authoritative; individual capitulations precede its settlement.
 VAL_northern_aid_daily = {
 	if = {
@@ -12091,13 +11969,6 @@ VAL_council_start_inspection = {
 	set_country_flag = VAL_council_inspection
 	remove_mission = VAL_council_inspection_timer
 	activate_mission = VAL_council_inspection_timer
-	VAL_refresh_contract_modifier = yes
-}
-
-VAL_council_start_public_shock = {
-	set_country_flag = VAL_council_public_shock
-	remove_mission = VAL_council_public_shock_timer
-	activate_mission = VAL_council_public_shock_timer
 	VAL_refresh_contract_modifier = yes
 }
 

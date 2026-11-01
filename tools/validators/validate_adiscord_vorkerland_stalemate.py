@@ -42,7 +42,11 @@ SCOPED_FILES = (
 
 CENTRAL_TARGETS = ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")
 SOLAR_TARGETS = ("SRA", "CSL")
+CLAIMANT_TARGETS = ("WKR", "VAD", "TVA")
 
+# Central and Solarino deadlines are one-shot per country. The claimant
+# showdown chain re-arms itself while the peer war is live, so its schedule
+# flag is transient and has exactly one writer and one clearer.
 SCHEDULED_FLAGS = (
     "ADISCORD_vorkerland_central_stalemate_deadline_scheduled",
     "ADISCORD_vorkerland_solarino_stalemate_deadline_scheduled",
@@ -54,7 +58,13 @@ RESOLVED_FLAGS = (
 ACTIVE_FLAGS = (
     "ADISCORD_vorkerland_central_breakthrough_window_active",
     "ADISCORD_vorkerland_solarino_breakthrough_window_active",
+    "ADISCORD_vorkerland_claimant_breakthrough_window_active",
 )
+CLAIMANT_SCHEDULED_FLAG = "ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled"
+CLAIMANT_SCHEDULER = "ADISCORD_vorkerland_schedule_claimant_stalemate_deadline"
+CLAIMANT_RESOLVER = "ADISCORD_vorkerland_resolve_claimant_stalemate_deadline"
+IDEA_CALL = "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
+IDEA_CALLERS = 3
 
 
 def _read(root: Path, relative: str) -> str:
@@ -189,6 +199,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for trigger_name in (
         "ADISCORD_vorkerland_has_live_central_minor_war",
         "ADISCORD_vorkerland_has_live_solarino_war",
+        "ADISCORD_vorkerland_has_live_claimant_war",
     ):
         block = _named_block(triggers, trigger_name)
         if "is_ai = yes" not in block:
@@ -196,7 +207,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         if "NOT = { has_capitulated = yes }" not in block:
             issues.append(f"{trigger_name} must reject a capitulated attacker")
 
-    for tag in CENTRAL_TARGETS + SOLAR_TARGETS:
+    for tag in CENTRAL_TARGETS + SOLAR_TARGETS + CLAIMANT_TARGETS:
         if f"has_war_with = {tag}" not in triggers:
             issues.append(f"live-war trigger is missing {tag}")
 
@@ -207,6 +218,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for token in (
         "ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }",
         "FROM = { ADISCORD_vorkerland_is_central_minor = yes }",
+        "FROM = { ADISCORD_vorkerland_is_main_claimant = yes }",
         "ROOT = { tag = SOL }",
         "FROM = { OR = { tag = SRA tag = CSL } }",
     ):
@@ -218,6 +230,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     ):
         if on_actions.count(f"{effect_name} = yes") != 1:
             issues.append(f"{effect_name} must have exactly one on-action caller")
+    for scope in ("ROOT", "FROM"):
+        if on_actions.count(f"{scope} = {{ {CLAIMANT_SCHEDULER} = yes }}") != 1:
+            issues.append(f"{CLAIMANT_SCHEDULER} must be called once for {scope}")
     if re.search(r"\bon_(daily|weekly|monthly|startup)\b", on_actions):
         issues.append("stalemate contract must not poll or run startup/save repair")
     if "every_country" in on_actions:
@@ -226,17 +241,13 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for event_id, days in (
         ("ADISCORD_vorkerland_stalemate.1", 240),
         ("ADISCORD_vorkerland_stalemate.2", 300),
+        ("ADISCORD_vorkerland_stalemate.3", 240),
     ):
         token = f"country_event = {{ id = {event_id} days = {days} }}"
         if effects.count(token) != 1:
             issues.append(f"one-shot deadline is missing or has wrong delay: {token}")
-    if (
-        effects.count(
-            "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
-        )
-        != 2
-    ):
-        issues.append("exactly two AI-gated 75-day idea callers are required")
+    if effects.count(IDEA_CALL) != IDEA_CALLERS:
+        issues.append(f"exactly {IDEA_CALLERS} AI-gated 75-day idea callers are required")
     for active_flag in ACTIVE_FLAGS:
         token = f"set_country_flag = {{ flag = {active_flag} days = 75 }}"
         if effects.count(token) != 1:
@@ -265,6 +276,29 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"{effect_name} must write its permanent guard before its payload"
             )
 
+    # The claimant resolver clears its transient schedule flag before the
+    # payload and re-arms through the scheduler, which is the only other writer.
+    block = _named_block(effects, CLAIMANT_RESOLVER)
+    if not block:
+        issues.append(f"missing resolver effect: {CLAIMANT_RESOLVER}")
+    else:
+        clear = block.find(f"clr_country_flag = {CLAIMANT_SCHEDULED_FLAG}")
+        payload = block.find(f"flag = {ACTIVE_FLAGS[2]}")
+        if clear < 0 or payload < 0 or clear > payload:
+            issues.append(f"{CLAIMANT_RESOLVER} must clear its schedule flag before its payload")
+        if block.count(f"{CLAIMANT_SCHEDULER} = yes") != 1:
+            issues.append(f"{CLAIMANT_RESOLVER} must re-arm the countdown exactly once")
+        for token in (
+            "has_global_flag = ADISCORD_vorkerland_central_showdown_started",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+            "ADISCORD_vorkerland_has_live_claimant_war = yes",
+        ):
+            if token not in block:
+                issues.append(f"{CLAIMANT_RESOLVER} payload gate is missing: {token}")
+    scheduler = _named_block(effects, CLAIMANT_SCHEDULER)
+    if f"NOT = {{ has_country_flag = {CLAIMANT_SCHEDULED_FLAG} }}" not in scheduler:
+        issues.append(f"{CLAIMANT_SCHEDULER} must refuse a second concurrent countdown")
+
     for event_id, resolver in (
         (
             "ADISCORD_vorkerland_stalemate.1",
@@ -274,25 +308,26 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             "ADISCORD_vorkerland_stalemate.2",
             "ADISCORD_vorkerland_resolve_solarino_stalemate_deadline",
         ),
+        ("ADISCORD_vorkerland_stalemate.3", CLAIMANT_RESOLVER),
     ):
         if events.count(f"id = {event_id}") != 1:
             issues.append(f"event definition count is not one: {event_id}")
         if events.count(f"{resolver} = yes") != 1:
             issues.append(f"deadline event must call {resolver} exactly once")
     if (
-        events.count("hidden = yes") != 2
-        or events.count("is_triggered_only = yes") != 2
+        events.count("hidden = yes") != 3
+        or events.count("is_triggered_only = yes") != 3
     ):
-        issues.append("both stalemate events must be hidden and triggered-only")
-    if events.count("country_event = {") != 2:
+        issues.append("all stalemate events must be hidden and triggered-only")
+    if events.count("country_event = {") != 3:
         issues.append("deadline events must not schedule a retry or another event")
 
     plan_names = re.findall(
-        r"(?m)^(ADISCORD_vorkerland_(?:central|solarino)_breakthrough_\w+)\s*=\s*\{",
+        r"(?m)^(ADISCORD_vorkerland_(?:central|solarino|claimant)_breakthrough_\w+)\s*=\s*\{",
         ai,
     )
     ai = "\n".join(_named_block(ai, name) for name in plan_names)
-    expected_plan_count = len(CENTRAL_TARGETS) + len(SOLAR_TARGETS)
+    expected_plan_count = len(CENTRAL_TARGETS) + len(SOLAR_TARGETS) + len(CLAIMANT_TARGETS)
     if ai.count("abort_when_not_enabled = yes") != expected_plan_count:
         issues.append(f"stalemate AI must contain {expected_plan_count} bounded plans")
     for tag in CENTRAL_TARGETS:
@@ -311,6 +346,15 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         ):
             if token not in ai:
                 issues.append(f"Solarino breakthrough AI is missing: {token}")
+    for tag in CLAIMANT_TARGETS:
+        for token in (
+            f"has_war_with = {tag}",
+            f"type = front_control tag = {tag} ratio = 0.01",
+            f"fighting_army_strength_ratio = {{ tag = {tag} ratio > 0.9 }}",
+            f"type = conquer id = {tag}",
+        ):
+            if token not in ai:
+                issues.append(f"claimant breakthrough AI is missing: {token}")
     for active_flag in ACTIVE_FLAGS:
         if f"has_country_flag = {active_flag}" not in ai:
             issues.append(
@@ -324,12 +368,16 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     for token in ("priority = 2000", "execution_type = rush_weak", "manual_attack = no"):
         if default_orders.count(token) != expected_plan_count:
             issues.append(f"all stalemate default orders must use {token}")
-    for token in (
-        "has_manpower > 1000",
-        "stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
+    if ai.count("has_manpower > 1000") != expected_plan_count:
+        issues.append("all stalemate AI plans must use has_manpower > 1000")
+    for token, count in (
+        ("stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
+         len(CENTRAL_TARGETS) + len(SOLAR_TARGETS)),
+        ("stockpile_ratio = { archetype = infantry_equipment ratio > 0.02 }",
+         len(CLAIMANT_TARGETS)),
     ):
-        if ai.count(token) != expected_plan_count:
-            issues.append(f"all stalemate AI plans must use {token}")
+        if ai.count(token) != count:
+            issues.append(f"{count} stalemate AI plans must use {token}")
 
     for token in (
         "allowed = { always = no }",
@@ -394,13 +442,18 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             != 1
         ):
             issues.append(f"timed active flag must have exactly one writer: {flag}")
-    if (
-        gameplay_joined.count(
-            "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
-        )
-        != 2
+    for pattern, label in (
+        (rf"set_country_flag\s*=\s*{re.escape(CLAIMANT_SCHEDULED_FLAG)}\b", "writer"),
+        (rf"clr_country_flag\s*=\s*{re.escape(CLAIMANT_SCHEDULED_FLAG)}\b", "clearer"),
     ):
-        issues.append("operational idea must have exactly two bounded gameplay writers")
+        if len(re.findall(pattern, gameplay_joined)) != 1:
+            issues.append(
+                f"transient schedule flag must have exactly one {label}: {CLAIMANT_SCHEDULED_FLAG}"
+            )
+    if gameplay_joined.count(IDEA_CALL) != IDEA_CALLERS:
+        issues.append(
+            f"operational idea must have exactly {IDEA_CALLERS} bounded gameplay writers"
+        )
 
     registry_text = texts.get(REGISTRY, "")
     if registry_text:
@@ -410,7 +463,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(f"event registry is not valid JSON: {exc}")
         else:
             entries = {entry.get("id"): entry for entry in registry.get("events", [])}
-            for number in (1, 2):
+            for number in (1, 2, 3):
                 event_id = f"ADISCORD_vorkerland_stalemate.{number}"
                 expected = {
                     "namespace": "ADISCORD_vorkerland_stalemate",

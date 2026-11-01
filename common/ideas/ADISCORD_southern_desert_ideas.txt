@@ -198,7 +198,7 @@ ideas = {
 				ADISCORD_economy_treasury_capacity_factor = -0.10
 			}
 		}
-		SHL_mazar_ration = {
+		SHL_keizan_ration = {
 			picture = generic_central_management
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }

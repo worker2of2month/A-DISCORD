@@ -158,7 +158,8 @@ ADISCORD_vorkerland_prep_contest_communications
 NAM_hold_field_67
 NAM_hold_field_689
 NAM_hold_field_690
-NAM_rival_demand
+NAM_agreement_deadline
+NAM_agreement_crisis
 ADISCORD_interceptor_archetype
 ADISCORD_strike_drone_archetype
 transport_plane_equipment
@@ -167,7 +168,7 @@ ADISCORD_marine_infantry
 train_equipment
 SHL_strike_mission
 SHL_conspiracy_mission
-SHL_mazar_deadline
+SHL_keizan_deadline
 SHL_cons_debt_term
 SHL_council_election
 SHL_cons_charter_round

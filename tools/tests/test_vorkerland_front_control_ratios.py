@@ -108,12 +108,15 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
         from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block
 
         source = AI_FILES[0].read_text(encoding="utf-8-sig")
-        for group, targets in (
+        for group, targets, stockpile, strength in (
             (
                 "central",
                 ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"),
+                "0.05",
+                "1.15",
             ),
-            ("solarino", ("SRA", "CSL")),
+            ("solarino", ("SRA", "CSL"), "0.05", "1.15"),
+            ("claimant", ("WKR", "VAD", "TVA"), "0.02", "0.9"),
         ):
             for target in targets:
                 front = named_block(
@@ -127,11 +130,11 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
                     )
                     self.assertIn("has_manpower > 1000", enabled)
                     self.assertIn(
-                        "stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
+                        f"stockpile_ratio = {{ archetype = infantry_equipment ratio > {stockpile} }}",
                         enabled,
                     )
                     self.assertIn(
-                        f"fighting_army_strength_ratio = {{ tag = {target} ratio > 1.15 }}",
+                        f"fighting_army_strength_ratio = {{ tag = {target} ratio > {strength} }}",
                         enabled,
                     )
                     self.assertIn("execution_type = rush_weak", front)

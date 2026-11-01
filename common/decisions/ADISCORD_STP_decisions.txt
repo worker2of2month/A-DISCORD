@@ -7510,6 +7510,30 @@ STP_military_operations = {
 		timeout_effect = { }
 	}
 
+	# Mirror of Kefreyt's siege clock: a year without a single occupied district
+	# ends the intervention as a defeat with the capitulation route's results.
+	STP_cw_republics_repel_val = {
+		activation = { STP_cw_republics_repelled_val = yes }
+		icon = generic_prepare_civil_war
+		allowed = { tag = SRP }
+		visible = { STP_cw_republics_repelled_val = yes }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = yes
+		fire_only_once = no
+		days_mission_timeout = 365
+		cancel_trigger = { NOT = { STP_cw_republics_repelled_val = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_cw_republics_repel_val_timeout_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_cw_republics_repelled_val = yes }
+					VAL_cw_settle_defeat = yes
+				}
+			}
+		}
+	}
+
 	STP_cw_nod_intervention_cancelled = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }

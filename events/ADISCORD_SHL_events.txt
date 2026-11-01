@@ -615,7 +615,7 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.56.a
 		custom_effect_tooltip = SHL_armistice_tt
-		hidden_effect = { SHL_kyz_war_armistice = yes }
+		hidden_effect = { SHL_qanat_war_armistice = yes }
 	}
 }
 
@@ -767,7 +767,7 @@ country_event = {
 }
 
 # ---------------------------------------------------------------------------
-# Mazar (MZR)
+# Keizan (KYZ): ration demand and invasion
 # ---------------------------------------------------------------------------
 
 country_event = {
@@ -778,22 +778,25 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		tag = SHL
-		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 1 compare = equals }
 	}
 	option = {
 		name = ADISCORD_SHL.70.b
-		custom_effect_tooltip = SHL_mazar_refuse_tt
-		hidden_effect = { SHL_mazar_refuse = yes }
+		custom_effect_tooltip = SHL_keizan_refuse_tt
+		hidden_effect = { SHL_keizan_refuse = yes }
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.70.a
-		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
-			NOT = { has_political_power < 30 }
+		trigger = { SHL_keizan_first_payment_affordable = yes }
+		if = {
+			limit = { check_variable = { var = SHL_water_crisis value = 2 compare = equals } }
+			custom_effect_tooltip = SHL_water_treaty_discount_tt
 		}
-		custom_effect_tooltip = SHL_mazar_pay_first_tt
-		hidden_effect = { SHL_mazar_pay_first = yes }
+		else = {
+			custom_effect_tooltip = SHL_keizan_pay_first_tt
+		}
+		hidden_effect = { SHL_keizan_pay_first = yes }
 		ai_chance = {
 			base = 50
 			modifier = {
@@ -824,16 +827,16 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		tag = SHL
-		check_variable = { var = SHL_war_mzr value = 1 compare = equals }
+		check_variable = { var = SHL_war_kyz value = 2 compare = equals }
 		has_country_flag = {
-			flag = SHL_war_mzr_clock
+			flag = SHL_ration_war_clock
 			days > 298
 		}
 	}
 	option = {
 		name = ADISCORD_SHL.72.a
 		custom_effect_tooltip = SHL_armistice_tt
-		hidden_effect = { SHL_mzr_war_armistice = yes }
+		hidden_effect = { SHL_kyz_war_armistice = yes }
 	}
 }
 
@@ -889,19 +892,19 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		tag = SHL
-		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 1 compare = equals }
 	}
 	option = {
 		name = ADISCORD_SHL.75.b
-		custom_effect_tooltip = SHL_mazar_refuse_tt
-		hidden_effect = { SHL_mazar_refuse = yes }
+		custom_effect_tooltip = SHL_keizan_refuse_tt
+		hidden_effect = { SHL_keizan_refuse = yes }
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.75.a
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } }
-		custom_effect_tooltip = SHL_mazar_pay_final_tt
-		hidden_effect = { SHL_mazar_pay_final = yes }
+		custom_effect_tooltip = SHL_keizan_pay_final_tt
+		hidden_effect = { SHL_keizan_pay_final = yes }
 		ai_chance = {
 			base = 50
 			modifier = {
@@ -925,11 +928,11 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		tag = SHL
-		SHL_mzr_diplomacy_open = yes
+		SHL_kyz_diplomacy_open = yes
 	}
 	option = {
 		name = ADISCORD_SHL.124.a
-		unlock_decision_tooltip = SHL_negotiate_mzr_neutrality
+		unlock_decision_tooltip = SHL_negotiate_kyz_neutrality
 	}
 }
 
@@ -940,22 +943,22 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = {
-		SHL_mzr_partner_offer_current = yes
-		has_country_flag = SHL_mzr_pact_pending
+		SHL_kyz_partner_offer_current = yes
+		has_country_flag = SHL_kyz_pact_pending
 	}
 	option = {
 		name = ADISCORD_SHL.125.b
-		hidden_effect = { SHL_clear_mzr_partner_offer = yes }
+		hidden_effect = { SHL_clear_kyz_partner_offer = yes }
 		ai_chance = { base = 15 }
 	}
 	option = {
 		name = ADISCORD_SHL.125.a
 		trigger = {
-			SHL_mzr_partner_offer_current = yes
-			has_country_flag = SHL_mzr_pact_pending
+			SHL_kyz_partner_offer_current = yes
+			has_country_flag = SHL_kyz_pact_pending
 		}
-		custom_effect_tooltip = SHL_mzr_pact_accept_tt
-		hidden_effect = { SHL_accept_mzr_pact = yes }
+		custom_effect_tooltip = SHL_kyz_pact_accept_tt
+		hidden_effect = { SHL_accept_kyz_pact = yes }
 		ai_chance = { base = 85 }
 	}
 }
@@ -966,17 +969,17 @@ country_event = {
 	desc = ADISCORD_SHL.126.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { has_country_flag = SHL_mzr_neutrality_pending }
+	trigger = { has_country_flag = SHL_kyz_neutrality_pending }
 	option = {
 		name = ADISCORD_SHL.126.b
-		hidden_effect = { SHL_decline_mzr_neutrality = yes }
+		hidden_effect = { SHL_decline_kyz_neutrality = yes }
 		ai_chance = { base = 15 }
 	}
 	option = {
 		name = ADISCORD_SHL.126.a
-		trigger = { SHL_mzr_neutrality_current = yes }
-		custom_effect_tooltip = SHL_mzr_neutrality_accept_tt
-		hidden_effect = { SHL_accept_mzr_neutrality = yes }
+		trigger = { SHL_kyz_neutrality_current = yes }
+		custom_effect_tooltip = SHL_kyz_neutrality_accept_tt
+		hidden_effect = { SHL_accept_kyz_neutrality = yes }
 		ai_chance = { base = 85 }
 	}
 }
@@ -1011,13 +1014,6 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.90.a
 		custom_effect_tooltip = SHL_partner_joins_tt
-		if = {
-			limit = {
-				SHL = { has_war_with = MZR }
-				NOT = { has_war_with = MZR }
-			}
-			custom_effect_tooltip = SHL_partner_joins_mazar_tt
-		}
 		hidden_effect = { SHL_join_southern_compact = yes }
 		ai_chance = { base = 85 }
 	}
@@ -1045,10 +1041,10 @@ country_event = {
 		custom_effect_tooltip = SHL_partner_joins_tt
 		if = {
 			limit = {
-				SHL = { has_war_with = MZR }
-				NOT = { has_war_with = MZR }
+				SHL = { has_war_with = KYZ }
+				NOT = { has_war_with = KYZ }
 			}
-			custom_effect_tooltip = SHL_partner_joins_mazar_tt
+			custom_effect_tooltip = SHL_partner_joins_keizan_tt
 		}
 		hidden_effect = { SHL_join_golden_gate = yes }
 		ai_chance = { base = 85 }
@@ -1167,11 +1163,11 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		SHL_campaign_open = yes
-		SHL_mazar_can_threaten = yes
+		SHL_keizan_can_threaten = yes
 	}
 	option = {
 		name = ADISCORD_SHL.110.a
-		custom_effect_tooltip = SHL_mazar_warning_tt
+		custom_effect_tooltip = SHL_keizan_warning_tt
 	}
 }
 
@@ -1181,7 +1177,7 @@ country_event = {
 	desc = ADISCORD_SHL.111.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
-	trigger = { tag = MZR }
+	trigger = { tag = KYZ }
 	option = {
 		name = ADISCORD_SHL.111.a
 	}
@@ -1193,7 +1189,7 @@ country_event = {
 	desc = ADISCORD_SHL.112.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = MZR }
+	trigger = { tag = KYZ }
 	option = {
 		name = ADISCORD_SHL.112.b
 		hidden_effect = {

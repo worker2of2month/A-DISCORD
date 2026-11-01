@@ -3097,6 +3097,34 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("days = 21", intervention)
         self.assertIn("VAL_foreign_operation_active", self.triggers)
 
+    def test_val_siege_and_repulse_missions_mirror_each_other(self):
+        val = block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_cw_livonn_siege")
+        self.assertIn("activation = { VAL_cw_livonn_siege_active = yes }", val)
+        self.assertIn("days_mission_timeout = 180", val)
+        self.assertIn("available = { hidden_trigger = { always = no } }", val)
+        self.assertIn("VAL_cw_settle_republics = yes", block(val, "timeout_effect"))
+        srp = block(read("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_republics_repel_val")
+        self.assertIn("activation = { STP_cw_republics_repelled_val = yes }", srp)
+        self.assertIn("days_mission_timeout = 365", srp)
+        self.assertIn("available = { hidden_trigger = { always = no } }", srp)
+        self.assertIn("VAL_cw_settle_defeat = yes", block(srp, "timeout_effect"))
+        triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        siege = block(triggers, "VAL_cw_livonn_siege_active")
+        for state in (43, 44, 88):
+            self.assertIn(f"{state} = {{ controller = {{ OR = {{ tag = VAL is_subject_of = VAL }} }} }}", siege)
+        self.assertIn("45 = { is_controlled_by = SRP }", siege)
+        repelled = block(triggers, "STP_cw_republics_repelled_val")
+        for state in (43, 44, 45, 88):
+            self.assertIn(f"{state} = {{ is_controlled_by = SRP }}", repelled)
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        defeat = block(effects, "VAL_cw_settle_defeat")
+        self.assertIn("set_country_flag = VAL_cw_defeated", defeat)
+        self.assertIn("white_peace = SRP", defeat)
+        self.assertIn("STP_cw_finish_mobilization = yes", defeat)
+        peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        self.assertIn("VAL_cw_settle_defeat = yes", peace)
+        self.assertNotIn("set_country_flag = VAL_cw_defeated", peace)
+
     def test_nod_owns_readiness_and_observers_cannot_authorize_war(self):
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         warning = block(decisions, "STP_cw_nod_warning")
@@ -7454,6 +7482,7 @@ class WartimeProgramContracts(unittest.TestCase):
         for name in (
             "STP_cw_start",
             "VAL_cw_settle_republics",
+            "VAL_cw_settle_defeat",
             "STP_cw_settle_union_victory",
             "STP_cw_settle_nod_victory",
         ):
@@ -7465,11 +7494,12 @@ class WartimeProgramContracts(unittest.TestCase):
                 1,
                 name,
             )
+        # Every peace route closes mobilisation through its settlement effect.
         hooks = country_on_actions_entries(
             "common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'
         )
         self.assertEqual(
-            sum(e.key == "STP_cw_finish_mobilization" for e in walk(hooks)), 1
+            sum(e.key == "STP_cw_finish_mobilization" for e in walk(hooks)), 0
         )
         for path in (
             "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",

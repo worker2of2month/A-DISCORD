@@ -87,10 +87,6 @@ ADISCORD_economy_is_dormant_tier_country = {
 	}
 }
 
-ADISCORD_economy_is_dormant = {
-	ADISCORD_economy_is_dormant_tier_country = yes
-}
-
 ADISCORD_economy_should_monthly_update = {
 	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 	ADISCORD_economy_has_current_schema = yes

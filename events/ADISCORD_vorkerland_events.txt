@@ -3031,6 +3031,18 @@ country_event = {
 	}
 }
 
+# Peer claimant deadline; its resolver re-arms the next countdown while the
+# showdown war is live.
+country_event = {
+	id = ADISCORD_vorkerland_stalemate.3
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_vorkerland_resolve_claimant_stalemate_deadline = yes
+	}
+}
+
 # --- story_events ---
 add_namespace = ADISCORD_vorkerland_story
 

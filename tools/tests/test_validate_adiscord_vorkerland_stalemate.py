@@ -88,6 +88,23 @@ class VorkerlandStalemateValidatorTests(unittest.TestCase):
             any("guard before its payload" in issue for issue in issues), issues
         )
 
+    def test_claimant_chain_re_arms_and_clears_its_schedule_flag(self) -> None:
+        temporary, root = _fixture()
+        self.addCleanup(temporary.cleanup)
+        path = root / EFFECTS
+        text = path.read_text(encoding="utf-8")
+        clear = "clr_country_flag = ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled"
+        self.assertEqual(text.count(clear), 1)
+        path.write_text(text.replace(clear, "", 1), encoding="utf-8")
+        issues = collect_issues(root)
+        self.assertTrue(any("schedule flag before its payload" in issue for issue in issues), issues)
+        self.assertTrue(any("exactly one clearer" in issue for issue in issues), issues)
+        rearm = "\t\tADISCORD_vorkerland_schedule_claimant_stalemate_deadline = yes\n"
+        self.assertEqual(text.count(rearm), 1)
+        path.write_text(text.replace(rearm, "", 1), encoding="utf-8")
+        issues = collect_issues(root)
+        self.assertTrue(any("re-arm the countdown" in issue for issue in issues), issues)
+
     def test_ai_only_actual_war_gate_is_required(self) -> None:
         temporary, root = _fixture()
         self.addCleanup(temporary.cleanup)

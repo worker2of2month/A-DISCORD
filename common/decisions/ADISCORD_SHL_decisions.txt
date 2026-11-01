@@ -1285,7 +1285,7 @@ SHL_quarters_and_borders = {
 				add = 40
 				OR = {
 					has_war = yes
-					check_variable = { var = SHL_mazar_state value = 5 compare = equals }
+					check_variable = { var = SHL_keizan_state value = 5 compare = equals }
 				}
 			}
 			modifier = {
@@ -1437,7 +1437,7 @@ SHL_quarters_and_borders = {
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_seize_qanats_tt
-			hidden_effect = { SHL_start_kyz_war = yes }
+			hidden_effect = { SHL_start_qanat_war = yes }
 		}
 		ai_will_do = {
 			base = 0
@@ -1529,40 +1529,40 @@ SHL_quarters_and_borders = {
 		}
 	}
 
-	# ----- Mazar -----
+	# ----- Keizan -----
 
-	SHL_negotiate_mzr_neutrality = {
+	SHL_negotiate_kyz_neutrality = {
 		icon = generic_diplomatic_treaty
 		visible = {
-			SHL_mzr_diplomacy_open = yes
+			SHL_kyz_diplomacy_open = yes
 			OR = {
-				KYZ = { SHL_mzr_partner_offer_current = yes }
-				GLP = { SHL_mzr_partner_offer_current = yes }
+				MZR = { SHL_kyz_partner_offer_current = yes }
+				GLP = { SHL_kyz_partner_offer_current = yes }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = SHL_mzr_neutrality_funds_tt
+				tooltip = SHL_kyz_neutrality_funds_tt
 				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 			}
 			NOT = { has_political_power < 30 }
 			custom_trigger_tooltip = {
-				tooltip = SHL_mzr_neutrality_idle_tt
-				KYZ = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
-				GLP = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
+				tooltip = SHL_kyz_neutrality_idle_tt
+				MZR = { NOT = { has_country_flag = SHL_kyz_neutrality_pending } }
+				GLP = { NOT = { has_country_flag = SHL_kyz_neutrality_pending } }
 			}
 		}
 		cost = 0
 		fire_only_once = no
 		days_re_enable = 14
 		complete_effect = {
-			custom_effect_tooltip = SHL_mzr_neutrality_offer_tt
-			hidden_effect = { SHL_request_mzr_neutrality = yes }
+			custom_effect_tooltip = SHL_kyz_neutrality_offer_tt
+			hidden_effect = { SHL_request_kyz_neutrality = yes }
 		}
 		ai_will_do = { base = 80 }
 	}
 
-	SHL_mazar_deadline = {
+	SHL_keizan_deadline = {
 		icon = generic_border_conflict
 		allowed = { tag = SHL }
 		activation = { always = no }
@@ -1572,14 +1572,14 @@ SHL_quarters_and_borders = {
 		selectable_mission = no
 		fire_only_once = no
 		timeout_effect = {
-			custom_effect_tooltip = SHL_mazar_deadline_timeout_tt
-			hidden_effect = { SHL_start_mzr_war = yes }
+			custom_effect_tooltip = SHL_keizan_deadline_timeout_tt
+			hidden_effect = { SHL_start_kyz_war = yes }
 		}
 	}
 
-	SHL_mazar_last_ration = {
+	SHL_keizan_last_ration = {
 		icon = generic_diplomatic_treaty
-		visible = { has_active_mission = SHL_mazar_deadline }
+		visible = { has_active_mission = SHL_keizan_deadline }
 		available = {
 			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
 			NOT = { has_political_power < 50 }
@@ -1592,8 +1592,8 @@ SHL_quarters_and_borders = {
 		}
 		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = SHL_mazar_last_ration_tt
-			hidden_effect = { SHL_mazar_buyout = yes }
+			custom_effect_tooltip = SHL_keizan_last_ration_tt
+			hidden_effect = { SHL_keizan_buyout = yes }
 		}
 		ai_will_do = {
 			base = 0
@@ -2113,40 +2113,40 @@ SHL_quarters_and_borders = {
 			base = 0
 			modifier = {
 				add = 10
-				check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+				check_variable = { var = SHL_keizan_state value = 3 compare = equals }
 				has_war = no
 			}
 		}
 	}
 
-	SHL_march_on_mazar = {
+	SHL_march_on_keizan = {
 		icon = generic_operation
 		visible = {
 			has_completed_focus = SHL_no_more_rations
-			NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+			NOT = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = SHL_march_ready_tt
-				SHL_can_march_on_mazar = yes
+				SHL_can_march_on_keizan = yes
 			}
 		}
 		cost = 50
 		days_remove = 28
 		complete_effect = {
-			custom_effect_tooltip = SHL_march_on_mazar_tt
-			hidden_effect = { SHL_begin_mzr_mobilization = yes }
+			custom_effect_tooltip = SHL_march_on_keizan_tt
+			hidden_effect = { SHL_begin_kyz_mobilization = yes }
 		}
-		remove_effect = { hidden_effect = { SHL_finish_mzr_mobilization = yes } }
+		remove_effect = { hidden_effect = { SHL_finish_kyz_mobilization = yes } }
 		cancel_trigger = {
 			OR = {
 				SHL_country_operable = no
 				has_war = yes
-				SHL_mazar_can_threaten = no
-				check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+				SHL_keizan_can_threaten = no
+				check_variable = { var = SHL_keizan_state value = 3 compare = equals }
 			}
 		}
-		cancel_effect = { hidden_effect = { SHL_cancel_mzr_mobilization = yes } }
+		cancel_effect = { hidden_effect = { SHL_cancel_kyz_mobilization = yes } }
 		ai_will_do = {
 			base = 0
 			modifier = {
@@ -2159,22 +2159,22 @@ SHL_quarters_and_borders = {
 
 	SHL_secure_cistern_corridor = {
 		icon = generic_operation
-		visible = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		visible = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = SHL_cistern_objectives_tt
-				SHL_mzr_objectives_held = yes
+				SHL_kyz_objectives_held = yes
 			}
 		}
 		cost = 0
 		days_remove = 14
 		complete_effect = { custom_effect_tooltip = SHL_secure_cistern_corridor_tt }
-		cancel_trigger = { SHL_mzr_objectives_held = no }
+		cancel_trigger = { SHL_kyz_objectives_held = no }
 		remove_effect = {
 			hidden_effect = {
 				if = {
-					limit = { SHL_mzr_objectives_held = yes }
-					SHL_mzr_war_victory = yes
+					limit = { SHL_kyz_objectives_held = yes }
+					SHL_kyz_war_victory = yes
 				}
 			}
 		}
@@ -2311,7 +2311,7 @@ SHL_quarters_and_borders = {
 		icon = ADISCORD_negotiations
 		visible = {
 			OR = {
-				check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+				check_variable = { var = SHL_kyz_outcome value = 1 compare = equals }
 				has_completed_focus = SHL_c_cistern_charter
 			}
 			OR = {
@@ -2338,7 +2338,7 @@ SHL_quarters_and_borders = {
 	SHL_reconstruct_south = {
 		icon = ADISCORD_construction
 		state_target = yes
-		targets = { 269 268 707 287 288 289 290 291 292 293 294 295 }
+		targets = { 280 284 707 287 288 289 290 291 292 293 294 295 }
 		visible = {
 			has_completed_focus = SHL_peace_has_a_price
 			NOT = { has_variable = SHL_southern_programme }
@@ -2397,7 +2397,7 @@ SHL_quarters_and_borders = {
 	SHL_cistern_concession = {
 		icon = ADISCORD_negotiations
 		visible = {
-			check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+			check_variable = { var = SHL_kyz_outcome value = 1 compare = equals }
 			OR = {
 				SHL_house_mandate_current = yes
 				SHL_regent_mandate_current = yes

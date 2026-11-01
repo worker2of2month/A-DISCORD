@@ -1298,8 +1298,6 @@ ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
 }
 
 ADISCORD_vorkerland_ensure_wkr_home_guard = {
-	# New campaigns apply this here; on_startup applies the same versioned
-	# template package to WKR countries loaded from older saves.
 	ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes
 	if = {
 		limit = {
@@ -1767,21 +1765,6 @@ ADISCORD_vorkerland_assert_rom_dva_war_content_initialized = {
 			}
 		}
 	}
-}
-
-ADISCORD_vorkerland_detach_central_war_factions = {
-	WKR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	VAD = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	TVA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-	OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
 }
 
 ADISCORD_vorkerland_detach_regional_war_factions = {
@@ -4522,60 +4505,6 @@ ADISCORD_vorkerland_schedule_outcome_recheck = {
 }
 
 # --- collapse_map_effects ---
-ADISCORD_vorkerland_end_internal_wars = {
-	# Central claimant wars.
-	if = { limit = { country_exists = WRK country_exists = VAD } WRK = { if = { limit = { has_war_with = VAD } white_peace = VAD } } }
-	if = { limit = { country_exists = WRK country_exists = TVA } WRK = { if = { limit = { has_war_with = TVA } white_peace = TVA } } }
-	if = { limit = { country_exists = WRK country_exists = TGD } WRK = { if = { limit = { has_war_with = TGD } white_peace = TGD } } }
-	if = { limit = { country_exists = WRK country_exists = EYR } WRK = { if = { limit = { has_war_with = EYR } white_peace = EYR } } }
-	if = { limit = { country_exists = WRK country_exists = EGC } WRK = { if = { limit = { has_war_with = EGC } white_peace = EGC } } }
-	if = { limit = { country_exists = VAD country_exists = TVA } VAD = { if = { limit = { has_war_with = TVA } white_peace = TVA } } }
-	if = { limit = { country_exists = VAD country_exists = TGD } VAD = { if = { limit = { has_war_with = TGD } white_peace = TGD } } }
-	if = { limit = { country_exists = VAD country_exists = EYR } VAD = { if = { limit = { has_war_with = EYR } white_peace = EYR } } }
-	if = { limit = { country_exists = VAD country_exists = EGC } VAD = { if = { limit = { has_war_with = EGC } white_peace = EGC } } }
-	if = { limit = { country_exists = TVA country_exists = TGD } TVA = { if = { limit = { has_war_with = TGD } white_peace = TGD } } }
-	if = { limit = { country_exists = TVA country_exists = EYR } TVA = { if = { limit = { has_war_with = EYR } white_peace = EYR } } }
-	if = { limit = { country_exists = TVA country_exists = EGC } TVA = { if = { limit = { has_war_with = EGC } white_peace = EGC } } }
-	if = { limit = { country_exists = WRK country_exists = RIV } WRK = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
-	if = { limit = { country_exists = WRK country_exists = REV } WRK = { if = { limit = { has_war_with = REV } white_peace = REV } } }
-	if = { limit = { country_exists = WRK country_exists = YOR } WRK = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
-	if = { limit = { country_exists = VAD country_exists = RIV } VAD = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
-	if = { limit = { country_exists = VAD country_exists = REV } VAD = { if = { limit = { has_war_with = REV } white_peace = REV } } }
-	if = { limit = { country_exists = VAD country_exists = YOR } VAD = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
-	if = { limit = { country_exists = TVA country_exists = RIV } TVA = { if = { limit = { has_war_with = RIV } white_peace = RIV } } }
-	if = { limit = { country_exists = TVA country_exists = REV } TVA = { if = { limit = { has_war_with = REV } white_peace = REV } } }
-	if = { limit = { country_exists = TVA country_exists = YOR } TVA = { if = { limit = { has_war_with = YOR } white_peace = YOR } } }
-	if = { limit = { country_exists = WRK country_exists = NDN } WRK = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
-	if = { limit = { country_exists = WRK country_exists = SWB } WRK = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
-	if = { limit = { country_exists = VAD country_exists = NDN } VAD = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
-	if = { limit = { country_exists = VAD country_exists = SWB } VAD = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
-	if = { limit = { country_exists = TVA country_exists = NDN } TVA = { if = { limit = { has_war_with = NDN } white_peace = NDN } } }
-	if = { limit = { country_exists = TVA country_exists = SWB } TVA = { if = { limit = { has_war_with = SWB } white_peace = SWB } } }
-	if = { limit = { country_exists = WRK country_exists = VHV } WRK = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
-	if = { limit = { country_exists = WRK country_exists = OSV } WRK = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
-	if = { limit = { country_exists = VAD country_exists = VHV } VAD = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
-	if = { limit = { country_exists = VAD country_exists = OSV } VAD = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
-	if = { limit = { country_exists = TVA country_exists = VHV } TVA = { if = { limit = { has_war_with = VHV } white_peace = VHV } } }
-	if = { limit = { country_exists = TVA country_exists = OSV } TVA = { if = { limit = { has_war_with = OSV } white_peace = OSV } } }
-
-	# Local wars may still be active when a central claimant wins. Close them
-	# explicitly before applying that claimant's final political map.
-	if = { limit = { country_exists = ZAO country_exists = WPA } ZAO = { if = { limit = { has_war_with = WPA } white_peace = WPA } } }
-	if = { limit = { country_exists = WPS country_exists = ZAO } WPS = { if = { limit = { has_war_with = ZAO } white_peace = ZAO } } }
-	if = { limit = { country_exists = ZAO country_exists = PSD } ZAO = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
-	if = { limit = { country_exists = ZAO country_exists = PWR } ZAO = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
-	if = { limit = { country_exists = WPA country_exists = PSD } WPA = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
-	if = { limit = { country_exists = WPA country_exists = PWR } WPA = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
-	if = { limit = { country_exists = WPS country_exists = PSD } WPS = { if = { limit = { has_war_with = PSD } white_peace = PSD } } }
-	if = { limit = { country_exists = WPS country_exists = PWR } WPS = { if = { limit = { has_war_with = PWR } white_peace = PWR } } }
-	if = { limit = { country_exists = VLA country_exists = EBA } VLA = { if = { limit = { has_war_with = EBA } white_peace = EBA } } }
-	if = { limit = { country_exists = ROM country_exists = DVA } ROM = { if = { limit = { has_war_with = DVA } white_peace = DVA } } }
-	if = { limit = { country_exists = SOL country_exists = SRA } SOL = { if = { limit = { has_war_with = SRA } white_peace = SRA } } }
-	if = { limit = { country_exists = TRU country_exists = ZTA } TRU = { if = { limit = { has_war_with = ZTA } white_peace = ZTA } } }
-	if = { limit = { country_exists = ROM country_exists = VAD } ROM = { if = { limit = { has_war_with = VAD } white_peace = VAD } } }
-	if = { limit = { country_exists = TRU country_exists = VAD } TRU = { if = { limit = { has_war_with = VAD } white_peace = VAD } } }
-}
-
 # Global FIFO survives the requesting country's annexation and player handoff.
 # Requests, button clicks and observer expiry advance the shared queue.
 ADISCORD_superevent_enqueue = {
@@ -5529,15 +5458,6 @@ ADISCORD_vorkerland_disengage_regional_allies_before_formation = {
 			if = { limit = { country_exists = VAD has_war_with = VAD } white_peace = VAD }
 			if = { limit = { country_exists = TVA has_war_with = TVA } white_peace = TVA }
 		}
-	}
-}
-
-ADISCORD_vorkerland_restore_independent_wrk_core_packages = {
-	# Public no-op hook used by the postwar decisions. The decisions themselves
-	# verify complete ownership/control and add only their explicit package.
-	if = {
-		limit = { tag = WRK has_global_flag = ADISCORD_vorkerland_reunification_verified }
-		clr_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending
 	}
 }
 
@@ -10773,6 +10693,41 @@ ADISCORD_vorkerland_resolve_solarino_stalemate_deadline = {
 			set_country_flag = { flag = ADISCORD_vorkerland_solarino_breakthrough_window_active days = 75 }
 			add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }
 		}
+	}
+}
+
+# The claimant showdown has no one-shot guard: the countdown re-arms itself
+# after each resolved deadline while the peer war is still live, so a long war
+# receives a 75-day window every 240 days and the chain ends with the war.
+ADISCORD_vorkerland_schedule_claimant_stalemate_deadline = {
+	if = {
+		limit = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			ADISCORD_vorkerland_has_live_claimant_war = yes
+			NOT = { has_country_flag = ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled }
+		}
+		set_country_flag = ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled
+		country_event = { id = ADISCORD_vorkerland_stalemate.3 days = 240 }
+	}
+}
+
+# The window is granted only inside the verified showdown; an earlier peer war
+# keeps its countdown alive without a buff until the showdown starts.
+ADISCORD_vorkerland_resolve_claimant_stalemate_deadline = {
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled }
+		clr_country_flag = ADISCORD_vorkerland_claimant_stalemate_deadline_scheduled
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_central_showdown_started
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				ADISCORD_vorkerland_is_main_claimant = yes
+				ADISCORD_vorkerland_has_live_claimant_war = yes
+			}
+			set_country_flag = { flag = ADISCORD_vorkerland_claimant_breakthrough_window_active days = 75 }
+			add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }
+		}
+		ADISCORD_vorkerland_schedule_claimant_stalemate_deadline = yes
 	}
 }
 

@@ -1878,19 +1878,6 @@ STP_false_trail_noisy_redirect = {
 	}
 }
 
-STP_false_trail_courier_seized = {
-	if = { limit = { STP = { STP_cw_preparation_open = yes } } STP = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.03 } } }
-	set_temp_variable = { var = STP_region_influence_change value = 6 }
-	STP_add_party_influence = yes
-	clr_state_flag = STP_niansas_transfer_secured
-	clr_state_flag = STP_resistance_administration_asset
-	ROOT = {
-		set_variable = { var = STP_last_party_response value = 3 }
-		set_temp_variable = { var = STP_party_suspicion_change value = 8 }
-		STP_change_party_suspicion = yes
-	}
-}
-
 STP_false_trail_counterintelligence_breakthrough = {
 	if = { limit = { STP = { STP_cw_preparation_open = yes } } STP = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.06 } } }
 	STP_cw_return_preparation_reserves = yes
@@ -4493,7 +4480,8 @@ VAL_cw_start_intervention = {
 	}
 }
 
-# COUNTRY scope VAL; called only by the reserved military-result router.
+# COUNTRY scope VAL; called by the reserved military-result router and the
+# Livonn siege mission.
 VAL_cw_settle_republics = {
 	if = {
 		limit = { has_country_flag = VAL_cw_entered NOT = { has_country_flag = VAL_cw_settled } }
@@ -4529,6 +4517,27 @@ VAL_cw_settle_republics = {
 		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/45/88"
 		STP_cw_queue_peace_reconciliation = yes
 	}
+}
+
+# Any scope; called by the capitulation router and the republics' repulse mission.
+VAL_cw_settle_defeat = {
+	VAL = {
+		if = { limit = { has_war_with = SRP } white_peace = SRP }
+		set_country_flag = VAL_cw_settled
+		set_country_flag = VAL_cw_defeated
+		clr_country_flag = VAL_cw_entered
+		clr_country_flag = VAL_cw_offer_pending
+		if = {
+			limit = { has_country_flag = VAL_cw_mobilizing }
+			clr_country_flag = VAL_cw_mobilizing
+			clr_country_flag = VAL_foreign_operation_active
+		}
+		set_temp_variable = { var = ADISCORD_VAL_effect_value value = -10 }
+		VAL_change_contract_authority = yes
+		country_event = { id = ADISCORD_STP_cw.23 }
+	}
+	SRP = { remove_ideas = STP_cw_republics_battle_spirit STP_cw_finish_mobilization = yes }
+	log = "[STP_CW] SRP repelled VAL; unrelated wars retained"
 }
 
 # COUNTRY: NOD owns readiness; observers never authorize or postpone entry.
@@ -10506,14 +10515,6 @@ STP_ps_refund_val_supply = {
 		set_temp_variable = { var = STP_ps_refund_rifles value = STP_ps_val_receipt_rifles }
 		set_temp_variable = { var = STP_ps_refund_money value = STP_ps_val_receipt_money }
 		set_temp_variable = { var = STP_ps_contract_type value = STP_ps_val_receipt_contract }
-		# Compatibility for saves from before fulfilment moved to convoy resolution.
-		if = {
-			limit = {
-				check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
-				check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
-			}
-			clr_country_flag = VAL_cw_arms_contract_fulfilled
-		}
 		STP_ps_clear_val_receipt = yes
 		add_equipment_to_stockpile = { type = infantry_equipment amount = STP_ps_refund_rifles producer = VAL }
 		if = { limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
@@ -10613,20 +10614,15 @@ STP_ps_resolve_val_supply = {
 					check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
 					check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
 				}
-				# Old saves may already carry the premature fulfilled flag and rewards.
-				# In that case resolve the escrow without granting them a second time.
 				if = {
-					limit = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
-					if = {
-						limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
-						set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
-					}
-					else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
-					army_experience = 5
-					set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-					VAL_change_contract_authority = yes
-					country_event = { id = ADISCORD_STP_cw.51 }
+					limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
+					set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
 				}
+				else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
+				army_experience = 5
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+				VAL_change_contract_authority = yes
+				country_event = { id = ADISCORD_STP_cw.51 }
 			}
 			if = { limit = { check_variable = { var = STP_ps_contract_type value = 3 compare = equals } }
 				if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }

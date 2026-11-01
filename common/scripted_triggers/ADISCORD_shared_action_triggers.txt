@@ -24,14 +24,6 @@ ADISCORD_has_campaign_slot = {
 	check_variable = { var = ADISCORD_available_campaign_slots value = 1 compare = greater_than_or_equals }
 }
 
-ADISCORD_has_2500_infantry_equipment = {
-	NOT = { has_equipment = { infantry_equipment < 25000 } }
-}
-
 ADISCORD_has_4000_infantry_equipment = {
 	NOT = { has_equipment = { infantry_equipment < 40000 } }
-}
-
-ADISCORD_has_5000_infantry_equipment = {
-	NOT = { has_equipment = { infantry_equipment < 50000 } }
 }

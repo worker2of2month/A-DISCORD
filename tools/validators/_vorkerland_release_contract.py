@@ -7,6 +7,19 @@ import re
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
+# Peer-claimant fronts switch to careful only against a materially stronger
+# enemy (ADISCORD_difficulty_enemy_outmatches); every other adaptive front
+# keeps the full ADISCORD_difficulty_enemy_requires_caution guard.
+PEER_CAUTION_PROFILES = frozenset({
+    "ADISCORD_vorkerland_front_central_against_wrk",
+    "ADISCORD_vorkerland_front_central_against_vad",
+    "ADISCORD_vorkerland_front_central_against_tva",
+    "ADISCORD_vorkerland_claimant_breakthrough_wkr",
+    "ADISCORD_vorkerland_claimant_breakthrough_vad",
+    "ADISCORD_vorkerland_claimant_breakthrough_tva",
+})
+
+
 def base_front_controls(profile: str) -> list[str]:
     """Return country-targeted default orders, excluding difficulty variants."""
     return [
@@ -50,8 +63,9 @@ def validate_adaptive_fronts(source: str, issues: list[str]) -> None:
             issues.append(f"{profile.key}: default front needs a numeric priority")
             continue
         offset = 2 if profile.key.startswith("ADISCORD_vorkerland_auxiliary_of_") else 1
+        caution = "outmatches" if profile.key in PEER_CAUTION_PROFILES else "requires_caution"
         modes = [("allows_push", "careful", "yes")] if base["execution_type"] == "careful" else [
-            ("requires_caution", "careful", "no"), ("allows_push", "rush_weak", "yes")
+            (caution, "careful", "no"), ("allows_push", "rush_weak", "yes")
         ]
         if base.get("execute_order") == "no":
             modes = []

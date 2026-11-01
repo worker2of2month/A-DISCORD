@@ -554,7 +554,8 @@ scripted_gui = {
 			}
 
 			NAM_bw_underground_visible = {
-				NOT = { has_country_flag = NAM_weber_amnesty }
+				has_variable = NAM_underground
+				NAM_underground_open = yes
 			}
 
 			NAM_bw_67_repair_visible = {
@@ -750,21 +751,21 @@ scripted_gui = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_67_drilling_price_visible = {
 				OR = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_67_drilling_duration_visible = {
 				OR = {
 					NOT = { has_variable = NAM_bw_selected_state }
 					check_variable = { var = NAM_bw_selected_state value = 67 compare = equals }
 				}
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_67_drilling_click_enabled = {
 				OR = {
@@ -776,15 +777,15 @@ scripted_gui = {
 
 			NAM_bw_688_drilling_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_688_drilling_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_688_drilling_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_688_drilling_click_enabled = {
 				check_variable = { var = NAM_bw_selected_state value = 688 compare = equals }
@@ -793,15 +794,15 @@ scripted_gui = {
 
 			NAM_bw_689_drilling_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_689_drilling_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_689_drilling_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_689_drilling_click_enabled = {
 				check_variable = { var = NAM_bw_selected_state value = 689 compare = equals }
@@ -810,15 +811,15 @@ scripted_gui = {
 
 			NAM_bw_690_drilling_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_690_drilling_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_690_drilling_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_690_drilling_click_enabled = {
 				check_variable = { var = NAM_bw_selected_state value = 690 compare = equals }
@@ -827,15 +828,15 @@ scripted_gui = {
 
 			NAM_bw_719_drilling_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_719_drilling_price_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_719_drilling_duration_visible = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }
-				has_completed_focus = NAM_deep_wells
+				NAM_deep_drilling_unlocked = yes
 			}
 			NAM_bw_719_drilling_click_enabled = {
 				check_variable = { var = NAM_bw_selected_state value = 719 compare = equals }

@@ -56,11 +56,6 @@ VAL_partner_market_income = {
 	icon = GFX_idea_VAL_contract_state
 }
 
-# Retain the serialized legacy ID only for guarded removal from older saves.
-VAL_reclamation_recovered_land = {
-	enable = { always = no }
-}
-
 # State reclamation is represented by one status at a time.
 # These are the net penalties after replacing the original contaminated-state modifier.
 VAL_reclamation_stage_1_modifier = {

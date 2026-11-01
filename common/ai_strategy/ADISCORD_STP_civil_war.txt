@@ -416,12 +416,14 @@ SRP_cw_front_against_val = {
 	ai_strategy = { type = conquer id = VAL value = 200 }
 }
 
+# The intervention is a paid conquest of 43/44/88: the base order attacks on its
+# own, otherwise the AI parks in front of Livonn's hills until the siege clock ends it.
 VAL_cw_front_against_srp = {
 	allowed = { original_tag = VAL }
 	enable = { has_war_with = SRP }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SRP value = 80 }
-	ai_strategy = { type = front_control tag = SRP ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = SRP value = 120 }
+	ai_strategy = { type = front_control tag = SRP ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
@@ -429,7 +431,7 @@ VAL_cw_front_against_srp = {
 			ADISCORD_difficulty_enemy_requires_caution = yes
 		}
 		ratio = 0.01
-		priority = 1201
+		priority = 1401
 		ordertype = front
 		execution_type = careful
 		execute_order = yes
@@ -442,12 +444,47 @@ VAL_cw_front_against_srp = {
 			ADISCORD_difficulty_enemy_allows_push = yes
 		}
 		ratio = 0.01
-		priority = 1201
+		priority = 1401
 		ordertype = front
 		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}
+	ai_strategy = { type = conquer id = SRP value = 200 }
+	ai_strategy = { type = consider_weak id = SRP value = 30 }
+}
+
+# Field army for the republics war. Territorial militias and the air-defence
+# floor otherwise absorb the factories while the line infantry stays half empty.
+VAL_cw_republics_war_army = {
+	allowed = { original_tag = VAL }
+	enable = {
+		is_ai = yes
+		has_war_with = SRP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = infantry value = 80 }
+	ai_strategy = { type = role_ratio id = mountaineers value = 15 }
+	ai_strategy = { type = role_ratio id = militias value = -80 }
+	ai_strategy = { type = role_ratio id = garrison value = -40 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 60 }
+	ai_strategy = { type = equipment_production_factor id = artillery value = 15 }
+	ai_strategy = { type = equipment_production_factor id = support value = 10 }
+	ai_strategy = { type = force_concentration_factor value = 50 }
+}
+
+# Advanced difficulty raises Kefreyt's wartime recruitment above the fiscal
+# brakes; the replacement reserve guard in VAL.txt still outranks this.
+VAL_cw_republics_war_recruitment = {
+	allowed = { original_tag = VAL }
+	enable = {
+		is_ai = yes
+		difficulty > 2
+		has_war_with = SRP
+		NOT = { has_manpower < 15000 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = 25 }
 }
 
 STP_cw_front_against_nod = {
@@ -606,6 +643,8 @@ STP_cw_border_territorial_armies = {
 	enable = {
 		has_war = yes
 		NOT = { STP_cw_northern_counteroffensive_open = yes }
+		# Advanced-difficulty Kefreyt fields regular infantry instead of militias.
+		NOT = { AND = { original_tag = VAL difficulty > 2 } }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = militias value = 100 }

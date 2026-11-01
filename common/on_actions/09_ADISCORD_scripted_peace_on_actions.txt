@@ -1460,23 +1460,7 @@ on_actions = {
 						}
 					}
 					set_global_flag = skip_default_capitulation
-					VAL = {
-						if = { limit = { has_war_with = SRP } white_peace = SRP }
-						set_country_flag = VAL_cw_settled
-						set_country_flag = VAL_cw_defeated
-						clr_country_flag = VAL_cw_entered
-						clr_country_flag = VAL_cw_offer_pending
-						if = {
-							limit = { has_country_flag = VAL_cw_mobilizing }
-							clr_country_flag = VAL_cw_mobilizing
-							clr_country_flag = VAL_foreign_operation_active
-						}
-						set_temp_variable = { var = ADISCORD_VAL_effect_value value = -10 }
-						VAL_change_contract_authority = yes
-						country_event = { id = ADISCORD_STP_cw.23 }
-					}
-					SRP = { remove_ideas = STP_cw_republics_battle_spirit STP_cw_finish_mobilization = yes }
-					log = "[STP_CW] SRP repelled VAL; unrelated wars retained"
+					VAL_cw_settle_defeat = yes
 				}
 				else_if = {
 					limit = {
@@ -1766,19 +1750,20 @@ on_actions = {
 
 				# BEGIN shahrabad:on_capitulation
 				# Shahrabad wars are limited: white peace and the listed regions, never annexation.
+				# SHL_war_kyz = 2 is the ration war with Keizan, 1 the limited qanat war.
 				if = {
 					limit = {
 						ROOT = { tag = SHL }
-						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						SHL = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 						FROM = {
 							OR = {
-								tag = MZR
-								has_country_flag = SHL_mzr_war_partner
+								tag = KYZ
+								has_country_flag = SHL_kyz_war_partner
 							}
 						}
 					}
 					set_global_flag = skip_default_capitulation
-					SHL = { SHL_mzr_war_defeat = yes }
+					SHL = { SHL_kyz_war_defeat = yes }
 				}
 				else_if = {
 					limit = {
@@ -1787,7 +1772,7 @@ on_actions = {
 						FROM = { tag = KYZ }
 					}
 					set_global_flag = skip_default_capitulation
-					SHL = { SHL_kyz_war_defeat = yes }
+					SHL = { SHL_qanat_war_defeat = yes }
 				}
 				else_if = {
 					limit = {
@@ -1800,8 +1785,8 @@ on_actions = {
 				}
 				else_if = {
 					limit = {
-						ROOT = { tag = MZR }
-						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						ROOT = { tag = KYZ }
+						SHL = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 						FROM = {
 							OR = {
 								tag = SHL
@@ -1810,7 +1795,7 @@ on_actions = {
 						}
 					}
 					set_global_flag = skip_default_capitulation
-					SHL = { SHL_mzr_war_victory = yes }
+					SHL = { SHL_kyz_war_victory = yes }
 				}
 				else_if = {
 					limit = {
@@ -1819,7 +1804,7 @@ on_actions = {
 						FROM = { tag = SHL }
 					}
 					set_global_flag = skip_default_capitulation
-					SHL = { SHL_kyz_war_victory = yes }
+					SHL = { SHL_qanat_war_victory = yes }
 				}
 				else_if = {
 					limit = {
@@ -1834,27 +1819,27 @@ on_actions = {
 					limit = {
 						ROOT = {
 							OR = {
-								tag = KYZ
+								tag = MZR
 								tag = GLP
 							}
 							is_in_faction_with = SHL
 						}
-						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						SHL = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 						FROM = {
 							OR = {
-								tag = MZR
-								has_country_flag = SHL_mzr_war_partner
+								tag = KYZ
+								has_country_flag = SHL_kyz_war_partner
 							}
 						}
 					}
-					# Allied defeats remain occupied until the SHL/MZR settlement;
+					# Allied defeats remain occupied until the SHL/KYZ settlement;
 					# white peace here could end the whole faction war prematurely.
 					set_global_flag = skip_default_capitulation
 				}
 				else_if = {
 					limit = {
-						ROOT = { has_country_flag = SHL_mzr_war_partner }
-						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						ROOT = { has_country_flag = SHL_kyz_war_partner }
+						SHL = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 						FROM = {
 							OR = {
 								tag = SHL
@@ -1862,7 +1847,7 @@ on_actions = {
 							}
 						}
 					}
-					# The border pact follows Mazar's settlement; a partner's defeat
+					# The border pact follows Keizan's settlement; a partner's defeat
 					# leaves its territory occupied until the principal war ends.
 					set_global_flag = skip_default_capitulation
 				}
@@ -2128,7 +2113,7 @@ on_actions = {
 				NAM_great_war_close_external = yes
 				# END nam:on_peace
 				# BEGIN shahrabad:on_peace
-				SHL = { SHL_close_external_mzr_war = yes }
+				SHL = { SHL_close_external_kyz_war = yes }
 				# END shahrabad:on_peace
 				# BEGIN south_final:on_peace
 				ADISCORD_south_final_close_external = yes
@@ -2378,7 +2363,7 @@ on_actions = {
 			NAM_great_war_close_external = yes
 			# END nam:on_puppet
 			# BEGIN shahrabad:on_puppet
-			SHL = { SHL_close_external_mzr_war = yes }
+			SHL = { SHL_close_external_kyz_war = yes }
 			# END shahrabad:on_puppet
 			# BEGIN south_final:on_puppet
 			ADISCORD_south_final_close_external = yes
@@ -2487,7 +2472,7 @@ on_actions = {
 				if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
 				# END kefreyt:on_annex
 				# BEGIN shahrabad:on_annex
-				SHL = { SHL_close_external_mzr_war = yes }
+				SHL = { SHL_close_external_kyz_war = yes }
 				if = {
 					limit = { FROM = { tag = SHL } }
 					FROM = { SHL_abort_annexed_operations = yes }

@@ -1422,19 +1422,6 @@ ADISCORD_decrease_economic_development_monthly_growth = {
 	clamp_variable = { var = ADISCORD_economic_development_monthly_growth min = -20 max = 20 }
 }
 
-# Compatibility wrappers for clearer future naming. Existing content can keep using the old effect names.
-ADISCORD_country_development_initialize = {
-	ADISCORD_initialize_society_development_variables = yes
-}
-
-ADISCORD_country_development_monthly_tick = {
-	ADISCORD_tick_all_society_development_monthly = yes
-}
-
-ADISCORD_country_development_update_total = {
-	ADISCORD_update_total_country_development = yes
-}
-
 ADISCORD_reform_society_development = {
 	custom_effect_tooltip = ADISCORD_society_development_reform_tt
 	hidden_effect = {

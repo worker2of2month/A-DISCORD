@@ -1539,10 +1539,10 @@ class CrisisLayerTests(unittest.TestCase):
         c["SHL_water_crisis"] = 1
         self.m.focuses.add("SHL_qanat_guard")
         self.m.ownership["285"] = "MZR"
-        self.m.run("SHL_start_kyz_war")
+        self.m.run("SHL_start_qanat_war")
         self.assertIn(frozenset(("SHL", "KYZ")), self.m.wars)
-        self.m.run("SHL_kyz_war_victory")
-        self.m.run("SHL_kyz_war_victory")
+        self.m.run("SHL_qanat_war_victory")
+        self.m.run("SHL_qanat_war_victory")
         self.assertEqual(self.m.ownership["280"], "SHL")
         self.assertEqual(self.m.ownership["285"], "MZR")
         self.assertEqual(c["SHL_water_crisis"], 4)
@@ -1553,8 +1553,8 @@ class CrisisLayerTests(unittest.TestCase):
         c = self.country()
         c["SHL_water_crisis"] = 1
         self.m.focuses.add("SHL_qanat_guard")
-        self.m.run("SHL_start_kyz_war")
-        self.m.run("SHL_kyz_war_defeat")
+        self.m.run("SHL_start_qanat_war")
+        self.m.run("SHL_qanat_war_defeat")
         self.assertEqual(self.m.ownership["287"], "KYZ")
         self.assertEqual(c["SHL_water_quota"], 1)
         self.assertEqual(c["SHL_income_deduction"], 3)
@@ -1582,33 +1582,33 @@ class CrisisLayerTests(unittest.TestCase):
 
     def test_mazar_refusal_leads_to_war_and_buyout_closes_the_threat(self):
         c = self.country()
-        c["SHL_mazar_state"] = 1
-        self.m.run("SHL_mazar_refuse")
-        self.assertIn("SHL_mazar_deadline", self.m.missions)
-        self.m.run("SHL_mazar_buyout")
-        self.assertEqual(c["SHL_mazar_state"], 3)
-        self.assertNotIn("SHL_mazar_deadline", self.m.missions)
-        self.m.run("SHL_start_mzr_war")
-        self.assertNotIn(frozenset(("MZR", "SHL")), self.m.wars)
+        c["SHL_keizan_state"] = 1
+        self.m.run("SHL_keizan_refuse")
+        self.assertIn("SHL_keizan_deadline", self.m.missions)
+        self.m.run("SHL_keizan_buyout")
+        self.assertEqual(c["SHL_keizan_state"], 3)
+        self.assertNotIn("SHL_keizan_deadline", self.m.missions)
+        self.m.run("SHL_start_kyz_war")
+        self.assertNotIn(frozenset(("KYZ", "SHL")), self.m.wars)
 
     def test_busy_mazar_postpones_instead_of_discarding(self):
         c = self.country()
-        c["SHL_mazar_state"] = 5
+        c["SHL_keizan_state"] = 5
         c["SHL_cycle_number"] = 20
-        self.m.countries["MZR"]["has_war"] = True
-        self.m.run("SHL_start_mzr_war")
-        self.assertEqual(c["SHL_mazar_state"], 2)
-        self.assertEqual(c["SHL_mazar_repeat_cycle"], 24)
+        self.m.countries["KYZ"]["has_war"] = True
+        self.m.run("SHL_start_kyz_war")
+        self.assertEqual(c["SHL_keizan_state"], 2)
+        self.assertEqual(c["SHL_keizan_repeat_cycle"], 24)
 
     def test_mazar_defeat_takes_two_fifths_of_a_positive_treasury(self):
         c = self.country()
-        c["SHL_mazar_state"] = 5
-        self.m.run("SHL_start_mzr_war")
-        self.assertIn(frozenset(("MZR", "SHL")), self.m.wars)
-        self.m.run("SHL_mzr_war_defeat")
+        c["SHL_keizan_state"] = 5
+        self.m.run("SHL_start_kyz_war")
+        self.assertIn(frozenset(("KYZ", "SHL")), self.m.wars)
+        self.m.run("SHL_kyz_war_defeat")
         self.assertAlmostEqual(c["ADISCORD_economy_treasury"], 600)
-        self.assertEqual(c["SHL_mazar_state"], 3)
-        self.assertIn("SHL_mazar_ration", self.m.ideas)
+        self.assertEqual(c["SHL_keizan_state"], 3)
+        self.assertIn("SHL_keizan_ration", self.m.ideas)
         self.assertEqual(self.m.ownership["707"], "SHL")
 
     def test_guard_levy_refunds_exactly_when_capital_is_lost(self):
@@ -1647,12 +1647,12 @@ class CrisisLayerTests(unittest.TestCase):
 
     def test_late_alliance_enters_existing_mazar_war_on_shahrabad_side(self):
         self.country()["SHL_political_course"] = 1
-        self.country()["SHL_war_mzr"] = 1
-        self.m.wars.add(frozenset(("SHL", "MZR")))
+        self.country()["SHL_war_kyz"] = 2
+        self.m.wars.add(frozenset(("SHL", "KYZ")))
         self.m.run("SHL_request_golden_alliance")
         self.m.run("SHL_join_golden_gate", scope="GLP")
         self.assertEqual(self.m.factions["GLP"], "SHL")
-        self.assertIn(frozenset(("GLP", "MZR")), self.m.wars)
+        self.assertIn(frozenset(("GLP", "KYZ")), self.m.wars)
         self.m.run("SHL_join_golden_gate", scope="GLP")
         self.assertEqual(self.m.calls.count(("add_to_war", "GLP")), 1)
 
@@ -1740,17 +1740,21 @@ class MazarBorderPactTests(unittest.TestCase):
     setUp = CrisisLayerTests.setUp
     country = CrisisLayerTests.country
 
-    def prepare(self, partner="KYZ"):
-        self.m.flags[partner].add("SHL_mzr_border_grievance")
-        self.country()["SHL_mazar_state"] = 1
-        self.m.run("SHL_mazar_refuse")
+    def prepare(self, partner="MZR"):
+        if partner != "MZR":
+            # The refusal hands Mazar its grievance first; a subject Mazar
+            # leaves the other partner as the only candidate.
+            self.m.countries["MZR"]["is_subject"] = True
+        self.m.flags[partner].add("SHL_kyz_border_grievance")
+        self.country()["SHL_keizan_state"] = 1
+        self.m.run("SHL_keizan_refuse")
 
-    def start(self, partner="KYZ", ally=None):
+    def start(self, partner="MZR", ally=None):
         self.prepare(partner)
-        self.m.run("SHL_accept_mzr_pact", scope=partner)
+        self.m.run("SHL_accept_kyz_pact", scope=partner)
         if ally:
             self.m.factions.update({"SHL": "SHL", ally: "SHL"})
-        self.m.run("SHL_start_mzr_war")
+        self.m.run("SHL_start_kyz_war")
 
     def event(self, number):
         events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
@@ -1763,36 +1767,38 @@ class MazarBorderPactTests(unittest.TestCase):
         self.m.execute(parse_clausewitz(section), loser, winner)
 
     def test_only_actual_military_action_creates_a_grievance(self):
+        # Keizan is the aggressor of the ration war, so only Veir's limited war
+        # can leave a flank grievance; Mazar has no limited war with Shahrabad.
         for partner, crisis, focus, start, armistice in (
-            ("KYZ", "SHL_water_crisis", "SHL_right_to_water", "SHL_start_kyz_war", "SHL_kyz_war_armistice"),
             ("GLP", "SHL_veyr_crisis", "SHL_veyr_ultimatum", "SHL_start_glp_war", "SHL_glp_war_armistice"),
         ):
             with self.subTest(partner=partner):
                 self.setUp()
+                self.m.countries["MZR"]["is_subject"] = True
                 self.country()[crisis] = 1
                 self.m.focuses.add(focus)
-                self.country()["SHL_mazar_state"] = 1
-                self.m.run("SHL_mazar_refuse")
+                self.country()["SHL_keizan_state"] = 1
+                self.m.run("SHL_keizan_refuse")
                 self.assertNotIn("ADISCORD_SHL.124", self.m.scheduled)
                 self.m.run(start)
                 self.m.run(armistice)
-                self.assertIn("SHL_mzr_border_grievance", self.m.flags[partner])
-                self.m.run("SHL_clear_mzr_diplomacy")
-                self.m.run("SHL_prepare_mzr_partner")
-                self.assertIn("SHL_mzr_pact_pending", self.m.flags[partner])
+                self.assertIn("SHL_kyz_border_grievance", self.m.flags[partner])
+                self.m.run("SHL_clear_kyz_diplomacy")
+                self.m.run("SHL_prepare_kyz_partner")
+                self.assertIn("SHL_kyz_pact_pending", self.m.flags[partner])
 
     def test_at_most_one_announced_candidate_and_no_replacement_after_refusal(self):
-        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.m.flags["GLP"].add("SHL_kyz_border_grievance")
         self.prepare()
-        self.m.run("SHL_prepare_mzr_partner")
+        self.m.run("SHL_prepare_kyz_partner")
         self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.124"), 1)
-        self.assertIn("SHL_mzr_pact_pending", self.m.flags["KYZ"])
-        self.assertNotIn("SHL_mzr_pact_pending", self.m.flags["GLP"])
+        self.assertIn("SHL_kyz_pact_pending", self.m.flags["MZR"])
+        self.assertNotIn("SHL_kyz_pact_pending", self.m.flags["GLP"])
         first_option = block(self.event(125), "option")
-        self.m.execute(block(first_option, "hidden_effect"), "KYZ")
-        self.m.run("SHL_prepare_mzr_partner")
-        self.m.run("SHL_start_mzr_war")
-        self.assertNotIn(frozenset(("KYZ", "SHL")), self.m.wars)
+        self.m.execute(block(first_option, "hidden_effect"), "MZR")
+        self.m.run("SHL_prepare_kyz_partner")
+        self.m.run("SHL_start_kyz_war")
+        self.assertNotIn(frozenset(("MZR", "SHL")), self.m.wars)
         self.assertNotIn(frozenset(("GLP", "SHL")), self.m.wars)
 
     def test_subject_foreign_faction_war_or_lost_border_blocks_candidate(self):
@@ -1800,63 +1806,63 @@ class MazarBorderPactTests(unittest.TestCase):
             with self.subTest(reason=reason):
                 self.setUp()
                 if reason == "subject":
-                    self.m.countries["KYZ"]["is_subject"] = True
+                    self.m.countries["MZR"]["is_subject"] = True
                 elif reason == "faction":
-                    self.m.factions["KYZ"] = "VAL"
-                elif reason == "war":
-                    self.m.wars.add(frozenset(("KYZ", "VAL")))
-                elif reason == "border":
-                    self.m.neighbours.remove("KYZ")
-                elif reason == "absent":
-                    self.m.countries["KYZ"]["exists"] = False
-                else:
                     self.m.factions["MZR"] = "VAL"
+                elif reason == "war":
+                    self.m.wars.add(frozenset(("MZR", "VAL")))
+                elif reason == "border":
+                    self.m.neighbours.remove("MZR")
+                elif reason == "absent":
+                    self.m.countries["MZR"]["exists"] = False
+                else:
+                    self.m.factions["KYZ"] = "VAL"
                 self.prepare()
                 self.assertNotIn("ADISCORD_SHL.125", self.m.scheduled)
 
     def test_both_candidates_join_the_existing_war_with_no_extra_declaration(self):
-        for partner, ally in (("KYZ", "GLP"), ("GLP", "KYZ")):
+        for partner, ally in (("MZR", "GLP"), ("GLP", "MZR")):
             with self.subTest(partner=partner):
                 self.setUp()
                 self.start(partner, ally)
-                self.assertEqual(self.m.factions[partner], "MZR")
-                self.assertEqual(self.m.majors, {"SHL", "MZR"})
+                self.assertEqual(self.m.factions[partner], "KYZ")
+                self.assertEqual(self.m.majors, {"SHL", "KYZ"})
                 self.assertEqual(len([call for call in self.m.calls if call[0] == "declare_war_on"]), 1)
-                for opponent in ("MZR", partner):
+                for opponent in ("KYZ", partner):
                     for friend in ("SHL", ally):
                         self.assertIn(frozenset((opponent, friend)), self.m.wars)
-                self.assertNotIn("SHL_mzr_pact_pending", self.m.flags[partner])
+                self.assertNotIn("SHL_kyz_pact_pending", self.m.flags[partner])
 
     def test_offensive_warns_during_the_existing_28_day_mobilization(self):
-        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.m.flags["GLP"].add("SHL_kyz_border_grievance")
         self.m.focuses.add("SHL_no_more_rations")
-        self.m.run("SHL_begin_mzr_mobilization")
+        self.m.run("SHL_begin_kyz_mobilization")
         self.assertIn("ADISCORD_SHL.124", self.m.scheduled)
         self.assertFalse(self.m.wars)
-        self.m.run("SHL_accept_mzr_pact", scope="GLP")
-        self.m.run("SHL_finish_mzr_mobilization")
-        self.assertIn(("declare_war_on", "SHL", "MZR"), self.m.calls)
+        self.m.run("SHL_accept_kyz_pact", scope="GLP")
+        self.m.run("SHL_finish_kyz_mobilization")
+        self.assertIn(("declare_war_on", "SHL", "KYZ"), self.m.calls)
         self.assertIn(frozenset(("GLP", "SHL")), self.m.wars)
 
     def test_neutrality_payment_requires_choice_and_is_exactly_once(self):
-        for partner in ("KYZ", "GLP"):
+        for partner in ("MZR", "GLP"):
             with self.subTest(partner=partner):
                 self.setUp()
                 self.prepare(partner)
-                self.m.run("SHL_accept_mzr_pact", scope=partner)
+                self.m.run("SHL_accept_kyz_pact", scope=partner)
                 self.country()["ADISCORD_economy_treasury"] = 100
                 self.m.values["political_power"] = 30
-                self.m.run("SHL_request_mzr_neutrality")
-                self.m.run("SHL_request_mzr_neutrality")
+                self.m.run("SHL_request_kyz_neutrality")
+                self.m.run("SHL_request_kyz_neutrality")
                 self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.126"), 1)
                 self.assertEqual(self.country()["ADISCORD_economy_treasury"], 100)
-                self.m.run("SHL_accept_mzr_neutrality", scope=partner)
-                self.m.run("SHL_accept_mzr_neutrality", scope=partner)
+                self.m.run("SHL_accept_kyz_neutrality", scope=partner)
+                self.m.run("SHL_accept_kyz_neutrality", scope=partner)
                 self.assertEqual(self.country()["ADISCORD_economy_treasury"], 0)
                 self.assertEqual(self.m.values["political_power"], 0)
                 self.assertEqual(self.m.variables[partner]["ADISCORD_economy_treasury"], 100)
-                self.m.run("SHL_accept_mzr_pact", scope=partner)
-                self.m.run("SHL_start_mzr_war")
+                self.m.run("SHL_accept_kyz_pact", scope=partner)
+                self.m.run("SHL_start_kyz_war")
                 self.assertNotIn(frozenset((partner, "SHL")), self.m.wars)
 
     def test_changed_funds_and_late_answers_never_charge_or_change_sides(self):
@@ -1864,146 +1870,145 @@ class MazarBorderPactTests(unittest.TestCase):
             with self.subTest(reason=reason):
                 self.setUp()
                 self.prepare()
-                self.m.run("SHL_accept_mzr_pact", scope="KYZ")
-                self.m.run("SHL_request_mzr_neutrality")
+                self.m.run("SHL_accept_kyz_pact", scope="MZR")
+                self.m.run("SHL_request_kyz_neutrality")
                 if reason == "treasury":
                     self.country()["ADISCORD_economy_treasury"] = 99.9
                 elif reason == "political_power":
                     self.m.values["political_power"] = 29.9
                 elif reason == "war":
-                    self.m.run("SHL_start_mzr_war")
+                    self.m.run("SHL_start_kyz_war")
                 elif reason == "peace":
-                    self.m.run("SHL_mazar_buyout")
+                    self.m.run("SHL_keizan_buyout")
                 elif reason == "faction":
-                    self.m.factions["KYZ"] = "VAL"
+                    self.m.factions["MZR"] = "VAL"
                 else:
-                    self.m.countries["KYZ"]["is_subject"] = True
+                    self.m.countries["MZR"]["is_subject"] = True
                 balances = (self.country()["ADISCORD_economy_treasury"], self.m.values["political_power"])
-                self.m.run("SHL_accept_mzr_neutrality", scope="KYZ")
+                self.m.run("SHL_accept_kyz_neutrality", scope="MZR")
                 self.assertEqual(balances, (self.country()["ADISCORD_economy_treasury"], self.m.values["political_power"]))
-                self.assertNotIn("ADISCORD_economy_treasury", self.m.variables["KYZ"])
+                self.assertNotIn("ADISCORD_economy_treasury", self.m.variables["MZR"])
                 if reason == "war":
-                    self.assertIn(frozenset(("KYZ", "SHL")), self.m.wars)
+                    self.assertIn(frozenset(("MZR", "SHL")), self.m.wars)
 
     def test_existing_treaties_and_alliance_supersede_the_pact(self):
         for partner, effect, course in (
-            ("KYZ", "SHL_sign_water_treaty", 0),
-            ("KYZ", "SHL_sign_water_brotherhood", 0),
             ("GLP", "SHL_sign_veyr_union", 0),
-            ("KYZ", "SHL_join_southern_compact", 2),
+            ("MZR", "SHL_join_southern_compact", 2),
             ("GLP", "SHL_join_golden_gate", 1),
         ):
             with self.subTest(effect=effect):
                 self.setUp()
                 self.prepare(partner)
-                self.m.run("SHL_accept_mzr_pact", scope=partner)
+                self.m.run("SHL_accept_kyz_pact", scope=partner)
                 self.country().update({"SHL_water_crisis": 1, "SHL_political_course": course})
                 self.m.flags["SHL"].update({"SHL_southern_alliance_pending", "SHL_golden_alliance_pending"})
                 self.m.run(effect, scope=partner)
-                self.assertNotIn("SHL_mzr_border_grievance", self.m.flags[partner])
-                self.m.run("SHL_start_mzr_war")
+                self.assertNotIn("SHL_kyz_border_grievance", self.m.flags[partner])
+                self.m.run("SHL_start_kyz_war")
                 self.assertNotIn(frozenset((partner, "SHL")), self.m.wars)
 
     def test_late_trade_offer_does_not_reconcile_an_active_enemy(self):
         self.start("GLP")
         self.m.run("SHL_sign_veyr_union", scope="GLP")
         self.assertNotIn("SHL_veyr_partner", self.m.flags["SHL"])
-        self.assertIn("SHL_mzr_war_partner", self.m.flags["GLP"])
+        self.assertIn("SHL_kyz_war_partner", self.m.flags["GLP"])
 
     def test_every_settlement_closes_both_fronts_and_preserves_unrelated_wars(self):
-        for effect in ("SHL_mzr_war_victory", "SHL_mzr_war_defeat", "SHL_mzr_war_armistice", "SHL_close_external_mzr_war"):
+        for effect in ("SHL_kyz_war_victory", "SHL_kyz_war_defeat", "SHL_kyz_war_armistice", "SHL_close_external_kyz_war"):
             with self.subTest(effect=effect):
                 self.setUp()
-                self.start("KYZ", "GLP")
-                foreign_war = frozenset(("KYZ", "VAL"))
+                self.start("MZR", "GLP")
+                foreign_war = frozenset(("MZR", "VAL"))
                 self.m.wars.add(foreign_war)
-                if effect == "SHL_close_external_mzr_war":
-                    self.m.countries["MZR"]["is_subject"] = True
+                if effect == "SHL_close_external_kyz_war":
+                    self.m.countries["KYZ"]["is_subject"] = True
                 self.m.run(effect)
                 self.assertEqual(self.m.wars, {foreign_war})
-                self.assertNotIn("MZR", self.m.factions)
+                self.assertNotIn("KYZ", self.m.factions)
                 self.assertEqual(self.m.factions["GLP"], "SHL")
                 self.assertFalse(self.m.majors)
-                for tag in ("KYZ", "GLP"):
-                    self.assertFalse(self.m.flags[tag] & {"SHL_mzr_war_partner", "SHL_mzr_shl_partner", "SHL_mzr_neutrality_pending"})
+                for tag in ("MZR", "GLP"):
+                    self.assertFalse(self.m.flags[tag] & {"SHL_kyz_war_partner", "SHL_kyz_shl_partner", "SHL_kyz_neutrality_pending"})
 
     def test_neighbour_capitulations_remain_occupied_until_principal_settlement(self):
-        for loser, winner in (("KYZ", "SHL"), ("KYZ", "GLP"), ("GLP", "KYZ")):
+        for loser, winner in (("MZR", "SHL"), ("MZR", "GLP"), ("GLP", "MZR")):
             with self.subTest(loser=loser, winner=winner):
                 self.setUp()
-                self.start("KYZ", "GLP")
+                self.start("MZR", "GLP")
                 before = set(self.m.wars)
                 self.capitulate(loser, winner)
                 self.assertIn("skip_default_capitulation", self.m.global_flags)
                 self.assertEqual(self.m.wars, before)
-                self.assertEqual(self.country()["SHL_war_mzr"], 1)
+                self.assertEqual(self.country()["SHL_war_kyz"], 2)
 
     def test_shahrabad_defeat_by_partner_uses_mazar_terms(self):
         self.start()
-        self.capitulate("SHL", "KYZ")
-        self.assertEqual(self.country()["SHL_mzr_outcome"], 4)
+        self.capitulate("SHL", "MZR")
+        self.assertEqual(self.country()["SHL_kyz_outcome"], 4)
         self.assertEqual(self.country()["ADISCORD_economy_treasury"], 600)
         self.assertFalse(self.m.wars)
         self.assertEqual(self.m.ownership["707"], "SHL")
 
     def test_mazar_defeat_by_shahrabad_ally_ends_partner_war(self):
-        self.start("KYZ", "GLP")
-        self.capitulate("MZR", "GLP")
-        self.assertEqual(self.country()["SHL_mzr_outcome"], 1)
+        self.start("MZR", "GLP")
+        self.capitulate("KYZ", "GLP")
+        self.assertEqual(self.country()["SHL_kyz_outcome"], 1)
         self.assertFalse(self.m.wars)
-        self.assertEqual(self.m.ownership["269"], "SHL")
-        self.assertEqual(self.m.ownership["280"], "KYZ")
+        self.assertEqual(self.m.ownership["280"], "SHL")
+        # The partner's own land is not a war goal of the ration war.
+        self.assertEqual(self.m.ownership["269"], "MZR")
 
     def test_absent_or_busy_partner_is_not_replaced_at_declaration(self):
-        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.m.flags["GLP"].add("SHL_kyz_border_grievance")
         self.prepare()
-        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
-        self.m.countries["KYZ"]["is_subject"] = True
-        self.m.run("SHL_start_mzr_war")
-        self.assertEqual(self.m.wars, {frozenset(("SHL", "MZR"))})
+        self.m.run("SHL_accept_kyz_pact", scope="MZR")
+        self.m.countries["MZR"]["is_subject"] = True
+        self.m.run("SHL_start_kyz_war")
+        self.assertEqual(self.m.wars, {frozenset(("SHL", "KYZ"))})
 
     def test_postponement_and_cancelled_preparation_clear_open_offers(self):
         self.prepare()
-        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
-        self.m.countries["MZR"]["has_war"] = True
-        self.m.run("SHL_start_mzr_war")
-        self.assertNotIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
-        self.assertNotIn("SHL_mzr_diplomacy_started", self.m.flags["SHL"])
-        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
-        self.assertNotIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
+        self.m.run("SHL_accept_kyz_pact", scope="MZR")
+        self.m.countries["KYZ"]["has_war"] = True
+        self.m.run("SHL_start_kyz_war")
+        self.assertNotIn("SHL_kyz_pact_signed", self.m.flags["MZR"])
+        self.assertNotIn("SHL_kyz_diplomacy_started", self.m.flags["SHL"])
+        self.m.run("SHL_accept_kyz_pact", scope="MZR")
+        self.assertNotIn("SHL_kyz_pact_signed", self.m.flags["MZR"])
 
     def test_cancelled_offensive_clears_invitation_without_a_remaining_deadline(self):
-        self.m.flags["KYZ"].add("SHL_mzr_border_grievance")
+        self.m.flags["MZR"].add("SHL_kyz_border_grievance")
         self.m.focuses.add("SHL_no_more_rations")
-        self.m.run("SHL_begin_mzr_mobilization")
-        self.m.run("SHL_request_mzr_neutrality")
-        self.m.run("SHL_cancel_mzr_mobilization")
-        self.assertNotIn("SHL_mzr_diplomacy_started", self.m.flags["SHL"])
-        self.assertNotIn("SHL_mzr_pact_pending", self.m.flags["KYZ"])
-        self.assertNotIn("SHL_mzr_neutrality_pending", self.m.flags["KYZ"])
+        self.m.run("SHL_begin_kyz_mobilization")
+        self.m.run("SHL_request_kyz_neutrality")
+        self.m.run("SHL_cancel_kyz_mobilization")
+        self.assertNotIn("SHL_kyz_diplomacy_started", self.m.flags["SHL"])
+        self.assertNotIn("SHL_kyz_pact_pending", self.m.flags["MZR"])
+        self.assertNotIn("SHL_kyz_neutrality_pending", self.m.flags["MZR"])
 
     def test_annexed_mazar_cleans_up_the_pacts_successor_leader(self):
         self.start()
-        self.m.countries["MZR"]["exists"] = False
-        self.m.factions.pop("MZR")
-        self.m.factions["KYZ"] = "KYZ"
-        self.m.run("SHL_close_external_mzr_war")
+        self.m.countries["KYZ"]["exists"] = False
+        self.m.factions.pop("KYZ")
+        self.m.factions["MZR"] = "MZR"
+        self.m.run("SHL_close_external_kyz_war")
         self.assertFalse(self.m.factions)
         self.assertFalse(self.m.wars)
         self.assertFalse(self.m.majors)
 
     def test_nonparticipant_war_and_preexisting_major_are_preserved(self):
-        self.m.majors.add("MZR")
-        self.country()["SHL_mazar_state"] = 5
-        self.m.run("SHL_start_mzr_war")
-        foreign_war = frozenset(("KYZ", "MZR"))
+        self.m.majors.add("KYZ")
+        self.country()["SHL_keizan_state"] = 5
+        self.m.run("SHL_start_kyz_war")
+        foreign_war = frozenset(("MZR", "KYZ"))
         self.m.wars.add(foreign_war)
-        self.m.run("SHL_mzr_war_armistice")
+        self.m.run("SHL_kyz_war_armistice")
         self.assertEqual(self.m.wars, {foreign_war})
-        self.assertEqual(self.m.majors, {"MZR"})
+        self.assertEqual(self.m.majors, {"KYZ"})
 
     def test_major_release_preserves_another_campaign_and_transfers_the_khan_receipt(self):
-        for country in ("SHL", "MZR"):
+        for country in ("SHL", "KYZ"):
             for other_receipt, keeps_major, khan_receipt in (
                 (None, False, False),
                 ("ADISCORD_south_added_major", True, False),
@@ -2012,14 +2017,14 @@ class MazarBorderPactTests(unittest.TestCase):
                 with self.subTest(country=country, other_receipt=other_receipt):
                     self.setUp()
                     self.m.majors.add(country)
-                    self.m.flags[country].add("SHL_mzr_added_major")
+                    self.m.flags[country].add("SHL_kyz_added_major")
                     if other_receipt:
                         self.m.flags[country].add(other_receipt)
-                    other_country = "MZR" if country == "SHL" else "SHL"
+                    other_country = "KYZ" if country == "SHL" else "SHL"
                     self.m.flags[other_country].add("ADISCORD_west_added_major")
-                    self.m.run("SHL_release_mzr_principal", scope=country)
-                    self.m.run("SHL_release_mzr_principal", scope=country)
-                    self.assertNotIn("SHL_mzr_added_major", self.m.flags[country])
+                    self.m.run("SHL_release_kyz_principal", scope=country)
+                    self.m.run("SHL_release_kyz_principal", scope=country)
+                    self.assertNotIn("SHL_kyz_added_major", self.m.flags[country])
                     self.assertEqual(country in self.m.majors, keeps_major)
                     self.assertEqual("RUS_crisis_added_major" in self.m.flags[country], khan_receipt)
                     if other_receipt:
@@ -2027,13 +2032,13 @@ class MazarBorderPactTests(unittest.TestCase):
 
     def test_neutrality_timeout_is_free_and_keeps_the_existing_pact(self):
         self.prepare()
-        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
-        self.m.run("SHL_request_mzr_neutrality")
-        self.m.execute(block(block(self.event(126), "option"), "hidden_effect"), "KYZ")
+        self.m.run("SHL_accept_kyz_pact", scope="MZR")
+        self.m.run("SHL_request_kyz_neutrality")
+        self.m.execute(block(block(self.event(126), "option"), "hidden_effect"), "MZR")
         self.assertEqual(self.country()["ADISCORD_economy_treasury"], 1000)
         self.assertEqual(self.m.values["political_power"], 200)
-        self.assertIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
-        self.assertNotIn("SHL_mzr_neutrality_pending", self.m.flags["KYZ"])
+        self.assertIn("SHL_kyz_pact_signed", self.m.flags["MZR"])
+        self.assertNotIn("SHL_kyz_neutrality_pending", self.m.flags["MZR"])
 
 
 class SouthernCampaignTests(unittest.TestCase):
@@ -2042,13 +2047,13 @@ class SouthernCampaignTests(unittest.TestCase):
 
     def ready(self, course=1, outcome=6):
         c = self.country()
-        c.update({"SHL_political_course": course, "SHL_mazar_state": 3, "SHL_mzr_outcome": outcome})
+        c.update({"SHL_political_course": course, "SHL_keizan_state": 3, "SHL_kyz_outcome": outcome})
         self.m.focuses.add("SHL_peace_has_a_price")
         return c
 
     def captured_cisterns(self, course):
         self.ready(course, 1)
-        for state in ("269", "268"):
+        for state in ("280", "284"):
             self.m.ownership[state] = "SHL"
             self.m.control[state] = "SHL"
 
@@ -2126,7 +2131,7 @@ class SouthernCampaignTests(unittest.TestCase):
                 self.assertLess(dates[mandate], 340)
         source = EFFECT_PATH.read_text(encoding="utf-8")
         self.assertIn("id = ADISCORD_SHL.110 days = 168", source)
-        self.assertEqual(scalar(decision_definition("SHL_mazar_deadline"), "days_mission_timeout"), "60")
+        self.assertEqual(scalar(decision_definition("SHL_keizan_deadline"), "days_mission_timeout"), "60")
 
     def test_convoy_costs_two_actual_pours_and_is_consumed_once(self):
         self.convoy()
@@ -2170,40 +2175,40 @@ class SouthernCampaignTests(unittest.TestCase):
     def test_proactive_march_has_correct_declarer_and_one_settlement(self):
         self.m.focuses.add("SHL_no_more_rations")
         self.m.values["political_power"] -= 50
-        self.m.run("SHL_begin_mzr_mobilization")
+        self.m.run("SHL_begin_kyz_mobilization")
         self.assertIn("ADISCORD_SHL.111", self.m.scheduled)
-        self.m.run("SHL_finish_mzr_mobilization")
-        self.m.run("SHL_finish_mzr_mobilization")
+        self.m.run("SHL_finish_kyz_mobilization")
+        self.m.run("SHL_finish_kyz_mobilization")
         declarations = [call for call in self.m.calls if isinstance(call, tuple) and call[0] == "declare_war_on"]
-        self.assertEqual(declarations, [("declare_war_on", "SHL", "MZR")])
+        self.assertEqual(declarations, [("declare_war_on", "SHL", "KYZ")])
         self.assertEqual(self.m.values["political_power"], 150)
 
     def test_peace_during_mobilization_refunds_once_and_prevents_war(self):
         self.m.focuses.add("SHL_no_more_rations")
         self.m.values["political_power"] -= 50
-        self.m.run("SHL_begin_mzr_mobilization")
-        self.country()["SHL_mazar_state"] = 5
-        self.m.run("SHL_mazar_buyout")
-        self.m.run("SHL_finish_mzr_mobilization")
-        self.m.run("SHL_cancel_mzr_mobilization")
+        self.m.run("SHL_begin_kyz_mobilization")
+        self.country()["SHL_keizan_state"] = 5
+        self.m.run("SHL_keizan_buyout")
+        self.m.run("SHL_finish_kyz_mobilization")
+        self.m.run("SHL_cancel_kyz_mobilization")
         self.assertEqual(self.m.values["political_power"], 150)
         self.assertEqual(self.country()["ADISCORD_economy_treasury"], 650)
         self.assertEqual(self.m.wars, set())
 
     def test_paid_reserve_can_arrive_during_war_and_cleanup_removes_bonuses(self):
         self.convoy(True)
-        self.country()["SHL_mazar_state"] = 5
-        self.m.run("SHL_start_mzr_war")
+        self.country()["SHL_keizan_state"] = 5
+        self.m.run("SHL_start_kyz_war")
         self.pour()
         self.assertIn("SHL_prepared_columns", self.m.ideas)
         self.assertNotIn("SHL_campaign_reserve", self.country())
-        self.m.run("SHL_mzr_war_armistice")
+        self.m.run("SHL_kyz_war_armistice")
         self.assertNotIn("SHL_prepared_columns", self.m.ideas)
         self.assertEqual(self.m.majors, set())
 
     def test_directorate_can_prepare_the_next_war_after_settling_mazar(self):
         for neighbour, crisis, focus, start in (
-            ("KYZ", "SHL_water_crisis", "SHL_right_to_water", "SHL_start_kyz_war"),
+            ("KYZ", "SHL_water_crisis", "SHL_right_to_water", "SHL_start_qanat_war"),
             ("GLP", "SHL_veyr_crisis", "SHL_key_to_sea", "SHL_start_glp_war"),
         ):
             with self.subTest(neighbour=neighbour):
@@ -2224,61 +2229,65 @@ class SouthernCampaignTests(unittest.TestCase):
         for parallel in (False, True):
             with self.subTest(parallel=parallel):
                 self.setUp()
-                self.country()["SHL_mazar_state"] = 1
+                self.country()["SHL_keizan_state"] = 1
                 self.m.flags["SHL"].add("SHL_campaign_assistance_used")
                 self.m.ideas.add("SHL_prepared_columns")
                 if parallel:
-                    self.m.wars.add(frozenset(("SHL", "KYZ")))
-                self.m.run("SHL_mazar_pay_final")
+                    self.m.wars.add(frozenset(("SHL", "MZR")))
+                self.m.run("SHL_keizan_pay_final")
                 self.assertEqual("SHL_campaign_assistance_used" in self.m.flags["SHL"], parallel)
                 self.assertEqual("SHL_prepared_columns" in self.m.ideas, parallel)
-                self.assertEqual(self.country()["SHL_mazar_state"], 3)
+                self.assertEqual(self.country()["SHL_keizan_state"], 3)
 
     def test_objectives_accept_fighting_allies_and_reject_other_occupiers(self):
-        self.country()["SHL_mazar_state"] = 5
-        self.m.factions.update({"SHL": "SHL", "KYZ": "SHL"})
-        self.m.run("SHL_start_mzr_war")
-        self.m.control.update({"269": "KYZ", "268": "SHL", "707": "KYZ"})
-        trigger = self.m.triggers["SHL_mzr_objectives_held"]
+        self.country()["SHL_keizan_state"] = 5
+        self.m.factions.update({"SHL": "SHL", "MZR": "SHL"})
+        self.m.run("SHL_start_kyz_war")
+        self.m.control.update({"280": "MZR", "284": "SHL", "707": "MZR"})
+        trigger = self.m.triggers["SHL_kyz_objectives_held"]
         self.assertTrue(self.m.matches(trigger, "SHL"))
-        self.m.wars.discard(frozenset(("KYZ", "MZR")))
+        self.m.wars.discard(frozenset(("MZR", "KYZ")))
         self.assertFalse(self.m.matches(trigger, "SHL"))
-        self.m.control.update({"269": "SHL", "707": "SHL"})
+        self.m.control.update({"280": "SHL", "707": "SHL"})
         decision = decision_definition("SHL_secure_cistern_corridor")
         self.assertEqual(scalar(decision, "days_remove"), "14")
         self.m.execute(block(decision, "remove_effect"), "SHL")
-        self.assertEqual(self.m.ownership["269"], "SHL")
-        self.assertEqual(self.country()["SHL_mzr_outcome"], 1)
+        self.assertEqual(self.m.ownership["280"], "SHL")
+        self.assertEqual(self.country()["SHL_kyz_outcome"], 1)
         self.assertFalse(self.m.wars)
 
     def test_lost_objective_cancels_corridor_without_victory(self):
-        self.country()["SHL_mazar_state"] = 5
-        self.m.run("SHL_start_mzr_war")
-        self.m.control["269"] = "SHL"
+        self.country()["SHL_keizan_state"] = 5
+        self.m.run("SHL_start_kyz_war")
+        self.m.control["280"] = "SHL"
         decision = decision_definition("SHL_secure_cistern_corridor")
         self.assertTrue(self.m.matches(block(decision, "cancel_trigger"), "SHL"))
         self.m.execute(block(decision, "remove_effect"), "SHL")
-        self.assertEqual(self.m.ownership["269"], "MZR")
-        self.assertNotIn("SHL_mzr_outcome", self.country())
+        self.assertEqual(self.m.ownership["280"], "KYZ")
+        self.assertNotIn("SHL_kyz_outcome", self.country())
 
     def test_permanent_loss_of_threat_opens_peace_but_temporary_war_waits(self):
-        self.m.countries["MZR"]["has_war"] = True
-        self.m.run("SHL_close_lost_mazar_threat")
-        self.assertNotEqual(self.country().get("SHL_mazar_state"), 3)
-        for change in ("absent", "subject", "lost_one_cistern", "ally"):
+        self.m.countries["KYZ"]["has_war"] = True
+        self.m.run("SHL_close_lost_keizan_threat")
+        self.assertNotEqual(self.country().get("SHL_keizan_state"), 3)
+        for change in ("absent", "subject", "lost_both_cisterns", "ally"):
             with self.subTest(change=change):
                 self.setUp()
                 if change == "absent":
-                    self.m.countries["MZR"]["exists"] = False
+                    self.m.countries["KYZ"]["exists"] = False
                 elif change == "subject":
-                    self.m.countries["MZR"]["is_subject"] = True
-                elif change == "lost_one_cistern":
-                    self.m.ownership["269"] = "AZH"
+                    self.m.countries["KYZ"]["is_subject"] = True
+                elif change == "lost_both_cisterns":
+                    # One cistern left to Keizan keeps the ration claim alive.
+                    self.m.ownership["280"] = "AZH"
+                    self.m.run("SHL_close_lost_keizan_threat")
+                    self.assertNotEqual(self.country().get("SHL_keizan_state"), 3)
+                    self.m.ownership["284"] = "AZH"
                 else:
-                    self.m.factions.update({"SHL": "SHL", "MZR": "SHL"})
-                self.m.run("SHL_close_lost_mazar_threat")
-                self.assertEqual(self.country()["SHL_mzr_outcome"], 7)
-                self.assertEqual(self.country()["SHL_mazar_state"], 3)
+                    self.m.factions.update({"SHL": "SHL", "KYZ": "SHL"})
+                self.m.run("SHL_close_lost_keizan_threat")
+                self.assertEqual(self.country()["SHL_kyz_outcome"], 7)
+                self.assertEqual(self.country()["SHL_keizan_state"], 3)
                 self.assertNotIn("SHL_victory_over_ration", self.m.ideas)
 
     def test_five_assistance_packages_have_actual_distinct_payments(self):
@@ -2344,23 +2353,23 @@ class SouthernCampaignTests(unittest.TestCase):
                 self.m.run("SHL_take_cistern_concession")
                 self.assertEqual(c["ADISCORD_economy_treasury"], cash)
                 self.assertEqual(c.get("SHL_obligation_liability", 0), remaining)
-                self.assertEqual(self.m.ownership["269"], "MZR")
-                self.assertEqual(c["SHL_mzr_outcome"], 2)
+                self.assertEqual(self.m.ownership["280"], "KYZ")
+                self.assertEqual(c["SHL_kyz_outcome"], 2)
 
     def test_charter_requires_recipient_choice_and_rechecks_changed_course(self):
         self.captured_cisterns(2)
         self.m.run("SHL_request_cistern_charter")
-        self.assertEqual(self.m.ownership["269"], "SHL")
+        self.assertEqual(self.m.ownership["280"], "SHL")
         self.country()["SHL_political_course"] = 3
-        self.m.run("SHL_accept_cistern_charter", scope="MZR")
-        self.assertEqual(self.m.ownership["269"], "SHL")
-        self.assertNotIn("MZR", self.m.factions)
+        self.m.run("SHL_accept_cistern_charter", scope="KYZ")
+        self.assertEqual(self.m.ownership["280"], "SHL")
+        self.assertNotIn("KYZ", self.m.factions)
         self.country()["SHL_political_course"] = 2
         self.m.run("SHL_request_cistern_charter")
-        self.m.run("SHL_accept_cistern_charter", scope="MZR")
-        self.assertEqual(self.m.ownership["269"], "MZR")
-        self.assertEqual(self.m.factions["MZR"], "SHL")
-        self.assertFalse(self.m.countries["MZR"]["is_subject"])
+        self.m.run("SHL_accept_cistern_charter", scope="KYZ")
+        self.assertEqual(self.m.ownership["280"], "KYZ")
+        self.assertEqual(self.m.factions["KYZ"], "SHL")
+        self.assertFalse(self.m.countries["KYZ"]["is_subject"])
 
     def test_five_peace_projects_are_paid_once_with_distinct_results(self):
         for course in range(1, 6):
@@ -2419,14 +2428,14 @@ class SouthernCampaignTests(unittest.TestCase):
                 self.setUp()
                 self.captured_cisterns(course)
                 self.m.run("SHL_request_cistern_charter")
-                self.m.run("SHL_accept_cistern_charter", scope="MZR")
+                self.m.run("SHL_accept_cistern_charter", scope="KYZ")
                 self.equipment()
-                self.m.run("SHL_begin_southern_programme", target="269")
+                self.m.run("SHL_begin_southern_programme", target="280")
                 self.m.run("SHL_finish_southern_programme")
-                self.assertEqual(self.m.ownership["269"], "MZR")
-                self.assertNotIn(("269", "SHL"), self.m.cores)
+                self.assertEqual(self.m.ownership["280"], "KYZ")
+                self.assertNotIn(("280", "SHL"), self.m.cores)
                 if course == 5:
-                    self.assertEqual(self.m.unit_owners, [("269", "MZR")])
+                    self.assertEqual(self.m.unit_owners, [("280", "KYZ")])
                     self.assertEqual(self.m.manpower, 0)
 
     def test_project_cancellation_preserves_exact_escrow_on_all_terminal_paths(self):
@@ -2434,17 +2443,17 @@ class SouthernCampaignTests(unittest.TestCase):
             with self.subTest(reason=reason):
                 self.setUp()
                 self.ready(5, 3)
-                self.m.factions.update({"SHL": "SHL", "MZR": "SHL"})
+                self.m.factions.update({"SHL": "SHL", "KYZ": "SHL"})
                 self.equipment()
-                self.m.run("SHL_begin_southern_programme", target="269")
+                self.m.run("SHL_begin_southern_programme", target="280")
                 if reason == "war":
                     self.m.wars.add(frozenset(("SHL", "GLP")))
                 elif reason == "course":
                     self.country()["SHL_political_course"] = 3
                 elif reason == "occupation":
-                    self.m.control["269"] = "AZH"
+                    self.m.control["280"] = "AZH"
                 else:
-                    del self.m.factions["MZR"]
+                    del self.m.factions["KYZ"]
                 self.m.run("SHL_finish_southern_programme")
                 self.m.run("SHL_cancel_southern_programme")
                 self.assertEqual(self.country()["ADISCORD_economy_treasury"], 1000)
@@ -2485,10 +2494,10 @@ class SouthernCampaignTests(unittest.TestCase):
         events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
         event = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_SHL.112")
         default = next(e.value for e in event if e.key == "option")
-        self.m.execute(block(default, "hidden_effect"), "MZR")
-        self.assertEqual(self.m.ownership["269"], "SHL")
+        self.m.execute(block(default, "hidden_effect"), "KYZ")
+        self.assertEqual(self.m.ownership["280"], "SHL")
         self.assertNotIn("SHL_cistern_charter_pending", self.m.flags["SHL"])
-        self.assertNotIn("MZR", self.m.factions)
+        self.assertNotIn("KYZ", self.m.factions)
 
     def test_campaign_localisation_values_parse_and_story_pages_stay_bounded(self):
         for language in ("russian", "english"):
@@ -3214,7 +3223,7 @@ class ConclaveBalanceTests(unittest.TestCase):
         "SHL_balance_quarters_influence": (0.1, 0.5),
         "SHL_balance_quarters_dominance": (0.5, 1.0),
     }
-    MISSIONS = ("SHL_strike_mission", "SHL_conspiracy_mission", "SHL_mazar_deadline")
+    MISSIONS = ("SHL_strike_mission", "SHL_conspiracy_mission", "SHL_keizan_deadline")
 
     def setUp(self):
         CrisisLayerTests.setUp(self)
@@ -4081,8 +4090,8 @@ class CourseProgrammeTests(unittest.TestCase):
     def test_neighbour_revanche_is_scheduled_a_year_after_victory_and_the_revision_buys_the_claim_once(self):
         self.c["SHL_water_crisis"] = 1
         self.m.focuses.add("SHL_qanat_guard")
-        self.m.run("SHL_start_kyz_war")
-        self.m.run("SHL_kyz_war_victory")
+        self.m.run("SHL_start_qanat_war")
+        self.m.run("SHL_qanat_war_victory")
         self.assertEqual(self.m.event_days["ADISCORD_SHL.76"], 365)
         self.assertIn("SHL_revanche_due_KYZ", self.m.flags["SHL"])
         self.assertFalse(self.m.matches(self.m.triggers["SHL_revanche_ready"], "SHL"))
@@ -4104,7 +4113,7 @@ class CourseProgrammeTests(unittest.TestCase):
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 0)
         self.assertEqual(sorted(call[1] for call in self.m.calls if call[0] == "remove_claim_by"), ["280", "284", "285", "286"])
         self.assertEqual(self.c["SHL_revanche_neighbour"], 0)
-        for effect in ("SHL_glp_war_victory", "SHL_mzr_war_victory"):
+        for effect in ("SHL_glp_war_victory", "SHL_kyz_war_victory"):
             self.assertIn("ADISCORD_SHL.76", repr(self.m.effects[effect]), effect)
 
     def test_integration_annexes_only_satellites_and_each_course_settles_its_own_way(self):
@@ -4178,12 +4187,12 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.focuses.add("SHL_c_cistern_charter")
         self.assertTrue(self.m.matches(self.m.triggers["SHL_can_offer_cistern_charter"], "SHL"))
         self.m.run("SHL_request_cistern_charter")
-        self.c["SHL_mazar_state"] = 1
-        self.m.missions.add("SHL_mazar_deadline")
-        self.m.run("SHL_accept_cistern_charter", scope="MZR")
-        self.assertEqual(self.m.factions.get("MZR"), "SHL")
-        self.assertEqual((self.c["SHL_mzr_outcome"], self.c["SHL_mazar_state"]), (3, 3))
-        self.assertNotIn("SHL_mazar_deadline", self.m.missions)
+        self.c["SHL_keizan_state"] = 1
+        self.m.missions.add("SHL_keizan_deadline")
+        self.m.run("SHL_accept_cistern_charter", scope="KYZ")
+        self.assertEqual(self.m.factions.get("KYZ"), "SHL")
+        self.assertEqual((self.c["SHL_kyz_outcome"], self.c["SHL_keizan_state"]), (3, 3))
+        self.assertNotIn("SHL_keizan_deadline", self.m.missions)
         self.assertFalse(self.m.matches(self.m.triggers["SHL_can_offer_cistern_charter"], "SHL"))
 
 

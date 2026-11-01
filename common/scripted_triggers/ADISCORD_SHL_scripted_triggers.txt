@@ -151,7 +151,7 @@ SHL_can_lead_alliance = {
 	}
 }
 
-SHL_kyz_counterpart = {
+SHL_qanat_counterpart = {
 	KYZ = {
 		exists = yes
 		is_subject = no
@@ -182,12 +182,13 @@ SHL_glp_counterpart = {
 SHL_can_seize_qanats = {
 	SHL_country_operable = yes
 	has_war = no
+	NOT = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 	check_variable = { var = SHL_water_crisis value = 1 compare = equals }
 	OR = {
 		has_completed_focus = SHL_qanat_guard
 		has_completed_focus = SHL_right_to_water
 	}
-	SHL_kyz_counterpart = yes
+	SHL_qanat_counterpart = yes
 	KYZ = { has_war = no }
 }
 
@@ -203,77 +204,95 @@ SHL_can_strike_veyr = {
 	GLP = { has_war = no }
 }
 
-SHL_mazar_can_threaten = {
+# COUNTRY SHL. The demand needs a head well left in Keizan's hands and no
+# running qanat war; the brotherhood closes the dispute for good.
+SHL_keizan_can_threaten = {
 	707 = { is_owned_by = SHL }
-	MZR = {
+	KYZ = {
 		exists = yes
 		is_subject = no
 		has_war = no
 		NOT = { is_in_faction_with = SHL }
 	}
-	269 = { is_owned_by = MZR }
-	268 = { is_owned_by = MZR }
+	OR = {
+		280 = { is_owned_by = KYZ }
+		284 = { is_owned_by = KYZ }
+	}
+	NOT = { has_country_flag = SHL_kyz_brotherhood }
+	NOT = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+}
+
+# Shared by the demand event option and its payment effect.
+SHL_keizan_first_payment_affordable = {
+	NOT = { has_political_power < 30 }
+	OR = {
+		check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		AND = {
+			check_variable = { var = SHL_water_crisis value = 2 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 125 compare = greater_than_or_equals }
+		}
+	}
 }
 
 # The sixth-cycle warning precedes the tenth-cycle demand by four cycles.
-SHL_mazar_demand_ready = {
-	check_variable = { var = SHL_mazar_state value = 0 compare = equals }
+SHL_keizan_demand_ready = {
+	check_variable = { var = SHL_keizan_state value = 0 compare = equals }
 	check_variable = { var = SHL_cycle_number value = 10 compare = greater_than_or_equals }
-	SHL_mazar_can_threaten = yes
+	SHL_keizan_can_threaten = yes
 }
 
-SHL_mazar_repeat_ready = {
-	check_variable = { var = SHL_mazar_state value = 2 compare = equals }
-	check_variable = { var = SHL_cycle_number value = SHL_mazar_repeat_cycle compare = greater_than_or_equals }
-	SHL_mazar_can_threaten = yes
+SHL_keizan_repeat_ready = {
+	check_variable = { var = SHL_keizan_state value = 2 compare = equals }
+	check_variable = { var = SHL_cycle_number value = SHL_keizan_repeat_cycle compare = greater_than_or_equals }
+	SHL_keizan_can_threaten = yes
 }
 
 # COUNTRY SHL. Diplomacy ends at the actual declaration, including an early offensive.
-SHL_mzr_diplomacy_open = {
+SHL_kyz_diplomacy_open = {
 	SHL_country_operable = yes
-	NOT = { has_war_with = MZR }
-	NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+	NOT = { has_war_with = KYZ }
+	NOT = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
 	OR = {
-		check_variable = { var = SHL_mazar_state value = 5 compare = equals }
-		has_country_flag = SHL_mzr_mobilizing
+		check_variable = { var = SHL_keizan_state value = 5 compare = equals }
+		has_country_flag = SHL_kyz_mobilizing
 	}
-	SHL_mazar_can_threaten = yes
+	SHL_keizan_can_threaten = yes
 }
 
-# COUNTRY KYZ/GLP. A commercial dispute alone is not a military grievance.
-SHL_mzr_partner_eligible = {
+# COUNTRY MZR/GLP. A commercial dispute alone is not a military grievance.
+SHL_kyz_partner_eligible = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
 	has_war = no
 	is_in_faction = no
 	is_neighbor_of = SHL
-	has_country_flag = SHL_mzr_border_grievance
-	MZR = {
+	has_country_flag = SHL_kyz_border_grievance
+	KYZ = {
 		exists = yes
 		is_subject = no
 		is_in_faction = no
 	}
 }
 
-SHL_mzr_partner_offer_current = {
-	SHL_mzr_partner_eligible = yes
-	SHL = { SHL_mzr_diplomacy_open = yes }
+SHL_kyz_partner_offer_current = {
+	SHL_kyz_partner_eligible = yes
+	SHL = { SHL_kyz_diplomacy_open = yes }
 	OR = {
-		has_country_flag = SHL_mzr_pact_pending
-		has_country_flag = SHL_mzr_pact_signed
+		has_country_flag = SHL_kyz_pact_pending
+		has_country_flag = SHL_kyz_pact_signed
 	}
 }
 
-SHL_mzr_neutrality_affordable = {
+SHL_kyz_neutrality_affordable = {
 	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	NOT = { has_political_power < 30 }
 }
 
-SHL_mzr_neutrality_current = {
-	SHL_mzr_partner_offer_current = yes
-	has_country_flag = SHL_mzr_neutrality_pending
-	SHL = { SHL_mzr_neutrality_affordable = yes }
+SHL_kyz_neutrality_current = {
+	SHL_kyz_partner_offer_current = yes
+	has_country_flag = SHL_kyz_neutrality_pending
+	SHL = { SHL_kyz_neutrality_affordable = yes }
 }
 
 # Obligations occupy one national ledger; routine servicing keeps its own receipt.
@@ -406,12 +425,11 @@ SHL_campaign_open = {
 		ADISCORD_south_final_active = yes
 		SHL_can_seize_qanats = yes
 		SHL_can_strike_veyr = yes
-		check_variable = { var = SHL_mazar_state value = 0 compare = equals }
-		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
-		check_variable = { var = SHL_mazar_state value = 2 compare = equals }
-		check_variable = { var = SHL_mazar_state value = 5 compare = equals }
-		check_variable = { var = SHL_war_mzr value = 1 compare = equals }
-		check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 0 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 1 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 2 compare = equals }
+		check_variable = { var = SHL_keizan_state value = 5 compare = equals }
+		check_variable = { var = SHL_war_kyz value = 1 compare = greater_than_or_equals }
 		check_variable = { var = SHL_war_glp value = 1 compare = equals }
 	}
 }
@@ -424,23 +442,23 @@ SHL_can_prepare_columns = {
 	check_variable = { var = ADISCORD_economy_treasury value = SHL_convoy_deposit compare = greater_than_or_equals }
 }
 
-SHL_can_march_on_mazar = {
+SHL_can_march_on_keizan = {
 	SHL_country_operable = yes
 	is_subject = no
 	has_war = no
 	has_completed_focus = SHL_no_more_rations
-	NOT = { has_country_flag = SHL_mzr_mobilizing }
-	NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
-	NOT = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
-	SHL_mazar_can_threaten = yes
+	NOT = { has_country_flag = SHL_kyz_mobilizing }
+	NOT = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
+	NOT = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+	SHL_keizan_can_threaten = yes
 }
 
-SHL_mzr_objectives_held = {
+SHL_kyz_objectives_held = {
 	SHL_country_operable = yes
-	check_variable = { var = SHL_war_mzr value = 1 compare = equals }
-	has_war_with = MZR
-	269 = { SHL_cistern_coalition_control = yes }
-	268 = { SHL_cistern_coalition_control = yes }
+	check_variable = { var = SHL_war_kyz value = 2 compare = equals }
+	has_war_with = KYZ
+	280 = { SHL_cistern_coalition_control = yes }
+	284 = { SHL_cistern_coalition_control = yes }
 	707 = {
 		is_owned_by = SHL
 		SHL_cistern_coalition_control = yes
@@ -559,18 +577,18 @@ SHL_can_commune_campaign_aid = {
 SHL_can_settle_cisterns = {
 	SHL_country_operable = yes
 	has_war = no
-	check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+	check_variable = { var = SHL_kyz_outcome value = 1 compare = equals }
 	NOT = { has_variable = SHL_south_deposit }
 	NOT = { has_variable = SHL_southern_programme }
-	269 = {
+	280 = {
 		is_owned_by = SHL
 		is_controlled_by = SHL
 	}
-	268 = {
+	284 = {
 		is_owned_by = SHL
 		is_controlled_by = SHL
 	}
-	MZR = {
+	KYZ = {
 		exists = yes
 		is_subject = no
 		NOT = { has_war_with = SHL }
@@ -583,22 +601,22 @@ SHL_can_offer_cistern_charter = {
 		SHL_city_mandate_current = yes
 		SHL_commune_mandate_current = yes
 	}
-	MZR = { is_in_faction = no }
+	KYZ = { is_in_faction = no }
 	OR = {
 		SHL_can_settle_cisterns = yes
 		SHL_can_offer_early_charter = yes
 	}
 }
 
-# The open Conclave may offer the charter before any war with Mazar.
+# The open Conclave may offer the charter before any ration war with Keizan.
 SHL_can_offer_early_charter = {
 	SHL_country_operable = yes
 	has_completed_focus = SHL_c_cistern_charter
 	has_war = no
-	check_variable = { var = SHL_war_mzr value = 0 compare = equals }
-	check_variable = { var = SHL_mzr_outcome value = 0 compare = equals }
+	NOT = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+	check_variable = { var = SHL_kyz_outcome value = 0 compare = equals }
 	NOT = { has_variable = SHL_south_deposit }
-	MZR = {
+	KYZ = {
 		exists = yes
 		is_subject = no
 		NOT = { has_war_with = SHL }
@@ -609,7 +627,7 @@ SHL_south_country_ready = {
 	SHL_country_operable = yes
 	has_completed_focus = SHL_peace_has_a_price
 	has_war = no
-	check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+	check_variable = { var = SHL_keizan_state value = 3 compare = equals }
 	NOT = { has_variable = SHL_southern_programme }
 }
 
@@ -620,11 +638,11 @@ SHL_south_site_current = {
 			is_controlled_by = SHL
 		}
 		AND = {
-			is_owned_by = MZR
-			is_controlled_by = MZR
-			MZR = { is_in_faction_with = SHL }
+			is_owned_by = KYZ
+			is_controlled_by = KYZ
+			KYZ = { is_in_faction_with = SHL }
 			SHL = {
-				check_variable = { var = SHL_mzr_outcome value = 3 compare = equals }
+				check_variable = { var = SHL_kyz_outcome value = 3 compare = equals }
 				OR = {
 					check_variable = { var = SHL_political_course value = 2 compare = equals }
 					check_variable = { var = SHL_political_course value = 5 compare = equals }
@@ -640,8 +658,8 @@ SHL_south_site_has_result = {
 		AND = {
 			SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			OR = {
-				state = 269
-				state = 268
+				state = 280
+				state = 284
 				state = 707
 				state = 287
 				state = 288
@@ -657,8 +675,8 @@ SHL_south_site_has_result = {
 		AND = {
 			SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
 			OR = {
-				state = 269
-				state = 268
+				state = 280
+				state = 284
 				state = 707
 				state = 287
 				state = 288
@@ -674,8 +692,8 @@ SHL_south_site_has_result = {
 		AND = {
 			SHL = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
 			OR = {
-				state = 269
-				state = 268
+				state = 280
+				state = 284
 				state = 707
 				state = 287
 				state = 288
@@ -695,8 +713,8 @@ SHL_south_site_has_result = {
 		AND = {
 			SHL = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 			OR = {
-				state = 269
-				state = 268
+				state = 280
+				state = 284
 				state = 707
 				state = 287
 				state = 288
@@ -716,12 +734,12 @@ SHL_south_site_has_result = {
 SHL_south_receipt_here = {
 	OR = {
 		AND = {
-			state = 269
-			SHL = { check_variable = { var = SHL_south_site value = 269 compare = equals } }
+			state = 280
+			SHL = { check_variable = { var = SHL_south_site value = 280 compare = equals } }
 		}
 		AND = {
-			state = 268
-			SHL = { check_variable = { var = SHL_south_site value = 268 compare = equals } }
+			state = 284
+			SHL = { check_variable = { var = SHL_south_site value = 284 compare = equals } }
 		}
 		AND = {
 			state = 707
@@ -771,17 +789,17 @@ SHL_cistern_coalition_control = {
 	OR = {
 		is_controlled_by = SHL
 		AND = {
-			is_controlled_by = KYZ
-			KYZ = {
+			is_controlled_by = MZR
+			MZR = {
 				is_in_faction_with = SHL
-				has_war_with = MZR
+				has_war_with = KYZ
 			}
 		}
 		AND = {
 			is_controlled_by = GLP
 			GLP = {
 				is_in_faction_with = SHL
-				has_war_with = MZR
+				has_war_with = KYZ
 			}
 		}
 	}
@@ -1178,7 +1196,7 @@ SHL_neighbour_dispute_closed = {
 	OR = {
 		SHL_kyz_settled = yes
 		SHL_glp_settled = yes
-		has_country_flag = SHL_kyz_war_closed
+		has_country_flag = SHL_qanat_war_closed
 		has_country_flag = SHL_glp_war_closed
 	}
 }

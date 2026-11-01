@@ -15,6 +15,7 @@ state={
 	history = {
 		owner = EFL
 		add_core_of = EFL
+		victory_points = { 6331 5 }
 		buildings = {
 			infrastructure = 3
 		}

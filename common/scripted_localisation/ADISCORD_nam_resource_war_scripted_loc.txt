@@ -8,12 +8,6 @@ defined_text = {
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_grp_nam_support value = 85 compare = greater_than_or_equals }
-		}
-		localization_key = NAM_bw_colour_demand
-	}
-	text = {
-		trigger = {
 			check_variable = { var = NAM_grp_nam_support value = 70 compare = greater_than_or_equals }
 		}
 		localization_key = NAM_bw_colour_bonus
@@ -51,12 +45,6 @@ defined_text = {
 			check_variable = { var = NAM_grp_oil_support value = 25 compare = less_than_or_equals }
 		}
 		localization_key = NAM_bw_colour_penalty
-	}
-	text = {
-		trigger = {
-			check_variable = { var = NAM_grp_oil_support value = 85 compare = greater_than_or_equals }
-		}
-		localization_key = NAM_bw_colour_demand
 	}
 	text = {
 		trigger = {
@@ -100,12 +88,6 @@ defined_text = {
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_grp_dist_support value = 85 compare = greater_than_or_equals }
-		}
-		localization_key = NAM_bw_colour_demand
-	}
-	text = {
-		trigger = {
 			check_variable = { var = NAM_grp_dist_support value = 70 compare = greater_than_or_equals }
 		}
 		localization_key = NAM_bw_colour_bonus
@@ -146,12 +128,6 @@ defined_text = {
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_grp_garr_support value = 85 compare = greater_than_or_equals }
-		}
-		localization_key = NAM_bw_colour_demand
-	}
-	text = {
-		trigger = {
 			check_variable = { var = NAM_grp_garr_support value = 70 compare = greater_than_or_equals }
 		}
 		localization_key = NAM_bw_colour_bonus
@@ -189,12 +165,6 @@ defined_text = {
 			check_variable = { var = NAM_grp_trade_support value = 25 compare = less_than_or_equals }
 		}
 		localization_key = NAM_bw_colour_penalty
-	}
-	text = {
-		trigger = {
-			check_variable = { var = NAM_grp_trade_support value = 85 compare = greater_than_or_equals }
-		}
-		localization_key = NAM_bw_colour_demand
 	}
 	text = {
 		trigger = {
@@ -474,41 +444,9 @@ defined_text = {
 	}
 }
 
-defined_text = {
-	name = NAMGetRivalTerm
-	text = {
-		trigger = { check_variable = { NAM_rival_current = 1 } }
-		localization_key = NAM_rival_term_1
-	}
-	text = {
-		trigger = { check_variable = { NAM_rival_current = 2 } }
-		localization_key = NAM_rival_term_2
-	}
-	text = {
-		trigger = { check_variable = { NAM_rival_current = 3 } }
-		localization_key = NAM_rival_term_3
-	}
-	text = {
-		localization_key = NAM_rival_term_4
-	}
-}
-
 # What a refusal costs: a heard rival only loses face; an unheard rival of a
 # pillar below 25 stakes the seals.
-defined_text = {
-	name = NAMGetRivalRefusal
-	text = {
-		trigger = { NAM_rival_current_heard = yes }
-		localization_key = NAM_rival_refusal_heard
-	}
-	text = {
-		trigger = { NAM_rival_current_pillar_broken = yes }
-		localization_key = NAM_rival_refusal_coup
-	}
-	text = {
-		localization_key = NAM_rival_refusal_plain
-	}
-}
+
 
 # ----- Colony phase -----
 # The metropole's trade concession in the NAM_colony category.
@@ -1985,4 +1923,104 @@ defined_text = {
 		localization_key = NAM_administration_prag_directorate_title
 	}
 	text = { localization_key = NAM_administration_default_title }
+}
+
+defined_text = {
+	name = NAMGetAgreementName
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 1 } }
+		localization_key = NAM_agreement_nam_name
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 2 } }
+		localization_key = NAM_agreement_oil_name
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 3 } }
+		localization_key = NAM_agreement_dist_name
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 4 } }
+		localization_key = NAM_agreement_garr_name
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 5 } }
+		localization_key = NAM_agreement_trade_name
+	}
+	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetAgreementGoal
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 1 } }
+		localization_key = NAM_agreement_nam_goal
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 2 } }
+		localization_key = NAM_agreement_oil_goal
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 3 } }
+		localization_key = NAM_agreement_dist_goal
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 4 } }
+		localization_key = NAM_agreement_garr_goal
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 5 } }
+		localization_key = NAM_agreement_trade_goal
+	}
+	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetAgreementSupport
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 1 } }
+		localization_key = NAM_agreement_nam_support
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 2 } }
+		localization_key = NAM_agreement_oil_support
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 3 } }
+		localization_key = NAM_agreement_dist_support
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 4 } }
+		localization_key = NAM_agreement_garr_support
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 5 } }
+		localization_key = NAM_agreement_trade_support
+	}
+	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetAgreementPillar
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 1 } }
+		localization_key = NAM_agreement_nam_pillar
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 2 } }
+		localization_key = NAM_agreement_oil_pillar
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 3 } }
+		localization_key = NAM_agreement_dist_pillar
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 4 } }
+		localization_key = NAM_agreement_garr_pillar
+	}
+	text = {
+		trigger = { check_variable = { NAM_agreement_current = 5 } }
+		localization_key = NAM_agreement_trade_pillar
+	}
+	text = { localization_key = NAM_agreement_none }
 }

@@ -84,13 +84,6 @@ STP_sided_with_Maksim_trigger = {
 	}
 }
 
-STP_sided_with_Hedersett_trigger = {
-	OR = {
-		has_country_flag = STP_sided_with_the_party_flag
-		has_country_flag = STP_cw_party_player
-	}
-}
-
 # COUNTRY: the election result alone does not end the prewar cabinet's mandate.
 STP_pw_party_trial_pending = {
 	tag = STS
@@ -331,39 +324,8 @@ STP_region_local_forces_entrenched = {
 	check_variable = { var = STP_region_status value = 6 compare = equals }
 }
 
-STP_region_local_forces_dominant = {
-	STP_region_local_forces_entrenched = yes
-}
-
-STP_region_has_administration_asset = {
-	has_state_flag = STP_resistance_administration_asset
-}
-
 STP_region_has_ready_administration = {
 	has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
-}
-
-STP_region_has_garrison_asset = {
-	has_state_flag = STP_resistance_garrison_asset
-}
-
-STP_region_has_supply_asset = {
-	has_state_flag = STP_resistance_supply_asset
-}
-
-STP_region_has_sabotage_asset = {
-	has_state_flag = STP_resistance_sabotage_asset
-}
-
-STP_region_has_local_deal = {
-	has_state_flag = STP_local_deal_asset
-}
-
-STP_region_has_party_counter_assets = {
-	OR = {
-		has_state_flag = STP_party_reinforced_garrison_asset
-		has_state_flag = STP_party_counterintelligence_asset
-	}
 }
 
 STP_region_has_detectable_assets = {
@@ -626,6 +588,35 @@ VAL_cw_can_intervene = {
 		tooltip = VAL_cw_republics_grace_elapsed_tt
 		has_global_flag = { flag = STP_cw_started days > 59 }
 	}
+}
+
+# COUNTRY VAL. Three republican districts occupied and only Livonn left: the
+# council is besieged, not beaten, so the siege clock ends the war.
+VAL_cw_livonn_siege_active = {
+	has_country_flag = VAL_cw_entered
+	NOT = { has_country_flag = VAL_cw_settled }
+	has_war_with = SRP
+	SRP = {
+		exists = yes
+		has_capitulated = no
+	}
+	43 = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+	44 = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+	88 = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+	45 = { is_controlled_by = SRP }
+}
+
+# COUNTRY SRP. Kefreyt holds no republican district at all.
+STP_cw_republics_repelled_val = {
+	has_war_with = VAL
+	VAL = {
+		has_country_flag = VAL_cw_entered
+		NOT = { has_country_flag = VAL_cw_settled }
+	}
+	43 = { is_controlled_by = SRP }
+	44 = { is_controlled_by = SRP }
+	45 = { is_controlled_by = SRP }
+	88 = { is_controlled_by = SRP }
 }
 
 STP_cw_nod_busy_in_north = {

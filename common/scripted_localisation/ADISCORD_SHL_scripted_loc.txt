@@ -593,87 +593,87 @@ defined_text = {
 }
 
 defined_text = {
-	name = SHLGetMazarFlankStatus
+	name = SHLGetKeizanFlankStatus
 	text = {
-		trigger = { KYZ = { has_country_flag = SHL_mzr_war_partner } }
-		localization_key = SHL_mzr_flank_kyz_war
+		trigger = { MZR = { has_country_flag = SHL_kyz_war_partner } }
+		localization_key = SHL_kyz_flank_mzr_war
 	}
 	text = {
-		trigger = { GLP = { has_country_flag = SHL_mzr_war_partner } }
-		localization_key = SHL_mzr_flank_glp_war
+		trigger = { GLP = { has_country_flag = SHL_kyz_war_partner } }
+		localization_key = SHL_kyz_flank_glp_war
 	}
 	text = {
 		trigger = {
 			OR = {
-				KYZ = { has_country_flag = SHL_mzr_neutrality_pending }
-				GLP = { has_country_flag = SHL_mzr_neutrality_pending }
+				MZR = { has_country_flag = SHL_kyz_neutrality_pending }
+				GLP = { has_country_flag = SHL_kyz_neutrality_pending }
 			}
 		}
-		localization_key = SHL_mzr_flank_negotiating
+		localization_key = SHL_kyz_flank_negotiating
 	}
 	text = {
 		trigger = {
-			KYZ = {
-				SHL_mzr_partner_offer_current = yes
-				has_country_flag = SHL_mzr_pact_signed
+			MZR = {
+				SHL_kyz_partner_offer_current = yes
+				has_country_flag = SHL_kyz_pact_signed
 			}
 		}
-		localization_key = SHL_mzr_flank_kyz_signed
-	}
-	text = {
-		trigger = {
-			GLP = {
-				SHL_mzr_partner_offer_current = yes
-				has_country_flag = SHL_mzr_pact_signed
-			}
-		}
-		localization_key = SHL_mzr_flank_glp_signed
-	}
-	text = {
-		trigger = {
-			KYZ = {
-				SHL_mzr_partner_offer_current = yes
-				has_country_flag = SHL_mzr_pact_pending
-			}
-		}
-		localization_key = SHL_mzr_flank_kyz_pending
+		localization_key = SHL_kyz_flank_mzr_signed
 	}
 	text = {
 		trigger = {
 			GLP = {
-				SHL_mzr_partner_offer_current = yes
-				has_country_flag = SHL_mzr_pact_pending
+				SHL_kyz_partner_offer_current = yes
+				has_country_flag = SHL_kyz_pact_signed
 			}
 		}
-		localization_key = SHL_mzr_flank_glp_pending
+		localization_key = SHL_kyz_flank_glp_signed
 	}
-	text = { localization_key = SHL_mzr_flank_none }
+	text = {
+		trigger = {
+			MZR = {
+				SHL_kyz_partner_offer_current = yes
+				has_country_flag = SHL_kyz_pact_pending
+			}
+		}
+		localization_key = SHL_kyz_flank_mzr_pending
+	}
+	text = {
+		trigger = {
+			GLP = {
+				SHL_kyz_partner_offer_current = yes
+				has_country_flag = SHL_kyz_pact_pending
+			}
+		}
+		localization_key = SHL_kyz_flank_glp_pending
+	}
+	text = { localization_key = SHL_kyz_flank_none }
 }
 
 defined_text = {
-	name = SHLGetMazarStatus
+	name = SHLGetKeizanStatus
 	text = {
-		trigger = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
-		localization_key = SHL_status_mazar_war
+		trigger = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+		localization_key = SHL_status_keizan_war
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mazar_state value = 5 compare = equals } }
-		localization_key = SHL_status_mazar_deadline
+		trigger = { check_variable = { var = SHL_keizan_state value = 5 compare = equals } }
+		localization_key = SHL_status_keizan_deadline
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mazar_state value = 2 compare = equals } }
-		localization_key = SHL_status_mazar_paid
+		trigger = { check_variable = { var = SHL_keizan_state value = 2 compare = equals } }
+		localization_key = SHL_status_keizan_paid
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
-		localization_key = SHL_status_mazar_settled
+		trigger = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
+		localization_key = SHL_status_keizan_settled
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mazar_state value = 1 compare = equals } }
-		localization_key = SHL_status_mazar_demand
+		trigger = { check_variable = { var = SHL_keizan_state value = 1 compare = equals } }
+		localization_key = SHL_status_keizan_demand
 	}
 	text = {
-		localization_key = SHL_status_mazar_quiet
+		localization_key = SHL_status_keizan_quiet
 	}
 }
 
@@ -939,31 +939,31 @@ defined_text = {
 defined_text = {
 	name = SHLGetCampaignOutcome
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 7 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 7 compare = equals } }
 		localization_key = SHL_campaign_no_threat
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 1 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 1 compare = equals } }
 		localization_key = SHL_campaign_victory
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 2 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 2 compare = equals } }
 		localization_key = SHL_campaign_concession
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 3 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 3 compare = equals } }
 		localization_key = SHL_campaign_charter
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 4 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 4 compare = equals } }
 		localization_key = SHL_campaign_defeat
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 5 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 5 compare = equals } }
 		localization_key = SHL_campaign_armistice
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_mzr_outcome value = 6 compare = equals } }
+		trigger = { check_variable = { var = SHL_kyz_outcome value = 6 compare = equals } }
 		localization_key = SHL_campaign_payment
 	}
 	text = { localization_key = SHL_campaign_unsettled }

@@ -336,3 +336,13 @@ NAM_guarded_wells_modifier = {
 	enemy_army_speed_factor = -0.10
 	state_repair_speed_infrastructure_factor = 0.25
 }
+
+# Autonomy is a permanent term of NAM citizenship, dormant under a foreign owner.
+NAM_border_autonomous_district = {
+	icon = GFX_modifiers_generic_military_plans
+	enable = { is_owned_by = NAM }
+	local_factories = -0.50
+	state_production_speed_buildings_factor = -0.50
+	local_manpower = -0.50
+	state_resources_factor = -0.35
+}

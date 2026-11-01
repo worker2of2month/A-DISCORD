@@ -104,7 +104,7 @@ NAM_resource_war_district_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_resource_war_focus
-		NOT = { has_completed_focus = NAM_vertical }
+		NAM_prewar_service_mandate = no
 	}
 	abort = {
 		OR = {
@@ -117,12 +117,20 @@ NAM_resource_war_district_plan = {
 		NAM_wells_under_guard
 		NAM_hold_basin
 		NAM_relief_columns
+		NAM_war_rear_directorate
+		NAM_war_depot_network
+		NAM_war_dispatch_service
 		NAM_discipline_of_seals
 		NAM_counterstroke
 		NAM_volunteer_levies
 		NAM_last_reserve
 		NAM_district_volunteers
 		NAM_oil_score
+		NAM_war_civilian_routes
+		NAM_war_naval_staff
+		NAM_war_convoy_escort
+		NAM_war_field_airfields
+		NAM_war_interceptor_control
 	}
 	weight = { factor = 20 }
 }
@@ -135,7 +143,7 @@ NAM_resource_war_vertical_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_resource_war_focus
-		has_completed_focus = NAM_vertical
+		NAM_prewar_service_mandate = yes
 	}
 	abort = {
 		OR = {
@@ -148,12 +156,20 @@ NAM_resource_war_vertical_plan = {
 		NAM_wells_under_guard
 		NAM_hold_basin
 		NAM_relief_columns
+		NAM_war_rear_directorate
+		NAM_war_mobile_workshops
+		NAM_war_dispatch_service
 		NAM_discipline_of_seals
 		NAM_counterstroke
 		NAM_volunteer_levies
 		NAM_last_reserve
 		NAM_martial_seals
 		NAM_oil_score
+		NAM_war_factory_shifts
+		NAM_war_naval_staff
+		NAM_war_coastal_batteries
+		NAM_war_field_airfields
+		NAM_war_air_ground_liaison
 	}
 	weight = { factor = 20 }
 }
@@ -197,6 +213,8 @@ NAM_postwar_plan = {
 		NAM_middle_loren_wells
 		NAM_reclaim_230
 		NAM_oil_exchange
+		NAM_border_administration
+		NAM_border_compacts
 		NAM_national_university
 		NAM_svetlogorsk_dam
 		NAM_charter_ending_federation
@@ -265,6 +283,9 @@ NAM_postwar_vertical_plan = {
 		NAM_middle_loren_wells
 		NAM_reclaim_230
 		NAM_oil_exchange
+		NAM_border_administration
+		NAM_border_security
+		NAM_border_citizenship
 		NAM_national_university
 		NAM_svetlogorsk_dam
 		NAM_ladder_ending_service
@@ -598,6 +619,8 @@ NAM_postwar_pragmatic_plan = {
 		NAM_oil_ministry
 		NAM_export_consortium
 		NAM_oil_exchange
+		NAM_border_administration
+		NAM_border_compacts
 		NAM_normalisation
 		NAM_svetlogorye
 		NAM_prag_ending_republic

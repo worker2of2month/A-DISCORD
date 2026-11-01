@@ -1423,23 +1423,6 @@ ADISCORD_vorkerland_has_adjacent_viable_central_minor = {
 	}
 }
 
-# The deadline and launch verifier use the recorded wave, not a global scan.
-# When the final recorded war ends, the claimant receives a short regrouping
-# interval before the next layer of newly adjacent governments may be opened.
-ADISCORD_vorkerland_has_live_recorded_central_minor_front = {
-	OR = {
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr has_war_with = EYR }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc has_war_with = EGC }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv has_war_with = RIV }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev has_war_with = REV }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor has_war_with = YOR }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn has_war_with = NDN }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb has_war_with = SWB }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv has_war_with = VHV }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv has_war_with = OSV }
-	}
-}
-
 ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = {
 	OR = {
 		AND = {
@@ -2503,6 +2486,19 @@ ADISCORD_vorkerland_has_live_central_minor_war = {
 		AND = { country_exists = SWB has_war_with = SWB SWB = { NOT = { has_capitulated = yes } } }
 		AND = { country_exists = VHV has_war_with = VHV VHV = { NOT = { has_capitulated = yes } } }
 		AND = { country_exists = OSV has_war_with = OSV OSV = { NOT = { has_capitulated = yes } } }
+	}
+}
+
+# Peer claimant wars stay live while at least one rival successor government
+# still exists, fights this country and has not capitulated.
+ADISCORD_vorkerland_has_live_claimant_war = {
+	is_ai = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	OR = {
+		AND = { country_exists = WKR has_war_with = WKR WKR = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = VAD has_war_with = VAD VAD = { NOT = { has_capitulated = yes } } }
+		AND = { country_exists = TVA has_war_with = TVA TVA = { NOT = { has_capitulated = yes } } }
 	}
 }
 

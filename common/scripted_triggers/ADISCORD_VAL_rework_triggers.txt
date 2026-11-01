@@ -253,9 +253,6 @@ VAL_frontier_postwar = {
 	is_subject = no
 	NOT = { has_country_flag = VAL_stelander_defeated }
 }
-VAL_frontier_shabrat_buffer = {
-	STS = { exists = yes has_country_flag = STP_cw_won_union_battle is_subject = no has_capitulated = no }
-}
 VAL_frontier_idle = {
 	NOT = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 }
@@ -541,36 +538,6 @@ VAL_frontier_matches_current_target = {
 
 VAL_frontier_reply_is_current = {
 	event_target:VAL_frontier_quoted_target = { VAL_frontier_matches_current_target = yes }
-}
-
-VAL_cin_contract_family_open = {
-	OR = {
-		AND = { NOT = { has_country_flag = VAL_CIN_block_market } NOT = { has_country_flag = VAL_CIN_success_market } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_arms } NOT = { has_country_flag = VAL_CIN_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_infrastructure } NOT = { has_country_flag = VAL_CIN_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_captain } NOT = { has_country_flag = VAL_CIN_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_terms } NOT = { has_country_flag = VAL_CIN_success_terms } }
-	}
-}
-
-VAL_osf_contract_family_open = {
-	OR = {
-		AND = { NOT = { has_country_flag = VAL_OSF_block_market } NOT = { has_country_flag = VAL_OSF_success_market } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_arms } NOT = { has_country_flag = VAL_OSF_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_infrastructure } NOT = { has_country_flag = VAL_OSF_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_captain } NOT = { has_country_flag = VAL_OSF_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_terms } NOT = { has_country_flag = VAL_OSF_success_terms } }
-	}
-}
-
-VAL_aph_contract_family_open = {
-	OR = {
-		AND = { NOT = { has_country_flag = VAL_APH_block_market } NOT = { has_country_flag = VAL_APH_success_market } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_arms } NOT = { has_country_flag = VAL_APH_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_infrastructure } NOT = { has_country_flag = VAL_APH_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_captain } NOT = { has_country_flag = VAL_APH_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_terms } NOT = { has_country_flag = VAL_APH_success_terms } }
-	}
 }
 
 # COUNTRY VAL: the ultimatum/response stages end on settlement or war.
@@ -2029,15 +1996,6 @@ VAL_regional_integration_state_valid = {
 	}
 }
 
-# State scope: local work and nationalisation reserve the same integration slot.
-VAL_regional_administration_needed = {
-	is_owned_by = VAL
-	is_controlled_by = VAL
-	NOT = { is_core_of = VAL }
-	NOT = { has_state_flag = VAL_regional_administration_in_progress }
-	OR = { compliance < 60 NOT = { resistance < 20 } }
-}
-
 VAL_can_proclaim_commonwealth = {
 	tag = VAL
 	has_completed_focus = VAL_Contracts_Outlive_Kings
@@ -2055,8 +2013,8 @@ VAL_stelander_civil_war_active = {
 	STS = { exists = yes }
 }
 
-# The UI follows the live obligation, not the focus that originally created it.
-# This also keeps old saves actionable when an active quarter survives focus-tree changes.
+# The UI follows the live obligation, not the focus that originally created it,
+# so an active quarter stays actionable after a focus-tree change.
 VAL_contract_obligations_decisions_visible = {
 	has_country_flag = VAL_quarterly_contract_active
 }
@@ -2072,21 +2030,6 @@ VAL_frontier_decisions_visible = {
 		}
 	}
 }
-
-VAL_foreign_sales_decisions_visible = {
-	OR = {
-		has_completed_focus = VAL_Market_Roads_North
-		has_completed_focus = VAL_Foreign_Broker_Licences
-		has_country_flag = VAL_cw_trade_course
-		has_country_flag = VAL_operation_sell_rifles_to_cin
-		has_country_flag = VAL_operation_sell_rifles_to_osf
-	}
-}
-
-VAL_can_spend_750 = {
-	check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
-}
-
 
 # Policy is explicit; merely not researching the military branch is not a choice.
 VAL_can_defer_northern_expansion = {
@@ -3427,20 +3370,6 @@ VAL_hire_recipient_ready = {
 	NOT = { has_country_flag = VAL_hire_fee_paid }
 	NOT = { VAL_partner_hire_fee_reserved = yes }
 }
-VAL_ready_recipient_ready = {
-	NOT = { has_country_flag = VAL_arms_offers_declined }
-	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
-	NOT = { tag = STS has_war_with = STP }
-	NOT = { has_country_flag = VAL_partner_contact_cooldown }
-	NOT = { has_country_flag = VAL_export_customer_cooldown }
-}
-VAL_quarterly_recipient_ready = {
-	NOT = { has_country_flag = VAL_order_offers_declined }
-	VAL_order_partner_valid = yes
-	NOT = { has_country_flag = VAL_partner_contact_cooldown }
-	NOT = { has_country_flag = VAL_quarterly_supply_active }
-}
-
 VAL_military_recipient_ready = {
 	NOT = { has_country_flag = VAL_military_offers_declined }
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
@@ -3459,16 +3388,6 @@ VAL_military_recipient_ready = {
 				AND = { tag = NAM has_war_with = AZH VAL = { has_war_with = AZH } }
 			}
 		}
-	}
-}
-
-VAL_special_recipient_ready = {
-	exists = yes has_capitulated = no NOT = { has_war_with = VAL }
-	NOT = { has_country_flag = VAL_partner_contact_cooldown }
-	OR = {
-		AND = { VAL_partner_military_visible = yes VAL_military_recipient_ready = yes }
-		AND = { VAL_partner_advisors_visible = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } }
-		VAL_partner_transit_visible = yes
 	}
 }
 
@@ -3788,5 +3707,20 @@ VAL_council_seat_arbitration_ready = {
 	custom_trigger_tooltip = {
 		tooltip = VAL_council_arbitration_cash_tt
 		check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	}
+}
+
+# COUNTRY VAL. Advanced-difficulty AI edge for the scripted campaigns only;
+# a human Kefreyt or a war outside those routes never qualifies.
+VAL_ai_scripted_war_bonus_active = {
+	is_ai = yes
+	difficulty > 2
+	has_capitulated = no
+	is_subject = no
+	OR = {
+		has_war_with = SRP
+		has_war_with = STS
+		has_war_with = STP
+		has_war_with = NOD
 	}
 }

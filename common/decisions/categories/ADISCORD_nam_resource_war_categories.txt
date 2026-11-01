@@ -127,7 +127,10 @@ NAM_supports = {
 NAM_underground = {
 	icon = generic_operation
 	allowed = { tag = NAM }
-	visible = { has_variable = NAM_underground }
+	visible = {
+		has_variable = NAM_underground
+		NAM_underground_open = yes
+	}
 	visible_when_empty = yes
 	priority = 20
 }

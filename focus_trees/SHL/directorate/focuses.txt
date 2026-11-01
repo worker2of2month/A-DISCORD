@@ -117,7 +117,7 @@
 					check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
 					AND = {
 						check_variable = { var = SHL_water_crisis value = 0 compare = equals }
-						SHL_kyz_counterpart = no
+						SHL_qanat_counterpart = no
 					}
 				}
 				OR = {

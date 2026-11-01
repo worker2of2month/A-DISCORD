@@ -1169,32 +1169,33 @@ AFRELA_LEGACY_VICTORY_POINTS = {
     326: ((16626, 5),),
 }
 
+# Regional centres complement the capitals so progress is spread across each front.
 NAM_LEGACY_VICTORY_POINTS = {
-    67: ((6099, 1), (16890, 5)),
-    68: ((6150, 1),),
+    67: ((6099, 10), (16890, 15)),
+    68: ((6150, 10),),
     69: (
-        (16893, 10), (16883, 5), (16886, 5), (16889, 5), (16894, 5),
+        (16893, 25), (16883, 5), (16886, 5), (16889, 5), (16894, 5),
         (16888, 5),
     ),
-    70: ((2986, 1),),
-    723: ((6495, 1),),
-    724: (),
-    725: (),
-    726: (),
-    727: ((8234, 1),),
+    70: ((2986, 15),),
+    723: ((6495, 10),),
+    724: ((6796, 5),),
+    725: ((259, 10),),
+    726: ((6331, 5),),
+    727: ((8234, 10),),
     728: ((16882, 5), (16891, 5)),
-    729: (),
-    NAM_SVETLOGORSK_STATE_ID: ((16721, 5), (1710, 1)),
-    NAM_RESIDUAL_CITY_STATE_ID: (),
-    NAM_DRYRIVER_STATE_ID: ((8058, 1), (9016, 1), (16885, 5), (16887, 5)),
-    NAM_EAST_DRYRIVER_STATE_ID: (),
-    EFL_MIDDLE_LOREN_STATE_ID: (),
-    EFL_MOREN_STATE_ID: ((8057, 1),),
-    EFL_LOREN_BORDERLAND_STATE_ID: (),
-    AZH_BLACK_COAST_STATE_ID: ((493, 25), (5039, 1), (4089, 10)),
-    AZH_SEABOARD_STATE_ID: (),
-    700: ((16716, 5), (16881, 5), (16884, 5), (16892, 5)),
-    701: ((16717, 5),),
+    729: ((6193, 5),),
+    NAM_SVETLOGORSK_STATE_ID: ((16721, 25), (1710, 5)),
+    NAM_RESIDUAL_CITY_STATE_ID: ((7618, 5),),
+    NAM_DRYRIVER_STATE_ID: ((8058, 5), (9016, 10), (16885, 5), (16887, 5)),
+    NAM_EAST_DRYRIVER_STATE_ID: ((6961, 5),),
+    EFL_MIDDLE_LOREN_STATE_ID: ((8194, 10),),
+    EFL_MOREN_STATE_ID: ((8057, 5),),
+    EFL_LOREN_BORDERLAND_STATE_ID: ((7908, 5),),
+    AZH_BLACK_COAST_STATE_ID: ((493, 25), (5039, 5), (4089, 10)),
+    AZH_SEABOARD_STATE_ID: ((2443, 5),),
+    700: ((16716, 20), (16881, 5), (16884, 5), (16892, 5)),
+    701: ((16717, 25),),
 }
 
 AFRELA_VICTORY_POINT_NAMES = {
@@ -1231,6 +1232,15 @@ NAM_VICTORY_POINT_NAMES = {
     16890: "Нефтегорск",
     16891: "Рас-Нур",
     16894: "Эль-Хадид",
+    6796: "Белогорье",
+    259: "Эфлор",
+    6331: "Тарен",
+    6193: "Хадир",
+    7618: "Прибрежск",
+    6961: "Вересовка",
+    8194: "Ясный Брод",
+    7908: "Заречье",
+    2443: "Мерса",
 }
 
 # Every playable dirty-zone state is a war objective of its republic. Capitals
@@ -2271,7 +2281,7 @@ def split_ivanland_overhaul_states() -> None:
 
 
 def replace_history_victory_points(
-    source: str, points: tuple[tuple[int, int], ...]
+    source: str, points: tuple[tuple[int, int], ...], *, before_buildings: bool = False
 ) -> str:
     """Replace every history VP with one exact ordered manifest block."""
     history_open, history_close = named_block(source, "history")
@@ -2281,7 +2291,14 @@ def replace_history_victory_points(
         r"\d+[ \t]+\d+[ \t]*\}[ \t]*(?:\n|$)"
     )
     matches = list(pattern.finditer(history))
-    if matches:
+    if before_buildings:
+        history = pattern.sub("", history)
+        anchor = re.search(r"(?m)^([ \t]*)buildings\s*=", history)
+        if anchor is None:
+            raise ValueError("Generated NAM state has no building block")
+        insertion = anchor.start()
+        indent = anchor.group(1)
+    elif matches:
         insertion = matches[0].start()
         indent = matches[0].group(1)
         history = pattern.sub("", history)
@@ -2453,7 +2470,7 @@ def nam_victory_point_plan() -> dict[Path, bytes]:
             for province, value in re.findall(r"\bvictory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source)
         }
         existing.update(points)
-        updated = replace_history_victory_points(source, tuple(existing.items())) if points else source
+        updated = replace_history_victory_points(source, tuple(existing.items()), before_buildings=True) if points else source
         outputs[path] = updated.encode("utf-8") if updated != source else path.read_bytes()
     path = ROOT / "localisation/russian/victory_points_l_russian.yml"
     source = path.read_text(encoding="utf-8-sig")

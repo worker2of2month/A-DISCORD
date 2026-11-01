@@ -217,8 +217,7 @@ ADISCORD_south_participants_ready = {
 		ADISCORD_south_champion_viable = yes
 		has_war = no
 		has_country_flag = SHL_furnaces_initialized
-		NOT = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
-		NOT = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 		NOT = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
 	}
 	OR = {

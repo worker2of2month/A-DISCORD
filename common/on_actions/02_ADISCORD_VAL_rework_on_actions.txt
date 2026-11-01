@@ -22,7 +22,6 @@ on_actions = {
 			if = {
 				limit = { VAL = { exists = yes } }
 				VAL = {
-					VAL_restore_fulfilled_northern_aid = yes
 					# Rebuild contract income from authoritative annual-contract flags.
 					VAL_recalculate_market_contract_income = yes
 					VAL_initialize_contract_authority = yes
@@ -312,6 +311,21 @@ on_actions = {
 			if = {
 				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 				VAL_frontier_weekly = yes
+			}
+			# The scripted-campaign edge follows the live war and the current controller.
+			if = {
+				limit = {
+					VAL_ai_scripted_war_bonus_active = yes
+					NOT = { has_idea = VAL_ai_scripted_war_command }
+				}
+				add_ideas = VAL_ai_scripted_war_command
+			}
+			else_if = {
+				limit = {
+					has_idea = VAL_ai_scripted_war_command
+					NOT = { VAL_ai_scripted_war_bonus_active = yes }
+				}
+				remove_ideas = VAL_ai_scripted_war_command
 			}
 		}
 	}

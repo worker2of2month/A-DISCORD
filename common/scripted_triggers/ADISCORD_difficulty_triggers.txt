@@ -31,8 +31,12 @@ ADISCORD_difficulty_ai_abyss_front = {
 }
 
 # Field equipment and funding gate opportunistic attacks, not total army size.
+# War itself strains the budget; only a fiscal crisis or recovery withholds the push.
 ADISCORD_difficulty_ai_offensive_ready = {
-	ADISCORD_economy_ai_is_healthy = yes
+	OR = {
+		ADISCORD_economy_ai_is_healthy = yes
+		ADISCORD_economy_ai_is_stressed = yes
+	}
 	ADISCORD_ai_army_replacement_pressure_cleared = yes
 }
 
@@ -55,6 +59,14 @@ ADISCORD_difficulty_enemy_requires_caution = {
 		FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
 		fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
 	}
+}
+
+# Peer-claimant fronts: only a materially stronger enemy justifies careful
+# execution; a replacement shortage alone keeps the balanced plan.
+ADISCORD_difficulty_enemy_outmatches = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
+	fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
 }
 
 # State-targeted orders have an extra FROM level; do not reuse the country

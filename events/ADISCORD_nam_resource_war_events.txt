@@ -745,7 +745,7 @@ country_event = {
 		name = ADISCORD_nam_resource_war.21.c
 		trigger = {
 			NAM_rw_can_buy_time = yes
-			NOT = { has_fuel < 12000 }
+			NOT = { has_fuel < 120000 }
 		}
 		custom_effect_tooltip = NAM_rw_21_c_tt
 		hidden_effect = { NAM_rw_buy_time = yes }
@@ -1117,45 +1117,73 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.82.d
 	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_underground_active = yes
+	}
 
 	option = {
 		name = ADISCORD_nam_resource_war.82.a
-		trigger = { NOT = { has_political_power < 30 } }
-		add_political_power = -30
-		custom_effect_tooltip = NAM_ug_82_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -10 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = -5 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NOT = { has_political_power < 30 }
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_political_power = -30
+			custom_effect_tooltip = NAM_ug_82_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -10 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.82.b
 		trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			NAM_underground_active = yes
 		}
-		custom_effect_tooltip = NAM_ug_82_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 100 }
-			NAM_spend_treasury = yes
-			set_temp_variable = { var = NAM_underground_change value = -5 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = 6 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			custom_effect_tooltip = NAM_ug_82_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 100 }
+				NAM_spend_treasury = yes
+				set_temp_variable = { var = NAM_underground_change value = -5 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
 		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.82.c
-		add_stability = -0.02
-		custom_effect_tooltip = NAM_ug_ignore_tt
-		hidden_effect = { NAM_underground_close_event = yes }
+		trigger = {
+			NAM_underground_active = yes
+		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_ug_ignore_tt
+			hidden_effect = { NAM_underground_close_event = yes }
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			NAM_underground_active = no }
+		hidden_effect = { NAM_underground_close_event = yes }
 	}
 }
 
@@ -1165,51 +1193,79 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.83.d
 	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_underground_active = yes
+	}
 
 	option = {
 		name = ADISCORD_nam_resource_war.83.a
-		trigger = { NOT = { has_political_power < 50 } }
-		add_political_power = -50
-		add_stability = -0.03
-		custom_effect_tooltip = NAM_ug_83_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -15 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = -10 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NOT = { has_political_power < 50 }
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_political_power = -50
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_ug_83_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -15 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.83.b
 		trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			NAM_underground_active = yes
 		}
-		custom_effect_tooltip = NAM_ug_83_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 200 }
-			NAM_spend_treasury = yes
-			set_temp_variable = { var = NAM_underground_change value = -8 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = 8 }
-			add_to_variable = { var = NAM_grp_oil_support value = 4 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			custom_effect_tooltip = NAM_ug_83_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 200 }
+				NAM_spend_treasury = yes
+				set_temp_variable = { var = NAM_underground_change value = -8 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
 		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.83.c
-		add_fuel = -5000
-		custom_effect_tooltip = NAM_ug_83_c_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_oil_support value = -6 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_fuel = -5000
+			custom_effect_tooltip = NAM_ug_83_c_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = -6 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			NAM_underground_active = no }
+		hidden_effect = { NAM_underground_close_event = yes }
 	}
 }
 
@@ -1219,23 +1275,33 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.84.d
 	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_underground_active = yes
+	}
 
 	option = {
 		name = ADISCORD_nam_resource_war.84.a
-		trigger = { NOT = { has_manpower < 3000 } }
-		add_manpower = -3000
-		custom_effect_tooltip = NAM_ug_84_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -20 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_garr_support value = 5 }
-			add_to_variable = { var = NAM_grp_dist_support value = -10 }
-			NAM_groups_refresh = yes
-			set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
-			NAM_ladder_shift = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NOT = { has_manpower < 3000 }
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_manpower = -3000
+			custom_effect_tooltip = NAM_ug_84_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -20 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				NAM_groups_refresh = yes
+				set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
+				NAM_ladder_shift = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 50 }
 	}
 	option = {
@@ -1243,31 +1309,49 @@ country_event = {
 		trigger = {
 			NOT = { has_political_power < 75 }
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			NAM_underground_active = yes
 		}
-		add_political_power = -75
-		custom_effect_tooltip = NAM_ug_84_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 150 }
-			NAM_spend_treasury = yes
-			set_temp_variable = { var = NAM_underground_change value = -15 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_dist_support value = 8 }
-			add_to_variable = { var = NAM_grp_nam_support value = -8 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_political_power = -75
+			custom_effect_tooltip = NAM_ug_84_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_spend_treasury = yes
+				set_temp_variable = { var = NAM_underground_change value = -15 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
 		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.84.c
-		add_stability = -0.06
-		custom_effect_tooltip = NAM_ug_84_c_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = 5 }
-			NAM_underground_add = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_stability = -0.06
+			custom_effect_tooltip = NAM_ug_84_c_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = 5 }
+				NAM_underground_add = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			NAM_underground_active = no }
+		hidden_effect = { NAM_underground_close_event = yes }
 	}
 }
 
@@ -1283,6 +1367,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		NAM_country_operable = yes
+		NAM_underground_active = yes
 		NAM_underground_active = yes
 	}
 
@@ -1480,6 +1565,7 @@ country_event = {
 		tag = NAM
 		NAM_country_operable = yes
 		NAM_underground_active = yes
+		NAM_underground_active = yes
 	}
 
 	immediate = {
@@ -1637,48 +1723,78 @@ country_event = {
 	desc = ADISCORD_nam_resource_war.87.d
 	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NAM_underground_active = yes
+	}
 
 	option = {
 		name = ADISCORD_nam_resource_war.87.a
-		add_stability = -0.03
-		custom_effect_tooltip = NAM_ug_87_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -10 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_nam_support value = 6 }
-			add_to_variable = { var = NAM_grp_dist_support value = -8 }
-			NAM_groups_refresh = yes
-			set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
-			NAM_ladder_shift = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_stability = -0.03
+			custom_effect_tooltip = NAM_ug_87_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -10 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 6 }
+				add_to_variable = { var = NAM_grp_dist_support value = -8 }
+				NAM_groups_refresh = yes
+				set_temp_variable = { var = NAM_ladder_shift value = -0.05 }
+				NAM_ladder_shift = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.87.b
-		trigger = { NOT = { has_political_power < 50 } }
-		add_political_power = -50
-		custom_effect_tooltip = NAM_ug_87_b_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_underground_change value = -5 }
-			NAM_underground_add = yes
-			add_to_variable = { var = NAM_grp_nam_support value = 3 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NOT = { has_political_power < 50 }
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_political_power = -50
+			custom_effect_tooltip = NAM_ug_87_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_underground_change value = -5 }
+				NAM_underground_add = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 3 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.87.c
-		add_stability = -0.02
-		custom_effect_tooltip = NAM_ug_87_c_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_nam_support value = -8 }
-			NAM_groups_refresh = yes
-			NAM_underground_close_event = yes
+		trigger = {
+			NAM_underground_active = yes
 		}
+		if = {
+			limit = { hidden_trigger = { NAM_underground_active = yes } }
+			add_stability = -0.02
+			custom_effect_tooltip = NAM_ug_87_c_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				NAM_groups_refresh = yes
+				NAM_underground_close_event = yes
+			}
+		}
+		else = { hidden_effect = { NAM_underground_close_event = yes } }
 		ai_chance = { base = 20 }
+	}
+	option = {
+		name = NAM_ug_close_case
+		trigger = {
+			NAM_underground_active = no }
+		hidden_effect = { NAM_underground_close_event = yes }
 	}
 }
 
@@ -2281,94 +2397,6 @@ country_event = {
 
 add_namespace = ADISCORD_nam_groups
 
-# A pillar of power falls to 20 support.
-country_event = {
-	id = ADISCORD_nam_groups.1
-	title = ADISCORD_nam_groups.1.t
-	desc = {
-		text = ADISCORD_nam_groups.1.d_nam
-		trigger = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.1.d_oil
-		trigger = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.1.d_dist
-		trigger = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.1.d_garr
-		trigger = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.1.d_trade
-		trigger = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
-	}
-	picture = GFX_event_adiscord_parliament_chamber
-	is_triggered_only = yes
-
-	option = {
-		name = ADISCORD_nam_groups.1.a
-		custom_effect_tooltip = NAM_grp_crisis_concede_tt
-		hidden_effect = { NAM_groups_event_concede = yes }
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_groups.1.b
-		custom_effect_tooltip = NAM_grp_crisis_rivals_tt
-		hidden_effect = { NAM_groups_event_rivals = yes }
-		ai_chance = { base = 30 }
-	}
-	option = {
-		name = ADISCORD_nam_groups.1.c
-		custom_effect_tooltip = NAM_grp_crisis_wait_tt
-		hidden_effect = { NAM_groups_event_wait = yes }
-		ai_chance = { base = 30 }
-	}
-}
-
-# A pillar of power reaches 85 support and presents a demand.
-country_event = {
-	id = ADISCORD_nam_groups.2
-	title = ADISCORD_nam_groups.2.t
-	desc = {
-		text = ADISCORD_nam_groups.2.d_nam
-		trigger = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.2.d_oil
-		trigger = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.2.d_dist
-		trigger = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.2.d_garr
-		trigger = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.2.d_trade
-		trigger = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
-	}
-	picture = GFX_event_adiscord_parliament_chamber
-	is_triggered_only = yes
-
-	option = {
-		name = ADISCORD_nam_groups.2.a
-		custom_effect_tooltip = NAM_grp_demand_accept_tt
-		hidden_effect = { NAM_groups_event_accept_demand = yes }
-		ai_chance = { base = 60 }
-	}
-	option = {
-		name = ADISCORD_nam_groups.2.b
-		custom_effect_tooltip = NAM_grp_demand_refuse_tt
-		hidden_effect = { NAM_groups_event_refuse_demand = yes }
-		ai_chance = { base = 40 }
-	}
-}
-
 country_event = {
 	id = ADISCORD_nam_groups.11
 	title = ADISCORD_nam_groups.11.t
@@ -2478,77 +2506,6 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.close
 		trigger = { NOT = { NAM_ladder_formed = yes } }
-		ai_chance = { base = 100 }
-	}
-}
-
-# A rival speaks for the weakest pillar and names his term. Accepting is the
-# first option, so an unanswered demand never risks the seals.
-country_event = {
-	id = ADISCORD_nam_groups.20
-	title = ADISCORD_nam_groups.20.t
-	desc = {
-		trigger = { check_variable = { NAM_rival_current = 1 } }
-		text = ADISCORD_nam_groups.20.d_pechat
-	}
-	desc = {
-		trigger = { check_variable = { NAM_rival_current = 2 } }
-		text = ADISCORD_nam_groups.20.d_klyuch
-	}
-	desc = {
-		trigger = { check_variable = { NAM_rival_current = 3 } }
-		text = ADISCORD_nam_groups.20.d_shtyk
-	}
-	desc = {
-		trigger = { check_variable = { NAM_rival_current = 4 } }
-		text = ADISCORD_nam_groups.20.d_gavanov
-	}
-	picture = GFX_event_adiscord_negotiation_table
-	is_triggered_only = yes
-	trigger = { tag = NAM }
-
-	option = {
-		name = ADISCORD_nam_groups.20.a
-		trigger = {
-			NAM_country_operable = yes
-			NOT = { has_country_flag = NAM_coup_succeeded }
-		}
-		custom_effect_tooltip = NAM_rival_demand_accept_tt
-		hidden_effect = { NAM_rival_accept_demand = yes }
-		ai_chance = {
-			base = 60
-			modifier = {
-				factor = 3
-				NAM_rival_current_pillar_broken = yes
-			}
-		}
-	}
-	option = {
-		name = ADISCORD_nam_groups.20.b
-		trigger = {
-			NAM_country_operable = yes
-			NOT = { has_country_flag = NAM_coup_succeeded }
-		}
-		custom_effect_tooltip = NAM_rival_demand_refuse_tt
-		hidden_effect = { NAM_rival_refuse = yes }
-		ai_chance = {
-			base = 40
-			modifier = {
-				factor = 0
-				NAM_rival_current_pillar_broken = yes
-				NAM_rival_current_heard = no
-			}
-		}
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.close
-		trigger = {
-			OR = {
-				NAM_country_operable = no
-				has_country_flag = NAM_coup_succeeded
-			}
-		}
-		hidden_effect = { clr_country_flag = NAM_rival_event_pending }
 		ai_chance = { base = 100 }
 	}
 }
@@ -3509,7 +3466,7 @@ country_event = {
 			base = 40
 			modifier = {
 				factor = 0
-				has_fuel < 9000
+				has_fuel < 90000
 			}
 		}
 	}
@@ -3849,4 +3806,178 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { NAM_oil_refresh = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.20
+	title = ADISCORD_nam_groups.20.t
+	desc = ADISCORD_nam_groups.20.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = NAM_agreement_offer_pending }
+	option = {
+		name = NAM_agreement_choose_nam
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_agreement_nam_possible = yes
+			OR = {
+				check_variable = { NAM_agreement_offer_a = 1 }
+				check_variable = { NAM_agreement_offer_b = 1 }
+			}
+		}
+		custom_effect_tooltip = NAM_agreement_nam_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_failure days = 180 } }
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = 1 }
+			NAM_agreement_start = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_nam_support < 35 }
+			}
+		}
+	}
+	option = {
+		name = NAM_agreement_choose_oil
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_agreement_oil_possible = yes
+			OR = {
+				check_variable = { NAM_agreement_offer_a = 2 }
+				check_variable = { NAM_agreement_offer_b = 2 }
+			}
+		}
+		custom_effect_tooltip = NAM_agreement_oil_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_failure days = 180 } }
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = 2 }
+			NAM_agreement_start = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_oil_support < 35 }
+			}
+		}
+	}
+	option = {
+		name = NAM_agreement_choose_dist
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_agreement_dist_possible = yes
+			OR = {
+				check_variable = { NAM_agreement_offer_a = 3 }
+				check_variable = { NAM_agreement_offer_b = 3 }
+			}
+		}
+		custom_effect_tooltip = NAM_agreement_dist_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_failure days = 180 } }
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = 3 }
+			NAM_agreement_start = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_dist_support < 35 }
+			}
+		}
+	}
+	option = {
+		name = NAM_agreement_choose_garr
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_agreement_garr_possible = yes
+			OR = {
+				check_variable = { NAM_agreement_offer_a = 4 }
+				check_variable = { NAM_agreement_offer_b = 4 }
+			}
+		}
+		custom_effect_tooltip = NAM_agreement_garr_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_failure days = 180 } }
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = 4 }
+			NAM_agreement_start = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_garr_support < 35 }
+			}
+		}
+	}
+	option = {
+		name = NAM_agreement_choose_trade
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_agreement_trade_possible = yes
+			OR = {
+				check_variable = { NAM_agreement_offer_a = 5 }
+				check_variable = { NAM_agreement_offer_b = 5 }
+			}
+		}
+		custom_effect_tooltip = NAM_agreement_trade_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_failure days = 180 } }
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = 5 }
+			NAM_agreement_start = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_trade_support < 35 }
+			}
+		}
+	}
+
+	option = {
+		name = NAM_agreement_decline
+		trigger = { NAM_agreement_offer_open = yes }
+		custom_effect_tooltip = NAM_agreement_decline_tt
+		hidden_effect = {
+			set_variable = { var = NAM_agreement_current value = NAM_agreement_offer_a }
+			set_temp_variable = { var = NAM_agreement_support_delta value = -5 }
+			NAM_agreement_add_support = yes
+			set_variable = { var = NAM_agreement_current value = NAM_agreement_offer_b }
+			NAM_agreement_add_support = yes
+			NAM_agreement_finish = yes
+		}
+		ai_chance = { base = 5 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = { NAM_agreement_offer_open = no }
+		hidden_effect = { NAM_agreement_cancel = yes }
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.22
+	title = ADISCORD_nam_groups.22.t
+	desc = ADISCORD_nam_groups.22.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_active_mission = NAM_agreement_crisis }
+	option = {
+		name = ADISCORD_nam_groups.22.a
+		custom_effect_tooltip = NAM_agreement_crisis_tt
+		ai_chance = { base = 100 }
+	}
 }

@@ -1487,15 +1487,15 @@ class CoalitionLifecycleTests(unittest.TestCase):
         f.root = "SHL"
         f.subjects["SHL"] = "ZZZ"
         f.load("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt")
-        f.variables["SHL", "SHL_war_mzr"] = 1
-        f.wars = {frozenset((t, "MZR")) for t in ("SHL", "KYZ", "GLP")}
-        f.majors = {"SHL", "MZR", "ZZZ"}
-        for tag in ("SHL", "MZR"):
-            f.flags[tag].add("SHL_mzr_added_major")
-        f.execute(f.effects["SHL_close_external_mzr_war"])
+        f.variables["SHL", "SHL_war_kyz"] = 2
+        f.wars = {frozenset((t, "KYZ")) for t in ("SHL", "MZR", "GLP")}
+        f.majors = {"SHL", "KYZ", "ZZZ"}
+        for tag in ("SHL", "KYZ"):
+            f.flags[tag].add("SHL_kyz_added_major")
+        f.execute(f.effects["SHL_close_external_kyz_war"])
         self.assertFalse(f.wars)
         self.assertEqual(f.majors, {"ZZZ"})
-        self.assertEqual(f.variables["SHL", "SHL_war_mzr"], 0)
+        self.assertEqual(f.variables["SHL", "SHL_war_kyz"], 0)
         self.assertFalse(f.annexed)
 
     def test_stelander_restoration_does_not_capture_neutral_nod_or_other_stelander(

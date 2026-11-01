@@ -93,28 +93,6 @@ VAL_pay_corridor_income = {
 }
 
 VAL_initialize_logistics_market = {
-	# Save migration: before this split, the 59/60/61 western corridor used the north identifiers.
-	if = {
-		limit = {
-			NOT = { has_country_flag = VAL_trade_route_west_migration_v1 }
-		}
-		if = {
-			limit = { has_country_flag = VAL_route_north_commissioned }
-			set_country_flag = VAL_route_west_commissioned
-			clr_country_flag = VAL_route_north_commissioned
-		}
-		if = {
-			limit = { has_country_flag = VAL_route_north_upgraded }
-			set_country_flag = VAL_route_west_upgraded
-			clr_country_flag = VAL_route_north_upgraded
-		}
-		if = {
-			limit = { has_variable = VAL_route_north_active }
-			set_variable = { var = VAL_route_west_active value = VAL_route_north_active }
-			set_variable = { var = VAL_route_north_active value = 0 }
-		}
-		set_country_flag = VAL_trade_route_west_migration_v1
-	}
 	ADISCORD_economy_mark_dirty = yes
 	if = {
 		limit = {

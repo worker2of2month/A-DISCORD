@@ -94,7 +94,9 @@ ADISCORD_vorkerland_claimant_decision_spending = {
 
 # Central wars are selected dynamically from live borders. Claimant-on-claimant
 # fronts execute a balanced plan; rush and manual_attack stay off so supply
-# still gates individual attacks.
+# still gates individual attacks. Their Abyss caution variant uses
+# ADISCORD_difficulty_enemy_outmatches: a replacement shortage alone keeps the
+# balanced plan, only a materially stronger enemy switches the front to careful.
 ADISCORD_vorkerland_front_central_against_wrk = {
 	allowed = { OR = { tag = VAD tag = TVA tag = WTD } }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = WKR has_war_with = WKR }
@@ -105,7 +107,7 @@ ADISCORD_vorkerland_front_central_against_wrk = {
 		type = front_control
 		country_trigger = {
 			tag = WKR
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_enemy_outmatches = yes
 		}
 		ratio = 0.01
 		priority = 1251
@@ -135,15 +137,17 @@ ADISCORD_vorkerland_front_central_against_vad = {
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = VAD has_war_with = VAD }
 	abort_when_not_enabled = yes
 	# Symmetric with the WKR and TVA profiles. Peer claimant wars use balanced
-	# execution so PLAN_EXECUTE_CAREFUL_LIMIT does not freeze the front; rush
-	# and manual_attack stay off so supply still gates individual attacks.
+	# execution so PLAN_EXECUTE_CAREFUL_LIMIT does not freeze the front, and
+	# stay balanced through equipment shortages; careful applies only against
+	# a stronger enemy. Rush and manual_attack stay off so supply still gates
+	# individual attacks.
 	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
 	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 1250 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = VAD
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_enemy_outmatches = yes
 		}
 		ratio = 0.01
 		priority = 1251
@@ -178,7 +182,7 @@ ADISCORD_vorkerland_front_central_against_tva = {
 		type = front_control
 		country_trigger = {
 			tag = TVA
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_enemy_outmatches = yes
 		}
 		ratio = 0.01
 		priority = 1251
@@ -4644,6 +4648,144 @@ ADISCORD_vorkerland_solarino_breakthrough_csl = {
 	}
 	ai_strategy = { type = consider_weak id = CSL value = 100 }
 	ai_strategy = { type = conquer id = CSL value = 300 }
+}
+
+# Peer claimant windows open at parity rather than only against a weaker
+# district: the showdown is fought between comparable armies and the side that
+# is not weaker receives the initiative. The reserve gate is lower than the
+# central one because the window exists to break a long exchange, and the
+# caution variant uses ADISCORD_difficulty_enemy_outmatches so a shortage
+# alone does not cancel the window.
+ADISCORD_vorkerland_claimant_breakthrough_wkr = {
+	allowed = { OR = { tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_claimant_breakthrough_window_active
+		country_exists = WKR
+		has_war_with = WKR
+		WKR = { NOT = { has_capitulated = yes } }
+		has_manpower > 1000
+		stockpile_ratio = { archetype = infantry_equipment ratio > 0.02 }
+		fighting_army_strength_ratio = { tag = WKR ratio > 0.9 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = WKR value = 100 }
+	ai_strategy = { type = front_control tag = WKR ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_outmatches = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = WKR value = 300 }
+}
+
+ADISCORD_vorkerland_claimant_breakthrough_vad = {
+	allowed = { OR = { tag = WKR tag = TVA } }
+	enable = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_claimant_breakthrough_window_active
+		country_exists = VAD
+		has_war_with = VAD
+		VAD = { NOT = { has_capitulated = yes } }
+		has_manpower > 1000
+		stockpile_ratio = { archetype = infantry_equipment ratio > 0.02 }
+		fighting_army_strength_ratio = { tag = VAD ratio > 0.9 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = VAD value = 100 }
+	ai_strategy = { type = front_control tag = VAD ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_outmatches = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = VAD value = 300 }
+}
+
+ADISCORD_vorkerland_claimant_breakthrough_tva = {
+	allowed = { OR = { tag = WKR tag = VAD } }
+	enable = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_claimant_breakthrough_window_active
+		country_exists = TVA
+		has_war_with = TVA
+		TVA = { NOT = { has_capitulated = yes } }
+		has_manpower > 1000
+		stockpile_ratio = { archetype = infantry_equipment ratio > 0.02 }
+		fighting_army_strength_ratio = { tag = TVA ratio > 0.9 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = TVA value = 100 }
+	ai_strategy = { type = front_control tag = TVA ratio = 0.01 priority = 2000 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_outmatches = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 2001
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = TVA value = 300 }
 }
 
 ADISCORD_vorkerland_territorial_army = {

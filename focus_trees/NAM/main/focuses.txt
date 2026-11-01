@@ -104,17 +104,17 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			is_subject = yes
-			NOT = { has_fuel < 3000 }
+			NOT = { has_fuel < 30000 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_colonial_rifle_contract
 			custom_effect_tooltip = NAM_colonial_rifle_contract_unlock_tt
-			add_fuel = -3000
+			add_fuel = -30000
 			if = {
 				limit = { is_subject = yes }
-				overlord = { add_fuel = 3000 }
+				overlord = { add_fuel = 30000 }
 			}
 			add_political_power = 75
 			add_stability = 0.04
@@ -3699,7 +3699,7 @@ focus_tree = {
 				tooltip = NAM_independent_tt
 				NAM_independent_programmes_operable = yes
 			}
-			NOT = { has_fuel < 6000 }
+			NOT = { has_fuel < 60000 }
 			AZH = {
 				exists = yes
 				has_capitulated = no
@@ -3717,12 +3717,12 @@ focus_tree = {
 				limit = {
 					hidden_trigger = {
 						NAM_rw_can_buy_time = yes
-						NOT = { has_fuel < 6000 }
+						NOT = { has_fuel < 60000 }
 					}
 				}
-				add_fuel = -6000
+				add_fuel = -60000
 				AZH = {
-					add_fuel = 6000
+					add_fuel = 60000
 				}
 				hidden_effect = { set_country_flag = NAM_rw_time_bought }
 				add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 75 }

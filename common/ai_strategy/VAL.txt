@@ -620,7 +620,8 @@ VAL_preserve_replacement_reserve = {
 	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
 }
 
-# Air defence supports the republics and Stelander campaigns without adding a factory floor.
+# Air defence supports the Stelander and RUS campaigns without adding a factory floor.
+# The republics field no aircraft: their war must not pull factories off rifles.
 ADISCORD_difficulty_val_air_defence = {
 	allowed = { tag = VAL }
 	enable = {
@@ -629,8 +630,6 @@ ADISCORD_difficulty_val_air_defence = {
 		num_of_military_factories > 7
 		has_tech = ADISCORD_tech_improvised_air_defense
 		OR = {
-			VAL_ai_republics_preparation = yes
-			has_war_with = SRP
 			has_war_with = STS
 			has_war_with = STP
 			has_war_with = RUS

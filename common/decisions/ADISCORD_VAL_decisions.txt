@@ -13,6 +13,31 @@ VAL_military_operations = {
 		timeout_effect = { }
 	}
 
+	# Three republican districts occupied and only Livonn holding out: the council
+	# accepts the Occidian settlement after half a year of siege. The capitulation
+	# router stays the fast path when Livonn itself falls.
+	VAL_cw_livonn_siege = {
+		activation = { VAL_cw_livonn_siege_active = yes }
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { VAL_cw_livonn_siege_active = yes }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = yes
+		fire_only_once = no
+		days_mission_timeout = 180
+		cancel_trigger = { NOT = { VAL_cw_livonn_siege_active = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_cw_livonn_siege_timeout_tt
+			hidden_effect = {
+				if = {
+					limit = { VAL_cw_livonn_siege_active = yes }
+					VAL_cw_settle_republics = yes
+				}
+			}
+		}
+	}
+
 	# Stelander contracts require buyer consent before payment.
 
 	VAL_cw_begin_mobilization = {

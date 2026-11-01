@@ -8,6 +8,7 @@ from pathlib import Path
 
 from tools.tests.test_adiscord_ai_production_lifecycle import OPS, child, parse
 from tools.tests.test_adiscord_generic_wartime_fronts import named_block, named_blocks
+from tools.validators._vorkerland_release_contract import PEER_CAUTION_PROFILES
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -71,6 +72,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "army_ratios": {},
             "variables": {},
             "ADISCORD_economy_ai_is_healthy": True,
+            "ADISCORD_economy_ai_is_stressed": False,
             "ADISCORD_economy_ai_can_fund_advanced_forces": True,
             "ADISCORD_ai_has_adjacent_war_preparation": False,
             "ADISCORD_ai_army_replacement_pressure_cleared": True,
@@ -262,12 +264,13 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             self.assertFalse(self.enabled(name, dict(context, **changes)), changes)
 
     def test_val_air_defence_needs_technology_factories_and_current_campaign(self):
-        context = self.context("VAL", wars={"SRP"})
+        context = self.context("VAL", wars={"STS"})
         name = PREFIX + "val_air_defence"
         self.assertTrue(self.enabled(name, context))
+        # The republics have no air force; their war must not divert rifle factories.
         for changes in ({"has_tech": set()}, {"num_of_military_factories": 7},
                         {"ADISCORD_ai_rifle_replacement_emergency": True},
-                        {"has_war": False, "wars": set()}, {"wars": {"SHL"}}):
+                        {"has_war": False, "wars": set()}, {"wars": {"SHL"}}, {"wars": {"SRP"}}):
             self.assertFalse(self.enabled(name, dict(context, **changes)), changes)
 
     def test_rus_armor_and_coalition_logistics_use_separate_actors(self):
@@ -347,7 +350,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             ("stelander_arms", self.context("STS")),
             ("nod_northern_logistics", self.context("NOD", wars={"YPR"})),
             ("nod_landing_preparation", self.context("NOD", wars={"STS"})),
-            ("val_air_defence", self.context("VAL", wars={"SRP"})),
+            ("val_air_defence", self.context("VAL", wars={"STS"})),
             ("rus_armored_campaign", self.context("RUS")),
             ("rus_coalition_logistics", self.context("VAL", wars={"RUS"}, has_country_flag={"RUS_crisis_defender"})),
             ("vorkerland_field_supply", self.context("VAD", has_global_flag={"ADISCORD_vorkerland_collapse_wars_started"})),
@@ -412,6 +415,11 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         actor["ADISCORD_economy_ai_is_healthy"] = False
         orders = [s for s in self.front_strategies(actor, enemy) if s["type"] == "front_control"]
         self.assertEqual([s["execution_type"] for s in orders], ["careful"])
+        # A stressed wartime budget keeps the push; only crisis and recovery withhold it.
+        actor["ADISCORD_economy_ai_is_stressed"] = True
+        orders = [s for s in self.front_strategies(actor, enemy) if s["type"] == "front_control"]
+        self.assertEqual([s["execution_type"] for s in orders], ["balanced"])
+        actor["ADISCORD_economy_ai_is_stressed"] = False
         self.assertFalse(any("state_trigger" in s for s in self.strategies(actor)))
 
     def test_objectives_use_enemy_control_and_respect_fortification(self):
@@ -500,14 +508,41 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             for variant in controls[1:]:
                 target = variant[target_key]
                 self.assertEqual(target[:-1], original_target, name)
-                self.assertRegex(target[-1][0], r"^ADISCORD_difficulty_(enemy|state)_(allows_push|requires_caution)$")
+                self.assertRegex(target[-1][0], r"^ADISCORD_difficulty_(enemy|state)_(allows_push|requires_caution|outmatches)$")
                 self.assertEqual(target[-1][1:], ("=", "yes"))
                 offset = 2 if name.startswith("ADISCORD_vorkerland_auxiliary_of_") else 1
                 self.assertEqual(int(variant["priority"]), int(base["priority"]) + offset, name)
                 self.assertEqual(variant["ratio"], base["ratio"], name)
                 self.assertEqual(variant["ordertype"], base["ordertype"], name)
                 self.assertEqual(variant["execute_order"], base["execute_order"], name)
-        self.assertGreaterEqual(adapted, 161)
+        self.assertGreaterEqual(adapted, 164)
+
+    def test_peer_claimant_fronts_stay_balanced_through_shortages(self):
+        users = set()
+        for name, profile in self.campaigns.items():
+            for key, _, body in profile:
+                if key != "ai_strategy":
+                    continue
+                fields = dict((field, value) for field, _, value in body)
+                guard = fields.get("country_trigger", [("", "", "")])[-1][0]
+                if guard == "ADISCORD_difficulty_enemy_outmatches":
+                    users.add(name)
+        self.assertEqual(users, PEER_CAUTION_PROFILES)
+        name = "ADISCORD_vorkerland_front_central_against_vad"
+        for ratio, ready, expected in (
+            (1, False, "balanced"), (1, True, "balanced"),
+            (2, True, "careful"), (2, False, "careful"),
+            (0.5, True, "rush_weak"), (0.5, False, "balanced"),
+        ):
+            enemy = self.context("VAD", wars={"WKR"}, army_ratios={"WKR": ratio})
+            actor = self.context("WKR", 4, wars={"VAD"}, countries={"VAD": enemy},
+                                 has_global_flag={"ADISCORD_vorkerland_collapse_wars_started"},
+                                 ADISCORD_ai_army_replacement_pressure_cleared=ready)
+            with self.subTest(ratio=ratio, ready=ready):
+                self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], expected)
+        actor["difficulty"] = 3
+        enemy["army_ratios"]["WKR"] = 2
+        self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "balanced")
 
     def test_nam_scenario_changes_tactics_only_on_abyss(self):
         name = "ADISCORD_nam_resource_war_eflor_offensive"
@@ -654,14 +689,15 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 with self.subTest(profile=name, difficulty=difficulty, ratio=ratio, ready=ready):
                     self.assertLessEqual(len(matching), 1)
                     winner = max([base, *matching], key=lambda control: int(control["priority"]))
-                    if difficulty < 4 or (ready and 0.8 <= ratio <= 1.25):
+                    peer = name in PEER_CAUTION_PROFILES
+                    if difficulty < 4 or (ready and 0.8 <= ratio <= 1.25) or (peer and not ready and ratio <= 1.25):
                         self.assertIs(winner, base)
                     elif not ready or ratio > 1.25:
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), ("careful", "no"))
                     else:
                         expected = "careful" if base["execution_type"] == "careful" else "rush_weak"
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), (expected, "yes"))
-        self.assertEqual(checked, 161)
+        self.assertEqual(checked, 164)
 
 
 if __name__ == "__main__":

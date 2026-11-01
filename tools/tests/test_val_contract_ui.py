@@ -377,40 +377,13 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
         self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_rifles"], 75000)
         self.assertEqual(facts["VAL", "equipment", "infantry_equipment"], 0)
 
-    def test_paid_legacy_defeat_reopens_only_during_the_live_campaign(self):
-        from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
-
-        self.assertIn("VAL_restore_fulfilled_northern_aid", self.effects)
-        for campaign, state, penalty, paid, expected in (
-            (1, 3, True, 2000, True),
-            (2, 3, True, 2000, False),
-            (1, 2, True, 2000, False),
-            (1, 3, False, 2000, False),
-            (1, 3, True, 0, False),
-        ):
-            facts = self.facts(campaign=campaign, state=state)
-            facts["VAL", "has_idea", "VAL_northern_aid_failure"] = penalty
-            facts["VAL", "variable", "VAL_northern_aid_personnel"] = paid
-            rows = list(
-                selected_effects(
-                    self.expand(
-                        self.effects["VAL_restore_fulfilled_northern_aid"], facts
-                    ),
-                    facts,
-                    "VAL",
-                )
-            )
-            with self.subTest(
-                campaign=campaign, state=state, penalty=penalty, paid=paid
-            ):
-                self.assertEqual(bool(rows), expected)
-                if expected:
-                    self.assertEqual(
-                        [e.key for _, e in rows],
-                        ["remove_ideas", "set_variable", "ADISCORD_economy_mark_dirty"],
-                    )
-                    self.assertEqual(rows[0][1].value, "VAL_northern_aid_failure")
-                    self.assertEqual(scalar(rows[1][1].value, "value"), "2")
+    def test_startup_does_not_rewrite_settled_northern_aid(self):
+        startup = named_block(
+            read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"),
+            "on_startup",
+        )
+        self.assertNotIn("VAL_northern_aid", startup)
+        self.assertNotIn("VAL_restore_fulfilled_northern_aid", self.effects)
 
 
 class ValPartnerSettlementTests(unittest.TestCase):
@@ -1956,26 +1929,12 @@ class TestValReclamationFollowThrough(unittest.TestCase):
             "VAL_complete_reclamation", named_block(actions, "on_weekly_VAL")
         )
 
-    def test_legacy_compensation_is_disabled_without_save_migration(self):
-        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
-        refresh = named_block(effects, "VAL_reclamation_refresh_state")
-        self.assertIn(
-            "has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }",
-            refresh,
-        )
-        self.assertIn(
-            "remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }",
-            refresh,
-        )
-        self.assertNotIn(
-            "add_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }",
-            effects,
-        )
-        legacy = named_block(
-            read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
-            "VAL_reclamation_recovered_land",
-        )
-        self.assertIn("enable = { always = no }", legacy)
+    def test_reclamation_has_no_retired_compensation_modifier(self):
+        for path in (
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt",
+        ):
+            self.assertNotIn("VAL_reclamation_recovered_land", read(path))
         startup = named_block(
             read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"),
             "on_startup",

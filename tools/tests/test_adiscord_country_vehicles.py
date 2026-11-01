@@ -632,5 +632,38 @@ class CarrierFocusTests(unittest.TestCase):
                         )), 1, key)
 
 
+class SmallArmsResourceTests(unittest.TestCase):
+    """Rifles and squad weapons before 2170 are steel-only."""
+
+    EQUIPMENT = ROOT / "common/units/equipment/ADISCORD_infantry_equipment.txt"
+
+    def resources(self, name):
+        rows = parse_clausewitz(self.EQUIPMENT.read_text(encoding="utf-8-sig"))
+        equipments = next(row.value for row in rows if row.key == "equipments")
+        fields = next(row.value for row in equipments if row.key == name)
+        block = next(field.value for field in fields if field.key == "resources")
+        return {field.key: int(field.value) for field in block}
+
+    def test_pre_2170_small_arms_need_only_steel(self):
+        for name, steel in (
+            ("ADISCORD_infantry_equipment_2163", 2),
+            ("ADISCORD_infantry_equipment_2168", 3),
+            ("ADISCORD_squad_weapons_equipment_2163", 3),
+            ("ADISCORD_squad_weapons_equipment_2168", 3),
+        ):
+            with self.subTest(name=name):
+                self.assertEqual(self.resources(name), {"steel": steel})
+
+    def test_2170_small_arms_keep_their_rare_resources(self):
+        self.assertEqual(
+            self.resources("ADISCORD_infantry_equipment_2170"),
+            {"steel": 3, "aluminium": 2},
+        )
+        self.assertEqual(
+            self.resources("ADISCORD_squad_weapons_equipment_2170"),
+            {"steel": 4, "aluminium": 1, "tungsten": 1},
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

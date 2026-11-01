@@ -105,7 +105,7 @@
  ADISCORD_shl_debug_ratify_cities: "§RDEBUG:§! Ratify the City Course"
  ADISCORD_shl_debug_ratify_cities_desc: "Removes the hereditary seats and calls the real Southern Compact ratification without the preparation focuses, the mandate or the balance check; loads the city course tree."
  ADISCORD_shl_debug_ratify_directorate: "§RDEBUG:§! Ratify the Directorate Course"
- ADISCORD_shl_debug_ratify_directorate_desc: "Removes the hereditary seats and calls the real Iron Shahrabad ratification without the preparation focuses or the balance check; loads the directorate course tree."
+ ADISCORD_shl_debug_ratify_directorate_desc: "Removes the hereditary seats and calls the real Directorate of Furnaces ratification without the preparation focuses or the balance check; loads the directorate course tree."
  ADISCORD_shl_debug_regency: "§RDEBUG:§! Regency Without the Night of Crests"
  ADISCORD_shl_debug_regency_desc: "Calls the real transition to the Hereditary Republic, skipping the crest conspiracy; available until a hidden course is chosen."
  ADISCORD_shl_debug_commune: "§RDEBUG:§! Commune Without the Strike"

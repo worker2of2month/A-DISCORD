@@ -329,9 +329,9 @@ def check_oil_monopoly(
         "NAM_rw_can_buy_time = yes" in buy_time
         and "NOT = { has_country_flag = NAM_rw_time_bought }" in named_block(triggers, "NAM_rw_can_buy_time")
         and "NAM_rw_ultimatum_open = yes" in named_block(triggers, "NAM_rw_can_buy_time")
-        and "NOT = { has_fuel < 12000 }" in buy_time
-        and buy_time.count("add_fuel = -12000") == 1
-        and "AZH = { add_fuel = 12000 }" in buy_time
+        and "NOT = { has_fuel < 120000 }" in buy_time
+        and buy_time.count("add_fuel = -120000") == 1
+        and "AZH = { add_fuel = 120000 }" in buy_time
         and "set_country_flag = NAM_rw_time_bought" in buy_time
         and "mission = NAM_resource_war_deadline days = 75" in buy_time
         and "NAM_rw_deadline_open = yes" in named_block(triggers, "NAM_rw_ultimatum_open"),
@@ -562,34 +562,31 @@ def check_ladder(
             f"NAM_favour_{group} lacks its focus gate, 70-support price or 120-day favour",
         )
     tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
-    check(
-        re.search(r"(?m)^NAM_rival_demand\s*$", tokens) is not None,
-        "NAM_rival_demand is not registered in the synchronized token file",
-    )
-    rival_mission = named_block(decisions, "NAM_rival_demand")
-    check(
-        "NAM_rival_demand_met = yes" in named_block(rival_mission, "available")
-        and "days_mission_timeout = 60" in rival_mission
-        and "NAM_rival_demand_paid = yes" in rival_mission
-        and "NAM_rival_refuse = yes" in named_block(rival_mission, "timeout_effect"),
-        "the rival demand must succeed on its term and count its deadline as a refusal",
-    )
-    refuse = named_block(effects, "NAM_rival_refuse")
-    check(
-        "NAM_rival_current_heard = no" in refuse
-        and "NAM_rival_current_pillar_broken = yes" in refuse
-        and refuse.find("NAM_rival_current_pillar_broken = yes") < refuse.find("NAM_rival_pillar_add = yes")
-        and "NAM_rival_open_coup = yes" in refuse,
-        "an unheard rival of a pillar already below 25 must open the coup on refusal",
-    )
+    for mission, days in (("NAM_agreement_deadline", 180), ("NAM_agreement_crisis", 90)):
+        check(re.search(r"(?m)^" + mission + r"\s*$", tokens) is not None,
+              f"{mission} is missing its synchronized token")
+        body = named_block(decisions, mission)
+        check(f"days_mission_timeout = {days}" in body and "fire_only_once = no" in body,
+              f"{mission} must have its repeatable bounded deadline")
+        check("NAM_agreement_cancel = yes" in named_block(body, "cancel_effect"),
+              f"{mission} must settle work when the phase closes")
+    for obsolete in ("NAM_rival_demand", "NAM_groups_check_events", "NAM_groups_event_concede",
+                     "NAM_political_petition_cooldown"):
+        check(obsolete not in effects + decisions + events,
+              f"obsolete demand system remains active: {obsolete}")
+    check("NAM_agreement_goal_met = yes" in named_block(named_block(decisions, "NAM_agreement_deadline"), "available"),
+          "agreement success must require delivered programme results")
+    finish = named_block(effects, "NAM_agreement_finish")
+    check("flag = NAM_agreement_cooldown value = 1 days = 300" in finish
+          and "NAM_agreement_refund = yes" in finish,
+          "agreement settlement must refund unfinished work and start the shared 300-day pause")
     rivals_monthly = named_block(effects, "NAM_rivals_monthly")
-    check(
-        "has_country_flag = NAM_coup_pending" in rivals_monthly
-        and "clr_country_flag = NAM_coup_pending" in rivals_monthly
-        and "flag = NAM_rival_cooldown value = 1 days = 240" in rivals_monthly
-        and "id = ADISCORD_nam_groups.20" in rivals_monthly,
-        "the rival cycle must wait 240 days and consume the Night of Seals",
-    )
+    check("has_country_flag = NAM_coup_pending" in rivals_monthly
+          and "clr_country_flag = NAM_coup_pending" in rivals_monthly
+          and "NAM_agreements_monthly = yes" in rivals_monthly,
+          "civil agreements must preserve the priority of the Night of Seals")
+    check("NAM_agreement_check_crisis = yes" in named_block(effects, "NAM_agreements_monthly"),
+          "the agreement cycle must also consider contextual crises")
     coup = named_block(effects, "NAM_coup_install")
     check(
         coup.count("add_country_leader_role") == 4
@@ -1196,9 +1193,9 @@ def check_colony_and_exile(
         block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
         extended = event_id in ("85", "86")
         check(
-            block.count("option = {") == (5 if extended else 3)
-            and block.count("NAM_underground_close_event = yes") == (9 if extended else 3)
-            and (not extended or "name = NAM_ug_close_case" in block),
+            block.count("option = {") == (5 if extended else 4)
+            and block.count("NAM_underground_close_event = yes") == (9 if extended else 7)
+            and "name = NAM_ug_close_case" in block,
             f"underground event .{event_id} must settle every answer, including a stale case",
         )
     coalition = named_block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
@@ -1459,7 +1456,7 @@ def check_settlement(
     buy_option = ultimatum[ultimatum.find("ADISCORD_nam_resource_war.21.c"):]
     check(
         "NAM_rw_can_buy_time = yes" in buy_option
-        and "NOT = { has_fuel < 12000 }" in buy_option
+        and "NOT = { has_fuel < 120000 }" in buy_option
         and "NAM_rw_buy_time = yes" in buy_option,
         "the ultimatum must offer Azhar's paid delay once and only with the fuel in stock",
     )
@@ -1960,6 +1957,7 @@ def main() -> int:
     )
     # The victory treaty carves border slivers from both principals: 720, 721
     # and 701 from Eflor, 722 from a belligerent Azhar, never the core 68/691.
+    # The frozen governor mandate also receives 727 and 723 without cores.
     victory_award = named_block(effects, "ADISCORD_nam_resource_war_resolve_nam_victory")
     check(
         all(
@@ -1973,16 +1971,18 @@ def main() -> int:
     )
     award = named_block(effects, "NAM_rw_award_border_state")
     check(
-        has_script_fragment(award, "NAM = { transfer_state = PREV } remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM")
-        and has_script_fragment(award, "NAM = { transfer_state = PREV } remove_core_of = AZH add_core_of = NAM set_state_controller_to = NAM"),
-        "border awards must move ownership, cores and control from the defeated principal",
+        has_script_fragment(award, "NAM = { transfer_state = PREV } set_state_controller_to = NAM")
+        and "remove_core_of" not in award
+        and "add_core_of" not in award,
+        "border awards must transfer ownership and control while preserving original cores",
     )
     check(
         "NAM_rw_punish_defeated_coalition = yes" in victory_award
         and "idea = NAM_ruined_economy" in named_block(effects, "NAM_rw_apply_punishment")
         and "idea = NAM_army_of_shame" in named_block(effects, "NAM_rw_apply_punishment")
+        and "idea = NAM_reparations_to_svetlogorye" in named_block(effects, "NAM_rw_apply_punishment")
         and "days = 730" in named_block(effects, "NAM_rw_apply_punishment"),
-        "a NAM victory must punish each defeated principal with both timed spirits",
+        "a NAM victory must impose punishment and factory reparations on each defeated principal",
     )
     check(
         "228 = { add_core_of = NAM" not in effects
@@ -2134,7 +2134,7 @@ def main() -> int:
     )
     line_decision = named_block(prewar_decisions, "NAM_prepare_line")
     check(
-        "targets = { 67 688 689 690 719 700 701 720 721 722 }" in line_decision
+        "targets = { 67 688 689 690 719 700 701 720 721 722 723 727 }" in line_decision
         and "custom_cost_text = NAM_cost_line" in line_decision
         and "cost = 0" in line_decision
         and "days_remove = 35" in line_decision
@@ -2999,31 +2999,28 @@ def main() -> int:
     )
 
     expected_victory_points = {
-        67: {6099: 1, 16890: 5},
-        68: {6150: 1},
-        69: {
-            16893: 10, 16883: 5, 16886: 5, 16889: 5, 16894: 5,
-            16888: 5,
-        },
-        70: {2986: 1},
-        723: {6495: 1},
-        724: {},
-        725: {},
-        726: {},
-        727: {8234: 1},
+        67: {6099: 10, 16890: 15},
+        68: {6150: 10},
+        69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
+        70: {2986: 15},
+        723: {6495: 10},
+        724: {6796: 5},
+        725: {259: 10},
+        726: {6331: 5},
+        727: {8234: 10},
         728: {16882: 5, 16891: 5},
-        729: {},
-        688: {16721: 5, 1710: 1},
-        689: {},
-        690: {8058: 1, 9016: 1, 16885: 5, 16887: 5},
-        691: {},
-        692: {493: 25, 5039: 1, 4089: 10},
-        700: {16716: 5, 16881: 5, 16884: 5, 16892: 5},
-        701: {16717: 5},
-        719: {},
-        720: {8057: 1},
-        721: {},
-        722: {},
+        729: {6193: 5},
+        688: {16721: 25, 1710: 5},
+        689: {7618: 5},
+        690: {8058: 5, 9016: 10, 16885: 5, 16887: 5},
+        719: {6961: 5},
+        691: {8194: 10},
+        720: {8057: 5},
+        721: {7908: 5},
+        692: {493: 25, 5039: 5, 4089: 10},
+        722: {2443: 5},
+        700: {16716: 20, 16881: 5, 16884: 5, 16892: 5},
+        701: {16717: 25},
     }
     for state_id, points in expected_victory_points.items():
         state = state_source(state_id)
@@ -3039,17 +3036,17 @@ def main() -> int:
         )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (67, 688, 689, 690, 700, 719))
-        == 44,
-        "NAM mainland VP total must be 44",
+        == 125,
+        "NAM mainland VP total must be 125",
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726))
-        == 9,
-        "EFL mainland VP total must be 9",
+        == 100,
+        "EFL mainland VP total must be 100",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 82,
-        "AZH mainland VP total must be 82",
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 120,
+        "AZH mainland VP total must be 120",
     )
 
     localisation = (
