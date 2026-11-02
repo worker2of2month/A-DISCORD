@@ -6141,7 +6141,7 @@ class NamCampaignTests(unittest.TestCase):
         root = self.postwar[names[0]]
         self.assertEqual([e.value for e in block(root, "prerequisite")], ["NAM_south_heritage"])
         heritage = self.postwar["NAM_south_heritage"]
-        self.assertEqual(scalar(root, "x"), scalar(heritage, "x"))
+        self.assertGreater(int(scalar(root, "x")), int(scalar(heritage, "x")))
         self.assertEqual(int(scalar(root, "y")), int(scalar(heritage, "y")) + 1)
         for resolved, nam_won in ((False, False), (True, False), (False, True), (True, True)):
             facts = self.postwar_facts()
@@ -6230,9 +6230,55 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertNotIn((x, y), coordinates, (name, coordinates.get((x, y))))
                 coordinates[x, y] = name
                 if name == roots[course]:
-                    self.assertEqual((x, y), (38, 2))
-            self.assertLessEqual(max(x for x, y in coordinates), 78)
-            self.assertLessEqual(max(y for x, y in coordinates), 13)
+                    self.assertEqual((x, y), (52, 2))
+            self.assertLessEqual(max(x for x, y in coordinates), 100)
+            self.assertLessEqual(max(y for x, y in coordinates), 18)
+
+    def test_postwar_layout_keeps_connection_corridors_clear(self):
+        mandate_keys = {"NAM_prewar_" + route + "_mandate"
+                        for route in ("service", "district", "pragmatic")}
+        for route in ("service", "district", "pragmatic"):
+            visible = {name: focus for name, focus in self.postwar.items()
+                       if not any(e.key in mandate_keys
+                                  and e.key != "NAM_prewar_" + route + "_mandate"
+                                  for e in walk(focus))}
+            positions = {
+                name: (int(scalar(focus, "x"))
+                       + sum(int(scalar(e.value, "x")) for e in focus if e.key == "offset"),
+                       int(scalar(focus, "y")))
+                for name, focus in visible.items()
+            }
+            exclusive_pairs = [
+                (name, other.value)
+                for name, focus in visible.items()
+                for entry in focus if entry.key == "mutually_exclusive"
+                for other in entry.value if other.value in positions and name < other.value
+            ]
+            for name, focus in visible.items():
+                x, y = positions[name]
+                for entry in focus:
+                    if entry.key not in ("prerequisite", "mutually_exclusive"):
+                        continue
+                    for target in entry.value:
+                        if target.value not in positions:
+                            continue
+                        tx, ty = positions[target.value]
+                        if entry.key == "prerequisite":
+                            for left, right in exclusive_pairs:
+                                if target.value in (left, right):
+                                    continue
+                                lx, ly = positions[left]
+                                rx, _ = positions[right]
+                                self.assertFalse(min(lx, rx) < x < max(lx, rx) and ty < ly < y,
+                                                 (route, name, target.value, left, right))
+                        for other, (ox, oy) in positions.items():
+                            if other in (name, target.value):
+                                continue
+                            if entry.key == "prerequisite":
+                                blocked = ox == x and ty < oy < y
+                            else:
+                                blocked = oy == y == ty and min(x, tx) < ox < max(x, tx)
+                            self.assertFalse(blocked, (route, name, target.value, other))
 
     def test_postwar_three_branches_and_compact_prerequisites(self):
         roots = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
