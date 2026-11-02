@@ -5726,7 +5726,7 @@ class NamCampaignTests(unittest.TestCase):
             facts[("NAM", "variable", "NAM_prewar_balance")] = balance
             for name, focus in preparation.items():
                 self.assertTrue(self.matches(block(focus, "allow_branch"), facts), (balance, name))
-            facts[("NAM", "has_completed_focus", "NAM_svetlogorye")] = False
+            facts[("NAM", "has_completed_focus", "NAM_recognition")] = False
             facts[("NAM", "has_global_flag", "ADISCORD_south_final_started")] = False
             self.assertFalse(self.matches(self.triggers["NAM_pw_southern_preparation_open"], facts))
             facts[("NAM", "has_global_flag", "ADISCORD_south_final_started")] = True
@@ -6230,8 +6230,34 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertNotIn((x, y), coordinates, (name, coordinates.get((x, y))))
                 coordinates[x, y] = name
                 if name == roots[course]:
-                    self.assertEqual((x, y), (28, 1))
-            self.assertLessEqual(max(x for x, y in coordinates), 57)
+                    self.assertEqual((x, y), (38, 2))
+            self.assertLessEqual(max(x for x, y in coordinates), 78)
+            self.assertLessEqual(max(y for x, y in coordinates), 13)
+
+    def test_postwar_three_branches_and_compact_prerequisites(self):
+        roots = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
+        children = {name for name, focus in self.postwar.items() if any(
+            e.key == "prerequisite" and any(p.value == "NAM_recognition" for p in e.value) for e in focus)}
+        self.assertEqual(children, roots)
+        for name in ("NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review"):
+            self.assertEqual(scalar(block(self.postwar[name], "prerequisite"), "focus"), "NAM_veterans_return")
+        for name in ("NAM_service_state", "NAM_federal_charter", "NAM_pragmatic_compact"):
+            self.assertEqual(scalar(block(self.postwar[name], "prerequisite"), "focus"), "NAM_law_after_war")
+        for name, focus in self.postwar.items():
+            y = int(scalar(focus, "y"))
+            for entry in focus:
+                if entry.key == "prerequisite":
+                    for parent in entry.value:
+                        self.assertLess(int(scalar(self.postwar[parent.value], "y")), y, (name, parent.value))
+                elif entry.key == "mutually_exclusive":
+                    for other in entry.value:
+                        self.assertEqual(int(scalar(self.postwar[other.value], "y")), y, (name, other.value))
+        reward = block(self.postwar["NAM_recognition"], "completion_reward")
+        self.assertEqual(sum(e.key == "custom_effect_tooltip" and e.value == "NAM_pw_south_preparation_unlock_tt" for e in reward), 1)
+        facts = self.postwar_facts()
+        facts[("NAM", "has_completed_focus", "NAM_svetlogorye")] = False
+        facts[("NAM", "has_completed_focus", "NAM_oil_exchange")] = False
+        self.assertTrue(self.matches(self.triggers["NAM_pw_southern_preparation_open"], facts))
 
     def test_postwar_new_orders_deliver_once_or_refund_a_lost_site(self):
         results = {
@@ -6370,7 +6396,7 @@ class NamCampaignTests(unittest.TestCase):
         Diplomacy consumes its focus time; offer responses and story wars are
         not simulated, so the queue assumes the story gate remains open.
         """
-        route = ["NAM_recognition"]
+        route = ["NAM_recognition", "NAM_law_after_war"]
         if vertical:
             route += ["NAM_service_state", "NAM_seal_registry", "NAM_namestnik_garrisons",
                       "NAM_oil_quotas", "NAM_state_plan", "NAM_unified_standards",
@@ -6382,7 +6408,7 @@ class NamCampaignTests(unittest.TestCase):
                       "NAM_common_fuel_market", "NAM_charter_ending_federation"]
             wanted = ["NAM_pw_district_congress", "NAM_pw_district_schools",
                       "NAM_pw_militia_reserve", "NAM_pw_district_cooperative"]
-        route += ["NAM_law_after_war", "NAM_veterans_return", "NAM_civil_repair",
+        route += ["NAM_veterans_return", "NAM_civil_repair",
                   "NAM_armed_peace" if armed else "NAM_civil_dividend", "NAM_oil_ministry",
                   "NAM_export_consortium" if export else "NAM_state_refineries",
                   "NAM_oil_exchange", "NAM_national_university"]
@@ -6467,8 +6493,8 @@ class NamCampaignTests(unittest.TestCase):
         for vertical, armed, export in product((False, True), repeat=3):
             day, focus_days, finished, facts = self.run_postwar_budget(vertical, armed, export)
             self.assertTrue(self.matches(readiness, facts), (vertical, armed, export))
-            self.assertEqual(focus_days["NAM_seal_registry" if vertical else "NAM_district_council"], 49)
-            self.assertEqual(finished["NAM_district_audit" if vertical else "NAM_pw_district_congress"], 63)
+            self.assertEqual(focus_days["NAM_seal_registry" if vertical else "NAM_district_council"], 70)
+            self.assertEqual(finished["NAM_district_audit" if vertical else "NAM_pw_district_congress"], 84)
             self.assertEqual(day, 665)
             for channel in ("civil", "military"):
                 self.assertFalse(facts[("NAM", "has_country_flag", f"NAM_pw_{channel}_busy")])
@@ -6520,7 +6546,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertFalse(retired & self.postwar.keys())
         for name, other in (("NAM_normalisation", "NAM_border_revenge"), ("NAM_border_revenge", "NAM_normalisation")):
             focus = self.postwar[name]
-            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_recognition")
+            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_law_after_war")
             self.assertEqual(scalar(block(focus, "mutually_exclusive"), "focus"), other)
             self.assertEqual(int(scalar(focus, "cost")) * 7, 35)
             reward = block(focus, "completion_reward")

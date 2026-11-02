@@ -195,11 +195,11 @@ NAM_postwar_plan = {
 	}
 	ai_national_focuses = {
 		NAM_recognition
+		NAM_law_after_war
 		NAM_federal_charter
 		NAM_public_utilities
 		NAM_civic_audit
 		NAM_district_council
-		NAM_law_after_war
 		NAM_civil_repair
 		NAM_armed_peace
 		NAM_oil_fund
@@ -243,6 +243,7 @@ NAM_postwar_plan = {
 		NAM_workers_inspection
 		NAM_regional_university
 		NAM_common_citizenship
+		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
@@ -282,7 +283,6 @@ NAM_postwar_plan = {
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
 		NAM_pw_engineer_units
-		NAM_pw_naval_review
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
@@ -315,11 +315,11 @@ NAM_postwar_vertical_plan = {
 	}
 	ai_national_focuses = {
 		NAM_recognition
+		NAM_law_after_war
 		NAM_service_state
 		NAM_state_plan
 		NAM_unified_standards
 		NAM_seal_registry
-		NAM_law_after_war
 		NAM_civil_repair
 		NAM_armed_peace
 		NAM_oil_quotas
@@ -363,6 +363,7 @@ NAM_postwar_vertical_plan = {
 		NAM_engineering_collegium
 		NAM_district_inspectorate
 		NAM_reconstruction_statute
+		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
@@ -442,7 +443,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
 		NAM_pw_engineer_units
-		NAM_pw_naval_review
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
@@ -741,6 +741,7 @@ NAM_postwar_pragmatic_plan = {
 	}
 	ai_national_focuses = {
 		NAM_recognition
+		NAM_law_after_war
 		NAM_pragmatic_compact
 		NAM_commercial_courts
 		NAM_export_clearing
@@ -752,7 +753,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_prag_settlement_agreements
 		NAM_prag_partner_supply
 		NAM_balanced_accounts
-		NAM_law_after_war
 		NAM_civil_repair
 		NAM_civil_dividend
 		NAM_national_university
@@ -764,6 +764,7 @@ NAM_postwar_pragmatic_plan = {
 		NAM_normalisation
 		NAM_svetlogorye
 		NAM_pw_transport_commission
+		NAM_veterans_return
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
 		NAM_pw_breakthrough_army
@@ -785,8 +786,8 @@ NAM_postwar_pragmatic_plan = {
 		NAM_port_polytechnic
 		NAM_municipal_bonds
 		NAM_commercial_commonwealth
+		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_veterans_return
 		NAM_south_war_council
 		NAM_south_allied_fuel_office
 		NAM_south_oil_tap
@@ -825,7 +826,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
 		NAM_pw_engineer_units
-		NAM_pw_naval_review
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
