@@ -1143,7 +1143,7 @@ class FocusAggregateTests(unittest.TestCase):
                 self.assertEqual(applied, delta, identifier)
                 self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
                 checked += 1
-        self.assertEqual(checked, 175)
+        self.assertEqual(checked, 156)
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)

@@ -225,8 +225,13 @@ NAM_postwar_plan = {
 		NAM_pw_transport_commission
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
+		NAM_pw_breakthrough_army
+		NAM_pw_staff_exercises
+		NAM_pw_reserve_centres
 		NAM_pw_southern_army
+		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
+		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
 		NAM_south_oil_charter
 		NAM_rural_grid
@@ -253,8 +258,6 @@ NAM_postwar_plan = {
 		NAM_pw_oil_laboratories
 		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
-		NAM_pw_road_priority
-		NAM_pw_freight_depots
 		NAM_pw_fuel_reservoirs
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
@@ -274,18 +277,14 @@ NAM_postwar_plan = {
 		NAM_pw_industrial_sites
 		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
-		NAM_pw_logistics_depots
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
-		NAM_pw_breakthrough_army
-		NAM_pw_reserve_centres
 		NAM_pw_engineer_units
-		NAM_pw_staff_exercises
 		NAM_pw_naval_review
-		NAM_pw_escort_fleet
 		NAM_pw_naval_workshops
+		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
 		NAM_pw_landing_supply
 		NAM_pw_naval_service
@@ -347,8 +346,13 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_transport_commission
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
+		NAM_pw_breakthrough_army
+		NAM_pw_staff_exercises
+		NAM_pw_reserve_centres
 		NAM_pw_southern_army
+		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
+		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
 		NAM_south_seal_over_furnaces
 		NAM_civil_service_exam
@@ -371,8 +375,6 @@ NAM_postwar_vertical_plan = {
 		NAM_rus_expedition_staff
 		NAM_pw_constitutional_committee
 		NAM_pw_cabinet_statute
-		NAM_pw_regional_conference
-		NAM_pw_succession_statute
 		NAM_pw_cadastre
 		NAM_pw_civil_payroll
 		NAM_pw_provincial_records
@@ -416,8 +418,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_oil_laboratories
 		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
-		NAM_pw_road_priority
-		NAM_pw_freight_depots
 		NAM_pw_fuel_reservoirs
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
@@ -437,18 +437,14 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_industrial_sites
 		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
-		NAM_pw_logistics_depots
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
-		NAM_pw_breakthrough_army
-		NAM_pw_reserve_centres
 		NAM_pw_engineer_units
-		NAM_pw_staff_exercises
 		NAM_pw_naval_review
-		NAM_pw_escort_fleet
 		NAM_pw_naval_workshops
+		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
 		NAM_pw_landing_supply
 		NAM_pw_naval_service
@@ -770,8 +766,13 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_transport_commission
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
+		NAM_pw_breakthrough_army
+		NAM_pw_staff_exercises
+		NAM_pw_reserve_centres
 		NAM_pw_southern_army
+		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
+		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
 		NAM_prag_ending_republic
 		NAM_svetlogorsk_dam
@@ -800,8 +801,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_oil_laboratories
 		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
-		NAM_pw_road_priority
-		NAM_pw_freight_depots
 		NAM_pw_fuel_reservoirs
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
@@ -821,18 +820,14 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_industrial_sites
 		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
-		NAM_pw_logistics_depots
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
-		NAM_pw_breakthrough_army
-		NAM_pw_reserve_centres
 		NAM_pw_engineer_units
-		NAM_pw_staff_exercises
 		NAM_pw_naval_review
-		NAM_pw_escort_fleet
 		NAM_pw_naval_workshops
+		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
 		NAM_pw_landing_supply
 		NAM_pw_naval_service

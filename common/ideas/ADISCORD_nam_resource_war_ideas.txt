@@ -1410,54 +1410,8 @@ ideas = {
 			picture = GFX_idea_NAM_national_spirit
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.05
-			}
-		}
-
-		NAM_pw_cabinet_statute_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
-			}
-		}
-
-		NAM_pw_state_chamber_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_tax_collection_factor = 0.04
-			}
-		}
-
-		NAM_pw_regional_conference_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
+				political_power_gain = 0.1
 				stability_factor = 0.04
-			}
-		}
-
-		NAM_pw_succession_statute_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				political_power_gain = 0.05
-				stability_factor = 0.02
-			}
-		}
-
-		NAM_pw_public_accounts_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
-				ADISCORD_economy_tax_collection_factor = 0.02
 			}
 		}
 
@@ -1679,26 +1633,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_southern_military_rule_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				resistance_growth = -0.08
-				ADISCORD_economy_trade_income_factor = -0.03
-			}
-		}
-
-		NAM_pw_southern_local_offices_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				compliance_gain = 0.05
-				ADISCORD_economy_admin_expense_factor = 0.03
-			}
-		}
-
 		NAM_pw_southern_supply_plan_garrison_preview = {
 			name = NAM_garrison_dynamic
 			picture = GFX_idea_generic_fortify_the_borders
@@ -1800,15 +1734,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_power_reserve_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.04
-			}
-		}
-
 		NAM_pw_grid_dispatch_administration_preview = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit
@@ -1863,30 +1788,12 @@ ideas = {
 			}
 		}
 
-		NAM_pw_rail_workshops_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.03
-			}
-		}
-
 		NAM_pw_transport_maintenance_garrison_preview = {
 			name = NAM_garrison_dynamic
 			picture = GFX_idea_generic_fortify_the_borders
 			allowed = { always = no }
 			modifier = {
-				supply_consumption_factor = -0.03
-			}
-		}
-
-		NAM_pw_freight_schedule_garrison_preview = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.04
+				supply_consumption_factor = -0.07
 			}
 		}
 
@@ -1919,24 +1826,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_field_workshops_garrison_preview = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.04
-			}
-		}
-
-		NAM_pw_staff_exercises_garrison_preview = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
-			allowed = { always = no }
-			modifier = {
-				planning_speed = 0.04
-			}
-		}
-
 		NAM_pw_southern_army_garrison_preview = {
 			name = NAM_garrison_dynamic
 			picture = GFX_idea_generic_fortify_the_borders
@@ -1947,71 +1836,13 @@ ideas = {
 			}
 		}
 
-		NAM_pw_escort_fleet_navy_preview = {
-			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
-			allowed = { always = no }
-			modifier = {
-				convoy_escort_efficiency = 0.1
-				navy_org_factor = -0.03
-			}
-		}
-
-		NAM_pw_strike_fleet_navy_preview = {
-			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
-			allowed = { always = no }
-			modifier = {
-				navy_org_factor = 0.08
-				convoy_escort_efficiency = -0.04
-			}
-		}
-
-		NAM_pw_naval_workshops_navy_preview = {
-			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
-			allowed = { always = no }
-			modifier = {
-				repair_speed_factor = 0.1
-			}
-		}
-
 		NAM_pw_naval_service_navy_preview = {
 			name = NAM_navy_dynamic
 			picture = GFX_idea_generic_coastal_navy
 			allowed = { always = no }
 			modifier = {
 				amphibious_invasion = 0.08
-				repair_speed_factor = 0.05
-			}
-		}
-
-		NAM_pw_air_defence_air_preview = {
-			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
-			allowed = { always = no }
-			modifier = {
-				air_intercept_efficiency = 0.1
-				air_cas_efficiency = -0.04
-			}
-		}
-
-		NAM_pw_frontline_air_air_preview = {
-			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
-			allowed = { always = no }
-			modifier = {
-				air_cas_efficiency = 0.1
-				air_intercept_efficiency = -0.04
-			}
-		}
-
-		NAM_pw_flight_schools_air_preview = {
-			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
-			allowed = { always = no }
-			modifier = {
-				air_accidents_factor = -0.08
+				repair_speed_factor = 0.15
 			}
 		}
 
@@ -2020,17 +1851,9 @@ ideas = {
 			picture = GFX_idea_generic_air_bonus
 			allowed = { always = no }
 			modifier = {
-				air_mission_efficiency = 0.05
+				air_mission_efficiency = 0.08
 			}
 		}
 
-		NAM_pw_southern_air_command_air_preview = {
-			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
-			allowed = { always = no }
-			modifier = {
-				air_mission_efficiency = 0.03
-			}
-		}
 	}
 }

@@ -2154,3 +2154,75 @@ NAM_pw_southern_preparation_open = {
 		has_global_flag = ADISCORD_south_final_started
 	}
 }
+
+NAM_program_rail_priority_site = {
+	owns_state = 688
+	controls_state = 688
+	owns_state = 690
+	controls_state = 690
+	owns_state = 67
+	controls_state = 67
+	controls_province = 16721
+	controls_province = 16865
+	controls_province = 4321
+	controls_province = 2935
+	controls_province = 8351
+	controls_province = 9016
+}
+
+NAM_program_logistics_depots_site = {
+	owns_state = 700
+	controls_state = 700
+	owns_state = 689
+	controls_state = 689
+	owns_state = 690
+	controls_state = 690
+	owns_state = 67
+	controls_state = 67
+	controls_province = 16716
+	controls_province = 16884
+	controls_province = 16873
+	controls_province = 9641
+	controls_province = 4321
+	controls_province = 2935
+	controls_province = 8351
+	controls_province = 9016
+	690 = { supply_node < 1 }
+}
+
+NAM_program_freight_depots_site = {
+	owns_state = 700
+	controls_state = 700
+	owns_state = 689
+	controls_state = 689
+	owns_state = 690
+	controls_state = 690
+	owns_state = 719
+	controls_state = 719
+	controls_province = 16716
+	controls_province = 16884
+	controls_province = 16873
+	controls_province = 9641
+	controls_province = 11926
+	controls_province = 176
+	controls_province = 6961
+	719 = { supply_node < 1 }
+}
+
+NAM_program_southern_corridor_site = {
+	owns_state = 688
+	controls_state = 688
+	owns_state = 690
+	controls_state = 690
+	owns_state = 689
+	controls_state = 689
+	owns_state = 700
+	controls_state = 700
+	controls_province = 16721
+	controls_province = 16865
+	controls_province = 4321
+	controls_province = 9641
+	controls_province = 16873
+	controls_province = 16884
+	controls_province = 16716
+}
