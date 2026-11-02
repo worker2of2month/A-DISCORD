@@ -5022,7 +5022,7 @@ class NamCampaignTests(unittest.TestCase):
 
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 24),
-            "postwar": (self.postwar, 227), "defeated": (self.defeated, 22),
+            "postwar": (self.postwar, 245), "defeated": (self.defeated, 22),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
             "exile_corporate": (self.exile_trees["exile_corporate"][1], 34),
@@ -5650,10 +5650,12 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "has_global_flag", BASE + "_nam_victory")] = True
         for focus in self.postwar:
             facts[("NAM", "has_completed_focus", focus)] = True
+        for focus in ("haulage_cooperatives", "tool_cooperatives", "chartered_tonnage", "tractor_leasing"):
+            facts[("NAM", "has_completed_focus", "NAM_" + focus)] = False
         for group in ("nam", "oil", "dist", "garr", "trade"):
             facts[("NAM", "variable", f"NAM_grp_{group}_support")] = 60
         for state, kind in (("700", "industrial_complex"), ("700", "arms_factory"), ("688", "industrial_complex")):
-            facts[(state, "fixture_free_building_slots", f"{kind}:1:no")] = True
+            facts[(state, "variable", f"fixture_building_slots_{kind}_no")] = 3
         facts[("NAM", "owns_state", "690")] = True
         facts[("NAM", "controls_state", "690")] = True
         facts[("690", "numeric", "infrastructure")] = 2
@@ -5997,7 +5999,7 @@ class NamCampaignTests(unittest.TestCase):
                 self.apply(block(decision, "complete_effect"), facts)
                 lost = (("NAM", "owns_state", state) if reason == "owner" else
                         ("NAM", "controls_state", state) if reason == "controller" else
-                        (state, "fixture_free_building_slots", f"{kind}:1:no"))
+                        (state, "variable", f"fixture_building_slots_{kind}_no"))
                 facts[lost] = False
                 self.assertTrue(self.matches(block(decision, "cancel_trigger"), facts), (name, reason))
                 self.apply(block(decision, "remove_effect"), facts)
@@ -6207,7 +6209,7 @@ class NamCampaignTests(unittest.TestCase):
             for route in routes:
                 if gates and any(e.key == "NAM_prewar_" + route + "_mandate" for e in gates[0]):
                     membership[name] = route
-        self.assertEqual(Counter(membership.values()), {"service": 77, "district": 25, "pragmatic": 25})
+        self.assertEqual(Counter(membership.values()), {"service": 77, "district": 34, "pragmatic": 34})
         for balance, course in ((-0.5, "service"), (-0.25, "pragmatic"),
                                 (0, "pragmatic"), (0.25, "pragmatic"), (0.5, "district")):
             facts = self.postwar_facts()
@@ -6331,6 +6333,48 @@ class NamCampaignTests(unittest.TestCase):
                 self.apply(block(decision, "cancel_effect"), facts)
                 self.assertEqual(facts, result, (name, "late callback"))
                 self.assertFalse(facts[("NAM", "has_country_flag", "NAM_pw_civil_busy")])
+
+    def test_specialised_orders_deliver_only_on_success_and_only_once(self):
+        cases = (
+            ("district_cooperative", "haulage_cooperatives", "motorized_equipment", 150),
+            ("district_cooperative", "tool_cooperatives", "support_equipment", 180),
+            ("merchant_order", "chartered_tonnage", "convoy", 45),
+            ("merchant_order", "tractor_leasing", "motorized_equipment", 540),
+        )
+        for order, focus, equipment, amount in cases:
+            decision = self.decisions["NAM_pw_" + order]
+            for cancel in (False, True):
+                facts = self.postwar_facts()
+                facts[("NAM", "has_completed_focus", "NAM_" + focus)] = True
+                self.apply(block(decision, "complete_effect"), facts)
+                if cancel:
+                    self.apply(block(decision, "cancel_effect"), facts)
+                self.apply(block(decision, "remove_effect"), facts)
+                self.apply(block(decision, "remove_effect"), facts)
+                self.assertEqual(facts.get(("NAM", "equipment", equipment), 0),
+                                 0 if cancel else amount, (order, focus, cancel))
+
+    def test_district_and_commercial_projects_use_existing_sites_when_full(self):
+        projects = (
+            ("district_fair", "689", "industrial_complex", "motorized_equipment", 180),
+            ("relief_reserves", "690", "fuel_silo", "train_equipment", 16),
+            ("bonded_terminal", "700", "fuel_silo", "convoy", 18),
+            ("licensed_workshop", "688", "arms_factory", "support_equipment", 350),
+        )
+        for name, state, building, alternative, amount in projects:
+            focus = self.postwar["NAM_" + name]
+            for slots in (0, 1, 3):
+                has_space = slots > 0
+                facts = self.postwar_facts()
+                facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
+                facts[("NAM", "variable", "NAM_prewar_balance")] = 0.5 if name in (
+                    "district_fair", "relief_reserves") else 0
+                facts[(state, "variable", "fixture_building_slots_" + building + "_no")] = slots
+                self.assertTrue(self.matches(block(focus, "available"), facts), name)
+                self.apply(block(focus, "completion_reward"), facts)
+                self.assertEqual(facts.get((state, "building", building), 0), int(has_space), name)
+                self.assertEqual(facts.get(("NAM", "equipment", alternative), 0),
+                                 0 if has_space else amount, name)
 
     def test_postwar_ai_respects_inherited_political_course(self):
         plans = parsed("common/ai_strategy_plans/ADISCORD_NAM_plans.txt")

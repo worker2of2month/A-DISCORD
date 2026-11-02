@@ -8558,6 +8558,22 @@ NAM_pw_district_cooperative_settle = {
 		}
 		add_to_variable = { var = NAM_grp_dist_support value = 5 }
 		NAM_groups_refresh = yes
+		if = {
+			limit = { has_completed_focus = NAM_haulage_cooperatives }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = NAM
+			}
+		}
+		if = {
+			limit = { has_completed_focus = NAM_tool_cooperatives }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 180
+				producer = NAM
+			}
+		}
 	}
 	else = { NAM_pw_district_cooperative_refund = yes }
 }
@@ -9346,6 +9362,22 @@ NAM_pw_merchant_order_settle = {
 			type = motorized_equipment
 			amount = 300
 			producer = NAM
+		}
+		if = {
+			limit = { has_completed_focus = NAM_chartered_tonnage }
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 15
+				producer = NAM
+			}
+		}
+		if = {
+			limit = { has_completed_focus = NAM_tractor_leasing }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 240
+				producer = NAM
+			}
 		}
 	}
 	else = { NAM_pw_merchant_order_refund = yes }
@@ -11446,11 +11478,11 @@ NAM_program_power_reserve_settle = {
 				NAM_pw_operable = yes
 				owns_state = 700
 				controls_state = 700
-				700 = { anti_air < 4 }
+				700 = { anti_air_building < 4 }
 			}
 			700 = {
 				add_building_construction = {
-					type = anti_air
+					type = anti_air_building
 					level = 2
 					instant_build = yes
 				}

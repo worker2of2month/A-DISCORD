@@ -2267,8 +2267,8 @@ focus_tree = {
 			controls_state = 689
 			owns_state = 690
 			controls_state = 690
-			689 = { free_building_slots = { building = industrial_complex size = 1 include_locked = yes } }
-			690 = { free_building_slots = { building = industrial_complex size = 1 include_locked = yes } }
+			689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
+			690 = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3355,7 +3355,7 @@ focus_tree = {
 				amount = 25
 				producer = NAM
 			}
-			add_navy_experience = 15
+			navy_experience = 15
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3421,7 +3421,7 @@ focus_tree = {
 			NAM_prewar_pragmatic_mandate = yes
 			owns_state = 700
 			controls_state = 700
-			700 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+			700 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3811,7 +3811,7 @@ focus_tree = {
 			NAM_prewar_district_mandate = yes
 			owns_state = 689
 			controls_state = 689
-			689 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+			689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6717,7 +6717,7 @@ focus_tree = {
 		bypass = {
 			owns_state = 700
 			controls_state = 700
-			700 = { anti_air > 3 }
+			700 = { anti_air_building > 3 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8529,6 +8529,645 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_pw_air_batches_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_cooperative_congress
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 144
+		y = 8
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_common_fuel_market }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_cooperative_congress_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 350 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_haulage_cooperatives
+		icon = GFX_goal_generic_army_motorized
+		x = 142
+		y = 9
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_cooperative_congress }
+		mutually_exclusive = { focus = NAM_tool_cooperatives }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_haulage_cooperatives_delivery_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_tool_cooperatives
+		icon = GFX_goal_generic_production2
+		x = 146
+		y = 9
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_cooperative_congress }
+		mutually_exclusive = { focus = NAM_haulage_cooperatives }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 180
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_tool_cooperatives_delivery_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_district_fair
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 144
+		y = 10
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_haulage_cooperatives
+			focus = NAM_tool_cooperatives
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+			owns_state = 689
+			controls_state = 689
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 689
+					controls_state = 689
+					689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+				}
+				689 = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 180
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_relief_register
+		icon = GFX_goal_generic_national_unity
+		x = 162
+		y = 10
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_district_scholarships }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 3500
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_relief_trains
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 160
+		y = 11
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_relief_register }
+		mutually_exclusive = { focus = NAM_mobile_clinics }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 18
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_mobile_clinics
+		icon = GFX_goal_generic_army_motorized
+		x = 164
+		y = 11
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_relief_register }
+		mutually_exclusive = { focus = NAM_relief_trains }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 140
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 160
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_rescue_college
+		icon = GFX_goal_generic_scientific_exchange
+		x = 162
+		y = 12
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_relief_trains
+			focus = NAM_mobile_clinics
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_rescue_college
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_relief_reserves
+		icon = GFX_goal_generic_oil_refinery
+		x = 154
+		y = 13
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		offset = {
+			x = -100
+			trigger = { NAM_prewar_district_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_district_fair }
+		prerequisite = { focus = NAM_rescue_college }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_district_mandate = yes
+			owns_state = 690
+			controls_state = 690
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 690
+					controls_state = 690
+					690 = { free_building_slots = { building = fuel_silo size > 0 include_locked = no } }
+				}
+				690 = {
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = train_equipment
+					amount = 16
+					producer = NAM
+				}
+			}
+			add_fuel = 35000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_freight_brokerage
+		icon = GFX_goal_generic_trade
+		x = 266
+		y = 6
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_merchant_charter }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 15
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_chartered_tonnage
+		icon = GFX_goal_generic_trade
+		x = 264
+		y = 7
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_freight_brokerage }
+		mutually_exclusive = { focus = NAM_tractor_leasing }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_chartered_tonnage_delivery_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_tractor_leasing
+		icon = GFX_goal_generic_army_motorized
+		x = 268
+		y = 7
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_freight_brokerage }
+		mutually_exclusive = { focus = NAM_chartered_tonnage }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_tractor_leasing_delivery_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_bonded_terminal
+		icon = GFX_goal_generic_oil_refinery
+		x = 266
+		y = 8
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_chartered_tonnage
+			focus = NAM_tractor_leasing
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+			owns_state = 700
+			controls_state = 700
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = { free_building_slots = { building = fuel_silo size > 0 include_locked = no } }
+				}
+				700 = {
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 18
+					producer = NAM
+				}
+			}
+			add_fuel = 45000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_testing_office
+		icon = GFX_goal_generic_scientific_exchange
+		x = 252
+		y = 11
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_port_polytechnic }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_testing_office
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_precision_gauges
+		icon = GFX_goal_generic_production2
+		x = 250
+		y = 12
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_testing_office }
+		mutually_exclusive = { focus = NAM_relay_trials }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 320
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_relay_trials
+		icon = GFX_goal_generic_scientific_exchange
+		x = 254
+		y = 12
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_testing_office }
+		mutually_exclusive = { focus = NAM_precision_gauges }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_relay_trials
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_licensed_workshop
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 252
+		y = 13
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_precision_gauges
+			focus = NAM_relay_trials
+		}
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+			owns_state = 688
+			controls_state = 688
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = { free_building_slots = { building = arms_factory size > 0 include_locked = no } }
+				}
+				688 = {
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 350
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_through_waybill
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 260
+		y = 14
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		offset = {
+			x = -200
+			trigger = { NAM_prewar_pragmatic_mandate = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_licensed_workshop }
+		prerequisite = { focus = NAM_bonded_terminal }
+		available = {
+			has_capitulated = no
+			NAM_pw_operable = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = NAM
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

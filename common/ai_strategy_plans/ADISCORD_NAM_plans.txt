@@ -243,6 +243,13 @@ NAM_postwar_plan = {
 		NAM_workers_inspection
 		NAM_regional_university
 		NAM_common_citizenship
+		NAM_cooperative_congress
+		NAM_haulage_cooperatives
+		NAM_district_fair
+		NAM_relief_register
+		NAM_relief_trains
+		NAM_rescue_college
+		NAM_relief_reserves
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council
@@ -786,6 +793,13 @@ NAM_postwar_pragmatic_plan = {
 		NAM_port_polytechnic
 		NAM_municipal_bonds
 		NAM_commercial_commonwealth
+		NAM_freight_brokerage
+		NAM_chartered_tonnage
+		NAM_bonded_terminal
+		NAM_testing_office
+		NAM_precision_gauges
+		NAM_licensed_workshop
+		NAM_through_waybill
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_war_council

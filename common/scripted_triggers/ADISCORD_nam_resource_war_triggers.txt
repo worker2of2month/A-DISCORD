@@ -1457,7 +1457,7 @@ NAM_pw_capital_civil_site = {
 	700 = {
 		free_building_slots = {
 			building = industrial_complex
-			size = 1
+			size > 0
 			include_locked = no
 		}
 	}
@@ -1469,7 +1469,7 @@ NAM_pw_capital_arms_site = {
 	700 = {
 		free_building_slots = {
 			building = arms_factory
-			size = 1
+			size > 0
 			include_locked = no
 		}
 	}
@@ -1481,7 +1481,7 @@ NAM_pw_district_civil_site = {
 	688 = {
 		free_building_slots = {
 			building = industrial_complex
-			size = 1
+			size > 0
 			include_locked = no
 		}
 	}

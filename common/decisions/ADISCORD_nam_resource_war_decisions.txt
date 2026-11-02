@@ -7771,11 +7771,27 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_pw_district_cooperative_result_tt
+				if = {
+					limit = { has_completed_focus = NAM_tool_cooperatives }
+					custom_effect_tooltip = NAM_tool_cooperatives_delivery_tt
+				}
+				if = {
+					limit = { has_completed_focus = NAM_haulage_cooperatives }
+					custom_effect_tooltip = NAM_haulage_cooperatives_delivery_tt
+				}
 			}
 		}
 		cancel_trigger = { NAM_pw_district_cooperative_ready = no }
 		remove_effect = {
 			custom_effect_tooltip = NAM_pw_district_cooperative_result_tt
+			if = {
+				limit = { has_completed_focus = NAM_tool_cooperatives }
+				custom_effect_tooltip = NAM_tool_cooperatives_delivery_tt
+			}
+			if = {
+				limit = { has_completed_focus = NAM_haulage_cooperatives }
+				custom_effect_tooltip = NAM_haulage_cooperatives_delivery_tt
+			}
 			hidden_effect = { NAM_pw_district_cooperative_settle = yes }
 		}
 		cancel_effect = {
@@ -9101,6 +9117,14 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_pw_merchant_order_result_tt
+				if = {
+					limit = { has_completed_focus = NAM_tractor_leasing }
+					custom_effect_tooltip = NAM_tractor_leasing_delivery_tt
+				}
+				if = {
+					limit = { has_completed_focus = NAM_chartered_tonnage }
+					custom_effect_tooltip = NAM_chartered_tonnage_delivery_tt
+				}
 			}
 		}
 		cancel_trigger = {
@@ -9111,6 +9135,14 @@ NAM_national_programmes = {
 		}
 		remove_effect = {
 			custom_effect_tooltip = NAM_pw_merchant_order_result_tt
+			if = {
+				limit = { has_completed_focus = NAM_tractor_leasing }
+				custom_effect_tooltip = NAM_tractor_leasing_delivery_tt
+			}
+			if = {
+				limit = { has_completed_focus = NAM_chartered_tonnage }
+				custom_effect_tooltip = NAM_chartered_tonnage_delivery_tt
+			}
 			hidden_effect = { NAM_pw_merchant_order_settle = yes }
 		}
 		cancel_effect = {
@@ -11486,7 +11518,7 @@ NAM_national_programmes = {
 			}
 			owns_state = 700
 			controls_state = 700
-			700 = { anti_air < 4 }
+			700 = { anti_air_building < 4 }
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_civil_free_tt
 				NOT = { has_country_flag = NAM_pw_civil_busy }
@@ -11511,7 +11543,7 @@ NAM_national_programmes = {
 						NAM_pw_operable = yes
 						owns_state = 700
 						controls_state = 700
-						700 = { anti_air < 4 }
+						700 = { anti_air_building < 4 }
 						has_completed_focus = NAM_pw_power_reserve
 						NOT = { has_country_flag = NAM_program_power_reserve_paid }
 						NOT = { has_country_flag = NAM_pw_civil_busy }
@@ -11539,7 +11571,7 @@ NAM_national_programmes = {
 				NAM_pw_operable = yes
 				owns_state = 700
 				controls_state = 700
-				700 = { anti_air < 4 }
+				700 = { anti_air_building < 4 }
 			}
 		}
 		remove_effect = {
