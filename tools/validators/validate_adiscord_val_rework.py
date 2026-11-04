@@ -1008,6 +1008,43 @@ def validate_val_preview_ideas(
                 and len(items[0].value) == 1
             )
 
+        mutators = {
+            "add_to_variable",
+            "set_variable",
+            "subtract_from_variable",
+            "multiply_variable",
+            "divide_variable",
+            "clamp_variable",
+            "clear_variable",
+        }
+        presence = {
+            "add_dynamic_modifier",
+            "remove_dynamic_modifier",
+            "force_update_dynamic_modifier",
+        }
+
+        def touches_native(entry, seen=frozenset()):
+            # Bookkeeping blocks are allowed only when no nested write or helper
+            # can reach a modifier input or the modifier's presence.
+            for child in walk_script([entry]):
+                if child.key in mutators:
+                    variable = (
+                        child.value
+                        if isinstance(child.value, str)
+                        else script_fields(child.value).get("var")
+                    )
+                    if variable in native_maps[native]:
+                        return True
+                elif child.key in presence:
+                    return True
+                elif child.key in effects and child.value == "yes":
+                    if child.key in seen or any(
+                        touches_native(item, seen | {child.key})
+                        for item in effects[child.key]
+                    ):
+                        return True
+            return False
+
         expected = {}
         installed = refreshed = dirty = False
         try:
@@ -1027,7 +1064,7 @@ def validate_val_preview_ideas(
                         return {}
                     expected[modifier] = expected.get(modifier, 0) + amount
                     refreshed = dirty = False
-            elif entry.key == "if":
+            elif entry.key == "if" and touches_native(entry):
                 guard = script_children(entry.value, "limit")
                 payload = [item for item in entry.value if item.key != "limit"]
                 if (
@@ -1043,12 +1080,10 @@ def validate_val_preview_ideas(
                 refreshed = entry.value == "yes" and installed
             elif entry.key == "ADISCORD_economy_mark_dirty":
                 dirty = entry.value == "yes" and refreshed
-            elif entry.key in {"clear_variable", "remove_dynamic_modifier"}:
+            elif entry.key == "remove_dynamic_modifier" or touches_native(entry):
                 return {}
             elif entry.key == "country_event" and is_event_dispatch(entry.value):
                 continue
-            elif isinstance(entry.value, list):
-                return {}
         return expected if installed and refreshed and dirty else {}
 
     referenced, checked = set(), set()
@@ -1147,6 +1182,16 @@ def validate_val_preview_ideas(
                     path,
                     inside,
                     script_children(entry.value, "completion_reward"),
+                    hidden,
+                )
+                continue
+            if entry.key == "option" and isinstance(entry.value, list):
+                # An event answer is its own reward; its conditions and AI weight are not.
+                inspect(
+                    entry.value,
+                    path,
+                    inside,
+                    [e for e in entry.value if e.key not in {"name", "trigger", "ai_chance"}],
                     hidden,
                 )
                 continue

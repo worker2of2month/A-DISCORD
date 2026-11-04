@@ -181,6 +181,30 @@
       "status": "active"
     },
     {
+      "id": "val_contract.426",
+      "namespace": "val_contract",
+      "number": 426,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
+      "id": "val_contract.427",
+      "namespace": "val_contract",
+      "number": 427,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
+      "id": "val_contract.428",
+      "namespace": "val_contract",
+      "number": 428,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "val_contract.423",
       "namespace": "val_contract",
       "number": 423,
@@ -3738,7 +3762,7 @@
       "number": 45,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_story",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_vorkerland_story.46",
@@ -8840,6 +8864,46 @@
       "id": "val_rework.167",
       "namespace": "val_rework",
       "number": 167,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.180",
+      "namespace": "val_rework",
+      "number": 180,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.181",
+      "namespace": "val_rework",
+      "number": 181,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.182",
+      "namespace": "val_rework",
+      "number": 182,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.183",
+      "namespace": "val_rework",
+      "number": 183,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.184",
+      "namespace": "val_rework",
+      "number": 184,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_rework",
       "status": "active"

@@ -384,13 +384,14 @@ country_event = {
 	option = {
 		name = val_rework.144.a
 		ai_chance = { base = 60 }
-		add_political_power = -10
+		add_political_power = -100
+		add_timed_idea = { idea = VAL_ash_residents_petitions days = 365 }
 		hidden_effect = { set_country_flag = VAL_ash_report_filed }
 	}
 	option = {
 		name = val_rework.144.b
 		ai_chance = { base = 40 }
-		add_political_power = 10
+		add_political_power = 50
 	}
 }
 
@@ -855,7 +856,7 @@ country_event = {
 		name = val_rework.154.c
 		ai_chance = { base = 30 }
 		custom_effect_tooltip = val_rework.154.c_tt
-		hidden_effect = { ADISCORD_economy_receive_50 = yes }
+		hidden_effect = { ADISCORD_economy_receive_300 = yes }
 	}
 }
 
@@ -1925,6 +1926,64 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { VAL_finish_frontier_protectorate = yes }
+}
+
+# Pact of Four: COF, TFF or YPR answers Kefreyt's invitation; FROM = VAL.
+# Refusal comes first, so an unanswered invitation closes without a membership.
+country_event = {
+	id = val_contract.426
+	title = val_contract.426.t
+	desc = val_contract.426.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 35
+	option = {
+		name = val_contract.426.refuse
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 3
+				VAL = { VAL_northern_aid_sufficient = no }
+			}
+		}
+		hidden_effect = { FROM = { country_event = { id = val_contract.428 } } }
+	}
+	option = {
+		name = val_contract.426.accept
+		trigger = {
+			VAL_pact_of_four_partner_eligible = yes
+			FROM = { VAL_pact_of_four_host_ready = yes }
+		}
+		ai_chance = {
+			base = 70
+			modifier = {
+				factor = 2
+				VAL = { VAL_northern_aid_sufficient = yes }
+			}
+		}
+		custom_effect_tooltip = val_contract.426.accept_tt
+		hidden_effect = { VAL_join_pact_of_four = yes }
+	}
+}
+
+# COUNTRY VAL, FROM = the partner that has just joined the Pact of Four.
+country_event = {
+	id = val_contract.427
+	title = val_contract.427.t
+	desc = val_contract.427.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.427.a }
+}
+
+# COUNTRY VAL, FROM = the partner that declined the Pact of Four.
+country_event = {
+	id = val_contract.428
+	title = val_contract.428.t
+	desc = val_contract.428.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.428.a }
 }
 
 # VAL_ardent_stage is already terminal when the settlement sends this result.
@@ -3858,6 +3917,115 @@ country_event = {
 		name = VAL_epilogue_continue
 		custom_effect_tooltip = VAL_epilogue_thanks_tt
 	}
+}
+
+# COUNTRY VAL. The side of the wartime command balance limits the postwar terms;
+# every range keeps two answers, and the compromise keeps all three.
+country_event = {
+	id = val_rework.180
+	title = val_rework.180.t
+	desc = {
+		trigger = { power_balance_value = { id = VAL_command_balance value > 0.10 } }
+		text = val_rework.180.solgalov
+	}
+	desc = {
+		trigger = { power_balance_value = { id = VAL_command_balance value < -0.10 } }
+		text = val_rework.180.staff
+	}
+	desc = {
+		trigger = {
+			NOT = { power_balance_value = { id = VAL_command_balance value > 0.10 } }
+			NOT = { power_balance_value = { id = VAL_command_balance value < -0.10 } }
+		}
+		text = val_rework.180.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { has_power_balance = { id = VAL_command_balance } }
+	option = {
+		name = val_rework.180.a
+		trigger = { NOT = { power_balance_value = { id = VAL_command_balance value < -0.10 } } }
+		ai_chance = { base = 30 }
+		effect_tooltip = { add_ideas = VAL_nw_pensions_delta }
+		hidden_effect = { VAL_nw_settle_command_pensions = yes }
+	}
+	option = {
+		name = val_rework.180.b
+		ai_chance = { base = 40 }
+		effect_tooltip = { add_ideas = VAL_nw_joint_staff_delta }
+		hidden_effect = { VAL_nw_settle_command_joint_staff = yes }
+	}
+	option = {
+		name = val_rework.180.c
+		trigger = { NOT = { power_balance_value = { id = VAL_command_balance value > 0.10 } } }
+		ai_chance = { base = 30 }
+		effect_tooltip = { add_ideas = VAL_nw_army_charter_delta }
+		hidden_effect = { VAL_nw_settle_command_charter = yes }
+	}
+}
+
+# COUNTRY ERT. The refusal comes first, so an unattended offer keeps the district.
+country_event = {
+	id = val_rework.181
+	title = val_rework.181.t
+	desc = val_rework.181.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_nw_tsaygen_offer_pending }
+	timeout_days = 14
+	option = {
+		name = val_rework.181.a
+		ai_chance = { base = 40 }
+		hidden_effect = { VAL_nw_decline_tsaygen_sale = yes }
+	}
+	option = {
+		name = val_rework.181.b
+		trigger = {
+			VAL_nw_tsaygen_sale_possible = yes
+			VAL = { VAL_nw_tsaygen_sale_affordable = yes }
+		}
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.5
+				is_in_faction = yes
+			}
+		}
+		custom_effect_tooltip = VAL_nw_tsaygen_sale_receive_tt
+		hidden_effect = { VAL_nw_accept_tsaygen_sale = yes }
+	}
+}
+
+country_event = {
+	id = val_rework.182
+	title = val_rework.182.t
+	desc = val_rework.182.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.182.a }
+}
+
+country_event = {
+	id = val_rework.183
+	title = val_rework.183.t
+	desc = val_rework.183.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.183.a }
+}
+
+# COUNTRY VAL; FROM is the republic that has just left its alliance.
+country_event = {
+	id = val_rework.184
+	title = val_rework.184.t
+	desc = val_rework.184.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	option = { name = val_rework.184.a }
 }
 
 # --- commanders_council ---

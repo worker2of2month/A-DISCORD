@@ -56,6 +56,8 @@ focus_tree = {
 	### NORTH: MARKETS AND FOREIGN HANDS
 	#############################################
 
+	# The northern alliance kept its ground, so Kefreyt joins it as a partner instead of a protector.
+
 	#############################################
 	### POLITICS: THE WORKING CONTRACT STATE
 	#############################################
@@ -871,10 +873,10 @@ shared_focus = {
 		id = VAL_Different_Views_On_Freedom
 		icon = GFX_focus_VAL_Different_Views_On_Freedom
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_CONTRACTS }
-		x = 38
+		x = 36
 		y = 6
 		offset = {
-			x = 26
+			x = 28
 			y = 0
 			trigger = { VAL_council_governs = yes }
 		}
@@ -883,11 +885,13 @@ shared_focus = {
 			focus = VAL_Trading_Partners
 			focus = VAL_October_Of_2160
 		}
+		mutually_exclusive = { focus = VAL_Pact_Of_Four }
+		# Only Nodrul's northern victory gives Kefreyt a common front with Nodrul.
 		available = {
 			VAL_frontier_protectorate_partners = yes
 			custom_trigger_tooltip = {
-				tooltip = VAL_frontier_northern_war_settled_tt
-				VAL_frontier_northern_war_settled = yes
+				tooltip = VAL_frontier_northern_war_lost_tt
+				VAL_frontier_northern_war_lost = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = VAL_frontier_protectorate_no_pending_tt
@@ -907,6 +911,53 @@ shared_focus = {
 				VAL_unlock_operations_map = yes
 				VAL_offer_frontier_protectorate = yes
 			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_Pact_Of_Four
+		icon = GFX_goal_generic_alliance
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION }
+		x = 38
+		y = 6
+		offset = {
+			x = 28
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 5
+		prerequisite = { focus = VAL_Trading_Partners }
+		mutually_exclusive = { focus = VAL_Different_Views_On_Freedom }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_pact_of_four_war_held_tt
+				VAL_frontier_northern_war_held = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_pact_of_four_host_ready_tt
+				VAL_pact_of_four_host_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_pact_of_four_partner_tt
+				OR = {
+					COF = { VAL_pact_of_four_partner_eligible = yes }
+					TFF = { VAL_pact_of_four_partner_eligible = yes }
+					YPR = { VAL_pact_of_four_partner_eligible = yes }
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = VAL_pact_of_four_faction
+				}
+			}
+			custom_effect_tooltip = VAL_pact_of_four_tt
+			hidden_effect = { VAL_invite_pact_of_four = yes }
 		}
 	}
 
@@ -1336,6 +1387,11 @@ shared_focus = {
 				fallback = yes
 				start_state = 48
 				target_state = 57
+			}
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_merchant_rail_yards_delta } }
+			hidden_effect = {
+				set_country_flag = VAL_merchant_rail_yards
+				VAL_refresh_contract_modifier = yes
 			}
 		}
 		ai_will_do = { base = 2 }
@@ -2651,6 +2707,7 @@ shared_focus = {
 
 shared_focus = {
 		id = VAL_Stelander_Crisis_Opens
+		dynamic = yes
 		# Under Council rule the coup dirties the layout and swaps out Solgalov's portrait.
 		icon = {
 			GFX_focus_VAL_Operational_Directorate = {
@@ -2662,6 +2719,9 @@ shared_focus = {
 		x = 26
 		y = 6
 		cost = 2
+		# STP_cw_started is never cleared, so the aftermath stays visible after the war.
+		# The STP-STS war declaration and startup dirty the layout through VAL_reveal_stelander_focus_branch.
+		allow_branch = { has_global_flag = STP_cw_started }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_crisis_active_tt
@@ -3202,28 +3262,9 @@ shared_focus = {
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = VAL_frontier_contracts_required_tt
-				has_completed_focus = VAL_Contracts_Outlive_Kings
-			}
-			custom_trigger_tooltip = {
-				tooltip = VAL_frontier_banner_required_tt
-				has_completed_focus = VAL_One_Ledger_One_Banner
-			}
-			custom_trigger_tooltip = {
-				tooltip = VAL_frontier_course_required_tt
-				OR = {
-					has_completed_focus = VAL_Trading_Partners
-					has_completed_focus = VAL_October_Of_2160
-				}
-			}
-			custom_trigger_tooltip = {
 				tooltip = VAL_frontier_postwar_ready_tt
 				VAL_frontier_postwar = yes
 			}
-
-			has_completed_focus = VAL_One_Ledger_One_Banner
-			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
-
 		}
 
 		completion_reward = {
@@ -4721,7 +4762,7 @@ shared_focus = {
 		available = {
 			OR = {
 				has_completed_focus = VAL_Contract_Landing_Craft
-				has_completed_focus = VAL_nw_staff
+				has_completed_focus = VAL_nw_khan
 			}
 			has_capitulated = no
 			custom_trigger_tooltip = {

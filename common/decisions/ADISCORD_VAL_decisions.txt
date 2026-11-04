@@ -277,7 +277,7 @@ VAL_military_operations = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
 		visible = {
-			has_completed_focus = VAL_Return_Southern_Tsaygen
+			VAL_tsaygen_campaign_opened = yes
 			NOT = { owns_state = 168 }
 			ERT = { exists = yes NOT = { is_subject_of = VAL } }
 		}
@@ -295,7 +295,7 @@ VAL_military_operations = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
 		visible = {
-			has_completed_focus = VAL_frontier_return_irem
+			VAL_perimeter_campaign_opened = yes
 			NOT = { owns_state = 169 }
 			ERT = { exists = yes NOT = { is_subject_of = VAL } }
 		}
@@ -316,7 +316,7 @@ VAL_military_operations = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
 		visible = {
-			has_completed_focus = VAL_frontier_return_irem
+			VAL_perimeter_campaign_opened = yes
 			has_war_with = ERT
 			169 = { is_owned_by = ERT }
 		}
@@ -712,7 +712,7 @@ VAL_military_operations = {
 	VAL_frontier_demand_ERT = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_Return_Southern_Tsaygen ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
+		visible = { VAL_tsaygen_campaign_opened = yes ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
 		available = {
 			VAL_frontier_postwar = yes
 			has_war = no
@@ -4029,7 +4029,7 @@ VAL_new_world_category = {
 		allowed = { tag = VAL }
 		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
-			has_completed_focus = VAL_nw_guarantor
+			has_completed_focus = VAL_nw_register
 			FROM = { has_country_flag = VAL_nw_concession }
 		}
 		available = {
@@ -4291,7 +4291,7 @@ VAL_new_world_category = {
 		visible = {
 			NOT = { has_country_flag = VAL_nw_expanded_arsenals_complete }
 			VAL_nw_khan_threat = yes
-			has_completed_focus = VAL_nw_arsenals
+			has_completed_focus = VAL_nw_khan
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -4402,7 +4402,7 @@ VAL_new_world_category = {
 		visible = {
 			NOT = { has_country_flag = VAL_nw_expanded_reserve_complete }
 			VAL_nw_khan_threat = yes
-			has_completed_focus = VAL_nw_reserve
+			has_completed_focus = VAL_nw_khan
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -4494,7 +4494,7 @@ VAL_new_world_category = {
 	VAL_nw_guard_caravans = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_nw_caravans }
+		visible = { has_completed_focus = VAL_nw_charters }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_nw_operational_tt
@@ -4581,10 +4581,7 @@ VAL_new_world_category = {
 		allowed = { tag = VAL }
 		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		visible = {
-			OR = {
-				has_completed_focus = VAL_nw_councils
-				has_completed_focus = VAL_nw_charters
-			}
+			has_completed_focus = VAL_nw_council
 			FROM = {
 				exists = yes
 				NOT = { has_country_flag = VAL_nw_concession }
@@ -4746,6 +4743,95 @@ VAL_new_world_category = {
 			modifier = {
 				factor = 4
 				FROM = { VAL_nw_concession_valid = yes }
+			}
+		}
+	}
+
+	VAL_nw_buy_tsaygen = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_nw_bloc_accord
+			NOT = { owns_state = 168 }
+			168 = { is_owned_by = ERT }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_tsaygen_sale_possible_tt
+				ERT = { VAL_nw_tsaygen_sale_possible = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_offer_idle_tt
+				ERT = { NOT = { has_country_flag = VAL_nw_tsaygen_offer_pending } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_tsaygen_offer_ready_tt
+				NOT = { has_country_flag = VAL_nw_tsaygen_offer_cooldown }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_buy_tsaygen_cost
+		custom_cost_trigger = { VAL_nw_tsaygen_sale_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_buy_tsaygen_tt
+			hidden_effect = { VAL_nw_offer_tsaygen_sale = yes }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	# The shared deposit, not has_decision, blocks a second target.
+	VAL_nw_detach_republic = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_nw_bloc_confront
+			FROM = { VAL_nw_bloc_member = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_detach_idle_tt
+				NOT = { has_variable = VAL_nw_detach_deposit }
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_detach_target_valid_tt
+					VAL_nw_detach_target_valid = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_detach_republic_cost
+		custom_cost_trigger = { VAL_nw_detach_affordable = yes }
+		days_remove = 60
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_detach_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_government_unavailable_tt
+					VAL_nw_operational = no
+				}
+				FROM = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_nw_detach_target_lost_tt
+						VAL_nw_detach_target_valid = no
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_detach_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_detach_republic_result_tt
+			hidden_effect = { VAL_nw_detach_finish = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				FROM = { tag = ERT }
 			}
 		}
 	}
@@ -5488,17 +5574,21 @@ VAL_council_government_category = {
 							has_political_power < 10
 						}
 					}
-					add_political_power = -10
 					set_temp_variable = { var = VAL_contract_rifle_cost value = 30000 }
+					set_temp_variable = { var = VAL_contract_rifles_before value = num_equipment@infantry_equipment }
 					VAL_pay_contract_rifles = yes
 					if = {
 						limit = {
 							has_country_flag = VAL_contract_rifles_paid
 						}
+						add_political_power = -10
 						VAL_council_consume_reserve = yes
 						set_country_flag = VAL_quarterly_contract_paid
 						VAL_council_supply_mandate_success = yes
 						VAL_refresh_contract_modifier = yes
+					}
+					else = {
+						VAL_return_unpaid_contract_rifles = yes
 					}
 				}
 			}

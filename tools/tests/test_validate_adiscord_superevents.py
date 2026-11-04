@@ -683,7 +683,8 @@ class SupereventContractTests(unittest.TestCase):
                     flags.add(entry.value)
                 elif entry.key == "country_event":
                     event = {child.key: child.value for child in entry.value}
-                    scheduled.append((event["id"], event["days"]))
+                    delay = next(f"{unit}={event[unit]}" for unit in ("days", "hours") if unit in event)
+                    scheduled.append((event["id"], delay))
                 elif entry.key.startswith("ADISCORD_vorkerland_show_"):
                     shown.append(entry.key)
                     show = blocks(source, rf"^{entry.key}\s*=\s*\{{")[0]
@@ -720,7 +721,7 @@ class SupereventContractTests(unittest.TestCase):
                     ])
                     first_shown = list(shown)
                     self.assertEqual(scheduled, [
-                        ("ADISCORD_vorkerland_postwar.4", "7")
+                        ("ADISCORD_vorkerland_postwar.4", "hours=1")
                     ] if joint and not announced else [])
                     first_scheduled = list(scheduled)
                     execute(payload, flags, shown)

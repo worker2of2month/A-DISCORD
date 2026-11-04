@@ -172,7 +172,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                     ("WRK", "has_country_flag", f"ADISCORD_vorkerland_route_{route}"): True,
                     ("EGC", "has_country_flag", "ADISCORD_vorkerland_prep_treaty_signed"): True,
                 }
-                for tag in ("WKR", "VAD", "TVA", "WTD", "EGC"):
+                for tag in ("WKR", "VAD", "TVA", "WTD", "EGC", "RIV", "YOR"):
                     facts[("WRK", "country_exists", tag)] = True
                 dispatch = list(selected_effects(
                     effects["ADISCORD_vorkerland_finish_delayed_wrk_handoff"], facts, "WRK"
@@ -180,24 +180,29 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                 self.assertEqual([e.key for _, e in dispatch], [
                     f"ADISCORD_vorkerland_complete_wrk_from_{winner.lower()}"
                 ])
-                actions = list(selected_effects(effects[dispatch[0][1].key], facts, "WRK"))
-                expanded = []
-                for scope, entry in actions:
-                    if entry.key in (
-                        "ADISCORD_vorkerland_absorb_wtd_after_reunification",
-                        "ADISCORD_vorkerland_absorb_egc_after_reunification",
-                    ):
-                        expanded.extend(selected_effects(effects[entry.key], facts, scope))
-                    else:
-                        expanded.append((scope, entry))
+                absorptions = (
+                    "ADISCORD_vorkerland_absorb_wtd_after_reunification",
+                    "ADISCORD_vorkerland_absorb_egc_after_reunification",
+                    "ADISCORD_vorkerland_absorb_treaty_districts_after_reunification",
+                    "ADISCORD_vorkerland_absorb_treaty_district",
+                )
+
+                def expand(items, scope, district):
+                    for inner, entry in selected_effects(items, facts, scope):
+                        if entry.key in absorptions:
+                            yield from expand(effects[entry.key], inner, inner)
+                        else:
+                            yield inner, entry, district
+
                 annexations = []
-                for scope, entry in expanded:
+                for scope, entry, district in expand(effects[dispatch[0][1].key], "WRK", "WRK"):
                     self.assertNotEqual(entry.key, "change_tag_from")
                     if entry.key == "annex_country":
                         self.assertEqual(scope, "WRK")
                         self.assertEqual(scalar(entry.value, "transfer_troops"), "yes")
-                        annexations.append(scalar(entry.value, "target"))
-                self.assertCountEqual(annexations, ["WKR", "VAD", "TVA", "WTD", "EGC"])
+                        target = scalar(entry.value, "target")
+                        annexations.append(district if target == "PREV" else target)
+                self.assertCountEqual(annexations, ["WKR", "VAD", "TVA", "WTD", "EGC", "RIV", "YOR"])
 
     def test_zshat_player_handoff_precedes_annexation(self) -> None:
         event = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.7"))
@@ -214,6 +219,38 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         actions = list(selected_effects(parsed_block(event, "immediate"), facts, "WRK"))
         self.assertFalse(any(e.key == "change_tag_from" for _, e in actions))
         self.assertEqual(actions[0][1].key, "ADISCORD_vorkerland_finish_delayed_wrk_handoff")
+
+    def test_treaty_district_player_handoff_precedes_annexation(self) -> None:
+        event = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.7"))
+        for tag in ("RIV", "YOR"):
+            with self.subTest(district=tag):
+                facts = {
+                    ("WRK", "is_ai", "yes"): True,
+                    (tag, "exists", "yes"): True,
+                    (tag, "is_ai", "no"): True,
+                }
+                actions = list(selected_effects(parsed_block(event, "immediate"), facts, "WRK"))
+                self.assertEqual([e.key for _, e in actions], ["country_event", "change_tag_from"])
+                self.assertEqual(scalar(actions[0][1].value, "id"), "ADISCORD_vorkerland_phase.7")
+                self.assertEqual(actions[1][1].value, tag)
+
+    def test_treaty_district_absorption_clears_treaty_and_skips_absent_country(self) -> None:
+        effects = {e.key: e.value for e in parse_clausewitz(self.effects)}
+        district = effects["ADISCORD_vorkerland_absorb_treaty_district"]
+        for flag in (
+            "ADISCORD_vorkerland_prep_treaty_signed",
+            "ADISCORD_vorkerland_prep_independence_guaranteed",
+            "ADISCORD_vorkerland_reunification_ally",
+        ):
+            self.assertIn(flag, [e.value for e in district if e.key == "clr_country_flag"])
+        self.assertIn("ADISCORD_vorkerland_prep_treaty_patron", [e.value for e in district if e.key == "clear_variable"])
+        keys = [e.key for e in district]
+        self.assertLess(keys.index("clear_variable"), keys.index("WRK"))
+        absorb = effects["ADISCORD_vorkerland_absorb_treaty_districts_after_reunification"]
+        facts = {("WRK", "country_exists", "RIV"): True, ("WRK", "country_exists", "YOR"): False}
+        calls = [(scope, e.key) for scope, e in selected_effects(absorb, facts, "WRK")]
+        self.assertIn(("RIV", "ADISCORD_vorkerland_absorb_treaty_district"), calls)
+        self.assertNotIn(("YOR", "ADISCORD_vorkerland_absorb_treaty_district"), calls)
 
     def test_zshat_settlement_controls_owned_districts_and_skips_absent_country(self) -> None:
         effect = parse_clausewitz(named_block(
@@ -247,8 +284,10 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
             ("32", "is_controlled_by", "WRK"): True,
         }
         self.assertTrue(matches_conditions(gate, facts, "WRK"))
-        facts[("WRK", "country_exists", "EGC")] = True
-        self.assertFalse(matches_conditions(gate, facts, "WRK"))
+        for tag in ("EGC", "RIV", "YOR"):
+            with self.subTest(surviving=tag):
+                blocked = {**facts, ("WRK", "country_exists", tag): True}
+                self.assertFalse(matches_conditions(gate, blocked, "WRK"))
 
     def test_worker_victory_is_checked_on_the_living_claimant(self) -> None:
         candidate = named_block(

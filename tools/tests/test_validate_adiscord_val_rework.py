@@ -23,6 +23,15 @@ ON_ACTIONS_PATH = (
 )
 FOREIGN_EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_effects.txt"
 DECISIONS_PATH = ROOT / "common" / "decisions" / "ADISCORD_VAL_decisions.txt"
+INFANTRY_EQUIPMENT_PATH = (
+    ROOT / "common" / "units" / "equipment" / "ADISCORD_infantry_equipment.txt"
+)
+RIFLE_MODELS = tuple(
+    re.findall(
+        r"(?m)^\t(\w+) = \{\s*\n\t\tyear = \d+\s*\n\t\tarchetype = infantry_equipment\b",
+        INFANTRY_EQUIPMENT_PATH.read_text(encoding="utf-8-sig"),
+    )
+)
 LOCALISATION_PATH = (
     ROOT / "localisation" / "russian" / "ADISCORD_VAL_decisions_l_russian.yml"
 )
@@ -1309,6 +1318,8 @@ class ValStelanderContractTests(unittest.TestCase):
                             return {part.key: part.value for part in item.value}
 
                         def number(value):
+                            if value == "num_equipment@infantry_equipment":
+                                return sum(pools.values())
                             return values[value] if value in values else float(value)
 
                         def condition(item):
@@ -1331,10 +1342,12 @@ class ValStelanderContractTests(unittest.TestCase):
                             )
 
                         def execute(items):
+                            previous_if_ran = True
                             for item in items:
                                 if item.key == "if":
                                     limit = body(item.value, "limit")
-                                    if all(condition(child) for child in limit):
+                                    previous_if_ran = all(condition(child) for child in limit)
+                                    if previous_if_ran:
                                         execute(
                                             [
                                                 child
@@ -1342,6 +1355,13 @@ class ValStelanderContractTests(unittest.TestCase):
                                                 if child.key != "limit"
                                             ]
                                         )
+                                elif item.key == "else":
+                                    if not previous_if_ran:
+                                        execute(item.value)
+                                elif item.key == "VAL_return_unpaid_contract_rifles":
+                                    returned = values["VAL_contract_rifles_before"] - sum(pools.values())
+                                    if returned > 0:
+                                        pools["VAL"] += returned
                                 elif item.key == "hidden_effect":
                                     execute(item.value)
                                 elif item.key == "VAL_council_supply_mandate_success":
@@ -1705,12 +1725,15 @@ class ValRewardValidatorTests(unittest.TestCase):
             "focuses": read_focus_source(FOCUSES_PATH, encoding="utf-8-sig"),
             "new_world": (ROOT / "common/national_focus/ADISCORD_VAL_new_world.txt").read_text(encoding="utf-8"),
             "effects": EFFECTS_PATH.read_text(encoding="utf-8-sig"),
+            # The postwar command settlement previews its terms in event answers.
+            "events": (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8"),
         }
 
-    def variable_addition(self, source, variable):
+    def variable_addition(self, source, variable, amount=None):
         matches = [
             body for body in named_blocks(source, "add_to_variable")
             if re.search(rf"\bvar\s*=\s*{re.escape(variable)}\b", body)
+            and (amount is None or re.search(rf"\bvalue\s*=\s*{re.escape(amount)}\b", body))
         ]
         self.assertEqual(len(matches), 1, f"Expected one addition to {variable}")
         return matches[0]
@@ -1775,6 +1798,12 @@ class ValRewardValidatorTests(unittest.TestCase):
             "VAL_nw_admin_delta",
             "VAL_nw_open_market_delta",
             "VAL_nw_coercive_market_delta",
+            "VAL_nw_pensions_delta",
+            "VAL_nw_joint_staff_delta",
+            "VAL_nw_army_charter_delta",
+            "VAL_nw_confront_delta",
+            "VAL_nw_cabinet_delta",
+            "VAL_nw_army_guarantee_delta",
         }
         self.assertLessEqual(previews, accepted)
         sources = self.preview_sources()
@@ -1784,8 +1813,10 @@ class ValRewardValidatorTests(unittest.TestCase):
             ("effects", "VAL_nw_admin_expense", "-0.05"),
             ("effects", "VAL_nw_course_pp_gain", "0.15"),
             ("effects", "VAL_nw_course_military_income", "0.07"),
+            ("effects", "VAL_nw_army_org", "0.05"),
+            ("effects", "VAL_nw_planning", "0.10"),
         ):
-            original = self.variable_addition(sources[key], variable)
+            original = self.variable_addition(sources[key], variable, amount)
             for changed in (
                 original.replace(amount, str(float(amount) * 2)),
                 original.replace("add_to_variable", "set_variable"),
@@ -1967,6 +1998,10 @@ class ValNativePreviewTests(unittest.TestCase):
                     "supply_consumption_factor": -0.03,
                     "ADISCORD_economy_trade_income_factor": 0.05,
                 },
+            ),
+            "VAL_Merchant_Rail_Yards": (
+                "VAL_merchant_rail_yards_delta",
+                {"production_lack_of_resource_penalty_factor": -0.20},
             ),
             "VAL_Export_Rifles_Not_Promises": (
                 "VAL_supply_contracts_delta",
@@ -4155,6 +4190,72 @@ class ValContractFormationTests(unittest.TestCase):
             any(e.key.startswith("ADISCORD_economy_spend_") for e in walk(refusal))
         )
 
+    def test_rifle_debit_names_every_model_from_oldest_to_newest(self):
+        # An archetype debit with a producer only reaches that producer's newest
+        # model; obsolete stock would block every payment.
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        helper = only_named_block(self, effects, "VAL_debit_contract_rifle_models")
+        debited = re.findall(
+            r"add_equipment_to_stockpile = \{ type = (\w+) amount = VAL_contract_rifle_debit producer = PREV \}",
+            helper,
+        )
+        self.assertEqual(tuple(debited), RIFLE_MODELS)
+        self.assertEqual(helper.count("VAL_prepare_contract_rifle_debit = yes"), len(RIFLE_MODELS))
+        self.assertEqual(helper.count("VAL_measure_contract_rifle_debit = yes"), len(RIFLE_MODELS))
+        payment = only_named_block(self, effects, "VAL_pay_contract_rifles")
+        self.assertIn("PREV = { VAL_debit_contract_rifle_models = yes }", payment)
+        self.assertNotIn("type = infantry_equipment amount", payment)
+
+    def test_northern_result_splits_protectorate_and_pact_of_four(self):
+        focuses = read_focus_source(ROOT / "focus_trees" / "VAL" / "main" / "focuses.txt")
+        blocks = {
+            re.search(r"\bid = (\w+)", body).group(1): body
+            for body in named_blocks(focuses, "focus")
+        }
+        freedom = blocks["VAL_Different_Views_On_Freedom"]
+        pact = blocks["VAL_Pact_Of_Four"]
+        self.assertIn("VAL_frontier_northern_war_lost = yes", freedom)
+        self.assertIn("mutually_exclusive = { focus = VAL_Pact_Of_Four }", freedom)
+        self.assertIn("unlock_decision_tooltip = VAL_campaign_against_nod", freedom)
+        self.assertIn("prerequisite = { focus = VAL_Trading_Partners }", pact)
+        self.assertNotIn("VAL_October_Of_2160", pact)
+        self.assertIn("mutually_exclusive = { focus = VAL_Different_Views_On_Freedom }", pact)
+        self.assertIn("VAL_frontier_northern_war_held = yes", pact)
+        self.assertNotIn("VAL_campaign_against_nod", pact)
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        lost = only_named_block(self, triggers, "VAL_frontier_northern_war_lost")
+        held = only_named_block(self, triggers, "VAL_frontier_northern_war_held")
+        self.assertIn("value = 2 compare = equals", lost)
+        self.assertNotIn("value = 2 compare", held)
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        invite = only_named_block(self, effects, "VAL_invite_pact_of_four")
+        for tag in ("COF", "TFF", "YPR"):
+            self.assertIn(f"{tag} = {{ country_event = {{ id = val_contract.426 }} }}", invite)
+        events = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
+        invitation = events[events.index("id = val_contract.426"):events.index("id = val_contract.427")]
+        self.assertLess(
+            invitation.index("val_contract.426.refuse"),
+            invitation.index("val_contract.426.accept"),
+            "An unanswered invitation must not join the alliance",
+        )
+
+    def test_quarterly_rifle_payments_return_partial_debits(self):
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8")
+        for body in (
+            only_named_block(self, effects, "VAL_pay_quarterly_contract_norm"),
+            only_named_block(self, decisions, "VAL_council_reserve_quarter"),
+        ):
+            self.assertLess(
+                body.index("VAL_contract_rifles_before"),
+                body.index("VAL_pay_contract_rifles = yes"),
+            )
+            self.assertIn("VAL_return_unpaid_contract_rifles = yes", body)
+            self.assertGreater(
+                body.index("add_political_power = -10"),
+                body.index("VAL_pay_contract_rifles = yes"),
+            )
+
     def test_full_contract_consumes_real_mixed_stocks_and_conserves_contents(self):
         from collections import defaultdict
         from tools.tests.test_adiscord_stp_preparation import block, scalar
@@ -4174,6 +4275,9 @@ class ValContractFormationTests(unittest.TestCase):
                 (effects, "VAL_cw_complete_arms_contract"),
                 (effects, "VAL_cw_pay_contract_auxiliary"),
                 (effects, "VAL_pay_contract_rifles"),
+                (effects, "VAL_debit_contract_rifle_models"),
+                (effects, "VAL_prepare_contract_rifle_debit"),
+                (effects, "VAL_measure_contract_rifle_debit"),
                 *[
                     (rifle_effects, name)
                     for name in (
@@ -4502,6 +4606,9 @@ class ValContractFormationTests(unittest.TestCase):
                                 equipment, amount = scalar(entry.value, "type"), number(
                                     scalar(entry.value, "amount"), scope
                                 )
+                                # Concrete rifle models share the archetype stockpile.
+                                if equipment in RIFLE_MODELS:
+                                    equipment = rifle
                                 producer = scalar(entry.value, "producer")
                                 self.assertIsNotNone(
                                     producer, "Never debit every creator independently"

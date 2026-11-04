@@ -1575,6 +1575,45 @@ VAL_frontier_northern_war_settled = {
 	}
 }
 
+# Status 2 is Nodrul's northern victory: the Frontier lost and Nodrul reaches Kefreyt.
+VAL_frontier_northern_war_lost = {
+	NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals } }
+}
+
+# Status 3 is Nodrul's retreat, status 4 the status quo: the northern alliance held.
+VAL_frontier_northern_war_held = {
+	NOD = {
+		OR = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+			check_variable = { var = STP_cw_northern_campaign_status value = 4 compare = equals }
+		}
+	}
+}
+
+# COUNTRY VAL. Kefreyt can host the Pact of Four only from its own alliance or none.
+VAL_pact_of_four_host_ready = {
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	NOT = { is_in_faction_with = NOD }
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+	}
+}
+
+# COUNTRY COF, TFF or YPR receiving the Pact of Four invitation.
+VAL_pact_of_four_partner_eligible = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	NOT = { is_in_faction_with = NOD }
+	NOT = { is_in_faction_with = VAL }
+}
+
 VAL_frontier_protectorate_available = {
 	VAL_frontier_protectorate_partners = yes
 	VAL_frontier_northern_war_settled = yes
@@ -2121,11 +2160,77 @@ VAL_nw_partner_eligible = {
 			OR = {
 				is_in_faction = no
 				is_in_faction_with = VAL
+				# The accord admits the alliance that outlived the Khan; RUS is excluded below.
+				VAL = { has_completed_focus = VAL_nw_bloc_accord }
 			}
 		}
 	}
 	NOT = { has_war_with = VAL }
 	NOT = { is_in_faction_with = RUS }
+}
+
+# COUNTRY republic inside an alliance that Kefreyt does not lead or share.
+VAL_nw_bloc_member = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	is_in_faction = yes
+	is_faction_leader = no
+	NOT = { is_in_faction_with = VAL }
+	NOT = { is_in_faction_with = RUS }
+}
+
+# COUNTRY VAL. Either tree may open the campaigns behind the existing frontier operations.
+VAL_tsaygen_campaign_opened = {
+	OR = {
+		has_completed_focus = VAL_Return_Southern_Tsaygen
+		has_completed_focus = VAL_nw_tsaygen_strike
+	}
+}
+
+VAL_perimeter_campaign_opened = {
+	OR = {
+		has_completed_focus = VAL_frontier_return_irem
+		has_completed_focus = VAL_nw_beyond_perimeter
+	}
+}
+
+# COUNTRY ERT. The sale must still be possible when ERT answers and when Kefreyt pays.
+VAL_nw_tsaygen_sale_possible = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = { is_subject_of = VAL }
+	168 = {
+		is_owned_by = ERT
+		is_controlled_by = ERT
+	}
+	VAL = {
+		VAL_nw_operational = yes
+		has_completed_focus = VAL_nw_bloc_accord
+	}
+}
+
+VAL_nw_tsaygen_sale_affordable = {
+	NOT = { has_political_power < 75 }
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+}
+
+VAL_nw_detach_affordable = {
+	NOT = { has_political_power < 100 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+}
+
+# COUNTRY republic targeted by the paid campaign in FROM of VAL's decision.
+VAL_nw_detach_target_valid = {
+	VAL_nw_bloc_member = yes
+	is_ai = yes
+	has_war = no
+	NOT = { has_war_with = VAL }
+	VAL = {
+		VAL_nw_operational = yes
+		has_completed_focus = VAL_nw_bloc_confront
+	}
 }
 
 VAL_nw_concession_valid = {
@@ -2897,8 +3002,8 @@ VAL_wasteland_capitulation_managed = {
 			tag = ERT
 			VAL = {
 				OR = {
-					has_completed_focus = VAL_Return_Southern_Tsaygen
-					has_completed_focus = VAL_frontier_return_irem
+					VAL_tsaygen_campaign_opened = yes
+					VAL_perimeter_campaign_opened = yes
 					has_completed_focus = VAL_Southern_Expansion
 				}
 			}

@@ -8,6 +8,9 @@ VAL_nw_industrial_network = {
 	stability_factor = VAL_nw_course_stability
 	war_support_factor = VAL_nw_course_war_support
 	ADISCORD_economy_military_industry_income_factor = VAL_nw_course_military_income
+	army_org_factor = VAL_nw_army_org
+	planning_speed = VAL_nw_planning
+	command_power_gain_mult = VAL_nw_command_gain
 }
 
 # Independent Kefreyt contract-state modifier.

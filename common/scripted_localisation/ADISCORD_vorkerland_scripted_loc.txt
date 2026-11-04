@@ -509,6 +509,15 @@ defined_text = {
 		trigger = { tag = EGC }
 		localization_key = ADISCORD_vorkerland_egc_settlement_tt
 	}
+	text = {
+		trigger = {
+			OR = {
+				tag = RIV
+				tag = YOR
+			}
+		}
+		localization_key = ADISCORD_vorkerland_treaty_district_settlement_tt
+	}
 	text = { localization_key = ADISCORD_vorkerland_district_settlement_tt }
 }
 

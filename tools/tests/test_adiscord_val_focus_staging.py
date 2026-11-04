@@ -325,9 +325,10 @@ class KefreytFocusStagingTests(unittest.TestCase):
         gate = focus_block(self.focuses, root)
         self.assertIn("dynamic = yes", gate)
         self.assertIn("has_completed_focus = VAL_Contracts_Outlive_Kings", allow(self.focuses, root))
-        self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate)
-        self.assertIn("has_completed_focus = VAL_Trading_Partners", gate)
-        self.assertIn("has_completed_focus = VAL_October_Of_2160", gate)
+        # Prerequisites already show these requirements; available keeps only the postwar gate.
+        self.assertIn("prerequisite = { focus = VAL_One_Ledger_One_Banner }", gate)
+        self.assertIn("prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }", gate)
+        self.assertNotIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate)
 
         for focus_id in internals:
             block = focus_block(self.focuses, focus_id)
@@ -387,10 +388,9 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 )
 
     def test_world_reactive_branches_still_use_world_state(self) -> None:
-        stelander = focus_block(self.focuses, "VAL_Stelander_Crisis_Opens")
-        self.assertNotIn("dynamic = yes", stelander)
-        self.assertNotIn("allow_branch", stelander)
+        stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")
         self.assertIn("has_global_flag = STP_cw_started", stelander)
+        self.assertNotIn("has_completed_focus =", stelander)
 
         resource = allow(self.focuses, "VAL_Resource_War_Contracts")
         self.assertIn("ADISCORD_nam_resource_war_active = yes", resource)
@@ -461,6 +461,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertEqual(
             set(staged),
             {
+                "VAL_Stelander_Crisis_Opens",
                 "VAL_Vorkerland_Contracts_Burn",
                 "VAL_Audit_Lost_Contracts",
                 "VAL_Resource_War_Contracts",

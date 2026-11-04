@@ -968,6 +968,8 @@ RUS_crisis_dissolve_empire = {
 	# The credited victor receives the choice after the Khan's empire dissolves.
 	event_target:RUS_crisis_hegemon = {
 		set_country_flag = RUS_crisis_settlement_rights
+		# Kefreyt's postwar tree shows the settlement branch only to the rights holder.
+		mark_focus_tree_layout_dirty = yes
 		# The proclaimed imperial form selects the settlement narrative.
 		set_variable = { var = RUS_crisis_defeated_course value = 1 }
 		if = {

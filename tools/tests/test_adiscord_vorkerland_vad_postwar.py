@@ -927,72 +927,34 @@ class WorldEmpireTests(unittest.TestCase):
         self.assertLess(guarded.start(), initialization.index("load_focus_tree"))
         events = parse_clausewitz(read("events/ADISCORD_vorkerland_events.txt"))
         callback = next(e.value for e in events if isinstance(e.value, list) and scalar(e.value, "id") == "ADISCORD_vorkerland_postwar.4")
-        self.assertNotIn("hidden", [e.key for e in callback])
-        self.assertNotIn("immediate", [e.key for e in callback])
-        self.assertEqual(scalar(callback, "timeout_days"), "14")
-        options = [row.value for row in callback if row.key == "option"]
-        self.assertEqual([scalar(option, "name") for option in options], [
-            "ADISCORD_vorkerland_postwar.4.council", "ADISCORD_vorkerland_postwar.4.empire",
-            "ADISCORD_vorkerland_postwar.4.close",
-        ])
-        self.assertEqual(scalar(block(options[1], "hidden_effect"), "ADISCORD_vorkerland_establish_world_empire"), "yes")
+        self.assertEqual(scalar(callback, "hidden"), "yes")
+        self.assertNotIn("option", [e.key for e in callback])
+        self.assertNotIn("timeout_days", [e.key for e in callback])
+        self.assertEqual(scalar(block(callback, "immediate"), "ADISCORD_vorkerland_establish_world_empire"), "yes")
         self.assertEqual(scalar(payload, "set_country_flag"), "ADISCORD_vorkerland_joint_succession_settled")
         self.assertEqual(scalar(block(payload, "news_event"), "id"), "ADISCORD_vorkerland_postwar.5")
 
-    def test_default_timeout_keeps_council_and_closes_later_coup(self):
-        triggers = parse_clausewitz(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
-        guard = block(triggers, "ADISCORD_vorkerland_world_empire_can_form")
-        event = self.event("ADISCORD_vorkerland_postwar.4")
-        facts = self.joint_victory_facts()
-        active = matches_conditions(guard, facts, "WRK")
-        facts[("WRK", "ADISCORD_vorkerland_world_empire_can_form", "yes")] = active
-        facts[("WRK", "ADISCORD_vorkerland_world_empire_can_form", "no")] = not active
-        options = [row.value for row in event if row.key == "option"]
-        first = next(option for option in options if matches_conditions(block(option, "trigger"), facts, "WRK"))
-        self.assertEqual(scalar(first, "name"), "ADISCORD_vorkerland_postwar.4.council")
-        reward = list(selected_effects(block(first, "hidden_effect"), facts, "WRK"))
-        self.assertEqual([(scope, row.key, row.value) for scope, row in reward if row.key == "set_country_flag"], [
-            ("WRK", "set_country_flag", "ADISCORD_vorkerland_joint_succession_settled"),
-        ])
-        self.assertEqual([(scope, scalar(row.value, "id")) for scope, row in reward if row.key == "news_event"], [
-            ("WRK", "ADISCORD_vorkerland_story.45"),
-        ])
-        for scope, row in reward:
-            if row.key == "set_country_flag":
-                facts[(scope, "has_country_flag", row.value)] = True
-        self.assertFalse(matches_conditions(guard, facts, "WRK"))
-        self.assertEqual(facts[("WRK", "ruling_leader")], "WRK_VAD_Joint_Council")
+    def test_joint_victory_schedules_the_coup_one_hour_after_reunification(self):
+        finalize = named_block(self.effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        joint = finalize[finalize.index("has_country_flag = ADISCORD_vorkerland_route_joint"):]
+        joint = joint[:joint.index("ADISCORD_vorkerland_route_utilitarian")]
+        self.assertIn("ADISCORD_vorkerland_show_joint_victory_superevent = yes", joint)
+        self.assertIn("country_event = { id = ADISCORD_vorkerland_postwar.4 hours = 1 }", joint)
+        self.assertNotIn("days = 7", joint)
+        # The callback's guard reads collapse_finished, committed later in the same effect.
+        self.assertLess(finalize.index("ADISCORD_vorkerland_postwar.4"), finalize.index("set_global_flag = ADISCORD_vorkerland_collapse_finished"))
 
-    def test_open_succession_offer_has_only_close_after_context_is_lost(self):
-        triggers = parse_clausewitz(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
-        guard = block(triggers, "ADISCORD_vorkerland_world_empire_can_form")
-        options = [row.value for row in self.event("ADISCORD_vorkerland_postwar.4") if row.key == "option"]
-        for missing in ("is_subject", "has_capitulated", "ruling_leader", "has_cosmetic_tag", "has_country_flag"):
-            with self.subTest(missing=missing):
-                facts = {key: value for key, value in self.joint_victory_facts().items() if key[1] != missing}
-                active = matches_conditions(guard, facts, "WRK")
-                self.assertFalse(active)
-                facts[("WRK", "ADISCORD_vorkerland_world_empire_can_form", "yes")] = active
-                facts[("WRK", "ADISCORD_vorkerland_world_empire_can_form", "no")] = not active
-                choices = [option for option in options if matches_conditions(block(option, "trigger"), facts, "WRK")]
-                self.assertEqual([scalar(option, "name") for option in choices], ["ADISCORD_vorkerland_postwar.4.close"])
-                actions = list(selected_effects(block(choices[0], "hidden_effect"), facts, "WRK"))
-                self.assertEqual([row.key for _, row in actions], ["set_country_flag"])
-
-    def test_succession_text_is_loadable_and_within_the_display_limits(self):
+    def test_removed_succession_choice_leaves_no_text_or_news(self):
         keys = [f"ADISCORD_vorkerland_postwar.4.{suffix}" for suffix in ("t", "d", "council", "empire", "close")]
+        keys += [f"ADISCORD_vorkerland_story.45.{suffix}" for suffix in ("t", "d", "a")]
         keys += ["WRK_joint_preserve_council_tt", "WRK_joint_world_empire_choice_tt"]
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             source = path.read_text(encoding="utf-8-sig")
             for key in keys:
-                lines = re.findall(rf'^ {re.escape(key)}:(?:\d+)? "((?:[^"\\\r\n]|\\.)*)"$', source, re.M)
-                self.assertEqual(len(lines), 1, (language, key))
-                rendered = lines[0].replace(r"\n", "\n")
-                self.assertLessEqual(len(rendered), 3000)
-                self.assertLessEqual(len(rendered.encode("utf-8")), 5500)
-                self.assertFalse(set(rendered) & {"\u2013", "\u2014", "\u00ab", "\u00bb"})
+                self.assertIsNone(re.search(rf"^ {re.escape(key)}:", source, re.M), (language, key))
+        self.assertNotIn("ADISCORD_vorkerland_story.45", read("events/ADISCORD_vorkerland_events.txt"))
 
     def test_resource_package_and_exact_delta_previews(self):
         from decimal import Decimal

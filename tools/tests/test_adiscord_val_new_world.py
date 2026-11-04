@@ -14,6 +14,17 @@ EFFECTS = "common/scripted_effects/ADISCORD_VAL_effects.txt"
 TRIGGERS = "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 DECISIONS = "common/decisions/ADISCORD_VAL_decisions.txt"
 TREE = "focus_trees/VAL/new_world/focuses.txt"
+EVENTS = "events/ADISCORD_VAL_contract_events.txt"
+IDEAS = "common/ideas/ADISCORD_VAL_rework_ideas.txt"
+PARTNERS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")
+
+
+def country_event(event_id):
+    return next(e.value for e in entries(EVENTS) if e.key == "country_event" and scalar(e.value, "id") == event_id)
+
+
+def tree_focuses():
+    return {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
 
 
 class ContractWorld:
@@ -37,7 +48,8 @@ class ContractWorld:
             "slots": 0, "exists": True, "owner": "VAL", "controller": "VAL",
             "subject": None, "capitulated": False, "focuses": set(),
             "manpower": 0, "army_experience": 0, "modifiers": set(),
-            "research_bonuses": [],
+            "research_bonuses": [], "faction": None, "leader": False, "ai": True,
+            "bop": {}, "missions": set(),
         })
         self.data["VAL"]["vars"]["ADISCORD_economy_treasury"] = 2000
         self.target = "176"
@@ -133,10 +145,28 @@ class ContractWorld:
             elif key == "has_war":
                 result.append(bool(country["wars"]) == (value == "yes"))
             elif key == "is_in_faction_with":
-                result.append(False)
+                other = self.data[self.scope(value, scope)]["faction"]
+                result.append(country["faction"] is not None and country["faction"] == other)
             elif key == "is_in_faction":
-                result.append(value == "no")
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")):
+                result.append((country["faction"] is not None) == (value == "yes"))
+            elif key == "is_faction_leader":
+                result.append(country["leader"] == (value == "yes"))
+            elif key == "is_ai":
+                result.append(country["ai"] == (value == "yes"))
+            elif key == "has_power_balance":
+                result.append(scalar(value, "id") in country["bop"])
+            elif key == "power_balance_value":
+                name = scalar(value, "id")
+                _, op, threshold = [child.value for child in value if not child.key]
+                current = country["bop"].get(name)
+                result.append(current is not None and (current < float(threshold) if op == "<" else current > float(threshold)))
+            elif key == "owns_state":
+                result.append(self.data[value]["owner"] == scope)
+            elif key == "is_owned_by":
+                result.append(country["owner"] == value)
+            elif key == "is_controlled_by":
+                result.append(country["controller"] == value)
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller") + PARTNERS):
                 result.append(self.matches(value, self.scope(key, scope)))
             else:
                 raise AssertionError(("unsupported condition", scope, key, value))
@@ -224,9 +254,20 @@ class ContractWorld:
                 country["rights"].pop(value, None)
             elif key == "country_event":
                 self.events.append((scope, scalar(value, "id")))
-            elif key == "custom_effect_tooltip":
+            elif key in ("custom_effect_tooltip", "effect_tooltip"):
                 pass
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller")):
+            elif key == "leave_faction":
+                country["faction"] = None
+                country["leader"] = False
+            elif key == "transfer_state":
+                self.data[value]["owner"] = scope
+            elif key == "set_state_controller_to":
+                country["controller"] = value
+            elif key == "remove_power_balance":
+                country["bop"].pop(scalar(value, "id"), None)
+            elif key == "remove_mission":
+                country["missions"].discard(value)
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller") + PARTNERS):
                 self.execute(value, self.scope(key, scope))
             else:
                 raise AssertionError(("unsupported effect", scope, key, value))
@@ -241,7 +282,8 @@ class NewWorldAccountingTests(unittest.TestCase):
         world = ContractWorld()
         world.data["VAL"]["flags"].add("RUS_crisis_warned")
         world.data["RUS"]["vars"]["RUS_crisis_phase"] = 1
-        world.data["VAL"]["focuses"].add("VAL_nw_" + kind)
+        # Both expanded orders are unlocked by reading the Khan's order.
+        world.data["VAL"]["focuses"].add("VAL_nw_khan")
         return world
 
     def test_expanded_orders_preserve_quotes_and_reject_other_tier_callbacks(self):
@@ -256,7 +298,7 @@ class NewWorldAccountingTests(unittest.TestCase):
                 base = "VAL_nw_emergency_" + kind
                 expanded = "VAL_nw_expanded_" + kind
                 world.run(base + "_begin")
-                country["focuses"].add("VAL_nw_" + kind)
+                country["focuses"].add("VAL_nw_khan")
                 world.run(expanded + "_begin")
                 self.assertEqual(country["vars"][base + "_deposit"], base_price)
                 world.run(expanded + "_finish")
@@ -387,7 +429,7 @@ class NewWorldAccountingTests(unittest.TestCase):
                 with self.subTest(order=name, interruption=interruption):
                     world = self.warning("arsenals")
                     country = world.data["VAL"]
-                    country["focuses"].update({"VAL_nw_reserve", "VAL_nw_perimeter", "VAL_nw_archives"})
+                    country["focuses"].update({"VAL_nw_perimeter", "VAL_nw_archives"})
                     key = "VAL_nw_" + name
                     decision = block(decisions, key)
                     self.assertFalse(any(row.key == "fire_only_once" and row.value == "yes" for row in decision))
@@ -738,37 +780,38 @@ class NewWorldAccountingTests(unittest.TestCase):
 
 class NewWorldRouteTests(unittest.TestCase):
     def test_both_expanded_orders_can_finish_within_a_fresh_warning(self):
-        focuses = {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
+        focuses = tree_focuses()
         plan = block(entries("common/ai_strategy_plans/ADISCORD_VAL_plans.txt"), "VAL_new_world_plan")
         order = [e.value for e in block(plan, "ai_national_focuses")]
         days = 0
-        finishes = {}
-        completed = set()
         for name in order:
-            focus = focuses[name]
-            prerequisites = [e.value for e in focus if e.key == "prerequisite"]
-            self.assertTrue(all(any(p.value in completed for p in group) for group in prerequisites), name)
-            days += int(scalar(focus, "cost")) * 7
-            completed.add(name)
-            if name == "VAL_nw_reserve":
-                finishes["reserve"] = days + 30
-            if name == "VAL_nw_arsenals":
-                finishes["arsenals"] = days + 21
+            days += int(scalar(focuses[name], "cost")) * 7
+            if name == "VAL_nw_khan":
                 break
-        self.assertEqual(finishes, {"reserve": 79, "arsenals": 84})
+        self.assertEqual(days, 14)
+        decisions = block(entries(DECISIONS), "VAL_new_world_category")
+        # The expanded order reuses the emergency deposit, so each pair runs in sequence.
+        finishes = {kind: days + 2 * int(scalar(block(decisions, "VAL_nw_emergency_" + kind), "days_remove"))
+                    for kind in ("arsenals", "reserve")}
+        self.assertEqual(finishes, {"arsenals": 56, "reserve": 74})
 
     def test_finale_does_not_require_finishing_the_military_or_all_side_programmes(self):
-        focuses = {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
-        skipped = {"VAL_nw_" + name for name in ("khan", "defence", "staff", "arsenals", "reserve", "break_ring", "last_account", "zones", "roads", "restitution", "guarantor", "observers")}
-        reachable = set()
-        for _ in range(len(focuses)):
-            for name, focus in focuses.items():
-                if name in skipped:
-                    continue
-                prerequisites = [e.value for e in focus if e.key == "prerequisite"]
-                if all(any(p.value in reachable for p in group) for group in prerequisites):
-                    reachable.add(name)
-        self.assertIn("VAL_nw_steel_peace", reachable)
+        focuses = tree_focuses()
+        war = {"VAL_nw_tsaygen_strike", "VAL_nw_beyond_perimeter", "VAL_nw_zones"}
+        for chosen in (
+            {"VAL_nw_register", "VAL_nw_bloc_accord", "VAL_nw_foundries", "VAL_nw_cabinet"},
+            {"VAL_nw_charters", "VAL_nw_bloc_confront", "VAL_nw_dispatch", "VAL_nw_army_guarantee"},
+        ):
+            excluded = {scalar(block(focuses[name], "mutually_exclusive"), "focus") for name in chosen} | war
+            reachable = set()
+            for _ in range(len(focuses)):
+                for name, focus in focuses.items():
+                    if name in excluded:
+                        continue
+                    prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                    if all(any(p.value in reachable for p in group) for group in prerequisites):
+                        reachable.add(name)
+            self.assertIn("VAL_nw_steel_peace", reachable, chosen)
         final_conditions = block(focuses["VAL_nw_steel_peace"], "available")
         world = ContractWorld()
         world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
@@ -802,12 +845,12 @@ class NewWorldRouteTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             rows = {}
             for line in path.read_text(encoding="utf-8-sig").splitlines():
-                if re.match(r"\s+(?:VAL_nw_|val_rework\.(?:12[4-9]|13[014-8]))", line):
+                if re.match(r"\s+(?:VAL_nw_|val_rework\.(?:12[4-9]|13[014-8]|18[0-4]))", line):
                     match = re.fullmatch(r' ([\w.]+):\d+ "([^"\\]*(?:\\.[^"\\]*)*)"', line)
                     self.assertIsNotNone(match, line)
                     self.assertNotIn(match[1], rows)
                     rows[match[1]] = match[2]
-                    if re.match(r"val_rework\.(?:124|129|13[4-8])\.d", match[1]):
+                    if re.match(r"val_rework\.(?:124|129|13[4-8]|18[0-4])\.(?:d|solgalov|staff)$", match[1]):
                         rendered = match[2].replace(r"\n", "\n")
                         self.assertLessEqual(len(rendered), 3000, match[1])
                         self.assertLessEqual(len(rendered.encode("utf-8")), 5500, match[1])
@@ -832,8 +875,19 @@ class NewWorldRouteTests(unittest.TestCase):
         plan = next(e.value for e in plans if e.key == "VAL_new_world_plan")
         self.assertIn("VAL_new_world_focus", [e.value for e in walk(block(plan, "enable")) if e.key == "has_focus_tree"])
         self.assertIn("VAL_new_world_focus", [e.value for e in walk(block(plan, "abort")) if e.key == "has_focus_tree"])
-        focuses = {scalar(e.value, "id") for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
-        self.assertEqual({e.value for e in block(plan, "ai_national_focuses")}, focuses)
+        focuses = tree_focuses()
+        order = [e.value for e in block(plan, "ai_national_focuses")]
+        self.assertLessEqual(set(order), set(focuses))
+        self.assertIn("VAL_nw_steel_peace", order)
+        completed = set()
+        for name in order:
+            prerequisites = [e.value for e in focuses[name] if e.key == "prerequisite"]
+            self.assertTrue(all(any(p.value in completed for p in group) for group in prerequisites), name)
+            completed.add(name)
+        for name, focus in focuses.items():
+            for exclusive in (e.value for e in focus if e.key == "mutually_exclusive"):
+                rival = scalar(exclusive, "focus")
+                self.assertEqual((name in completed) + (rival in completed), 1, (name, rival))
 
     def test_transition_preserves_completed_unlocks_and_runs_without_event_answer(self):
         events = entries("events/ADISCORD_VAL_contract_events.txt")
@@ -850,9 +904,8 @@ class NewWorldRouteTests(unittest.TestCase):
 
     def test_new_tree_is_registered_complete_and_has_no_unreachable_prerequisites(self):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
-        tree = block(entries(TREE), "focus_tree")
-        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        self.assertEqual(len(focuses), 36)
+        focuses = tree_focuses()
+        self.assertEqual(len(focuses), 24)
         reachable = set()
         for _ in range(len(focuses)):
             for name, focus in focuses.items():
@@ -861,9 +914,234 @@ class NewWorldRouteTests(unittest.TestCase):
                     reachable.add(name)
                 for group in prerequisites:
                     self.assertTrue(all(p.value in focuses for p in group), name)
-                self.assertNotIn("allow_branch", {e.key for e in focus}, name)
+                # Only the settlement-rights branch depends on the Khan's victor.
+                if name != "VAL_nw_zones":
+                    self.assertNotIn("allow_branch", {e.key for e in focus}, name)
         self.assertEqual(reachable, set(focuses))
-        self.assertEqual(len({(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}), 36)
+        self.assertEqual(len({(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}), 24)
+
+    def test_every_branch_has_a_symmetric_exclusive_pair(self):
+        focuses = tree_focuses()
+        pairs = set()
+        for name, focus in focuses.items():
+            for exclusive in (e.value for e in focus if e.key == "mutually_exclusive"):
+                rival = scalar(exclusive, "focus")
+                rival_list = [scalar(e.value, "focus") for e in focuses[rival] if e.key == "mutually_exclusive"]
+                self.assertIn(name, rival_list)
+                pairs.add(frozenset((name, rival)))
+        self.assertEqual(pairs, {
+            frozenset(("VAL_nw_register", "VAL_nw_charters")),
+            frozenset(("VAL_nw_bloc_accord", "VAL_nw_bloc_confront")),
+            frozenset(("VAL_nw_foundries", "VAL_nw_dispatch")),
+            frozenset(("VAL_nw_cabinet", "VAL_nw_army_guarantee")),
+        })
+        for pair in pairs:
+            first, second = sorted(pair)
+            self.assertEqual(scalar(focuses[first], "y"), scalar(focuses[second], "y"))
+            for name in pair:
+                rewards = [e.key for e in block(focuses[name], "completion_reward")]
+                self.assertTrue(rewards, name)
+
+    def test_main_tree_campaign_operations_accept_the_new_tree_route(self):
+        for name, trigger in (
+            ("VAL_operation_return_southern_tsaygen", "VAL_tsaygen_campaign_opened"),
+            ("VAL_frontier_demand_ERT", "VAL_tsaygen_campaign_opened"),
+            ("VAL_operation_cross_perimeter", "VAL_perimeter_campaign_opened"),
+            ("VAL_operation_secure_perimeter", "VAL_perimeter_campaign_opened"),
+        ):
+            decision = next(e.value for e in walk(entries(DECISIONS)) if e.key == name)
+            self.assertEqual(scalar(block(decision, "visible"), trigger), "yes", name)
+        world = ContractWorld()
+        self.assertFalse(world.matches(world.triggers["VAL_tsaygen_campaign_opened"]))
+        world.data["VAL"]["focuses"].add("VAL_nw_tsaygen_strike")
+        self.assertTrue(world.matches(world.triggers["VAL_tsaygen_campaign_opened"]))
+        begin = block(entries(EFFECTS), "VAL_begin_southern_tsaygen_campaign")
+        self.assertEqual(scalar(block(block(begin, "if"), "limit"), "VAL_tsaygen_campaign_opened"), "yes")
+
+
+class NewWorldSettlementTests(unittest.TestCase):
+    @staticmethod
+    def modifier_variables():
+        modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+                         "VAL_nw_industrial_network")
+        return {e.value: e.key for e in modifier if e.key not in ("enable", "icon")}
+
+    @staticmethod
+    def preview(name):
+        ideas = block(block(entries(IDEAS), "ideas"), "country")
+        return {e.key: float(e.value) for e in block(block(ideas, name), "modifier")}
+
+    def applied(self, world, before):
+        variables = self.modifier_variables()
+        after = world.data["VAL"]["vars"]
+        delta = {}
+        for variable, modifier in variables.items():
+            change = round(after.get(variable, 0) - before.get(variable, 0), 6)
+            if change:
+                delta[modifier] = change
+        return delta
+
+    def test_root_waits_for_paid_consolidation_and_opens_the_settlement(self):
+        root = tree_focuses()["VAL_nw_price"]
+        world = ContractWorld()
+        world.data["VAL"]["vars"]["VAL_command_consolidation_kind"] = 2
+        self.assertFalse(world.matches(block(root, "available")))
+        del world.data["VAL"]["vars"]["VAL_command_consolidation_kind"]
+        self.assertTrue(world.matches(block(root, "available")))
+        world.data["VAL"]["bop"]["VAL_command_balance"] = 0.3
+        world.execute(block(root, "completion_reward"))
+        self.assertEqual(world.events, [("VAL", "val_rework.180")])
+        self.assertEqual(world.data["VAL"]["pp"], 1000)
+        council = ContractWorld()
+        council.execute(block(root, "completion_reward"))
+        self.assertEqual((council.events, council.data["VAL"]["pp"]), ([], 1050))
+
+    def test_each_command_range_keeps_two_answers_and_settles_once(self):
+        event = country_event("val_rework.180")
+        options = [e.value for e in event if e.key == "option"]
+        expected = {0.5: ["val_rework.180.a", "val_rework.180.b"],
+                    0.0: ["val_rework.180.a", "val_rework.180.b", "val_rework.180.c"],
+                    -0.5: ["val_rework.180.b", "val_rework.180.c"]}
+        for value, names in expected.items():
+            with self.subTest(value=value):
+                world = ContractWorld()
+                world.data["VAL"]["bop"]["VAL_command_balance"] = value
+                available = [option for option in options
+                             if not [e for e in option if e.key == "trigger"]
+                             or world.matches(block(option, "trigger"))]
+                self.assertEqual([scalar(option, "name") for option in available], names)
+                descriptions = [e.value for e in event if e.key == "desc"]
+                self.assertEqual(sum(world.matches(block(desc, "trigger")) for desc in descriptions), 1)
+        for option in options:
+            with self.subTest(option=scalar(option, "name")):
+                world = ContractWorld()
+                world.data["VAL"]["bop"]["VAL_command_balance"] = 0.0
+                world.data["VAL"]["flags"].add("VAL_command_conspiracy_exposed")
+                world.data["VAL"]["missions"].add("VAL_council_ultimatum")
+                world.execute(block(option, "hidden_effect"))
+                preview = scalar(block(option, "effect_tooltip"), "add_ideas")
+                self.assertEqual(self.applied(world, {}), self.preview(preview))
+                self.assertNotIn("VAL_command_balance", world.data["VAL"]["bop"])
+                self.assertNotIn("VAL_command_conspiracy_exposed", world.data["VAL"]["flags"])
+                self.assertFalse(world.data["VAL"]["missions"])
+                self.assertEqual(world.data["VAL"]["modifiers"], {"VAL_nw_industrial_network"})
+                # The answer removes the balance that the event requires, so it cannot fire again.
+                self.assertFalse(world.matches(block(event, "trigger")))
+        root = tree_focuses()["VAL_nw_price"]
+        self.assertFalse(any(e.key == "repeatable" for e in root))
+        senders = [path for path in (ROOT / "common").rglob("*.txt")
+                   if "id = val_rework.180 " in path.read_text(encoding="utf-8-sig", errors="replace")]
+        self.assertEqual([p.relative_to(ROOT).as_posix() for p in senders],
+                         ["common/national_focus/ADISCORD_VAL_new_world.txt"])
+
+    def test_focus_delta_previews_match_applied_values(self):
+        for name, focus in tree_focuses().items():
+            reward = block(focus, "completion_reward")
+            previews = [e.value for e in reward if e.key == "effect_tooltip"]
+            if not previews:
+                continue
+            with self.subTest(focus=name):
+                world = ContractWorld()
+                world.execute(block(reward, "hidden_effect"))
+                self.assertEqual(self.applied(world, {}), self.preview(scalar(previews[0], "add_ideas")))
+
+    def tsaygen_world(self):
+        world = ContractWorld()
+        world.data["VAL"]["focuses"].add("VAL_nw_bloc_accord")
+        world.data["168"].update(owner="ERT", controller="ERT")
+        world.data["ERT"]["faction"] = "victors"
+        world.data["ERT"]["vars"]["ADISCORD_economy_treasury"] = 0
+        return world
+
+    def test_tsaygen_sale_is_paid_only_after_consent_and_transfers_once(self):
+        world = self.tsaygen_world()
+        world.run("VAL_nw_offer_tsaygen_sale")
+        world.run("VAL_nw_offer_tsaygen_sale")
+        self.assertEqual(world.events, [("ERT", "val_rework.181")])
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+        self.assertIn("VAL_nw_tsaygen_offer_cooldown", world.data["VAL"]["flags"])
+        world.run("VAL_nw_accept_tsaygen_sale", "ERT")
+        world.run("VAL_nw_accept_tsaygen_sale", "ERT")
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1500)
+        self.assertEqual(world.data["VAL"]["pp"], 925)
+        self.assertEqual(world.data["ERT"]["vars"]["ADISCORD_economy_treasury"], 500)
+        self.assertEqual((world.data["168"]["owner"], world.data["168"]["controller"]), ("VAL", "VAL"))
+        self.assertEqual(world.events[1:], [("VAL", "val_rework.182")])
+        for treasury, pp in ((499.99, 75), (500, 74.99)):
+            with self.subTest(treasury=treasury, pp=pp):
+                short = self.tsaygen_world()
+                short.run("VAL_nw_offer_tsaygen_sale")
+                short.data["VAL"]["vars"]["ADISCORD_economy_treasury"] = treasury
+                short.data["VAL"]["pp"] = pp
+                short.run("VAL_nw_accept_tsaygen_sale", "ERT")
+                self.assertEqual(short.data["168"]["owner"], "ERT")
+                self.assertEqual(short.data["ERT"]["vars"]["ADISCORD_economy_treasury"], 0)
+                self.assertEqual(short.events[1:], [("VAL", "val_rework.183")])
+                self.assertNotIn("VAL_nw_tsaygen_offer_pending", short.data["ERT"]["flags"])
+        offer = country_event("val_rework.181")
+        refusal = next(e.value for e in offer if e.key == "option")
+        self.assertFalse([e for e in refusal if e.key == "trigger"])
+        self.assertEqual(scalar(block(refusal, "hidden_effect"), "VAL_nw_decline_tsaygen_sale"), "yes")
+
+    def bloc_world(self):
+        world = ContractWorld()
+        world.data["VAL"]["focuses"].add("VAL_nw_bloc_confront")
+        for tag in ("ERT", "SLA"):
+            world.data[tag]["faction"] = "victors"
+        world.data["MON"].update(faction="victors", leader=True)
+        world.target = "ERT"
+        return world
+
+    def test_alliance_campaign_holds_one_deposit_and_detaches_once(self):
+        world = self.bloc_world()
+        world.run("VAL_nw_detach_begin")
+        world.target = "SLA"
+        world.run("VAL_nw_detach_begin")
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1750)
+        self.assertEqual(world.data["VAL"]["pp"], 900)
+        self.assertNotIn("VAL_nw_detach_target", world.data["SLA"]["flags"])
+        world.run("VAL_nw_detach_finish")
+        self.assertEqual(world.data["SLA"]["faction"], "victors")
+        world.target = "ERT"
+        world.run("VAL_nw_detach_finish")
+        world.run("VAL_nw_detach_finish")
+        self.assertIsNone(world.data["ERT"]["faction"])
+        self.assertNotIn("VAL_nw_detach_deposit", world.data["VAL"]["vars"])
+        self.assertEqual(world.events, [("VAL", "val_rework.184")])
+        self.assertEqual(world.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 1750)
+        for interruption in ("left", "player", "war"):
+            with self.subTest(interruption=interruption):
+                failed = self.bloc_world()
+                failed.run("VAL_nw_detach_begin")
+                if interruption == "left":
+                    failed.data["ERT"]["faction"] = None
+                elif interruption == "player":
+                    failed.data["ERT"]["ai"] = False
+                else:
+                    failed.data["ERT"]["wars"].add("SCA")
+                failed.run("VAL_nw_detach_finish")
+                self.assertEqual(failed.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+                self.assertEqual(failed.data["VAL"]["pp"], 1000)
+                self.assertNotIn("VAL_nw_detach_target", failed.data["ERT"]["flags"])
+                self.assertFalse(failed.events)
+        annexed = self.bloc_world()
+        annexed.run("VAL_nw_detach_begin")
+        annexed.run("VAL_nw_refund_orders")
+        annexed.run("VAL_nw_refund_orders")
+        self.assertEqual(annexed.data["VAL"]["vars"]["ADISCORD_economy_treasury"], 2000)
+        decision = block(block(entries(DECISIONS), "VAL_new_world_category"), "VAL_nw_detach_republic")
+        self.assertEqual([e.value for e in block(decision, "targets")], list(PARTNERS))
+        self.assertEqual(scalar(block(decision, "cancel_effect")[0].value, "VAL_nw_detach_refund"), "yes")
+
+    def test_accord_admits_members_of_the_khans_victors_as_partners(self):
+        world = ContractWorld()
+        world.target = "SLA"
+        world.data["SLA"]["faction"] = "victors"
+        self.assertFalse(world.matches(world.triggers["VAL_nw_partner_eligible"], "SLA"))
+        world.data["VAL"]["focuses"].add("VAL_nw_bloc_accord")
+        self.assertTrue(world.matches(world.triggers["VAL_nw_partner_eligible"], "SLA"))
+        world.data["RUS"]["faction"] = "victors"
+        self.assertFalse(world.matches(world.triggers["VAL_nw_partner_eligible"], "SLA"))
 
     def test_emergency_preparation_does_not_require_late_tree(self):
         decisions = block(entries(DECISIONS), "VAL_new_world_category")

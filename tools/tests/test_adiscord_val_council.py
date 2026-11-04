@@ -14,6 +14,7 @@ from tools.builders import build_adiscord_val_flags
 from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, walk
 from tools.tests.test_adiscord_val_new_world import ContractWorld
 from tools.tests.test_adiscord_val_focus_layout import PERSONAL_FOCUSES
+from tools.tests.test_validate_adiscord_val_rework import RIFLE_MODELS
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -238,7 +239,8 @@ class CouncilWorld(ContractWorld):
                 kind = scalar(value, "type")
                 amount = self.number(scalar(value, "amount"), scope)
                 producer = self.scope(scalar(value, "producer"), scope)
-                stock = country["rifles"] if kind == "infantry_equipment" else country.setdefault(kind, {})
+                rifle = kind == "infantry_equipment" or kind in RIFLE_MODELS
+                stock = country["rifles"] if rifle else country.setdefault(kind, {})
                 stock[producer] = max(0, stock.get(producer, 0) + amount)
             else:
                 super().execute([row], scope)
@@ -745,8 +747,8 @@ class CouncilTreeTests(unittest.TestCase):
         self.assertTrue(requires("VAL_Return_To_World_Market", industry))
         self.assertTrue(requires("VAL_Expedition_Landing_Staff", "VAL_Expedition_Escorts"))
         preparation = block(block(self.focuses["VAL_Expedition_Landing_Staff"], "available"), "OR")
-        self.assertEqual({row.value for row in preparation}, {"VAL_Contract_Landing_Craft", "VAL_nw_staff"})
-        for completed in (None, "VAL_Contract_Landing_Craft", "VAL_nw_staff"):
+        self.assertEqual({row.value for row in preparation}, {"VAL_Contract_Landing_Craft", "VAL_nw_khan"})
+        for completed in (None, "VAL_Contract_Landing_Craft", "VAL_nw_khan"):
             world = CouncilWorld()
             if completed:
                 world.val["focuses"].add(completed)

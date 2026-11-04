@@ -9065,6 +9065,51 @@ ADISCORD_vorkerland_absorb_egc_after_reunification = {
 	}
 }
 
+# COUNTRY WRK: Riven and Yorsk keep their governments only during the civil war.
+# Their treaty with a claimant does not survive reunification on any route;
+# phase.7 hands a human RIV/YOR player to WRK before this effect.
+ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = {
+	if = {
+		limit = { country_exists = RIV }
+		RIV = { ADISCORD_vorkerland_absorb_treaty_district = yes }
+	}
+	if = {
+		limit = { country_exists = YOR }
+		YOR = { ADISCORD_vorkerland_absorb_treaty_district = yes }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY RIV/YOR, called only by the reunification absorption above.
+ADISCORD_vorkerland_absorb_treaty_district = {
+	if = {
+		limit = { is_subject = yes }
+		overlord = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_free
+			}
+		}
+	}
+	if = { limit = { is_in_faction = yes } leave_faction = yes }
+	if = { limit = { has_war_with = WRK } white_peace = WRK }
+	clr_country_flag = ADISCORD_vorkerland_reunification_ally
+	ADISCORD_vorkerland_reconcile_coalition_obligation = yes
+	clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
+	clr_country_flag = ADISCORD_vorkerland_prep_treaty_signed
+	clr_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
+	clear_variable = ADISCORD_vorkerland_prep_treaty_patron
+	WRK = { annex_country = { target = PREV transfer_troops = yes } }
+	# Native annexation can leave residual ownership on leftover tiles.
+	if = {
+		limit = { exists = yes }
+		every_owned_state = {
+			set_state_owner_to = WRK
+			set_state_controller_to = WRK
+		}
+	}
+}
+
 # Carry only earned claimant cores into the restored country. Every state is
 # explicit and must belong to WRK after the losing claimant shells are annexed;
 # temporary control drift cannot erase an already earned integration core.
@@ -9682,6 +9727,7 @@ ADISCORD_vorkerland_complete_wrk_from_wkr = {
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
+	ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	set_country_flag = ADISCORD_vorkerland_route_worker
 	# The handoff receipt is written before moving the ruling character. Its
@@ -9824,6 +9870,7 @@ ADISCORD_vorkerland_complete_wrk_from_vad = {
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
+	ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_joint also covers an ordinary VAD victory; the government flag
 	# distinguishes the rescue council, collegial staff and imperial restoration.
@@ -9962,6 +10009,7 @@ ADISCORD_vorkerland_complete_wrk_from_tva = {
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_absorb_egc_after_reunification = yes
+	ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_utilitarian is retained as the established focus/save contract for
 	# the TVA claimant. Dorian's visible state and politics remain technocratic.
@@ -10209,7 +10257,7 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 				if = {
 					limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 					ADISCORD_vorkerland_show_joint_victory_superevent = yes
-					country_event = { id = ADISCORD_vorkerland_postwar.4 days = 7 }
+					country_event = { id = ADISCORD_vorkerland_postwar.4 hours = 1 }
 				}
 				else_if = {
 					limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
@@ -12220,7 +12268,7 @@ ADISCORD_superevent_observer_tick = {
 }
 
 # --- postwar_expansion_effects ---
-# The succession choice is separate from the local super-event window.
+# The coup does not wait for the local super-event window to close.
 # Recheck the cabinet before applying the political transition once.
 ADISCORD_vorkerland_establish_world_empire = {
 	if = {
@@ -14012,82 +14060,8 @@ ADISCORD_vorkerland_prep_settle_treaties = {
 		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
 	}
 	EGC = { clr_country_flag = ADISCORD_vorkerland_prep_offer_pending }
-	RIV = {
-		if = {
-			limit = {
-				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
-				exists = yes
-				is_subject = no
-				is_in_faction_with = WRK
-				OR = {
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 1
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_worker_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 2
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_vlad_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 3
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_dorian_won
-					}
-				}
-			}
-			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
-		}
-		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
-	}
-	YOR = {
-		if = {
-			limit = {
-				has_country_flag = ADISCORD_vorkerland_prep_treaty_signed
-				exists = yes
-				is_subject = no
-				is_in_faction_with = WRK
-				OR = {
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 1
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_worker_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 2
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_vlad_won
-					}
-					AND = {
-						check_variable = {
-							var = ADISCORD_vorkerland_prep_treaty_patron
-							value = 3
-							compare = equals
-						}
-						has_global_flag = ADISCORD_vorkerland_dorian_won
-					}
-				}
-			}
-			set_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed
-		}
-		clr_country_flag = ADISCORD_vorkerland_prep_offer_pending
-	}
+	RIV = { clr_country_flag = ADISCORD_vorkerland_prep_offer_pending }
+	YOR = { clr_country_flag = ADISCORD_vorkerland_prep_offer_pending }
 }
 
 ADISCORD_vorkerland_prep_dispatch_treaties = {

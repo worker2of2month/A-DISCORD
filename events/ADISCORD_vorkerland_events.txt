@@ -2913,6 +2913,28 @@ country_event = {
 			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
 			change_tag_from = EGC
 		}
+		else_if = {
+			limit = {
+				is_ai = yes
+				RIV = {
+					exists = yes
+					is_ai = no
+				}
+			}
+			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
+			change_tag_from = RIV
+		}
+		else_if = {
+			limit = {
+				is_ai = yes
+				YOR = {
+					exists = yes
+					is_ai = no
+				}
+			}
+			country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }
+			change_tag_from = YOR
+		}
 		else = {
 			ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes
 			ADISCORD_vorkerland_verify_reunified_wrk = yes
@@ -3445,17 +3467,6 @@ news_event = {
 }
 
 news_event = {
-	id = ADISCORD_vorkerland_story.45
-	title = ADISCORD_vorkerland_story.45.t
-	desc = ADISCORD_vorkerland_story.45.d
-	picture = GFX_news_event_adiscord_parliament_chamber
-	major = yes
-	is_triggered_only = yes
-	fire_only_once = no
-	option = { name = ADISCORD_vorkerland_story.45.a }
-}
-
-news_event = {
 	id = ADISCORD_vorkerland_story.46
 	title = ADISCORD_vorkerland_story.46.t
 	desc = ADISCORD_vorkerland_story.46.d
@@ -3547,39 +3558,13 @@ country_event = {
 	option = { name = ADISCORD_vorkerland_postwar.3.a }
 }
 
+# A joint victory always ends in Worcker's coup. The callback runs after the
+# reunification has committed its global flags, so the cabinet guard can pass.
 country_event = {
 	id = ADISCORD_vorkerland_postwar.4
-	title = ADISCORD_vorkerland_postwar.4.t
-	desc = ADISCORD_vorkerland_postwar.4.d
-	picture = GFX_event_adiscord_parliament_chamber
+	hidden = yes
 	is_triggered_only = yes
-	timeout_days = 14
-	trigger = { ADISCORD_vorkerland_world_empire_can_form = yes }
-	option = {
-		name = ADISCORD_vorkerland_postwar.4.council
-		trigger = { ADISCORD_vorkerland_world_empire_can_form = yes }
-		ai_chance = { factor = 80 }
-		custom_effect_tooltip = WRK_joint_preserve_council_tt
-		hidden_effect = {
-			set_country_flag = ADISCORD_vorkerland_joint_succession_settled
-			news_event = { id = ADISCORD_vorkerland_story.45 hours = 1 }
-		}
-	}
-	option = {
-		name = ADISCORD_vorkerland_postwar.4.empire
-		trigger = { ADISCORD_vorkerland_world_empire_can_form = yes }
-		ai_chance = { factor = 20 }
-		custom_effect_tooltip = WRK_joint_world_empire_choice_tt
-		hidden_effect = { ADISCORD_vorkerland_establish_world_empire = yes }
-	}
-	option = {
-		name = ADISCORD_vorkerland_postwar.4.close
-		trigger = { ADISCORD_vorkerland_world_empire_can_form = no }
-		ai_chance = { factor = 100 }
-		hidden_effect = {
-			set_country_flag = ADISCORD_vorkerland_joint_succession_settled
-		}
-	}
+	immediate = { ADISCORD_vorkerland_establish_world_empire = yes }
 }
 
 news_event = {

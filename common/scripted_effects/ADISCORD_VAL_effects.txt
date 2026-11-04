@@ -691,6 +691,7 @@ VAL_nw_refund_orders = {
 	VAL_nw_survey_refund = yes
 	VAL_nw_guard_caravans_refund = yes
 	VAL_nw_salvage_archives_refund = yes
+	VAL_nw_detach_refund = yes
 }
 
 # COUNTRY recipient; consent is rechecked before any VAL payment or delivery.
@@ -878,7 +879,7 @@ VAL_nw_expanded_arsenals_begin = {
 				value = 250
 				compare = greater_than_or_equals
 			}
-			has_completed_focus = VAL_nw_arsenals
+			has_completed_focus = VAL_nw_khan
 		}
 		set_variable = {
 			var = VAL_nw_emergency_arsenals_deposit
@@ -943,7 +944,7 @@ VAL_nw_expanded_reserve_begin = {
 				value = 300
 				compare = greater_than_or_equals
 			}
-			has_completed_focus = VAL_nw_reserve
+			has_completed_focus = VAL_nw_khan
 		}
 		set_variable = {
 			var = VAL_nw_emergency_reserve_deposit
@@ -1035,6 +1036,168 @@ VAL_nw_recognize_republic = {
 			country_event = { id = val_rework.138 }
 		}
 	}
+}
+
+# COUNTRY VAL. The postwar settlement replaces the wartime command balance.
+# The root focus waits for a paid trial or retirement, so no receipt is lost here.
+VAL_nw_close_command_balance = {
+	VAL_cancel_command_consolidation = yes
+	clr_country_flag = VAL_command_conspiracy_exposed
+	remove_mission = VAL_council_ultimatum
+	if = {
+		limit = { has_power_balance = { id = VAL_command_balance } }
+		remove_power_balance = { id = VAL_command_balance }
+	}
+}
+
+# Event val_rework.180 applies one of these once: its trigger needs the balance
+# that every answer removes, and the root focus that sends it is not repeatable.
+VAL_nw_settle_command_pensions = {
+	VAL_nw_close_command_balance = yes
+	add_to_variable = { var = VAL_nw_course_pp_gain value = 0.10 }
+	add_to_variable = { var = VAL_nw_army_org value = -0.02 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_settle_command_joint_staff = {
+	VAL_nw_close_command_balance = yes
+	add_to_variable = { var = VAL_nw_planning value = 0.10 }
+	add_to_variable = { var = VAL_nw_course_stability value = 0.03 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_settle_command_charter = {
+	VAL_nw_close_command_balance = yes
+	add_to_variable = { var = VAL_nw_army_org value = 0.05 }
+	add_to_variable = { var = VAL_nw_command_gain value = 0.10 }
+	add_to_variable = { var = VAL_nw_course_pp_gain value = -0.10 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_adopt_bloc_confront = {
+	add_to_variable = { var = VAL_nw_course_war_support value = 0.05 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_adopt_cabinet = {
+	add_to_variable = { var = VAL_nw_course_pp_gain value = 0.10 }
+	add_to_variable = { var = VAL_nw_course_stability value = 0.03 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+VAL_nw_adopt_army_guarantee = {
+	add_to_variable = { var = VAL_nw_army_org value = 0.03 }
+	add_to_variable = { var = VAL_nw_command_gain value = 0.10 }
+	VAL_nw_ensure_network_modifier = yes
+}
+
+# COUNTRY VAL. Nothing is debited until ERT answers the offer.
+VAL_nw_offer_tsaygen_sale = {
+	if = {
+		limit = {
+			VAL_nw_tsaygen_sale_affordable = yes
+			NOT = { has_country_flag = VAL_nw_tsaygen_offer_cooldown }
+			ERT = {
+				VAL_nw_tsaygen_sale_possible = yes
+				NOT = { has_country_flag = VAL_nw_tsaygen_offer_pending }
+			}
+		}
+		set_country_flag = { flag = VAL_nw_tsaygen_offer_cooldown days = 90 }
+		ERT = {
+			set_country_flag = { flag = VAL_nw_tsaygen_offer_pending days = 15 }
+			country_event = { id = val_rework.181 }
+		}
+	}
+}
+
+# COUNTRY ERT. Payment and transfer settle together; a lapsed offer notifies Kefreyt once.
+VAL_nw_accept_tsaygen_sale = {
+	if = {
+		limit = {
+			has_country_flag = VAL_nw_tsaygen_offer_pending
+			VAL_nw_tsaygen_sale_possible = yes
+			VAL = { VAL_nw_tsaygen_sale_affordable = yes }
+		}
+		clr_country_flag = VAL_nw_tsaygen_offer_pending
+		add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			add_political_power = -75
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+			transfer_state = 168
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_rework.182 }
+		}
+		168 = { set_state_controller_to = VAL }
+	}
+	else = { VAL_nw_decline_tsaygen_sale = yes }
+}
+
+VAL_nw_decline_tsaygen_sale = {
+	if = {
+		limit = { has_country_flag = VAL_nw_tsaygen_offer_pending }
+		clr_country_flag = VAL_nw_tsaygen_offer_pending
+		VAL = { country_event = { id = val_rework.183 } }
+	}
+}
+
+# COUNTRY VAL with the republic in FROM. One campaign at a time holds the deposit.
+VAL_nw_detach_begin = {
+	if = {
+		limit = {
+			VAL_nw_detach_affordable = yes
+			NOT = { has_variable = VAL_nw_detach_deposit }
+			FROM = { VAL_nw_detach_target_valid = yes }
+		}
+		set_variable = { var = VAL_nw_detach_deposit value = 250 }
+		add_political_power = -100
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		FROM = { set_country_flag = VAL_nw_detach_target }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Only the callback of the paid target can consume the deposit.
+VAL_nw_detach_finish = {
+	if = {
+		limit = {
+			has_variable = VAL_nw_detach_deposit
+			FROM = { has_country_flag = VAL_nw_detach_target }
+		}
+		if = {
+			limit = { FROM = { VAL_nw_detach_target_valid = yes } }
+			clear_variable = VAL_nw_detach_deposit
+			FROM = {
+				clr_country_flag = VAL_nw_detach_target
+				leave_faction = yes
+				VAL = { country_event = { id = val_rework.184 } }
+			}
+		}
+		else = { VAL_nw_detach_refund = yes }
+	}
+}
+
+VAL_nw_detach_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_detach_deposit }
+		add_political_power = 100
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_nw_detach_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_nw_detach_deposit }
+		clear_variable = VAL_nw_detach_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+	SLA = { clr_country_flag = VAL_nw_detach_target }
+	RZA = { clr_country_flag = VAL_nw_detach_target }
+	MLR = { clr_country_flag = VAL_nw_detach_target }
+	ERT = { clr_country_flag = VAL_nw_detach_target }
+	IRT = { clr_country_flag = VAL_nw_detach_target }
+	SCA = { clr_country_flag = VAL_nw_detach_target }
+	TMR = { clr_country_flag = VAL_nw_detach_target }
+	VEL = { clr_country_flag = VAL_nw_detach_target }
+	RLY = { clr_country_flag = VAL_nw_detach_target }
 }
 
 # --- contract_authority_effects ---
@@ -1390,6 +1553,10 @@ VAL_refresh_contract_modifier = {
 		limit = { has_country_flag = VAL_broad_resource_network }
 		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
 		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_merchant_rail_yards }
+		add_to_variable = { var = VAL_contract_resource_penalty_factor value = -0.20 }
 	}
 	if = {
 		limit = { has_country_flag = VAL_supply_contracts }
@@ -3122,11 +3289,11 @@ VAL_settle_wasteland_capitulation = {
 			VAL = { VAL_assign_southern_sector_to_administration = yes }
 		}
 		else_if = {
-			limit = { VAL = { has_completed_focus = VAL_frontier_return_irem } }
+			limit = { VAL = { VAL_perimeter_campaign_opened = yes } }
 			169 = { if = { limit = { is_owned_by = ERT } VAL = { transfer_state = 169 } set_state_controller_to = VAL } }
 		}
 		else_if = {
-			limit = { VAL = { has_completed_focus = VAL_Return_Southern_Tsaygen } }
+			limit = { VAL = { VAL_tsaygen_campaign_opened = yes } }
 			168 = { if = { limit = { is_owned_by = ERT } VAL = { transfer_state = 168 } set_state_controller_to = VAL } }
 		}
 	}
@@ -3972,6 +4139,77 @@ VAL_start_quarterly_contract_norm = {
 
 # COUNTRY: caller sets positive temp VAL_contract_rifle_cost.
 # Debit mixed producer stocks exactly; success is reported only through VAL_contract_rifles_paid.
+# COUNTRY paying the rifles; PREV is the producer. A negative archetype amount
+# removes only the producer's newest model, so obsolete stock must be named
+# model by model. Older models are delivered first.
+VAL_debit_contract_rifle_models = {
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2156 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2163 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2168 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2170 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2178 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2183 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2193 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+		VAL_prepare_contract_rifle_debit = yes
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2200 amount = VAL_contract_rifle_debit producer = PREV }
+		VAL_measure_contract_rifle_debit = yes
+	}
+}
+
+VAL_prepare_contract_rifle_debit = {
+	set_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
+	set_temp_variable = { var = VAL_contract_rifle_debit value = VAL_contract_rifles_remaining }
+	multiply_temp_variable = { var = VAL_contract_rifle_debit value = -1 }
+}
+
+VAL_measure_contract_rifle_debit = {
+	subtract_from_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
+	subtract_from_temp_variable = { var = VAL_contract_rifles_remaining value = VAL_contract_rifles_removed }
+}
+
 VAL_pay_contract_rifles = {
 	clr_country_flag = VAL_contract_rifles_paid
 	set_temp_variable = { var = VAL_contract_rifles_remaining value = VAL_contract_rifle_cost }
@@ -3982,17 +4220,7 @@ VAL_pay_contract_rifles = {
 		}
 		every_possible_country = {
 			limit = { PREV = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } } }
-			PREV = {
-				if = {
-					limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
-					set_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
-					set_temp_variable = { var = VAL_contract_rifle_debit value = VAL_contract_rifles_remaining }
-					multiply_temp_variable = { var = VAL_contract_rifle_debit value = -1 }
-					add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_contract_rifle_debit producer = PREV }
-					subtract_from_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
-					subtract_from_temp_variable = { var = VAL_contract_rifles_remaining value = VAL_contract_rifles_removed }
-				}
-			}
+			PREV = { VAL_debit_contract_rifle_models = yes }
 		}
 		if = {
 			limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = equals } }
@@ -4005,17 +4233,29 @@ VAL_pay_contract_rifles = {
 	}
 }
 
+# An unfinished debit returns the rifles it already removed. Producers that the
+# loop could not reach keep their stock, so the returned rifles belong to the payer.
+VAL_return_unpaid_contract_rifles = {
+	subtract_from_temp_variable = { var = VAL_contract_rifles_before value = num_equipment@infantry_equipment }
+	if = {
+		limit = { check_variable = { var = VAL_contract_rifles_before value = 0 compare = greater_than } }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_contract_rifles_before producer = ROOT }
+	}
+}
+
 VAL_pay_quarterly_contract_norm = {
 	hidden_effect = {
 		if = {
 			limit = { VAL_can_pay_quarterly_contract_norm = yes }
 			set_temp_variable = { var = VAL_contract_rifle_cost value = 40000 }
+			set_temp_variable = { var = VAL_contract_rifles_before value = num_equipment@infantry_equipment }
 			VAL_pay_contract_rifles = yes
 			if = {
 				limit = { has_country_flag = VAL_contract_rifles_paid }
 				add_political_power = -10
 				set_country_flag = VAL_quarterly_contract_paid
 			}
+			else = { VAL_return_unpaid_contract_rifles = yes }
 		}
 	}
 	if = {
@@ -5250,7 +5490,7 @@ VAL_frontier_declare_all_tribal_members = {
 VAL_begin_southern_tsaygen_campaign = {
 	if = {
 		limit = {
-			has_completed_focus = VAL_Return_Southern_Tsaygen
+			VAL_tsaygen_campaign_opened = yes
 			VAL_southern_tsaygen_revenge_available = yes
 		}
 		set_variable = { var = VAL_frontier_target value = 4 }
@@ -8012,6 +8252,54 @@ VAL_offer_frontier_protectorate = {
 		limit = { VAL_frontier_protectorate_available = yes }
 		set_country_flag = { flag = VAL_frontier_protectorate_pending value = 1 days = 37 }
 		TFF = { country_event = { id = val_contract.381 } }
+	}
+}
+
+# COUNTRY VAL. Each partner answers its own invitation; nobody joins by default.
+VAL_invite_pact_of_four = {
+	if = {
+		limit = { COF = { VAL_pact_of_four_partner_eligible = yes } }
+		COF = { country_event = { id = val_contract.426 } }
+	}
+	if = {
+		limit = { TFF = { VAL_pact_of_four_partner_eligible = yes } }
+		TFF = { country_event = { id = val_contract.426 } }
+	}
+	if = {
+		limit = { YPR = { VAL_pact_of_four_partner_eligible = yes } }
+		YPR = { country_event = { id = val_contract.426 } }
+	}
+}
+
+# COUNTRY partner, FROM = VAL. The partner leaves its old alliance first; a
+# leader dissolves it, so the remaining members answer their own invitations freely.
+VAL_join_pact_of_four = {
+	if = {
+		limit = {
+			VAL_pact_of_four_partner_eligible = yes
+			FROM = { VAL_pact_of_four_host_ready = yes }
+		}
+		if = {
+			limit = { is_in_faction = yes }
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+			else = {
+				faction_leader = { remove_from_faction = PREV }
+			}
+		}
+		FROM = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = VAL_pact_of_four_faction
+				}
+			}
+			add_to_faction = PREV
+			country_event = { id = val_contract.427 }
+		}
 	}
 }
 

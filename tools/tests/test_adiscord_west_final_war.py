@@ -338,18 +338,17 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertEqual(event.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
         self.assertIn("NOT = { has_country_flag = ADISCORD_west_league_offer_pending }", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
 
-    def test_treaties_never_admit_a_state_at_war_with_a_champion(self):
-        # A member at war with the rival champion drags the bloc into an
-        # unscripted war that blocks the final campaign.
-        outside = body(TRIGGERS, "ADISCORD_west_outside_champion_wars")
-        for champion in ("WRK", "IVN"):
-            self.assertIn(f"NOT = {{ has_war_with = {champion} }}", outside)
-        self.assertIn("ADISCORD_west_outside_champion_wars = yes", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
+    def test_treaties_never_admit_a_state_at_war(self):
+        # A member at war drags the bloc into that war: against the rival
+        # champion it blocks the final campaign, against a local rival the
+        # generic capitulation awards the champion the whole defeated side.
+        self.assertEqual(body(TRIGGERS, "ADISCORD_west_league_partner_at_peace").split(), ["has_war", "=", "no"])
+        self.assertIn("ADISCORD_west_league_partner_at_peace = yes", body(TRIGGERS, "ADISCORD_west_league_target_valid"))
         source = EVENTS.read_text(encoding="utf-8")
         for start, end in (("ADISCORD_west.40", "ADISCORD_west.41"), ("ADISCORD_west.43", "ADISCORD_west.44")):
             event = source[source.index(f"\tid = {start}\n"):source.index(f"\tid = {end}\n")]
             accept = event[:event.index(f"name = {start}.b")]
-            self.assertLess(accept.index("ADISCORD_west_outside_champion_wars = yes"), accept.index("add_to_faction = ROOT"))
+            self.assertLess(accept.index("ADISCORD_west_league_partner_at_peace = yes"), accept.index("add_to_faction = ROOT"))
             self.assertNotIn("has_war_with = FROM", accept)
 
     def test_vorkerland_treaties_mirror_the_league_and_let_the_target_answer(self):
@@ -372,7 +371,7 @@ class WestFinalWarContractTests(unittest.TestCase):
         offer = source[source.index("\tid = ADISCORD_west.43\n"):source.index("\tid = ADISCORD_west.44\n")]
         self.assertEqual(offer.count("clr_country_flag = ADISCORD_west_league_offer_pending"), 2)
         accept = offer[:offer.index("name = ADISCORD_west.43.b")]
-        for guard in ("is_in_faction = no", "ADISCORD_west_outside_champion_wars = yes", "NOT = { has_global_flag = ADISCORD_west_final_started }"):
+        for guard in ("is_in_faction = no", "ADISCORD_west_league_partner_at_peace = yes", "NOT = { has_global_flag = ADISCORD_west_final_started }"):
             self.assertIn(guard, accept)
         self.assertLess(accept.index("create_faction_from_template"), accept.index("add_to_faction = ROOT"))
         partners = body(EFFECTS, "ADISCORD_west_wrk_arm_front_partners")
