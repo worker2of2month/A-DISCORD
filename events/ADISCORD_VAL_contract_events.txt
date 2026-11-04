@@ -383,6 +383,14 @@ country_event = {
 	fire_only_once = yes
 	option = {
 		name = val_rework.144.a
+		ai_chance = { base = 60 }
+		add_political_power = -10
+		hidden_effect = { set_country_flag = VAL_ash_report_filed }
+	}
+	option = {
+		name = val_rework.144.b
+		ai_chance = { base = 40 }
+		add_political_power = 10
 	}
 }
 
@@ -430,7 +438,24 @@ country_event = {
 	desc = val_rework.7.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_rework.7.a }
+	option = {
+		name = val_rework.7.a
+		ai_chance = { base = 60 }
+		add_political_power = 10
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+		}
+	}
+	option = {
+		name = val_rework.7.b
+		ai_chance = { base = 40 }
+		add_stability = 0.01
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = -0.05 }
+		}
+	}
 }
 
 country_event = {
@@ -689,6 +714,26 @@ country_event = {
 	}
 	option = {
 		name = val_rework.152.a
+		ai_chance = { base = 50 }
+		hidden_effect = { country_event = { id = val_rework.158 days = 2 } }
+	}
+	option = {
+		name = val_rework.152.b
+		ai_chance = { base = 20 }
+		add_war_support = -0.02
+		hidden_effect = {
+			set_country_flag = VAL_legend_withdrawn
+			country_event = { id = val_rework.158 days = 2 }
+		}
+	}
+	option = {
+		name = val_rework.152.c
+		ai_chance = { base = 30 }
+		add_war_support = 0.03
+		hidden_effect = {
+			set_country_flag = VAL_legend_amplified
+			country_event = { id = val_rework.158 days = 2 }
+		}
 	}
 }
 
@@ -788,6 +833,264 @@ country_event = {
 	is_triggered_only = yes
 	option = { name = val_rework.11.a }
 }
+# Captains, the archive, reclamation and the Savin family follow the main-route focuses.
+country_event = {
+	id = val_rework.154
+	title = val_rework.154.t
+	desc = val_rework.154.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = val_rework.154.a
+		ai_chance = { base = 40 }
+		add_war_support = 0.02
+	}
+	option = {
+		name = val_rework.154.b
+		ai_chance = { base = 30 }
+		add_stability = 0.02
+	}
+	option = {
+		name = val_rework.154.c
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = val_rework.154.c_tt
+		hidden_effect = { ADISCORD_economy_receive_50 = yes }
+	}
+}
+
+# The folder decides which archive the later tribunal finds and what Krutov knows at the square.
+country_event = {
+	id = val_rework.155
+	title = val_rework.155.t
+	desc = val_rework.155.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		NOT = { has_country_flag = VAL_daughter_archive_burned }
+		NOT = { has_country_flag = VAL_daughter_secret_told }
+	}
+	option = {
+		name = val_rework.155.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = val_rework.155.a_tt
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+		}
+		hidden_effect = { set_country_flag = VAL_daughter_archive_burned }
+	}
+	option = {
+		name = val_rework.155.b
+		ai_chance = { base = 20 }
+		custom_effect_tooltip = val_rework.155.b_tt
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = -0.10 }
+		}
+		hidden_effect = { set_country_flag = VAL_daughter_secret_told }
+	}
+	option = {
+		name = val_rework.155.c
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = val_rework.155.c_tt
+	}
+}
+
+country_event = {
+	id = val_rework.156
+	title = val_rework.156.t
+	desc = {
+		trigger = { has_country_flag = VAL_daughter_secret_told }
+		text = val_rework.156.told
+	}
+	desc = {
+		trigger = {
+			has_country_flag = VAL_daughter_archive_burned
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+		}
+		text = val_rework.156.burned
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+			NOT = { has_country_flag = VAL_daughter_archive_burned }
+		}
+		text = val_rework.156.d
+	}
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		VAL_council_personal_rule = yes
+	}
+	option = {
+		name = val_rework.156.a
+		ai_chance = { base = 60 }
+		add_war_support = 0.02
+	}
+	option = {
+		name = val_rework.156.b
+		ai_chance = { base = 40 }
+		add_stability = 0.02
+		add_war_support = -0.02
+	}
+}
+
+# Dispatched by the first finished settlement project in a contaminated state.
+country_event = {
+	id = val_rework.157
+	title = val_rework.157.t
+	desc = {
+		trigger = { has_country_flag = VAL_ash_report_filed }
+		text = val_rework.157.d
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = VAL_ash_report_filed } }
+		text = val_rework.157.unfiled
+	}
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_rework.157.a
+		ai_chance = { base = 60 }
+		add_stability = 0.03
+	}
+	option = {
+		name = val_rework.157.b
+		ai_chance = { base = 40 }
+		add_political_power = 25
+		add_stability = -0.01
+	}
+}
+
+country_event = {
+	id = val_rework.158
+	title = val_rework.158.t
+	desc = {
+		trigger = { has_country_flag = VAL_legend_withdrawn }
+		text = val_rework.158.withdrawn
+	}
+	desc = {
+		trigger = { has_country_flag = VAL_legend_amplified }
+		text = val_rework.158.amplified
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = VAL_legend_withdrawn }
+			NOT = { has_country_flag = VAL_legend_amplified }
+		}
+		text = val_rework.158.d
+	}
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_rework.158.a }
+}
+
+country_event = {
+	id = val_rework.160
+	title = val_rework.160.t
+	desc = val_rework.160.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_rework.160.a }
+}
+
+# Nodrul's intervention reaches native diplomacy a tick after the ultimatum expires.
+country_event = {
+	id = val_rework.161
+	title = val_rework.161.t
+	desc = val_rework.161.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		NOD = {
+			has_war_with = VAL
+			has_country_flag = VAL_frontier_guarantor
+		}
+	}
+	immediate = { hidden_effect = { news_event = { id = val_rework.164 hours = 6 } } }
+	option = { name = val_rework.161.a }
+}
+
+country_event = {
+	id = val_rework.162
+	title = val_rework.162.t
+	desc = val_rework.162.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_rework.162.a }
+}
+
+news_event = {
+	id = val_rework.163
+	title = val_rework.163.t
+	desc = val_rework.163.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = val_rework.163.a }
+}
+
+news_event = {
+	id = val_rework.164
+	title = val_rework.164.t
+	desc = val_rework.164.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.164.a }
+}
+
+news_event = {
+	id = val_rework.165
+	title = val_rework.165.t
+	desc = val_rework.165.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = val_rework.165.a }
+}
+
+country_event = {
+	id = val_rework.166
+	title = val_rework.166.t
+	desc = val_rework.166.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = VAL
+		owns_state = 168
+	}
+	immediate = { hidden_effect = { news_event = { id = val_rework.165 hours = 6 } } }
+	option = { name = val_rework.166.a }
+}
+
+country_event = {
+	id = val_rework.167
+	title = val_rework.167.t
+	desc = val_rework.167.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_rework.167.a }
+}
+
 # END CONSOLIDATED: ADISCORD_VAL_rework_events.txt
 
 country_event = {
@@ -1487,7 +1790,10 @@ country_event = {
 	desc = val_contract.347.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.347.a }
+	option = {
+		name = val_contract.347.a
+		custom_effect_tooltip = val_contract.347.terms_tt
+	}
 }
 country_event = {
 	id = val_contract.348
@@ -2338,7 +2644,10 @@ country_event = {
 	desc = val_contract.372.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.372.a }
+	option = {
+		name = val_contract.372.a
+		custom_effect_tooltip = val_contract.372.a_tt
+	}
 }
 
 country_event = {
@@ -2347,7 +2656,10 @@ country_event = {
 	desc = val_contract.373.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.373.a }
+	option = {
+		name = val_contract.373.a
+		custom_effect_tooltip = val_contract.373.a_tt
+	}
 }
 
 # VAL answers Svetlogorye's aid request or counter-offer. The stored terms are
@@ -3816,7 +4128,13 @@ country_event = {
 			set_variable = { var = VAL_council_solgalov_fate value = 1 }
 			set_temp_variable = { var = VAL_council_loyalists_delta value = 15 }
 			VAL_council_change_loyalists = yes
-			country_event = { id = val_council.12 days = 30 }
+			if = {
+				limit = { has_country_flag = VAL_daughter_archive_burned }
+				country_event = { id = val_council.36 days = 30 }
+			}
+			else = {
+				country_event = { id = val_council.12 days = 30 }
+			}
 		}
 	}
 	option = {
@@ -3849,7 +4167,14 @@ country_event = {
 country_event = {
 	id = val_council.12
 	title = val_council.12.t
-	desc = val_council.12.d
+	desc = {
+		trigger = { has_country_flag = VAL_daughter_secret_told }
+		text = val_council.12.told
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = VAL_daughter_secret_told } }
+		text = val_council.12.d
+	}
 	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = {
@@ -4227,6 +4552,146 @@ country_event = {
 		ai_chance = { factor = 30 }
 		add_stability = -0.05
 		add_power_balance_value = { id = VAL_council_balance value = 0.20 }
+	}
+}
+
+# Defeat route: the staff armistice seen from the cabinet, then the Council's recovery tree.
+country_event = {
+	id = val_council.30
+	title = val_council.30.t
+	desc = val_council.30.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		VAL_council_personal_rule = yes
+	}
+	option = {
+		name = val_council.30.a
+		ai_chance = { base = 50 }
+		add_war_support = -0.03
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+		}
+	}
+	option = {
+		name = val_council.30.b
+		ai_chance = { base = 50 }
+		add_political_power = 10
+		if = {
+			limit = { has_power_balance = { id = VAL_command_balance } }
+			add_power_balance_value = { id = VAL_command_balance value = -0.05 }
+		}
+	}
+}
+
+country_event = {
+	id = val_council.31
+	title = val_council.31.t
+	desc = val_council.31.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_council.31.a }
+}
+
+country_event = {
+	id = val_council.32
+	title = val_council.32.t
+	desc = val_council.32.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { VAL_council_operational = yes }
+	option = {
+		name = val_council.32.a
+		ai_chance = { factor = 60 }
+		add_stability = -0.02
+		custom_effect_tooltip = VAL_council_favour_front_seat_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_seat_side value = 2 }
+			set_temp_variable = { var = VAL_council_seat_delta value = 1 }
+			VAL_council_transfer_seat = yes
+		}
+	}
+	option = {
+		name = val_council.32.b
+		ai_chance = { factor = 40 }
+		custom_effect_tooltip = VAL_council_loyalists_p10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = 10 }
+			VAL_council_change_loyalists = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_council.33
+	title = val_council.33.t
+	desc = val_council.33.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_council.33.a }
+}
+
+country_event = {
+	id = val_council.34
+	title = val_council.34.t
+	desc = val_council.34.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_council.34.a }
+}
+
+country_event = {
+	id = val_council.35
+	title = val_council.35.t
+	desc = {
+		trigger = { has_country_leader = { character = VAL_Mikhail_Velsky ruling_only = yes } }
+		text = val_council.35.velsky
+	}
+	desc = {
+		trigger = { NOT = { has_country_leader = { character = VAL_Mikhail_Velsky ruling_only = yes } } }
+		text = val_council.35.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { tag = VAL }
+	option = { name = val_council.35.a }
+}
+
+# Replaces the archive revelation when the folder was burned under Solgalov.
+country_event = {
+	id = val_council.36
+	title = val_council.36.t
+	desc = val_council.36.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = {
+		VAL_council_operational = yes
+		check_variable = { var = VAL_council_solgalov_fate value = 1 compare = equals }
+	}
+	option = {
+		name = val_council.36.a
+		ai_chance = { factor = 60 }
+		add_stability = 0.02
+	}
+	option = {
+		name = val_council.36.b
+		ai_chance = { factor = 40 }
+		add_stability = -0.02
+		custom_effect_tooltip = VAL_council_loyalists_m5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
+			VAL_council_change_loyalists = yes
+		}
 	}
 }
 

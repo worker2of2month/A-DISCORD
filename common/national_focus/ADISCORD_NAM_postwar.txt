@@ -34,7 +34,6 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_pw_south_preparation_unlock_tt
 			add_political_power = 50
 			country_event = {
 				id = ADISCORD_nam_resource_war.12
@@ -42,7 +41,6 @@ focus_tree = {
 			}
 			custom_effect_tooltip = NAM_grp_recognition_tt
 			hidden_effect = {
-				mark_focus_tree_layout_dirty = yes
 				add_to_variable = { var = NAM_grp_nam_support value = 5 }
 				add_to_variable = { var = NAM_grp_oil_support value = 5 }
 				add_to_variable = { var = NAM_grp_dist_support value = 5 }
@@ -297,7 +295,7 @@ focus_tree = {
 	focus = {
 		id = NAM_svetlogorsk_shipyards
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 78
+		x = 82
 		y = 3
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -326,6 +324,59 @@ focus_tree = {
 				amount = 10
 				producer = NAM
 			}
+			if = {
+				limit = {
+					NOT = {
+						any_owned_state = {
+							is_controlled_by = ROOT
+							naval_facility > 0
+						}
+					}
+				}
+				if = {
+					limit = {
+						owns_state = 688
+						controls_state = 688
+						688 = { free_building_slots = { building = naval_facility size > 0 province = 689 } }
+					}
+					688 = {
+						add_building_construction = {
+							type = naval_facility
+							province = 689
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owns_state = 700
+						controls_state = 700
+						700 = { free_building_slots = { building = naval_facility size > 0 province = 16716 } }
+					}
+					700 = {
+						add_building_construction = {
+							type = naval_facility
+							province = 16716
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					custom_effect_tooltip = NAM_barge_no_facility_tt
+				}
+			}
+			generate_scientist_character = {
+				skills = {
+					specialization_naval = 2
+				}
+			}
+			add_breakthrough_points = {
+				specialization = specialization_naval
+				value = 1
+			}
+			custom_effect_tooltip = NAM_barge_project_tt
 		}
 		ai_will_do = {
 			base = 5
@@ -2074,11 +2125,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_unified_standards_bonus
-				bonus = 0.75
-				uses = 2
-				category = industry
+			if = {
+				limit = {
+					has_completed_focus = NAM_regional_trusts
+				}
+				custom_effect_tooltip = NAM_standards_trust_contract_tt
+			}
+			if = {
+				limit = {
+					has_completed_focus = NAM_state_plan
+				}
+				custom_effect_tooltip = NAM_unified_standards_delivery_tt
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 180
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2267,19 +2329,53 @@ focus_tree = {
 			controls_state = 689
 			owns_state = 690
 			controls_state = 690
-			689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
-			690 = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			689 = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				if = {
+					limit = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
 			}
 			690 = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				if = {
+					limit = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 180
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2307,12 +2403,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_open_libraries_bonus
-				bonus = 1.0
-				uses = 2
-				category = electronics
+			custom_effect_tooltip = NAM_libraries_campaign_tt
+			hidden_effect = {
+				NAM_reset_campaign_cooldowns = yes
 			}
+			add_stability = 0.04
+			add_political_power = 55
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2530,12 +2626,35 @@ focus_tree = {
 			NAM_pw_operable = yes
 			owns_state = 700
 			controls_state = 700
-			700 = { free_building_slots = { building = fuel_silo size = 2 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			700 = { add_building_construction = { type = fuel_silo level = 2 instant_build = yes } }
+			700 = {
+				if = {
+					limit = {
+						free_building_slots = {
+							building = fuel_silo
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_warehouse_relief_port_tt
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_commercial_reserve }
+				}
+				unlock_decision_tooltip = NAM_pw_barter_charter
+				custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2596,11 +2715,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_commercial_reserve_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 500 }
-				NAM_add_treasury = yes
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_warehouse_receipts }
+				}
+				unlock_decision_tooltip = NAM_pw_barter_charter
+				custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
 			}
+			custom_effect_tooltip = NAM_commercial_reserve_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3012,11 +3134,19 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_works_commission
-				bonus = 0.75
-				uses = 2
-				category = industry
+			custom_effect_tooltip = NAM_works_commission_slots_tt
+			hidden_effect = {
+				set_variable = { var = NAM_project_slots value = 2 }
+				add_equipment_to_stockpile = {
+					type = train_equipment
+					amount = 20
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 180
+					producer = NAM
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -3064,17 +3194,32 @@ focus_tree = {
 			NAM_prewar_service_mandate = yes
 			owns_state = 700
 			controls_state = 700
-			700 = { free_building_slots = { building = fuel_silo size = 2 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			700 = {
-				add_building_construction = {
-					type = fuel_silo
-					level = 2
-					instant_build = yes
+				if = {
+					limit = {
+						free_building_slots = {
+							building = fuel_silo
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
 				}
+			}
+			add_fuel = 90000
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -3105,6 +3250,7 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
+			add_research_slot = 1
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3237,11 +3383,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_foreign_patents
-				bonus = 1.5
-				uses = 2
-				category = industry
+			NAM_order_grant_motor_technology = yes
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 120
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 240
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -3421,17 +3572,33 @@ focus_tree = {
 			NAM_prewar_pragmatic_mandate = yes
 			owns_state = 700
 			controls_state = 700
-			700 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_licensed_assembly_delivery_tt
 			700 = {
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
+				if = {
+					limit = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
 				}
+			}
+			NAM_order_grant_motor_technology = yes
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 75
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -3470,6 +3637,7 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
+			add_research_slot = 1
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3644,6 +3812,7 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
+			add_research_slot = 1
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3747,41 +3916,19 @@ focus_tree = {
 			focus = NAM_municipal_land
 			focus = NAM_tenant_councils
 		}
-		bypass = {
-			67 = { infrastructure > 4 }
-			690 = { infrastructure > 4 }
-		}
 		available = {
 			has_capitulated = no
 			NAM_pw_operable = yes
 			NAM_prewar_district_mandate = yes
-			owns_state = 67
-			controls_state = 67
-			owns_state = 690
-			controls_state = 690
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			67 = {
-				if = {
-					limit = { infrastructure < 5 }
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			690 = {
-				if = {
-					limit = { infrastructure < 5 }
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-				}
+			custom_effect_tooltip = NAM_water_board_network_tt
+			hidden_effect = {
+				67 = { NAM_water_board_dispatch = yes }
+				690 = { NAM_water_board_dispatch = yes }
+				NAM_oil_refresh = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -3811,16 +3958,26 @@ focus_tree = {
 			NAM_prewar_district_mandate = yes
 			owns_state = 689
 			controls_state = 689
-			689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_public_credit_delivery_tt
 			689 = {
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
+				if = {
+					limit = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
 				}
 			}
 		}
@@ -4206,17 +4363,14 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			owns_state = 700
-			controls_state = 700
-			700 = {
-				infrastructure < 5
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_cadastre
 			custom_effect_tooltip = NAM_program_cadastre_unlock_tt
+			unlock_decision_tooltip = NAM_program_land_allotments
+			custom_effect_tooltip = NAM_program_land_allotments_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4472,11 +4626,68 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_industrial_commission
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_ladder_of_seals }
+				}
+				unlock_decision_tooltip = NAM_pw_state_arsenal
+				custom_effect_tooltip = NAM_pw_state_arsenal_unlock_tt
+			}
+			else = { custom_effect_tooltip = NAM_inspected_state_arsenal_tt }
+			if = {
+				limit = {
+					has_completed_focus = NAM_regional_trusts
+				}
+				custom_effect_tooltip = NAM_pw_industrial_commission_delivery_tt
+			}
+			if = {
+				limit = {
+					has_completed_focus = NAM_state_plan
+				}
+				if = {
+					limit = {
+						owns_state = 700
+						controls_state = 700
+						700 = { free_building_slots = { building = arms_factory size > 0 include_locked = no } }
+					}
+					700 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = 350
+						producer = NAM
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						owns_state = 689
+						controls_state = 689
+						689 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+					}
+					689 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = motorized_equipment
+						amount = 240
+						producer = NAM
+					}
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -4506,13 +4717,6 @@ focus_tree = {
 			}
 			owns_state = 700
 			controls_state = 700
-			700 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -4738,13 +4942,6 @@ focus_tree = {
 			}
 			owns_state = 688
 			controls_state = 688
-			688 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -4833,11 +5030,34 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_technical_training
-				bonus = 0.5
-				uses = 1
-				category = industry
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 240
+				producer = NAM
+			}
+			if = {
+				limit = {
+					has_completed_focus = NAM_pw_company_housing
+				}
+				if = {
+					limit = {
+						owns_state = 689
+						controls_state = 689
+					}
+					689 = {
+						add_extra_state_shared_building_slots = 1
+					}
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = motorized_equipment
+						amount = 120
+						producer = NAM
+					}
+				}
+			}
+			else = {
+				add_manpower = 2000
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -5033,11 +5253,6 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
-			}
-			owns_state = 690
-			controls_state = 690
-			690 = {
-				infrastructure < 5
 			}
 		}
 		cancel_if_invalid = yes
@@ -5259,11 +5474,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_armament_inspectorate
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
+			custom_effect_tooltip = NAM_inspected_garrison_tt
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2500
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 180
+				producer = NAM
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -5425,11 +5645,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_survey_corps
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					owns_state = 690
+					controls_state = 690
+				}
+				690 = {
+					add_resource = { type = steel amount = 5 }
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = train_equipment
+					amount = 15
+					producer = NAM
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -5459,13 +5689,6 @@ focus_tree = {
 			}
 			owns_state = 719
 			controls_state = 719
-			719 = {
-				free_building_slots = {
-					building = fuel_silo
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -5957,13 +6180,6 @@ focus_tree = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
 			owns_state = 700
 			controls_state = 700
-			700 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6302,11 +6518,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-			owns_state = 700
-			controls_state = 700
-			700 = {
-				infrastructure < 5
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6360,11 +6571,58 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_oil_laboratories
-				bonus = 0.5
-				uses = 1
-				category = industry
+			custom_effect_tooltip = NAM_pw_lab_drilling_tt
+			hidden_effect = {
+				67 = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							has_variable = NAM_field_max_capacity
+						}
+						add_to_variable = { var = NAM_field_max_capacity value = 2 }
+					}
+				}
+				688 = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							has_variable = NAM_field_max_capacity
+						}
+						add_to_variable = { var = NAM_field_max_capacity value = 2 }
+					}
+				}
+				689 = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							has_variable = NAM_field_max_capacity
+						}
+						add_to_variable = { var = NAM_field_max_capacity value = 2 }
+					}
+				}
+				690 = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							has_variable = NAM_field_max_capacity
+						}
+						add_to_variable = { var = NAM_field_max_capacity value = 2 }
+					}
+				}
+				719 = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							has_variable = NAM_field_max_capacity
+						}
+						add_to_variable = { var = NAM_field_max_capacity value = 2 }
+					}
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -6425,11 +6683,30 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_refinery_engineering
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_refinery_programme }
+				}
+				unlock_decision_tooltip = NAM_project_refinery
+				custom_effect_tooltip = NAM_project_refinery_unlock_tt
+			}
+			custom_effect_tooltip = NAM_refining_commission_tt
+			if = {
+				limit = {
+					owns_state = 67
+					controls_state = 67
+					67 = { free_building_slots = { building = synthetic_refinery size > 0 include_locked = no } }
+				}
+				67 = {
+					add_building_construction = {
+						type = synthetic_refinery
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_fuel = 40000
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -6442,7 +6719,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_transport_commission
 		}
@@ -6451,11 +6727,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 67
-			controls_state = 67
-			67 = { fuel_silo > 1 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6485,12 +6756,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_energy_commission
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_second_drilling_crew }
+				}
+				unlock_decision_tooltip = NAM_econ_emergency_service
+				custom_effect_tooltip = NAM_econ_emergency_service_unlock_tt
 			}
+			custom_effect_tooltip = NAM_pw_grid_emergency_bonus_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -6512,13 +6785,6 @@ focus_tree = {
 			}
 			owns_state = 690
 			controls_state = 690
-			690 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6579,11 +6845,6 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
-			}
-			owns_state = 67
-			controls_state = 67
-			67 = {
-				infrastructure < 5
 			}
 		}
 		cancel_if_invalid = yes
@@ -6652,11 +6913,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-			owns_state = 689
-			controls_state = 689
-			689 = {
-				infrastructure < 5
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6687,11 +6943,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_reservoir_survey
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					owns_state = 690
+					controls_state = 690
+				}
+				690 = {
+					add_extra_state_shared_building_slots = 2
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 120
+					producer = NAM
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -6699,12 +6965,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_power_reserve
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_goal_generic_defence
 		x = 98
-		y = 4
+		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_review
 		}
@@ -6713,11 +6978,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 700
-			controls_state = 700
-			700 = { anti_air_building > 3 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6783,11 +7043,28 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_industrial_recovery
-				bonus = 0.5
-				uses = 1
-				category = industry
+			custom_effect_tooltip = NAM_recovery_ordnance_tt
+			custom_effect_tooltip = NAM_pw_industrial_recovery_delivery_tt
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+				}
+				700 = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = train_equipment
+					amount = 25
+					producer = NAM
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -6813,13 +7090,6 @@ focus_tree = {
 			}
 			owns_state = 700
 			controls_state = 700
-			700 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6850,13 +7120,6 @@ focus_tree = {
 			}
 			owns_state = 700
 			controls_state = 700
-			700 = {
-				free_building_slots = {
-					building = arms_factory
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6948,11 +7211,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_chemical_works
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					owns_state = 689
+					controls_state = 689
+				}
+				689 = {
+					add_resource = { type = rubber amount = 4 }
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 220
+					producer = NAM
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -7110,7 +7383,6 @@ focus_tree = {
 		y = 7
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_civil_repair
 		}
@@ -7141,7 +7413,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		mutually_exclusive = {
 			focus = NAM_pw_road_priority
 		}
@@ -7170,7 +7441,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		mutually_exclusive = {
 			focus = NAM_pw_rail_priority
 		}
@@ -7199,7 +7469,6 @@ focus_tree = {
 		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_rail_priority
 			focus = NAM_pw_road_priority
@@ -7225,7 +7494,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_transport_commission
 		}
@@ -7251,7 +7519,6 @@ focus_tree = {
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_rail_priority
 			focus = NAM_pw_road_priority
@@ -7283,7 +7550,6 @@ focus_tree = {
 		y = 9
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_rail_priority
 			focus = NAM_pw_road_priority
@@ -7321,7 +7587,6 @@ focus_tree = {
 		y = 10
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_rail_priority
 			focus = NAM_pw_road_priority
@@ -7353,7 +7618,6 @@ focus_tree = {
 		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_transport_commission
 		}
@@ -7379,7 +7643,6 @@ focus_tree = {
 		y = 11
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
 		prerequisite = {
 			focus = NAM_pw_transport_maintenance
 		}
@@ -7509,7 +7772,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_communications
-		icon = GFX_focus_generic_university_2
+		icon = GFX_goal_generic_propaganda
 		x = 42
 		y = 3
 		cost = 3
@@ -7529,11 +7792,33 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_civil_communications
-				bonus = 0.5
-				uses = 1
-				category = electronics
+			custom_effect_tooltip = NAM_pw_broadcast_slot_tt
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_completed_focus = NAM_inventory
+							has_completed_focus = NAM_rom_address
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_campaign_our_own_word
+				custom_effect_tooltip = NAM_campaign_our_own_word_unlock_tt
+			}
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_completed_focus = NAM_inventory
+							has_completed_focus = NAM_open_ledgers
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_campaign_oil_is_ours
+				custom_effect_tooltip = NAM_campaign_oil_is_ours_unlock_tt
+			}
+			hidden_effect = {
+				ADISCORD_campaign_slot_grant = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -7557,13 +7842,6 @@ focus_tree = {
 			}
 			owns_state = 719
 			controls_state = 719
-			719 = {
-				free_building_slots = {
-					building = industrial_complex
-					size = 1
-					include_locked = yes
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -7580,8 +7858,7 @@ focus_tree = {
 		x = 72
 		y = 2
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_veterans_return
 		}
@@ -7605,8 +7882,7 @@ focus_tree = {
 		x = 70
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_army_review
 		}
@@ -7649,8 +7925,7 @@ focus_tree = {
 		x = 74
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_army_review
 		}
@@ -7689,12 +7964,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_reserve_centres
-		icon = GFX_goal_generic_small_arms
-		x = 72
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 70
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_breakthrough_army
 			focus = NAM_pw_mobile_army
@@ -7716,12 +7990,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_engineer_units
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_goal_generic_construct_infrastructure
 		x = 68
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_breakthrough_army
 		}
@@ -7742,12 +8015,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_field_workshops
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_goal_generic_production2
 		x = 76
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_mobile_army
 		}
@@ -7775,11 +8047,10 @@ focus_tree = {
 	focus = {
 		id = NAM_pw_artillery_observers
 		icon = GFX_goal_generic_army_artillery2
-		x = 76
+		x = 68
 		y = 3
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_army_review
 		}
@@ -7809,12 +8080,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_staff_exercises
-		icon = GFX_goal_generic_army_doctrines
-		x = 70
-		y = 5
+		icon = GFX_goal_generic_position_armies
+		x = 74
+		y = 4
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_breakthrough_army
 			focus = NAM_pw_mobile_army
@@ -7837,12 +8107,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_combined_arms
-		icon = GFX_goal_generic_small_arms
-		x = 74
+		icon = GFX_goal_generic_build_tank
+		x = 76
 		y = 5
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_engineer_units
 			focus = NAM_pw_field_workshops
@@ -7865,10 +8134,9 @@ focus_tree = {
 		id = NAM_pw_southern_army
 		icon = GFX_goal_generic_army_doctrines
 		x = 72
-		y = 6
+		y = 5
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_staff_exercises
 		}
@@ -7922,12 +8190,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_review
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_goal_generic_navy_doctrines_tactics
 		x = 82
 		y = 2
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_veterans_return
 		}
@@ -7947,12 +8214,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_escort_fleet
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_goal_generic_navy_anti_submarine
 		x = 78
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_naval_workshops
 		}
@@ -8003,12 +8269,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_strike_fleet
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 82
+		icon = GFX_goal_generic_navy_submarine
+		x = 81
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_naval_workshops
 		}
@@ -8059,12 +8324,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_workshops
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 80
+		icon = GFX_goal_generic_production2
+		x = 78
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_naval_review
 		}
@@ -8073,11 +8337,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 700
-			controls_state = 700
-			700 = { dockyard > 3 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8090,12 +8349,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_crew_schools
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 80
+		icon = GFX_goal_generic_special_forces
+		x = 79
 		y = 5
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_escort_fleet
 			focus = NAM_pw_strike_fleet
@@ -8115,18 +8373,23 @@ focus_tree = {
 				uses = 1
 				category = naval_equipment
 			}
+			navy_experience = 30
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 12
+				producer = NAM
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 	focus = {
 		id = NAM_pw_naval_fuel_depots
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_goal_generic_oil_refinery
 		x = 86
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_naval_review
 		}
@@ -8135,11 +8398,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 700
-			controls_state = 700
-			700 = { naval_base > 8 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8152,12 +8410,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_landing_supply
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_goal_generic_occupy_states_coastal
 		x = 84
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_naval_review
 		}
@@ -8170,8 +8427,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_program_landing_supply
-			custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
+			if = {
+				limit = {
+					NOT = { is_special_project_completed = sp:NAM_sp_shallow_landing_barge }
+				}
+				unlock_decision_tooltip = NAM_program_landing_supply
+				custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
+			}
 			set_technology = { ADISCORD_tech_svetlogorsk_marine_corps = 1 }
 			unlock_decision_tooltip = NAM_marine_detachment_order
 			custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
@@ -8181,12 +8443,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_service
-		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 84
+		icon = GFX_goal_generic_navy_cruiser
+		x = 83
 		y = 6
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_escort_fleet
 			focus = NAM_pw_strike_fleet
@@ -8233,8 +8494,7 @@ focus_tree = {
 		x = 94
 		y = 2
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_veterans_return
 		}
@@ -8254,14 +8514,14 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_air_defence
-		icon = GFX_goal_generic_air_fighter2
+		icon = GFX_goal_generic_air_fighter
 		x = 92
-		y = 3
+		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_pw_air_review
+			focus = NAM_pw_airfield_network
+			focus = NAM_pw_flight_schools
 		}
 		mutually_exclusive = {
 			focus = NAM_pw_frontline_air
@@ -8288,14 +8548,14 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_frontline_air
-		icon = GFX_goal_generic_air_bomber
+		icon = GFX_goal_generic_CAS
 		x = 96
-		y = 3
+		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_pw_air_review
+			focus = NAM_pw_airfield_network
+			focus = NAM_pw_flight_schools
 		}
 		mutually_exclusive = {
 			focus = NAM_pw_air_defence
@@ -8322,12 +8582,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_airfield_network
-		icon = GFX_goal_generic_air_doctrine
-		x = 88
+		icon = GFX_goal_generic_construction
+		x = 90
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_review
 		}
@@ -8336,11 +8595,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 700
-			controls_state = 700
-			700 = { air_base > 8 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8353,12 +8607,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_flight_schools
-		icon = GFX_goal_generic_air_doctrine
-		x = 90
-		y = 4
+		icon = GFX_goal_generic_build_airforce
+		x = 94
+		y = 3
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_review
 		}
@@ -8379,12 +8632,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_radar_posts
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_goal_generic_radar
 		x = 100
 		y = 3
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_review
 		}
@@ -8393,11 +8645,6 @@ focus_tree = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-		}
-		bypass = {
-			owns_state = 700
-			controls_state = 700
-			700 = { radar_station > 5 }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8412,10 +8659,9 @@ focus_tree = {
 		id = NAM_pw_engine_workshops
 		icon = GFX_goal_generic_air_production
 		x = 94
-		y = 4
+		y = 5
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_defence
 			focus = NAM_pw_frontline_air
@@ -8435,18 +8681,38 @@ focus_tree = {
 				uses = 1
 				category = air_equipment
 			}
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = { free_building_slots = { building = arms_factory size > 0 include_locked = no } }
+				}
+				700 = {
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 220
+					producer = NAM
+				}
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 	focus = {
 		id = NAM_pw_air_supply
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_goal_generic_air_bomber
 		x = 89
 		y = 5
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_airfield_network
 			focus = NAM_pw_flight_schools
@@ -8468,12 +8734,11 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_ground_control
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_goal_generic_intelligence_exchange
 		x = 100
-		y = 5
+		y = 4
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_radar_posts
 		}
@@ -8506,11 +8771,10 @@ focus_tree = {
 	focus = {
 		id = NAM_pw_southern_air_command
 		icon = GFX_goal_generic_air_doctrine
-		x = 96
+		x = 98
 		y = 6
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_pw_southern_preparation_open = yes }
+		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_air_defence
 			focus = NAM_pw_frontline_air
@@ -8554,11 +8818,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_cooperative_congress_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 350 }
-				NAM_add_treasury = yes
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							has_completed_focus = NAM_deep_wells
+							has_completed_focus = NAM_pw_oil_laboratories
+							NAM_agreement_oil_active = yes
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_econ_deep_drilling
+				custom_effect_tooltip = NAM_econ_deep_drilling_unlock_tt
 			}
+			custom_effect_tooltip = NAM_cooperative_congress_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8653,6 +8926,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_district_fair_delivery_tt
 			if = {
 				limit = {
 					owns_state = 689
@@ -8699,6 +8973,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_oil_fund } }
+				unlock_decision_tooltip = NAM_pw_district_schools
+				custom_effect_tooltip = NAM_pw_district_schools_unlock_tt
+			}
+			custom_effect_tooltip = NAM_registered_volunteers_tt
 			add_manpower = 3500
 		}
 		ai_will_do = { base = 5 }
@@ -8795,12 +9075,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_rescue_college
-				bonus = 0.75
-				uses = 1
-				category = electronics
+			if = {
+				limit = {
+					NAM_field_repair_trained = no
+				}
+				unlock_decision_tooltip = NAM_project_repair_wells
+				custom_effect_tooltip = NAM_rescue_college_service_tt
 			}
+			else = { custom_effect_tooltip = NAM_rescue_college_service_tt }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
+			army_experience = 15
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8876,6 +9164,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_return_freight_tt
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_export_consortium } }
+				unlock_decision_tooltip = NAM_pw_export_shipment
+				custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+			}
 			add_equipment_to_stockpile = {
 				type = convoy
 				amount = 15
@@ -9012,11 +9306,53 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_testing_office
-				bonus = 0.75
-				uses = 1
-				category = industry
+			if = {
+				limit = {
+					NOT = {
+						any_owned_state = {
+							land_facility > 0
+						}
+					}
+				}
+				if = {
+					limit = {
+						owns_state = 688
+						controls_state = 688
+						688 = { free_building_slots = { building = land_facility size > 0 province = 689 } }
+					}
+					688 = {
+						add_building_construction = {
+							type = land_facility
+							level = 1
+							instant_build = yes
+							province = 689
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owns_state = 700
+						controls_state = 700
+						700 = { free_building_slots = { building = land_facility size > 0 province = 16716 } }
+					}
+					700 = {
+						add_building_construction = {
+							type = land_facility
+							level = 1
+							instant_build = yes
+							province = 16716
+						}
+					}
+				}
+			}
+			generate_scientist_character = {
+				skills = {
+					specialization_land = 2
+				}
+			}
+			add_breakthrough_points = {
+				specialization = specialization_land
+				value = 1
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -9075,11 +9411,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_relay_trials
-				bonus = 0.75
-				uses = 1
-				category = electronics
+			set_technology = {
+				ADISCORD_tech_hardened_computers = 1
+				popup = no
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 240
+				producer = NAM
+			}
+			add_breakthrough_points = {
+				specialization = specialization_land
+				value = 1
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -9111,6 +9454,27 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = {
+					has_completed_focus = NAM_precision_gauges
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 240
+					producer = NAM
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = anti_air_equipment
+					amount = 180
+					producer = NAM
+				}
+			}
+			set_technology = {
+				ADISCORD_tech_automated_assembly = 1
+				popup = no
+			}
 			if = {
 				limit = {
 					owns_state = 688

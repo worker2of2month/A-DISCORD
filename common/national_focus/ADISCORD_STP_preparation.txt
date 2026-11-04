@@ -750,7 +750,10 @@ focus_tree = {
 			}
 			custom_effect_tooltip = STP_cw_network_transfer_tt
 			add_political_power = 50
-			hidden_effect = { set_country_flag = STP_cw_archives_used }
+			hidden_effect = {
+				set_country_flag = STP_cw_archives_used
+				country_event = { id = ADISCORD_STP_preparation.34 days = 1 }
+			}
 		}
 	}
 
@@ -779,6 +782,7 @@ focus_tree = {
 				set_country_flag = STP_cw_archives_used
 				set_temp_variable = { var = STP_party_suspicion_change value = 10 }
 				STP_change_party_suspicion = yes
+				country_event = { id = ADISCORD_STP_preparation.35 days = 1 }
 			}
 		}
 	}

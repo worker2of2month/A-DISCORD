@@ -395,6 +395,157 @@ country_event = {
 	option = { name = ADISCORD_STP_preparation.4.a }
 }
 
+# Ivanov's last public weeks. The balcony is queued at health stage 4 and
+# rechecks that he is alive; the funeral and the cabinet ovens follow the
+# election opening and close if the civil war has already started.
+country_event = {
+	id = ADISCORD_STP_preparation.36
+	title = ADISCORD_STP_preparation.36.t
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		text = ADISCORD_STP_preparation.36.d_resistance
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		text = ADISCORD_STP_preparation.36.d_party
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STP
+		is_ai = no
+		NOT = { has_country_flag = STP_ivanov_dead }
+		NOT = { has_global_flag = STP_cw_started }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.36.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.37
+	title = ADISCORD_STP_preparation.37.t
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		text = ADISCORD_STP_preparation.37.d_resistance
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		text = ADISCORD_STP_preparation.37.d_party
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STP
+		is_ai = no
+		STP_cw_preparation_open = yes
+	}
+	# The cost-free answer of each side is listed first and is the timeout choice.
+	option = {
+		name = ADISCORD_STP_preparation.37.b
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.37.a
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.03 }
+		custom_effect_tooltip = STP_cw_suspicion_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+			STP_change_party_suspicion = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_preparation.37.d
+		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.37.c
+		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		add_political_power = -25
+		add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.03 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.38
+	title = ADISCORD_STP_preparation.38.t
+	desc = ADISCORD_STP_preparation.38.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STP
+		is_ai = no
+		STP_cw_preparation_open = yes
+		has_country_flag = STP_sided_with_the_party_flag
+	}
+	option = {
+		name = ADISCORD_STP_preparation.38.a
+	}
+}
+
+# The Black Book thread on Shabrat's side: the cabinet archive yields the
+# ledger, the public exposure yields a witness. Both pay in party suspicion.
+country_event = {
+	id = ADISCORD_STP_preparation.34
+	title = ADISCORD_STP_preparation.34.t
+	desc = ADISCORD_STP_preparation.34.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STP
+		is_ai = no
+		STP_cw_preparation_open = yes
+		has_country_flag = STP_sided_with_Maksim_flag
+	}
+	option = {
+		name = ADISCORD_STP_preparation.34.a
+	}
+	option = {
+		name = ADISCORD_STP_preparation.34.b
+		add_political_power = 30
+		custom_effect_tooltip = STP_cw_suspicion_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+			STP_change_party_suspicion = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.35
+	title = ADISCORD_STP_preparation.35.t
+	desc = ADISCORD_STP_preparation.35.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		tag = STP
+		is_ai = no
+		STP_cw_preparation_open = yes
+		has_country_flag = STP_sided_with_Maksim_flag
+	}
+	option = {
+		name = ADISCORD_STP_preparation.35.b
+	}
+	option = {
+		name = ADISCORD_STP_preparation.35.a
+		add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.03 }
+		custom_effect_tooltip = STP_cw_suspicion_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = STP_party_suspicion_change value = 5 }
+			STP_change_party_suspicion = yes
+		}
+	}
+}
+
 country_event = {
 	id = ADISCORD_STP_preparation.10
 	title = ADISCORD_STP_preparation.10.t
@@ -545,7 +696,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_STP_cw.40
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	title = ADISCORD_STP_cw.40.t
 	desc = ADISCORD_STP_cw.40.d
 	is_triggered_only = yes
@@ -728,7 +879,7 @@ country_event = {
 	id = ADISCORD_STP_cw.42
 	title = ADISCORD_STP_cw.42.t
 	desc = ADISCORD_STP_cw.42.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = { NOD_cw_intervention_possible = yes NOT = { has_country_flag = NOD_cw_offer_shown } }
 	immediate = { set_country_flag = NOD_cw_offer_shown }
@@ -772,7 +923,7 @@ country_event = {
 	desc = { trigger = { has_country_flag = NOD_cw_victorious } text = ADISCORD_STP_cw.43.victory }
 	desc = { trigger = { has_country_flag = NOD_cw_withdrew } text = ADISCORD_STP_cw.43.withdrawal }
 	desc = { trigger = { has_country_flag = NOD_cw_defeated } text = ADISCORD_STP_cw.43.defeat }
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = { tag = NOD }
 	option = { name = ADISCORD_STP_cw.43.a }
@@ -1166,14 +1317,19 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_new_republic }
-	option = { name = ADISCORD_STP_pw.1.a }
+	option = {
+		name = ADISCORD_STP_pw.1.a
+		hidden_effect = {
+			country_event = { id = ADISCORD_STP_pw.12 days = 45 }
+		}
+	}
 }
 
 country_event = {
 	id = ADISCORD_STP_pw.2
 	title = ADISCORD_STP_pw.2.t
 	desc = ADISCORD_STP_pw.2.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_civil_records }
@@ -1341,7 +1497,7 @@ country_event = {
 	id = ADISCORD_STP_pc.1
 	title = ADISCORD_STP_pc.1.t
 	desc = ADISCORD_STP_pc.1.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_school_classroom
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_STP_pc.1.a }
@@ -1351,7 +1507,7 @@ country_event = {
 	id = ADISCORD_STP_pc.2
 	title = ADISCORD_STP_pc.2.t
 	desc = ADISCORD_STP_pc.2.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_STP_pc.2.a }
@@ -1361,7 +1517,7 @@ country_event = {
 	id = ADISCORD_STP_pc.3
 	title = ADISCORD_STP_pc.3.t
 	desc = ADISCORD_STP_pc.3.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	fire_only_once = yes
 	immediate = {
@@ -1543,7 +1699,7 @@ country_event = {
 	id = ADISCORD_STP_pc.6
 	title = ADISCORD_STP_pc.6.t
 	desc = ADISCORD_STP_pc.6.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS }
@@ -1653,7 +1809,7 @@ country_event = {
 	id = ADISCORD_STP_pc.8
 	title = ADISCORD_STP_pc.8.t
 	desc = ADISCORD_STP_pc.8.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_STP_pc.8.a }
@@ -1874,7 +2030,7 @@ country_event = {
 	id = ADISCORD_STP_pc.13
 	title = ADISCORD_STP_pc.13.t
 	desc = ADISCORD_STP_pc.13.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	immediate = { hidden_effect = { set_country_flag = STP_gornin_introduced } }
@@ -1885,7 +2041,7 @@ country_event = {
 	id = ADISCORD_STP_pc.14
 	title = ADISCORD_STP_pc.14.t
 	desc = ADISCORD_STP_pc.14.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	immediate = { hidden_effect = { set_country_flag = STP_vera_introduced } }
@@ -2152,7 +2308,7 @@ country_event = {
 	id = ADISCORD_STP_pc.20
 	title = ADISCORD_STP_pc.20.t
 	desc = ADISCORD_STP_pc.20.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	trigger = { OR = { tag = VAL tag = NOD } STS = { exists = yes } }
 	immediate = { add_ideas = STP_pc_campaign_defence_ready }
@@ -2185,7 +2341,7 @@ country_event = {
 		trigger = { FROM = { tag = NOD } has_country_flag = STP_pc_nod_terms_refused }
 		text = ADISCORD_STP_pc.21.nod_refused
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = { tag = STS }
 	immediate = {
@@ -2205,7 +2361,7 @@ country_event = {
 	id = ADISCORD_STP_pc.22
 	title = ADISCORD_STP_pc.22.t
 	desc = ADISCORD_STP_pc.22.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	timeout_days = 21
 	trigger = { tag = NOD }
@@ -2362,7 +2518,7 @@ country_event = {
 	id = ADISCORD_STP_pc.25
 	title = ADISCORD_STP_pc.25.t
 	desc = ADISCORD_STP_pc.25.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = { tag = STP }
 	option = { name = ADISCORD_STP_pc.25.a }
@@ -2372,7 +2528,7 @@ country_event = {
 	id = ADISCORD_STP_pc.26
 	title = ADISCORD_STP_pc.26.t
 	desc = ADISCORD_STP_pc.26.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STP }
@@ -2441,7 +2597,7 @@ country_event = {
 	id = ADISCORD_STP_pc.27
 	title = ADISCORD_STP_pc.27.t
 	desc = ADISCORD_STP_pc.27.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STP }
@@ -2604,6 +2760,7 @@ country_event = {
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
 				}
 				scoped_play_song = "ADISCORD_stp_civil_war"
+				country_event = { id = ADISCORD_STP_cw.117 days = 40 }
 			}
 		}
 	}
@@ -2633,7 +2790,7 @@ country_event = {
 	id = ADISCORD_STP_pc.30
 	title = ADISCORD_STP_pc.30.t
 	desc = ADISCORD_STP_pc.30.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	trigger = { tag = STP has_country_flag = STP_pw_party_nod_invasion_defeated }
 	option = { name = ADISCORD_STP_pc.30.a }
@@ -3122,7 +3279,7 @@ country_event = {
 	id = ADISCORD_STP_pc.38
 	title = ADISCORD_STP_pc.38.t
 	desc = ADISCORD_STP_pc.38.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -3515,6 +3672,7 @@ country_event = {
 	timeout_days = 21
 	option = {
 		name = ADISCORD_STP_ch.2.a
+		custom_effect_tooltip = ADISCORD_STP_ch.2.a_tt
 	}
 }
 
@@ -3545,6 +3703,7 @@ country_event = {
 	timeout_days = 21
 	option = {
 		name = ADISCORD_STP_ch.4.a
+		custom_effect_tooltip = ADISCORD_STP_ch.4.a_tt
 	}
 }
 
@@ -3732,6 +3891,7 @@ country_event = {
 	timeout_days = 21
 	option = {
 		name = ADISCORD_STP_ch.8.a
+		custom_effect_tooltip = ADISCORD_STP_ch.8.a_tt
 	}
 }
 
@@ -3747,6 +3907,7 @@ country_event = {
 	timeout_days = 21
 	option = {
 		name = ADISCORD_STP_ch.9.a
+		custom_effect_tooltip = ADISCORD_STP_ch.9.a_tt
 	}
 }
 
@@ -3976,7 +4137,7 @@ country_event = {
 	id = ADISCORD_STP_pv.11
 	title = ADISCORD_STP_pv.11.t
 	desc = ADISCORD_STP_pv.11.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	trigger = { STP_pv_war_current = yes }
 	option = {
@@ -4100,6 +4261,58 @@ country_event = {
 	}
 }
 
+# The ledger reached through the war budget. Settlement uses the same bloc
+# and treasury bookkeeping as the strain events.
+country_event = {
+	id = ADISCORD_STP_pv.13
+	title = ADISCORD_STP_pv.13.t
+	desc = ADISCORD_STP_pv.13.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { STP_pv_war_current = yes }
+	option = {
+		name = ADISCORD_STP_pv.13.a
+		ai_chance = { base = 60 }
+		add_stability = -0.02
+		custom_effect_tooltip = ADISCORD_STP_pv.13.a_tt
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = { STP_pf_settled = yes }
+				}
+			}
+			custom_effect_tooltip = ADISCORD_STP_pv.13.a_tt_pf
+		}
+		hidden_effect = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 800 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 800 }
+			ADISCORD_economy_mark_dirty = yes
+			add_to_variable = { var = STP_pf_merchants_support value = 6 }
+			STP_refresh_apparatus_loyalty = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.13.b
+		ai_chance = { base = 40 }
+		add_war_support = 0.03
+		if = {
+			limit = {
+				hidden_trigger = {
+					NOT = { STP_pf_settled = yes }
+				}
+			}
+			custom_effect_tooltip = ADISCORD_STP_pv.13.b_tt_pf
+		}
+		hidden_effect = {
+			subtract_from_variable = { var = STP_pf_merchants_support value = 8 }
+			add_to_variable = { var = STP_pf_conservatives_support value = 4 }
+			STP_refresh_apparatus_loyalty = yes
+		}
+	}
+}
+
 # Bloc crises: appease the bloc, move power elsewhere, or accept its concrete penalty.
 country_event = {
 	id = ADISCORD_STP_pv.20
@@ -4165,7 +4378,7 @@ country_event = {
 	id = ADISCORD_STP_pv.21
 	title = ADISCORD_STP_pv.21.t
 	desc = ADISCORD_STP_pv.21.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = { STP_pv_war_current = yes }
 	option = {
@@ -4223,7 +4436,7 @@ country_event = {
 	id = ADISCORD_STP_pv.22
 	title = ADISCORD_STP_pv.22.t
 	desc = ADISCORD_STP_pv.22.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	trigger = { STP_pv_war_current = yes }
 	option = {
@@ -4413,7 +4626,7 @@ country_event = {
 	id = ADISCORD_STP_pv.25
 	title = ADISCORD_STP_pv.25.t
 	desc = ADISCORD_STP_pv.25.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = { STP_pv_war_current = yes }
 	option = {
@@ -4563,7 +4776,7 @@ country_event = {
 	id = ADISCORD_STP_pv.40
 	title = ADISCORD_STP_pv.40.t
 	desc = ADISCORD_STP_pv.40.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	trigger = { STP_pv_war_current = yes }
 	option = {
@@ -4633,7 +4846,29 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { has_variable = STP_pv_outcome }
-	option = { name = ADISCORD_STP_pv.50.a }
+	option = {
+		name = ADISCORD_STP_pv.50.a
+		hidden_effect = {
+			country_event = { id = ADISCORD_STP_pv.14 days = 45 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pv.14
+	title = ADISCORD_STP_pv.14.t
+	desc = ADISCORD_STP_pv.14.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STP
+		is_ai = no
+		NOT = { has_war_with = STS }
+	}
+	option = {
+		name = ADISCORD_STP_pv.14.a
+	}
 }
 
 # ============================================================
@@ -4658,7 +4893,7 @@ country_event = {
 	id = ADISCORD_STP_hw.10
 	title = ADISCORD_STP_hw.10.t
 	desc = ADISCORD_STP_hw.10.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	trigger = { STP_hw_war_current = yes }
 	option = {
@@ -4689,7 +4924,7 @@ country_event = {
 	id = ADISCORD_STP_hw.11
 	title = ADISCORD_STP_hw.11.t
 	desc = ADISCORD_STP_hw.11.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	trigger = { STP_hw_war_current = yes }
 	option = {
@@ -4752,7 +4987,7 @@ country_event = {
 	id = ADISCORD_STP_hw.21
 	title = ADISCORD_STP_hw.21.t
 	desc = ADISCORD_STP_hw.21.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	trigger = { STP_hw_war_current = yes }
 	option = {
@@ -4857,7 +5092,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.20.t
 	desc = ADISCORD_STP_ch.20.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -4952,7 +5187,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.21.t
 	desc = ADISCORD_STP_ch.21.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5056,7 +5291,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.22.t
 	desc = ADISCORD_STP_ch.22.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5176,7 +5411,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.23.t
 	desc = ADISCORD_STP_ch.23.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5377,7 +5612,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.25.t
 	desc = ADISCORD_STP_ch.25.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5481,7 +5716,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.26.t
 	desc = ADISCORD_STP_ch.26.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5599,7 +5834,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.27.t
 	desc = ADISCORD_STP_ch.27.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5724,7 +5959,7 @@ country_event = {
 		trigger = { NOT = { has_country_flag = STP_party_drug_health_fund } }
 		text = ADISCORD_STP_ch.28.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5859,7 +6094,7 @@ country_event = {
 		trigger = { NOT = { has_country_flag = STP_party_labour_registry } }
 		text = ADISCORD_STP_ch.29.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -5980,7 +6215,7 @@ country_event = {
 	timeout_days = 14
 	title = ADISCORD_STP_ch.30.t
 	desc = ADISCORD_STP_ch.30.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	trigger = {
 		STP_pf_active = yes
 		has_country_flag = STP_cw_postwar
@@ -6128,7 +6363,7 @@ country_event = {
 	id = ADISCORD_STP_ch.40
 	title = ADISCORD_STP_ch.40.t
 	desc = ADISCORD_STP_ch.40.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6156,7 +6391,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.46.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -6320,7 +6555,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.52.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6341,7 +6576,7 @@ country_event = {
 	id = ADISCORD_STP_ch.41
 	title = ADISCORD_STP_ch.41.t
 	desc = ADISCORD_STP_ch.41.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6387,7 +6622,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.47.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -6524,7 +6759,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.53.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6545,7 +6780,7 @@ country_event = {
 	id = ADISCORD_STP_ch.42
 	title = ADISCORD_STP_ch.42.t
 	desc = ADISCORD_STP_ch.42.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6573,7 +6808,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.48.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -6737,7 +6972,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.54.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6758,7 +6993,7 @@ country_event = {
 	id = ADISCORD_STP_ch.43
 	title = ADISCORD_STP_ch.43.t
 	desc = ADISCORD_STP_ch.43.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6786,7 +7021,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.49.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -6950,7 +7185,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.55.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6971,7 +7206,7 @@ country_event = {
 	id = ADISCORD_STP_ch.44
 	title = ADISCORD_STP_ch.44.t
 	desc = ADISCORD_STP_ch.44.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -6999,7 +7234,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.50.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -7163,7 +7398,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.56.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7418,7 +7653,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.60.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7446,7 +7681,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.61.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7474,7 +7709,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.62.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7502,7 +7737,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.63.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7530,7 +7765,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_ch.64.b_desc
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7580,7 +7815,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_pc.60.d
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -7750,7 +7985,7 @@ country_event = {
 		}
 		text = ADISCORD_STP_pc.62.retained
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -8464,7 +8699,7 @@ country_event = {
 	id = ADISCORD_STP_pc.81
 	title = ADISCORD_STP_pc.81.t
 	desc = ADISCORD_STP_pc.81.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = no
 	timeout_days = 14
@@ -8650,7 +8885,7 @@ country_event = {
 	id = ADISCORD_STP_pc.83
 	title = ADISCORD_STP_pc.83.t
 	desc = ADISCORD_STP_pc.83.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -8715,7 +8950,7 @@ country_event = {
 	id = ADISCORD_STP_pc.84
 	title = ADISCORD_STP_pc.84.t
 	desc = ADISCORD_STP_pc.84.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -9045,7 +9280,7 @@ country_event = {
 	id = ADISCORD_STP_pc.91
 	title = ADISCORD_STP_pc.91.t
 	desc = ADISCORD_STP_pc.91.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	timeout_days = 14
@@ -9139,7 +9374,7 @@ country_event = {
 		trigger = { STP_pc_founder_rules = no }
 		text = ADISCORD_STP_cw.101.absent
 	}
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -9346,6 +9581,41 @@ country_event = {
 	}
 }
 
+# Story beats at fixed campaign moments; each rechecks the side and the war.
+country_event = {
+	id = ADISCORD_STP_cw.116
+	title = ADISCORD_STP_cw.116.t
+	desc = ADISCORD_STP_cw.116.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STS
+		is_ai = no
+		has_war_with = STP
+	}
+	option = {
+		name = ADISCORD_STP_cw.116.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.117
+	title = ADISCORD_STP_cw.117.t
+	desc = ADISCORD_STP_cw.117.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STS
+		is_ai = no
+		has_war_with = STP
+	}
+	option = {
+		name = ADISCORD_STP_cw.117.a
+	}
+}
+
 country_event = {
 	id = ADISCORD_STP_pw.10
 	title = ADISCORD_STP_pw.10.t
@@ -9379,6 +9649,23 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_pw.11.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pw.12
+	title = ADISCORD_STP_pw.12.t
+	desc = ADISCORD_STP_pw.12.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STS
+		is_ai = no
+		NOT = { has_war_with = STP }
+	}
+	option = {
+		name = ADISCORD_STP_pw.12.a
 	}
 }
 

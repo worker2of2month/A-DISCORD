@@ -405,6 +405,9 @@ def check_oil_monopoly(
         visible = named_block(decision, "visible")
         if "NAM_field_repair_unlocked = yes" in visible:
             visible += named_block(triggers, "NAM_field_repair_unlocked")
+            visible += named_block(triggers, "NAM_field_repair_trained")
+        if "NAM_postwar_refinery_authorized = yes" in visible:
+            visible += named_block(triggers, "NAM_postwar_refinery_authorized")
         if "NAM_oil_trade_authorized = yes" in visible:
             visible += named_block(triggers, "NAM_oil_trade_authorized")
         if "NAM_permanent_lines_authorized = yes" in visible:
@@ -1144,9 +1147,10 @@ def check_colony_and_exile(
     """Colony phase, the active underground, the flight to the islands and piracy."""
     check(
         "visible = { NAM_colony_phase = yes }" in named_block(categories, "NAM_colony")
-        and "visible = { NAM_piracy_open = yes }" in named_block(categories, "NAM_piracy")
+        and has_script_fragment(named_block(categories, "NAM_piracy"),
+                                "visible = { OR = { NAM_piracy_open = yes NAM_piracy_victory = yes } }")
         and "NOT = { has_country_flag = NAM_center_vanished }" in named_block(triggers, "NAM_colony_phase"),
-        "the colony category must close with the centre and the piracy category open in exile",
+        "colonial programmes must close with the centre; sea raids open in radical exile or after victory",
     )
     monthly = named_block(on_actions, "on_monthly_NAM")
     check(
@@ -3012,7 +3016,7 @@ def main() -> int:
         729: {6193: 5},
         688: {16721: 25, 1710: 5},
         689: {7618: 5},
-        690: {8058: 5, 9016: 10, 16885: 5, 16887: 5},
+        690: {8058: 5, 9016: 5, 16885: 15, 16887: 10},
         719: {6961: 5},
         691: {8194: 10},
         720: {8057: 5},
@@ -3036,8 +3040,8 @@ def main() -> int:
         )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (67, 688, 689, 690, 700, 719))
-        == 125,
-        "NAM mainland VP total must be 125",
+        == 135,
+        "NAM mainland VP total must be 135",
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726))

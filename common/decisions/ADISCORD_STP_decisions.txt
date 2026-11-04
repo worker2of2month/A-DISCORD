@@ -4818,6 +4818,7 @@ STP_military_operations = {
 			hidden_effect = {
 				set_country_flag = STP_cw_last_banquet_started
 				activate_mission = STP_cw_last_banquet_deadline
+				country_event = { id = ADISCORD_STP_cw.116 }
 			}
 		}
 		ai_will_do = { base = 10 }

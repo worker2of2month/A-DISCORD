@@ -4859,6 +4859,8 @@ class ValReclamationTests(unittest.TestCase):
                     modifiers.add((scope, scalar(v, "modifier")))
                 elif k == "remove_dynamic_modifier":
                     modifiers.discard((scope, scalar(v, "modifier")))
+                elif k == "country_event":
+                    pass
                 elif k == "add_extra_state_shared_building_slots":
                     buildings[(scope, "slots")] += float(v)
                 elif k == "add_building_construction":

@@ -166,6 +166,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Count_The_Captains_tt
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
 			VAL_apply_contract_army_1 = yes
+			country_event = { id = val_rework.154 }
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_negotiation_posture_delta } }
 			hidden_effect = {
@@ -1067,6 +1068,7 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Closed_Ledgers_tt
 			add_stability = 0.05
+			country_event = { id = val_rework.155 }
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_closed_ledgers_delta } }
 			hidden_effect = {
@@ -3767,6 +3769,7 @@ focus_tree = {
 			add_ideas = VAL_regional_settlement
 			hidden_effect = {
 				country_event = { id = val_contract.345 }
+				country_event = { id = val_rework.156 days = 3 }
 				country_event = { id = val_rework.123 hours = 1 }
 			}
 		}
@@ -3961,6 +3964,7 @@ focus_tree = {
 			}
 			army_experience = 25
 			add_command_power = 25
+			country_event = { id = val_rework.160 }
 		}
 		ai_will_do = { base = 30 }
 	}

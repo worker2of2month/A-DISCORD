@@ -4106,7 +4106,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 41)
+        self.assertEqual(len(events), 45)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -4171,7 +4171,7 @@ class RusCampaignTests(unittest.TestCase):
             self.assertEqual([row.key for row in options[0] if row.key != "effect_tooltip"], ["name"])
             for language in ("russian", "english"):
                 source = read(f"localisation/{language}/{BASE}_l_{language}.yml")
-                loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"([^"\r\n]*)"\s*$', source, re.M))
+                loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"((?:[^"\\\r\n]|\\.)*)"\s*$', source, re.M))
                 keys = [scalar(event, "title"), scalar(event, "desc")]
                 keys.extend(scalar(option, "name") for option in options)
                 for key in keys:
@@ -4205,7 +4205,6 @@ class RusCampaignTests(unittest.TestCase):
             (26, 28, "Вейранской империи", "Я помню"),
             (28, 30, "Вейранская империя", "Я сюда не за этим пришёл"),
             (30, 32, "Вейранской империи", "Когда будет звонок?"),
-            (32, 34, "Вейранской империи", "Оставьте открытой"),
         ):
             with self.subTest(number=number):
                 source_id = f"ADISCORD_rus_campaign.{predecessor}"
@@ -4256,6 +4255,92 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertNotIn("Хан", text)
                 self.assertEqual(self.loc[last_id + ".a"], answer)
 
+    def test_last_dream_waits_for_the_orbital_order_or_the_peaceful_end(self):
+        events = {
+            scalar(entry.value, "id"): entry.value
+            for entry in parse(f"events/{BASE}_events.txt")
+            if entry.key == "country_event"
+        }
+        source = events["ADISCORD_rus_campaign.32"]
+        immediate = block(source, "immediate")
+        scheduled = [row.value for row in walk(immediate) if row.key == "country_event"]
+        self.assertEqual([(scalar(row, "id"), scalar(row, "days")) for row in scheduled], [("ADISCORD_rus_campaign.34", "90")])
+        early = self.world()
+        early.variables.pop("RUS_crisis_phase", None)
+        before = early.balances(), deepcopy(early.variables)
+        early.execute(immediate)
+        self.assertNotIn("ADISCORD_rus_campaign.34", early.events)
+        self.assertIn("RUS_dream_finale_pending", early.flags)
+        self.assertEqual((early.balances(), early.variables), before)
+        late = self.world()
+        late.variables["RUS_crisis_phase"] = 2
+        late.execute(immediate)
+        self.assertEqual(late.events.count("ADISCORD_rus_campaign.34"), 1)
+        self.assertNotIn("RUS_dream_finale_pending", late.flags)
+        for option in (row.value for row in source if row.key == "option"):
+            self.assertFalse(any(row.key in ("effect_tooltip", "custom_effect_tooltip") for row in walk(option)))
+        # Each consumer clears the marker and dispatches the finale once.
+        consumers = (
+            (self.effects["RUS_crisis_begin"], "1"),
+            (block(self.focuses["RUS_tomorrow_above_ground"], "completion_reward"), "3"),
+        )
+        for rows, days in consumers:
+            guarded = [
+                row.value for row in walk(rows)
+                if row.key == "if" and any(
+                    gate.key == "has_country_flag" and gate.value == "RUS_dream_finale_pending"
+                    for gate in block(row.value, "limit")
+                )
+            ]
+            self.assertEqual(len(guarded), 1)
+            self.assertEqual([row.key for row in guarded[0] if row.key != "limit"], ["clr_country_flag", "country_event"])
+            finale = block(guarded[0], "country_event")
+            self.assertEqual((scalar(finale, "id"), scalar(finale, "days")), ("ADISCORD_rus_campaign.34", days))
+        text = self.loc["ADISCORD_rus_campaign.34.d"] + self.loc["ADISCORD_rus_campaign.35.d"]
+        self.assertIn("Марк Рустан", text)
+        self.assertIn("Вейранской империи", text)
+        self.assertNotIn("Хан", text)
+        self.assertEqual(self.loc["ADISCORD_rus_campaign.35.a"], "Оставьте открытой")
+
+    def test_war_route_scenes_have_one_focus_caller_and_complete_translations(self):
+        events = {
+            scalar(entry.value, "id"): entry.value
+            for entry in parse(f"events/{BASE}_events.txt")
+            if entry.key == "country_event"
+        }
+        expected = {
+            "ADISCORD_rus_campaign.42": "RUS_drive_starolesye_back",
+            "ADISCORD_rus_campaign.43": "RUS_press_the_closed_zone",
+            "ADISCORD_rus_campaign.44": "RUS_seat_the_khan_chancery",
+            "ADISCORD_rus_campaign.45": "RUS_claim_the_opened_zone",
+        }
+        translations = {}
+        for language in ("russian", "english"):
+            source = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            translations[language] = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"((?:[^"\\\r\n]|\\.)*)"\s*$', source, re.M))
+        for name, focus in expected.items():
+            with self.subTest(event=name):
+                event = events[name]
+                self.assertEqual(scalar(event, "fire_only_once"), "yes")
+                self.assertEqual(scalar(block(event, "trigger"), "RUS_khan_governing"), "yes")
+                self.assertFalse(any(entry.key == "immediate" for entry in event))
+                callers = [
+                    caller for caller, rows in self.focuses.items()
+                    for entry in block(rows, "completion_reward") if entry.key == "hidden_effect"
+                    for child in walk(entry.value)
+                    if child.key == "country_event" and scalar(child.value, "id") == name
+                ]
+                self.assertEqual(callers, [focus])
+                for language, loc in translations.items():
+                    for suffix in ("t", "d", "a"):
+                        key = f"{name}.{suffix}"
+                        self.assertIn(key, loc, language)
+                        expanded = loc[key].replace("\\n", "\n")
+                        self.assertLessEqual(len(expanded), 3000, key)
+                        self.assertLessEqual(len(expanded.encode("utf-8")), 5500, key)
+                        for forbidden in ("§Y", "–", "—", "«", "»"):
+                            self.assertNotIn(forbidden, expanded, key)
+
     def test_perimeter_stories_are_guarded_discoveries_with_complete_translations(self):
         events = {
             scalar(entry.value, "id"): entry.value
@@ -4267,7 +4352,7 @@ class RusCampaignTests(unittest.TestCase):
             raw = (ROOT / f"localisation/{language}/{BASE}_l_{language}.yml").read_bytes()
             self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
             translations[language] = dict(re.findall(
-                r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"([^"\r\n]*)"\s*$',
+                r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"((?:[^"\\\r\n]|\\.)*)"\s*$',
                 raw.decode("utf-8-sig"), re.M,
             ))
         for number in range(14, 26):

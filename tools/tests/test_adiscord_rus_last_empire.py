@@ -2672,6 +2672,75 @@ class RusCrisisContracts(unittest.TestCase):
         world.run("RUS_morale_select_victor")
         self.assertEqual(world.targets["event_target:RUS_crisis_hegemon"], "VAL")
 
+    def test_khan_can_disconnect_the_weapon_channel_before_or_during_the_war(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        events = {
+            self.scalar(row.value, "id"): row.value
+            for row in self.entries("events/ADISCORD_RUS_events.txt")
+            if row.key == "country_event"
+        }
+        for number, disconnect in ((41, "ADISCORD_rus_crisis.41.b"), (42, "ADISCORD_rus_crisis.42.disconnect")):
+            with self.subTest(event=number):
+                options = [row.value for row in events[f"ADISCORD_rus_crisis.{number}"] if row.key == "option"]
+                # An unattended or AI answer keeps the current programme.
+                self.assertFalse(any(row.key in ("hidden_effect", "trigger") for row in options[0]))
+                self.assertEqual(self.scalar(self.block(options[0], "ai_chance"), "base"), "100")
+                for option in options[1:]:
+                    self.assertEqual(self.scalar(self.block(option, "ai_chance"), "base"), "0")
+                chosen = next(option for option in options if self.scalar(option, "name") == disconnect)
+                self.assertEqual([row.key for row in self.block(chosen, "hidden_effect")], ["RUS_crisis_disconnect_channel"])
+        begin = self.block(self.entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"), "RUS_crisis_begin")
+        scheduled = {
+            self.scalar(row.value, "id"): row.value
+            for row in walk(begin) if row.key == "country_event"
+        }
+        self.assertEqual(
+            (self.scalar(scheduled["ADISCORD_rus_crisis.41"], "days"), self.scalar(scheduled["ADISCORD_rus_crisis.42"], "days")),
+            ("30", "200"),
+        )
+
+        preparing = self.peaceful_empire()
+        preparing.ai_countries.discard("RUS")
+        preparing.run("RUS_crisis_begin")
+        preparing.run("RUS_crisis_disconnect_channel")
+        self.assertEqual(preparing.variables["RUS", "RUS_crisis_phase"], 5)
+        self.assertTrue({"RUS_crisis_laser_disabled", "RUS_crisis_channel_disconnected"} <= preparing.flags["RUS"])
+        self.assertIn(("RUS", "ADISCORD_rus_crisis.10"), preparing.events)
+        self.assertFalse(preparing.wars)
+        settled = list(preparing.events)
+        preparing.run("RUS_crisis_disconnect_channel")
+        self.assertEqual(preparing.events, settled)
+
+        fighting = self.peaceful_empire()
+        fighting.ai_countries.discard("RUS")
+        fighting.run("RUS_crisis_begin")
+        fighting.run("RUS_crisis_launch")
+        wars = set(fighting.wars)
+        self.assertTrue(wars)
+        fighting.run("RUS_crisis_disconnect_channel")
+        self.assertEqual(fighting.variables["RUS", "RUS_crisis_phase"], 2)
+        self.assertIn("RUS_crisis_laser_disabled", fighting.flags["RUS"])
+        self.assertEqual(fighting.wars, wars)
+
+        dying = self.dying_empire()
+        dying.variables["RUS", "RUS_crisis_phase"] = 2
+        dying.controllers.update({"49": "VAL", "51": "VAL"})
+        dying.run("RUS_khan_death")
+        self.assertIn(("RUS", "ADISCORD_rus_crisis.43"), dying.events)
+
+        key_re = re.compile(r'(?m)^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"((?:[^"\\\r\n]|\\.)*)"\s*$')
+        for path in (RUSSIAN_LOC, ENGLISH_LOC):
+            loc = dict(key_re.findall(read(path)))
+            for number in (41, 42, 43):
+                for row in walk(events[f"ADISCORD_rus_crisis.{number}"]):
+                    if row.key in ("title", "text", "name", "custom_effect_tooltip") or (
+                        row.key == "desc" and isinstance(row.value, str)
+                    ):
+                        self.assertIn(row.value, loc, (path.name, row.value))
+            for key in ("ADISCORD_rus_crisis.10.disconnected.d", "ADISCORD_rus_crisis.32.empire.d"):
+                self.assertIn(key, loc, (path.name, key))
+
     def test_khan_death_dissolves_the_empire_like_a_military_defeat(self):
         world = self.dying_empire()
         world.variables["RUS", "RUS_crisis_phase"] = 2

@@ -39,6 +39,9 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			add_stability = 0.05
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.31 days = 2 }
+			}
 		}
 		ai_will_do = {
 			base = 50
@@ -296,6 +299,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_trade_support value = -6 }
 				NAM_groups_refresh = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.33 days = 2 }
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -341,6 +347,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_trade_support value = 8 }
 				add_to_variable = { var = NAM_grp_garr_support value = -6 }
 				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.32 days = 2 }
 			}
 		}
 		ai_will_do = {
@@ -786,6 +795,9 @@ focus_tree = {
 			add_research_slot = 1
 			add_political_power = 75
 			add_stability = 0.05
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.34 days = 3 }
+			}
 		}
 		ai_will_do = {
 			base = 10

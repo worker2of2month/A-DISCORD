@@ -50,6 +50,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_dist_support value = -6 }
 				NAM_groups_refresh = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.21 days = 3 }
+			}
 		}
 		ai_will_do = {
 			base = 30
@@ -268,6 +271,9 @@ focus_tree = {
 			unlock_decision_tooltip = NAM_corp_auction_district
 			custom_effect_tooltip = NAM_corp_auction_district_unlock_tt
 			add_political_power = 30
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.22 days = 2 }
+			}
 		}
 		ai_will_do = {
 			base = 20
@@ -1456,6 +1462,9 @@ focus_tree = {
 			hidden_effect = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
 				NAM_corp_capital_add = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.23 days = 3 }
 			}
 		}
 		ai_will_do = {

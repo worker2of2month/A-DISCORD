@@ -824,6 +824,7 @@ VAL_military_operations = {
 					clr_country_flag = VAL_foreign_operation_active
 					set_country_flag = VAL_ardent_mandate_secured
 					TFF = { country_event = { id = ADISCORD_TFF.20 } }
+					country_event = { id = val_rework.162 }
 				}
 			}
 			else = {

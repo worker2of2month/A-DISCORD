@@ -847,7 +847,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             729: {6193: 5},
             688: {16721: 25, 1710: 5},
             689: {7618: 5},
-            690: {8058: 5, 9016: 10, 16885: 5, 16887: 5},
+            690: {8058: 5, 9016: 5, 16885: 15, 16887: 10},
             719: {6961: 5},
             691: {8194: 10},
             720: {8057: 5},
@@ -876,7 +876,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
-            125,
+            135,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726)),

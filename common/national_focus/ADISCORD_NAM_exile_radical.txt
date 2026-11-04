@@ -50,6 +50,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_nam_support value = -10 }
 				NAM_groups_refresh = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.1 days = 3 }
+			}
 		}
 		ai_will_do = {
 			base = 30
@@ -280,6 +283,9 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = NAM_revenge_readiness value = 10 }
 				NAM_revenge_readiness_clamp = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.2 days = 2 }
 			}
 		}
 		ai_will_do = {
@@ -1977,6 +1983,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_consolidation value = 5 }
 				NAM_consolidation_clamp = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.3 days = 5 }
+			}
 		}
 		ai_will_do = {
 			base = 30
@@ -2742,6 +2751,9 @@ focus_tree = {
 				add_to_variable = { var = NAM_grp_nam_support value = -10 }
 				add_to_variable = { var = NAM_grp_dist_support value = -10 }
 				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.4 days = 3 }
 			}
 		}
 		ai_will_do = {

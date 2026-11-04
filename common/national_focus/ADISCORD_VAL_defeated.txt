@@ -23,6 +23,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			add_stability = 0.02
+			country_event = { id = val_council.31 }
 		}
 		ai_will_do = { base = 20 }
 	}
@@ -115,6 +116,7 @@ focus_tree = {
 			add_stability = 0.05
 			add_war_support = -0.05
 			add_political_power = 50
+			country_event = { id = val_council.32 }
 		}
 		ai_will_do = { base = 20 }
 	}
@@ -146,6 +148,7 @@ focus_tree = {
 			army_experience = 15
 			add_command_power = 15
 			add_political_power = 25
+			country_event = { id = val_council.34 }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -183,6 +186,7 @@ focus_tree = {
 		completion_reward = {
 			add_war_support = 0.1
 			custom_effect_tooltip = VAL_council_revanche_stakes_tt
+			country_event = { id = val_council.33 }
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -426,6 +430,7 @@ focus_tree = {
 			ADISCORD_economy_receive_15 = yes
 			add_political_power = 75
 			add_stability = 0.05
+			country_event = { id = val_council.35 }
 		}
 		ai_will_do = { base = 10 }
 	}

@@ -11,7 +11,12 @@ NAM_colony = {
 NAM_piracy = {
 	icon = generic_naval
 	allowed = { tag = NAM }
-	visible = { NAM_piracy_open = yes }
+	visible = {
+		OR = {
+			NAM_piracy_open = yes
+			NAM_piracy_victory = yes
+		}
+	}
 	visible_when_empty = yes
 	priority = 25
 	scripted_gui = ADISCORD_NAM_piracy_panel
@@ -106,7 +111,10 @@ NAM_public_campaigns = {
 	icon = ADISCORD_propaganda
 	allowed = { tag = NAM }
 	visible = {
-		has_completed_focus = NAM_inventory
+		OR = {
+			has_completed_focus = NAM_inventory
+			has_completed_focus = NAM_pw_civil_communications
+		}
 		NAM_independent_programmes_operable = yes
 	}
 	visible_when_empty = yes

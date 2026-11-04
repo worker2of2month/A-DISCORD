@@ -852,12 +852,20 @@ defined_text = {
 defined_text = {
 	name = NAMBasinRepairBody
 	text = {
+		trigger = { has_completed_focus = NAM_rescue_college }
+		localization_key = NAM_bw_repair_body_trained
+	}
+	text = {
 		localization_key = NAM_bw_repair_body
 	}
 }
 
 defined_text = {
 	name = NAMBasinRefineryBody
+	text = {
+		trigger = { has_completed_focus = NAM_pw_refinery_engineering }
+		localization_key = NAM_bw_refinery_body_trained
+	}
 	text = {
 		localization_key = NAM_bw_refinery_body
 	}
@@ -1498,7 +1506,7 @@ defined_text = {
 defined_text = {
 	name = NAMPwRaidStatus
 	text = {
-		trigger = { NOT = { has_completed_focus = NAM_exile_sea_raiders } }
+		trigger = { NAM_pirate_commissioned = no }
 		localization_key = NAM_pw_reason_raiders_focus
 	}
 	text = {
@@ -2023,4 +2031,46 @@ defined_text = {
 		localization_key = NAM_agreement_trade_pillar
 	}
 	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetPrizeSpending
+	text = {
+		trigger = { NAM_piracy_victory = yes }
+		localization_key = NAM_pw_loot_tt_winner
+	}
+	text = {
+		localization_key = NAM_pw_loot_tt_exile
+	}
+}
+
+defined_text = {
+	name = NAMGetPrizeResponse
+	text = {
+		trigger = { NAM_piracy_victory = yes }
+		localization_key = NAM_pw_notoriety_tt_winner
+	}
+	text = {
+		localization_key = NAM_pw_notoriety_tt_exile
+	}
+}
+
+defined_text = {
+	name = NAMGetPrizeFlotillas
+	text = {
+		trigger = { NAM_piracy_victory = yes }
+		localization_key = NAM_pw_fleet_tt_winner
+	}
+	text = {
+		localization_key = NAM_pw_fleet_tt_exile
+	}
+}
+
+defined_text = {
+	name = NAMArtelSurveyNote
+	text = {
+		trigger = { NAM_artel_survey_open = yes }
+		localization_key = NAM_artel_survey_note
+	}
+	text = { localization_key = NAM_bw_empty }
 }

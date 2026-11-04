@@ -1237,7 +1237,7 @@ NAM_bw_refinery_startable = {
 	NAM_project_state_ready = yes
 	NAM = {
 		NAM_country_operable = yes
-		has_completed_focus = NAM_refinery_programme
+		NAM_postwar_refinery_authorized = yes
 		NAM_project_slot_free = yes
 		NAM_bw_can_pay_refinery = yes
 	}
@@ -1274,6 +1274,31 @@ NAM_piracy_open = {
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	has_country_flag = NAM_exile_radical
 	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+NAM_piracy_victory = {
+	NAM_pw_operable = yes
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+}
+
+NAM_pirate_commissioned = {
+	OR = {
+		NAM_piracy_victory = yes
+		AND = {
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_sea_raiders
+		}
+	}
+}
+
+NAM_pirate_exchange_open = {
+	OR = {
+		NAM_piracy_victory = yes
+		AND = {
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_fences
+		}
+	}
 }
 
 # COUNTRY NAM. A free flotilla for a new raid: NAM_pirate_raid_slots, never
@@ -1354,8 +1379,7 @@ NAM_pirate_lane_crossing_alert = {
 # COUNTRY NAM. A flotilla may put to sea now; the lane, price and cooldown are
 # checked by each caller.
 NAM_pirate_raid_ready = {
-	NAM_piracy_open = yes
-	has_completed_focus = NAM_exile_sea_raiders
+	NAM_pirate_commissioned = yes
 	NAM_country_operable = yes
 	NAM_pirate_slot_free = yes
 	has_navy_size = { size > 0 }
@@ -1517,11 +1541,23 @@ NAM_pw_fuel_quota_ready = {
 
 NAM_pw_state_arsenal_ready = {
 	NAM_pw_operable = yes
-	NAM_pw_capital_arms_site = yes
+	owns_state = 700
+	controls_state = 700
+	OR = {
+		NAM_pw_capital_arms_site = yes
+		has_completed_focus = NAM_pw_industrial_commission
+	}
 }
 
 NAM_pw_district_congress_ready = {
 	NAM_pw_operable = yes
+}
+
+NAM_pw_district_schools_unlocked = {
+	OR = {
+		has_completed_focus = NAM_oil_fund
+		has_completed_focus = NAM_relief_register
+	}
 }
 
 NAM_pw_district_schools_ready = {
@@ -1535,13 +1571,15 @@ NAM_pw_militia_reserve_ready = {
 
 NAM_pw_district_cooperative_ready = {
 	NAM_pw_operable = yes
-	NAM_pw_district_civil_site = yes
+	owns_state = 688
+	controls_state = 688
 	check_variable = { var = NAM_grp_dist_support value = 50 compare = greater_than_or_equals }
 }
 
 NAM_pw_export_shipment_unlocked = {
 	OR = {
 		has_completed_focus = NAM_export_consortium
+		has_completed_focus = NAM_freight_brokerage
 		has_completed_focus = NAM_defeat_oil_peace
 	}
 }
@@ -1584,11 +1622,18 @@ NAM_pw_charter_ally_available = {
 }
 
 # COUNTRY NAM. Either institution authorises the same local repair programme.
-NAM_field_repair_unlocked = {
+NAM_field_repair_trained = {
 	OR = {
 		has_completed_focus = NAM_supports_oil_compact
 		has_completed_focus = NAM_field_repair_crews
 		has_completed_focus = NAM_field_firefighters
+	}
+}
+
+NAM_field_repair_unlocked = {
+	OR = {
+		NAM_field_repair_trained = yes
+		has_completed_focus = NAM_rescue_college
 	}
 }
 
@@ -1767,7 +1812,7 @@ NAM_steel_site = {
 NAM_bw_drilling_startable = {
 	NAM_project_state_ready = yes
 	NOT = { has_state_flag = NAM_wells_scorched }
-	check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
+	NAM_field_can_drill = yes
 	NAM = {
 		NAM_independent_programmes_operable = yes
 		NAM_deep_drilling_unlocked = yes
@@ -1866,7 +1911,8 @@ ADISCORD_nam_debug_mandate_open = {
 
 NAM_pw_development_works_ready = {
 	NAM_pw_operable = yes
-	NAM_pw_capital_civil_site = yes
+	owns_state = 700
+	controls_state = 700
 }
 
 NAM_pw_merchant_order_ready = {
@@ -1877,7 +1923,7 @@ NAM_pw_rural_electrification_ready = {
 	NAM_pw_operable = yes
 	owns_state = 690
 	controls_state = 690
-	690 = { infrastructure < 5 }
+	NOT = { has_country_flag = NAM_dryriver_power_cooperative }
 }
 
 NAM_war_transport_purchase_ready = {
@@ -2132,7 +2178,9 @@ NAM_agreement_training_ready = {
 
 NAM_deep_drilling_unlocked = {
 	OR = {
+		has_completed_focus = NAM_cooperative_congress
 		has_completed_focus = NAM_deep_wells
+		has_completed_focus = NAM_pw_oil_laboratories
 		NAM_agreement_oil_active = yes
 	}
 }
@@ -2141,14 +2189,6 @@ NAM_agreement_district_order_open = {
 	NAM_agreement_dist_active = yes
 	NOT = {
 		any_owned_state = { has_state_flag = NAM_agreement_building }
-	}
-}
-
-NAM_pw_southern_preparation_open = {
-	NAM_pw_operable = yes
-	OR = {
-		has_completed_focus = NAM_recognition
-		has_global_flag = ADISCORD_south_final_started
 	}
 }
 
@@ -2222,4 +2262,225 @@ NAM_program_southern_corridor_site = {
 	controls_province = 16873
 	controls_province = 16884
 	controls_province = 16716
+}
+
+NAM_barge_order_open = {
+	OR = {
+		has_completed_focus = NAM_pw_landing_supply
+		is_special_project_completed = sp:NAM_sp_shallow_landing_barge
+	}
+}
+
+NAM_program_cadastre_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_land_register_ratified }
+}
+
+NAM_program_land_allotments_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_land_register_ratified }
+	owns_state = 689
+	controls_state = 689
+	owns_state = 690
+	controls_state = 690
+}
+
+NAM_program_public_works_contract_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_basin_works_depot }
+	owns_state = 690
+	controls_state = 690
+}
+
+NAM_program_municipal_repair_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_harbour_repair_service }
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_program_oilfield_substations_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_northern_pumps_electrified }
+	owns_state = 67
+	controls_state = 67
+	67 = {
+		has_variable = NAM_field_capacity
+		has_variable = NAM_field_max_capacity
+		NOT = { has_state_flag = NAM_wells_scorched }
+	}
+}
+
+NAM_program_irrigation_works_ready = {
+	NAM_pw_operable = yes
+	NOT = { has_country_flag = NAM_south_coast_canal_open }
+	owns_state = 689
+	controls_state = 689
+}
+
+NAM_program_tool_reserve_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	NOT = { has_country_flag = NAM_program_tool_reserve_commissioned }
+}
+
+NAM_program_company_housing_ready = {
+	NAM_pw_operable = yes
+	owns_state = 688
+	controls_state = 688
+	NOT = { has_country_flag = NAM_program_company_housing_commissioned }
+}
+
+NAM_program_state_warehouses_ready = {
+	NAM_pw_operable = yes
+	owns_state = 719
+	controls_state = 719
+	NOT = { has_country_flag = NAM_program_state_warehouses_commissioned }
+}
+
+NAM_program_development_fund_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	NOT = { has_country_flag = NAM_program_development_fund_commissioned }
+}
+
+NAM_program_regional_power_ready = {
+	NAM_pw_operable = yes
+	owns_state = 690
+	controls_state = 690
+	NOT = { has_country_flag = NAM_program_regional_power_commissioned }
+}
+
+NAM_program_civil_engineering_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_program_arms_engineering_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_program_regional_reconstruction_ready = {
+	NAM_pw_operable = yes
+	owns_state = 719
+	controls_state = 719
+	NOT = { has_country_flag = NAM_program_regional_reconstruction_commissioned }
+}
+
+NAM_program_naval_workshops_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	NOT = { has_country_flag = NAM_program_naval_workshops_commissioned }
+}
+
+NAM_program_radar_posts_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	NOT = { has_country_flag = NAM_program_radar_posts_commissioned }
+}
+
+NAM_program_southern_local_offices_ready = {
+	NAM_pw_operable = yes
+	SHL = {
+		is_subject_of = NAM
+		controls_province = 16719
+		controls_province = 16715
+		controls_province = 16713
+	}
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	NOT = { has_country_flag = NAM_program_southern_local_offices_commissioned }
+}
+
+NAM_program_fuel_reservoirs_ready = {
+	NAM_pw_operable = yes
+	owns_state = 67
+	controls_state = 67
+}
+
+NAM_program_naval_fuel_depots_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	controls_province = 16716
+}
+
+NAM_program_airfield_network_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_program_power_reserve_ready = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_postwar_refinery_authorized = {
+	OR = {
+		has_completed_focus = NAM_refinery_programme
+		has_completed_focus = NAM_pw_refinery_engineering
+	}
+}
+
+NAM_pw_state_arsenal_unlocked = {
+	OR = {
+		has_completed_focus = NAM_ladder_of_seals
+		has_completed_focus = NAM_pw_industrial_commission
+	}
+}
+
+NAM_pw_barter_charter_unlocked = {
+	OR = {
+		has_completed_focus = NAM_warehouse_receipts
+		has_completed_focus = NAM_commercial_reserve
+	}
+}
+
+NAM_pw_barter_charter_ready = {
+	NAM_pw_operable = yes
+	OR = {
+		AND = {
+			owns_state = 700
+			controls_state = 700
+			controls_province = 16716
+		}
+		AND = {
+			has_completed_focus = NAM_warehouse_receipts
+			owns_state = 688
+			controls_state = 688
+			controls_province = 689
+		}
+	}
+}
+
+NAM_pw_barter_charter_slot_free = {
+	OR = {
+		has_completed_focus = NAM_commercial_reserve
+		NOT = { has_country_flag = NAM_pw_civil_busy }
+	}
+	NOT = { has_country_flag = NAM_pw_barter_charter_paid }
+}
+
+NAM_artel_survey_open = {
+	has_variable = NAM_field_max_capacity
+	NOT = { has_state_flag = NAM_artel_surveyed }
+	NAM = { has_completed_focus = NAM_cooperative_congress }
+}
+
+NAM_field_can_drill = {
+	OR = {
+		check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
+		NAM_artel_survey_open = yes
+	}
 }

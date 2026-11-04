@@ -58,6 +58,7 @@ country_event = {
 			custom_effect_tooltip = RUS_crisis_exposed_warning_tt
 		}
 		else = { custom_effect_tooltip = RUS_crisis_warning_tt }
+		custom_effect_tooltip = RUS_crisis_programme_hold_tt
 	}
 }
 
@@ -68,7 +69,10 @@ country_event = {
 	desc = ADISCORD_rus_crisis.3.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
-	option = { name = ADISCORD_rus_crisis.3.a }
+	option = {
+		name = ADISCORD_rus_crisis.3.a
+		custom_effect_tooltip = RUS_crisis_war_rules_tt
+	}
 }
 
 country_event = {
@@ -160,7 +164,10 @@ country_event = {
 	desc = ADISCORD_rus_crisis.6.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
-	option = { name = ADISCORD_rus_crisis.6.a }
+	option = {
+		name = ADISCORD_rus_crisis.6.a
+		custom_effect_tooltip = RUS_crisis_programme_closed_tt
+	}
 }
 
 country_event = {
@@ -185,12 +192,22 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_crisis.10
 	title = ADISCORD_rus_crisis.10.t
-	desc = ADISCORD_rus_crisis.10.d
+	desc = {
+		trigger = { RUS = { has_country_flag = RUS_crisis_channel_disconnected } }
+		text = ADISCORD_rus_crisis.10.disconnected.d
+	}
+	desc = {
+		trigger = { RUS = { NOT = { has_country_flag = RUS_crisis_channel_disconnected } } }
+		text = ADISCORD_rus_crisis.10.d
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
-	option = { name = ADISCORD_rus_crisis.10.a }
+	option = {
+		name = ADISCORD_rus_crisis.10.a
+		custom_effect_tooltip = RUS_crisis_strike_cancelled_tt
+	}
 }
 
 country_event = {
@@ -893,6 +910,51 @@ country_event = {
 	option = { name = ADISCORD_rus_campaign.41.a }
 }
 
+# War-route scenes. Like the other public story events, they settle nothing.
+country_event = {
+	id = ADISCORD_rus_campaign.42
+	title = ADISCORD_rus_campaign.42.t
+	desc = ADISCORD_rus_campaign.42.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { RUS_khan_governing = yes }
+	option = { name = ADISCORD_rus_campaign.42.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.43
+	title = ADISCORD_rus_campaign.43.t
+	desc = ADISCORD_rus_campaign.43.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { RUS_khan_governing = yes }
+	option = { name = ADISCORD_rus_campaign.43.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.44
+	title = ADISCORD_rus_campaign.44.t
+	desc = ADISCORD_rus_campaign.44.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { RUS_khan_governing = yes }
+	option = { name = ADISCORD_rus_campaign.44.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.45
+	title = ADISCORD_rus_campaign.45.t
+	desc = ADISCORD_rus_campaign.45.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { RUS_khan_governing = yes }
+	option = { name = ADISCORD_rus_campaign.45.a }
+}
+
 # The perimeter archives are independent discoveries; their reading order is optional.
 country_event = {
 	id = ADISCORD_rus_campaign.14
@@ -1204,22 +1266,20 @@ country_event = {
 		is_ai = no
 		RUS_khan_governing = yes
 	}
+	# Before the orbital order the last dream waits for RUS_crisis_begin or,
+	# without a programme, for RUS_tomorrow_above_ground.
 	immediate = {
 		hidden_effect = {
-			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
+			if = {
+				limit = { has_variable = RUS_crisis_phase }
+				country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
+			}
+			else = { set_country_flag = RUS_dream_finale_pending }
 		}
 	}
-	option = {
-		name = ADISCORD_rus_campaign.32.a
-		effect_tooltip = {
-			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
-		}
-	}
+	option = { name = ADISCORD_rus_campaign.32.a }
 	option = {
 		name = ADISCORD_rus_campaign.32.continue
-		effect_tooltip = {
-			country_event = { id = ADISCORD_rus_campaign.34 days = 90 }
-		}
 		hidden_effect = {
 			country_event = { id = ADISCORD_rus_campaign.33 }
 		}
@@ -1382,7 +1442,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_crisis.32
 	title = ADISCORD_rus_crisis.32.t
-	desc = ADISCORD_rus_crisis.32.d
+	desc = {
+		trigger = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed } }
+		text = ADISCORD_rus_crisis.32.d
+	}
+	desc = {
+		trigger = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		text = ADISCORD_rus_crisis.32.empire.d
+	}
 	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	trigger = { tag = RUS }
@@ -1677,4 +1744,109 @@ country_event = {
 			RUS_suspicion_add = yes
 		}
 	}
+}
+
+# RUS. The coalition's envoy arrives during the preparation. Disconnecting
+# the weapon channel then closes the crisis before the intervention starts.
+country_event = {
+	id = ADISCORD_rus_crisis.41
+	title = ADISCORD_rus_crisis.41.t
+	desc = ADISCORD_rus_crisis.41.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		RUS_crisis_project_active = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+	}
+	# The first answer keeps the current programme for an unattended event.
+	option = {
+		name = ADISCORD_rus_crisis.41.a
+		ai_chance = { base = 100 }
+		custom_effect_tooltip = RUS_crisis_envoy_refused_tt
+	}
+	option = {
+		name = ADISCORD_rus_crisis.41.b
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = RUS_crisis_disconnect_preparation_tt
+		hidden_effect = { RUS_crisis_disconnect_channel = yes }
+	}
+}
+
+# RUS. The chief engineer's refusal during the countdown.
+country_event = {
+	id = ADISCORD_rus_crisis.42
+	title = ADISCORD_rus_crisis.42.t
+	desc = ADISCORD_rus_crisis.42.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { RUS_crisis_project_active = yes }
+	option = {
+		name = ADISCORD_rus_crisis.42.console
+		ai_chance = { base = 100 }
+	}
+	option = {
+		name = ADISCORD_rus_crisis.42.evacuation
+		ai_chance = { base = 0 }
+		add_stability = 0.02
+		if = {
+			limit = { RUS_state_balance_operational = yes }
+			custom_effect_tooltip = RUS_suspicion_energy_cover_support_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = { RUS_state_balance_operational = yes }
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+				RUS_faction_support_change = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.42.guard
+		ai_chance = { base = 0 }
+		add_stability = -0.02
+		add_war_support = 0.03
+		if = {
+			limit = { RUS_state_balance_operational = yes }
+			custom_effect_tooltip = RUS_suspicion_disperse_musters_support_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = { RUS_state_balance_operational = yes }
+				set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
+				RUS_faction_support_change = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_rus_crisis.42.disconnect
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = RUS_crisis_disconnect_war_tt
+		hidden_effect = { RUS_crisis_disconnect_channel = yes }
+	}
+}
+
+# RUS. Shown before the dissolution, while the Khan's own routes are still known.
+country_event = {
+	id = ADISCORD_rus_crisis.43
+	title = ADISCORD_rus_crisis.43.t
+	desc = {
+		trigger = { has_completed_focus = RUS_black_army_oath }
+		text = ADISCORD_rus_crisis.43.army.d
+	}
+	desc = {
+		trigger = { NOT = { has_completed_focus = RUS_black_army_oath } }
+		text = ADISCORD_rus_crisis.43.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = RUS
+		is_ai = no
+	}
+	option = { name = ADISCORD_rus_crisis.43.a }
 }

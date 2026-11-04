@@ -432,6 +432,9 @@ shared_focus = {
 				add_to_variable = { var = NAM_grp_nam_support value = -10 }
 				NAM_groups_refresh = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.11 days = 3 }
+			}
 		}
 		ai_will_do = {
 			base = 30
@@ -1416,6 +1419,9 @@ shared_focus = {
 				add_to_variable = { var = NAM_revenge_readiness value = 5 }
 				NAM_revenge_readiness_clamp = yes
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.12 days = 5 }
+			}
 		}
 		ai_will_do = {
 			base = 20
@@ -2009,6 +2015,9 @@ shared_focus = {
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_dist_support value = 4 }
 				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.13 days = 3 }
 			}
 		}
 		ai_will_do = {
@@ -2703,6 +2712,9 @@ shared_focus = {
 				add_to_variable = { var = NAM_grp_dist_support value = 6 }
 				add_to_variable = { var = NAM_grp_nam_support value = -6 }
 				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.14 days = 3 }
 			}
 		}
 		ai_will_do = {

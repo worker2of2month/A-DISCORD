@@ -90,7 +90,10 @@ country_event = {
 		ADISCORD_nam_resource_war_active = yes
 	}
 
-	option = { name = ADISCORD_nam_resource_war.3.a }
+	option = {
+		name = ADISCORD_nam_resource_war.3.a
+		custom_effect_tooltip = ADISCORD_nam_resource_war.3_tt
+	}
 }
 
 # Hard ceiling for an edge case in which neither mainland AI can convert its
@@ -180,7 +183,13 @@ news_event = {
 	major = yes
 	fire_only_once = no
 	is_triggered_only = yes
-	option = { name = ADISCORD_nam_resource_news.3.a }
+	option = {
+		name = ADISCORD_nam_resource_news.3.a
+		if = {
+			limit = { NAM_piracy_victory = yes }
+			custom_effect_tooltip = NAM_victory_tt
+		}
+	}
 }
 
 news_event = {
@@ -440,6 +449,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.11.a
+		custom_effect_tooltip = NAM_war_terms_tt
 		custom_effect_tooltip = NAM_captured_wells_warning_tt
 		custom_effect_tooltip = NAM_prewar_mandate_result_tt
 		# The paid mobilisation report: every formation delivered at hostilities.
@@ -2412,15 +2422,38 @@ country_event = {
 		text = ADISCORD_nam_groups.11.d_federation
 		trigger = { check_variable = { var = NAM_prog_ending value = 3 compare = equals } }
 	}
+	# Without a coup, NAM_apply_ending_oil_union has already retired Rom.
+	desc = {
+		text = ADISCORD_nam_groups.11.d_oil_union_rom
+		trigger = {
+			check_variable = { var = NAM_prog_ending value = 4 compare = equals }
+			NOT = { has_country_flag = NAM_coup_succeeded }
+		}
+	}
 	desc = {
 		text = ADISCORD_nam_groups.11.d_oil_union
-		trigger = { check_variable = { var = NAM_prog_ending value = 4 compare = equals } }
+		trigger = {
+			check_variable = { var = NAM_prog_ending value = 4 compare = equals }
+			has_country_flag = NAM_coup_succeeded
+		}
 	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 
 	option = {
 		name = ADISCORD_nam_groups.11.a
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					check_variable = { var = NAM_prog_ending value = 3 compare = less_than }
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 60 }
+			}
+		}
 	}
 }
 
@@ -2629,7 +2662,7 @@ country_event = {
 	id = ADISCORD_nam_crisis.1
 	title = ADISCORD_nam_crisis.1.t
 	desc = ADISCORD_nam_crisis.1.d
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	timeout_days = 22
 
@@ -2753,7 +2786,7 @@ country_event = {
 	id = ADISCORD_nam_crisis.2
 	title = ADISCORD_nam_crisis.2.t
 	desc = ADISCORD_nam_crisis.2.d
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	timeout_days = 22
 
@@ -2878,7 +2911,7 @@ country_event = {
 	id = ADISCORD_nam_crisis.3
 	title = ADISCORD_nam_crisis.3.t
 	desc = ADISCORD_nam_crisis.3.d
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	timeout_days = 22
 
@@ -2998,7 +3031,7 @@ country_event = {
 	id = ADISCORD_nam_crisis.4
 	title = ADISCORD_nam_crisis.4.t
 	desc = ADISCORD_nam_crisis.4.d
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	timeout_days = 22
 
@@ -3110,7 +3143,7 @@ country_event = {
 	id = ADISCORD_nam_crisis.5
 	title = ADISCORD_nam_crisis.5.t
 	desc = ADISCORD_nam_crisis.5.d
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	timeout_days = 22
 
@@ -3980,4 +4013,463 @@ country_event = {
 		custom_effect_tooltip = NAM_agreement_crisis_tt
 		ai_chance = { base = 100 }
 	}
+}
+
+# ----- Story scenes of the exile, defeat and postwar routes -----
+# Focus rewards dispatch these scenes after completion; each trigger rechecks
+# that the country still follows the route that opened it. Options settle only
+# existing pillar, readiness, consolidation and corporate variables.
+add_namespace = ADISCORD_nam_story
+
+# Junta: the deposed namestnik. Without a coup the ladder was Rom's until the council.
+country_event = {
+	id = ADISCORD_nam_story.1
+	title = ADISCORD_nam_story.1.t
+	desc = {
+		text = ADISCORD_nam_story.1.d
+		trigger = { NOT = { has_country_flag = NAM_coup_succeeded } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.1.d_coup
+		trigger = { has_country_flag = NAM_coup_succeeded }
+	}
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_radical
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.1.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_1_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.1.b
+		add_political_power = 50
+		custom_effect_tooltip = NAM_story_1_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.1.c
+		add_war_support = 0.05
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_1_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_revenge_readiness value = 5 }
+			NAM_revenge_readiness_clamp = yes
+			add_to_variable = { var = NAM_grp_nam_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Junta: the evacuation rolls become either a list of enemies or of the abandoned.
+country_event = {
+	id = ADISCORD_nam_story.2
+	title = ADISCORD_nam_story.2.t
+	desc = ADISCORD_nam_story.2.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_radical
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.2.a
+		custom_effect_tooltip = NAM_story_2_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_revenge_readiness value = 5 }
+			NAM_revenge_readiness_clamp = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.2.b
+		add_political_power = -25
+		add_manpower = 1500
+		custom_effect_tooltip = NAM_story_2_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_garr_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# Junta: the return reaches the pumping stations its own sappers burned.
+country_event = {
+	id = ADISCORD_nam_story.3
+	title = ADISCORD_nam_story.3.t
+	desc = ADISCORD_nam_story.3.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_radical
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.3.a
+		custom_effect_tooltip = NAM_story_3_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_consolidation value = 5 }
+			NAM_consolidation_clamp = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.3.b
+		add_political_power = -30
+		custom_effect_tooltip = NAM_story_3_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_consolidation value = 3 }
+			NAM_consolidation_clamp = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_oil_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# Junta: epilogue of the dominion.
+country_event = {
+	id = ADISCORD_nam_story.4
+	title = ADISCORD_nam_story.4.t
+	desc = ADISCORD_nam_story.4.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_country_flag = NAM_exile_radical }
+	option = { name = ADISCORD_nam_story.4.a }
+}
+
+# Humanists: Weber's first cabinet chooses who staffs the island ministries.
+country_event = {
+	id = ADISCORD_nam_story.11
+	title = ADISCORD_nam_story.11.t
+	desc = ADISCORD_nam_story.11.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.11.a
+		add_stability = 0.04
+		custom_effect_tooltip = NAM_story_11_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 5 }
+			add_to_variable = { var = NAM_grp_dist_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.11.b
+		add_war_support = 0.03
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_story_11_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+			add_to_variable = { var = NAM_corp_influence value = -5 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# Humanists: a letter from the occupied city.
+country_event = {
+	id = ADISCORD_nam_story.12
+	title = ADISCORD_nam_story.12.t
+	desc = ADISCORD_nam_story.12.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.12.a
+		custom_effect_tooltip = NAM_story_12_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_revenge_readiness value = 5 }
+			NAM_revenge_readiness_clamp = yes
+			add_to_variable = { var = NAM_corp_influence value = -5 }
+			NAM_corp_influence_clamp = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.12.b
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_12_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# Humanists: the truth commission reaches Weber's own petitions.
+country_event = {
+	id = ADISCORD_nam_story.13
+	title = ADISCORD_nam_story.13.t
+	desc = ADISCORD_nam_story.13.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.13.a
+		custom_effect_tooltip = NAM_story_13_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_consolidation value = 6 }
+			NAM_consolidation_clamp = yes
+			add_to_variable = { var = NAM_grp_nam_support value = -6 }
+			add_to_variable = { var = NAM_grp_dist_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.13.b
+		add_stability = 0.02
+		custom_effect_tooltip = NAM_story_13_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_consolidation value = 3 }
+			NAM_consolidation_clamp = yes
+			add_to_variable = { var = NAM_grp_nam_support value = -2 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# Humanists: epilogue of the Union constitution.
+country_event = {
+	id = ADISCORD_nam_story.14
+	title = ADISCORD_nam_story.14.t
+	desc = ADISCORD_nam_story.14.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_exile_humanist
+		NOT = { has_country_flag = NAM_corp_takeover }
+	}
+	option = { name = ADISCORD_nam_story.14.a }
+}
+
+# Boards: Weber is offered an honorary chair after the takeover.
+country_event = {
+	id = ADISCORD_nam_story.21
+	title = ADISCORD_nam_story.21.t
+	desc = ADISCORD_nam_story.21.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_corp_takeover
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.21.a
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_21_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.21.b
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_21_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# Boards: the district auction catalogue lists a school and a hospital.
+country_event = {
+	id = ADISCORD_nam_story.22
+	title = ADISCORD_nam_story.22.t
+	desc = ADISCORD_nam_story.22.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_corp_takeover
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.22.a
+		custom_effect_tooltip = NAM_story_22_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.22.b
+		custom_effect_tooltip = NAM_story_22_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# Boards: epilogue of the union of boards.
+country_event = {
+	id = ADISCORD_nam_story.23
+	title = ADISCORD_nam_story.23.t
+	desc = ADISCORD_nam_story.23.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_country_flag = NAM_corp_takeover }
+	option = { name = ADISCORD_nam_story.23.a }
+}
+
+# Defeat: the roll call after the compromise peace.
+country_event = {
+	id = ADISCORD_nam_story.31
+	title = ADISCORD_nam_story.31.t
+	desc = ADISCORD_nam_story.31.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.31.a
+		add_war_support = 0.05
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_31_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.31.b
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_31_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			add_to_variable = { var = NAM_grp_dist_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# Defeat: the accommodation course opens with a dinner for the Eflor envoy.
+country_event = {
+	id = ADISCORD_nam_story.32
+	title = ADISCORD_nam_story.32.t
+	desc = ADISCORD_nam_story.32.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = { name = ADISCORD_nam_story.32.a }
+}
+
+# Defeat: the revenge course opens with the old border map.
+country_event = {
+	id = ADISCORD_nam_story.33
+	title = ADISCORD_nam_story.33.t
+	desc = ADISCORD_nam_story.33.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = { name = ADISCORD_nam_story.33.a }
+}
+
+# Defeat: epilogue of the second chapter.
+country_event = {
+	id = ADISCORD_nam_story.34
+	title = ADISCORD_nam_story.34.t
+	desc = ADISCORD_nam_story.34.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = { name = ADISCORD_nam_story.34.a }
+}
+
+# Rom's last note: ADISCORD_nam_groups.11 queues it for the two ladder endings
+# while Rom still rules.
+country_event = {
+	id = ADISCORD_nam_story.40
+	title = ADISCORD_nam_story.40.t
+	desc = {
+		text = ADISCORD_nam_story.40.d_iron
+		trigger = { check_variable = { var = NAM_prog_ending value = 1 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.40.d_service
+		trigger = { check_variable = { var = NAM_prog_ending value = 2 compare = equals } }
+	}
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		is_ai = no
+		has_country_leader = {
+			character = NAM_Egor_Rom
+			ruling_only = yes
+		}
+		OR = {
+			check_variable = { var = NAM_prog_ending value = 1 compare = equals }
+			check_variable = { var = NAM_prog_ending value = 2 compare = equals }
+		}
+	}
+	option = { name = ADISCORD_nam_memoir.close }
 }

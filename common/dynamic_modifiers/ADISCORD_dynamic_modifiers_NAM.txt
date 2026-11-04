@@ -27,6 +27,7 @@ NAM_administration_dynamic = {
 	production_speed_industrial_complex_factor = NAM_adm_civilian_speed
 	fuel_gain_factor = NAM_adm_fuel_gain_factor
 	ADISCORD_economy_tax_collection_factor = NAM_adm_tax_collection
+	ADISCORD_economy_weekly_income = NAM_adm_land_rent
 	ADISCORD_economy_admin_expense_factor = NAM_adm_admin_expense
 	ADISCORD_economy_trade_income_factor = NAM_adm_trade_income
 	resistance_growth = NAM_adm_resistance_growth

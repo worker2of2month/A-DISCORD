@@ -20,6 +20,13 @@ RUS_crisis_begin = {
 		country_event = { id = ADISCORD_rus_crisis.21 days = 365 }
 		country_event = { id = ADISCORD_rus_crisis.22 days = 395 }
 		country_event = { id = ADISCORD_rus_crisis.23 days = 425 }
+		country_event = { id = ADISCORD_rus_crisis.41 days = 30 }
+		country_event = { id = ADISCORD_rus_crisis.42 days = 200 }
+		if = {
+			limit = { has_country_flag = RUS_dream_finale_pending }
+			clr_country_flag = RUS_dream_finale_pending
+			country_event = { id = ADISCORD_rus_campaign.34 days = 1 }
+		}
 		every_country = {
 			limit = {
 				OR = {
@@ -1069,18 +1076,31 @@ RUS_crisis_disable_laser = {
 				RUS_khan_governing = no
 			}
 		}
-		set_country_flag = RUS_crisis_laser_disabled
-		RUS_last_sky_clear_offers = yes
-		RUS_crisis_clear_preparation = yes
+		RUS_crisis_switch_off_laser = yes
+	}
+}
+
+# RUS. The Khan's own order keeps the live war and closes only an unstarted one.
+RUS_crisis_disconnect_channel = {
+	if = {
+		limit = { RUS_crisis_project_active = yes }
+		set_country_flag = RUS_crisis_channel_disconnected
+		RUS_crisis_switch_off_laser = yes
+	}
+}
+
+RUS_crisis_switch_off_laser = {
+	set_country_flag = RUS_crisis_laser_disabled
+	RUS_last_sky_clear_offers = yes
+	RUS_crisis_clear_preparation = yes
+	country_event = { id = ADISCORD_rus_crisis.10 }
+	for_each_scope_loop = {
+		array = global.RUS_crisis_defenders
 		country_event = { id = ADISCORD_rus_crisis.10 }
-		for_each_scope_loop = {
-			array = global.RUS_crisis_defenders
-			country_event = { id = ADISCORD_rus_crisis.10 }
-		}
-		if = {
-			limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
-			RUS_crisis_close = yes
-		}
+	}
+	if = {
+		limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_close = yes
 	}
 }
 
@@ -2217,6 +2237,7 @@ RUS_khan_death = {
 		if = {
 			limit = { has_event_target = RUS_crisis_hegemon }
 			set_global_flag = RUS_khan_died
+			country_event = { id = ADISCORD_rus_crisis.43 }
 			every_enemy_country = { country_event = { id = ADISCORD_rus_crisis.20 } }
 			RUS_crisis_dissolve_empire = yes
 		}

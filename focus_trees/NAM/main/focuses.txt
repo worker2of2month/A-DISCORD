@@ -1021,7 +1021,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rom_address
-		icon = GFX_focus_generic_public_meetings
+		icon = GFX_focus_NAM_rom_address
 		x = 26
 		y = 10
 		cost = 3

@@ -157,6 +157,7 @@ focus_tree = {
 			49 = { add_claim_by = RUS }
 			176 = { add_claim_by = RUS }
 			custom_effect_tooltip = RUS_claim_the_opened_zone_tt
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.45 } }
 		}
 		ai_will_do = {
 			base = 80
@@ -201,6 +202,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = RUS }
 			add_war_support = 0.04
 			unlock_decision_tooltip = RUS_campaign_sla
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.42 } }
 		}
 		ai_will_do = {
 			base = 90
@@ -240,6 +242,7 @@ focus_tree = {
 			unlock_decision_tooltip = RUS_campaign_ert
 			unlock_decision_tooltip = RUS_campaign_irt
 			unlock_decision_tooltip = RUS_campaign_sca
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.43 } }
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -276,6 +279,7 @@ focus_tree = {
 					limit = { is_ai = no }
 					scoped_play_song = "ADISCORD_3teeth_pit_of_fire"
 				}
+				country_event = { id = ADISCORD_rus_campaign.44 }
 			}
 		}
 		ai_will_do = { base = 120 }
@@ -2362,7 +2366,15 @@ focus_tree = {
 		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
 			add_ideas = RUS_crisis_reactor_guard
-			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.11 } }
+			hidden_effect = {
+				country_event = { id = ADISCORD_rus_campaign.11 }
+				# Without an orbital order the last dream closes the reign instead.
+				if = {
+					limit = { has_country_flag = RUS_dream_finale_pending }
+					clr_country_flag = RUS_dream_finale_pending
+					country_event = { id = ADISCORD_rus_campaign.34 days = 3 }
+				}
+			}
 		}
 		ai_will_do = { base = 120 }
 	}

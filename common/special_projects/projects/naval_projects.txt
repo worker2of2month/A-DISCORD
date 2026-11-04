@@ -1,1 +1,39 @@
-# Intentionally empty: masks incompatible vanilla 1.19 file for A-Discord total conversion.
+NAM_sp_shallow_landing_barge = {
+	specialization = specialization_naval
+	allowed = { tag = NAM }
+	visible = { FROM = { has_completed_focus = NAM_svetlogorsk_shipyards } }
+	icon = GFX_goal_generic_occupy_states_coastal
+	available = {
+		FROM = {
+			tag = NAM
+			NAM_pw_operable = yes
+			has_completed_focus = NAM_svetlogorsk_shipyards
+		}
+	}
+	breakthrough_cost = { specialization_naval = 1 }
+	prototype_time = sp_time.prototype.short
+	complexity = sp_complexity.small
+	resource_cost = {
+		resources = {
+			steel = 3
+			aluminium = 1
+		}
+	}
+	project_output = {
+		country_effects = {
+			set_technology = { ADISCORD_tech_amphibious_landing_craft = 1 }
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_pw_landing_supply } }
+				unlock_decision_tooltip = NAM_program_landing_supply
+				custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
+			}
+			custom_effect_tooltip = NAM_barge_series_tt
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 12
+				producer = NAM
+			}
+		}
+	}
+	ai_will_do = { base = 5 }
+}

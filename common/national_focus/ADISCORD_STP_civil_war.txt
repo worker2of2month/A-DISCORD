@@ -2056,6 +2056,9 @@ focus_tree = {
 				limit = { STP_pf_nod_contacts = yes }
 				unlock_decision_tooltip = STP_pv_northern_loan
 			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_pv.13 days = 2 }
+			}
 		}
 	}
 

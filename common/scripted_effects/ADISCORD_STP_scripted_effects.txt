@@ -731,7 +731,12 @@ STP_cw_advance_health = {
 		add_to_temp_variable = { var = STP_requested_health_stage value = 1 }
 		STP_set_leader_health_stage = yes
 		if = { limit = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } } country_event = { id = ADISCORD_STP_preparation.20 days = 7 } }
-		if = { limit = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } } country_event = { id = ADISCORD_STP_preparation.21 days = 10 } }
+		if = {
+			limit = { check_variable = { var = STP_leader_health_stage value = 4 compare = equals } }
+			country_event = { id = ADISCORD_STP_preparation.21 days = 10 }
+			# The next stage arrives after seven weeks; the balcony rechecks that Ivanov is alive.
+			country_event = { id = ADISCORD_STP_preparation.36 days = 28 }
+		}
 		if = {
 			limit = { check_variable = { var = STP_leader_health_stage value = 3 compare = equals } has_idea = volunteer_only }
 			add_ideas = limited_conscription
@@ -768,6 +773,8 @@ STP_cw_begin_elections = {
 		activate_mission = STP_cw_election_window
 		if = { limit = { has_country_flag = STP_sided_with_Maksim_flag } activate_mission = STP_cw_credentials_review }
 		country_event = { id = ADISCORD_STP_preparation.3 }
+		country_event = { id = ADISCORD_STP_preparation.38 days = 2 }
+		country_event = { id = ADISCORD_STP_preparation.37 days = 6 }
 		STP_cw_launch_northern_crisis = yes
 		NOD = { country_event = { id = ADISCORD_STP_cw.42 days = 112 } }
 		log = "[STP CW] Elections opened: 140 days to the result"

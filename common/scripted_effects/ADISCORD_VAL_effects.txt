@@ -4063,6 +4063,7 @@ VAL_fail_quarterly_contract_norm = {
 	add_to_variable = { var = VAL_quarterly_contract_failures value = 1 }
 	VAL_refresh_contract_reputation = yes
 	country_event = { id = val_rework.1 days = 1 }
+	country_event = { id = val_rework.167 }
 	VAL_council_record_failure = yes
 	if = {
 		limit = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
@@ -4644,6 +4645,7 @@ VAL_reclamation_finish_state_project = {
 			else = {
 				add_extra_state_shared_building_slots = 1
 				if = { limit = { industrial_complex < 20 } add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
+				VAL = { country_event = { id = val_rework.157 } }
 			}
 			add_to_variable = { var = VAL_reclamation_stage value = 1 }
 			VAL_reclamation_refresh_state = yes
@@ -5134,6 +5136,7 @@ VAL_frontier_settle_victory = {
 		if = {
 			limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
 			if = { limit = { 168 = { is_owned_by = ERT OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } } transfer_state = 168 }
+			country_event = { id = val_rework.166 days = 1 }
 		}
 		VAL_form_northern_administration = yes
 		add_stability = 0.05
@@ -5536,6 +5539,7 @@ VAL_frontier_weekly = {
 		set_country_flag = VAL_frontier_armistice_offered
 		VAL_frontier_save_quoted_target = yes
 		NOD = { country_event = { id = val_rework.113 } }
+		country_event = { id = val_council.30 }
 	}
 	else_if = {
 		limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } check_variable = { var = VAL_frontier_stage value = 3 compare = less_than } VAL_frontier_prewar_eligible = no }
@@ -8678,6 +8682,7 @@ VAL_adopt_commonwealth = {
 	if = {
 		limit = { VAL_can_proclaim_commonwealth = yes }
 		set_country_flag = VAL_commonwealth_proclaimed
+		news_event = { id = val_rework.163 hours = 2 }
 		if = {
 			limit = {
 				has_variable = VAL_council_identity
@@ -9094,6 +9099,8 @@ VAL_frontier_expire_nod_ultimatum = {
 		else_if = {
 			limit = { has_country_flag = VAL_nod_ultimatum_expired }
 			VAL_frontier_join_existing_war = yes
+			# The scene checks the native war relation itself after the diplomacy tick.
+			country_event = { id = val_rework.161 days = 1 }
 		}
 	}
 }

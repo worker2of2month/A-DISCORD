@@ -1,5 +1,24 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_rom_address_shine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rom_address.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/GFX_focus_NAM_rom_address.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_independence_day_shine"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_independence_day.png"
 		effectFile = "gfx/FX/buttonstate.lua"
