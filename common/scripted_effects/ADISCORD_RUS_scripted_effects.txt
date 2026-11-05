@@ -5481,8 +5481,19 @@ RUS_bunker_energy_sale_cancel = {
 	if = {
 		limit = { has_variable = RUS_bunker_energy_export_power }
 		clear_variable = RUS_bunker_energy_export_power
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		# The advance may already be spent: cash returns what the treasury holds
+		# and the unpaid remainder becomes ordinary debt, never negative cash.
+		set_temp_variable = { var = RUS_bunker_energy_refund_temp value = ADISCORD_economy_treasury }
+		clamp_temp_variable = { var = RUS_bunker_energy_refund_temp min = 0 max = 100 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = RUS_bunker_energy_refund_temp }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = RUS_bunker_energy_refund_temp }
+		if = {
+			limit = { check_variable = { var = RUS_bunker_energy_refund_temp value = 100 compare = less_than } }
+			set_temp_variable = { var = RUS_bunker_energy_unpaid_temp value = 100 }
+			subtract_from_temp_variable = { var = RUS_bunker_energy_unpaid_temp value = RUS_bunker_energy_refund_temp }
+			add_to_variable = { var = ADISCORD_economy_debt value = RUS_bunker_energy_unpaid_temp }
+			ADISCORD_economy_reprice_debt = yes
+		}
 		RUS_bunker_refresh = yes
 	}
 }

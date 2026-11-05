@@ -286,16 +286,17 @@ on_actions = {
 		# ROOT is the new controller and FROM is the old controller. A control
 		# change can enable or disable regional cluster output, so invalidate both
 		# country caches cheaply and let the next scheduled/open-window refresh do
-		# the single owned-state recount.
+		# the single owned-state recount. Control changes alter no economy
+		# modifier, so frontline fighting does not queue the policy refresh.
 		effect = {
 			if = {
 				limit = { ADISCORD_economy_has_current_schema = yes }
-				ADISCORD_economy_mark_dirty = yes
+				ADISCORD_economy_mark_sources_dirty = yes
 			}
 			FROM = {
 				if = {
 					limit = { ADISCORD_economy_has_current_schema = yes }
-					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_mark_sources_dirty = yes
 				}
 			}
 		}

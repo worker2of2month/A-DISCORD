@@ -581,6 +581,7 @@
 			custom_effect_tooltip = SHL_c_cooperative_bank_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
 				add_to_variable = { var = SHL_treasury_capacity_bonus value = 0.05 }
 				ADISCORD_economy_mark_dirty = yes
 				SHL_refresh_furnaces = yes

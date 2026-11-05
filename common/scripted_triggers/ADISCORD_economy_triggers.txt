@@ -477,7 +477,10 @@ ADISCORD_economy_can_reduce_money_emission = {
 	NOT = { has_idea = ADISCORD_economy_money_printing }
 }
 
+# The package starts at the first inflation spirit (10) and is quarterly, so
+# repeated purchases cannot erase every macro pressure in one week.
 ADISCORD_economy_can_stabilize_macro = {
+	NOT = { has_country_flag = ADISCORD_economy_stabilization_cooldown }
 	OR = {
 		AND = {
 			NOT = { STP_uses_campaign_currency_scale = yes }
@@ -489,14 +492,17 @@ ADISCORD_economy_can_stabilize_macro = {
 		}
 	}
 	OR = {
-		check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
+		check_variable = { var = ADISCORD_economy_inflation value = 10 compare = greater_than_or_equals }
 		check_variable = { var = ADISCORD_economy_fiscal_stress value = 25 compare = greater_than_or_equals }
 		check_variable = { var = ADISCORD_economy_deficit_pressure value = 25 compare = greater_than_or_equals }
 		check_variable = { var = ADISCORD_economy_price_shock value = 10 compare = greater_than_or_equals }
 	}
 }
 
+# A write-off is a half-year event: the monthly loan lock alone would let a
+# country erase almost all principal within one year.
 ADISCORD_economy_can_restructure_debt = {
+	NOT = { has_country_flag = ADISCORD_economy_restructuring_cooldown }
 	ADISCORD_economy_has_debt = yes
 	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_debt value = 1 compare = less_than }

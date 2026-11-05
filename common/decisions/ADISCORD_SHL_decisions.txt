@@ -1049,6 +1049,7 @@ SHL_quarters_and_borders = {
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.03 }
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 				subtract_from_variable = { var = SHL_unrest value = 10 }
 				SHL_clamp_tensions = yes
 			}
@@ -1085,6 +1086,7 @@ SHL_quarters_and_borders = {
 			add_power_balance_value = { id = SHL_conclave_balance value = -0.03 }
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 				subtract_from_variable = { var = SHL_house_pressure value = 10 }
 				SHL_clamp_tensions = yes
 			}
@@ -2021,6 +2023,7 @@ SHL_quarters_and_borders = {
 				}
 				hidden_effect = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 				add_equipment_to_stockpile = {
@@ -4310,6 +4313,7 @@ SHL_public_campaigns = {
 			custom_effect_tooltip = SHL_festival_begin_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
 				add_political_power = -25
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -4320,6 +4324,7 @@ SHL_public_campaigns = {
 		cancel_effect = {
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 60 }
 				add_political_power = 25
 				ADISCORD_economy_mark_dirty = yes
 			}

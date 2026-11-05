@@ -486,7 +486,7 @@ class BunkerWorld:
                 self.missions.add(value)
             elif key == "force_update_dynamic_modifier":
                 continue
-            elif key == "ADISCORD_economy_mark_dirty":
+            elif key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt"):
                 self.dirty += 1
             elif key in self.effects:
                 assert value == "yes", (key, value)
@@ -736,6 +736,19 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual(loaded.balances(), paid)
         self.assertEqual(loaded.value("RUS_bunker_free_power"), capacity)
         self.assertNotIn("RUS_bunker_energy_export_power", loaded.variables)
+
+    def test_spent_energy_advance_becomes_debt_instead_of_negative_cash(self):
+        world = self.world()
+        world.begin("RUS_bunker_energy_sale")
+        world.variables["ADISCORD_economy_treasury"] = 20
+        debt = world.value("ADISCORD_economy_debt")
+        costs = world.value("ADISCORD_economy_current_month_action_costs")
+        world.run("RUS_bunker_energy_sale_cancel")
+        self.assertEqual(world.value("ADISCORD_economy_treasury"), 0)
+        self.assertEqual(world.value("ADISCORD_economy_debt") - debt, 80)
+        self.assertEqual(world.value("ADISCORD_economy_current_month_action_costs") - costs, 20)
+        world.run("RUS_bunker_energy_sale_cancel")
+        self.assertEqual(world.value("ADISCORD_economy_debt") - debt, 80)
 
     def test_energy_reservation_limits_construction_and_cannot_interrupt_a_paid_order(self):
         world = self.world()

@@ -611,7 +611,8 @@ def task7_cache_invalidation_issues(
     """Require dirty to recache factories and request a rebuild without halting weekly cash."""
 
     try:
-        dirty = _parsed_definition(effects_text, "ADISCORD_economy_mark_dirty")
+        dirty = _parsed_definition(effects_text, "ADISCORD_economy_mark_sources_dirty")
+        modifier_dirty = _parsed_definition(effects_text, "ADISCORD_economy_mark_dirty")
         full = _parsed_definition(effects_text, "ADISCORD_economy_full_refresh")
         factory = _parsed_definition(
             effects_text, "ADISCORD_economy_cache_weekly_factory_sources"
@@ -646,12 +647,23 @@ def task7_cache_invalidation_issues(
         issues.append(
             "dirty invalidation does not recache factories and request a rebuild without clearing weekly readiness"
         )
-    dirty_source = unique_block(effects_text, "ADISCORD_economy_mark_dirty")
+    modifier_dirty_keys = [entry.key for entry in modifier_dirty.value]
+    modifier_dirty_source = unique_block(effects_text, "ADISCORD_economy_mark_dirty")
     if (
-        "ADISCORD_economy_weekly_source_cache_ready" in dirty_source
-        or "ADISCORD_economy_weekly_ready" in dirty_source
+        modifier_dirty_keys[:1] != ["ADISCORD_economy_mark_sources_dirty"]
+        or "id = ADISCORD_economy.5 days = 1" not in modifier_dirty_source
+        or "has_country_flag = ADISCORD_economy_law_refresh_pending" not in modifier_dirty_source
     ):
-        issues.append("dirty invalidation still clears the weekly readiness watermark")
+        issues.append(
+            "modifier invalidation does not queue one guarded next-day policy refresh"
+        )
+    dirty_source = unique_block(effects_text, "ADISCORD_economy_mark_sources_dirty")
+    for source in (dirty_source, modifier_dirty_source):
+        if (
+            "ADISCORD_economy_weekly_source_cache_ready" in source
+            or "ADISCORD_economy_weekly_ready" in source
+        ):
+            issues.append("dirty invalidation still clears the weekly readiness watermark")
 
     full_sequence = [signature(entry) for entry in full.value]
     if full_sequence != [
@@ -6130,7 +6142,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
         migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
         self.assertIn("ADISCORD_economy_full_refresh_if_needed = yes", migration)
-        dirty = unique_block(EFFECTS, "ADISCORD_economy_mark_dirty")
+        dirty = unique_block(EFFECTS, "ADISCORD_economy_mark_sources_dirty")
         self.assertIn(
             "set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
             dirty,
@@ -6141,7 +6153,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             defaults,
         )
 
-        dirty_source = unique_block(EFFECTS, "ADISCORD_economy_mark_dirty")
+        dirty_source = unique_block(EFFECTS, "ADISCORD_economy_mark_sources_dirty")
         full_source = unique_block(EFFECTS, "ADISCORD_economy_full_refresh")
         targeted_anchor = "\tADISCORD_economy_finish_targeted_policy_refresh = yes"
         self.assertIn(targeted_anchor, EFFECTS)
@@ -8018,7 +8030,10 @@ ADISCORD_task10_forbidden_cache_consumer = {
 
     def test_state_control_changes_only_invalidate_existing_country_caches(self):
         control_change = block(ON_ACTIONS, "on_state_control_changed")
-        self.assertEqual(control_change.count("ADISCORD_economy_mark_dirty = yes"), 2)
+        self.assertEqual(
+            control_change.count("ADISCORD_economy_mark_sources_dirty = yes"), 2
+        )
+        self.assertNotIn("ADISCORD_economy_mark_dirty", control_change)
         self.assertEqual(
             control_change.count("ADISCORD_economy_has_current_schema = yes"), 2
         )

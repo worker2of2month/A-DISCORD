@@ -11,7 +11,7 @@ SHL_apply_starting_economy = {
 
 SHL_receive_250 = {
 	add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
-	ADISCORD_economy_clamp_treasury = yes
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -236,6 +236,7 @@ SHL_produce_period = {
 					check_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_tenth_planned_price }
 				add_to_variable = { var = SHL_tenth_stock value = SHL_tenth_planned_packets }
 			}
 		}
@@ -245,6 +246,7 @@ SHL_produce_period = {
 			add_to_variable = { var = SHL_tenth_wear value = SHL_tenth_period_wear }
 			SHL_deliver_tenth_heat = yes
 			add_to_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_period_income }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_tenth_period_income }
 			add_to_variable = { var = SHL_last_cycle_income value = SHL_tenth_period_income }
 			set_variable = { var = SHL_tenth_shortages value = 0 }
 		}
@@ -273,6 +275,7 @@ SHL_produce_period = {
 	if = {
 		limit = { check_variable = { var = SHL_credit_cycles value = 0 compare = greater_than } }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 25 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 25 }
 		add_to_variable = { var = SHL_last_cycle_income value = 25 }
 		subtract_from_variable = { var = SHL_credit_cycles value = 1 }
 	}
@@ -284,8 +287,14 @@ SHL_produce_period = {
 	# District and treaty income of the second-row focuses: once per cycle, in
 	# country scope, never through the nine site scopes above. May be negative.
 	add_to_variable = { var = ADISCORD_economy_treasury value = SHL_cycle_bonus_income }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_bonus_income value = 0 compare = greater_than_or_equals } }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_cycle_bonus_income }
+	}
+	else = {
+		subtract_from_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_cycle_bonus_income }
+	}
 	add_to_variable = { var = SHL_last_cycle_income value = SHL_cycle_bonus_income }
-	ADISCORD_economy_clamp_treasury = yes
 }
 
 SHL_produce_site = {
@@ -356,7 +365,10 @@ SHL_produce_site = {
 						check_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price compare = greater_than_or_equals }
 					}
 				}
-				SHL = { subtract_from_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price } }
+				SHL = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_planned_price }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = PREV.SHL_planned_price }
+				}
 				add_to_variable = { var = SHL_furnace_stock value = SHL_planned_packets }
 			}
 		}
@@ -421,6 +433,7 @@ SHL_produce_site = {
 # PREV is the paying production site; this effect has no other callers.
 SHL_collect_site_income = {
 	add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_period_cash }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_period_cash }
 	add_to_variable = { var = SHL_last_cycle_income value = PREV.SHL_period_cash }
 }
 
@@ -461,6 +474,7 @@ SHL_begin_supply = {
 			check_variable = { var = ADISCORD_economy_treasury value = SHL_packet_price compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_packet_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_packet_price }
 		FROM = {
 			set_variable = { var = SHL_operation value = 1 }
 			set_variable = { var = SHL_operation_deposit value = PREV.SHL_packet_price }
@@ -503,6 +517,7 @@ SHL_begin_repair = {
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		FROM = {
 			set_variable = { var = SHL_operation value = 2 }
 			set_variable = { var = SHL_operation_deposit value = 80 }
@@ -566,6 +581,7 @@ SHL_begin_training = {
 			NOT = { has_political_power < 25 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		add_political_power = -25
 		FROM = {
 			set_variable = { var = SHL_operation value = 3 }
@@ -605,6 +621,7 @@ SHL_begin_restart = {
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 		FROM = {
 			set_variable = { var = SHL_operation value = 4 }
 			set_variable = { var = SHL_operation_deposit value = 120 }
@@ -638,6 +655,7 @@ SHL_cancel_operation = {
 	if = {
 		limit = { FROM = { has_variable = SHL_operation_deposit } }
 		add_to_variable = { var = ADISCORD_economy_treasury value = FROM.SHL_operation_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = FROM.SHL_operation_deposit }
 		add_political_power = FROM.SHL_operation_pp
 		FROM = {
 			clear_variable = SHL_operation_deposit
@@ -928,6 +946,7 @@ SHL_begin_engineers = {
 			NOT = { has_political_power < 25 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_engineers_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_engineers_price }
 		add_political_power = -25
 		set_variable = { var = SHL_project_deposit value = SHL_engineers_price }
 		set_variable = { var = SHL_project_pp value = 25 }
@@ -946,6 +965,7 @@ SHL_begin_foundation = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 		set_variable = { var = SHL_project_deposit value = 200 }
 		set_variable = { var = SHL_project_pp value = 0 }
 		set_variable = { var = SHL_project_operation value = 2 }
@@ -970,6 +990,7 @@ SHL_begin_construction = {
 			}
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
 		set_variable = { var = SHL_project_deposit value = 300 }
 		set_variable = { var = SHL_project_pp value = 0 }
 		set_variable = { var = SHL_project_operation value = 3 }
@@ -987,6 +1008,7 @@ SHL_begin_first_pour = {
 			check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		subtract_from_variable = { var = SHL_reserve_stock value = 1 }
 		set_variable = { var = SHL_project_stock_receipt value = 1 }
 		set_variable = { var = SHL_project_deposit value = 100 }
@@ -1000,6 +1022,7 @@ SHL_cancel_project = {
 	if = {
 		limit = { has_variable = SHL_project_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_project_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_project_deposit }
 		add_political_power = SHL_project_pp
 		add_to_variable = { var = SHL_reserve_stock value = SHL_project_stock_receipt }
 		SHL_clear_project_receipt = yes
@@ -1016,6 +1039,7 @@ SHL_begin_tenth_service = {
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		set_variable = { var = SHL_project_deposit value = 80 }
 		set_variable = { var = SHL_project_operation value = 5 }
 		set_variable = { var = SHL_project_pp value = 0 }
@@ -1033,6 +1057,7 @@ SHL_begin_tenth_restart = {
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 		set_variable = { var = SHL_project_deposit value = 120 }
 		set_variable = { var = SHL_project_operation value = 6 }
 		set_variable = { var = SHL_project_pp value = 0 }
@@ -1070,7 +1095,10 @@ SHL_finish_project = {
 					limit = { 294 = { infrastructure < 5 } }
 					294 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 				}
-				else = { add_to_variable = { var = ADISCORD_economy_treasury value = SHL_project_deposit } }
+				else = {
+					add_to_variable = { var = ADISCORD_economy_treasury value = SHL_project_deposit }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_project_deposit }
+				}
 				set_variable = { var = SHL_project_stage value = 2 }
 				SHL_clear_project_receipt = yes
 			}
@@ -1404,9 +1432,13 @@ SHL_purchase_reserve = {
 		if = {
 			limit = { has_country_flag = SHL_supplier_premium }
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price_premium }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_reserve_price_premium }
 			clr_country_flag = SHL_supplier_premium
 		}
-		else = { subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price } }
+		else = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_reserve_price }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_reserve_price }
+		}
 		add_to_variable = { var = SHL_reserve_stock value = 2 }
 		add_to_variable = { var = SHL_gui_dirty value = 1 }
 	}
@@ -1913,6 +1945,7 @@ SHL_strike_concede = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		subtract_from_variable = { var = SHL_unrest value = 35 }
 		add_to_variable = { var = SHL_house_pressure value = 10 }
 		add_to_variable = { var = SHL_city_support value = 5 }
@@ -2269,6 +2302,7 @@ SHL_begin_guard_order = {
 			NOT = { has_manpower < 3000 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		add_political_power = -25
 		add_manpower = -3000
 		set_variable = { var = SHL_guard_deposit value = 150 }
@@ -2283,6 +2317,7 @@ SHL_cancel_guard_order = {
 	if = {
 		limit = { has_variable = SHL_guard_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_guard_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_guard_deposit }
 		add_political_power = 25
 		add_manpower = 3000
 		SHL_clear_guard_receipt = yes
@@ -2370,6 +2405,7 @@ SHL_sign_water_treaty = {
 				NOT = { has_war_with = KYZ }
 			}
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 			set_variable = { var = SHL_water_crisis value = 2 }
 			set_variable = { var = SHL_water_quota value = 1 }
 			SHL_refresh_furnaces = yes
@@ -2425,6 +2461,7 @@ SHL_begin_wells = {
 			check_variable = { var = ADISCORD_economy_treasury value = SHL_wells_price compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_wells_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_wells_price }
 		set_variable = { var = SHL_wells_deposit value = SHL_wells_price }
 		if = {
 			limit = { check_variable = { var = SHL_wells_price value = 0 compare = equals } }
@@ -2437,6 +2474,7 @@ SHL_cancel_wells = {
 	if = {
 		limit = { has_variable = SHL_wells_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_wells_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_wells_deposit }
 		clear_variable = SHL_wells_deposit
 	}
 }
@@ -2624,6 +2662,7 @@ SHL_begin_harbour = {
 			check_variable = { var = ADISCORD_economy_treasury value = SHL_harbour_price compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_harbour_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_harbour_price }
 		set_variable = { var = SHL_harbour_deposit value = SHL_harbour_price }
 	}
 }
@@ -2632,6 +2671,7 @@ SHL_cancel_harbour = {
 	if = {
 		limit = { has_variable = SHL_harbour_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_harbour_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_harbour_deposit }
 		clear_variable = SHL_harbour_deposit
 	}
 }
@@ -2885,10 +2925,12 @@ SHL_accept_kyz_neutrality = {
 		SHL_reconcile_kyz_grievance = yes
 		SHL = {
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 			add_political_power = -30
 			country_event = { id = ADISCORD_SHL.127 }
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
 	}
 	else = { SHL_decline_kyz_neutrality = yes }
 }
@@ -2972,6 +3014,7 @@ SHL_keizan_pay_first = {
 			set_temp_variable = { var = SHL_keizan_first_price value = 125 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_keizan_first_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_keizan_first_price }
 		add_political_power = -30
 		set_variable = { var = SHL_keizan_state value = 2 }
 		set_variable = { var = SHL_keizan_repeat_cycle value = SHL_cycle_number }
@@ -2986,6 +3029,7 @@ SHL_keizan_pay_final = {
 			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
 		set_variable = { var = SHL_keizan_state value = 3 }
 		set_variable = { var = SHL_kyz_outcome value = 6 }
 		SHL_clear_kyz_diplomacy = yes
@@ -3025,6 +3069,7 @@ SHL_keizan_buyout = {
 			NOT = { has_political_power < 50 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 350 }
 		add_political_power = -50
 		set_variable = { var = SHL_keizan_state value = 3 }
 		set_variable = { var = SHL_kyz_outcome value = 6 }
@@ -3267,6 +3312,7 @@ SHL_kyz_war_defeat = {
 			set_variable = { var = SHL_keizan_requisition value = ADISCORD_economy_treasury }
 			multiply_variable = { var = SHL_keizan_requisition value = 0.4 }
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_keizan_requisition }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_keizan_requisition }
 		}
 		add_timed_idea = { idea = SHL_keizan_ration days = 540 }
 		SHL_refresh_furnaces = yes
@@ -3487,15 +3533,17 @@ SHL_cancel_obligation = {
 	if = {
 		limit = { has_variable = SHL_obligation_kind }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_obligation_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_obligation_deposit }
 		set_variable = { var = SHL_obligation_payment value = ADISCORD_economy_treasury }
 		clamp_variable = { var = SHL_obligation_payment min = 0 max = SHL_obligation_liability }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_obligation_payment }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_obligation_payment }
 		subtract_from_variable = { var = SHL_obligation_liability value = SHL_obligation_payment }
 		add_to_variable = { var = ADISCORD_economy_debt value = SHL_obligation_liability }
+		ADISCORD_economy_reprice_debt = yes
 		SHL_clear_obligation = yes
 		clear_variable = SHL_obligation_payment
 		ADISCORD_economy_mark_dirty = yes
-		ADISCORD_economy_clamp_treasury = yes
 	}
 }
 
@@ -3521,7 +3569,7 @@ SHL_begin_export = {
 		set_variable = { var = SHL_obligation_liability value = SHL_export_advance }
 		add_to_variable = { var = SHL_obligation_liability value = 30 }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_export_advance }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_export_advance }
 	}
 }
 
@@ -3542,6 +3590,7 @@ SHL_begin_civic_order = {
 		set_variable = { var = SHL_obligation_kind value = 2 }
 		set_variable = { var = SHL_obligation_deposit value = SHL_civic_price }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_civic_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_civic_price }
 	}
 }
 
@@ -3561,6 +3610,7 @@ SHL_begin_arsenal_order = {
 		set_variable = { var = SHL_obligation_batch_price value = SHL_arsenal_price }
 		divide_variable = { var = SHL_obligation_batch_price value = 2 }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_arsenal_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_arsenal_price }
 	}
 }
 
@@ -3581,9 +3631,9 @@ SHL_begin_pledge = {
 		set_variable = { var = SHL_obligation_kind value = 4 }
 		set_variable = { var = SHL_obligation_liability value = SHL_pledge_price }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
 		add_to_variable = { var = SHL_unrest value = 8 }
 		SHL_clamp_tensions = yes
-		ADISCORD_economy_clamp_treasury = yes
 	}
 }
 
@@ -3884,8 +3934,12 @@ SHL_complete_obligation = {
 		if = {
 			limit = { has_variable = SHL_obligation_extended }
 			add_to_variable = { var = ADISCORD_economy_treasury value = 90 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 90 }
 		}
-		else = { add_to_variable = { var = ADISCORD_economy_treasury value = 120 } }
+		else = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
+		}
 		clear_variable = SHL_obligation_liability
 		subtract_from_variable = { var = SHL_house_pressure value = 5 }
 	}
@@ -3928,6 +3982,7 @@ SHL_complete_obligation = {
 			295 = { SHL_deliver_civic_order = yes }
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_obligation_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_obligation_deposit }
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_obligation_kind value = 5 compare = equals } }
@@ -3988,7 +4043,6 @@ SHL_complete_obligation = {
 	}
 	SHL_clamp_tensions = yes
 	ADISCORD_economy_mark_dirty = yes
-	ADISCORD_economy_clamp_treasury = yes
 }
 
 SHL_check_obligation_deadline = {
@@ -4312,6 +4366,7 @@ SHL_begin_campaign_convoy = {
 		set_variable = { var = SHL_obligation_kind value = 6 }
 		set_variable = { var = SHL_obligation_deposit value = SHL_convoy_deposit }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_convoy_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_convoy_deposit }
 	}
 }
 
@@ -4413,7 +4468,9 @@ SHL_take_house_campaign_aid = {
 		limit = { SHL_can_house_campaign_aid = yes }
 		add_political_power = -25
 		add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 400 }
 		add_to_variable = { var = ADISCORD_economy_debt value = 500 }
+		ADISCORD_economy_reprice_debt = yes
 		set_country_flag = SHL_campaign_assistance_used
 		SHL_clamp_tensions = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -4425,6 +4482,7 @@ SHL_take_city_campaign_aid = {
 		limit = { SHL_can_city_campaign_aid = yes }
 		subtract_from_variable = { var = SHL_city_support value = 15 }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		add_manpower = -6000
 		SHL_raise_paid_levies_2 = yes
 		set_country_flag = SHL_campaign_assistance_used
@@ -4506,6 +4564,7 @@ SHL_take_cistern_concession = {
 			clear_variable = SHL_concession_payment
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_concession_balance }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_concession_balance }
 		clear_variable = SHL_concession_balance
 		ADISCORD_economy_mark_dirty = yes
 		SHL_refresh_furnaces = yes
@@ -4628,6 +4687,7 @@ SHL_begin_southern_programme = {
 		set_variable = { var = SHL_south_course value = SHL_political_course }
 		set_variable = { var = SHL_south_deposit value = 200 }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 		if = {
 			limit = { check_variable = { var = SHL_south_course value = 5 compare = equals } }
 			add_manpower = -3000
@@ -4647,6 +4707,7 @@ SHL_cancel_southern_programme = {
 	if = {
 		limit = { has_variable = SHL_south_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_south_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_south_deposit }
 		if = {
 			limit = { check_variable = { var = SHL_south_course value = 5 compare = equals } }
 			add_manpower = 3000
@@ -4861,6 +4922,7 @@ SHL_recognise_quarter_registers = {
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		remove_ideas = SHL_unregistered_quarters
 		add_to_variable = { var = SHL_city_support value = 8 }
 		add_to_variable = { var = SHL_house_pressure value = 5 }
@@ -5941,6 +6003,7 @@ SHL_begin_cargo_insurance = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		set_variable = { var = SHL_insurance_deposit value = 100 }
 	}
 }
@@ -5949,6 +6012,7 @@ SHL_cancel_cargo_insurance = {
 	if = {
 		limit = { has_variable = SHL_insurance_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_insurance_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_insurance_deposit }
 		clear_variable = SHL_insurance_deposit
 	}
 }
@@ -5985,6 +6049,7 @@ SHL_grant_house_credit = {
 			}
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		add_to_variable = { var = SHL_credit_cycles value = 6 }
 		FROM = { set_country_flag = ADISCORD_south_indebted_to_SHL }
 		ADISCORD_economy_mark_dirty = yes
@@ -6093,6 +6158,7 @@ SHL_begin_school = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		FROM = {
 			set_variable = { var = SHL_operation value = 6 }
 			set_variable = { var = SHL_operation_deposit value = 100 }
@@ -6133,6 +6199,7 @@ SHL_begin_hospital = {
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 		FROM = {
 			set_variable = { var = SHL_operation value = 7 }
 			set_variable = { var = SHL_operation_deposit value = 120 }
@@ -6219,6 +6286,7 @@ SHL_begin_directorate_railway = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 		set_variable = { var = SHL_railway_deposit value = 200 }
 	}
 }
@@ -6227,6 +6295,7 @@ SHL_cancel_directorate_railway = {
 	if = {
 		limit = { has_variable = SHL_railway_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_railway_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_railway_deposit }
 		clear_variable = SHL_railway_deposit
 	}
 }
@@ -6273,6 +6342,7 @@ SHL_lease_state_furnace = {
 		SHL_assign_site_owner_house = yes
 		SHL = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
 			add_to_variable = { var = SHL_lease_count value = 1 }
 		}
 	}
@@ -6283,7 +6353,6 @@ SHL_settle_leases = {
 		limit = { check_variable = { var = SHL_lease_count value = 0 compare = greater_than } }
 		set_temp_variable = { var = SHL_balance_shift value = -0.05 }
 		SHL_balance_shift = yes
-		ADISCORD_economy_clamp_treasury = yes
 		ADISCORD_economy_mark_dirty = yes
 		SHL_refresh_furnaces = yes
 	}
@@ -6320,10 +6389,11 @@ SHL_sell_crest_concessions = {
 			NOT = { has_country_flag = SHL_concessions_sold }
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 300 }
 		add_to_variable = { var = ADISCORD_economy_debt value = 500 }
+		ADISCORD_economy_reprice_debt = yes
 		subtract_from_variable = { var = SHL_house_pressure value = 5 }
 		SHL_clamp_tensions = yes
-		ADISCORD_economy_clamp_treasury = yes
 		ADISCORD_economy_mark_dirty = yes
 		if = {
 			limit = {
@@ -6356,6 +6426,7 @@ SHL_begin_regent_guard = {
 			NOT = { has_manpower < 3000 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		add_manpower = -3000
 		set_variable = { var = SHL_regent_guard_deposit value = 150 }
 	}
@@ -6365,6 +6436,7 @@ SHL_cancel_regent_guard = {
 	if = {
 		limit = { has_variable = SHL_regent_guard_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_regent_guard_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_regent_guard_deposit }
 		add_manpower = 3000
 		clear_variable = SHL_regent_guard_deposit
 	}
@@ -6430,6 +6502,7 @@ SHL_hire_guard = {
 			check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_guard_price }
 		ADISCORD_economy_mark_dirty = yes
 		SHL_ensure_levy_template = yes
 		699 = { SHL_create_levy = yes }
@@ -6619,6 +6692,7 @@ SHL_begin_shift_school = {
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		set_variable = { var = SHL_shift_school_deposit value = 80 }
 	}
 }
@@ -6627,6 +6701,7 @@ SHL_cancel_shift_school = {
 	if = {
 		limit = { has_variable = SHL_shift_school_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_shift_school_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_shift_school_deposit }
 		clear_variable = SHL_shift_school_deposit
 	}
 }
@@ -6837,6 +6912,7 @@ SHL_begin_strike_support = {
 			}
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 		add_political_power = -20
 		FROM = { set_variable = { var = SHL_strike_support_deposit value = 50 } }
 	}
@@ -6846,6 +6922,7 @@ SHL_cancel_strike_support = {
 	if = {
 		limit = { FROM = { has_variable = SHL_strike_support_deposit } }
 		add_to_variable = { var = ADISCORD_economy_treasury value = FROM.SHL_strike_support_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = FROM.SHL_strike_support_deposit }
 		add_political_power = 20
 		FROM = { clear_variable = SHL_strike_support_deposit }
 	}
@@ -6899,7 +6976,7 @@ SHL_sell_road_stations = {
 			KDR = { exists = yes }
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
 		ADISCORD_economy_mark_dirty = yes
 		KDR = {
 			transfer_state = 234
@@ -6959,6 +7036,7 @@ SHL_house_demand_pay = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		ADISCORD_economy_mark_dirty = yes
 		SHL_close_house_demand = yes
 	}
@@ -7162,6 +7240,7 @@ SHL_revanche_revision = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		ADISCORD_economy_mark_dirty = yes
 		SHL_revanche_drop_claims = yes
 		set_variable = { var = SHL_revanche_neighbour value = 0 }
@@ -7198,6 +7277,7 @@ SHL_integrate_satellite = {
 		}
 		SHL = {
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_integration_price }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_integration_price }
 			add_to_variable = { var = SHL_integrated_count value = 1 }
 			annex_country = {
 				target = PREV
@@ -7224,7 +7304,6 @@ SHL_integrate_all_satellites = {
 SHL_finish_integration = {
 	clear_variable = SHL_integration_price
 	clear_variable = SHL_integrated_count
-	ADISCORD_economy_clamp_treasury = yes
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -7269,8 +7348,10 @@ SHL_annex_integration_regency = {
 		set_variable = { var = SHL_integration_cash value = SHL_integrated_count }
 		multiply_variable = { var = SHL_integration_cash value = 100 }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_integration_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = SHL_integration_cash }
 		multiply_variable = { var = SHL_integration_cash value = 2 }
 		add_to_variable = { var = ADISCORD_economy_debt value = SHL_integration_cash }
+		ADISCORD_economy_reprice_debt = yes
 		clear_variable = SHL_integration_cash
 	}
 	SHL_finish_integration = yes
@@ -7649,6 +7730,7 @@ SHL_begin_charter = {
 			FROM = { SHL_charter_site_ready = yes }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
 		FROM = {
 			set_variable = { var = SHL_operation value = 9 }
 			set_variable = { var = SHL_operation_deposit value = 60 }
@@ -7816,6 +7898,7 @@ SHL_begin_embassy = {
 			FROM = { SHL_embassy_target_open = yes }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
 		set_variable = { var = SHL_embassy_deposit value = 50 }
 		FROM = { set_country_flag = SHL_embassy_pending }
 	}
@@ -7847,6 +7930,7 @@ SHL_cancel_embassy = {
 	if = {
 		limit = { has_variable = SHL_embassy_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_embassy_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_embassy_deposit }
 		clear_variable = SHL_embassy_deposit
 		FROM = { clr_country_flag = SHL_embassy_pending }
 	}
@@ -7871,6 +7955,7 @@ SHL_begin_paid_measure = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_treasury value = SHL_measure_price compare = greater_than_or_equals } }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_measure_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_measure_price }
 		SHL_begin_measure = yes
 	}
 }
@@ -7896,7 +7981,10 @@ SHL_fair_site = {
 			check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
 		}
-		SHL = { add_to_variable = { var = ADISCORD_economy_treasury value = 30 } }
+		SHL = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 30 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 30 }
+		}
 	}
 }
 
@@ -7911,7 +7999,6 @@ SHL_finish_golden_fair = {
 	293 = { SHL_fair_site = yes }
 	294 = { SHL_fair_site = yes }
 	295 = { SHL_fair_site = yes }
-	ADISCORD_economy_clamp_treasury = yes
 }
 
 SHL_finish_quarter_assembly = {
@@ -7943,8 +8030,9 @@ SHL_finish_directorate_decree = {
 SHL_finish_war_bonds = {
 	SHL_end_measure = yes
 	add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+	add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 200 }
 	add_to_variable = { var = ADISCORD_economy_debt value = 300 }
-	ADISCORD_economy_clamp_treasury = yes
+	ADISCORD_economy_reprice_debt = yes
 }
 
 SHL_finish_crest_court = {
@@ -8036,6 +8124,7 @@ SHL_begin_integration = {
 			set_variable = { var = SHL_integration_deposit_pp value = 50 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_integration_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_integration_deposit }
 		set_variable = { var = SHL_integration_pp_debit value = 0 }
 		subtract_from_variable = { var = SHL_integration_pp_debit value = SHL_integration_deposit_pp }
 		add_political_power = SHL_integration_pp_debit
@@ -8072,6 +8161,7 @@ SHL_cancel_integration = {
 	if = {
 		limit = { has_variable = SHL_integration_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_integration_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_integration_deposit }
 		add_political_power = SHL_integration_deposit_pp
 		clear_variable = SHL_integration_deposit
 		clear_variable = SHL_integration_deposit_pp
@@ -8138,7 +8228,7 @@ SHL_prog_first_batch = {
 			}
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 90 }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 90 }
 		ADISCORD_economy_mark_dirty = yes
 	}
 	else_if = {
@@ -8188,7 +8278,7 @@ SHL_prog_first_batch = {
 			}
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
 		ADISCORD_economy_mark_dirty = yes
 	}
 	else_if = {
@@ -8451,6 +8541,7 @@ SHL_begin_border_watch_order = {
 			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
 		set_variable = { var = SHL_border_watch_deposit value = 60 }
 	}
 }
@@ -8459,6 +8550,7 @@ SHL_cancel_border_watch_order = {
 	if = {
 		limit = { has_variable = SHL_border_watch_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_border_watch_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_border_watch_deposit }
 		clear_variable = SHL_border_watch_deposit
 	}
 }
@@ -8495,6 +8587,7 @@ SHL_begin_copi_prospecting = {
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 		set_variable = { var = SHL_copi_deposit value = 120 }
 	}
 }
@@ -8503,6 +8596,7 @@ SHL_cancel_copi_prospecting = {
 	if = {
 		limit = { has_variable = SHL_copi_deposit }
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_copi_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_copi_deposit }
 		clear_variable = SHL_copi_deposit
 	}
 }
@@ -8579,7 +8673,7 @@ SHL_eflor_accept_investment = {
 			}
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 60 }
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
@@ -8597,6 +8691,7 @@ SHL_eflor_offer_accord = {
 			}
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		set_variable = { var = SHL_accord_deposit value = 80 }
 		EFL = {
 			ADISCORD_release_non_participating_minor_optimization = yes
@@ -8648,7 +8743,7 @@ SHL_eflor_accept_accord = {
 			}
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = SHL.SHL_accord_deposit }
-		ADISCORD_economy_clamp_treasury = yes
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL.SHL_accord_deposit }
 		ADISCORD_economy_mark_dirty = yes
 		add_opinion_modifier = {
 			target = SHL
@@ -8671,6 +8766,7 @@ SHL_eflor_refuse_accord = {
 		if = {
 			limit = { has_variable = SHL_accord_deposit }
 			add_to_variable = { var = ADISCORD_economy_treasury value = SHL_accord_deposit }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_accord_deposit }
 			clear_variable = SHL_accord_deposit
 		}
 	}

@@ -617,7 +617,7 @@ class ScriptMachine:
             elif e.key in ("country_event", "news_event"):
                 self.scheduled.append(scalar(e.value, "id"))
                 self.event_days[scalar(e.value, "id")] = int(scalar(e.value, "days", "0"))
-            elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_clamp_treasury"):
+            elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt"):
                 self.calls.append(e.key)
             elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience", "ADISCORD_rename_party_representative"):
                 self.calls.append(e.key)
@@ -4447,7 +4447,8 @@ class ExternalContractTests(unittest.TestCase):
         self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 440)
         self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 60)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 1600)
-        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 60)
+        # The ledger books the whole cycle, contract payment included.
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 600)
         self.assertEqual(self.c["SHL_last_cycle_income"], 600)
         self.assertEqual(self.dirty_calls() - before, 2)
         self.assertIn("SHL_metal_client", self.m.flags["VAL"])

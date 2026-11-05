@@ -476,6 +476,7 @@ ADISCORD_scenario_debug_category = {
 		fire_only_once = no
 		complete_effect = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+			hidden_effect = { add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 } }
 			ADISCORD_economy_mark_dirty = yes
 			add_political_power = 200
 		}
@@ -736,6 +737,18 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			# The ledger books the difference, so the next settlement explains it.
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_debug_treasury_delta_temp value = 5000 }
+				subtract_from_temp_variable = { var = ADISCORD_debug_treasury_delta_temp value = ADISCORD_economy_treasury }
+				if = {
+					limit = { check_variable = { var = ADISCORD_debug_treasury_delta_temp value = 0 compare = greater_than_or_equals } }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = ADISCORD_debug_treasury_delta_temp }
+				}
+				else = {
+					subtract_from_variable = { var = ADISCORD_economy_current_month_action_costs value = ADISCORD_debug_treasury_delta_temp }
+				}
+			}
 			set_variable = { var = ADISCORD_economy_treasury value = 5000 }
 			ADISCORD_economy_mark_dirty = yes
 		}

@@ -31,6 +31,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 				clr_country_flag = SHL_master_dispute
 			}
 		}
@@ -174,6 +175,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 				clr_country_flag = SHL_transport_dispute
 			}
 		}
@@ -2347,6 +2349,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 30 }
 				ADISCORD_economy_mark_dirty = yes
 				subtract_from_variable = { var = SHL_unrest value = 2 }
 				SHL_clamp_tensions = yes
@@ -2388,6 +2391,7 @@ country_event = {
 					check_variable = { var = SHL_reserve_stock value = 10 compare = less_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = SHL_reserve_stock value = 1 }
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
@@ -2460,6 +2464,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 20 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 20 }
 				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = SHL_city_support value = 2 }
 				SHL_clamp_tensions = yes
@@ -2499,6 +2504,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 25 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 25 }
 				ADISCORD_economy_mark_dirty = yes
 				subtract_from_variable = { var = SHL_unrest value = 2 }
 				SHL_clamp_tensions = yes
@@ -2538,6 +2544,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 30 }
 				ADISCORD_economy_mark_dirty = yes
 				subtract_from_variable = { var = SHL_house_pressure value = 2 }
 				SHL_clamp_tensions = yes
@@ -2610,6 +2617,7 @@ country_event = {
 					check_variable = { var = ADISCORD_economy_treasury value = 20 compare = greater_than_or_equals }
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 20 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 20 }
 				ADISCORD_economy_mark_dirty = yes
 				add_political_power = 25
 			}

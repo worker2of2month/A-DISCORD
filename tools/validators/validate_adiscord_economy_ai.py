@@ -3555,7 +3555,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     require(
         "ADISCORD_economy_weekly_source_cache_ready"
-        not in block(effects, "ADISCORD_economy_mark_dirty"),
+        not in block(effects, "ADISCORD_economy_mark_sources_dirty"),
         "dirty invalidation still clears the weekly readiness watermark",
     )
     require(
@@ -3637,7 +3637,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     control_change = block(on_actions, "on_state_control_changed")
     require(
-        control_change.count("ADISCORD_economy_mark_dirty = yes") == 2
+        control_change.count("ADISCORD_economy_mark_sources_dirty = yes") == 2
         and control_change.count("ADISCORD_economy_has_current_schema = yes") == 2,
         "state control changes do not invalidate both existing economy caches",
     )

@@ -56,7 +56,7 @@
 			custom_effect_tooltip = SHL_h_cartel_price_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
-				ADISCORD_economy_clamp_treasury = yes
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 60 }
 				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.05 }
 				SHL_refresh_conclave_power = yes
@@ -498,7 +498,7 @@
 			custom_effect_tooltip = SHL_h_export_houses_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 90 }
-				ADISCORD_economy_clamp_treasury = yes
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 90 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -730,7 +730,7 @@
 			custom_effect_tooltip = SHL_h_bank_of_houses_tt
 			hidden_effect = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-				ADISCORD_economy_clamp_treasury = yes
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
 				add_to_variable = { var = SHL_treasury_capacity_bonus value = 0.05 }
 				SHL_refresh_furnaces = yes
 			}
@@ -760,6 +760,7 @@
 			custom_effect_tooltip = SHL_south_debt_network_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
 				ADISCORD_economy_mark_dirty = yes
 				RHM = {
 					if = {
@@ -1154,7 +1155,7 @@
 				add_to_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
 				SHL_refresh_furnaces = yes
 				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
-				ADISCORD_economy_clamp_treasury = yes
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}

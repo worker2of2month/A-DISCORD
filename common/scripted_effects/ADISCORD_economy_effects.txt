@@ -3201,6 +3201,18 @@ ADISCORD_economy_repay_debt = {
 	}
 }
 
+# Country content may change principal directly (concessions, treaty loans,
+# focus write-offs). Reprice interest at once and let a lower interest share
+# relieve an existing debt state; upward states still belong to settlement.
+ADISCORD_economy_reprice_debt = {
+	clamp_variable = { var = ADISCORD_economy_debt min = 0 max = 1000000 }
+	ADISCORD_economy_calculate_debt_metrics = yes
+	ADISCORD_economy_reconcile_debt_state_after_action = yes
+	ADISCORD_economy_update_macro_confidence = yes
+	ADISCORD_economy_refresh_after_debt_action = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
 ADISCORD_economy_print_money = {
 	ADISCORD_economy_expand_money_emission = yes
 }
@@ -3327,6 +3339,7 @@ ADISCORD_economy_stabilization_package = {
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -20 }
 		add_to_variable = { var = ADISCORD_economy_price_shock value = -10 }
 		add_to_variable = { var = ADISCORD_economy_action_overload_residue value = -12 }
+		set_country_flag = { flag = ADISCORD_economy_stabilization_cooldown days = 90 }
 		ADISCORD_economy_clamp_financing_pressures = yes
 		ADISCORD_economy_calculate_macro_indicators = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -3344,6 +3357,7 @@ ADISCORD_economy_restructure_debt = {
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 6 }
 		add_to_variable = { var = ADISCORD_economy_action_overload_residue value = 4 }
 		set_variable = { var = ADISCORD_economy_recent_debt value = 1 }
+		set_country_flag = { flag = ADISCORD_economy_restructuring_cooldown days = 180 }
 		ADISCORD_economy_clamp_financing_pressures = yes
 		ADISCORD_economy_calculate_debt_metrics = yes
 		ADISCORD_economy_reconcile_debt_state_after_action = yes
@@ -3472,7 +3486,7 @@ ADISCORD_economy_recount_economic_buildings = {
 
 		# HOI4 has no state-scoped factory-output modifier. Count operational
 		# military factories here so the country modifier can reproduce the exact
-		# weighted effect of +5% per cluster level in this particular state.
+		# weighted effect of +10% per cluster level in this particular state.
 		set_temp_variable = { var = ADISCORD_economy_state_operational_mils_temp value = 0 }
 		if = {
 			limit = { is_controlled_by = PREV }
@@ -3662,7 +3676,7 @@ ADISCORD_economy_close_window = {
 	ADISCORD_economy_update_gui = yes
 }
 
-ADISCORD_economy_mark_dirty = {
+ADISCORD_economy_mark_sources_dirty = {
 	# Buildings still need a recount, but weekly cash must keep settling from
 	# the last factory scalars. Recache those five engine counts in country
 	# scope; do not clear the weekly readiness watermark.
@@ -3671,6 +3685,22 @@ ADISCORD_economy_mark_dirty = {
 	# Cash transactions immediately update the runway against the current forecast.
 	ADISCORD_economy_refresh_deficit_runway = yes
 	ADISCORD_economy_update_gui = yes
+}
+
+# Content calls this after an idea, dynamic modifier or variable behind an
+# economy modifier changes. The weekly ledger cannot read modifier@, so the
+# change reaches it through the next-day policy refresh shared with laws; the
+# pending flag limits that refresh to one hidden event per country.
+ADISCORD_economy_mark_dirty = {
+	ADISCORD_economy_mark_sources_dirty = yes
+	if = {
+		limit = {
+			ADISCORD_economy_has_current_schema = yes
+			NOT = { has_country_flag = ADISCORD_economy_law_refresh_pending }
+		}
+		set_country_flag = { flag = ADISCORD_economy_law_refresh_pending days = 2 }
+		country_event = { id = ADISCORD_economy.5 days = 1 }
+	}
 }
 
 # Law callbacks run while the engine replaces idea modifiers. Reconcile once
