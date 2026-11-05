@@ -243,6 +243,7 @@ ideas = {
 		}
 
 		ADISCORD_economy_civilian_investment = {
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -250,6 +251,7 @@ ideas = {
 			modifier = {
 				production_speed_buildings_factor = 0.05
 				production_speed_industrial_complex_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.20
 			}
 		}
 		ADISCORD_economy_military_investment = {

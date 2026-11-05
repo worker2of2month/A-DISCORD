@@ -1823,6 +1823,22 @@ ADISCORD_economy_update_debt_state_after_settlement = {
 	ADISCORD_economy_sync_debt_state_idea = yes
 }
 
+# A default is not cured by one surplus week. It lasts while interest still
+# takes the crisis share of income, until repayment, restructuring or income
+# growth bring it down; the settlement automaton itself stays unchanged.
+ADISCORD_economy_hold_debt_default = {
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = 4 compare = equals }
+			check_variable = { var = ADISCORD_economy_debt_state value = 4 compare = less_than }
+			check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = greater_than_or_equals }
+		}
+		set_variable = { var = ADISCORD_economy_debt_state value = 4 }
+		set_variable = { var = ADISCORD_economy_debt_crisis_level value = 4 }
+		ADISCORD_economy_sync_debt_state_idea = yes
+	}
+}
+
 ADISCORD_economy_queue_debt_notification = {
 	# Cache first, then let an upward state replace kind 1. The borrowed amount
 	# remains intact so a combined notice still explains the automatic loan.
@@ -1926,12 +1942,19 @@ ADISCORD_economy_calculate_weekly_budget = {
 	multiply_variable = { var = ADISCORD_economy_weekly_income value = 3 }
 	divide_variable = { var = ADISCORD_economy_weekly_income value = 13 }
 	# Flat country modifiers are applied after the 3/13 conversion: +20 is exactly +20 per week.
-	add_to_variable = { var = ADISCORD_economy_weekly_income value = ADISCORD_economy_final_weekly_income_bonus }
 	set_variable = { var = ADISCORD_economy_weekly_expenses value = ADISCORD_economy_monthly_expenses }
 	multiply_variable = { var = ADISCORD_economy_weekly_expenses value = 3 }
 	divide_variable = { var = ADISCORD_economy_weekly_expenses value = 13 }
+	# A net negative flat amount (lost contracts, sanctions) is a weekly charge,
+	# so the dashboard never shows negative income; the balance is identical.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_final_weekly_income_bonus value = 0 compare = less_than } }
+		subtract_from_variable = { var = ADISCORD_economy_weekly_expenses value = ADISCORD_economy_final_weekly_income_bonus }
+	}
+	else = { add_to_variable = { var = ADISCORD_economy_weekly_income value = ADISCORD_economy_final_weekly_income_bonus } }
 	set_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_income }
 	subtract_from_variable = { var = ADISCORD_economy_weekly_balance value = ADISCORD_economy_weekly_expenses }
+	ADISCORD_economy_calculate_financing_offers = yes
 	# Display-only weekly equivalent of the last macro inflation change. The source
 	# remains authoritative; 3/13 is the same exact month-to-week conversion used
 	# by the cash forecast, and this value has no gameplay consumer.
@@ -1951,6 +1974,30 @@ ADISCORD_economy_calculate_weekly_budget = {
 	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 25 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.04 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 50 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.08 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_inflation value = 75 compare = greater_than_or_equals } } set_variable = { var = ADISCORD_economy_inflation_expense_multiplier value = 1.15 } }
+}
+
+# Liquidity packages follow gross weekly income: a bond issue is thirty weeks
+# of revenue, an external loan forty and a war levy twelve, so a small country
+# is not offered several years of income at once. The former fixed packages
+# remain the caps. The dashboard shows these scalars and the actions pay them.
+ADISCORD_economy_calculate_financing_offers = {
+	set_variable = { var = ADISCORD_economy_bond_offer_cash value = ADISCORD_economy_weekly_income }
+	multiply_variable = { var = ADISCORD_economy_bond_offer_cash value = 30 }
+	clamp_variable = { var = ADISCORD_economy_bond_offer_cash min = 100 max = 1500 }
+	set_variable = { var = ADISCORD_economy_external_offer_cash value = ADISCORD_economy_weekly_income }
+	multiply_variable = { var = ADISCORD_economy_external_offer_cash value = 40 }
+	clamp_variable = { var = ADISCORD_economy_external_offer_cash min = 150 max = 2000 }
+	set_variable = { var = ADISCORD_economy_war_tax_offer_cash value = ADISCORD_economy_weekly_income }
+	multiply_variable = { var = ADISCORD_economy_war_tax_offer_cash value = 12 }
+	clamp_variable = { var = ADISCORD_economy_war_tax_offer_cash min = 50 max = 1000 }
+	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_variable = { var = ADISCORD_economy_war_tax_offer_cash value = 1.25 } }
+	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_variable = { var = ADISCORD_economy_war_tax_offer_cash value = 1.50 } }
+	# Emission is twenty weeks of revenue; buying one level back costs half.
+	set_variable = { var = ADISCORD_economy_emission_offer_cash value = ADISCORD_economy_weekly_income }
+	multiply_variable = { var = ADISCORD_economy_emission_offer_cash value = 20 }
+	clamp_variable = { var = ADISCORD_economy_emission_offer_cash min = 50 max = 750 }
+	set_variable = { var = ADISCORD_economy_emission_buyback_cash value = ADISCORD_economy_emission_offer_cash }
+	multiply_variable = { var = ADISCORD_economy_emission_buyback_cash value = 0.5 }
 }
 
 ADISCORD_economy_refresh_deficit_runway = {
@@ -2254,6 +2301,7 @@ ADISCORD_economy_apply_weekly_balance = {
 	set_variable = { var = ADISCORD_economy_current_month_building_costs value = 0 }
 	ADISCORD_economy_clamp_treasury = yes
 	ADISCORD_economy_update_debt_state_after_settlement = yes
+	ADISCORD_economy_hold_debt_default = yes
 	ADISCORD_economy_queue_debt_notification = yes
 }
 
@@ -2469,6 +2517,21 @@ ADISCORD_economy_update_inflation = {
 		clamp_variable = { var = ADISCORD_economy_inflation_delta_temp min = 0 max = 1.5 }
 		multiply_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_tick_scale }
 		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_inflation_delta_temp }
+		# Half a year of peaceful surplus without emission or deficit pressure lets
+		# prices settle by 0.25 pp a month. Stabilisation stays the fast remedy.
+		if = {
+			limit = {
+				has_war = no
+				check_variable = { var = ADISCORD_economy_surplus_streak value = 6 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = less_than_or_equals }
+				check_variable = { var = ADISCORD_economy_deficit_pressure value = 0 compare = less_than_or_equals }
+				check_variable = { var = ADISCORD_economy_inflation value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = ADISCORD_economy_inflation_settling_temp value = -0.25 }
+			multiply_temp_variable = { var = ADISCORD_economy_inflation_settling_temp value = ADISCORD_economy_tick_scale }
+			add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_inflation_settling_temp }
+			add_to_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_inflation_settling_temp }
+		}
 	}
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_price_shock value = 0 compare = greater_than } }
@@ -3113,7 +3176,7 @@ ADISCORD_economy_take_debt = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_take_debt = yes }
-		set_variable = { var = ADISCORD_economy_loan_cash_temp value = 1500 }
+		set_variable = { var = ADISCORD_economy_loan_cash_temp value = ADISCORD_economy_bond_offer_cash }
 		set_variable = { var = ADISCORD_economy_loan_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_loan_room_temp value = ADISCORD_economy_treasury }
 		clamp_variable = { var = ADISCORD_economy_loan_room_temp min = 0 max = 5000 }
@@ -3228,7 +3291,7 @@ ADISCORD_economy_take_external_loan = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_take_external_loan = yes }
-		set_variable = { var = ADISCORD_economy_external_cash_temp value = 2000 }
+		set_variable = { var = ADISCORD_economy_external_cash_temp value = ADISCORD_economy_external_offer_cash }
 		set_variable = { var = ADISCORD_economy_external_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_external_room_temp value = ADISCORD_economy_treasury }
 		clamp_variable = { var = ADISCORD_economy_external_room_temp min = 0 max = 5000 }
@@ -3283,7 +3346,7 @@ ADISCORD_economy_expand_money_emission = {
 		limit = { ADISCORD_economy_can_expand_money_emission = yes }
 		# Emission is emergency liquidity, not free permanent income. The cash
 		# injection is bounded by reserve capacity and carries persistent prices.
-		set_variable = { var = ADISCORD_economy_emission_cash_temp value = 750 }
+		set_variable = { var = ADISCORD_economy_emission_cash_temp value = ADISCORD_economy_emission_offer_cash }
 		set_variable = { var = ADISCORD_economy_emission_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_emission_room_temp value = ADISCORD_economy_treasury }
 		clamp_variable = { var = ADISCORD_economy_emission_room_temp min = 0 max = 5000 }
@@ -3310,9 +3373,12 @@ ADISCORD_economy_reduce_money_emission = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_reduce_money_emission = yes }
+		# A buyback withdraws half of one emission package from the treasury and
+		# removes its persistent pressure; it is not a free inflation cut.
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_emission_buyback_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = ADISCORD_economy_emission_buyback_cash }
 		add_to_variable = { var = ADISCORD_economy_money_printing_level value = -1 }
 		add_to_variable = { var = ADISCORD_economy_price_shock value = -4 }
-		add_to_variable = { var = ADISCORD_economy_inflation value = -4 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = 1 }
 		set_variable = { var = ADISCORD_economy_recent_money_printing value = 1 }
 		ADISCORD_economy_clamp_financing_pressures = yes
@@ -4701,7 +4767,6 @@ ADISCORD_economy_civilian_investment_action = {
 		add_to_variable = { var = ADISCORD_economy_treasury value = -100 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		add_to_variable = { var = ADISCORD_economic_development_progress value = 24 }
-		add_to_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 20 }
 		if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 16 } }
 		if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 10 } }
 		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economic_development_progress value = 20 } }
@@ -4745,9 +4810,7 @@ ADISCORD_economy_war_taxes_action = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_use_war_taxes = yes }
-		set_temp_variable = { var = ADISCORD_economy_war_tax_cash_temp value = 1000 }
-		if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_temp_variable = { var = ADISCORD_economy_war_tax_cash_temp value = 250 } }
-		if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_temp_variable = { var = ADISCORD_economy_war_tax_cash_temp value = 500 } }
+		set_temp_variable = { var = ADISCORD_economy_war_tax_cash_temp value = ADISCORD_economy_war_tax_offer_cash }
 		set_temp_variable = { var = ADISCORD_economy_war_tax_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_war_tax_room_temp value = ADISCORD_economy_treasury }
 		set_temp_variable = { var = ADISCORD_economy_war_tax_overflow_temp value = ADISCORD_economy_war_tax_cash_temp }

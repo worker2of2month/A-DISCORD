@@ -23,3 +23,9 @@ ADISCORD_economy_demobilization = {
 		}
 	}
 }
+
+ADISCORD_economy_treasury_operations = {
+	icon = ADISCORD_deal
+	visible = { ADISCORD_economy_should_show_player_ui = yes }
+	priority = 14
+}

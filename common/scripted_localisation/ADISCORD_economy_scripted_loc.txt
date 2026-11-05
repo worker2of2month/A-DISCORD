@@ -1,5 +1,7 @@
 defined_text = {
 	name = GetADISCORDEconomyModelLoc
+	# Industrialization shares the mixed budget profile but keeps its own name.
+	text = { trigger = { ADISCORD_economy_has_idea_economic_system_industrializing = yes } localization_key = ADISCORD_economic_system_industrializing }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 0 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_0 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_2 }

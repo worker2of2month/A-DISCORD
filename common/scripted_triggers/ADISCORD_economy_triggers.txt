@@ -473,6 +473,13 @@ ADISCORD_economy_can_expand_money_emission = {
 
 ADISCORD_economy_can_reduce_money_emission = {
 	check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = greater_than }
+	set_temp_variable = {
+		ADISCORD_economy_emission_buyback_room_temp = {
+			value = ADISCORD_economy_treasury
+			subtract = ADISCORD_economy_emission_buyback_cash
+		}
+	}
+	check_variable = { var = ADISCORD_economy_emission_buyback_room_temp value = 0 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_money_printing value = 1 compare = less_than }
 	NOT = { has_idea = ADISCORD_economy_money_printing }
 }

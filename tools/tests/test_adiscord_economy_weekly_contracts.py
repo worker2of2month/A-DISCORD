@@ -2384,12 +2384,12 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
     issues = []
     exact_numeric_contracts = {
         "ADISCORD_economy_action_restructure_debt_tt": {
-            "russian": ("10%", "100", "30%", "35", "50"),
-            "english": ("10%", "100", "2", "30%", "35", "50"),
+            "russian": ("10%", "100", "180", "30%", "35", "50"),
+            "english": ("10%", "100", "180", "2", "30%", "35", "50"),
         },
         "ADISCORD_economy_buildings_tt": {
-            "russian": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
-            "english": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
+            "russian": ("+10%", "+30%", "+30.15", "0.62", "1", "2", "4", "6"),
+            "english": ("+10%", "+30%", "+30.15", "0.62", "1", "2", "4", "6"),
         },
         "ADISCORD_economy_war_fatigue_tt": {
             "russian": (
@@ -7136,7 +7136,7 @@ ADISCORD_bad_assistance_owner = {
         )
         buildings_mutation = ECONOMY_LOC_EN.replace(
             buildings_value,
-            buildings_value.replace("+1.20", "", 1),
+            buildings_value.replace("+30.15", "", 1),
             1,
         )
         self.assertNotEqual(buildings_mutation, ECONOMY_LOC_EN)
@@ -8076,9 +8076,21 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertIn("ADISCORD_economy_surplus_streak", trend)
         self.assertNotIn("ADISCORD_economy_treasury", trend)
 
-    def test_market_inflation_does_not_self_heal_without_an_explicit_action(self):
+    def test_market_inflation_settles_only_after_a_peaceful_surplus(self):
         inflation = block(EFFECTS, "ADISCORD_economy_update_inflation")
         market_branch = inflation[inflation.index("else =") :]
+        settling = market_branch[market_branch.index("ADISCORD_economy_inflation_settling_temp") - 600 :]
+        for condition in (
+            "has_war = no",
+            "check_variable = { var = ADISCORD_economy_surplus_streak value = 6 compare = greater_than_or_equals }",
+            "check_variable = { var = ADISCORD_economy_money_printing_level value = 0 compare = less_than_or_equals }",
+            "check_variable = { var = ADISCORD_economy_deficit_pressure value = 0 compare = less_than_or_equals }",
+        ):
+            self.assertIn(condition, settling)
+        self.assertIn(
+            "set_temp_variable = { var = ADISCORD_economy_inflation_settling_temp value = -0.25 }",
+            settling,
+        )
         delta_start = market_branch.index(
             "set_variable = { var = ADISCORD_economy_inflation_delta_temp"
         )
@@ -8105,9 +8117,15 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "add_to_variable = { var = ADISCORD_economy_inflation value = -12 }",
             block(EFFECTS, "ADISCORD_economy_stabilization_package"),
         )
+        buyback = block(EFFECTS, "ADISCORD_economy_reduce_money_emission")
+        self.assertNotIn("var = ADISCORD_economy_inflation value", buyback)
         self.assertIn(
-            "add_to_variable = { var = ADISCORD_economy_inflation value = -4 }",
-            block(EFFECTS, "ADISCORD_economy_reduce_money_emission"),
+            "subtract_from_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_emission_buyback_cash }",
+            buyback,
+        )
+        self.assertIn(
+            "add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = ADISCORD_economy_emission_buyback_cash }",
+            buyback,
         )
 
     def test_borrowing_has_immediate_inflation_and_refreshes_visible_penalties(self):
@@ -10208,7 +10226,13 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 facts={p + "can_expand_money_emission": True}, stubs=stubs
             )
             values = fixture.scopes["A"]
-            values.update({p + "treasury": 100, p + "treasury_cap": 100 + room})
+            values.update(
+                {
+                    p + "treasury": 100,
+                    p + "treasury_cap": 100 + room,
+                    p + "emission_offer_cash": 750,
+                }
+            )
             fixture.run(p + "expand_money_emission")
             self.assertEqual(values[p + "treasury"], 100 + min(room, 750))
             self.assertEqual(values[p + "current_month_action_income"], min(room, 750))
@@ -10320,7 +10344,14 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                     ),
                 )
                 values = fixture.scopes["A"]
-                values.update({p + "treasury": 100, p + "treasury_cap": 100 + room})
+                values.update(
+                    {
+                        p + "treasury": 100,
+                        p + "treasury_cap": 100 + room,
+                        p + "weekly_income": 100,
+                    }
+                )
+                fixture.run(p + "calculate_financing_offers")
                 fixture.run(p + "war_taxes_action")
                 received = min(room, expected)
                 self.assertEqual(values[p + "treasury"], 100 + received)
@@ -10395,6 +10426,8 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                             p + "treasury": 100,
                             p + "treasury_cap": 100 + room,
                             p + "debt": 80,
+                            p + "bond_offer_cash": 1500,
+                            p + "external_offer_cash": 2000,
                         }
                     )
                     fixture.run(p + effect)
@@ -10407,6 +10440,96 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                         values[p + "inflation"], inflation * room / principal
                     )
                     self.assertEqual(values[p + "recent_debt"], 1)
+
+    def test_negative_flat_weekly_amount_is_shown_as_an_expense(self):
+        p = self.PREFIX
+        for bonus, income, expenses in ((-25, 30, 38), (15, 45, 13)):
+            with self.subTest(bonus=bonus):
+                fixture = EconomyScriptFixture(
+                    stubs=(
+                        p + "refresh_deficit_runway",
+                        p + "calculate_financing_offers",
+                    )
+                )
+                values = fixture.scopes["A"]
+                values.update(
+                    {
+                        p + "monthly_income": 130,
+                        p + "monthly_expenses": 56.333333,
+                        p + "final_weekly_income_bonus": bonus,
+                        p + "inflation_delta_temp": 0,
+                        p + "inflation": 0,
+                    }
+                )
+                fixture.run(p + "calculate_weekly_budget")
+                self.assertAlmostEqual(values[p + "weekly_income"], income, places=3)
+                self.assertAlmostEqual(values[p + "weekly_expenses"], expenses, places=3)
+                self.assertAlmostEqual(
+                    values[p + "weekly_balance"], 30 + bonus - 13, places=3
+                )
+
+    def test_default_lasts_while_interest_keeps_the_crisis_share(self):
+        p = self.PREFIX
+        for previous, share, expected in ((4, 30, 4), (4, 20, 2), (3, 30, 2)):
+            with self.subTest(previous=previous, share=share):
+                fixture = EconomyScriptFixture(stubs=(p + "sync_debt_state_idea",))
+                values = fixture.scopes["A"]
+                values.update(
+                    {
+                        p + "pending_debt_notification_previous_state": previous,
+                        p + "debt_state": 2,
+                        p + "debt_crisis_level": 2,
+                        p + "interest_share_income": share,
+                    }
+                )
+                fixture.run(p + "hold_debt_default")
+                self.assertEqual(values[p + "debt_state"], expected)
+                self.assertEqual(values[p + "debt_crisis_level"], expected)
+        weekly = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
+        self.assertLess(
+            weekly.index("ADISCORD_economy_update_debt_state_after_settlement = yes"),
+            weekly.index("ADISCORD_economy_hold_debt_default = yes"),
+        )
+        self.assertLess(
+            weekly.index("ADISCORD_economy_hold_debt_default = yes"),
+            weekly.index("ADISCORD_economy_queue_debt_notification = yes"),
+        )
+
+    def test_financing_offers_follow_gross_weekly_income_within_former_packages(self):
+        p = self.PREFIX
+        for weekly, bonds, external, war_taxes in (
+            (2, 100, 150, 50),
+            (10, 300, 400, 120),
+            (40, 1200, 1600, 480),
+            (400, 1500, 2000, 1000),
+        ):
+            with self.subTest(weekly=weekly):
+                fixture = EconomyScriptFixture(
+                    facts={
+                        p + "model_is_state_coordinated": False,
+                        p + "model_is_planned_bureaucratic": False,
+                    }
+                )
+                values = fixture.scopes["A"]
+                values[p + "weekly_income"] = weekly
+                fixture.run(p + "calculate_financing_offers")
+                self.assertEqual(values[p + "bond_offer_cash"], bonds)
+                self.assertEqual(values[p + "external_offer_cash"], external)
+                self.assertEqual(values[p + "war_tax_offer_cash"], war_taxes)
+        weekly_budget = block(EFFECTS, "ADISCORD_economy_calculate_weekly_budget")
+        self.assertIn("ADISCORD_economy_calculate_financing_offers = yes", weekly_budget)
+        for action, offer in (
+            ("take_debt", "bond_offer_cash"),
+            ("take_external_loan", "external_offer_cash"),
+            ("war_taxes_action", "war_tax_offer_cash"),
+        ):
+            self.assertIn(f"value = ADISCORD_economy_{offer} }}", block(EFFECTS, p + action))
+        for key in (
+            "ADISCORD_economy_action_internal_bonds_tt",
+            "ADISCORD_economy_action_external_loan_tt",
+            "ADISCORD_economy_action_war_taxes_tt",
+        ):
+            self.assertIn("_offer_cash|0]", ECONOMY_LOC.split(key, 1)[1].split("\n", 1)[0])
 
     def test_flat_weekly_income_is_in_cash_ai_balance_and_both_debt_denominators(self):
         fixture = EconomyScriptFixture(
