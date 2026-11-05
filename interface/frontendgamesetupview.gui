@@ -638,7 +638,7 @@ guiTypes = {
 		instantTextBoxType = {
 			name = "bookmark_desc"
 			position = { x = 20 y = 330 }
-			font = "hoi_24header"
+			font = "hoi_20bs"
 			borderSize = {x = 0 y = 0}
 			maxWidth = 540
 			maxHeight = 30

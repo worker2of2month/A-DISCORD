@@ -1703,7 +1703,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_strengthen_corridor_security:0 "Strengthen corridor security"
  VAL_corridor_security_step_tt:0 "Corridor security: +1 out of 3. Weekly grey market pressure change: -1."
  VAL_route_occidia_available_tt:0 "The Occidian route is open: Balchansk, the Harbour and the inland depot are accessible to freight."
- VAL_route_west_available_tt:0 "The western route is open: Antolla, Farein and Himber are accessible to freight."
  VAL_route_stelander_available_tt:0 "The Stelander corridor is open: Kreyden and Hoskheyt are accessible to freight."
  VAL_route_vorkerland_available_tt:0 "The Vorkerland route is open through contractual transit or a peaceful Vorkerland corridor."
  VAL_route_project_free_tt:0 "No other corridor upgrade is unfinished."

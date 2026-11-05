@@ -4514,6 +4514,7 @@ class ExternalContractTests(unittest.TestCase):
         modifier = shared_definitions("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt", ("SHL_metal_supply",))["SHL_metal_supply"]
         self.assertEqual(scalar(modifier, "production_factory_efficiency_gain_factor"), "SHL_metal_efficiency_growth")
         self.assertEqual(scalar(modifier, "production_factory_max_efficiency_factor"), "SHL_metal_efficiency_cap")
+        self.assertEqual(scalar(modifier, "production_lack_of_resource_penalty_factor"), "SHL_metal_resource_penalty")
         self.assertIn("SHL_metal_client", repr(block(modifier, "enable")))
         self.assertIn("country_exists", repr(block(modifier, "remove_trigger")))
 
@@ -4530,11 +4531,13 @@ class ExternalContractTests(unittest.TestCase):
                 mission = decision_definition(mission_id)
                 self.assertEqual(self.m.variables["VAL"]["SHL_metal_efficiency_growth"], 0.15)
                 self.assertEqual(self.m.variables["VAL"]["SHL_metal_efficiency_cap"], 0.05)
+                self.assertEqual(self.m.variables["VAL"]["SHL_metal_resource_penalty"], -0.10)
                 ideas = parse_clausewitz((ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8"))
                 preview = block(block(block(ideas, "ideas"), "country"), "SHL_metal_supply_preview")
                 modifiers = block(preview, "modifier")
                 self.assertEqual(float(scalar(modifiers, "production_factory_efficiency_gain_factor")), self.m.variables["VAL"]["SHL_metal_efficiency_growth"])
                 self.assertEqual(float(scalar(modifiers, "production_factory_max_efficiency_factor")), self.m.variables["VAL"]["SHL_metal_efficiency_cap"])
+                self.assertEqual(float(scalar(modifiers, "production_lack_of_resource_penalty_factor")), self.m.variables["VAL"]["SHL_metal_resource_penalty"])
                 self.assertEqual(scalar(mission, "days_mission_timeout"), duration)
                 self.assertIn("always", repr(block(mission, "available")))
                 self.assertIn("no", repr(block(mission, "available")))

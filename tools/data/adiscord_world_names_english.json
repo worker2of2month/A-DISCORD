@@ -3635,6 +3635,38 @@
         "VICTORY_POINTS_6126": {
           "russian": "Вейран-кала",
           "english": "Veyran-Kala"
+        },
+        "VICTORY_POINTS_6796": {
+          "russian": "Белогорье",
+          "english": "Belogorye"
+        },
+        "VICTORY_POINTS_6331": {
+          "russian": "Тарен",
+          "english": "Taren"
+        },
+        "VICTORY_POINTS_6193": {
+          "russian": "Хадир",
+          "english": "Khadir"
+        },
+        "VICTORY_POINTS_7618": {
+          "russian": "Прибрежск",
+          "english": "Pribrezhsk"
+        },
+        "VICTORY_POINTS_6961": {
+          "russian": "Вересовка",
+          "english": "Veresovka"
+        },
+        "VICTORY_POINTS_8194": {
+          "russian": "Ясный Брод",
+          "english": "Clear Ford"
+        },
+        "VICTORY_POINTS_7908": {
+          "russian": "Заречье",
+          "english": "Zarechye"
+        },
+        "VICTORY_POINTS_2443": {
+          "russian": "Мерса",
+          "english": "Mersa"
         }
       }
     }

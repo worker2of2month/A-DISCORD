@@ -504,4 +504,12 @@
  VICTORY_POINTS_11295: "Loran-Deh"
  VICTORY_POINTS_9890: "Bayrat-Kan"
  VICTORY_POINTS_6126: "Veyran-Kala"
+ VICTORY_POINTS_6796: "Belogorye"
+ VICTORY_POINTS_6331: "Taren"
+ VICTORY_POINTS_6193: "Khadir"
+ VICTORY_POINTS_7618: "Pribrezhsk"
+ VICTORY_POINTS_6961: "Veresovka"
+ VICTORY_POINTS_8194: "Clear Ford"
+ VICTORY_POINTS_7908: "Zarechye"
+ VICTORY_POINTS_2443: "Mersa"
  # END GENERATED: tools.builders.build_adiscord_new_states

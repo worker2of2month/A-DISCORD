@@ -7366,6 +7366,7 @@ SHL_metal_establish_contract = {
 		set_variable = { var = SHL_metal_arrears value = 0 }
 		set_variable = { var = SHL_metal_efficiency_growth value = 0.15 }
 		set_variable = { var = SHL_metal_efficiency_cap value = 0.05 }
+		set_variable = { var = SHL_metal_resource_penalty value = -0.10 }
 		add_dynamic_modifier = { modifier = SHL_metal_supply }
 		ADISCORD_economy_mark_dirty = yes
 		SHL = {
@@ -7449,6 +7450,7 @@ SHL_metal_drop_client = {
 		clear_variable = SHL_metal_arrears
 		clear_variable = SHL_metal_efficiency_growth
 		clear_variable = SHL_metal_efficiency_cap
+		clear_variable = SHL_metal_resource_penalty
 		remove_mission = SHL_metal_contract_year
 		remove_mission = SHL_metal_contract_two_years
 		if = {

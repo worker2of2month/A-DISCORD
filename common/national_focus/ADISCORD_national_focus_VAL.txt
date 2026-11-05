@@ -1133,7 +1133,7 @@ shared_focus = {
 		allow_branch = {
 			VAL_council_governs = no
 		}
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_VAL_Krutovs_Eyes
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 34
 		y = 4

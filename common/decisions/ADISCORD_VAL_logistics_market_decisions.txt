@@ -1171,7 +1171,7 @@ VAL_trade_routes = {
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
-				tooltip = VAL_route_west_available_tt
+				tooltip = VAL_route_north_available_tt
 				VAL_trade_route_west_open = yes
 			}
 			custom_trigger_tooltip = {
