@@ -10,6 +10,7 @@ from tools.lib.focus_sources import read_focus_source
 
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
+EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt"
 LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
@@ -147,6 +148,45 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
                     "modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }",
                     ai,
                 )
+
+    def test_shabrat_ai_flips_districts_that_the_mandate_can_transfer(
+        self,
+    ) -> None:
+        decisions = read(DECISIONS)
+        effects = read(EFFECTS)
+        network = named_block(
+            named_block(decisions, "STP_cw_raise_district_network"), "ai_will_do"
+        )
+        self.assertIn(
+            "modifier = { factor = 3 FROM = { NOT = { STP_region_resistance_leaning = yes } } }",
+            network,
+        )
+        self.assertIn(
+            "modifier = { factor = 0.1 FROM = { STP_region_resistance_entrenched = yes } }",
+            network,
+        )
+        disperse = named_block(
+            named_block(decisions, "STP_cw_disperse_network"), "ai_will_do"
+        )
+        self.assertIn("value = 50 compare = greater_than_or_equals", disperse)
+
+        for schedule, own_flag in (
+            ("STP_cw_schedule_opposition", "STP_cw_opposition_target"),
+            ("STP_cw_schedule_opposition_second", "STP_ps_opposition_target_second"),
+        ):
+            with self.subTest(schedule=schedule):
+                body = named_block(effects, schedule)
+                first = named_block(body, "random_owned_state")
+                self.assertIn("STP_region_resistance_leaning = yes", first)
+                self.assertIn(
+                    "NOT = { STP_cw_opposition_foothold_secured = yes }", first
+                )
+                self.assertIn(f"set_state_flag = {own_flag}", first)
+                guard = (
+                    "limit = { NOT = { any_owned_state = "
+                    f"{{ has_state_flag = {own_flag} }} }} }}"
+                )
+                self.assertEqual(body.count(guard), 2)
 
     def test_ai_prefers_buying_silence_over_exposing_the_cabinet(self) -> None:
         focuses = read(FOCUS)

@@ -308,6 +308,20 @@ STP_region_resistance_overwhelming = {
 	check_variable = { var = STP_resistance_influence value = 90 compare = greater_than_or_equals }
 }
 
+# STATE: a district of the fixed pool where the announced opposition network can work.
+STP_cw_opposition_district_available = {
+	OR = { state = 2 state = 3 state = 29 state = 46 state = 53 }
+	STP_region_is_operable = yes
+	is_controlled_by = STP
+}
+
+# STATE: an entrenched district with an administration transfers once that
+# administration has worked 20 days; later operations there only add arms assets.
+STP_cw_opposition_foothold_secured = {
+	STP_region_resistance_entrenched = yes
+	has_state_flag = STP_resistance_administration_asset
+}
+
 STP_region_party_entrenched = {
 	STP_region_party_strongest = yes
 	check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }

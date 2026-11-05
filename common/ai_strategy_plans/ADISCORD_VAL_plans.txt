@@ -60,10 +60,10 @@ VAL_expansion_priority_plan = {
 		VAL_Captains_Cannot_Veto
 		VAL_State_Contract
 		VAL_Operational_Directorate
-		VAL_Vorkerland_Contracts_Burn
-		VAL_Inventory_The_Empty_Yards
 		VAL_Factories_Like_Cathedrals
 		VAL_Ballistics_Schools
+		VAL_Vorkerland_Contracts_Burn
+		VAL_Inventory_The_Empty_Yards
 		VAL_Export_Rifles_Not_Promises
 		VAL_Contract_Accounting_Office
 		VAL_Salvage_Every_Barrel
@@ -188,10 +188,10 @@ VAL_council_government_plan = {
 		VAL_Central_Payment_Office
 		VAL_Provincial_Contract_Courts
 		VAL_Operational_Directorate
-		VAL_Vorkerland_Contracts_Burn
-		VAL_Inventory_The_Empty_Yards
 		VAL_Factories_Like_Cathedrals
 		VAL_Ballistics_Schools
+		VAL_Vorkerland_Contracts_Burn
+		VAL_Inventory_The_Empty_Yards
 		VAL_Export_Rifles_Not_Promises
 		VAL_Contract_Accounting_Office
 		VAL_Salvage_Every_Barrel

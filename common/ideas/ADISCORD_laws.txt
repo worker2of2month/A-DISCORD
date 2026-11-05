@@ -301,17 +301,15 @@ ideas = {
 			cost = 75
 			removal_cost = -1
 
-			available = {
-				OR = {
-					has_war = yes
-					has_war_support > 0.35
-				}
-			}
+			# Peacetime repeal belongs to the postwar demobilization requirements.
+			available = { has_war = yes }
 
 			modifier = {
 				stability_factor = 0.03
 				war_support_factor = 0.075
 				political_power_gain = -0.03
+				research_speed_factor = -0.10
+				ADISCORD_economy_war_fatigue_gain_factor = 0.05
 			}
 
 			cancel_if_invalid = no

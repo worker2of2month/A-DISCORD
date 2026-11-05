@@ -30,7 +30,6 @@ CHAPTER_ROOTS = {
     "VAL_Veterans_Of_The_Campaign",
 }
 REVEAL_MILESTONES = {
-    "VAL_Operational_Directorate",
     "VAL_Inventory_The_Empty_Yards",
     "VAL_Resource_War_Contracts",
     "VAL_Brokered_Steel",
@@ -401,7 +400,13 @@ class KefreytFocusStagingTests(unittest.TestCase):
 
         vorkerland = allow(self.focuses, "VAL_Vorkerland_Contracts_Burn")
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)
-        self.assertIn("has_completed_focus = VAL_Operational_Directorate", vorkerland)
+        self.assertNotIn("has_completed_focus =", vorkerland)
+        root = focus_block(self.focuses, "VAL_Vorkerland_Contracts_Burn")
+        self.assertRegex(
+            root,
+            r"prerequisite = \{\s*focus = VAL_Ballistics_Schools\s*focus = VAL_Brokered_Steel\s*\}",
+        )
+        self.assertNotIn("focus = VAL_Operational_Directorate", root)
 
     def test_late_chapters_keep_selection_gates_and_reveal_their_internal_roadmap(self) -> None:
         expected = {

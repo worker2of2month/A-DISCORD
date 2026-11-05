@@ -9392,6 +9392,7 @@ class PostwarDemobilizationTests(unittest.TestCase):
         for law, kind in (
             ("closed_economy", "trade"),
             ("ADISCORD_justice_field_courts", "justice"),
+            ("ADISCORD_information_wartime_censorship", "censorship"),
         ):
             with self.subTest(law=law):
                 fixture, state = self.fixture(phase=1, budget=3, laws=False)
@@ -9431,6 +9432,7 @@ class PostwarDemobilizationTests(unittest.TestCase):
         for kind, replacement in (
             ("trade", "export_focus"),
             ("justice", "ADISCORD_justice_regular_tribunals"),
+            ("censorship", "ADISCORD_information_licensed_press"),
         ):
             decision = block(source, self.P + "demobilize_" + kind)
             self.assertIn("add_ideas = " + replacement, decision)
@@ -9659,7 +9661,8 @@ class PostwarDemobilizationTests(unittest.TestCase):
         fixture, state = self.fixture(phase=2)
         state["idea@closed_economy"] = True
         state["idea@ADISCORD_justice_field_courts"] = True
-        for kind in ("economy", "manpower", "budget", "trade", "justice"):
+        state["idea@ADISCORD_information_wartime_censorship"] = True
+        for kind in ("economy", "manpower", "budget", "trade", "justice", "censorship"):
             idea = block(ECONOMY_IDEAS, self.P + "demobilization_" + kind + "_penalty")
             cancel = _parsed_definition(idea, "cancel").value
             self.assertFalse(fixture.condition(cancel))
@@ -9722,7 +9725,7 @@ class PostwarDemobilizationTests(unittest.TestCase):
         source = (ROOT / "common/decisions/ADISCORD_economy_projects.txt").read_text(
             encoding="utf-8"
         )
-        for kind in ("economy", "manpower", "budget", "trade", "justice"):
+        for kind in ("economy", "manpower", "budget", "trade", "justice", "censorship"):
             decision = block(source, self.P + "demobilize_" + kind)
             self.assertIn("cost = 50", decision)
             self.assertNotIn("add_political_power", decision)

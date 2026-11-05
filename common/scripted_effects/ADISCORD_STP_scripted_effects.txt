@@ -832,21 +832,44 @@ STP_cw_schedule_opposition = {
 		29 = { clr_state_flag = STP_cw_opposition_target }
 		46 = { clr_state_flag = STP_cw_opposition_target }
 		53 = { clr_state_flag = STP_cw_opposition_target }
+		# Only resistance-leaning districts transfer, so the network finishes a started
+		# flip, then opens a new one; secured footholds only receive missing assets.
 		random_owned_state = {
 			limit = {
-				OR = { state = 2 state = 3 state = 29 state = 46 state = 53 }
-				STP_region_is_operable = yes
+				STP_cw_opposition_district_available = yes
 				NOT = { has_state_flag = STP_ps_opposition_target_second }
-				is_controlled_by = STP
-				OR = {
-					NOT = { has_state_flag = STP_resistance_administration_asset }
-					NOT = { STP_region_resistance_entrenched = yes }
-					AND = { OR = { state = 2 state = 29 } NOT = { has_state_flag = STP_resistance_garrison_asset } }
-					AND = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } }
-					AND = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } }
-				}
+				STP_region_resistance_leaning = yes
+				NOT = { STP_cw_opposition_foothold_secured = yes }
 			}
 			set_state_flag = STP_cw_opposition_target
+		}
+		if = {
+			limit = { NOT = { any_owned_state = { has_state_flag = STP_cw_opposition_target } } }
+			random_owned_state = {
+				limit = {
+					STP_cw_opposition_district_available = yes
+					NOT = { has_state_flag = STP_ps_opposition_target_second }
+					NOT = { STP_region_resistance_leaning = yes }
+				}
+				set_state_flag = STP_cw_opposition_target
+			}
+		}
+		if = {
+			limit = { NOT = { any_owned_state = { has_state_flag = STP_cw_opposition_target } } }
+			random_owned_state = {
+				limit = {
+					STP_cw_opposition_district_available = yes
+					NOT = { has_state_flag = STP_ps_opposition_target_second }
+					OR = {
+						NOT = { has_state_flag = STP_resistance_administration_asset }
+						NOT = { STP_region_resistance_entrenched = yes }
+						AND = { OR = { state = 2 state = 29 } NOT = { has_state_flag = STP_resistance_garrison_asset } }
+						AND = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } }
+						AND = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } }
+					}
+				}
+				set_state_flag = STP_cw_opposition_target
+			}
 		}
 		if = { limit = { any_owned_state = { has_state_flag = STP_cw_opposition_target } } activate_mission = STP_cw_opposition_preparation }
 		if = {
@@ -10796,21 +10819,43 @@ STP_cw_schedule_opposition_second = {
 		29 = { clr_state_flag = STP_ps_opposition_target_second }
 		46 = { clr_state_flag = STP_ps_opposition_target_second }
 		53 = { clr_state_flag = STP_ps_opposition_target_second }
+		# Same priority as the first network: finish a flip, open one, then add assets.
 		random_owned_state = {
 			limit = {
-				OR = { state = 2 state = 3 state = 29 state = 46 state = 53 }
-				STP_region_is_operable = yes
+				STP_cw_opposition_district_available = yes
 				NOT = { has_state_flag = STP_cw_opposition_target }
-				is_controlled_by = STP
-				OR = {
-					NOT = { has_state_flag = STP_resistance_administration_asset }
-					NOT = { STP_region_resistance_entrenched = yes }
-					AND = { OR = { state = 2 state = 29 } NOT = { has_state_flag = STP_resistance_garrison_asset } }
-					AND = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } }
-					AND = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } }
-				}
+				STP_region_resistance_leaning = yes
+				NOT = { STP_cw_opposition_foothold_secured = yes }
 			}
 			set_state_flag = STP_ps_opposition_target_second
+		}
+		if = {
+			limit = { NOT = { any_owned_state = { has_state_flag = STP_ps_opposition_target_second } } }
+			random_owned_state = {
+				limit = {
+					STP_cw_opposition_district_available = yes
+					NOT = { has_state_flag = STP_cw_opposition_target }
+					NOT = { STP_region_resistance_leaning = yes }
+				}
+				set_state_flag = STP_ps_opposition_target_second
+			}
+		}
+		if = {
+			limit = { NOT = { any_owned_state = { has_state_flag = STP_ps_opposition_target_second } } }
+			random_owned_state = {
+				limit = {
+					STP_cw_opposition_district_available = yes
+					NOT = { has_state_flag = STP_cw_opposition_target }
+					OR = {
+						NOT = { has_state_flag = STP_resistance_administration_asset }
+						NOT = { STP_region_resistance_entrenched = yes }
+						AND = { OR = { state = 2 state = 29 } NOT = { has_state_flag = STP_resistance_garrison_asset } }
+						AND = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } }
+						AND = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } }
+					}
+				}
+				set_state_flag = STP_ps_opposition_target_second
+			}
 		}
 		if = { limit = { any_owned_state = { has_state_flag = STP_ps_opposition_target_second } } activate_mission = STP_ps_opposition_preparation_second }
 		if = {

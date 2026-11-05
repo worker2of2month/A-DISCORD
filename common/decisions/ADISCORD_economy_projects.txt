@@ -421,6 +421,10 @@ ADISCORD_economy_demobilization = {
 				tooltip = ADISCORD_economy_demobilization_justice_done_tt
 				ADISCORD_economy_demobilize_justice_needed = no
 			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_censorship_done_tt
+				ADISCORD_economy_demobilize_censorship_needed = no
+			}
 		}
 		cancel_trigger = {
 			custom_trigger_tooltip = {
@@ -574,6 +578,31 @@ ADISCORD_economy_demobilization = {
 		cost = 50
 		complete_effect = {
 			add_ideas = ADISCORD_justice_regular_tribunals
+			hidden_effect = {
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	ADISCORD_economy_demobilize_censorship = {
+		icon = generic_political_discourse
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_censorship_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			add_ideas = ADISCORD_information_licensed_press
 			hidden_effect = {
 				ADISCORD_economy_reconcile_demobilization = yes
 				ADISCORD_economy_queue_law_refresh = yes

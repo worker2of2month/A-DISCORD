@@ -2139,7 +2139,7 @@ VAL_reclamation_industry_available_tt:0 "Регион принадлежит н�
 # --- GENERATED: VAL focus progression tooltips ---
  VAL_focus_progression_VAL_Army_Of_The_Ledger_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Contracts_Outlive_Kings$, $VAL_Veterans_Of_The_Campaign$."
  VAL_focus_progression_VAL_Arsenal_Reserve_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Reserve_Accounting$."
- VAL_focus_progression_VAL_Brokered_Steel_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Export_Rifles_Not_Promises$, $VAL_Merchant_Rail_Yards$, $VAL_Westerholm_Concessions$, $VAL_Industrial_Mobilization_Plan$, $VAL_Independent_Trials$."
+ VAL_focus_progression_VAL_Brokered_Steel_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Export_Rifles_Not_Promises$, $VAL_Merchant_Rail_Yards$, $VAL_Westerholm_Concessions$, $VAL_Vorkerland_Contracts_Burn$, $VAL_Industrial_Mobilization_Plan$, $VAL_Independent_Trials$."
  VAL_focus_progression_VAL_Campaign_Secured_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Reopen_Trade_Routes$, $VAL_Settle_Industrial_Debts$, $VAL_Veterans_Of_The_Campaign$, $VAL_Return_To_World_Market$."
  VAL_focus_progression_VAL_Captains_Cannot_Veto_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_State_Contract$."
  VAL_focus_progression_VAL_Central_Payment_Office_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_State_Contract$."
@@ -2168,7 +2168,7 @@ VAL_reclamation_industry_available_tt:0 "Регион принадлежит н�
  VAL_focus_progression_VAL_Occidian_Registries_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Integrate_Occidia$, $VAL_Balchansk_Charter$."
  VAL_focus_progression_VAL_October_Of_2160_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Different_Views_On_Freedom$, $VAL_Foreign_Broker_Licences$, $VAL_frontier_conference$."
  VAL_focus_progression_VAL_One_Ledger_One_Banner_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Market_Roads_North$, $VAL_frontier_conference$."
- VAL_focus_progression_VAL_Operational_Directorate_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Vorkerland_Contracts_Burn$, $VAL_Ministry_Auditors$, $VAL_Resource_War_Contracts$."
+ VAL_focus_progression_VAL_Operational_Directorate_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Ministry_Auditors$, $VAL_Resource_War_Contracts$."
  VAL_focus_progression_VAL_Operational_Reserves_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Contract_General_Staff$."
  VAL_focus_progression_VAL_Paid_Loyalty_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_Closed_Ledgers$, $VAL_Loyal_Captains_Honours$."
  VAL_focus_progression_VAL_Price_Of_Loyalty_tt:0 "§GДЕРЕВО ФОКУСОВ§!\n§YСледующие фокусы (при выполнении их условий):§! $VAL_One_Ledger_One_Banner$, $VAL_Paid_Loyalty$."

@@ -778,6 +778,10 @@ ADISCORD_economy_demobilize_justice_needed = {
 	has_idea = ADISCORD_justice_field_courts
 }
 
+ADISCORD_economy_demobilize_censorship_needed = {
+	has_idea = ADISCORD_information_wartime_censorship
+}
+
 ADISCORD_economy_demobilization_needed = {
 	OR = {
 		ADISCORD_economy_demobilize_economy_needed = yes
@@ -785,6 +789,7 @@ ADISCORD_economy_demobilization_needed = {
 		ADISCORD_economy_demobilize_budget_needed = yes
 		ADISCORD_economy_demobilize_trade_needed = yes
 		ADISCORD_economy_demobilize_justice_needed = yes
+		ADISCORD_economy_demobilize_censorship_needed = yes
 	}
 }
 
@@ -861,3 +866,5 @@ ADISCORD_economy_has_demobilization_budget_penalty = { has_idea = ADISCORD_econo
 ADISCORD_economy_has_demobilization_trade_penalty = { has_idea = ADISCORD_economy_demobilization_trade_penalty }
 
 ADISCORD_economy_has_demobilization_justice_penalty = { has_idea = ADISCORD_economy_demobilization_justice_penalty }
+
+ADISCORD_economy_has_demobilization_censorship_penalty = { has_idea = ADISCORD_economy_demobilization_censorship_penalty }

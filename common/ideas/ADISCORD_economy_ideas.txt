@@ -382,6 +382,26 @@ ideas = {
 			}
 		}
 
+		ADISCORD_economy_demobilization_censorship_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_censorship_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.05
+				research_speed_factor = -0.05
+			}
+		}
+
 		ADISCORD_economy_postwar_demobilization = {
 			cancel = {
 				OR = {

@@ -726,6 +726,23 @@ ADISCORD_economy_reconcile_demobilization = {
 		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
 	}
 	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_censorship_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_censorship_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_censorship_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_censorship_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_censorship_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
 		limit = { check_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 compare = equals } }
 		ADISCORD_economy_mark_dirty = yes
 		# Idea modifiers are collected after the engine has finished replacing them.

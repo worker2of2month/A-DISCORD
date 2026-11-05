@@ -1811,9 +1811,11 @@ focus_tree = {
 		x = 22
 		y = 3
 		cost = 5
-		prerequisite = { focus = VAL_Operational_Directorate }
+		prerequisite = {
+			focus = VAL_Ballistics_Schools
+			focus = VAL_Brokered_Steel
+		}
 		allow_branch = {
-			has_completed_focus = VAL_Operational_Directorate
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 				has_country_flag = VAL_debug_vorkerland_collapse

@@ -200,7 +200,15 @@ STP_shabrat_election_bop_category = {
 				}
 			}
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			# Shabrat's campaign raises suspicion; keep room below the district-operation limit.
+			modifier = {
+				factor = 0.25
+				has_country_flag = STP_sided_with_Maksim_flag
+				check_variable = { var = STP_party_suspicion value = 55 compare = greater_than_or_equals }
+			}
+		}
 	}
 
 	STP_cw_open_election_campaign = {
@@ -267,7 +275,14 @@ STP_shabrat_election_bop_category = {
 				}
 			}
 		}
-		ai_will_do = { base = 6 }
+		ai_will_do = {
+			base = 6
+			modifier = {
+				factor = 0.25
+				has_country_flag = STP_sided_with_Maksim_flag
+				check_variable = { var = STP_party_suspicion value = 55 compare = greater_than_or_equals }
+			}
+		}
 	}
 
 }
@@ -377,7 +392,17 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 8 modifier = { factor = 4 FROM = { state = 3 } } modifier = { factor = 4 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+		ai_will_do = {
+			base = 8
+			modifier = { factor = 4 FROM = { state = 3 } }
+			modifier = { factor = 4 FROM = { state = 2 } }
+			# The mandate transfers only resistance-leaning districts: flip new ones
+			# before reinforcing a won district or one the party is searching.
+			modifier = { factor = 3 FROM = { NOT = { STP_region_resistance_leaning = yes } } }
+			modifier = { factor = 0.1 FROM = { STP_region_resistance_entrenched = yes } }
+			modifier = { factor = 0.25 FROM = { has_state_flag = STP_party_inspection_active } }
+			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
+		}
 	}
 
 	STP_cw_prepare_rifle_cache = {
@@ -498,7 +523,12 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 1 modifier = { factor = 8 check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals } } }
+		ai_will_do = {
+			base = 1
+			# District operations stop at 65 suspicion; disperse before reaching it.
+			modifier = { factor = 6 check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
+			modifier = { factor = 8 check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals } }
+		}
 	}
 
 	STP_cw_secure_election_result = {
@@ -706,6 +736,8 @@ STP_battle_for_stelander = {
 			base = 8
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
 			modifier = { factor = 3 FROM = { OR = { state = 2 state = 3 } } }
+			# An entrenched district without an administration lacks only this to transfer.
+			modifier = { factor = 3 FROM = { STP_region_resistance_entrenched = yes } }
 			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
 		}
 	}
