@@ -477,7 +477,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         self.assertNotIn("mechanized_entity", entities)
         self.assertNotIn("motorized_entity", entities)
 
-    def test_designer_pools_add_national_models_only_through_rifles(self):
+    def test_designer_pools_keep_apcs_and_artillery_in_their_equipment_families(self):
         from tools.assets.source.country_vehicles import package_vehicles as registry
 
         def one(rows, key):
@@ -495,18 +495,20 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
             country = one(countries, tag)
             self.assertEqual(
                 {row.key for row in country},
-                {"infantry_equipment"},
+                {"infantry_equipment", "artillery_equipment"} if tag != "NOD" else {"infantry_equipment"},
             )
             for equipment in country:
                 with self.subTest(tag=tag, equipment=equipment.key):
                     pool = one(equipment.value, "pool")
                     self.assertEqual(
                         {row.value for row in one(pool, "sub_units")},
-                        {"ADISCORD_mechanized_infantry"},
+                        {"ADISCORD_mechanized_infantry"} if equipment.key == "infantry_equipment"
+                        else {"artillery", "ADISCORD_line_artillery"},
                     )
                     self.assertEqual(
                         {row.value for row in one(pool, "models")},
-                        {f"ADISCORD_{tag}_apc_entity"},
+                        {f"ADISCORD_{tag}_apc_entity"} if equipment.key == "infantry_equipment"
+                        else {f"ADISCORD_{tag}_artillery_entity"},
                     )
                     self.assertEqual(one(pool, "weight"), "3000")
 
@@ -630,6 +632,47 @@ class CarrierFocusTests(unittest.TestCase):
                             rf'^ {key}:\d* "[^"\r\n]+"\s*$',
                             raw.decode("utf-8-sig"), re.MULTILINE,
                         )), 1, key)
+
+
+class NationalArtilleryTests(unittest.TestCase):
+    def test_native_gun_uses_national_infantry_for_every_visual_level(self):
+        from tools.assets.source.country_vehicles import package_vehicles as registry
+
+        path = ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset"
+        rows = parse_clausewitz(path.read_text())
+        entities = {}
+        for row in rows:
+            if row.key != "entity":
+                continue
+            fields = row.value
+            name = next(field.value.strip('"') for field in fields if field.key == "name")
+            self.assertNotIn(name, entities, name)
+            entities[name] = fields
+
+        def field(rows, key):
+            return next(row.value for row in rows if row.key == key)
+
+        for tag in ("NAM", "STP", "VAL", "STS"):
+            body = entities[f"ADISCORD_{tag}_artillery_entity"]
+            self.assertEqual(field(body, "pdxmesh").strip('"'), "frame_artillery_mesh")
+            attachments = {field(row.value, "name").strip('"'): row.value
+                           for row in body if row.key == "attach"}
+            self.assertEqual(set(attachments), {"artillery", "infantry"})
+            self.assertEqual(field(attachments["artillery"], "artillery").strip('"'), "artillery_gun_entity")
+            self.assertEqual(field(attachments["infantry"], "infantry").strip('"'), f"{tag}_infantry_entity")
+            states = {field(row.value, "name").strip('"'): row.value
+                      for row in body if row.key == "state"}
+            self.assertEqual(set(states), {"idle", "move", "retreat", "training", "death",
+                                           "attack", "defend", "support_attack"})
+            for state in ("attack", "defend", "support_attack"):
+                self.assertEqual(field(states[state], "animation").strip('"'), "attack")
+                self.assertEqual(field(field(states[state], "propagate_state"), "infantry").strip('"'), "idle")
+            for identity in registry.country_families():
+                if identity.split("_", 1)[0] != tag:
+                    continue
+                for route in registry.ARTILLERY_ROUTES:
+                    self.assertEqual(field(entities[f"{identity}_{route}_entity"], "clone").strip('"'),
+                                     f"ADISCORD_{tag}_artillery_entity")
 
 
 class SmallArmsResourceTests(unittest.TestCase):

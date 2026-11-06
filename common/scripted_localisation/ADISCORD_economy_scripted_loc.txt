@@ -1,7 +1,5 @@
 defined_text = {
 	name = GetADISCORDEconomyModelLoc
-	# Industrialization shares the mixed budget profile but keeps its own name.
-	text = { trigger = { ADISCORD_economy_has_idea_economic_system_industrializing = yes } localization_key = ADISCORD_economic_system_industrializing }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 0 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_0 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 1 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_1 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 2 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_2 }
@@ -9,7 +7,8 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_4 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 5 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_5 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 6 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_6 }
-	text = { localization_key = ADISCORD_economy_model_7 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 7 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_7 }
+	text = { localization_key = ADISCORD_economy_model_8 }
 }
 
 defined_text = {
@@ -29,7 +28,8 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_unlocks_4 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 5 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_unlocks_5 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 6 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_unlocks_6 }
-	text = { localization_key = ADISCORD_economy_model_unlocks_7 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 7 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_unlocks_7 }
+	text = { localization_key = ADISCORD_economy_model_unlocks_8 }
 }
 
 defined_text = {
@@ -41,7 +41,8 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 4 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_penalties_4 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 5 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_penalties_5 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 6 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_penalties_6 }
-	text = { localization_key = ADISCORD_economy_model_penalties_7 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_model value = 7 compare = less_than_or_equals } } localization_key = ADISCORD_economy_model_penalties_7 }
+	text = { localization_key = ADISCORD_economy_model_penalties_8 }
 }
 
 defined_text = {

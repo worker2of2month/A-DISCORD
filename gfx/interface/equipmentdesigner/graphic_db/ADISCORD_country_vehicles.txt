@@ -8,6 +8,13 @@ VAL = {
 			models = { ADISCORD_VAL_apc_entity }
 		}
 	}
+	artillery_equipment = {
+		pool = {
+			sub_units = { artillery ADISCORD_line_artillery }
+			weight = 3000
+			models = { ADISCORD_VAL_artillery_entity }
+		}
+	}
 }
 
 STP = {
@@ -16,6 +23,13 @@ STP = {
 			sub_units = { ADISCORD_mechanized_infantry }
 			weight = 3000
 			models = { ADISCORD_STP_apc_entity }
+		}
+	}
+	artillery_equipment = {
+		pool = {
+			sub_units = { artillery ADISCORD_line_artillery }
+			weight = 3000
+			models = { ADISCORD_STP_artillery_entity }
 		}
 	}
 }
@@ -28,6 +42,13 @@ STS = {
 			models = { ADISCORD_STS_apc_entity }
 		}
 	}
+	artillery_equipment = {
+		pool = {
+			sub_units = { artillery ADISCORD_line_artillery }
+			weight = 3000
+			models = { ADISCORD_STS_artillery_entity }
+		}
+	}
 }
 
 NAM = {
@@ -36,6 +57,13 @@ NAM = {
 			sub_units = { ADISCORD_mechanized_infantry }
 			weight = 3000
 			models = { ADISCORD_NAM_apc_entity }
+		}
+	}
+	artillery_equipment = {
+		pool = {
+			sub_units = { artillery ADISCORD_line_artillery }
+			weight = 3000
+			models = { ADISCORD_NAM_artillery_entity }
 		}
 	}
 }

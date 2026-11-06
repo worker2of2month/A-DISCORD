@@ -29,6 +29,13 @@ SHARED_NAMES = tuple(f"{family}_{prefix}{role}" for family in FAMILIES
                      for prefix in PREFIXES for role in ("fighter", "cas"))
 SPECIAL_NAMES = ("STS_taran",)
 APC_TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
+ARTILLERY_TAGS = ("NAM", "STP", "VAL", "STS")
+ARTILLERY_ROUTES = (
+    "artillery", *[f"artillery_{level}" for level in range(4)],
+    "ADISCORD_line_artillery", "artillery_equipment", "artillery_equipment_1",
+    "ADISCORD_artillery_equipment_2160", "ADISCORD_artillery_equipment_2170",
+    "ADISCORD_artillery_equipment_2183",
+)
 APC_ROUTES = (
     "mechanized", *[f"mechanized_{level}" for level in range(4)],
     "motorized", "motorized_0", "motorized_1", "motorized_equipment", "motorized_equipment_1",
@@ -97,8 +104,37 @@ def apc_registry():
     return gfx, assets, animations
 
 
+def artillery_entities():
+    """Use the native gun and frame with each country's infantry attachment."""
+    assets = ""
+    for tag in ARTILLERY_TAGS:
+        name = f"{tag}_artillery"
+        assets += (f'\nentity = {{\n\tname = "ADISCORD_{name}_entity"\n'
+                   '\tpdxmesh = "frame_artillery_mesh"\n\tdefault_state = "idle"\n')
+        for state, clip in (("idle", "idle"), ("training", "idle"), ("death", "idle"),
+                            ("move", "move"), ("retreat", "move"), ("attack", "attack"),
+                            ("defend", "attack"), ("support_attack", "attack")):
+            blend = "0.0" if clip == "attack" else "0.3"
+            assets += (f'\tstate = {{\n\t\tname = "{state}"\n\t\tanimation = "{clip}"\n'
+                       f'\t\tanimation_blend_time = {blend}\n\t\tanimation_speed = 1.0\n')
+            if clip == "attack":
+                assets += '\t\tpropagate_state = { infantry = "idle" }\n'
+            assets += '\t}\n'
+        assets += ('\tattach = {\n\t\tname = "artillery"\n'
+                   '\t\tartillery = "artillery_gun_entity"\n\t}\n'
+                   '\tattach = {\n\t\tname = "infantry"\n'
+                   f'\t\tinfantry = "{tag}_infantry_entity"\n\t}}\n}}\n')
+    for identity in country_families():
+        tag = identity.split("_", 1)[0]
+        if tag in ARTILLERY_TAGS:
+            assets += "\n"
+            for route in ARTILLERY_ROUTES:
+                assets += alias(f"ADISCORD_{tag}_artillery_entity", f"{identity}_{route}_entity")
+    return assets
+
+
 def apc_model_pools():
-    """Add a national candidate through the battalion's rifle equipment."""
+    """Keep national candidates scoped to the battalion and equipment family."""
     text = HEADER
     for tag in APC_TAGS:
         # Carrier queries use the equipment origin, including foreign designs.
@@ -113,8 +149,14 @@ def apc_model_pools():
             f"\t\t\tmodels = {{ ADISCORD_{tag}_apc_entity }}\n"
             "\t\t}\n"
             "\t}\n"
-            "}\n"
         )
+        if tag in ARTILLERY_TAGS:
+            text += ("\tartillery_equipment = {\n\t\tpool = {\n"
+                     "\t\t\tsub_units = { artillery ADISCORD_line_artillery }\n"
+                     "\t\t\tweight = 3000\n"
+                     f"\t\t\tmodels = {{ ADISCORD_{tag}_artillery_entity }}\n"
+                     "\t\t}\n\t}\n")
+        text += "}\n"
     return text
 
 
@@ -198,7 +240,7 @@ def registry():
         assets += "}\n"
     apc_gfx, apc_assets, apc_animations = apc_registry()
     gfx += apc_gfx + "}\n"
-    assets += apc_assets
+    assets += apc_assets + artillery_entities()
     animations += apc_animations
     routes = air_routes()
     assets += "\n"

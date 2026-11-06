@@ -253,7 +253,11 @@ class CivilWarContracts(unittest.TestCase):
         debt_copy = transfer.index(
             "set_variable = { var = ADISCORD_economy_debt value = STP.ADISCORD_economy_debt }"
         )
-        self.assertIn("ADISCORD_economy_mark_dirty = yes", transfer[debt_copy:])
+        self.assertIn("ADISCORD_economy_reprice_debt = yes", transfer[debt_copy:])
+        # The rebel party does not keep servicing the same principal.
+        repudiation = transfer.index("set_variable = { var = ADISCORD_economy_debt value = 0 }")
+        self.assertGreater(repudiation, debt_copy)
+        self.assertIn("ADISCORD_economy_reprice_debt = yes", transfer[repudiation:])
 
     def test_terminal_world_cannot_restart_either_civil_war_side(self):
         hostilities = ast_block(

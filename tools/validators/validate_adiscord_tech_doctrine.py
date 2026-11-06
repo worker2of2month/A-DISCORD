@@ -3958,7 +3958,6 @@ def check_economy_spending() -> list[str]:
     text = strip_comments(read_text(effects))
     expected_spenders = {
         "ADISCORD_economy_repay_debt": (-50,),
-        "ADISCORD_economy_stabilization_package": (-500, -1200),
         "ADISCORD_economy_invest_reserves": (-100,),
         "ADISCORD_economy_civilian_investment_action": (-100,),
         "ADISCORD_economy_military_investment_action": (-100,),
@@ -3979,6 +3978,22 @@ def check_economy_spending() -> list[str]:
             pattern = rf"add_to_variable\s*=\s*\{{[^{{}}]*var\s*=\s*ADISCORD_economy_treasury[^{{}}]*value\s*=\s*{value}\s*\}}"
             if not re.search(pattern, block, re.S) and not bounded_repayment:
                 issues.append(f"{effect} does not subtract {abs(value)} treasury")
+    # The stabilisation price follows income; it must be debited and booked once.
+    match = re.search(r"\bADISCORD_economy_stabilization_package\s*=\s*\{", text)
+    if not match:
+        issues.append("ADISCORD_economy_stabilization_package is missing")
+    else:
+        block = extract_block(text, match.start())
+        for target in ("ADISCORD_economy_treasury", "ADISCORD_economy_current_month_action_costs"):
+            operation = "subtract_from_variable" if target == "ADISCORD_economy_treasury" else "add_to_variable"
+            pattern = (
+                rf"{operation}\s*=\s*\{{[^{{}}]*var\s*=\s*{target}[^{{}}]*"
+                r"value\s*=\s*ADISCORD_economy_stabilization_price\s*\}"
+            )
+            if len(re.findall(pattern, block, re.S)) != 1:
+                issues.append(
+                    f"ADISCORD_economy_stabilization_package does not book its price once in {target}"
+                )
     return issues
 
 

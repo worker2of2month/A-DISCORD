@@ -367,31 +367,33 @@ class ProductiveIncomeTests(unittest.TestCase):
 
 
 class DebtRepaymentGateTests(unittest.TestCase):
-    def test_standard_repayment_requires_full_500_treasury_chunk(self):
+    def test_standard_repayment_requires_the_full_income_scaled_chunk(self):
         triggers = read("common/scripted_triggers/ADISCORD_economy_triggers.txt")
         effects = read("common/scripted_effects/ADISCORD_economy_effects.txt")
         gui = read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt")
         ru = read("localisation/russian/ADISCORD_economy_l_russian.yml")
         en = read("localisation/english/ADISCORD_economy_l_english.yml")
 
-        gate = block(triggers, "ADISCORD_economy_has_treasury_500")
-        self.assertIn("value = 500", gate)
-        self.assertIn("compare = greater_than_or_equals", gate)
+        gate = block(triggers, "ADISCORD_economy_can_repay_debt")
+        self.assertIn("ADISCORD_economy_has_debt = yes", gate)
+        self.assertIn(
+            "check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_repay_offer_cash compare = greater_than_or_equals }",
+            gate,
+        )
 
         gui_try = block(effects, "ADISCORD_economy_gui_try_repay_debt")
         repay = block(effects, "ADISCORD_economy_repay_debt")
-        self.assertIn("ADISCORD_economy_has_treasury_500 = yes", gui_try)
-        self.assertIn("ADISCORD_economy_has_treasury_500 = yes", repay)
-        self.assertNotIn("ADISCORD_economy_has_treasury_50 = yes", gui_try)
-        self.assertNotIn("ADISCORD_economy_has_treasury_50 = yes", repay)
+        self.assertIn("ADISCORD_economy_can_repay_debt = yes", gui_try)
+        self.assertIn("ADISCORD_economy_can_repay_debt = yes", repay)
+        self.assertIn("value = ADISCORD_economy_repay_offer_cash }", repay)
         self.assertNotIn("value = ADISCORD_economy_treasury", repay)
 
         self.assertIn(
-            "ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_has_treasury_500 = yes ADISCORD_economy_has_debt = yes }",
+            "ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_repay_debt = yes }",
             gui,
         )
-        self.assertIn("Требует §Y500§! в казне", ru)
-        self.assertIn("Requires §Y500§! treasury", en)
+        self.assertIn("[?ADISCORD_economy_repay_offer_cash|0]", ru)
+        self.assertIn("[?ADISCORD_economy_repay_offer_cash|0]", en)
 
 
 class NorthernCampaignRouteTests(unittest.TestCase):

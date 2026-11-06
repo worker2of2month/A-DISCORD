@@ -1,5 +1,13 @@
 # Country vehicles
 
+NAM, STP, VAL and STS field artillery uses the native `artillery_gun_entity`
+and `frame_artillery_mesh`, with each country's existing infantry attachment.
+One composition covers every field-artillery equipment and visual level,
+including cosmetic identities. Native frame states control the crew's visibility
+during firing and movement. No additional gun mesh or texture is required.
+The shared packager also registers the composition in the artillery equipment
+pool, restricted to `artillery` and `ADISCORD_line_artillery` subunits.
+
 `package_vehicles.py` owns the shared mesh, entity and animation registries.
 `build_motorized.py` owns the five wheeled APC meshes, textures, animation
 clips and packed Blender scenes in this family. It uses the native geometry

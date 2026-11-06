@@ -394,8 +394,6 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
         path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
         source = validator.read_text(path)
         for effect, amount in (
-            ("stabilization_package", 500),
-            ("stabilization_package", 1200),
             ("invest_reserves", 100),
             ("civilian_investment_action", 100),
             ("military_investment_action", 100),
@@ -412,6 +410,19 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
                     with patch.object(validator, "read_text", return_value=broken):
                         issues = validator.check_economy_spending()
                     self.assertIn(f"{key} does not subtract {amount} treasury", issues)
+
+    def test_stabilization_price_is_debited_from_the_income_scaled_variable(self) -> None:
+        path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
+        source = validator.read_text(path)
+        debit = "subtract_from_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_stabilization_price }"
+        self.assertIn(debit, source)
+        broken = source.replace(debit, "", 1)
+        with patch.object(validator, "read_text", return_value=broken):
+            issues = validator.check_economy_spending()
+        self.assertIn(
+            "ADISCORD_economy_stabilization_package does not book its price once in ADISCORD_economy_treasury",
+            issues,
+        )
 
     def test_generated_horizontal_tree_positions_match_the_validator_contract(
         self,

@@ -1723,7 +1723,6 @@ def automatic_borrow_flow_issues(text: str) -> list[str]:
     issues: list[str] = []
     for name in (
         "ADISCORD_economy_apply_weekly_balance",
-        "ADISCORD_economy_apply_monthly_balance",
     ):
         definition = _definitions((text,)).get(name)
         if definition is None or not isinstance(definition.value, list):
@@ -2063,7 +2062,6 @@ def debt_notification_flow_issues(text: str) -> list[str]:
 
     settlement_names = {
         "ADISCORD_economy_apply_weekly_balance",
-        "ADISCORD_economy_apply_monthly_balance",
     }
     for name, definition in definitions.items():
         calls = [
@@ -4166,7 +4164,6 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     for settlement_name in (
         "ADISCORD_economy_apply_weekly_balance",
-        "ADISCORD_economy_apply_monthly_balance",
     ):
         settlement = block(effects, settlement_name)
         require(
