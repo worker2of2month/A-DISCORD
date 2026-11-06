@@ -4181,12 +4181,6 @@ def validate(root: Path = ROOT) -> list[str]:
         # this coarse whole-file substring guard.
         "ADISCORD_economy_admin_spending_mode",
         "ADISCORD_economy_weekly_player_refresh",
-        "ADISCORD_economy_gui_try_early_repay_debt",
-        "ADISCORD_economy_gui_try_expand_emission",
-        "ADISCORD_economy_gui_try_reduce_emission",
-        "ADISCORD_economy_gui_try_invest_reserves",
-        "ADISCORD_economy_gui_try_civilian_investment",
-        "ADISCORD_economy_gui_try_military_investment",
     ):
         require(
             retired_name not in effects,
@@ -4360,7 +4354,6 @@ def validate(root: Path = ROOT) -> list[str]:
         "ADISCORD_economy_action_early_repay_debt",
         "ADISCORD_economy_action_expand_emission",
         "ADISCORD_economy_action_civilian_investment",
-        "ADISCORD_economy_action_military_investment",
     ):
         require(
             removed_control not in gui,
@@ -4412,10 +4405,16 @@ def validate(root: Path = ROOT) -> list[str]:
         "ADISCORD_economy_action_restructure_debt",
         "ADISCORD_economy_action_stabilization",
         "ADISCORD_economy_action_war_taxes",
+        "ADISCORD_economy_action_early_repay",
+        "ADISCORD_economy_action_emission",
+        "ADISCORD_economy_action_emission_buyback",
+        "ADISCORD_economy_action_invest_reserves",
+        "ADISCORD_economy_action_civilian_stimulus",
+        "ADISCORD_economy_action_military_investment",
     }
     require(
         visible_actions == expected_actions,
-        "economy UI must expose exactly six focused treasury operations",
+        "economy UI must expose exactly twelve treasury operations",
     )
     require(
         'pdx_tooltip = "ADISCORD_economy_balance_tt"' in gui
@@ -4465,6 +4464,12 @@ def validate(root: Path = ROOT) -> list[str]:
         "restructure_debt": "restructure_debt",
         "stabilization": "stabilization",
         "war_taxes": "war_taxes",
+        "early_repay": "early_repay_debt",
+        "emission": "expand_emission",
+        "emission_buyback": "reduce_emission",
+        "invest_reserves": "invest_reserves",
+        "civilian_stimulus": "civilian_investment",
+        "military_investment": "military_investment",
     }
     for action, effect in guarded_actions.items():
         require(

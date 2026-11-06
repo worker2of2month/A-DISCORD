@@ -1988,6 +1988,12 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             'restructure_debt',
             'stabilization',
             'war_taxes',
+            'early_repay',
+            'emission',
+            'emission_buyback',
+            'invest_reserves',
+            'civilian_stimulus',
+            'military_investment',
         )
         for action in actions:
             node_name = f'ADISCORD_economy_action_{action}'

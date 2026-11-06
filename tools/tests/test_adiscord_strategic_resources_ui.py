@@ -592,6 +592,12 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "action_restructure_debt",
             "action_stabilization",
             "action_war_taxes",
+            "action_early_repay",
+            "action_emission",
+            "action_emission_buyback",
+            "action_invest_reserves",
+            "action_civilian_stimulus",
+            "action_military_investment",
         )
         for control in mutation_controls:
             enabled = direct(
@@ -807,6 +813,12 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "restructure_debt",
             "stabilization",
             "war_taxes",
+            "early_repay",
+            "emission",
+            "emission_buyback",
+            "invest_reserves",
+            "civilian_stimulus",
+            "military_investment",
         )
         for action in actions:
             self.assertEqual(

@@ -7641,14 +7641,23 @@ ADISCORD_task10_forbidden_cache_consumer = {
 
         for retired_effect in (
             "ADISCORD_economy_weekly_player_refresh",
-            "ADISCORD_economy_gui_try_early_repay_debt",
-            "ADISCORD_economy_gui_try_expand_emission",
-            "ADISCORD_economy_gui_try_reduce_emission",
-            "ADISCORD_economy_gui_try_invest_reserves",
-            "ADISCORD_economy_gui_try_civilian_investment",
-            "ADISCORD_economy_gui_try_military_investment",
         ):
             self.assertNotIn(retired_effect, EFFECTS)
+        # The reserve, stimulus and emission operations returned to the dashboard
+        # as guarded buttons; each wrapper is owned by its scripted GUI click.
+        for action, wrapper in (
+            ("early_repay", "early_repay_debt"),
+            ("emission", "expand_emission"),
+            ("emission_buyback", "reduce_emission"),
+            ("invest_reserves", "invest_reserves"),
+            ("civilian_stimulus", "civilian_investment"),
+            ("military_investment", "military_investment"),
+        ):
+            self.assertIn(
+                f"ADISCORD_economy_action_{action}_click = {{ ADISCORD_economy_gui_try_{wrapper} = yes }}",
+                SCRIPTED_GUI,
+            )
+            self.assertIn(f"ADISCORD_economy_gui_try_{wrapper} = {{", EFFECTS)
 
     def test_weekly_update_has_no_full_refresh_or_map_scan(self):
         weekly = block(EFFECTS, "ADISCORD_economy_weekly_update")
