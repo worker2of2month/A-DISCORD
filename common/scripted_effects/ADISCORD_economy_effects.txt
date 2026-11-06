@@ -3856,6 +3856,68 @@ ADISCORD_economy_gui_try_war_taxes = {
 	}
 }
 
+# The remaining dashboard operations reuse the actions of the economic AI
+# policy; each action debits its own price exactly once.
+ADISCORD_economy_gui_try_early_repay_debt = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_early_repay_debt = yes }
+		ADISCORD_economy_early_repay_debt = yes
+		ADISCORD_economy_refresh_after_debt_action = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_expand_emission = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_expand_money_emission = yes }
+		ADISCORD_economy_expand_money_emission = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_reduce_emission = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_reduce_money_emission = yes }
+		ADISCORD_economy_reduce_money_emission = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_invest_reserves = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_expand_public_capital = yes }
+		ADISCORD_economy_invest_reserves = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_civilian_investment = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_use_civilian_stimulus = yes }
+		ADISCORD_economy_civilian_investment_action = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
+ADISCORD_economy_gui_try_military_investment = {
+	ADISCORD_economy_initialize_country = yes
+	if = {
+		limit = { ADISCORD_economy_can_use_military_investment = yes }
+		ADISCORD_economy_military_investment_action = yes
+		ADISCORD_economy_light_update = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
 ADISCORD_economy_clamp_all_variables = {
 	# Cash is settled only by the weekly ledger. A lower reserve cap must not
 	# silently erase money between settlements; its writeoff is recorded there.

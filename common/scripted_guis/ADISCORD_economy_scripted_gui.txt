@@ -58,6 +58,12 @@ scripted_gui = {
 			ADISCORD_economy_action_restructure_debt_click = { ADISCORD_economy_gui_try_restructure_debt = yes }
 			ADISCORD_economy_action_stabilization_click = { ADISCORD_economy_gui_try_stabilization_package = yes }
 			ADISCORD_economy_action_war_taxes_click = { ADISCORD_economy_gui_try_war_taxes = yes }
+			ADISCORD_economy_action_early_repay_click = { ADISCORD_economy_gui_try_early_repay_debt = yes }
+			ADISCORD_economy_action_emission_click = { ADISCORD_economy_gui_try_expand_emission = yes }
+			ADISCORD_economy_action_emission_buyback_click = { ADISCORD_economy_gui_try_reduce_emission = yes }
+			ADISCORD_economy_action_invest_reserves_click = { ADISCORD_economy_gui_try_invest_reserves = yes }
+			ADISCORD_economy_action_civilian_stimulus_click = { ADISCORD_economy_gui_try_civilian_investment = yes }
+			ADISCORD_economy_action_military_investment_click = { ADISCORD_economy_gui_try_military_investment = yes }
 		}
 		triggers = {
 			ADISCORD_economy_tax_decrease_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_decrease_tax_burden = yes }
@@ -193,6 +199,12 @@ scripted_gui = {
 				ADISCORD_economy_can_stabilize_macro = yes
 			}
 			ADISCORD_economy_action_war_taxes_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_use_war_taxes = yes }
+			ADISCORD_economy_action_early_repay_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_early_repay_debt = yes }
+			ADISCORD_economy_action_emission_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_expand_money_emission = yes }
+			ADISCORD_economy_action_emission_buyback_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_reduce_money_emission = yes }
+			ADISCORD_economy_action_invest_reserves_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_expand_public_capital = yes }
+			ADISCORD_economy_action_civilian_stimulus_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_use_civilian_stimulus = yes }
+			ADISCORD_economy_action_military_investment_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_use_military_investment = yes }
 		}
 		properties = {
 			ADISCORD_economy_tax_active_marker = { x = ADISCORD_economy_tax_active_marker_x_position }

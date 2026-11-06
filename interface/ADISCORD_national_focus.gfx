@@ -1,5 +1,20 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_VAL_econ_integrated_economy"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_econ_integrated_economy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_econ_captured_laboratories"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_econ_captured_laboratories.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Industrial_Mobilization_Plan"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Industrial_Mobilization_Plan.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Operational_Reserves"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Operational_Reserves.png"
 	}

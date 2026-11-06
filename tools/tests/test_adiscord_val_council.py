@@ -878,7 +878,19 @@ class CouncilTreeTests(unittest.TestCase):
                 self.assertLessEqual(max(x for x, y in positions) - min(x for x, y in positions), 64)
                 self.assertEqual(positions[32, 0], "VAL_The_Contract_State")
             else:
-                self.assertEqual(positions[44, 0], "VAL_The_Contract_State")
+                self.assertEqual(positions[45, 0], "VAL_The_Contract_State")
+
+            # show_focuses also draws the hidden government's branch; its parking
+            # offsets must keep every focus on its own cell, not just the visible ones.
+            drawn = {}
+            for name, body in self.focuses.items():
+                x, y = int(scalar(body, "x")), int(scalar(body, "y"))
+                for offset in (row.value for row in body if row.key == "offset"):
+                    if world.matches(block(offset, "trigger")):
+                        x += int(scalar(offset, "x"))
+                        y += int(scalar(offset, "y"))
+                self.assertNotIn((x, y), drawn, (council, name, drawn.get((x, y))))
+                drawn[x, y] = name
 
     def test_factory_rechecks_capital_and_pays_cash_when_no_site_survives(self):
         reward = block(self.focuses[PREFIX + "direct_orders"], "completion_reward")

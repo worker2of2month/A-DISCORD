@@ -8,7 +8,7 @@ focus_tree = {
 	continuous_focus_position = { x = 100 y = 555555 }
 	focus = {
 		id = VAL_admin_restore_offices
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Provincial_Brokers
 		x = 6
 		y = 0
 		cost = 3
@@ -27,7 +27,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_admin_local_guard
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_VAL_Vorons_Companies
 		x = 8
 		y = 1
 		cost = 3
@@ -54,7 +54,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_admin_supply_depots
-		icon = GFX_focus_generic_reinforcing_the_supply_network
+		icon = GFX_focus_VAL_Arsenal_Reserve
 		x = 4
 		y = 2
 		cost = 3
@@ -64,7 +64,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_admin_professional_service
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contractor_Officers
 		x = 8
 		y = 2
 		cost = 2
@@ -77,7 +77,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_admin_ratify_charter
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_State_Contract
 		x = 6
 		y = 3
 		cost = 3
@@ -90,7 +90,7 @@ focus_tree = {
 	# Balchansk: economic and security work support either administrative mandate.
 	focus = {
 		id = OCA_balchansk_mandate
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_VAL_Integrate_Occidia
 		x = 16
 		y = 1
 		cost = 3
@@ -105,7 +105,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_civilian_board
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Provincial_Brokers
 		x = 14
 		y = 2
 		cost = 3
@@ -121,7 +121,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_garrison_directorate
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_VAL_Vorons_Companies
 		x = 18
 		y = 2
 		cost = 3
@@ -137,7 +137,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_municipal_services
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 14
 		y = 3
 		cost = 5
@@ -152,7 +152,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_paid_garrison
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Paid_Loyalty
 		x = 18
 		y = 3
 		cost = 5
@@ -167,7 +167,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_harbour_customs
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_VAL_Trading_Partners
 		x = 10
 		y = 2
 		cost = 3
@@ -182,7 +182,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_balchansk_workshops
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 10
 		y = 3
 		cost = 5
@@ -212,7 +212,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_mining_concessions
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_The_Steel_Contract
 		x = 10
 		y = 4
 		cost = 5
@@ -241,7 +241,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_border_arsenals
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_Munitions_Board
 		x = 22
 		y = 2
 		cost = 5
@@ -271,7 +271,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_contract_officers
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contractor_Officers
 		x = 22
 		y = 3
 		cost = 3
@@ -286,7 +286,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_supply_corridor
-		icon = GFX_focus_generic_reinforcing_the_supply_network
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 22
 		y = 4
 		cost = 5
@@ -315,7 +315,7 @@ focus_tree = {
 	}
 	focus = {
 		id = OCA_renewed_charter
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_State_Contract
 		x = 16
 		y = 5
 		cost = 5
