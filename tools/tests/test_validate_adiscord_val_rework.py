@@ -1543,16 +1543,26 @@ class ValStelanderContractTests(unittest.TestCase):
             set(re.findall(r"focus\s*=\s*(\w+)", group))
             for group in named_blocks(finish, "prerequisite")
         ]
-        for course in (
-            "VAL_Arms_For_The_Burning",
-            "VAL_Seize_The_Northern_Passes",
-            "VAL_Keep_The_Arsenals",
-        ):
+        # Each course reaches the finish through its follow-up; the follow-ups are
+        # bypassed once the civil war is over, so a late course is never stranded.
+        routes = {
+            "VAL_Arms_For_The_Burning": "VAL_cw_undermine_party",
+            "VAL_Keep_The_Arsenals": "VAL_cw_balance_the_front",
+            "VAL_Seize_The_Northern_Passes": "VAL_Seize_The_Northern_Passes",
+        }
+        for course, step in routes.items():
             with self.subTest(course=course):
                 self.assertTrue(
-                    all({course} & group for group in prerequisites),
+                    all({step} & group for group in prerequisites),
                     "separate prerequisite blocks require both exclusive courses",
                 )
+                if step != course:
+                    body = self.focus(step)
+                    self.assertIn(f"prerequisite = {{ focus = {course} }}", body)
+                    self.assertEqual(
+                        " ".join(named_blocks(body, "bypass")[0].split()),
+                        "bypass = { VAL_stelander_civil_war_active = no }",
+                    )
 
     def test_crisis_unlock_tracks_stelander_and_arms_focus_does_not_discard_stock(self):
         opener = self.focus("VAL_Stelander_Crisis_Opens")
@@ -4040,10 +4050,10 @@ class ValContractFormationTests(unittest.TestCase):
                 for e in walk(block(focus, "completion_reward"))
                 if e.key == "unlock_decision_tooltip"
             },
+            # Mobilisation belongs to the passes focus, which combines with this course.
             {
                 "VAL_cw_sell_arms_to_resistance",
                 "VAL_cw_offer_contract_formations",
-                "VAL_cw_begin_mobilization",
             },
         )
         events = parse_clausewitz(

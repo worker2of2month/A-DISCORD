@@ -1,5 +1,119 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_VAL_Operational_Reserves_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Operational_Reserves.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Operational_Reserves.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Logistics_Command_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Logistics_Command.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Logistics_Command.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Keep_The_Arsenals_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Keep_The_Arsenals.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Keep_The_Arsenals.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Seize_The_Northern_Passes_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Seize_The_Northern_Passes.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Seize_The_Northern_Passes.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Loyal_Captains_Honours_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Loyal_Captains_Honours.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Loyal_Captains_Honours.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Arms_For_The_Burning_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Arms_For_The_Burning.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Arms_For_The_Burning.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Krutovs_Eyes_shine"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Krutovs_Eyes.png"
 		effectFile = "gfx/FX/buttonstate.lua"

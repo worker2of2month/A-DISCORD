@@ -1830,9 +1830,10 @@ class TestValExpansionRoute(unittest.TestCase):
         for name in (
             "VAL_The_Harvest_Of_Ash",
             "VAL_Stelander_Crisis_Opens",
-            "VAL_The_Steel_Contract",
         ):
             self.assertLess(float(get(focuses[name], "y")), continuation_y, name)
+        # The crisis capstone closes its layer level with the continuation row.
+        self.assertLessEqual(float(get(focuses["VAL_The_Steel_Contract"], "y")), continuation_y)
         for name in (
             "VAL_Bezhaysk_Operation",
             "VAL_Return_Southern_Tsaygen",

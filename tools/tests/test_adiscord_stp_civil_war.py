@@ -3768,11 +3768,13 @@ class CivilWarContracts(unittest.TestCase):
             entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
             "VAL_cw_can_intervene",
         )
+        # Only the passes focus authorizes mobilisation; it combines with either
+        # Stelander course, neither of which authorizes it alone.
         scenarios = (
             (None, False),
             ("VAL_Stelander_Crisis_Opens", False),
             ("VAL_Keep_The_Arsenals", False),
-            ("VAL_Arms_For_The_Burning", True),
+            ("VAL_Arms_For_The_Burning", False),
             ("VAL_Seize_The_Northern_Passes", True),
         )
         for course, focus_case, eligible, days in product(

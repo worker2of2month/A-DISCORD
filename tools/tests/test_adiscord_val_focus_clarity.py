@@ -97,9 +97,10 @@ class KefreytFocusClarityTests(unittest.TestCase):
         for focus_id in (
             "VAL_The_Harvest_Of_Ash",
             "VAL_Stelander_Crisis_Opens",
-            "VAL_The_Steel_Contract",
         ):
             self.assertLess(xy(focus_id)[1], continuation_y, focus_id)
+        # The crisis capstone closes its layer level with the continuation row.
+        self.assertLessEqual(xy("VAL_The_Steel_Contract")[1], continuation_y)
         for focus_id in (
             "VAL_Bezhaysk_Operation",
             "VAL_Return_Southern_Tsaygen",

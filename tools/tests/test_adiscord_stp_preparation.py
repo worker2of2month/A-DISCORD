@@ -1171,15 +1171,25 @@ class StelanderPreparationTests(unittest.TestCase):
             ("STS", "has_capitulated", "no"): True,
             ("STS", "has_war_with", "STP"): True,
         }
-        after_neutral_focus = dict(eligible)
-        for scope, effect in selected_effects(
-            block(neutral, "completion_reward"), eligible, "VAL"
-        ):
-            if effect.key == "set_country_flag" and not isinstance(effect.value, list):
-                after_neutral_focus[(scope, "has_country_flag", effect.value)] = True
-        self.assertTrue(
-            after_neutral_focus[("VAL", "has_country_flag", "VAL_cw_refused")]
+        # The long-war course keeps the passes operation open, so it declares no
+        # neutrality; the completed focus itself must close the stale trade answer.
+        self.assertFalse(
+            any(
+                e.key == "set_country_flag" and e.value == "VAL_cw_refused"
+                for e in walk(block(neutral, "completion_reward"))
+            )
         )
+        route = block(
+            entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+            "VAL_cw_route_focus_completed",
+        )
+        completed = {("VAL", "has_completed_focus", "VAL_Keep_The_Arsenals"): True}
+        self.assertTrue(matches_conditions(route, completed, "VAL"))
+        after_neutral_focus = {
+            **eligible,
+            **completed,
+            ("VAL", "VAL_cw_route_focus_completed", "yes"): True,
+        }
         scenarios = (
             ("eligible", eligible, True),
             ("neutral focus completed", after_neutral_focus, False),

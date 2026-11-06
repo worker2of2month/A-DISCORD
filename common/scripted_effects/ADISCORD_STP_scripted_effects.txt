@@ -5166,6 +5166,7 @@ STP_cw_settle_union_victory = {
 		}
 		VAL = { VAL_close_stelander_support = yes }
 	}
+	VAL_settle_stelander_attrition = yes
 	# The resistance is a claimant to Stelander; foreign conquests stay non-core.
 	if = {
 		limit = { tag = STS }
@@ -5231,6 +5232,7 @@ STP_cw_settle_nod_victory = {
 			}
 			annex_country = { target = STS transfer_troops = no }
 			set_country_flag = STP_cw_won_union_battle
+			VAL_settle_stelander_attrition = yes
 			STP_cw_finish_mobilization = yes
 			STP_pv_resolve_victory = yes
 			if = {

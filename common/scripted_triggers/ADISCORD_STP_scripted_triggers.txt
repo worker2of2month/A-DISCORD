@@ -591,13 +591,11 @@ VAL_cw_external_course_available = {
 	NOT = { has_country_flag = VAL_stelander_defeated }
 }
 
-# A route focus authorizes mobilisation after the republics' 60-day preparation window.
+# The passes focus authorizes mobilisation after the republics' 60-day preparation
+# window. It combines with either Stelander course; neither course authorizes it.
 VAL_cw_can_intervene = {
 	VAL_cw_external_course_available = yes
-	OR = {
-		has_completed_focus = VAL_Seize_The_Northern_Passes
-		has_completed_focus = VAL_Arms_For_The_Burning
-	}
+	has_completed_focus = VAL_Seize_The_Northern_Passes
 	custom_trigger_tooltip = {
 		tooltip = VAL_cw_republics_grace_elapsed_tt
 		has_global_flag = { flag = STP_cw_started days > 59 }

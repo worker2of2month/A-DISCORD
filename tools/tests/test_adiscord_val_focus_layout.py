@@ -86,7 +86,9 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Seize_The_Northern_Passes",
         ):
             self.assertEqual(self.position(focus_id)[1], 7, focus_id)
-        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 8)
+        for focus_id in ("VAL_cw_undermine_party", "VAL_cw_balance_the_front"):
+            self.assertEqual(self.position(focus_id)[1], 8, focus_id)
+        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 9)
         self.assertEqual(self.position("VAL_frontier_conference")[1], 11)
         self.assertEqual(self.position("VAL_frontier_security_plan")[1], 13)
 
@@ -131,6 +133,8 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Arms_For_The_Burning",
             "VAL_Keep_The_Arsenals",
             "VAL_Seize_The_Northern_Passes",
+            "VAL_cw_undermine_party",
+            "VAL_cw_balance_the_front",
             "VAL_The_Steel_Contract",
             "VAL_frontier_conference",
             "VAL_frontier_logistics",

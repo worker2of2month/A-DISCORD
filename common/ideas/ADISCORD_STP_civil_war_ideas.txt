@@ -1771,6 +1771,31 @@ ideas = {
 				army_morale_factor = -0.05
 			}
 		}
+		# Kefreyt's covert attrition in the civil war; granted to the winner by
+		# VAL_settle_stelander_attrition and removed only by its timer.
+		STP_cw_bled_victory = {
+			picture = ADISCORD_isolated_country
+			allowed = { OR = { tag = STP tag = STS } }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.10
+				conscription_factor = -0.15
+				industrial_capacity_factory = -0.10
+			}
+		}
+		STP_cw_bled_victory_heavy = {
+			picture = ADISCORD_isolated_country
+			allowed = { OR = { tag = STP tag = STS } }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.10
+				war_support_factor = -0.15
+				conscription_factor = -0.25
+				industrial_capacity_factory = -0.15
+				army_org_factor = -0.05
+			}
+		}
 		STP_cw_republics_battle_spirit = {
 			picture = ADISCORD_law_civic_local_councils
 			allowed = { tag = SRP }

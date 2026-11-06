@@ -44,10 +44,7 @@ VAL_military_operations = {
 		icon = ADISCORD_mobilization
 		allowed = { tag = VAL }
 		visible = {
-			OR = {
-				has_completed_focus = VAL_Seize_The_Northern_Passes
-				has_completed_focus = VAL_Arms_For_The_Burning
-			}
+			has_completed_focus = VAL_Seize_The_Northern_Passes
 			NOT = { has_country_flag = VAL_cw_entered }
 			NOT = { has_country_flag = VAL_cw_settled }
 			NOT = { has_country_flag = VAL_stelander_defeated }
@@ -3885,9 +3882,11 @@ VAL_stelander_war_aid = {
 	VAL_back_shabrat = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
+		# The long-war course excludes an open wager on one side.
 		visible = {
 			VAL_stelander_volunteer_front_open = yes
 			NOT = { has_variable = VAL_stelander_support_state }
+			NOT = { has_completed_focus = VAL_Keep_The_Arsenals }
 		}
 		available = {
 			has_war = no
@@ -4016,6 +4015,160 @@ VAL_stelander_war_aid = {
 					set_country_flag = VAL_stelander_staff_funded
 					VAL_add_stelander_support_point = yes
 				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	# Shabrat course: covert damage to the party counts as support and as attrition
+	# that only the party's victory pays for.
+	VAL_cw_bribe_party_quartermasters = {
+		icon = generic_operation
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_cw_undermine_party
+			VAL_stelander_civil_war_active = yes
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_war_with = STP }
+			STP = {
+				exists = yes
+				has_capitulated = no
+				has_war_with = STS
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_attrition_not_full_tt
+				NOT = {
+					check_variable = {
+						var = VAL_stelander_attrition_score
+						value = 3
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_cw_bribe_party_quartermasters_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 40 }
+			ADISCORD_economy_can_spend_300 = yes
+		}
+		days_re_enable = 45
+		fire_only_once = no
+		complete_effect = {
+			STP = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -6000 }
+				add_stability = -0.03
+			}
+			custom_effect_tooltip = VAL_cw_party_attrition_point_tt
+			hidden_effect = {
+				add_political_power = -40
+				ADISCORD_economy_spend_300 = yes
+				VAL_add_stelander_attrition_point = yes
+				VAL_add_stelander_support_point = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	# Long-war course: either side may be supplied; the point is the war's length.
+	VAL_cw_broker_deliveries_party = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_cw_balance_the_front
+			VAL_stelander_civil_war_active = yes
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_war_with = STP }
+			STP = {
+				exists = yes
+				has_capitulated = no
+				has_war_with = STS
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_attrition_not_full_tt
+				NOT = {
+					check_variable = {
+						var = VAL_stelander_attrition_score
+						value = 3
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_cw_broker_deliveries_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 10000 } }
+		}
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 10000
+				target = STP
+			}
+			custom_effect_tooltip = VAL_cw_attrition_point_tt
+			hidden_effect = {
+				add_political_power = -25
+				VAL_add_stelander_attrition_point = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	VAL_cw_broker_deliveries_shabrat = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_cw_balance_the_front
+			VAL_stelander_civil_war_active = yes
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_war_with = STS }
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_war_with = STP
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_attrition_not_full_tt
+				NOT = {
+					check_variable = {
+						var = VAL_stelander_attrition_score
+						value = 3
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_cw_broker_deliveries_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 10000 } }
+		}
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 10000
+				target = STS
+			}
+			custom_effect_tooltip = VAL_cw_attrition_point_tt
+			hidden_effect = {
+				add_political_power = -25
+				VAL_add_stelander_attrition_point = yes
 			}
 		}
 		ai_will_do = { base = 0 }

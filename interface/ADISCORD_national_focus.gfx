@@ -1,5 +1,35 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_VAL_Operational_Reserves"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Operational_Reserves.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Logistics_Command"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Logistics_Command.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Keep_The_Arsenals"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Keep_The_Arsenals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Seize_The_Northern_Passes"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Seize_The_Northern_Passes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Loyal_Captains_Honours"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Loyal_Captains_Honours.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Arms_For_The_Burning"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Arms_For_The_Burning.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Krutovs_Eyes"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Krutovs_Eyes.png"
 	}

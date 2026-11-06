@@ -11708,6 +11708,67 @@ VAL_settle_stelander_support_victory = {
 	}
 }
 
+# COUNTRY VAL. Covert attrition of the STP-STS war, capped at three points.
+VAL_add_stelander_attrition_point = {
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					var = VAL_stelander_attrition_score
+					value = 3
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		add_to_variable = { var = VAL_stelander_attrition_score value = 1 }
+	}
+}
+
+# Winner country scope (STP or STS), called from both union-victory settlements.
+# Attrition bought on the Shabrat course was aimed at the party only. The idea
+# check keeps the party and NOD settlements of one result from stacking.
+VAL_settle_stelander_attrition = {
+	if = {
+		limit = {
+			OR = {
+				tag = STP
+				tag = STS
+			}
+			NOT = { has_idea = STP_cw_bled_victory }
+			NOT = { has_idea = STP_cw_bled_victory_heavy }
+			VAL = {
+				exists = yes
+				check_variable = {
+					var = VAL_stelander_attrition_score
+					value = 0
+					compare = greater_than
+				}
+			}
+			OR = {
+				tag = STP
+				VAL = { NOT = { has_completed_focus = VAL_Arms_For_The_Burning } }
+			}
+		}
+		if = {
+			limit = {
+				VAL = {
+					check_variable = {
+						var = VAL_stelander_attrition_score
+						value = 3
+						compare = greater_than_or_equals
+					}
+				}
+			}
+			add_timed_idea = { idea = STP_cw_bled_victory_heavy days = 365 }
+		}
+		else = {
+			add_timed_idea = { idea = STP_cw_bled_victory days = 180 }
+		}
+		ADISCORD_economy_mark_dirty = yes
+		VAL = { country_event = { id = val_rework.185 days = 2 } }
+	}
+}
+
 # VAL: settle the wager only from the authoritative STP-STS war result.
 
 # --- commanders_council ---
