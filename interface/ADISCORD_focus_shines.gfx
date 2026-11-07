@@ -1,5 +1,43 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_weber_channel_shine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_weber_channel.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/GFX_focus_NAM_weber_channel.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_field_firefighters_shine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_firefighters.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_firefighters.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_econ_integrated_economy_shine"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_econ_integrated_economy.png"
 		effectFile = "gfx/FX/buttonstate.lua"

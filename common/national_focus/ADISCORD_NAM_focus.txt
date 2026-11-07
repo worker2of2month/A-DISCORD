@@ -1721,7 +1721,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_field_firefighters
-		icon = GFX_focus_generic_field_hostpital
+		icon = GFX_focus_NAM_field_firefighters
 		x = 16
 		y = 10
 		cost = 3
@@ -1826,7 +1826,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_weber_channel
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_weber_channel
 		x = 20
 		y = 9
 		cost = 3

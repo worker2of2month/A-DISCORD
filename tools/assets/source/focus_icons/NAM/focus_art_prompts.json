@@ -1909,6 +1909,18 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_weber_channel",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_weber_channel",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_weber_channel.png"
+    },
+    {
+      "focus_id": "NAM_field_firefighters",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_field_firefighters",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_field_firefighters.png"
+    },
+    {
       "focus_id": "NAM_rom_address",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_rom_address",

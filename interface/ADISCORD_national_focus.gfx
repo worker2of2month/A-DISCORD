@@ -1,5 +1,15 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_weber_channel"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_weber_channel.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_field_firefighters"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_firefighters.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_econ_integrated_economy"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_econ_integrated_economy.png"
 	}
