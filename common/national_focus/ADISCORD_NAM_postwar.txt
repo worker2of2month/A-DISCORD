@@ -22,7 +22,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_recognition
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_recognition
 		x = 52
 		y = 0
 		cost = 2

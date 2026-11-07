@@ -1909,6 +1909,24 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_recognition",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_recognition",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_recognition.png"
+    },
+    {
+      "focus_id": "NAM_well_register",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_well_register",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_well_register.png"
+    },
+    {
+      "focus_id": "NAM_open_ledgers",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_open_ledgers",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_open_ledgers.png"
+    },
+    {
       "focus_id": "NAM_weber_channel",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_weber_channel",

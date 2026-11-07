@@ -1,5 +1,20 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_recognition"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_recognition.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_well_register"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_well_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_open_ledgers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_open_ledgers.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_weber_channel"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_weber_channel.png"
 	}
