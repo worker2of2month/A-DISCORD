@@ -1,5 +1,25 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_cache_hunters"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_cache_hunters.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_mobile_columns"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_mobile_columns.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_basin_is_ours"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_basin_is_ours.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_neutral_basin"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_neutral_basin.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_recognition"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_recognition.png"
 	}

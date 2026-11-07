@@ -26,7 +26,7 @@ focus_tree = {
 
 shared_focus = {
 		id = NAM_alarm
-		icon = GFX_goal_generic_occupy_start_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 10
 		y = 0
 		cost = 1
@@ -53,7 +53,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_hold_basin
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 9
 		y = 1
 		cost = 2
@@ -94,7 +94,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_relief_columns
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 11
 		y = 1
 		cost = 2
@@ -126,7 +126,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_discipline_of_seals
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_NAM_rom_address
 		x = 8
 		y = 2
 		cost = 2
@@ -159,7 +159,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_counterstroke
-		icon = GFX_focus_generic_army_attack
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 10
 		y = 2
 		cost = 3
@@ -195,7 +195,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_volunteer_levies
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 12
 		y = 2
 		cost = 2
@@ -255,7 +255,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_wells_under_guard
-		icon = GFX_goal_generic_fortify_city
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 15
 		y = 1
 		cost = 2
@@ -312,7 +312,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_last_reserve
-		icon = GFX_goal_generic_army_artillery
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 14
 		y = 2
 		cost = 3
@@ -351,7 +351,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_district_volunteers
-		icon = GFX_focus_generic_forest_brothers
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 13
 		y = 3
 		cost = 2
@@ -387,7 +387,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_martial_seals
-		icon = GFX_focus_generic_total_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 15
 		y = 3
 		cost = 2
@@ -423,7 +423,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_oil_score
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_NAM_well_register
 		x = 14
 		y = 4
 		cost = 3
@@ -458,7 +458,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_rear_directorate
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 4
 		y = 1
 		cost = 1
@@ -485,7 +485,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_depot_network
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 2
 		y = 2
 		cost = 2
@@ -515,7 +515,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_mobile_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_NAM_mobile_columns
 		x = 6
 		y = 2
 		cost = 2
@@ -545,7 +545,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_dispatch_service
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 4
 		y = 3
 		cost = 2
@@ -581,7 +581,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_civilian_routes
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 2
 		y = 4
 		cost = 2
@@ -609,7 +609,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_factory_shifts
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 6
 		y = 4
 		cost = 2
@@ -639,7 +639,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_naval_staff
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 18
 		y = 1
 		cost = 1
@@ -670,7 +670,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_convoy_escort
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 17
 		y = 2
 		cost = 2
@@ -700,7 +700,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_coastal_batteries
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 19
 		y = 2
 		cost = 2
@@ -741,7 +741,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_field_airfields
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_RUS_capital_airfields
 		x = 24
 		y = 1
 		cost = 1
@@ -776,7 +776,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_interceptor_control
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_RUS_fighter_cover
 		x = 23
 		y = 2
 		cost = 2
@@ -806,7 +806,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_war_air_ground_liaison
-		icon = GFX_focus_generic_army_attack
+		icon = GFX_focus_RUS_air_ground_coordination
 		x = 25
 		y = 2
 		cost = 2

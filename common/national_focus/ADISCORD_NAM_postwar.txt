@@ -56,7 +56,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_law_after_war
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_VAL_State_Contract
 		x = 52
 		y = 1
 		cost = 3
@@ -88,7 +88,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_veterans_return
-		icon = GFX_focus_generic_soldier_salute
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 82
 		y = 1
 		cost = 3
@@ -116,7 +116,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_civil_repair
-		icon = GFX_focus_generic_economic_recovery
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 14
 		y = 1
 		cost = 4
@@ -148,7 +148,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_civil_dividend
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 26
 		y = 2
 		cost = 4
@@ -191,7 +191,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_armed_peace
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 30
 		y = 2
 		cost = 4
@@ -232,7 +232,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_national_university
-		icon = GFX_focus_generic_university_2
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 28
 		y = 3
 		cost = 4
@@ -257,7 +257,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_svetlogorye
-		icon = GFX_focus_generic_phoenix
+		icon = GFX_focus_NAM_independence_day
 		x = 34
 		y = 6
 		cost = 5
@@ -294,7 +294,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_svetlogorsk_shipyards
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_harbour_service
 		x = 82
 		y = 3
 		cost = 4
@@ -385,7 +385,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_service_state
-		icon = GFX_focus_generic_military_dictatorship
+		icon = GFX_focus_RUS_trained_administrators
 		x = 52
 		y = 2
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -444,7 +444,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_seal_registry
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_last_centre_register
 		x = 52
 		y = 3
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -486,7 +486,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_namestnik_garrisons
-		icon = GFX_focus_generic_home_defense
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 54
 		y = 5
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -529,7 +529,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_oil_quotas
-		icon = GFX_focus_generic_price_controls
+		icon = GFX_focus_NAM_well_register
 		x = 57
 		y = 5
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -572,7 +572,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_ladder_of_seals
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 55
 		y = 8
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -612,7 +612,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_ladder_ending_iron
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_NAM_rom_address
 		x = 56
 		y = 9
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -673,7 +673,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_ladder_ending_service
-		icon = GFX_focus_generic_improve_the_administration_2
+		icon = GFX_focus_NAM_open_ledgers
 		x = 52
 		y = 9
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -723,7 +723,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_black_basin
-		icon = GFX_goal_generic_more_territorial_claims
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 59
 		y = 14
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -760,7 +760,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_desert_offices
-		icon = GFX_focus_generic_subjugation
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 54
 		y = 15
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -799,7 +799,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_seal_over_furnaces
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 57
 		y = 16
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -838,7 +838,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_normalisation
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 36
 		y = 2
 		cost = 5
@@ -896,7 +896,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_border_revenge
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 38
 		y = 2
 		cost = 5
@@ -930,7 +930,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_oil_ministry
-		icon = GFX_focus_generic_offshore_oil_rig
+		icon = GFX_focus_NAM_well_register
 		x = 25
 		y = 7
 		cost = 3
@@ -959,7 +959,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_middle_loren_wells
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_well_register
 		x = 20
 		y = 8
 		cost = 4
@@ -1003,7 +1003,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_reclaim_230
-		icon = GFX_focus_generic_steel
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 32
 		y = 8
 		cost = 3
@@ -1034,7 +1034,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_export_consortium
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 24
 		y = 8
 		cost = 4
@@ -1069,7 +1069,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_state_refineries
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 28
 		y = 8
 		cost = 4
@@ -1127,7 +1127,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_oil_exchange
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_well_register
 		x = 26
 		y = 10
 		cost = 4
@@ -1155,7 +1155,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_federal_charter
-		icon = GFX_focus_generic_universal_suffrage
+		icon = GFX_focus_VAL_State_Contract
 		x = 152
 		y = 2
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1219,7 +1219,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_council
-		icon = GFX_focus_generic_vote
+		icon = GFX_focus_NAM_open_ledgers
 		x = 146
 		y = 3
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1264,7 +1264,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_oil_fund
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_second_ledger
 		x = 144
 		y = 4
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1316,7 +1316,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_militia
-		icon = GFX_goal_generic_small_arms
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 148
 		y = 4
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1362,7 +1362,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_common_fuel_market
-		icon = GFX_focus_generic_energy
+		icon = GFX_focus_NAM_well_register
 		x = 152
 		y = 6
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1405,7 +1405,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_charter_ending_federation
-		icon = GFX_focus_generic_the_council_of_europe
+		icon = GFX_focus_VAL_State_Contract
 		x = 150
 		y = 7
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1457,7 +1457,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_charter_ending_oil_union
-		icon = GFX_focus_generic_industrialists
+		icon = GFX_focus_VAL_State_Contract
 		x = 154
 		y = 7
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1511,7 +1511,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_oil_for_water
-		icon = GFX_focus_generic_concessions
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 156
 		y = 7
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1557,7 +1557,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_fenn_guarantee
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 156
 		y = 8
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1598,7 +1598,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_oil_charter
-		icon = GFX_goal_generic_forceful_treaty
+		icon = GFX_focus_VAL_State_Contract
 		x = 160
 		y = 9
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -1641,7 +1641,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_war_council
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 82
 		y = 9
 		cost = 2
@@ -1669,7 +1669,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_allied_fuel_office
-		icon = GFX_focus_generic_supply_line
+		icon = GFX_focus_NAM_well_register
 		x = 76
 		y = 10
 		cost = 2
@@ -1724,7 +1724,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_field_fortresses
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 88
 		y = 10
 		cost = 2
@@ -1766,7 +1766,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_convoy_hunters
-		icon = GFX_focus_generic_trade_interdiction
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 80
 		y = 10
 		cost = 2
@@ -1799,7 +1799,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_counteroffensive
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 86
 		y = 11
 		cost = 3
@@ -1831,7 +1831,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_south_heritage
-		icon = GFX_focus_generic_the_giant_wakes
+		icon = GFX_focus_NAM_independence_day
 		x = 82
 		y = 14
 		cost = 3
@@ -1874,7 +1874,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rus_crisis_watch
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 94
 		y = 15
 		cost = 2
@@ -1906,7 +1906,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rus_fuel_for_coalition
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_well_register
 		x = 92
 		y = 16
 		cost = 3
@@ -1950,7 +1950,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rus_demand_share
-		icon = GFX_focus_generic_price_controls
+		icon = GFX_focus_NAM_second_ledger
 		x = 96
 		y = 16
 		cost = 3
@@ -1990,7 +1990,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rus_expedition_staff
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 94
 		y = 17
 		cost = 3
@@ -2029,7 +2029,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_svetlogorsk_dam
-		icon = GFX_focus_generic_hydroelectric_energy
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 30
 		y = 4
 		cost = 5
@@ -2058,7 +2058,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_state_plan
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 58
 		y = 3
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -2083,7 +2083,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_regional_trusts
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 62
 		y = 3
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -2108,7 +2108,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_unified_standards
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 60
 		y = 4
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -2148,7 +2148,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_state_logistics_grid
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 60
 		y = 6
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -2184,7 +2184,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_state_project_bureaus
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 61
 		y = 7
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -2210,7 +2210,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_public_utilities
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_open_ledgers
 		x = 158
 		y = 3
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -2239,7 +2239,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_municipal_services
-		icon = GFX_focus_generic_vote
+		icon = GFX_focus_NAM_open_ledgers
 		x = 162
 		y = 3
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -2268,7 +2268,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_civic_audit
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_rom_address
 		x = 160
 		y = 4
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -2306,7 +2306,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 150
 		y = 5
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -2383,7 +2383,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_open_libraries
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 158
 		y = 5
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -2415,7 +2415,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pragmatic_compact
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 252
 		y = 2
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2450,7 +2450,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_commercial_courts
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_district_courts
 		x = 244
 		y = 3
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2478,7 +2478,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_export_clearing
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 242
 		y = 4
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2507,7 +2507,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_machine_tool_contracts
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_RUS_precision_lathes
 		x = 246
 		y = 4
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2536,7 +2536,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_contract_register
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_last_centre_register
 		x = 244
 		y = 5
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2574,7 +2574,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_port_agreement
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_NAM_harbour_service
 		x = 260
 		y = 3
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2608,7 +2608,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_warehouse_receipts
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 256
 		y = 4
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2661,7 +2661,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_insured_caravans
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 260
 		y = 4
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2695,7 +2695,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_commercial_reserve
-		icon = GFX_goal_generic_consumer_goods
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 246
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2729,7 +2729,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_balanced_accounts
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_second_ledger
 		x = 248
 		y = 8
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2770,7 +2770,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_prag_ending_republic
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_open_ledgers
 		x = 246
 		y = 9
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2813,7 +2813,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_prag_ending_directorate
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 250
 		y = 9
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2857,7 +2857,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_prag_settlement_agreements
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 250
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2897,7 +2897,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_prag_partner_supply
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 250
 		y = 7
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2934,7 +2934,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_prag_south_guarantees
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 256
 		y = 9
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -2978,7 +2978,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_civil_service_exam
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_RUS_trained_administrators
 		x = 50
 		y = 4
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3013,7 +3013,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_appointed_prefects
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_RUS_trained_administrators
 		x = 52
 		y = 4
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3048,7 +3048,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_building_code
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 58
 		y = 8
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3082,7 +3082,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_distribution_board
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 62
 		y = 8
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3116,7 +3116,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_works_commission
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_NAM_open_ledgers
 		x = 60
 		y = 9
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3154,7 +3154,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_development_bank
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_NAM_second_ledger
 		x = 58
 		y = 10
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3179,7 +3179,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_basin_reservoirs
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 62
 		y = 10
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3227,7 +3227,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_engineering_collegium
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 60
 		y = 10
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3257,7 +3257,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_inspectorate
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_rom_address
 		x = 69
 		y = 12
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3295,7 +3295,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_reconstruction_statute
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_State_Contract
 		x = 64
 		y = 13
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -3332,7 +3332,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_merchant_charter
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_State_Contract
 		x = 264
 		y = 4
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3361,7 +3361,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_foreign_patents
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 238
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3400,7 +3400,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_domestic_designs
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 242
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3438,7 +3438,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_customs_clearinghouse
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_rom_address
 		x = 240
 		y = 7
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3477,7 +3477,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_freight_exchange
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 262
 		y = 5
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3513,7 +3513,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_repair_depots
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 254
 		y = 5
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3552,7 +3552,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_licensed_assembly
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 258
 		y = 5
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3606,7 +3606,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_port_polytechnic
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 256
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3644,7 +3644,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_municipal_bonds
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_second_ledger
 		x = 244
 		y = 9
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3685,7 +3685,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_commercial_commonwealth
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_independence_day
 		x = 254
 		y = 10
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -3726,7 +3726,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rural_grid
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 164
 		y = 4
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3756,7 +3756,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_returnee_offices
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_RUS_trained_administrators
 		x = 142
 		y = 4
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3785,7 +3785,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_scholarships
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 158
 		y = 6
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3819,7 +3819,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_municipal_land
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 162
 		y = 5
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3860,7 +3860,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_tenant_councils
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_open_ledgers
 		x = 166
 		y = 5
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3902,7 +3902,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_water_boards
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 164
 		y = 6
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3936,7 +3936,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_public_credit
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_NAM_open_ledgers
 		x = 146
 		y = 6
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -3986,7 +3986,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_workers_inspection
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 164
 		y = 7
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -4023,7 +4023,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_regional_university
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 161
 		y = 8
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -4063,7 +4063,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_common_citizenship
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_independence_day
 		x = 158
 		y = 9
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -4105,7 +4105,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_border_administration
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_trained_administrators
 		x = 36
 		y = 11
 		cost = 4
@@ -4133,7 +4133,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_border_security
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 34
 		y = 12
 		cost = 4
@@ -4165,7 +4165,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_border_compacts
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 38
 		y = 12
 		cost = 4
@@ -4195,7 +4195,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_border_citizenship
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 34
 		y = 13
 		cost = 4
@@ -4224,7 +4224,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_constitutional_committee
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_VAL_State_Contract
 		x = 44
 		y = 3
 		cost = 3
@@ -4268,7 +4268,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_cabinet_statute
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_VAL_State_Contract
 		x = 42
 		y = 4
 		cost = 3
@@ -4304,7 +4304,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_state_chamber
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_open_ledgers
 		x = 46
 		y = 4
 		cost = 3
@@ -4343,7 +4343,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_cadastre
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_last_centre_register
 		x = 48
 		y = 4
 		cost = 3
@@ -4377,7 +4377,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_payroll
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_second_ledger
 		x = 58
 		y = 4
 		cost = 3
@@ -4424,7 +4424,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_provincial_records
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_last_centre_register
 		x = 56
 		y = 4
 		cost = 3
@@ -4467,7 +4467,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_administrative_courts
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_RUS_district_courts
 		x = 48
 		y = 5
 		cost = 3
@@ -4510,7 +4510,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_public_procurement
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_open_ledgers
 		x = 59
 		y = 5
 		cost = 3
@@ -4553,7 +4553,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_central_treasury
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_second_ledger
 		x = 53
 		y = 6
 		cost = 3
@@ -4601,7 +4601,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_industrial_commission
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_open_ledgers
 		x = 64
 		y = 4
 		cost = 3
@@ -4695,7 +4695,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_tool_reserve
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_RUS_precision_lathes
 		x = 66
 		y = 5
 		cost = 3
@@ -4729,7 +4729,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_public_supply
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_open_ledgers
 		x = 62
 		y = 5
 		cost = 3
@@ -4772,7 +4772,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_industrial_credit
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_second_ledger
 		x = 64
 		y = 6
 		cost = 3
@@ -4822,7 +4822,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_export_guarantees
-		icon = GFX_focus_generic_military_industry
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 66
 		y = 6
 		cost = 3
@@ -4872,7 +4872,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_labour_code
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_State_Contract
 		x = 40
 		y = 5
 		cost = 3
@@ -4916,7 +4916,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_company_housing
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 44
 		y = 5
 		cost = 3
@@ -4954,7 +4954,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_insurance_fund
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_NAM_second_ledger
 		x = 46
 		y = 5
 		cost = 3
@@ -5005,7 +5005,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_technical_training
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 46
 		y = 6
 		cost = 3
@@ -5065,7 +5065,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_family_pensions
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 42
 		y = 6
 		cost = 3
@@ -5112,7 +5112,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_labour_inspection
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 50
 		y = 6
 		cost = 3
@@ -5155,7 +5155,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_employment_offices
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 38
 		y = 6
 		cost = 3
@@ -5186,7 +5186,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_arbitration_commissions
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_RUS_district_courts
 		x = 44
 		y = 7
 		cost = 3
@@ -5234,7 +5234,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_public_works_contract
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_NAM_open_ledgers
 		x = 50
 		y = 7
 		cost = 3
@@ -5266,7 +5266,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_social_budget
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_NAM_second_ledger
 		x = 38
 		y = 7
 		cost = 3
@@ -5313,7 +5313,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_military_governors
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_RUS_military_governors
 		x = 40
 		y = 9
 		cost = 3
@@ -5363,7 +5363,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_police
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 48
 		y = 9
 		cost = 3
@@ -5417,7 +5417,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_mobilisation_register
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 44
 		y = 10
 		cost = 3
@@ -5450,7 +5450,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_armament_inspectorate
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 38
 		y = 10
 		cost = 3
@@ -5491,7 +5491,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_officer_appointments
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 50
 		y = 10
 		cost = 3
@@ -5535,7 +5535,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_strategic_guard
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 44
 		y = 11
 		cost = 3
@@ -5578,7 +5578,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_defence_accounts
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_second_ledger
 		x = 40
 		y = 10
 		cost = 3
@@ -5621,7 +5621,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_survey_corps
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 64
 		y = 8
 		cost = 3
@@ -5667,7 +5667,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_state_warehouses
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 66
 		y = 8
 		cost = 3
@@ -5701,7 +5701,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_standard_projects
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 68
 		y = 9
 		cost = 3
@@ -5747,7 +5747,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_local_design_offices
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 64
 		y = 9
 		cost = 3
@@ -5793,7 +5793,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_budget
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_second_ledger
 		x = 50
 		y = 15
 		cost = 3
@@ -5825,7 +5825,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_intelligence
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_underground_reports
 		x = 52
 		y = 16
 		cost = 3
@@ -5868,7 +5868,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_civil_service
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_RUS_trained_administrators
 		x = 58
 		y = 15
 		cost = 3
@@ -5911,7 +5911,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_military_rule
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_RUS_military_governors
 		x = 48
 		y = 17
 		cost = 3
@@ -5951,7 +5951,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_local_offices
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 52
 		y = 17
 		cost = 3
@@ -5990,7 +5990,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_supply_plan
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 50
 		y = 18
 		cost = 3
@@ -6034,7 +6034,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_reserve
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 46
 		y = 16
 		cost = 3
@@ -6071,7 +6071,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_postwar_commission
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_open_ledgers
 		x = 72
 		y = 15
 		cost = 3
@@ -6116,7 +6116,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_strategic_reserve
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 76
 		y = 15
 		cost = 3
@@ -6153,7 +6153,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_development_fund
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_second_ledger
 		x = 80
 		y = 15
 		cost = 3
@@ -6192,7 +6192,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_war_accounts
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_second_ledger
 		x = 78
 		y = 16
 		cost = 3
@@ -6238,7 +6238,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_schools
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_district_courts
 		x = 74
 		y = 16
 		cost = 3
@@ -6283,7 +6283,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_unified_budget
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_second_ledger
 		x = 80
 		y = 16
 		cost = 3
@@ -6328,7 +6328,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_demobilisation_board
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 70
 		y = 16
 		cost = 3
@@ -6361,7 +6361,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_industrial_repair
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 76
 		y = 17
 		cost = 3
@@ -6407,7 +6407,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_administration
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_trained_administrators
 		x = 80
 		y = 17
 		cost = 3
@@ -6456,7 +6456,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_permanent_institutions
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_district_courts
 		x = 70
 		y = 17
 		cost = 3
@@ -6505,7 +6505,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_municipal_repair
-		icon = GFX_focus_generic_economic_recovery
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 24
 		y = 3
 		cost = 3
@@ -6530,7 +6530,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_returnee_registration
-		icon = GFX_focus_generic_economic_recovery
+		icon = GFX_focus_RUS_trained_administrators
 		x = 32
 		y = 3
 		cost = 3
@@ -6554,7 +6554,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_oil_laboratories
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_VAL_econ_captured_laboratories
 		x = 18
 		y = 9
 		cost = 3
@@ -6630,7 +6630,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_oil_equipment
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 34
 		y = 9
 		cost = 3
@@ -6666,7 +6666,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_refinery_engineering
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 22
 		y = 9
 		cost = 3
@@ -6714,7 +6714,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_fuel_reservoirs
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 0
 		y = 8
 		cost = 3
@@ -6739,7 +6739,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_energy_commission
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 18
 		y = 2
 		cost = 3
@@ -6770,7 +6770,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_regional_power
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 16
 		y = 3
 		cost = 3
@@ -6797,7 +6797,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_power_grid
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 20
 		y = 3
 		cost = 3
@@ -6833,7 +6833,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_oilfield_substations
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_well_register
 		x = 22
 		y = 3
 		cost = 3
@@ -6858,7 +6858,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_water_intakes
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 16
 		y = 4
 		cost = 3
@@ -6897,7 +6897,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_irrigation_works
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 20
 		y = 4
 		cost = 3
@@ -6925,7 +6925,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_reservoir_survey
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 18
 		y = 5
 		cost = 3
@@ -6965,7 +6965,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_power_reserve
-		icon = GFX_goal_generic_defence
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 98
 		y = 3
 		cost = 3
@@ -6990,7 +6990,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_grid_dispatch
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 22
 		y = 5
 		cost = 3
@@ -7026,7 +7026,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_industrial_recovery
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 6
 		y = 2
 		cost = 3
@@ -7072,7 +7072,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_engineering
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 4
 		y = 3
 		cost = 3
@@ -7102,7 +7102,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_arms_engineering
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 8
 		y = 3
 		cost = 3
@@ -7132,7 +7132,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_toolmaking
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_precision_lathes
 		x = 6
 		y = 4
 		cost = 3
@@ -7169,7 +7169,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_machine_repair
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_precision_lathes
 		x = 2
 		y = 4
 		cost = 3
@@ -7194,7 +7194,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_chemical_works
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_reactor_decontamination
 		x = 10
 		y = 4
 		cost = 3
@@ -7233,7 +7233,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_testing_facilities
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_VAL_econ_captured_laboratories
 		x = 12
 		y = 3
 		cost = 3
@@ -7269,7 +7269,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_industrial_sites
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 4
 		y = 5
 		cost = 3
@@ -7306,7 +7306,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_components
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 10
 		y = 5
 		cost = 3
@@ -7342,7 +7342,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_production_cycle
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 12
 		y = 5
 		cost = 3
@@ -7378,7 +7378,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_transport_commission
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_NAM_open_ledgers
 		x = 14
 		y = 7
 		cost = 2
@@ -7408,7 +7408,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_rail_priority
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_imperial_railways
 		x = 4
 		y = 8
 		cost = 3
@@ -7436,7 +7436,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_road_priority
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 8
 		y = 8
 		cost = 3
@@ -7464,7 +7464,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_rail_workshops
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_imperial_railways
 		x = 2
 		y = 9
 		cost = 2
@@ -7489,7 +7489,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_river_crossings
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 10
 		y = 8
 		cost = 3
@@ -7514,7 +7514,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_freight_depots
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 8
 		y = 10
 		cost = 3
@@ -7545,7 +7545,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_transport_maintenance
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 6
 		y = 9
 		cost = 2
@@ -7582,7 +7582,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_logistics_depots
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 4
 		y = 10
 		cost = 3
@@ -7613,7 +7613,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_corridor
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 14
 		y = 8
 		cost = 3
@@ -7638,7 +7638,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_freight_schedule
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 6
 		y = 11
 		cost = 2
@@ -7709,7 +7709,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_district_hospitals
-		icon = GFX_focus_generic_university_2
+		icon = GFX_focus_RUS_roadside_clinics
 		x = 35
 		y = 3
 		cost = 3
@@ -7733,7 +7733,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_school_network
-		icon = GFX_focus_generic_university_2
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 40
 		y = 3
 		cost = 3
@@ -7772,7 +7772,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_civil_communications
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 42
 		y = 3
 		cost = 3
@@ -7826,7 +7826,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_regional_reconstruction
-		icon = GFX_focus_generic_university_2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 38
 		y = 5
 		cost = 3
@@ -7854,7 +7854,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_army_review
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 72
 		y = 2
 		cost = 2
@@ -7878,7 +7878,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_breakthrough_army
-		icon = GFX_goal_generic_army_tanks
+		icon = GFX_focus_NAM_mobile_columns
 		x = 70
 		y = 3
 		cost = 3
@@ -7921,7 +7921,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_mobile_army
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_NAM_mobile_columns
 		x = 74
 		y = 3
 		cost = 3
@@ -7964,7 +7964,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_reserve_centres
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 70
 		y = 4
 		cost = 3
@@ -7990,7 +7990,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_engineer_units
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 68
 		y = 4
 		cost = 3
@@ -8015,7 +8015,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_field_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 76
 		y = 4
 		cost = 3
@@ -8046,7 +8046,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_artillery_observers
-		icon = GFX_goal_generic_army_artillery2
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 68
 		y = 3
 		cost = 2
@@ -8080,7 +8080,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_staff_exercises
-		icon = GFX_goal_generic_position_armies
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 74
 		y = 4
 		cost = 2
@@ -8107,7 +8107,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_combined_arms
-		icon = GFX_goal_generic_build_tank
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 76
 		y = 5
 		cost = 2
@@ -8132,7 +8132,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_army
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 72
 		y = 5
 		cost = 3
@@ -8190,7 +8190,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_review
-		icon = GFX_goal_generic_navy_doctrines_tactics
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 82
 		y = 2
 		cost = 2
@@ -8214,7 +8214,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_escort_fleet
-		icon = GFX_goal_generic_navy_anti_submarine
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 78
 		y = 4
 		cost = 3
@@ -8269,7 +8269,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_strike_fleet
-		icon = GFX_goal_generic_navy_submarine
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 81
 		y = 4
 		cost = 3
@@ -8324,7 +8324,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 78
 		y = 3
 		cost = 3
@@ -8349,7 +8349,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_crew_schools
-		icon = GFX_goal_generic_special_forces
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 79
 		y = 5
 		cost = 2
@@ -8385,7 +8385,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_fuel_depots
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 86
 		y = 3
 		cost = 3
@@ -8410,7 +8410,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_landing_supply
-		icon = GFX_goal_generic_occupy_states_coastal
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 84
 		y = 3
 		cost = 3
@@ -8443,7 +8443,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_naval_service
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 83
 		y = 6
 		cost = 3
@@ -8490,7 +8490,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_air_review
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 94
 		y = 2
 		cost = 2
@@ -8514,7 +8514,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_air_defence
-		icon = GFX_goal_generic_air_fighter
+		icon = GFX_focus_RUS_fighter_cover
 		x = 92
 		y = 4
 		cost = 3
@@ -8548,7 +8548,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_frontline_air
-		icon = GFX_goal_generic_CAS
+		icon = GFX_focus_RUS_air_ground_coordination
 		x = 96
 		y = 4
 		cost = 3
@@ -8582,7 +8582,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_airfield_network
-		icon = GFX_goal_generic_construction
+		icon = GFX_focus_RUS_capital_airfields
 		x = 90
 		y = 3
 		cost = 3
@@ -8607,7 +8607,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_flight_schools
-		icon = GFX_goal_generic_build_airforce
+		icon = GFX_focus_RUS_flight_school
 		x = 94
 		y = 3
 		cost = 2
@@ -8632,7 +8632,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_radar_posts
-		icon = GFX_goal_generic_radar
+		icon = GFX_focus_RUS_air_control_network
 		x = 100
 		y = 3
 		cost = 3
@@ -8657,7 +8657,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_engine_workshops
-		icon = GFX_goal_generic_air_production
+		icon = GFX_focus_RUS_aircraft_workshops
 		x = 94
 		y = 5
 		cost = 2
@@ -8708,7 +8708,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_air_supply
-		icon = GFX_goal_generic_air_bomber
+		icon = GFX_focus_RUS_aviation_fuel_reserve
 		x = 89
 		y = 5
 		cost = 3
@@ -8734,7 +8734,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_ground_control
-		icon = GFX_goal_generic_intelligence_exchange
+		icon = GFX_focus_RUS_air_control_network
 		x = 100
 		y = 4
 		cost = 2
@@ -8770,7 +8770,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_air_command
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 98
 		y = 6
 		cost = 2
@@ -8799,7 +8799,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_cooperative_congress
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_open_ledgers
 		x = 144
 		y = 8
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -8838,7 +8838,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_haulage_cooperatives
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_NAM_mobile_columns
 		x = 142
 		y = 9
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -8870,7 +8870,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_tool_cooperatives
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_RUS_precision_lathes
 		x = 146
 		y = 9
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -8902,7 +8902,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_district_fair
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_NAM_open_ledgers
 		x = 144
 		y = 10
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -8954,7 +8954,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_relief_register
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_RUS_roadside_clinics
 		x = 162
 		y = 10
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -8986,7 +8986,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_relief_trains
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_imperial_railways
 		x = 160
 		y = 11
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -9017,7 +9017,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_mobile_clinics
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_RUS_roadside_clinics
 		x = 164
 		y = 11
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -9053,7 +9053,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rescue_college
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 162
 		y = 12
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -9095,7 +9095,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_relief_reserves
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 154
 		y = 13
 		allow_branch = { NAM_prewar_district_mandate = yes }
@@ -9145,7 +9145,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_freight_brokerage
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 266
 		y = 6
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9181,7 +9181,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_chartered_tonnage
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_VAL_State_Contract
 		x = 264
 		y = 7
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9208,7 +9208,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_tractor_leasing
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_NAM_mobile_columns
 		x = 268
 		y = 7
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9235,7 +9235,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_bonded_terminal
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_second_ledger
 		x = 266
 		y = 8
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9287,7 +9287,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_testing_office
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_VAL_econ_captured_laboratories
 		x = 252
 		y = 11
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9360,7 +9360,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_precision_gauges
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_RUS_precision_lathes
 		x = 250
 		y = 12
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9391,7 +9391,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_relay_trials
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_VAL_econ_captured_laboratories
 		x = 254
 		y = 12
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9430,7 +9430,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_licensed_workshop
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 252
 		y = 13
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
@@ -9502,7 +9502,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_through_waybill
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 260
 		y = 14
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }

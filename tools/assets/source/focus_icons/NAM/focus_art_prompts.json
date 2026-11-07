@@ -1909,6 +1909,30 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_cache_hunters",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_cache_hunters",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_cache_hunters.png"
+    },
+    {
+      "focus_id": "NAM_mobile_columns",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_mobile_columns",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_mobile_columns.png"
+    },
+    {
+      "focus_id": "NAM_basin_is_ours",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_basin_is_ours",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_basin_is_ours.png"
+    },
+    {
+      "focus_id": "NAM_neutral_basin",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_neutral_basin",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_neutral_basin.png"
+    },
+    {
       "focus_id": "NAM_recognition",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_recognition",

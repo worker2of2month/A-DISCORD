@@ -29,7 +29,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_free_zones
-		icon = GFX_focus_generic_industry_investment
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 3
 		y = 0
 		cost = 4
@@ -57,7 +57,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_open_doors
-		icon = GFX_focus_generic_concessions
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 1
 		y = 1
 		cost = 5
@@ -93,7 +93,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_regulated_partnership
-		icon = GFX_focus_generic_price_controls
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 5
 		y = 1
 		cost = 5
@@ -124,7 +124,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_steel_exchange
-		icon = GFX_focus_generic_steel
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 3
 		y = 2
 		cost = 4
@@ -155,7 +155,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_innovation_parks
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 1
 		y = 3
 		cost = 5
@@ -188,7 +188,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_labour_bureau
-		icon = GFX_focus_generic_full_employment
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 5
 		y = 3
 		cost = 4
@@ -216,7 +216,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_contracts
-		icon = GFX_focus_generic_workers
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 3
 		y = 4
 		cost = 5
@@ -250,7 +250,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_company_towns
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 7
 		y = 4
 		cost = 5
@@ -291,7 +291,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_charter_harbours
-		icon = GFX_focus_generic_refit_civilian_ships
+		icon = GFX_focus_VAL_State_Contract
 		x = 3
 		y = 5
 		cost = 5
@@ -331,7 +331,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_charter_commission
-		icon = GFX_focus_generic_commission
+		icon = GFX_focus_VAL_State_Contract
 		x = 3
 		y = 6
 		cost = 4
@@ -367,7 +367,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_veter_government
-		icon = GFX_focus_generic_freedom_council
+		icon = GFX_focus_NAM_open_ledgers
 		x = 32
 		y = 0
 		cost = 4
@@ -397,7 +397,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_island_chancellery
-		icon = GFX_focus_generic_improve_the_administration_2
+		icon = GFX_focus_RUS_trained_administrators
 		x = 18
 		y = 1
 		cost = 5
@@ -431,7 +431,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_free_port
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_NAM_harbour_service
 		x = 12
 		y = 2
 		cost = 5
@@ -465,7 +465,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_refugee_homesteads
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 16
 		y = 2
 		cost = 5
@@ -504,7 +504,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_island_steel
-		icon = GFX_focus_generic_steel
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 14
 		y = 3
 		cost = 5
@@ -553,7 +553,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_overseas_districts
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_open_ledgers
 		x = 14
 		y = 4
 		cost = 6
@@ -587,7 +587,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_coast_guard
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 12
 		y = 5
 		cost = 5
@@ -646,7 +646,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_civil_airport
-		icon = GFX_goal_generic_air_fighter
+		icon = GFX_focus_RUS_flight_school
 		x = 16
 		y = 5
 		cost = 5
@@ -689,7 +689,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_neo_svetlogorsk
-		icon = GFX_focus_generic_public_works
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 23
 		y = 2
 		cost = 7
@@ -721,7 +721,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_loan_roads
-		icon = GFX_focus_generic_road_investment
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 20
 		y = 3
 		cost = 6
@@ -757,7 +757,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_refugee_housing
-		icon = GFX_focus_generic_welfare
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 26
 		y = 3
 		cost = 5
@@ -784,7 +784,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_harbour_concession
-		icon = GFX_focus_generic_british_trade
+		icon = GFX_focus_NAM_harbour_service
 		x = 18
 		y = 4
 		cost = 6
@@ -832,7 +832,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_municipal_harbour
-		icon = GFX_focus_generic_merchant_fleet
+		icon = GFX_focus_NAM_harbour_service
 		x = 22
 		y = 4
 		cost = 6
@@ -879,7 +879,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_island_power_grid
-		icon = GFX_focus_generic_energy
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 26
 		y = 4
 		cost = 6
@@ -916,7 +916,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_free_port_shipyards
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_harbour_service
 		x = 20
 		y = 5
 		cost = 6
@@ -957,7 +957,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_water_works
-		icon = GFX_focus_generic_hydroelectric_energy
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 26
 		y = 5
 		cost = 6
@@ -1016,7 +1016,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_people_university
-		icon = GFX_focus_generic_university_2
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 18
 		y = 6
 		cost = 6
@@ -1060,7 +1060,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_corporate_polytechnic
-		icon = GFX_focus_generic_industrial_experts
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 22
 		y = 6
 		cost = 6
@@ -1094,7 +1094,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_free_city_charter
-		icon = GFX_focus_generic_happy_cheer
+		icon = GFX_focus_VAL_State_Contract
 		x = 20
 		y = 7
 		cost = 7
@@ -1144,7 +1144,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_exile_parliament
-		icon = GFX_focus_generic_conference
+		icon = GFX_focus_NAM_open_ledgers
 		x = 30
 		y = 1
 		cost = 6
@@ -1172,7 +1172,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_salvation_cabinet
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_RUS_trained_administrators
 		x = 34
 		y = 1
 		cost = 6
@@ -1201,7 +1201,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_federal_programme
-		icon = GFX_focus_generic_social_democracy
+		icon = GFX_focus_NAM_open_ledgers
 		x = 32
 		y = 2
 		cost = 5
@@ -1238,7 +1238,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_appeal_to_nations
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 30
 		y = 3
 		cost = 5
@@ -1309,7 +1309,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_split_coalition
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 34
 		y = 3
 		cost = 5
@@ -1367,7 +1367,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_mainland_contacts
-		icon = GFX_focus_generic_secret_agent_operative
+		icon = GFX_focus_NAM_weber_channel
 		x = 40
 		y = 1
 		cost = 5
@@ -1397,7 +1397,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_civic_underground
-		icon = GFX_focus_generic_whispers
+		icon = GFX_focus_NAM_weber_channel
 		x = 38
 		y = 2
 		cost = 5
@@ -1426,7 +1426,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_voice_of_svetlogorye
-		icon = GFX_focus_generic_radio_communication
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 42
 		y = 2
 		cost = 5
@@ -1460,7 +1460,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_mainland_committees
-		icon = GFX_focus_generic_printing_press
+		icon = GFX_focus_NAM_rom_address
 		x = 36
 		y = 4
 		cost = 6
@@ -1510,7 +1510,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_citizen_army
-		icon = GFX_focus_generic_manpower
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 50
 		y = 0
 		cost = 5
@@ -1538,7 +1538,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_credit_arms
-		icon = GFX_goal_generic_small_arms
+		icon = GFX_focus_NAM_second_ledger
 		x = 46
 		y = 1
 		cost = 4
@@ -1570,7 +1570,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_district_militia
-		icon = GFX_focus_generic_home_defense
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 50
 		y = 1
 		cost = 6
@@ -1598,7 +1598,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_hired_instructors
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 54
 		y = 1
 		cost = 6
@@ -1626,7 +1626,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_marine_contracts
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 52
 		y = 2
 		cost = 5
@@ -1652,7 +1652,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_landing_rehearsals
-		icon = GFX_focus_generic_naval_invasion
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 52
 		y = 3
 		cost = 5
@@ -1689,7 +1689,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_officer_college
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 52
 		y = 4
 		cost = 6
@@ -1717,7 +1717,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_army_of_citizens
-		icon = GFX_focus_generic_combined_arms
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 49
 		y = 5
 		cost = 7
@@ -1751,7 +1751,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_return_manifesto
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_NAM_rom_address
 		x = 36
 		y = 5
 		cost = 6
@@ -1778,7 +1778,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_war_of_return
-		icon = GFX_goal_generic_occupy_start_coast
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 28
 		y = 8
 		cost = 5
@@ -1819,7 +1819,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_federal_districts
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_NAM_open_ledgers
 		x = 28
 		y = 9
 		cost = 3
@@ -1857,7 +1857,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_federal_treaties
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 20
 		y = 10
 		cost = 4
@@ -1890,7 +1890,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_council
-		icon = GFX_focus_generic_the_council_of_europe
+		icon = GFX_focus_NAM_open_ledgers
 		x = 28
 		y = 10
 		cost = 4
@@ -1926,7 +1926,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_harbour_rebuilding
-		icon = GFX_focus_generic_economic_recovery
+		icon = GFX_focus_NAM_harbour_service
 		x = 36
 		y = 10
 		cost = 4
@@ -1977,7 +1977,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_truth_commission
-		icon = GFX_focus_generic_public_meetings
+		icon = GFX_focus_NAM_open_ledgers
 		x = 18
 		y = 11
 		cost = 3
@@ -2011,7 +2011,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_district_police
-		icon = GFX_focus_generic_defensive_reorganization
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 22
 		y = 11
 		cost = 4
@@ -2038,7 +2038,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_districts_charter
-		icon = GFX_focus_generic_universal_suffrage
+		icon = GFX_focus_VAL_State_Contract
 		x = 26
 		y = 11
 		cost = 4
@@ -2074,7 +2074,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_metropole_charter
-		icon = GFX_focus_generic_central_planning
+		icon = GFX_focus_VAL_State_Contract
 		x = 30
 		y = 11
 		cost = 4
@@ -2112,7 +2112,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_roads
-		icon = GFX_focus_generic_improve_roads
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 36
 		y = 11
 		cost = 4
@@ -2163,7 +2163,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_accepted
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_independence_day
 		x = 28
 		y = 12
 		cost = 5
@@ -2198,7 +2198,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_southern_offer
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 24
 		y = 13
 		cost = 4
@@ -2239,7 +2239,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_federal_army
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 28
 		y = 13
 		cost = 4
@@ -2261,7 +2261,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_war_bonds
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_second_ledger
 		x = 32
 		y = 13
 		cost = 4
@@ -2301,7 +2301,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_call
-		icon = GFX_goal_generic_major_alliance
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 28
 		y = 14
 		cost = 5
@@ -2325,7 +2325,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_great_war
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 28
 		y = 15
 		cost = 5
@@ -2357,7 +2357,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_southern_districts
-		icon = GFX_goal_generic_alliance
+		icon = GFX_focus_NAM_open_ledgers
 		x = 28
 		y = 16
 		cost = 3
@@ -2394,7 +2394,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_dry_river_works
-		icon = GFX_focus_generic_land_reclamation
+		icon = GFX_focus_NAM_independence_day
 		x = 24
 		y = 17
 		cost = 4
@@ -2447,7 +2447,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_water_compact
-		icon = GFX_focus_generic_hydroelectric_energy
+		icon = GFX_focus_RUS_bunker_utilities
 		x = 20
 		y = 17
 		cost = 4
@@ -2494,7 +2494,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_parliament
-		icon = GFX_focus_generic_vote
+		icon = GFX_focus_NAM_open_ledgers
 		x = 28
 		y = 17
 		cost = 4
@@ -2521,7 +2521,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_caravan_charter
-		icon = GFX_focus_generic_camel_corps
+		icon = GFX_focus_VAL_State_Contract
 		x = 36
 		y = 17
 		cost = 4
@@ -2569,7 +2569,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_university
-		icon = GFX_focus_generic_university_1
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 20
 		y = 18
 		cost = 4
@@ -2596,7 +2596,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_currency
-		icon = GFX_focus_generic_currency_reforms
+		icon = GFX_focus_NAM_second_ledger
 		x = 26
 		y = 18
 		cost = 4
@@ -2627,7 +2627,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_army
-		icon = GFX_focus_generic_soldier_salute
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 30
 		y = 18
 		cost = 4
@@ -2650,7 +2650,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_common_market
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 36
 		y = 18
 		cost = 4
@@ -2676,7 +2676,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_union_constitution
-		icon = GFX_focus_generic_league_of_nations
+		icon = GFX_focus_VAL_State_Contract
 		x = 28
 		y = 19
 		cost = 6

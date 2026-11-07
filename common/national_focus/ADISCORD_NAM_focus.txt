@@ -943,7 +943,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_neutral_basin
-		icon = GFX_goal_generic_neutrality_focus
+		icon = GFX_focus_NAM_neutral_basin
 		x = 25
 		y = 8
 		cost = 2
@@ -984,7 +984,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_basin_is_ours
-		icon = GFX_focus_generic_provoke_border_clashes
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 27
 		y = 8
 		cost = 2
@@ -1024,7 +1024,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_provisional_statute
-		icon = GFX_focus_generic_social_democracy
+		icon = GFX_focus_VAL_State_Contract
 		x = 26
 		y = 9
 		cost = 3
@@ -1141,7 +1141,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_vertical
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_NAM_open_ledgers
 		x = 3
 		y = 9
 		cost = 4
@@ -1196,7 +1196,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_districts
-		icon = GFX_focus_generic_freedom_council
+		icon = GFX_focus_NAM_open_ledgers
 		x = 7
 		y = 9
 		cost = 4
@@ -1250,7 +1250,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_tax_rolls
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_second_ledger
 		x = 9
 		y = 10
 		cost = 3
@@ -1282,7 +1282,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_emergency_writ
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_NAM_last_centre_register
 		x = 3
 		y = 10
 		cost = 4
@@ -1316,7 +1316,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_district_guarantees
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 7
 		y = 10
 		cost = 4
@@ -1370,7 +1370,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_one_budget
-		icon = GFX_focus_generic_currency_reforms
+		icon = GFX_focus_NAM_second_ledger
 		x = 5
 		y = 11
 		cost = 2
@@ -1414,7 +1414,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_seal_courts
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_district_courts
 		x = 9
 		y = 12
 		cost = 4
@@ -1448,7 +1448,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_supports_oil_compact
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 11
 		y = 9
 		cost = 4
@@ -1497,7 +1497,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_supports_export_houses
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 15
 		y = 9
 		cost = 4
@@ -1538,7 +1538,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_garrison_assembly
-		icon = GFX_focus_generic_soldier_salute
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 11
 		y = 10
 		cost = 3
@@ -1604,7 +1604,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pillar_arbitration
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_RUS_district_courts
 		x = 13
 		y = 10
 		cost = 3
@@ -1667,7 +1667,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_crisis_office
-		icon = GFX_focus_generic_phone
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 17
 		y = 9
 		cost = 2
@@ -1756,7 +1756,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_chancellery_purge
-		icon = GFX_focus_generic_sympathetic_judges
+		icon = GFX_focus_NAM_underground_reports
 		x = 18
 		y = 10
 		cost = 3
@@ -1855,7 +1855,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_cache_hunters
-		icon = GFX_focus_generic_infiltration
+		icon = GFX_focus_NAM_cache_hunters
 		x = 22
 		y = 9
 		cost = 3
@@ -1883,7 +1883,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_mine_councils
-		icon = GFX_focus_generic_workers
+		icon = GFX_focus_NAM_open_ledgers
 		x = 20
 		y = 10
 		cost = 4
@@ -1919,7 +1919,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_field_gendarmes
-		icon = GFX_goal_generic_special_forces
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 22
 		y = 10
 		cost = 4
@@ -1996,7 +1996,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_export_quays
-		icon = GFX_focus_generic_merchant_fleet
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 35
 		y = 9
 		cost = 4
@@ -2039,7 +2039,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_contract_bureau
-		icon = GFX_focus_generic_concessions
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 42
 		y = 9
 		cost = 2
@@ -2067,7 +2067,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_domestic_refining
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 37
 		y = 9
 		cost = 4
@@ -2109,7 +2109,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_insured_cargoes
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 35
 		y = 10
 		cost = 3
@@ -2138,7 +2138,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_overseas_buyers
-		icon = GFX_focus_generic_the_suez
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 33
 		y = 10
 		cost = 4
@@ -2162,7 +2162,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_field_repair_crews
-		icon = GFX_goal_generic_construction2
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 42
 		y = 10
 		cost = 3
@@ -2193,7 +2193,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_refinery_programme
-		icon = GFX_focus_generic_industry_2
+		icon = GFX_focus_NAM_well_register
 		x = 39
 		y = 10
 		cost = 3
@@ -2215,7 +2215,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_machine_shops
-		icon = GFX_focus_generic_modernize_industry
+		icon = GFX_focus_RUS_precision_lathes
 		x = 37
 		y = 10
 		cost = 3
@@ -2253,7 +2253,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_klyuchevsk_pipeline
-		icon = GFX_focus_generic_road_investment
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 42
 		y = 11
 		cost = 4
@@ -2281,7 +2281,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_deep_wells
-		icon = GFX_focus_generic_mineral_prospecting
+		icon = GFX_focus_NAM_well_register
 		x = 42
 		y = 12
 		cost = 4
@@ -2313,7 +2313,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_fuel_depots
-		icon = GFX_focus_generic_energy
+		icon = GFX_focus_NAM_well_register
 		x = 44
 		y = 11
 		cost = 3
@@ -2346,7 +2346,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_second_drilling_crew
-		icon = GFX_focus_generic_mining_industry
+		icon = GFX_focus_NAM_well_register
 		x = 46
 		y = 11
 		cost = 3
@@ -2377,7 +2377,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_civilian_combine
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 36
 		y = 11
 		cost = 4
@@ -2412,7 +2412,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_basin_roads
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 35
 		y = 12
 		cost = 3
@@ -2503,7 +2503,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_technical_college
-		icon = GFX_focus_generic_university_1
+		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 37
 		y = 12
 		cost = 3
@@ -2527,7 +2527,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_count_garrisons
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 50
 		y = 8
 		cost = 2
@@ -2563,7 +2563,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_field_guards
-		icon = GFX_goal_generic_defence
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 49
 		y = 9
 		cost = 3
@@ -2599,7 +2599,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_mobilisation_office
-		icon = GFX_focus_generic_manpower
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 55
 		y = 9
 		cost = 2
@@ -2649,7 +2649,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_mobile_columns
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_NAM_mobile_columns
 		x = 51
 		y = 9
 		cost = 3
@@ -2685,7 +2685,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_engineer_depots
-		icon = GFX_goal_generic_construction
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 50
 		y = 10
 		cost = 2
@@ -2713,7 +2713,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_line_survey
-		icon = GFX_focus_generic_defensive_reorganization
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 56
 		y = 10
 		cost = 2
@@ -2755,7 +2755,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_motor_pool
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_NAM_mobile_columns
 		x = 52
 		y = 10
 		cost = 3
@@ -2793,7 +2793,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_line_engineers
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 54
 		y = 11
 		cost = 3
@@ -2839,7 +2839,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_reserve_rolls
-		icon = GFX_goal_generic_axis_build_infantry
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 57
 		y = 11
 		cost = 3
@@ -2877,7 +2877,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_quartermaster
-		icon = GFX_focus_generic_supply_line
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 51
 		y = 11
 		cost = 4
@@ -2948,7 +2948,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_officer_courses
-		icon = GFX_focus_generic_advanced_military_studies
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 52
 		y = 12
 		cost = 3
@@ -2972,7 +2972,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_flight_school
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_focus_RUS_flight_school
 		x = 71
 		y = 8
 		cost = 2
@@ -3016,7 +3016,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_air_ground_service
-		icon = GFX_goal_generic_air_production
+		icon = GFX_focus_RUS_aircraft_workshops
 		x = 69
 		y = 9
 		cost = 1
@@ -3055,7 +3055,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_air_interceptors
-		icon = GFX_goal_generic_air_fighter
+		icon = GFX_focus_RUS_fighter_cover
 		x = 71
 		y = 9
 		cost = 2
@@ -3094,7 +3094,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_air_support
-		icon = GFX_goal_generic_CAS
+		icon = GFX_focus_RUS_air_ground_coordination
 		x = 73
 		y = 9
 		cost = 2
@@ -3133,7 +3133,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_air_operations
-		icon = GFX_goal_generic_air_doctrine
+		icon = GFX_focus_RUS_air_control_network
 		x = 71
 		y = 10
 		cost = 2
@@ -3207,7 +3207,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_repair_yard
-		icon = GFX_focus_generic_refit_civilian_ships
+		icon = GFX_focus_NAM_harbour_service
 		x = 61
 		y = 9
 		cost = 3
@@ -3253,7 +3253,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_escort_school
-		icon = GFX_goal_generic_navy_anti_submarine
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 60
 		y = 10
 		cost = 2
@@ -3285,7 +3285,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_landing_school
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 64
 		y = 10
 		cost = 2
@@ -3320,7 +3320,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_coastal_battalions
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_NAM_harbour_service
 		x = 61
 		y = 12
 		cost = 3
@@ -3381,7 +3381,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_island_accounts
-		icon = GFX_focus_generic_smugglers
+		icon = GFX_focus_NAM_second_ledger
 		x = 67
 		y = 9
 		cost = 2
@@ -3413,7 +3413,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_island_levy_office
-		icon = GFX_focus_generic_steel
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 66
 		y = 10
 		cost = 3
@@ -3446,7 +3446,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_island_concession
-		icon = GFX_focus_generic_license_production
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 68
 		y = 10
 		cost = 3
@@ -3484,7 +3484,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_basin_reconnaissance
-		icon = GFX_goal_generic_radar
+		icon = GFX_focus_NAM_underground_reports
 		x = 64
 		y = 9
 		cost = 2
@@ -3512,7 +3512,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_active_squadron
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 62
 		y = 10
 		cost = 2
@@ -3545,7 +3545,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_naval_construction
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_harbour_service
 		x = 61
 		y = 11
 		cost = 3
@@ -3592,7 +3592,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_marine_arsenal
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 64
 		y = 11
 		cost = 3
@@ -3620,7 +3620,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_restitution_desk
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_focus_RUS_trained_administrators
 		x = 30
 		y = 8
 		cost = 2
@@ -3678,7 +3678,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_court_azhar
-		icon = GFX_focus_generic_influence_middle_east
+		icon = GFX_focus_RUS_district_courts
 		x = 29
 		y = 9
 		cost = 4
@@ -3748,7 +3748,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_fuel_leverage
-		icon = GFX_focus_generic_trade_interdiction
+		icon = GFX_focus_NAM_well_register
 		x = 31
 		y = 9
 		cost = 4
@@ -3789,7 +3789,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_general_staff_plan
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 30
 		y = 10
 		cost = 5

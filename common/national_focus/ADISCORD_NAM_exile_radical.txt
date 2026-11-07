@@ -30,7 +30,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_pillar_junta
-		icon = GFX_focus_generic_military_dictatorship
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 18
 		y = 0
 		cost = 4
@@ -61,7 +61,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_island_requisitions
-		icon = GFX_focus_generic_expropriate_industrialist
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 6
 		y = 1
 		cost = 5
@@ -94,7 +94,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_tribunals
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_RUS_district_courts
 		x = 16
 		y = 1
 		cost = 5
@@ -128,7 +128,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_pact_of_pillars
-		icon = GFX_goal_generic_dangerous_deal
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 20
 		y = 1
 		cost = 5
@@ -161,7 +161,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_war_council
-		icon = GFX_goal_generic_position_armies
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 18
 		y = 2
 		cost = 5
@@ -191,7 +191,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_purge_of_loyalists
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_NAM_underground_reports
 		x = 16
 		y = 3
 		cost = 6
@@ -220,7 +220,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_officer_amnesty
-		icon = GFX_focus_generic_advisors
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 20
 		y = 3
 		cost = 6
@@ -249,7 +249,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_enemy_lists
-		icon = GFX_focus_generic_conspiracy
+		icon = GFX_focus_NAM_underground_reports
 		x = 18
 		y = 4
 		cost = 5
@@ -295,7 +295,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_armed_underground
-		icon = GFX_focus_generic_forest_brothers
+		icon = GFX_focus_NAM_weber_channel
 		x = 16
 		y = 5
 		cost = 6
@@ -368,7 +368,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_harbour_pilots
-		icon = GFX_goal_generic_occupy_states_coastal
+		icon = GFX_focus_NAM_harbour_service
 		x = 18
 		y = 6
 		cost = 5
@@ -404,7 +404,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_naval_port
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_harbour_service
 		x = 1
 		y = 2
 		cost = 6
@@ -444,7 +444,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_refugee_barracks
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 5
 		y = 2
 		cost = 6
@@ -473,7 +473,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_coastal_batteries
-		icon = GFX_focus_generic_atlantic_coast
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 3
 		y = 3
 		cost = 5
@@ -534,7 +534,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_island_foundry
-		icon = GFX_focus_generic_steel_mill
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 1
 		y = 4
 		cost = 6
@@ -588,7 +588,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_prison_shipyards
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_harbour_service
 		x = 5
 		y = 4
 		cost = 6
@@ -654,7 +654,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_island_fuel_dumps
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_well_register
 		x = 3
 		y = 5
 		cost = 5
@@ -700,7 +700,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_labour_battalions
-		icon = GFX_goal_generic_construction2
+		icon = GFX_focus_RUS_engineers_collegium
 		x = 9
 		y = 2
 		cost = 6
@@ -753,7 +753,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_neo_svetlogorsk
-		icon = GFX_focus_generic_phoenix
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 11
 		y = 3
 		cost = 7
@@ -787,7 +787,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_barrack_towns
-		icon = GFX_focus_generic_low_cost_housing
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 7
 		y = 3
 		cost = 6
@@ -851,7 +851,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_convict_power_plant
-		icon = GFX_focus_generic_electrification
+		icon = GFX_focus_RUS_bunker_power_school
 		x = 9
 		y = 4
 		cost = 6
@@ -890,7 +890,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_ore_conveyors
-		icon = GFX_focus_generic_mining_industry
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 13
 		y = 4
 		cost = 6
@@ -960,7 +960,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_military_roads
-		icon = GFX_focus_generic_road_investment
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 11
 		y = 5
 		cost = 6
@@ -995,7 +995,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_penal_mines
-		icon = GFX_focus_generic_mineral_prospecting
+		icon = GFX_focus_NAM_well_register
 		x = 9
 		y = 6
 		cost = 5
@@ -1055,7 +1055,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_island_airfields
-		icon = GFX_goal_generic_air_fighter
+		icon = GFX_focus_RUS_capital_airfields
 		x = 13
 		y = 6
 		cost = 5
@@ -1100,7 +1100,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_fortress_capital
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 11
 		y = 7
 		cost = 7
@@ -1161,7 +1161,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_general_staff
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 28
 		y = 0
 		cost = 4
@@ -1188,7 +1188,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_landing_craft
-		icon = GFX_focus_generic_naval_invasion
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 23
 		y = 1
 		cost = 4
@@ -1218,7 +1218,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_cadre_army
-		icon = GFX_focus_generic_soldier_salute
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 26
 		y = 1
 		cost = 6
@@ -1251,7 +1251,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_levy_of_exiles
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 30
 		y = 1
 		cost = 6
@@ -1284,7 +1284,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_arms_purchases
-		icon = GFX_focus_generic_money_for_equipment
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 33
 		y = 1
 		cost = 4
@@ -1319,7 +1319,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_marine_orders
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 28
 		y = 2
 		cost = 5
@@ -1345,7 +1345,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_strike_from_the_sea
-		icon = GFX_focus_generic_north_atlantic_fleet
+		icon = GFX_focus_NAM_harbour_service
 		x = 26
 		y = 3
 		cost = 6
@@ -1381,7 +1381,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_strike_from_within
-		icon = GFX_focus_generic_infiltration
+		icon = GFX_focus_NAM_weber_channel
 		x = 30
 		y = 3
 		cost = 6
@@ -1414,7 +1414,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_landing_school
-		icon = GFX_focus_generic_advanced_military_studies
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 28
 		y = 4
 		cost = 5
@@ -1449,7 +1449,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_cadet_corps
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 28
 		y = 5
 		cost = 6
@@ -1483,7 +1483,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_sea_raiders
-		icon = GFX_focus_generic_piracy
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 41
 		y = 0
 		cost = 4
@@ -1520,7 +1520,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_fences
-		icon = GFX_focus_generic_smugglers
+		icon = GFX_focus_NAM_underground_reports
 		x = 36
 		y = 1
 		cost = 4
@@ -1544,7 +1544,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_letters_of_marque
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 39
 		y = 1
 		cost = 5
@@ -1577,7 +1577,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_free_brotherhood
-		icon = GFX_focus_generic_turning_a_blind_eye
+		icon = GFX_focus_NAM_underground_reports
 		x = 43
 		y = 1
 		cost = 5
@@ -1612,7 +1612,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_tanker_raids
-		icon = GFX_focus_generic_trade_interdiction
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 46
 		y = 1
 		cost = 4
@@ -1646,7 +1646,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_black_market
-		icon = GFX_focus_generic_arms_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 36
 		y = 2
 		cost = 4
@@ -1673,7 +1673,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_privateer_captains
-		icon = GFX_focus_generic_destroyer
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 41
 		y = 2
 		cost = 5
@@ -1713,7 +1713,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_hidden_anchorages
-		icon = GFX_focus_generic_coastal_fort
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 46
 		y = 2
 		cost = 4
@@ -1776,7 +1776,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_raider_squadron
-		icon = GFX_goal_generic_navy_cruiser
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 39
 		y = 3
 		cost = 5
@@ -1824,7 +1824,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_wolfpacks
-		icon = GFX_goal_generic_wolf_pack
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 43
 		y = 3
 		cost = 5
@@ -1872,7 +1872,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_corsair_admiralty
-		icon = GFX_focus_generic_naval_discipline
+		icon = GFX_focus_VAL_Marine_Contract_Corps
 		x = 41
 		y = 4
 		cost = 6
@@ -1917,7 +1917,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_war_of_return
-		icon = GFX_goal_generic_occupy_start_coast
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 23
 		y = 8
 		cost = 5
@@ -1958,7 +1958,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_spoils_of_return
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_NAM_well_register
 		x = 23
 		y = 9
 		cost = 3
@@ -1994,7 +1994,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_labour_camps
-		icon = GFX_focus_generic_workers
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 17
 		y = 10
 		cost = 4
@@ -2029,7 +2029,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_martial_law
-		icon = GFX_goal_generic_fortify_city
+		icon = GFX_focus_RUS_military_governors
 		x = 23
 		y = 10
 		cost = 3
@@ -2058,7 +2058,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_oil_seizure
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 29
 		y = 10
 		cost = 4
@@ -2084,7 +2084,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_garrison_belt
-		icon = GFX_goal_generic_defence
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 17
 		y = 11
 		cost = 4
@@ -2117,7 +2117,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_hostage_system
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_underground_reports
 		x = 21
 		y = 11
 		cost = 4
@@ -2149,7 +2149,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_collaborator_councils
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_NAM_open_ledgers
 		x = 25
 		y = 11
 		cost = 4
@@ -2182,7 +2182,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_field_tribunals
-		icon = GFX_focus_generic_sympathetic_judges
+		icon = GFX_focus_RUS_district_courts
 		x = 29
 		y = 11
 		cost = 3
@@ -2209,7 +2209,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_pacification
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 23
 		y = 12
 		cost = 5
@@ -2244,7 +2244,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_three_capitals
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_NAM_underground_reports
 		x = 19
 		y = 13
 		cost = 4
@@ -2284,7 +2284,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_penal_legions
-		icon = GFX_goal_generic_axis_build_infantry
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 23
 		y = 13
 		cost = 4
@@ -2311,7 +2311,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_plunder_economy
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 27
 		y = 13
 		cost = 4
@@ -2344,7 +2344,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_great_war_plan
-		icon = GFX_focus_generic_total_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 23
 		y = 14
 		cost = 5
@@ -2369,7 +2369,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_great_war
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 23
 		y = 15
 		cost = 5
@@ -2401,7 +2401,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_southern_tribute
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_basin_is_ours
 		x = 23
 		y = 16
 		cost = 3
@@ -2429,7 +2429,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_sardan_levies
-		icon = GFX_focus_generic_full_social_mobilization
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 17
 		y = 17
 		cost = 4
@@ -2456,7 +2456,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_garrison_rule
-		icon = GFX_focus_generic_national_security
+		icon = GFX_focus_RUS_military_governors
 		x = 21
 		y = 17
 		cost = 4
@@ -2485,7 +2485,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_extraction_trusts
-		icon = GFX_focus_generic_resource_extraction
+		icon = GFX_focus_NAM_well_register
 		x = 25
 		y = 17
 		cost = 4
@@ -2535,7 +2535,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_kadir_tolls
-		icon = GFX_focus_generic_camel_corps
+		icon = GFX_focus_NAM_second_ledger
 		x = 29
 		y = 17
 		cost = 4
@@ -2563,7 +2563,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_army_of_dominion
-		icon = GFX_focus_generic_army_doctrines_2
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 17
 		y = 18
 		cost = 4
@@ -2585,7 +2585,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_machines_to_islands
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 23
 		y = 18
 		cost = 4
@@ -2665,7 +2665,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_rakhma_wells
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_well_register
 		x = 29
 		y = 18
 		cost = 4
@@ -2696,7 +2696,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_pillar_estates
-		icon = GFX_focus_generic_land_redistribution
+		icon = GFX_focus_NAM_independence_day
 		x = 23
 		y = 19
 		cost = 4
@@ -2726,7 +2726,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_dominion_of_pillars
-		icon = GFX_goal_generic_military_sphere
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 23
 		y = 20
 		cost = 6
