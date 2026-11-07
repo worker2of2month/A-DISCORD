@@ -1005,7 +1005,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_board_stock_mobilisation
-		icon = GFX_focus_ADISCORD_industrial_development
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 26
 		y = 5
 		cost = 5

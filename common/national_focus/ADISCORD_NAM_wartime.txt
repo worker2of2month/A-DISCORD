@@ -226,7 +226,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_scorched_wells
-		icon = GFX_focus_ADISCORD_sabotage
+		icon = GFX_focus_NAM_sand_runs_out
 		x = 13
 		y = 1
 		cost = 2
