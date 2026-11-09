@@ -6209,77 +6209,223 @@ NAM_wor_take_state = {
 NAM_sync_neighbor_governor = {
 	if = {
 		limit = { tag = EFL }
-		NAM_sync_governor_roles = { GOVERNOR = EFL_NAM_governor }
+		EFL_NAM_governor = { NAM_sync_governor_roles = yes }
 	}
 	else_if = {
 		limit = { tag = AZH }
-		NAM_sync_governor_roles = { GOVERNOR = AZH_NAM_governor }
+		AZH_NAM_governor = { NAM_sync_governor_roles = yes }
 	}
 }
 
+# CHARACTER scope. PREV is the governor's country on each appointment or release.
 NAM_sync_governor_roles = {
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = humanism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = utilitarism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = chauvinism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = pragmatism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = anarchism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = technocracy
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = etatism
-	}
-	NAM_sync_governor_party = {
-		GOVERNOR = $GOVERNOR$
-		PARTY = hedonism
-	}
-}
-
-NAM_sync_governor_party = {
 	if = {
 		limit = {
-			is_subject_of = NAM
-			has_government = $PARTY$
+			PREV = {
+				is_subject_of = NAM
+				has_government = humanism
+			}
 		}
 		if = {
-			limit = { $GOVERNOR$ = { NOT = { has_ideology = $PARTY$_ideology } } }
+			limit = { NOT = { has_ideology = humanism_ideology } }
 			add_country_leader_role = {
-				character = $GOVERNOR$
 				promote_leader = yes
 				country_leader = {
-					ideology = $PARTY$_ideology
+					ideology = humanism_ideology
 					expire = "2200.1.1.1"
 				}
 			}
 		}
 		else_if = {
-			limit = { NOT = { has_country_leader = { character = $GOVERNOR$ ruling_only = yes } } }
-			promote_character = {
-				character = $GOVERNOR$
-				ideology = $PARTY$_ideology
-			}
+			limit = { is_country_leader = no }
+			promote_character = humanism_ideology
 		}
 	}
 	else_if = {
-		limit = { $GOVERNOR$ = { has_ideology = $PARTY$_ideology } }
-		$GOVERNOR$ = { remove_country_leader_role = { ideology = $PARTY$_ideology } }
+		limit = { has_ideology = humanism_ideology }
+		remove_country_leader_role = { ideology = humanism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = utilitarism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = utilitarism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = utilitarism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = utilitarism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = utilitarism_ideology }
+		remove_country_leader_role = { ideology = utilitarism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = chauvinism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = chauvinism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = chauvinism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = chauvinism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = chauvinism_ideology }
+		remove_country_leader_role = { ideology = chauvinism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = pragmatism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = pragmatism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = pragmatism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = pragmatism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = pragmatism_ideology }
+		remove_country_leader_role = { ideology = pragmatism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = anarchism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = anarchism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = anarchism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = anarchism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = anarchism_ideology }
+		remove_country_leader_role = { ideology = anarchism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = technocracy
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = technocracy_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = technocracy_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = technocracy_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = technocracy_ideology }
+		remove_country_leader_role = { ideology = technocracy_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = etatism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = etatism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = etatism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = etatism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = etatism_ideology }
+		remove_country_leader_role = { ideology = etatism_ideology }
+	}
+	if = {
+		limit = {
+			PREV = {
+				is_subject_of = NAM
+				has_government = hedonism
+			}
+		}
+		if = {
+			limit = { NOT = { has_ideology = hedonism_ideology } }
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					ideology = hedonism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { is_country_leader = no }
+			promote_character = hedonism_ideology
+		}
+	}
+	else_if = {
+		limit = { has_ideology = hedonism_ideology }
+		remove_country_leader_role = { ideology = hedonism_ideology }
 	}
 }
 
@@ -9060,33 +9206,75 @@ NAM_party_representatives_iron = {
 			has_cosmetic_tag = NAM_iron_ladder
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_iron_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_iron_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_iron_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_iron_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_iron_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_iron_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_iron_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_iron_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_iron_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_iron_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_iron_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_iron_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_iron_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_iron_hedonism
+				}
 			}
 		}
 	}
@@ -9099,33 +9287,75 @@ NAM_party_representatives_service = {
 			has_cosmetic_tag = NAM_service_republic
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_service_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_service_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_service_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_service_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_service_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_service_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_service_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_service_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_service_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_service_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_service_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_service_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_service_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_service_hedonism
+				}
 			}
 		}
 	}
@@ -9138,33 +9368,75 @@ NAM_party_representatives_federation = {
 			has_cosmetic_tag = NAM_federation
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_federation_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_federation_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_federation_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_federation_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_federation_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_federation_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_federation_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_federation_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_federation_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_federation_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_federation_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_federation_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_federation_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_federation_hedonism
+				}
 			}
 		}
 	}
@@ -9177,33 +9449,75 @@ NAM_party_representatives_oil_union = {
 			has_cosmetic_tag = NAM_oil_union
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_oil_union_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_oil_union_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_oil_union_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_oil_union_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_oil_union_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_oil_union_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_oil_union_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_oil_union_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_oil_union_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_oil_union_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_oil_union_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_oil_union_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_oil_union_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_oil_union_hedonism
+				}
 			}
 		}
 	}
@@ -9216,33 +9530,75 @@ NAM_party_representatives_corporate = {
 			has_cosmetic_tag = NAM_corporate_state
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_corporate_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_corporate_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_corporate_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_corporate_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_corporate_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_corporate_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_corporate_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_corporate_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_corporate_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_corporate_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_corporate_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_corporate_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_corporate_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_corporate_hedonism
+				}
 			}
 		}
 	}
@@ -9255,33 +9611,75 @@ NAM_party_representatives_exile_radical = {
 			has_country_flag = NAM_exile_radical
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_exile_radical_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_exile_radical_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_exile_radical_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_exile_radical_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_exile_radical_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_exile_radical_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_exile_radical_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_exile_radical_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_exile_radical_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_exile_radical_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_exile_radical_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_exile_radical_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_exile_radical_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_exile_radical_hedonism
+				}
 			}
 		}
 	}
@@ -9294,33 +9692,75 @@ NAM_party_representatives_exile_humanist = {
 			has_country_flag = NAM_exile_humanist
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_humanism
-				NAME = NAM_party_representatives_exile_humanist_humanism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_humanism
+					NOT = { has_country_leader = { character = NAM_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_humanism
+					name = NAM_party_representatives_exile_humanist_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_utilitarism
-				NAME = NAM_party_representatives_exile_humanist_utilitarism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_utilitarism
+					NOT = { has_country_leader = { character = NAM_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_utilitarism
+					name = NAM_party_representatives_exile_humanist_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_chauvinism
-				NAME = NAM_party_representatives_exile_humanist_chauvinism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_chauvinism
+					NOT = { has_country_leader = { character = NAM_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_chauvinism
+					name = NAM_party_representatives_exile_humanist_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_pragmatism
-				NAME = NAM_party_representatives_exile_humanist_pragmatism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_pragmatism
+					NOT = { has_country_leader = { character = NAM_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_pragmatism
+					name = NAM_party_representatives_exile_humanist_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_anarchism
-				NAME = NAM_party_representatives_exile_humanist_anarchism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_anarchism
+					NOT = { has_country_leader = { character = NAM_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_anarchism
+					name = NAM_party_representatives_exile_humanist_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_technocracy
-				NAME = NAM_party_representatives_exile_humanist_technocracy
+			if = {
+				limit = {
+					has_character = NAM_party_representative_technocracy
+					NOT = { has_country_leader = { character = NAM_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_technocracy
+					name = NAM_party_representatives_exile_humanist_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = NAM_party_representative_hedonism
-				NAME = NAM_party_representatives_exile_humanist_hedonism
+			if = {
+				limit = {
+					has_character = NAM_party_representative_hedonism
+					NOT = { has_country_leader = { character = NAM_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = NAM_party_representative_hedonism
+					name = NAM_party_representatives_exile_humanist_hedonism
+				}
 			}
 		}
 	}
@@ -10238,7 +10678,10 @@ NAM_agreements_monthly = {
 			limit = { NOT = { has_variable = NAM_agreement_current } }
 			random_list = {
 				20 = {
-					trigger = { NAM_agreement_nam_possible = yes }
+					modifier = {
+						factor = 0
+						NAM_agreement_nam_possible = no
+					}
 					modifier = {
 						factor = 3
 						check_variable = { NAM_grp_nam_support < 35 }
@@ -10246,7 +10689,10 @@ NAM_agreements_monthly = {
 					set_variable = { var = NAM_agreement_offer_a value = 1 }
 				}
 				20 = {
-					trigger = { NAM_agreement_oil_possible = yes }
+					modifier = {
+						factor = 0
+						NAM_agreement_oil_possible = no
+					}
 					modifier = {
 						factor = 3
 						check_variable = { NAM_grp_oil_support < 35 }
@@ -10254,7 +10700,10 @@ NAM_agreements_monthly = {
 					set_variable = { var = NAM_agreement_offer_a value = 2 }
 				}
 				20 = {
-					trigger = { NAM_agreement_dist_possible = yes }
+					modifier = {
+						factor = 0
+						NAM_agreement_dist_possible = no
+					}
 					modifier = {
 						factor = 3
 						check_variable = { NAM_grp_dist_support < 35 }
@@ -10262,7 +10711,10 @@ NAM_agreements_monthly = {
 					set_variable = { var = NAM_agreement_offer_a value = 3 }
 				}
 				20 = {
-					trigger = { NAM_agreement_garr_possible = yes }
+					modifier = {
+						factor = 0
+						NAM_agreement_garr_possible = no
+					}
 					modifier = {
 						factor = 3
 						check_variable = { NAM_grp_garr_support < 35 }
@@ -10270,7 +10722,10 @@ NAM_agreements_monthly = {
 					set_variable = { var = NAM_agreement_offer_a value = 4 }
 				}
 				20 = {
-					trigger = { NAM_agreement_trade_possible = yes }
+					modifier = {
+						factor = 0
+						NAM_agreement_trade_possible = no
+					}
 					modifier = {
 						factor = 3
 						check_variable = { NAM_grp_trade_support < 35 }
@@ -10280,37 +10735,52 @@ NAM_agreements_monthly = {
 			}
 			random_list = {
 				20 = {
-					trigger = {
-						NAM_agreement_nam_possible = yes
-						NOT = { check_variable = { NAM_agreement_offer_a = 1 } }
+					modifier = {
+						factor = 0
+						OR = {
+							NAM_agreement_nam_possible = no
+							check_variable = { NAM_agreement_offer_a = 1 }
+						}
 					}
 					set_variable = { var = NAM_agreement_offer_b value = 1 }
 				}
 				20 = {
-					trigger = {
-						NAM_agreement_oil_possible = yes
-						NOT = { check_variable = { NAM_agreement_offer_a = 2 } }
+					modifier = {
+						factor = 0
+						OR = {
+							NAM_agreement_oil_possible = no
+							check_variable = { NAM_agreement_offer_a = 2 }
+						}
 					}
 					set_variable = { var = NAM_agreement_offer_b value = 2 }
 				}
 				20 = {
-					trigger = {
-						NAM_agreement_dist_possible = yes
-						NOT = { check_variable = { NAM_agreement_offer_a = 3 } }
+					modifier = {
+						factor = 0
+						OR = {
+							NAM_agreement_dist_possible = no
+							check_variable = { NAM_agreement_offer_a = 3 }
+						}
 					}
 					set_variable = { var = NAM_agreement_offer_b value = 3 }
 				}
 				20 = {
-					trigger = {
-						NAM_agreement_garr_possible = yes
-						NOT = { check_variable = { NAM_agreement_offer_a = 4 } }
+					modifier = {
+						factor = 0
+						OR = {
+							NAM_agreement_garr_possible = no
+							check_variable = { NAM_agreement_offer_a = 4 }
+						}
 					}
 					set_variable = { var = NAM_agreement_offer_b value = 4 }
 				}
 				20 = {
-					trigger = {
-						NAM_agreement_trade_possible = yes
-						NOT = { check_variable = { NAM_agreement_offer_a = 5 } }
+					modifier = {
+						factor = 0
+						OR = {
+							NAM_agreement_trade_possible = no
+							check_variable = { NAM_agreement_offer_a = 5 }
+						}
 					}
 					set_variable = { var = NAM_agreement_offer_b value = 5 }
 				}
@@ -10405,45 +10875,70 @@ NAM_agreement_check_crisis = {
 	random_list = {
 		40 = { }
 		20 = {
-			trigger = {
-				check_variable = { NAM_grp_nam_support < 25 }
-				check_variable = { ADISCORD_economy_treasury < 0 }
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						check_variable = { NAM_grp_nam_support < 25 }
+						check_variable = { ADISCORD_economy_treasury < 0 }
+					}
+				}
 			}
 			set_temp_variable = { var = NAM_agreement_crisis_group value = 1 }
 		}
 		20 = {
-			trigger = {
-				check_variable = { NAM_grp_oil_support < 25 }
-				any_owned_state = {
-					NAM_field_state = yes
-					OR = {
-						check_variable = { NAM_field_condition < 50 }
-						NOT = { is_controlled_by = NAM }
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						check_variable = { NAM_grp_oil_support < 25 }
+						any_owned_state = {
+							NAM_field_state = yes
+							OR = {
+								check_variable = { NAM_field_condition < 50 }
+								NOT = { is_controlled_by = NAM }
+							}
+						}
 					}
 				}
 			}
 			set_temp_variable = { var = NAM_agreement_crisis_group value = 2 }
 		}
 		20 = {
-			trigger = {
-				check_variable = { NAM_grp_dist_support < 25 }
-				has_stability < 0.35
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						check_variable = { NAM_grp_dist_support < 25 }
+						has_stability < 0.35
+					}
+				}
 			}
 			set_temp_variable = { var = NAM_agreement_crisis_group value = 3 }
 		}
 		20 = {
-			trigger = {
-				check_variable = { NAM_grp_garr_support < 25 }
-				has_war_support < 0.30
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						check_variable = { NAM_grp_garr_support < 25 }
+						has_war_support < 0.30
+					}
+				}
 			}
 			set_temp_variable = { var = NAM_agreement_crisis_group value = 4 }
 		}
 		20 = {
-			trigger = {
-				check_variable = { NAM_grp_trade_support < 25 }
-				700 = {
-					is_owned_by = NAM
-					NOT = { is_controlled_by = NAM }
+			modifier = {
+				factor = 0
+				NOT = {
+					AND = {
+						check_variable = { NAM_grp_trade_support < 25 }
+						700 = {
+							is_owned_by = NAM
+							NOT = { is_controlled_by = NAM }
+						}
+					}
 				}
 			}
 			set_temp_variable = { var = NAM_agreement_crisis_group value = 5 }

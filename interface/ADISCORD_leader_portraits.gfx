@@ -1335,12 +1335,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Nadezhda_Okrug"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
+		texturefile = "gfx/leaders/leader_unknown_female.dds"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Nadezhda_Okrug_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
+		texturefile = "gfx/leaders/leader_unknown_female.dds"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1378,7 +1378,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Taras_Shtyk"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Taras_Shtyk.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 	}
 
 	spriteType = {
@@ -1388,7 +1388,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Kirill_Vykup"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Kirill_Vykup.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 	}
 
 	spriteType = {
@@ -1398,12 +1398,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Rostislav_Karamyshev"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Rostislav_Karamyshev_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1411,12 +1411,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Mark_Olshansky"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Mark_Olshansky_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1424,12 +1424,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Matvei_Prichal"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Matvei_Prichal_small"
-		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
+		texturefile = "gfx/leaders/leader_unknown.dds"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no

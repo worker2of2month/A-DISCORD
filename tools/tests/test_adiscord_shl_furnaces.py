@@ -619,7 +619,7 @@ class ScriptMachine:
                 self.event_days[scalar(e.value, "id")] = int(scalar(e.value, "days", "0"))
             elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt"):
                 self.calls.append(e.key)
-            elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience", "ADISCORD_rename_party_representative"):
+            elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience", "set_character_name"):
                 self.calls.append(e.key)
             else:
                 raise AssertionError("Unsupported effect: " + e.key)

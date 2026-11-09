@@ -70,6 +70,38 @@ def reachable(focuses, blocked):
 
 
 class NamCampaignTests(unittest.TestCase):
+    def test_agreement_draws_use_native_weight_modifiers(self):
+        for effect, expected in (("NAM_agreements_monthly", 10), ("NAM_agreement_check_crisis", 5)):
+            choices = [
+                option.value for entry in walk(self.effects[effect]) if entry.key == "random_list"
+                for option in entry.value if option.key == "20"
+            ]
+            self.assertEqual(len(choices), expected)
+            for choice in choices:
+                self.assertFalse(any(entry.key == "trigger" for entry in choice))
+                self.assertTrue(any(
+                    entry.key == "modifier" and scalar(entry.value, "factor") == "0"
+                    for entry in choice
+                ))
+
+    def test_neighbor_governors_dispatch_in_character_scope(self):
+        dispatch = self.effects["NAM_sync_neighbor_governor"]
+        for branch, tag in (("if", "EFL"), ("else_if", "AZH")):
+            target = block(dispatch, branch)
+            self.assertEqual(scalar(block(target, "limit"), "tag"), tag)
+            self.assertEqual(scalar(block(target, tag + "_NAM_governor"), "NAM_sync_governor_roles"), "yes")
+        roles = self.effects["NAM_sync_governor_roles"]
+        parties = {entry.value for entry in walk(roles) if entry.key == "has_government"}
+        self.assertEqual(parties, {"humanism", "utilitarism", "chauvinism", "pragmatism",
+                                   "anarchism", "technocracy", "etatism", "hedonism"})
+        for action in ("add_country_leader_role", "remove_country_leader_role"):
+            ideologies = {
+                scalar(block(entry.value, "country_leader") if action == "add_country_leader_role"
+                       else entry.value, "ideology")
+                for entry in walk(roles) if entry.key == action
+            }
+            self.assertEqual(ideologies, {party + "_ideology" for party in parties})
+
     def test_debug_console_commands_share_decision_handlers_and_active_war_guard(self):
         commands = ("resolve_nam_victory", "resolve_coalition_victory", "resolve_compromise",
                     "resolve_standoff", "start_resource_war", "prepare_etatism",

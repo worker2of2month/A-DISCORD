@@ -154,33 +154,75 @@ IVN_party_representatives_emergency = {
 			has_government = etatism
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_utilitarism
-				NAME = IVN_party_representatives_emergency_utilitarism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_utilitarism
+					NOT = { has_country_leader = { character = IVN_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_utilitarism
+					name = IVN_party_representatives_emergency_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_chauvinism
-				NAME = IVN_party_representatives_emergency_chauvinism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_chauvinism
+					NOT = { has_country_leader = { character = IVN_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_chauvinism
+					name = IVN_party_representatives_emergency_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_pragmatism
-				NAME = IVN_party_representatives_emergency_pragmatism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_pragmatism
+					NOT = { has_country_leader = { character = IVN_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_pragmatism
+					name = IVN_party_representatives_emergency_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_anarchism
-				NAME = IVN_party_representatives_emergency_anarchism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_anarchism
+					NOT = { has_country_leader = { character = IVN_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_anarchism
+					name = IVN_party_representatives_emergency_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_technocracy
-				NAME = IVN_party_representatives_emergency_technocracy
+			if = {
+				limit = {
+					has_character = IVN_party_representative_technocracy
+					NOT = { has_country_leader = { character = IVN_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_technocracy
+					name = IVN_party_representatives_emergency_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_etatism
-				NAME = IVN_party_representatives_emergency_etatism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_etatism
+					NOT = { has_country_leader = { character = IVN_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_etatism
+					name = IVN_party_representatives_emergency_etatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_hedonism
-				NAME = IVN_party_representatives_emergency_hedonism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_hedonism
+					NOT = { has_country_leader = { character = IVN_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_hedonism
+					name = IVN_party_representatives_emergency_hedonism
+				}
 			}
 		}
 	}
@@ -193,33 +235,75 @@ IVN_party_representatives_legion = {
 			has_government = chauvinism
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_utilitarism
-				NAME = IVN_party_representatives_legion_utilitarism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_utilitarism
+					NOT = { has_country_leader = { character = IVN_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_utilitarism
+					name = IVN_party_representatives_legion_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_chauvinism
-				NAME = IVN_party_representatives_legion_chauvinism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_chauvinism
+					NOT = { has_country_leader = { character = IVN_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_chauvinism
+					name = IVN_party_representatives_legion_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_pragmatism
-				NAME = IVN_party_representatives_legion_pragmatism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_pragmatism
+					NOT = { has_country_leader = { character = IVN_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_pragmatism
+					name = IVN_party_representatives_legion_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_anarchism
-				NAME = IVN_party_representatives_legion_anarchism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_anarchism
+					NOT = { has_country_leader = { character = IVN_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_anarchism
+					name = IVN_party_representatives_legion_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_technocracy
-				NAME = IVN_party_representatives_legion_technocracy
+			if = {
+				limit = {
+					has_character = IVN_party_representative_technocracy
+					NOT = { has_country_leader = { character = IVN_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_technocracy
+					name = IVN_party_representatives_legion_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_etatism
-				NAME = IVN_party_representatives_legion_etatism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_etatism
+					NOT = { has_country_leader = { character = IVN_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_etatism
+					name = IVN_party_representatives_legion_etatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = IVN_party_representative_hedonism
-				NAME = IVN_party_representatives_legion_hedonism
+			if = {
+				limit = {
+					has_character = IVN_party_representative_hedonism
+					NOT = { has_country_leader = { character = IVN_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = IVN_party_representative_hedonism
+					name = IVN_party_representatives_legion_hedonism
+				}
 			}
 		}
 	}

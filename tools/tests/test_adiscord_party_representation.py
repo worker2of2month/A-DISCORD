@@ -132,25 +132,36 @@ class PartyRepresentationTests(unittest.TestCase):
                 self.assertEqual(scalar(block(block(body, "if"), "limit"), "tag"), tag)
                 callers = [key for key, value in effects.items() if key != name and any(entry.key == name for entry in walk(value))]
                 self.assertTrue(callers, name)
-                calls = [entry.value for entry in walk(body) if entry.key == "ADISCORD_rename_party_representative"]
-                self.assertTrue(calls)
-                for call in calls:
-                    character = scalar(call, "CHARACTER")
+                hidden = block(block(body, "if"), "hidden_effect")
+                renames = [entry.value for entry in hidden if entry.key == "if"]
+                self.assertTrue(renames)
+                self.assertEqual(len(renames), len(hidden))
+                expected_names = {
+                    f"{name}_{group}" for group in self.groups
+                    if f"{name}_{group}" in self.localisation["russian"]
+                }
+                self.assertCountEqual(
+                    [scalar(block(rename, "set_character_name"), "name") for rename in renames],
+                    expected_names,
+                )
+                for rename in renames:
+                    action = block(rename, "set_character_name")
+                    character = scalar(action, "character")
+                    guard = block(rename, "limit")
+                    self.assertEqual(scalar(guard, "has_character"), character)
+                    ruling = block(block(guard, "NOT"), "has_country_leader")
+                    self.assertEqual(scalar(ruling, "character"), character)
+                    # has_country_leader defaults to the ruling character.
+                    self.assertFalse(any(entry.key == "ruling_only" and entry.value != "yes" for entry in ruling))
                     self.assertTrue(character.startswith(tag + "_party_representative_"))
                     self.assertIn(character, self.characters)
-                    key = scalar(call, "NAME")
+                    key = scalar(action, "name")
+                    self.assertEqual(key, name + "_" + character.split("_party_representative_")[1])
                     for language, entries in self.localisation.items():
                         self.assertEqual(len(entries.get(key, [])), 1, (language, key))
                     value = self.localisation["russian"][key][0][1]
                     self.assertNotIn(value, names_by_country.setdefault(tag, set()))
                     names_by_country[tag].add(value)
-        helper = block(effects["ADISCORD_rename_party_representative"], "if")
-        guard = block(helper, "limit")
-        self.assertEqual(scalar(guard, "has_character"), "$CHARACTER$")
-        ruling = block(block(guard, "NOT"), "has_country_leader")
-        self.assertEqual(scalar(ruling, "character"), "$CHARACTER$")
-        self.assertEqual(scalar(ruling, "ruling_only"), "yes")
-        self.assertEqual({entry.key for entry in helper}, {"limit", "set_character_name"})
 
     def test_nam_collapse_reduces_support_once_before_the_announcement(self):
         effects = parsed(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")

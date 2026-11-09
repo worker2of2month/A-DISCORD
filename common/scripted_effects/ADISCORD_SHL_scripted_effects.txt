@@ -8300,25 +8300,55 @@ SHL_party_representatives_house = {
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_humanism
-				NAME = SHL_party_representatives_house_humanism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_humanism
+					NOT = { has_country_leader = { character = SHL_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_humanism
+					name = SHL_party_representatives_house_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_utilitarism
-				NAME = SHL_party_representatives_house_utilitarism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_utilitarism
+					NOT = { has_country_leader = { character = SHL_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_utilitarism
+					name = SHL_party_representatives_house_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_chauvinism
-				NAME = SHL_party_representatives_house_chauvinism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_chauvinism
+					NOT = { has_country_leader = { character = SHL_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_chauvinism
+					name = SHL_party_representatives_house_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_technocracy
-				NAME = SHL_party_representatives_house_technocracy
+			if = {
+				limit = {
+					has_character = SHL_party_representative_technocracy
+					NOT = { has_country_leader = { character = SHL_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_technocracy
+					name = SHL_party_representatives_house_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_etatism
-				NAME = SHL_party_representatives_house_etatism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_etatism
+					NOT = { has_country_leader = { character = SHL_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_etatism
+					name = SHL_party_representatives_house_etatism
+				}
 			}
 		}
 	}
@@ -8331,25 +8361,55 @@ SHL_party_representatives_city = {
 			check_variable = { var = SHL_political_course value = 2 compare = equals }
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_humanism
-				NAME = SHL_party_representatives_city_humanism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_humanism
+					NOT = { has_country_leader = { character = SHL_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_humanism
+					name = SHL_party_representatives_city_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_utilitarism
-				NAME = SHL_party_representatives_city_utilitarism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_utilitarism
+					NOT = { has_country_leader = { character = SHL_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_utilitarism
+					name = SHL_party_representatives_city_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_chauvinism
-				NAME = SHL_party_representatives_city_chauvinism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_chauvinism
+					NOT = { has_country_leader = { character = SHL_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_chauvinism
+					name = SHL_party_representatives_city_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_technocracy
-				NAME = SHL_party_representatives_city_technocracy
+			if = {
+				limit = {
+					has_character = SHL_party_representative_technocracy
+					NOT = { has_country_leader = { character = SHL_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_technocracy
+					name = SHL_party_representatives_city_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_etatism
-				NAME = SHL_party_representatives_city_etatism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_etatism
+					NOT = { has_country_leader = { character = SHL_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_etatism
+					name = SHL_party_representatives_city_etatism
+				}
 			}
 		}
 	}
@@ -8362,25 +8422,55 @@ SHL_party_representatives_state = {
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_humanism
-				NAME = SHL_party_representatives_state_humanism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_humanism
+					NOT = { has_country_leader = { character = SHL_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_humanism
+					name = SHL_party_representatives_state_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_utilitarism
-				NAME = SHL_party_representatives_state_utilitarism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_utilitarism
+					NOT = { has_country_leader = { character = SHL_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_utilitarism
+					name = SHL_party_representatives_state_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_chauvinism
-				NAME = SHL_party_representatives_state_chauvinism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_chauvinism
+					NOT = { has_country_leader = { character = SHL_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_chauvinism
+					name = SHL_party_representatives_state_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_technocracy
-				NAME = SHL_party_representatives_state_technocracy
+			if = {
+				limit = {
+					has_character = SHL_party_representative_technocracy
+					NOT = { has_country_leader = { character = SHL_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_technocracy
+					name = SHL_party_representatives_state_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_etatism
-				NAME = SHL_party_representatives_state_etatism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_etatism
+					NOT = { has_country_leader = { character = SHL_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_etatism
+					name = SHL_party_representatives_state_etatism
+				}
 			}
 		}
 	}
@@ -8393,25 +8483,55 @@ SHL_party_representatives_regency = {
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_humanism
-				NAME = SHL_party_representatives_regency_humanism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_humanism
+					NOT = { has_country_leader = { character = SHL_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_humanism
+					name = SHL_party_representatives_regency_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_utilitarism
-				NAME = SHL_party_representatives_regency_utilitarism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_utilitarism
+					NOT = { has_country_leader = { character = SHL_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_utilitarism
+					name = SHL_party_representatives_regency_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_chauvinism
-				NAME = SHL_party_representatives_regency_chauvinism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_chauvinism
+					NOT = { has_country_leader = { character = SHL_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_chauvinism
+					name = SHL_party_representatives_regency_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_technocracy
-				NAME = SHL_party_representatives_regency_technocracy
+			if = {
+				limit = {
+					has_character = SHL_party_representative_technocracy
+					NOT = { has_country_leader = { character = SHL_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_technocracy
+					name = SHL_party_representatives_regency_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_etatism
-				NAME = SHL_party_representatives_regency_etatism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_etatism
+					NOT = { has_country_leader = { character = SHL_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_etatism
+					name = SHL_party_representatives_regency_etatism
+				}
 			}
 		}
 	}
@@ -8424,25 +8544,55 @@ SHL_party_representatives_commune = {
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_humanism
-				NAME = SHL_party_representatives_commune_humanism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_humanism
+					NOT = { has_country_leader = { character = SHL_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_humanism
+					name = SHL_party_representatives_commune_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_utilitarism
-				NAME = SHL_party_representatives_commune_utilitarism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_utilitarism
+					NOT = { has_country_leader = { character = SHL_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_utilitarism
+					name = SHL_party_representatives_commune_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_chauvinism
-				NAME = SHL_party_representatives_commune_chauvinism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_chauvinism
+					NOT = { has_country_leader = { character = SHL_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_chauvinism
+					name = SHL_party_representatives_commune_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_technocracy
-				NAME = SHL_party_representatives_commune_technocracy
+			if = {
+				limit = {
+					has_character = SHL_party_representative_technocracy
+					NOT = { has_country_leader = { character = SHL_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_technocracy
+					name = SHL_party_representatives_commune_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = SHL_party_representative_etatism
-				NAME = SHL_party_representatives_commune_etatism
+			if = {
+				limit = {
+					has_character = SHL_party_representative_etatism
+					NOT = { has_country_leader = { character = SHL_party_representative_etatism } }
+				}
+				set_character_name = {
+					character = SHL_party_representative_etatism
+					name = SHL_party_representatives_commune_etatism
+				}
 			}
 		}
 	}

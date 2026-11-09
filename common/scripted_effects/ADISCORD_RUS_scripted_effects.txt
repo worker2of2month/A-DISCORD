@@ -5779,33 +5779,75 @@ RUS_party_representatives_black_banner_empire = {
 			has_cosmetic_tag = RUS_black_banner_empire
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_humanism
-				NAME = RUS_party_representatives_black_banner_empire_humanism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_humanism
+					NOT = { has_country_leader = { character = RUS_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_humanism
+					name = RUS_party_representatives_black_banner_empire_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_utilitarism
-				NAME = RUS_party_representatives_black_banner_empire_utilitarism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_utilitarism
+					NOT = { has_country_leader = { character = RUS_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_utilitarism
+					name = RUS_party_representatives_black_banner_empire_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_chauvinism
-				NAME = RUS_party_representatives_black_banner_empire_chauvinism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_chauvinism
+					NOT = { has_country_leader = { character = RUS_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_chauvinism
+					name = RUS_party_representatives_black_banner_empire_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_pragmatism
-				NAME = RUS_party_representatives_black_banner_empire_pragmatism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_pragmatism
+					NOT = { has_country_leader = { character = RUS_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_pragmatism
+					name = RUS_party_representatives_black_banner_empire_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_anarchism
-				NAME = RUS_party_representatives_black_banner_empire_anarchism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_anarchism
+					NOT = { has_country_leader = { character = RUS_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_anarchism
+					name = RUS_party_representatives_black_banner_empire_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_technocracy
-				NAME = RUS_party_representatives_black_banner_empire_technocracy
+			if = {
+				limit = {
+					has_character = RUS_party_representative_technocracy
+					NOT = { has_country_leader = { character = RUS_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_technocracy
+					name = RUS_party_representatives_black_banner_empire_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_hedonism
-				NAME = RUS_party_representatives_black_banner_empire_hedonism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_hedonism
+					NOT = { has_country_leader = { character = RUS_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_hedonism
+					name = RUS_party_representatives_black_banner_empire_hedonism
+				}
 			}
 		}
 	}
@@ -5818,33 +5860,75 @@ RUS_party_representatives_restoration_state = {
 			has_cosmetic_tag = RUS_restoration_state
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_humanism
-				NAME = RUS_party_representatives_restoration_state_humanism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_humanism
+					NOT = { has_country_leader = { character = RUS_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_humanism
+					name = RUS_party_representatives_restoration_state_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_utilitarism
-				NAME = RUS_party_representatives_restoration_state_utilitarism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_utilitarism
+					NOT = { has_country_leader = { character = RUS_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_utilitarism
+					name = RUS_party_representatives_restoration_state_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_chauvinism
-				NAME = RUS_party_representatives_restoration_state_chauvinism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_chauvinism
+					NOT = { has_country_leader = { character = RUS_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_chauvinism
+					name = RUS_party_representatives_restoration_state_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_pragmatism
-				NAME = RUS_party_representatives_restoration_state_pragmatism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_pragmatism
+					NOT = { has_country_leader = { character = RUS_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_pragmatism
+					name = RUS_party_representatives_restoration_state_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_anarchism
-				NAME = RUS_party_representatives_restoration_state_anarchism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_anarchism
+					NOT = { has_country_leader = { character = RUS_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_anarchism
+					name = RUS_party_representatives_restoration_state_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_technocracy
-				NAME = RUS_party_representatives_restoration_state_technocracy
+			if = {
+				limit = {
+					has_character = RUS_party_representative_technocracy
+					NOT = { has_country_leader = { character = RUS_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_technocracy
+					name = RUS_party_representatives_restoration_state_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_hedonism
-				NAME = RUS_party_representatives_restoration_state_hedonism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_hedonism
+					NOT = { has_country_leader = { character = RUS_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_hedonism
+					name = RUS_party_representatives_restoration_state_hedonism
+				}
 			}
 		}
 	}
@@ -5857,33 +5941,75 @@ RUS_party_representatives_last_empire = {
 			has_cosmetic_tag = RUS_last_empire
 		}
 		hidden_effect = {
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_humanism
-				NAME = RUS_party_representatives_last_empire_humanism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_humanism
+					NOT = { has_country_leader = { character = RUS_party_representative_humanism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_humanism
+					name = RUS_party_representatives_last_empire_humanism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_utilitarism
-				NAME = RUS_party_representatives_last_empire_utilitarism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_utilitarism
+					NOT = { has_country_leader = { character = RUS_party_representative_utilitarism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_utilitarism
+					name = RUS_party_representatives_last_empire_utilitarism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_chauvinism
-				NAME = RUS_party_representatives_last_empire_chauvinism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_chauvinism
+					NOT = { has_country_leader = { character = RUS_party_representative_chauvinism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_chauvinism
+					name = RUS_party_representatives_last_empire_chauvinism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_pragmatism
-				NAME = RUS_party_representatives_last_empire_pragmatism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_pragmatism
+					NOT = { has_country_leader = { character = RUS_party_representative_pragmatism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_pragmatism
+					name = RUS_party_representatives_last_empire_pragmatism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_anarchism
-				NAME = RUS_party_representatives_last_empire_anarchism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_anarchism
+					NOT = { has_country_leader = { character = RUS_party_representative_anarchism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_anarchism
+					name = RUS_party_representatives_last_empire_anarchism
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_technocracy
-				NAME = RUS_party_representatives_last_empire_technocracy
+			if = {
+				limit = {
+					has_character = RUS_party_representative_technocracy
+					NOT = { has_country_leader = { character = RUS_party_representative_technocracy } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_technocracy
+					name = RUS_party_representatives_last_empire_technocracy
+				}
 			}
-			ADISCORD_rename_party_representative = {
-				CHARACTER = RUS_party_representative_hedonism
-				NAME = RUS_party_representatives_last_empire_hedonism
+			if = {
+				limit = {
+					has_character = RUS_party_representative_hedonism
+					NOT = { has_country_leader = { character = RUS_party_representative_hedonism } }
+				}
+				set_character_name = {
+					character = RUS_party_representative_hedonism
+					name = RUS_party_representatives_last_empire_hedonism
+				}
 			}
 		}
 	}
