@@ -5935,7 +5935,6 @@ NAM_war_of_return_start = {
 		}
 		# From the islands the return begins with a landing at the old capital.
 		NAM_wor_revenge_landing = yes
-		add_war_support = 0.10
 		country_event = { id = ADISCORD_nam_resource_war.60 hours = 1 }
 	}
 }
@@ -6195,7 +6194,85 @@ NAM_wor_take_state = {
 	}
 }
 
-# COUNTRY defeated participant, humanist route. It keeps its government as a
+# COUNTRY EFL or AZH. Appointment follows the subject's current ruling party.
+NAM_sync_neighbor_governor = {
+	if = {
+		limit = { tag = EFL }
+		NAM_sync_governor_roles = { GOVERNOR = EFL_NAM_governor }
+	}
+	else_if = {
+		limit = { tag = AZH }
+		NAM_sync_governor_roles = { GOVERNOR = AZH_NAM_governor }
+	}
+}
+
+NAM_sync_governor_roles = {
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = humanism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = utilitarism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = chauvinism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = pragmatism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = anarchism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = technocracy
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = etatism
+	}
+	NAM_sync_governor_party = {
+		GOVERNOR = $GOVERNOR$
+		PARTY = hedonism
+	}
+}
+
+NAM_sync_governor_party = {
+	if = {
+		limit = {
+			is_subject_of = NAM
+			has_government = $PARTY$
+		}
+		if = {
+			limit = { $GOVERNOR$ = { NOT = { has_ideology = $PARTY$_ideology } } }
+			add_country_leader_role = {
+				character = $GOVERNOR$
+				promote_leader = yes
+				country_leader = {
+					ideology = $PARTY$_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_country_leader = { character = $GOVERNOR$ ruling_only = yes } } }
+			promote_character = {
+				character = $GOVERNOR$
+				ideology = $PARTY$_ideology
+			}
+		}
+	}
+	else_if = {
+		limit = { $GOVERNOR$ = { has_ideology = $PARTY$_ideology } }
+		$GOVERNOR$ = { remove_country_leader_role = { ideology = $PARTY$_ideology } }
+	}
+}
+
+# COUNTRY defeated participant, humanist route. It becomes a
 # federal district of Svetlogorye: all resources, factories and recruits serve
 # the federation through autonomy_NAM_federal_district. Under the corporate
 # state a corporation receives the district at once.
@@ -6318,14 +6395,14 @@ NAM_wor_annex_svetlogorye = {
 # (NAM_great_war_can_start). NAM_consolidation_dynamic turns the hold into
 # stability and compliance.
 
-# COUNTRY NAM. A focus may already have written a value, so only a missing
-# one is seeded.
+# COUNTRY NAM. Focuses completed before the victory may already have written
+# consolidation; the base 10 is added to that value once.
 NAM_consolidation_begin = {
-	set_country_flag = NAM_consolidation_started
 	if = {
-		limit = { NOT = { has_variable = NAM_consolidation } }
-		set_variable = { var = NAM_consolidation value = 10 }
+		limit = { NOT = { has_country_flag = NAM_consolidation_started } }
+		add_to_variable = { var = NAM_consolidation value = 10 }
 	}
+	set_country_flag = NAM_consolidation_started
 	NAM_consolidation_clamp = yes
 	mark_focus_tree_layout_dirty = yes
 }
@@ -6523,7 +6600,6 @@ NAM_great_war_start = {
 			array = global.NAM_wor_participants
 			country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
 		}
-		add_war_support = 0.10
 		country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
 		log = "[ADISCORD][NAM][GREAT_WAR] Svetlogorye opens the great war against the south."
 	}

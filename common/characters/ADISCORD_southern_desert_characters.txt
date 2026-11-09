@@ -65,6 +65,11 @@ characters = {
 			traits = { GLP_broker_of_glass_ports }
 		}
 	}
+	AZH_NAM_governor = {
+		name = AZH_NAM_governor
+		portraits = { civilian = { large = GFX_portrait_AZH_NAM_governor } }
+	}
+
 	AZH_Samir_Azhar = {
 		name = AZH_Samir_Azhar
 		portraits = { civilian = { large = GFX_portrait_AZH_Samir_Azhar } }

@@ -6,6 +6,7 @@ ADISCORD_grant_technology_profile_naval_taskforce = yes
 
 oob = "AZH"
 
+recruit_character = AZH_NAM_governor
 recruit_character = AZH_Samir_Azhar
 
 set_politics = {

@@ -9,6 +9,7 @@ ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "EFL"
 ####### Characters
 
+recruit_character = EFL_NAM_governor
 recruit_character = EFL_Dextung
 
 ####### Basic shit

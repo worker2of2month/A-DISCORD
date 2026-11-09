@@ -798,6 +798,10 @@ spriteTypes = {
 	}
 	###EFL
 	spriteType = {
+		name = "GFX_portrait_EFL_NAM_governor"
+		texturefile = "gfx/leaders/EFL/portrait_EFL_NAM_governor.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_EFL_Dextung"
 		texturefile = "gfx/leaders/EFL/portrait_EFL_Dextung.png"
 	}

@@ -1,4 +1,24 @@
 on_actions = {
+	on_puppet = {
+		effect = { NAM_sync_neighbor_governor = yes }
+	}
+
+	on_release_as_puppet = {
+		effect = { NAM_sync_neighbor_governor = yes }
+	}
+
+	on_subject_free = {
+		effect = { NAM_sync_neighbor_governor = yes }
+	}
+
+	on_release_as_free = {
+		effect = { NAM_sync_neighbor_governor = yes }
+	}
+
+	on_ruling_party_change = {
+		effect = { NAM_sync_neighbor_governor = yes }
+	}
+
 	on_state_control_changed = {
 		effect = {
 			if = {

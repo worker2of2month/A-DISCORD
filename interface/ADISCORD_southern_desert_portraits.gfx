@@ -20,6 +20,10 @@ spriteTypes = {
 		texturefile = "gfx/leaders/GLP/portrait_GLP_Miran_Veyr.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_AZH_NAM_governor"
+		texturefile = "gfx/leaders/AZH/portrait_AZH_NAM_governor.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_AZH_Samir_Azhar"
 		texturefile = "gfx/leaders/AZH/portrait_AZH_Samir_Azhar.png"
 	}

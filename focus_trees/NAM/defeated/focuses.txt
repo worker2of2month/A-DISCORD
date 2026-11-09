@@ -565,25 +565,83 @@ focus_tree = {
 		bypass = {
 			NOT = { has_country_flag = NAM_rw_tribute }
 		}
+		# The buyout price follows the remaining term of the 365-day tribute:
+		# three, two or one monthly delivery to both recipients. Flag age is
+		# read again at completion, so the debit matches the current tier.
 		available = {
 			has_capitulated = no
-			has_country_flag = NAM_rw_tribute
-			NOT = { has_fuel < 6000 }
+			custom_trigger_tooltip = {
+				tooltip = NAM_defeat_early_tribute_price_tt
+				has_country_flag = NAM_rw_tribute
+				OR = {
+					AND = {
+						NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } }
+						NOT = { has_fuel < 90000 }
+					}
+					AND = {
+						has_country_flag = { flag = NAM_rw_tribute days > 121 }
+						NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } }
+						NOT = { has_fuel < 60000 }
+					}
+					AND = {
+						has_country_flag = { flag = NAM_rw_tribute days > 243 }
+						NOT = { has_fuel < 30000 }
+					}
+				}
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = -6000
-			EFL = {
-				if = {
-					limit = { exists = yes }
-					add_fuel = 3000
+			if = {
+				limit = {
+					NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } }
+				}
+				add_fuel = -90000
+				EFL = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 45000
+					}
+				}
+				AZH = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 45000
+					}
 				}
 			}
-			AZH = {
-				if = {
-					limit = { exists = yes }
-					add_fuel = 3000
+			else_if = {
+				limit = {
+					NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } }
+				}
+				add_fuel = -60000
+				EFL = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 30000
+					}
+				}
+				AZH = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 30000
+					}
+				}
+			}
+			else = {
+				add_fuel = -30000
+				EFL = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 15000
+					}
+				}
+				AZH = {
+					if = {
+						limit = { exists = yes }
+						add_fuel = 15000
+					}
 				}
 			}
 			custom_effect_tooltip = NAM_defeat_early_tribute_tt
@@ -736,13 +794,9 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_defeat_road_south }
 		mutually_exclusive = { focus = NAM_defeat_oil_peace }
-		bypass = {
-			NOT = { has_completed_focus = NAM_defeat_oil_peace }
-			OR = {
-				has_global_flag = ADISCORD_south_final_started
-				has_global_flag = ADISCORD_south_final_resolved
-			}
-		}
+		# No bypass: an automatic completion would exclude NAM_defeat_oil_peace,
+		# which stays reachable through the unconditional oil union and leads
+		# to the same second chapter after the war for the South has passed.
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
