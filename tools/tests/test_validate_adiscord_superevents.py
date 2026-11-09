@@ -428,6 +428,24 @@ class SupereventContractTests(unittest.TestCase):
                 self.assertTrue(samples)
                 self.assertFalse(any(samples))
 
+    @unittest.skipUnless(shutil.which("ffmpeg"), "requires FFmpeg")
+    def test_nam_who_starts_at_end_of_tower_sound(self) -> None:
+        tower = ROOT / "sound/superevents/superevent_vorkerland_civilwar_sound.wav"
+        with wave.open(str(tower)) as audio:
+            duration = audio.getnframes() / audio.getframerate()
+        song = ROOT / "music/ADISCORD_nam_who.ogg"
+        result = subprocess.run(
+            ["ffmpeg", "-nostdin", "-hide_banner", "-i", str(song),
+             "-t", str(duration + 1), "-af", "silencedetect=noise=-60dB:d=0.1",
+             "-f", "null", "-"],
+            check=True, capture_output=True, text=True,
+        )
+        self.assertRegex(result.stderr, r"silence_start: 0\s")
+        onset = re.search(r"silence_end: ([\d.]+)", result.stderr)
+        self.assertIsNotNone(onset)
+        # Allow for the song's own quiet opening after the silent lead-in.
+        self.assertAlmostEqual(float(onset[1]), duration, delta=0.15)
+
     def test_repository_contract_is_clean(self) -> None:
         self.assertEqual(collect_issues(), [])
 
