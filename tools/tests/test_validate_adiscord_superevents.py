@@ -124,6 +124,8 @@ class SupereventContractTests(unittest.TestCase):
             self.assertEqual(scalar(block(effects, "set_temp_variable"), "ADISCORD_superevent_request"), str(number + 3))
 
     def test_radio_excludes_superevents_and_preserves_mod_music(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
         playlists = list((ROOT / "music").glob("*.txt"))
         songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
 
@@ -146,11 +148,13 @@ class SupereventContractTests(unittest.TestCase):
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
         self.assertIn('music_station = "adiscord_music"', songs)
-        visible_songs = (ROOT / "music/ADISCORD_songs.txt").read_text(
-            encoding="utf-8-sig"
-        )
-        for item in PRESENTATIONS:
-            self.assertNotIn(f'song = "{item.name}"', visible_songs)
+        self.assertIn('music_station = "adiscord_special"', songs)
+        free = (ROOT / "music/ADISCORD_songs.txt").read_text(encoding="utf-8")
+        for entry in parse_clausewitz(free):
+            if entry.key == "music":
+                chance = next(row.value for row in entry.value if row.key == "chance")
+                self.assertEqual([row.key for row in chance], ["base"])
+                self.assertGreater(float(chance[0].value), 0)
 
         # Every radio-visible identifier must resolve to a human title in both
         # shipped languages. Otherwise HOI4 renders the raw script key in the
@@ -161,8 +165,9 @@ class SupereventContractTests(unittest.TestCase):
         russian_music = (ROOT / "localisation/russian/ADISCORD_music_l_russian.yml").read_text(
             encoding="utf-8-sig"
         )
-        visible_ids = re.findall(r'(?m)^\s*song\s*=\s*"([^"]+)"\s*$', visible_songs)
+        visible_ids = re.findall(r'(?m)^\s*song\s*=\s*"([^"]+)"\s*$', songs)
         self.assertTrue(visible_ids)
+        self.assertEqual(len(visible_ids), len(set(visible_ids)))
         for song in visible_ids:
             for localisation in (english_music, russian_music):
                 self.assertRegex(

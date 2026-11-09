@@ -27,7 +27,7 @@ SOUND_EFFECTS = Path("sound/superevents_effects.asset")
 SOUND_CATEGORY = Path("sound/superevents_category.asset")
 REGISTRY = Path("tools/data/adiscord_event_ids.json")
 MUSIC = Path("music/ADISCORD_music.asset")
-SONGS = Path("music/ADISCORD_songs.txt")
+SPECIAL_SONGS = Path("music/ADISCORD_special_songs.txt")
 PRESENTATION_SONGS = Path("music/ADISCORD_superevent_songs.txt")
 
 REQUIRED_FILES = (
@@ -43,7 +43,8 @@ REQUIRED_FILES = (
     SOUND_CATEGORY,
     REGISTRY,
     MUSIC,
-    SONGS,
+    Path("music/ADISCORD_songs.txt"),
+    SPECIAL_SONGS,
     PRESENTATION_SONGS,
 )
 
@@ -516,11 +517,11 @@ def collect_issues(root: Path = ROOT) -> list[str]:
 
         silence_registrations = [
             block
-            for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
+            for block in blocks(source[SPECIAL_SONGS], r"^\s*music\s*=\s*\{")
             if f'song = "{carrier}"' in block
         ]
         if len(silence_registrations) != 1:
-            issues.append(f"{carrier}: must be registered exactly once in ADISCORD_songs.txt")
+            issues.append(f"{carrier}: must be registered exactly once in {SPECIAL_SONGS.name}")
         elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
             issues.append(f"{carrier}: must have zero random-play chance")
 

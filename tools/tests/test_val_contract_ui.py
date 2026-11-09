@@ -2034,7 +2034,7 @@ class KefreytOpeningThemeTests(unittest.TestCase):
         )
         self.assertIn(
             'song = "ADISCORD_val_theme"',
-            (ROOT / "music/ADISCORD_songs.txt").read_text(),
+            (ROOT / "music/ADISCORD_special_songs.txt").read_text(),
         )
 
 

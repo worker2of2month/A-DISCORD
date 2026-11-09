@@ -1253,7 +1253,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_civil_war.ogg").is_file())
         playlists = {
             scalar(e.value, "song"): e.value
-            for e in entries("music/ADISCORD_songs.txt")
+            for e in entries("music/ADISCORD_special_songs.txt")
             if e.key == "music"
             and scalar(e.value, "song")
             in {"ADISCORD_stp_party", "ADISCORD_stp_civil_war"}

@@ -18,6 +18,9 @@ recruit_character = NAM_Kirill_Vykup
 recruit_character = NAM_Grigory_Levashov
 recruit_character = NAM_Gleb_Burov
 recruit_character = NAM_Anton_Zhar
+recruit_character = NAM_Ilya_Rudnev
+recruit_character = NAM_Vadim_Krechetov
+recruit_character = NAM_Irina_Somova
 recruit_character = NAM_Matvei_Prichal
 recruit_character = NAM_Yaroslav_Weber
 

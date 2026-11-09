@@ -726,6 +726,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_NAM_Egor_Rom_independent"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom_independent.png"
+	}
+
+	spriteType = {
 		name = "GFX_portrait_NAM_Egor_Rom_republic"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Egor_Rom_republic.png"
 	}
@@ -743,6 +748,45 @@ spriteTypes = {
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Grigory_Levashov_small"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Grigory_Levashov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Ilya_Rudnev"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Ilya_Rudnev.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Ilya_Rudnev_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Ilya_Rudnev.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Vadim_Krechetov"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Vadim_Krechetov.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Vadim_Krechetov_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Vadim_Krechetov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Irina_Somova"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Irina_Somova.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Irina_Somova_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Irina_Somova.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no

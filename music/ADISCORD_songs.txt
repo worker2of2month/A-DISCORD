@@ -1,147 +1,4 @@
-
 music_station = "adiscord_music"
-
-# Silent carrier used by the shared super-event helper. It is a real music
-# database entry so play_song can take over the music channel, but weighted
-# shuffle can never choose it on its own.
-music = {
-	song = "one_minute_of_silence"
-	chance = {
-		modifier = { factor = 0 }
-	}
-}
-
-music = {
-	song = "two_minutes_of_silence"
-	chance = {
-		modifier = { factor = 0 }
-	}
-}
-
-music = {
-	song = "ADISCORD_rus_aftermath_silence"
-	chance = {
-		modifier = { factor = 0 }
-	}
-}
-
-# Scripted finale only; play_song permits interruption at the epilogue button.
-music = {
-	song = "ADISCORD_rus_world_ends"
-	chance = {
-		modifier = { factor = 0 }
-	}
-}
-
-music = {
-	song = "ADISCORD_val_theme"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { tag = VAL }
-		}
-	}
-}
-
-music = {
-	song = "ADISCORD_stp_shabrat"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { has_country_flag = STP_sided_with_Maksim_flag }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_started
-		}
-	}
-}
-
-music = {
-	song = "ADISCORD_stp_party_preparation"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { has_country_flag = STP_sided_with_the_party_flag }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_started
-		}
-	}
-}
-
-music = {
-	song = "ADISCORD_stp_party"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { has_global_flag = STP_cw_started }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_union_wars_finished
-		}
-		modifier = {
-			factor = 0
-			NOT = { tag = STP has_country_flag = STP_sided_with_the_party_flag has_war_with = STS }
-		}
-	}
-}
-
-music = {
-	song = "ADISCORD_stp_civil_war"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { has_global_flag = STP_cw_started }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_union_wars_finished
-		}
-		modifier = {
-			factor = 0
-			NOT = { tag = STS has_country_flag = STP_sided_with_Maksim_flag has_war_with = STP }
-		}
-	}
-}
-
-# Played by the opening postwar focus; excluded from random rotation.
-music = {
-	song = "ADISCORD_stp_civil_war_end"
-	chance = {
-		modifier = { factor = 0 }
-	}
-}
-
-# Kefreyt's postwar rotation follows the same settlement as its postwar content.
-music = {
-	song = "ADISCORD_val_postwar"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { AND = { tag = VAL has_global_flag = STP_cw_union_wars_finished } }
-		}
-	}
-}
-
-music = {
-	song = "ADISCORD_stp_party_postwar"
-	chance = {
-		base = 10
-		modifier = {
-			factor = 0
-			NOT = { AND = { tag = STP has_country_flag = STP_cw_postwar has_country_flag = STP_cw_won_union_battle } }
-		}
-	}
-}
 
 music = {
 	song = "ADISCORD_shot"
@@ -170,11 +27,6 @@ music = {
 
 music = {
 	song = "ADISCORD_3teeth_scorpion"
-	chance = { base = 10 }
-}
-
-music = {
-	song = "ADISCORD_vorkerland_theme"
 	chance = { base = 10 }
 }
 
@@ -209,27 +61,12 @@ music = {
 }
 
 music = {
-	song = "ADISCORD_3teeth_pit_of_fire"
-	chance = { base = 10 }
-}
-
-music = {
 	song = "ADISCORD_3teeth_atrophy_of_these_hope_remix"
 	chance = { base = 10 }
 }
 
 music = {
 	song = "ADISCORD_3teeth_nihil"
-	chance = { base = 10 }
-}
-
-music = {
-	song = "ADISCORD_khan_theme"
-	chance = { base = 10 }
-}
-
-music = {
-	song = "ADISCORD_expedition_44_theme"
 	chance = { base = 10 }
 }
 
@@ -249,6 +86,26 @@ music = {
 }
 
 music = {
-	song = "ADISCORD_3teeth_too_far_gone"
+	song = "ADISCORD_luke_c_est_la_guerre"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_unveiled"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_volshebny_poroshok"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_die_krupps_welcome_to_the_blackout"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_radio_tapok_zloy_gorod"
 	chance = { base = 10 }
 }

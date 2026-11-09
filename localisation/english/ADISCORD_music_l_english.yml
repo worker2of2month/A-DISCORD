@@ -23,7 +23,8 @@
  superevent_nam_resource_war:0 "$superevent_nam_resource_war_title$"
  superevent_rus_last_empire:0 "$superevent_rus_last_empire_title$"
 
- adiscord_music:0 "A-DISCORD"
+ adiscord_music:0 "Abyss of Discord - Free Play"
+ adiscord_special:0 "Abyss of Discord - Special Broadcast"
 
  ADISCORD_capistrano_crush_kill:0 "Capistrano - Crush, Kill"
  ADISCORD_oomph_labyrinth:0 "OOMPH! - Labyrinth"
@@ -47,3 +48,10 @@
  ADISCORD_3teeth_chasm:0 "3TEETH - Chasm"
  ADISCORD_3teeth_eradicate:0 "3TEETH - Eradicate"
  ADISCORD_3teeth_too_far_gone:0 "3TEETH - Too Far Gone"
+ ADISCORD_luke_c_est_la_guerre:0 "Luke - C'est la guerre"
+ ADISCORD_3teeth_unveiled:0 "3TEETH - Unveiled"
+ ADISCORD_volshebny_poroshok:0 "Volshebny poroshok"
+ ADISCORD_die_krupps_welcome_to_the_blackout:0 "Die Krupps - Welcome To The Blackout"
+ ADISCORD_nam_who:0 "Who? (After the Unity Tower Explosion)"
+ ADISCORD_3teeth_dissolve:0 "3TEETH - Dissolve"
+ ADISCORD_radio_tapok_zloy_gorod:0 "RADIO TAPOK - Zloy gorod"

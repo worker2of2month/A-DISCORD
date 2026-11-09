@@ -4717,6 +4717,19 @@ ADISCORD_superevent_dispatch_next = {
 			set_global_flag = superevent_rus_khan_died
 		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
+		if = {
+			limit = {
+				has_global_flag = superevent_vorkerland_civilwar
+				has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+			}
+			# The silent lead-in of Who? matches the tower GUI sound even on pause.
+			NAM = {
+				if = {
+					limit = { is_ai = no }
+					scoped_play_song = "ADISCORD_nam_who"
+				}
+			}
+		}
 	}
 }
 

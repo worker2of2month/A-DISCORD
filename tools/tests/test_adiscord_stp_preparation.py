@@ -7300,7 +7300,7 @@ class StelanderPreparationTests(unittest.TestCase):
         )
         self.assertEqual(scalar(song, "file"), "ADISCORD_stp_shabrat.ogg")
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_shabrat.ogg").is_file())
-        station = entries("music/ADISCORD_songs.txt")
+        station = entries("music/ADISCORD_special_songs.txt")
         playlist = next(
             e.value
             for e in station

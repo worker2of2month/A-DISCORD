@@ -259,6 +259,64 @@ characters = {
 		}
 	}
 
+	NAM_Ilya_Rudnev = {
+		name = NAM_Ilya_Rudnev
+		portraits = {
+			army = {
+				large = GFX_portrait_NAM_Ilya_Rudnev
+				small = GFX_portrait_NAM_Ilya_Rudnev_small
+			}
+		}
+		corps_commander = {
+			traits = { trait_engineer }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 3
+			planning_skill = 4
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	NAM_Vadim_Krechetov = {
+		name = NAM_Vadim_Krechetov
+		portraits = {
+			army = {
+				large = GFX_portrait_NAM_Vadim_Krechetov
+				small = GFX_portrait_NAM_Vadim_Krechetov_small
+			}
+		}
+		corps_commander = {
+			traits = { ranger }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	NAM_Irina_Somova = {
+		name = NAM_Irina_Somova
+		gender = female
+		portraits = {
+			army = {
+				large = GFX_portrait_NAM_Irina_Somova
+				small = GFX_portrait_NAM_Irina_Somova_small
+			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
 	NAM_Matvei_Prichal = {
 		name = NAM_Matvei_Prichal
 		portraits = {

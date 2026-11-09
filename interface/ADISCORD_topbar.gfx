@@ -10,4 +10,16 @@ spriteTypes = {
 		texturefile = "gfx/interface/topbar/ADISCORD_flag_frame_overlay.dds"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_album_art"
+		texturefile = "gfx/interface/topbar/musicplayer/ADISCORD_album_art.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_special_album_art"
+		texturefile = "gfx/interface/topbar/musicplayer/ADISCORD_special_album_art.dds"
+		noOfFrames = 2
+	}
 }

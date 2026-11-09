@@ -1491,6 +1491,10 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 				tree = NAM_postwar_focus
 				keep_completed = yes
 			}
+			if = {
+				limit = { is_ai = no }
+				scoped_play_song = "ADISCORD_3teeth_dissolve"
+			}
 			news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 }
 		}
 		ADISCORD_south_begin_preparation = yes
@@ -4784,6 +4788,13 @@ NAM_ladder_declare_independence = {
 			NOT = { has_country_flag = NAM_independence_declared }
 		}
 		set_country_flag = NAM_independence_declared
+		if = {
+			limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
+			set_portraits = {
+				character = NAM_Egor_Rom
+				civilian = { large = GFX_portrait_NAM_Egor_Rom_independent }
+			}
+		}
 		NAM_reset_campaign_cooldowns = yes
 		set_popularities = {
 			etatism = 45

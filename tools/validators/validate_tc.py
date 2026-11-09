@@ -807,15 +807,14 @@ def check_gfx_entity_ownership(limit):
             f'{rel(winter_terrain_texture)} is missing winter contaminated terrain texture'
         )
 
-    music_station = ROOT / "music" / "ADISCORD_songs.txt"
     music_gui_path = ROOT / "interface" / "ADISCORD_musicplayer_compat.gui"
-    if music_station.is_file():
-        music_gui = read_text(music_gui_path) if music_gui_path.is_file() else ""
-        for widget in ("adiscord_music_faceplate", "adiscord_music_stations_entry"):
-            if not re.search(rf'\bname\s*=\s*"{widget}"', music_gui):
-                issues.append(
-                    f'{rel(music_gui_path)} is missing {widget} required by music station adiscord_music'
-                )
+    music_gui = read_text(music_gui_path) if music_gui_path.is_file() else ""
+    for playlist in (ROOT / "music").glob("*.txt"):
+        for station in re.findall(r'(?m)^\s*music_station\s*=\s*"([^"]+)"', read_text(playlist)):
+            for suffix in ("faceplate", "stations_entry"):
+                widget = f"{station}_{suffix}"
+                if not re.search(rf'\bname\s*=\s*"{re.escape(widget)}"', music_gui):
+                    issues.append(f'{rel(music_gui_path)} is missing {widget} required by {rel(playlist)}')
     return issues[:limit], len(issues)
 
 
