@@ -17,7 +17,8 @@ from PIL import Image
 from scipy.ndimage import distance_transform_edt, gaussian_filter
 
 from tools.builders.build_adiscord_ivn_geography import normal_from_height
-from tools.builders.build_adiscord_new_states import CITY_TERRAINS, SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
+from tools.builders.build_adiscord_new_states import SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
+from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
 from tools.lib.coastal_clearance import (
     URBAN_FALLBACK_PALETTE,
     tree_cells_blocked,
@@ -64,13 +65,14 @@ ARAB_URBAN_GROWTH = frozenset({
 })
 # Arab cities take the combat terrain of their rural surroundings: hill cities
 # stand among hills and mountains, desert cities among sand. Cities in forest
-# or farmland keep ordinary urban terrain. Every Arab city province is in the
-# geometry masks, so the definition pass below writes its terrain field.
+# or farmland keep ordinary urban terrain. A multi-province city follows the
+# prevailing surroundings of the whole cluster. Every Arab city province is in
+# the geometry masks, so the definition pass below writes its terrain field.
 ARAB_HILL_CITIES = frozenset({
-    971, 16713, 16714, 16715, 16718, 16719, 16722, 16727, 16728,
-    16729, 16733, 16739, 16742, 16788, 16897, 16899,
+    16713, 16714, 16715, 16718, 16719, 16727, 16728,
+    16729, 16733, 16739, 16897, 16899,
 })
-ARAB_FARMLAND_CITIES = frozenset({7903, 16734, 16735, 16738, 16789})
+ARAB_FARMLAND_CITIES = frozenset({7903, 16734, 16735, 16737, 16738, 16787, 16788, 16789})
 ARAB_CITY_TERRAIN = {
     province: "hill_city" if province in ARAB_HILL_CITIES
     else "urban" if province in ARAB_FARMLAND_CITIES
@@ -710,6 +712,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         fields[5] = "true" if coastal else "false"
         if int(fields[0]) in ARAB_CITY_TERRAIN:
             fields[6] = ARAB_CITY_TERRAIN[int(fields[0])]
+        elif int(fields[0]) in NATIONAL_CITY_TERRAIN:
+            fields[6] = NATIONAL_CITY_TERRAIN[int(fields[0])]
         elif int(fields[0]) in CITIES:
             fields[6] = "urban"
         elif int(fields[0]) in RELIEF_PROVINCES:

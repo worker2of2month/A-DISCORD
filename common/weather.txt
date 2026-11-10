@@ -23,6 +23,13 @@ terrain_modifiers = {
 		terrain = { type = "urban" value = -0.4 }
 		terrain = { type = "desert_city" value = -1.0 }
 		terrain = { type = "hill_city" value = -0.2 }
+		terrain = { type = "fada_city" value = -0.4 }
+		terrain = { type = "dopotoydron_city" value = -0.4 }
+		terrain = { type = "south_harbour_city" value = -1.0 }
+		terrain = { type = "svetlogorye_town" value = -1.0 }
+		terrain = { type = "kefreyt_city" value = -0.4 }
+		terrain = { type = "stelander_city" value = -0.2 }
+		terrain = { type = "rich_city" value = -0.4 }
 	}
 	blizzard = {
 		terrain = { type = "mountain" value = 0.8 }
@@ -30,10 +37,19 @@ terrain_modifiers = {
 		terrain = { type = "urban" value = -0.4 }
 		terrain = { type = "desert_city" value = -1.0 }
 		terrain = { type = "hill_city" value = -0.2 }
+		terrain = { type = "fada_city" value = -0.4 }
+		terrain = { type = "dopotoydron_city" value = -0.4 }
+		terrain = { type = "south_harbour_city" value = -1.0 }
+		terrain = { type = "svetlogorye_town" value = -1.0 }
+		terrain = { type = "kefreyt_city" value = -0.4 }
+		terrain = { type = "stelander_city" value = -0.2 }
+		terrain = { type = "rich_city" value = -0.4 }
 	}
 	sandstorm = { #dudududu
 		terrain = { type = "desert" value = 0.8 }
 		terrain = { type = "desert_city" value = 0.5 }
+		terrain = { type = "south_harbour_city" value = 0.3 }
+		terrain = { type = "svetlogorye_town" value = 0.5 }
 		terrain = { type = "mountain" value = -1.0 }
 	}
 
@@ -44,6 +60,11 @@ terrain_modifiers = {
 		terrain = { type = "forest" value = -1.0 }
 		terrain = { type = "urban" value = 3.0 }
 		terrain = { type = "desert_city" value = 3.0 }
+		terrain = { type = "fada_city" value = 3.0 }
+		terrain = { type = "dopotoydron_city" value = 3.0 }
+		terrain = { type = "south_harbour_city" value = 3.0 }
+		terrain = { type = "kefreyt_city" value = 3.0 }
+		terrain = { type = "rich_city" value = 3.0 }
 		terrain = { type = "jungle" value = 5.0 }
 	}
 }

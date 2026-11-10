@@ -13,6 +13,7 @@ from unittest.mock import patch
 from tools.builders import build_adiscord_technology_system as generator
 from tools.builders import build_adiscord_technology_ui_assets as ui_builder
 from tools.validators import validate_adiscord_tech_doctrine as validator
+from tools.lib.city_terrains import CITY_TERRAINS
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -3441,7 +3442,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
             "ADISCORD_special_forces_shield_formations_covered_crossings",
         )
         unit = self.block(reward, "ADISCORD_urban_breacher")
-        for terrain in ("urban", "vorkernsberg", "desert_city", "hill_city"):
+        for terrain in sorted(CITY_TERRAINS):
             self.assertEqual(
                 self.block(unit, terrain).strip(),
                 "attack = 0.06",
@@ -3454,32 +3455,62 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         alternatives = self.block(gain_xp, "OR")
         self.assertEqual(
             re.findall(r"is_fighting_in_terrain\s*=\s*(\w+)", alternatives),
-            ["urban", "vorkernsberg", "desert_city", "hill_city"],
+            ["urban", "vorkernsberg", "desert_city", "hill_city", "fada_city", "dopotoydron_city", "south_harbour_city", "svetlogorye_town", "kefreyt_city", "stelander_city", "rich_city"],
         )
         for name, expected in (
             ("urban_assault_specialist", {"movement": 0.05, "attack": 0.1, "defence": 0.1}),
             ("expert_improviser", {"movement": 0.1}),
         ):
             modifier = self.block(self.block(source, name), "modifier")
-            for terrain in ("urban", "vorkernsberg", "desert_city", "hill_city"):
+            for terrain in sorted(CITY_TERRAINS):
                 values = re.findall(r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(modifier, terrain))
                 self.assertEqual({key: float(value) for key, value in values}, expected)
 
     def test_terrain_specialists_count_their_own_city_at_half_strength(self):
         source = self.read("common/unit_leader/00_traits.txt")
-        for name, base, city in (
-            ("desert_fox", "desert", "desert_city"),
-            ("hill_fighter", "hills", "hill_city"),
+        for name, base, cities in (
+            ("desert_fox", "desert", ["desert_city", "south_harbour_city", "svetlogorye_town"]),
+            ("hill_fighter", "hills", ["hill_city", "stelander_city"]),
         ):
             trait = self.block(source, name)
             self.assertEqual(
                 re.findall(r"is_fighting_in_terrain\s*=\s*(\w+)", self.block(trait, "gain_xp")),
-                [base, city],
+                [base, *cities],
             )
-            values = re.findall(
-                r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(self.block(trait, "modifier"), city)
-            )
-            self.assertEqual({key: float(value) for key, value in values}, {"attack": 0.05, "defence": 0.05})
+            for city in cities:
+                values = re.findall(
+                    r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(self.block(trait, "modifier"), city)
+                )
+                self.assertEqual({key: float(value) for key, value in values}, {"attack": 0.05, "defence": 0.05})
+
+    def test_national_city_terrains_have_assets_and_city_roles(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        units = parse_clausewitz(self.read("common/units/ADISCORD_land_units.txt"))[0].value
+        terrain_source = self.read("common/terrain/00_terrain.txt")
+        sprites = self.read("interface/ADISCORD_terrain.gfx")
+        localisation = [
+            self.read("localisation/russian/state_l_russian.yml"),
+            self.read("localisation/english/ADISCORD_terrain_l_english.yml"),
+        ]
+        city_units = {"ADISCORD_urban_breacher", "ADISCORD_territorial", "ADISCORD_assault_infantry",
+                      "ADISCORD_heavy_platform", "ADISCORD_regimental_pioneers"}
+        for terrain in CITY_TERRAINS - {"urban", "vorkernsberg"}:
+            with self.subTest(terrain=terrain):
+                self.assertIn("units = {", self.block(terrain_source, terrain))
+                for suffix in ("", "_winter"):
+                    self.assertIn(f'name = "GFX_terrain_{terrain}{suffix}"', sprites)
+                self.assertTrue((ROOT / f"gfx/interface/terrains/{terrain}.dds").is_file())
+                for source in localisation:
+                    self.assertRegex(source, rf'(?m)^ {terrain}: "[^"]+"\r?$')
+                    self.assertRegex(source, rf'(?m)^ {terrain}_desc: "[^"]+"\r?$')
+                covered = {unit.key for unit in units if any(entry.key == terrain for entry in unit.value)}
+                self.assertLessEqual(city_units, covered)
+        # Harbour quays favour landing troops; slopes favour mountain troops.
+        marines = self.block(self.read("common/units/ADISCORD_land_units.txt"), "ADISCORD_marine_infantry")
+        self.assertIn("south_harbour_city = { attack = 0.15 }", marines)
+        mountaineers = self.block(self.read("common/units/ADISCORD_land_units.txt"), "mountaineers")
+        self.assertIn("stelander_city = { attack = 0.10 defence = 0.05 movement = 0.05 }", mountaineers)
 
     def test_new_icon_frames_are_different_in_every_supported_size(self):
         from PIL import Image

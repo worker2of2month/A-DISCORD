@@ -96,6 +96,13 @@ sub_units = {
 			defence = 0.65
 			movement = -0.05
 		}
+		fada_city = { attack = 0.65 defence = 0.60 }
+		dopotoydron_city = { attack = 0.65 defence = 0.60 }
+		south_harbour_city = { attack = 0.55 defence = 0.50 }
+		svetlogorye_town = { attack = 0.55 defence = 0.50 }
+		kefreyt_city = { attack = 0.65 defence = 0.60 }
+		stelander_city = { attack = 0.65 defence = 0.65 movement = -0.05 }
+		rich_city = { attack = 0.55 defence = 0.50 }
 		fort = {
 			attack = 0.30
 		}
@@ -188,6 +195,8 @@ sub_units = {
 		forest = { defence = 0.15 }
 		hills = { defence = 0.15 }
 		hill_city = { defence = 0.10 }
+		svetlogorye_town = { defence = 0.10 }
+		stelander_city = { defence = 0.10 }
 	}
 
 	# Local defence retains full rifle accounting for scripted mobilization.
@@ -227,6 +236,13 @@ sub_units = {
 		vorkernsberg = { defence = 0.15 }
 		desert_city = { defence = 0.10 }
 		hill_city = { defence = 0.20 }
+		fada_city = { defence = 0.20 }
+		dopotoydron_city = { defence = 0.15 }
+		south_harbour_city = { defence = 0.10 }
+		svetlogorye_town = { defence = 0.10 }
+		kefreyt_city = { defence = 0.20 }
+		stelander_city = { defence = 0.20 }
+		rich_city = { defence = 0.10 }
 		fort = { defence = 0.20 }
 	}
 
@@ -314,6 +330,13 @@ sub_units = {
 		hill_city = {
 			attack = 0.10
 		}
+		fada_city = { attack = 0.10 }
+		dopotoydron_city = { attack = 0.10 }
+		south_harbour_city = { attack = 0.10 }
+		svetlogorye_town = { attack = 0.10 }
+		kefreyt_city = { attack = 0.10 }
+		stelander_city = { attack = 0.10 }
+		rich_city = { attack = 0.10 }
 		fort = {
 			attack = 0.10
 		}
@@ -394,6 +417,13 @@ sub_units = {
 		vorkernsberg = { attack = -0.10 }
 		desert_city = { attack = -0.05 }
 		hill_city = { attack = -0.15 movement = -0.10 }
+		fada_city = { attack = -0.10 }
+		dopotoydron_city = { attack = -0.05 }
+		south_harbour_city = { attack = -0.05 }
+		svetlogorye_town = { attack = -0.05 }
+		kefreyt_city = { attack = -0.15 }
+		stelander_city = { attack = -0.15 movement = -0.10 }
+		rich_city = { attack = -0.05 }
 		river = { attack = -0.20 movement = -0.20 }
 		amphibious = { attack = -0.45 }
 	}
@@ -432,6 +462,7 @@ sub_units = {
 			infantry_equipment = 900
 			ADISCORD_squad_weapons_equipment = 48
 		}
+		south_harbour_city = { attack = 0.15 }
 		amphibious = {
 			attack = 0.50
 			movement = 0.10
@@ -491,6 +522,7 @@ sub_units = {
 			defence = 0.05
 			movement = 0.05
 		}
+		stelander_city = { attack = 0.10 defence = 0.05 movement = 0.05 }
 	}
 
 	artillery = {
@@ -567,6 +599,7 @@ sub_units = {
 		forest = { attack = -0.20 movement = -0.20 }
 		hills = { movement = -0.05 }
 		hill_city = { movement = -0.05 }
+		stelander_city = { movement = -0.05 }
 		mountain = { attack = -0.15 movement = -0.20 }
 		jungle = { attack = -0.25 movement = -0.20 }
 		marsh = { attack = -0.20 movement = -0.30 }
@@ -861,6 +894,10 @@ sub_units = {
 		desert = { movement = 0.15 }
 		desert_city = { movement = 0.10 }
 		hill_city = { movement = 0.05 }
+		south_harbour_city = { movement = 0.10 }
+		svetlogorye_town = { movement = 0.10 }
+		stelander_city = { movement = 0.05 }
+		rich_city = { movement = 0.10 }
 	}
 
 	ADISCORD_light_tank = {
@@ -914,6 +951,13 @@ sub_units = {
 		vorkernsberg = { attack = -0.15 }
 		desert_city = { attack = -0.10 }
 		hill_city = { attack = -0.20 movement = -0.10 }
+		fada_city = { attack = -0.15 }
+		dopotoydron_city = { attack = -0.10 }
+		south_harbour_city = { attack = -0.10 }
+		svetlogorye_town = { attack = -0.10 }
+		kefreyt_city = { attack = -0.20 }
+		stelander_city = { attack = -0.20 movement = -0.10 }
+		rich_city = { attack = -0.10 }
 		river = {
 			attack = -0.25
 			movement = -0.20
@@ -960,6 +1004,13 @@ sub_units = {
 		vorkernsberg = { attack = -0.15 }
 		desert_city = { attack = -0.10 }
 		hill_city = { attack = -0.20 movement = -0.10 }
+		fada_city = { attack = -0.15 }
+		dopotoydron_city = { attack = -0.10 }
+		south_harbour_city = { attack = -0.10 }
+		svetlogorye_town = { attack = -0.10 }
+		kefreyt_city = { attack = -0.20 }
+		stelander_city = { attack = -0.20 movement = -0.10 }
+		rich_city = { attack = -0.10 }
 		river = { attack = -0.25 movement = -0.20 }
 		amphibious = { attack = -0.70 }
 	}
@@ -1029,6 +1080,13 @@ sub_units = {
 			attack = 0.10
 			movement = -0.30
 		}
+		fada_city = { attack = 0.20 movement = -0.20 }
+		dopotoydron_city = { attack = 0.25 movement = -0.15 }
+		south_harbour_city = { attack = 0.20 movement = -0.10 }
+		svetlogorye_town = { attack = 0.20 movement = -0.10 }
+		kefreyt_city = { attack = 0.25 movement = -0.25 }
+		stelander_city = { attack = 0.10 movement = -0.30 }
+		rich_city = { attack = 0.20 movement = -0.10 }
 		river = {
 			attack = -0.45
 			movement = -0.40
@@ -1080,6 +1138,13 @@ sub_units = {
 		}
 		desert_city = { attack = -0.25 defence = -0.10 movement = -0.15 }
 		hill_city = { attack = -0.40 defence = -0.15 movement = -0.35 }
+		fada_city = { attack = -0.35 defence = -0.15 movement = -0.25 }
+		dopotoydron_city = { attack = -0.25 defence = -0.10 movement = -0.15 }
+		south_harbour_city = { attack = -0.25 defence = -0.10 movement = -0.15 }
+		svetlogorye_town = { attack = -0.25 defence = -0.10 movement = -0.15 }
+		kefreyt_city = { attack = -0.40 defence = -0.15 movement = -0.30 }
+		stelander_city = { attack = -0.40 defence = -0.15 movement = -0.35 }
+		rich_city = { attack = -0.25 defence = -0.10 movement = -0.15 }
 		river = { attack = -0.40 movement = -0.35 }
 		amphibious = { attack = -0.85 }
 		fort = { attack = 0.10 }
@@ -1577,6 +1642,13 @@ sub_units = {
 		hill_city = {
 			attack = 0.05
 		}
+		fada_city = { attack = 0.03 }
+		dopotoydron_city = { attack = 0.05 }
+		south_harbour_city = { attack = 0.03 }
+		svetlogorye_town = { attack = 0.03 }
+		kefreyt_city = { attack = 0.03 }
+		stelander_city = { attack = 0.05 }
+		rich_city = { attack = 0.03 }
 		fort = {
 			attack = 0.05
 		}

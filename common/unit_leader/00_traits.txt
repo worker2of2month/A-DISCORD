@@ -1418,6 +1418,8 @@ leader_traits = {
 			OR = {
 				is_fighting_in_terrain = desert
 				is_fighting_in_terrain = desert_city
+				is_fighting_in_terrain = south_harbour_city
+				is_fighting_in_terrain = svetlogorye_town
 			}
 		}
 		cost = 700
@@ -1428,6 +1430,14 @@ leader_traits = {
 				defence = 0.1
 			}
 			desert_city = {
+				attack = 0.05
+				defence = 0.05
+			}
+			south_harbour_city = {
+				attack = 0.05
+				defence = 0.05
+			}
+			svetlogorye_town = {
 				attack = 0.05
 				defence = 0.05
 			}
@@ -1495,6 +1505,7 @@ leader_traits = {
 			OR = {
 				is_fighting_in_terrain = hills
 				is_fighting_in_terrain = hill_city
+				is_fighting_in_terrain = stelander_city
 			}
 		}
 		cost = 700
@@ -1505,6 +1516,10 @@ leader_traits = {
 				defence = 0.1
 			}
 			hill_city = {
+				attack = 0.05
+				defence = 0.05
+			}
+			stelander_city = {
 				attack = 0.05
 				defence = 0.05
 			}
@@ -1567,6 +1582,13 @@ leader_traits = {
 				is_fighting_in_terrain = vorkernsberg
 				is_fighting_in_terrain = desert_city
 				is_fighting_in_terrain = hill_city
+				is_fighting_in_terrain = fada_city
+				is_fighting_in_terrain = dopotoydron_city
+				is_fighting_in_terrain = south_harbour_city
+				is_fighting_in_terrain = svetlogorye_town
+				is_fighting_in_terrain = kefreyt_city
+				is_fighting_in_terrain = stelander_city
+				is_fighting_in_terrain = rich_city
 			}
 		}
 		cost = 500
@@ -1587,6 +1609,41 @@ leader_traits = {
 				defence = 0.1
 			}
 			hill_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			fada_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			dopotoydron_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			south_harbour_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			svetlogorye_town = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			kefreyt_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			stelander_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			rich_city = {
 				movement = 0.05
 				attack = 0.1
 				defence = 0.1
@@ -1949,6 +2006,27 @@ leader_traits = {
 				movement = 0.1
 			}
 			hill_city = {
+				movement = 0.1
+			}
+			fada_city = {
+				movement = 0.1
+			}
+			dopotoydron_city = {
+				movement = 0.1
+			}
+			south_harbour_city = {
+				movement = 0.1
+			}
+			svetlogorye_town = {
+				movement = 0.1
+			}
+			kefreyt_city = {
+				movement = 0.1
+			}
+			stelander_city = {
+				movement = 0.1
+			}
+			rich_city = {
 				movement = 0.1
 			}
 			jungle = {

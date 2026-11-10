@@ -102,12 +102,12 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             self.gui,
             r'(?s)name\s*=\s*"diplomatic_actions".{0,220}?'
             r'position\s*=\s*\{\s*x\s*=\s*260\s+y\s*=\s*466\s*\}.'
-            r'{0,260}?size\s*=\s*\{\s*width\s*=\s*410\s+height\s*=\s*-50\s*\}',
+            r'{0,260}?size\s*=\s*\{\s*width\s*=\s*420\s+height\s*=\s*-50\s*\}',
         )
         self.assertRegex(
             self.gui,
             r'(?s)name\s*=\s*"diplomacy_action_entry".{0,180}?'
-            r'size\s*=\s*\{\s*width\s*=\s*395\s+height\s*=\s*33\s*\}',
+            r'size\s*=\s*\{\s*width\s*=\s*387\s+height\s*=\s*33\s*\}',
         )
         self.assertRegex(
             self.gui,
@@ -328,10 +328,10 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             r'noOfFrames\s*=\s*3',
         )
         start, end = named_block_span(self.gui, "diplo_actions_entry_bg")
-        self.assertIn("size = { x = 391 y = 33 }", self.gui[start : end + 1])
+        self.assertIn("size = { x = 383 y = 33 }", self.gui[start : end + 1])
         self.assertEqual(ACTION_BUTTON.read_bytes(), expected_outputs()[ACTION_BUTTON])
         with Image.open(ACTION_BUTTON) as atlas:
-            self.assertEqual(atlas.size, (3 * 391, 33))
+            self.assertEqual(atlas.size, (3 * 383, 33))
         self.assertRegex(
             self.gui,
             r'(?s)name\s*=\s*"show_national_goal_button".{0,180}?'

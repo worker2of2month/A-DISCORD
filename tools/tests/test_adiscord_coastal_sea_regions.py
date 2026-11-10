@@ -15,6 +15,7 @@ from tools.builders import build_adiscord_coastal_geography as geography
 
 
 from tools.builders import build_adiscord_new_states as states
+from tools.lib import city_terrains
 from tools.lib import coastal_clearance as clearance
 from tools.lib.localisation import sync_builder_english_localisation
 from tools.validators.validate_adiscord_strategic_regions import parse_regions
@@ -284,23 +285,48 @@ class CoastalSeaRegionTests(unittest.TestCase):
     # borders the Devyatipechye cluster besides its mountain parent 2407.
     HOUSE_TOWN_NEIGHBOURS = {16899: {2407, 16739, 16793, 16794}}
 
-    def test_arab_cities_use_desert_and_hill_city_terrain(self) -> None:
+    @staticmethod
+    def definition_terrain() -> dict[int, str]:
         terrain = {}
         for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines():
             fields = line.split(";")
             if len(fields) >= 8 and fields[0].isdigit():
                 terrain[int(fields[0])] = fields[6]
+        return terrain
+
+    def test_arab_cities_use_desert_and_hill_city_terrain(self) -> None:
+        terrain = self.definition_terrain()
         arab = geography.ARAB_CITIES | geography.ARAB_URBAN_GROWTH
         self.assertEqual(set(geography.ARAB_CITY_TERRAIN), arab)
         self.assertLessEqual(geography.ARAB_HILL_CITIES | geography.ARAB_FARMLAND_CITIES, arab)
         self.assertFalse(geography.ARAB_HILL_CITIES & geography.ARAB_FARMLAND_CITIES)
+        self.assertFalse(arab & set(city_terrains.NATIONAL_CITY_TERRAIN))
         for province, expected in geography.ARAB_CITY_TERRAIN.items():
             self.assertEqual(terrain[province], expected, province)
-        # Lower Loren and the northern settlements keep ordinary city terrain.
+        # Lower Loren keeps ordinary city terrain; Svetlogorye uses its own.
         for province in geography.URBAN_GROWTH - arab:
-            self.assertEqual(terrain[province], "urban", province)
-        used = {value for value in terrain.values() if value in states.CITY_TERRAINS}
-        self.assertEqual(used, states.CITY_TERRAINS)
+            expected = city_terrains.NATIONAL_CITY_TERRAIN.get(province, "urban")
+            self.assertEqual(terrain[province], expected, province)
+
+    def test_national_city_clusters_share_one_terrain(self) -> None:
+        terrain = self.definition_terrain()
+        listed = [
+            province
+            for provinces in city_terrains.NATIONAL_CITY_CLUSTERS.values()
+            for province in provinces
+        ]
+        self.assertEqual(len(listed), len(set(listed)))
+        for province, expected in city_terrains.NATIONAL_CITY_TERRAIN.items():
+            self.assertEqual(terrain[province], expected, province)
+        used = {value for value in terrain.values() if value in city_terrains.CITY_TERRAINS}
+        self.assertEqual(used, city_terrains.CITY_TERRAINS)
+        # One city is one terrain: no two neighbouring city provinces differ.
+        for province, neighbours in self.physical.items():
+            if terrain.get(province) not in city_terrains.CITY_TERRAINS:
+                continue
+            for neighbour in neighbours:
+                if terrain.get(neighbour) in city_terrains.CITY_TERRAINS:
+                    self.assertEqual(terrain[province], terrain[neighbour], (province, neighbour))
 
     def test_shahrabad_house_towns_are_urban_provinces_inside_their_parents(self) -> None:
         from scipy.ndimage import label

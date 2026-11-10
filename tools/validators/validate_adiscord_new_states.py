@@ -13,6 +13,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.lib.adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
+from tools.lib.city_terrains import CITY_TERRAINS
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -28,7 +29,6 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 )
 from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
-    CITY_TERRAINS,
     DIRTY_ZONE_VICTORY_POINTS,
     CAPITALS,
     EXACT_LEGACY_FACTORY_STATE_IDS,

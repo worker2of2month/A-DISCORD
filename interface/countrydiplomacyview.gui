@@ -526,7 +526,8 @@ guiTypes = {
 				position = { x = 260 y = 466 }
 				# Keep a right-side gutter: Clausewitz fails to instantiate the
 				# engine-owned action rows when their grid touches the parent edge.
-				size = { width = 410 height = -50 }
+				# Slider and its handle span x 395-415; row icons end at x 387.
+				size = { width = 420 height = -50 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 40
 				smooth_scrolling = yes
@@ -560,8 +561,8 @@ guiTypes = {
 				gridboxtype = {
 					name = "actions_grid"
 					position = { x = 10 y = 32 }
-					size = { width = 395 height = 100%% }
-					slotsize = { width = 395 height = 34 }
+					size = { width = 387 height = 100%% }
+					slotsize = { width = 387 height = 34 }
 					max_slots_horizontal = 1
 					format = "UPPER_LEFT"
 				}
@@ -1130,14 +1131,14 @@ guiTypes = {
 	containerWindowType = {
 		name = "diplomacy_action_entry"
 		position = { x=0 y=0}
-		size = { width = 395 height = 33 }
+		size = { width = 387 height = 33 }
 		clipping = no
 
 		buttonType = {
 			name = "diplo_actions_entry_bg"
 			quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"
 			position = { x = 2 y = 0 }
-			size = { x = 391 y = 33 }
+			size = { x = 383 y = 33 }
 			clicksound = click_action
 		}
 
@@ -1148,7 +1149,7 @@ guiTypes = {
 			font = "hoi_16mbs"
 			borderSize = { x = 0 y = 0 }
 			text = "Maus"
-			maxWidth = 263
+			maxWidth = 245
 			maxHeight = 20
 			fixedsize = yes
 			format = left
@@ -1157,7 +1158,7 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "cost"
-			position = { x = 272 y = 6 }
+			position = { x = 254 y = 6 }
 			textureFile = ""
 			font = "hoi_16mbs"
 			borderSize = { x = 0 y = 0 }
@@ -1170,7 +1171,7 @@ guiTypes = {
 
 		iconType = {
 			name = "accept_icon"
-			position = { x = 371 y = 6 }
+			position = { x = 353 y = 6 }
 			spriteType ="GFX_accept_decline_icon"
 		}
 	}

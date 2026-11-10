@@ -29,12 +29,11 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
     VORKERLAND_THEATRE_VICTORY_POINTS,
     VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 )
+from tools.lib.city_terrains import CITY_TERRAINS
 from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
-# Combat terrains of city provinces: city VPs and settlement checks accept each.
-CITY_TERRAINS = frozenset({"urban", "vorkernsberg", "desert_city", "hill_city"})
 
 NAM_SVETLOGORSK_STATE_ID = 688
 NAM_SVETLOGORSK_PROVINCES = (

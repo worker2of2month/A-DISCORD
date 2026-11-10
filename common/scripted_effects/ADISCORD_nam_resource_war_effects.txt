@@ -14214,20 +14214,79 @@ NAM_program_flight_schools_refund = {
 	}
 }
 
-NAM_air_deliver_batch = {
+# Scripted effects take no argument blocks in the engine, so each air order has its own delivery.
+NAM_air_deliver_fighter_batch = {
 	if = {
-		limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
-		add_equipment_to_stockpile = {
-			type = $model$
-			amount = 36
-			producer = NAM
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_air_defence } }
+		if = {
+			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_fighter_airframe_2161
+				amount = 36
+				producer = NAM
+			}
+		}
+		else = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_fighter_airframe_2161
+				amount = 24
+				producer = NAM
+			}
 		}
 	}
 	else = {
-		add_equipment_to_stockpile = {
-			type = $model$
-			amount = 24
-			producer = NAM
+		if = {
+			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_fighter_airframe_2163
+				amount = 36
+				producer = NAM
+			}
+		}
+		else = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_fighter_airframe_2163
+				amount = 24
+				producer = NAM
+			}
+		}
+	}
+}
+
+NAM_air_deliver_cas_batch = {
+	if = {
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_frontline_air } }
+		if = {
+			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_attack_airframe_2163
+				amount = 36
+				producer = NAM
+			}
+		}
+		else = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_attack_airframe_2163
+				amount = 24
+				producer = NAM
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+			add_equipment_to_stockpile = {
+				type = ADISCORD_cas_airframe_2170
+				amount = 36
+				producer = NAM
+			}
+		}
+		else = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_cas_airframe_2170
+				amount = 24
+				producer = NAM
+			}
 		}
 	}
 }

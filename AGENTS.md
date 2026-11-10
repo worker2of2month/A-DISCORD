@@ -404,6 +404,30 @@ unfinished, whatever its validators report.
   delivery, localisation for every focus, tooltip and preview, and an AI plan
   naming only existing focuses.
 
+## Vorkerland country target
+
+The winner of the Vorkerland civil war keeps its own tag (WKR, VAD or TVA); the
+WRK tag does not return after the collapse. Address Vorkerland as a country
+through the global event target `event_target:ADISCORD_vorkerland_nation`, both
+as a scope and as a value (`tag`, `is_owned_by`, `add_core_of`, `has_war_with`).
+WRK's history binds it to WRK and `ADISCORD_vorkerland_unify_under_<tag>` rebinds
+it to the winner; do not bind it anywhere else.
+
+Write literal `WRK` only for the retired tag object itself: the prewar tree, the
+collapse, the premature-release guard, `producer = WRK`, and tag lists that
+already name all three claimants. `allowed` is read once at load, so it lists
+WRK, WKR, VAD and TVA, and the same definition's `visible` or `enable` carries
+`ADISCORD_vorkerland_is_not_wartime_claimant = yes`. Tag-keyed hooks
+(`on_daily_<TAG>`, `on_monthly_<TAG>`) and AI entries with a literal `id` need
+one entry per tag that can be the country. Do not use a claimant's tag to mean
+that the civil war is still on: test the campaign flags or the target instead.
+
+`VorkerlandNationTargetTests` in
+`tools/tests/test_adiscord_vorkerland_wrk_formation_scope.py` rejects a literal
+`WRK` where the target belongs and an `allowed` that names WRK without a
+claimant. Details are in the
+[focus-effects guide](docs/development/focus-effects.md).
+
 ## Performance
 
 Before changing runtime performance, read the source-backed

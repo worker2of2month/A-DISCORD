@@ -1177,7 +1177,7 @@ focus_tree = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NOR = {
+						NOT = {
 							has_completed_focus = NAM_export_quays
 							has_completed_focus = NAM_customs_clearinghouse
 						}
@@ -2245,7 +2245,7 @@ focus_tree = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NOR = {
+						NOT = {
 							has_completed_focus = NAM_supports_export_houses
 							has_completed_focus = NAM_contract_bureau
 							has_completed_focus = NAM_defeat_oil_union
@@ -2372,7 +2372,7 @@ focus_tree = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NOR = {
+						NOT = {
 							has_completed_focus = NAM_commercial_reserve
 							has_completed_focus = NAM_warehouse_receipts
 						}
@@ -3970,7 +3970,7 @@ focus_tree = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NOR = {
+						NOT = {
 							has_completed_focus = NAM_export_quays
 							has_completed_focus = NAM_oil_exchange
 						}

@@ -212,6 +212,185 @@ categories =  {
 		truck_attrition_factor = 0.2
 	}
 
+	# Stelander capital: monumental quarters between the sea and the mountains.
+	fada_city = {
+		color = { 196 160 92 }
+		movement_cost = 1.3
+		combat_width = 80
+		combat_support_width = 40
+		ai_terrain_importance_factor = 6.0
+		match_value = 5
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.35
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.55
+
+		supply_flow_penalty_factor = -0.25
+	}
+
+	# Kefreyt capital: factory halls and rail yards give a wide front and
+	# shelter for stocks, but the plants are large targets from the air.
+	dopotoydron_city = {
+		color = { 120 96 84 }
+		movement_cost = 1.25
+		combat_width = 90
+		combat_support_width = 45
+		ai_terrain_importance_factor = 6.0
+		match_value = 5
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.3
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.3
+
+		supply_flow_penalty_factor = -0.3
+
+		truck_attrition_factor = 0
+	}
+
+	# Governorate port on the desert coast: quays and warehouses keep
+	# supply flowing, while the low waterfront gives little cover.
+	south_harbour_city = {
+		color = { 92 150 170 }
+		movement_cost = 1.15
+		attrition = 0.05
+		combat_width = 80
+		combat_support_width = 40
+		ai_terrain_importance_factor = 5.0
+		match_value = 4
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.25
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.4
+
+		supply_flow_penalty_factor = -0.3
+
+		sickness_chance = 0.3
+	}
+
+	# Low oil towns among dry hills: scattered quarters give little cover
+	# and the long roads between them wear down transport.
+	svetlogorye_town = {
+		color = { 176 150 104 }
+		movement_cost = 1.15
+		attrition = 0.05
+		combat_width = 80
+		combat_support_width = 40
+		ai_terrain_importance_factor = 4.0
+		match_value = 4
+		sound_type = desert
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.2
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.3
+
+		supply_flow_penalty_factor = -0.1
+
+		sickness_chance = 0.3
+
+		truck_attrition_factor = 0.3
+	}
+
+	# Kefreyt tenements: narrow streets packed with traffic shorten the
+	# front and hide defenders in every courtyard.
+	kefreyt_city = {
+		color = { 132 92 76 }
+		movement_cost = 1.25
+		combat_width = 70
+		combat_support_width = 35
+		ai_terrain_importance_factor = 4.0
+		match_value = 4
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.35
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.5
+
+		supply_flow_penalty_factor = -0.15
+	}
+
+	# Stelander old towns climb the slopes: stairs and terraces make every
+	# assault uphill.
+	stelander_city = {
+		color = { 170 150 120 }
+		movement_cost = 1.4
+		combat_width = 70
+		combat_support_width = 35
+		ai_terrain_importance_factor = 5.0
+		match_value = 5
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.4
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.45
+
+		supply_flow_penalty_factor = -0.05
+
+		truck_attrition_factor = 0.15
+	}
+
+	# Wealthy boulevard cities: wide avenues open the front, while arcades
+	# and stone facades still shelter the defenders from the air.
+	rich_city = {
+		color = { 220 196 140 }
+		movement_cost = 1.1
+		combat_width = 90
+		combat_support_width = 45
+		ai_terrain_importance_factor = 5.0
+		match_value = 4
+		sound_type = plains
+		buildings_max_level = {
+			bunker = 5
+			coastal_bunker = 6
+		}
+
+		units = {
+			attack = -0.2
+		}
+
+		enemy_army_bonus_air_superiority_factor = -0.45
+
+		supply_flow_penalty_factor = -0.25
+	}
+
 	jungle = {
 		color = { 127 191 0 }
 		movement_cost = 1.5

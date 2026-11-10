@@ -8,6 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from tools.builders.build_adiscord_new_states import REGIONAL_SETTLEMENTS
+from tools.lib.city_terrains import CITY_TERRAINS
 from tools.lib.adiscord_core_state_balance_manifest import (
     CAPITAL_CUSTOM_BUILDING_STATES,
     EXPECTED_DIRECT_BUILDINGS,
@@ -216,7 +217,7 @@ def validate() -> None:
                 f"state {state_id}: VP {province} is outside the state",
             )
             terrain = province_terrain.get(province)
-            if terrain == "urban":
+            if terrain in CITY_TERRAINS:
                 check(value >= 5, f"state {state_id}: urban VP {province} is below 5")
             else:
                 check(
@@ -246,7 +247,7 @@ def validate() -> None:
             f"state {state_id}: missing settlement VP {province}:{value}",
         )
         check(
-            province_terrain.get(province) != "urban",
+            province_terrain.get(province) not in CITY_TERRAINS,
             f"state {state_id}: settlement VP {province} unexpectedly became urban",
         )
     for state_id, expected_vps in NORTHERN_CAMPAIGN_VPS.items():
@@ -262,7 +263,7 @@ def validate() -> None:
                 f"state {state_id}: expected urban VP {province}:{value}",
             )
             check(
-                province_terrain.get(province) == "urban",
+                province_terrain.get(province) in CITY_TERRAINS,
                 f"state {state_id}: VP {province} is not urban",
             )
 

@@ -5487,8 +5487,6 @@ class NamCampaignTests(unittest.TestCase):
                                                        else e for e in condition.value])
                 self.assertIn(entry.value, ("yes", "no"))
                 result.append(comparison if entry.value == "yes" else replace(entry, key="NOT", value=[comparison]))
-            elif entry.key == "NOR":
-                result.append(replace(entry, key="NOT", value=self.expand(entry.value)))
             elif entry.key in self.triggers:
                 self.assertIn(entry.value, ("yes", "no"), entry.key)
                 predicate = replace(entry, key="AND", value=self.expand(self.triggers[entry.key]))
@@ -5651,15 +5649,7 @@ class NamCampaignTests(unittest.TestCase):
             for name, target in facts[("fixture", "federal_front")].items():
                 facts[("event_target", name)] = target
         for scope, entry in selected_effects(self.expand(entries), conditions, current_scope):
-            if entry.key == "NAM_air_deliver_batch":
-                model = scalar(entry.value, "model")
-                batch = self.effects[entry.key]
-                for officer_scope, delivery in selected_effects(self.expand(batch), conditions, scope):
-                    self.assertEqual(delivery.key, "add_equipment_to_stockpile")
-                    self.assertEqual(scalar(delivery.value, "type"), "$model$")
-                    resolved = [replace(item, value=model) if item.key == "type" else item for item in delivery.value]
-                    self.apply([replace(delivery, value=resolved)], facts, officer_scope)
-            elif entry.key == "add_ace":
+            if entry.key == "add_ace":
                 ace = (scope, "ace", scalar(entry.value, "type"))
                 facts[ace] = facts.get(ace, 0) + 1
             elif entry.key in self.effects:

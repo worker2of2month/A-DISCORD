@@ -3128,9 +3128,8 @@ NAM_national_programmes = {
 							producer = NAM
 						}
 					}
-					NAM_air_deliver_batch = { model = ADISCORD_fighter_airframe_2161 }
 				}
-				else = { NAM_air_deliver_batch = { model = ADISCORD_fighter_airframe_2163 } }
+				NAM_air_deliver_fighter_batch = yes
 				if = {
 					limit = {
 						hidden_trigger = {
@@ -3234,9 +3233,8 @@ NAM_national_programmes = {
 							producer = NAM
 						}
 					}
-					NAM_air_deliver_batch = { model = ADISCORD_attack_airframe_2163 }
 				}
-				else = { NAM_air_deliver_batch = { model = ADISCORD_cas_airframe_2170 } }
+				NAM_air_deliver_cas_batch = yes
 				if = {
 					limit = {
 						hidden_trigger = {

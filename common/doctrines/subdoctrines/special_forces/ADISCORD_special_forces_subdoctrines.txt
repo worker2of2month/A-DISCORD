@@ -314,6 +314,13 @@ ADISCORD_special_forces_shield_formations = {
 				vorkernsberg = { attack = 0.06 }
 				desert_city = { attack = 0.06 }
 				hill_city = { attack = 0.06 }
+				fada_city = { attack = 0.06 }
+				dopotoydron_city = { attack = 0.06 }
+				south_harbour_city = { attack = 0.06 }
+				svetlogorye_town = { attack = 0.06 }
+				kefreyt_city = { attack = 0.06 }
+				stelander_city = { attack = 0.06 }
+				rich_city = { attack = 0.06 }
 			}
 		}
 		ADISCORD_special_forces_shield_formations_generator_rotation = {
