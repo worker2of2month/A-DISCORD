@@ -906,7 +906,15 @@ class SouthLifecycleTests(unittest.TestCase):
             for name, focus in focus_blocks(path).items():
                 reward = repr(block(focus, "completion_reward"))
                 if "ADISCORD_south_prepare_offensive" in reward:
-                    self.assertIn("ADISCORD_south_final_started", repr(block(focus, "bypass")), name)
+                    if name == "NAM_defeat_southern_charter":
+                        # Auto-completion would bind the mutually exclusive economic settlement.
+                        self.assertFalse(any(entry.key == "bypass" for entry in focus))
+                        self.assertEqual(scalar(block(focus, "mutually_exclusive"), "focus"), "NAM_defeat_oil_peace")
+                        second_chapter = focus_blocks(path)["NAM_defeat_second_chapter"]
+                        alternatives = {entry.value for entry in block(second_chapter, "prerequisite")}
+                        self.assertTrue({name, "NAM_defeat_oil_peace"} <= alternatives)
+                    else:
+                        self.assertIn("ADISCORD_south_final_started", repr(block(focus, "bypass")), name)
                     self.assertIn("ADISCORD_south_final_focus_available", repr(block(focus, "available")), name)
         for name in ("ADISCORD_south_accept_offer", "ADISCORD_south_refuse_offer", "ADISCORD_south_finalize_submission"):
             self.assertIn("ADISCORD_south_nam_story_clear", body(EFFECTS, name))
@@ -1113,37 +1121,34 @@ class FocusAggregateTests(unittest.TestCase):
                         self.display[idea.key] = (name, {e.key: float(e.value) for e in modifier})
 
     def test_every_display_delta_matches_the_applied_change(self):
-        checked = 0
+        checked = set()
+        owners = {var: (name, field) for name, fields in self.fields.items() for var, field in fields.items()}
         for tree in self.TREES:
             for identifier, focus in focus_blocks(tree).items():
                 reward = next(e.value for e in focus if e.key == "completion_reward")
-                swaps = [e.value for e in flatten(reward) if e.key == "swap_ideas"]
-                if not swaps:
-                    continue
-                swap = {e.key: e.value for e in swaps[0]}
-                if swap["remove_idea"] not in self.display:
-                    # A policy swap between real ideas, not a preview of the aggregate.
-                    continue
-                base_name, base = self.display[swap["remove_idea"]]
-                delta_name, delta = self.display[swap["add_idea"]]
-                self.assertEqual(base, {}, identifier)
-                self.assertEqual(base_name, delta_name, identifier)
-                # A reward may split its hidden work over several blocks (first
-                # batch, aggregate, refresh); the preview covers their union.
-                hidden = [entry for e in reward if e.key == "hidden_effect" for entry in e.value]
+                previewed = {}
                 applied = {}
-                for entry in hidden:
-                    if entry.key == "add_to_variable":
-                        values = {e.key: e.value for e in entry.value}
-                        # Other hidden bookkeeping (tension counters, flags) is
-                        # not part of the previewed aggregate.
-                        if values["var"] not in self.fields[delta_name]:
-                            continue
-                        applied[self.fields[delta_name][values["var"]]] = float(values["value"])
-                self.assertEqual(applied, delta, identifier)
-                self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
-                checked += 1
-        self.assertEqual(checked, 156)
+                for tip in (entry.value for entry in reward if entry.key == "effect_tooltip"):
+                    for entry in (part for part in flatten(tip) if part.key == "swap_ideas"):
+                        swap = {part.key: part.value for part in entry.value}
+                        if swap["remove_idea"] in self.display:
+                            base_name, base = self.display[swap["remove_idea"]]
+                            name, delta = self.display[swap["add_idea"]]
+                            self.assertEqual((base_name, base), (name, {}), identifier)
+                            self.assertNotIn(name, previewed, identifier)
+                            previewed[name] = delta
+                hidden = [part for entry in reward if entry.key == "hidden_effect" for part in entry.value]
+                for entry in (part for part in hidden if part.key == "add_to_variable"):
+                    change = {part.key: part.value for part in entry.value}
+                    if change.get("var") in owners:
+                        name, field = owners[change["var"]]
+                        fields = applied.setdefault(name, {})
+                        fields[field] = fields.get(field, 0) + float(change["value"])
+                self.assertEqual(previewed, applied, identifier)
+                for name in previewed:
+                    self.assertIn((self.REFRESH[name], "yes"), [(e.key, e.value) for e in hidden], identifier)
+                checked.update(previewed)
+        self.assertEqual(checked, set(self.REFRESH))
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)

@@ -219,11 +219,14 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_innovation_park
 			custom_effect_tooltip = NAM_corp_innovation_park_unlock_tt
-			add_tech_bonus = {
-				name = NAM_hum_innovation_parks
-				bonus = 0.5
-				uses = 1
-				category = industry
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_standard_gauge_recovery } }
+				set_technology = { ADISCORD_tech_standard_gauge_recovery = 1 }
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 8
+				producer = NAM
 			}
 			custom_effect_tooltip = NAM_hum_innovation_parks_tt
 			hidden_effect = {
@@ -1190,6 +1193,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_hum_finance_island_cooperative
+			custom_effect_tooltip = NAM_hum_finance_island_cooperative_unlock_tt
 			add_stability = 0.05
 			custom_effect_tooltip = NAM_grp_hum_exile_parliament_tt
 			hidden_effect = {
@@ -1218,7 +1223,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 80
+			unlock_decision_tooltip = NAM_hum_refit_landing_transports
+			custom_effect_tooltip = NAM_hum_refit_landing_transports_unlock_tt
 			add_war_support = 0.05
 			custom_effect_tooltip = NAM_grp_hum_salvation_cabinet_tt
 			hidden_effect = {
@@ -1355,38 +1361,6 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			# The minor allies of the coalition lose the will to fight; the two
-			# principals lose stability.
-			SDR = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
-			}
-			RHM = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
-			}
-			KDR = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
-			}
-			AZH = {
-				if = {
-					limit = { exists = yes }
-					add_stability = -0.02
-				}
-			}
-			EFL = {
-				if = {
-					limit = { exists = yes }
-					add_stability = -0.02
-				}
-			}
 			custom_effect_tooltip = NAM_hum_split_coalition_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_revenge_readiness value = 5 }
@@ -2224,27 +2198,13 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			# Rejected offers of union divide the elites of the three southern
-			# governments before the war.
-			SDR = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
+			unlock_decision_tooltip = NAM_hum_send_southern_mandate
+			custom_effect_tooltip = NAM_hum_send_southern_mandate_unlock_tt
+			custom_effect_tooltip = NAM_hum_southern_assembly_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_consolidation value = 5 }
+				NAM_consolidation_clamp = yes
 			}
-			RHM = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
-			}
-			KDR = {
-				if = {
-					limit = { exists = yes }
-					add_war_support = -0.05
-				}
-			}
-			add_political_power = 30
 		}
 		ai_will_do = {
 			base = 25
@@ -2260,13 +2220,47 @@ shared_focus = {
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_hum_union_accepted }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_government_tt
+				NAM_hum_government_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 8000
 			army_experience = 15
+			custom_effect_tooltip = NAM_hum_federal_muster_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_template = "Federal Rifle Regiment" }
+						capital_scope = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+					}
+					NAM_hum_issue_federal_regiment = yes
+					capital_scope = {
+						create_unit = {
+							division = "name = \"1-й федеральный стрелковый полк\" division_template = \"Federal Rifle Regiment\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+							owner = NAM
+							allow_spawning_on_enemy_provs = no
+						}
+					}
+					add_manpower = 4000
+				}
+				else = {
+					NAM_hum_issue_federal_regiment = yes
+					add_manpower = 8000
+				}
+				for_each_scope_loop = {
+					array = NAM_federal_districts
+					if = {
+						limit = { NAM_board_federal_subject = yes }
+						NAM_hum_issue_federal_regiment = yes
+					}
+				}
+			}
 		}
 		ai_will_do = {
 			base = 25
@@ -2329,6 +2323,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_hum_union_call_tt
 			add_war_support = 0.10
 			add_command_power = 20
 		}
@@ -2545,29 +2540,31 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			custom_effect_tooltip = NAM_hum_caravan_charter_tt
-			hidden_effect = {
-				KDR = {
-					if = {
-						limit = {
+			unlock_decision_tooltip = NAM_hum_establish_caravan_depot
+			custom_effect_tooltip = NAM_hum_establish_caravan_depot_unlock_tt
+			KDR = {
+				if = {
+					limit = {
+						hidden_trigger = {
 							exists = yes
 							has_country_flag = NAM_federal_district
 							is_subject_of = NAM
 						}
-						add_stability = 0.05
-						capital_scope = {
-							if = {
-								limit = {
+					}
+					add_stability = 0.05
+					capital_scope = {
+						if = {
+							limit = {
+								hidden_trigger = {
 									is_owned_by = KDR
 									is_controlled_by = KDR
+									infrastructure < 5
 								}
-								add_building_construction = {
-									type = infrastructure
-									level = 1
-									instant_build = yes
-								}
+							}
+							add_building_construction = {
+								type = infrastructure
+								level = 1
+								instant_build = yes
 							}
 						}
 					}
@@ -2593,13 +2590,9 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_hum_union_university
-				bonus = 0.5
-				uses = 2
-				category = industry
-			}
-			add_stability = 0.02
+			add_research_slot = 1
+			unlock_decision_tooltip = NAM_hum_endow_district_faculty
+			custom_effect_tooltip = NAM_hum_endow_district_faculty_unlock_tt
 		}
 		ai_will_do = {
 			base = 15
@@ -2622,8 +2615,8 @@ shared_focus = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_stability = 0.03
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
+			unlock_decision_tooltip = NAM_hum_place_union_order
+			custom_effect_tooltip = NAM_hum_place_union_order_unlock_tt
 			custom_effect_tooltip = NAM_hum_union_currency_tt
 			hidden_effect = {
 				every_subject_country = {
@@ -2647,13 +2640,36 @@ shared_focus = {
 		prerequisite = { focus = NAM_hum_union_parliament }
 		mutually_exclusive = { focus = NAM_hum_union_currency }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_government_tt
+				NAM_hum_government_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 10000
 			army_experience = 20
+			custom_effect_tooltip = NAM_hum_union_brigades_tt
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 48
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = NAM
+			}
+			hidden_effect = {
+				NAM_hum_issue_union_brigade = yes
+				for_each_scope_loop = {
+					array = NAM_federal_districts
+					if = {
+						limit = { NAM_board_federal_subject = yes }
+						NAM_hum_issue_union_brigade = yes
+					}
+				}
+			}
 		}
 		ai_will_do = {
 			base = 8
@@ -2674,7 +2690,9 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 50
+			unlock_decision_tooltip = NAM_hum_collect_market_freight
+			custom_effect_tooltip = NAM_hum_collect_market_freight_unlock_tt
+			custom_effect_tooltip = NAM_hum_market_federation_tt
 			custom_effect_tooltip = NAM_grp_hum_common_market_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_trade_support value = 6 }

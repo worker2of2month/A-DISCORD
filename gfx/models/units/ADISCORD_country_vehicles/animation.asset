@@ -56,9 +56,18 @@ animation = { name = "ADISCORD_NAM_fighter_idle_animation" file = "NAM_fighter_i
 animation = { name = "ADISCORD_NAM_cas_idle_animation" file = "NAM_cas_idle.anim" }
 animation = { name = "ADISCORD_NAM_future_fighter_idle_animation" file = "NAM_future_fighter_idle.anim" }
 animation = { name = "ADISCORD_NAM_future_cas_idle_animation" file = "NAM_future_cas_idle.anim" }
+animation = { name = "ADISCORD_SHL_early_fighter_idle_animation" file = "SHL_early_fighter_idle.anim" }
+animation = { name = "ADISCORD_SHL_early_cas_idle_animation" file = "SHL_early_cas_idle.anim" }
+animation = { name = "ADISCORD_SHL_fighter_idle_animation" file = "SHL_fighter_idle.anim" }
+animation = { name = "ADISCORD_SHL_cas_idle_animation" file = "SHL_cas_idle.anim" }
+animation = { name = "ADISCORD_SHL_future_fighter_idle_animation" file = "SHL_future_fighter_idle.anim" }
+animation = { name = "ADISCORD_SHL_future_cas_idle_animation" file = "SHL_future_cas_idle.anim" }
 animation = { name = "ADISCORD_STS_taran_idle_animation" file = "STS_taran_idle.anim" }
 animation = { name = "ADISCORD_STS_taran_move_animation" file = "STS_taran_move.anim" }
 animation = { name = "ADISCORD_STS_taran_attack_animation" file = "STS_taran_attack.anim" }
+animation = { name = "ADISCORD_SHL_tank_idle_animation" file = "SHL_tank_idle.anim" }
+animation = { name = "ADISCORD_SHL_tank_move_animation" file = "SHL_tank_move.anim" }
+animation = { name = "ADISCORD_SHL_tank_attack_animation" file = "SHL_tank_attack.anim" }
 animation = { name = "ADISCORD_VAL_apc_idle_animation" file = "VAL_apc_idle.anim" }
 animation = { name = "ADISCORD_VAL_apc_move_animation" file = "VAL_apc_move.anim" }
 animation = { name = "ADISCORD_VAL_apc_attack_animation" file = "VAL_apc_attack.anim" }
@@ -74,3 +83,6 @@ animation = { name = "ADISCORD_NAM_apc_attack_animation" file = "NAM_apc_attack.
 animation = { name = "ADISCORD_NOD_apc_idle_animation" file = "NOD_apc_idle.anim" }
 animation = { name = "ADISCORD_NOD_apc_move_animation" file = "NOD_apc_move.anim" }
 animation = { name = "ADISCORD_NOD_apc_attack_animation" file = "NOD_apc_attack.anim" }
+animation = { name = "ADISCORD_SHL_apc_idle_animation" file = "SHL_apc_idle.anim" }
+animation = { name = "ADISCORD_SHL_apc_move_animation" file = "SHL_apc_move.anim" }
+animation = { name = "ADISCORD_SHL_apc_attack_animation" file = "SHL_apc_attack.anim" }

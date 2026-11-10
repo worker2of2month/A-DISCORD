@@ -28,6 +28,7 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 )
 from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
+    CITY_TERRAINS,
     DIRTY_ZONE_VICTORY_POINTS,
     CAPITALS,
     EXACT_LEGACY_FACTORY_STATE_IDS,
@@ -183,7 +184,7 @@ EBA_EXPECTED_STATE_PROFILES = {
 
 ROOT = Path(__file__).resolve().parents[2]
 ERRORS: list[str] = []
-SETTLEMENT_TERRAINS = frozenset({"urban", "vorkernsberg"})
+SETTLEMENT_TERRAINS = CITY_TERRAINS
 
 
 def check(condition: bool, message: str) -> None:
@@ -1132,29 +1133,34 @@ def validate_vorkerland_expansion() -> None:
             )
 
     # A central victory records the surviving wartime claimant, then the guarded
-    # phase controller forms final WRK. Keep direct map-paint forbidden here so
-    # generated expansion-state assignments cannot be bypassed by an outcome.
+    # phase controller unifies Vorkerland under that claimant's own tag. Keep
+    # direct map-paint forbidden here so generated expansion-state assignments
+    # cannot be bypassed by an outcome.
+    nation_rebinding = re.compile(
+        r"\s*clear_global_event_target\s*=\s*ADISCORD_vorkerland_nation\s+"
+        r"save_global_event_target_as\s*=\s*ADISCORD_vorkerland_nation\b"
+    )
     winner_paths = (
         (
             "ADISCORD_vorkerland_apply_worker_map",
             "WKR",
             "ADISCORD_vorkerland_worker_won",
-            "ADISCORD_vorkerland_form_wrk_from_wkr",
+            "ADISCORD_vorkerland_unify_under_wkr",
         ),
         (
             "ADISCORD_vorkerland_apply_vlad_map",
             "VAD",
             "ADISCORD_vorkerland_vlad_won",
-            "ADISCORD_vorkerland_form_wrk_from_vad",
+            "ADISCORD_vorkerland_unify_under_vad",
         ),
         (
             "ADISCORD_vorkerland_apply_dorian_map",
             "TVA",
             "ADISCORD_vorkerland_dorian_won",
-            "ADISCORD_vorkerland_form_wrk_from_tva",
+            "ADISCORD_vorkerland_unify_under_tva",
         ),
     )
-    finalizer = block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+    finalizer = block(phase_effects, "ADISCORD_vorkerland_finalize_reunification")
     for map_name, winner_tag, victory_flag, formation_effect in winner_paths:
         winner = block(maps, map_name)
         for required in ("ADISCORD_vorkerland_begin_reunification = yes",):
@@ -1186,16 +1192,33 @@ def validate_vorkerland_expansion() -> None:
             ),
             f"{map_name}: missing central-unifier marker for wartime {winner_tag}",
         )
-        formation = block(phase_effects, formation_effect)
-        formation += block(phase_effects, f"ADISCORD_vorkerland_complete_wrk_from_{winner_tag.lower()}")
-        for required in (
-            f"change_tag_from = {winner_tag}",
-            "ADISCORD_vorkerland_finalize_wrk_formation = yes",
-        ):
-            check(
-                required in formation,
-                f"{formation_effect}: missing final-WRK token {required}",
-            )
+        unification = block(phase_effects, formation_effect)
+        settlement_effect = (
+            f"ADISCORD_vorkerland_settle_unification_under_{winner_tag.lower()}"
+        )
+        settlement = block(phase_effects, settlement_effect)
+        # The effect runs in the winner's scope; binding the nation target
+        # first makes the winner the country every later reader resolves.
+        check(
+            bool(nation_rebinding.match(unification)),
+            f"{formation_effect}: must open by rebinding the nation target to {winner_tag}",
+        )
+        check(
+            "change_tag_from" not in unification + settlement,
+            f"{formation_effect}: {winner_tag} must keep its own tag",
+        )
+        check(
+            not re.search(
+                rf"\bannex_country\s*=\s*\{{\s*target\s*=\s*{winner_tag}\b",
+                unification + settlement,
+            ),
+            f"{settlement_effect}: must not annex the winner {winner_tag}",
+        )
+        check(
+            "ADISCORD_vorkerland_finalize_unified_territory = yes" in settlement,
+            f"{settlement_effect}: missing unification token "
+            "ADISCORD_vorkerland_finalize_unified_territory = yes",
+        )
         for forbidden in (
             "transfer_state",
             "annex_country",
@@ -1236,20 +1259,19 @@ def validate_vorkerland_expansion() -> None:
 
     phase_six = event_block(phase_events, "ADISCORD_vorkerland_phase.6")
     for _map_name, winner_tag, _victory_flag, formation_effect in winner_paths:
-        check(
-            bool(
-                re.search(
-                    rf"\bWRK\s*=\s*\{{\s*{re.escape(formation_effect)}\s*=\s*yes\s*\}}",
-                    phase_six,
-                    re.DOTALL,
-                )
-            ),
-            f"phase.6 does not form final WRK from surviving {winner_tag}",
+        callers = re.findall(
+            rf"(\S+)\s*=\s*\{{\s*{re.escape(formation_effect)}\s*=\s*yes\s*\}}",
+            phase_six,
         )
         check(
-            "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
-            in block(phase_effects, formation_effect),
-            f"{formation_effect} must queue WRK settlement before handing off control",
+            callers == [winner_tag],
+            f"phase.6 does not unify Vorkerland in the scope of surviving {winner_tag}",
+        )
+        check(
+            block(phase_effects, formation_effect)
+            .rstrip()
+            .endswith("country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"),
+            f"{formation_effect} must end by queueing the phase.7 settlement",
         )
 
 

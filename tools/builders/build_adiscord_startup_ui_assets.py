@@ -25,7 +25,7 @@ PORTRAIT = (220, 440)
 # Country portraits cut from existing campaign art at the briefing's 1:2 ratio:
 # the desert city of the southern superevent and the oil towers of a loading screen.
 PORTRAIT_CROPS = {
-    'shl': ('gfx/interface/superevents/NAM/namestnik lost.png', (290, 86, 542, 590)),
+    'shl': ('gfx/interface/superevents/NAM/superevent_resource_war.png', (290, 86, 542, 590)),
     'nam': ('gfx/loadingscreens/load_3.dds', (1180, 0, 1900, 1440)),
 }
 

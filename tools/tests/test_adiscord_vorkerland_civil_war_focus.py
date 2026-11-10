@@ -39,8 +39,6 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     CORE_DECISIONS,
     DIPLOMACY_DECISIONS_FILE,
     DIPLOMACY_EFFECTS_FILE,
-    DORMANT_WRK_CRISIS_IDEAS,
-    DORMANT_WRK_SCRUB_EFFECT,
     ENGLISH_LOCALISATION,
     ENGLISH_POSTWAR_IDEA_LOCALISATION,
     FOCUS_DECISION_FILES,
@@ -61,6 +59,10 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     POSTWAR_ROUTE_TERMINALS,
     POSTWAR_SETTLEMENT_IDEAS,
     POSTWAR_TRANSITIONAL_IDEAS,
+    NATION_TARGET,
+    PRECOLLAPSE_CRISIS_IDEAS,
+    PRECOLLAPSE_CRISIS_SCRUB_EFFECT,
+    PRECOLLAPSE_SCRUBBED_IDEAS,
     PREWAR_CARRYOVER_EFFECT,
     PREWAR_CARRYOVER_FLAG,
     PREWAR_COURSE_SELECTIONS,
@@ -102,6 +104,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     TVA_OPTIONAL_TIMED_IDEAS,
     TVA_OPTIONAL_WARTIME_FOCUSES,
     TVA_VARIANT_FOCUSES,
+    RETIRED_HANDOFF_EFFECTS,
     RETIRED_WARTIME_FOCUSES,
     VAD_VARIANT_FOCUSES,
     VARIANT_BRANCHES,
@@ -139,9 +142,9 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     WORX_FIELD_DIRECTORATE_IDEAS,
     WORX_POSTWAR_PROVISIONAL_IDEAS,
     WORX_WARTIME_TIMED_IDEAS,
-    WORKER_REFORM_INHERIT_EFFECT,
     WORKER_REFORM_STAGE_IDEAS,
-    WRK_COMPLETION_EFFECTS,
+    UNIFICATION_EFFECTS,
+    UNIFICATION_SETTLEMENT_EFFECTS,
     _blocks,
     _allow_branch,
     _check_focus_reference_order,
@@ -159,6 +162,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     focus_blocks,
     localisation_entries,
     read,
+    unification_spirit_issues,
 )
 
 
@@ -217,6 +221,34 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     "claimant capstone 30 must dispatch its country report once",
                     collect_issues(),
                 )
+
+    def test_postwar_trees_reject_a_literal_wrk_gate(self) -> None:
+        original = read(FOCUS_FILE)
+        claimant_selector = "OR = { tag = WKR tag = VAD tag = TVA }"
+        focus_id = "WRK_worker_convene_reunification_congress"
+        focus = self.blocks[focus_id]
+        nation_gate = f"tag = {NATION_TARGET}"
+        self.assertIn(nation_gate, focus)
+        self.assertEqual(original.count(focus), 1)
+        # One pass covers both gates: the settlement tree is the first tree
+        # with a claimant selector, and the focus is its root.
+        mutated = original.replace(claimant_selector, "tag = WRK", 1).replace(
+            focus, focus.replace(nation_gate, "tag = WRK", 1), 1
+        )
+        with patch(
+            "tools.validators.validate_adiscord_vorkerland_civil_war_focus.read",
+            side_effect=lambda path: mutated if path == FOCUS_FILE else read(path),
+        ):
+            issues = collect_issues()
+        self.assertIn(
+            "ADISCORD_vorkerland_settlement_focus selector must cover "
+            "['TVA', 'VAD', 'WKR'], found ['WRK']",
+            issues,
+        )
+        self.assertIn(
+            f"{focus_id} must expose only the block of the unified nation target",
+            issues,
+        )
 
     def test_each_lifecycle_tree_selects_only_its_own_tags(self) -> None:
         trees = _blocks(self.source, "focus_tree")
@@ -1663,61 +1695,110 @@ focus = {
             with self.subTest(focus_id=focus_id):
                 self.assertEqual(native_grants(reward), native_grants(inherited))
 
-    def test_all_winner_formations_normalize_the_dormant_wrk_before_annex(self) -> None:
-        scrub = _blocks(self.phase_effects, DORMANT_WRK_SCRUB_EFFECT)[0]
+    def test_every_winner_settlement_ends_the_precollapse_crisis_on_its_own_tag(
+        self,
+    ) -> None:
+        scrub = _blocks(self.phase_effects, PRECOLLAPSE_CRISIS_SCRUB_EFFECT)[0]
         scrubbed_ideas = Counter(
             re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", scrub)
         )
-        for idea_id in DORMANT_WRK_CRISIS_IDEAS:
+        for idea_id in PRECOLLAPSE_SCRUBBED_IDEAS:
             with self.subTest(scrubbed_idea=idea_id):
                 self.assertEqual(scrubbed_ideas[idea_id], 1)
 
-        worker_inheritance = _blocks(self.phase_effects, WORKER_REFORM_INHERIT_EFFECT)[
-            0
-        ]
-        self.assertEqual(
-            worker_inheritance.count(f"{DORMANT_WRK_SCRUB_EFFECT} = yes"), 1
-        )
+        effects = read(PHASE_EFFECTS_FILE)
+        for retired in RETIRED_HANDOFF_EFFECTS:
+            with self.subTest(retired=retired):
+                self.assertNotIn(retired, effects)
 
-        for winner_tag, formation_name in WRK_COMPLETION_EFFECTS.items():
+        scrub_call = f"{PRECOLLAPSE_CRISIS_SCRUB_EFFECT} = yes"
+        for winner_tag, settlement_name in UNIFICATION_SETTLEMENT_EFFECTS.items():
             with self.subTest(winner_tag=winner_tag):
-                formation = _blocks(self.phase_effects, formation_name)[0]
-                route_bridge = (
-                    WORKER_REFORM_INHERIT_EFFECT
-                    if winner_tag == "WKR"
-                    else DORMANT_WRK_SCRUB_EFFECT
+                unification = _blocks(
+                    self.phase_effects, UNIFICATION_EFFECTS[winner_tag]
+                )[0]
+                settlement = _blocks(self.phase_effects, settlement_name)[0]
+                # The winner is the country being settled; nothing consumes it
+                # or moves its player to another tag.
+                self.assertNotIn("change_tag_from", unification + settlement)
+                self.assertNotRegex(
+                    unification + settlement,
+                    rf"annex_country\s*=\s*\{{\s*target\s*=\s*{winner_tag}\b",
                 )
-                bridge_token = f"{route_bridge} = yes"
-                annex_token = (
-                    f"annex_country = {{ target = {winner_tag} transfer_troops = yes }}"
-                )
-                self.assertEqual(formation.count(bridge_token), 1)
-                self.assertEqual(formation.count(annex_token), 1)
-                self.assertLess(
-                    formation.index(bridge_token), formation.index(annex_token)
-                )
-
-    def test_worker_formation_inherits_one_exact_stage_from_each_reform_chain(
-        self,
-    ) -> None:
-        inheritance = _blocks(self.phase_effects, WORKER_REFORM_INHERIT_EFFECT)[0]
-        self.assertEqual(len(_blocks(inheritance, "if")), 2)
-        self.assertEqual(len(_blocks(inheritance, "else_if")), 4)
-        inherited_ideas = Counter(
-            re.findall(r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", inheritance)
-        )
-        self.assertEqual(inherited_ideas, Counter(WORKER_REFORM_STAGE_IDEAS))
-        for idea_id in WORKER_REFORM_STAGE_IDEAS:
-            with self.subTest(idea_id=idea_id):
                 self.assertEqual(
-                    inheritance.count(f"WKR = {{ has_idea = {idea_id} }}"), 1
+                    settlement.count(scrub_call), 0 if winner_tag == "WKR" else 1
                 )
+                self.assertNotIn(scrub_call, unification)
 
-        formation = _blocks(self.phase_effects, WRK_COMPLETION_EFFECTS["WKR"])[0]
-        self.assertLess(
-            formation.index(f"{WORKER_REFORM_INHERIT_EFFECT} = yes"),
-            formation.index("annex_country = { target = WKR transfer_troops = yes }"),
+    def test_worker_unification_keeps_the_reform_stage_it_reached(self) -> None:
+        unification = _blocks(self.phase_effects, UNIFICATION_EFFECTS["WKR"])[0]
+        settlements = {
+            tag: _blocks(self.phase_effects, name)[0]
+            for tag, name in UNIFICATION_SETTLEMENT_EFFECTS.items()
+        }
+        worker = settlements["WKR"]
+        ended = Counter(re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", worker))
+        for idea_id in PRECOLLAPSE_CRISIS_IDEAS:
+            with self.subTest(ended=idea_id):
+                self.assertEqual(ended[idea_id], 1)
+        for idea_id in WORKER_REFORM_STAGE_IDEAS:
+            with self.subTest(kept=idea_id):
+                self.assertNotRegex(unification + worker, rf"\b{idea_id}\b")
+
+        effects = read(PHASE_EFFECTS_FILE)
+        self.assertEqual(unification_spirit_issues(settlements, effects), [])
+        worker_name = UNIFICATION_SETTLEMENT_EFFECTS["WKR"]
+        joint_name = UNIFICATION_SETTLEMENT_EFFECTS["VAD"]
+        scrub_call = f"{PRECOLLAPSE_CRISIS_SCRUB_EFFECT} = yes"
+        hourglass = "remove_ideas = WRK_hourglass_of_discord"
+        reform_stage = WORKER_REFORM_STAGE_IDEAS[0]
+        cases = (
+            (
+                {"WKR": worker.replace(hourglass, scrub_call, 1)},
+                effects,
+                (
+                    f"{worker_name} must keep the worker reform stage instead of "
+                    f"running {PRECOLLAPSE_CRISIS_SCRUB_EFFECT}",
+                    f"{worker_name} must end WRK_hourglass_of_discord exactly once",
+                ),
+            ),
+            (
+                {"WKR": worker.replace(hourglass, f"{hourglass}\n\tremove_ideas = {reform_stage}", 1)},
+                effects,
+                (f"{worker_name} must leave the worker reform stage {reform_stage} untouched",),
+            ),
+            (
+                {
+                    "WKR": worker.replace(
+                        hourglass,
+                        f"{hourglass}\n\tannex_country = {{ target = WKR transfer_troops = yes }}",
+                        1,
+                    )
+                },
+                effects,
+                (f"{worker_name} must not annex its winner WKR",),
+            ),
+            (
+                {"VAD": settlements["VAD"].replace(scrub_call, "", 1)},
+                effects,
+                (f"{joint_name} must invoke {PRECOLLAPSE_CRISIS_SCRUB_EFFECT} exactly once",),
+            ),
+            (
+                {},
+                f"{effects}\n{worker_name} = {{ {RETIRED_HANDOFF_EFFECTS[0]} = yes }}\n",
+                (
+                    f"retired handoff effect {RETIRED_HANDOFF_EFFECTS[0]} must not be "
+                    "defined or called",
+                ),
+            ),
         )
+        for mutated, script, expected in cases:
+            with self.subTest(expected=expected[0]):
+                for tag, block in mutated.items():
+                    self.assertNotEqual(block, settlements[tag])
+                issues = unification_spirit_issues({**settlements, **mutated}, script)
+                for diagnostic in expected:
+                    self.assertIn(diagnostic, issues)
 
     def test_wartime_routes_are_isolated_and_bounded(self) -> None:
         for tag, focus_ids in WARTIME_ROUTE_FOCUSES.items():
@@ -1815,7 +1896,7 @@ focus = {
         standardize = self.blocks["TVA_standardize_emergency_administration"]
         self.assertEqual(standardize.count("else = { add_war_support = 0.01 }"), 1)
 
-        formation = _blocks(self.phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
+        formation = _blocks(self.phase_effects, "ADISCORD_vorkerland_settle_unification_under_tva")
         self.assertEqual(len(formation), 1)
         self.assertEqual(
             formation[0].count(
@@ -1954,7 +2035,13 @@ focus = {
                 with self.subTest(focus_id=focus_id):
                     block = self.blocks[focus_id]
                     self.assertEqual(_phase_flags(block), {POSTWAR_PHASE})
-                    self.assertIn("tag = WRK", block)
+                    # The postwar tree opens for whichever claimant unified
+                    # the country, never for a literal tag.
+                    self.assertEqual(
+                        re.findall(r"\btag\s*=\s*(\S+)", _allow_branch(block)),
+                        [NATION_TARGET],
+                    )
+                    self.assertNotIn("tag = WRK", block)
                     self.assertIn(f"has_country_flag = {route_flag}", block)
 
     def test_postwar_routes_have_two_reachable_policy_paths(self) -> None:
@@ -2925,9 +3012,9 @@ class WarLegacyTests(unittest.TestCase):
     """The winning claimant's war systems carry into the reunified settlement."""
 
     ROUTES = {
-        "ADISCORD_vorkerland_complete_wrk_from_wkr": ("WKR", "ADISCORD_vorkerland_pw_record_worker_councils"),
-        "ADISCORD_vorkerland_complete_wrk_from_vad": ("VAD", "ADISCORD_vorkerland_pw_record_district_oaths"),
-        "ADISCORD_vorkerland_complete_wrk_from_tva": ("TVA", "ADISCORD_vorkerland_pw_record_trial_iterations"),
+        "ADISCORD_vorkerland_settle_unification_under_wkr": ("WKR", "ADISCORD_vorkerland_pw_record_worker_councils"),
+        "ADISCORD_vorkerland_settle_unification_under_vad": ("VAD", "ADISCORD_vorkerland_pw_record_district_oaths"),
+        "ADISCORD_vorkerland_settle_unification_under_tva": ("TVA", "ADISCORD_vorkerland_pw_record_trial_iterations"),
     }
     CONSUMERS = {
         "WRK_worker_convene_reunification_congress": "ADISCORD_vorkerland_pw_council_output",
@@ -2942,14 +3029,27 @@ class WarLegacyTests(unittest.TestCase):
         cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
         cls.effects = read(PHASE_EFFECTS_FILE)
 
-    def test_legacy_is_recorded_before_the_winner_is_annexed(self) -> None:
-        for completion, (tag, record) in self.ROUTES.items():
-            with self.subTest(completion=completion):
-                body = _blocks(self.effects, completion)[0]
-                self.assertLess(
-                    body.index(f"{record} = yes"),
-                    body.index(f"annex_country = {{ target = {tag}"),
+    def test_legacy_is_recorded_once_on_the_surviving_winner(self) -> None:
+        for settlement, (tag, record) in self.ROUTES.items():
+            with self.subTest(settlement=settlement):
+                body = _blocks(self.effects, settlement)[0]
+                # The settlement runs on the winner, whose own war systems the
+                # record reads; the winner is never annexed, so they stay readable.
+                self.assertEqual(body.count(f"{record} = yes"), 1)
+                guards = [
+                    block for block in _blocks(body, "if") if f"{record} = yes" in block
+                ]
+                self.assertEqual(len(guards), 1)
+                self.assertIn(f"country_exists = {tag}", guards[0])
+                self.assertNotRegex(
+                    body, rf"annex_country\s*=\s*\{{\s*target\s*=\s*{tag}\b"
                 )
+                sources = set(
+                    re.findall(
+                        r"\bvalue\s*=\s*([A-Z]{3})\.", _blocks(self.effects, record)[0]
+                    )
+                )
+                self.assertEqual(sources, {tag})
 
     def test_each_recorded_delta_has_one_settlement_consumer(self) -> None:
         recorded = "".join(

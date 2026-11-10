@@ -22,9 +22,9 @@ country_event = {
 		if = {
 			limit = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
-				WRK = { exists = yes }
+				event_target:ADISCORD_vorkerland_nation = { exists = yes }
 			}
-			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+			event_target:ADISCORD_vorkerland_nation = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 		}
 		else = {
 			# superevent_vorkerland_civilwar
@@ -94,15 +94,15 @@ country_event = {
 	}
 }
 
-# Console audio proxies. News events play through the shared unscoped helper
-# instead of dispatching to a human country that observer mode does not have.
+# Audio-only console events also play for observers without a country.
 country_event = {
 	id = ADISCORD_superevent_audio.1
 	hidden = yes
 	is_triggered_only = yes
 
 	immediate = {
-		play_song = "superevent_vorkerland_civilwar"
+		play_song = "one_minute_of_silence"
+		sound_effect = superevent_vorkerland_civilwar_sound_e
 	}
 }
 
@@ -112,7 +112,8 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		play_song = "superevent_stelander_empire"
+		play_song = "one_minute_of_silence"
+		sound_effect = superevent_stelander_empire_sound_e
 	}
 }
 
@@ -187,7 +188,17 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		# superevent_nam_resource_war
-		set_temp_variable = { ADISCORD_superevent_request = 10 }
+		if = {
+			limit = { NAM = { NAM_prewar_service_mandate = yes } }
+			set_temp_variable = { ADISCORD_superevent_request = 26 }
+		}
+		else_if = {
+			limit = { NAM = { NAM_prewar_district_mandate = yes } }
+			set_temp_variable = { ADISCORD_superevent_request = 27 }
+		}
+		else = {
+			set_temp_variable = { ADISCORD_superevent_request = 10 }
+		}
 		ADISCORD_superevent_enqueue = yes
 	}
 }

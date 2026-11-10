@@ -53,6 +53,9 @@ COLLAPSE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.
 COLLAPSE_ON_ACTIONS = Path(
     "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
 )
+# The two places that may bind the nation target to WRK for a fresh campaign.
+WRK_HISTORY = Path("history/countries/WRK - WorkerLand.txt")
+NATION_BINDING_ON_ACTIONS = Path("common/on_actions/00_ADISCORD_on_actions.txt")
 FOCUS_TREE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 FOCUS_DECISION_FILES = (Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),)
 FOCUS_DECISIONS = FOCUS_DECISION_FILES
@@ -89,6 +92,46 @@ CENTRAL_MINOR_PACKAGES = {
     "OSV": (318, 320),
 }
 WKR_DEFAULT_LEADER = "WKR_Emergency_Coordination_Committee"
+
+# Global event target naming the country that currently is Vorkerland: WRK
+# from startup until a claimant unifies the country, that claimant afterwards.
+NATION_TARGET_NAME = "ADISCORD_vorkerland_nation"
+NATION_TARGET = f"event_target:{NATION_TARGET_NAME}"
+NATION_TARGET_BIND = f"save_global_event_target_as = {NATION_TARGET_NAME}"
+NATION_TARGET_CLEAR = f"clear_global_event_target = {NATION_TARGET_NAME}"
+# The western crisis clock runs on whichever claimant tag is the nation target.
+WEST_CRISIS_CLOCK_GUARDS = (
+    f"tag = {NATION_TARGET}",
+    "ADISCORD_west_crisis_open = yes",
+)
+WEST_CRISIS_CLOCK_CALL = "ADISCORD_west_crisis_month = yes"
+RETIRED_CORE_INHERITANCE = "ADISCORD_vorkerland_inherit_retired_cores"
+RETIRED_ROSTER_ADOPTION = "ADISCORD_vorkerland_adopt_retired_roster"
+# Effects that hand a country over to another country object. The claimant
+# that unifies Vorkerland keeps its own country and runs none of them.
+WINNER_HANDOFF_EFFECTS = (
+    "change_tag_from",
+    "annex_country",
+    "inherit_technology",
+    "ADISCORD_copy_development_from_prev",
+    "set_nationality",
+    "ADISCORD_vorkerland_transfer_military_staff_to_wrk",
+)
+WARTIME_PROGRAMME_SETTLEMENTS = (
+    "ADISCORD_vorkerland_wkr_settle_programme_handoff = yes",
+    "WKR_settle_council_order_handoff = yes",
+    "WKR_settle_railway_handoff = yes",
+    "ADISCORD_vorkerland_tva_settle_trial_handoff = yes",
+    "VAD_settle_oath_handoff = yes",
+    "TVA_settle_administration_handoff = yes",
+)
+ROUTE_FLAGS = (
+    "ADISCORD_vorkerland_route_worker",
+    "ADISCORD_vorkerland_route_joint",
+    "ADISCORD_vorkerland_route_utilitarian",
+)
+CLAIMANT_TAGS = tuple(CLAIMANT_HOME_STATES)
+ABSORBED_ADMINISTRATIONS = ("WTD", "EGC", "RIV", "YOR")
 
 PHASE_FLAGS = (
     "ADISCORD_vorkerland_phase_prewar",
@@ -142,11 +185,11 @@ PHASE_EFFECT_NAMES = (
     "ADISCORD_vorkerland_verify_showdown_edge_vad_tva",
     "ADISCORD_vorkerland_verify_central_showdown",
     "ADISCORD_vorkerland_begin_reunification",
-    "ADISCORD_vorkerland_verify_reunified_wrk",
+    "ADISCORD_vorkerland_verify_reunification",
 )
 
-# Reunification starts only after the war graph has a single surviving claimant;
-# those two effects may legitimately refer to the newly formed WRK country.
+# The nation target still resolves to dormant WRK while the claimants fight.
+# Only the reunification verifier runs after a claimant has taken the target.
 ACTIVE_WAR_EFFECTS = PHASE_EFFECT_NAMES[:-1]
 ACTIVE_WAR_TRIGGERS = tuple(
     name
@@ -271,10 +314,43 @@ def _tga_dimensions(path: Path) -> tuple[int, int] | None:
 
 
 def _contains_wrk_scope(block: str) -> bool:
+    """Detect a scope of dormant WRK, by tag or through the nation target."""
+    dormant = rf"(?:WRK|{re.escape(NATION_TARGET)})"
     return bool(
-        re.search(r"\btag\s*=\s*WRK\b", block)
-        or re.search(r"(?m)^\s*WRK\s*=\s*\{", block)
+        re.search(rf"\btag\s*=\s*{dormant}\b", block)
+        or re.search(rf"(?m)^\s*{dormant}\s*=\s*\{{", block)
     )
+
+
+def _statement_count(block: str, statement: str) -> int:
+    """Count whole `key = value` statements, ignoring longer look-alikes."""
+    return len(re.findall(rf"(?<![\w:.]){re.escape(statement)}(?![\w:.])", block))
+
+
+def _block_body(block: str) -> str:
+    """Return the text between a named block's outer braces."""
+    opener = block.find("{")
+    closer = block.rfind("}")
+    if opener < 0 or closer <= opener:
+        return ""
+    return block[opener + 1 : closer]
+
+
+def _nation_target_bindings() -> dict[str, int]:
+    """Map each gameplay file to the number of nation-target bindings it holds."""
+    bindings: dict[str, int] = {}
+    for root_name in ("common", "events", "history"):
+        directory = ROOT / root_name
+        if not directory.is_dir():
+            continue
+        for path in directory.rglob("*.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            if NATION_TARGET_NAME not in source:
+                continue
+            count = _statement_count(strip_comments(source), NATION_TARGET_BIND)
+            if count:
+                bindings[path.relative_to(ROOT).as_posix()] = count
+    return bindings
 
 
 def _set_flag(flag: str) -> str:
@@ -462,6 +538,107 @@ def _global_set_owners(flag: str) -> list[str]:
     return sorted(owners)
 
 
+def _prewar_vorkerland_scopes(startup: str) -> list[str]:
+    """Return startup scopes of pre-collapse Vorkerland.
+
+    A fresh campaign binds the nation target to WRK before any other startup
+    effect, so both spellings address the same country there.
+    """
+    return named_blocks(startup, "WRK") + named_blocks(startup, NATION_TARGET)
+
+
+def _validate_nation_target_binding(load_issues: list[str]) -> list[str]:
+    """Check that a fresh campaign starts with the nation target naming WRK.
+
+    Every reader resolves Vorkerland through the target, so it has to exist
+    before the first of them runs. WRK's country history can bind it, because
+    history is applied before any startup hook; a startup hook can bind it
+    only as the first effect and only while the target is unbound, so a
+    repeated run cannot take it back from the claimant that unified the country.
+    """
+    issues: list[str] = []
+    history = _load(WRK_HISTORY, load_issues)
+    history_bindings = _statement_count(history, NATION_TARGET_BIND)
+    startup = named_block(_load(NATION_BINDING_ON_ACTIONS, load_issues), "on_startup")
+    startup_bindings = _statement_count(startup, NATION_TARGET_BIND)
+    if not history_bindings and not startup_bindings:
+        issues.append("a fresh campaign must bind the nation target to WRK")
+
+    if history_bindings:
+        binding_position = history.find(NATION_TARGET_BIND)
+        nesting = history[:binding_position].count("{") - history[
+            :binding_position
+        ].count("}")
+        first_reader = history.find(NATION_TARGET)
+        if (
+            history_bindings != 1
+            or nesting != 0
+            or 0 <= first_reader < binding_position
+        ):
+            issues.append(
+                "WRK history must bind the nation target once, at its top level, "
+                "before reading it"
+            )
+
+    if startup_bindings:
+        expected_binder = (
+            f"if = {{ limit = {{ NOT = {{ has_event_target = {NATION_TARGET_NAME} }} }} "
+            f"WRK = {{ {NATION_TARGET_BIND} }} }}"
+        )
+        binders = [
+            block.strip()
+            for block in named_blocks(startup, "if")
+            if _statement_count(block, NATION_TARGET_BIND)
+        ]
+        if (
+            startup_bindings != 1
+            or len(binders) != 1
+            or " ".join(binders[0].split()) != expected_binder
+        ):
+            issues.append(
+                "startup may bind the nation target to WRK once, only while it is unbound"
+            )
+        elif (
+            not _block_body(named_block(startup, "effect"))
+            .lstrip()
+            .startswith(binders[0])
+        ):
+            issues.append("the nation target binding must be the first startup effect")
+    for label, source in (("WRK history", history), ("startup", startup)):
+        if _statement_count(source, NATION_TARGET_CLEAR):
+            issues.append(f"{label} must not clear the nation target")
+
+    expected_bindings = {PHASE_EFFECTS.as_posix(): len(CLAIMANT_TAGS)}
+    if history_bindings:
+        expected_bindings[WRK_HISTORY.as_posix()] = 1
+    if startup_bindings:
+        expected_bindings[NATION_BINDING_ON_ACTIONS.as_posix()] = 1
+    actual_bindings = _nation_target_bindings()
+    if actual_bindings != expected_bindings:
+        issues.append(
+            "the nation target may be bound only by WRK history, the startup "
+            f"hook and the three unification effects, found {actual_bindings}"
+        )
+
+    # Without the history binding the startup hook is the only one. Startup
+    # effects run in file order, and a file sorted before it would then read
+    # a target that does not exist yet.
+    if history_bindings:
+        return issues
+    on_action_root = ROOT / NATION_BINDING_ON_ACTIONS.parent
+    for path in sorted(on_action_root.glob("*.txt"), key=lambda entry: entry.name):
+        if path.name >= NATION_BINDING_ON_ACTIONS.name:
+            break
+        source = strip_comments(path.read_text(encoding="utf-8-sig"))
+        if any(
+            NATION_TARGET_NAME in block for block in named_blocks(source, "on_startup")
+        ):
+            issues.append(
+                f"{path.name} reads the nation target at startup before it is bound"
+            )
+    return issues
+
+
 def validate_new_save_materialization() -> list[str]:
     """Validate the one-shot WRK partition and bounded atomic recovery."""
 
@@ -492,8 +669,12 @@ def validate_new_save_materialization() -> list[str]:
         )
     else:
         choice_trigger = named_block(choice, "trigger")
-        if len(re.findall(r"\btag\s*=\s*WRK\b", choice_trigger)) != 1:
-            issues.append("phase event .1 must be scoped exactly to pre-collapse WRK")
+        # The nation target is WRK until a claimant unifies the country, so
+        # together with collapse_not_started it selects pre-collapse WRK.
+        if re.findall(r"\btag\s*=\s*(\S+)", choice_trigger) != [NATION_TARGET]:
+            issues.append(
+                "phase event .1 must be scoped exactly to the pre-collapse nation target"
+            )
         if choice_trigger.count("ADISCORD_vorkerland_collapse_not_started = yes") != 1:
             issues.append(
                 "phase event .1 must expire when the collapse has already started"
@@ -581,15 +762,16 @@ def validate_new_save_materialization() -> list[str]:
         for token in ("days = 350", "random_days = 30"):
             if startup_choice.count(token) != 1:
                 issues.append(f"startup phase.1 claimant choice must retain {token}")
-        wrk_producers = [
+        producers = [
             block
-            for block in named_blocks(startup, "WRK")
+            for block in _prewar_vorkerland_scopes(startup)
             if "id = ADISCORD_vorkerland_phase.1" in block
         ]
-        if len(wrk_producers) != 1:
+        if len(producers) != 1:
             issues.append(
-                "startup must schedule phase.1 from the live WRK country scope"
+                "startup must schedule phase.1 from the scope of pre-collapse Vorkerland"
             )
+    issues.extend(_validate_nation_target_binding(issues))
     if re.search(r"\bid\s*=\s*ADISCORD_vorkerland_collapse\.1\b", startup):
         issues.append(
             "startup must wait for phase.1 instead of scheduling hidden collapse.1 directly"
@@ -619,7 +801,7 @@ def validate_new_save_materialization() -> list[str]:
     )
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
-        "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
+        f"{NATION_TARGET} = {{ has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }}",
         "EYR = {",
         "EGC = {",
         "RIV = {",
@@ -640,8 +822,10 @@ def validate_new_save_materialization() -> list[str]:
         return issues
     trigger = named_block(collapse, "trigger")
     immediate = named_block(collapse, "immediate")
-    if len(re.findall(r"\btag\s*=\s*WRK\b", trigger)) != 1:
-        issues.append("collapse event .1 must be entered exactly once from prewar WRK")
+    if re.findall(r"\btag\s*=\s*(\S+)", trigger) != [NATION_TARGET]:
+        issues.append(
+            "collapse event .1 must be entered exactly once from the prewar nation target"
+        )
 
     tag_changes = list(re.finditer(r"\bchange_tag_from\s*=\s*WRK\b", immediate))
     handoffs = [
@@ -796,9 +980,14 @@ def validate_new_save_materialization() -> list[str]:
             issues.append("WKR materialization must annex WRK exactly once")
         else:
             annex = annex_blocks[0]
-            if not re.search(r"\btarget\s*=\s*WRK\b", annex):
+            # No claimant has unified the country yet, so the nation target
+            # still names the pre-collapse WRK that this annexation consumes.
+            if re.findall(r"\btarget\s*=\s*(\S+)", annex) not in (
+                [NATION_TARGET],
+                ["WRK"],
+            ):
                 issues.append(
-                    "WKR materialization annex must target the dormant WRK country"
+                    "WKR materialization annex must consume the pre-collapse WRK country"
                 )
             if not re.search(r"\btransfer_troops\s*=\s*yes\b", annex):
                 issues.append(
@@ -1367,10 +1556,31 @@ def validate_phase_controller() -> list[str]:
         )
 
     refresh = named_block(effects, "ADISCORD_vorkerland_refresh_focus_lifecycle")
-    for tag in ("WRK", "WKR", "VAD", "TVA"):
-        scope = named_block(refresh, tag)
+    for scope_name, label in (
+        (NATION_TARGET, "nation target"),
+        ("WKR", "WKR"),
+        ("VAD", "VAD"),
+        ("TVA", "TVA"),
+    ):
+        scope = named_block(refresh, scope_name)
         if "focus_unlock = yes" not in scope:
-            issues.append(f"lifecycle focus refresh must dirty the {tag} focus layout")
+            issues.append(f"lifecycle focus refresh must dirty the {label} focus layout")
+    if named_block(refresh, "WRK"):
+        issues.append(
+            "lifecycle focus refresh must reach Vorkerland through the nation target"
+        )
+    # The target names a country without territory between the collapse and
+    # the unification; the refresh may enter that scope only while it exists.
+    guarded_nation_refreshes = [
+        block
+        for block in named_blocks(refresh, "if")
+        if f"{NATION_TARGET} = {{ exists = yes }}" in named_block(block, "limit")
+        and "focus_unlock = yes" in named_block(block, NATION_TARGET)
+    ]
+    if len(guarded_nation_refreshes) != 1:
+        issues.append(
+            "lifecycle focus refresh must guard the nation target scope by existence"
+        )
 
     for effect_name in PHASE_EFFECT_NAMES:
         if len(named_blocks(effects, effect_name)) != 1:
@@ -1445,8 +1655,8 @@ def validate_phase_controller() -> list[str]:
                 f"phase event .{event_number} must dispatch exactly once to {callback}"
             )
 
-    # Event .6 runs after the controller has selected one surviving claimant
-    # and may therefore materialize/scope the dormant WRK destination.
+    # Event .6 runs after the controller has selected one surviving claimant;
+    # that claimant takes over the nation target there.
     for event_number in range(2, 6):
         block = event_block(events, f"ADISCORD_vorkerland_phase.{event_number}")
         if block and _contains_wrk_scope(block):
@@ -1475,9 +1685,24 @@ def validate_phase_controller() -> list[str]:
     for terminal_name in (
         "ADISCORD_vorkerland_retire_civil_war_modifiers",
         "ADISCORD_vorkerland_restore_reunification_allies",
+        RETIRED_CORE_INHERITANCE,
     ):
         phase_runtime = phase_runtime.replace(
             named_block(phase_runtime, terminal_name), ""
+        )
+    # The retired-core scan stays one-shot only while the territorial
+    # finalizer of the unification is its single caller.
+    retired_core_call = f"{RETIRED_CORE_INHERITANCE} = yes"
+    if (
+        _statement_count(effects, retired_core_call) != 1
+        or _statement_count(
+            named_block(effects, "ADISCORD_vorkerland_finalize_unified_territory"),
+            retired_core_call,
+        )
+        != 1
+    ):
+        issues.append(
+            f"{RETIRED_CORE_INHERITANCE} must be called once, by the unification finalizer"
         )
     for label, source in (
         ("effects", phase_runtime),
@@ -1506,13 +1731,13 @@ def validate_phase_controller() -> list[str]:
         not in startup
     ):
         issues.append("prewar focus lifecycle must stop after the collapse starts")
-    wrk_startup_scopes = named_blocks(startup, "WRK")
     if not any(
         "ADISCORD_vorkerland_set_phase_prewar = yes" in scope
-        for scope in wrk_startup_scopes
+        for scope in _prewar_vorkerland_scopes(startup)
     ):
         issues.append(
-            "startup must initialise the prewar focus phase through its setter in WRK scope"
+            "startup must initialise the prewar focus phase through its setter "
+            "in the scope of pre-collapse Vorkerland"
         )
 
     forbidden_startup_materialization_requeues = (
@@ -2147,27 +2372,27 @@ def validate_bounded_retry() -> list[str]:
         if token not in capital:
             issues.append(f"coalition victory omits capital/enemy guard {token}")
 
-    verify_reunified = named_block(effects, "ADISCORD_vorkerland_verify_reunified_wrk")
+    verify_reunified = named_block(effects, "ADISCORD_vorkerland_verify_reunification")
     reunited_gate = "ADISCORD_vorkerland_reunification_verified = yes"
     postwar_transition = "ADISCORD_vorkerland_set_phase_postwar_integration = yes"
     if reunited_gate not in verify_reunified:
         issues.append(
-            "WRK formation verifier must call the reunification_verified postcondition"
+            "unification verifier must call the reunification_verified postcondition"
         )
     if postwar_transition not in verify_reunified:
         issues.append(
-            "WRK formation verifier must enter postwar integration after success"
+            "unification verifier must enter postwar integration after success"
         )
     elif verify_reunified.find(postwar_transition) < verify_reunified.find(
         reunited_gate
     ):
         issues.append(
-            "postwar integration success is set before WRK formation postconditions"
+            "postwar integration success is set before the unification postconditions"
         )
     phase_seven = event_block(events, "ADISCORD_vorkerland_phase.7")
-    if "ADISCORD_vorkerland_verify_reunified_wrk = yes" not in phase_seven:
+    if "ADISCORD_vorkerland_verify_reunification = yes" not in phase_seven:
         issues.append(
-            "phase event .7 must own WRK formation postcondition verification"
+            "phase event .7 must own the unification postcondition verification"
         )
     reunification_retry = "ADISCORD_vorkerland_reunification_retry"
     if phase_seven.count(_set_flag(reunification_retry)) != 1:
@@ -2179,19 +2404,22 @@ def validate_bounded_retry() -> list[str]:
         phase_seven,
     )
     if not retry_guard:
-        issues.append("phase event .7 must guard its one formation retry")
+        issues.append("phase event .7 must guard its one unification retry")
     if phase_seven.count("ADISCORD_vorkerland_phase.7 days = 1") != 1:
         issues.append(
-            "phase event .7 must schedule exactly one explicit formation retry"
+            "phase event .7 must schedule exactly one explicit unification retry"
         )
 
     return issues
 
 
 def validate_reunification_formation() -> list[str]:
+    """Validate the unification of Vorkerland under the winner's own tag."""
+
     issues: list[str] = []
     effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
     triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
+    claimant_triggers = _load(COLLAPSE_TRIGGERS, issues, section="collapse_triggers")
     events = _load(PHASE_EVENTS, issues, section="phase_events")
     if any(
         not (ROOT / path).is_file()
@@ -2235,50 +2463,169 @@ def validate_reunification_formation() -> list[str]:
             "promote_character = {",
         ),
     )
+    queue = "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+    finalize_call = "ADISCORD_vorkerland_finalize_unified_territory = yes"
+    absorb_calls = (
+        "ADISCORD_vorkerland_absorb_wtd_after_reunification = yes",
+        "ADISCORD_vorkerland_absorb_egc_after_reunification = yes",
+        "ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = yes",
+    )
+    dispatcher = named_block(effects, "ADISCORD_vorkerland_finish_delayed_unification")
+    dispatcher_branches = named_blocks(dispatcher, "if") + named_blocks(
+        dispatcher, "else_if"
+    )
     for winner, losers, route, cosmetic_effect, leader_effect in formations:
-        name = f"ADISCORD_vorkerland_form_wrk_from_{winner.lower()}"
-        block = named_block(effects, name)
-        completion_name = f"ADISCORD_vorkerland_complete_wrk_from_{winner.lower()}"
-        completion = named_block(effects, completion_name)
-        # The handoff invalidates its native scope. Only the queued callback
-        # may consume countries and finalize their political route.
-        change = f"change_tag_from = {winner}"
-        change_position = block.find(change)
-        if change_position < 0:
-            issues.append(f"{name} must change the verified winner {winner} into WRK")
-            continue
-        queue = "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
-        if queue not in block or block.find(queue) > change_position:
-            issues.append(f"{name} must queue settlement on WRK before handing off control")
-        if block[change_position + len(change):].strip().strip("}").strip():
-            issues.append(f"{name} must end immediately after the human handoff")
-        if "annex_country" in block or "change_tag_from" in completion:
-            issues.append(f"{name} must separate player handoff from country annexation")
-        dispatcher = named_block(effects, "ADISCORD_vorkerland_finish_delayed_wrk_handoff")
-        if f"{completion_name} = yes" not in dispatcher:
-            issues.append(f"WRK settlement does not dispatch {completion_name}")
-        if f"WRK = {{ change_tag_from = {winner} }}" in block:
+        name = f"ADISCORD_vorkerland_unify_under_{winner.lower()}"
+        completion_name = (
+            f"ADISCORD_vorkerland_settle_unification_under_{winner.lower()}"
+        )
+        blocks = named_blocks(effects, name)
+        completions = named_blocks(effects, completion_name)
+        if len(blocks) != 1 or len(completions) != 1:
             issues.append(
-                f"{name} must change tag through the live winner scope, not a same-tick WRK lookup"
+                f"{winner} unification must define {name} and {completion_name} once each"
             )
+            continue
+        block = blocks[0]
+        completion = completions[0]
+
+        # Everything after the rebinding, including the scripted effects it
+        # calls, reads the nation target and has to resolve it to the winner.
+        rebinding = re.match(
+            rf"\s*{re.escape(NATION_TARGET_CLEAR)}\s+{re.escape(NATION_TARGET_BIND)}(?![\w:.])",
+            _block_body(block),
+        )
+        if (
+            not rebinding
+            or _statement_count(block, NATION_TARGET_CLEAR) != 1
+            or _statement_count(block, NATION_TARGET_BIND) != 1
+        ):
+            issues.append(
+                f"{name} must open by clearing the nation target and rebinding it to {winner}"
+            )
+        for bound_effect in (completion, dispatcher):
+            if NATION_TARGET_BIND in bound_effect or NATION_TARGET_CLEAR in bound_effect:
+                issues.append(f"only {name} may rebind the nation target for {winner}")
+                break
+
+        # The winner stays on its own tag: nothing here moves the player, the
+        # army, the technology or the roster of the winner to another country.
+        for handoff in WINNER_HANDOFF_EFFECTS:
+            if re.search(rf"(?<![\w:.]){re.escape(handoff)}\s*=", block):
+                issues.append(
+                    f"{name} must keep {winner} on its own tag, found {handoff}"
+                )
+        if re.search(r"(?<![\w:.])WRK\s*=\s*\{", block):
+            issues.append(f"{name} must not scope the retired WRK tag")
+        if "change_tag_from" in completion or "inherit_technology" in completion:
+            issues.append(f"{completion_name} must not hand {winner} to another tag")
+
+        if _statement_count(block, queue) != 1:
+            issues.append(f"{name} must queue the phase.7 settlement exactly once")
+        elif block[block.find(queue) + len(queue) :].strip().strip("}").strip():
+            issues.append(f"{name} must end by queueing the phase.7 settlement")
+        if f"{completion_name} = yes" in block:
+            issues.append(f"{name} must leave its settlement to the queued phase.7")
+        route_branches = [
+            branch
+            for branch in dispatcher_branches
+            if f"has_country_flag = {route}" in named_block(branch, "limit")
+        ]
+        if (
+            len(route_branches) != 1
+            or re.findall(
+                r"\b(ADISCORD_vorkerland_settle_unification_under_\w+)\s*=\s*yes",
+                route_branches[0],
+            )
+            != [completion_name]
+        ):
+            issues.append(
+                f"delayed unification must dispatch only {completion_name} on {route}"
+            )
+
         for loser in losers:
             release_token = f"{loser} = {{ ADISCORD_vorkerland_release_losing_claimant_subjects = yes }}"
-            release_position = block.find(release_token)
-            if release_position < 0 or release_position > change_position:
+            if _statement_count(block, release_token) != 1:
                 issues.append(
-                    f"{name} must release {loser} subjects before the winner changes tag"
+                    f"{name} must release {loser} subjects before the settlement annexes {loser}"
                 )
             annex = f"annex_country = {{ target = {loser} transfer_troops = yes }}"
-            if annex not in completion:
+            if _statement_count(completion, annex) != 1:
                 issues.append(
                     f"{completion_name} must annex {loser} with troop transfer"
                 )
-        if f"annex_country = {{ target = {winner} transfer_troops = yes }}" not in completion:
-            issues.append(f"{completion_name} must absorb the winning country's army")
+        annex_targets = Counter(
+            re.findall(r"\bannex_country\s*=\s*\{\s*target\s*=\s*(\S+)", completion)
+        )
+        if annex_targets != Counter(losers):
+            issues.append(
+                f"{completion_name} must annex only the defeated claimants "
+                f"{list(losers)}, found {sorted(annex_targets.elements())}"
+            )
+
+        capital_transfer = "transfer_state = 32"
+        capital_control = f"32 = {{ set_state_controller_to = {winner} }}"
+        if (
+            _statement_count(block, capital_transfer) != 1
+            or _statement_count(block, capital_control) != 1
+            or block.find(capital_transfer) > block.find(capital_control)
+        ):
+            issues.append(
+                f"{name} must take state 32 and then hand its control to {winner}"
+            )
+        for settlement in WARTIME_PROGRAMME_SETTLEMENTS:
+            if _statement_count(block, settlement) != 1:
+                issues.append(
+                    f"{name} must settle the wartime programme {settlement} exactly once"
+                )
+        route_set_position = block.find(f"set_country_flag = {route}")
+        for route_flag in ROUTE_FLAGS:
+            clear_token = f"clr_country_flag = {route_flag}"
+            if (
+                _statement_count(block, clear_token) != 1
+                or block.find(clear_token) > route_set_position
+            ):
+                issues.append(
+                    f"{name} must clear {route_flag} once before selecting its route"
+                )
+        selected_routes = re.findall(
+            r"\bset_country_flag\s*=\s*(ADISCORD_vorkerland_route_\w+)", block
+        )
+        if selected_routes != [route]:
+            issues.append(f"{name} must select only {route}, found {selected_routes}")
+        focus_loads = named_blocks(block, "load_focus_tree")
+        if len(focus_loads) != 1:
+            issues.append(f"{name} must load exactly one postwar focus tree")
+        else:
+            for token in ("keep_completed = yes", "copy_completed_from = WRK"):
+                if _statement_count(focus_loads[0], token) != 1:
+                    issues.append(f"{name} focus tree load is missing {token}")
+        if _statement_count(block, f"{RETIRED_ROSTER_ADOPTION} = yes") != 1:
+            issues.append(f"{name} must adopt the retired WRK roster exactly once")
+
+        # Core settlement reads ownership, so every annexation and absorbed
+        # administration has to precede the territorial finalizer.
+        finalize_position = completion.find(finalize_call)
+        if _statement_count(completion, finalize_call) != 1:
+            issues.append(f"{completion_name} must finalize the territory exactly once")
+        for absorb_call in absorb_calls:
+            if _statement_count(completion, absorb_call) != 1:
+                issues.append(f"{completion_name} must call {absorb_call} exactly once")
+        territorial_steps = (
+            *(f"annex_country = {{ target = {loser}" for loser in losers),
+            *absorb_calls,
+        )
+        if any(
+            not 0 <= completion.find(step) < finalize_position
+            for step in territorial_steps
+        ):
+            issues.append(
+                f"{completion_name} must annex and absorb before finalizing the territory"
+            )
+
         sequence = block + completion
         for token in (
             "ADISCORD_vorkerland_prepare_claimants_for_formation = yes",
-            "ADISCORD_vorkerland_finalize_wrk_formation = yes",
             f"set_country_flag = {route}",
             cosmetic_effect,
         ):
@@ -2287,34 +2634,165 @@ def validate_reunification_formation() -> list[str]:
         if leader_effect and leader_effect not in completion:
             issues.append(f"{name} is missing route leader effect {leader_effect}")
 
-    finalize = named_block(effects, "ADISCORD_vorkerland_finalize_wrk_formation")
+    dispatcher_guards = [
+        named_block(branch, "limit")
+        for branch in named_blocks(dispatcher, "if")
+        if "ADISCORD_vorkerland_settle_unification_under_wkr = yes" in branch
+        and "ADISCORD_vorkerland_settle_unification_under_tva = yes" in branch
+    ]
+    if len(dispatcher_guards) != 1:
+        issues.append("delayed unification must settle the route inside one guard")
+    else:
+        for token in (
+            f"tag = {NATION_TARGET}",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }",
+        ):
+            if _statement_count(dispatcher_guards[0], token) != 1:
+                issues.append(f"delayed unification guard is missing {token}")
+
+    absorbed_annexations = (
+        ("ADISCORD_vorkerland_absorb_wtd_after_reunification", "WTD"),
+        ("ADISCORD_vorkerland_absorb_egc_after_reunification", "EGC"),
+    )
+    for effect_name, administration in absorbed_annexations:
+        annex = f"annex_country = {{ target = {administration} transfer_troops = yes }}"
+        if _statement_count(named_block(effects, effect_name), annex) != 1:
+            issues.append(f"{effect_name} must annex {administration} with its troops")
+    treaty_districts = named_block(
+        effects, "ADISCORD_vorkerland_absorb_treaty_districts_after_reunification"
+    )
+    for district in ("RIV", "YOR"):
+        call = f"{district} = {{ ADISCORD_vorkerland_absorb_treaty_district = yes }}"
+        if _statement_count(treaty_districts, call) != 1:
+            issues.append(f"treaty-district absorption must run once in {district} scope")
+    treaty_district = named_block(effects, "ADISCORD_vorkerland_absorb_treaty_district")
+    nation_annex = (
+        f"{NATION_TARGET} = {{ annex_country = {{ target = PREV transfer_troops = yes }} }}"
+    )
+    if _statement_count(treaty_district, nation_annex) != 1:
+        issues.append("a treaty district must be annexed by the nation target")
+
+    finalize = named_block(effects, "ADISCORD_vorkerland_finalize_unified_territory")
     if "set_capital = { state = 32 }" not in finalize:
-        issues.append("reunified WRK must restore state 32 as its capital")
-    for route in (
-        "ADISCORD_vorkerland_route_worker",
-        "ADISCORD_vorkerland_route_joint",
-        "ADISCORD_vorkerland_route_utilitarian",
-    ):
+        issues.append("unified Vorkerland must restore state 32 as its capital")
+    for route in ROUTE_FLAGS:
         if finalize.count(f"clr_country_flag = {route}") != 1:
             issues.append(
                 f"formation finalizer must clear prior country route {route} exactly once"
             )
+    # A claimant core is consumed on every listed state, also on those the
+    # winner does not hold. Inheriting the WRK cores afterwards keeps the
+    # historical claim there when the winner's own tag core was the consumed one.
+    claimant_cores = "ADISCORD_vorkerland_inherit_integrated_claimant_cores = yes"
+    retired_cores = f"{RETIRED_CORE_INHERITANCE} = yes"
+    if (
+        _statement_count(finalize, claimant_cores) != 1
+        or _statement_count(finalize, retired_cores) != 1
+        or finalize.find(claimant_cores) > finalize.find(retired_cores)
+    ):
+        issues.append(
+            "formation finalizer must settle claimant cores, then inherit the retired WRK cores"
+        )
+    retired_scans = named_blocks(
+        named_block(effects, RETIRED_CORE_INHERITANCE), "every_state"
+    )
+    if len(retired_scans) != 1:
+        issues.append(f"{RETIRED_CORE_INHERITANCE} must scan the WRK cores exactly once")
+    else:
+        for token in (
+            "limit = { is_core_of = WRK }",
+            f"add_core_of = {NATION_TARGET}",
+            "remove_core_of = WRK",
+        ):
+            if _statement_count(retired_scans[0], token) != 1:
+                issues.append(f"{RETIRED_CORE_INHERITANCE} is missing {token}")
+    roster_scopes = named_blocks(named_block(effects, RETIRED_ROSTER_ADOPTION), "WRK")
+    roster_moves = [
+        move
+        for scope in roster_scopes
+        for scan in named_blocks(scope, "every_character")
+        for move in named_blocks(scan, "set_nationality")
+    ]
+    if len(roster_moves) != 1 or re.findall(
+        r"\btarget_country\s*=\s*(\S+)", roster_moves[0]
+    ) != [NATION_TARGET]:
+        issues.append(
+            f"{RETIRED_ROSTER_ADOPTION} must move every WRK character to the nation target"
+        )
+
+    main_claimant = named_block(claimant_triggers, "ADISCORD_vorkerland_is_main_claimant")
+    if not named_blocks(main_claimant, "OR") or sorted(
+        re.findall(r"\btag\s*=\s*(\S+)", main_claimant)
+    ) != sorted(CLAIMANT_TAGS):
+        issues.append("main-claimant trigger must accept exactly the WKR/VAD/TVA tags")
 
     reunited = named_block(triggers, "ADISCORD_vorkerland_reunification_verified")
-    for token in (
-        "country_exists = WRK",
-        "controls_state = 32",
-        "32 = { is_owned_by = WRK is_controlled_by = WRK }",
-        "NOT = { country_exists = WKR }",
-        "NOT = { country_exists = VAD }",
-        "NOT = { country_exists = TVA }",
-    ):
-        if token not in reunited:
+    nation_scopes = named_blocks(reunited, NATION_TARGET)
+    if len(nation_scopes) != 1:
+        issues.append("reunification postcondition must test the nation target once")
+    else:
+        nation = nation_scopes[0]
+        for token in (
+            "ADISCORD_vorkerland_is_main_claimant = yes",
+            "exists = yes",
+            "is_subject = no",
+            "NOT = { has_capitulated = yes }",
+            "controls_state = 32",
+        ):
+            if _statement_count(nation, token) != 1:
+                issues.append(
+                    f"reunification postcondition is missing nation-target guard {token}"
+                )
+        route_gates = [
+            gate
+            for gate in named_blocks(nation, "OR")
+            if sorted(re.findall(r"\bhas_country_flag\s*=\s*(\w+)", gate))
+            == sorted(ROUTE_FLAGS)
+        ]
+        if len(route_gates) != 1:
+            issues.append(
+                "reunification postcondition must require one of the three route flags"
+            )
+    capital_gates = named_blocks(reunited, "32")
+    if len(capital_gates) != 1:
+        issues.append("reunification postcondition must test state 32 once")
+    else:
+        for token in (
+            f"is_owned_by = {NATION_TARGET}",
+            f"is_controlled_by = {NATION_TARGET}",
+        ):
+            if _statement_count(capital_gates[0], token) != 1:
+                issues.append(f"reunification postcondition is missing 32 = {{ {token} }}")
+    for claimant in CLAIMANT_TAGS:
+        # The winner is one of these tags and still exists; only a claimant
+        # other than the nation target has to be gone.
+        survivor_gates = [
+            " ".join(gate.split()) for gate in named_blocks(reunited, claimant)
+        ]
+        accepted_gates = (
+            f"{claimant} = {{ OR = {{ exists = no tag = {NATION_TARGET} }} }}",
+            f"{claimant} = {{ OR = {{ tag = {NATION_TARGET} exists = no }} }}",
+        )
+        if len(survivor_gates) != 1 or survivor_gates[0] not in accepted_gates:
+            issues.append(
+                f"reunification postcondition must let {claimant} survive only as the nation target"
+            )
+    if re.search(r"\bcountry_exists\s*=\s*(?:WRK|WKR|VAD|TVA)\b", reunited):
+        issues.append(
+            "reunification postcondition must not test WRK or a claimant by literal existence"
+        )
+    for administration in ABSORBED_ADMINISTRATIONS:
+        token = f"NOT = {{ country_exists = {administration} }}"
+        if _statement_count(reunited, token) != 1:
             issues.append(f"reunification postcondition is missing {token}")
 
     phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
     if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in phase_six:
         issues.append("formation event must require one surviving claimant")
+    if _contains_wrk_scope(phase_six):
+        issues.append(
+            "formation event must not scope WRK or the nation target a claimant has yet to take"
+        )
     formation_branches = named_blocks(phase_six, "if") + named_blocks(
         phase_six, "else_if"
     )
@@ -2327,27 +2805,40 @@ def validate_reunification_formation() -> list[str]:
                 named_block(block, "limit"),
             )
         ]
-        effect_name = f"ADISCORD_vorkerland_form_wrk_from_{winner.lower()} = yes"
+        effect_name = f"ADISCORD_vorkerland_unify_under_{winner.lower()} = yes"
         if len(winner_branches) != 1:
             issues.append(
                 f"formation event must expose one verified {winner} winner branch"
             )
             continue
-        destination_scopes = [
+        unification_calls = re.findall(
+            r"\bADISCORD_vorkerland_unify_under_\w+\s*=\s*yes", winner_branches[0]
+        )
+        winner_scopes = [
             block
-            for block in named_blocks(winner_branches[0], "WRK")
+            for block in named_blocks(winner_branches[0], winner)
             if effect_name in block
         ]
-        if len(destination_scopes) != 1:
+        if len(winner_scopes) != 1 or unification_calls != [effect_name]:
             issues.append(
-                f"formation event must run {effect_name} in the materialized WRK scope"
+                f"formation event must run only {effect_name} in the {winner} scope"
             )
             continue
-        destination = destination_scopes[0]
-        if "country_event" in destination:
+        if "country_event" in winner_scopes[0]:
             issues.append(
-                f"phase.6 must not schedule effects after the {winner} human handoff"
+                f"phase.6 must leave the settlement queue of {winner} to its unification effect"
             )
+
+    phase_seven = event_block(events, "ADISCORD_vorkerland_phase.7")
+    phase_seven_trigger = named_block(phase_seven, "trigger")
+    if re.findall(r"\btag\s*=\s*(\S+)", phase_seven_trigger) != [NATION_TARGET]:
+        issues.append("phase event .7 must fire only for the nation target")
+    if "has_global_flag = ADISCORD_vorkerland_phase_reunification" not in phase_seven_trigger:
+        issues.append("phase event .7 must stay inside the reunification phase")
+    settle_position = phase_seven.find("ADISCORD_vorkerland_finish_delayed_unification = yes")
+    verify_position = phase_seven.find("ADISCORD_vorkerland_verify_reunification = yes")
+    if not 0 <= settle_position < verify_position:
+        issues.append("phase event .7 must settle the unification before verifying it")
     return issues
 
 
@@ -2664,14 +3155,45 @@ def validate_campaign_state() -> list[str]:
     if named_block(on_actions, "on_monthly"):
         issues.append("campaign state must not use a general on_monthly controller")
     economy_call = "ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes"
-    if named_block(on_actions, "on_monthly_TVA"):
-        issues.append("TVA programmes must not use a monthly factory-scaling hook")
-    for tag in ("WKR", "VAD"):
+    for tag in ("WKR", "VAD", "TVA"):
         hooks = named_blocks(on_actions, f"on_monthly_{tag}")
         if len(hooks) != 1:
             issues.append(f"campaign state must define exactly one on_monthly_{tag}")
             continue
         hook = hooks[0]
+        # Each claimant tag can become the nation target, so each hook carries
+        # the western crisis clock behind that guard.
+        clocks = [
+            block
+            for block in named_blocks(hook, "if")
+            if WEST_CRISIS_CLOCK_CALL in block
+        ]
+        clock_is_exact = (
+            len(clocks) == 1
+            and _statement_count(hook, WEST_CRISIS_CLOCK_CALL) == 1
+            and all(
+                _statement_count(named_block(clocks[0], "limit"), guard) == 1
+                for guard in WEST_CRISIS_CLOCK_GUARDS
+            )
+        )
+        if not clock_is_exact:
+            issues.append(
+                f"on_monthly_{tag} must run the western crisis clock once, for the nation target only"
+            )
+        if tag == "TVA":
+            # TVA has no monthly factory scaling: the clock is the only work
+            # its hook may carry.
+            if economy_call in hook:
+                issues.append(
+                    "TVA programmes must not use a monthly factory-scaling hook"
+                )
+            if clock_is_exact:
+                remainder = re.sub(r"\s+", "", hook.replace(clocks[0], ""))
+                if remainder != "on_monthly_TVA={effect={}}":
+                    issues.append(
+                        "on_monthly_TVA may carry only the western crisis clock"
+                    )
+            continue
         if hook.count(economy_call) != 1:
             issues.append(f"on_monthly_{tag} must refresh factory scaling exactly once")
         if hook.count("ADISCORD_vorkerland_is_live_claimant = yes") != 1:
@@ -2791,7 +3313,7 @@ def validate_campaign_state() -> list[str]:
             )
 
     showdown = named_block(phase, "ADISCORD_vorkerland_set_phase_central_showdown")
-    terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
+    terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunification")
     for label, block in (
         ("central showdown", showdown),
         ("terminal settlement", terminal),
@@ -2849,7 +3371,8 @@ def main() -> int:
     print(
         "Vorkerland recovery validation passed: WKR claimant semantics, atomic new-save "
         "materialization, bounded seven-phase controller, simultaneous three-edge launch, "
-        "guarded WRK formation, event-driven campaign state, premature-WRK recovery, "
+        "unification under the winner's own tag, event-driven campaign state, "
+        "premature-WRK recovery, "
         "and retired legacy paths are coherent."
     )
     return 0

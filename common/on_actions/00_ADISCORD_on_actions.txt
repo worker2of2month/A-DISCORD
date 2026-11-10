@@ -9,6 +9,13 @@ on_actions = {
 
 	on_startup = {
 		effect = {
+			# WRK's history binds the Vorkerland country target. This covers a start
+			# where that binding is missing; the guard keeps a later run of the hook
+			# from undoing a unification.
+			if = {
+				limit = { NOT = { has_event_target = ADISCORD_vorkerland_nation } }
+				WRK = { save_global_event_target_as = ADISCORD_vorkerland_nation }
+			}
 			# Map safety invariant: every state must have at least one level of
 			# infrastructure. The global flag limits the pass to the first startup of
 			# a campaign and prevents AI fronts from stalling in zero-infrastructure
@@ -94,7 +101,7 @@ on_actions = {
 					ADISCORD_initialize_society_development_variables = yes
 					ADISCORD_update_total_country_development = yes
 				}
-				WRK = {
+				event_target:ADISCORD_vorkerland_nation = {
 					# Ruined great-power baseline: substantial institutions and army,
 					# but only middling post-collapse economic capacity. This prevents
 					# the large inherited factory base from entering an automatic debt spiral.

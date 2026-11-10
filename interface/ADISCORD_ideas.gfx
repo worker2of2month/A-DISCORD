@@ -1,4 +1,14 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_idea_STP_Ignat_Forel"
+		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_Ignat_Forel.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_STP_Nikita_Volgin"
+		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_Nikita_Volgin.png"
+	}
+
 	# Native advisor slots can reposition badges; all 18 frames stay transparent.
 	spriteType = {
 		name = "GFX_idea_traits_strip"

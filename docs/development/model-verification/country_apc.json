@@ -1,5 +1,5 @@
 {
-  "generator_sha256": "d8d74519523709602e043f480172ccc213d72ab7d10d1fc9978707534c575a26",
+  "generator_sha256": "3246a57853c1bd6dbbd89c12767645a600b2f39929ed94b503e45bb847e32c61",
   "idle_generator_sha256": "f3ebe8d7293ef043f74ebe447f64010107f5c8dc1fafe6b2901060ed49a1d58f",
   "models": {
     "VAL_apc": {
@@ -397,6 +397,113 @@
         "NOD_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
       },
       "blend_sha256": "0a39c9b065430376f547b28e80c9bdd655a6143b892006a3e755b9013ac356fc"
+    },
+    "SHL_apc": {
+      "triangles": 6664,
+      "vertices": 16490,
+      "materials": 1,
+      "bones": 10,
+      "locators": [
+        "root",
+        "left_wheel",
+        "right_wheel",
+        "barrel"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.18129683875247934,
+          "loop_error": 4.199926197728114e-17
+        },
+        "move": {
+          "max_vertex_motion": 1.6319939053482433,
+          "loop_error": 4.2981520598697533e-07,
+          "moving_bones": [
+            "wheel_-1_0",
+            "wheel_-1_1",
+            "wheel_-1_2",
+            "wheel_1_0",
+            "wheel_1_1",
+            "wheel_1_2"
+          ]
+        },
+        "attack": {
+          "max_vertex_motion": 0.15000009300805228,
+          "loop_error": 0.0,
+          "combat_heading_error_degrees": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "SHL_apc.mesh": "80c2d68068a0cbf8e1aa8e231b7cb6c8dddeb88654f349a36de4dcc006daf712",
+        "SHL_apc_idle.anim": "455a7977547d9b1c85da43c7ce17fac4e3e4022c933680af9ac7e4a12ca2cb9b",
+        "SHL_apc_move.anim": "073cc513e92c3603a9932a5d602f36fde92336471d588002962bc744fb861b78",
+        "SHL_apc_attack.anim": "887778339045b78686669f2b9cdd22aacccd901bef16f6d8a2e1508867123c46",
+        "SHL_apc_diffuse.dds": "d97f710c4c6d5eb8be4cf6ceb3e0e7b0a8cc1b044d1ad713d17ce65a13bc0d99",
+        "SHL_apc_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "SHL_apc_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "0af03ac8d54869849566f7690b21f4ad2d49744f3119c3c23b291f7b987b32be"
+    },
+    "SHL_tank": {
+      "triangles": 5840,
+      "vertices": 14758,
+      "materials": 1,
+      "bones": 42,
+      "locators": [
+        "barrel",
+        "left_wheel",
+        "left_tracks",
+        "left_exhaust",
+        "right_wheel",
+        "right_tracks",
+        "right_exhaust",
+        "root"
+      ],
+      "animations": {
+        "idle": {
+          "max_vertex_motion": 0.6238899872730382,
+          "loop_error": 1.467065565453722e-16
+        },
+        "move": {
+          "max_vertex_motion": 7.566152479753936,
+          "loop_error": 5.960464477539062e-07,
+          "moving_bones": [
+            "wheel_0",
+            "wheel_1",
+            "wheel_2",
+            "wheel_3",
+            "wheel_4",
+            "wheel_5"
+          ],
+          "animated_track_links": 32
+        },
+        "attack": {
+          "max_vertex_motion": 0.1500000961124589,
+          "loop_error": 0.0,
+          "combat_heading_error_degrees": 0.0,
+          "moving_bones": [
+            "gun"
+          ]
+        }
+      },
+      "native_reimport": true,
+      "rigid_skin_slots_validated": true,
+      "hoi4_runtime_verified": false,
+      "files": {
+        "SHL_tank.mesh": "745ae9ea0f21c4da466bd8b20e3e991e8779319dd542db4fd7206b966f29199b",
+        "SHL_tank_idle.anim": "b5c6194d5c34441839a494a374df5a1a16d0fc6985a98cf42f977aa03d834480",
+        "SHL_tank_move.anim": "b79b3055ad07c556329cd8e72147c7d3ba520dfa4c02b5c516cdbe3f1f666751",
+        "SHL_tank_attack.anim": "c1e117f1ba5507167f87934dc14e5373fdb6e1be0f77c2787cfe5b93130bd68c",
+        "SHL_tank_diffuse.dds": "b6453fbc9a8a9d86f3ae00ee5e8ac817c6b5f443d321ad1c7ffd28a4a3f9acdf",
+        "SHL_tank_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+        "SHL_tank_specular.dds": "de6b3d63df3966977c4280d8684aaed1bd08d0acf515bfaf448126a20991b066"
+      },
+      "blend_sha256": "3ecd65d9a69d6f12c788caa7622bcddfa9a99e0398a781c26445809ca6997da1"
     }
   }
 }

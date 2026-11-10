@@ -948,7 +948,7 @@ country_event = {
 	id = ADISCORD_rus_campaign.45
 	title = ADISCORD_rus_campaign.45.t
 	desc = ADISCORD_rus_campaign.45.d
-	picture = GFX_event_adiscord_perimeter_checkpoint
+	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { RUS_khan_governing = yes }
@@ -1077,7 +1077,7 @@ country_event = {
 	id = ADISCORD_rus_campaign.23
 	title = ADISCORD_rus_campaign.23.t
 	desc = ADISCORD_rus_campaign.23.d
-	picture = GFX_event_adiscord_military_headquarters
+	picture = GFX_event_adiscord_signal_archive_basement
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {

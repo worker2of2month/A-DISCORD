@@ -1,0 +1,72 @@
+{
+  "NAM_militia": {
+    "sha256": "c6b1b85fc9aa5abc6937595754d61ae8c7df3e65845cd64de36fd2da796cef7e",
+    "textures": {
+      "NAM_militia_field_body_diffuse.dds": "109c3fb12d710cd4be59059c0afe8c71fcdd9810cfa15960199d32d5926212dd",
+      "NAM_militia_field_body_normal.dds": "ccb6570bb1566458fe71f870c04993318a6c65055df6f6b545a391bdb2e3618c",
+      "NAM_militia_field_body_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a",
+      "NAM_militia_field_gear_diffuse.dds": "1f19c94e295d53a55bfe0506718b9b11b216beaff9befb62e708af4df42e33e3",
+      "NAM_militia_field_gear_normal.dds": "13172a7842a2a910ba1f3bc7b39055a3f82ea4bdf7744efc27811fe963909ee4",
+      "NAM_militia_field_gear_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a"
+    },
+    "shapes": [
+      {
+        "vertices": 4830,
+        "triangles": 1610,
+        "bones": 33
+      },
+      {
+        "vertices": 7549,
+        "triangles": 8416,
+        "bones": 33
+      }
+    ],
+    "poses": {
+      "idle_rifle": [
+        1,
+        91,
+        181
+      ],
+      "moving_rifle": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_rifle": [
+        1,
+        40,
+        79
+      ],
+      "idle_mg": [
+        1,
+        90,
+        180
+      ],
+      "moving_mg": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_mg": [
+        1,
+        49,
+        97
+      ]
+    },
+    "bindings": {
+      "tags": [
+        "NAM",
+        "NAM_confederation",
+        "NAM_iron_ladder",
+        "NAM_service_republic",
+        "NAM_federation",
+        "NAM_oil_union",
+        "NAM_corporate_state"
+      ],
+      "roles": [
+        "ADISCORD_militia"
+      ],
+      "weapon_levels": 8
+    }
+  }
+}

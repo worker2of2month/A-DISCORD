@@ -13,9 +13,19 @@ from tools.validators._vorkerland_release_contract import PEER_CAUTION_PROFILES
 
 ROOT = Path(__file__).resolve().parents[2]
 PREFIX = "ADISCORD_difficulty_"
+NATION_TARGET = "event_target:ADISCORD_vorkerland_nation"
+CLAIMANTS = ("WKR", "VAD", "TVA")
+# Profiles written for Vorkerland as a whole admit the claimant tags in
+# `allowed` and gate them in `enable` with these country triggers.
+CLAIMANT_GATES = ("ADISCORD_vorkerland_is_main_claimant", "ADISCORD_vorkerland_is_not_wartime_claimant")
 
 
 class DifficultyAIBehaviorTests(unittest.TestCase):
+    # The country target is global. It names WRK until a claimant unifies
+    # Vorkerland and names that claimant afterwards; a test rebinds it on its
+    # own instance.
+    vorkerland_nation = "WRK"
+
     @classmethod
     def setUpClass(cls):
         cls.policies = {}
@@ -39,6 +49,13 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             source = path.read_text(encoding="utf-8-sig")
             for name in re.findall(r"(?m)^(ADISCORD_difficulty_\w+)\s*=", source):
                 cls.triggers[name] = parse(named_block(source, name))[0][2]
+        source = (ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt").read_text(encoding="utf-8-sig")
+        for name in CLAIMANT_GATES:
+            cls.triggers[name] = parse(named_block(source, name))[0][2]
+
+    def country(self, reference):
+        """Return the tag a country reference names, following the country target."""
+        return self.vorkerland_nation if reference == NATION_TARGET else reference
 
     def context(self, tag="STS", difficulty=3, **changes):
         context = {
@@ -85,7 +102,6 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "VAL_ai_republics_preparation": False,
             "STP_pc_ai_preparing_val_war": False,
             "STP_pc_ai_preparing_nod_war": False,
-            "ADISCORD_vorkerland_is_main_claimant": False,
             "ADISCORD_vorkerland_is_regional_combatant": False,
             "ADISCORD_nam_resource_war_preparation": False,
             "ADISCORD_nam_resource_war_active": False,
@@ -115,10 +131,10 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 return self.evaluate(self.triggers[key], context) == (value == "yes")
             if key in context["scopes"]:
                 return self.evaluate(value, context["scopes"][key])
-            if key in context["countries"]:
-                return self.evaluate(value, context["countries"][key])
+            if self.country(key) in context["countries"]:
+                return self.evaluate(value, context["countries"][self.country(key)])
             if key in ("tag", "original_tag"):
-                return context["tag"] == value
+                return context["tag"] == self.country(value)
             if key in ("has_country_flag", "has_global_flag", "has_tech", "has_idea"):
                 return value in context[key]
             if key == "controls_province":
@@ -132,13 +148,13 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             if key == "has_variable":
                 return value in context["variables"]
             if key == "has_war_with":
-                target = context["scopes"].get(value, {}).get("tag", value)
+                target = context["scopes"].get(value, {}).get("tag", self.country(value))
                 return target in context["wars"]
             if key == "is_controlled_by":
                 return context["controller"] == context["scopes"][value]["tag"]
             if key == "fighting_army_strength_ratio":
                 fields = {name: val for name, _, val in value}
-                target = context["scopes"].get(fields["tag"], {}).get("tag", fields["tag"])
+                target = context["scopes"].get(fields["tag"], {}).get("tag", self.country(fields["tag"]))
                 comparison = next(op for name, op, _ in value if name == "ratio")
                 return OPS[comparison](context["army_ratios"][target], float(fields["ratio"]))
             if key == "any_province_building_level":
@@ -147,7 +163,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 _, comparison, threshold = next(node for node in value if node[0] == "level")
                 return any(OPS[comparison](level, float(threshold)) for level in context["forts"])
             if key == "is_in_faction_with":
-                return value in context["allies"]
+                return self.country(value) in context["allies"]
             if key == "has_equipment":
                 return all(OPS[comparison](context["equipment"].get(name, 0), float(amount))
                            for name, comparison, amount in value)
@@ -307,28 +323,65 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         self.assertTrue(self.enabled(name, preparing))
 
     def test_west_preparation_expires_if_the_other_champion_is_unavailable(self):
-        for tag, opponent in (("WRK", "IVN"), ("IVN", "WRK")):
-            context = self.context(tag, has_war=False, wars=set(), ADISCORD_west_crisis_open=True,
-                                   has_global_flag={"ADISCORD_west_crisis_warned"})
-            context["countries"] = {name: self.context(name) for name in ("WRK", "IVN")}
-            name = PREFIX + "west_campaign_supply"
-            self.assertTrue(self.enabled(name, context), tag)
-            for field, value in (("exists", False), ("has_capitulated", True), ("is_subject", True)):
-                context["countries"][opponent][field] = value
-                self.assertFalse(self.enabled(name, context), (tag, field))
-                context["countries"][opponent][field] = not value
-            context["countries"]["IVN"]["allies"] = {"WRK"}
-            self.assertFalse(self.enabled(name, context), tag)
+        name = PREFIX + "west_campaign_supply"
+        for nation in ("WRK", *CLAIMANTS):
+            self.vorkerland_nation = nation
+            for tag, opponent in ((nation, "IVN"), ("IVN", nation)):
+                context = self.context(tag, has_war=False, wars=set(), ADISCORD_west_crisis_open=True,
+                                       has_global_flag={"ADISCORD_west_crisis_warned"})
+                # Only the two champions are present: the profile has to reach
+                # Vorkerland through the country target.
+                context["countries"] = {champion: self.context(champion) for champion in (nation, "IVN")}
+                self.assertTrue(self.enabled(name, context), (nation, tag))
+                for field, value in (("exists", False), ("has_capitulated", True), ("is_subject", True)):
+                    context["countries"][opponent][field] = value
+                    self.assertFalse(self.enabled(name, context), (nation, tag, field))
+                    context["countries"][opponent][field] = not value
+                context["countries"]["IVN"]["allies"] = {nation}
+                self.assertFalse(self.enabled(name, context), (nation, tag))
 
     def test_west_warning_and_live_war_are_separate_paths(self):
-        context = self.context("WRK", has_war=False, wars=set(), ADISCORD_west_crisis_open=True)
         name = PREFIX + "west_campaign_supply"
-        self.assertFalse(self.enabled(name, context))
-        context.update(has_war=True, wars={"IVN"}, ADISCORD_west_final_active=True,
-                       ADISCORD_west_crisis_open=False)
-        self.assertTrue(self.enabled(name, context))
-        context["wars"] = {"RUS"}
-        self.assertFalse(self.enabled(name, context))
+        for nation in ("WRK", *CLAIMANTS):
+            self.vorkerland_nation = nation
+            context = self.context(nation, has_war=False, wars=set(), ADISCORD_west_crisis_open=True)
+            self.assertFalse(self.enabled(name, context), nation)
+            context.update(has_war=True, wars={"IVN"}, ADISCORD_west_final_active=True,
+                           ADISCORD_west_crisis_open=False)
+            self.assertTrue(self.enabled(name, context), nation)
+            context["wars"] = {"RUS"}
+            self.assertFalse(self.enabled(name, context), nation)
+            rival = self.context("IVN", wars={nation}, ADISCORD_west_final_active=True)
+            self.assertTrue(self.enabled(name, rival), nation)
+            # A war with another holder of a Vorkerland tag is not the western war.
+            rival["wars"] = {"WRK", *CLAIMANTS} - {nation}
+            self.assertFalse(self.enabled(name, rival), nation)
+
+    def test_vorkerland_profiles_skip_claimants_that_have_not_unified_the_country(self):
+        gate = [("ADISCORD_vorkerland_is_not_wartime_claimant", "=", "yes")]
+        supply = PREFIX + "west_campaign_supply"
+        fronts = ["ADISCORD_west_wrk_front_ivn", "ADISCORD_west_wrk_hold_ivn",
+                  "ADISCORD_wrk_postwar_expedition_front"]
+        for nation in ("WRK", *CLAIMANTS):
+            self.vorkerland_nation = nation
+            for tag in ("WRK", *CLAIMANTS, "IVN", "STS"):
+                with self.subTest(nation=nation, tag=tag):
+                    self.assertEqual(self.evaluate(gate, self.context(tag)),
+                                     tag not in CLAIMANTS or tag == nation)
+            for tag in CLAIMANTS:
+                actor = self.context(tag, 4, wars={"IVN", "PIV"}, army_ratios={"IVN": 1},
+                                     ADISCORD_west_final_active=True,
+                                     has_country_flag={"ADISCORD_vorkerland_pw_campaign_active"})
+                enemy = self.context("PIV", wars={tag}, army_ratios={tag: 1},
+                                     ADISCORD_west_on_ivn_side=True,
+                                     has_country_flag={"ADISCORD_vorkerland_pw_campaign_member"})
+                with self.subTest(nation=nation, tag=tag):
+                    # Every claimant tag passes the load-time filter; only the
+                    # country target passes the live gate.
+                    for front in fronts:
+                        self.assertTrue(self.evaluate(child(self.campaigns[front], "allowed"), actor), front)
+                    self.assertEqual(self.enabled(supply, actor), tag == nation)
+                    self.assertEqual(bool(self.campaign_orders(fronts, actor, enemy)), tag == nation)
 
     def test_vorkerland_profile_uses_live_preparation_and_closes_at_reunification(self):
         context = self.context("WKR", has_war=False, wars=set(),
@@ -598,14 +651,17 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
 
     def test_west_coalition_adapts_to_actual_front_enemy(self):
         name = "ADISCORD_west_wrk_front_ivn"
-        actor = self.context("WRK", 4, wars={"IVN", "VAD"}, army_ratios={"IVN": 1},
-                             ADISCORD_west_final_active=True)
-        enemy = self.context("VAD", wars={"WRK"}, army_ratios={"WRK": 2}, ADISCORD_west_on_ivn_side=True)
-        self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "careful")
-        enemy["army_ratios"]["WRK"] = 0.5
-        self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "rush_weak")
-        enemy["ADISCORD_west_on_ivn_side"] = False
-        self.assertEqual(self.campaign_orders([name], actor, enemy), [])
+        for nation in ("WRK", *CLAIMANTS):
+            self.vorkerland_nation = nation
+            actor = self.context(nation, 4, wars={"IVN", "PIV"}, army_ratios={"IVN": 1},
+                                 ADISCORD_west_final_active=True)
+            enemy = self.context("PIV", wars={nation}, army_ratios={nation: 2}, ADISCORD_west_on_ivn_side=True)
+            with self.subTest(nation=nation):
+                self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "careful")
+                enemy["army_ratios"][nation] = 0.5
+                self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "rush_weak")
+                enemy["ADISCORD_west_on_ivn_side"] = False
+                self.assertEqual(self.campaign_orders([name], actor, enemy), [])
 
     def test_vorkerland_breakthrough_remains_inside_timed_window(self):
         name = "ADISCORD_vorkerland_central_breakthrough_eyr"
@@ -636,17 +692,20 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
     def test_west_hold_wins_over_overlapping_expedition(self):
         names = ["ADISCORD_west_wrk_front_ivn", "ADISCORD_west_wrk_hold_ivn",
                  "ADISCORD_wrk_postwar_expedition_front"]
-        actor = self.context("WRK", 4, wars={"IVN", "PIV"}, army_ratios={"IVN": 0.4},
-                             ADISCORD_west_final_active=True,
-                             has_country_flag={"ADISCORD_vorkerland_pw_campaign_active"})
-        enemy = self.context("PIV", wars={"WRK"}, army_ratios={"WRK": 0.5},
-                             ADISCORD_west_on_ivn_side=True,
-                             has_country_flag={"ADISCORD_vorkerland_pw_campaign_member"})
-        orders = self.campaign_orders(names, actor, enemy)
-        self.assertEqual((orders[-1]["priority"], orders[-1]["execution_type"], orders[-1]["manual_attack"]),
-                         ("1502", "careful", "no"))
-        actor["army_ratios"]["IVN"] = 1
-        self.assertEqual(self.campaign_orders(names, actor, enemy)[-1]["execution_type"], "rush_weak")
+        for nation in ("WRK", *CLAIMANTS):
+            self.vorkerland_nation = nation
+            actor = self.context(nation, 4, wars={"IVN", "PIV"}, army_ratios={"IVN": 0.4},
+                                 ADISCORD_west_final_active=True,
+                                 has_country_flag={"ADISCORD_vorkerland_pw_campaign_active"})
+            enemy = self.context("PIV", wars={nation}, army_ratios={nation: 0.5},
+                                 ADISCORD_west_on_ivn_side=True,
+                                 has_country_flag={"ADISCORD_vorkerland_pw_campaign_member"})
+            with self.subTest(nation=nation):
+                orders = self.campaign_orders(names, actor, enemy)
+                self.assertEqual((orders[-1]["priority"], orders[-1]["execution_type"],
+                                  orders[-1]["manual_attack"]), ("1502", "careful", "no"))
+                actor["army_ratios"]["IVN"] = 1
+                self.assertEqual(self.campaign_orders(names, actor, enemy)[-1]["execution_type"], "rush_weak")
 
     def test_variants_cannot_jump_the_next_scenario_priority_tier(self):
         base_priorities = {int(next(dict((k, v) for k, _, v in body)["priority"]

@@ -54,7 +54,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_nam_resource_war"
-		textureFile = "gfx/interface/superevents/NAM/namestnik lost.png"
+		textureFile = "gfx/interface/superevents/NAM/superevent_resource_war.png"
 	}
 
 	spriteType = {
@@ -90,17 +90,17 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_itora_civilwar"
-		textureFile = "gfx/interface/superevents/NAM/namestnik lost.png"
+		textureFile = "gfx/interface/superevents/NAM/superevent_resource_war.png"
 	}
 
 	spriteType = {
 		name = "GFX_superevent_rus_khan_defeated"
-		textureFile = "gfx/interface/superevents/NAM/namestnik lost.png"
+		textureFile = "gfx/interface/superevents/NAM/superevent_resource_war.png"
 	}
 
 	spriteType = {
 		name = "GFX_superevent_vorkerland_joint_victory"
-		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_joint_victory.png"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_council.png"
 	}
 
 	spriteType = {
@@ -131,6 +131,231 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_superevent_rus_khan_died"
 		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_nam_resource_war_service"
+		textureFile = "gfx/interface/superevents/NAM/superevent_nam_resource_war_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_nam_resource_war_district"
+		textureFile = "gfx/interface/superevents/NAM/superevent_nam_resource_war_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_houses"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_regency.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_staff"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_wallets"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_wallets.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_silence"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_silence.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_regent"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_shabrat_victory_staff"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_shabrat_victory_councils"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_worker.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_shabrat_victory_truth"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_conclave.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory_festival"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_festival.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_houses"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_houses.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_cities"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_cities.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_nur"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_nur.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_regency"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_regency.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_commune"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_commune.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_conclave"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_conclave.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_service"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_iron.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_charter"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_conclave.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_contracts"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_houses.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_rump"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_world_empire.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_revenge"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_nam.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_radical"
+		textureFile = "gfx/interface/superevents/NAM/superevent_nam_resource_war_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_free_islands"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_anton.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_boards"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_boards.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_restitution"
+		textureFile = "gfx/interface/superevents/South/superevent_south_restitution.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_worker"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_worker.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_petrichev"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_petrichev.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_veyran"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_veyran.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_dorian"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_dorian.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_anton"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_anton.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_shield"
+		textureFile = "gfx/interface/superevents/IVN/superevent_west_shield.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_emergency"
+		textureFile = "gfx/interface/superevents/IVN/superevent_west_emergency.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_revanche"
+		textureFile = "gfx/interface/superevents/IVN/superevent_west_revanche.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_committee"
+		textureFile = "gfx/interface/superevents/IVN/superevent_west_committee.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_vorkerland_world_empire"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_world_empire.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_iron"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_iron.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_civil_service"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_wallets.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_federation"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_worker.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_oil_union"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_boards.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_contract_republic"
+		textureFile = "gfx/interface/superevents/SHL/superevent_south_cities.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_directorate"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_nam"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_nam.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_council"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_west_world_empire"
+		textureFile = "gfx/interface/superevents/WRK/superevent_west_world_empire.png"
 	}
 
 }

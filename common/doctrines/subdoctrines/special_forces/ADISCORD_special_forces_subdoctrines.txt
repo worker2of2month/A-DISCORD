@@ -312,6 +312,8 @@ ADISCORD_special_forces_shield_formations = {
 			ADISCORD_urban_breacher = {
 				urban = { attack = 0.06 }
 				vorkernsberg = { attack = 0.06 }
+				desert_city = { attack = 0.06 }
+				hill_city = { attack = 0.06 }
 			}
 		}
 		ADISCORD_special_forces_shield_formations_generator_rotation = {

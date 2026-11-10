@@ -2050,16 +2050,17 @@ ADISCORD_vorkerland_wkr_remaining_fronts_plan = {
 ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	name = "WRK prewar compact"
 	desc = ""
-	allowed = { original_tag = WRK }
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 	enable = {
-		tag = WRK
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
 	}
 	abort = {
 		OR = {
-			NOT = { tag = WRK }
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 			has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
 		}
@@ -2086,16 +2087,17 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 	name = "WRK prewar hardline"
 	desc = ""
-	allowed = { original_tag = WRK }
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 	enable = {
-		tag = WRK
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 		has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
 	}
 	abort = {
 		OR = {
-			NOT = { tag = WRK }
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		}
 	}
@@ -2176,16 +2178,17 @@ ADISCORD_vorkerland_vad_prewar_hardline_plan = {
 ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 	name = "WRK postwar worker"
 	desc = ""
-	allowed = { original_tag = WRK }
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 	enable = {
-		tag = WRK
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 		has_country_flag = ADISCORD_vorkerland_route_worker
 	}
 	abort = {
 		OR = {
-			NOT = { tag = WRK }
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		}
 	}
@@ -2227,9 +2230,10 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 ADISCORD_vorkerland_wrk_postwar_joint_plan = {
 	name = "WRK postwar joint"
 	desc = ""
-	allowed = { original_tag = WRK }
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 	enable = {
-		tag = WRK
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 		has_country_flag = ADISCORD_vorkerland_route_joint
@@ -2237,7 +2241,7 @@ ADISCORD_vorkerland_wrk_postwar_joint_plan = {
 	}
 	abort = {
 		OR = {
-			NOT = { tag = WRK }
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 			ADISCORD_vorkerland_world_empire_active = yes
 		}
@@ -2295,16 +2299,17 @@ ADISCORD_vorkerland_wrk_postwar_joint_plan = {
 ADISCORD_vorkerland_wrk_postwar_utilitarian_plan = {
 	name = "WRK postwar utilitarian"
 	desc = ""
-	allowed = { original_tag = WRK }
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 	enable = {
-		tag = WRK
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 		has_country_flag = ADISCORD_vorkerland_route_utilitarian
 	}
 	abort = {
 		OR = {
-			NOT = { tag = WRK }
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		}
 	}
@@ -2497,6 +2502,7 @@ ADISCORD_vorkerland_petrichev_empire_plan = {
 		WRK_empire_after_the_tribunal
 		WRK_empire_crown_service
 		WRK_empire_crown_charter
+		WRK_empire_open_crown_registers
 		WRK_empire_military_conventions
 		WRK_empire_district_guarantees
 		WRK_empire_staff_without_petrishchev
@@ -2514,6 +2520,7 @@ ADISCORD_vorkerland_petrichev_empire_plan = {
 		WRK_empire_imperial_census
 		WRK_empire_imperial_air_command
 		WRK_empire_imperial_peace
+		WRK_empire_restore_veyran_crown
 		WRK_empire_tower_coronation
 		WRK_empire_veyran_order
 	}

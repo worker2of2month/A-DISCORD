@@ -676,7 +676,7 @@ class CouncilTreeTests(unittest.TestCase):
             self.assertFalse(self.visible(world, capstone))
 
     def test_market_recovery_can_reveal_before_northern_expansion(self):
-        market = ("VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts", "VAL_Return_To_World_Market")
+        market = ("VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts")
         for council in (False, True):
             world = CouncilWorld()
             world.val["leader"] = "VAL_Commanders_Council" if council else "VAL_Valera_Solgalov"
@@ -744,7 +744,7 @@ class CouncilTreeTests(unittest.TestCase):
 
         industry = "VAL_Industrial_Mobilization_Plan"
         self.assertTrue(requires("VAL_Naval_Contract_Office", industry))
-        self.assertTrue(requires("VAL_Return_To_World_Market", industry))
+        self.assertTrue(requires("VAL_Settle_Industrial_Debts", industry))
         self.assertTrue(requires("VAL_Expedition_Landing_Staff", "VAL_Expedition_Escorts"))
         preparation = block(block(self.focuses["VAL_Expedition_Landing_Staff"], "available"), "OR")
         self.assertEqual({row.value for row in preparation}, {"VAL_Contract_Landing_Craft", "VAL_nw_khan"})

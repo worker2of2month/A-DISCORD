@@ -5,18 +5,23 @@ import unittest
 from unittest.mock import patch
 
 from tools.lib.paths import source_section
+from tools.tests.test_vorkerland_preparation import EFFECTS, Script, fields
 from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
     CENTRAL_INTEGRATION_PACKAGES,
     CENTRAL_TARGETS,
     CENTRAL_WAVE_DECISION,
     CENTRAL_WAVE_VERIFIER_EVENTS,
+    CLAIMANT_CORE_SETTLEMENT,
     CLAIMANT_HOME_STATES,
+    CLAIMANT_TAGS,
     CORE_FOCUS_UNLOCK,
     CORE_PACKAGES,
     DECISION_FILE,
     EFFECT_FILE,
     EVENT_REGISTRY_FILE,
     LEGACY_CONTROLLER_MISSIONS,
+    NATION_CONTENT_GATE,
+    NATION_TARGET,
     PHASE_EVENT_FILE,
     PHASE_EFFECT_FILE,
     PHASE_TRIGGER_FILE,
@@ -24,11 +29,58 @@ from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
     ROOT,
     RUSSIAN_LOCALISATION,
     SUPPORT_DECISIONS,
+    claimant_core_settlement_issues,
     collect_issues,
     named_block,
     named_blocks,
+    nation_content_gate_definition_issues,
+    nation_content_gate_issues,
     read,
 )
+
+
+class CoreSettlementScript(Script):
+    """The shared script simulator plus the state core effects of the unification."""
+
+    SETTLEMENT_EFFECTS = (
+        "ADISCORD_vorkerland_inherit_integrated_claimant_cores",
+        "ADISCORD_vorkerland_inherit_retired_cores",
+        CLAIMANT_CORE_SETTLEMENT,
+    )
+    # set_capital has no bearing on cores and is accepted without a model.
+    LOCAL_EFFECTS = (
+        "add_core_of",
+        "remove_core_of",
+        "every_state",
+        "set_capital",
+        *SETTLEMENT_EFFECTS,
+    )
+
+    def run(self, block, current=None, previous=None):
+        current = current or self.root
+        # Entries the base simulator knows stay together, so an if/else chain
+        # is still evaluated as one sequence.
+        known = []
+        for entry in block:
+            key, _, value = entry
+            if key not in self.LOCAL_EFFECTS:
+                known.append(entry)
+                continue
+            super().run(known, current, previous)
+            known = []
+            if key in self.SETTLEMENT_EFFECTS:
+                self.run(EFFECTS[key], current, previous)
+            elif key == "every_state":
+                limit = fields(value).get("limit", [])
+                body = [item for item in value if item[0] != "limit"]
+                for state in [name for name in self.scopes if name.isdigit()]:
+                    if self.conditions(limit, state, current):
+                        self.run(body, state, current)
+            elif key == "add_core_of":
+                self.scopes[current].cores.add(self.scope(value, current, previous))
+            elif key == "remove_core_of":
+                self.scopes[current].cores.discard(self.scope(value, current, previous))
+        super().run(known, current, previous)
 
 
 class VorkerlandFocusDecisionTests(unittest.TestCase):
@@ -433,21 +485,133 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         inheritance = named_block(
             phase, "ADISCORD_vorkerland_inherit_integrated_claimant_cores"
         )
-        formation = named_block(phase, "ADISCORD_vorkerland_finalize_wrk_formation")
+        formation = named_block(phase, "ADISCORD_vorkerland_finalize_unified_territory")
         states = sorted(
             state
             for _, package, _ in CENTRAL_INTEGRATION_PACKAGES.values()
             for state in package
         )
         inherited = sorted(set(states).union(CLAIMANT_HOME_STATES))
+        call = f"{CLAIMANT_CORE_SETTLEMENT} = yes"
         for state in inherited:
             block = named_block(inheritance, str(state))
-            self.assertIn("is_owned_by = WRK", block)
-            self.assertNotIn("is_controlled_by = WRK", block)
-            self.assertIn("add_core_of = WRK", block)
+            self.assertEqual(" ".join(block.split()), f"{state} = {{ {call} }}")
+        self.assertEqual(phase.count(call), len(inherited))
+        settlement = named_block(phase, CLAIMANT_CORE_SETTLEMENT)
+        self.assertEqual(claimant_core_settlement_issues(settlement), [])
+        self.assertIn(f"is_owned_by = {NATION_TARGET}", settlement)
+        self.assertNotIn("is_controlled_by", settlement)
+        self.assertEqual(settlement.count(f"add_core_of = {NATION_TARGET}"), 1)
+        self.assertNotIn("WRK", settlement)
         self.assertIn(
             "ADISCORD_vorkerland_inherit_integrated_claimant_cores = yes", formation
         )
+
+    def test_claimant_core_settlement_check_rejects_unsafe_rules(self) -> None:
+        phase = source_section(read(PHASE_EFFECT_FILE), 'phase_effects')
+        settlement = named_block(phase, CLAIMANT_CORE_SETTLEMENT)
+        nation_core = f"add_core_of = {NATION_TARGET}"
+        first_removal = "remove_core_of = WKR"
+        cases = (
+            (
+                [(nation_core, ""), (first_removal, f"{nation_core}\n\t\t{first_removal}")],
+                f"{CLAIMANT_CORE_SETTLEMENT} must consume the WKR core before "
+                "awarding the nation core",
+            ),
+            (
+                [(f"is_owned_by = {NATION_TARGET}", f"is_controlled_by = {NATION_TARGET}")],
+                f"{CLAIMANT_CORE_SETTLEMENT} can lose earned integration to transient control",
+            ),
+            (
+                [(nation_core, "add_core_of = WRK")],
+                f"{CLAIMANT_CORE_SETTLEMENT} must not address the retired WRK tag",
+            ),
+            (
+                [(nation_core, "add_core_of = ROOT")],
+                f"{CLAIMANT_CORE_SETTLEMENT} must award one core, to the nation target "
+                "on a state it owns",
+            ),
+            (
+                [("is_core_of = TVA", "is_core_of = WRK")],
+                f"{CLAIMANT_CORE_SETTLEMENT} lacks safe token "
+                "OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA }",
+            ),
+        )
+        for replacements, expected in cases:
+            mutated = settlement
+            for old, new in replacements:
+                self.assertIn(old, mutated)
+                mutated = mutated.replace(old, new, 1)
+            with self.subTest(expected=expected):
+                self.assertIn(expected, claimant_core_settlement_issues(mutated))
+
+        fallback = named_block(settlement, "else")
+        without_fallback_removal = settlement.replace(
+            fallback, fallback.replace("remove_core_of = TVA", "", 1), 1
+        )
+        self.assertIn(
+            f"{CLAIMANT_CORE_SETTLEMENT} must consume the TVA core in both branches",
+            claimant_core_settlement_issues(without_fallback_removal),
+        )
+
+        original = read(PHASE_EFFECT_FILE)
+        mutated_file = original.replace(
+            f"27 = {{ {CLAIMANT_CORE_SETTLEMENT} = yes }}",
+            "27 = { remove_core_of = WKR }",
+            1,
+        )
+        self.assertNotEqual(original, mutated_file)
+        with patch(
+            "tools.validators.validate_adiscord_vorkerland_focus_decisions.read",
+            side_effect=lambda requested: (
+                mutated_file if requested == PHASE_EFFECT_FILE else read(requested)
+            ),
+        ):
+            issues = collect_issues()
+        self.assertIn(
+            f"inherited core state 27 must only call {CLAIMANT_CORE_SETTLEMENT}", issues
+        )
+        self.assertIn(
+            f"{CLAIMANT_CORE_SETTLEMENT} may be called only by the claimant-core inheritance",
+            issues,
+        )
+
+    def test_unification_passes_cores_to_the_winner_under_its_own_tag(self) -> None:
+        finalizer = EFFECTS["ADISCORD_vorkerland_finalize_unified_territory"]
+        for winner in CLAIMANT_TAGS:
+            rival = next(tag for tag in CLAIMANT_TAGS if tag != winner)
+            script = CoreSettlementScript()
+            script.root = winner
+            script.event_targets["ADISCORD_vorkerland_nation"] = winner
+            # state: (owner, cores before the finalizer, cores after it)
+            holdings = {
+                "32": (winner, {"WRK", winner}, {winner}),
+                "75": (winner, {"WRK", rival}, {winner}),
+                "27": (winner, {rival}, {winner}),
+                "36": (winner, {"NAM"}, {"NAM"}),
+                "102": ("EYR", {"EYR", "WRK", winner}, {"EYR", winner}),
+                "108": ("YOR", {"YOR", winner, rival}, {"YOR"}),
+                "500": ("NAM", {"WRK", "NAM"}, {"NAM", winner}),
+            }
+            for state, (owner, cores, _) in holdings.items():
+                script.scopes[state].owner = owner
+                script.scopes[state].cores = set(cores)
+            script.run(finalizer, winner)
+            for state, (_, _, expected) in holdings.items():
+                with self.subTest(winner=winner, state=state):
+                    self.assertEqual(script.scopes[state].cores, expected)
+            with self.subTest(winner=winner, check="retired tag keeps no core"):
+                self.assertFalse(
+                    any("WRK" in scope.cores for scope in script.scopes.values())
+                )
+
+        # The award follows the nation target, not the tag of the state's owner:
+        # while the target still names WRK a claimant-held state gains nothing.
+        script = CoreSettlementScript()
+        script.scopes["27"].owner = "WKR"
+        script.scopes["27"].cores = {"WKR"}
+        script.run(EFFECTS[CLAIMANT_CORE_SETTLEMENT], "27")
+        self.assertEqual(script.scopes["27"].cores, set())
 
     def test_retreat_levies_are_two_weak_units_per_claimant_at_most(self) -> None:
         decisions = read(DECISION_FILE)
@@ -477,6 +641,55 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             for state in package:
                 self.assertIn(f"owns_state = {state}", block)
                 self.assertIn(f"controls_state = {state}", block)
+                self.assertRegex(
+                    block,
+                    rf"\b{state}\s*=\s*\{{\s*add_core_of\s*=\s*{NATION_TARGET}\s*\}}",
+                )
+            self.assertNotIn("add_core_of = WRK", block)
+            self.assertEqual(nation_content_gate_issues(decision_id, block), [])
+
+    def test_postwar_core_packages_stay_closed_to_wartime_claimants(self) -> None:
+        decisions = read(DECISION_FILE)
+        triggers = source_section(read(PHASE_TRIGGER_FILE), 'collapse_triggers')
+        self.assertEqual(nation_content_gate_definition_issues(triggers), [])
+        gate = named_block(triggers, NATION_CONTENT_GATE)
+        for claimant in CLAIMANT_TAGS:
+            for nation in ("WRK", *CLAIMANT_TAGS):
+                script = Script()
+                script.event_targets["ADISCORD_vorkerland_nation"] = nation
+                with self.subTest(claimant=claimant, nation=nation):
+                    self.assertEqual(
+                        script.conditions([(NATION_CONTENT_GATE, "=", "yes")], claimant),
+                        claimant == nation,
+                    )
+        prewar = Script()
+        self.assertTrue(prewar.conditions([(NATION_CONTENT_GATE, "=", "yes")], "WRK"))
+        self.assertTrue(prewar.conditions([(NATION_CONTENT_GATE, "=", "yes")], "IVN"))
+
+        without_target = gate.replace(f"tag = {NATION_TARGET}", "tag = WRK", 1)
+        self.assertNotEqual(gate, without_target)
+        self.assertEqual(
+            nation_content_gate_definition_issues(without_target),
+            [
+                f"{NATION_CONTENT_GATE} must accept every non-claimant and the "
+                "nation target only"
+            ],
+        )
+
+        decision_id = "ADISCORD_vorkerland_restore_core_oitfort"
+        block = named_block(decisions, decision_id)
+        narrowed = block.replace(named_block(block, "allowed"), "allowed = { tag = WRK }", 1)
+        self.assertIn(
+            f"{decision_id} allowed must admit exactly WRK and the three claimant tags",
+            nation_content_gate_issues(decision_id, narrowed),
+        )
+        ungated = block.replace(f"{NATION_CONTENT_GATE} = yes ", "", 1)
+        self.assertNotEqual(block, ungated)
+        self.assertIn(
+            f"{decision_id} visible must withhold the decision from wartime "
+            f"claimants through {NATION_CONTENT_GATE}",
+            nation_content_gate_issues(decision_id, ungated),
+        )
 
     def test_allied_support_is_finite_and_cannot_create_relations(self) -> None:
         decisions = read(DECISION_FILE)

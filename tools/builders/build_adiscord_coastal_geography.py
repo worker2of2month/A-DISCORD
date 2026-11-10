@@ -17,7 +17,7 @@ from PIL import Image
 from scipy.ndimage import distance_transform_edt, gaussian_filter
 
 from tools.builders.build_adiscord_ivn_geography import normal_from_height
-from tools.builders.build_adiscord_new_states import SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
+from tools.builders.build_adiscord_new_states import CITY_TERRAINS, SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
 from tools.lib.coastal_clearance import (
     URBAN_FALLBACK_PALETTE,
     tree_cells_blocked,
@@ -62,6 +62,21 @@ ARAB_URBAN_GROWTH = frozenset({
     16766, 16767, 16768, 16769, 16770, 16771, 16787, 16788, 16789,
     16796, 16797, 16798,
 })
+# Arab cities take the combat terrain of their rural surroundings: hill cities
+# stand among hills and mountains, desert cities among sand. Cities in forest
+# or farmland keep ordinary urban terrain. Every Arab city province is in the
+# geometry masks, so the definition pass below writes its terrain field.
+ARAB_HILL_CITIES = frozenset({
+    971, 16713, 16714, 16715, 16718, 16719, 16722, 16727, 16728,
+    16729, 16733, 16739, 16742, 16788, 16897, 16899,
+})
+ARAB_FARMLAND_CITIES = frozenset({7903, 16734, 16735, 16738, 16789})
+ARAB_CITY_TERRAIN = {
+    province: "hill_city" if province in ARAB_HILL_CITIES
+    else "urban" if province in ARAB_FARMLAND_CITIES
+    else "desert_city"
+    for province in ARAB_CITIES | ARAB_URBAN_GROWTH
+}
 # Lower Loren's hand-painted urban provinces use the northern city raster.
 URBAN_GROWTH = ARAB_URBAN_GROWTH | frozenset({
     1198, 16881, 16884, 16885, 16887, 16890, 16892, 16900, 16901,
@@ -693,7 +708,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         ys, xs = np.where(masks[int(fields[0])])
         coastal = any(sea[ys + dy, xs + dx].any() for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
         fields[5] = "true" if coastal else "false"
-        if int(fields[0]) in CITIES:
+        if int(fields[0]) in ARAB_CITY_TERRAIN:
+            fields[6] = ARAB_CITY_TERRAIN[int(fields[0])]
+        elif int(fields[0]) in CITIES:
             fields[6] = "urban"
         elif int(fields[0]) in RELIEF_PROVINCES:
             fields[6] = RELIEF_TERRAIN[int(fields[0])]
@@ -774,7 +791,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         tree_clearance = cities | (mountains & (mountain_heightmap >= 165))
         urban = {
             int(fields[0]) for line in definition_lines
-            if (fields := line.split(";"))[6] == "urban"
+            if (fields := line.split(";"))[6] in CITY_TERRAINS
         }
         for (x, y), (_original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
             if replacement in urban:

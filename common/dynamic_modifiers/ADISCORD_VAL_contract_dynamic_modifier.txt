@@ -13,6 +13,47 @@ VAL_nw_industrial_network = {
 	command_power_gain_mult = VAL_nw_command_gain
 }
 
+# COUNTRY VAL. The postwar reckoning; VAL_peace_refresh owns every value.
+VAL_peace_crisis = {
+	enable = { tag = VAL }
+	icon = GFX_idea_VAL_harvest_of_ash
+	industrial_capacity_factory = VAL_peace_factory_output
+	ADISCORD_economy_military_industry_income_factor = VAL_peace_military_income
+	political_power_gain = VAL_peace_pp_gain
+	stability_factor = VAL_peace_stability
+}
+
+# COUNTRY VAL. The regime chosen at the reckoning sets only its own variables.
+VAL_peace_order = {
+	enable = { tag = VAL }
+	icon = GFX_idea_VAL_mercenary_state
+	political_power_gain = VAL_peace_order_pp
+	war_support_factor = VAL_peace_order_war_support
+	ADISCORD_economy_military_industry_income_factor = VAL_peace_order_military_income
+	stability_factor = VAL_peace_order_stability
+	ADISCORD_economy_admin_expense_factor = VAL_peace_order_admin_expense
+	industrial_capacity_factory = VAL_peace_order_factory_output
+	army_org_factor = VAL_peace_order_army_org
+	command_power_gain_mult = VAL_peace_order_command_gain
+	planning_speed = VAL_peace_order_planning
+	army_attack_factor = VAL_peace_order_attack
+	conscription_factor = VAL_peace_order_conscription
+	ADISCORD_economy_weekly_income = VAL_peace_order_weekly_income
+	consumer_goods_factor = VAL_peace_order_consumer_goods
+}
+
+# COUNTRY VAL. The last war of the east; VAL_east_apply_war_spirit owns every value.
+VAL_east_war_effort = {
+	enable = { tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	army_attack_factor = VAL_east_war_attack
+	army_defence_factor = VAL_east_war_defence
+	army_org_factor = VAL_east_war_org
+	planning_speed = VAL_east_war_planning
+	war_stability_factor = VAL_east_war_stability
+	equipment_capture_factor = VAL_east_war_capture
+}
+
 # Independent Kefreyt contract-state modifier.
 
 VAL_contract_state = {

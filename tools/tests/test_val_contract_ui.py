@@ -1020,7 +1020,7 @@ class TestValContractUi(unittest.TestCase):
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         nationalise = named_block(decisions, "VAL_nationalise_region")
         for token in (
-            "state_target = yes",
+            "state_target = any_owned_state",
             "VAL_regional_integration_state_valid = yes",
             "set_state_flag = VAL_regional_administration_in_progress",
             "add_core_of = ROOT",
@@ -2265,7 +2265,6 @@ class TestValProgressionChoices(unittest.TestCase):
         for name in (
             "VAL_Reopen_Trade_Routes",
             "VAL_Settle_Industrial_Debts",
-            "VAL_Return_To_World_Market",
         ):
             with self.subTest(name=name):
                 focus = self.focus(name)

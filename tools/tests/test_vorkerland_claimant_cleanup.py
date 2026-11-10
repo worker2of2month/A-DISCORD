@@ -32,10 +32,13 @@ class VorkerlandClaimantCleanupTests(unittest.TestCase):
             "WKR = {",
             "tag = SOL",
             "VAD = {",
-            "tag = WRK",
+            "tag = event_target:ADISCORD_vorkerland_nation",
         ):
             with self.subTest(route=route):
                 self.assertIn(route, source)
+        # The unified country is the claimant that kept its tag; the retired
+        # WRK tag is never the live winner.
+        self.assertNotIn("tag = WRK", source)
 
     def test_tva_aligned_ostfort_is_annexed_before_defeated_tva(self) -> None:
         source = " ".join(read().split())

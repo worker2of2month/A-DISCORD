@@ -5,7 +5,7 @@ defined_text = {
 		localization_key = ADISCORD_decision_country_WKR
 	}
 	text = {
-		trigger = { tag = WRK }
+		trigger = { tag = event_target:ADISCORD_vorkerland_nation }
 		localization_key = ADISCORD_decision_country_WRK
 	}
 	text = {

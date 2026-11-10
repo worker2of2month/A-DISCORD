@@ -253,6 +253,73 @@ EVENT_AWAKENED_PARTICIPATION["BJK"].update(
     }
 )
 
+# Shahrabad's own desks reach the remaining desert houses the same way. Credit
+# and embassies leave only flags and opinion; debt, toll and charter terms go
+# through the southern offers, which release their target first; integration
+# annexes a country that became a subject through those offers. The road-station
+# sale hands KDR two states and nothing else.
+for _tag in ("KDR", "SDR", "WEF"):
+    EVENT_AWAKENED_PARTICIPATION[_tag].update(
+        {
+            Path("common/decisions/ADISCORD_SHL_decisions.txt"),
+            Path("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"),
+            Path("common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"),
+        }
+    )
+
+# GLP sees the metal contract category only after the offer that released it.
+# The Svetlogorye island concession focus reads its eligibility and unlocks a
+# decision that releases it before the offer.
+EVENT_AWAKENED_PARTICIPATION["GLP"].update(
+    {
+        Path("common/decisions/categories/ADISCORD_decision_categories_SHL.txt"),
+        Path("common/national_focus/ADISCORD_NAM_focus.txt"),
+    }
+)
+
+# The last-empire crisis releases every coalition candidate when its warning
+# phase opens and again when a defender is registered; only registered
+# defenders enter the reactor alliance. The imperial frontier campaign releases
+# its target before the declaration. The special-zone decision relies on those
+# paths: a restored fragment was annexed in one of these wars first, so no
+# peaceful route makes a still-dormant country a subject.
+RUS_CRISIS_SHARED_FILES = {
+    Path("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt"),
+}
+RUS_CRISIS_AI_FILE = Path("common/ai_strategy/ADISCORD_RUS_ai.txt")
+RUS_FRONTIER_FILES = {
+    Path("common/decisions/ADISCORD_RUS_decisions.txt"),
+    Path("common/decisions/categories/ADISCORD_decision_categories_RUS.txt"),
+}
+# Kefreyt's partner desk releases a republic when it accepts a concession or is
+# recognised, before equipment, money or resource rights reach it. Supply and
+# defence require that concession or an existing war with RUS.
+VAL_PARTNER_FILES = {
+    Path("common/decisions/ADISCORD_VAL_decisions.txt"),
+    Path("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+}
+EVENT_AWAKENED_PARTICIPATION["MON"].update(
+    RUS_CRISIS_SHARED_FILES | {RUS_CRISIS_AI_FILE}
+)
+EVENT_AWAKENED_PARTICIPATION["RLY"].update(
+    RUS_CRISIS_SHARED_FILES | RUS_FRONTIER_FILES | VAL_PARTNER_FILES
+)
+EVENT_AWAKENED_PARTICIPATION.setdefault("TMR", set()).update(
+    RUS_CRISIS_SHARED_FILES
+    | {RUS_CRISIS_AI_FILE}
+    | RUS_FRONTIER_FILES
+    | VAL_PARTNER_FILES
+)
+
+# The startup cabinet fill reads each tag once to seat its authored foreign
+# minister. It grants no slots, units, subject status or economy state.
+for _tag in EXPECTED_SLOTS:
+    EVENT_AWAKENED_PARTICIPATION.setdefault(_tag, set()).add(
+        Path("common/scripted_effects/ADISCORD_scripted_effects_generic.txt")
+    )
+
 
 def bezhaysk_administration_release_issues(text: str) -> list[str]:
     """Every administration payload must wake its country before cache invalidation."""
@@ -797,7 +864,7 @@ def validate(root: Path = ROOT) -> list[str]:
     if any(token in terminal for token in ("every_country", "any_country")):
         issues.append("terminal assistance fanout scans countries")
     finalizer = named_block(
-        phase_effect_text, "ADISCORD_vorkerland_finalize_reunified_wrk"
+        phase_effect_text, "ADISCORD_vorkerland_finalize_reunification"
     )
     finish_position = finalizer.find(
         "set_global_flag = ADISCORD_vorkerland_collapse_finished"

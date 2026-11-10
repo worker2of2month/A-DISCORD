@@ -53,6 +53,14 @@ CENTRAL_INTEGRATION_PACKAGES = {
 
 CLAIMANT_HOME_STATES = (32, 33, 36, 37, 38, 39, 40, 75, 106, 107, 121, 200, 201, 324)
 
+# Global event target naming the country that currently is Vorkerland: WRK
+# until a claimant unifies the country, that claimant afterwards.
+NATION_TARGET = "event_target:ADISCORD_vorkerland_nation"
+CLAIMANT_TAGS = ("WKR", "VAD", "TVA")
+CLAIMANT_CORE_SETTLEMENT = "ADISCORD_vorkerland_settle_claimant_core"
+# Trigger that is false only for a claimant tag other than the nation target.
+NATION_CONTENT_GATE = "ADISCORD_vorkerland_is_not_wartime_claimant"
+
 LEVY_DECISIONS = {
     "ADISCORD_vorkerland_wkr_retreat_levy_1": (
         "WKR",
@@ -271,6 +279,89 @@ def expected_localisation_keys() -> set[str]:
     }
 
 
+def claimant_core_settlement_issues(settlement: str) -> list[str]:
+    """Check the STATE-scope effect that settles claimant cores on one state.
+
+    The winner holds the nation target under its own claimant tag, so the
+    settlement consumes the three claimant cores first and awards the nation
+    core last; the reverse order would strip the core it has just awarded.
+    """
+    name = CLAIMANT_CORE_SETTLEMENT
+    awards = named_blocks(settlement, "if")
+    fallbacks = named_blocks(settlement, "else")
+    if len(awards) != 1 or len(fallbacks) != 1 or "else_if" in settlement:
+        return [f"{name} must hold one owned-state branch and one fallback"]
+    award = awards[0]
+    fallback = fallbacks[0]
+    issues: list[str] = []
+    limit = " ".join(named_block(award, "limit").split())
+    for token in (
+        f"is_owned_by = {NATION_TARGET}",
+        "OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA }",
+    ):
+        if token not in limit:
+            issues.append(f"{name} lacks safe token {token}")
+    if "is_controlled_by" in settlement:
+        issues.append(f"{name} can lose earned integration to transient control")
+    nation_core = f"add_core_of = {NATION_TARGET}"
+    awarded = re.findall(r"\badd_core_of\s*=\s*(\S+)", settlement)
+    if awarded != [NATION_TARGET] or nation_core not in award:
+        issues.append(
+            f"{name} must award one core, to the nation target on a state it owns"
+        )
+    for claimant in CLAIMANT_TAGS:
+        removal = f"remove_core_of = {claimant}"
+        if award.count(removal) != 1 or fallback.count(removal) != 1:
+            issues.append(f"{name} must consume the {claimant} core in both branches")
+        elif nation_core in award and award.find(removal) > award.find(nation_core):
+            issues.append(
+                f"{name} must consume the {claimant} core before awarding the nation core"
+            )
+    if re.search(r"\bWRK\b", settlement):
+        issues.append(f"{name} must not address the retired WRK tag")
+    return issues
+
+
+def nation_content_gate_issues(decision_id: str, block: str) -> list[str]:
+    """Check a decision written for Vorkerland as a whole.
+
+    The engine reads `allowed` once at load, so it admits WRK and every
+    claimant tag; `visible` withholds the decision from a claimant that has
+    not unified the country.
+    """
+    issues: list[str] = []
+    allowed = " ".join(named_block(block, "allowed").split())
+    admitted = re.findall(r"\btag\s*=\s*(\S+)", allowed)
+    if sorted(admitted) != sorted(("WRK", *CLAIMANT_TAGS)) or not re.fullmatch(
+        r"allowed = \{ OR = \{ (?:tag = [A-Z]{3} ){4}\} \}", allowed
+    ):
+        issues.append(
+            f"{decision_id} allowed must admit exactly WRK and the three claimant tags"
+        )
+    if named_block(block, "visible").count(f"{NATION_CONTENT_GATE} = yes") != 1:
+        issues.append(
+            f"{decision_id} visible must withhold the decision from wartime "
+            f"claimants through {NATION_CONTENT_GATE}"
+        )
+    return issues
+
+
+def nation_content_gate_definition_issues(triggers: str) -> list[str]:
+    """Check that the gate rejects only a claimant other than the nation target."""
+    gates = named_blocks(triggers, NATION_CONTENT_GATE)
+    accepted = (
+        f"{NATION_CONTENT_GATE} = {{ OR = {{ NOT = {{ ADISCORD_vorkerland_is_main_claimant = yes }} "
+        f"tag = {NATION_TARGET} }} }}",
+        f"{NATION_CONTENT_GATE} = {{ OR = {{ tag = {NATION_TARGET} "
+        "NOT = { ADISCORD_vorkerland_is_main_claimant = yes } } }",
+    )
+    if len(gates) != 1 or " ".join(gates[0].split()) not in accepted:
+        return [
+            f"{NATION_CONTENT_GATE} must accept every non-claimant and the nation target only"
+        ]
+    return []
+
+
 def collect_issues() -> list[str]:
     issues: list[str] = []
     paths = (
@@ -296,6 +387,7 @@ def collect_issues() -> list[str]:
     effects = source_section(read(EFFECT_FILE), 'focus_decision_effects')
     phase_effects = source_section(read(PHASE_EFFECT_FILE), 'phase_effects')
     phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
+    claimant_triggers = source_section(read(PHASE_TRIGGER_FILE), 'collapse_triggers')
     phase_events = source_section(read(PHASE_EVENT_FILE), 'phase_events')
     event_registry = read(EVENT_REGISTRY_FILE)
     ideas = source_section(read(IDEA_FILE), 'focus_decision_ideas')
@@ -320,6 +412,7 @@ def collect_issues() -> list[str]:
         "has_global_flag = ADISCORD_vorkerland_phase_reunification",
         "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
         "tag = WRK",
+        f"tag = {NATION_TARGET}",
         "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration",
         "has_global_flag = ADISCORD_vorkerland_reunification_verified",
         "has_country_flag = ADISCORD_vorkerland_route_worker",
@@ -864,23 +957,16 @@ def collect_issues() -> list[str]:
     inherit_cores = named_block(
         phase_effects, "ADISCORD_vorkerland_inherit_integrated_claimant_cores"
     )
-    formation = named_block(phase_effects, "ADISCORD_vorkerland_finalize_wrk_formation")
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_finalize_unified_territory")
     inherited_states = sorted(set(integrated_states).union(CLAIMANT_HOME_STATES))
+    # Every listed state runs the same STATE-scope settlement, whose rule is
+    # checked once below instead of once per state.
+    settlement_call = f"{CLAIMANT_CORE_SETTLEMENT} = yes"
     for state in inherited_states:
-        state_block = named_block(inherit_cores, str(state))
-        for token in (
-            "is_owned_by = WRK",
-            "OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA }",
-            "add_core_of = WRK",
-            "remove_core_of = WKR",
-            "remove_core_of = VAD",
-            "remove_core_of = TVA",
-        ):
-            if token not in state_block:
-                issues.append(f"inherited core state {state} lacks safe token {token}")
-        if "is_controlled_by = WRK" in state_block:
+        state_block = " ".join(named_block(inherit_cores, str(state)).split())
+        if state_block != f"{state} = {{ {settlement_call} }}":
             issues.append(
-                f"inherited core state {state} can lose earned integration to transient control"
+                f"inherited core state {state} must only call {CLAIMANT_CORE_SETTLEMENT}"
             )
     inherited_block_states = sorted(
         int(value) for value in re.findall(r"(?m)^\s*(\d+)\s*=\s*\{", inherit_cores)
@@ -889,8 +975,17 @@ def collect_issues() -> list[str]:
         issues.append(
             "claimant-core inheritance must contain exactly its 38 explicit states"
         )
+    if phase_effects.count(settlement_call) != len(inherited_states):
+        issues.append(
+            f"{CLAIMANT_CORE_SETTLEMENT} may be called only by the claimant-core inheritance"
+        )
+    settlements = named_blocks(phase_effects, CLAIMANT_CORE_SETTLEMENT)
+    if len(settlements) != 1:
+        issues.append(f"{CLAIMANT_CORE_SETTLEMENT} must be defined exactly once")
+    else:
+        issues.extend(claimant_core_settlement_issues(settlements[0]))
     if "ADISCORD_vorkerland_inherit_integrated_claimant_cores = yes" not in formation:
-        issues.append("WRK formation does not inherit verified claimant cores")
+        issues.append("unification finalizer does not inherit verified claimant cores")
 
     for decision_id, (
         tag,
@@ -941,12 +1036,14 @@ def collect_issues() -> list[str]:
             if forbidden in effect:
                 issues.append(f"{effect_id} contains unbounded levy token {forbidden}")
 
+    issues.extend(nation_content_gate_definition_issues(claimant_triggers))
+    nation_core = re.escape(f"add_core_of = {NATION_TARGET}")
     all_package_states: list[int] = []
     for decision_id, states in CORE_PACKAGES.items():
         block = named_block(decisions, decision_id)
         all_package_states.extend(states)
+        issues.extend(nation_content_gate_issues(decision_id, block))
         for token in (
-            "tag = WRK",
             "ADISCORD_vorkerland_phase_postwar_integration",
             "ADISCORD_vorkerland_reunification_verified",
             CORE_FOCUS_UNLOCK,
@@ -960,9 +1057,7 @@ def collect_issues() -> list[str]:
                 or f"controls_state = {state}" not in block
             ):
                 issues.append(f"{decision_id} must own and control state {state}")
-            if not re.search(
-                rf"\b{state}\s*=\s*\{{\s*add_core_of\s*=\s*WRK\s*\}}", block
-            ):
+            if not re.search(rf"\b{state}\s*=\s*\{{\s*{nation_core}\s*\}}", block):
                 issues.append(f"{decision_id} does not explicitly core state {state}")
         if "every_owned_state" in block or "every_state" in block:
             issues.append(f"{decision_id} must not use bulk state iteration")
@@ -974,10 +1069,14 @@ def collect_issues() -> list[str]:
         )
         cored_states = tuple(
             int(value)
-            for value in re.findall(
-                r"\b(\d+)\s*=\s*\{\s*add_core_of\s*=\s*WRK\s*\}", block
-            )
+            for value in re.findall(rf"\b(\d+)\s*=\s*\{{\s*{nation_core}\s*\}}", block)
         )
+        if re.findall(r"\badd_core_of\s*=\s*(\S+)", block) != [NATION_TARGET] * len(
+            states
+        ):
+            issues.append(
+                f"{decision_id} must award its cores to the nation target only"
+            )
         if (
             owned_states != states
             or controlled_states != states

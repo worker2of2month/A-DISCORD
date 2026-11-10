@@ -515,7 +515,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         validator.validate_states()
         self.assertEqual(validator.ERRORS, [])
 
-    def test_worker_outcome_marks_wartime_wkr_before_final_wrk_formation(self) -> None:
+    def test_worker_outcome_marks_wartime_wkr_before_it_unifies_vorkerland(self) -> None:
         maps = validator.text(
             validator.ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
         )
@@ -541,28 +541,126 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         phase_effects = validator.text(
             validator.ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
         )
-        formation = validator.block(
-            phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
+        # WKR keeps its own country: it takes over the nation target and the
+        # delayed settlement annexes only the defeated claimants.
+        unification = validator.block(
+            phase_effects, "ADISCORD_vorkerland_unify_under_wkr"
         )
-        self.assertIn("change_tag_from = WKR", formation)
-        completion = validator.block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
-        self.assertIn("ADISCORD_vorkerland_finalize_wrk_formation = yes", completion)
+        self.assertRegex(
+            unification,
+            r"\A\s*clear_global_event_target = ADISCORD_vorkerland_nation\s+"
+            r"save_global_event_target_as = ADISCORD_vorkerland_nation\b",
+        )
+        self.assertNotIn("change_tag_from", unification)
+        self.assertNotIn("annex_country", unification)
+        self.assertTrue(
+            unification.rstrip().endswith(
+                "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+            )
+        )
+        settlement = validator.block(
+            phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr"
+        )
+        self.assertNotIn("change_tag_from", settlement)
+        self.assertEqual(
+            sorted(re.findall(r"annex_country = \{ target = (\w+)", settlement)),
+            ["TVA", "VAD"],
+        )
+        self.assertIn("ADISCORD_vorkerland_finalize_unified_territory = yes", settlement)
 
-    def test_phase_six_immediately_forms_wrk_from_every_winner(self) -> None:
+    def test_phase_six_unifies_vorkerland_in_the_scope_of_every_winner(self) -> None:
         phase_events = validator.text(
             validator.ROOT / "events/ADISCORD_vorkerland_events.txt"
         )
         phase_six = validator.event_block(phase_events, "ADISCORD_vorkerland_phase.6")
         for tag, effect in (
-            ("WKR", "ADISCORD_vorkerland_form_wrk_from_wkr"),
-            ("VAD", "ADISCORD_vorkerland_form_wrk_from_vad"),
-            ("TVA", "ADISCORD_vorkerland_form_wrk_from_tva"),
+            ("WKR", "ADISCORD_vorkerland_unify_under_wkr"),
+            ("VAD", "ADISCORD_vorkerland_unify_under_vad"),
+            ("TVA", "ADISCORD_vorkerland_unify_under_tva"),
         ):
             with self.subTest(tag=tag):
-                self.assertRegex(
-                    phase_six,
-                    rf"(?s)\b{tag}\s*=\s*\{{.*?{re.escape(effect)}\s*=\s*yes",
+                self.assertEqual(
+                    re.findall(
+                        rf"(\S+)\s*=\s*\{{\s*{re.escape(effect)}\s*=\s*yes\s*\}}",
+                        phase_six,
+                    ),
+                    [tag],
                 )
+
+    def test_unification_contract_rejects_a_handoff_into_wrk(self) -> None:
+        effects_path = (
+            validator.ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+        )
+        events_path = validator.ROOT / "events/ADISCORD_vorkerland_events.txt"
+        queue = "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+        rebinding = "save_global_event_target_as = ADISCORD_vorkerland_nation"
+        cases = (
+            (
+                effects_path,
+                "ADISCORD_vorkerland_unify_under_vad = {",
+                [(queue, f"{queue}\n\tchange_tag_from = VAD")],
+                (
+                    "ADISCORD_vorkerland_unify_under_vad: VAD must keep its own tag",
+                    "ADISCORD_vorkerland_unify_under_vad must end by queueing the "
+                    "phase.7 settlement",
+                ),
+            ),
+            (
+                effects_path,
+                "ADISCORD_vorkerland_unify_under_tva = {",
+                [(f"\t{rebinding}\n", "")],
+                (
+                    "ADISCORD_vorkerland_unify_under_tva: must open by rebinding the "
+                    "nation target to TVA",
+                ),
+            ),
+            (
+                effects_path,
+                "ADISCORD_vorkerland_settle_unification_under_wkr = {",
+                [
+                    (
+                        "annex_country = { target = VAD transfer_troops = yes }",
+                        "annex_country = { target = WKR transfer_troops = yes }",
+                    )
+                ],
+                (
+                    "ADISCORD_vorkerland_settle_unification_under_wkr: must not annex "
+                    "the winner WKR",
+                ),
+            ),
+            (
+                events_path,
+                "\tid = ADISCORD_vorkerland_phase.6\n",
+                [
+                    (
+                        "TVA = {\n\t\t\t\tADISCORD_vorkerland_unify_under_tva = yes",
+                        "WRK = {\n\t\t\t\tADISCORD_vorkerland_unify_under_tva = yes",
+                    )
+                ],
+                ("phase.6 does not unify Vorkerland in the scope of surviving TVA",),
+            ),
+        )
+        read_source = validator.text
+        for path, anchor, replacements, expected in cases:
+            # The anchor opens the block under test; each replacement applies
+            # to its first occurrence after that point.
+            head, separator, tail = read_source(path).partition(anchor)
+            self.assertTrue(separator, anchor)
+            for old, new in replacements:
+                self.assertIn(old, tail)
+                tail = tail.replace(old, new, 1)
+            mutated = head + separator + tail
+
+            def served(requested, path=path, mutated=mutated):
+                return mutated if requested == path else read_source(requested)
+
+            validator.ERRORS.clear()
+            with self.subTest(expected=expected[0]), patch.object(
+                validator, "text", side_effect=served
+            ):
+                validator.validate_vorkerland_expansion()
+                for diagnostic in expected:
+                    self.assertIn(diagnostic, validator.ERRORS)
 
 
 class NorthernStartingStateContracts(unittest.TestCase):

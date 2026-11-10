@@ -96,4 +96,28 @@ entity = {
 	name = "NAM_corporate_state_army_headquarters_entity"
 	pdxmesh = "ADISCORD_NAM_hq_mesh"
 }
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_prag_republic_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_prag_directorate_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_svetlogorye_derzhava_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
+
+entity = {
+	clone = "ADISCORD_army_headquarters_base_entity"
+	name = "NAM_veyran_union_army_headquarters_entity"
+	pdxmesh = "ADISCORD_NAM_hq_mesh"
+}
 # END ADISCORD NAM headquarters

@@ -18,6 +18,9 @@ PEER_CAUTION_PROFILES = frozenset({
     "ADISCORD_vorkerland_claimant_breakthrough_vad",
     "ADISCORD_vorkerland_claimant_breakthrough_tva",
 })
+# Global event target for the country that currently is Vorkerland: WRK until a
+# civil-war claimant unifies the country, that claimant afterwards.
+VORKERLAND_NATION = "event_target:ADISCORD_vorkerland_nation"
 
 
 def base_front_controls(profile: str) -> list[str]:
@@ -308,7 +311,10 @@ def validate_release_hook_normal_branches(
                 r"\bADISCORD_vorkerland_sync_republics_from_ruins\s*=",
             ),
             ("VLA tag guard", r"\btag\s*=\s*VLA\b"),
-            ("VLA subject guard", r"\bis_subject_of\s*=\s*(?:WKR|WRK)\b"),
+            (
+                "VLA subject guard",
+                rf"\bis_subject_of\s*=\s*(?:WKR|WRK|{re.escape(VORKERLAND_NATION)})\b",
+            ),
             (
                 "ADISCORD_vorkerland_wrk_activate_vla_auxiliaries",
                 r"\bADISCORD_vorkerland_wrk_activate_vla_auxiliaries\s*=",
@@ -356,7 +362,9 @@ def validate_release_hook_normal_branches(
         ):
             issues.append(f"{hook_name} normal branch lacks ROM/TRU/ZAO/SOL cosmetics")
         if hook_name == "on_puppet":
-            for scope in ("WKR", "WRK"):
+            # VLA serves its wartime patron WKR and, after the civil war, whichever
+            # claimant unified the country.
+            for scope, label in (("WKR", "WKR"), (VORKERLAND_NATION, "unified-country")):
                 blocks = []
                 for block in conditional_blocks:
                     limits = direct_named_blocks(block, "limit")
@@ -378,5 +386,5 @@ def validate_release_hook_normal_branches(
                     )
                 ):
                     issues.append(
-                        f"on_puppet normal branch lacks exact VLA {scope} auxiliary branch"
+                        f"on_puppet normal branch lacks exact VLA {label} auxiliary branch"
                     )

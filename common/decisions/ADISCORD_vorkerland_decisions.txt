@@ -566,7 +566,7 @@ ADISCORD_vorkerland_collapse_category = {
 		visible = {
 			is_subject = no
 			NOT = { has_country_flag = ADISCORD_vorkerland_loyalist_district_restored }
-			WRK = {
+			event_target:ADISCORD_vorkerland_nation = {
 				exists = yes
 				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 				has_global_flag = ADISCORD_vorkerland_reunification_verified
@@ -581,7 +581,7 @@ ADISCORD_vorkerland_collapse_category = {
 		available = {
 			has_war = no
 			is_subject = no
-			WRK = {
+			event_target:ADISCORD_vorkerland_nation = {
 				exists = yes
 				is_subject = no
 				NOT = { has_capitulated = yes }
@@ -596,7 +596,7 @@ ADISCORD_vorkerland_collapse_category = {
 		fire_only_once = yes
 		complete_effect = {
 			drop_cosmetic_tag = yes
-			WRK = {
+			event_target:ADISCORD_vorkerland_nation = {
 				set_autonomy = {
 					target = ROOT
 					autonomy_state = autonomy_district_in_Vorkerland
@@ -861,8 +861,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	WRK_requisition_emergency_tools = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_requisition_commissions
 			ADISCORD_vorkerland_prep_open = yes
 		}
@@ -882,8 +883,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	WRK_finance_evacuation_stock = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_district_treasuries
 			ADISCORD_vorkerland_prep_open = yes
 		}
@@ -907,8 +909,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	WRK_register_volunteer_reserve = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_party_cell_rolls
 			ADISCORD_vorkerland_prep_open = yes
 		}
@@ -924,8 +927,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	WRK_drill_emergency_staff = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_district_staff_exercises
 			ADISCORD_vorkerland_prep_open = yes
 		}
@@ -942,8 +946,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	WRK_order_standard_tools = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_worx_network_register
 			ADISCORD_vorkerland_prep_open = yes
 		}
@@ -965,8 +970,9 @@ ADISCORD_vorkerland_prewar_category = {
 	# balance; each can be repeated after sixty days.
 	ADISCORD_vorkerland_prewar_central_levy = {
 		icon = generic_political_pressure
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_emergency_central_budget
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 		}
@@ -986,8 +992,9 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prewar_district_mandates = {
 		icon = generic_diplomatic_treaty
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_district_emergency_powers
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 		}
@@ -1009,7 +1016,7 @@ ADISCORD_vorkerland_prewar_category = {
 		icon = generic_prepare_civil_war
 		allowed = {
 			OR = {
-				tag = WRK
+				OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 				tag = EYR
 				tag = EGC
 				tag = RIV
@@ -1025,6 +1032,7 @@ ADISCORD_vorkerland_prewar_category = {
 			}
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 			OR = {
 				has_completed_focus = WRK_measure_confederation_fault_lines
@@ -1073,7 +1081,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_open_stores = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 32 }
 		target_trigger = {
@@ -1084,6 +1092,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_measure_confederation_fault_lines
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -1220,7 +1229,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_seal_reserve = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 32 }
 		target_trigger = {
@@ -1231,6 +1240,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_inventory_emergency_stores
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -1367,9 +1377,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_arsenal = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			32 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -1392,7 +1403,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_protect_rail = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 33 }
 		target_trigger = {
@@ -1403,6 +1414,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_disperse_railway_reserves
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -1539,7 +1551,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_evacuate_trains = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 33 }
 		target_trigger = {
@@ -1550,6 +1562,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_bind_districts_to_charter
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -1696,9 +1709,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_rail = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			33 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -1721,7 +1735,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_war_shifts = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 36 }
 		target_trigger = {
@@ -1732,6 +1746,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_prioritize_arsenal_output
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -1868,7 +1883,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_save_specialists = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 36 }
 		target_trigger = {
@@ -1879,6 +1894,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_preserve_machine_tools
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2015,9 +2031,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_industry = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			36 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -2040,7 +2057,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_local_guard = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 37 }
 		target_trigger = {
@@ -2051,6 +2068,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_contract_local_garrisons
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2190,7 +2208,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_cadre_school = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 37 }
 		target_trigger = {
@@ -2201,6 +2219,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_prepare_officer_reserve
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2343,9 +2362,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_garrison = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			37 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -2368,7 +2388,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_public_charter = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 38 }
 		target_trigger = {
@@ -2379,6 +2399,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_convene_council_of_republics
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2505,7 +2526,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_mobilisation_lists = {
 		icon = ADISCORD_mobilization
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 38 }
 		target_trigger = {
@@ -2516,6 +2537,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_inventory_emergency_stores
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2642,9 +2664,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_archives = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			38 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -2667,7 +2690,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_civil_evacuation = {
 		icon = ADISCORD_resettlement
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 40 }
 		target_trigger = {
@@ -2678,6 +2701,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_prepare_civil_evacuation
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2814,7 +2838,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_military_evacuation = {
 		icon = ADISCORD_resettlement
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 40 }
 		target_trigger = {
@@ -2825,6 +2849,7 @@ ADISCORD_vorkerland_prewar_category = {
 			highlight_state_targets = { state = FROM }
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_completed_focus = WRK_prepare_military_evacuation
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = {
@@ -2964,9 +2989,10 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_contest_communications = {
 		icon = generic_prepare_civil_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			40 = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
 		available = {
@@ -2989,7 +3015,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_defend_object = {
 		icon = generic_political_discourse
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 32 33 36 37 38 40 }
 		target_trigger = {
@@ -2997,6 +3023,7 @@ ADISCORD_vorkerland_prewar_category = {
 		}
 		on_map_mode = map_and_decisions_view
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
@@ -3030,7 +3057,7 @@ ADISCORD_vorkerland_prewar_category = {
 
 	ADISCORD_vorkerland_prep_concede_object = {
 		icon = generic_political_discourse
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		state_target = yes
 		targets = { 32 33 36 37 38 40 }
 		target_trigger = {
@@ -3038,6 +3065,7 @@ ADISCORD_vorkerland_prewar_category = {
 		}
 		on_map_mode = map_and_decisions_view
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			ADISCORD_vorkerland_prep_open = yes
 			FROM = { has_state_flag = ADISCORD_vorkerland_prep_contested }
 		}
@@ -7737,8 +7765,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# Vorkerland space back into the imperial state in a controlled sequence.
 	ADISCORD_vorkerland_vad_continue_imperial_reunification = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_global_flag = ADISCORD_vorkerland_reunification_verified
 			has_country_flag = ADISCORD_vorkerland_route_joint
@@ -7759,8 +7788,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 
 	ADISCORD_vorkerland_restore_core_claimant_homes = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_global_flag = ADISCORD_vorkerland_reunification_verified
 			has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
@@ -7783,27 +7813,28 @@ ADISCORD_vorkerland_focus_operations_category = {
 		cost = 40
 		fire_only_once = yes
 		complete_effect = {
-			32 = { add_core_of = WRK }
-			33 = { add_core_of = WRK }
-			36 = { add_core_of = WRK }
-			37 = { add_core_of = WRK }
-			38 = { add_core_of = WRK }
-			39 = { add_core_of = WRK }
-			75 = { add_core_of = WRK }
-			106 = { add_core_of = WRK }
-			107 = { add_core_of = WRK }
-			121 = { add_core_of = WRK }
-			200 = { add_core_of = WRK }
-			201 = { add_core_of = WRK }
-			324 = { add_core_of = WRK }
+			32 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			33 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			36 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			37 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			38 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			39 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			75 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			106 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			107 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			121 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			200 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			201 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			324 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
 		}
 		ai_will_do = { factor = 400 }
 	}
 
 	ADISCORD_vorkerland_restore_core_central_historical = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_global_flag = ADISCORD_vorkerland_reunification_verified
 			has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
@@ -7834,27 +7865,27 @@ ADISCORD_vorkerland_focus_operations_category = {
 		cost = 50
 		fire_only_once = yes
 		complete_effect = {
-			27 = { add_core_of = WRK }
-			35 = { add_core_of = WRK }
-			40 = { add_core_of = WRK }
-			79 = { add_core_of = WRK }
-			81 = { add_core_of = WRK }
-			82 = { add_core_of = WRK }
-			102 = { add_core_of = WRK }
-			108 = { add_core_of = WRK }
-			109 = { add_core_of = WRK }
-			110 = { add_core_of = WRK }
-			111 = { add_core_of = WRK }
-			122 = { add_core_of = WRK }
-			123 = { add_core_of = WRK }
-			124 = { add_core_of = WRK }
-			306 = { add_core_of = WRK }
-			308 = { add_core_of = WRK }
-			309 = { add_core_of = WRK }
-			320 = { add_core_of = WRK }
-			323 = { add_core_of = WRK }
-			325 = { add_core_of = WRK }
-			327 = { add_core_of = WRK }
+			27 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			35 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			40 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			79 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			81 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			82 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			102 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			108 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			109 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			110 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			111 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			122 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			123 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			124 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			306 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			308 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			309 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			320 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			323 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			325 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			327 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
 		}
 		ai_will_do = { factor = 400 }
 	}
@@ -7863,59 +7894,59 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# grants the national core only after state 34 is fully owned and controlled.
 	ADISCORD_vorkerland_restore_core_oitfort = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
-		visible = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
 		available = { owns_state = 34 controls_state = 34 }
 		cost = 10
 		fire_only_once = yes
-		complete_effect = { 34 = { add_core_of = WRK } }
+		complete_effect = { 34 = { add_core_of = event_target:ADISCORD_vorkerland_nation } }
 		ai_will_do = { factor = 400 }
 	}
 
 	ADISCORD_vorkerland_restore_core_rimat = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
-		visible = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
 		available = { owns_state = 202 controls_state = 202 }
 		cost = 10
 		fire_only_once = yes
-		complete_effect = { 202 = { add_core_of = WRK } }
+		complete_effect = { 202 = { add_core_of = event_target:ADISCORD_vorkerland_nation } }
 		ai_will_do = { factor = 400 }
 	}
 
 	ADISCORD_vorkerland_restore_core_techlar = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
-		visible = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
 		available = { owns_state = 105 controls_state = 105 }
 		cost = 10
 		fire_only_once = yes
-		complete_effect = { 105 = { add_core_of = WRK } }
+		complete_effect = { 105 = { add_core_of = event_target:ADISCORD_vorkerland_nation } }
 		ai_will_do = { factor = 400 }
 	}
 
 	ADISCORD_vorkerland_restore_core_ebern = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
-		visible = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
 		available = { owns_state = 311 controls_state = 311 }
 		cost = 10
 		fire_only_once = yes
-		complete_effect = { 311 = { add_core_of = WRK } }
+		complete_effect = { 311 = { add_core_of = event_target:ADISCORD_vorkerland_nation } }
 		ai_will_do = { factor = 400 }
 	}
 
 	ADISCORD_vorkerland_restore_core_solar = {
 		icon = generic_territory_or_war
-		allowed = { tag = WRK }
-		visible = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_global_flag = ADISCORD_vorkerland_reunification_verified has_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked }
 		available = { owns_state = 104 controls_state = 104 owns_state = 198 controls_state = 198 owns_state = 307 controls_state = 307 }
 		cost = 15
 		fire_only_once = yes
 		complete_effect = {
-			104 = { add_core_of = WRK }
-			198 = { add_core_of = WRK }
-			307 = { add_core_of = WRK }
+			104 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			198 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
+			307 = { add_core_of = event_target:ADISCORD_vorkerland_nation }
 		}
 		ai_will_do = { factor = 400 }
 	}
@@ -7924,8 +7955,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# here prevents the finished-collapse category from hiding the focus reward.
 	ADISCORD_vorkerland_recognize_free_republics = {
 		icon = generic_diplomatic_treaty
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_country_flag = ADISCORD_vorkerland_central_unifier
 			has_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
 			NOT = { has_country_flag = ADISCORD_vorkerland_free_republics_recognized }
@@ -7959,8 +7991,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 
 	ADISCORD_vorkerland_pw_ebern_campaign = {
 		icon = ADISCORD_operations
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			OR = {
 				has_completed_focus = WRK_conf_southern_solidarity
 				has_completed_focus = WRK_joint_pw_ebern_campaign
@@ -7990,8 +8023,9 @@ ADISCORD_vorkerland_focus_operations_category = {
 
 	ADISCORD_vorkerland_pw_afrela_campaign = {
 		icon = ADISCORD_operations
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			OR = {
 				has_completed_focus = WRK_conf_southern_solidarity
 				has_completed_focus = WRK_joint_pw_afrela_campaign
@@ -8023,7 +8057,8 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# and its district from payment through completion or cancellation.
 	ADISCORD_vorkerland_pw_rebuild_district = {
 		icon = ADISCORD_construction
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes }
 		state_target = yes
 		on_map_mode = map_and_decisions_view
 		targets = { 27 32 33 34 35 36 37 38 39 40 75 79 81 82 102 104 105 106 107 108 109 110 111 121 122 123 124 198 200 201 202 306 307 308 309 311 315 316 317 318 320 323 324 325 327 }
@@ -8286,8 +8321,9 @@ ADISCORD_vorkerland_rom_tru_category = {
 WRK_worx_research_category = {
 	WRK_worx_basic = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			NOT = { has_country_flag = WRK_worx_supervised }
 		}
@@ -8347,8 +8383,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_expanded = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			NOT = { has_country_flag = WRK_worx_supervised }
 			has_completed_focus = WRK_worx_operating_table
@@ -8409,8 +8446,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_oversight = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			NOT = { has_country_flag = WRK_worx_supervised }
 			WRK_worx_oversight_ready = yes
@@ -8471,8 +8509,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_review = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_right_to_error
 			NOT = { has_country_flag = WRK_worx_supervised }
@@ -8530,8 +8569,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_accelerated = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_genius_permission
 			NOT = { has_country_flag = WRK_worx_supervised }
@@ -8589,8 +8629,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_field_trials = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_tech_engineering_corps
 		}
@@ -8649,8 +8690,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_mass_trials = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_tech_fire_superiority
 		}
@@ -8706,8 +8748,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_industrial = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			OR = {
 				has_completed_focus = WRK_tech_machine_tool_pool
@@ -8761,8 +8804,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_civil_science = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_even_genius
 		}
@@ -8814,8 +8858,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_grand_programme = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			OR = {
 				has_completed_focus = WRK_worx_correct_humanity
@@ -8876,8 +8921,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_restore_obedience = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_variable = WRK_worx_emergency_days
 		}
@@ -8934,8 +8980,9 @@ WRK_worx_research_category = {
 	# Extended directorate programmes share the existing receipt and slot.
 	WRK_worx_archive_audit = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_control_group
 		}
@@ -9001,8 +9048,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_clinical_series = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_names_obstruct
 		}
@@ -9090,8 +9138,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_tooling_order = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_serial_numbers
 		}
@@ -9172,8 +9221,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_rehabilitation = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_soldier_returns
 		}
@@ -9254,8 +9304,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_conditioning = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_return_unplanned
 		}
@@ -9343,8 +9394,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_district_clinics = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_compulsory_welfare
 		}
@@ -9425,8 +9477,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_population_registry = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_complaints_deviations
 		}
@@ -9499,8 +9552,9 @@ WRK_worx_research_category = {
 
 	WRK_worx_corridor_depots = {
 		icon = ADISCORD_science
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			WRK_worx_mandate = yes
 			has_completed_focus = WRK_worx_maps_have_weight
 		}
@@ -9586,7 +9640,8 @@ ADISCORD_vorkerland_empire_category = {
 	# military and civil governors decides the installed administration.
 	WRK_empire_appoint_governor = {
 		icon = ADISCORD_deal
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes }
 		state_target = yes
 		on_map_mode = map_and_decisions_view
 		targets = { 27 32 33 34 35 36 37 38 39 40 75 79 81 82 102 104 105 106 107 108 109 110 111 121 122 123 124 198 200 201 202 306 307 308 309 311 315 316 317 318 320 323 324 325 327 }

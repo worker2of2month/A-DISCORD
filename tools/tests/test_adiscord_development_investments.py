@@ -215,6 +215,7 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
 
 class CountryDevelopmentReformTests(unittest.TestCase):
     AXES = ("society", "social_system", "army", "cultural", "state", "economic")
+    NATION_TARGET = "event_target:ADISCORD_vorkerland_nation"
 
     @classmethod
     def setUpClass(cls):
@@ -225,10 +226,13 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         cls.triggers = (ROOT / "common/scripted_triggers/ADISCORD_society_development_triggers.txt").read_text(encoding="utf-8")
         cls.lists = (ROOT / "common/scripted_triggers/ADISCORD_development_country_lists.txt").read_text(encoding="utf-8")
 
-    def fixture(self, countries=None):
+    def fixture(self, countries=None, nation="WRK"):
+        # The country lists name Vorkerland through its global event target:
+        # WRK from startup, the winning claimant after the unification.
+        lists = self.lists.replace(self.NATION_TARGET, nation)
         return self.fixture_type(
             countries=countries,
-            texts=(self.effects, self.triggers, self.lists),
+            texts=(self.effects, self.triggers, lists),
             stubs=("custom_effect_tooltip", "ADISCORD_economy_mark_dirty"),
         )
 
@@ -290,10 +294,15 @@ class CountryDevelopmentReformTests(unittest.TestCase):
 
         month = development_condition(monthly, "ADISCORD_tick_all_society_development_monthly")
         year = development_condition(yearly, "ADISCORD_tick_all_society_development_yearly")
-        for tag in ("STS", "SRP", "WKR", "TVA", "WRK", "VAD", "NOD"):
+        self.assertIn(self.NATION_TARGET, self.lists)
+        scenarios = [("WRK", tag) for tag in ("STS", "SRP", "WKR", "TVA", "WRK", "VAD", "NOD")]
+        # The winner keeps its tag, so unified Vorkerland is ticked on WKR, VAD or TVA.
+        scenarios += [(winner, winner) for winner in ("WKR", "VAD", "TVA")]
+        for nation, tag in scenarios:
             for ai in (False, True):
-                with self.subTest(tag=tag, ai=ai):
-                    fixture = self.fixture({"A": {"tag": tag, "is_ai": ai, "ADISCORD_fresh_campaign_contract_v1": True}})
+                with self.subTest(nation=nation, tag=tag, ai=ai):
+                    country = {"tag": tag, "is_ai": ai, "ADISCORD_fresh_campaign_contract_v1": True}
+                    fixture = self.fixture({"A": country}, nation=nation)
                     scheduled = [fixture.condition(month), fixture.condition(year)]
                     self.assertEqual(sum(scheduled), 1)
         fixture = self.fixture({"A": {"tag": "VAD", "is_ai": True, "ADISCORD_fresh_campaign_contract_v1": True, "ADISCORD_non_participating_minor_optimized": True}})
@@ -363,7 +372,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         for axis in ("society", "state", "economic"):
             self.assertIn(f"ADISCORD_increase_{axis}_development_monthly_growth = yes", shabrat)
 
-    def test_copy_runs_during_creation_and_before_claimant_annexation(self):
+    def test_copy_runs_during_creation_and_the_unifier_keeps_its_own_development(self):
         stp = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8")
         successor = named_block(stp, "STP_cw_prepare_successor")
         self.assertIn("NOT = { has_country_flag = STP_cw_templates_loaded }", successor)
@@ -373,10 +382,13 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         opening = named_block(vorkerland, "ADISCORD_vorkerland_prepare_initial_combatants")
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn("ADISCORD_copy_development_from_prev = yes", named_block(opening, tag))
-            formation = named_block(vorkerland, "ADISCORD_vorkerland_form_wrk_from_" + tag.lower())
-            formation += named_block(vorkerland, "ADISCORD_vorkerland_complete_wrk_from_" + tag.lower())
-            self.assertEqual(formation.count("ADISCORD_copy_development_from_prev = yes"), 1)
-            self.assertLess(formation.index("ADISCORD_copy_development_from_prev"), formation.index(f"annex_country = {{ target = {tag}"))
+            # The civil-war winner unifies Vorkerland on its own tag. It is
+            # neither annexed nor replaced, so there is no successor to copy to.
+            unification = named_block(vorkerland, "ADISCORD_vorkerland_unify_under_" + tag.lower())
+            unification += named_block(vorkerland, "ADISCORD_vorkerland_settle_unification_under_" + tag.lower())
+            self.assertNotIn("ADISCORD_copy_development_from_prev", unification)
+            self.assertNotIn(f"annex_country = {{ target = {tag}", unification)
+            self.assertNotIn("change_tag_from", unification)
 
     def test_science_start_uses_research_slots_with_a_three_level_ceiling(self):
         for slots, expected in ((0, 1), (1, 1), (2, 2), (3, 3), (6, 3)):

@@ -194,6 +194,7 @@ DECISION_FOCUS_GATES = {
     "NAM_island_steel_levy": "NAM_island_levy_office",
     "NAM_island_concession_231": "NAM_island_concession",
     "NAM_island_convoy_service": "NAM_harbour_service",
+    "NAM_cabinet_install_machine_tools": "NAM_defeat_rump_cabinet",
     "NAM_renegotiate_val_concession": "NAM_reclaim_230",
     "NAM_south_allied_fuel": "NAM_south_allied_fuel_office",
     "NAM_south_convoy_interdiction": "NAM_south_convoy_hunters",
@@ -358,8 +359,11 @@ def check_oil_monopoly(
     slot = named_block(triggers, "NAM_project_slot_free")
     check(
         "value = NAM_projects_in_progress compare = greater_than" in slot
-        and "value = 2 compare = less_than" in slot,
-        "field projects must respect NAM_project_slots and the ceiling of two",
+        and "NAM_projects_in_progress < 2" in slot
+        and "NAM_labour_shift_workers > 0" in slot
+        and "value = NAM_projects_in_progress compare = greater_than_or_equals" in slot
+        and "NAM_projects_in_progress < 3" in slot,
+        "field projects need a free regular crew or a paid relief shift for one additional site",
     )
     for decision_name, (pp, treasury, days, completion) in PROJECT_PRICES.items():
         decision = named_block(decisions, decision_name)
@@ -412,6 +416,8 @@ def check_oil_monopoly(
             visible += named_block(triggers, "NAM_oil_trade_authorized")
         if "NAM_permanent_lines_authorized = yes" in visible:
             visible += named_block(triggers, "NAM_permanent_lines_authorized")
+        if "NAM_convoy_service_authorised = yes" in visible:
+            visible += named_block(triggers, "NAM_convoy_service_authorised")
         check(
             f"has_completed_focus = {focus}" in visible,
             f"{decision_name} must be gated by its unlocking focus {focus}",
@@ -639,6 +645,29 @@ def check_ladder(
                 (ROOT / "gfx" / "flags" / f"{size}{tag}.tga").exists(),
                 f"missing flag gfx/flags/{size}{tag}.tga",
             )
+    # The compact endings keep Rom as a pragmatist and do not move the ladder.
+    for ending, tag, spirit in (
+        ("NAM_apply_ending_prag_republic", "NAM_prag_republic", "NAM_spirit_prag_republic"),
+        ("NAM_apply_ending_prag_directorate", "NAM_prag_directorate", "NAM_spirit_prag_directorate"),
+    ):
+        block = named_block(effects, ending)
+        check(
+            f"set_cosmetic_tag = {tag}" in block
+            and f"add_ideas = {spirit}" in block
+            and "NAM_rom_take_pragmatism = yes" in block
+            and "has_country_flag = NAM_coup_succeeded" in block
+            and "set_country_flag = NAM_ladder_settled" in block,
+            f"{ending} must keep a coup leader, settle the ladder, set its name and its spirit",
+        )
+        check(
+            re.search(rf"(?m)^{tag} = \{{", (ROOT / "common/countries/cosmetic.txt").read_text(encoding="utf-8-sig")),
+            f"{tag} must be defined in common/countries/cosmetic.txt",
+        )
+        for size in ("", "medium/", "small/"):
+            check(
+                (ROOT / "gfx" / "flags" / f"{size}{tag}.tga").exists(),
+                f"missing flag gfx/flags/{size}{tag}.tga",
+            )
     dispatcher = event_block(events, "ADISCORD_nam_memoir.99")
     check(
         "hidden = yes" in dispatcher and "NAM_memoir_dispatch = yes" in dispatcher,
@@ -766,7 +795,6 @@ CUSTOM_COST_DECISIONS = {
 }
 # Humanist decisions and the focus that opens each (M10).
 CORP_DECISION_FOCUSES = {
-    "NAM_corp_charter_free_zone": "NAM_hum_free_zones",
     "NAM_corp_court_investors": "NAM_hum_open_doors",
     "NAM_corp_sell_steel": "NAM_hum_steel_exchange",
     "NAM_corp_innovation_park": "NAM_hum_innovation_parks",
@@ -871,6 +899,16 @@ def check_exile_revolution(
             f"has_completed_focus = {focus}" in named_block(named_block(decisions, decision_name), "visible"),
             f"{decision_name} must open with {focus}",
         )
+    charter = named_block(decisions, "NAM_corp_charter_free_zone")
+    rights = named_block(triggers, "NAM_corp_charter_authorized")
+    check(
+        "NAM_corp_charter_authorized = yes" in named_block(charter, "visible")
+        and "NAM_corp_charter_authorized = yes" in named_block(charter, "complete_effect")
+        and "has_completed_focus = NAM_hum_free_zones" in rights
+        and "has_completed_focus = NAM_board_company_capital" in rights
+        and "NAM_board_operable = yes" in rights,
+        "free-zone charters must accept humanist authorisation or the operating board's capital programme",
+    )
     monthly = named_block(effects, "NAM_corp_monthly")
     check(
         "NAM_corp_monthly = yes" in named_block(on_actions, "on_monthly_NAM")

@@ -487,14 +487,16 @@ VAL_nw_salvage_archives_finish = {
 
 # --- new_world_contracts ---
 # The event's immediate block also runs when its reading window is left open.
+# The commonwealth opens the chapter and its reckoning in the same call.
 VAL_nw_open_chapter = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
-			has_completed_focus = VAL_Return_To_World_Market
+			has_country_flag = VAL_commonwealth_proclaimed
 			NOT = { has_focus_tree = VAL_new_world_focus }
 		}
 		load_focus_tree = { tree = VAL_new_world_focus keep_completed = yes }
+		VAL_peace_begin = yes
 	}
 }
 
@@ -777,7 +779,7 @@ VAL_nw_reconcile_partner = {
 
 VAL_nw_reconcile_partners = {
 	if = {
-		limit = { has_completed_focus = VAL_Return_To_World_Market }
+		limit = { has_focus_tree = VAL_new_world_focus }
 		SLA = { VAL_nw_reconcile_partner = yes }
 		RZA = { VAL_nw_reconcile_partner = yes }
 		MLR = { VAL_nw_reconcile_partner = yes }
@@ -1079,12 +1081,6 @@ VAL_nw_adopt_bloc_confront = {
 	VAL_nw_ensure_network_modifier = yes
 }
 
-VAL_nw_adopt_cabinet = {
-	add_to_variable = { var = VAL_nw_course_pp_gain value = 0.10 }
-	add_to_variable = { var = VAL_nw_course_stability value = 0.03 }
-	VAL_nw_ensure_network_modifier = yes
-}
-
 VAL_nw_adopt_army_guarantee = {
 	add_to_variable = { var = VAL_nw_army_org value = 0.03 }
 	add_to_variable = { var = VAL_nw_command_gain value = 0.10 }
@@ -1198,6 +1194,998 @@ VAL_nw_detach_refund = {
 	TMR = { clr_country_flag = VAL_nw_detach_target }
 	VEL = { clr_country_flag = VAL_nw_detach_target }
 	RLY = { clr_country_flag = VAL_nw_detach_target }
+}
+
+# --- peace_reckoning ---
+# COUNTRY VAL. The commonwealth tree opens the reckoning once. A repeated call
+# keeps the accumulated balance, strike and company debt.
+VAL_peace_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			NOT = { has_power_balance = { id = VAL_peace_balance } }
+			VAL_peace_regime_chosen = no
+		}
+		if = {
+			limit = { has_idea = VAL_regional_settlement }
+			remove_ideas = VAL_regional_settlement
+		}
+		if = {
+			limit = { VAL_council_governs = yes }
+			set_power_balance = { id = VAL_peace_balance set_value = 0.15 }
+		}
+		else = {
+			set_power_balance = { id = VAL_peace_balance set_value = 0 }
+		}
+		set_variable = { var = VAL_peace_strike value = 20 }
+		set_variable = { var = VAL_peace_arrears value = 0 }
+		set_variable = { var = VAL_peace_orders value = 0 }
+		activate_mission = VAL_peace_reckoning
+		VAL_peace_refresh = yes
+	}
+}
+
+# COUNTRY VAL. Country variables own the crisis modifier; the BOP owns the army penalties.
+VAL_peace_refresh = {
+	clamp_variable = { var = VAL_peace_strike min = 0 max = 100 }
+	set_variable = { var = VAL_peace_factory_output value = VAL_peace_strike }
+	multiply_variable = { var = VAL_peace_factory_output value = -0.0015 }
+	add_to_variable = { var = VAL_peace_factory_output value = -0.05 }
+	if = {
+		limit = { has_completed_focus = VAL_peace_workers_charter }
+		add_to_variable = { var = VAL_peace_factory_output value = -0.03 }
+	}
+	set_variable = { var = VAL_peace_stability value = VAL_peace_strike }
+	multiply_variable = { var = VAL_peace_stability value = -0.001 }
+	add_to_variable = { var = VAL_peace_stability value = -0.05 }
+	clamp_variable = { var = VAL_peace_orders min = 0 max = 5 }
+	set_variable = { var = VAL_peace_military_income value = VAL_peace_orders }
+	multiply_variable = { var = VAL_peace_military_income value = 0.05 }
+	add_to_variable = { var = VAL_peace_military_income value = -0.25 }
+	set_variable = { var = VAL_peace_pp_gain value = -0.15 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_peace_crisis } } }
+		add_dynamic_modifier = { modifier = VAL_peace_crisis }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. Input: temporary VAL_peace_strike_delta. Each rising threshold
+# notifies once; a general strike opens the reckoning without waiting for the focus.
+VAL_peace_apply_strike = {
+	if = {
+		limit = { VAL_peace_crisis_active = yes }
+		set_temp_variable = { var = VAL_peace_strike_before value = VAL_peace_strike }
+		add_to_variable = { var = VAL_peace_strike value = VAL_peace_strike_delta }
+		clamp_variable = { var = VAL_peace_strike min = 0 max = 100 }
+		if = {
+			limit = {
+				has_completed_focus = VAL_peace_shift_law
+				check_variable = { var = VAL_peace_strike value = 30 compare = less_than }
+			}
+			set_variable = { var = VAL_peace_strike value = 30 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_peace_strike_before value = 50 compare = less_than }
+				check_variable = { var = VAL_peace_strike value = 50 compare = greater_than_or_equals }
+			}
+			country_event = { id = val_peace.21 hours = 6 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_peace_strike_before value = 80 compare = less_than }
+				check_variable = { var = VAL_peace_strike value = 80 compare = greater_than_or_equals }
+			}
+			country_event = { id = val_peace.22 hours = 12 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = VAL_peace_strike_before value = 100 compare = less_than }
+				check_variable = { var = VAL_peace_strike value = 100 compare = greater_than_or_equals }
+			}
+			country_event = { id = val_peace.23 days = 1 }
+		}
+		VAL_peace_refresh = yes
+	}
+}
+
+# COUNTRY VAL. Idle lines feed the strike; restored reactor works and the chosen
+# answer slow it. Unpaid companies add one month of debt.
+VAL_peace_monthly = {
+	if = {
+		limit = { VAL_peace_crisis_active = yes }
+		set_temp_variable = { var = VAL_peace_strike_delta value = 6 }
+		if = {
+			limit = { VAL_nw_two_restored_works = yes }
+			add_to_temp_variable = { var = VAL_peace_strike_delta value = -4 }
+		}
+		else_if = {
+			limit = { VAL_nw_has_restored_works = yes }
+			add_to_temp_variable = { var = VAL_peace_strike_delta value = -2 }
+		}
+		if = {
+			limit = { has_completed_focus = VAL_peace_workers_charter }
+			add_to_temp_variable = { var = VAL_peace_strike_delta value = -4 }
+		}
+		else_if = {
+			limit = { has_completed_focus = VAL_peace_land_for_service }
+			add_to_temp_variable = { var = VAL_peace_strike_delta value = -3 }
+		}
+		else_if = {
+			limit = { has_completed_focus = VAL_peace_shift_law }
+			add_to_temp_variable = { var = VAL_peace_strike_delta value = -2 }
+		}
+		VAL_peace_apply_strike = yes
+		add_to_variable = { var = VAL_peace_arrears value = 1 }
+	}
+}
+
+# COUNTRY VAL. Each month of company debt pulls the balance 0.005 a week toward shares, at most 0.02.
+VAL_peace_weekly = {
+	if = {
+		limit = {
+			VAL_peace_crisis_active = yes
+			check_variable = { var = VAL_peace_arrears value = 1 compare = greater_than_or_equals }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_peace_arrears value = 4 compare = greater_than_or_equals } }
+			add_power_balance_value = { id = VAL_peace_balance value = 0.02 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_peace_arrears value = 3 compare = greater_than_or_equals } }
+			add_power_balance_value = { id = VAL_peace_balance value = 0.015 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_peace_arrears value = 2 compare = greater_than_or_equals } }
+			add_power_balance_value = { id = VAL_peace_balance value = 0.01 }
+		}
+		else = {
+			add_power_balance_value = { id = VAL_peace_balance value = 0.005 }
+		}
+	}
+}
+
+VAL_peace_pay_companies = {
+	if = {
+		limit = {
+			VAL_peace_crisis_active = yes
+			VAL_peace_companies_payable = yes
+		}
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.08 }
+		set_variable = { var = VAL_peace_arrears value = 0 }
+		set_temp_variable = { var = VAL_peace_strike_delta value = 5 }
+		VAL_peace_apply_strike = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_peace_pay_shifts = {
+	if = {
+		limit = {
+			VAL_peace_crisis_active = yes
+			VAL_peace_shifts_payable = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.04 }
+		set_temp_variable = { var = VAL_peace_strike_delta value = -12 }
+		VAL_peace_apply_strike = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. The rifles and political capital are committed at dispatch; the
+# buyer pays on delivery even when the reckoning has closed in the meantime.
+VAL_peace_begin_foreign_order = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_peace_order_payable = yes
+			NOT = { has_variable = VAL_peace_order_deposit }
+		}
+		set_variable = { var = VAL_peace_order_deposit value = 5400 }
+		add_political_power = -50
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
+	}
+}
+
+VAL_peace_deliver_foreign_order = {
+	if = {
+		limit = { has_variable = VAL_peace_order_deposit }
+		clear_variable = VAL_peace_order_deposit
+		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		if = {
+			limit = { VAL_peace_crisis_active = yes }
+			add_to_variable = { var = VAL_peace_orders value = 1 }
+			add_power_balance_value = { id = VAL_peace_balance value = -0.03 }
+			set_temp_variable = { var = VAL_peace_strike_delta value = -5 }
+			VAL_peace_apply_strike = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. Sends the reckoning once from the focus, the mission timeout,
+# a general strike or the captains' coup range of the balance.
+VAL_peace_open_reckoning = {
+	if = {
+		limit = {
+			VAL_peace_crisis_active = yes
+			NOT = { has_country_flag = VAL_peace_reckoning_sent }
+		}
+		set_country_flag = VAL_peace_reckoning_sent
+		remove_mission = VAL_peace_reckoning
+		country_event = { id = val_peace.40 hours = 6 }
+	}
+}
+
+# COUNTRY VAL. The teardown of the reckoning, sent by val_peace.41 after the
+# regime answer has added its own order inputs.
+VAL_peace_close_crisis = {
+	remove_mission = VAL_peace_reckoning
+	clr_country_flag = VAL_peace_reckoning_sent
+	clr_country_flag = VAL_peace_plot_exposed
+	if = {
+		limit = { has_power_balance = { id = VAL_peace_balance } }
+		remove_power_balance = { id = VAL_peace_balance }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_peace_crisis } }
+		remove_dynamic_modifier = { modifier = VAL_peace_crisis }
+	}
+	clear_variable = VAL_peace_strike
+	clear_variable = VAL_peace_arrears
+	clear_variable = VAL_peace_orders
+	clear_variable = VAL_peace_factory_output
+	clear_variable = VAL_peace_stability
+	clear_variable = VAL_peace_military_income
+	clear_variable = VAL_peace_pp_gain
+	clear_variable = VAL_peace_shares_granted
+	clear_variable = VAL_peace_lines_converted
+	VAL_peace_complete_recovery = yes
+	mark_focus_tree_layout_dirty = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. The end of the reckoning completes the recovery: payroll
+# reform, the final recovery step and the arsenal's reputation.
+VAL_peace_complete_recovery = {
+	VAL_reform_mercenary_payroll = yes
+	set_country_flag = VAL_economic_recovery_completed
+	VAL_advance_economic_recovery = yes
+	VAL_restore_arsenal_reputation = yes
+}
+
+# COUNTRY VAL. The order modifier reads only VAL_peace_order_* variables.
+VAL_peace_order_update = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_peace_order } } }
+		add_dynamic_modifier = { modifier = VAL_peace_order }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. Each regime answer adds its own order inputs; val_peace.41
+# closes the crisis and installs the new government.
+VAL_peace_adopt_throne = {
+	set_variable = { var = VAL_peace_regime value = 1 }
+	add_to_variable = { var = VAL_peace_order_pp value = 0.15 }
+	add_to_variable = { var = VAL_peace_order_war_support value = 0.10 }
+	add_to_variable = { var = VAL_peace_order_military_income value = 0.10 }
+	VAL_peace_order_update = yes
+	country_event = { id = val_peace.41 }
+}
+
+VAL_peace_adopt_cabinet = {
+	set_variable = { var = VAL_peace_regime value = 2 }
+	add_to_variable = { var = VAL_peace_order_stability value = 0.10 }
+	add_to_variable = { var = VAL_peace_order_admin_expense value = -0.10 }
+	add_to_variable = { var = VAL_peace_order_factory_output value = 0.05 }
+	VAL_peace_order_update = yes
+	country_event = { id = val_peace.41 }
+}
+
+VAL_peace_adopt_charter = {
+	set_variable = { var = VAL_peace_regime value = 3 }
+	add_to_variable = { var = VAL_peace_order_army_org value = 0.05 }
+	add_to_variable = { var = VAL_peace_order_command_gain value = 0.20 }
+	add_to_variable = { var = VAL_peace_order_planning value = 0.10 }
+	VAL_peace_order_update = yes
+	country_event = { id = val_peace.41 }
+}
+
+VAL_peace_adopt_captains = {
+	set_variable = { var = VAL_peace_regime value = 4 }
+	add_to_variable = { var = VAL_peace_order_attack value = 0.10 }
+	add_to_variable = { var = VAL_peace_order_war_support value = 0.15 }
+	add_to_variable = { var = VAL_peace_order_stability value = -0.10 }
+	VAL_peace_order_update = yes
+	country_event = { id = val_peace.41 }
+}
+
+# COUNTRY VAL. Government change for the chosen regime. The Council retired
+# Solgalov, so its throne passes to Osten as regent.
+VAL_peace_install_regime = {
+	VAL_peace_close_crisis = yes
+	if = {
+		limit = { VAL_peace_regime_throne = yes }
+		if = {
+			limit = { VAL_council_governs = yes }
+			VAL_council_close_regime = yes
+			clr_country_flag = VAL_council_in_power
+			promote_character = { character = VAL_Gleb_Osten ideology = contractual_etatism }
+			set_cosmetic_tag = VAL_commonwealth
+			VAL_council_tint_administrations = yes
+		}
+	}
+	else_if = {
+		limit = { VAL_peace_regime_cabinet = yes }
+		# Under Solgalov the cabinet contract keeps him as head of state.
+		if = {
+			limit = { VAL_council_governs = yes }
+			promote_character = { character = VAL_Mikhail_Velsky ideology = contractual_etatism }
+		}
+	}
+	else_if = {
+		limit = { VAL_peace_regime_charter = yes }
+		# The commanders govern without reopening the wartime Council machinery.
+		if = {
+			limit = { VAL_council_governs = no }
+			retire_character = VAL_Valera_Solgalov
+			promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }
+		}
+	}
+	else_if = {
+		limit = { VAL_peace_regime_captains = yes }
+		if = {
+			limit = { VAL_council_governs = yes }
+			VAL_council_close_regime = yes
+			clr_country_flag = VAL_council_in_power
+			set_cosmetic_tag = VAL_commonwealth
+			VAL_council_tint_administrations = yes
+		}
+		else = {
+			retire_character = VAL_Valera_Solgalov
+		}
+		promote_character = { character = VAL_Tamara_Greitz ideology = contractual_etatism }
+	}
+}
+
+# --- east_final_war ---
+# COUNTRY VAL. Without a surviving rival the east is already Kefreyt's.
+VAL_east_settle_uncontested = {
+	if = {
+		limit = {
+			VAL_east_rival_exists = no
+			VAL_east_khan_question_closed = yes
+			NOT = { has_global_flag = VAL_east_final_resolved }
+		}
+		set_global_flag = VAL_east_final_resolved
+		set_global_flag = VAL_east_hegemon_VAL
+		set_global_flag = VAL_east_unopposed
+		country_event = { id = val_peace.88 days = 1 }
+	}
+}
+
+# COUNTRY VAL. The casus focus of each regime selects the war spirit and terms.
+VAL_east_final_start = {
+	if = {
+		limit = { VAL_east_final_can_start = yes }
+		set_global_flag = VAL_east_final_started
+		set_variable = { var = VAL_east_side value = 1 }
+		if = {
+			limit = { VAL_east_khan_victorious = yes }
+			set_variable = { var = global.VAL_east_rival_kind value = 2 }
+			RUS = {
+				set_variable = { var = VAL_east_side value = 2 }
+				save_global_event_target_as = VAL_east_rival
+			}
+		}
+		else = {
+			set_variable = { var = global.VAL_east_rival_kind value = 1 }
+			MON = {
+				set_variable = { var = VAL_east_side value = 2 }
+				save_global_event_target_as = VAL_east_rival
+			}
+		}
+		VAL_east_prepare_champion = yes
+		event_target:VAL_east_rival = { VAL_east_prepare_champion = yes }
+		declare_war_on = {
+			target = event_target:VAL_east_rival
+			type = annex_everything
+		}
+		VAL_east_bind_sides = yes
+		VAL_east_apply_war_spirit = yes
+		activate_mission = VAL_east_deadline
+		country_event = { id = val_peace.81 hours = 1 }
+		news_event = { id = val_peace.82 hours = 2 }
+		event_target:VAL_east_rival = { country_event = { id = val_peace.83 hours = 1 } }
+	}
+}
+
+# COUNTRY champion. Holds major status only for this campaign, so native peace
+# waits for the champion's own defeat.
+VAL_east_prepare_champion = {
+	if = {
+		limit = {
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
+		set_country_flag = VAL_east_added_major
+		set_major = yes
+	}
+}
+
+# COUNTRY VAL. Subjects follow their overlord. Concession partners stand with
+# Kefreyt after the shards' union; the rival's faction stands with the rival.
+VAL_east_bind_sides = {
+	every_subject_country = {
+		set_variable = { var = VAL_east_side value = 1 }
+		if = {
+			limit = { NOT = { has_war_with = event_target:VAL_east_rival } }
+			add_to_war = {
+				targeted_alliance = VAL
+				enemy = event_target:VAL_east_rival
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	if = {
+		limit = { has_completed_focus = VAL_east_shards }
+		every_country = {
+			limit = {
+				has_country_flag = VAL_nw_concession
+				VAL_nw_concession_valid = yes
+				is_subject = no
+				NOT = { has_war_with = VAL }
+				NOT = { is_in_faction_with = event_target:VAL_east_rival }
+			}
+			set_variable = { var = VAL_east_side value = 1 }
+			add_to_war = {
+				targeted_alliance = VAL
+				enemy = event_target:VAL_east_rival
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	event_target:VAL_east_rival = {
+		every_subject_country = {
+			set_variable = { var = VAL_east_side value = 2 }
+			if = {
+				limit = { NOT = { has_war_with = VAL } }
+				add_to_war = {
+					targeted_alliance = PREV
+					enemy = VAL
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+	}
+	every_country = {
+		limit = {
+			is_in_faction_with = event_target:VAL_east_rival
+			NOT = { has_variable = VAL_east_side }
+			NOT = { is_subject_of = VAL }
+		}
+		set_variable = { var = VAL_east_side value = 2 }
+		if = {
+			limit = { NOT = { has_war_with = VAL } }
+			add_to_war = {
+				targeted_alliance = event_target:VAL_east_rival
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+}
+
+# COUNTRY VAL. Variables own the war spirit; the casus variable is set by the
+# final focus of the chosen regime.
+VAL_east_apply_war_spirit = {
+	set_variable = { var = VAL_east_war_attack value = 0 }
+	set_variable = { var = VAL_east_war_defence value = 0 }
+	set_variable = { var = VAL_east_war_org value = 0 }
+	set_variable = { var = VAL_east_war_planning value = 0 }
+	set_variable = { var = VAL_east_war_stability value = 0 }
+	set_variable = { var = VAL_east_war_capture value = 0 }
+	if = {
+		limit = { check_variable = { var = VAL_east_casus value = 1 compare = equals } }
+		set_variable = { var = VAL_east_war_attack value = 0.10 }
+		set_variable = { var = VAL_east_war_stability value = 0.10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_east_casus value = 2 compare = equals } }
+		set_variable = { var = VAL_east_war_defence value = 0.15 }
+		set_variable = { var = VAL_east_war_stability value = 0.15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_east_casus value = 3 compare = equals } }
+		set_variable = { var = VAL_east_war_org value = 0.05 }
+		set_variable = { var = VAL_east_war_planning value = 0.15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_east_casus value = 4 compare = equals } }
+		set_variable = { var = VAL_east_war_attack value = 0.15 }
+		set_variable = { var = VAL_east_war_capture value = 0.25 }
+		set_variable = { var = VAL_east_war_stability value = -0.05 }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_east_war_effort } } }
+		add_dynamic_modifier = { modifier = VAL_east_war_effort }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# GLOBAL. Kefreyt wins the east. The settlement follows a day after peace.
+VAL_east_resolve_val_victory = {
+	if = {
+		limit = { VAL_east_final_active = yes }
+		# The resolved flag precedes white peace so on_peace cannot re-enter.
+		set_global_flag = VAL_east_final_resolved
+		set_global_flag = VAL_east_hegemon_VAL
+		set_variable = { var = global.VAL_east_winner_side value = 1 }
+		if = {
+			limit = {
+				VAL_east_rival_is_khan = yes
+				RUS = { exists = yes }
+			}
+			# The Khan's own dissolution frees his vassals and returns his conquests.
+			VAL = { save_global_event_target_as = RUS_crisis_hegemon }
+			RUS = { RUS_crisis_dissolve_empire = yes }
+		}
+		VAL_east_end_wars = yes
+		VAL_east_mark_losers = yes
+		VAL_east_close_campaign = yes
+		VAL = { country_event = { id = val_peace.85 days = 1 } }
+		news_event = { id = val_peace.86 hours = 2 }
+	}
+}
+
+# GLOBAL. The Khan capitulated to Kefreyt; his crisis code has already
+# dissolved the empire in the immediate capitulation callback.
+VAL_east_record_khan_defeat = {
+	if = {
+		limit = { VAL_east_final_active = yes }
+		set_global_flag = VAL_east_final_resolved
+		set_global_flag = VAL_east_hegemon_VAL
+		set_variable = { var = global.VAL_east_winner_side value = 1 }
+		VAL_east_end_wars = yes
+		VAL_east_mark_losers = yes
+		VAL_east_close_campaign = yes
+		VAL = { country_event = { id = val_peace.85 days = 1 } }
+		news_event = { id = val_peace.86 hours = 2 }
+	}
+}
+
+# GLOBAL. The rival wins: Kefreyt becomes a vassal of the last empire.
+VAL_east_resolve_rival_victory = {
+	if = {
+		limit = { VAL_east_final_active = yes }
+		set_global_flag = VAL_east_final_resolved
+		set_global_flag = VAL_east_hegemon_rival
+		set_variable = { var = global.VAL_east_winner_side value = 2 }
+		VAL_east_end_wars = yes
+		VAL = {
+			every_subject_country = {
+				VAL = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_free
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+			}
+		}
+		VAL_east_close_campaign = yes
+		if = {
+			limit = {
+				VAL = { exists = yes }
+				event_target:VAL_east_rival = { exists = yes }
+			}
+			event_target:VAL_east_rival = {
+				puppet = {
+					target = VAL
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		VAL_east_clear_participants = yes
+		VAL = { country_event = { id = val_peace.87 days = 1 } }
+		news_event = { id = val_peace.86 hours = 2 }
+	}
+}
+
+# GLOBAL. Neither champion holds more of the other's key ground.
+VAL_east_resolve_without_hegemon = {
+	set_global_flag = VAL_east_final_resolved
+	set_global_flag = VAL_east_stalemate
+	VAL_east_end_wars = yes
+	VAL_east_close_campaign = yes
+	VAL_east_clear_participants = yes
+	VAL = { country_event = { id = val_peace.84 days = 1 } }
+}
+
+# GLOBAL. Deadline or external end. Each side scores the other's key states it
+# occupies; holding one's own land scores nothing, so the declaration and the
+# neutral corridor do not decide the war. An equal score ends without a hegemon.
+VAL_east_final_resolve_by_control = {
+	if = {
+		limit = { VAL_east_final_active = yes }
+		if = {
+			limit = { VAL = { exists = no } }
+			VAL_east_resolve_without_hegemon = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						VAL_east_rival_is_montar = yes
+						MON = { exists = no }
+					}
+					AND = {
+						VAL_east_rival_is_khan = yes
+						RUS = { exists = no }
+					}
+				}
+			}
+			VAL_east_resolve_val_victory = yes
+		}
+		else = {
+			set_temp_variable = { var = VAL_east_val_hold value = 0 }
+			set_temp_variable = { var = VAL_east_rival_hold value = 0 }
+			48 = { VAL_east_count_occupied_state = yes }
+			24 = { VAL_east_count_occupied_state = yes }
+			42 = { VAL_east_count_occupied_state = yes }
+			56 = { VAL_east_count_occupied_state = yes }
+			57 = { VAL_east_count_occupied_state = yes }
+			if = {
+				limit = { VAL_east_rival_is_montar = yes }
+				469 = { VAL_east_count_occupied_state = yes }
+				460 = { VAL_east_count_occupied_state = yes }
+				444 = { VAL_east_count_occupied_state = yes }
+				425 = { VAL_east_count_occupied_state = yes }
+				453 = { VAL_east_count_occupied_state = yes }
+			}
+			else = {
+				66 = { VAL_east_count_occupied_state = yes }
+				176 = { VAL_east_count_occupied_state = yes }
+				177 = { VAL_east_count_occupied_state = yes }
+				188 = { VAL_east_count_occupied_state = yes }
+				192 = { VAL_east_count_occupied_state = yes }
+			}
+			if = {
+				limit = { check_variable = { var = VAL_east_val_hold value = VAL_east_rival_hold compare = greater_than } }
+				VAL_east_resolve_val_victory = yes
+			}
+			else_if = {
+				limit = { check_variable = { var = VAL_east_rival_hold value = VAL_east_val_hold compare = greater_than } }
+				VAL_east_resolve_rival_victory = yes
+			}
+			else = {
+				VAL_east_resolve_without_hegemon = yes
+			}
+		}
+	}
+}
+
+# STATE. Scores only for the side occupying it from an owner of the other side.
+VAL_east_count_occupied_state = {
+	if = {
+		limit = {
+			owner = { VAL_east_on_rival_side = yes }
+			VAL_east_state_held_by_val_side = yes
+		}
+		add_to_temp_variable = { var = VAL_east_val_hold value = 1 }
+	}
+	else_if = {
+		limit = {
+			owner = { VAL_east_on_val_side = yes }
+			VAL_east_state_held_by_rival_side = yes
+		}
+		add_to_temp_variable = { var = VAL_east_rival_hold value = 1 }
+	}
+}
+
+# GLOBAL. Called from on_peace for wars ended outside the settlement.
+VAL_east_final_close_external = {
+	if = {
+		limit = {
+			VAL_east_final_active = yes
+			VAL_east_final_broken = yes
+		}
+		VAL_east_final_resolve_by_control = yes
+	}
+}
+
+# GLOBAL. Ends only the wars between the two sides of this campaign.
+VAL_east_end_wars = {
+	every_country = {
+		limit = {
+			VAL_east_on_val_side = yes
+			exists = yes
+		}
+		every_enemy_country = {
+			limit = { VAL_east_on_rival_side = yes }
+			white_peace = PREV
+		}
+	}
+}
+
+# GLOBAL. Losers leave factions and foreign subjection before the delayed settlement.
+VAL_east_mark_losers = {
+	every_country = {
+		limit = {
+			VAL_east_on_rival_side = yes
+			exists = yes
+		}
+		set_country_flag = VAL_east_settlement_pending
+		if = {
+			limit = {
+				is_subject = yes
+				NOT = { is_subject_of = VAL }
+			}
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
+			dismantle_faction = yes
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+	}
+}
+
+# GLOBAL. Campaign-only status ends on every terminal path.
+VAL_east_close_campaign = {
+	clr_global_flag = VAL_east_final_started
+	VAL = {
+		remove_mission = VAL_east_deadline
+		VAL_east_close_champion = yes
+		if = {
+			limit = { has_dynamic_modifier = { modifier = VAL_east_war_effort } }
+			remove_dynamic_modifier = { modifier = VAL_east_war_effort }
+		}
+	}
+	MON = { VAL_east_close_champion = yes }
+	RUS = { VAL_east_close_champion = yes }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY champion.
+VAL_east_close_champion = {
+	if = {
+		limit = { has_country_flag = VAL_east_added_major }
+		clr_country_flag = VAL_east_added_major
+		RUS_crisis_release_other_major = yes
+	}
+}
+
+# GLOBAL. Side markers exist only for the campaign and its settlement.
+VAL_east_clear_participants = {
+	every_country = {
+		limit = { has_variable = VAL_east_side }
+		clear_variable = VAL_east_side
+		clr_country_flag = VAL_east_settlement_pending
+	}
+}
+
+# COUNTRY VAL (event ROOT). One day after peace every defeated participant
+# receives the terms chosen by the regime: the captains annex, every other
+# government keeps vassals under the contract.
+VAL_east_apply_settlement = {
+	every_country = {
+		limit = {
+			exists = yes
+			has_country_flag = VAL_east_settlement_pending
+			NOT = { tag = VAL }
+		}
+		if = {
+			limit = { has_war_with = VAL }
+			white_peace = VAL
+		}
+		if = {
+			limit = { VAL = { check_variable = { var = VAL_east_casus value = 4 compare = equals } } }
+			VAL = { annex_country = { target = PREV transfer_troops = no } }
+		}
+		else = {
+			VAL = {
+				puppet = {
+					target = PREV
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+	}
+	VAL_east_clear_participants = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. The war stockpile is paid at dispatch and delivered once.
+VAL_east_begin_stockpile = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_east_stockpile_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_east_stockpile_deposit value = 300 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_east_deliver_stockpile = {
+	if = {
+		limit = { has_variable = VAL_east_stockpile_deposit }
+		clear_variable = VAL_east_stockpile_deposit
+		add_to_variable = { var = VAL_east_stockpiles value = 1 }
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 10800
+			producer = VAL
+		}
+		add_manpower = 5000
+	}
+}
+
+# COUNTRY VAL. Rented companies leave with their manpower and return with pay and experience.
+VAL_peace_begin_rent = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_peace_rent_deposit }
+			NOT = { has_manpower < 3000 }
+		}
+		set_variable = { var = VAL_peace_rent_deposit value = 3000 }
+		add_manpower = -3000
+	}
+}
+
+VAL_peace_finish_rent = {
+	if = {
+		limit = { has_variable = VAL_peace_rent_deposit }
+		clear_variable = VAL_peace_rent_deposit
+		add_manpower = 2000
+		army_experience = 10
+		ADISCORD_economy_initialize_country = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. Crown orders and civilian lines hold one deposit each; a lost
+# site at delivery returns the payment instead of building elsewhere.
+VAL_throne_begin_crown_order = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_throne_order_deposit }
+			NOT = { has_political_power < 75 }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_throne_order_deposit value = 250 }
+		add_political_power = -75
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_throne_finish_crown_order = {
+	if = {
+		limit = { has_variable = VAL_throne_order_deposit }
+		if = {
+			limit = {
+				48 = {
+					is_owned_by = VAL
+					free_building_slots = { building = arms_factory size > 0 include_locked = no }
+				}
+			}
+			clear_variable = VAL_throne_order_deposit
+			add_to_variable = { var = VAL_throne_crown_orders value = 1 }
+			48 = {
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = VAL
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_throne_refund_crown_order = yes }
+	}
+}
+
+VAL_throne_refund_crown_order = {
+	if = {
+		limit = { has_variable = VAL_throne_order_deposit }
+		add_political_power = 75
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_throne_order_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_throne_order_deposit }
+		clear_variable = VAL_throne_order_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_cabinet_begin_civil_line = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_cabinet_line_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_cabinet_line_deposit value = 200 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_cabinet_finish_civil_line = {
+	if = {
+		limit = { has_variable = VAL_cabinet_line_deposit }
+		if = {
+			limit = {
+				any_owned_state = {
+					is_controlled_by = VAL
+					free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+				}
+			}
+			clear_variable = VAL_cabinet_line_deposit
+			add_to_variable = { var = VAL_cabinet_civil_lines value = 1 }
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_cabinet_refund_civil_line = yes }
+	}
+}
+
+VAL_cabinet_refund_civil_line = {
+	if = {
+		limit = { has_variable = VAL_cabinet_line_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_cabinet_line_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_cabinet_line_deposit }
+		clear_variable = VAL_cabinet_line_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # --- contract_authority_effects ---
@@ -4391,14 +5379,14 @@ VAL_offer_westerholm_concession = {
 	hidden_effect = {
 		if = {
 			limit = {
-				WRK = { exists = yes }
-				38 = { is_owned_by = WRK is_controlled_by = WRK }
+				event_target:ADISCORD_vorkerland_nation = { exists = yes }
+				38 = { is_owned_by = event_target:ADISCORD_vorkerland_nation is_controlled_by = event_target:ADISCORD_vorkerland_nation }
 				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 				NOT = { has_country_flag = VAL_westerholm_concession_granted }
 				NOT = { has_country_flag = VAL_westerholm_offer_pending }
 			}
 			set_country_flag = VAL_westerholm_offer_pending
-			WRK = { country_event = { id = val_contract.320 } }
+			event_target:ADISCORD_vorkerland_nation = { country_event = { id = val_contract.320 } }
 		}
 	}
 }
@@ -4406,13 +5394,13 @@ VAL_offer_westerholm_concession = {
 VAL_grant_westerholm_concession = {
 	if = {
 		limit = {
-			WRK = { exists = yes }
-			38 = { is_owned_by = WRK is_controlled_by = WRK }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes }
+			38 = { is_owned_by = event_target:ADISCORD_vorkerland_nation is_controlled_by = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 			NOT = { has_country_flag = VAL_westerholm_concession_granted }
 		}
 		38 = { add_resource = { type = steel amount = 10 } }
-		WRK = { give_resource_rights = { receiver = VAL state = 38 } }
+		event_target:ADISCORD_vorkerland_nation = { give_resource_rights = { receiver = VAL state = 38 } }
 		set_country_flag = VAL_westerholm_concession_granted
 		set_country_flag = VAL_westerholm_resource_rights_active
 		add_ideas = VAL_westerholm_concession_income
@@ -4627,7 +5615,7 @@ VAL_initialize_rework = {
 	if = {
 		limit = {
 			has_country_flag = VAL_westerholm_resource_rights_active
-			38 = { NOT = { controller = { tag = WRK } } }
+			38 = { NOT = { controller = { tag = event_target:ADISCORD_vorkerland_nation } } }
 		}
 		VAL_handle_westerholm_loss = yes
 	}
@@ -8983,6 +9971,7 @@ VAL_adopt_commonwealth = {
 		}
 		VAL_sync_solgalov_portrait = yes
 		VAL_grant_contract_warlord = yes
+		country_event = { id = val_rework.124 days = 1 }
 	}
 	VAL_party_representatives_commonwealth = yes
 }
@@ -8990,7 +9979,7 @@ VAL_adopt_commonwealth = {
 # Country VAL. Initialize once; loading a save must preserve earned progress.
 VAL_initialize_arsenal_recovery = {
 	if = {
-		limit = { has_country_flag = VAL_vorkerland_resource_access_active OR = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started 33 = { NOT = { is_owned_by = WRK is_controlled_by = WRK } } } }
+		limit = { has_country_flag = VAL_vorkerland_resource_access_active OR = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started 33 = { NOT = { is_owned_by = event_target:ADISCORD_vorkerland_nation is_controlled_by = event_target:ADISCORD_vorkerland_nation } } } }
 		VAL_end_vorkerland_resource_access = yes
 	}
 	if = {
@@ -9010,15 +9999,15 @@ VAL_initialize_arsenal_recovery = {
 				NOT = {
 					has_country_flag = VAL_vorkerland_contracts_disrupted
 				}
-				WRK = {
+				event_target:ADISCORD_vorkerland_nation = {
 					exists = yes
 				}
 				33 = {
-					is_owned_by = WRK
-					is_controlled_by = WRK
+					is_owned_by = event_target:ADISCORD_vorkerland_nation
+					is_controlled_by = event_target:ADISCORD_vorkerland_nation
 				}
 			}
-			WRK = { give_resource_rights = { receiver = VAL state = 33 } }
+			event_target:ADISCORD_vorkerland_nation = { give_resource_rights = { receiver = VAL state = 33 } }
 			set_country_flag = VAL_vorkerland_resource_access_active
 		}
 	}

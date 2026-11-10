@@ -26,7 +26,6 @@ CHAPTER_ROOTS = {
     "VAL_Occidian_Claims_Commission",
     "VAL_Reopen_Trade_Routes",
     "VAL_Settle_Industrial_Debts",
-    "VAL_Return_To_World_Market",
     "VAL_Veterans_Of_The_Campaign",
 }
 REVEAL_MILESTONES = {
@@ -426,7 +425,6 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Settle_Industrial_Debts": "VAL_Industrial_Mobilization_Plan",
             "VAL_Veterans_Of_The_Campaign": "VAL_Campaign_Secured",
             "VAL_Southern_Expansion": "VAL_Wasteland_Charter",
-            "VAL_Return_To_World_Market": "VAL_Reopen_Trade_Routes",
             "VAL_Eastern_Expansion": "VAL_Southern_Expansion",
         }
         for focus_id, milestone in expected.items():

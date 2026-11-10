@@ -1,5 +1,9 @@
 capital = 32
 
+# Vorkerland is WRK until a civil-war claimant unifies the country. History is
+# applied before any startup hook, and the effects below already read the target.
+save_global_event_target_as = ADISCORD_vorkerland_nation
+
 # Consumed by the collapse startup hook. A loaded pre-feature save never has
 # this history-only marker and therefore cannot be migrated into the campaign.
 set_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1

@@ -87,6 +87,15 @@ sub_units = {
 			attack = 0.65
 			defence = 0.60
 		}
+		desert_city = {
+			attack = 0.55
+			defence = 0.50
+		}
+		hill_city = {
+			attack = 0.65
+			defence = 0.65
+			movement = -0.05
+		}
 		fort = {
 			attack = 0.30
 		}
@@ -178,6 +187,7 @@ sub_units = {
 		}
 		forest = { defence = 0.15 }
 		hills = { defence = 0.15 }
+		hill_city = { defence = 0.10 }
 	}
 
 	# Local defence retains full rifle accounting for scripted mobilization.
@@ -215,6 +225,8 @@ sub_units = {
 		}
 		urban = { defence = 0.15 }
 		vorkernsberg = { defence = 0.15 }
+		desert_city = { defence = 0.10 }
+		hill_city = { defence = 0.20 }
 		fort = { defence = 0.20 }
 	}
 
@@ -296,6 +308,12 @@ sub_units = {
 		vorkernsberg = {
 			attack = 0.10
 		}
+		desert_city = {
+			attack = 0.10
+		}
+		hill_city = {
+			attack = 0.10
+		}
 		fort = {
 			attack = 0.10
 		}
@@ -374,6 +392,8 @@ sub_units = {
 		marsh = { attack = -0.15 movement = -0.20 }
 		urban = { attack = -0.10 }
 		vorkernsberg = { attack = -0.10 }
+		desert_city = { attack = -0.05 }
+		hill_city = { attack = -0.15 movement = -0.10 }
 		river = { attack = -0.20 movement = -0.20 }
 		amphibious = { attack = -0.45 }
 	}
@@ -466,6 +486,11 @@ sub_units = {
 			defence = 0.1
 			movement = 0.2
 		}
+		hill_city = {
+			attack = 0.10
+			defence = 0.05
+			movement = 0.05
+		}
 	}
 
 	artillery = {
@@ -541,6 +566,7 @@ sub_units = {
 		soft_attack = 0.10
 		forest = { attack = -0.20 movement = -0.20 }
 		hills = { movement = -0.05 }
+		hill_city = { movement = -0.05 }
 		mountain = { attack = -0.15 movement = -0.20 }
 		jungle = { attack = -0.25 movement = -0.20 }
 		marsh = { attack = -0.20 movement = -0.30 }
@@ -833,6 +859,8 @@ sub_units = {
 		mountain = { movement = 0.05 }
 		plains = { movement = 0.15 }
 		desert = { movement = 0.15 }
+		desert_city = { movement = 0.10 }
+		hill_city = { movement = 0.05 }
 	}
 
 	ADISCORD_light_tank = {
@@ -884,6 +912,8 @@ sub_units = {
 		}
 		urban = { attack = -0.15 }
 		vorkernsberg = { attack = -0.15 }
+		desert_city = { attack = -0.10 }
+		hill_city = { attack = -0.20 movement = -0.10 }
 		river = {
 			attack = -0.25
 			movement = -0.20
@@ -928,6 +958,8 @@ sub_units = {
 		marsh = { attack = -0.20 movement = -0.20 }
 		urban = { attack = -0.15 }
 		vorkernsberg = { attack = -0.15 }
+		desert_city = { attack = -0.10 }
+		hill_city = { attack = -0.20 movement = -0.10 }
 		river = { attack = -0.25 movement = -0.20 }
 		amphibious = { attack = -0.70 }
 	}
@@ -989,6 +1021,14 @@ sub_units = {
 			attack = 0.20
 			movement = -0.20
 		}
+		desert_city = {
+			attack = 0.20
+			movement = -0.10
+		}
+		hill_city = {
+			attack = 0.10
+			movement = -0.30
+		}
 		river = {
 			attack = -0.45
 			movement = -0.40
@@ -1038,6 +1078,8 @@ sub_units = {
 			defence = -0.15
 			movement = -0.25
 		}
+		desert_city = { attack = -0.25 defence = -0.10 movement = -0.15 }
+		hill_city = { attack = -0.40 defence = -0.15 movement = -0.35 }
 		river = { attack = -0.40 movement = -0.35 }
 		amphibious = { attack = -0.85 }
 		fort = { attack = 0.10 }
@@ -1528,6 +1570,12 @@ sub_units = {
 		}
 		vorkernsberg = {
 			attack = 0.03
+		}
+		desert_city = {
+			attack = 0.03
+		}
+		hill_city = {
+			attack = 0.05
 		}
 		fort = {
 			attack = 0.05

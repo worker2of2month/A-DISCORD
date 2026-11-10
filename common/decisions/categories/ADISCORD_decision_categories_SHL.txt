@@ -1,5 +1,6 @@
 SHL_metal_contracts = {
 	icon = generic_industry
+	picture = GFX_ADISCORD_decision_picture_deal
 	allowed = {
 		OR = {
 			tag = VAL

@@ -5190,7 +5190,11 @@ STP_cw_settle_union_victory = {
 	if = { limit = { tag = STS } STP_cw_close_last_banquet_technical = yes }
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
-	if = { limit = { tag = STP } STP_pv_resolve_victory = yes }
+	if = {
+		limit = { tag = STP }
+		STP_pv_settle_resistance_prisoners = yes
+		STP_pv_resolve_victory = yes
+	}
 	if = {
 		limit = { tag = STS }
 		STP_hw_resolve_victory = yes
@@ -5234,6 +5238,7 @@ STP_cw_settle_nod_victory = {
 			set_country_flag = STP_cw_won_union_battle
 			VAL_settle_stelander_attrition = yes
 			STP_cw_finish_mobilization = yes
+			STP_pv_settle_resistance_prisoners = yes
 			STP_pv_resolve_victory = yes
 			if = {
 				limit = { NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_result_published } }
@@ -16077,6 +16082,107 @@ STP_pv_refresh_claims = {
 		if = {
 			limit = { check_variable = { var = STP_pv_claim_6 value = STP_pv_best_claim compare = greater_than } }
 			set_variable = { var = STP_pv_claim_lead value = 6 }
+		}
+	}
+}
+
+# Both victory settlements call this after annexation. Prisoners still belong to
+# their wartime tag, including a founder already held in Fada before the split.
+STP_pv_settle_resistance_prisoners = {
+	STP_pv_retire_resistance_leaders = yes
+	STS = { STP_pv_retire_resistance_leaders = yes }
+	if = {
+		limit = { has_country_flag = STP_shabrat_was_arrested }
+		country_event = { id = ADISCORD_STP_pv.52 days = 3 }
+	}
+	else = {
+		country_event = { id = ADISCORD_STP_pv.51 days = 3 }
+	}
+	country_event = { id = ADISCORD_STP_pv.53 days = 5 }
+}
+
+STP_pv_retire_resistance_leaders = {
+	if = {
+		limit = { has_character = STP_maksim_shabrat }
+		retire_character = STP_maksim_shabrat
+	}
+	if = {
+		limit = { has_character = STP_grigory_sotnikov }
+		retire_character = STP_grigory_sotnikov
+	}
+}
+
+# Character scope. The oath replaces civil-war allegiance while keeping combat traits.
+STP_pv_administer_officer_oath = {
+	release_from_captivity = yes
+	clr_character_flag = STP_cw_arrested
+	if = {
+		limit = { has_trait = STP_shabrat_loyalist }
+		remove_unit_leader_trait = STP_shabrat_loyalist
+	}
+	if = {
+		limit = { NOT = { has_trait = STP_party_loyalist } }
+		add_unit_leader_trait = STP_party_loyalist
+	}
+}
+
+# The annexed resistance retains its officers. A new oath restores the same
+# commander, including earned experience, in the party uniform.
+STP_pv_reinstate_officers = {
+	STS = {
+		if = {
+			limit = {
+				exists = no
+				has_character = STP_Leonid_Barchel
+			}
+			STP_Leonid_Barchel = {
+				if = {
+					limit = { has_ideology = chauvinism_ideology }
+					remove_country_leader_role = { ideology = chauvinism_ideology }
+				}
+				if = {
+					limit = { has_ideology = steland_military_directory }
+					remove_country_leader_role = { ideology = steland_military_directory }
+				}
+				STP_pv_administer_officer_oath = yes
+			}
+			set_nationality = {
+				character = STP_Leonid_Barchel
+				target_country = STP
+			}
+			STP = {
+				set_portraits = {
+					character = STP_Leonid_Barchel
+					army = {
+						large = GFX_portrait_STP_Leonid_Barchel
+						small = GFX_portrait_STP_Leonid_Barchel_small
+					}
+					civilian = {
+						large = GFX_portrait_STP_Leonid_Barchel
+						small = GFX_portrait_STP_Leonid_Barchel_small
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = no
+				has_character = STP_Edmund_Ravel
+			}
+			STP_Edmund_Ravel = { STP_pv_administer_officer_oath = yes }
+			set_nationality = {
+				character = STP_Edmund_Ravel
+				target_country = STP
+			}
+			STP = {
+				set_portraits = {
+					character = STP_Edmund_Ravel
+					army = {
+						large = GFX_portrait_STP_Edmund_Ravel
+						small = GFX_portrait_STP_Edmund_Ravel_small
+					}
+				}
+			}
 		}
 	}
 }

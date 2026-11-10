@@ -1,0 +1,13 @@
+capital = 700
+
+recruit_character = SNG_governor_council
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 65
+	pragmatism = 25
+	humanism = 10
+}
+set_research_slots = 2

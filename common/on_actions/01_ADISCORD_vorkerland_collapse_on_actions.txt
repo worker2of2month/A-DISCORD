@@ -1,5 +1,7 @@
 on_actions = {
-	on_daily_WRK = {
+	# Doctor Worx rules only the country unified by TVA, so the daily hook is
+	# keyed to that tag.
+	on_daily_TVA = {
 		effect = {
 			if = {
 				limit = {
@@ -19,7 +21,7 @@ on_actions = {
 			40 = { ADISCORD_vorkerland_reconcile_dirty_zone_remainder = yes }
 			# Country history seeds this marker only while creating a fresh campaign.
 			# Once consumed, later loads cannot schedule the collapse again.
-			WRK = {
+			event_target:ADISCORD_vorkerland_nation = {
 				if = {
 					limit = {
 						has_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
@@ -47,6 +49,14 @@ on_actions = {
 	}
 	on_monthly_WKR = {
 		effect = {
+			# The unified country carries the western crisis clock on its own tag.
+			if = {
+				limit = {
+					tag = event_target:ADISCORD_vorkerland_nation
+					ADISCORD_west_crisis_open = yes
+				}
+				ADISCORD_west_crisis_month = yes
+			}
 			ADISCORD_vorkerland_release_evacuated_fuel = yes
 			if = {
 				limit = {
@@ -60,6 +70,14 @@ on_actions = {
 	}
 	on_monthly_VAD = {
 		effect = {
+			# The unified country carries the western crisis clock on its own tag.
+			if = {
+				limit = {
+					tag = event_target:ADISCORD_vorkerland_nation
+					ADISCORD_west_crisis_open = yes
+				}
+				ADISCORD_west_crisis_month = yes
+			}
 			if = {
 				limit = {
 					ADISCORD_vorkerland_is_live_claimant = yes
@@ -71,12 +89,17 @@ on_actions = {
 			}
 		}
 	}
-	# The reunified confederation drives the western clock. Before reunification
-	# the guard fails at once; IVN has no hook because its loss ends the question.
-	on_monthly_WRK = {
+	# The unified country drives the western clock on the tag it kept. Before the
+	# unification every guard fails at once; IVN has no hook because its loss ends
+	# the question.
+	on_monthly_TVA = {
 		effect = {
+			# The unified country carries the western crisis clock on its own tag.
 			if = {
-				limit = { ADISCORD_west_crisis_open = yes }
+				limit = {
+					tag = event_target:ADISCORD_vorkerland_nation
+					ADISCORD_west_crisis_open = yes
+				}
 				ADISCORD_west_crisis_month = yes
 			}
 		}
@@ -241,8 +264,8 @@ on_actions = {
 					WKR = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
 				}
 				else_if = {
-					limit = { tag = VLA is_subject_of = WRK }
-					WRK = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
+					limit = { tag = VLA is_subject_of = event_target:ADISCORD_vorkerland_nation }
+					event_target:ADISCORD_vorkerland_nation = { ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = yes }
 				}
 				if = {
 					limit = { OR = { tag = ROM tag = TRU tag = ZAO tag = SOL } }
@@ -300,8 +323,8 @@ on_actions = {
 							has_completed_focus = WRK_empire_officer_estates
 						}
 						FROM.FROM = {
-							is_core_of = WRK
-							is_owned_and_controlled_by = WRK
+							is_core_of = event_target:ADISCORD_vorkerland_nation
+							is_owned_and_controlled_by = event_target:ADISCORD_vorkerland_nation
 							has_state_flag = WRK_empire_governor_seat
 							NOT = { has_dynamic_modifier = { modifier = WRK_empire_officer_estate } }
 						}

@@ -34,6 +34,80 @@ def military_advisor_definitions():
                             yield character, role.value
 
 
+# Global event target naming the country that currently is Vorkerland, and the
+# tags it can name: WRK from the start of a campaign, then the claimant that
+# unified the country.
+NATION_TARGET = "ADISCORD_vorkerland_nation"
+VORKERLAND_CLAIMANTS = ("WKR", "VAD", "TVA")
+VORKERLAND_TAGS = ("WRK",) + VORKERLAND_CLAIMANTS
+
+
+def names_country_target(entries) -> bool:
+    """Whether a parsed block compares or scopes to the country target."""
+    for entry in entries:
+        if isinstance(entry.value, list):
+            if NATION_TARGET in entry.key or names_country_target(entry.value):
+                return True
+        elif NATION_TARGET in entry.value:
+            return True
+    return False
+
+
+def startup_country_target(effect: str):
+    """Tag the country target names when on_startup first calls `effect`.
+
+    Country history is applied before any startup hook. on_startup blocks then
+    run in on_action file order, each from top to bottom, and a block limited to
+    an unbound target is skipped once the target is bound. A target that only a
+    later statement saves is still unbound and is returned as None.
+    """
+    from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+    def binds(entry):
+        return entry.key == "save_global_event_target_as" and entry.value == NATION_TARGET
+
+    def waits_for_unbound_target(entries):
+        return any(
+            child.key == "has_event_target" and child.value == NATION_TARGET
+            for limit in entries if limit.key == "limit"
+            for negation in limit.value if negation.key == "NOT"
+            for child in negation.value
+        )
+
+    def scan(entries, scope, bound):
+        for entry in entries:
+            if entry.key == effect:
+                return bound, True
+            if binds(entry):
+                bound = scope
+            elif isinstance(entry.value, list):
+                if entry.key == "if" and bound and waits_for_unbound_target(entry.value):
+                    continue
+                inner = entry.key if re.fullmatch(r"[A-Z]{3}", entry.key) else scope
+                bound, found = scan(entry.value, inner, bound)
+                if found:
+                    return bound, True
+        return bound, False
+
+    bound = None
+    for path in sorted((ROOT / "history/countries").glob("*.txt"), key=lambda p: p.name):
+        text = path.read_text(encoding="utf-8-sig")
+        if NATION_TARGET in text and any(binds(entry) for entry in parse_clausewitz(text)):
+            bound = path.name[:3]
+    paths = sorted((ROOT / "common/on_actions").glob("*.txt"), key=lambda p: p.name)
+    for path in paths:
+        for root in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+            if root.key != "on_actions":
+                continue
+            for action in root.value:
+                if action.key != "on_startup":
+                    continue
+                bound, found = scan(action.value, None, bound)
+                if found:
+                    return bound
+    raise AssertionError(f"on_startup never calls {effect}")
+
+
 APPROVED_RU_CIVILIAN_NAMES = {
     "ADISCORD_society_type_laws": "Общественный уклад",
     "ADISCORD_information_open_press": "Свободная пресса",
@@ -601,8 +675,18 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                         allowed = [
                             e.value for e in candidate.value if e.key == "allowed"
                         ]
-                        if not allowed or matches_conditions(allowed[0], facts, tag):
-                            eligible.append(candidate.key)
+                        if allowed and not matches_conditions(allowed[0], facts, tag):
+                            continue
+                        # `allowed` also admits the claimants to Vorkerland's own
+                        # candidates; only the country target's holder sees them.
+                        shared = [
+                            e.value
+                            for e in candidate.value
+                            if e.key == "visible" and names_country_target(e.value)
+                        ]
+                        if shared and not matches_conditions(shared[0], facts, tag):
+                            continue
+                        eligible.append(candidate.key)
                     self.assertGreaterEqual(len(set(eligible)), required[slot])
 
     def test_new_economic_ministers_refresh_weekly_inputs_on_hire_and_removal(self):
@@ -680,10 +764,26 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             ]
             dynamic = re.fullmatch(r"D\d\d", tag) is not None
             inherited = tag == "STS"
-            self.assertEqual(len(eligible), 2 if dynamic or inherited else 1, tag)
+            claimant = tag in VORKERLAND_CLAIMANTS
+            self.assertEqual(
+                len(eligible), 2 if dynamic or inherited or claimant else 1, tag
+            )
             if inherited:
                 self.assertIn("minister_STP_Adrian_Vels", [idea.key for idea in eligible])
                 eligible = [idea for idea in eligible if idea.key.startswith("minister_STS_")]
+                self.assertEqual(len(eligible), 1)
+            if claimant:
+                # Vorkerland's own minister is loaded for every claimant and
+                # shown only to the one that holds the country target.
+                shared = [idea for idea in eligible if idea.key.startswith("minister_WRK_")]
+                self.assertEqual(len(shared), 1, tag)
+                visible = self.one(shared[0].value, "visible")
+                for holder in VORKERLAND_TAGS:
+                    unified = {("event_target", NATION_TARGET): holder}
+                    self.assertEqual(
+                        matches_conditions(visible, unified, tag), holder == tag, (tag, holder)
+                    )
+                eligible = [idea for idea in eligible if idea.key.startswith(f"minister_{tag}_")]
                 self.assertEqual(len(eligible), 1)
             if not dynamic:
                 self.assertTrue(eligible[0].key.startswith(f"minister_{tag}_"), tag)
@@ -749,6 +849,9 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             path.name[:3]: parse_clausewitz(path.read_text(encoding="utf-8-sig"))
             for path in (ROOT / "history/countries").glob("*.txt")
         }
+        # The initializer selects Vorkerland's minister through the country
+        # target, so it sees whatever is bound by the time startup calls it.
+        nation = startup_country_target("ADISCORD_initialize_foreign_minister")
         for tag in sorted(owners):
             with self.subTest(tag=tag):
                 installed = []
@@ -765,7 +868,8 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                         tag,
                         "has_idea",
                         "political_advisor_minister_of_foreign_affairs_vacant",
-                    ): not ministers
+                    ): not ministers,
+                    ("event_target", NATION_TARGET): nation,
                 }
                 appointments = [
                     entry.value
@@ -773,7 +877,9 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                     if scope == tag and entry.key == "add_ideas"
                 ]
                 ministers.extend(appointments)
-                self.assertEqual(len(ministers), 1, ministers)
+                self.assertEqual(
+                    len(ministers), 1, (ministers, f"country target names {nation}")
+                )
                 candidate = next(idea for idea in national if idea.key == ministers[0])
                 self.assertTrue(
                     matches_conditions(self.one(candidate.value, "allowed"), {}, tag)
@@ -934,7 +1040,7 @@ class MilitaryStaffContracts(unittest.TestCase):
             )
 
     def test_each_national_roster_can_fill_seven_seats_before_any_focus(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        from tools.tests.test_adiscord_stp_preparation import event_target, matches_conditions
 
         trigger = self.one(
             self.parse(
@@ -945,15 +1051,33 @@ class MilitaryStaffContracts(unittest.TestCase):
             ),
             "ADISCORD_has_national_military_staff",
         )
-        tags = [entry.value for entry in self.walk(trigger) if entry.key == "tag"]
-        self.assertEqual(len(set(tags)), 38)
-        self.assertTrue(self.starting_tags.issubset(tags))
+        rows = [entry.value for entry in self.walk(trigger) if entry.key == "tag"]
+        # A row that names the country target stands for the tag that holds it.
+        tags = sorted(
+            {event_target(row, {}) if row.startswith("event_target:") else row for row in rows}
+        )
+        self.assertEqual(len(tags), 38)
+        self.assertEqual(self.starting_tags - set(tags), set())
+        # General history reads this list while the campaign is being built and
+        # does not rely on a country history having bound the country target
+        # first: every starting roster is found with the target unbound.
+        unbound = {("event_target", NATION_TARGET): None}
+        self.assertEqual(
+            sorted(
+                tag for tag in self.starting_tags
+                if not matches_conditions(trigger, unbound, tag)
+            ),
+            [],
+        )
         for tag in tags:
             counts = Counter()
             for slot, idea in self.candidates:
-                if matches_conditions(
-                    self.one(idea.value, "allowed"), {}, tag
-                ) and matches_conditions(self.one(idea.value, "available"), {}, tag):
+                # `allowed` admits every tag that may come to hold a roster;
+                # `visible` narrows it to the country that holds it now.
+                if all(
+                    matches_conditions(self.one(idea.value, gate), {}, tag)
+                    for gate in ("allowed", "visible", "available")
+                ):
                     counts[slot] += 1
             for slot in self.slots:
                 self.assertGreaterEqual(
@@ -1053,7 +1177,16 @@ class MilitaryStaffContracts(unittest.TestCase):
                 )
                 self.assertFalse(any(entry.key == "bypass" for entry in focus), unlock)
             focus = self.focuses[unlocks[0]]
-            tag = self.one(self.one(idea.value, "allowed"), "tag")
+            tag = idea.key.split("_")[2]
+            allowed = [
+                entry.value
+                for entry in self.walk(self.one(idea.value, "allowed"))
+                if entry.key == "tag"
+            ]
+            # Vorkerland's elites are loaded for each tag that can be the country.
+            self.assertEqual(
+                allowed, list(VORKERLAND_TAGS) if tag == "WRK" else [tag], idea.key
+            )
             if tag in ("STP", "STS"):
                 self.assertIn(
                     tag,
@@ -1152,74 +1285,145 @@ class MilitaryStaffContracts(unittest.TestCase):
                 self.assertEqual(counts[token], 1)
                 self.assertTrue(names[token + "_desc"])
 
+    def reachable_effects(self, entries, definitions):
+        """Yield `entries` and the bodies of every scripted effect they call."""
+        seen = set()
+        pending = [entries]
+        while pending:
+            for entry in self.walk(pending.pop()):
+                yield entry
+                if entry.key in definitions and entry.key not in seen:
+                    seen.add(entry.key)
+                    pending.append(definitions[entry.key])
+
     def test_reunification_preserves_every_occupied_or_vacant_seat(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+        from tools.tests.test_adiscord_stp_preparation import (
+            event_target,
+            matches_conditions,
+            selected_effects,
+        )
 
         effects = self.parse(
             (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
         )
-        effect_id = "ADISCORD_vorkerland_transfer_military_staff_to_wrk"
-        transfer = self.one(effects, effect_id)
+        definitions = {}
+        for path in (ROOT / "common/scripted_effects").glob("*.txt"):
+            for root in self.parse(path.read_text(encoding="utf-8-sig")):
+                if isinstance(root.value, list):
+                    definitions[root.key] = root.value
+        adopt_id = "ADISCORD_vorkerland_adopt_retired_roster"
+        adopt = self.one(effects, adopt_id)
         candidates = {idea.key: idea.value for _, idea in self.candidates}
-        old_staff = {key for key in candidates if key.startswith("ADISCORD_staff_WRK_")}
-        for tag, route in (("WKR", "worker"), ("VAD", "joint"), ("TVA", "utilitarian")):
-            roster = sorted(key for key in candidates if key.startswith(f"ADISCORD_staff_{tag}_"))
+        old_staff = sorted(key for key in candidates if key.startswith("ADISCORD_staff_WRK_"))
+        self.assertEqual(len(old_staff), 10)
+        routes = (("WKR", "worker"), ("VAD", "joint"), ("TVA", "utilitarian"))
+        rosters = {
+            tag: sorted(key for key in candidates if key.startswith(f"ADISCORD_staff_{tag}_"))
+            for tag, _ in routes
+        }
+        for tag, route in routes:
+            roster = rosters[tag]
             self.assertEqual(len(roster), 7)
             route_flag = "ADISCORD_vorkerland_route_" + route
-            formation = self.one(effects, "ADISCORD_vorkerland_form_wrk_from_" + tag.lower())
-            ordered = list(self.walk(formation))
-            call = next(e for e in ordered if e.key == effect_id)
-            flag = next(e for e in ordered if e.key == "set_country_flag" and e.value == route_flag)
-            handoff = next(e for e in ordered if e.key == "change_tag_from")
-            self.assertLess(ordered.index(flag), ordered.index(call))
-            self.assertLess(ordered.index(call), ordered.index(handoff))
-            source_calls = [
-                entry for entry in formation
-                if entry.key == tag and call in entry.value
-            ]
-            self.assertEqual(len(source_calls), 1)
-            for mask in range(1 << len(roster)):
-                hired = {key for index, key in enumerate(roster) if mask & (1 << index)}
-                state = {tag: set(hired), "WRK": set(old_staff)}
-                owners = {key: tag for key in roster}
-                facts = {(tag, "has_idea", key): True for key in hired}
-                facts.update({(tag, "has_character", key): True for key in roster})
-                for scope, entry in selected_effects(transfer, facts, tag):
-                    self.assertIn(
-                        entry.key,
-                        ("activate_advisor", "deactivate_advisor", "remove_ideas", "set_nationality"),
-                    )
-                    if entry.key == "set_nationality":
-                        character = self.one(entry.value, "character")
-                        self.assertEqual(owners[character], scope)
-                        self.assertNotIn(character, state[scope])
-                        owners[character] = self.one(entry.value, "target_country")
-                    elif entry.key == "activate_advisor":
-                        self.assertEqual(owners[entry.value], scope)
-                        state[scope].add(entry.value)
-                    elif entry.key == "deactivate_advisor":
-                        self.assertIn(entry.value, state[scope])
-                        state[scope].remove(entry.value)
-                    elif entry.key == "remove_ideas":
-                        values = {e.value for e in entry.value}
-                        state[scope].difference_update(values)
-                self.assertEqual(state["WRK"], hired, (tag, mask))
-                self.assertFalse(state[tag], (tag, mask))
-                self.assertEqual(set(owners.values()), {"WRK"}, (tag, mask))
+            unify = self.one(effects, "ADISCORD_vorkerland_unify_under_" + tag.lower())
+            settle = self.one(
+                effects, "ADISCORD_vorkerland_settle_unification_under_" + tag.lower()
+            )
+            # The winner rebinds the country target in its own scope before the
+            # retired roster is sent to whichever country the target names.
+            steps = [(entry.key, entry.value) for entry in unify]
+            rebind = steps.index(("save_global_event_target_as", NATION_TARGET))
+            self.assertEqual(steps[rebind - 1], ("clear_global_event_target", NATION_TARGET))
+            self.assertEqual(steps.count((adopt_id, "yes")), 1)
+            self.assertLess(rebind, steps.index((adopt_id, "yes")))
+            self.assertIn(("set_country_flag", route_flag), steps)
+            self.assertIn(
+                ("32", [("set_state_controller_to", tag)]),
+                [
+                    (key, [(e.key, e.value) for e in value])
+                    for key, value in steps
+                    if isinstance(value, list)
+                ],
+            )
+            # The winner keeps its tag, so its seats are never moved or vacated:
+            # no step of the unification names its roster, replaces the tag or
+            # annexes it, and characters change country only in the roster sweep.
+            reached = list(self.reachable_effects(unify + settle, definitions))
+            mentioned = {
+                value
+                for entry in reached
+                for value in (entry.key, entry.value)
+                if isinstance(value, str) and value.startswith("ADISCORD_staff_")
+            }
+            self.assertEqual(mentioned, set(), tag)
+            for entry in reached:
+                self.assertNotIn(
+                    entry.key, ("change_tag_from", "deactivate_advisor", "retire_character"), tag
+                )
+                if entry.key == "annex_country":
+                    self.assertNotEqual(self.one(entry.value, "target"), tag)
+            for moved in ("every_character", "set_nationality"):
+                self.assertEqual(sum(entry.key == moved for entry in reached), 1, (tag, moved))
+
+            # The sweep sends every character still on WRK to the winner and
+            # seats nobody, so it cannot displace an adviser the winner has hired.
+            facts = {("event_target", NATION_TARGET): tag}
+            owners = {key: tag for key in roster}
+            owners.update({key: "WRK" for key in old_staff})
+            swept = list(selected_effects(adopt, facts, tag))
+            self.assertEqual(
+                [(scope, entry.key) for scope, entry in swept], [("WRK", "every_character")]
+            )
+            orders = swept[0][1].value
+            self.assertEqual([entry.key for entry in orders], ["set_nationality"])
+            self.assertEqual(
+                [(entry.key, entry.value) for entry in orders[0].value],
+                [("target_country", "event_target:" + NATION_TARGET)],
+            )
+            destination = event_target(orders[0].value[0].value, facts)
+            for character in old_staff:
+                owners[character] = destination
+            self.assertEqual(set(owners.values()), {tag})
+
+            # The winner's roster stays listed and hireable on its own tag before
+            # and after the unification, and on no other tag that can be the country.
+            unified = {
+                ("event_target", NATION_TARGET): tag,
+                (tag, "has_country_flag", route_flag): True,
+            }
+            for owner, owner_roster in rosters.items():
+                for key in owner_roster:
+                    body = candidates[key]
+                    for gate in ("available", "visible"):
+                        for scenario in ({}, unified):
+                            for scope in VORKERLAND_TAGS:
+                                self.assertEqual(
+                                    matches_conditions(self.one(body, gate), scenario, scope),
+                                    scope == owner,
+                                    (key, gate, scope, tag, bool(scenario)),
+                                )
             for key in roster:
+                self.assertTrue(
+                    matches_conditions(self.one(candidates[key], "allowed"), {}, tag), key
+                )
+            # Vorkerland's own staff is loaded for every tag that can be the
+            # country and listed only for the current holder of the target.
+            for key in old_staff:
                 body = candidates[key]
-                self.assertTrue(matches_conditions(self.one(body, "allowed"), {}, "WRK"))
-                for gate in ("available", "visible"):
-                    self.assertFalse(matches_conditions(self.one(body, gate), {}, "WRK"))
-                    for current_route in ("worker", "joint", "utilitarian"):
-                        facts = {
-                            ("WRK", "has_country_flag", "ADISCORD_vorkerland_route_" + current_route): True
-                        }
-                        self.assertEqual(
-                            matches_conditions(self.one(body, gate), facts, "WRK"),
-                            current_route == route,
-                            (key, current_route),
-                        )
+                for scope in VORKERLAND_TAGS:
+                    self.assertTrue(
+                        matches_conditions(self.one(body, "allowed"), {}, scope), (key, scope)
+                    )
+                    self.assertEqual(
+                        matches_conditions(self.one(body, "visible"), {}, scope),
+                        scope == "WRK",
+                        (key, scope),
+                    )
+                    self.assertEqual(
+                        matches_conditions(self.one(body, "visible"), unified, scope),
+                        scope == tag,
+                        (key, scope, tag),
+                    )
 
     def test_kefreyt_commanders_keep_single_character_identity_and_native_focus_appointments(
         self,

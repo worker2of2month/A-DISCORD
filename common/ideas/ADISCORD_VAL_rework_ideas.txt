@@ -72,8 +72,66 @@ ideas = {
 			modifier = { war_support_factor = 0.05 }
 		}
 
-		VAL_nw_cabinet_delta = {
+		VAL_nw_army_guarantee_delta = {
 			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAL_peace_throne_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				war_support_factor = 0.10
+				ADISCORD_economy_military_industry_income_factor = 0.10
+			}
+		}
+
+		VAL_peace_cabinet_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.10
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		VAL_peace_charter_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				command_power_gain_mult = 0.20
+				planning_speed = 0.10
+			}
+		}
+
+		VAL_peace_captains_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				war_support_factor = 0.15
+				stability_factor = -0.10
+			}
+		}
+
+		VAL_throne_officer_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				war_support_factor = 0.05
+			}
+		}
+
+		VAL_throne_clerk_delta = {
+			name = VAL_peace_order
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.10
@@ -81,12 +139,108 @@ ideas = {
 			}
 		}
 
-		VAL_nw_army_guarantee_delta = {
-			name = VAL_nw_industrial_network
+		VAL_throne_purge_delta = {
+			name = VAL_peace_order
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.03
+				stability_factor = 0.05
+				command_power_gain_mult = -0.10
+			}
+		}
+
+		VAL_throne_patents_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
 				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAL_throne_monopoly_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_military_industry_income_factor = 0.10 }
+		}
+
+		VAL_throne_memorial_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				political_power_gain = 0.05
+			}
+		}
+
+		VAL_throne_confession_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 }
+		}
+
+		VAL_cabinet_estimates_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		VAL_cabinet_apparatus_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 }
+		}
+
+		VAL_cabinet_bread_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_weekly_income = 15
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		VAL_cabinet_not_for_sale_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				consumer_goods_factor = -0.05
+			}
+		}
+
+		VAL_charter_district_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.10
+				stability_factor = -0.03
+			}
+		}
+
+		VAL_charter_staff_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAL_charter_silence_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 }
+		}
+
+		VAL_captains_shares_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				industrial_capacity_factory = -0.05
 			}
 		}
 

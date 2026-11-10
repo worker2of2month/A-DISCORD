@@ -82,7 +82,6 @@ SUPEREVENT_IDS = (
 class SupereventPresentation:
     name: str
     dedicated_sound_effect: str | None = None
-    legacy_music_asset: bool = True
 
 
 PRESENTATIONS = (
@@ -131,7 +130,6 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_val_commonwealth",
         "superevent_val_commonwealth_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_great", "superevent_stelander_great_sound_e"
@@ -139,65 +137,232 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_rus_black_banner",
         "superevent_rus_last_empire_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_rus_restoration",
         "superevent_rus_last_empire_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_itora_vorkerland_war",
         "superevent_itora_vorkerland_war_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_itora_civilwar",
         "superevent_itora_civilwar_sound_e",
-        legacy_music_asset=False,
     ),
 
     SupereventPresentation(
         "superevent_rus_khan_defeated",
         "superevent_rus_khan_defeated_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_vorkerland_joint_victory",
         "superevent_vorkerland_joint_victory_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_sotnikov_civilwar",
         "superevent_stelander_sotnikov_civilwar_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_sotnikov_directory",
         "superevent_stelander_shabrat_victory_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_sotnikov_charter",
         "superevent_stelander_shabrat_victory_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_shabrat_republic",
         "superevent_stelander_shabrat_republic_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_stelander_tikhoreva",
         "superevent_stelander_shabrat_victory_sound_e",
-        legacy_music_asset=False,
     ),
     SupereventPresentation(
         "superevent_rus_khan_died",
         "superevent_rus_khan_defeated_sound_e",
-        legacy_music_asset=False,
     ),
-
+    SupereventPresentation(
+        "superevent_nam_resource_war_service",
+        "superevent_nam_resource_war_service_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_nam_resource_war_district",
+        "superevent_nam_resource_war_district_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_houses",
+        "superevent_stelander_party_victory_houses_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_staff",
+        "superevent_stelander_party_victory_staff_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_wallets",
+        "superevent_stelander_party_victory_wallets_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_silence",
+        "superevent_stelander_party_victory_silence_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_regent",
+        "superevent_stelander_party_victory_regent_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_shabrat_victory_staff",
+        "superevent_stelander_shabrat_victory_staff_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_shabrat_victory_councils",
+        "superevent_stelander_shabrat_victory_councils_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_shabrat_victory_truth",
+        "superevent_stelander_shabrat_victory_truth_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_party_victory_festival",
+        "superevent_stelander_party_victory_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_houses",
+        "superevent_south_houses_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_cities",
+        "superevent_south_cities_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_nur",
+        "superevent_south_nur_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_regency",
+        "superevent_south_regency_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_commune",
+        "superevent_south_commune_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_conclave",
+        "superevent_south_conclave_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_service",
+        "superevent_south_service_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_charter",
+        "superevent_south_charter_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_contracts",
+        "superevent_south_contracts_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_rump",
+        "superevent_south_rump_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_revenge",
+        "superevent_south_revenge_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_radical",
+        "superevent_south_radical_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_free_islands",
+        "superevent_south_free_islands_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_boards",
+        "superevent_south_boards_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_restitution",
+        "superevent_south_restitution_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_worker",
+        "superevent_west_worker_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_petrichev",
+        "superevent_west_petrichev_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_veyran",
+        "superevent_west_veyran_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_dorian",
+        "superevent_west_dorian_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_anton",
+        "superevent_west_anton_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_shield",
+        "superevent_west_shield_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_emergency",
+        "superevent_west_emergency_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_revanche",
+        "superevent_west_revanche_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_committee",
+        "superevent_west_committee_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_vorkerland_world_empire",
+        "superevent_vorkerland_world_empire_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_iron",
+        "superevent_south_iron_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_civil_service",
+        "superevent_south_civil_service_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_federation",
+        "superevent_south_federation_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_oil_union",
+        "superevent_south_oil_union_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_contract_republic",
+        "superevent_south_contract_republic_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_directorate",
+        "superevent_south_directorate_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_south_nam",
+        "superevent_south_nam_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_council",
+        "superevent_west_council_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_west_world_empire",
+        "superevent_west_world_empire_sound_e",
+    ),
 )
 
 
@@ -331,6 +496,10 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         )
         if match:
             gfx_names.append(match.group(1))
+            texture = re.search(r'\btexturefile\s*=\s*"([^"]+)"', block, re.I)
+            if not texture or not (root / texture.group(1)).is_file():
+                path = texture.group(1) if texture else "(unspecified)"
+                issues.append(f"GFX_{match.group(1)}: missing texture {path}")
 
     for item in PRESENTATIONS:
         name = item.name
@@ -455,31 +624,33 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         )
 
     # Several presentations may reuse the same registered sound.
-    sound_items = tuple(
-        {
-            item.dedicated_sound_effect: item
-            for item in PRESENTATIONS
-            if item.dedicated_sound_effect
-        }.values()
-    )
-    sound_effect_names = tuple(item.dedicated_sound_effect for item in sound_items)
-    sound_names = tuple(effect.removesuffix("_e") for effect in sound_effect_names)
+    sound_effect_names = tuple(dict.fromkeys(
+        item.dedicated_sound_effect for item in PRESENTATIONS if item.dedicated_sound_effect
+    ))
+    samples = {}
+    for block in blocks(sounds, r"^\s*sound\s*=\s*\{"):
+        name = re.search(r'\bname\s*=\s*"([^"]+)"', block)
+        file = re.search(r'\bfile\s*=\s*"([^"]+)"', block)
+        if not name or not file:
+            issues.append("sound asset requires a sample name and file")
+            continue
+        if name[1] in samples:
+            issues.append(f"duplicate sound sample {name[1]}")
+        samples[name[1]] = file[1]
+        if not (root / "sound" / file[1]).is_file():
+            issues.append(f"{name[1]}: missing sound/{file[1]}")
 
-    for item, effect, sound in zip(sound_items, sound_effect_names, sound_names):
-        effect_count = len(
-            re.findall(rf"(?m)^\s*name\s*=\s*{re.escape(effect)}\s*$", sound_effects)
-        )
-        if effect_count != 1:
-            issues.append(
-                f"sound effect {effect}: expected one definition, found {effect_count}"
-            )
-        sound_count = len(
-            re.findall(rf'(?m)^\s*name\s*=\s*"{re.escape(sound)}"\s*$', sounds)
-        )
-        if sound_count != 1:
-            issues.append(
-                f"sound asset {sound}: expected one definition, found {sound_count}"
-            )
+    bindings = blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{")
+    for effect in sound_effect_names:
+        matches = [block for block in bindings if re.search(
+            rf"(?m)^\s*name\s*=\s*{re.escape(effect)}\s*$", block
+        )]
+        if len(matches) != 1:
+            issues.append(f"sound effect {effect}: expected one definition, found {len(matches)}")
+        else:
+            referenced = re.findall(r"(?m)^\s*sound\s*=\s*(\w+)\s*$", matches[0])
+            if len(referenced) != 1 or referenced[0] not in samples:
+                issues.append(f"sound effect {effect}: expected one registered sample, found {referenced}")
         category_count = len(
             re.findall(rf"(?m)^\s*{re.escape(effect)}\s*$", sound_category)
         )
@@ -488,13 +659,10 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"SuperEvents category: expected one reference to {effect}, found {category_count}"
             )
 
-    _check_order("sound assets", sounds, sound_names, issues)
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
-    # Runtime presentation audio is a GUI show_sound effect. The legacy OGG
-    # assets may remain as non-radio fallback material, but registering them in
-    # music/*.txt makes HOI4 enumerate them in the music player.
+    # The radio database contains only the silent carriers for these windows.
     if re.search(r"(?m)^\s*music_station\s*=", source[PRESENTATION_SONGS]):
         issues.append("presentation audio guard file must not define a music station")
     if re.search(r"(?m)^\s*music\s*=", source[PRESENTATION_SONGS]):
@@ -525,7 +693,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
             issues.append(f"{carrier}: must have zero random-play chance")
 
-    for item, effect in zip(sound_items, sound_effect_names):
+    for effect in sound_effect_names:
         song = effect.removesuffix("_sound_e")
         assets = [
             block
@@ -540,10 +708,8 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 issues.append(
                     f"presentation music must not be registered in radio playlists: {song}"
                 )
-        if (item.legacy_music_asset or assets) and (
-            len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]
-        ):
-            issues.append(f"missing or duplicate single-channel music asset {song}")
+        if assets or (root / "music" / f"{song}.ogg").exists():
+            issues.append(f"{song}: presentation audio belongs only in sound/")
 
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(
         b"\xef\xbb\xbf"

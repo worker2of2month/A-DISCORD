@@ -1,4 +1,22 @@
 scripted_gui = {
+	ADISCORD_NAM_board_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_board_window"
+		properties = {
+			NAM_board_mark_1 = { frame = NAM_board_rank_1 }
+			NAM_board_mark_2 = { frame = NAM_board_rank_2 }
+			NAM_board_mark_3 = { frame = NAM_board_rank_3 }
+			NAM_board_mark_4 = { frame = NAM_board_rank_4 }
+			NAM_board_mark_5 = { frame = NAM_board_rank_5 }
+			NAM_board_mark_6 = { frame = NAM_board_rank_6 }
+		}
+		visible = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		ai_enabled = { always = no }
+	}
+
 	# Basin window. It has no dirty variable: its inputs include political
 	# power, treasury, control and focus completion, which have no shared
 	# invalidation, so it keeps the native per-tick refresh. The panel

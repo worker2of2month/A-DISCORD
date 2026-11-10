@@ -94,9 +94,9 @@ VAL_trade_route_vorkerland_open = {
 		OR = {
 			VAL_trade_state_in_contract_sphere = yes
 			AND = {
-				is_owned_by = WRK
-				is_controlled_by = WRK
-				WRK = { has_war = no }
+				is_owned_by = event_target:ADISCORD_vorkerland_nation
+				is_controlled_by = event_target:ADISCORD_vorkerland_nation
+				event_target:ADISCORD_vorkerland_nation = { has_war = no }
 			}
 			AND = {
 				is_owned_by = WKR
@@ -222,7 +222,7 @@ VAL_regional_displacement_crisis = {
 			exists = yes
 			has_war = yes
 		}
-		WRK = {
+		event_target:ADISCORD_vorkerland_nation = {
 			exists = yes
 			has_war = yes
 		}
@@ -260,7 +260,7 @@ VAL_refugee_vorkerland_war = {
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	OR = {
-		WRK = {
+		event_target:ADISCORD_vorkerland_nation = {
 			exists = yes
 			has_war = yes
 		}

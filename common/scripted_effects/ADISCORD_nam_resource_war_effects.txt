@@ -1109,17 +1109,24 @@ NAM_exile_found_new_capital = {
 		limit = {
 			NOT = { has_country_flag = NAM_new_capital_founded }
 			OR = {
-				owns_state = 228
+				AND = {
+					owns_state = 228
+					controls_state = 228
+				}
 				capital_scope = {
 					NAM_rw_island_state = yes
 					is_owned_by = NAM
+					is_controlled_by = NAM
 				}
 			}
 		}
 		custom_effect_tooltip = NAM_exile_found_new_capital_tt
 		hidden_effect = { set_country_flag = NAM_new_capital_founded }
 		if = {
-			limit = { owns_state = 228 }
+			limit = {
+				owns_state = 228
+				controls_state = 228
+			}
 			hidden_effect = {
 				set_province_name = {
 					id = 6893
@@ -2517,7 +2524,7 @@ NAM_colony_monthly = {
 		limit = {
 			has_variable = NAM_hidden_reserve
 			NAM_colony_phase = yes
-			WRK = { exists = yes }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes }
 		}
 		add_to_variable = { var = NAM_hidden_reserve value = 45 }
 	}
@@ -2530,11 +2537,11 @@ NAM_wrk_echelon_deliver = {
 		limit = {
 			check_variable = { NAM_wrk_echelon_deposit > 0 }
 			NAM_colony_phase = yes
-			WRK = { exists = yes }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes }
 		}
 		clear_variable = NAM_wrk_echelon_deposit
 		add_to_variable = { var = NAM_wrk_echelons_delivered value = 1 }
-		WRK = { add_fuel = 90000 }
+		event_target:ADISCORD_vorkerland_nation = { add_fuel = 90000 }
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
 			amount = 6000
@@ -2940,6 +2947,19 @@ NAM_rw_start_tribute = {
 	NAM_oil_refresh = yes
 }
 
+# COUNTRY creditor. Paid cargo stays at the terminal until the tanks have room.
+NAM_rw_fill_tribute_tanks = {
+	if = {
+		limit = { check_variable = { NAM_rw_tribute_fuel_reserve > 0 } }
+		set_temp_variable = { var = NAM_rw_tribute_room value = max_fuel_k }
+		subtract_from_temp_variable = { var = NAM_rw_tribute_room value = fuel_k }
+		multiply_temp_variable = { var = NAM_rw_tribute_room value = 1000 }
+		clamp_temp_variable = { var = NAM_rw_tribute_room min = 0 max = NAM_rw_tribute_fuel_reserve }
+		add_fuel = NAM_rw_tribute_room
+		subtract_from_variable = { var = NAM_rw_tribute_fuel_reserve value = NAM_rw_tribute_room }
+	}
+}
+
 # COUNTRY NAM. Monthly deliveries come only from fuel actually in stock; a
 # recipient at war with Svetlogorye receives nothing.
 NAM_rw_deliveries_monthly = {
@@ -2948,24 +2968,24 @@ NAM_rw_deliveries_monthly = {
 		if = {
 			limit = {
 				NOT = { has_fuel < 15000 }
-				EFL = {
-					exists = yes
-					NOT = { has_war_with = NAM }
-				}
+				EFL = { NAM_rw_tribute_creditor = yes }
 			}
 			add_fuel = -15000
-			EFL = { add_fuel = 15000 }
+			EFL = {
+				add_to_variable = { var = NAM_rw_tribute_fuel_reserve value = 15000 }
+				NAM_rw_fill_tribute_tanks = yes
+			}
 		}
 		if = {
 			limit = {
 				NOT = { has_fuel < 15000 }
-				AZH = {
-					exists = yes
-					NOT = { has_war_with = NAM }
-				}
+				AZH = { NAM_rw_tribute_creditor = yes }
 			}
 			add_fuel = -15000
-			AZH = { add_fuel = 15000 }
+			AZH = {
+				add_to_variable = { var = NAM_rw_tribute_fuel_reserve value = 15000 }
+				NAM_rw_fill_tribute_tanks = yes
+			}
 		}
 	}
 }
@@ -3815,6 +3835,10 @@ NAM_oil_refresh = {
 	set_variable = { var = NAM_oil_overseas_committed value = 0 }
 	NAM_oil_count_clients = yes
 	set_variable = { var = NAM_oil_committed value = NAM_oil_contracts }
+	if = {
+		limit = { has_variable = NAM_loren_cargo_quote }
+		add_to_variable = { var = NAM_oil_committed value = 1 }
+	}
 	set_variable = { var = NAM_oil_tribute_counted value = 0 }
 	if = {
 		limit = { has_country_flag = NAM_rw_tribute }
@@ -3846,7 +3870,19 @@ NAM_field_update_units = {
 	NAM_guarded_field_refresh = yes
 	# Physical extraction follows the field even when NAM loses control. Apply only
 	# its delta so unrelated resource rewards in this state remain intact.
-	set_variable = { var = NAM_field_oil value = NAM_field_capacity }
+	set_temp_variable = { var = NAM_pumping_capacity value = NAM_field_capacity }
+	if = {
+		limit = { NAM_grid_operating_field = yes }
+		if = {
+			limit = { NAM = { NAM_grid_has_power = yes } }
+			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
+		}
+		if = {
+			limit = { has_state_flag = NAM_grid_mobile_generator }
+			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
+		}
+	}
+	set_variable = { var = NAM_field_oil value = NAM_pumping_capacity }
 	multiply_variable = { var = NAM_field_oil value = NAM_field_condition }
 	divide_variable = { var = NAM_field_oil value = 10 }
 	subtract_from_variable = { var = NAM_field_oil value = 0.499 }
@@ -3868,7 +3904,7 @@ NAM_field_update_units = {
 			is_controlled_by = NAM
 			NOT = { has_state_flag = NAM_wells_scorched }
 		}
-		set_variable = { var = NAM_field_units value = NAM_field_capacity }
+		set_variable = { var = NAM_field_units value = NAM_pumping_capacity }
 		multiply_variable = { var = NAM_field_units value = NAM_field_condition }
 		divide_variable = { var = NAM_field_units value = 100 }
 		# The quotient has at most two decimals, so this rounds down.
@@ -3878,6 +3914,13 @@ NAM_field_update_units = {
 			var = NAM_field_units
 			min = 0
 			max = 20
+		}
+		if = {
+			limit = {
+				has_state_flag = NAM_loren_lease
+				NAM_loren_working_field = yes
+			}
+			add_to_variable = { var = NAM_field_units value = 1 }
 		}
 		if = {
 			limit = { has_state_flag = NAM_refinery_built }
@@ -3894,6 +3937,40 @@ NAM_field_update_units = {
 	NAM = { add_to_variable = { var = NAM_oil_throughput value = PREV.NAM_field_units } }
 }
 
+# COUNTRY NAM. Commissioning a plant affects extraction only after a feeder is installed.
+NAM_grid_refresh_connections = {
+	if = {
+		limit = {
+			OR = {
+				67 = { has_state_flag = NAM_grid_feeder }
+				688 = { has_state_flag = NAM_grid_feeder }
+				689 = { has_state_flag = NAM_grid_feeder }
+				690 = { has_state_flag = NAM_grid_feeder }
+				719 = { has_state_flag = NAM_grid_feeder }
+			}
+		}
+		NAM_oil_refresh = yes
+	}
+}
+
+# STATE. The deployed set and its diesel have already entered service.
+NAM_grid_recall_generator = {
+	if = {
+		limit = { has_state_flag = NAM_grid_mobile_generator }
+		clr_state_flag = NAM_grid_mobile_generator
+		NAM = { NAM_oil_refresh = yes }
+	}
+}
+
+# COUNTRY NAM. The quote reserves one land route. No fuel or capital is moved until delivery.
+NAM_loren_close_cargo = {
+	if = {
+		limit = { has_variable = NAM_loren_cargo_quote }
+		clear_variable = NAM_loren_cargo_quote
+		NAM_oil_refresh = yes
+	}
+}
+
 # STATE field. Input: temp NAM_field_damage_amount set in this state scope.
 # Fires, raids and sabotage lower the condition; throughput follows at once.
 NAM_field_apply_damage = {
@@ -3904,9 +3981,16 @@ NAM_field_apply_damage = {
 			limit = {
 				is_owned_by = NAM
 				is_controlled_by = NAM
-				NAM = {
-					NAM_independent_programmes_operable = yes
-					has_decision = NAM_mil_field_security
+				OR = {
+					NAM = {
+						NAM_independent_programmes_operable = yes
+						has_decision = NAM_mil_field_security
+					}
+					AND = {
+						state = 67
+						has_state_flag = NAM_board_guard_post
+						NAM = { NAM_board_operable = yes }
+					}
 				}
 			}
 			multiply_temp_variable = { var = NAM_field_effective_damage value = 0.5 }
@@ -3916,9 +4000,23 @@ NAM_field_apply_damage = {
 				state = 689
 				is_owned_by = NAM
 				is_controlled_by = NAM
-				NAM = { has_country_flag = NAM_south_coast_canal_open }
+				has_dynamic_modifier = { modifier = NAM_south_coast_irrigation }
 			}
 			multiply_temp_variable = { var = NAM_field_effective_damage value = 0.5 }
+		}
+		if = {
+			limit = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+				has_state_flag = NAM_field_spare_pump
+				check_variable = { NAM_field_effective_damage > 0 }
+			}
+			clr_state_flag = NAM_field_spare_pump
+			subtract_from_temp_variable = { var = NAM_field_effective_damage value = 25 }
+			if = {
+				limit = { check_variable = { NAM_field_effective_damage < 0 } }
+				set_temp_variable = { var = NAM_field_effective_damage value = 0 }
+			}
 		}
 		subtract_from_variable = { var = NAM_field_condition value = NAM_field_effective_damage }
 		clamp_variable = {
@@ -4115,6 +4213,58 @@ NAM_oil_count_clients = {
 	KYZ = { NAM_oil_count_client = yes }
 }
 
+NAM_certify_shipping_manifest = {
+	clr_country_flag = NAM_certified_export
+	if = {
+		limit = {
+			has_completed_focus = NAM_municipal_bonds
+			has_completed_focus = NAM_prag_ending_directorate
+		}
+		set_country_flag = {
+			flag = NAM_certified_export
+			days = 180
+		}
+	}
+	else = {
+		set_country_flag = {
+			flag = NAM_certified_export
+			days = 90
+		}
+	}
+}
+
+# COUNTRY NAM. The exporter supplies the gross sale price in NAM_treasury_amount.
+# Warehouse receipts confer a buyback right. A customs stamp backs one bond issue.
+NAM_settle_harbour_sale = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					has_completed_focus = NAM_customs_clearinghouse
+					has_completed_focus = NAM_prag_ending_directorate
+				}
+			}
+		}
+		custom_effect_tooltip = NAM_bond_stamp_tt
+		hidden_effect = { NAM_certify_shipping_manifest = yes }
+		if = {
+			limit = { hidden_trigger = { check_variable = { NAM_bond_balance > 0 } } }
+			if = {
+				limit = { hidden_trigger = { check_variable = { NAM_bond_balance < 200 } } }
+				custom_effect_tooltip = NAM_bond_final_payment_tt
+			}
+			else = { custom_effect_tooltip = NAM_bond_payment_tt }
+			hidden_effect = {
+				set_temp_variable = { var = NAM_bond_payment value = NAM_bond_balance }
+				clamp_temp_variable = { var = NAM_bond_payment min = 0 max = 200 }
+				subtract_from_variable = { var = NAM_bond_balance value = NAM_bond_payment }
+				subtract_from_temp_variable = { var = NAM_treasury_amount value = NAM_bond_payment }
+			}
+		}
+	}
+	hidden_effect = { NAM_add_treasury = yes }
+}
+
 # COUNTRY client. Only a completed shipment earns the dispatch-office margin.
 # It uses the existing monthly client pass and never charges the buyer again.
 NAM_oil_settle_client = {
@@ -4170,6 +4320,10 @@ NAM_oil_settle_clients = {
 NAM_oil_monthly = {
 	NAM_oil_validate_clients = yes
 	NAM_oil_settle_clients = yes
+	if = {
+		limit = { check_variable = { NAM_bond_balance > 0 } }
+		NAM_pay_municipal_instalment = yes
+	}
 	# A tribute flag expires without an event; release its units once.
 	if = {
 		limit = {
@@ -4182,6 +4336,21 @@ NAM_oil_monthly = {
 	VAL = { NAM_steel_concession_validate = yes }
 	GLP = { NAM_steel_concession_validate = yes }
 	NAM_rus_coalition_check = yes
+}
+
+# Bondholders keep their claim on the treasury if the port or the export market closes.
+NAM_pay_municipal_instalment = {
+	if = {
+		limit = {
+			check_variable = { NAM_bond_balance > 0 }
+			check_variable = { ADISCORD_economy_treasury > 0 }
+		}
+		set_temp_variable = { var = NAM_treasury_amount value = ADISCORD_economy_treasury }
+		clamp_temp_variable = { var = NAM_treasury_amount min = 0 max = 60 }
+		clamp_temp_variable = { var = NAM_treasury_amount min = 0 max = NAM_bond_balance }
+		subtract_from_variable = { var = NAM_bond_balance value = NAM_treasury_amount }
+		NAM_spend_treasury = yes
+	}
 }
 
 # COUNTRY buyer. Svetlogorye no longer exists: contracts, offers and the
@@ -4270,11 +4439,18 @@ NAM_oil_lift_embargo = {
 # occupies one of NAM_project_slots (never more than two). Completion rechecks
 # ownership and control; a lost state returns the deposit.
 
-# STATE target. Payment side; the decision has debited the price and stored
-# NAM_project_deposit on this state.
+# STATE target. The decision has debited the price and stored the local deposit.
 NAM_project_begin = {
 	set_state_flag = NAM_project_in_progress
 	NAM = { add_to_variable = { var = NAM_projects_in_progress value = 1 } }
+}
+
+NAM_labour_shift_release = {
+	if = {
+		limit = { check_variable = { NAM_labour_shift_workers > 0 } }
+		add_manpower = NAM_labour_shift_workers
+		clear_variable = NAM_labour_shift_workers
+	}
 }
 
 # STATE target. Unfinished project: slot and deposit return.
@@ -4302,6 +4478,48 @@ NAM_project_close = {
 	clear_variable = NAM_project_pp_deposit
 	clear_variable = NAM_project_deposit
 	NAM = { subtract_from_variable = { var = NAM_projects_in_progress value = 1 } }
+}
+
+# STATE. The shipment follows its receipt even if another country controls the port.
+NAM_cabinet_return_tools = {
+	if = {
+		limit = { has_state_flag = NAM_cabinet_installing_tools }
+		clr_state_flag = NAM_cabinet_installing_tools
+		NAM_project_release = yes
+		NAM = { set_country_flag = NAM_cabinet_machine_tools_in_store }
+	}
+}
+
+NAM_cabinet_install_tools = {
+	if = {
+		limit = { has_state_flag = NAM_cabinet_installing_tools }
+		if = {
+			limit = {
+				has_state_flag = NAM_project_in_progress
+				NAM_cabinet_tool_site = yes
+			}
+			clr_state_flag = NAM_cabinet_installing_tools
+			NAM_project_close = yes
+			add_extra_state_shared_building_slots = 1
+			if = {
+				limit = { state = 700 }
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			else = {
+				add_building_construction = {
+					type = dockyard
+					level = 1
+					instant_build = yes
+				}
+			}
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else = { NAM_cabinet_return_tools = yes }
+	}
 }
 
 NAM_water_board_dispatch = {
@@ -4375,6 +4593,7 @@ NAM_project_complete_refinery = {
 	if = {
 		limit = {
 			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 300 compare = equals }
 			is_owned_by = NAM
 			is_controlled_by = NAM
 		}
@@ -4397,7 +4616,11 @@ NAM_project_complete_refinery = {
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
-	else = {
+	else_if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 300 compare = equals }
+		}
 		NAM_project_release = yes
 	}
 }
@@ -4407,6 +4630,7 @@ NAM_project_complete_pipeline = {
 	if = {
 		limit = {
 			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 350 compare = equals }
 			is_owned_by = NAM
 			is_controlled_by = NAM
 			700 = {
@@ -4418,7 +4642,11 @@ NAM_project_complete_pipeline = {
 		set_state_flag = NAM_pipeline_built
 		NAM = { NAM_oil_refresh = yes }
 	}
-	else = {
+	else_if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 350 compare = equals }
+		}
 		NAM_project_release = yes
 	}
 }
@@ -4428,6 +4656,7 @@ NAM_project_complete_terminal = {
 	if = {
 		limit = {
 			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 250 compare = equals }
 			is_owned_by = NAM
 			is_controlled_by = NAM
 		}
@@ -4435,7 +4664,11 @@ NAM_project_complete_terminal = {
 		set_state_flag = NAM_sea_terminal_built
 		NAM = { NAM_oil_refresh = yes }
 	}
-	else = {
+	else_if = {
+		limit = {
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_project_deposit value = 250 compare = equals }
+		}
 		NAM_project_release = yes
 	}
 }
@@ -4723,28 +4956,27 @@ NAM_rus_coalition_check = {
 	if = {
 		limit = {
 			NOT = { has_country_flag = NAM_rus_oil_offered }
-			NAM_country_operable = yes
-			NAM_rus_coalition_member = yes
+			NAM_rus_emergency_debate = yes
 		}
-		set_country_flag = NAM_rus_oil_offered
 		country_event = { id = ADISCORD_nam_oil.10 hours = 6 }
 	}
 }
 
-# COUNTRY coalition member, iterated from ADISCORD_nam_oil.10.
+# COUNTRY recipient. Check native tank room before debiting the supplier.
 NAM_rus_supply_member = {
 	if = {
-		limit = {
-			NOT = { tag = NAM }
-			exists = yes
-			NAM = { NOT = { has_fuel < 30000 } }
-		}
+		limit = { NAM_rus_fuel_shipment_ready = yes }
+		NAM = { add_fuel = -30000 }
 		add_fuel = 30000
+		set_country_flag = {
+			flag = NAM_rus_received_fuel
+			value = 1
+			days = 45
+		}
 		add_opinion_modifier = {
 			target = NAM
 			modifier = took_stand_for_us
 		}
-		NAM = { add_fuel = -30000 }
 	}
 }
 
@@ -4753,7 +4985,7 @@ NAM_rus_supply_member = {
 NAM_rus_offer_member_contract = {
 	if = {
 		limit = {
-			NOT = { tag = NAM }
+			NAM_rus_active_defender = yes
 			NAM_oil_buyer_eligible = yes
 		}
 		NAM_oil_offer_contract = yes
@@ -4764,8 +4996,7 @@ NAM_rus_offer_member_contract = {
 NAM_rus_refuse_member = {
 	if = {
 		limit = {
-			NOT = { tag = NAM }
-			exists = yes
+			NAM_rus_active_defender = yes
 		}
 		add_opinion_modifier = {
 			target = NAM
@@ -5201,6 +5432,10 @@ NAM_coup_install = {
 	NAM_ladder_shift = yes
 	add_to_variable = { var = NAM_underground value = 10 }
 	NAM_underground_clamp = yes
+	if = {
+		limit = { has_global_flag = ADISCORD_south_hegemon_NAM }
+		mark_focus_tree_layout_dirty = yes
+	}
 }
 
 # ----- Underground -----
@@ -5692,6 +5927,42 @@ NAM_apply_ending_oil_union = {
 	NAM_party_representatives_oil_union = yes
 }
 
+# COUNTRY NAM. The compact endings of the pragmatic mandate settle the order
+# without moving the ladder: Rom stays as a pragmatist and the party rosters
+# keep their names. The South-war settlement follows NAM_pragmatic_compact and
+# reads the completed ending focus.
+NAM_apply_ending_prag_republic = {
+	set_country_flag = NAM_ladder_settled
+	if = {
+		limit = { has_country_flag = NAM_coup_succeeded }
+		custom_effect_tooltip = NAM_ending_coup_leader_tt
+	}
+	else = {
+		custom_effect_tooltip = NAM_ending_prag_republic_leader_tt
+		hidden_effect = { NAM_rom_take_pragmatism = yes }
+	}
+	custom_effect_tooltip = NAM_ending_prag_republic_name_tt
+	hidden_effect = { set_cosmetic_tag = NAM_prag_republic }
+	add_ideas = NAM_spirit_prag_republic
+	custom_effect_tooltip = NAM_pragmatic_ending_tt
+}
+
+NAM_apply_ending_prag_directorate = {
+	set_country_flag = NAM_ladder_settled
+	if = {
+		limit = { has_country_flag = NAM_coup_succeeded }
+		custom_effect_tooltip = NAM_ending_coup_leader_tt
+	}
+	else = {
+		custom_effect_tooltip = NAM_ending_prag_directorate_leader_tt
+		hidden_effect = { NAM_rom_take_pragmatism = yes }
+	}
+	custom_effect_tooltip = NAM_ending_prag_directorate_name_tt
+	hidden_effect = { set_cosmetic_tag = NAM_prag_directorate }
+	add_ideas = NAM_spirit_prag_directorate
+	custom_effect_tooltip = NAM_pragmatic_ending_tt
+}
+
 # ----- Victory treaty: border award and punishment -----
 # STATE border sliver. Ownership, cores and control move from a defeated
 # principal under the native validity gate.
@@ -5775,6 +6046,33 @@ NAM_rw_clear_punishment = {
 # The later great war (NAM_great_war_*) reuses the participant array, the
 # coalition, the capitulation receipts and the settlements of this section.
 # Every terminal path runs NAM_war_of_return_close or NAM_great_war_close.
+
+# STATE field. The same army may hold several lost regions.
+NAM_return_record_contact = {
+	if = {
+		limit = { NAM_wor_field_held_by_rival = yes }
+		owner = {
+			if = {
+				limit = { NOT = { is_in_array = { array = NAM_return_contacts value = THIS } } }
+				add_to_temp_array = { array = NAM_return_contacts value = THIS }
+			}
+		}
+	}
+}
+
+NAM_return_survey_field_owners = {
+	clear_temp_array = NAM_return_contacts
+	67 = { NAM_return_record_contact = yes }
+	688 = { NAM_return_record_contact = yes }
+	689 = { NAM_return_record_contact = yes }
+	690 = { NAM_return_record_contact = yes }
+	719 = { NAM_return_record_contact = yes }
+	700 = { NAM_return_record_contact = yes }
+	for_each_scope_loop = {
+		array = NAM_return_contacts
+		NAM = { add_intel = { target = PREV army_intel = 20 } }
+	}
+}
 
 # STATE field. Registers its foreign owner once and claims the field.
 NAM_wor_register_owner = {
@@ -5940,6 +6238,16 @@ NAM_war_of_return_start = {
 		}
 		# The other owners join the same war on the primary owner's side.
 		NAM_wor_call_participants = yes
+		if = {
+			limit = {
+				check_variable = { NAM_wor_start_exile = 0 }
+				has_completed_focus = NAM_defeat_officer_cadres
+			}
+			for_each_scope_loop = {
+				array = global.NAM_wor_participants
+				NAM = { add_intel = { target = PREV army_intel = 20 } }
+			}
+		}
 		for_each_scope_loop = {
 			array = global.NAM_wor_participants
 			country_event = { id = ADISCORD_nam_resource_war.60 hours = 1 }
@@ -5988,6 +6296,7 @@ NAM_war_of_return_close = {
 	set_global_flag = NAM_war_of_return_resolved
 	NAM_wor_release_participants = yes
 	NAM = {
+		clr_country_flag = NAM_return_yard_warrant
 		ADISCORD_nam_resource_war_release_major = yes
 		mark_focus_tree_layout_dirty = yes
 	}
@@ -6198,6 +6507,7 @@ NAM_wor_take_state = {
 		if = {
 			limit = {
 				NAM = { has_country_flag = NAM_exile_radical }
+				NAM_rad_direct_rule = yes
 				NOT = { has_dynamic_modifier = { modifier = NAM_conquered_state_modifier } }
 			}
 			add_dynamic_modifier = { modifier = NAM_conquered_state_modifier }
@@ -6429,11 +6739,49 @@ NAM_sync_governor_roles = {
 	}
 }
 
-# COUNTRY defeated participant, humanist route. It becomes a
-# federal district of Svetlogorye: all resources, factories and recruits serve
-# the federation through autonomy_NAM_federal_district. Under the corporate
-# state a corporation receives the district at once.
+# COUNTRY NAM or a member district. Issuing a standard preserves any locally edited copy.
+NAM_hum_issue_federal_regiment = {
+	if = {
+		limit = { NOT = { has_template = "Federal Rifle Regiment" } }
+		division_template = {
+			name = "Federal Rifle Regiment"
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+			}
+		}
+	}
+}
+
+NAM_hum_issue_union_brigade = {
+	if = {
+		limit = { NOT = { has_template = "Union Combined Arms Brigade" } }
+		division_template = {
+			name = "Union Combined Arms Brigade"
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+				ADISCORD_line_artillery = { x = 2 y = 0 }
+			}
+			support = { engineer = { x = 0 y = 0 } }
+		}
+	}
+}
+
+# COUNTRY defeated participant. The autonomy level pools resources, factories
+# and recruits. A corporate government assigns the district to an operator.
 NAM_wor_federal_district_join = {
+	clr_country_flag = NAM_hum_federal_treaty_signed
 	if = {
 		limit = {
 			is_subject = no
@@ -6453,7 +6801,10 @@ NAM_wor_federal_district_join = {
 	}
 	set_country_flag = NAM_federal_district
 	NAM = {
-		add_to_array = { array = NAM_federal_districts value = PREV }
+		if = {
+			limit = { NOT = { is_in_array = { array = NAM_federal_districts value = PREV } } }
+			add_to_array = { array = NAM_federal_districts value = PREV }
+		}
 		set_country_flag = NAM_southern_lands_open
 	}
 	if = {
@@ -6462,6 +6813,43 @@ NAM_wor_federal_district_join = {
 	}
 	else = {
 		NAM_federal_district_set_name = yes
+		if = {
+			limit = { NAM = { has_completed_focus = NAM_hum_federal_army } }
+			NAM_hum_issue_federal_regiment = yes
+		}
+		if = {
+			limit = { NAM = { has_completed_focus = NAM_hum_union_army } }
+			NAM_hum_issue_union_brigade = yes
+		}
+	}
+}
+
+# COUNTRY recipient. The original mandate and the active southern balance are rechecked on signature.
+NAM_hum_sign_southern_mandate = {
+	if = {
+		limit = { NAM_hum_southern_letter_live = yes }
+		NAM = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		if = {
+			limit = { has_country_flag = { flag = NAM_hum_southern_letter value < 2 } }
+			NAM_wor_federal_district_join = yes
+			set_country_flag = NAM_hum_federal_treaty_signed
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+		}
+		else = {
+			capital_scope = {
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		clr_country_flag = NAM_hum_southern_letter
+		NAM = { country_event = { id = ADISCORD_nam_resource_war.114 hours = 1 } }
 	}
 }
 
@@ -6546,8 +6934,8 @@ NAM_wor_annex_svetlogorye = {
 # NAM_consolidation (0-100) is Svetlogorye's hold on the regions taken back in
 # the exile war. It starts at 10 with the victory and grows by 2 a month; the
 # junta adds terror and garrison orders and pays garrison upkeep of 3
-# treasury for every conquered state, the humanists add federal treaties and
-# reconstruction funds. Below 70 the regions may revolt or strike (event
+# treasury per held district with a posted division, the humanists add federal treaties and
+# reconstruction funds, the corporate board the same funds. Below 70 the regions may revolt or strike (event
 # .104). From 70 the great war against the rest of the south may begin
 # (NAM_great_war_can_start). NAM_consolidation_dynamic turns the hold into
 # stability and compliance.
@@ -6587,6 +6975,31 @@ NAM_consolidation_clamp = {
 	}
 }
 
+# Kadir's market can trade locally even if traffic to Basiran is interrupted.
+NAM_rad_collect_kadir_tolls = {
+	if = {
+		limit = {
+			has_completed_focus = NAM_rad_kadir_tolls
+			has_country_flag = NAM_exile_radical
+			NAM_country_operable = yes
+			is_subject = no
+			controls_province = 16723
+			241 = { NAM_rad_caravan_market = yes }
+		}
+		set_temp_variable = { var = NAM_treasury_amount value = 20 }
+		if = {
+			limit = {
+				controls_province = 16747
+				controls_province = 16752
+				controls_province = 16725
+				249 = { NAM_rad_caravan_market = yes }
+			}
+			add_to_temp_variable = { var = NAM_treasury_amount value = 30 }
+		}
+		NAM_add_treasury = yes
+	}
+}
+
 # COUNTRY NAM, on_monthly_NAM. Growth, garrison upkeep and the incident roll;
 # the incident reads only NAM's own arrays of conquered states and districts.
 NAM_consolidation_monthly = {
@@ -6596,8 +7009,40 @@ NAM_consolidation_monthly = {
 			NAM_country_operable = yes
 		}
 		set_temp_variable = { var = NAM_cons_delta value = 2 }
+		set_temp_variable = { var = NAM_posted_garrisons value = 0 }
 		if = {
-			limit = { has_country_flag = NAM_rad_garrison_order_active }
+			limit = {
+				has_country_flag = NAM_exile_radical
+				OR = {
+					check_variable = { NAM_consolidation < 100 }
+					has_country_flag = NAM_rad_garrison_order_active
+				}
+			}
+			for_each_scope_loop = {
+				array = NAM_conquered_states
+				if = {
+					limit = {
+						NAM_rad_direct_rule = yes
+						NAM_rad_command_post_staffed = yes
+					}
+					NAM = { add_to_temp_variable = { var = NAM_posted_garrisons value = 1 } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = NAM_rad_garrison_order_active
+				OR = {
+					check_variable = { NAM_posted_garrisons > 0 }
+					AND = {
+						has_completed_focus = NAM_rad_garrison_rule
+						capital_scope = {
+							NAM_rad_command_post_site = yes
+							NAM_rad_command_post_staffed = yes
+						}
+					}
+				}
+			}
 			add_to_temp_variable = { var = NAM_cons_delta value = 3 }
 			set_temp_variable = { var = NAM_treasury_amount value = 20 }
 			NAM_spend_treasury = yes
@@ -6615,7 +7060,7 @@ NAM_consolidation_monthly = {
 				has_country_flag = NAM_exile_radical
 				check_variable = { NAM_consolidation < 100 }
 			}
-			set_temp_variable = { var = NAM_treasury_amount value = NAM_conquered_states^num }
+			set_temp_variable = { var = NAM_treasury_amount value = NAM_posted_garrisons }
 			multiply_temp_variable = { var = NAM_treasury_amount value = 3 }
 			if = {
 				limit = { check_variable = { NAM_treasury_amount > 0 } }
@@ -6700,8 +7145,117 @@ NAM_consolidation_add = {
 	NAM_consolidation_clamp = yes
 }
 
+# STATE market. A convoy takes one unreserved lot per stop. The district is the producer.
+NAM_hum_collect_local_freight = {
+	if = {
+		limit = { NAM_hum_market_freight_available = yes }
+		subtract_from_variable = { var = NAM_hum_market_lots value = 1 }
+		owner = {
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = PREV
+				}
+			}
+		}
+	}
+}
+
+# STATE market. The receipt stays at the contracted factory if its country disappears.
+NAM_hum_union_order_refund = {
+	if = {
+		limit = { has_state_flag = NAM_hum_union_order_paid }
+		clr_state_flag = NAM_hum_union_order_paid
+		if = {
+			limit = { has_state_flag = NAM_hum_order_reserved_lot }
+			clr_state_flag = NAM_hum_order_reserved_lot
+			add_to_variable = { var = NAM_hum_market_lots value = 1 }
+		}
+		NAM = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+		}
+	}
+}
+
+NAM_hum_union_order_settle = {
+	if = {
+		limit = { has_state_flag = NAM_hum_union_order_paid }
+		if = {
+			limit = {
+				NAM = { NAM_hum_government_operable = yes }
+				NAM_hum_district_workshop = yes
+			}
+			clr_state_flag = NAM_hum_union_order_paid
+			if = {
+				limit = { has_state_flag = NAM_hum_order_reserved_lot }
+				clr_state_flag = NAM_hum_order_reserved_lot
+				owner = {
+					NAM = {
+						add_equipment_to_stockpile = {
+							type = artillery_equipment
+							amount = 15
+							producer = PREV
+						}
+					}
+				}
+			}
+			owner = {
+				set_temp_variable = { var = NAM_treasury_amount value = 180 }
+				NAM_add_treasury = yes
+				NAM = {
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = 120
+						producer = PREV
+					}
+				}
+			}
+		}
+		else = { NAM_hum_union_order_refund = yes }
+	}
+}
+
+# STATE South Harbour. An existing basin project keeps its paid terminal commission.
+NAM_board_complete_harbour_works = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				NOT = { has_state_flag = NAM_sea_terminal_built }
+				NOT = { has_state_flag = NAM_project_in_progress }
+			}
+		}
+		custom_effect_tooltip = NAM_board_harbour_terminal_tt
+		hidden_effect = {
+			set_state_flag = NAM_sea_terminal_built
+			NAM = { NAM_oil_refresh = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			free_building_slots = { building = dockyard size > 0 include_locked = no }
+		}
+		add_building_construction = {
+			type = dockyard
+			level = 1
+			instant_build = yes
+		}
+	}
+	else = {
+		NAM = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 6
+				producer = NAM
+			}
+		}
+	}
+}
+
 # COUNTRY NAM. An interrupted reconstruction fund returns its capital.
 NAM_hum_reconstruction_refund = {
+	700 = { clr_state_flag = NAM_board_harbour_contract }
 	if = {
 		limit = { check_variable = { var = NAM_hum_reconstruction_deposit value = 0 compare = greater_than } }
 		set_temp_variable = { var = NAM_corp_capital_change value = NAM_hum_reconstruction_deposit }
@@ -6720,6 +7274,60 @@ NAM_hum_reconstruction_refund = {
 # applies the course's settlement to the new conquests; NAM capitulation
 # annexes Svetlogorye. The war has no deadline. Every terminal path runs
 # NAM_great_war_close.
+
+# COUNTRY NAM. Only districts at peace before the declaration can enter the federal muster.
+NAM_hum_register_federal_army = {
+	clear_array = global.NAM_hum_federal_army
+	if = {
+		limit = {
+			NAM_hum_government_operable = yes
+			has_completed_focus = NAM_hum_union_call
+		}
+		for_each_scope_loop = {
+			array = NAM_federal_districts
+			if = {
+				limit = { NAM_hum_federal_muster_eligible = yes }
+				add_to_array = { array = global.NAM_hum_federal_army value = THIS }
+			}
+		}
+	}
+}
+
+# GLOBAL. Each district joins Svetlogorye against the existing southern coalition.
+NAM_hum_call_federal_army = {
+	for_each_scope_loop = {
+		array = global.NAM_hum_federal_army
+		if = {
+			limit = { NOT = { has_war_with = event_target:NAM_wor_primary } }
+			add_to_war = {
+				targeted_alliance = NAM
+				enemy = event_target:NAM_wor_primary
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+}
+
+NAM_hum_demobilise_federal_army = {
+	for_each_scope_loop = {
+		array = global.NAM_hum_federal_army
+		if = {
+			limit = { exists = yes }
+			save_event_target_as = NAM_hum_mustered_district
+			for_each_scope_loop = {
+				array = global.NAM_wor_participants
+				if = {
+					limit = {
+						exists = yes
+						has_war_with = event_target:NAM_hum_mustered_district
+					}
+					white_peace = event_target:NAM_hum_mustered_district
+				}
+			}
+		}
+	}
+	clear_array = global.NAM_hum_federal_army
+}
 
 # COUNTRY NAM. Called by the focuses NAM_rad_great_war, NAM_hum_great_war and
 # NAM_board_great_war and by the renewal decision NAM_renew_great_war after a
@@ -6748,11 +7356,13 @@ NAM_great_war_start = {
 			ADISCORD_nam_resource_war_reserve_major = yes
 		}
 		NAM_wor_form_coalition = yes
+		NAM_hum_register_federal_army = yes
 		declare_war_on = {
 			target = event_target:NAM_wor_primary
 			type = annex_everything
 		}
 		NAM_wor_call_participants = yes
+		NAM_hum_call_federal_army = yes
 		for_each_scope_loop = {
 			array = global.NAM_wor_participants
 			country_event = { id = ADISCORD_nam_resource_war.105 hours = 1 }
@@ -6766,6 +7376,7 @@ NAM_great_war_start = {
 # first.
 NAM_great_war_close = {
 	set_global_flag = NAM_great_war_resolved
+	NAM_hum_demobilise_federal_army = yes
 	NAM_wor_release_participants = yes
 	NAM = {
 		ADISCORD_nam_resource_war_release_major = yes
@@ -7160,7 +7771,7 @@ NAM_corp_zone_establish = {
 			limit = {
 				is_owned_by = NAM
 				is_controlled_by = NAM
-				NAM = { NAM_country_operable = yes }
+				NAM = { NAM_corp_zone_operable = yes }
 			}
 			set_state_flag = NAM_free_zone
 			if = {
@@ -7204,6 +7815,69 @@ NAM_corp_labour_return = {
 	}
 	clear_variable = NAM_corp_labour_escrow
 	clr_country_flag = NAM_corp_labour_leased
+}
+
+# STATE. The board develops the selected plot only if the national limit permits it.
+NAM_board_build_company_offices = {
+	if = {
+		limit = { NOT = { free_building_slots = { building = ADISCORD_business_center size > 0 include_locked = no } } }
+		add_extra_state_shared_building_slots = 1
+	}
+	add_building_construction = {
+		type = ADISCORD_business_center
+		level = 1
+		instant_build = yes
+	}
+}
+
+NAM_board_build_company_housing = {
+	if = {
+		limit = { NOT = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } } }
+		add_extra_state_shared_building_slots = 1
+	}
+	add_building_construction = {
+		type = industrial_complex
+		level = 1
+		instant_build = yes
+	}
+	add_dynamic_modifier = { modifier = NAM_board_company_quarters_state }
+}
+
+NAM_board_build_company_docks = {
+	if = {
+		limit = {
+			dockyard < 20
+			free_building_slots = { building = dockyard size > 0 include_locked = yes }
+		}
+		if = {
+			limit = { NOT = { free_building_slots = { building = dockyard size > 0 include_locked = no } } }
+			add_extra_state_shared_building_slots = 1
+		}
+		add_building_construction = {
+			type = dockyard
+			level = 1
+			instant_build = yes
+		}
+	}
+}
+
+NAM_board_expand_company_airport = {
+	if = {
+		limit = { air_base < 9 }
+		add_building_construction = {
+			type = air_base
+			level = 2
+			instant_build = yes
+		}
+	}
+	else_if = {
+		limit = { air_base < 10 }
+		add_building_construction = {
+			type = air_base
+			level = 1
+			instant_build = yes
+		}
+	}
 }
 
 # COUNTRY NAM. An interrupted capital-paid programme returns its deposit.
@@ -7264,7 +7938,14 @@ NAM_corp_monthly = {
 		else = {
 			set_variable = { var = NAM_corp_last_drift value = 0 }
 			NAM_corp_refresh = yes
-			NAM_corp_districts_monthly = yes
+			if = {
+				limit = {
+					NAM_board_operable = yes
+				}
+				NAM_corp_districts_monthly = yes
+				NAM_board_recount = yes
+			}
+			else = { set_variable = { var = NAM_corp_last_dividend value = 0 } }
 		}
 	}
 }
@@ -7304,6 +7985,7 @@ NAM_corp_takeover = {
 		add_dynamic_modifier = { modifier = NAM_corporate_board_state }
 	}
 	# Every existing federal district passes to a corporation.
+	NAM_board_initialize = yes
 	NAM_corp_init_owner_turn = yes
 	for_each_scope_loop = {
 		array = NAM_federal_districts
@@ -7329,13 +8011,429 @@ NAM_corp_takeover = {
 # ----- Corporate state: the districts of the corporations -----
 # After the takeover every federal district belongs to one of six
 # corporations; the district's variable NAM_corp_district_owner (1-6) names
-# it: 1 the Yuzhneft oil concern, 2 the Island Steel trust, 3 the Sea Line
-# shipping company, 4 the Coastal Arsenal arms company, 5 the Artel labour
-# agency, 6 the Island Credit bank. The owner gives its district a profile
+# it: 1 Loren, 2 Ferrant, 3 Navis, 4 Arktur, 5 Smenkom, 6 Reidbank.
+# The owner gives its district a profile
 # modifier and pays the board a monthly dividend; rival corporations dispute
 # districts (event .108); the board auctions districts, arbitrates disputes
 # and renews charters through decisions. The board leader rules the
 # metropole.
+
+NAM_board_subject_change = {
+	if = {
+		limit = {
+			OR = {
+				tag = NAM
+				has_variable = NAM_corp_district_owner
+			}
+		}
+		if = {
+			limit = { has_variable = NAM_corp_district_owner }
+			country_event = { id = ADISCORD_nam_resource_war.112 hours = 1 }
+		}
+		NAM = { NAM_board_queue_recount = yes }
+	}
+}
+
+# Diplomatic callbacks can fire before the native overlord has changed.
+# Only corporate flags belonging to this register may be removed on liberation.
+NAM_board_sync_district_status = {
+	if = {
+		limit = {
+			has_country_flag = NAM_corp_disputed
+			NAM_board_federal_subject = no
+		}
+		NAM_corp_dispute_clear = yes
+	}
+	if = {
+		limit = {
+			NAM_board_federal_subject = yes
+			NAM = { has_country_flag = NAM_corp_takeover }
+		}
+		NAM_corp_district_set_name = yes
+	}
+	else_if = {
+		limit = { NAM_board_has_charter_cosmetic = yes }
+		drop_cosmetic_tag = yes
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# Slot and diplomatic callbacks may precede the native change of office or overlord.
+NAM_board_queue_recount = {
+	if = {
+		limit = { has_country_flag = NAM_corp_takeover }
+		country_event = { id = ADISCORD_nam_resource_war.111 hours = 1 }
+	}
+}
+
+NAM_board_initialize = {
+	if = {
+		limit = { NOT = { has_variable = NAM_board_lot_rail } }
+		set_variable = { var = NAM_board_lot_rail value = 0 }
+		resize_array = {
+			array = NAM_board_objection_days
+			size = 7
+			value = 0
+		}
+		set_variable = { var = NAM_board_lot_yards value = 0 }
+		set_variable = { var = NAM_board_lot_depots value = 0 }
+	}
+	NAM_board_recount = yes
+}
+
+# One-based company IDs match district concessions. Public holdings accrue at index zero.
+# Seniority is the last digit of the ballot, so equal votes have a stable order.
+NAM_board_recount = {
+	clear_temp_array = NAM_board_industries
+	resize_temp_array = {
+		array = NAM_board_industries
+		size = 7
+		value = 0
+	}
+	clear_temp_array = NAM_board_holdings
+	resize_temp_array = {
+		array = NAM_board_holdings
+		size = 7
+		value = 0
+	}
+	add_to_temp_variable = { var = NAM_board_industries^1 value = 1 }
+	add_to_temp_variable = { var = NAM_board_industries^3 value = 1 }
+	add_to_temp_variable = { var = NAM_board_industries^5 value = 1 }
+	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_rail value = 1 }
+	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_yards value = 1 }
+	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_depots value = 1 }
+	for_each_scope_loop = {
+		array = NAM_federal_districts
+		if = {
+			limit = { NAM_board_current_concession = yes }
+			add_to_temp_variable = { var = NAM_board_holdings^NAM_corp_district_owner value = 1 }
+		}
+	}
+	clear_temp_array = NAM_board_ballots
+	clear_temp_array = NAM_board_order
+	clear_temp_array = NAM_board_seats
+	clear_temp_array = NAM_board_nominees
+	add_to_temp_array = { array = NAM_board_nominees value = 0 }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_1 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_2 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_3 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_4 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_5 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	set_temp_variable = { var = NAM_board_has_minister value = 0 }
+	if = {
+		limit = { NAM_board_minister_6 = yes }
+		set_temp_variable = { var = NAM_board_has_minister value = 1 }
+	}
+	add_to_temp_array = { array = NAM_board_nominees value = NAM_board_has_minister }
+	add_to_temp_array = { array = NAM_board_seats value = 0 }
+	for_loop_effect = {
+		start = 1
+		end = 7
+		value = NAM_board_company
+		set_temp_variable = { var = NAM_board_votes value = NAM_board_industries^NAM_board_company }
+		multiply_temp_variable = { var = NAM_board_votes value = 3 }
+		set_temp_variable = { var = NAM_board_territorial_votes value = NAM_board_holdings^NAM_board_company }
+		multiply_temp_variable = { var = NAM_board_territorial_votes value = 2 }
+		add_to_temp_variable = { var = NAM_board_votes value = NAM_board_territorial_votes }
+		add_to_temp_variable = { var = NAM_board_votes value = NAM_board_nominees^NAM_board_company }
+		add_to_temp_array = { array = NAM_board_seats value = NAM_board_votes }
+		multiply_temp_variable = { var = NAM_board_votes value = 10 }
+		add_to_temp_variable = { var = NAM_board_votes value = 7 }
+		subtract_from_temp_variable = { var = NAM_board_votes value = NAM_board_company }
+		add_to_temp_array = { array = NAM_board_ballots value = NAM_board_votes }
+	}
+	for_loop_effect = {
+		end = 6
+		value = NAM_board_round
+		find_highest_in_array = {
+			array = NAM_board_ballots
+			index = NAM_board_index
+			value = NAM_board_winning_score
+		}
+		set_temp_variable = { var = NAM_board_ballots^NAM_board_index value = -1 }
+		add_to_temp_variable = { var = NAM_board_index value = 1 }
+		add_to_temp_array = { array = NAM_board_order value = NAM_board_index }
+	}
+	set_variable = { var = NAM_board_rank_1 value = NAM_board_order^0 }
+	set_variable = { var = NAM_board_sectors_1 value = NAM_board_industries^1 }
+	set_variable = { var = NAM_board_districts_1 value = NAM_board_holdings^1 }
+	set_variable = { var = NAM_board_votes_1 value = NAM_board_seats^1 }
+	set_variable = { var = NAM_board_rank_2 value = NAM_board_order^1 }
+	set_variable = { var = NAM_board_sectors_2 value = NAM_board_industries^2 }
+	set_variable = { var = NAM_board_districts_2 value = NAM_board_holdings^2 }
+	set_variable = { var = NAM_board_votes_2 value = NAM_board_seats^2 }
+	set_variable = { var = NAM_board_rank_3 value = NAM_board_order^2 }
+	set_variable = { var = NAM_board_sectors_3 value = NAM_board_industries^3 }
+	set_variable = { var = NAM_board_districts_3 value = NAM_board_holdings^3 }
+	set_variable = { var = NAM_board_votes_3 value = NAM_board_seats^3 }
+	set_variable = { var = NAM_board_rank_4 value = NAM_board_order^3 }
+	set_variable = { var = NAM_board_sectors_4 value = NAM_board_industries^4 }
+	set_variable = { var = NAM_board_districts_4 value = NAM_board_holdings^4 }
+	set_variable = { var = NAM_board_votes_4 value = NAM_board_seats^4 }
+	set_variable = { var = NAM_board_rank_5 value = NAM_board_order^4 }
+	set_variable = { var = NAM_board_sectors_5 value = NAM_board_industries^5 }
+	set_variable = { var = NAM_board_districts_5 value = NAM_board_holdings^5 }
+	set_variable = { var = NAM_board_votes_5 value = NAM_board_seats^5 }
+	set_variable = { var = NAM_board_rank_6 value = NAM_board_order^5 }
+	set_variable = { var = NAM_board_sectors_6 value = NAM_board_industries^6 }
+	set_variable = { var = NAM_board_districts_6 value = NAM_board_holdings^6 }
+	set_variable = { var = NAM_board_votes_6 value = NAM_board_seats^6 }
+	NAM_board_update_industrial_policy = yes
+	NAM_board_sync_eflor_quota = yes
+}
+
+# Only this charter's contribution is withdrawn when the field, title or district changes hands.
+NAM_board_sync_eflor_quota = {
+	if = {
+		limit = {
+			has_completed_focus = NAM_board_eflor_oil
+			NAM_board_operable = yes
+			NAM_board_eflor_terminal = yes
+			EFL = {
+				NAM_board_title_available = yes
+				check_variable = { NAM_corp_district_owner = 1 }
+			}
+		}
+		if = {
+			limit = { NOT = { has_country_flag = NAM_board_eflor_exporting } }
+			set_country_flag = NAM_board_eflor_exporting
+			add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+			NAM_oil_refresh = yes
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_board_eflor_exporting }
+		clr_country_flag = NAM_board_eflor_exporting
+		subtract_from_variable = { var = NAM_oil_bonus_units value = 1 }
+		NAM_oil_refresh = yes
+	}
+}
+
+# An objection keeps its original deadline through recounts. The cabinet and the
+# district register settle it before another 30-day callback can take effect.
+NAM_board_update_industrial_policy = {
+	clear_temp_array = NAM_board_weights
+	add_to_temp_array = { array = NAM_board_weights value = 0 }
+	set_temp_variable = { var = NAM_board_new_objection value = 0 }
+	set_temp_variable = { var = NAM_board_active value = 0 }
+	if = {
+		limit = { NAM_board_operable = yes }
+		set_temp_variable = { var = NAM_board_active value = 1 }
+	}
+	for_loop_effect = {
+		start = 1
+		end = 7
+		value = NAM_board_company
+		set_temp_variable = { var = NAM_board_weight value = NAM_board_industries^NAM_board_company }
+		if = {
+			limit = {
+				check_variable = { NAM_board_weight = 0 }
+				check_variable = { var = NAM_board_holdings^NAM_board_company value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = NAM_board_weight value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { NAM_board_weight > 0 }
+				check_variable = { var = NAM_board_company value = NAM_board_rank_1 compare = equals }
+			}
+			add_to_temp_variable = { var = NAM_board_weight value = 1 }
+		}
+		if = {
+			limit = {
+				OR = {
+					check_variable = { NAM_board_weight = 0 }
+					check_variable = { var = NAM_board_nominees^NAM_board_company value = 1 compare = equals }
+				}
+			}
+			set_variable = { var = NAM_board_objection_days^NAM_board_company value = 0 }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_active = 1 } }
+			set_temp_variable = { var = NAM_board_deadline value = NAM_board_objection_days^NAM_board_company }
+			if = {
+				limit = { check_variable = { NAM_board_deadline = 0 } }
+				set_temp_variable = { var = NAM_board_deadline value = global.num_days }
+				add_to_temp_variable = { var = NAM_board_deadline value = 30 }
+				set_variable = { var = NAM_board_objection_days^NAM_board_company value = NAM_board_deadline }
+				set_temp_variable = { var = NAM_board_new_objection value = 1 }
+			}
+			if = {
+				limit = { check_variable = { var = global.num_days value = NAM_board_deadline compare = greater_than_or_equals } }
+				multiply_temp_variable = { var = NAM_board_weight value = -0.5 }
+			}
+			else = { set_temp_variable = { var = NAM_board_weight value = 0 } }
+		}
+		multiply_temp_variable = { var = NAM_board_weight value = NAM_board_active }
+		add_to_temp_array = { array = NAM_board_weights value = NAM_board_weight }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_new_objection > 0 } }
+		country_event = { id = ADISCORD_nam_resource_war.111 days = 30 }
+	}
+	set_variable = { var = NAM_board_mod_output value = 0 }
+	set_variable = { var = NAM_board_mod_construction value = 0 }
+	set_variable = { var = NAM_board_mod_growth value = 0 }
+	set_variable = { var = NAM_board_mod_naval value = 0 }
+	set_variable = { var = NAM_board_mod_dockyards value = 0 }
+	set_variable = { var = NAM_board_mod_ceiling value = 0 }
+	set_variable = { var = NAM_board_mod_goods value = 0 }
+	set_variable = { var = NAM_board_rate_a_1 value = NAM_board_weights^1 }
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_1 }
+	set_variable = { var = NAM_board_rate_b_1 value = NAM_board_weights^1 }
+	multiply_variable = { var = NAM_board_rate_b_1 value = 2 }
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_b_1 }
+	set_variable = { var = NAM_board_rate_a_2 value = NAM_board_weights^2 }
+	multiply_variable = { var = NAM_board_rate_a_2 value = 2 }
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_2 }
+	set_variable = { var = NAM_board_rate_b_2 value = NAM_board_weights^2 }
+	multiply_variable = { var = NAM_board_rate_b_2 value = 3 }
+	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_2 }
+	set_variable = { var = NAM_board_rate_a_3 value = NAM_board_weights^3 }
+	multiply_variable = { var = NAM_board_rate_a_3 value = 3 }
+	add_to_variable = { var = NAM_board_mod_naval value = NAM_board_rate_a_3 }
+	set_variable = { var = NAM_board_rate_b_3 value = NAM_board_weights^3 }
+	multiply_variable = { var = NAM_board_rate_b_3 value = 3 }
+	add_to_variable = { var = NAM_board_mod_dockyards value = NAM_board_rate_b_3 }
+	set_variable = { var = NAM_board_rate_a_4 value = NAM_board_weights^4 }
+	multiply_variable = { var = NAM_board_rate_a_4 value = 3 }
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_4 }
+	set_variable = { var = NAM_board_rate_b_4 value = NAM_board_weights^4 }
+	add_to_variable = { var = NAM_board_mod_ceiling value = NAM_board_rate_b_4 }
+	set_variable = { var = NAM_board_rate_a_5 value = NAM_board_weights^5 }
+	multiply_variable = { var = NAM_board_rate_a_5 value = 2 }
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_5 }
+	set_variable = { var = NAM_board_rate_b_5 value = NAM_board_weights^5 }
+	multiply_variable = { var = NAM_board_rate_b_5 value = 2 }
+	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_5 }
+	set_variable = { var = NAM_board_rate_a_6 value = NAM_board_weights^6 }
+	multiply_variable = { var = NAM_board_rate_a_6 value = 3 }
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_6 }
+	set_variable = { var = NAM_board_rate_b_6 value = NAM_board_weights^6 }
+	multiply_variable = { var = NAM_board_rate_b_6 value = -1 }
+	add_to_variable = { var = NAM_board_mod_goods value = NAM_board_rate_b_6 }
+	if = {
+		limit = { check_variable = { NAM_board_active = 1 } }
+		if = {
+			limit = { check_variable = { NAM_board_lot_rail = 0 } }
+			add_to_variable = { var = NAM_board_mod_output value = 2 }
+		}
+		if = {
+			limit = { check_variable = { NAM_board_lot_yards = 0 } }
+			add_to_variable = { var = NAM_board_mod_naval value = 3 }
+		}
+		if = {
+			limit = { check_variable = { NAM_board_lot_depots = 0 } }
+			add_to_variable = { var = NAM_board_mod_construction value = 2 }
+		}
+	}
+	multiply_variable = { var = NAM_board_mod_output value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_construction value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_growth value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_naval value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_dockyards value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_ceiling value = 0.01 }
+	multiply_variable = { var = NAM_board_mod_goods value = 0.01 }
+	if = {
+		limit = {
+			check_variable = { NAM_board_active = 1 }
+			NOT = { has_dynamic_modifier = { modifier = NAM_board_industrial_policy } }
+		}
+		add_dynamic_modifier = { modifier = NAM_board_industrial_policy }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_active = 0 }
+			has_dynamic_modifier = { modifier = NAM_board_industrial_policy }
+		}
+		remove_dynamic_modifier = { modifier = NAM_board_industrial_policy }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY district. An undisputed operator delivers its own product under the federal charter.
+NAM_board_ship_district_order = {
+	if = {
+		limit = {
+			NAM_board_trading_concession = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 1 compare = equals } }
+			NAM = {
+				add_to_variable = { var = NAM_open_fuel_reserve value = 12000 }
+				NAM_open_fuel_release = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 2 compare = equals } }
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = motorized_equipment_1
+					amount = 100
+					producer = NAM
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 3 compare = equals } }
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = convoy_1
+					amount = 4
+					producer = NAM
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 4 compare = equals } }
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = artillery_equipment_1
+					amount = 30
+					producer = NAM
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 5 compare = equals } }
+			NAM = { add_manpower = 250 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_corp_district_owner value = 6 compare = equals } }
+			NAM = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 15 }
+				NAM_corp_capital_add = yes
+			}
+		}
+	}
+}
 
 # COUNTRY NAM. The owner of the next district handed out.
 NAM_corp_init_owner_turn = {
@@ -7375,6 +8473,10 @@ NAM_corp_district_rotate = {
 
 # COUNTRY federal district. The owner's profile modifier and name.
 NAM_corp_district_apply = {
+	if = {
+		limit = { has_country_flag = NAM_corp_disputed }
+		NAM_corp_dispute_clear = yes
+	}
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_corp_owner_1_district } }
 		remove_dynamic_modifier = { modifier = NAM_corp_owner_1_district }
@@ -7423,6 +8525,7 @@ NAM_corp_district_apply = {
 		add_dynamic_modifier = { modifier = NAM_corp_owner_6_district }
 	}
 	NAM_corp_district_set_name = yes
+	NAM = { NAM_board_recount = yes }
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -7641,39 +8744,50 @@ NAM_corp_district_set_name = {
 	}
 }
 
-# COUNTRY federal district inside the monthly dividend loop: adds its owner's
-# dividend to the temp NAM_corp_dividend and delivers fuel or rifles. A
-# disputed district pays nothing until the dispute is settled.
+# COUNTRY federal district. The caller settles the combined capital dividend;
+# a contested concession can remit funds only under guard at its own capital.
 NAM_corp_district_dividend = {
 	if = {
 		limit = {
 			has_variable = NAM_corp_district_owner
-			NOT = { has_country_flag = NAM_corp_disputed }
+			OR = {
+				NOT = { has_country_flag = NAM_corp_disputed }
+				capital_scope = {
+					has_state_flag = NAM_board_guard_post
+					NAM_hum_union_market = yes
+				}
+			}
 		}
+		# Coupons 1-3 divert this district's earnings. Coupon 4 closes its issue.
 		if = {
+			limit = {
+				has_variable = NAM_board_stock_coupon
+				check_variable = { NAM_board_stock_coupon < 4 }
+			}
+			add_to_variable = { var = NAM_board_stock_coupon value = 1 }
+		}
+		else_if = {
 			limit = { check_variable = { NAM_corp_district_owner = 1 } }
-			add_to_temp_variable = { var = NAM_corp_dividend value = 8 }
-			NAM = { add_fuel = 500 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 8 } }
 		}
 		else_if = {
 			limit = { check_variable = { NAM_corp_district_owner = 2 } }
-			add_to_temp_variable = { var = NAM_corp_dividend value = 10 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 10 } }
 		}
 		else_if = {
 			limit = { check_variable = { NAM_corp_district_owner = 3 } }
-			add_to_temp_variable = { var = NAM_corp_dividend value = 10 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 10 } }
 		}
 		else_if = {
 			limit = { check_variable = { NAM_corp_district_owner = 4 } }
-			add_to_temp_variable = { var = NAM_corp_dividend value = 6 }
-			NAM = { add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = NAM } }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 6 } }
 		}
 		else_if = {
 			limit = { check_variable = { NAM_corp_district_owner = 5 } }
-			add_to_temp_variable = { var = NAM_corp_dividend value = 12 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 12 } }
 		}
 		else = {
-			add_to_temp_variable = { var = NAM_corp_dividend value = 15 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_dividend value = 15 } }
 		}
 	}
 }
@@ -7681,21 +8795,32 @@ NAM_corp_district_dividend = {
 # COUNTRY NAM, inside NAM_corp_monthly after the takeover. Dividends of the
 # districts and the rivalry roll over NAM's own array of districts.
 NAM_corp_districts_monthly = {
+	if = {
+		limit = {
+			has_country_flag = NAM_corp_dispute_open
+			NOT = { event_target:NAM_corp_dispute_district = { NAM_corp_live_disputed_district = yes } }
+		}
+		if = {
+			limit = { has_event_target = NAM_corp_dispute_district }
+			event_target:NAM_corp_dispute_district = { NAM_corp_dispute_clear = yes }
+		}
+		clr_country_flag = NAM_corp_dispute_open
+		clear_global_event_target = NAM_corp_dispute_district
+	}
 	set_temp_variable = { var = NAM_corp_dividend value = 0 }
 	set_temp_variable = { var = NAM_corp_district_count value = 0 }
 	for_each_scope_loop = {
 		array = NAM_federal_districts
 		if = {
 			limit = {
-				exists = yes
-				is_subject_of = NAM
+				NAM_board_operating_district = yes
 			}
 			if = {
 				limit = { NOT = { has_variable = NAM_corp_district_owner } }
 				NAM_corp_assign_district = yes
 			}
 			NAM_corp_district_dividend = yes
-			add_to_temp_variable = { var = NAM_corp_district_count value = 1 }
+			NAM = { add_to_temp_variable = { var = NAM_corp_district_count value = 1 } }
 		}
 	}
 	set_variable = { var = NAM_corp_last_dividend value = NAM_corp_dividend }
@@ -7704,6 +8829,7 @@ NAM_corp_districts_monthly = {
 	if = {
 		limit = {
 			check_variable = { NAM_corp_district_count > 1 }
+			has_completed_focus = NAM_board_constitution
 			NOT = { has_country_flag = NAM_corp_dispute_open }
 			NOT = { has_country_flag = NAM_corp_dispute_cooldown }
 		}
@@ -7716,19 +8842,12 @@ NAM_corp_districts_monthly = {
 
 # COUNTRY NAM. A rival corporation, the next one in turn, claims a district.
 NAM_corp_open_dispute = {
-	set_country_flag = NAM_corp_dispute_open
-	set_country_flag = {
-		flag = NAM_corp_dispute_cooldown
-		value = 1
-		days = 120
-	}
 	clear_global_event_target = NAM_corp_dispute_district
 	random_scope_in_array = {
 		array = NAM_federal_districts
 		limit = {
-			exists = yes
-			is_subject_of = NAM
-			has_variable = NAM_corp_district_owner
+			NAM_board_trading_concession = yes
+			NOT = { has_country_flag = NAM_corp_court_protection }
 		}
 		set_country_flag = NAM_corp_disputed
 		set_variable = { var = NAM_corp_dispute_claimant value = NAM_corp_district_owner }
@@ -7738,8 +8857,19 @@ NAM_corp_open_dispute = {
 			set_variable = { var = NAM_corp_dispute_claimant value = 1 }
 		}
 		save_global_event_target_as = NAM_corp_dispute_district
+		save_event_target_as = NAM_corp_case_district
 	}
-	country_event = { id = ADISCORD_nam_resource_war.108 hours = 6 }
+	if = {
+		limit = { has_event_target = NAM_corp_dispute_district }
+		NAM_board_recount = yes
+		set_country_flag = NAM_corp_dispute_open
+		set_country_flag = {
+			flag = NAM_corp_dispute_cooldown
+			value = 1
+			days = 120
+		}
+		country_event = { id = ADISCORD_nam_resource_war.108 hours = 6 }
+	}
 }
 
 # COUNTRY disputed district. The claimant takes the concession.
@@ -7753,40 +8883,70 @@ NAM_corp_dispute_award_claimant = {
 NAM_corp_dispute_clear = {
 	clr_country_flag = NAM_corp_disputed
 	clear_variable = NAM_corp_dispute_claimant
-	NAM = { clr_country_flag = NAM_corp_dispute_open }
+	NAM = {
+		clr_country_flag = NAM_corp_dispute_open
+		clear_global_event_target = NAM_corp_dispute_district
+		NAM_board_recount = yes
+	}
 }
 
-# COUNTRY NAM, NAM_corp_board_arbitration. The arbiters settle the open
-# dispute either way with equal odds.
+# Company courts enforce the cabinet's concession policy in the disputed district.
 NAM_corp_arbitrate_dispute = {
-	for_each_scope_loop = {
-		array = NAM_federal_districts
+	event_target:NAM_corp_dispute_district = {
 		if = {
-			limit = {
-				exists = yes
-				has_country_flag = NAM_corp_disputed
+			limit = { NAM = { has_completed_focus = NAM_board_corporate_courts } }
+			set_country_flag = {
+				flag = NAM_corp_court_protection
+				days = 180
 			}
+			if = {
+				limit = { NAM = { has_completed_focus = NAM_board_purge_ministers } }
+				NAM_corp_dispute_award_claimant = yes
+			}
+			else = { NAM_corp_dispute_clear = yes }
+		}
+		else = {
 			random_list = {
 				50 = { NAM_corp_dispute_award_claimant = yes }
 				50 = { NAM_corp_dispute_clear = yes }
 			}
 		}
 	}
-	clr_country_flag = NAM_corp_dispute_open
 }
 
 # ----- Radical exploitation of the conquered south -----
+# STATE. The council's guarantees survive the district changing hands again.
+NAM_rad_devolve_district = {
+	set_state_flag = NAM_rad_local_council
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_rad_command_post } }
+		remove_dynamic_modifier = { modifier = NAM_rad_command_post }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_conquered_state_modifier } }
+		remove_dynamic_modifier = { modifier = NAM_conquered_state_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
+		remove_dynamic_modifier = { modifier = NAM_labour_camp_state }
+	}
+	NAM = { ADISCORD_economy_mark_dirty = yes }
+}
+
 # STATE conquered, the end of NAM_radical_labour_camp: forced labour extracts
 # the state's resources for Svetlogorye and nothing is built there.
 NAM_radical_open_labour_camp = {
-	clr_state_flag = NAM_labour_camp_building
 	if = {
 		limit = {
+			has_state_flag = NAM_labour_camp_building
 			is_owned_by = NAM
+			is_controlled_by = NAM
+			NAM_rad_direct_rule = yes
 			NOT = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
 		}
 		add_dynamic_modifier = { modifier = NAM_labour_camp_state }
 	}
+	clr_state_flag = NAM_labour_camp_building
 }
 
 # STATE conquered, NAM_radical_strip_state. One civilian and one military
@@ -8460,6 +9620,35 @@ NAM_marine_orders_refund = {
 	NAM_marine_unlock_template = yes
 }
 
+# COUNTRY coalition leader. The quartermasters can divert only equipment still in reserve.
+NAM_hum_divert_return_supplies = {
+	set_temp_variable = { var = NAM_hum_diverted_rifles value = num_equipment@infantry_equipment }
+	multiply_temp_variable = { var = NAM_hum_diverted_rifles value = 0.25 }
+	clamp_temp_variable = { var = NAM_hum_diverted_rifles min = 0 max = 1000 }
+	round_temp_variable = NAM_hum_diverted_rifles
+	if = {
+		limit = { check_variable = { NAM_hum_diverted_rifles > 0 } }
+		send_equipment = {
+			equipment = infantry_equipment
+			amount = NAM_hum_diverted_rifles
+			target = NAM
+		}
+	}
+	set_temp_variable = { var = NAM_hum_diverted_trucks value = num_equipment@motorized_equipment }
+	multiply_temp_variable = { var = NAM_hum_diverted_trucks value = 0.25 }
+	clamp_temp_variable = { var = NAM_hum_diverted_trucks min = 0 max = 100 }
+	round_temp_variable = NAM_hum_diverted_trucks
+	if = {
+		limit = { check_variable = { NAM_hum_diverted_trucks > 0 } }
+		send_equipment = {
+			equipment = motorized_equipment
+			amount = NAM_hum_diverted_trucks
+			target = NAM
+		}
+	}
+	log = "[ADISCORD][NAM][RETURN] [This.GetTag] depot crews diverted [?NAM_hum_diverted_rifles] rifles and [?NAM_hum_diverted_trucks] trucks to Svetlogorye."
+}
+
 # COUNTRY NAM, NAM_war_of_return_start after the declaration, from the island
 # exile only. create_unit refuses a province held by the enemy, so the landing
 # first takes a beachhead: hostile armies in the South Harbour (province 16716
@@ -8480,6 +9669,14 @@ NAM_wor_revenge_landing = {
 		}
 		NAM_marine_ensure_template = yes
 		set_variable = { var = NAM_marines_orders_delivered value = NAM_marine_orders_paid }
+		if = {
+			limit = {
+				NAM_hum_government_operable = yes
+				has_completed_focus = NAM_hum_split_coalition
+				has_event_target = NAM_wor_primary
+			}
+			event_target:NAM_wor_primary = { NAM_hum_divert_return_supplies = yes }
+		}
 		set_variable = { var = NAM_marines_landed value = 2 }
 		if = {
 			limit = { NAM_landing_third_division = yes }
@@ -8588,6 +9785,17 @@ NAM_veteran_housing_settle = {
 			has_country_flag = NAM_veteran_housing_paid
 			NAM_veteran_housing_ready = yes
 		}
+		if = {
+			limit = { has_country_flag = { flag = NAM_veteran_housing_paid value > 1 } }
+			688 = {
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		set_country_flag = NAM_veteran_housing_blueprint
 		clr_country_flag = NAM_veteran_housing_paid
 		clr_country_flag = NAM_pw_civil_busy
 		700 = {
@@ -8652,6 +9860,97 @@ NAM_district_audit_refund = {
 	}
 }
 
+# STATE. The receipt records which office reserved the slot when the order was signed.
+NAM_pw_district_allotment_close = {
+	if = {
+		limit = { check_variable = { NAM_pw_allotment_authority = 1 } }
+		NAM = { clr_country_flag = NAM_pw_civil_busy }
+	}
+	clear_variable = NAM_pw_allotment_authority
+}
+
+NAM_pw_district_allotment_refund = {
+	if = {
+		limit = { hidden_trigger = { has_variable = NAM_pw_allotment_authority } }
+		hidden_effect = { NAM_pw_district_allotment_close = yes }
+		NAM = { add_political_power = 25 }
+	}
+}
+
+NAM_pw_district_allotment_settle = {
+	if = {
+		limit = { hidden_trigger = { has_variable = NAM_pw_allotment_authority } }
+		if = {
+			limit = {
+				hidden_trigger = {
+					NAM_pw_district_allotment_site = yes
+					NAM = { NAM_district_audit_ready = yes }
+				}
+			}
+			hidden_effect = { NAM_pw_district_allotment_close = yes }
+			if = {
+				limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_civil_service_exam } } }
+				if = {
+					limit = {
+						hidden_trigger = {
+							NOT = { has_state_flag = NAM_pw_allotment_site_opened }
+							OR = {
+								infrastructure > 4
+								NAM = { has_completed_focus = NAM_district_inspectorate }
+							}
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					hidden_effect = { set_state_flag = NAM_pw_allotment_site_opened }
+				}
+				if = {
+					limit = { hidden_trigger = { infrastructure < 5 } }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { hidden_trigger = { infrastructure > 3 } }
+					NAM = {
+						add_equipment_to_stockpile = {
+							type = motorized_equipment
+							amount = 120
+							producer = NAM
+						}
+					}
+				}
+				else = {
+					NAM = {
+						add_equipment_to_stockpile = {
+							type = motorized_equipment
+							amount = 80
+							producer = NAM
+						}
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_district_inspectorate } } }
+					add_dynamic_modifier = {
+						modifier = NAM_pw_district_fleet_called
+						days = 90
+					}
+				}
+				else = {
+					add_dynamic_modifier = {
+						modifier = NAM_pw_district_fleet_called
+						days = 180
+					}
+				}
+			}
+		}
+		else = { NAM_pw_district_allotment_refund = yes }
+	}
+}
+
 NAM_district_audit_settle = {
 	if = {
 		limit = {
@@ -8689,6 +9988,10 @@ NAM_pw_veteran_course_settle = {
 		clr_country_flag = NAM_pw_military_busy
 		army_experience = 25
 		add_command_power = 15
+		if = {
+			limit = { has_completed_focus = NAM_pw_army_review }
+			add_manpower = 2000
+		}
 	}
 	else = { NAM_pw_veteran_course_refund = yes }
 }
@@ -8824,14 +10127,87 @@ NAM_pw_state_arsenal_settle = {
 	else = { NAM_pw_state_arsenal_refund = yes }
 }
 
+NAM_municipal_workshop_close = {
+	if = {
+		limit = { has_state_flag = NAM_municipal_workshop_underway }
+		clr_state_flag = NAM_municipal_workshop_underway
+		if = {
+			limit = { has_state_flag = NAM_project_in_progress }
+			NAM_project_close = yes
+		}
+		NAM = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+# STATE. The local receipt owns the workers until this plant opens or releases them.
+NAM_plant_conversion_settle = {
+	if = {
+		limit = { has_state_flag = NAM_plant_conversion_underway }
+		if = {
+			limit = {
+				NAM = { NAM_plant_conversion_authorised = yes }
+				has_state_flag = NAM_project_in_progress
+				NAM_plant_conversion_site = yes
+			}
+			remove_building = { type = arms_factory level = 1 }
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+			set_state_flag = NAM_demobilised_plant
+			clr_state_flag = NAM_plant_conversion_underway
+			NAM_project_close = yes
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else = { NAM_plant_conversion_cancel = yes }
+	}
+}
+
+NAM_plant_conversion_cancel = {
+	if = {
+		limit = { has_state_flag = NAM_plant_conversion_underway }
+		clr_state_flag = NAM_plant_conversion_underway
+		if = {
+			limit = { has_state_flag = NAM_project_in_progress }
+			NAM_project_close = yes
+		}
+		NAM = { add_manpower = 4000 }
+	}
+}
+
 NAM_pw_district_congress_refund = {
 	if = {
 		limit = { has_country_flag = NAM_pw_district_congress_paid }
 		clr_country_flag = NAM_pw_district_congress_paid
 		clr_country_flag = NAM_pw_civil_busy
+		clear_global_event_target = NAM_tenant_petition_site
 		add_political_power = 20
 		set_temp_variable = { var = NAM_treasury_amount value = 100 }
 		NAM_add_treasury = yes
+	}
+}
+
+# STATE field. A visit leaves the existing project's receipt and workforce alone.
+NAM_workers_inspection_visit = {
+	if = {
+		limit = { NAM_workers_inspection_field = yes }
+		set_variable = { var = NAM_field_condition value = 80 }
+		NAM = { set_temp_variable = { var = NAM_inspection_repaired value = 1 } }
+	}
+}
+
+# COUNTRY NAM. Refresh the shared export capacity once after the crews return.
+NAM_workers_inspection_dispatch = {
+	set_temp_variable = { var = NAM_inspection_repaired value = 0 }
+	67 = { NAM_workers_inspection_visit = yes }
+	688 = { NAM_workers_inspection_visit = yes }
+	689 = { NAM_workers_inspection_visit = yes }
+	690 = { NAM_workers_inspection_visit = yes }
+	719 = { NAM_workers_inspection_visit = yes }
+	if = {
+		limit = { check_variable = { NAM_inspection_repaired > 0 } }
+		NAM_oil_refresh = yes
 	}
 }
 
@@ -8846,6 +10222,38 @@ NAM_pw_district_congress_settle = {
 		add_to_variable = { var = NAM_grp_dist_support value = 10 }
 		add_to_variable = { var = NAM_grp_nam_support value = -3 }
 		NAM_groups_refresh = yes
+		if = {
+			limit = { has_event_target = NAM_tenant_petition_site }
+			event_target:NAM_tenant_petition_site = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					if = {
+						limit = { infrastructure < 5 }
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
+					}
+					if = {
+						limit = { has_dynamic_modifier = { modifier = NAM_tenant_supply_depot } }
+						remove_dynamic_modifier = { modifier = NAM_tenant_supply_depot }
+					}
+					add_dynamic_modifier = {
+						modifier = NAM_tenant_supply_depot
+						days = 90
+					}
+				}
+			}
+			clear_global_event_target = NAM_tenant_petition_site
+		}
+		if = {
+			limit = { has_completed_focus = NAM_workers_inspection }
+			NAM_workers_inspection_dispatch = yes
+		}
 	}
 	else = { NAM_pw_district_congress_refund = yes }
 }
@@ -8861,6 +10269,103 @@ NAM_pw_district_schools_refund = {
 	}
 }
 
+# COUNTRY NAM. Each intake teaches the first missing stage of the medical curriculum.
+NAM_regional_medical_course = {
+	if = {
+		limit = { NOT = { has_tech = ADISCORD_tech_field_workshop_tools } }
+		set_technology = {
+			ADISCORD_tech_field_workshop_tools = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_tech = ADISCORD_tech_casualty_evacuation } }
+		set_technology = {
+			ADISCORD_tech_casualty_evacuation = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_tech = ADISCORD_tech_battlefield_medical_drones } }
+		set_technology = {
+			ADISCORD_tech_battlefield_medical_drones = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_tech = ADISCORD_tech_trauma_registry_networks } }
+		set_technology = {
+			ADISCORD_tech_trauma_registry_networks = 1
+			popup = no
+		}
+	}
+}
+
+# COUNTRY student, PREV partner. One graduation teaches the first missing step its partner actually uses.
+NAM_teach_machine_tools = {
+	if = {
+		limit = {
+			PREV = { has_tech = ADISCORD_tech_standardized_machine_tools }
+			NOT = { has_tech = ADISCORD_tech_standardized_machine_tools }
+		}
+		set_technology = {
+			ADISCORD_tech_standardized_machine_tools = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = {
+			PREV = { has_tech = ADISCORD_tech_interchangeable_components }
+			has_tech = ADISCORD_tech_standardized_machine_tools
+			NOT = { has_tech = ADISCORD_tech_interchangeable_components }
+		}
+		set_technology = {
+			ADISCORD_tech_interchangeable_components = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = {
+			PREV = { has_tech = ADISCORD_tech_precision_metrology_recovery }
+			has_tech = ADISCORD_tech_interchangeable_components
+			NOT = { has_tech = ADISCORD_tech_precision_metrology_recovery }
+		}
+		set_technology = {
+			ADISCORD_tech_precision_metrology_recovery = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = {
+			PREV = { has_tech = ADISCORD_tech_numerical_machine_controls }
+			has_tech = ADISCORD_tech_precision_metrology_recovery
+			NOT = { has_tech = ADISCORD_tech_numerical_machine_controls }
+		}
+		set_technology = {
+			ADISCORD_tech_numerical_machine_controls = 1
+			popup = no
+		}
+	}
+	else_if = {
+		limit = {
+			PREV = { has_tech = ADISCORD_tech_digital_tooling_libraries }
+			has_tech = ADISCORD_tech_numerical_machine_controls
+			NOT = { has_tech = ADISCORD_tech_digital_tooling_libraries }
+		}
+		set_technology = {
+			ADISCORD_tech_digital_tooling_libraries = 1
+			popup = no
+		}
+	}
+}
+
+NAM_khazar_school_exchange = {
+	SHL = {
+		NAM_teach_machine_tools = yes
+		NAM = { NAM_teach_machine_tools = yes }
+	}
+}
+
 NAM_pw_district_schools_settle = {
 	if = {
 		limit = {
@@ -8869,6 +10374,17 @@ NAM_pw_district_schools_settle = {
 		}
 		clr_country_flag = NAM_pw_district_schools_paid
 		clr_country_flag = NAM_pw_civil_busy
+		if = {
+			limit = {
+				has_completed_focus = NAM_pw_southern_schools
+				SHL = { NAM_khazar_teaching_partner = yes }
+			}
+			NAM_khazar_school_exchange = yes
+		}
+		if = {
+			limit = { has_completed_focus = NAM_regional_university }
+			NAM_regional_medical_course = yes
+		}
 		add_equipment_to_stockpile = {
 			type = support_equipment
 			amount = 60
@@ -9097,6 +10613,31 @@ NAM_coast_observation_order_settle = {
 	else = { NAM_coast_observation_order_refund = yes }
 }
 
+NAM_pw_patrol_refit_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_patrol_refit_paid }
+		clr_country_flag = NAM_pw_patrol_refit_paid
+		add_equipment_to_stockpile = { type = convoy amount = 10 producer = NAM }
+	}
+}
+
+NAM_pw_patrol_refit_settle = {
+	if = {
+		limit = {
+			has_country_flag = NAM_pw_patrol_refit_paid
+			NAM_pw_operable = yes
+			NAM_naval_shipyard_ready = yes
+		}
+		clr_country_flag = NAM_pw_patrol_refit_paid
+		create_ship = {
+			type = ADISCORD_coastal_patrol_ship_1
+			equipment_variant = "NAM_auxiliary_patrol_design"
+			amount = 1
+		}
+	}
+	else = { NAM_pw_patrol_refit_refund = yes }
+}
+
 NAM_escort_order_refund = {
 	if = {
 		limit = { has_country_flag = { flag = NAM_ship_order_paid value < 2 } }
@@ -9114,9 +10655,7 @@ NAM_escort_order_settle = {
 		clr_country_flag = NAM_ship_order_paid
 		if = {
 			limit = {
-				has_country_flag = NAM_program_naval_workshops_commissioned
-				owns_state = 700
-				controls_state = 700
+				NAM_naval_workshops_supply = yes
 			}
 			create_ship = {
 				type = ADISCORD_escort_ship_2155
@@ -9150,9 +10689,7 @@ NAM_submarine_order_settle = {
 		clr_country_flag = NAM_ship_order_paid
 		if = {
 			limit = {
-				has_country_flag = NAM_program_naval_workshops_commissioned
-				owns_state = 700
-				controls_state = 700
+				NAM_naval_workshops_supply = yes
 			}
 			create_ship = {
 				type = ADISCORD_submarine_2155
@@ -9784,7 +11321,10 @@ NAM_project_complete_hydroelectric = {
 				instant_build = yes
 			}
 			add_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower }
-			NAM = { ADISCORD_economy_mark_dirty = yes }
+			NAM = {
+				NAM_grid_refresh_connections = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		else = { NAM_project_release = yes }
 	}
@@ -9801,8 +11341,46 @@ NAM_crisis_close = {
 	NAM_crisis_draw = yes
 }
 
+# COUNTRY NAM. Insured losses and garrison family claims leave the emergency reserve intact.
+NAM_settle_industrial_claim = {
+	if = {
+		limit = { hidden_trigger = { NAM_industrial_claim_payable = yes } }
+		custom_effect_tooltip = NAM_industrial_claim_used_tt
+		hidden_effect = {
+			set_country_flag = {
+				flag = NAM_industrial_claim_paid
+				days = 180
+			}
+			NAM_crisis_close = yes
+		}
+	}
+}
+
+NAM_pay_garrison_families = {
+	if = {
+		limit = { hidden_trigger = { NAM_garrison_families_entitled = yes } }
+		custom_effect_tooltip = NAM_garrison_families_paid_tt
+		hidden_effect = { NAM_crisis_close = yes }
+	}
+}
+
 NAM_crisis_response_timeout = {
 	if = {
+		limit = {
+			NAM_crisis_case_1 = yes
+			has_completed_focus = NAM_field_firefighters
+		}
+		NAM_crisis_close = yes
+	}
+	else_if = {
+		limit = { NAM_industrial_claim_payable = yes }
+		NAM_settle_industrial_claim = yes
+	}
+	else_if = {
+		limit = { NAM_garrison_families_entitled = yes }
+		NAM_pay_garrison_families = yes
+	}
+	else_if = {
 		limit = {
 			has_country_flag = NAM_crisis_fund
 			OR = {
@@ -9942,6 +11520,33 @@ NAM_pw_regional_contracts_settle = {
 		}
 		clr_country_flag = NAM_pw_regional_contracts_paid
 		if = {
+			limit = { has_completed_focus = NAM_svetlogorsk_settlement }
+			random_owned_controlled_state = {
+				limit = {
+					NAM_border_integration_region = yes
+					OR = {
+						infrastructure < 5
+						free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+					}
+				}
+				if = {
+					limit = { infrastructure < 5 }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+				else = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		if = {
 			limit = {
 				has_completed_focus = NAM_pw_industrial_commission
 			}
@@ -9984,6 +11589,70 @@ NAM_pw_public_utilities_refund = {
 	}
 }
 
+# STATE. A recorded settlement receives a grant once, under the funded city programme.
+NAM_returnee_deliver_grant = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_returnee_settlement value = 1 compare = equals }
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NOT = { has_state_flag = NAM_project_in_progress }
+			NAM = { NAM_pw_operable = yes }
+		}
+		if = {
+			limit = { NAM = { has_idea = NAM_pw_public_utilities_idea } }
+			if = {
+				limit = { infrastructure < 5 }
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			else = {
+				NAM = {
+					add_equipment_to_stockpile = { type = motorized_equipment amount = 30 producer = NAM }
+				}
+			}
+			set_variable = { var = NAM_returnee_settlement value = 2 }
+		}
+		else_if = {
+			limit = { NAM = { has_idea = NAM_pw_municipal_services_idea } }
+			if = {
+				limit = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			else = {
+				NAM = {
+					add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = NAM }
+				}
+			}
+			set_variable = { var = NAM_returnee_settlement value = 2 }
+		}
+	}
+}
+
+# COUNTRY. Earlier arrivals keep their place through an occupation or temporary construction work.
+NAM_returnee_audit_rolls = {
+	if = {
+		limit = {
+			OR = {
+				has_idea = NAM_pw_public_utilities_idea
+				has_idea = NAM_pw_municipal_services_idea
+			}
+		}
+		every_owned_state = {
+			limit = { check_variable = { var = NAM_returnee_settlement value = 1 compare = equals } }
+			NAM_returnee_deliver_grant = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 NAM_pw_public_utilities_settle = {
 	if = {
 		limit = {
@@ -9993,6 +11662,10 @@ NAM_pw_public_utilities_settle = {
 		clr_country_flag = NAM_pw_public_utilities_paid
 		clr_country_flag = NAM_pw_civil_busy
 		add_timed_idea = { idea = NAM_pw_public_utilities_idea days = 180 }
+		if = {
+			limit = { has_completed_focus = NAM_civic_audit }
+			NAM_returnee_audit_rolls = yes
+		}
 	}
 	else = { NAM_pw_public_utilities_refund = yes }
 }
@@ -10017,6 +11690,10 @@ NAM_pw_municipal_services_settle = {
 		clr_country_flag = NAM_pw_municipal_services_paid
 		clr_country_flag = NAM_pw_civil_busy
 		add_timed_idea = { idea = NAM_pw_municipal_services_idea days = 180 }
+		if = {
+			limit = { has_completed_focus = NAM_civic_audit }
+			NAM_returnee_audit_rolls = yes
+		}
 	}
 	else = { NAM_pw_municipal_services_refund = yes }
 }
@@ -10044,6 +11721,10 @@ NAM_pw_export_clearing_settle = {
 		clr_country_flag = NAM_pw_civil_busy
 		set_temp_variable = { var = NAM_treasury_amount value = 1000 }
 		NAM_add_treasury = yes
+		if = {
+			limit = { has_completed_focus = NAM_prag_ending_directorate }
+			NAM_certify_shipping_manifest = yes
+		}
 	}
 	else = { NAM_pw_export_clearing_refund = yes }
 }
@@ -10088,9 +11769,11 @@ NAM_pw_contract_arbitration_settle = {
 		limit = {
 			has_country_flag = NAM_pw_contract_arbitration_paid
 			NAM_pw_contract_arbitration_ready = yes
+			NAM_prag_court_can_register = yes
 		}
 		clr_country_flag = NAM_pw_contract_arbitration_paid
 		clr_country_flag = NAM_pw_civil_busy
+		add_to_variable = { var = NAM_prag_warrants value = 1 }
 		add_timed_idea = { idea = NAM_pw_contract_arbitration_idea days = 180 }
 	}
 	else = { NAM_pw_contract_arbitration_refund = yes }
@@ -10240,6 +11923,7 @@ NAM_pw_rural_electrification_settle = {
 		690 = {
 			add_extra_state_shared_building_slots = 1
 		}
+		NAM_grid_refresh_connections = yes
 	}
 	else = { NAM_pw_rural_electrification_refund = yes }
 }
@@ -11274,6 +12958,36 @@ NAM_program_development_fund_refund = {
 	}
 }
 
+NAM_pw_harbour_slipway_refund = {
+	if = {
+		limit = { has_country_flag = NAM_pw_harbour_slipway_paid }
+		clr_country_flag = NAM_pw_harbour_slipway_paid
+		clr_country_flag = NAM_pw_civil_busy
+		set_temp_variable = { var = NAM_treasury_amount value = 900 }
+		NAM_add_treasury = yes
+	}
+}
+
+NAM_pw_harbour_slipway_settle = {
+	if = {
+		limit = { has_country_flag = NAM_pw_harbour_slipway_paid }
+		if = {
+			limit = { NAM_pw_harbour_slipway_site = yes }
+			clr_country_flag = NAM_pw_harbour_slipway_paid
+			clr_country_flag = NAM_pw_civil_busy
+			700 = {
+				add_building_construction = {
+					type = dockyard
+					level = 1
+					instant_build = yes
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { NAM_pw_harbour_slipway_refund = yes }
+	}
+}
+
 NAM_program_development_fund_settle = {
 	if = {
 		limit = {
@@ -11436,8 +13150,8 @@ NAM_program_regional_power_settle = {
 					set_variable = { var = NAM_field_condition value = 100 }
 				}
 			}
-			NAM_oil_refresh = yes
 			set_country_flag = NAM_program_regional_power_commissioned
+			NAM_oil_refresh = yes
 			clr_country_flag = NAM_program_regional_power_paid
 			clr_country_flag = NAM_pw_civil_busy
 		}
@@ -11482,6 +13196,54 @@ NAM_program_oilfield_substations_settle = {
 	}
 }
 
+# STATE destination. Only the project's own receipt can release the national civil crew.
+NAM_city_water_refund = {
+	if = {
+		limit = { has_state_flag = NAM_city_water_paid }
+		clr_state_flag = NAM_city_water_paid
+		NAM = {
+			clr_country_flag = NAM_pw_civil_busy
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+		}
+	}
+}
+
+NAM_city_water_settle = {
+	if = {
+		limit = { has_state_flag = NAM_city_water_paid }
+		if = {
+			limit = {
+				NAM = {
+					NAM_pw_operable = yes
+					NAM_city_water_pumping_capacity = yes
+				}
+				NAM_city_water_site = yes
+			}
+			clr_state_flag = NAM_city_water_paid
+			NAM = { clr_country_flag = NAM_pw_civil_busy }
+			add_extra_state_shared_building_slots = 1
+			if = {
+				limit = { state = 688 }
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			else = {
+				add_building_construction = {
+					type = dockyard
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_state_flag = NAM_city_water_connected
+		}
+		else = { NAM_city_water_refund = yes }
+	}
+}
+
 NAM_program_irrigation_works_refund = {
 	if = {
 		limit = { has_country_flag = NAM_program_irrigation_works_paid }
@@ -11506,8 +13268,8 @@ NAM_program_irrigation_works_settle = {
 			}
 			689 = {
 				add_extra_state_shared_building_slots = 2
+				add_dynamic_modifier = { modifier = NAM_south_coast_irrigation }
 			}
-			set_country_flag = NAM_south_coast_canal_open
 			clr_country_flag = NAM_program_irrigation_works_paid
 			clr_country_flag = NAM_pw_civil_busy
 		}
@@ -12082,8 +13844,32 @@ NAM_program_reserve_centres_settle = {
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 27000
+				amount = 18000
 				producer = NAM
+			}
+			if = {
+				limit = { has_completed_focus = NAM_pw_reserve_centres }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 9000
+					producer = NAM
+				}
+			}
+			if = {
+				limit = { has_completed_focus = NAM_pw_breakthrough_army }
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 60
+					producer = NAM
+				}
+			}
+			else_if = {
+				limit = { has_completed_focus = NAM_pw_mobile_army }
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 120
+					producer = NAM
+				}
 			}
 			clr_country_flag = NAM_program_reserve_centres_paid
 			clr_country_flag = NAM_pw_military_busy
@@ -12338,36 +14124,22 @@ NAM_program_radar_posts_settle = {
 	}
 }
 
-NAM_program_air_supply_refund = {
+# STATE. The local receipt survives changes of control and owns the assigned aircraft.
+NAM_air_bridge_close = {
 	if = {
-		limit = { has_country_flag = NAM_program_air_supply_paid }
-		set_temp_variable = {
-			var = NAM_treasury_amount
-			value = 700
-		}
-		NAM_add_treasury = yes
-		clr_country_flag = NAM_program_air_supply_paid
-		clr_country_flag = NAM_pw_military_busy
-	}
-}
-
-NAM_program_air_supply_settle = {
-	if = {
-		limit = { has_country_flag = NAM_program_air_supply_paid }
+		limit = { has_state_flag = NAM_air_bridge_running }
+		clr_state_flag = NAM_air_bridge_running
 		if = {
-			limit = {
-				NAM_pw_operable = yes
-			}
+			limit = { has_dynamic_modifier = { modifier = NAM_air_bridge_deliveries } }
+			remove_dynamic_modifier = { modifier = NAM_air_bridge_deliveries }
+		}
+		NAM = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_transport_airframe_2162
-				amount = 24
+				amount = 12
 				producer = NAM
 			}
-			clr_country_flag = NAM_program_air_supply_paid
 			clr_country_flag = NAM_pw_military_busy
-		}
-		else = {
-			NAM_program_air_supply_refund = yes
 		}
 	}
 }
@@ -12442,6 +14214,24 @@ NAM_program_flight_schools_refund = {
 	}
 }
 
+NAM_air_deliver_batch = {
+	if = {
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+		add_equipment_to_stockpile = {
+			type = $model$
+			amount = 36
+			producer = NAM
+		}
+	}
+	else = {
+		add_equipment_to_stockpile = {
+			type = $model$
+			amount = 24
+			producer = NAM
+		}
+	}
+}
+
 NAM_program_flight_schools_settle = {
 	if = {
 		limit = { has_country_flag = NAM_program_flight_schools_paid }
@@ -12449,7 +14239,10 @@ NAM_program_flight_schools_settle = {
 			limit = {
 				NAM_pw_operable = yes
 			}
-			air_experience = 60
+			set_country_flag = {
+				flag = NAM_air_instructor
+				value = 1
+			}
 			clr_country_flag = NAM_program_flight_schools_paid
 			clr_country_flag = NAM_pw_military_busy
 		}
@@ -12626,8 +14419,14 @@ NAM_pw_barter_charter_refund = {
 		}
 		NAM_pw_barter_charter_close = yes
 		add_political_power = 25
-		add_to_variable = { var = NAM_open_fuel_reserve value = 60000 }
-		NAM_open_fuel_release = yes
+		if = {
+			limit = { has_country_flag = NAM_prag_warrant_pledged }
+			clr_country_flag = NAM_prag_warrant_pledged
+		}
+		else = {
+			add_to_variable = { var = NAM_open_fuel_reserve value = 60000 }
+			NAM_open_fuel_release = yes
+		}
 	}
 }
 
@@ -12641,6 +14440,15 @@ NAM_pw_barter_charter_settle = {
 				NAM_pw_barter_charter_ready = yes
 			}
 			NAM_pw_barter_charter_close = yes
+			if = {
+				limit = { has_country_flag = NAM_prag_warrant_pledged }
+				clr_country_flag = NAM_prag_warrant_pledged
+				subtract_from_variable = { var = NAM_prag_warrants value = 1 }
+			}
+			if = {
+				limit = { has_completed_focus = NAM_prag_ending_directorate }
+				NAM_certify_shipping_manifest = yes
+			}
 			add_equipment_to_stockpile = {
 				type = convoy
 				amount = 24
@@ -12653,5 +14461,146 @@ NAM_pw_barter_charter_settle = {
 			}
 		}
 		else = { NAM_pw_barter_charter_refund = yes }
+	}
+}
+
+# ----- Rom's Veyran expedition -----
+
+# The array belongs to the campaign and survives save/load. Occupied foreign
+# states and the lands of southern subjects never enter the governorate.
+NAM_veyran_start_invasion = {
+	if = {
+		limit = { NAM_veyran_can_invade = yes }
+		every_owned_state = {
+			add_to_array = { array = global.NAM_veyran_homeland value = THIS }
+		}
+		set_variable = { var = NAM_veyran_campaign value = 1 }
+		declare_war_on = {
+			target = event_target:ADISCORD_vorkerland_nation
+			type = annex_everything
+		}
+		if = {
+			limit = { NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation } }
+			NAM_veyran_settle_defeat = yes
+		}
+	}
+}
+
+# COUNTRY NAM. Commit the result before native peace, annex and puppet effects
+# can re-enter the campaign through their own callbacks.
+NAM_veyran_settle_victory = {
+	if = {
+		limit = { NAM_veyran_invasion_active = yes }
+		set_variable = { var = NAM_veyran_campaign value = 2 }
+		clear_temp_array = NAM_veyran_annexed_states
+		event_target:ADISCORD_vorkerland_nation = {
+			every_owned_state = {
+				add_to_temp_array = { array = NAM_veyran_annexed_states value = THIS }
+			}
+		}
+		white_peace = event_target:ADISCORD_vorkerland_nation
+		annex_country = { target = event_target:ADISCORD_vorkerland_nation transfer_troops = no }
+		# Impassable states can survive the native annexation.
+		for_each_scope_loop = {
+			array = NAM_veyran_annexed_states
+			if = {
+				limit = { NOT = { is_owned_by = NAM } }
+				NAM = { transfer_state = PREV }
+			}
+			set_state_controller_to = NAM
+		}
+		clear_temp_array = NAM_veyran_annexed_states
+		32 = {
+			add_core_of = NAM
+			set_state_controller_to = NAM
+		}
+		set_capital = { state = 32 }
+		set_cosmetic_tag = NAM_veyran_union
+		for_each_scope_loop = {
+			array = global.NAM_veyran_homeland
+			add_core_of = SNG
+			SNG = { transfer_state = PREV }
+			set_state_controller_to = SNG
+		}
+		clear_array = global.NAM_veyran_homeland
+		puppet = {
+			target = SNG
+			end_wars = no
+			end_civil_wars = no
+		}
+		set_autonomy = {
+			target = SNG
+			autonomy_state = autonomy_NAM_imperial_governorate
+			freedom_level = 0.10
+			end_wars = no
+			end_civil_wars = no
+		}
+		SNG = {
+			if = {
+				limit = { owns_state = 700 }
+				set_capital = { state = 700 }
+			}
+			inherit_technology = NAM
+			ADISCORD_economy_mark_dirty = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = ADISCORD_nam_resource_war.408 hours = 1 }
+	}
+}
+
+NAM_veyran_settle_defeat = {
+	if = {
+		limit = { NAM_veyran_invasion_active = yes }
+		set_variable = { var = NAM_veyran_campaign value = 2 }
+		clear_array = global.NAM_veyran_homeland
+		if = {
+			limit = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+			white_peace = event_target:ADISCORD_vorkerland_nation
+		}
+		if = {
+			limit = { exists = yes }
+			set_cosmetic_tag = NAM_svetlogorye_derzhava
+			country_event = { id = ADISCORD_nam_resource_war.409 hours = 1 }
+		}
+	}
+}
+
+# Native ROOT is the loser. White peace can omit the late callback, so its
+# short-lived receipt belongs to this country rather than the next defeat.
+NAM_veyran_handle_capitulation = {
+	if = {
+		limit = { NAM_veyran_capitulation_managed = yes }
+		ROOT = { set_country_flag = { flag = NAM_veyran_capitulation_reserved days = 2 } }
+		if = {
+			limit = {
+				ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
+				32 = {
+					OR = {
+						is_owned_by = event_target:ADISCORD_vorkerland_nation
+						is_owned_by = NAM
+					}
+				}
+			}
+			NAM = { NAM_veyran_settle_victory = yes }
+		}
+		else = { NAM = { NAM_veyran_settle_defeat = yes } }
+		# Annexation and a synchronous late callback can consume the first receipt.
+		ROOT = { set_country_flag = { flag = NAM_veyran_capitulation_reserved days = 2 } }
+	}
+}
+
+NAM_veyran_close_external = {
+	if = {
+		limit = {
+			NAM_veyran_invasion_active = yes
+			OR = {
+				NOT = { country_exists = NAM }
+				NOT = { event_target:ADISCORD_vorkerland_nation = { exists = yes } }
+				NAM = { is_subject = yes }
+				event_target:ADISCORD_vorkerland_nation = { is_subject = yes }
+				NAM = { NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation } }
+			}
+		}
+		NAM = { NAM_veyran_settle_defeat = yes }
 	}
 }

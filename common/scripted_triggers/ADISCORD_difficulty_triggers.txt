@@ -19,14 +19,14 @@ ADISCORD_difficulty_ai_military_context = {
 }
 
 ADISCORD_difficulty_ai_advanced = {
-	ADISCORD_difficulty_ai_eligible = yes
 	difficulty > 2
+	ADISCORD_difficulty_ai_eligible = yes
 	ADISCORD_economy_ai_is_healthy = yes
 }
 
 ADISCORD_difficulty_ai_abyss_front = {
-	ADISCORD_difficulty_ai_eligible = yes
 	difficulty > 3
+	ADISCORD_difficulty_ai_eligible = yes
 	has_war = yes
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate bounded SOL/VLA diplomacy and explicit postwar WRK core packages.
+"""Validate bounded SOL/VLA diplomacy and explicit postwar core packages.
 
 This is intentionally a RED-to-GREEN contract validator.  It describes the
 public scripted triggers/effects/decisions used by the Vorkerland phase
@@ -18,6 +18,10 @@ from PIL import Image
 
 from tools.lib.focus_sources import FOCUS_SOURCE_GROUPS, read_focus_source
 from tools.lib.paths import source_section
+from tools.validators.validate_adiscord_vorkerland_focus_decisions import (
+    NATION_TARGET,
+    nation_content_gate_issues,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1383,20 +1387,29 @@ def validate_core_packages() -> list[str]:
     decisions = _load(FOCUS_DECISIONS, issues)
     package_states = [state for states in CORE_PACKAGES.values() for state in states]
     if len(package_states) != len(set(package_states)):
-        issues.append("independent WRK core packages must not overlap")
+        issues.append("independent postwar core packages must not overlap")
     if frozenset(package_states) != HISTORICAL_WRK_VAD_STATES:
         issues.append(
-            "independent WRK core packages must exactly cover the historical WRK/VAD state manifest"
+            "independent postwar core packages must exactly cover the historical WRK/VAD state manifest"
         )
     if set(package_states) & LIVE_ALLY_OR_FOREIGN_STATES:
-        issues.append("WRK core packages contain live ally or foreign-country states")
+        issues.append(
+            "postwar core packages contain live ally or foreign-country states"
+        )
 
     for decision_id, states in CORE_PACKAGES.items():
         block = _unique_block(decisions, decision_id, "public core decision", issues)
         if not block:
             continue
+        # The packages belong to whichever claimant unified Vorkerland, so they
+        # are gated and awarded through the nation target, not the WRK tag.
+        issues.extend(nation_content_gate_issues(decision_id, block))
+        awarded = re.findall(r"\badd_core_of\s*=\s*(\S+)", block)
+        if awarded != [NATION_TARGET] * len(states):
+            issues.append(
+                f"{decision_id} must award exactly its package to the nation target"
+            )
         for token in (
-            "allowed = { tag = WRK }",
             "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration",
             "has_global_flag = ADISCORD_vorkerland_reunification_verified",
             "fire_only_once = yes",
@@ -1409,9 +1422,9 @@ def validate_core_packages() -> list[str]:
                     issues.append(
                         f"{decision_id} lacks exact availability gate {token}"
                     )
-            if not _state_block_has(block, state, (("add_core_of", "WRK"),)):
+            if not _state_block_has(block, state, (("add_core_of", NATION_TARGET),)):
                 issues.append(
-                    f"{decision_id} must explicitly add the WRK core to state {state}"
+                    f"{decision_id} must explicitly add the nation core to state {state}"
                 )
         referenced_states = {
             int(value)
@@ -1957,8 +1970,8 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         issues.append(
             "reunification queue and phase.6 must both wait for WKR Solarino resolution"
         )
-    formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
-    formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_wkr")
+    formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_sol_worker_protectorate_verified",
         "autonomy_state = autonomy_free",
@@ -1969,7 +1982,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     ):
         if token not in formation:
             issues.append(
-                f"WKR-to-WRK formation does not preserve the SOL protectorate: {token}"
+                f"unification under WKR does not preserve the SOL protectorate: {token}"
             )
 
     cosmetic = named_block(cosmetics, "SOL_vorkerland_worker_protectorate")
@@ -2431,7 +2444,7 @@ def main() -> int:
         "A-Discord Vorkerland diplomacy validation passed: exact regional winners, "
         "bounded peaceful invitations, reachable SOL restoration, shared-showdown "
         "allies/counter-intervention, bounded WKR Solarino worker protectorate, and "
-        "independent WRK core packages are coherent."
+        "independent postwar core packages are coherent."
     )
     return 0
 

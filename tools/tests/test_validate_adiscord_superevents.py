@@ -28,6 +28,13 @@ def copy_contract_tree(destination: Path) -> None:
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
+    art = Path("gfx/interface/superevents")
+    shutil.copytree(ROOT / art, destination / art)
+    # The binding validator checks paths. The duration test opens the real PCM files.
+    audio = Path("sound/superevents")
+    (destination / audio).mkdir(parents=True, exist_ok=True)
+    for wav in (ROOT / audio).glob("*.wav"):
+        (destination / audio / wav.name).touch()
 
 
 class SupereventContractTests(unittest.TestCase):
@@ -129,9 +136,6 @@ class SupereventContractTests(unittest.TestCase):
         playlists = list((ROOT / "music").glob("*.txt"))
         songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
 
-        # Presentation audio is played directly from ADISCORD_music.asset.
-        # It must never be registered as a radio song, otherwise HOI4 exposes
-        # it in the music-player track list even with chance factor 0.
         for item in PRESENTATIONS:
             self.assertNotIn(f'song = "{item.name}"', songs, item.name)
 
@@ -189,9 +193,9 @@ class SupereventContractTests(unittest.TestCase):
         self.assertIsNotNone(main_theme_file)
         self.assertTrue((ROOT / "music" / main_theme_file.group(1)).is_file())
         for item in PRESENTATIONS:
-            if item.legacy_music_asset:
-                song = item.dedicated_sound_effect.removesuffix("_sound_e")
-                self.assertIn(f'name = "{song}"', assets)
+            song = item.dedicated_sound_effect.removesuffix("_sound_e")
+            self.assertNotIn(f'name = "{song}"', assets)
+            self.assertFalse((ROOT / "music" / f"{song}.ogg").exists())
 
     def test_nam_war_and_last_empire_are_registered_presentations(self):
         self.assertIn("superevent_nam_resource_war", {item.name for item in PRESENTATIONS})
@@ -227,6 +231,110 @@ class SupereventContractTests(unittest.TestCase):
             self.assertIn("ADISCORD_superevent_enqueue = yes", event)
             for forbidden in ("declare_war_on", "set_cosmetic_tag", "add_manpower"):
                 self.assertNotIn(forbidden, event)
+
+    def test_war_mandate_and_victor_select_one_queued_presentation(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_superevents import _event_block
+
+        def presentation(source, event_id, facts):
+            event = parse_clausewitz(_event_block(source, event_id))[0].value
+            effects = list(selected_effects(block(event, "immediate"), facts, "VAL"))
+            requests = [
+                int(scalar(row.value, "ADISCORD_superevent_request"))
+                for _, row in effects if row.key == "set_temp_variable"
+            ]
+            self.assertEqual(len(requests), 1)
+            self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
+            return PRESENTATIONS[requests[0] - 1].name
+
+        events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        nam = "superevent_nam_resource_war"
+        for mandate, expected in (("service", nam + "_service"), ("district", nam + "_district"), ("pragmatic", nam)):
+            facts = {("NAM", f"NAM_prewar_{mandate}_mandate", "yes"): True}
+            self.assertEqual(presentation(events, "ADISCORD_superevent.7", facts), expected)
+
+        events = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8")
+        party = "superevent_stelander_party_victory"
+        for outcome, suffix in enumerate(("", "_houses", "_festival", "_staff", "_wallets", "_silence", "_regent")):
+            facts = {("STP", "variable", "STP_pv_outcome"): outcome}
+            self.assertEqual(presentation(events, "ADISCORD_STP_cw.71", facts), party + suffix)
+
+        for course, suffix in enumerate(("", "_staff", "_councils", "_truth")):
+            facts = {("STS", "variable", "STP_hw_course"): course}
+            self.assertEqual(presentation(events, "ADISCORD_STP_cw.72", facts), "superevent_stelander_shabrat_victory" + suffix)
+            facts["STS", "ruling_leader"] = "STP_grigory_sotnikov"
+            self.assertEqual(presentation(events, "ADISCORD_STP_cw.72", facts), "superevent_stelander_sotnikov_civilwar")
+
+    def test_regional_victories_snapshot_the_winners_course(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        selectors = {}
+        for region in ("south", "west"):
+            source = ROOT / f"common/scripted_effects/ADISCORD_{region}_final_war_effects.txt"
+            selectors.update({row.key: row.value for row in parse_clausewitz(source.read_text(encoding="utf-8"))})
+
+        def check(selector, tag, expected, facts):
+            with self.subTest(expected=expected):
+                effects = list(selected_effects(selectors[selector], facts, tag))
+                requests = [
+                    int(scalar(row.value, "ADISCORD_superevent_request"))
+                    for _, row in effects if row.key == "set_temp_variable"
+                ]
+                self.assertEqual(len(requests), 1)
+                self.assertEqual(PRESENTATIONS[requests[0] - 1].name, "superevent_" + expected)
+                self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
+
+        for course, name in enumerate(("conclave", "houses", "cities", "nur", "regency", "commune")):
+            check("ADISCORD_south_show_shahrabad_victory", "SHL", "south_" + name,
+                  {("SHL", "variable", "SHL_political_course"): course})
+
+        selector = "ADISCORD_south_show_svetlogorye_victory"
+        for subject, name, endings in (
+            (3, "service", (("ladder_ending_iron", "iron"), ("ladder_ending_service", "civil_service"))),
+            (4, "charter", (("charter_ending_federation", "federation"), ("charter_ending_oil_union", "oil_union"))),
+            (5, "contracts", (("prag_ending_republic", "contract_republic"), ("prag_ending_directorate", "directorate"))),
+        ):
+            facts = {("NAM", "variable", "global.ADISCORD_south_subject_type"): subject}
+            check(selector, "NAM", "south_" + name, facts)
+            for focus, ending in endings:
+                check(selector, "NAM", "south_" + ending, {**facts, ("NAM", "has_completed_focus", "NAM_" + focus): True})
+        humanists = {("NAM", "has_country_flag", "NAM_exile_humanist"): True}
+        rump = {("NAM", "has_focus_tree", "NAM_defeated_focus"): True}
+        check(selector, "NAM", "south_boards", {**humanists, ("NAM", "has_country_flag", "NAM_corp_takeover"): True})
+        check(selector, "NAM", "south_free_islands", humanists)
+        check(selector, "NAM", "south_radical", {("NAM", "has_country_flag", "NAM_exile_radical"): True})
+        check(selector, "NAM", "south_revenge", {**rump, ("NAM", "has_completed_focus", "NAM_defeat_revenge"): True})
+        check(selector, "NAM", "south_rump", rump)
+        check(selector, "NAM", "south_nam", {})
+
+        selector = "ADISCORD_west_show_vorkerland_victory"
+        worker = {("WRK", "has_country_flag", "ADISCORD_vorkerland_route_worker"): True}
+        joint = {("WRK", "has_country_flag", "ADISCORD_vorkerland_route_joint"): True}
+        check(selector, "WRK", "west_worker", worker)
+        check(selector, "WRK", "west_anton", {**worker, ("WRK", "ruling_leader"): "WRK_Anton_Bagley"})
+        check(selector, "WRK", "west_council", {**joint, ("WRK", "ruling_leader"): "WRK_VAD_Joint_Council"})
+        check(selector, "WRK", "west_petrichev", joint)
+        check(selector, "WRK", "west_world_empire", {**joint, ("WRK", "has_cosmetic_tag", "WRK_vorkerland_world_empire"): True})
+        check(selector, "WRK", "west_dorian", {("WRK", "has_global_flag", "ADISCORD_vorkerland_joint_government_formed"): True})
+        for terms, subject, name in ((2, 0, "committee"), (2, 3, "shield"), (2, 4, "emergency"), (1, 0, "revanche")):
+            check("ADISCORD_west_show_itoran_victory", "IVN", "west_" + name, {
+                ("IVN", "variable", "global.ADISCORD_west_terms"): terms,
+                ("IVN", "variable", "global.ADISCORD_west_subject_type"): subject,
+            })
+
+        defense = selectors["ADISCORD_south_final_resolve_north_victory"]
+        for active, leader, victory in ((True, True, True), (True, False, False), (False, True, False)):
+            facts = {
+                ("EFL", "ADISCORD_south_final_active", "yes"): active,
+                ("EFL", "ADISCORD_south_north_leader_exists", "yes"): leader,
+            }
+            selected = [row for _, row in selected_effects(defense, facts, "EFL")]
+            cards = [PRESENTATIONS[int(scalar(row.value, "ADISCORD_superevent_request")) - 1].name
+                     for row in selected if row.key == "set_temp_variable"]
+            self.assertEqual(cards, ["superevent_south_restitution"] if victory else [])
+            self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for row in selected), int(victory))
 
     def test_fifo_duplicates_and_close_execute_the_scripted_effects(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -304,7 +412,8 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 24, 20, 23, 21, 22, 19, 18, 25, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 32, 24, 36, 20, 31, 23, 21, 29, 22, 19, 18, 25, 35, 17, 16, 27, 10, 11, 34, 9, 14, 1, 12, 26, 15, 13, 2, 28, 3, 4, 33, 5, 7, 30, 8)
+        order += tuple(reversed(range(37, len(PRESENTATIONS) + 1)))
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -527,7 +636,7 @@ class SupereventContractTests(unittest.TestCase):
             if 'name = "GFX_superevent_itora_civilwar"' in block
         )
         texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
-        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertEqual(texture, "gfx/interface/superevents/NAM/superevent_resource_war.png")
         self.assertTrue((ROOT / texture).is_file())
 
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
@@ -558,7 +667,7 @@ class SupereventContractTests(unittest.TestCase):
             if 'name = "GFX_superevent_rus_khan_defeated"' in block
         )
         texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
-        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertEqual(texture, "gfx/interface/superevents/NAM/superevent_resource_war.png")
         self.assertTrue((ROOT / texture).is_file())
 
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
@@ -588,15 +697,20 @@ class SupereventContractTests(unittest.TestCase):
             conditions = fields.get("trigger", [])
             choices.append((key, conditions))
 
-        def matches(conditions, flags, country_flags):
+        # Global event target naming the country that currently is Vorkerland:
+        # WRK until a claimant unifies it, then that claimant's own tag.
+        nation_scope = "event_target:ADISCORD_vorkerland_nation"
+        unifiers = {"worker": "WKR", "vlad": "VAD", "dorian": "TVA", None: "WRK"}
+
+        def matches(conditions, flags, country_flags, nation):
             for child in conditions:
                 if child.key == "has_global_flag":
                     if child.value not in flags:
                         return False
-                elif child.key == "WRK":
+                elif child.key == nation_scope:
                     for scoped in child.value:
                         self.assertEqual(scoped.key, "has_country_flag")
-                        if scoped.value not in country_flags.get("WRK", set()):
+                        if scoped.value not in country_flags.get(nation, set()):
                             return False
                 else:
                     self.fail(f"Unsupported quote condition: {child.key}")
@@ -605,22 +719,29 @@ class SupereventContractTests(unittest.TestCase):
         anton_outcome = "ADISCORD_vorkerland_worker_utilitarian_outcome"
         cases = (
             ("worker", {}, ""),
-            ("worker", {"WRK": {anton_outcome}}, "_anton"),
+            ("worker", {"WKR": {anton_outcome}}, "_anton"),
             ("worker", {"IVN": {anton_outcome}}, ""),
+            # The retired tag is no longer read once a claimant holds the target.
+            ("worker", {"WRK": {anton_outcome}}, ""),
             ("vlad", {}, "_vlad"),
             ("dorian", {}, "_dorian"),
-            ("vlad", {"WRK": {anton_outcome}}, "_vlad"),
-            ("dorian", {"WRK": {anton_outcome}}, "_dorian"),
+            ("vlad", {"VAD": {anton_outcome}}, "_vlad"),
+            ("dorian", {"TVA": {anton_outcome}}, "_dorian"),
             (None, {}, ""),
             (None, {"WRK": {anton_outcome}}, ""),
         )
         for winner, country_flags, suffix in cases:
             with self.subTest(winner=winner, country_flags=country_flags):
+                nation = unifiers[winner]
                 flags = {f"ADISCORD_vorkerland_{winner}_won"} if winner else set()
-                inactive = next(key for key, conditions in choices if matches(conditions, flags, country_flags))
+                inactive = next(
+                    key for key, conditions in choices if matches(conditions, flags, country_flags, nation)
+                )
                 self.assertEqual(inactive, "superevent_inactive_quote")
                 flags.add(name)
-                selected = next(key for key, conditions in choices if matches(conditions, flags, country_flags))
+                selected = next(
+                    key for key, conditions in choices if matches(conditions, flags, country_flags, nation)
+                )
                 self.assertEqual(selected, f"{name}{suffix}_quote")
 
         quote_keys = {key for key, _ in choices if key.startswith(name)}
@@ -637,7 +758,7 @@ class SupereventContractTests(unittest.TestCase):
                 values.append(matches[0])
             self.assertEqual(len(set(values)), 4)
 
-    def test_joint_victory_is_separate_from_vlad_and_uses_supplied_art(self) -> None:
+    def test_joint_victory_is_separate_from_vlad_and_uses_council_art(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks, _event_block
 
         name = "superevent_vorkerland_joint_victory"
@@ -651,7 +772,7 @@ class SupereventContractTests(unittest.TestCase):
         sprite = next(block for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
                       if f'name = "GFX_{name}"' in block)
         self.assertIn('textureFile = "gfx/interface/superevents/WRK/'
-                      'superevent_vorkerland_joint_victory.png"', sprite)
+                      'superevent_west_council.png"', sprite)
         source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
         timeout = blocks(source, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
         self.assertIn(f"flag = {name} days > 6", timeout)
@@ -664,7 +785,7 @@ class SupereventContractTests(unittest.TestCase):
         from tools.validators.validate_adiscord_superevents import blocks
 
         source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
-        finalizer = blocks(source, r"^ADISCORD_vorkerland_finalize_reunified_wrk\s*=\s*\{")[0]
+        finalizer = blocks(source, r"^ADISCORD_vorkerland_finalize_reunification\s*=\s*\{")[0]
         outer = parse_clausewitz(finalizer)[0].value[0].value
         route = next(entry.value for entry in outer if entry.key == "else_if"
                      and any(child.key == "limit" and any(
@@ -794,6 +915,51 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_stelander_shabrat_republic",
                 "superevent_stelander_tikhoreva",
                 "superevent_rus_khan_died",
+                "superevent_nam_resource_war_service",
+                "superevent_nam_resource_war_district",
+                "superevent_stelander_party_victory_houses",
+                "superevent_stelander_party_victory_staff",
+                "superevent_stelander_party_victory_wallets",
+                "superevent_stelander_party_victory_silence",
+                "superevent_stelander_party_victory_regent",
+                "superevent_stelander_shabrat_victory_staff",
+                "superevent_stelander_shabrat_victory_councils",
+                "superevent_stelander_shabrat_victory_truth",
+                "superevent_stelander_party_victory_festival",
+                "superevent_south_houses",
+                "superevent_south_cities",
+                "superevent_south_nur",
+                "superevent_south_regency",
+                "superevent_south_commune",
+                "superevent_south_conclave",
+                "superevent_south_service",
+                "superevent_south_charter",
+                "superevent_south_contracts",
+                "superevent_south_rump",
+                "superevent_south_revenge",
+                "superevent_south_radical",
+                "superevent_south_free_islands",
+                "superevent_south_boards",
+                "superevent_south_restitution",
+                "superevent_west_worker",
+                "superevent_west_petrichev",
+                "superevent_west_veyran",
+                "superevent_west_dorian",
+                "superevent_west_anton",
+                "superevent_west_shield",
+                "superevent_west_emergency",
+                "superevent_west_revanche",
+                "superevent_west_committee",
+                "superevent_vorkerland_world_empire",
+                "superevent_south_iron",
+                "superevent_south_civil_service",
+                "superevent_south_federation",
+                "superevent_south_oil_union",
+                "superevent_south_contract_republic",
+                "superevent_south_directorate",
+                "superevent_south_nam",
+                "superevent_west_council",
+                "superevent_west_world_empire",
             ),
         )
 
@@ -874,6 +1040,16 @@ class SupereventContractTests(unittest.TestCase):
                     for issue in collect_issues(root)
                 )
             )
+
+    def test_removed_texture_leaves_a_broken_presentation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            copy_contract_tree(root)
+            texture = "gfx/interface/superevents/NAM/superevent_resource_war.png"
+            (root / texture).unlink()
+            issues = collect_issues(root)
+            for scene in ("nam_resource_war", "itora_civilwar", "rus_khan_defeated"):
+                self.assertIn(f"GFX_superevent_{scene}: missing texture {texture}", issues)
 
     def test_orphan_scripted_gui_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

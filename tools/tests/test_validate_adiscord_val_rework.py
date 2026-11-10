@@ -1812,8 +1812,15 @@ class ValRewardValidatorTests(unittest.TestCase):
             "VAL_nw_joint_staff_delta",
             "VAL_nw_army_charter_delta",
             "VAL_nw_confront_delta",
-            "VAL_nw_cabinet_delta",
             "VAL_nw_army_guarantee_delta",
+            "VAL_peace_throne_delta",
+            "VAL_peace_cabinet_delta",
+            "VAL_peace_charter_delta",
+            "VAL_peace_captains_delta",
+            "VAL_throne_officer_delta",
+            "VAL_cabinet_bread_delta",
+            "VAL_charter_staff_delta",
+            "VAL_captains_shares_delta",
         }
         self.assertLessEqual(previews, accepted)
         sources = self.preview_sources()
@@ -2703,7 +2710,10 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertFalse(self.variables)
         focuses = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         self.assertNotIn("add_offsite_building", focuses)
-        self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 9)
+        # The last two steps and the completion belong to the postwar reckoning.
+        self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 8)
+        postwar = read_focus_source(ROOT / "focus_trees/VAL/new_world/focuses.txt", encoding="utf-8")
+        self.assertEqual(postwar.count("VAL_advance_economic_recovery = yes"), 2)
         for focus_id in ("VAL_Mobilize_Machine_Shops", "VAL_Reserve_Accounting"):
             focus = next(
                 f for f in named_blocks(focuses, "focus") if f"id = {focus_id}" in f
@@ -2791,7 +2801,6 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         for focus_id in (
             "VAL_Reopen_Trade_Routes",
             "VAL_Settle_Industrial_Debts",
-            "VAL_Return_To_World_Market",
             "VAL_Veterans_Of_The_Campaign",
         ):
             focus = next(
@@ -2803,12 +2812,9 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                 only_named_block(self, focus, "available"),
             )
             self.assertIn("cancel_if_invalid = yes", focus)
-        final = next(
-            f
-            for f in named_blocks(text, "focus")
-            if "id = VAL_Return_To_World_Market" in f
-        )
-        self.assertIn("prerequisite = { focus = VAL_Returning_Buyers }", final)
+        # The reckoning commits completion before its final recovery step.
+        effects = (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(encoding="utf-8")
+        final = only_named_block(self, effects, "VAL_peace_complete_recovery")
         self.assertIn("set_country_flag = VAL_economic_recovery_completed", final)
         self.assertLess(
             final.index("set_country_flag = VAL_economic_recovery_completed"),
@@ -7902,9 +7908,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
         for state in builder.STATE_IDS:
             widget = f"VAL_ops_{state}_controller"
             frame_variable = f"operations_state_{state}_frame"
-            self.assertTrue(
-                matches_conditions(triggers[f"{widget}_visible"], {}, "VAL")
-            )
+            # Fills carry no visibility trigger: an element without one is always shown.
+            self.assertNotIn(f"{widget}_visible", triggers)
             self.assertEqual(scalar(properties[widget], "frame"), frame_variable)
             self.assertEqual(gui_text.count(f'name = "{widget}"'), 1)
             self.assertIn(f'quadTextureSprite = "GFX_VAL_ops_state_{state}"', gui_text)
@@ -9306,14 +9311,17 @@ class ValFormationAndCommandTests(unittest.TestCase):
             (ROOT / "common/bop/VAL.txt").read_text(encoding="utf-8")
         )
         self.assertEqual(
-            [e.key for e in balances], ["VAL_command_balance", "VAL_council_balance"]
+            [e.key for e in balances],
+            ["VAL_command_balance", "VAL_council_balance", "VAL_peace_balance"],
         )
         for balance in balances:
             ranges = [e.value for e in walk(balance.value) if e.key == "range"]
             intervals = sorted(
                 (float(scalar(r, "min")), float(scalar(r, "max"))) for r in ranges
             )
-            self.assertEqual(len(intervals), 7, balance.key)
+            # The reckoning adds the coup and exposure extremes to each side.
+            expected = 9 if balance.key == "VAL_peace_balance" else 7
+            self.assertEqual(len(intervals), expected, balance.key)
             self.assertEqual(intervals[0][0], -1)
             self.assertEqual(intervals[-1][1], 1)
             for left, right in zip(intervals, intervals[1:]):

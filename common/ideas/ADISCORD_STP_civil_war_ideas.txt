@@ -4731,6 +4731,20 @@ ideas = {
 	political_advisor_minister_of_economy = {
 		minister_STS_Ignat_Forel = { name = minister_STS_Ignat_Forel default = no cost = 75 picture = generic_political_advisor_europe_3 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_eco_workshop_ledgers } }
 
+		minister_STP_Ignat_Forel = {
+			name = minister_STS_Ignat_Forel
+			picture = STP_Ignat_Forel
+			cost = 75
+			allowed = { tag = STP }
+			visible = { has_country_flag = STP_pw_civilian_amnesty }
+			available = { hidden_trigger = { has_country_flag = STP_pw_civilian_amnesty } }
+			allowed_to_remove = { }
+			traits = { minister_trait_STS_eco_workshop_ledgers }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
+		}
+
 		minister_STP_Anton_Belik = {
 			name = minister_STP_Anton_Belik
 			picture = generic_political_advisor_europe_3
@@ -4762,6 +4776,20 @@ ideas = {
 
 	political_advisor_minister_of_health = {
 		minister_STS_Nika_Volgina = { name = minister_STS_Nika_Volgina default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_hea_field_wards } }
+
+		minister_STP_Nikita_Volgin = {
+			name = minister_STS_Nika_Volgina
+			picture = STP_Nikita_Volgin
+			cost = 75
+			allowed = { tag = STP }
+			visible = { has_country_flag = STP_pw_civilian_amnesty }
+			available = { hidden_trigger = { has_country_flag = STP_pw_civilian_amnesty } }
+			allowed_to_remove = { }
+			traits = { minister_trait_STS_hea_field_wards }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
+		}
 
 		minister_STP_Sofia_Lanskaya = {
 			name = minister_STP_Sofia_Lanskaya

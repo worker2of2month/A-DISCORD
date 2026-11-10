@@ -12819,6 +12819,53 @@
       }
     },
     {
+      "key": "script_shl_border_watch",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Border Watch",
+      "display_name": "Border Watch",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 50.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 16,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.16
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_shl_border_watch"
+      }
+    },
+    {
       "key": "stp_taran_assault_group",
       "source": {
         "kind": "script",
@@ -14007,6 +14054,135 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_coalition_restitution_regiment"
+      }
+    },
+    {
+      "key": "script_nam_federal_rifle_regiment",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Federal Rifle Regiment",
+      "display_name": "Federal Rifle Regiment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32.0,
+          "infantry_equipment": 3600.0
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_nam_federal_rifle_regiment"
+      }
+    },
+    {
+      "key": "script_nam_union_combined_arms_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Union Combined Arms Brigade",
+      "display_name": "Union Combined Arms Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 44.9375,
+        "manpower": 6800.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "artillery_equipment": 24.0,
+          "infantry_equipment": 6120.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.62
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_nam_union_combined_arms_brigade"
       }
     },
     {
@@ -16567,6 +16743,16 @@
       "path": "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt",
       "kind": "create_unit",
       "technical_name": "Furnace Levy",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "shl_create_border_watch",
+      "path": "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Border Watch",
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,

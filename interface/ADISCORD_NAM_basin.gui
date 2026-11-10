@@ -1403,4 +1403,244 @@ guiTypes = {
 			}
 		}
 	}
+
+	containerWindowType = {
+		name = "ADISCORD_NAM_board_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 594 }
+		clipping = no
+		iconType = {
+			name = "NAM_board_pyramid"
+			spriteType = "GFX_NAM_board_pyramid"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_chair_caption"
+			position = { x = 8 y = 1 }
+			text = "NAM_board_chair_caption"
+			font = "hoi_18mbs"
+			maxWidth = 444
+			maxHeight = 22
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_election_rules"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_1"
+			position = { x = 186 y = 40 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_1_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_1"
+			position = { x = 124 y = 75 }
+			text = "NAM_board_seat_1"
+			font = "hoi_16mbs"
+			maxWidth = 174
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_1_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_2"
+			position = { x = 114 y = 162 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_2_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_2"
+			position = { x = 74 y = 197 }
+			text = "NAM_board_seat_2"
+			font = "hoi_16mbs"
+			maxWidth = 130
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_2_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_3"
+			position = { x = 257 y = 162 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_3_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_3"
+			position = { x = 217 y = 197 }
+			text = "NAM_board_seat_3"
+			font = "hoi_16mbs"
+			maxWidth = 130
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_3_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_4"
+			position = { x = 59 y = 284 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_4_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_4"
+			position = { x = 22 y = 319 }
+			text = "NAM_board_seat_4"
+			font = "hoi_16mbs"
+			maxWidth = 124
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_4_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_5"
+			position = { x = 184 y = 284 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_5_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_5"
+			position = { x = 147 y = 319 }
+			text = "NAM_board_seat_5"
+			font = "hoi_16mbs"
+			maxWidth = 124
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_5_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_mark_6"
+			position = { x = 313 y = 284 }
+			spriteType = "GFX_NAM_board_company_marks"
+			pdx_tooltip = "NAM_board_seat_6_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_seat_6"
+			position = { x = 274 y = 319 }
+			text = "NAM_board_seat_6"
+			font = "hoi_16mbs"
+			maxWidth = 128
+			maxHeight = 69
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_seat_6_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_sector_heading"
+			format = centre
+			position = { x = 8 y = 410 }
+			text = "NAM_board_sector_heading"
+			font = "hoi_18mbs"
+			maxWidth = 444
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_assets_rules"
+		}
+
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_oil"
+			position = { x = 17 y = 463 }
+			text = "NAM_board_registry_oil"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_oil_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_coast"
+			position = { x = 17 y = 504 }
+			text = "NAM_board_registry_coast"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_coast_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_labour"
+			position = { x = 17 y = 545 }
+			text = "NAM_board_registry_labour"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_labour_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_rail"
+			position = { x = 236 y = 463 }
+			text = "NAM_board_registry_rail"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_rail_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_yards"
+			position = { x = 236 y = 504 }
+			text = "NAM_board_registry_yards"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_yards_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_registry_depots"
+			position = { x = 236 y = 545 }
+			text = "NAM_board_registry_depots"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 40
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_registry_depots_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_chartered_caption"
+			position = { x = 17 y = 440 }
+			text = "NAM_board_chartered_caption"
+			font = "hoi_16mbs"
+			maxWidth = 210
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_assets_rules"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_tenders_caption"
+			position = { x = 236 y = 440 }
+			text = "NAM_board_tenders_caption"
+			font = "hoi_16mbs"
+			maxWidth = 208
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "NAM_board_assets_rules"
+		}
+	}
 }

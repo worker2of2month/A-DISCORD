@@ -60,8 +60,8 @@ ADISCORD_ai_healthy_civilian_growth = {
 	enable = {
 		ADISCORD_economy_ai_is_healthy = yes
 		has_war = no
-		ADISCORD_ai_has_war_preparation = no
 		check_variable = { var = ADISCORD_economy_surplus_streak value = 2 compare = greater_than_or_equals }
+		ADISCORD_ai_has_war_preparation = no
 	}
 	abort_when_not_enabled = yes
 
@@ -123,8 +123,8 @@ ADISCORD_ai_healthy_peace_infrastructure = {
 	enable = {
 		ADISCORD_economy_ai_is_healthy = yes
 		has_war = no
-		ADISCORD_ai_has_war_preparation = no
 		check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals }
+		ADISCORD_ai_has_war_preparation = no
 	}
 	abort_when_not_enabled = yes
 

@@ -45,6 +45,22 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_resource_war.408",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 408,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_veyran_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.409",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 409,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_veyran_campaign",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.109",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 109,
@@ -1845,6 +1861,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_oil.11",
+      "namespace": "ADISCORD_nam_oil",
+      "number": 11,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_oil_monopoly",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.24",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 24,
@@ -2320,6 +2344,30 @@
       "id": "ADISCORD_nam_story.23",
       "namespace": "ADISCORD_nam_story",
       "number": 23,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.24",
+      "namespace": "ADISCORD_nam_story",
+      "number": 24,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.25",
+      "namespace": "ADISCORD_nam_story",
+      "number": 25,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.26",
+      "namespace": "ADISCORD_nam_story",
+      "number": 26,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_story",
       "status": "active"
@@ -4920,6 +4968,30 @@
       "id": "ADISCORD_STP_pv.50",
       "namespace": "ADISCORD_STP_pv",
       "number": 50,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.51",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 51,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.52",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 52,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.53",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 53,
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_party_war",
       "status": "active"
@@ -8589,6 +8661,46 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_resource_war.111",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 111,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.112",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 112,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.113",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 113,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.114",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 114,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.115",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 115,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SHL.140",
       "namespace": "ADISCORD_SHL",
       "number": 140,
@@ -8970,6 +9082,414 @@
       "number": 36,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.2",
+      "namespace": "val_peace",
+      "number": 2,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.10",
+      "namespace": "val_peace",
+      "number": 10,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.11",
+      "namespace": "val_peace",
+      "number": 11,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.12",
+      "namespace": "val_peace",
+      "number": 12,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.13",
+      "namespace": "val_peace",
+      "number": 13,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.20",
+      "namespace": "val_peace",
+      "number": 20,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.21",
+      "namespace": "val_peace",
+      "number": 21,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.22",
+      "namespace": "val_peace",
+      "number": 22,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.23",
+      "namespace": "val_peace",
+      "number": 23,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.24",
+      "namespace": "val_peace",
+      "number": 24,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.25",
+      "namespace": "val_peace",
+      "number": 25,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.26",
+      "namespace": "val_peace",
+      "number": 26,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.27",
+      "namespace": "val_peace",
+      "number": 27,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.28",
+      "namespace": "val_peace",
+      "number": 28,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.30",
+      "namespace": "val_peace",
+      "number": 30,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.40",
+      "namespace": "val_peace",
+      "number": 40,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.50",
+      "namespace": "val_peace",
+      "number": 50,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.51",
+      "namespace": "val_peace",
+      "number": 51,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.52",
+      "namespace": "val_peace",
+      "number": 52,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.53",
+      "namespace": "val_peace",
+      "number": 53,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.41",
+      "namespace": "val_peace",
+      "number": 41,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.54",
+      "namespace": "val_peace",
+      "number": 54,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.55",
+      "namespace": "val_peace",
+      "number": 55,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.56",
+      "namespace": "val_peace",
+      "number": 56,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.57",
+      "namespace": "val_peace",
+      "number": 57,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.58",
+      "namespace": "val_peace",
+      "number": 58,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.59",
+      "namespace": "val_peace",
+      "number": 59,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.60",
+      "namespace": "val_peace",
+      "number": 60,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.61",
+      "namespace": "val_peace",
+      "number": 61,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.62",
+      "namespace": "val_peace",
+      "number": 62,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.63",
+      "namespace": "val_peace",
+      "number": 63,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.64",
+      "namespace": "val_peace",
+      "number": 64,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.65",
+      "namespace": "val_peace",
+      "number": 65,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.66",
+      "namespace": "val_peace",
+      "number": 66,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.67",
+      "namespace": "val_peace",
+      "number": 67,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.68",
+      "namespace": "val_peace",
+      "number": 68,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.69",
+      "namespace": "val_peace",
+      "number": 69,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.70",
+      "namespace": "val_peace",
+      "number": 70,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.71",
+      "namespace": "val_peace",
+      "number": 71,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.72",
+      "namespace": "val_peace",
+      "number": 72,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.73",
+      "namespace": "val_peace",
+      "number": 73,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.74",
+      "namespace": "val_peace",
+      "number": 74,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.80",
+      "namespace": "val_peace",
+      "number": 80,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.81",
+      "namespace": "val_peace",
+      "number": 81,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.82",
+      "namespace": "val_peace",
+      "number": 82,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.83",
+      "namespace": "val_peace",
+      "number": 83,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.84",
+      "namespace": "val_peace",
+      "number": 84,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.85",
+      "namespace": "val_peace",
+      "number": 85,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.86",
+      "namespace": "val_peace",
+      "number": 86,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.87",
+      "namespace": "val_peace",
+      "number": 87,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.88",
+      "namespace": "val_peace",
+      "number": 88,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
       "status": "active"
     }
   ]

@@ -74,6 +74,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_hum_innovation_parks } }
+				unlock_decision_tooltip = NAM_corp_innovation_park
+				custom_effect_tooltip = NAM_corp_innovation_park_unlock_tt
+			}
+			custom_effect_tooltip = NAM_board_civil_delivery_tt
 			add_stability = 0.05
 			custom_effect_tooltip = NAM_grp_board_humanist_facade_tt
 			hidden_effect = {
@@ -102,6 +108,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_hum_credit_arms } }
+				unlock_decision_tooltip = NAM_corp_buy_arms
+				custom_effect_tooltip = NAM_corp_buy_arms_unlock_tt
+			}
+			custom_effect_tooltip = NAM_board_guard_delivery_tt
 			add_political_power = 100
 			add_stability = -0.03
 			custom_effect_tooltip = NAM_grp_board_purge_ministers_tt
@@ -180,6 +192,8 @@ focus_tree = {
 				producer = NAM
 			}
 			custom_effect_tooltip = NAM_board_island_concessions_tt
+			unlock_decision_tooltip = NAM_board_tender_yards
+			custom_effect_tooltip = NAM_board_tender_yards_unlock_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 				NAM_corp_capital_add = yes
@@ -206,6 +220,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_charter_renewal
 			custom_effect_tooltip = NAM_corp_charter_renewal_unlock_tt
+			unlock_decision_tooltip = NAM_board_tender_depots
+			custom_effect_tooltip = NAM_board_tender_depots_unlock_tt
 			custom_effect_tooltip = NAM_board_shareholders_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
@@ -290,28 +306,42 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_district_auction }
 		mutually_exclusive = { focus = NAM_board_eflor_steel }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_efl_district_tt
 				EFL = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_eflor_terminal_tt
+				NAM_board_eflor_terminal = yes
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_board_eflor_oil_tt
-			hidden_effect = {
-				EFL = {
-					set_variable = { NAM_corp_district_owner = 1 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						EFL = { NAM_board_title_available = yes }
+						NAM_board_eflor_terminal = yes
+					}
 				}
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-				NAM_oil_refresh = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
+				custom_effect_tooltip = NAM_board_eflor_oil_tt
+				hidden_effect = {
+					EFL = {
+						set_variable = { NAM_corp_district_owner = 1 }
+						NAM_corp_district_apply = yes
+					}
+					NAM_board_queue_recount = yes
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -329,37 +359,52 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_district_auction }
 		mutually_exclusive = { focus = NAM_board_eflor_oil }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_efl_district_tt
 				EFL = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_factory_site_tt
+				EFL = { NAM_board_factory_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_board_eflor_steel_tt
-			hidden_effect = {
-				EFL = {
-					set_variable = { NAM_corp_district_owner = 2 }
-					NAM_corp_district_apply = yes
-					capital_scope = {
-						if = {
-							limit = { is_owned_by = EFL }
-							add_extra_state_shared_building_slots = 1
-							add_building_construction = {
-								type = arms_factory
-								level = 1
-								instant_build = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						EFL = { NAM_board_title_available = yes }
+						EFL = { NAM_board_factory_site = yes }
+					}
+				}
+				custom_effect_tooltip = NAM_board_eflor_steel_tt
+				hidden_effect = {
+					EFL = {
+						set_variable = { NAM_corp_district_owner = 2 }
+						NAM_corp_district_apply = yes
+						capital_scope = {
+							if = {
+								limit = { is_owned_by = EFL }
+								add_extra_state_shared_building_slots = 1
+								add_building_construction = {
+									type = arms_factory
+									level = 1
+									instant_build = yes
+								}
 							}
 						}
 					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
 			}
 		}
 		ai_will_do = {
@@ -377,31 +422,41 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_district_auction }
 		mutually_exclusive = { focus = NAM_board_azhar_bank }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_azh_district_tt
 				AZH = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 20
-				producer = NAM
-			}
-			custom_effect_tooltip = NAM_board_azhar_shipping_tt
-			hidden_effect = {
-				AZH = {
-					set_variable = { NAM_corp_district_owner = 3 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						AZH = { NAM_board_title_available = yes }
+					}
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 20
+					producer = NAM
+				}
+				custom_effect_tooltip = NAM_board_azhar_shipping_tt
+				hidden_effect = {
+					AZH = {
+						set_variable = { NAM_corp_district_owner = 3 }
+						NAM_corp_district_apply = yes
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -419,26 +474,36 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_district_auction }
 		mutually_exclusive = { focus = NAM_board_azhar_shipping }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_azh_district_tt
 				AZH = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_board_azhar_bank_tt
-			hidden_effect = {
-				AZH = {
-					set_variable = { NAM_corp_district_owner = 6 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						AZH = { NAM_board_title_available = yes }
+					}
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
-				NAM_corp_capital_add = yes
+				custom_effect_tooltip = NAM_board_azhar_bank_tt
+				hidden_effect = {
+					AZH = {
+						set_variable = { NAM_corp_district_owner = 6 }
+						NAM_corp_district_apply = yes
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+					NAM_corp_capital_add = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -574,7 +639,10 @@ focus_tree = {
 		prerequisite = { focus = NAM_hum_company_guard }
 		mutually_exclusive = { focus = NAM_board_mercenary_battalions }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_operational_naval_base_tt
 				ADISCORD_has_operational_naval_base = yes
@@ -583,24 +651,42 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			hidden_effect = {
-				create_equipment_variant = {
-					name = "ADISCORD_escort_ship_2155"
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						ADISCORD_has_operational_naval_base = yes
+					}
+				}
+				hidden_effect = {
+					create_equipment_variant = {
+						name = "ADISCORD_escort_ship_2155"
+						type = ADISCORD_escort_ship_2155
+						allow_without_tech = yes
+					}
+				}
+				create_ship = {
 					type = ADISCORD_escort_ship_2155
-					allow_without_tech = yes
+					equipment_variant = "ADISCORD_escort_ship_2155"
+					amount = 2
+				}
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 15
+					producer = NAM
+				}
+				navy_experience = 10
+				if = {
+					limit = {
+						hidden_trigger = {
+							NOT = { has_completed_focus = NAM_harbour_service }
+							NOT = { has_completed_focus = NAM_defeat_harbour_economy }
+						}
+					}
+					unlock_decision_tooltip = NAM_island_convoy_service
+					custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
 				}
 			}
-			create_ship = {
-				type = ADISCORD_escort_ship_2155
-				equipment_variant = "ADISCORD_escort_ship_2155"
-				amount = 2
-			}
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 15
-				producer = NAM
-			}
-			navy_experience = 10
 		}
 		ai_will_do = {
 			base = 15
@@ -617,21 +703,49 @@ focus_tree = {
 		prerequisite = { focus = NAM_hum_company_guard }
 		mutually_exclusive = { focus = NAM_board_private_navy }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
+			capital_scope = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 3000
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 2500
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 40
-				producer = NAM
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						capital_scope = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_mercenary_regiment_tt
+				hidden_effect = {
+					division_template = {
+						name = "Контрактный пехотный полк"
+						template_counter = 3
+						division_names_group = ADISCORD_INF_01
+						regiments = {
+							infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 0 y = 2 }
+						}
+						support = { engineer = { x = 0 y = 0 } }
+					}
+					capital_scope = {
+						create_unit = {
+							division = "name = \"1-й контрактный пехотный полк\" division_template = \"Контрактный пехотный полк\" start_experience_factor = 0.50 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+							owner = NAM
+							allow_spawning_on_enemy_provs = no
+						}
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -652,34 +766,54 @@ focus_tree = {
 		cost = 7
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		available = {
-			has_capitulated = no
-			capital_scope = {
-				is_owned_by = NAM
-				is_controlled_by = NAM
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_company_capital_ready_tt
+				any_owned_state = { NAM_board_held_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_offices_site_tt
 			if = {
 				limit = {
-					NOT = { has_completed_focus = NAM_hum_neo_svetlogorsk }
-					capital_scope = { NAM_rw_island_state = yes }
+					hidden_trigger = {
+						NAM_board_operable = yes
+						any_owned_state = { NAM_board_held_site = yes }
+					}
 				}
-				NAM_exile_found_new_capital = yes
-			}
-			capital_scope = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = ADISCORD_business_center
-					level = 1
-					instant_build = yes
+				if = {
+					limit = {
+						NOT = { has_completed_focus = NAM_hum_neo_svetlogorsk }
+						capital_scope = {
+							NAM_rw_island_state = yes
+							NAM_board_held_site = yes
+						}
+					}
+					NAM_exile_found_new_capital = yes
 				}
-			}
-			custom_effect_tooltip = NAM_board_company_capital_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
-				NAM_corp_capital_add = yes
+				if = {
+					limit = { capital_scope = { NAM_board_office_site = yes } }
+					capital_scope = { NAM_board_build_company_offices = yes }
+				}
+				else = {
+					random_owned_state = {
+						limit = { NAM_board_office_site = yes }
+						NAM_board_build_company_offices = yes
+					}
+				}
+				if = {
+					limit = { NOT = { has_completed_focus = NAM_hum_free_zones } }
+					unlock_decision_tooltip = NAM_corp_charter_free_zone
+					custom_effect_tooltip = NAM_corp_charter_free_zone_unlock_tt
+				}
+				custom_effect_tooltip = NAM_board_company_capital_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+					NAM_corp_capital_add = yes
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -697,51 +831,45 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_company_capital }
 		mutually_exclusive = { focus = NAM_board_company_docks }
 		available = {
-			has_capitulated = no
-			OR = {
-				231 = {
-					is_owned_by = NAM
-					is_controlled_by = NAM
-				}
-				capital_scope = {
-					is_owned_by = NAM
-					is_controlled_by = NAM
-				}
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_company_housing_ready_tt
+				any_owned_state = { NAM_board_housing_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			# Company housing and workshops rise beside the Middle Island mines
-			# while that island is ours; otherwise in the capital.
+			custom_effect_tooltip = NAM_board_housing_site_tt
 			if = {
 				limit = {
-					231 = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
+					hidden_trigger = {
+						NAM_board_operable = yes
+						any_owned_state = { NAM_board_housing_site = yes }
 					}
 				}
-				231 = {
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
+				if = {
+					limit = { 231 = { NAM_board_housing_site = yes } }
+					231 = { NAM_board_build_company_housing = yes }
+				}
+				else_if = {
+					limit = { capital_scope = { NAM_board_housing_site = yes } }
+					capital_scope = { NAM_board_build_company_housing = yes }
+				}
+				else = {
+					random_owned_state = {
+						limit = { NAM_board_housing_site = yes }
+						NAM_board_build_company_housing = yes
 					}
 				}
+				if = {
+					limit = { hidden_trigger = { check_variable = { NAM_free_zone_slots < 3 } } }
+					custom_effect_tooltip = NAM_board_housing_charter_tt
+					hidden_effect = { add_to_variable = { var = NAM_free_zone_slots value = 1 } }
+				}
+				add_stability = -0.02
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
-			else = {
-				capital_scope = {
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			add_stability = -0.02
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = {
 			base = 15
@@ -758,37 +886,42 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_company_capital }
 		mutually_exclusive = { focus = NAM_board_company_housing }
 		available = {
-			has_capitulated = no
-			capital_scope = {
-				is_owned_by = NAM
-				is_controlled_by = NAM
-				is_coastal = yes
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_company_docks_ready_tt
+				any_owned_state = { NAM_board_dock_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			capital_scope = {
-				if = {
-					limit = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-						is_coastal = yes
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = dockyard
-						level = 1
-						instant_build = yes
+			custom_effect_tooltip = NAM_board_docks_site_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						any_owned_state = { NAM_board_dock_site = yes }
 					}
 				}
+				if = {
+					limit = { capital_scope = { NAM_board_yard_site = yes } }
+					capital_scope = { NAM_board_build_company_docks = yes }
+				}
+				else = {
+					random_owned_state = {
+						limit = { NAM_board_yard_site = yes }
+						NAM_board_build_company_docks = yes
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 10
+					producer = NAM
+				}
+				unlock_decision_tooltip = NAM_econ_insured_freighters
+				custom_effect_tooltip = NAM_econ_insured_freighters_unlock_tt
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 10
-				producer = NAM
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = {
 			base = 15
@@ -807,27 +940,39 @@ focus_tree = {
 			focus = NAM_board_company_docks
 		}
 		available = {
-			has_capitulated = no
-			capital_scope = {
-				is_owned_by = NAM
-				is_controlled_by = NAM
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_company_airport_ready_tt
+				any_owned_state = { NAM_board_held_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			capital_scope = {
-				add_building_construction = {
-					type = air_base
-					level = 2
-					instant_build = yes
-				}
-			}
-			air_experience = 15
 			custom_effect_tooltip = NAM_board_company_airport_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
-				NAM_corp_capital_add = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						any_owned_state = { NAM_board_held_site = yes }
+					}
+				}
+				if = {
+					limit = { capital_scope = { NAM_board_airport_site = yes } }
+					capital_scope = { NAM_board_expand_company_airport = yes }
+				}
+				else = {
+					random_owned_state = {
+						limit = { NAM_board_airport_site = yes }
+						NAM_board_expand_company_airport = yes
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = ADISCORD_transport_airframe_2162
+					amount = 24
+					producer = NAM
+				}
+				air_experience = 15
 			}
 		}
 		ai_will_do = {
@@ -887,17 +1032,24 @@ focus_tree = {
 				tooltip = NAM_war_of_return_won_tt
 				has_global_flag = NAM_war_of_return_won
 			}
-			owns_state = 67
+			custom_trigger_tooltip = {
+				tooltip = NAM_loren_lease_site_tt
+				67 = { NAM_loren_working_field = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_loren_book_oil_cargo
+			custom_effect_tooltip = NAM_loren_book_oil_cargo_unlock_tt
 			custom_effect_tooltip = NAM_board_homeland_concession_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+				67 = { set_state_flag = NAM_loren_lease }
 				NAM_oil_refresh = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
 			}
 			custom_effect_tooltip = NAM_grp_board_homeland_concession_tt
 			hidden_effect = {
@@ -929,14 +1081,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_board_post_contract_guard
+			custom_effect_tooltip = NAM_board_post_contract_guard_unlock_tt
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 3000
+				amount = 600
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 60
+				type = motorized_equipment
+				amount = 40
 				producer = NAM
 			}
 			custom_effect_tooltip = NAM_board_security_contracts_tt
@@ -968,25 +1122,35 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			# The tenders rebuild South Harbour while it is ours.
 			if = {
-				limit = {
-					700 = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_hum_harbour_rebuilding } } }
+				unlock_decision_tooltip = NAM_hum_reconstruction_fund
+				custom_effect_tooltip = NAM_hum_reconstruction_fund_unlock_tt
+			}
+			custom_effect_tooltip = NAM_board_harbour_works_tt
+			700 = {
+				if = {
+					limit = { hidden_trigger = { NAM_board_held_site = yes } }
+					if = {
+						limit = { hidden_trigger = { infrastructure < 5 } }
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
 					}
-				}
-				700 = {
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
+					if = {
+						limit = {
+							hidden_trigger = {
+								free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+							}
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
 					}
 				}
 			}
@@ -1019,21 +1183,8 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_command_power = 20
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 4000
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 150
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 100
-				producer = NAM
-			}
+			unlock_decision_tooltip = NAM_board_issue_war_shares
+			custom_effect_tooltip = NAM_board_issue_war_shares_unlock_tt
 			custom_effect_tooltip = NAM_board_stock_mobilisation_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_consolidation value = 10 }
@@ -1098,8 +1249,8 @@ focus_tree = {
 				has_global_flag = NAM_great_war_won
 			}
 			custom_trigger_tooltip = {
-				tooltip = NAM_hum_has_federal_district_tt
-				any_subject_country = { has_country_flag = NAM_federal_district }
+				tooltip = NAM_board_district_office_tt
+				any_subject_country = { NAM_board_operating_district = yes }
 			}
 		}
 		cancel_if_invalid = yes
@@ -1108,7 +1259,7 @@ focus_tree = {
 			custom_effect_tooltip = NAM_hum_board_districts_tt
 			hidden_effect = {
 				every_subject_country = {
-					limit = { has_country_flag = NAM_federal_district }
+					limit = { NAM_board_factory_site = yes }
 					capital_scope = {
 						if = {
 							limit = { is_owned_by = PREV }
@@ -1143,39 +1294,48 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				SDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_sdr_district_tt
 				SDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 3000
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 80
-				producer = NAM
-			}
-			custom_effect_tooltip = NAM_board_sardan_arsenal_tt
-			hidden_effect = {
-				SDR = {
-					set_variable = { NAM_corp_district_owner = 4 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						SDR = { NAM_board_title_available = yes }
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 80
+					producer = NAM
+				}
+				custom_effect_tooltip = NAM_board_sardan_arsenal_tt
+				hidden_effect = {
+					SDR = {
+						set_variable = { NAM_corp_district_owner = 4 }
+						NAM_corp_district_apply = yes
+					}
 				}
 			}
 		}
@@ -1197,30 +1357,39 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				SDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_sdr_district_tt
 				SDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 8000
-			custom_effect_tooltip = NAM_board_sardan_artel_tt
-			hidden_effect = {
-				SDR = {
-					set_variable = { NAM_corp_district_owner = 5 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						SDR = { NAM_board_title_available = yes }
+					}
+				}
+				add_manpower = 8000
+				custom_effect_tooltip = NAM_board_sardan_artel_tt
+				hidden_effect = {
+					SDR = {
+						set_variable = { NAM_corp_district_owner = 5 }
+						NAM_corp_district_apply = yes
+					}
 				}
 			}
 		}
@@ -1242,33 +1411,43 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				RHM = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_rhm_district_tt
 				RHM = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = 6000
-			custom_effect_tooltip = NAM_board_rakhma_oil_tt
-			hidden_effect = {
-				RHM = {
-					set_variable = { NAM_corp_district_owner = 1 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						RHM = { NAM_board_title_available = yes }
+					}
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
+				custom_effect_tooltip = NAM_board_rakhma_oil_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_open_fuel_reserve value = 30000 }
+					NAM_open_fuel_release = yes
+					RHM = {
+						set_variable = { NAM_corp_district_owner = 1 }
+						NAM_corp_district_apply = yes
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -1289,45 +1468,59 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				RHM = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_rhm_district_tt
 				RHM = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_factory_site_tt
+				RHM = { NAM_board_factory_site = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			RHM = {
-				capital_scope = {
-					if = {
-						limit = { is_owned_by = RHM }
-						add_extra_state_shared_building_slots = 1
-						add_building_construction = {
-							type = arms_factory
-							level = 1
-							instant_build = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						RHM = { NAM_board_title_available = yes }
+						RHM = { NAM_board_factory_site = yes }
+					}
+				}
+				RHM = {
+					capital_scope = {
+						if = {
+							limit = { is_owned_by = RHM }
+							add_extra_state_shared_building_slots = 1
+							add_building_construction = {
+								type = arms_factory
+								level = 1
+								instant_build = yes
+							}
 						}
 					}
 				}
-			}
-			custom_effect_tooltip = NAM_board_rakhma_steel_tt
-			hidden_effect = {
-				RHM = {
-					set_variable = { NAM_corp_district_owner = 2 }
-					NAM_corp_district_apply = yes
+				custom_effect_tooltip = NAM_board_rakhma_steel_tt
+				hidden_effect = {
+					RHM = {
+						set_variable = { NAM_corp_district_owner = 2 }
+						NAM_corp_district_apply = yes
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
 			}
 		}
 		ai_will_do = {
@@ -1348,35 +1541,44 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				KDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_kdr_district_tt
 				KDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 20
-				producer = NAM
-			}
-			navy_experience = 10
-			custom_effect_tooltip = NAM_board_kadir_shipping_tt
-			hidden_effect = {
-				KDR = {
-					set_variable = { NAM_corp_district_owner = 3 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						KDR = { NAM_board_title_available = yes }
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 20
+					producer = NAM
+				}
+				navy_experience = 10
+				custom_effect_tooltip = NAM_board_kadir_shipping_tt
+				hidden_effect = {
+					KDR = {
+						set_variable = { NAM_corp_district_owner = 3 }
+						NAM_corp_district_apply = yes
+					}
 				}
 			}
 		}
@@ -1398,32 +1600,41 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				KDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_federal_subject = yes
 				}
 			}
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_kdr_district_tt
 				KDR = {
-					exists = yes
-					has_country_flag = NAM_federal_district
+					NAM_board_title_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_board_kadir_bank_tt
-			hidden_effect = {
-				KDR = {
-					set_variable = { NAM_corp_district_owner = 6 }
-					NAM_corp_district_apply = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						KDR = { NAM_board_title_available = yes }
+					}
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
-				NAM_corp_capital_add = yes
+				custom_effect_tooltip = NAM_board_kadir_bank_tt
+				hidden_effect = {
+					KDR = {
+						set_variable = { NAM_corp_district_owner = 6 }
+						NAM_corp_district_apply = yes
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+					NAM_corp_capital_add = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -1457,11 +1668,19 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_stability = 0.10
-			add_political_power = 100
 			custom_effect_tooltip = NAM_board_union_of_boards_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
-				NAM_corp_capital_add = yes
+				for_each_scope_loop = {
+					array = NAM_federal_districts
+					NAM_board_ship_district_order = yes
+				}
+			}
+			if = {
+				limit = {
+					hidden_trigger = { NOT = { has_completed_focus = NAM_board_shareholders } }
+				}
+				unlock_decision_tooltip = NAM_corp_charter_renewal
+				custom_effect_tooltip = NAM_corp_charter_renewal_unlock_tt
 			}
 			hidden_effect = {
 				country_event = { id = ADISCORD_nam_story.23 days = 3 }

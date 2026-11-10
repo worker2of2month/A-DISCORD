@@ -4,13 +4,13 @@ NAM_wrk_concession_income = {
 	enable = {
 		has_country_flag = NAM_wrk_concession_active
 		NAM_colony_phase = yes
-		WRK = { exists = yes }
+		event_target:ADISCORD_vorkerland_nation = { exists = yes }
 	}
 	remove_trigger = {
 		OR = {
 			NOT = { has_country_flag = NAM_wrk_concession_active }
 			NAM_colony_phase = no
-			WRK = { exists = no }
+			event_target:ADISCORD_vorkerland_nation = { exists = no }
 		}
 	}
 	ADISCORD_economy_weekly_income = NAM_wrk_trade_weekly_income
@@ -94,6 +94,13 @@ NAM_scorched_wells_modifier = {
 	local_supplies_for_controller = NAM_scorched_enemy_supply
 }
 
+NAM_klyuchevsk_oil_strike = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { NAM_exile_resistance_site = yes }
+	remove_trigger = { NAM_exile_resistance_site = no }
+	state_resources_factor = -0.50
+}
+
 # COUNTRY former client. A contract voided by war leaves its fuel plan empty
 # for 90 days.
 NAM_fuel_shortage = {
@@ -152,6 +159,18 @@ NAM_corp_dynamic = {
 	political_power_gain = NAM_corp_mod_pp
 }
 
+NAM_board_industrial_policy = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { NAM_board_operable = yes }
+	industrial_capacity_factory = NAM_board_mod_output
+	production_speed_buildings_factor = NAM_board_mod_construction
+	production_factory_efficiency_gain_factor = NAM_board_mod_growth
+	industrial_capacity_dockyard = NAM_board_mod_naval
+	production_speed_dockyard_factor = NAM_board_mod_dockyards
+	production_factory_max_efficiency_factor = NAM_board_mod_ceiling
+	consumer_goods_factor = NAM_board_mod_goods
+}
+
 # STATE island. A chartered free zone: no taxes, fast construction for the
 # investors and a richer output.
 NAM_free_zone_state = {
@@ -163,11 +182,37 @@ NAM_free_zone_state = {
 	local_building_slots = 1
 }
 
+NAM_board_company_quarters_state = {
+	icon = GFX_focus_VAL_Bread_From_Barracks
+	enable = { NAM_board_held_site = yes }
+	state_production_speed_industrial_complex_factor = 0.35
+}
+
+NAM_air_bridge_deliveries = {
+	icon = GFX_focus_RUS_aviation_fuel_reserve
+	enable = {
+		NAM_air_bridge_destination = yes
+		NAM = { NAM_air_bridge_departure = yes }
+	}
+	local_supplies_for_controller = 3
+}
+
+NAM_tenant_supply_depot = {
+	icon = GFX_focus_NAM_open_ledgers
+	enable = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+		NAM = { NAM_pw_operable = yes }
+	}
+	local_supplies = 1
+	state_repair_speed_infrastructure_factor = 0.25
+}
+
 # STATE island. The island steel sold abroad for 60 days.
 NAM_corp_steel_export_state = {
 	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
 	enable = { always = yes }
-	state_resources_factor = -0.50
+	state_resource_steel = -8
 }
 
 # STATE island after the corporate takeover. A corporate board governs it.
@@ -193,42 +238,42 @@ NAM_consolidation_dynamic = {
 # corporation's profile (NAM_corp_district_owner 1-6).
 NAM_corp_owner_1_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	fuel_gain_factor = 0.25
 	stability_factor = -0.05
 }
 
 NAM_corp_owner_2_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	local_resources_factor = 0.15
 	stability_factor = -0.03
 }
 
 NAM_corp_owner_3_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	ADISCORD_economy_trade_income_factor = 0.15
 	consumer_goods_factor = 0.03
 }
 
 NAM_corp_owner_4_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	production_factory_efficiency_gain_factor = 0.10
 	war_support_factor = -0.05
 }
 
 NAM_corp_owner_5_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	recruitable_population_factor = 0.05
 	stability_factor = -0.08
 }
 
 NAM_corp_owner_6_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { always = yes }
+	enable = { NAM_board_federal_subject = yes }
 	industrial_capacity_factory = 0.05
 	ADISCORD_economy_tax_collection_factor = -0.10
 }
@@ -241,6 +286,28 @@ NAM_conquered_state_modifier = {
 	state_production_speed_buildings_factor = -0.75
 	local_building_slots_factor = -0.50
 	compliance_growth = -0.05
+}
+
+# STATE. Civilian workshops and market stores provision the garrison.
+NAM_rad_requisitioned_market = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { NAM_rad_requisition_district = yes }
+	remove_trigger = { NAM_rad_requisition_district = no }
+	local_supplies = 1.5
+	local_factories = -0.50
+}
+
+NAM_rad_command_post = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { NAM_rad_command_post_staffed = yes }
+	remove_trigger = {
+		OR = {
+			NOT = { is_owned_by = NAM }
+			has_state_flag = NAM_rad_local_council
+		}
+	}
+	local_supplies = 1.25
+	resistance_target = -0.10
 }
 
 # STATE conquered. Forced labour extracts its resources for Svetlogorye.
@@ -338,6 +405,25 @@ NAM_guarded_wells_modifier = {
 	state_repair_speed_infrastructure_factor = 0.25
 }
 
+NAM_pw_district_fleet_called = {
+	icon = GFX_focus_NAM_mobile_columns
+	enable = { always = yes }
+	local_supplies = -0.5
+}
+
+# Title deeds survive a change of government. Their use requires jurisdiction.
+NAM_pw_district_title_books = {
+	icon = GFX_focus_NAM_last_centre_register
+	enable = { NAM_pw_central_civil_district = yes }
+	local_building_slots = 1
+}
+
+NAM_pw_civil_court_awards = {
+	icon = GFX_focus_RUS_district_courts
+	enable = { NAM_pw_central_civil_district = yes }
+	state_production_speed_buildings_factor = 0.20
+}
+
 # Autonomy is a permanent term of NAM citizenship, dormant under a foreign owner.
 NAM_border_autonomous_district = {
 	icon = GFX_modifiers_generic_military_plans
@@ -346,4 +432,14 @@ NAM_border_autonomous_district = {
 	state_production_speed_buildings_factor = -0.50
 	local_manpower = -0.50
 	state_resources_factor = -0.35
+}
+
+# STATE South Coast. Food from the irrigated plots reaches local supply while NAM holds the canal.
+NAM_south_coast_irrigation = {
+	icon = GFX_idea_ADISCORD_economic_system_agrarian
+	enable = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
+	local_supplies = 0.30
 }

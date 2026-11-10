@@ -635,6 +635,97 @@ ADISCORD_south_remove_path_spirit = {
 
 # ----- Settlement -----
 
+# The queue stores the outcome at settlement, before a later change of government.
+ADISCORD_south_show_shahrabad_victory = {
+	if = {
+		limit = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 37 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 38 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 39 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 40 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 41 }
+	}
+	else = {
+		set_temp_variable = { ADISCORD_superevent_request = 42 }
+	}
+	ADISCORD_superevent_enqueue = yes
+}
+
+ADISCORD_south_show_svetlogorye_victory = {
+	if = {
+		limit = { has_country_flag = NAM_corp_takeover }
+		set_temp_variable = { ADISCORD_superevent_request = 50 }
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_exile_radical }
+		set_temp_variable = { ADISCORD_superevent_request = 48 }
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_exile_humanist }
+		set_temp_variable = { ADISCORD_superevent_request = 49 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_ladder_ending_iron }
+		set_temp_variable = { ADISCORD_superevent_request = 62 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_ladder_ending_service }
+		set_temp_variable = { ADISCORD_superevent_request = 63 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_charter_ending_federation }
+		set_temp_variable = { ADISCORD_superevent_request = 64 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_charter_ending_oil_union }
+		set_temp_variable = { ADISCORD_superevent_request = 65 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_prag_ending_republic }
+		set_temp_variable = { ADISCORD_superevent_request = 66 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_prag_ending_directorate }
+		set_temp_variable = { ADISCORD_superevent_request = 67 }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 3 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 43 }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 4 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 44 }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 5 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 45 }
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_defeat_revenge }
+		set_temp_variable = { ADISCORD_superevent_request = 47 }
+	}
+	else_if = {
+		limit = { has_focus_tree = NAM_defeated_focus }
+		set_temp_variable = { ADISCORD_superevent_request = 46 }
+	}
+	else = {
+		set_temp_variable = { ADISCORD_superevent_request = 68 }
+	}
+	ADISCORD_superevent_enqueue = yes
+}
+
 # GLOBAL. Shahrabad wins the south.
 ADISCORD_south_final_resolve_shl_victory = {
 	if = {
@@ -662,6 +753,7 @@ ADISCORD_south_final_resolve_shl_victory = {
 		ADISCORD_south_mark_losers = yes
 		ADISCORD_south_close_campaign_state = yes
 		SHL = {
+			ADISCORD_south_show_shahrabad_victory = yes
 			country_event = { id = ADISCORD_south.30 days = 1 }
 			news_event = { id = ADISCORD_south.31 hours = 2 }
 		}
@@ -699,12 +791,18 @@ ADISCORD_south_final_resolve_north_victory = {
 		ADISCORD_south_mark_losers = yes
 		ADISCORD_south_close_campaign_state = yes
 		NAM = {
+			ADISCORD_south_show_svetlogorye_victory = yes
 			country_event = { id = ADISCORD_south.30 days = 1 }
 			news_event = { id = ADISCORD_south.31 hours = 2 }
 		}
 	}
 	else_if = {
 		limit = { ADISCORD_south_final_active = yes }
+		if = {
+			limit = { ADISCORD_south_north_leader_exists = yes }
+			set_temp_variable = { ADISCORD_superevent_request = 51 }
+			ADISCORD_superevent_enqueue = yes
+		}
 		ADISCORD_south_final_repel = yes
 	}
 }

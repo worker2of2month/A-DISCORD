@@ -1,7 +1,7 @@
 ADISCORD_scenario_debug_category = {
 	ADISCORD_debug_start_vorkerland_collapse = {
-		allowed = { tag = WRK }
-		visible = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } }
 		cost = 0
 		complete_effect = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 		ai_will_do = { factor = 0 }
@@ -72,8 +72,9 @@ ADISCORD_scenario_debug_category = {
 	}
 
 	ADISCORD_debug_form_vorkerland_joint_government = {
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 			VAD = { exists = yes }
@@ -129,9 +130,9 @@ ADISCORD_scenario_debug_category = {
 			if = {
 				limit = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
-					WRK = { exists = yes }
+					event_target:ADISCORD_vorkerland_nation = { exists = yes }
 				}
-				WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+				event_target:ADISCORD_vorkerland_nation = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 			}
 			set_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
 			set_global_flag = ADISCORD_vorkerland_claim_wars_authorized

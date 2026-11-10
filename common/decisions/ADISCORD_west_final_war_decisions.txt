@@ -2,8 +2,9 @@ ADISCORD_west_final_war_category = {
 	# A short offensive measure for Vorkerland's side of the corridor.
 	ADISCORD_west_wrk_corridor_offensive = {
 		icon = generic_army_support
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			ADISCORD_west_final_active = yes
 			ADISCORD_west_on_wrk_side = yes
 		}
@@ -33,7 +34,7 @@ ADISCORD_west_final_war_category = {
 			has_completed_focus = IVN_west_war_council
 		}
 		available = {
-			has_war_with = WRK
+			has_war_with = event_target:ADISCORD_vorkerland_nation
 		}
 		cost = 75
 		days_re_enable = 120
@@ -57,10 +58,11 @@ ADISCORD_west_influence_category = {
 		icon = generic_diplomatic_treaty
 		allowed = {
 			OR = {
-				tag = WRK
+				OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 				tag = IVN
 			}
 		}
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes }
 		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
 		target_root_trigger = {
 			ADISCORD_west_influence_open = yes
@@ -100,10 +102,11 @@ ADISCORD_west_influence_category = {
 		icon = generic_army_support
 		allowed = {
 			OR = {
-				tag = WRK
+				OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 				tag = IVN
 			}
 		}
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes }
 		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
 		target_root_trigger = {
 			ADISCORD_west_influence_open = yes
@@ -146,7 +149,7 @@ ADISCORD_west_influence_category = {
 	# state answers itself; only the political price is paid here.
 	ADISCORD_west_wrk_offer_front_treaty = {
 		icon = generic_diplomatic_treaty
-		allowed = { tag = WRK }
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
 		target_root_trigger = {
 			ADISCORD_west_crisis_open = yes
@@ -159,6 +162,7 @@ ADISCORD_west_influence_category = {
 			}
 		}
 		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
 			ADISCORD_west_crisis_open = yes
 		}
 		available = {
@@ -336,10 +340,11 @@ ADISCORD_west_influence_category = {
 		icon = generic_prepare_civil_war
 		allowed = {
 			OR = {
-				tag = WRK
+				OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 				tag = IVN
 			}
 		}
+		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes }
 		targets = { WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
 		target_root_trigger = {
 			ADISCORD_west_final_active = yes

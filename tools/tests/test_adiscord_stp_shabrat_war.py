@@ -385,17 +385,16 @@ class CoalitionEventTests(unittest.TestCase):
     def test_superevent_varies_with_the_course(self):
         scripted = compact(text(SUPEREVENT_LOC))
         super_ru, super_en = loc_keys(SUPER_RU), loc_keys(SUPER_EN)
+        from tools.validators.validate_adiscord_superevents import _event_block
+
+        event = compact(_event_block(text(EVENTS), "ADISCORD_STP_cw.72"))
         for number, _, name in COURSES.values():
             for kind in ("title", "quote", "comment"):
                 key = f"superevent_stelander_shabrat_victory_{name}_{kind}"
                 self.assertIn(key, scripted)
                 self.assertTrue(super_ru.get(key) and super_en.get(key), key)
-            self.assertIn(f"STS = {{ check_variable = {{ var = STP_hw_course value = {number} compare = equals }} }}", scripted)
-        # Variants must precede the generic fallback in each defined_text.
-        self.assertLess(
-            scripted.index("superevent_stelander_shabrat_victory_staff_title"),
-            scripted.index("localization_key = superevent_stelander_shabrat_victory_title"),
-        )
+            condition = f"STS = {{ check_variable = {{ var = STP_hw_course value = {number} compare = equals }} }}"
+            self.assertIn(condition, event)
 
 
 if __name__ == "__main__":

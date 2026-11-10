@@ -16,6 +16,25 @@ spriteTypes = {
 		tilingCenter = yes
 		effectFile = "gfx/FX/buttonstate.lua"
 	}
+	spriteType = {
+		name = "GFX_NAM_board_pyramid"
+		texturefile = "gfx/interface/NAM_basin/board_pyramid.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_company_marks"
+		texturefile = "gfx/interface/NAM_basin/board_company_marks.png"
+		noOfFrames = 6
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_mark_texticon"
+		texturefile = "gfx/interface/NAM_basin/board_mark_texticon.png"
+		noOfFrames = 6
+		legacy_lazy_load = no
+	}
+
 	# BEGIN GENERATED NAM BASIN MAP
 	spriteType = {
 		name = "GFX_NAM_bw_map"

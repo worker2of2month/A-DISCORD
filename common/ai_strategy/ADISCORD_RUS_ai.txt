@@ -581,10 +581,43 @@ RUS_crisis_prepare_WRK = {
 	enable = {
 		is_ai = yes
 		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
-		WRK = { RUS_crisis_coalition_candidate = yes }
+		event_target:ADISCORD_vorkerland_nation = { tag = WRK RUS_crisis_coalition_candidate = yes }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = WRK value = 200 }
+}
+
+RUS_crisis_prepare_WKR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = WKR RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 200 }
+}
+
+RUS_crisis_prepare_VAD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = VAD RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 200 }
+}
+
+RUS_crisis_prepare_TVA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = TVA RUS_crisis_coalition_candidate = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TVA value = 200 }
 }
 
 RUS_crisis_conquer_WRK = {
@@ -592,11 +625,47 @@ RUS_crisis_conquer_WRK = {
 	enable = {
 		is_ai = yes
 		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
-		WRK = { has_country_flag = RUS_crisis_defender }
-		has_war_with = WRK
+		event_target:ADISCORD_vorkerland_nation = { tag = WRK has_country_flag = RUS_crisis_defender }
+		has_war_with = event_target:ADISCORD_vorkerland_nation
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = WRK value = 200 }
+}
+
+RUS_crisis_conquer_WKR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = WKR has_country_flag = RUS_crisis_defender }
+		has_war_with = event_target:ADISCORD_vorkerland_nation
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = WKR value = 200 }
+}
+
+RUS_crisis_conquer_VAD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = VAD has_country_flag = RUS_crisis_defender }
+		has_war_with = event_target:ADISCORD_vorkerland_nation
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = VAD value = 200 }
+}
+
+RUS_crisis_conquer_TVA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		event_target:ADISCORD_vorkerland_nation = { tag = TVA has_country_flag = RUS_crisis_defender }
+		has_war_with = event_target:ADISCORD_vorkerland_nation
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = TVA value = 200 }
 }
 
 RUS_crisis_prepare_IVN = {
@@ -781,8 +850,8 @@ NOD_crisis_prepare_RUS = {
 	allowed = { tag = NOD }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -792,8 +861,8 @@ VAL_crisis_prepare_RUS = {
 	allowed = { tag = VAL }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -803,8 +872,8 @@ STS_crisis_prepare_RUS = {
 	allowed = { tag = STS }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -814,8 +883,8 @@ STP_crisis_prepare_RUS = {
 	allowed = { tag = STP }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -825,8 +894,8 @@ SHL_crisis_prepare_RUS = {
 	allowed = { tag = SHL }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -836,19 +905,20 @@ NAM_crisis_prepare_RUS = {
 	allowed = { tag = NAM }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
 }
 
 WRK_crisis_prepare_RUS = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -858,8 +928,8 @@ IVN_crisis_prepare_RUS = {
 	allowed = { tag = IVN }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -869,8 +939,8 @@ MON_crisis_prepare_RUS = {
 	allowed = { tag = MON }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -880,8 +950,8 @@ VLD_crisis_prepare_RUS = {
 	allowed = { tag = VLD }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -891,8 +961,8 @@ TMR_crisis_prepare_RUS = {
 	allowed = { tag = TMR }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -902,8 +972,8 @@ BTL_crisis_prepare_RUS = {
 	allowed = { tag = BTL }
 	enable = {
 		is_ai = yes
-		RUS_crisis_coalition_candidate = yes
 		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		RUS_crisis_coalition_candidate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
@@ -922,11 +992,12 @@ RUS_crisis_volunteers_MON = {
 			tag = NOD
 			tag = SHL
 			tag = NAM
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = IVN
 		}
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_idea = RUS_crisis_volunteer_mandate
 	}
@@ -943,11 +1014,12 @@ RUS_crisis_volunteers_VLD = {
 			tag = NOD
 			tag = SHL
 			tag = NAM
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = IVN
 		}
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_idea = RUS_crisis_volunteer_mandate
 	}
@@ -964,11 +1036,12 @@ RUS_crisis_volunteers_TMR = {
 			tag = NOD
 			tag = SHL
 			tag = NAM
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = IVN
 		}
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_idea = RUS_crisis_volunteer_mandate
 	}
@@ -985,11 +1058,12 @@ RUS_crisis_volunteers_BTL = {
 			tag = NOD
 			tag = SHL
 			tag = NAM
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = IVN
 		}
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_idea = RUS_crisis_volunteer_mandate
 	}

@@ -1,4 +1,1 @@
-# Superevent presentation audio is owned by interface/superevents.gui via
-# show_sound and the dedicated sound/superevents_* assets. The OGG mirrors are
-# intentionally not registered in any radio station, so they never appear in
-# the in-game music player.
+# Super-event windows play their dedicated sound effects outside the radio stations.

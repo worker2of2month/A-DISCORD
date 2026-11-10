@@ -77,3 +77,13 @@ NOD = {
 		}
 	}
 }
+
+SHL = {
+	infantry_equipment = {
+		pool = {
+			sub_units = { ADISCORD_mechanized_infantry }
+			weight = 3000
+			models = { ADISCORD_SHL_apc_entity }
+		}
+	}
+}

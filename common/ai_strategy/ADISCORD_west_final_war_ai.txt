@@ -3,8 +3,9 @@
 # side's regional members rather than the rival champion itself.
 
 ADISCORD_west_wrk_front_ivn = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		ADISCORD_west_final_active = yes
 		has_war_with = IVN
 		NOT = {
@@ -68,8 +69,9 @@ ADISCORD_west_wrk_front_ivn = {
 
 # A depleted army keeps native readiness checks while replenishing its front.
 ADISCORD_west_wrk_hold_ivn = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		ADISCORD_west_final_active = yes
 		has_war_with = IVN
 		fighting_army_strength_ratio = {
@@ -120,8 +122,9 @@ ADISCORD_west_wrk_hold_ivn = {
 # Production weights share the existing factory budget; no factory minimums
 # accumulate on top of the generic infantry and support-equipment guarantees.
 ADISCORD_wrk_postwar_production = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		ADISCORD_vorkerland_pw_sovereign = yes
 	}
@@ -144,8 +147,9 @@ ADISCORD_wrk_postwar_production = {
 }
 
 ADISCORD_wrk_postwar_expedition_front = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_country_flag = ADISCORD_vorkerland_pw_campaign_active
 	}
@@ -205,7 +209,7 @@ ADISCORD_west_ivn_front_wrk = {
 	allowed = { tag = IVN }
 	enable = {
 		ADISCORD_west_final_active = yes
-		has_war_with = WRK
+		has_war_with = event_target:ADISCORD_vorkerland_nation
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -263,17 +267,18 @@ ADISCORD_west_ivn_front_wrk = {
 ADISCORD_difficulty_west_campaign_supply = {
 	allowed = {
 		OR = {
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = IVN
 		}
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		ADISCORD_difficulty_ai_advanced = yes
 		OR = {
 			AND = {
 				ADISCORD_west_crisis_open = yes
 				has_global_flag = ADISCORD_west_crisis_warned
-				WRK = {
+				event_target:ADISCORD_vorkerland_nation = {
 					exists = yes
 					has_capitulated = no
 					is_subject = no
@@ -282,13 +287,13 @@ ADISCORD_difficulty_west_campaign_supply = {
 					exists = yes
 					has_capitulated = no
 					is_subject = no
-					NOT = { is_in_faction_with = WRK }
+					NOT = { is_in_faction_with = event_target:ADISCORD_vorkerland_nation }
 				}
 			}
 			AND = {
 				ADISCORD_west_final_active = yes
 				OR = {
-					has_war_with = WRK
+					has_war_with = event_target:ADISCORD_vorkerland_nation
 					has_war_with = IVN
 				}
 			}

@@ -292,7 +292,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -301,7 +301,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -334,7 +334,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -343,7 +343,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -376,7 +376,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -385,7 +385,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -419,7 +419,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -428,7 +428,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -462,7 +462,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -471,7 +471,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -505,7 +505,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -514,7 +514,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -547,7 +547,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -556,7 +556,7 @@ characters = {
 				OR = {
 					tag = VAD
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_joint
 					}
 				}
@@ -731,8 +731,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Stanislav_Malinin_desc
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { army_chief_organizational_1 }
 			ai_will_do = { factor = 1 }
@@ -752,8 +752,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Andrei_Severov_desc
 			cost = 150
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { has_completed_focus = WRK_conf_elected_officers }
 			traits = { army_chief_morale_2 }
 			ai_will_do = { factor = 2 }
@@ -773,8 +773,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Viktor_Hess_desc
 			cost = 150
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { has_completed_focus = WRK_tech_mechanized_staff }
 			traits = { army_chief_planning_2 }
 			ai_will_do = { factor = 2 }
@@ -794,8 +794,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Pavel_Barsov_desc
 			cost = 150
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { has_completed_focus = WRK_empire_staff_without_petrishchev }
 			traits = { army_chief_offensive_2 }
 			ai_will_do = { factor = 2 }
@@ -815,8 +815,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Aleksei_Nekrasov_desc
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { navy_chief_decisive_battle_1 }
 			ai_will_do = { factor = 1 }
@@ -836,8 +836,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Andrei_Ostretsov_desc
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { air_chief_reform_1 }
 			ai_will_do = { factor = 1 }
@@ -858,8 +858,8 @@ characters = {
 			ledger = army
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { army_infantry_1 }
 			ai_will_do = { factor = 1 }
@@ -880,8 +880,8 @@ characters = {
 			ledger = army
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { army_logistics_1 }
 			ai_will_do = { factor = 1 }
@@ -902,8 +902,8 @@ characters = {
 			ledger = army
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { army_regrouping_1 }
 			ai_will_do = { factor = 1 }
@@ -923,8 +923,8 @@ characters = {
 			desc = ADISCORD_staff_WRK_Denis_Tumanov_desc
 			cost = 100
 			removal_cost = 0
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { always = yes }
 			traits = { ADISCORD_staff_theorist }
 			ai_will_do = { factor = 1 }

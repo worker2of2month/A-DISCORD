@@ -1207,7 +1207,7 @@ country_event = {
 	option = {
 		name = val_contract.320.a
 		trigger = {
-			38 = { is_owned_by = WRK is_controlled_by = WRK }
+			38 = { is_owned_by = event_target:ADISCORD_vorkerland_nation is_controlled_by = event_target:ADISCORD_vorkerland_nation }
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 			VAL = { exists = yes has_country_flag = VAL_westerholm_offer_pending NOT = { has_country_flag = VAL_westerholm_concession_granted } }
 		}
@@ -3947,6 +3947,7 @@ country_event = {
 		trigger = { NOT = { power_balance_value = { id = VAL_command_balance value < -0.10 } } }
 		ai_chance = { base = 30 }
 		effect_tooltip = { add_ideas = VAL_nw_pensions_delta }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.15 }
 		hidden_effect = { VAL_nw_settle_command_pensions = yes }
 	}
 	option = {
@@ -3960,6 +3961,7 @@ country_event = {
 		trigger = { NOT = { power_balance_value = { id = VAL_command_balance value > 0.10 } } }
 		ai_chance = { base = 30 }
 		effect_tooltip = { add_ideas = VAL_nw_army_charter_delta }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.15 }
 		hidden_effect = { VAL_nw_settle_command_charter = yes }
 	}
 }
@@ -4919,4 +4921,992 @@ news_event = {
 	option = {
 		name = val_council.29.a
 	}
+}
+
+add_namespace = val_peace
+
+# --- peace_reckoning ---
+# COUNTRY VAL. Unsold rifles after the victory: ready money against the arsenal's name.
+country_event = {
+	id = val_peace.2
+	title = val_peace.2.t
+	desc = val_peace.2.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.2.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = VAL_peace_treasury_150_tt
+		custom_effect_tooltip = VAL_peace_strike_minus_4_tt
+		custom_effect_tooltip = VAL_peace_reputation_loss_tt
+		hidden_effect = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+			add_to_variable = { var = VAL_arsenal_reputation_stage value = -1 }
+			VAL_refresh_arsenal_reputation = yes
+			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = VAL_peace_strike_delta value = -4 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.2.b
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.03 }
+		custom_effect_tooltip = VAL_peace_strike_plus_3_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = 3 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+}
+
+# COUNTRY VAL. The junior captains present their bill; the payment option needs the money now.
+country_event = {
+	id = val_peace.10
+	title = val_peace.10.t
+	desc = val_peace.10.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.10.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 40 }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.05 }
+		custom_effect_tooltip = VAL_peace_treasury_minus_100_tt
+		custom_effect_tooltip = VAL_peace_arrears_cleared_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+			set_variable = { var = VAL_peace_arrears value = 0 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	option = {
+		name = val_peace.10.b
+		ai_chance = { base = 30 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.10 }
+		add_stability = 0.02
+	}
+	option = {
+		name = val_peace.10.c
+		ai_chance = { base = 30 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
+		custom_effect_tooltip = VAL_peace_arrears_grow_tt
+		hidden_effect = {
+			add_to_variable = { var = VAL_peace_arrears value = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL. The northern administration keeps its own army; Kilnet decides whose garrison it is.
+country_event = {
+	id = val_peace.11
+	title = val_peace.11.t
+	desc = val_peace.11.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.11.a
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.10 }
+		add_manpower = 5000
+		if = {
+			limit = {
+				NKA = {
+					exists = yes
+					is_subject_of = VAL
+				}
+			}
+			NKA = { add_stability = -0.10 }
+		}
+	}
+	option = {
+		name = val_peace.11.b
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.10 }
+		add_war_support = 0.03
+		if = {
+			limit = {
+				NKA = {
+					exists = yes
+					is_subject_of = VAL
+				}
+			}
+			NKA = { add_stability = 0.05 }
+		}
+	}
+}
+
+# COUNTRY VAL. Entry into the shares' dominance warns once per entry.
+country_event = {
+	id = val_peace.12
+	title = val_peace.12.t
+	desc = val_peace.12.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { VAL_peace_crisis_active = yes }
+	option = {
+		name = val_peace.12.a
+		custom_effect_tooltip = VAL_peace_captains_threshold_tt
+	}
+}
+
+# COUNTRY VAL. The registry reaches the exposure range: the captains' claim is
+# dismissed, their shares are confiscated and their coup is closed for this reckoning.
+country_event = {
+	id = val_peace.13
+	title = val_peace.13.t
+	desc = {
+		trigger = { VAL_council_governs = no }
+		text = val_peace.13.d
+	}
+	desc = {
+		trigger = { VAL_council_governs = yes }
+		text = val_peace.13.council
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		VAL_peace_crisis_active = yes
+		NOT = { has_country_flag = VAL_peace_plot_exposed }
+	}
+	option = {
+		name = val_peace.13.a
+		custom_effect_tooltip = VAL_peace_captains_exposed_tt
+		custom_effect_tooltip = VAL_peace_treasury_150_tt
+		hidden_effect = {
+			set_country_flag = VAL_peace_plot_exposed
+			set_variable = { var = VAL_peace_arrears value = 0 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# COUNTRY VAL. Tishin brings the first petition from the contaminated works.
+country_event = {
+	id = val_peace.20
+	title = val_peace.20.t
+	desc = val_peace.20.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.20.a
+		ai_chance = { base = 60 }
+		add_political_power = -25
+		custom_effect_tooltip = VAL_peace_strike_minus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = -5 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.20.b
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = VAL_peace_strike_plus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = 5 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_peace.21
+	title = val_peace.21.t
+	desc = val_peace.21.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { VAL_peace_crisis_active = yes }
+	option = {
+		name = val_peace.21.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 60 }
+		custom_effect_tooltip = VAL_peace_treasury_minus_50_tt
+		custom_effect_tooltip = VAL_peace_strike_minus_5_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = VAL_peace_strike_delta value = -5 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.21.b
+		ai_chance = { base = 40 }
+	}
+}
+
+country_event = {
+	id = val_peace.22
+	title = val_peace.22.t
+	desc = val_peace.22.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { VAL_peace_crisis_active = yes }
+	option = {
+		name = val_peace.22.a
+		ai_chance = { base = 50 }
+		add_stability = -0.05
+		add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
+		custom_effect_tooltip = VAL_peace_strike_minus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = -10 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.22.b
+		ai_chance = { base = 50 }
+		add_political_power = -50
+		custom_effect_tooltip = VAL_peace_strike_minus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = -5 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+}
+
+# COUNTRY VAL. A general strike brings the reckoning forward.
+country_event = {
+	id = val_peace.23
+	title = val_peace.23.t
+	desc = val_peace.23.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { VAL_peace_crisis_active = yes }
+	option = {
+		name = val_peace.23.a
+		custom_effect_tooltip = VAL_peace_general_strike_tt
+		hidden_effect = { VAL_peace_open_reckoning = yes }
+	}
+}
+
+country_event = {
+	id = val_peace.24
+	title = val_peace.24.t
+	desc = val_peace.24.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.24.a
+		ai_chance = { base = 60 }
+		add_political_power = -50
+		custom_effect_tooltip = VAL_peace_strike_minus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = -10 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.24.b
+		ai_chance = { base = 40 }
+		add_stability = -0.03
+		add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
+		custom_effect_tooltip = VAL_peace_strike_plus_10_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = 10 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_peace.25
+	title = val_peace.25.t
+	desc = val_peace.25.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.25.a
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = -0.05 }
+		custom_effect_tooltip = VAL_peace_strike_plus_5_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = 5 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+	option = {
+		name = val_peace.25.b
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
+		custom_effect_tooltip = VAL_peace_strike_minus_8_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_peace_strike_delta value = -8 }
+			VAL_peace_apply_strike = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_peace.26
+	title = val_peace.26.t
+	desc = val_peace.26.d
+	picture = GFX_event_adiscord_valley_irrigation_survey
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.26.a }
+}
+
+country_event = {
+	id = val_peace.27
+	title = val_peace.27.t
+	desc = val_peace.27.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.27.a }
+}
+
+country_event = {
+	id = val_peace.28
+	title = val_peace.28.t
+	desc = val_peace.28.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.28.a }
+}
+
+# COUNTRY VAL. The earlier folder decision selects the copy's reader; options
+# shown together always belong to the same folder state.
+country_event = {
+	id = val_peace.30
+	title = val_peace.30.t
+	desc = {
+		trigger = { has_country_flag = VAL_daughter_secret_told }
+		text = val_peace.30.told
+	}
+	desc = {
+		trigger = {
+			has_country_flag = VAL_daughter_archive_burned
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+		}
+		text = val_peace.30.burned
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+			NOT = { has_country_flag = VAL_daughter_archive_burned }
+		}
+		text = val_peace.30.d
+	}
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.30.a
+		trigger = { has_country_flag = VAL_daughter_secret_told }
+		ai_chance = { base = 40 }
+		add_stability = -0.10
+		add_war_support = 0.05
+		add_power_balance_value = { id = VAL_peace_balance value = 0.10 }
+		custom_effect_tooltip = VAL_peace_truth_public_tt
+		hidden_effect = { set_country_flag = VAL_peace_truth_public }
+	}
+	option = {
+		name = val_peace.30.b
+		trigger = {
+			has_country_flag = VAL_daughter_secret_told
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 60 }
+		add_political_power = -25
+		custom_effect_tooltip = VAL_peace_treasury_minus_150_tt
+		hidden_effect = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	option = {
+		name = val_peace.30.c
+		trigger = {
+			has_country_flag = VAL_daughter_archive_burned
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+		}
+		ai_chance = { base = 50 }
+		add_power_balance_value = { id = VAL_peace_balance value = 0.15 }
+		custom_effect_tooltip = VAL_peace_krutov_learns_tt
+		hidden_effect = { set_country_flag = VAL_daughter_secret_told }
+	}
+	option = {
+		name = val_peace.30.e
+		trigger = {
+			has_country_flag = VAL_daughter_archive_burned
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -75
+		add_power_balance_value = { id = VAL_peace_balance value = -0.10 }
+	}
+	option = {
+		name = val_peace.30.f
+		trigger = {
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+			NOT = { has_country_flag = VAL_daughter_archive_burned }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = 25
+		custom_effect_tooltip = VAL_peace_velsky_file_tt
+		hidden_effect = { set_country_flag = VAL_peace_velsky_holds_file }
+	}
+	option = {
+		name = val_peace.30.g
+		trigger = {
+			NOT = { has_country_flag = VAL_daughter_secret_told }
+			NOT = { has_country_flag = VAL_daughter_archive_burned }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -50
+		add_power_balance_value = { id = VAL_peace_balance value = -0.05 }
+	}
+}
+
+# COUNTRY VAL. The reckoning: the captains alone in the coup range of the
+# balance, otherwise the open regimes; the throne or the charter is always open.
+country_event = {
+	id = val_peace.40
+	title = val_peace.40.t
+	desc = {
+		trigger = { VAL_peace_captains_forced = yes }
+		text = val_peace.40.forced
+	}
+	desc = {
+		trigger = {
+			VAL_peace_captains_forced = no
+			VAL_council_governs = yes
+		}
+		text = val_peace.40.council
+	}
+	desc = {
+		trigger = {
+			VAL_peace_captains_forced = no
+			VAL_council_governs = no
+		}
+		text = val_peace.40.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { VAL_peace_crisis_active = yes }
+	option = {
+		name = val_peace.40.a
+		trigger = {
+			VAL_peace_captains_forced = no
+			VAL_peace_throne_open = yes
+		}
+		ai_chance = { base = 30 }
+		effect_tooltip = { add_ideas = VAL_peace_throne_delta }
+		if = {
+			limit = { VAL_council_governs = yes }
+			custom_effect_tooltip = VAL_peace_throne_council_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_peace_throne_solgalov_tt
+		}
+		custom_effect_tooltip = VAL_peace_recovery_tt
+		hidden_effect = { VAL_peace_adopt_throne = yes }
+	}
+	option = {
+		name = val_peace.40.b
+		trigger = {
+			VAL_peace_captains_forced = no
+			VAL_peace_cabinet_open = yes
+		}
+		ai_chance = { base = 40 }
+		effect_tooltip = { add_ideas = VAL_peace_cabinet_delta }
+		if = {
+			limit = { VAL_council_governs = yes }
+			custom_effect_tooltip = VAL_peace_cabinet_council_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_peace_cabinet_solgalov_tt
+		}
+		custom_effect_tooltip = VAL_peace_recovery_tt
+		hidden_effect = { VAL_peace_adopt_cabinet = yes }
+	}
+	option = {
+		name = val_peace.40.c
+		trigger = {
+			VAL_peace_captains_forced = no
+			VAL_peace_charter_open = yes
+		}
+		ai_chance = { base = 30 }
+		effect_tooltip = { add_ideas = VAL_peace_charter_delta }
+		if = {
+			limit = { VAL_council_governs = yes }
+			custom_effect_tooltip = VAL_peace_charter_council_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_peace_charter_solgalov_tt
+		}
+		custom_effect_tooltip = VAL_peace_recovery_tt
+		hidden_effect = { VAL_peace_adopt_charter = yes }
+	}
+	option = {
+		name = val_peace.40.e
+		trigger = { VAL_peace_captains_forced = yes }
+		ai_chance = { base = 100 }
+		effect_tooltip = { add_ideas = VAL_peace_captains_delta }
+		custom_effect_tooltip = VAL_peace_captains_coup_tt
+		custom_effect_tooltip = VAL_peace_recovery_tt
+		hidden_effect = { VAL_peace_adopt_captains = yes }
+	}
+}
+
+country_event = {
+	id = val_peace.50
+	title = val_peace.50.t
+	desc = {
+		trigger = { has_country_leader = { character = VAL_Gleb_Osten ruling_only = yes } }
+		text = val_peace.50.osten
+	}
+	desc = {
+		trigger = { NOT = { has_country_leader = { character = VAL_Gleb_Osten ruling_only = yes } } }
+		text = val_peace.50.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.50.a }
+}
+
+country_event = {
+	id = val_peace.51
+	title = val_peace.51.t
+	desc = val_peace.51.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.51.a }
+}
+
+country_event = {
+	id = val_peace.52
+	title = val_peace.52.t
+	desc = val_peace.52.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.52.a }
+}
+
+country_event = {
+	id = val_peace.53
+	title = val_peace.53.t
+	desc = val_peace.53.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.53.a }
+}
+
+# COUNTRY VAL. Closes the reckoning after the regime answer added its order inputs.
+country_event = {
+	id = val_peace.41
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { VAL_peace_regime_chosen = yes }
+	immediate = { VAL_peace_install_regime = yes }
+}
+
+country_event = {
+	id = val_peace.54
+	title = val_peace.54.t
+	desc = val_peace.54.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.54.a }
+}
+
+country_event = {
+	id = val_peace.55
+	title = val_peace.55.t
+	desc = val_peace.55.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.55.a }
+}
+
+country_event = {
+	id = val_peace.56
+	title = val_peace.56.t
+	desc = val_peace.56.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.56.a }
+}
+
+country_event = {
+	id = val_peace.57
+	title = val_peace.57.t
+	desc = val_peace.57.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.57.a }
+}
+
+country_event = {
+	id = val_peace.58
+	title = val_peace.58.t
+	desc = val_peace.58.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.58.a }
+}
+
+country_event = {
+	id = val_peace.59
+	title = val_peace.59.t
+	desc = val_peace.59.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.59.a }
+}
+
+country_event = {
+	id = val_peace.60
+	title = val_peace.60.t
+	desc = {
+		trigger = { VAL_east_khan_victorious = yes }
+		text = val_peace.60.khan
+	}
+	desc = {
+		trigger = { VAL_east_khan_victorious = no }
+		text = val_peace.60.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.60.a }
+}
+
+country_event = {
+	id = val_peace.61
+	title = val_peace.61.t
+	desc = val_peace.61.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.61.a }
+}
+
+country_event = {
+	id = val_peace.62
+	title = val_peace.62.t
+	desc = val_peace.62.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.62.a }
+}
+
+country_event = {
+	id = val_peace.63
+	title = val_peace.63.t
+	desc = val_peace.63.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.63.a }
+}
+
+country_event = {
+	id = val_peace.64
+	title = val_peace.64.t
+	desc = val_peace.64.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.64.a }
+}
+
+country_event = {
+	id = val_peace.65
+	title = val_peace.65.t
+	desc = val_peace.65.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.65.a }
+}
+
+country_event = {
+	id = val_peace.66
+	title = val_peace.66.t
+	desc = {
+		trigger = { VAL_east_khan_victorious = yes }
+		text = val_peace.66.khan
+	}
+	desc = {
+		trigger = { VAL_east_khan_victorious = no }
+		text = val_peace.66.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.66.a }
+}
+
+country_event = {
+	id = val_peace.67
+	title = val_peace.67.t
+	desc = val_peace.67.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.67.a }
+}
+
+country_event = {
+	id = val_peace.68
+	title = val_peace.68.t
+	desc = val_peace.68.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.68.a }
+}
+
+country_event = {
+	id = val_peace.69
+	title = val_peace.69.t
+	desc = val_peace.69.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.69.a }
+}
+
+country_event = {
+	id = val_peace.70
+	title = val_peace.70.t
+	desc = val_peace.70.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.70.a }
+}
+
+country_event = {
+	id = val_peace.71
+	title = val_peace.71.t
+	desc = {
+		trigger = { VAL_east_khan_victorious = yes }
+		text = val_peace.71.khan
+	}
+	desc = {
+		trigger = { VAL_east_khan_victorious = no }
+		text = val_peace.71.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.71.a }
+}
+
+country_event = {
+	id = val_peace.72
+	title = val_peace.72.t
+	desc = val_peace.72.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.72.a }
+}
+
+country_event = {
+	id = val_peace.73
+	title = val_peace.73.t
+	desc = val_peace.73.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.73.a }
+}
+
+country_event = {
+	id = val_peace.74
+	title = val_peace.74.t
+	desc = {
+		trigger = { VAL_east_khan_victorious = yes }
+		text = val_peace.74.khan
+	}
+	desc = {
+		trigger = { VAL_east_khan_victorious = no }
+		text = val_peace.74.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.74.a }
+}
+
+# COUNTRY VAL. Briefing on the last rival; the desc follows the Khan's fate.
+country_event = {
+	id = val_peace.80
+	title = val_peace.80.t
+	desc = {
+		trigger = { VAL_east_khan_victorious = yes }
+		text = val_peace.80.khan
+	}
+	desc = {
+		trigger = {
+			VAL_east_khan_victorious = no
+			VAL_east_montar_available = yes
+		}
+		text = val_peace.80.d
+	}
+	desc = {
+		trigger = { VAL_east_rival_exists = no }
+		text = val_peace.80.none
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.80.a }
+}
+
+country_event = {
+	id = val_peace.81
+	title = val_peace.81.t
+	desc = {
+		trigger = { VAL_east_rival_is_khan = yes }
+		text = val_peace.81.khan
+	}
+	desc = {
+		trigger = { VAL_east_rival_is_montar = yes }
+		text = val_peace.81.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.81.a }
+}
+
+news_event = {
+	id = val_peace.82
+	title = val_peace.82.t
+	desc = {
+		trigger = { VAL_east_rival_is_khan = yes }
+		text = val_peace.82.khan
+	}
+	desc = {
+		trigger = { VAL_east_rival_is_montar = yes }
+		text = val_peace.82.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	major = yes
+	option = { name = val_peace.82.a }
+}
+
+# COUNTRY rival. A human rival learns the stakes of the same campaign.
+country_event = {
+	id = val_peace.83
+	title = val_peace.83.t
+	desc = val_peace.83.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = val_peace.83.a }
+}
+
+country_event = {
+	id = val_peace.84
+	title = val_peace.84.t
+	desc = val_peace.84.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.84.a }
+}
+
+# COUNTRY VAL. One day after peace the regime's terms settle every defeated participant.
+country_event = {
+	id = val_peace.85
+	title = val_peace.85.t
+	desc = {
+		trigger = { VAL_east_rival_is_khan = yes }
+		text = val_peace.85.khan
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			check_variable = { var = VAL_east_casus value = 4 compare = equals }
+		}
+		text = val_peace.85.captains
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			NOT = { check_variable = { var = VAL_east_casus value = 4 compare = equals } }
+		}
+		text = val_peace.85.d
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	immediate = { VAL_east_apply_settlement = yes }
+	option = { name = val_peace.85.a }
+}
+
+news_event = {
+	id = val_peace.86
+	title = val_peace.86.t
+	desc = {
+		trigger = { has_global_flag = VAL_east_hegemon_VAL }
+		text = val_peace.86.d
+	}
+	desc = {
+		trigger = { has_global_flag = VAL_east_hegemon_rival }
+		text = val_peace.86.lost
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	major = yes
+	option = { name = val_peace.86.a }
+}
+
+country_event = {
+	id = val_peace.87
+	title = val_peace.87.t
+	desc = val_peace.87.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.87.a }
+}
+
+country_event = {
+	id = val_peace.88
+	title = val_peace.88.t
+	desc = val_peace.88.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.88.a }
 }

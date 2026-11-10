@@ -30,37 +30,10 @@
   superevent_stelander_party_victory_title: "Победа партии в Стеландере"
   superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, \"1984\""
   superevent_stelander_party_victory_comment: "Партийная власть сохранена"
-  superevent_stelander_party_victory_houses_title: "Высшие Дома правят Стеландером"
-  superevent_stelander_party_victory_houses_quote: "Если мы хотим, чтобы всё осталось как есть, нужно, чтобы всё изменилось.\n\n- Джузеппе Томази ди Лампедуза, \"Леопард\""
-  superevent_stelander_party_victory_houses_comment: "Сайан Кроу и Палата получают победу"
-  superevent_stelander_party_victory_festival_title: "Праздник продолжается!"
-  superevent_stelander_party_victory_festival_quote: "Хлеба и зрелищ.\n\n- Ювенал, \"Сатиры\""
-  superevent_stelander_party_victory_festival_comment: "Руфус Хедерсетт празднует победу"
-  superevent_stelander_party_victory_staff_title: "Генералы Стеландера берут власть"
-  superevent_stelander_party_victory_staff_quote: "Кто желает мира, пусть готовится к войне.\n\n- Флавий Вегеций Ренат, \"Краткое изложение военного дела\""
-  superevent_stelander_party_victory_staff_comment: "Август Вейль вводит мир по уставу"
-  superevent_stelander_party_victory_wallets_title: "Стеландская витрина снова открыта"
-  superevent_stelander_party_victory_wallets_quote: "Бесконечные деньги - нерв войны.\n\n- Марк Туллий Цицерон, \"Филиппики\""
-  superevent_stelander_party_victory_wallets_comment: "Павел Ланской открывает сезон"
-  superevent_stelander_party_victory_silence_title: "Тишина над Стеландером"
-  superevent_stelander_party_victory_silence_quote: "Они создают пустыню и называют это миром.\n\n- Публий Корнелий Тацит, \"Агрикола\""
-  superevent_stelander_party_victory_silence_comment: "Вера Корвина хранит тишину"
-  superevent_stelander_party_victory_regent_title: "Нодрул празднует стеландскую победу"
-  superevent_stelander_party_victory_regent_quote: "Сильные делают то, что могут, а слабые терпят то, что должны.\n\n- Фукидид, \"История\""
-  superevent_stelander_party_victory_regent_comment: "Эдгар Реннер подписывает за Стеландер"
 
   superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
   superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, \"Буря\""
   superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
-  superevent_stelander_shabrat_victory_staff_title: "Штаб Шабрата берёт Стеландер"
-  superevent_stelander_shabrat_victory_staff_quote: "Война есть лишь продолжение политики иными средствами.\n\n- Карл фон Клаузевиц, \"О войне\""
-  superevent_stelander_shabrat_victory_staff_comment: "Директория офицеров обещает порядок"
-  superevent_stelander_shabrat_victory_councils_title: "Горные советы входят в Фаду"
-  superevent_stelander_shabrat_victory_councils_quote: "Человек рождается свободным, а между тем он везде в оковах.\n\n- Жан-Жак Руссо, \"Об общественном договоре\""
-  superevent_stelander_shabrat_victory_councils_comment: "Перевалы получают голос"
-  superevent_stelander_shabrat_victory_truth_title: "Суд правды в Фаде"
-  superevent_stelander_shabrat_victory_truth_quote: "И познаете истину, и истина сделает вас свободными.\n\n- Евангелие от Иоанна, 8:32"
-  superevent_stelander_shabrat_victory_truth_comment: "Архивы Нижнего рынка выносят на площадь"
 
   superevent_nam_resource_war_title: "Ресурсная война"
   superevent_nam_resource_war_quote: "Немногие наживаются - многие платят.\n\n- Смедли Батлер, \"Война - это рэкет\""
@@ -136,3 +109,182 @@
  # Source: Alexander Pushkin, Boris Godunov, 1825. Public domain.
  superevent_rus_khan_died_quote:0 "Тяжела ты, шапка Мономаха!\n\n- Александр Пушкин, \"Борис Годунов\""
  superevent_rus_khan_died_comment:0 "Империя пережила своего Хана ненадолго"
+
+  superevent_nam_resource_war_service_title: "Ресурсная война: приказ наместников"
+  superevent_nam_resource_war_service_quote: "К рассвету через восточный пост прошли сорок цистерн. Обратно дорога шла пустая."
+  superevent_nam_resource_war_service_comment: "Наместники берут промыслы под охрану"
+
+  superevent_nam_resource_war_district_title: "Ресурсная война: ополчение округов"
+  superevent_nam_resource_war_district_quote: "Вчера у проходной сдавали пропуска. Сегодня здесь выдают винтовки."
+  superevent_nam_resource_war_district_comment: "Ночная смена остаётся на промыслах"
+
+  superevent_stelander_party_victory_houses_title: "Высшие Дома правят Стеландером"
+  superevent_stelander_party_victory_houses_quote: "Если мы хотим, чтобы всё осталось как есть, нужно, чтобы всё изменилось.\n\n- Джузеппе Томази ди Лампедуза, \"Леопард\""
+  superevent_stelander_party_victory_houses_comment: "Сайан Кроу и Палата получают победу"
+
+  superevent_stelander_party_victory_staff_title: "Генералы Стеландера берут власть"
+  superevent_stelander_party_victory_staff_quote: "Кто желает мира, пусть готовится к войне.\n\n- Флавий Вегеций Ренат, \"Краткое изложение военного дела\""
+  superevent_stelander_party_victory_staff_comment: "Август Вейль вводит мир по уставу"
+
+  superevent_stelander_party_victory_wallets_title: "Стеландская витрина снова открыта"
+  superevent_stelander_party_victory_wallets_quote: "Бесконечные деньги - нерв войны.\n\n- Марк Туллий Цицерон, \"Филиппики\""
+  superevent_stelander_party_victory_wallets_comment: "Павел Ланской открывает сезон"
+
+  superevent_stelander_party_victory_silence_title: "Тишина над Стеландером"
+  superevent_stelander_party_victory_silence_quote: "Они создают пустыню и называют это миром.\n\n- Публий Корнелий Тацит, \"Агрикола\""
+  superevent_stelander_party_victory_silence_comment: "Вера Корвина хранит тишину"
+
+  superevent_stelander_party_victory_regent_title: "Нодрул празднует стеландскую победу"
+  superevent_stelander_party_victory_regent_quote: "Сильные делают то, что могут, а слабые терпят то, что должны.\n\n- Фукидид, \"История\""
+  superevent_stelander_party_victory_regent_comment: "Эдгар Реннер подписывает за Стеландер"
+
+  superevent_stelander_shabrat_victory_staff_title: "Штаб Шабрата берёт Стеландер"
+  superevent_stelander_shabrat_victory_staff_quote: "Война есть лишь продолжение политики иными средствами.\n\n- Карл фон Клаузевиц, \"О войне\""
+  superevent_stelander_shabrat_victory_staff_comment: "Директория офицеров обещает порядок"
+
+  superevent_stelander_shabrat_victory_councils_title: "Горные советы входят в Фаду"
+  superevent_stelander_shabrat_victory_councils_quote: "Человек рождается свободным, а между тем он везде в оковах.\n\n- Жан-Жак Руссо, \"Об общественном договоре\""
+  superevent_stelander_shabrat_victory_councils_comment: "Перевалы получают голос"
+
+  superevent_stelander_shabrat_victory_truth_title: "Суд правды в Фаде"
+  superevent_stelander_shabrat_victory_truth_quote: "И познаете истину, и истина сделает вас свободными.\n\n- Евангелие от Иоанна, 8:32"
+  superevent_stelander_shabrat_victory_truth_comment: "Архивы Нижнего рынка выносят на площадь"
+
+  superevent_stelander_party_victory_festival_title: "Праздник продолжается!"
+  superevent_stelander_party_victory_festival_quote: "Хлеба и зрелищ.\n\n- Ювенал, \"Сатиры\""
+  superevent_stelander_party_victory_festival_comment: "Руфус Хедерсетт празднует победу"
+
+  superevent_south_houses_title: "Концессия Конклава десяти"
+  superevent_south_houses_quote: "На пломбе первой цистерны стоит клеймо торгового дома. Остальные девять ждут своей очереди."
+  superevent_south_houses_comment: "Концессии вступили в силу"
+
+  superevent_south_cities_title: "Хартии Южного договора"
+  superevent_south_cities_quote: "Каждый город увозит из Хазара свой экземпляр договора. Подписи на всех одинаковы."
+  superevent_south_cities_comment: "Города ратифицируют хартии"
+
+  superevent_south_nur_title: "Юг под управлением Дирекции Нура"
+  superevent_south_nur_quote: "Станционные часы переводят на хазарское время. Отныне составы идут по общему расписанию."
+  superevent_south_nur_comment: "Дирекция принимает железные дороги"
+
+  superevent_south_regency_title: "Раздел южных владений"
+  superevent_south_regency_quote: "Землемеры вышли в поле с первыми списками пожалований. Жители узнают хозяина по знаку на межевом столбе."
+  superevent_south_regency_comment: "Регентство раздаёт лены"
+
+  superevent_south_commune_title: "Победа Коммуны огня"
+  superevent_south_commune_quote: "Сменному совету передали ключи от насосной. В журнале впервые расписывается мастер, которого выбрал цех."
+  superevent_south_commune_comment: "Промыслы переходят советам"
+
+  superevent_south_conclave_title: "Конклав девяти удержал Юг"
+  superevent_south_conclave_quote: "В Хазар привезли ведомости со всех захваченных станций. Девять мест в палате по-прежнему заняты."
+  superevent_south_conclave_comment: "Конклав принимает управление"
+
+  superevent_south_service_title: "Наместничества Юга"
+  superevent_south_service_quote: "Первый отчёт из Хазара прибыл с печатью нового наместника. Следующий ждут через неделю."
+  superevent_south_service_comment: "Назначения подписаны"
+
+  superevent_south_charter_title: "Юг принимает Нефтяную хартию"
+  superevent_south_charter_quote: "Рядом с подписью Светлогорска осталось место для печати каждого округа. К вечеру заполнили последнюю строку."
+  superevent_south_charter_comment: "Хартия ратифицирована"
+
+  superevent_south_contracts_title: "Южные договоры Светлогорья"
+  superevent_south_contracts_quote: "Первая партия топлива проходит границу по новой накладной. Груз принимают диспетчеры обеих сторон."
+  superevent_south_contracts_comment: "Поставки возобновлены"
+
+  superevent_south_rump_title: "Возвращение южных портов"
+  superevent_south_rump_quote: "Береговая служба вновь принимает суда для материка. У старых причалов уже не хватает лоцманов."
+  superevent_south_rump_comment: "Гавань открыта"
+
+  superevent_south_revenge_title: "Материковый реванш"
+  superevent_south_revenge_quote: "На дороге, где забирали топливную дань, снимают шлагбаум. Ветераны уступают путь первому автобусу."
+  superevent_south_revenge_comment: "Светлогорье вернулось"
+
+  superevent_south_radical_title: "Юг под властью опор"
+  superevent_south_radical_quote: "В трюме первого судна помещаются три станка и запас привода к каждому. Капитан расписался за весь груз."
+  superevent_south_radical_comment: "Карамышев принимает добычу"
+
+  superevent_south_free_islands_title: "Победа Свободных островов"
+  superevent_south_free_islands_quote: "Паром принимает пассажиров и на обратный рейс. На причале сверяют списки семей, разлучённых войной."
+  superevent_south_free_islands_comment: "Берег встречает своих"
+
+  superevent_south_boards_title: "Юг достался правлениям"
+  superevent_south_boards_quote: "В акте приёмки указаны скважины, мастерские и даже часы над проходной. Председателю осталось поставить подпись."
+  superevent_south_boards_comment: "Правления принимают активы"
+
+  superevent_south_restitution_title: "Альянс удержал нефтяной пояс"
+  superevent_south_restitution_quote: "Передовые части вернулись на рубеж. Из-за вала уже слышно, как на промысле снова заработал насос."
+  superevent_south_restitution_comment: "Поход Шахрабада отражён"
+
+  superevent_west_worker_title: "Запад входит в Конфедерацию"
+  superevent_west_worker_quote: "Делегатам Иторы поставили столы в общем зале. Первым вопросом стало снабжение городов по обе стороны бывшего фронта."
+  superevent_west_worker_comment: "Республики открывают заседание"
+
+  superevent_west_petrichev_title: "Победа имперского Воркерланда"
+  superevent_west_petrichev_quote: "В Старую марку прибыл гарнизонный поезд. Начальник станции принял у коменданта расписание на ближайший месяц."
+  superevent_west_petrichev_comment: "Запад переходит под имперский мандат"
+
+  superevent_west_veyran_title: "Восстановление Вейранской империи"
+  superevent_west_veyran_quote: "Печать достали из музейной витрины. Первым под ней расписался Влад Петричев."
+  superevent_west_veyran_comment: "Акт о восстановлении подписан"
+
+  superevent_west_dorian_title: "Технический союз Форула"
+  superevent_west_dorian_quote: "Диспетчер включил западную линию. Стрелка амперметра дрогнула и впервые за всю войну осталась на рабочей отметке."
+  superevent_west_dorian_comment: "Сеть приняла нагрузку"
+
+  superevent_west_anton_title: "Запад Антона Багли"
+  superevent_west_anton_quote: "В западные больницы пришёл первый обоз с лекарствами. Врачи освободили палаты, где во время боёв хранили носилки."
+  superevent_west_anton_comment: "Первые больницы открыты"
+
+  superevent_west_shield_title: "Победа Гуманистического щита"
+  superevent_west_shield_quote: "Утренний автобус прошёл северный коридор с иторским сопровождением. На обратный рейс продали все места."
+  superevent_west_shield_comment: "Гарантии вступили в силу"
+
+  superevent_west_emergency_title: "Чрезвычайная опека Иторы"
+  superevent_west_emergency_quote: "Ночной оператор доработал смену. К утру у коммутатора уже сидел связист, присланный иторским комиссаром."
+  superevent_west_emergency_comment: "Комиссары принимают управление"
+
+  superevent_west_revanche_title: "Иторский реванш"
+  superevent_west_revanche_quote: "Межевой камень подняли со старой границы и увезли на грузовике. Землемерам предстоит заново описать всю марку."
+  superevent_west_revanche_comment: "Границы пересмотрены"
+
+  superevent_west_committee_title: "Западный мир Комитета Иторы"
+  superevent_west_committee_quote: "Ключи от сигнального поста на северной линии принял иторский дежурный. До вечера прошли два товарных состава."
+  superevent_west_committee_comment: "Коридор передан Иторе"
+
+  superevent_vorkerland_world_empire_title: "Мировая империя Воркерланда"
+  superevent_vorkerland_world_empire_quote: "Первый тираж разошёлся ещё тёплым. Вечернюю газету уже набирали с новым названием государства."
+  superevent_vorkerland_world_empire_comment: "Выпуск уходит в печать"
+
+  superevent_south_iron_title: "Железная лестница на Юге"
+  superevent_south_iron_quote: "Казармы и канцелярии получили один список назначений. К полудню новые наместники приняли присягу."
+  superevent_south_iron_comment: "Исполнительная власть утверждена"
+
+  superevent_south_civil_service_title: "Победа Служебной республики"
+  superevent_south_civil_service_quote: "В понедельник уездная канцелярия открылась в обычный час. Приказ о первом назначении вывесили рядом с часами приёма."
+  superevent_south_civil_service_comment: "Служба начинается"
+
+  superevent_south_federation_title: "Южные округа Федерации"
+  superevent_south_federation_quote: "Делегаты возвращаются из Светлогорска с подписанными грамотами. Дома каждую предстоит прочитать на открытом заседании."
+  superevent_south_federation_comment: "Федерация принимает округа"
+
+  superevent_south_oil_union_title: "Победа Нефтяного союза"
+  superevent_south_oil_union_quote: "На стыке двух окружных труб смена дождалась рабочего давления. Южная ветка впервые вошла в общую сеть."
+  superevent_south_oil_union_comment: "Открыть задвижку"
+
+  superevent_south_contract_republic_title: "Республика договоров на Юге"
+  superevent_south_contract_republic_quote: "Возобновился городской маршрут через бывший блокпост. Кондуктору выдали прежний запас билетов и новое расписание."
+  superevent_south_contract_republic_comment: "Первый рейс отправлен"
+
+  superevent_south_directorate_title: "Победа Делового совета"
+  superevent_south_directorate_quote: "На сортировочной станции сошлись заявки южных заводов. Деловой совет начинает с распределения порожних цистерн."
+  superevent_south_directorate_comment: "Утвердить график поставок"
+
+  superevent_south_nam_title: "Светлогорье выиграло войну за Юг"
+  superevent_south_nam_quote: "На дороге к печам Хазара сняли последнее заграждение. Утром по ней пошли бензовозы из Светлогорья."
+  superevent_south_nam_comment: "Южная дорога открыта"
+
+  superevent_west_council_title: "Запад под мандатом Чрезвычайного совета"
+  superevent_west_council_quote: "На новом расписании для западных станций стоят две подписи. Свою копию взяли и военные, и гражданское управление."
+  superevent_west_council_comment: "Совет утвердил мандат"
+ superevent_west_world_empire_title: "Мировая империя Воркерланда победила Итору"
+ superevent_west_world_empire_quote: "Дежурный снял с рычага проволочную пломбу. По западному пути впервые с начала войны пустили товарный состав."
+ superevent_west_world_empire_comment: "Западная линия открыта"

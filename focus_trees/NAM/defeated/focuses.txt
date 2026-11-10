@@ -59,17 +59,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = 0.03
-			add_political_power = 40
-			custom_effect_tooltip = NAM_grp_defeat_rump_cabinet_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_nam_support value = 3 }
-				add_to_variable = { var = NAM_grp_oil_support value = 3 }
-				add_to_variable = { var = NAM_grp_dist_support value = 3 }
-				add_to_variable = { var = NAM_grp_garr_support value = 3 }
-				add_to_variable = { var = NAM_grp_trade_support value = 3 }
-				NAM_groups_refresh = yes
-			}
+			unlock_decision_tooltip = NAM_cabinet_install_machine_tools
+			custom_effect_tooltip = NAM_cabinet_install_machine_tools_unlock_tt
+			hidden_effect = { set_country_flag = NAM_cabinet_machine_tools_in_store }
 		}
 		ai_will_do = {
 			base = 20
@@ -90,8 +82,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_harbour_service } }
+				unlock_decision_tooltip = NAM_island_convoy_service
+				custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
+			}
 			add_equipment_to_stockpile = {
 				type = convoy
 				amount = 10
@@ -355,8 +350,7 @@ focus_tree = {
 	}
 
 	# ----- Revenge -----
-	# The arsenal falls back to the capital if South Harbour is lost; the
-	# officers lead the underground that claims every lost district.
+	# The arsenal falls back to the capital if South Harbour is lost.
 
 	focus = {
 		id = NAM_defeat_rebuild_arsenal
@@ -417,6 +411,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_hidden_reserve
+		bypass = { has_global_flag = NAM_war_of_return_resolved }
 		icon = GFX_focus_NAM_concealed_reserve
 		x = 16
 		y = 3
@@ -424,18 +419,16 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_defeat_revenge }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_return_supply_open_tt
+				NAM_return_supply_open = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			if = {
-				limit = { has_completed_focus = NAM_concealed_reserve }
-				add_fuel = 10000
-			}
-			else = {
-				add_fuel = 4000
-			}
+			unlock_decision_tooltip = NAM_return_charter_freighters
+			custom_effect_tooltip = NAM_return_charter_freighters_unlock_tt
 		}
 		ai_will_do = {
 			base = 10
@@ -444,6 +437,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_officer_cadres
+		bypass = { has_global_flag = NAM_war_of_return_resolved }
 		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 14
 		y = 4
@@ -454,14 +448,17 @@ focus_tree = {
 			focus = NAM_defeat_hidden_reserve
 		}
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_return_supply_open_tt
+				NAM_return_supply_open = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			army_experience = 25
-			add_command_power = 30
-			add_war_support = 0.05
+			army_experience = 15
+			custom_effect_tooltip = NAM_return_officers_intel_tt
+			hidden_effect = { NAM_return_survey_field_owners = yes }
 		}
 		ai_will_do = {
 			base = 10
@@ -496,6 +493,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_war_chest
+		bypass = { has_global_flag = NAM_war_of_return_resolved }
 		icon = GFX_focus_NAM_second_ledger
 		x = 18
 		y = 5
@@ -503,18 +501,17 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_defeat_new_levies }
 		available = {
-			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_return_supply_open_tt
+				NAM_return_supply_open = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 100
-				producer = NAM
-			}
+			unlock_decision_tooltip = NAM_return_commission_yard
+			custom_effect_tooltip = NAM_return_commission_yard_unlock_tt
+			hidden_effect = { set_country_flag = NAM_return_yard_warrant }
 		}
 		ai_will_do = {
 			base = 10
@@ -565,89 +562,32 @@ focus_tree = {
 		bypass = {
 			NOT = { has_country_flag = NAM_rw_tribute }
 		}
-		# The buyout price follows the remaining term of the 365-day tribute:
-		# three, two or one monthly delivery to both recipients. Flag age is
-		# read again at completion, so the debit matches the current tier.
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_defeat_early_tribute_price_tt
-				has_country_flag = NAM_rw_tribute
-				OR = {
-					AND = {
-						NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } }
-						NOT = { has_fuel < 90000 }
-					}
-					AND = {
-						has_country_flag = { flag = NAM_rw_tribute days > 121 }
-						NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } }
-						NOT = { has_fuel < 60000 }
-					}
-					AND = {
-						has_country_flag = { flag = NAM_rw_tribute days > 243 }
-						NOT = { has_fuel < 30000 }
-					}
-				}
+				NAM_rw_tribute_buyout_affordable = yes
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			if = {
-				limit = {
-					NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } }
-				}
-				add_fuel = -90000
-				EFL = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 45000
-					}
-				}
-				AZH = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 45000
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } }
-				}
-				add_fuel = -60000
-				EFL = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 30000
-					}
-				}
-				AZH = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 30000
-					}
-				}
-			}
-			else = {
-				add_fuel = -30000
-				EFL = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 15000
-					}
-				}
-				AZH = {
-					if = {
-						limit = { exists = yes }
-						add_fuel = 15000
-					}
-				}
-			}
 			custom_effect_tooltip = NAM_defeat_early_tribute_tt
 			hidden_effect = {
-				clr_country_flag = NAM_rw_tribute
-				NAM_oil_refresh = yes
+				if = {
+					limit = { NAM_rw_tribute_buyout_affordable = yes }
+					NAM_rw_deliveries_monthly = yes
+					if = {
+						limit = { NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } } }
+						NAM_rw_deliveries_monthly = yes
+					}
+					if = {
+						limit = { NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } } }
+						NAM_rw_deliveries_monthly = yes
+					}
+					clr_country_flag = NAM_rw_tribute
+					NAM_oil_refresh = yes
+				}
 			}
 		}
 		ai_will_do = {

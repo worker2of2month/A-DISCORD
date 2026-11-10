@@ -7,3 +7,7 @@
  water_strongest_current_desc: "A relentless pole-to-pole current tearing between the western and the central continent. For centuries it smashed or carried off every ship that tried the crossing, which is why the two shores never met. Fleets here struggle to keep formation and to spot the enemy, but drifting mines are swept away."
  reactor_zone: "Reactor Zone"
  reactor_zone_desc: "Once the industrial centre of Vorkerland, this region held vast factory complexes powered by a zero-point reactor. Now the ruins of the destroyed reactor loom over dead workshops. Discharges from its ruptured core have poisoned the soil, water and air so thoroughly that entering the reactor zone means instant death. Neither settlement, work nor the passage of troops is possible: the former industrial heartland has become an impassable dead land."
+ desert_city: "Desert City"
+ desert_city_desc: "Low, dense clay and sandstone quarters gathered around wells and markets. Open sandy approaches give attackers little cover, heat and scarce water wear down garrisons, yet the city remains a hub of caravan roads."
+ hill_city: "Hill City"
+ hill_city_desc: "Stone quarters climb the hillsides in terraces, and streets turn into stairways and narrow ascents. Every assault goes uphill, vehicles have no room to deploy, and defenders hold the heights above neighbouring quarters."

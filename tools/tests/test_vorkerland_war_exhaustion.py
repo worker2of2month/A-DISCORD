@@ -118,9 +118,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             'collapse_map_effects',
         )
         finish = named_block(maps, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
-        for tag in ("WKR", "WRK", "VAD", "TVA"):
+        # Every claimant and the country that currently is Vorkerland are reset.
+        for scope in ("WKR", "event_target:ADISCORD_vorkerland_nation", "VAD", "TVA"):
             self.assertIn(
-                f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}",
+                f"{scope} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}",
                 finish,
             )
         for outcome in ("worker", "vlad", "dorian"):
@@ -133,7 +134,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'phase_effects',
         )
-        terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunification")
         self.assertIn(
             "set_global_flag = ADISCORD_vorkerland_central_war_finished", terminal
         )

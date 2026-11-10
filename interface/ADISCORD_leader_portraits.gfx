@@ -1,5 +1,9 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_portrait_SNG_governor_council"
+		texturefile = "gfx/leaders/SNG/portrait_SNG_governor_council.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_NKA_STS_administrator"
 		texturefile = "gfx/leaders/NKA/portrait_STP_northern_administrator.png"
 	}

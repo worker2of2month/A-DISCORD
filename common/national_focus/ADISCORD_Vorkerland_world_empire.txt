@@ -299,6 +299,106 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
+	focus = {
+		id = WRK_empire_open_crown_registers
+		icon = GFX_focus_generic_worker_administration
+		x = 0
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_crown_charter }
+		mutually_exclusive = { focus = WRK_empire_civic_oath }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_political_power = 75
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = { id = ADISCORD_vorkerland_empire_bop value = -0.10 }
+			}
+			effect_tooltip = { add_ideas = WRK_empire_delta_open_crown_registers }
+			custom_effect_tooltip = WRK_empire_open_crown_registers_tt
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_stability value = 0.05 }
+				add_to_variable = { var = WRK_empire_politics value = 0.05 }
+				ADISCORD_vorkerland_empire_refresh_court = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = WRK_empire_civic_oath
+		icon = GFX_goal_generic_national_unity
+		x = 4
+		y = 3
+		cost = 3
+		prerequisite = { focus = WRK_empire_crown_charter }
+		mutually_exclusive = { focus = WRK_empire_open_crown_registers }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			is_subject = no
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_manpower = 4200
+			if = {
+				limit = { has_power_balance = { id = ADISCORD_vorkerland_empire_bop } }
+				add_power_balance_value = { id = ADISCORD_vorkerland_empire_bop value = 0.10 }
+			}
+			effect_tooltip = { add_ideas = WRK_empire_delta_civic_oath }
+			hidden_effect = {
+				add_to_variable = { var = WRK_empire_org value = 0.05 }
+				add_to_variable = { var = WRK_empire_stability value = 0.03 }
+				ADISCORD_vorkerland_empire_refresh_army = yes
+				ADISCORD_vorkerland_empire_refresh_court = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = WRK_empire_restore_veyran_crown
+		icon = GFX_focus_generic_phoenix
+		x = 0
+		y = 4
+		cost = 3
+		prerequisite = { focus = WRK_empire_open_crown_registers }
+		allow_branch = { ADISCORD_vorkerland_petrichev_empire = yes }
+		available = {
+			hidden_trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
+			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_empire_west_secured_tt
+				has_global_flag = ADISCORD_west_hegemon_WRK
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = WRK_empire_restore_veyran_crown_tt
+			hidden_effect = {
+				set_cosmetic_tag = WRK_veyran_empire
+				set_temp_variable = { ADISCORD_superevent_request = 54 }
+				ADISCORD_superevent_enqueue = yes
+				news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	# ----- Imperial governors -----
 
 	focus = {

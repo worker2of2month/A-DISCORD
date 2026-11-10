@@ -1,0 +1,57 @@
+{
+  "SHL_line": {
+    "sha256": "27f067302258dae292e2fbccbf99e40b6df710be21ffb770b1fe95a8e7506d1b",
+    "textures": {
+      "SHL_line_field_body_diffuse.dds": "432efc3638ad0b390af605e62e78d9aa0445df19bea1cd32ee27db0633d3354c",
+      "SHL_line_field_body_normal.dds": "ccb6570bb1566458fe71f870c04993318a6c65055df6f6b545a391bdb2e3618c",
+      "SHL_line_field_body_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a",
+      "SHL_line_field_gear_diffuse.dds": "95cf751c11dd68dfe5fce024cea0e137cc7e268b2d08b3caf627a18802a7f91e",
+      "SHL_line_field_gear_normal.dds": "13172a7842a2a910ba1f3bc7b39055a3f82ea4bdf7744efc27811fe963909ee4",
+      "SHL_line_field_gear_specular.dds": "21cd30f78432e957606769d64a92ebd87e822c907abb38bcab7d42a5ebb7e22a"
+    },
+    "shapes": [
+      {
+        "vertices": 4830,
+        "triangles": 1610,
+        "bones": 33
+      },
+      {
+        "vertices": 10419,
+        "triangles": 12044,
+        "bones": 33
+      }
+    ],
+    "poses": {
+      "idle_rifle": [
+        1,
+        91,
+        181
+      ],
+      "moving_rifle": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_rifle": [
+        1,
+        40,
+        79
+      ],
+      "idle_mg": [
+        1,
+        90,
+        180
+      ],
+      "moving_mg": [
+        1,
+        21,
+        41
+      ],
+      "attack_stand_mg": [
+        1,
+        49,
+        97
+      ]
+    }
+  }
+}

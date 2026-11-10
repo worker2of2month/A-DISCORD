@@ -6,6 +6,16 @@ spriteTypes = {
 		texturefile = "gfx/interface/decisions/STP/stp_election.png"
 	}
 
+	### SHARED CATEGORY PICTURES
+	spriteType = {
+		name = "GFX_ADISCORD_decision_picture_land_reclamation"
+		texturefile = "gfx/interface/decisions/decision_picture_ADISCORD_land_reclamation.png"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_decision_picture_deal"
+		texturefile = "gfx/interface/decisions/decision_picture_ADISCORD_deal.png"
+	}
+
 
 	### CATEGORY ICON ALIASES
 	spriteType = {

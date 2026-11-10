@@ -243,7 +243,7 @@ RUS_crisis_update_volunteers = {
 		NOD = { RUS_crisis_update_volunteer_mandate = yes }
 		SHL = { RUS_crisis_update_volunteer_mandate = yes }
 		NAM = { RUS_crisis_update_volunteer_mandate = yes }
-		WRK = { RUS_crisis_update_volunteer_mandate = yes }
+		event_target:ADISCORD_vorkerland_nation = { RUS_crisis_update_volunteer_mandate = yes }
 		IVN = { RUS_crisis_update_volunteer_mandate = yes }
 	}
 }
@@ -268,7 +268,7 @@ RUS_crisis_clear_volunteers = {
 	NOD = { RUS_crisis_remove_volunteer_mandate = yes }
 	SHL = { RUS_crisis_remove_volunteer_mandate = yes }
 	NAM = { RUS_crisis_remove_volunteer_mandate = yes }
-	WRK = { RUS_crisis_remove_volunteer_mandate = yes }
+	event_target:ADISCORD_vorkerland_nation = { RUS_crisis_remove_volunteer_mandate = yes }
 	IVN = { RUS_crisis_remove_volunteer_mandate = yes }
 }
 
@@ -762,16 +762,20 @@ RUS_crisis_resolve_capitulation = {
 RUS_crisis_annex_hegemony = {
 	set_variable = { var = RUS_crisis_phase value = 3 }
 	# Preserve the full roster and territory before native peace merges war outcomes.
+	# Vassal crowns keep their land; the dissolution frees them as subjects.
 	clear_temp_array = RUS_crisis_conquests
 	for_each_scope_loop = {
 		array = global.RUS_crisis_defenders
 		if = {
-			limit = { NOT = { is_in_array = { array = global.RUS_crisis_conquered_countries value = THIS } } }
-			add_to_array = { array = global.RUS_crisis_conquered_countries value = THIS }
-		}
-		every_owned_state = {
-			add_to_temp_array = { array = RUS_crisis_conquests value = THIS }
-			PREV = { add_to_array = { array = RUS_crisis_annexed_states value = PREV } }
+			limit = { RUS_crisis_keeps_as_vassal = no }
+			if = {
+				limit = { NOT = { is_in_array = { array = global.RUS_crisis_conquered_countries value = THIS } } }
+				add_to_array = { array = global.RUS_crisis_conquered_countries value = THIS }
+			}
+			every_owned_state = {
+				add_to_temp_array = { array = RUS_crisis_conquests value = THIS }
+				PREV = { add_to_array = { array = RUS_crisis_annexed_states value = PREV } }
+			}
 		}
 	}
 	for_each_scope_loop = {
@@ -780,7 +784,19 @@ RUS_crisis_annex_hegemony = {
 			limit = { has_war_with = RUS }
 			RUS = { white_peace = PREV }
 		}
-		RUS = { annex_country = { target = PREV transfer_troops = no } }
+		if = {
+			limit = { RUS_crisis_keeps_as_vassal = yes }
+			RUS = {
+				puppet = {
+					target = PREV
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		else = {
+			RUS = { annex_country = { target = PREV transfer_troops = no } }
+		}
 	}
 	for_each_scope_loop = {
 		array = RUS_crisis_conquests

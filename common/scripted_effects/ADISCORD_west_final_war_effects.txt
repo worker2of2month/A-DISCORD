@@ -19,7 +19,8 @@ ADISCORD_west_crisis_add = {
 	}
 }
 
-# COUNTRY WRK. Called from on_monthly_WRK, the only periodic driver.
+# COUNTRY the unified Vorkerland. Called from the monthly hook of the claimant
+# tag it kept, the only periodic driver.
 ADISCORD_west_crisis_month = {
 	if = {
 		limit = {
@@ -68,7 +69,7 @@ ADISCORD_west_final_war_start = {
 	if = {
 		limit = { ADISCORD_west_final_can_start = yes }
 		set_global_flag = ADISCORD_west_final_started
-		WRK = {
+		event_target:ADISCORD_vorkerland_nation = {
 			ADISCORD_west_prepare_champion = yes
 			set_variable = { var = ADISCORD_west_side value = 1 }
 		}
@@ -77,17 +78,17 @@ ADISCORD_west_final_war_start = {
 			set_variable = { var = ADISCORD_west_side value = 2 }
 		}
 		if = {
-			limit = { tag = WRK }
+			limit = { tag = event_target:ADISCORD_vorkerland_nation }
 			declare_war_on = { target = IVN type = annex_everything }
 		}
 		else = {
-			declare_war_on = { target = WRK type = annex_everything }
+			declare_war_on = { target = event_target:ADISCORD_vorkerland_nation type = annex_everything }
 		}
 
 		ADISCORD_west_assign_bound_sides = yes
 		ADISCORD_west_offer_side_choices = yes
 
-		WRK = {
+		event_target:ADISCORD_vorkerland_nation = {
 			ADISCORD_west_add_path_spirit = yes
 			ADISCORD_vorkerland_show_itora_war_superevent = yes
 			# The deadline compares the age of the campaign flag, so a stale
@@ -116,7 +117,7 @@ ADISCORD_west_prepare_champion = {
 	if = {
 		limit = { is_in_faction = no }
 		if = {
-			limit = { tag = WRK }
+			limit = { tag = event_target:ADISCORD_vorkerland_nation }
 			create_faction_from_template = {
 				template = faction_template_ADISCORD_standard
 				name = ADISCORD_west_wrk_faction
@@ -164,8 +165,8 @@ ADISCORD_west_bind_to_champion = {
 			exists = yes
 			NOT = { has_variable = ADISCORD_west_side }
 			OR = {
-				is_subject_of = WRK
-				is_in_faction_with = WRK
+				is_subject_of = event_target:ADISCORD_vorkerland_nation
+				is_in_faction_with = event_target:ADISCORD_vorkerland_nation
 				has_war_with = IVN
 			}
 		}
@@ -178,7 +179,7 @@ ADISCORD_west_bind_to_champion = {
 			OR = {
 				is_subject_of = IVN
 				is_in_faction_with = IVN
-				has_war_with = WRK
+				has_war_with = event_target:ADISCORD_vorkerland_nation
 			}
 		}
 		ADISCORD_west_join_ivn_side = yes
@@ -240,7 +241,7 @@ ADISCORD_west_prepare_side_entry = {
 				OR = {
 					AND = {
 						ADISCORD_west_on_wrk_side = yes
-						is_in_faction_with = WRK
+						is_in_faction_with = event_target:ADISCORD_vorkerland_nation
 					}
 					AND = {
 						ADISCORD_west_on_ivn_side = yes
@@ -271,10 +272,10 @@ ADISCORD_west_complete_side_entry = {
 				is_in_faction = no
 				is_subject = no
 			}
-			WRK = { add_to_faction = PREV }
+			event_target:ADISCORD_vorkerland_nation = { add_to_faction = PREV }
 		}
 		add_to_war = {
-			targeted_alliance = WRK
+			targeted_alliance = event_target:ADISCORD_vorkerland_nation
 			enemy = IVN
 			hostility_reason = asked_to_join
 			single_target_only = yes
@@ -291,7 +292,7 @@ ADISCORD_west_complete_side_entry = {
 		}
 		add_to_war = {
 			targeted_alliance = IVN
-			enemy = WRK
+			enemy = event_target:ADISCORD_vorkerland_nation
 			hostility_reason = asked_to_join
 			single_target_only = yes
 		}
@@ -344,7 +345,7 @@ ADISCORD_west_follow_root = {
 # COUNTRY champion. The path chooses the war, not only its name.
 ADISCORD_west_add_path_spirit = {
 	if = {
-		limit = { tag = WRK }
+		limit = { tag = event_target:ADISCORD_vorkerland_nation }
 		if = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			add_ideas = ADISCORD_west_wrk_solidarity_committees
@@ -389,6 +390,56 @@ ADISCORD_west_remove_path_spirit = {
 
 # ----- Settlement -----
 
+# The queue stores the outcome at settlement, before a later change of government.
+ADISCORD_west_show_vorkerland_victory = {
+	if = {
+		limit = { has_cosmetic_tag = WRK_vorkerland_world_empire }
+		set_temp_variable = { ADISCORD_superevent_request = 70 }
+	}
+	else_if = {
+		limit = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+		set_temp_variable = { ADISCORD_superevent_request = 56 }
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+		set_temp_variable = { ADISCORD_superevent_request = 52 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_route_joint
+			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+		}
+		set_temp_variable = { ADISCORD_superevent_request = 69 }
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		set_temp_variable = { ADISCORD_superevent_request = 53 }
+	}
+	else = {
+		set_temp_variable = { ADISCORD_superevent_request = 55 }
+	}
+	ADISCORD_superevent_enqueue = yes
+}
+
+ADISCORD_west_show_itoran_victory = {
+	if = {
+		limit = { check_variable = { var = global.ADISCORD_west_terms value = 1 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 59 }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 3 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 57 }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 4 compare = equals } }
+		set_temp_variable = { ADISCORD_superevent_request = 58 }
+	}
+	else = {
+		set_temp_variable = { ADISCORD_superevent_request = 60 }
+	}
+	ADISCORD_superevent_enqueue = yes
+}
+
 # GLOBAL. Vorkerland wins the west.
 ADISCORD_west_final_resolve_wrk_victory = {
 	if = {
@@ -401,11 +452,11 @@ ADISCORD_west_final_resolve_wrk_victory = {
 		set_variable = { var = global.ADISCORD_west_subject_type value = 0 }
 		set_variable = { var = global.ADISCORD_west_transfer value = 0 }
 		if = {
-			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_worker } }
+			limit = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_worker } }
 			set_variable = { var = global.ADISCORD_west_subject_type value = 1 }
 		}
 		else_if = {
-			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_joint } }
+			limit = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_joint } }
 			set_variable = { var = global.ADISCORD_west_subject_type value = 5 }
 		}
 		else = {
@@ -415,7 +466,8 @@ ADISCORD_west_final_resolve_wrk_victory = {
 		ADISCORD_west_end_final_wars = yes
 		ADISCORD_west_mark_losers = yes
 		ADISCORD_west_close_campaign_state = yes
-		WRK = {
+		event_target:ADISCORD_vorkerland_nation = {
+			ADISCORD_west_show_vorkerland_victory = yes
 			country_event = { id = ADISCORD_west.30 days = 1 }
 			news_event = { id = ADISCORD_west.31 hours = 2 }
 			ADISCORD_vorkerland_rename_after_itora = yes
@@ -450,6 +502,7 @@ ADISCORD_west_final_resolve_ivn_victory = {
 		ADISCORD_west_mark_losers = yes
 		ADISCORD_west_close_campaign_state = yes
 		IVN = {
+			ADISCORD_west_show_itoran_victory = yes
 			country_event = { id = ADISCORD_west.30 days = 1 }
 			news_event = { id = ADISCORD_west.31 hours = 2 }
 		}
@@ -472,13 +525,13 @@ ADISCORD_west_final_resolve_without_hegemon = {
 ADISCORD_west_final_resolve_by_control = {
 	if = {
 		limit = {
-			NOT = { WRK = { ADISCORD_west_champion_viable = yes } }
+			NOT = { event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes } }
 			NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
 		}
 		ADISCORD_west_final_resolve_without_hegemon = yes
 	}
 	else_if = {
-		limit = { NOT = { WRK = { ADISCORD_west_champion_viable = yes } } }
+		limit = { NOT = { event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes } } }
 		ADISCORD_west_final_resolve_ivn_victory = yes
 	}
 	else_if = {
@@ -508,7 +561,7 @@ ADISCORD_west_final_resolve_by_control = {
 		}
 		else = {
 			ADISCORD_west_final_resolve_without_hegemon = yes
-			WRK = { news_event = { id = ADISCORD_west.31 hours = 2 } }
+			event_target:ADISCORD_vorkerland_nation = { news_event = { id = ADISCORD_west.31 hours = 2 } }
 		}
 	}
 }
@@ -576,7 +629,7 @@ ADISCORD_west_end_member_wars = {
 # GLOBAL. Losers leave factions and foreign subjection before the delayed
 # settlement, which gives the native faction cache one day to update.
 ADISCORD_west_mark_losers = {
-	WRK = { ADISCORD_west_mark_loser = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_mark_loser = yes }
 	IVN = { ADISCORD_west_mark_loser = yes }
 	WIT = { ADISCORD_west_mark_loser = yes }
 	IIA = { ADISCORD_west_mark_loser = yes }
@@ -628,7 +681,7 @@ ADISCORD_west_mark_loser = {
 # GLOBAL. Campaign-only status ends on every terminal path.
 ADISCORD_west_close_campaign_state = {
 	clr_global_flag = ADISCORD_west_final_started
-	WRK = { ADISCORD_west_close_member_state = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_close_member_state = yes }
 	IVN = { ADISCORD_west_close_member_state = yes }
 }
 
@@ -647,7 +700,7 @@ ADISCORD_west_close_member_state = {
 
 # GLOBAL.
 ADISCORD_west_clear_participants = {
-	WRK = { ADISCORD_west_clear_participant = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_clear_participant = yes }
 	IVN = { ADISCORD_west_clear_participant = yes }
 	WIT = { ADISCORD_west_clear_participant = yes }
 	IIA = { ADISCORD_west_clear_participant = yes }
@@ -689,7 +742,7 @@ ADISCORD_west_apply_settlement = {
 		95 = { ADISCORD_west_transfer_to_root = yes }
 		96 = { ADISCORD_west_transfer_to_root = yes }
 	}
-	WRK = { ADISCORD_west_settle_member = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_settle_member = yes }
 	IVN = { ADISCORD_west_settle_member = yes }
 	WIT = { ADISCORD_west_settle_member = yes }
 	IIA = { ADISCORD_west_settle_member = yes }
@@ -739,7 +792,7 @@ ADISCORD_west_settle_member = {
 				}
 			}
 			if = {
-				limit = { ROOT = { tag = WRK } }
+				limit = { ROOT = { tag = event_target:ADISCORD_vorkerland_nation } }
 				ADISCORD_vorkerland_pw_apply_subject_government = yes
 			}
 			else = { ADISCORD_west_apply_subject_type = yes }
@@ -812,7 +865,7 @@ ADISCORD_west_wrk_arm_front_partner = {
 	if = {
 		limit = {
 			exists = yes
-			is_in_faction_with = WRK
+			is_in_faction_with = event_target:ADISCORD_vorkerland_nation
 		}
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
@@ -874,7 +927,7 @@ ADISCORD_west_seed_leans = {
 		TRU = { add_to_variable = { var = ADISCORD_west_lean value = -30 } }
 	}
 	ADISCORD_west_clamp_all_leans = yes
-	WRK = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
+	event_target:ADISCORD_vorkerland_nation = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
 	IVN = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
 }
 
@@ -896,7 +949,7 @@ ADISCORD_west_clamp_all_leans = {
 # ADISCORD_west_push is the unsigned amount; its direction follows ROOT.
 ADISCORD_west_push_lean = {
 	if = {
-		limit = { ROOT = { tag = WRK } }
+		limit = { ROOT = { tag = event_target:ADISCORD_vorkerland_nation } }
 		add_to_variable = { var = ADISCORD_west_lean value = ADISCORD_west_push }
 	}
 	else = {
@@ -957,9 +1010,9 @@ ADISCORD_west_refresh_transit = {
 			limit = {
 				ADISCORD_west_final_active = yes
 				ADISCORD_west_grants_wrk_transit = yes
-				WRK = { ADISCORD_west_champion_viable = yes }
+				event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes }
 			}
-			give_military_access = WRK
+			give_military_access = event_target:ADISCORD_vorkerland_nation
 		}
 		else_if = {
 			limit = {
@@ -974,9 +1027,9 @@ ADISCORD_west_refresh_transit = {
 
 ADISCORD_west_revoke_transit = {
 	if = {
-		limit = { WRK = { has_military_access_to = PREV } }
+		limit = { event_target:ADISCORD_vorkerland_nation = { has_military_access_to = PREV } }
 		diplomatic_relation = {
-			country = WRK
+			country = event_target:ADISCORD_vorkerland_nation
 			relation = military_access
 			active = no
 		}
@@ -1013,7 +1066,7 @@ ADISCORD_west_answer_call_to_arms = {
 	ADISCORD_west_revoke_transit = yes
 	clr_country_flag = ADISCORD_west_neutral
 	if = {
-		limit = { FROM = { tag = WRK } }
+		limit = { FROM = { tag = event_target:ADISCORD_vorkerland_nation } }
 		ADISCORD_west_join_wrk_side = yes
 	}
 	else = {

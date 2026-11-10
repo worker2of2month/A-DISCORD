@@ -482,4 +482,44 @@ entity = {
 	clone = "ADISCORD_NAM_marine_entity"
 	name = "NAM_corporate_state_ADISCORD_marine_infantry_entity"
 }
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_prag_republic_marines_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_prag_republic_ADISCORD_marine_infantry_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_prag_directorate_marines_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_prag_directorate_ADISCORD_marine_infantry_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_svetlogorye_derzhava_marines_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_svetlogorye_derzhava_ADISCORD_marine_infantry_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_veyran_union_marines_entity"
+}
+
+entity = {
+	clone = "ADISCORD_NAM_marine_entity"
+	name = "NAM_veyran_union_ADISCORD_marine_infantry_entity"
+}
 # END ADISCORD NAM marines

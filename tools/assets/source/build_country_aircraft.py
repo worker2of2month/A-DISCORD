@@ -30,6 +30,7 @@ from tools.assets.source.country_vehicles import package_vehicles as registry
 FAMILIES = registry.FAMILIES
 NAMES = registry.SHARED_NAMES
 PAINTS = {
+    "SHL": ((187, 145, 92), (60, 47, 62), (214, 163, 74)),
     "DEF": ((112, 126, 123), (50, 65, 66), (209, 215, 199)),
     "ARB": ((185, 151, 94), (89, 65, 41), (47, 94, 82)),
     "WRK": ((79, 98, 76), (40, 51, 47), (193, 77, 41)),
@@ -77,7 +78,13 @@ def prepare(output, names=None):
                     draw.line((0, y, 127, y), fill=(58, 64, 66), width=2)
             if index == 8:
                 # Shared fleets use service markings instead of another country's flag.
-                if family == "ARB":
+                if family == "SHL":
+                    draw.polygon(((64,9),(113,64),(64,119),(15,64)), fill=dark)
+                    draw.line(((64,23),(99,64),(64,105),(29,64),(64,23)), fill=accent, width=6)
+                    draw.line((40,64,88,64), fill=accent, width=4)
+                    draw.line((64,38,64,90), fill=accent, width=4)
+                    draw.ellipse((58,58,70,70), fill=(246,225,179))
+                elif family == "ARB":
                     draw.ellipse((29, 25, 99, 101), fill=accent)
                     draw.ellipse((46, 17, 106, 86), fill=base)
                 elif family == "WRK":
@@ -121,8 +128,120 @@ def naval_stabilizer(model, side, z):
                  (side * 2.30, 4.53, z + .08), (side * .12, 4.43, z)], .075, 0)
 
 
+def desert_airframe(model, role, tier):
+    # Each station describes span, leading edge, trailing edge and dihedral.
+    # Colour breaks follow the airfoil itself, including the sloping gull wings.
+    attack = role == "cas"
+    profiles = {
+        ("fighter", 0): [(0.2, -2.31, .92, .03), (2.1, -2.08, .68, -.23), (4.8, -1.39, .69, .22),
+                         (5.7, -.99, .58, .31), (6.45, -.38, .31, .38)],
+        ("cas", 0): [(0.2, -1.75, 1.3, .18), (2.05, -1.9, 1.55, -.41), (5.9, -1.15, 1.23, .25),
+                     (6.7, -.86, .99, .44), (7.25, -.4, .80, .55)],
+        ("fighter", 1): [(.25, -3.15, 2.15, .03), (1.45, -1.95, 2.15, .03),
+                         (4.3, .36, 2.47, .03), (5.65, 1.75, 2.84, .11), (6, 2.30, 2.9, .13)],
+        ("cas", 1): [(.25, -1.95, 1.65, .1), (2.22, -1.64, 1.72, .22), (5.9, -2.02, .78, .42),
+                     (6.64, -2.17, .43, .48), (6.95, -2.04, .12, .52)],
+        ("fighter", 2): [(.25, -4.7, 3.22, .11), (2.18, -1.52, 3.22, .08), (4.1, .41, 3.74, .02),
+                         (5.84, 1.18, 3.92, -.08), (6.6, 1.69, 3.48, -.15)],
+        ("cas", 2): [(.2, -3.62, 2.36, .07), (2.36, -2.3, 3.02, .03), (5.75, -1.16, 1.75, .12),
+                     (7.1, -.30, 2.39, .32), (8.18, 1.03, 2.84, .62)],
+    }
+    stations = profiles[role, tier]
+    drone = attack and tier == 2
+    radial_fighter = not attack and tier == 0
+    booms = attack and tier == 1
+    nose = -4.5 if drone else -5.0 if attack or radial_fighter else -6.35
+    tail = 2.4 if drone or booms else 4.9
+    w = 1.08 if drone else .85 if attack else .62
+    model.loft([(nose, .065, .085, .01), (nose + .62, w * .59, .39, .04),
+                (nose + 1.65, w * .94, .61, .07), (-.52, w, .68, .04),
+                (1.18, w * .86, .58, .04), (tail, w * .22, .26, .07)], 0, sides=16)
+    if drone:
+        model.loft([(-3.38, .12, .12, .41), (-2.96, .49, .19, .54),
+                    (-1.97, .51, .17, .68), (-1.58, .28, .12, .67)], 7)
+        model.rod((0, -3.29, -.37), (0, -3.66, -.47), .28, 5, end_radius=.21)
+    else:
+        y = nose + (1.88 if radial_fighter else 1.30)
+        model.loft([(y, .1, .09, .40), (y + .52, w * .60, .40, .58),
+                    (y + 1.30, w * .78, .52, .66), (y + 2.1, w * .68, .38, .65),
+                    (y + 2.64, .1, .10, .59)], 5, sides=12)
+        for delta in (.79, 1.73):
+            for sign in (-1, 1):
+                model.rod((sign * w * .66, y + delta, .76), (0, y + delta + .10, 1.15), .038, 1)
+    gun_x, gun_y, gun_z = (1.8, -2.68, -.16) if radial_fighter else (w * .38, nose + .20, -.17)
+    for side in (-1, 1):
+        for j, (a, b) in enumerate(zip(stations, stations[1:])):
+            x, lead, trail, z = a
+            xx, le, tr, zz = b
+            color = (0, 0, 9, 1)[j]
+            model.plate([(side * x, lead, z), (side * xx, le, zz), (side * xx, tr, zz),
+                         (side * x, trail, z)], .135, color)
+            if j in (1, 2):
+                model.plate([(side * x, trail - .38, z + .079), (side * xx, tr - .28, zz + .079),
+                             (side * xx, tr - .06, zz + .079), (side * x, trail - .06, z + .079)], .014, 1)
+        x, lead, trail, z = stations[2]
+        # Place the insignia on a broad panel immediately inboard of the coloured tip.
+        x1, le, tr, z1 = stations[1]
+
+        def marking_point(frac, chord):
+            leading = le + (lead - le) * frac
+            trailing = tr + (trail - tr) * frac
+            return (side * (x1 + (x - x1) * frac), leading + (trailing - leading) * chord,
+                    z1 + (z - z1) * frac + .078)
+        model.plate([marking_point(f, c) for f, c in ((.51, .16), (.88, .16), (.88, .70), (.51, .70))], .008, 8)
+        if radial_fighter:
+            model.plate([(side * .08, 2.87, .20), (side * 1.38, 3.11, .24),
+                         (side * 2.41, 3.85, .27), (side * 2.19, 4.29, .27),
+                         (side * .13, 4.58, .20)], .103, 0)
+            for j in range(4):
+                y = -3.72 + .16 * j
+                model.rod((side * .54, y, .16), (side * .72, y + .14, .10), .07, 11)
+        elif tier == 0:
+            native.engine(model, side * 2.05, -2.8, 1.78, -.30, 0, .57)
+            native.wing(model, side, 2.63, .70, 3.03, 1.35, .57, z=.27, tile=1)
+        else:
+            ex = 2.14 if booms else 1.23 if drone else .82
+            native.engine(model, side * ex, -1.88 if booms else -1.55,
+                          2.71 if attack else 3.88, .37 if attack else .0, tier, .51 if attack else .43)
+            if booms:
+                model.loft([(-.4, .39, .45, .16), (2.2, .32, .32, .32),
+                            (5.16, .17, .18, .55)], 0, x=side * ex)
+                native.fin(model, side * ex, 4.45, .57, 1.43, 1.79, -side * .28)
+            elif not drone and tier == 1:
+                native.wing(model, side, 2.74, .78, 2.86, 1.45, .54, z=.61, tile=1)
+            elif not drone:
+                native.fin(model, side * 1.22, 2.86, .34, 1.42, 2.4, side * .81)
+        if attack:
+            for x, y in ((3.03, -.24), (4.48, -.36)):
+                native.ordnance(model, side, x, y, tier)
+        model.rod((side * gun_x, gun_y + .68, gun_z), (side * gun_x, gun_y, gun_z), .073, 3)
+    if radial_fighter:
+        model.loft([(-5.24, .60, .61, .045), (-5.04, .76, .76, .045),
+                    (-4.62, .79, .78, .045), (-3.87, .70, .67, .045),
+                    (-3.32, .56, .55, .055)], 9, sides=24)
+        model.rod((0, -5.26, .045), (0, -5.23, .045), .59, 7, sides=24)
+        for j in range(9):
+            angle = math.tau * j / 9
+            dx, dz = math.cos(angle), math.sin(angle)
+            model.rod((dx * .21, -5.29, .045 + dz * .21),
+                      (dx * .48, -5.29, .045 + dz * .48), .074, 3, sides=8)
+        native.propeller(model, 0, -5.53, .045)
+        model.rod((0, -5.54, .045), (0, -5.87, .045), .29, 1, end_radius=.038, sides=20)
+        native.fin(model, 0, 3.85, .23, 1.64, 1.88)
+    if booms:
+        model.plate([(-2.22, 4.35, .70), (2.22, 4.35, .70), (2.22, 5.38, .70), (-2.22, 5.38, .70)], .11, 1)
+    if (attack and tier == 0) or (not attack and tier == 1):
+        native.fin(model, 0, 3.98, .29, 1.94, 2.31)
+    model.locators = {"root": ((0, 0, 0), "vehicle_root"), "bomb": ((0, -.36, -.77), "vehicle_root"),
+                      "gun1": ((-gun_x, gun_y, gun_z), "vehicle_root"),
+                      "gun2": ((gun_x, gun_y, gun_z), "vehicle_root")}
+    return model
+
+
 def airframe(family, role, tier):
     model = native.Model(f"{family}_{registry.PREFIXES[tier]}{role}")
+    if family == "SHL":
+        return desert_airframe(model, role, tier)
     attack = role == "cas"
     width = {"DEF": .70, "ARB": .82, "WRK": .94, "RUS": .88, "NAM": .66}[family]
     width *= 1.12 if attack else 1
@@ -319,7 +438,8 @@ def main():
                 report_path.write_text(json.dumps(report, indent=2) + "\n")
                 print("VERIFIED", name, report[name]["triangles"], flush=True)
             if args.render:
-                preview = ROOT / "docs/development/previews/NAM_naval"
+                folder = "NAM_naval" if family == "NAM" else f"{family}_aircraft"
+                preview = ROOT / "docs/development/previews" / folder
                 preview.mkdir(parents=True, exist_ok=True)
                 native.render_preview(name, preview)
     else:

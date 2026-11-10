@@ -309,24 +309,30 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_war_support = 0.05
-			# Sabotage on the Northern Deposits and in the harbour hits whoever
-			# holds them now.
 			67 = {
 				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					owner = { add_stability = -0.03 }
+					limit = { NAM_exile_resistance_site = yes }
+					controller = { add_stability = -0.03 }
 				}
 			}
 			700 = {
 				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					owner = { add_stability = -0.03 }
+					limit = { NAM_exile_resistance_site = yes }
+					controller = { add_stability = -0.03 }
 				}
 			}
-			custom_effect_tooltip = NAM_exile_armed_underground_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_revenge_readiness value = 10 }
-				NAM_revenge_readiness_clamp = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_exile_return_programme_open = yes
+						check_variable = { NAM_revenge_readiness < 100 }
+					}
+				}
+				custom_effect_tooltip = NAM_exile_armed_underground_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_revenge_readiness value = 10 }
+					NAM_revenge_readiness_clamp = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -345,20 +351,40 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_exile_armed_underground }
 		available = {
 			has_capitulated = no
+			67 = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_exile_resistance_site_tt
+					NAM_exile_resistance_site = yes
+				}
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			67 = {
 				if = {
-					limit = { NOT = { is_owned_by = NAM } }
-					owner = { add_fuel = -5000 }
+					limit = { hidden_trigger = { NAM_exile_resistance_site = yes } }
+					controller = { add_fuel = -30000 }
+					add_dynamic_modifier = {
+						modifier = NAM_klyuchevsk_oil_strike
+						days = 180
+					}
+					custom_effect_tooltip = NAM_exile_strike_reopens_tt
 				}
 			}
-			custom_effect_tooltip = NAM_exile_klyuchevsk_strike_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_revenge_readiness value = 5 }
-				NAM_revenge_readiness_clamp = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						67 = { NAM_exile_resistance_site = yes }
+						NAM_exile_return_programme_open = yes
+						check_variable = { NAM_revenge_readiness < 100 }
+					}
+				}
+				custom_effect_tooltip = NAM_exile_klyuchevsk_strike_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_revenge_readiness value = 5 }
+					NAM_revenge_readiness_clamp = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -2130,17 +2156,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = -0.05
-			custom_effect_tooltip = NAM_rad_hostage_system_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_consolidation value = 20 }
-				NAM_consolidation_clamp = yes
-			}
-			custom_effect_tooltip = NAM_grp_rad_hostage_system_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_dist_support value = -6 }
-				NAM_groups_refresh = yes
-			}
+			unlock_decision_tooltip = NAM_rad_levy_transport
+			custom_effect_tooltip = NAM_rad_levy_transport_unlock_tt
 		}
 		ai_will_do = {
 			base = 12
@@ -2162,18 +2179,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 50
-			add_stability = 0.02
-			custom_effect_tooltip = NAM_rad_collaborator_councils_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_consolidation value = 10 }
-				NAM_consolidation_clamp = yes
-			}
-			custom_effect_tooltip = NAM_grp_rad_collaborator_councils_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_nam_support value = 4 }
-				NAM_groups_refresh = yes
-			}
+			unlock_decision_tooltip = NAM_rad_install_council
+			custom_effect_tooltip = NAM_rad_install_council_unlock_tt
 		}
 		ai_will_do = {
 			base = 8
@@ -2417,10 +2424,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 75
-			add_fuel = 6000
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
+			unlock_decision_tooltip = NAM_rad_garrison_requisition
+			custom_effect_tooltip = NAM_rad_garrison_requisition_unlock_tt
 		}
 		ai_will_do = {
 			base = 30
@@ -2435,18 +2440,53 @@ focus_tree = {
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_rad_southern_tribute }
+		bypass = {
+			NOT = {
+				any_of_scopes = {
+					array = NAM_conquered_states
+					NAM_rad_sardan_levy_district = yes
+				}
+			}
+		}
 		available = {
 			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_sardan_levy_site_tt
+				any_of_scopes = {
+					array = NAM_conquered_states
+					NAM_rad_sardan_levy_district = yes
+				}
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 10000
-			add_stability = -0.03
-			custom_effect_tooltip = NAM_grp_rad_sardan_levies_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_garr_support value = 3 }
-				NAM_groups_refresh = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						is_subject = no
+						any_of_scopes = {
+							array = NAM_conquered_states
+							NAM_rad_sardan_levy_district = yes
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_rad_sardan_levies_tt
+				add_stability = -0.03
+				custom_effect_tooltip = NAM_grp_rad_sardan_levies_tt
+				hidden_effect = {
+					for_each_scope_loop = {
+						array = NAM_conquered_states
+						if = {
+							limit = { NAM_rad_sardan_levy_district = yes }
+							NAM = { add_manpower = 500 }
+							add_resistance = 5
+						}
+					}
+					add_to_variable = { var = NAM_grp_garr_support value = 3 }
+					NAM_groups_refresh = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -2469,8 +2509,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 6000
-			army_experience = 20
+			unlock_decision_tooltip = NAM_rad_deploy_command_post
+			custom_effect_tooltip = NAM_rad_deploy_command_post_unlock_tt
 			custom_effect_tooltip = NAM_grp_rad_garrison_rule_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_garr_support value = 8 }
@@ -2496,10 +2536,7 @@ focus_tree = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_rad_has_conquered_state_tt
-				any_owned_state = {
-					has_state_flag = NAM_conquered_state
-					is_controlled_by = NAM
-				}
+				any_owned_state = { NAM_rad_held_direct_district = yes }
 			}
 		}
 		cancel_if_invalid = yes
@@ -2508,10 +2545,7 @@ focus_tree = {
 			custom_effect_tooltip = NAM_rad_extraction_trusts_tt
 			hidden_effect = {
 				every_owned_state = {
-					limit = {
-						has_state_flag = NAM_conquered_state
-						is_controlled_by = NAM
-					}
+					limit = { NAM_rad_held_direct_district = yes }
 					random_select_amount = 3
 					add_resource = {
 						type = oil
@@ -2541,20 +2575,18 @@ focus_tree = {
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_rad_southern_tribute }
+		bypass = {
+			NOT = { owns_state = 241 }
+		}
 		available = {
+			owns_state = 241
+			controls_state = 241
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 30
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			custom_effect_tooltip = NAM_grp_rad_kadir_tolls_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 4 }
-				NAM_groups_refresh = yes
-			}
+			custom_effect_tooltip = NAM_rad_kadir_tolls_tt
 		}
 		ai_will_do = {
 			base = 15
@@ -2598,7 +2630,7 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				any_owned_state = {
-					has_state_flag = NAM_conquered_state
+					NAM_rad_direct_rule = yes
 					is_controlled_by = NAM
 					industrial_complex > 0
 				}
@@ -2609,7 +2641,7 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_rad_conquered_factory_tt
 				any_owned_state = {
-					has_state_flag = NAM_conquered_state
+					NAM_rad_direct_rule = yes
 					is_controlled_by = NAM
 					industrial_complex > 0
 				}
@@ -2635,7 +2667,7 @@ focus_tree = {
 					}
 					every_owned_state = {
 						limit = {
-							has_state_flag = NAM_conquered_state
+							NAM_rad_direct_rule = yes
 							is_controlled_by = NAM
 							industrial_complex > 0
 						}
@@ -2671,22 +2703,37 @@ focus_tree = {
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_kadir_tolls }
+		bypass = { 255 = { NAM_rad_held_direct_district = no } }
 		available = {
 			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_rakhma_site_tt
+				255 = { NAM_rad_held_direct_district = yes }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = 5000
-			custom_effect_tooltip = NAM_rad_rakhma_wells_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-				NAM_oil_refresh = yes
-			}
-			custom_effect_tooltip = NAM_grp_rad_rakhma_wells_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_oil_support value = 4 }
-				NAM_groups_refresh = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						is_subject = no
+						255 = { NAM_rad_held_direct_district = yes }
+					}
+				}
+				add_fuel = 5000
+				255 = {
+					add_resource = {
+						type = oil
+						amount = 3
+					}
+				}
+				custom_effect_tooltip = NAM_grp_rad_rakhma_wells_tt
+				hidden_effect = {
+					add_to_variable = { var = NAM_grp_oil_support value = 4 }
+					NAM_groups_refresh = yes
+				}
 			}
 		}
 		ai_will_do = {

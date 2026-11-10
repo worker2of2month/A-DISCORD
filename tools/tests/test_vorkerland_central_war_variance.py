@@ -153,7 +153,7 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
             callback.index("ADISCORD_vorkerland_verify_coalition_membership"),
         )
 
-    def test_integration_receipt_settles_once_and_survives_tag_handoff(self) -> None:
+    def test_integration_receipt_settles_once_before_the_unified_country_annexes(self) -> None:
         ids = re.findall(
             r"^\s*(ADISCORD_vorkerland_integrate_\w+_district) = \{",
             self.decisions,
@@ -163,6 +163,7 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
         refund = named_block(
             self.effects, "ADISCORD_vorkerland_refund_integrations_to_successor"
         )
+        nation = "event_target:ADISCORD_vorkerland_nation"
         for key in ids:
             block = named_block(self.decisions, key)
             self.assertIn(
@@ -187,17 +188,32 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
                 remove.index("add_core_of"),
             )
             self.assertIn(f"add_political_power = {cost}", remove)
-            self.assertIn(f"remove_decision = {key}", refund)
+            # The refund goes to the unified country and closes the decision.
+            self.assertIn(
+                f"clr_country_flag = {key}_paid {nation} = {{ add_political_power = {cost} }} "
+                f"remove_decision = {key} }}",
+                refund,
+            )
         for tag in ("wkr", "vad", "tva"):
+            winner = tag.upper()
             formation = named_block(
-                self.effects, "ADISCORD_vorkerland_form_wrk_from_" + tag
+                self.effects, "ADISCORD_vorkerland_unify_under_" + tag
             )
             formation += named_block(
-                self.effects, "ADISCORD_vorkerland_complete_wrk_from_" + tag
+                self.effects, "ADISCORD_vorkerland_settle_unification_under_" + tag
             )
+            # The winner holds the receipts and is never annexed; they are
+            # settled in its own scope before the settlement annexes anyone.
+            settle = f"{winner} = {{ ADISCORD_vorkerland_refund_integrations_to_successor = yes }}"
+            self.assertEqual(formation.count(settle), 1)
+            self.assertEqual(
+                formation.count("ADISCORD_vorkerland_refund_integrations_to_successor"), 1
+            )
+            self.assertNotIn(f"annex_country = {{ target = {winner}", formation)
+            self.assertLess(formation.index(settle), formation.index("annex_country"))
             self.assertLess(
-                formation.index("ADISCORD_vorkerland_refund_integrations_to_successor"),
-                formation.index(f"annex_country = {{ target = {tag.upper()}"),
+                formation.index(settle),
+                formation.index("ADISCORD_vorkerland_absorb_wtd_after_reunification"),
             )
             self.assertLess(
                 formation.index("ADISCORD_vorkerland_reunification_ally"),

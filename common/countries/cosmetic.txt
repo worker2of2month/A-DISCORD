@@ -250,6 +250,16 @@ SHL_commune_of_fire = {
 }
 
 # Svetlogorye political endings.
+NAM_svetlogorye_derzhava = {
+	color = rgb { 128 38 52 }
+	color_ui = rgb { 174 70 84 }
+}
+
+NAM_veyran_union = {
+	color = rgb { 106 24 37 }
+	color_ui = rgb { 207 161 74 }
+}
+
 NAM_iron_ladder = {
 	color = rgb { 128 38 52 }
 	color_ui = rgb { 174 70 84 }
@@ -268,6 +278,16 @@ NAM_federation = {
 NAM_oil_union = {
 	color = rgb { 65 94 112 }
 	color_ui = rgb { 105 139 158 }
+}
+
+NAM_prag_republic = {
+	color = rgb { 176 104 66 }
+	color_ui = rgb { 208 142 104 }
+}
+
+NAM_prag_directorate = {
+	color = rgb { 88 82 122 }
+	color_ui = rgb { 130 124 168 }
 }
 
 # Svetlogorye after the corporate takeover of the humanist exile.

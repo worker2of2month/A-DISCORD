@@ -286,7 +286,7 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
         )
         self.assertIn(
             "ideology = imperial_restorationism",
-            named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad"),
+            named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_vad"),
         )
 
     def test_icons_have_semantic_names_and_keep_source_quality(self) -> None:
@@ -411,17 +411,18 @@ class DorianIdeologyContracts(unittest.TestCase):
         self.assertCountEqual(appointments, [
             "ADISCORD_vorkerland_setup_tva",
             "ADISCORD_vorkerland_repair_claimant_identities",
-            "ADISCORD_vorkerland_complete_wrk_from_tva",
+            "ADISCORD_vorkerland_settle_unification_under_tva",
         ])
-        formation = one(effects, "ADISCORD_vorkerland_form_wrk_from_tva")
-        formation = formation + one(effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
-        transfer = [
-            e.value for e in walk(formation) if e.key == "set_nationality"
-            and one(e.value, "character") == "TVA_Dorian_Worx"
+        unification = one(effects, "ADISCORD_vorkerland_unify_under_tva")
+        unification = unification + one(effects, "ADISCORD_vorkerland_settle_unification_under_tva")
+        # Worx unifies the country on TVA itself: the role authored for that
+        # tag keeps governing, and no step moves him or the player elsewhere.
+        moves = [
+            e.key for e in walk(unification)
+            if e.key in ("set_nationality", "change_tag_from", "retire_character")
         ]
-        self.assertEqual(len(transfer), 1)
-        self.assertEqual(one(transfer[0], "target_country"), "WRK")
-        self.assertEqual(one(one(formation, "set_politics"), "ruling_party"), "technocracy")
+        self.assertEqual(moves, [])
+        self.assertEqual(one(one(unification, "set_politics"), "ruling_party"), "technocracy")
 
     def test_subtype_has_its_own_colour_and_complete_localisation(self):
         ideologies = one(parse_clausewitz(read("common/ideologies/00_ideologies.txt")), "ideologies")

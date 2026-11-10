@@ -29,7 +29,7 @@ class NamOilfieldTests(unittest.TestCase):
         for site in self.sites:
             with self.subTest(site=site):
                 state = states[site["state"]]
-                self.assertGreaterEqual(state["oil"], 24)
+                self.assertGreaterEqual(state["oil"], builder.MIN_OIL)
                 self.assertIn(site["province"], state["provinces"])
                 self.assertNotIn(site["province"], state["cities"])
                 x, y, z = site["position"]

@@ -402,4 +402,724 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_nam_resource_war_service = {
+		window_name = "superevent_nam_resource_war_service"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_nam_resource_war_service
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_nam_resource_war_service
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_nam_resource_war_district = {
+		window_name = "superevent_nam_resource_war_district"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_nam_resource_war_district
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_nam_resource_war_district
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_houses = {
+		window_name = "superevent_stelander_party_victory_houses"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_houses
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_houses
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_staff = {
+		window_name = "superevent_stelander_party_victory_staff"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_staff
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_staff
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_wallets = {
+		window_name = "superevent_stelander_party_victory_wallets"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_wallets
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_wallets
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_silence = {
+		window_name = "superevent_stelander_party_victory_silence"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_silence
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_silence
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_regent = {
+		window_name = "superevent_stelander_party_victory_regent"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_regent
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_regent
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_shabrat_victory_staff = {
+		window_name = "superevent_stelander_shabrat_victory_staff"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_shabrat_victory_staff
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_shabrat_victory_staff
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_shabrat_victory_councils = {
+		window_name = "superevent_stelander_shabrat_victory_councils"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_shabrat_victory_councils
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_shabrat_victory_councils
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_shabrat_victory_truth = {
+		window_name = "superevent_stelander_shabrat_victory_truth"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_shabrat_victory_truth
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_shabrat_victory_truth
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_stelander_party_victory_festival = {
+		window_name = "superevent_stelander_party_victory_festival"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory_festival
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory_festival
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_houses = {
+		window_name = "superevent_south_houses"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_houses
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_houses
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_cities = {
+		window_name = "superevent_south_cities"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_cities
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_cities
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_nur = {
+		window_name = "superevent_south_nur"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_nur
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_nur
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_regency = {
+		window_name = "superevent_south_regency"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_regency
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_regency
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_commune = {
+		window_name = "superevent_south_commune"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_commune
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_commune
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_conclave = {
+		window_name = "superevent_south_conclave"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_conclave
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_conclave
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_service = {
+		window_name = "superevent_south_service"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_service
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_service
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_charter = {
+		window_name = "superevent_south_charter"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_charter
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_charter
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_contracts = {
+		window_name = "superevent_south_contracts"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_contracts
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_contracts
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_rump = {
+		window_name = "superevent_south_rump"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_rump
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_rump
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_revenge = {
+		window_name = "superevent_south_revenge"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_revenge
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_revenge
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_radical = {
+		window_name = "superevent_south_radical"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_radical
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_radical
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_free_islands = {
+		window_name = "superevent_south_free_islands"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_free_islands
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_free_islands
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_boards = {
+		window_name = "superevent_south_boards"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_boards
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_boards
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_restitution = {
+		window_name = "superevent_south_restitution"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_restitution
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_restitution
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_worker = {
+		window_name = "superevent_west_worker"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_worker
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_worker
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_petrichev = {
+		window_name = "superevent_west_petrichev"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_petrichev
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_petrichev
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_veyran = {
+		window_name = "superevent_west_veyran"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_veyran
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_veyran
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_dorian = {
+		window_name = "superevent_west_dorian"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_dorian
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_dorian
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_anton = {
+		window_name = "superevent_west_anton"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_anton
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_anton
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_shield = {
+		window_name = "superevent_west_shield"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_shield
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_shield
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_emergency = {
+		window_name = "superevent_west_emergency"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_emergency
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_emergency
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_revanche = {
+		window_name = "superevent_west_revanche"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_revanche
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_revanche
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_committee = {
+		window_name = "superevent_west_committee"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_committee
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_committee
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_vorkerland_world_empire = {
+		window_name = "superevent_vorkerland_world_empire"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_vorkerland_world_empire
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_vorkerland_world_empire
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_iron = {
+		window_name = "superevent_south_iron"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_iron
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_iron
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_civil_service = {
+		window_name = "superevent_south_civil_service"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_civil_service
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_civil_service
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_federation = {
+		window_name = "superevent_south_federation"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_federation
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_federation
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_oil_union = {
+		window_name = "superevent_south_oil_union"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_oil_union
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_oil_union
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_contract_republic = {
+		window_name = "superevent_south_contract_republic"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_contract_republic
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_contract_republic
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_directorate = {
+		window_name = "superevent_south_directorate"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_directorate
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_directorate
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_nam = {
+		window_name = "superevent_south_nam"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_nam
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_nam
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_council = {
+		window_name = "superevent_west_council"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_council
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_council
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_west_world_empire = {
+		window_name = "superevent_west_world_empire"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_west_world_empire
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_west_world_empire
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

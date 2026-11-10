@@ -1415,7 +1415,10 @@ leader_traits = {
 	desert_fox = {
 		type = corps_commander
 		gain_xp = {
-			is_fighting_in_terrain = desert
+			OR = {
+				is_fighting_in_terrain = desert
+				is_fighting_in_terrain = desert_city
+			}
 		}
 		cost = 700
 		modifier = {
@@ -1423,6 +1426,10 @@ leader_traits = {
 				movement = 0.05
 				attack = 0.1
 				defence = 0.1
+			}
+			desert_city = {
+				attack = 0.05
+				defence = 0.05
 			}
 		}
 		new_commander_weight = {
@@ -1485,7 +1492,10 @@ leader_traits = {
 	hill_fighter = {
 		type = corps_commander
 		gain_xp = {
-			is_fighting_in_terrain = hills
+			OR = {
+				is_fighting_in_terrain = hills
+				is_fighting_in_terrain = hill_city
+			}
 		}
 		cost = 700
 		modifier = {
@@ -1493,6 +1503,10 @@ leader_traits = {
 				movement = 0.05
 				attack = 0.1
 				defence = 0.1
+			}
+			hill_city = {
+				attack = 0.05
+				defence = 0.05
 			}
 		}
 
@@ -1551,6 +1565,8 @@ leader_traits = {
 			OR = {
 				is_fighting_in_terrain = urban
 				is_fighting_in_terrain = vorkernsberg
+				is_fighting_in_terrain = desert_city
+				is_fighting_in_terrain = hill_city
 			}
 		}
 		cost = 500
@@ -1561,6 +1577,16 @@ leader_traits = {
 				defence = 0.1
 			}
 			vorkernsberg = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			desert_city = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			hill_city = {
 				movement = 0.05
 				attack = 0.1
 				defence = 0.1
@@ -1917,6 +1943,12 @@ leader_traits = {
 				movement = 0.1
 			}
 			vorkernsberg = {
+				movement = 0.1
+			}
+			desert_city = {
+				movement = 0.1
+			}
+			hill_city = {
 				movement = 0.1
 			}
 			jungle = {

@@ -126,6 +126,22 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                 self.assertIn(f'clone = "{regular}"', entities[cosmetic])
                 self.assertLess(asset.index(entities[regular]), asset.index(entities[cosmetic]))
 
+    def test_nam_militia_keeps_its_own_kit_in_each_political_course(self):
+        folder = ROOT / "gfx/models/units/ADISCORD_regulars"
+        tag = "NAM_militia"
+        report = json.loads((ROOT / f"docs/development/model-verification/{tag}_verification.json").read_text())[tag]
+        for name, digest in {f"{tag}_field.mesh": report["sha256"], **report["textures"]}.items():
+            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), digest)
+        self.assertNotEqual(report["sha256"], hashlib.sha256((folder / "NAM_field.mesh").read_bytes()).hexdigest())
+        entities = entity_blocks(COUNTRY_ASSET)
+        for level in range(8):
+            militia = custom_entity_name("NAM_ADISCORD_militia", level)
+            pose = "mg" if level else "rifle"
+            self.assertIn(f'pdxmesh = "ADISCORD_NAM_militia_field_{pose}_mesh"', entities[militia])
+            for course in ("confederation", "iron_ladder", "service_republic", "federation", "oil_union", "corporate_state"):
+                cosmetic = custom_entity_name(f"NAM_{course}_ADISCORD_militia", level)
+                self.assertIn(f'clone = "{militia}"', entities[cosmetic])
+
     def test_bezhaysk_retinues_and_montar_guard_keep_models_and_weapons_at_every_tier(self) -> None:
         history = (ROOT / "history/countries/BJK - Besjaysk.txt").read_text(
             encoding="utf-8"
@@ -176,6 +192,61 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
         for path, generated in bindings().items():
             with self.subTest(path=path.name):
                 self.assertEqual(path.read_text(encoding="utf-8"), generated.decode("utf-8"))
+
+    def test_shahrabad_patrol_keeps_equipment_across_the_five_courses(self):
+        folder = ROOT / "gfx/models/units/ADISCORD_regulars"
+        meshes = set()
+        for variant in ("SHL", "SHL_line"):
+            report = json.loads(
+                (ROOT / f"docs/development/model-verification/{variant}_verification.json").read_text()
+            )[variant]
+            for name, expected in {f"{variant}_field.mesh": report["sha256"], **report["textures"]}.items():
+                self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected)
+            meshes.add(report["sha256"])
+        self.assertEqual(len(meshes), 2)
+        entities = entity_blocks(COUNTRY_ASSET)
+        for level in range(8):
+            regular = custom_entity_name("SHL_infantry", level)
+            militia = custom_entity_name("SHL_ADISCORD_militia", level)
+            pose = "mg" if level else "rifle"
+            self.assertIn(f'pdxmesh = "ADISCORD_SHL_line_field_{pose}_mesh"', entities[regular])
+            self.assertIn(f'pdxmesh = "ADISCORD_SHL_field_{pose}_mesh"', entities[militia])
+            self.assertIn(f'clone = "{regular}"', entities[militia])
+            for course in ("conclave_of_ten", "southern_compact", "iron_directorate",
+                           "hereditary_republic", "commune_of_fire"):
+                for role in ("infantry", "ADISCORD_militia", "ADISCORD_territorial", "mountaineers"):
+                    model = custom_entity_name(f"SHL_{course}_{role}", level)
+                    parent = custom_entity_name(f"SHL_{role}", level)
+                    self.assertIn(f'clone = "{parent}"', entities[model])
+
+    def test_country_militias_use_their_models_in_recruitment_and_the_designer(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        path = ROOT / "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_infantry.txt"
+        countries = parse_clausewitz(path.read_text())
+        self.assertEqual({entry.key for entry in countries}, {"SHL", "NAM"})
+        years = (2156, 2163, 2168, 2170, 2178, 2183, 2193, 2200)
+        rifles = {"infantry_equipment_0": 0, **{
+            f"ADISCORD_infantry_equipment_{year}": i for i, year in enumerate(years)
+        }}
+        for country in countries:
+            pools = {entry.key: entry.value[0].value for entry in country.value}
+            self.assertEqual(set(pools), set(rifles))
+            for name, level in rifles.items():
+                pool = {field.key: field.value for field in pools[name]}
+                self.assertEqual([field.value for field in pool["sub_units"]], ["ADISCORD_militia"])
+                self.assertEqual([field.value for field in pool["models"]],
+                                 [custom_entity_name(f"{country.key}_ADISCORD_militia", level)])
+
+    def test_shahrabad_mixed_templates_select_the_intended_role(self):
+        for filename, templates in (
+            ("history/units/SHL.txt", {"Furnace Guard": True, "Conclave Line Brigade": False, "Khazar Guard": False}),
+            ("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", {"Furnace Levy": True, "Border Watch": True}),
+        ):
+            script = (ROOT / filename).read_text()
+            for name, militia in templates.items():
+                index = script.index(f'name = "{name}"')
+                template = validator.extract_block(script, script.rindex("division_template = {", 0, index))
+                self.assertEqual("override_model = SHL_ADISCORD_militia_entity" in template, militia)
 
     def test_eflor_regulars_keep_their_model_and_weapon_progression(self) -> None:
         entities = entity_blocks(COUNTRY_ASSET)

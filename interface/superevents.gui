@@ -1142,4 +1142,3513 @@ guiTypes = {
 		}
 	}
 
+	containerWindowType = {
+		name = "superevent_nam_resource_war_service"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_nam_resource_war_service_sound_e
+
+		iconType = {
+			name = "superevent_nam_resource_war_service"
+			quadTextureSprite = "GFX_superevent_nam_resource_war_service"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_nam_resource_war_district"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_nam_resource_war_district_sound_e
+
+		iconType = {
+			name = "superevent_nam_resource_war_district"
+			quadTextureSprite = "GFX_superevent_nam_resource_war_district"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_houses"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_houses_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_houses"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_houses"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_staff"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_staff_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_staff"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_staff"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_wallets"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_wallets_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_wallets"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_wallets"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_silence"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_silence_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_silence"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_silence"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_regent"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_regent_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_regent"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_regent"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_shabrat_victory_staff"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_shabrat_victory_staff_sound_e
+
+		iconType = {
+			name = "superevent_stelander_shabrat_victory_staff"
+			quadTextureSprite = "GFX_superevent_stelander_shabrat_victory_staff"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_shabrat_victory_councils"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_shabrat_victory_councils_sound_e
+
+		iconType = {
+			name = "superevent_stelander_shabrat_victory_councils"
+			quadTextureSprite = "GFX_superevent_stelander_shabrat_victory_councils"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_shabrat_victory_truth"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_shabrat_victory_truth_sound_e
+
+		iconType = {
+			name = "superevent_stelander_shabrat_victory_truth"
+			quadTextureSprite = "GFX_superevent_stelander_shabrat_victory_truth"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_stelander_party_victory_festival"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_sound_e
+
+		iconType = {
+			name = "superevent_stelander_party_victory_festival"
+			quadTextureSprite = "GFX_superevent_stelander_party_victory_festival"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_houses"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_houses_sound_e
+
+		iconType = {
+			name = "superevent_south_houses"
+			quadTextureSprite = "GFX_superevent_south_houses"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_cities"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_cities_sound_e
+
+		iconType = {
+			name = "superevent_south_cities"
+			quadTextureSprite = "GFX_superevent_south_cities"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_nur"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_nur_sound_e
+
+		iconType = {
+			name = "superevent_south_nur"
+			quadTextureSprite = "GFX_superevent_south_nur"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_regency"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_regency_sound_e
+
+		iconType = {
+			name = "superevent_south_regency"
+			quadTextureSprite = "GFX_superevent_south_regency"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_commune"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_commune_sound_e
+
+		iconType = {
+			name = "superevent_south_commune"
+			quadTextureSprite = "GFX_superevent_south_commune"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_conclave"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_conclave_sound_e
+
+		iconType = {
+			name = "superevent_south_conclave"
+			quadTextureSprite = "GFX_superevent_south_conclave"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_service"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_service_sound_e
+
+		iconType = {
+			name = "superevent_south_service"
+			quadTextureSprite = "GFX_superevent_south_service"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_charter"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_charter_sound_e
+
+		iconType = {
+			name = "superevent_south_charter"
+			quadTextureSprite = "GFX_superevent_south_charter"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_contracts"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_contracts_sound_e
+
+		iconType = {
+			name = "superevent_south_contracts"
+			quadTextureSprite = "GFX_superevent_south_contracts"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_rump"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_rump_sound_e
+
+		iconType = {
+			name = "superevent_south_rump"
+			quadTextureSprite = "GFX_superevent_south_rump"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_revenge"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_revenge_sound_e
+
+		iconType = {
+			name = "superevent_south_revenge"
+			quadTextureSprite = "GFX_superevent_south_revenge"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_radical"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_radical_sound_e
+
+		iconType = {
+			name = "superevent_south_radical"
+			quadTextureSprite = "GFX_superevent_south_radical"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_free_islands"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_free_islands_sound_e
+
+		iconType = {
+			name = "superevent_south_free_islands"
+			quadTextureSprite = "GFX_superevent_south_free_islands"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_boards"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_boards_sound_e
+
+		iconType = {
+			name = "superevent_south_boards"
+			quadTextureSprite = "GFX_superevent_south_boards"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_restitution"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_restitution_sound_e
+
+		iconType = {
+			name = "superevent_south_restitution"
+			quadTextureSprite = "GFX_superevent_south_restitution"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_worker"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_worker_sound_e
+
+		iconType = {
+			name = "superevent_west_worker"
+			quadTextureSprite = "GFX_superevent_west_worker"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_petrichev"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_petrichev_sound_e
+
+		iconType = {
+			name = "superevent_west_petrichev"
+			quadTextureSprite = "GFX_superevent_west_petrichev"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_veyran"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_veyran_sound_e
+
+		iconType = {
+			name = "superevent_west_veyran"
+			quadTextureSprite = "GFX_superevent_west_veyran"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_dorian"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_dorian_sound_e
+
+		iconType = {
+			name = "superevent_west_dorian"
+			quadTextureSprite = "GFX_superevent_west_dorian"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_anton"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_anton_sound_e
+
+		iconType = {
+			name = "superevent_west_anton"
+			quadTextureSprite = "GFX_superevent_west_anton"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_shield"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_shield_sound_e
+
+		iconType = {
+			name = "superevent_west_shield"
+			quadTextureSprite = "GFX_superevent_west_shield"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_emergency"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_emergency_sound_e
+
+		iconType = {
+			name = "superevent_west_emergency"
+			quadTextureSprite = "GFX_superevent_west_emergency"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_revanche"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_revanche_sound_e
+
+		iconType = {
+			name = "superevent_west_revanche"
+			quadTextureSprite = "GFX_superevent_west_revanche"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_committee"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_committee_sound_e
+
+		iconType = {
+			name = "superevent_west_committee"
+			quadTextureSprite = "GFX_superevent_west_committee"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_vorkerland_world_empire"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_vorkerland_world_empire_sound_e
+
+		iconType = {
+			name = "superevent_vorkerland_world_empire"
+			quadTextureSprite = "GFX_superevent_vorkerland_world_empire"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_iron"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_iron_sound_e
+
+		iconType = {
+			name = "superevent_south_iron"
+			quadTextureSprite = "GFX_superevent_south_iron"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_civil_service"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_civil_service_sound_e
+
+		iconType = {
+			name = "superevent_south_civil_service"
+			quadTextureSprite = "GFX_superevent_south_civil_service"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_federation"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_federation_sound_e
+
+		iconType = {
+			name = "superevent_south_federation"
+			quadTextureSprite = "GFX_superevent_south_federation"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_oil_union"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_oil_union_sound_e
+
+		iconType = {
+			name = "superevent_south_oil_union"
+			quadTextureSprite = "GFX_superevent_south_oil_union"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_contract_republic"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_contract_republic_sound_e
+
+		iconType = {
+			name = "superevent_south_contract_republic"
+			quadTextureSprite = "GFX_superevent_south_contract_republic"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_directorate"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_directorate_sound_e
+
+		iconType = {
+			name = "superevent_south_directorate"
+			quadTextureSprite = "GFX_superevent_south_directorate"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_south_nam"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_south_nam_sound_e
+
+		iconType = {
+			name = "superevent_south_nam"
+			quadTextureSprite = "GFX_superevent_south_nam"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_council"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_council_sound_e
+
+		iconType = {
+			name = "superevent_west_council"
+			quadTextureSprite = "GFX_superevent_west_council"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_west_world_empire"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_west_world_empire_sound_e
+
+		iconType = {
+			name = "superevent_west_world_empire"
+			quadTextureSprite = "GFX_superevent_west_world_empire"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
 }

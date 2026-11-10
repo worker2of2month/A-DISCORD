@@ -7,6 +7,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BUYERS = ("WRK", "STP", "NOD", "IVN", "WIT", "NAM")
+# Vorkerland buys as one customer under whichever of these tags is its country
+# target. `allowed` is read once at load, so its own block lists them all, and
+# an AI order needs a literal id, so VAL holds one acceptance block per tag.
+VORKERLAND_TAGS = ("WRK", "WKR", "VAD", "TVA")
+VORKERLAND_NATION = "event_target:ADISCORD_vorkerland_nation"
+VORKERLAND_GATE = "ADISCORD_vorkerland_is_not_wartime_claimant"
+ACCEPTED_TAGS = VORKERLAND_TAGS + tuple(buyer for buyer in BUYERS if buyer != "WRK")
 AAT = '"Arms Against Tyranny"'
 REQUIRED_EXPORT_PORTS = {
     "WRK": ("79-79.txt", 5986),
@@ -163,7 +170,7 @@ def direct_scalar_assignments(block: Block) -> list[tuple[str, str]]:
     structure_masked = mask_non_code(block.text)
     scalar = re.compile(
         r'(?<![A-Za-z0-9_])([A-Za-z0-9_]+)\s*=\s*'
-        r'("(?:[^"\\]|\\.)*"|[A-Za-z0-9_]+)(?![A-Za-z0-9_])'
+        r'("(?:[^"\\]|\\.)*"|[A-Za-z0-9_:]+)(?![A-Za-z0-9_:])'
     )
     return [
         (match.group(1), match.group(2))
@@ -186,6 +193,59 @@ def require_direct_scalar(block: Block, key: str, value: str) -> None:
         )
 
 
+def require_owner(allowed: Block, enable: Block, original_tag: str) -> None:
+    """Require the block to belong to one country.
+
+    Vorkerland's block admits every tag it can carry and leaves the choice of
+    the current one to the live claimant gate.
+    """
+    if original_tag not in VORKERLAND_TAGS:
+        require_direct_scalar(allowed, "original_tag", original_tag)
+        return
+    owners = [
+        operand
+        for key, operand in direct_scalar_assignments(allowed)
+        if key == "original_tag"
+    ]
+    if owners:
+        raise AssertionError(
+            f"{allowed.name} must list the Vorkerland tags in one OR, got direct {owners}"
+        )
+    listed = direct_scalar_assignments(only_direct_block(allowed, "OR"))
+    expected = [("original_tag", tag) for tag in sorted(VORKERLAND_TAGS)]
+    if sorted(listed) != expected:
+        raise AssertionError(
+            f"{allowed.name} needs exactly the Vorkerland tags {expected}, got {listed}"
+        )
+    require_direct_scalar(enable, VORKERLAND_GATE, "yes")
+
+
+def require_partner(enable: Block, other_tag: str) -> str:
+    """Require the partner to exist and return the reference that names it.
+
+    A Vorkerland tag is a partner only while the country target carries it.
+    """
+    if other_tag not in VORKERLAND_TAGS:
+        require_direct_scalar(enable, "country_exists", other_tag)
+        return other_tag
+    literal = [
+        operand
+        for key, operand in direct_scalar_assignments(enable)
+        if key == "country_exists"
+    ]
+    if literal:
+        raise AssertionError(
+            f"{enable.name} must reach Vorkerland through its target, got {literal}"
+        )
+    nation = direct_scalar_assignments(only_direct_block(enable, VORKERLAND_NATION))
+    expected = [("exists", "yes"), ("tag", other_tag)]
+    if sorted(nation) != expected:
+        raise AssertionError(
+            f"{enable.name} needs the country target to be {expected}, got {nation}"
+        )
+    return VORKERLAND_NATION
+
+
 def validate_relationship(
     text: str,
     name: str,
@@ -196,16 +256,16 @@ def validate_relationship(
     relationship = only_top_level_block(text, name)
     allowed = only_direct_block(relationship, "allowed")
     enable = only_direct_block(relationship, "enable")
-    require_direct_scalar(allowed, "original_tag", original_tag)
+    require_owner(allowed, enable, original_tag)
     require_direct_scalar(allowed, "has_dlc", AAT)
-    require_direct_scalar(enable, "country_exists", other_tag)
+    partner = require_partner(enable, other_tag)
 
     war_guards = direct_named_blocks(enable.text, "NOT", enable.start)
     if len(war_guards) != 1:
         raise AssertionError(
             f"{name} needs exactly one direct NOT war guard, got {len(war_guards)}"
         )
-    require_direct_scalar(war_guards[0], "has_war_with", other_tag)
+    require_direct_scalar(war_guards[0], "has_war_with", partner)
     require_direct_scalar(relationship, "abort_when_not_enabled", "yes")
 
     direct_strategies = direct_named_blocks(
@@ -247,21 +307,22 @@ def validate_export_relationships(text: str) -> None:
                 },
             ),
         )
+    for customer in ACCEPTED_TAGS:
         validate_relationship(
             text,
-            f"ADISCORD_VAL_export_accept_{buyer}",
+            f"ADISCORD_VAL_export_accept_{customer}",
             "VAL",
-            buyer,
+            customer,
             (
                 {
                     "type": "diplo_action_acceptance",
-                    "id": buyer,
+                    "id": customer,
                     "target": "market_access_rights",
                     "value": "200",
                 },
                 {
                     "type": "equipment_market_trade_desire",
-                    "id": buyer,
+                    "id": customer,
                     "value": "200",
                 },
             ),
@@ -313,7 +374,7 @@ class ValExportMarketTests(unittest.TestCase):
                 )
 
     def test_val_accepts_and_retains_each_buyers_market_access(self) -> None:
-        for buyer in BUYERS:
+        for buyer in ACCEPTED_TAGS:
             with self.subTest(buyer=buyer):
                 validate_relationship(
                     self.ai_text,
@@ -342,8 +403,44 @@ class ValExportMarketTests(unittest.TestCase):
         )
         self.assertEqual(
             top_level_prefixed_tags(self.ai_text, "ADISCORD_VAL_export_accept_"),
-            set(BUYERS),
+            set(ACCEPTED_TAGS),
         )
+
+    def test_vorkerland_trades_only_as_the_country_target(self) -> None:
+        validate_export_relationships(self.ai_text)
+        buyer = "ADISCORD_VAL_export_buyer_WRK"
+        accept = "ADISCORD_VAL_export_accept_VAD"
+        mutations = (
+            ("claimant gate removed", buyer, f"\t\t{VORKERLAND_GATE} = yes\n", ""),
+            ("claimant tag not admitted", buyer, " original_tag = TVA", ""),
+            (
+                "partner named by literal tag",
+                accept,
+                f"{VORKERLAND_NATION} = {{ tag = VAD exists = yes }}",
+                "country_exists = VAD",
+            ),
+            (
+                "block enabled for another tag",
+                accept,
+                "{ tag = VAD exists = yes }",
+                "{ tag = WRK exists = yes }",
+            ),
+            (
+                "war guard names a literal tag",
+                accept,
+                f"has_war_with = {VORKERLAND_NATION}",
+                "has_war_with = VAD",
+            ),
+        )
+        for label, name, source, replacement in mutations:
+            with self.subTest(mutation=label):
+                original = only_top_level_block(self.ai_text, name).text
+                mutated = original.replace(source, replacement, 1)
+                self.assertNotEqual(mutated, original, "mutation must apply")
+                with self.assertRaises(AssertionError):
+                    validate_export_relationships(
+                        self.replace_relationship(self.ai_text, name, mutated)
+                    )
 
     def test_val_market_layer_only_lists_equipment_for_sale(self) -> None:
         market_layer = only_top_level_block(self.ai_text, "VAL_Wants_To_Sell_Stuff")

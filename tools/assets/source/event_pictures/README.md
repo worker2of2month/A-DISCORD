@@ -1,10 +1,18 @@
 # Event illustrations
 
 Production images are built by `tools/builders/build_adiscord_event_pictures.py`.
-Do not edit `../standard/` or `interface/ADISCORD_event_art.gfx` by hand.
+The four finished plates in `gfx/event_pictures/standard/news/` are
+`kefreyt_address.png`, `military_formation.png`, `parliament_chamber.png`
+and `vorkerland_world_empire_news.png`. Edit these plates in place. The builder
+writes their `*_print.png` game textures and `interface/ADISCORD_event_art.gfx`.
+
+Finished COUNTRY plates supplied at 507 x 184 are also edited in place in
+`gfx/event_pictures/standard/country/` and listed in the builder's
+`FINISHED_COUNTRY`; the builder only re-encodes them and registers their sprites.
 
 - COUNTRY: 507 x 184 pixels, matching the approved military-headquarters sample.
-- NEWS: 396 x 153 pixels, matching the separate newspaper window.
+- NEWS uses 396 x 153 pixels for photographs. Finished 499 x 176 plates scale
+  proportionally to 396 x 140 so the full composition fits the newspaper.
 - Cropping preserves aspect ratio. No stretching, decorative overlays, or tinting.
 - The old explosion's embedded frame is cropped out; its source stays untouched.
 - Files and sprites describe the scene. The NEWS prefix distinguishes its smaller format.
@@ -19,7 +27,7 @@ python -B -m tools.builders.build_adiscord_event_pictures --check
 python -B -m unittest tools.tests.test_adiscord_event_ui -q
 ```
 
-The generated contact sheet is
+Use `--apply --preview` to write the development contact sheet to
 `docs/development/previews/ADISCORD_event_art_contact_sheet.png`.
 Automated coverage resolves every visible COUNTRY/NEWS event to an opaque image
 with its exact window dimensions. This does not replace a fresh game restart and

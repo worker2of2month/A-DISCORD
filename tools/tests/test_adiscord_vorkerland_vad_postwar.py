@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import re
 import unittest
 from collections import Counter
@@ -15,17 +16,43 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     focus_blocks,
     resolved_positions,
 )
-from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, selected_effects
+from tools.tests.test_adiscord_stp_preparation import (
+    block,
+    event_target,
+    matches_conditions,
+    scalar,
+    selected_effects,
+)
 
 
 from tools.lib.paths import source_section
 
 
 ROOT = Path(__file__).resolve().parents[2]
+# Global event target naming the country that currently is Vorkerland: WRK from
+# the start of a campaign, then the claimant that unified it. Every postwar
+# scenario below runs on a claimant's own tag with the target rebound to it.
+NATION_TARGET = "ADISCORD_vorkerland_nation"
+NATION = "event_target:" + NATION_TARGET
+UNIFIERS = ("WKR", "VAD", "TVA")
+# The joint route is the one VAD unifies.
+JOINT_UNIFIER = "VAD"
 
 
 def read(relative: str) -> str:
     return read_focus_source(ROOT / relative, encoding="utf-8-sig")
+
+
+def for_each_unifier(test):
+    """Run a postwar scenario once for every claimant that can unify the country."""
+
+    @functools.wraps(test)
+    def wrapper(self):
+        for nation in UNIFIERS:
+            with self.subTest(nation=nation):
+                test(self, nation)
+
+    return wrapper
 
 
 def named_block(source: str, name: str) -> str:
@@ -48,15 +75,27 @@ def named_block(source: str, name: str) -> str:
 class VadPostwarContractTests(unittest.TestCase):
     def test_vad_handoff_loads_its_own_postwar_tree_after_recording_the_route(self):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        handoff = named_block(effects, "ADISCORD_vorkerland_form_wrk_from_vad")
+        handoff = named_block(effects, "ADISCORD_vorkerland_unify_under_vad")
         tree = named_block(handoff, "load_focus_tree")
         self.assertIn("tree = ADISCORD_vorkerland_joint_postwar_focus", tree)
-        self.assertIn("copy_completed_from = VAD", tree)
         self.assertLess(handoff.index("set_country_flag = ADISCORD_vorkerland_route_joint"), handoff.index(tree))
         for tag in ("wkr", "tva"):
-            other = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{tag}")
+            other = named_block(effects, f"ADISCORD_vorkerland_unify_under_{tag}")
             self.assertIn("tree = ADISCORD_vorkerland_settlement_focus", other)
             self.assertNotIn("tree = ADISCORD_vorkerland_joint_postwar_focus", other)
+        # Every winner stays on its own tag: it keeps its wartime record and adds
+        # the pre-collapse one that decisions and settlements still read.
+        for tag in UNIFIERS:
+            unify = named_block(effects, f"ADISCORD_vorkerland_unify_under_{tag.lower()}")
+            record = named_block(unify, "load_focus_tree")
+            self.assertIn("keep_completed = yes", record, tag)
+            self.assertIn("copy_completed_from = WRK", record, tag)
+            self.assertEqual(unify.count("copy_completed_from"), 1, tag)
+            self.assertNotIn("change_tag_from", unify, tag)
+            rebind = unify.index(f"save_global_event_target_as = {NATION_TARGET}")
+            self.assertLess(unify.index(f"clear_global_event_target = {NATION_TARGET}"), rebind)
+            self.assertLess(rebind, unify.index(record), tag)
+            self.assertIn(f"32 = {{ set_state_controller_to = {tag} }}", unify)
 
     def test_restored_and_voluntary_sol_remain_subjects_after_handoff(
         self,
@@ -65,8 +104,8 @@ class VadPostwarContractTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'phase_effects',
         )
-        formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
-        formation += named_block(source, "ADISCORD_vorkerland_complete_wrk_from_vad")
+        formation = named_block(source, "ADISCORD_vorkerland_unify_under_vad")
+        formation += named_block(source, "ADISCORD_vorkerland_settle_unification_under_vad")
         self.assertTrue(formation)
 
         restored = re.search(
@@ -88,11 +127,16 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("add_to_faction = SOL", voluntary)
         self.assertIn("puppet = SOL", voluntary)
         self.assertIn("autonomy_state = autonomy_puppet", voluntary)
+        # VAD is the unified country and is never annexed: it releases SOL, takes
+        # in the defeated claimants and only then binds SOL again.
+        self.assertNotIn("annex_country = { target = VAD", formation)
+        self.assertNotIn("change_tag_from", formation)
         detach = formation.index("autonomy_state = autonomy_free")
-        annex = formation.index("annex_country = { target = VAD")
         rebind = formation.index("puppet = SOL")
-        self.assertLess(detach, annex)
-        self.assertLess(annex, rebind)
+        for loser in ("WKR", "TVA"):
+            annex = formation.index(f"annex_country = {{ target = {loser} transfer_troops = yes }}")
+            self.assertLess(detach, annex, loser)
+            self.assertLess(annex, rebind, loser)
 
     def test_destroyed_sol_returns_as_administration_with_velin_and_overlord_colour(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
@@ -107,7 +151,8 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_sync_independence_cosmetic = yes", verification)
         cosmetics = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
         self.assertIn("is_subject_of = VAD", cosmetics)
-        self.assertIn("WRK = { has_country_flag = ADISCORD_vorkerland_route_joint }", cosmetics)
+        self.assertIn(f"is_subject_of = {NATION}", cosmetics)
+        self.assertIn(f"{NATION} = {{ has_country_flag = ADISCORD_vorkerland_route_joint }}", cosmetics)
         self.assertIn("has_country_flag = ADISCORD_vorkerland_restored_by_vad", cosmetics)
         self.assertLess(
             cosmetics.index("set_cosmetic_tag = SOL_vorkerland_restoration_administration"),
@@ -204,8 +249,8 @@ class VadPostwarContractTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             "phase_effects",
         )
-        formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
-        formation += named_block(source, "ADISCORD_vorkerland_complete_wrk_from_vad")
+        formation = named_block(source, "ADISCORD_vorkerland_unify_under_vad")
+        formation += named_block(source, "ADISCORD_vorkerland_settle_unification_under_vad")
         identity = re.search(
             r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
             r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
@@ -225,14 +270,27 @@ class VadPostwarContractTests(unittest.TestCase):
             "set_cosmetic_tag = VAD_vorkerland_restoration", identity.group("else")
         )
         self.assertIn("character = WRK_Vlad_Petrichev", identity.group("else"))
-        self.assertIn(
-            "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
-            formation,
-        )
-        self.assertIn("character = WRK_Vlad_Petrichev", formation)
-        self.assertIn("character = WRK_Nikita_Worcker", formation)
         self.assertIn("civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }", formation)
         self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", formation)
+        # VAD keeps its tag, so the rulers of both outcomes stay where the
+        # collapse placed them: Vlad is VAD's own character, the rescued chairman
+        # and the council joined VAD at the split, and the handoff moves nobody.
+        self.assertNotIn("set_nationality", formation)
+        self.assertNotIn("change_tag_from", formation)
+        self.assertIn(
+            "recruit_character = WRK_Vlad_Petrichev",
+            read("history/countries/VAD - VadlLand.txt"),
+        )
+        split = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_prepare_claimant_characters",
+        )
+        rescued = split[split.index("has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad"):]
+        rescued = rescued[:rescued.index("has_global_flag = ADISCORD_vorkerland_worker_killed")]
+        for character in ("WRK_Nikita_Worcker", "WRK_VAD_Joint_Council"):
+            self.assertIn(
+                f"set_nationality = {{ target_country = VAD character = {character} }}", rescued
+            )
 
     def test_joint_council_gets_specific_victory_text_before_inactive_fallback(
         self,
@@ -316,23 +374,25 @@ class PostwarExpansionTests(unittest.TestCase):
 
         return expand(definitions["ADISCORD_vorkerland_pw_" + name])
 
-    def campaign_facts(self):
+    def campaign_facts(self, nation):
+        """Facts of a running campaign fought by the unified country `nation`."""
         facts = {
-            ("WRK", "exists", "yes"): True,
-            ("WRK", "is_subject", "no"): True,
-            ("WRK", "has_capitulated", "no"): True,
-            ("WRK", "has_global_flag", "ADISCORD_vorkerland_phase_postwar_integration"): True,
-            ("WRK", "has_country_flag", "ADISCORD_vorkerland_pw_campaign_active"): True,
+            ("event_target", NATION_TARGET): nation,
+            (nation, "exists", "yes"): True,
+            (nation, "is_subject", "no"): True,
+            (nation, "has_capitulated", "no"): True,
+            (nation, "has_global_flag", "ADISCORD_vorkerland_phase_postwar_integration"): True,
+            (nation, "has_country_flag", "ADISCORD_vorkerland_pw_campaign_active"): True,
         }
         for tag in ("EBA", "PIV"):
             facts[(tag, "exists", "yes")] = True
-            facts[(tag, "has_war_with", "WRK")] = True
+            facts[(tag, "has_war_with", nation)] = True
             facts[(tag, "has_country_flag", "ADISCORD_vorkerland_pw_campaign_member")] = True
         return facts
 
-    def expedition_world(self):
+    def expedition_world(self, nation):
         world = {}
-        for tag in ("WRK", "EBA", "PIV", "VLA", "TGD", "VAL"):
+        for tag in (nation, "EBA", "PIV", "VLA", "TGD", "VAL"):
             world[tag] = {
                 "exists": tag not in ("VLA", "TGD"),
                 "capitulated": False,
@@ -348,16 +408,21 @@ class PostwarExpansionTests(unittest.TestCase):
             }
         world["EBA"].update(
             leader="EBA_Vlad_Mecra",
-            neighbors={"WRK"},
+            neighbors={nation},
             owned={74, 105, 197, 311, 312, 313, 314},
             controlled={74, 105, 197, 311, 312, 313, 314},
         )
         return world
 
-    def expedition_entry_matches(self, name, world):
-        """Evaluate authored conditions with explicit faction and subject scopes."""
+    def expedition_entry_matches(self, name, world, nation, bound=None):
+        """Evaluate authored conditions with explicit faction and subject scopes.
+
+        `nation` opens the expedition; the country target names `bound`, which is
+        `nation` itself unless a scenario leaves the target on another tag.
+        """
         facts = {
-            ("WRK", "has_global_flag", "ADISCORD_vorkerland_phase_postwar_integration"): True,
+            ("event_target", NATION_TARGET): bound or nation,
+            (nation, "has_global_flag", "ADISCORD_vorkerland_phase_postwar_integration"): True,
         }
         for tag, country in world.items():
             booleans = {
@@ -407,8 +472,9 @@ class PostwarExpansionTests(unittest.TestCase):
                             ))
                     resolved.append(replace(entry, key="OR", value=candidates))
                 elif isinstance(entry.value, list):
-                    nested_scope = entry.key if entry.key in world else scope
-                    nested_previous = scope if entry.key in world else previous
+                    tag = event_target(entry.key, facts) if entry.key == NATION else entry.key
+                    nested_scope = tag if tag in world else scope
+                    nested_previous = scope if tag in world else previous
                     resolved.append(replace(
                         entry,
                         value=resolve_iterators(entry.value, nested_scope, nested_previous),
@@ -417,20 +483,38 @@ class PostwarExpansionTests(unittest.TestCase):
                     resolved.append(replace(entry, value=previous) if entry.value == "PREV" else entry)
             return resolved
 
-        conditions = resolve_iterators(self.expanded_trigger(name), "WRK")
-        return matches_conditions(conditions, facts, "WRK")
+        conditions = resolve_iterators(self.expanded_trigger(name), nation)
+        return matches_conditions(conditions, facts, nation)
 
-    def test_macri_victory_opens_ebern_alone_and_with_afrela(self):
-        world = self.expedition_world()
-        self.assertTrue(self.expedition_entry_matches("can_attack_ebern", world))
+    @for_each_unifier
+    def test_macri_victory_opens_ebern_alone_and_with_afrela(self, nation):
+        world = self.expedition_world(nation)
+        self.assertTrue(self.expedition_entry_matches("can_attack_ebern", world, nation))
         world["EBA"]["faction"] = "southern_pact"
         world["PIV"]["faction"] = "southern_pact"
-        self.assertTrue(self.expedition_entry_matches("can_attack_ebern", world))
+        self.assertTrue(self.expedition_entry_matches("can_attack_ebern", world, nation))
         world["VAL"]["faction"] = "southern_pact"
-        self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world))
+        self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world, nation))
 
-    def test_macri_route_rejects_each_material_blocker(self):
-        baseline = self.expedition_world()
+    @for_each_unifier
+    def test_expedition_belongs_to_the_holder_of_the_country_target(self, nation):
+        world = self.expedition_world(nation)
+        world["EBA"]["overlord"] = nation
+        for name in ("can_attack_ebern", "can_attack_afrela"):
+            ready = deepcopy(world)
+            if name == "can_attack_ebern":
+                ready["EBA"]["overlord"] = None
+            self.assertTrue(self.expedition_entry_matches(name, ready, nation), name)
+            # The same claimant cannot open it while the target names another tag.
+            for bound in ("WRK", *UNIFIERS):
+                if bound != nation:
+                    self.assertFalse(
+                        self.expedition_entry_matches(name, ready, nation, bound), (name, bound)
+                    )
+
+    @for_each_unifier
+    def test_macri_route_rejects_each_material_blocker(self, nation):
+        baseline = self.expedition_world(nation)
         blockers = (
             ("EBA", "leader", "VLA_Dima_Volch"),
             ("EBA", "neighbors", set()),
@@ -441,23 +525,24 @@ class PostwarExpansionTests(unittest.TestCase):
             ("EBA", "exists", False),
             ("EBA", "overlord", "PIV"),
             ("EBA", "capitulated", True),
-            ("WRK", "overlord", "VAL"),
-            ("WRK", "capitulated", True),
-            ("WRK", "wars", {"VAL"}),
+            (nation, "overlord", "VAL"),
+            (nation, "capitulated", True),
+            (nation, "wars", {"VAL"}),
             ("EBA", "wars", {"VAL"}),
-            ("WRK", "faction", "external_command"),
-            ("WRK", "flags", {"ADISCORD_vorkerland_pw_campaign_active"}),
-            ("WRK", "flags", {"ADISCORD_vorkerland_pw_settlement_scheduled"}),
+            (nation, "faction", "external_command"),
+            (nation, "flags", {"ADISCORD_vorkerland_pw_campaign_active"}),
+            (nation, "flags", {"ADISCORD_vorkerland_pw_settlement_scheduled"}),
             ("VAL", "overlord", "EBA"),
         )
         for tag, field, value in blockers:
             with self.subTest(tag=tag, field=field, value=value):
                 world = deepcopy(baseline)
                 world[tag][field] = value
-                self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world))
+                self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world, nation))
 
-    def test_allied_afrela_must_be_free_of_wars_and_subjects(self):
-        baseline = self.expedition_world()
+    @for_each_unifier
+    def test_allied_afrela_must_be_free_of_wars_and_subjects(self, nation):
+        baseline = self.expedition_world(nation)
         baseline["EBA"]["faction"] = "southern_pact"
         baseline["PIV"]["faction"] = "southern_pact"
         for tag, field, value in (
@@ -469,42 +554,44 @@ class PostwarExpansionTests(unittest.TestCase):
             with self.subTest(tag=tag, field=field):
                 world = deepcopy(baseline)
                 world[tag][field] = value
-                self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world))
+                self.assertFalse(self.expedition_entry_matches("can_attack_ebern", world, nation))
 
-    def test_afrela_requires_a_current_ebern_outcome_and_land_access(self):
-        world = self.expedition_world()
-        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world))
-        world["EBA"]["overlord"] = "WRK"
-        self.assertTrue(self.expedition_entry_matches("can_attack_afrela", world))
+    @for_each_unifier
+    def test_afrela_requires_a_current_ebern_outcome_and_land_access(self, nation):
+        world = self.expedition_world(nation)
+        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world, nation))
+        world["EBA"]["overlord"] = nation
+        self.assertTrue(self.expedition_entry_matches("can_attack_afrela", world, nation))
         world["EBA"]["overlord"] = None
         world["EBA"]["exists"] = False
-        world["WRK"]["owned"] = {74, 105, 197}
-        world["WRK"]["controlled"] = {74, 105, 197}
-        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world))
-        world["PIV"]["neighbors"] = {"WRK"}
-        self.assertTrue(self.expedition_entry_matches("can_attack_afrela", world))
-        world["WRK"]["controlled"].remove(197)
-        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world))
+        world[nation]["owned"] = {74, 105, 197}
+        world[nation]["controlled"] = {74, 105, 197}
+        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world, nation))
+        world["PIV"]["neighbors"] = {nation}
+        self.assertTrue(self.expedition_entry_matches("can_attack_afrela", world, nation))
+        world[nation]["controlled"].remove(197)
+        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world, nation))
 
-    def test_afrela_rejects_external_coalitions_and_unsettled_operations(self):
-        baseline = self.expedition_world()
-        baseline["EBA"]["overlord"] = "WRK"
+    @for_each_unifier
+    def test_afrela_rejects_external_coalitions_and_unsettled_operations(self, nation):
+        baseline = self.expedition_world(nation)
+        baseline["EBA"]["overlord"] = nation
         for tag, field, value in (
             ("PIV", "exists", False),
             ("PIV", "overlord", "VAL"),
             ("PIV", "wars", {"VAL"}),
-            ("WRK", "wars", {"VAL"}),
-            ("WRK", "overlord", "VAL"),
-            ("WRK", "flags", {"ADISCORD_vorkerland_pw_campaign_active"}),
-            ("WRK", "flags", {"ADISCORD_vorkerland_pw_settlement_scheduled"}),
+            (nation, "wars", {"VAL"}),
+            (nation, "overlord", "VAL"),
+            (nation, "flags", {"ADISCORD_vorkerland_pw_campaign_active"}),
+            (nation, "flags", {"ADISCORD_vorkerland_pw_settlement_scheduled"}),
         ):
             with self.subTest(tag=tag, field=field, value=value):
                 world = deepcopy(baseline)
                 world[tag][field] = value
-                self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world))
+                self.assertFalse(self.expedition_entry_matches("can_attack_afrela", world, nation))
         baseline["PIV"]["faction"] = "outside_pact"
         baseline["VAL"]["faction"] = "outside_pact"
-        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", baseline))
+        self.assertFalse(self.expedition_entry_matches("can_attack_afrela", baseline, nation))
 
     def test_joint_definitions_are_reachable_without_other_winner_focuses(self):
         # Only the joint route keeps the programme columns in the civil-war tree;
@@ -612,44 +699,52 @@ class PostwarExpansionTests(unittest.TestCase):
             self.assertIn("is_controlled_by = ROOT", available, key)
             self.assertIn("free_building_slots", available, key)
 
-    def test_both_coalition_members_must_fall_and_liberation_blocks_again(self):
+    @for_each_unifier
+    def test_both_coalition_members_must_fall_and_liberation_blocks_again(self, nation):
         conditions = self.expanded_trigger("expedition_won")
-        facts = self.campaign_facts()
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        facts = self.campaign_facts(nation)
+        self.assertFalse(matches_conditions(conditions, facts, nation))
         facts[("EBA", "has_capitulated", "yes")] = True
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        self.assertFalse(matches_conditions(conditions, facts, nation))
         facts[("PIV", "has_capitulated", "yes")] = True
-        self.assertTrue(matches_conditions(conditions, facts, "WRK"))
+        self.assertTrue(matches_conditions(conditions, facts, nation))
+        # The war that counts is the one against the holder of the country target.
+        for bound in ("WRK", *UNIFIERS):
+            if bound != nation:
+                moved = {**facts, ("event_target", NATION_TARGET): bound}
+                self.assertFalse(matches_conditions(conditions, moved, nation), bound)
         facts[("EBA", "has_capitulated", "yes")] = False
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        self.assertFalse(matches_conditions(conditions, facts, nation))
         liberation = named_block(self.peace, "on_uncapitulation")
         self.assertIn("clr_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved", liberation)
 
-    def test_immediate_capitulation_receipt_and_single_target_campaign(self):
+    @for_each_unifier
+    def test_immediate_capitulation_receipt_and_single_target_campaign(self, nation):
         conditions = self.expanded_trigger("expedition_won")
-        facts = self.campaign_facts()
+        facts = self.campaign_facts(nation)
         facts[("EBA", "has_country_flag", "ADISCORD_vorkerland_pw_campaign_member")] = False
         facts[("PIV", "has_country_flag", "ADISCORD_vorkerland_pw_capitulation_reserved")] = True
-        self.assertTrue(matches_conditions(conditions, facts, "WRK"))
+        self.assertTrue(matches_conditions(conditions, facts, nation))
         facts[("PIV", "has_country_flag", "ADISCORD_vorkerland_pw_capitulation_reserved")] = False
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        self.assertFalse(matches_conditions(conditions, facts, nation))
 
-    def test_annexed_target_and_subjugated_winner_cannot_claim_victory(self):
+    @for_each_unifier
+    def test_annexed_target_and_subjugated_winner_cannot_claim_victory(self, nation):
         conditions = self.expanded_trigger("expedition_won")
-        facts = self.campaign_facts()
+        facts = self.campaign_facts(nation)
         for tag in ("EBA", "PIV"):
             facts[(tag, "has_capitulated", "yes")] = True
         facts[("EBA", "exists", "yes")] = False
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        self.assertFalse(matches_conditions(conditions, facts, nation))
         facts[("EBA", "exists", "yes")] = True
-        facts[("WRK", "is_subject", "no")] = False
-        self.assertFalse(matches_conditions(conditions, facts, "WRK"))
+        facts[(nation, "is_subject", "no")] = False
+        self.assertFalse(matches_conditions(conditions, facts, nation))
 
     def test_coalition_joins_the_same_war_and_all_temporary_majors_are_removed(self):
         source = self.effect("start_ebern_campaign")
         self.assertLess(source.index("EBA = { ADISCORD_vorkerland_pw_prepare_member"), source.index("declare_war_on"))
         self.assertIn("targeted_alliance = EBA", source)
-        self.assertIn("enemy = WRK", source)
+        self.assertIn(f"enemy = {NATION}", source)
         self.assertIn("single_target_only = yes", source)
         self.assertIn("is_major = no", self.effect("prepare_member"))
         self.assertIn("RUS_crisis_release_other_major = yes", self.effect("clear_member"))
@@ -667,8 +762,15 @@ class PostwarExpansionTests(unittest.TestCase):
         self.assertLess(finish.index("pw_prepare_settlement"), finish.index("pw_close_expedition"))
         self.assertRegex(finish, r"id = ADISCORD_vorkerland_postwar\.2\s+days = 1")
         settlement = self.effect("create_subject")
-        for guard in ("exists = yes", "is_subject = no", "is_in_faction = no", "WRK = { ADISCORD_vorkerland_pw_sovereign = yes }"):
+        for guard in (
+            "exists = yes",
+            "is_subject = no",
+            "is_in_faction = no",
+            f"NOT = {{ has_war_with = {NATION} }}",
+            f"{NATION} = {{ ADISCORD_vorkerland_pw_sovereign = yes }}",
+        ):
             self.assertIn(guard, settlement)
+        self.assertRegex(settlement, rf"{re.escape(NATION)} = \{{\s*puppet = \{{\s*target = PREV\b")
         self.assertIn("clr_country_flag = ADISCORD_vorkerland_pw_subject_pending", settlement)
         external = self.effect("close_external")
         self.assertIn("clr_country_flag = ADISCORD_vorkerland_pw_settlement_scheduled", external)
@@ -696,8 +798,10 @@ class PostwarExpansionTests(unittest.TestCase):
     def test_losing_wrk_keeps_the_war_for_the_final_capitulation_router(self):
         handler = self.effect("handle_capitulation")
         defeat = named_block(handler, "else_if")
-        self.assertIn("ROOT = { tag = WRK }", defeat)
-        self.assertIn("clr_country_flag = ADISCORD_vorkerland_pw_campaign_active", defeat)
+        self.assertIn(f"ROOT = {{ tag = {NATION} }}", defeat)
+        self.assertIn(
+            f"{NATION} = {{ clr_country_flag = ADISCORD_vorkerland_pw_campaign_active }}", defeat
+        )
         self.assertNotIn("pw_close_expedition", defeat)
         self.assertNotIn("white_peace", defeat)
         for tag in ("EBA", "PIV"):
@@ -716,10 +820,13 @@ class PostwarExpansionTests(unittest.TestCase):
         for autonomy in ("autonomy_WRK_confederate_republic", "autonomy_WRK_military_administration", "autonomy_WRK_technical_trusteeship"):
             self.assertIn(autonomy, source)
         for government in ("humanism", "utilitarism", "chauvinism", "pragmatism", "anarchism", "technocracy", "etatism", "hedonism"):
-            self.assertIn(f"WRK = {{ has_government = {government} }}", source)
+            self.assertIn(f"{NATION} = {{ has_government = {government} }}", source)
             self.assertIn(f"ruling_party = {government}", source)
-        self.assertIn("is_subject_of = WRK", source)
+        self.assertIn(f"is_subject_of = {NATION}", source)
         self.assertNotIn("set_rule", source)
+        # The overlord is addressed through the country target only.
+        self.assertNotRegex(source, r"\b(WRK|WKR|VAD|TVA) = \{")
+        self.assertNotRegex(source, r"is_subject_of = [A-Z]{3}\b")
 
     def test_western_front_preserves_readiness_and_production_budget(self):
         source = read("common/ai_strategy/ADISCORD_west_final_war_ai.txt")
@@ -798,6 +905,7 @@ class WorldEmpireTests(unittest.TestCase):
 
     PETRICHEV_FOCUSES = {
         "WRK_empire_crown_service", "WRK_empire_officer_estates", "WRK_empire_crown_charter",
+        "WRK_empire_open_crown_registers", "WRK_empire_civic_oath", "WRK_empire_restore_veyran_crown",
     }
     FINALE = "WRK_empire_itora_must_fall"
     PEACE = {
@@ -861,40 +969,47 @@ class WorldEmpireTests(unittest.TestCase):
         return {child for child in self.focuses if key in self.ancestors(child)}
 
     @staticmethod
-    def joint_victory_facts():
+    def joint_victory_facts(nation=JOINT_UNIFIER):
+        """Facts of the council's victory, held by `nation` as the unified country."""
         return {
-            ("WRK", "is_subject", "no"): True,
-            ("WRK", "has_capitulated", "no"): True,
-            ("WRK", "has_global_flag", "ADISCORD_vorkerland_reunification_verified"): True,
-            ("WRK", "has_global_flag", "ADISCORD_vorkerland_collapse_finished"): True,
-            ("WRK", "has_global_flag", "ADISCORD_vorkerland_joint_government_formed"): True,
-            ("WRK", "has_country_flag", "ADISCORD_vorkerland_route_joint"): True,
-            ("WRK", "has_cosmetic_tag", "WRK_vorkerland_joint_government"): True,
-            ("WRK", "has_character", "WRK_Nikita_Worcker"): True,
-            ("WRK", "ruling_leader"): "WRK_VAD_Joint_Council",
+            ("event_target", NATION_TARGET): nation,
+            (nation, "is_subject", "no"): True,
+            (nation, "has_capitulated", "no"): True,
+            (nation, "has_global_flag", "ADISCORD_vorkerland_reunification_verified"): True,
+            (nation, "has_global_flag", "ADISCORD_vorkerland_collapse_finished"): True,
+            (nation, "has_global_flag", "ADISCORD_vorkerland_joint_government_formed"): True,
+            (nation, "has_country_flag", "ADISCORD_vorkerland_route_joint"): True,
+            (nation, "has_cosmetic_tag", "WRK_vorkerland_joint_government"): True,
+            (nation, "has_character", "WRK_Nikita_Worcker"): True,
+            (nation, "ruling_leader"): "WRK_VAD_Joint_Council",
         }
 
     def test_guard_requires_joint_council_and_rejects_second_transition(self):
         triggers = parse_clausewitz(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
         guard = block(triggers, "ADISCORD_vorkerland_world_empire_can_form")
+        nation = JOINT_UNIFIER
         facts = self.joint_victory_facts()
-        self.assertTrue(matches_conditions(guard, facts, "WRK"))
+        self.assertTrue(matches_conditions(guard, facts, nation))
+        # Dropping the binding leaves the target on WRK, as before the unification.
         for key in facts:
             with self.subTest(missing=key):
                 invalid = dict(facts)
                 invalid.pop(key)
-                self.assertFalse(matches_conditions(guard, invalid, "WRK"))
+                self.assertFalse(matches_conditions(guard, invalid, nation))
         ordinary_vlad = dict(facts)
-        ordinary_vlad[("WRK", "ruling_leader")] = "WRK_Vlad_Petrichev"
-        self.assertFalse(matches_conditions(guard, ordinary_vlad, "WRK"))
+        ordinary_vlad[(nation, "ruling_leader")] = "WRK_Vlad_Petrichev"
+        self.assertFalse(matches_conditions(guard, ordinary_vlad, nation))
         after = dict(facts)
-        after.pop(("WRK", "has_cosmetic_tag", "WRK_vorkerland_joint_government"))
-        after[("WRK", "has_cosmetic_tag", "WRK_vorkerland_world_empire")] = True
-        after[("WRK", "ruling_leader")] = "WRK_Nikita_Worcker"
-        self.assertFalse(matches_conditions(guard, after, "WRK"))
-        self.assertFalse(matches_conditions(guard, facts, "VAD"))
-        confirmed = {**facts, ("WRK", "has_country_flag", "ADISCORD_vorkerland_joint_succession_settled"): True}
-        self.assertFalse(matches_conditions(guard, confirmed, "WRK"))
+        after.pop((nation, "has_cosmetic_tag", "WRK_vorkerland_joint_government"))
+        after[(nation, "has_cosmetic_tag", "WRK_vorkerland_world_empire")] = True
+        after[(nation, "ruling_leader")] = "WRK_Nikita_Worcker"
+        self.assertFalse(matches_conditions(guard, after, nation))
+        # The same council on any tag the target does not name cannot take the step.
+        for other in ("WRK", "WKR", "TVA"):
+            elsewhere = {**self.joint_victory_facts(other), ("event_target", NATION_TARGET): nation}
+            self.assertFalse(matches_conditions(guard, elsewhere, other), other)
+        confirmed = {**facts, (nation, "has_country_flag", "ADISCORD_vorkerland_joint_succession_settled"): True}
+        self.assertFalse(matches_conditions(guard, confirmed, nation))
 
     def test_chosen_transition_installs_etatist_role_portrait_balance_and_news(self):
         change = named_block(self.effects, "ADISCORD_vorkerland_establish_world_empire")
@@ -935,7 +1050,7 @@ class WorldEmpireTests(unittest.TestCase):
         self.assertEqual(scalar(block(payload, "news_event"), "id"), "ADISCORD_vorkerland_postwar.5")
 
     def test_joint_victory_schedules_the_coup_one_hour_after_reunification(self):
-        finalize = named_block(self.effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        finalize = named_block(self.effects, "ADISCORD_vorkerland_finalize_reunification")
         joint = finalize[finalize.index("has_country_flag = ADISCORD_vorkerland_route_joint"):]
         joint = joint[:joint.index("ADISCORD_vorkerland_route_utilitarian")]
         self.assertIn("ADISCORD_vorkerland_show_joint_victory_superevent = yes", joint)
@@ -1277,29 +1392,38 @@ class WorldEmpireTests(unittest.TestCase):
         unlock = block(self.focuses["WRK_empire_imperial_governors"], "completion_reward")
         self.assertEqual(scalar(unlock, "unlock_decision_tooltip"), "WRK_empire_appoint_governor")
 
-    def test_western_victory_renames_each_route(self):
+    def test_western_victory_preserves_the_world_empire(self):
         rename = named_block(self.effects, "ADISCORD_vorkerland_rename_after_itora")
-        self.assertRegex(rename, r"has_cosmetic_tag = WRK_vorkerland_world_empire \}\s*set_cosmetic_tag = WRK_veyran_empire")
+        self.assertNotIn("WRK_veyran_empire", rename)
+        self.assertIn("ADISCORD_vorkerland_world_empire_active = no", named_block(rename, "limit"))
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_worker \}\s*set_cosmetic_tag = WRK_western_eastern_union")
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_utilitarian \}\s*set_cosmetic_tag = WRK_forul_technical_union")
-        self.assertEqual(rename.count("news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }"), 3)
+        self.assertEqual(rename.count("news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }"), 2)
         west = read("common/scripted_effects/ADISCORD_west_final_war_effects.txt")
         unopposed = named_block(west, "ADISCORD_west_crisis_month")
         self.assertRegex(unopposed, r"set_global_flag = ADISCORD_west_hegemon_WRK(?:.|\n)*?ADISCORD_vorkerland_rename_after_itora = yes")
         victory = named_block(west, "ADISCORD_west_final_resolve_wrk_victory")
-        self.assertIn("ADISCORD_vorkerland_rename_after_itora = yes", named_block(victory, "WRK"))
+        # The victory addresses whichever claimant unified the country.
+        self.assertIn("ADISCORD_vorkerland_rename_after_itora = yes", named_block(victory, NATION))
+        self.assertNotRegex(victory, r"(?m)^\s*(WRK|WKR|VAD|TVA) = \{")
         self.assertNotIn("ADISCORD_vorkerland_rename_after_itora", named_block(west, "ADISCORD_west_final_resolve_ivn_victory"))
         # The renamed empire keeps its tree, balance and modifiers.
         triggers = parse_clausewitz(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"))
         active = block(triggers, "ADISCORD_vorkerland_world_empire_active")
+        nation = JOINT_UNIFIER
+        unified = {("event_target", NATION_TARGET): nation}
         for cosmetic in ("WRK_vorkerland_world_empire", "WRK_veyran_empire"):
-            self.assertTrue(matches_conditions(active, {("WRK", "has_cosmetic_tag", cosmetic): True}, "WRK"))
-        self.assertFalse(matches_conditions(active, {("WRK", "has_cosmetic_tag", "WRK_forul_technical_union"): True}, "WRK"))
+            title = {**unified, (nation, "has_cosmetic_tag", cosmetic): True}
+            self.assertTrue(matches_conditions(active, title, nation))
+            # A title alone does not make a wartime claimant the empire.
+            self.assertFalse(matches_conditions(active, {(nation, "has_cosmetic_tag", cosmetic): True}, nation))
+        technical = {**unified, (nation, "has_cosmetic_tag", "WRK_forul_technical_union"): True}
+        self.assertFalse(matches_conditions(active, technical, nation))
         cosmetic = read("common/countries/cosmetic.txt")
         news = self.event("ADISCORD_vorkerland_postwar.61")
         for tag in self.RENAMES:
             self.assertTrue(named_block(cosmetic, tag), tag)
-            self.assertIn(f"WRK = {{ has_cosmetic_tag = {tag} }}", str(read("events/ADISCORD_vorkerland_events.txt")))
+            self.assertIn(f"{NATION} = {{ has_cosmetic_tag = {tag} }}", str(read("events/ADISCORD_vorkerland_events.txt")))
         self.assertEqual(scalar(news, "major"), "yes")
         self.assertEqual(len([e for e in news if e.key == "title"]), 3)
         self.assertEqual(len([e for e in news if e.key == "desc"]), 3)
@@ -1341,7 +1465,7 @@ class WorldEmpireTests(unittest.TestCase):
                 expanded = news[0].replace(r"\n", "\n")
                 self.assertLessEqual(len(expanded), 3000)
                 self.assertLessEqual(len(expanded.encode("utf-8")), 5500)
-                self.assertNotRegex(expanded, "[–—]")
+                self.assertNotRegex(expanded, "[\u2013\u2014]")
             countries = (ROOT / f"localisation/{language}/countries_l_{language}.yml").read_text(encoding="utf-8-sig")
             for tag in self.RENAMES:
                 for suffix in ("", "_DEF", "_ADJ"):
@@ -1521,15 +1645,28 @@ class RouteTreeTests(unittest.TestCase):
 class PetrichevEmpireTests(unittest.TestCase):
     """Execute restoration transitions and grants; native tree/GUI calls are recorded boundaries."""
 
-    @staticmethod
-    def restored_country():
-        from tools.tests.test_vorkerland_preparation import Script, V
+    # The restoration is the joint route, unified by VAD on its own tag.
+    NATION = JOINT_UNIFIER
+
+    @classmethod
+    def restored_country(cls):
+        from tools.tests.test_vorkerland_preparation import EFFECTS, Script, V
         script = Script()
         script.globals = {V + "reunification_verified", V + "collapse_finished", V + "phase_postwar_integration"}
-        country = script.scopes["WRK"]
-        country.resources.clear()
-        country.focuses.clear()
-        country.variables.clear()
+        # The unification's own opening statements move the country target to
+        # the winner; the pre-collapse tag is retired.
+        script.root = cls.NATION
+        script.run(EFFECTS[V + "unify_under_" + cls.NATION.lower()][:2])
+        assert script.event_targets[NATION_TARGET] == cls.NATION, script.event_targets
+        retired = script.scopes["WRK"]
+        retired.exists = False
+        retired.resources.clear()
+        retired.focuses.clear()
+        retired.variables.clear()
+        capital = script.scopes["32"]
+        capital.owner = cls.NATION
+        capital.controller = cls.NATION
+        country = script.scopes[cls.NATION]
         country.flags.update({V + "route_joint", V + "central_unifier"})
         country.focuses.add("WRK_joint_restore_unity_tower")
         country.leader = "WRK_Vlad_Petrichev"
@@ -1537,10 +1674,21 @@ class PetrichevEmpireTests(unittest.TestCase):
         country.cosmetic = "VAD_vorkerland_restoration"
         return script
 
+    def test_restored_country_is_the_claimant_named_by_the_country_target(self):
+        from tools.tests.test_vorkerland_preparation import Script, TRIGGERS, V
+        self.assertEqual(Script().event_targets, {NATION_TARGET: "WRK"})
+        script = self.restored_country()
+        self.assertEqual(script.event_targets, {NATION_TARGET: self.NATION})
+        self.assertTrue(script.conditions(TRIGGERS[V + "petrichev_empire_can_form"]))
+        # The same restoration on a tag the target does not name is a wartime
+        # claimant and cannot proclaim the empire.
+        script.event_targets[NATION_TARGET] = "WRK"
+        self.assertFalse(script.conditions(TRIGGERS[V + "petrichev_empire_can_form"]))
+
     def test_tower_callback_preserves_ruler_and_initializes_empire_once(self):
         from tools.tests.test_vorkerland_preparation import EFFECTS, EVENTS, fields
         script = self.restored_country()
-        country = script.scopes["WRK"]
+        country = script.scopes[self.NATION]
         country.resources.update(pp=137, people=8234, infantry_equipment=9123)
         country.variables["ADISCORD_vorkerland_pw_rebuild_active"] = 1
         country.focuses.add("WRK_joint_pw_census")
@@ -1570,7 +1718,7 @@ class PetrichevEmpireTests(unittest.TestCase):
         for loss in ("joint", "tower", "subject", "capitulated", "ruler", "route", "verification"):
             with self.subTest(loss=loss):
                 script = self.restored_country()
-                country = script.scopes["WRK"]
+                country = script.scopes[self.NATION]
                 if loss == "joint":
                     script.globals.add(V + "joint_government_formed")
                 elif loss == "tower":
@@ -1593,7 +1741,7 @@ class PetrichevEmpireTests(unittest.TestCase):
         from tools.tests.test_vorkerland_preparation import normalized
         tree = block(parse_clausewitz(read("focus_trees/Vorkerland/world_empire/focuses.txt")), "focus_tree")
         focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
-        self.assertEqual(len(focuses), 34)
+        self.assertEqual(len(focuses), 37)
         coordinates = [(scalar(rows, "x"), scalar(rows, "y")) for rows in focuses.values()]
         self.assertEqual(len(coordinates), len(set(coordinates)))
         expected_hidden = {
@@ -1602,7 +1750,7 @@ class PetrichevEmpireTests(unittest.TestCase):
         }
         for petrichev in (True, False):
             script = self.restored_country()
-            script.scopes["WRK"].cosmetic = "WRK_vorkerland_world_empire"
+            script.scopes[self.NATION].cosmetic = "WRK_vorkerland_world_empire"
             if not petrichev:
                 script.globals.add("ADISCORD_vorkerland_joint_government_formed")
             visible = set()
@@ -1625,10 +1773,39 @@ class PetrichevEmpireTests(unittest.TestCase):
                 done.add(name)
             self.assertIn("WRK_empire_veyran_order", done)
 
+    def test_restoration_requires_vlad_the_registers_and_western_hegemony(self):
+        from tools.tests.test_vorkerland_preparation import V, normalized
+
+        tree = block(parse_clausewitz(read("focus_trees/Vorkerland/world_empire/focuses.txt")), "focus_tree")
+        focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
+        registers = "WRK_empire_open_crown_registers"
+        oath = "WRK_empire_civic_oath"
+        crown = focuses["WRK_empire_restore_veyran_crown"]
+        self.assertEqual(scalar(block(crown, "prerequisite"), "focus"), registers)
+        for name, excluded in ((registers, oath), (oath, registers)):
+            self.assertEqual(scalar(block(focuses[name], "mutually_exclusive"), "focus"), excluded)
+            self.assertEqual(scalar(block(focuses[name], "prerequisite"), "focus"), "WRK_empire_crown_charter")
+        script = self.restored_country()
+        wrk = script.scopes[self.NATION]
+        wrk.cosmetic = "WRK_vorkerland_world_empire"
+        conditions = normalized(block(crown, "available"))
+        self.assertFalse(script.conditions(conditions))
+        script.globals.add("ADISCORD_west_hegemon_WRK")
+        self.assertTrue(script.conditions(conditions))
+        wrk.leader = "WRK_Nikita_Worcker"
+        self.assertFalse(script.conditions(conditions))
+        wrk.leader = "WRK_Vlad_Petrichev"
+        script.globals.add(V + "joint_government_formed")
+        self.assertFalse(script.conditions(conditions))
+        result = block(block(crown, "completion_reward"), "hidden_effect")
+        self.assertEqual(scalar(result, "set_cosmetic_tag"), "WRK_veyran_empire")
+        self.assertEqual(scalar(block(result, "set_temp_variable"), "ADISCORD_superevent_request"), "54")
+        self.assertEqual(scalar(result, "ADISCORD_superevent_enqueue"), "yes")
+
     def test_civil_service_opens_two_paid_reconstruction_slots(self):
         from tools.tests.test_vorkerland_preparation import TRIGGERS
         script = self.restored_country()
-        country = script.scopes["WRK"]
+        country = script.scopes[self.NATION]
         country.cosmetic = "WRK_vorkerland_world_empire"
         country.focuses.add("WRK_empire_crown_service")
         self.assertTrue(script.conditions(TRIGGERS["ADISCORD_vorkerland_pw_reconstruction_open"]))
@@ -1639,11 +1816,11 @@ class PetrichevEmpireTests(unittest.TestCase):
     def test_estate_grants_are_once_per_state_and_preserve_the_local_tradeoff(self):
         from tools.tests.test_vorkerland_preparation import EFFECTS
         script = self.restored_country()
-        script.scopes["WRK"].cosmetic = "WRK_vorkerland_world_empire"
-        script.scopes["WRK"].focuses.add("WRK_empire_officer_estates")
+        script.scopes[self.NATION].cosmetic = "WRK_vorkerland_world_empire"
+        script.scopes[self.NATION].focuses.add("WRK_empire_officer_estates")
         for _ in range(2):
             script.run(EFFECTS["ADISCORD_vorkerland_empire_grant_estate"], "32")
-        self.assertEqual(script.scopes["WRK"].resources["people"], 2000)
+        self.assertEqual(script.scopes[self.NATION].resources["people"], 2000)
         self.assertIn("WRK_empire_officer_estate", script.scopes["32"].flags)
         modifier = named_block(read("common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"), "WRK_empire_officer_estate")
         self.assertIn("local_manpower = 0.15", modifier)
@@ -1651,7 +1828,8 @@ class PetrichevEmpireTests(unittest.TestCase):
         self.assertIn("owner = { ADISCORD_vorkerland_petrichev_empire = yes }", modifier)
         hook = named_block(read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_state_control_changed")
         self.assertIn("FROM.FROM = { ADISCORD_vorkerland_empire_grant_estate = yes }", hook)
-        self.assertIn("is_owned_and_controlled_by = WRK", hook)
+        self.assertIn(f"is_core_of = {NATION}", hook)
+        self.assertIn(f"is_owned_and_controlled_by = {NATION}", hook)
 
     def test_every_balance_write_is_guarded_after_the_final_settlement(self):
         from tools.tests.test_vorkerland_preparation import normalized
@@ -1662,7 +1840,7 @@ class PetrichevEmpireTests(unittest.TestCase):
                 if clause.key == "if" and any(row.key == "add_power_balance_value" for row in clause.value):
                     script = self.restored_country()
                     self.assertFalse(script.conditions(normalized(block(clause.value, "limit"))))
-                    script.scopes["WRK"].power_balances["ADISCORD_vorkerland_empire_bop"] = 0
+                    script.scopes[self.NATION].power_balances["ADISCORD_vorkerland_empire_bop"] = 0
                     self.assertTrue(script.conditions(normalized(block(clause.value, "limit"))))
 
     def test_governor_delivery_rechecks_district_and_works_after_balance_settlement(self):
@@ -1672,11 +1850,12 @@ class PetrichevEmpireTests(unittest.TestCase):
         for loss in (None, "owner", "controller", "core", "subject", "capitulated", "seat", "cabinet"):
             with self.subTest(loss=loss):
                 script = self.restored_country()
-                country = script.scopes["WRK"]
+                country = script.scopes[self.NATION]
                 country.cosmetic = "WRK_vorkerland_world_empire"
                 country.focuses.add("WRK_empire_officer_estates")
                 state = script.scopes["32"]
-                state.cores.add("WRK")
+                # The unification passed the retired tag's cores to the winner.
+                state.cores.add(self.NATION)
                 self.assertTrue(script.conditions(decision["available"]))
                 self.assertTrue(script.conditions(decision["target_root_trigger"]))
                 if loss == "owner":
@@ -1724,7 +1903,7 @@ class PetrichevEmpireTests(unittest.TestCase):
 
         script = self.restored_country()
         if not petrichev:
-            country = script.scopes["WRK"]
+            country = script.scopes[self.NATION]
             script.globals.add(V + "joint_government_formed")
             country.cosmetic = "WRK_vorkerland_joint_government"
             country.leader = "WRK_VAD_Joint_Council"
@@ -1743,19 +1922,24 @@ class PetrichevEmpireTests(unittest.TestCase):
         for language in ("russian", "english"):
             source = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
             response = re.search(r'^ ADISCORD_vorkerland_postwar\.5\.a:0 "([^"\r\n]*)"$', source, re.M).group(1)
-            binding = re.fullmatch(r"\[(WRK)\.(GetVorkerlandEmpireProclamationResponse)\]", response)
+            # The text is bound to the country target, not to a recipient or a tag.
+            binding = re.fullmatch(
+                rf"\[({NATION_TARGET})\.(GetVorkerlandEmpireProclamationResponse)\]", response
+            )
             self.assertIsNotNone(binding, "The acknowledgement must follow the same founder as the headline and description")
             self.assertIn(binding[2], definitions)
             choices = [fields(value) for key, _, value in definitions[binding[2]] if key == "text"]
             for petrichev in (False, True):
                 script, transition = self.proclamation_campaign(petrichev)
                 script.effect(transition)
-                self.assertEqual(script.scopes["WRK"].cosmetic, "WRK_vorkerland_world_empire")
-                for recipient in ("WRK", "RUS"):
+                self.assertEqual(script.scopes[self.NATION].cosmetic, "WRK_vorkerland_world_empire")
+                for recipient in (self.NATION, "RUS"):
                     script.root = recipient
                     script.scopes["RUS"].leader = "WRK_Nikita_Worcker" if petrichev else "WRK_Vlad_Petrichev"
+                    founder = script.event_targets[binding[1]]
+                    self.assertEqual(founder, self.NATION)
                     selected = next(choice["localization_key"] for choice in choices
-                                    if script.conditions(choice.get("trigger", []), binding[1]))
+                                    if script.conditions(choice.get("trigger", []), founder))
                     expected = "ADISCORD_vorkerland_postwar.5.a_" + ("petrichev" if petrichev else "worcker")
                     self.assertEqual(selected, expected, (language, petrichev, recipient))
                     values = re.findall(rf'^ {re.escape(selected)}:0 "((?:[^"\\\r\n]|\\.)*)"$', source, re.M)
@@ -1778,11 +1962,13 @@ class PetrichevEmpireTests(unittest.TestCase):
             script.effect(transition)
             dispatched = [fields(value)["id"] for key, _, value in script.calls if key == "news_event"]
             self.assertEqual(dispatched, [V + "postwar.5"])
+            cards = [(tag, request) for key, tag, request in script.calls if key == "ADISCORD_superevent_enqueue"]
+            self.assertEqual(cards, [(self.NATION, 61)])
 
     def test_founder_localisation_preserves_both_narratives_and_encoding(self):
         script = parse_clausewitz(read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt"))
         variants = [row.value for row in script if row.key == "defined_text" and scalar(row.value, "name").startswith("GetVorkerlandEmpire")]
-        self.assertEqual(len(variants), 19)
+        self.assertEqual(len(variants), 18)
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))

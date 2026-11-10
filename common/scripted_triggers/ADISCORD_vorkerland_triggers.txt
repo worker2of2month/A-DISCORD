@@ -121,9 +121,20 @@ ADISCORD_vorkerland_wrk_release_is_forbidden = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 }
 
-# The historical WRK tag is dormant between the initial split and the verified
-# phase.6 formation. Native peace actions can otherwise release that dormant
-# core holder for one tick and recreate the old country beside its claimants.
+# COUNTRY. False only for a civil-war claimant that is not the unified country.
+# Content written for Vorkerland as a whole admits the claimant tags in
+# `allowed`, which the engine reads once at load; this keeps it away from them
+# until one of them has unified the country.
+ADISCORD_vorkerland_is_not_wartime_claimant = {
+	OR = {
+		NOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+		tag = event_target:ADISCORD_vorkerland_nation
+	}
+}
+
+# The historical WRK tag stays dormant after the initial split; the unifying
+# claimant keeps its own tag. Native peace actions can otherwise release that
+# dormant core holder for one tick and recreate the old country beside it.
 ADISCORD_vorkerland_is_premature_wrk = {
 	tag = WRK
 	exists = yes
@@ -657,7 +668,7 @@ ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = {
 			}
 		}
 		AND = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			OR = {
 				EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
 				EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk }
@@ -1095,18 +1106,18 @@ ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = {
 }
 
 # Imperial reclamation: candidate scope and actor scope are separate.
-# COUNTRY candidate: relations are checked against the fixed successor WRK.
+# COUNTRY candidate: relations are checked against the Vorkerland country target.
 # ROOT/PREV would depend on whether the caller is the decision or dispatcher.
 ADISCORD_vorkerland_is_imperial_reclamation_target = {
 	exists = yes
 	is_subject = no
 	NOT = { has_capitulated = yes }
-	NOT = { has_war_with = WRK }
-	NOT = { is_in_faction_with = WRK }
+	NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+	NOT = { is_in_faction_with = event_target:ADISCORD_vorkerland_nation }
 	NOT = { has_country_flag = ADISCORD_vorkerland_prep_independence_guaranteed }
 }
 
-# COUNTRY WRK: keep this bounded list in the dispatcher's priority order.
+# COUNTRY the unified Vorkerland: keep this bounded list in the dispatcher's priority order.
 ADISCORD_vorkerland_has_imperial_reclamation_target = {
 	OR = {
 		EYR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
@@ -1385,7 +1396,7 @@ ADISCORD_vorkerland_central_minor_is_open_to_ROOT = {
 		AND = {
 			OR = { tag = RIV tag = NDN tag = SWB tag = VHV }
 			OR = {
-				ROOT = { OR = { tag = WKR tag = WRK } }
+				ROOT = { OR = { tag = WKR tag = event_target:ADISCORD_vorkerland_nation } }
 				NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes } }
 			}
 		}
@@ -1735,8 +1746,9 @@ ADISCORD_vorkerland_has_single_surviving_claimant = {
 }
 
 ADISCORD_vorkerland_reunification_verified = {
-	country_exists = WRK
-	WRK = {
+	event_target:ADISCORD_vorkerland_nation = {
+		ADISCORD_vorkerland_is_main_claimant = yes
+		exists = yes
 		is_subject = no
 		NOT = { has_capitulated = yes }
 		controls_state = 32
@@ -1746,10 +1758,14 @@ ADISCORD_vorkerland_reunification_verified = {
 			has_country_flag = ADISCORD_vorkerland_route_utilitarian
 		}
 	}
-	32 = { is_owned_by = WRK is_controlled_by = WRK }
-	NOT = { country_exists = WKR }
-	NOT = { country_exists = VAD }
-	NOT = { country_exists = TVA }
+	32 = {
+		is_owned_by = event_target:ADISCORD_vorkerland_nation
+		is_controlled_by = event_target:ADISCORD_vorkerland_nation
+	}
+	# Only the unified country itself may remain of the three claimants.
+	WKR = { OR = { exists = no tag = event_target:ADISCORD_vorkerland_nation } }
+	VAD = { OR = { exists = no tag = event_target:ADISCORD_vorkerland_nation } }
+	TVA = { OR = { exists = no tag = event_target:ADISCORD_vorkerland_nation } }
 	NOT = { country_exists = WTD }
 	NOT = { country_exists = EGC }
 	NOT = { country_exists = RIV }
@@ -1801,7 +1817,7 @@ ADISCORD_vorkerland_coalition_victory_ready = {
 ADISCORD_vorkerland_district_integration_available = {
 	OR = {
 		ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
-		AND = { tag = WRK has_global_flag = ADISCORD_vorkerland_reunification_verified }
+		AND = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_reunification_verified }
 	}
 }
 
@@ -1839,7 +1855,7 @@ ADISCORD_vorkerland_reserve_cache_affordable = {
 ADISCORD_vorkerland_reserve_cache_kept_by_ROOT = {
 	OR = {
 		AND = {
-			ROOT = { tag = WRK }
+			ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			OR = { state = 32 state = 33 state = 200 state = 201 }
 		}
 		AND = {
@@ -1997,7 +2013,7 @@ WKR_recognized_republic_survives = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	NOT = { has_war_with = WRK }
+	NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
 }
 
 # The target list contains the existing supply hubs of the civil-war theatre.
@@ -2111,7 +2127,7 @@ VAD_collegial_government = {
 	OR = {
 		tag = VAD
 		AND = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
 	}
@@ -2549,7 +2565,7 @@ ADISCORD_vorkerland_vad_ai_solar_preparation = {
 # Postwar programmes belong to the sovereign reunifier; subjugation suspends
 # new programmes without deleting reforms already completed in this campaign.
 ADISCORD_vorkerland_pw_sovereign = {
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	exists = yes
 	is_subject = no
 	has_capitulated = no
@@ -2562,7 +2578,7 @@ ADISCORD_vorkerland_pw_expedition_target = {
 	is_subject = no
 	has_capitulated = no
 	has_war = no
-	NOT = { is_in_faction_with = WRK }
+	NOT = { is_in_faction_with = event_target:ADISCORD_vorkerland_nation }
 	custom_trigger_tooltip = {
 		tooltip = WRK_pw_local_coalition_tt
 		NOT = {
@@ -2617,7 +2633,7 @@ ADISCORD_vorkerland_pw_can_attack_ebern = {
 	}
 	EBA = {
 		ADISCORD_vorkerland_pw_expedition_target = yes
-		is_neighbor_of = WRK
+		is_neighbor_of = event_target:ADISCORD_vorkerland_nation
 	}
 	OR = {
 		NOT = { EBA = { is_in_faction_with = PIV } }
@@ -2628,9 +2644,9 @@ ADISCORD_vorkerland_pw_can_attack_ebern = {
 # A completed territorial outcome is read from current ownership and subject status.
 ADISCORD_vorkerland_pw_ebern_settled = {
 	OR = {
-		EBA = { is_subject_of = WRK }
+		EBA = { is_subject_of = event_target:ADISCORD_vorkerland_nation }
 		AND = {
-			WRK = {
+			event_target:ADISCORD_vorkerland_nation = {
 				owns_state = 74
 				controls_state = 74
 				owns_state = 105
@@ -2644,7 +2660,7 @@ ADISCORD_vorkerland_pw_ebern_settled = {
 }
 
 ADISCORD_vorkerland_pw_afrela_settled = {
-	PIV = { is_subject_of = WRK }
+	PIV = { is_subject_of = event_target:ADISCORD_vorkerland_nation }
 }
 
 ADISCORD_vorkerland_pw_can_attack_afrela = {
@@ -2656,8 +2672,8 @@ ADISCORD_vorkerland_pw_can_attack_afrela = {
 	PIV = {
 		ADISCORD_vorkerland_pw_expedition_target = yes
 		OR = {
-			is_neighbor_of = WRK
-			EBA = { is_subject_of = WRK }
+			is_neighbor_of = event_target:ADISCORD_vorkerland_nation
+			EBA = { is_subject_of = event_target:ADISCORD_vorkerland_nation }
 		}
 	}
 }
@@ -2672,7 +2688,7 @@ ADISCORD_vorkerland_pw_expedition_won = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_pw_campaign_member }
 			AND = {
 				exists = yes
-				has_war_with = WRK
+				has_war_with = event_target:ADISCORD_vorkerland_nation
 				OR = {
 					has_capitulated = yes
 					has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
@@ -2685,7 +2701,7 @@ ADISCORD_vorkerland_pw_expedition_won = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_pw_campaign_member }
 			AND = {
 				exists = yes
-				has_war_with = WRK
+				has_war_with = event_target:ADISCORD_vorkerland_nation
 				OR = {
 					has_capitulated = yes
 					has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
@@ -2745,7 +2761,7 @@ ADISCORD_vorkerland_pw_rebuild_site = {
 # --- world_empire_triggers ---
 ADISCORD_vorkerland_petrichev_empire_can_form = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	is_subject = no
 	has_capitulated = no
 	has_global_flag = ADISCORD_vorkerland_reunification_verified
@@ -2768,7 +2784,7 @@ ADISCORD_vorkerland_petrichev_empire = {
 }
 
 ADISCORD_vorkerland_world_empire_can_form = {
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	NOT = { has_country_flag = ADISCORD_vorkerland_joint_succession_settled }
 	is_subject = no
 	has_capitulated = no
@@ -2784,9 +2800,9 @@ ADISCORD_vorkerland_world_empire_can_form = {
 	}
 }
 
-# The Veyran name after the western victory keeps the same empire.
+# The provincial assembly changes the imperial title while preserving its institutions.
 ADISCORD_vorkerland_world_empire_active = {
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	OR = {
 		has_cosmetic_tag = WRK_vorkerland_world_empire
 		has_cosmetic_tag = WRK_veyran_empire
@@ -2824,7 +2840,7 @@ ADISCORD_vorkerland_is_preparation_heir = {
 }
 
 ADISCORD_vorkerland_prep_open = {
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	has_global_flag = ADISCORD_vorkerland_phase_prewar
 	NOT = { has_capitulated = yes }
 	is_subject = no
@@ -2919,10 +2935,10 @@ ADISCORD_vorkerland_prep_district_open = {
 		}
 		AND = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			is_subject_of = WRK
+			is_subject_of = event_target:ADISCORD_vorkerland_nation
 			OR = {
 				is_in_faction = no
-				is_in_faction_with = WRK
+				is_in_faction_with = event_target:ADISCORD_vorkerland_nation
 			}
 		}
 	}
@@ -2944,10 +2960,10 @@ ADISCORD_vorkerland_prep_offer_valid = {
 		}
 		AND = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			is_subject_of = WRK
+			is_subject_of = event_target:ADISCORD_vorkerland_nation
 			OR = {
 				is_in_faction = no
-				is_in_faction_with = WRK
+				is_in_faction_with = event_target:ADISCORD_vorkerland_nation
 			}
 		}
 	}
@@ -2999,7 +3015,7 @@ ADISCORD_vorkerland_prep_offer_valid = {
 
 # WRK: the postwar mandate survives temporary occupation and subjugation.
 WRK_worx_mandate = {
-	tag = WRK
+	tag = event_target:ADISCORD_vorkerland_nation
 	has_country_flag = WRK_worx_initialized
 	has_country_flag = ADISCORD_vorkerland_route_utilitarian
 	has_country_leader = {

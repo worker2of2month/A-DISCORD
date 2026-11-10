@@ -735,10 +735,10 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             name = f"{prefix}_ops_{state}_controller"
             frame_variable = f"operations_state_{state}_frame"
             # Controller colors are cached in country variables outside the GUI trigger path.
+            # The fill has no visibility trigger: an element without one is always shown.
             gui.append(
                 f'  iconType = {{ name = "{name}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_state_{state}" }}\n'
             )
-            script.append(f"\t\t\t{name}_visible = {{ always = yes }}\n")
         # Draw borders after all fills so adjacent regions cannot cover their rims.
         for state in STATE_IDS:
             left, top, _, _ = boxes[state]

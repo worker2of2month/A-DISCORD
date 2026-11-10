@@ -290,6 +290,7 @@ NAM_postwar_plan = {
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
 		NAM_pw_engineer_units
+		NAM_pw_combined_arms
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
@@ -378,6 +379,11 @@ NAM_postwar_vertical_plan = {
 		NAM_south_field_fortresses
 		NAM_south_counteroffensive
 		NAM_south_heritage
+		NAM_veyran_union_charter
+		NAM_veyran_embarkation_staff
+		NAM_veyran_convoy_charter
+		NAM_veyran_counterplan
+		NAM_veyran_invasion
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
@@ -431,7 +437,7 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_regional_power
 		NAM_pw_power_grid
 		NAM_pw_oilfield_substations
-		NAM_pw_water_intakes
+		NAM_pw_irrigation_works
 		NAM_pw_reservoir_survey
 		NAM_pw_air_review
 		NAM_pw_airfield_network
@@ -450,6 +456,7 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
 		NAM_pw_engineer_units
+		NAM_pw_combined_arms
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools
@@ -774,7 +781,7 @@ NAM_postwar_pragmatic_plan = {
 		NAM_veterans_return
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
-		NAM_pw_breakthrough_army
+		NAM_pw_mobile_army
 		NAM_pw_staff_exercises
 		NAM_pw_reserve_centres
 		NAM_pw_southern_army
@@ -839,7 +846,8 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_district_hospitals
 		NAM_pw_school_network
 		NAM_pw_regional_reconstruction
-		NAM_pw_engineer_units
+		NAM_pw_field_workshops
+		NAM_pw_combined_arms
 		NAM_pw_naval_workshops
 		NAM_pw_escort_fleet
 		NAM_pw_crew_schools

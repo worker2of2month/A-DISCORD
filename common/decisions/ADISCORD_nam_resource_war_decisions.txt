@@ -806,7 +806,7 @@ NAM_colony = {
 			NAM_country_operable = yes
 			custom_trigger_tooltip = {
 				tooltip = NAM_wrk_metropole_present_tt
-				WRK = { exists = yes }
+				event_target:ADISCORD_vorkerland_nation = { exists = yes }
 			}
 		}
 		cost = 0
@@ -821,14 +821,14 @@ NAM_colony = {
 				limit = {
 					hidden_trigger = {
 						NAM_colony_phase = yes
-						WRK = { exists = yes }
+						event_target:ADISCORD_vorkerland_nation = { exists = yes }
 						NOT = { has_fuel < 40000 }
 					}
 				}
 				add_fuel = -40000
 				custom_effect_tooltip = NAM_wrk_fuel_shipment_tt
 				hidden_effect = {
-					WRK = {
+					event_target:ADISCORD_vorkerland_nation = {
 						add_fuel = 40000
 						add_opinion_modifier = {
 							target = NAM
@@ -866,7 +866,7 @@ NAM_colony = {
 			NAM_country_operable = yes
 			custom_trigger_tooltip = {
 				tooltip = NAM_wrk_metropole_present_tt
-				WRK = { exists = yes }
+				event_target:ADISCORD_vorkerland_nation = { exists = yes }
 			}
 		}
 		cost = 0
@@ -881,7 +881,7 @@ NAM_colony = {
 			OR = {
 				NAM_country_operable = no
 				NAM_colonial_programme_operable = no
-				WRK = { exists = no }
+				event_target:ADISCORD_vorkerland_nation = { exists = no }
 			}
 		}
 		complete_effect = {
@@ -944,7 +944,7 @@ NAM_colony = {
 			NAM_country_operable = yes
 			custom_trigger_tooltip = {
 				tooltip = NAM_wrk_metropole_present_tt
-				WRK = { exists = yes }
+				event_target:ADISCORD_vorkerland_nation = { exists = yes }
 			}
 		}
 		cost = 0
@@ -959,7 +959,7 @@ NAM_colony = {
 			OR = {
 				NAM_country_operable = no
 				NAM_colony_phase = no
-				WRK = { exists = no }
+				event_target:ADISCORD_vorkerland_nation = { exists = no }
 			}
 		}
 		complete_effect = {
@@ -1789,6 +1789,197 @@ NAM_mobilisation = {
 }
 
 NAM_national_programmes = {
+
+	NAM_rus_send_relief = {
+		icon = oil
+		allowed = { tag = NAM }
+		target_array = global.RUS_crisis_defenders
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			has_completed_focus = NAM_rus_fuel_for_coalition
+			NAM_pw_operable = yes
+			FROM = {
+				NAM_rus_active_defender = yes
+				NOT = { has_country_flag = NAM_rus_received_fuel }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_defender_tt
+				FROM = { NAM_rus_active_defender = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_sender_fuel_tt
+				NOT = { has_fuel < 30000 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_room_tt
+				FROM = { NAM_rus_fuel_room = yes }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_rus_fuel_for_coalition
+						NAM_pw_operable = yes
+						FROM = { NAM_rus_fuel_shipment_ready = yes }
+					}
+				}
+				custom_effect_tooltip = NAM_rus_send_relief_tt
+				hidden_effect = {
+					FROM = { NAM_rus_supply_member = yes }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_fuel < 60000
+			}
+		}
+	}
+
+	NAM_rus_offer_barter = {
+		icon = oil
+		allowed = { tag = NAM }
+		target_array = global.RUS_crisis_defenders
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			has_completed_focus = NAM_rus_demand_share
+			NAM_pw_operable = yes
+			FROM = {
+				NAM_rus_active_defender = yes
+				NOT = { has_country_flag = NAM_rus_received_fuel }
+				NOT = { has_country_flag = NAM_rus_barter_declined }
+				NOT = { has_country_flag = NAM_rus_barter_pending }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_defender_tt
+				FROM = { NAM_rus_active_defender = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_sender_fuel_tt
+				NOT = { has_fuel < 30000 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_room_tt
+				FROM = { NAM_rus_fuel_room = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_trucks_tt
+				FROM = { NOT = { has_equipment = { motorized_equipment < 100 } } }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						FROM = {
+							NAM_rus_barter_available = yes
+							NOT = { has_country_flag = NAM_rus_barter_pending }
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_rus_offer_barter_tt
+				hidden_effect = {
+					FROM = {
+						set_country_flag = NAM_rus_barter_pending
+						country_event = { id = ADISCORD_nam_oil.11 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_fuel < 60000
+			}
+		}
+	}
+
+	NAM_rus_send_column = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		target_array = global.RUS_crisis_defenders
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			has_completed_focus = NAM_rus_expedition_staff
+			NAM_pw_operable = yes
+			FROM = {
+				NAM_rus_active_defender = yes
+				NOT = { has_country_flag = NAM_rus_received_column }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_defender_tt
+				FROM = { NAM_rus_active_defender = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_column_stock_tt
+				NOT = { has_equipment = { motorized_equipment < 100 } }
+				NOT = { has_equipment = { infantry_equipment < 1000 } }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_rus_expedition_staff
+						NAM_pw_operable = yes
+						FROM = {
+							NAM_rus_active_defender = yes
+							NOT = { has_country_flag = NAM_rus_received_column }
+						}
+						NOT = { has_equipment = { motorized_equipment < 100 } }
+						NOT = { has_equipment = { infantry_equipment < 1000 } }
+					}
+				}
+				custom_effect_tooltip = NAM_rus_send_column_tt
+				hidden_effect = {
+					send_equipment = {
+						equipment = motorized_equipment
+						amount = 100
+						target = FROM
+					}
+					send_equipment = {
+						equipment = infantry_equipment
+						amount = 1000
+						target = FROM
+					}
+					FROM = {
+						set_country_flag = {
+							flag = NAM_rus_received_column
+							value = 1
+							days = 45
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				OR = {
+					has_equipment = { infantry_equipment < 3000 }
+					has_equipment = { motorized_equipment < 300 }
+				}
+			}
+		}
+	}
+
 	NAM_incident_countdown = {
 		icon = generic_political_pressure
 		allowed = { tag = NAM }
@@ -1884,6 +2075,67 @@ NAM_national_programmes = {
 		ai_will_do = { base = 5 }
 	}
 
+	NAM_pw_patrol_refit = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_pw_naval_review }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_shipyard_ready_tt
+				NAM_naval_shipyard_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_slip_free_tt
+				NAM_naval_slip_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_patrol_refit_cost
+		custom_cost_trigger = { NOT = { has_equipment = { convoy < 10 } } }
+		fire_only_once = no
+		days_remove = 42
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pw_operable = yes
+						has_completed_focus = NAM_pw_naval_review
+						NAM_naval_shipyard_ready = yes
+						NAM_naval_slip_available = yes
+						NOT = { has_equipment = { convoy < 10 } }
+					}
+				}
+				custom_effect_tooltip = NAM_pw_patrol_refit_result_tt
+				hidden_effect = {
+					add_equipment_to_stockpile = { type = convoy amount = -10 }
+					set_country_flag = NAM_pw_patrol_refit_paid
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NAM_pw_operable = no
+				NAM_naval_shipyard_ready = no
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_patrol_refit_result_tt
+			hidden_effect = { NAM_pw_patrol_refit_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_patrol_refit_refund_tt
+			hidden_effect = { NAM_pw_patrol_refit_refund = yes }
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_equipment = { convoy < 40 }
+			}
+		}
+	}
+
 	NAM_escort_order = {
 		icon = generic_naval
 		allowed = { tag = NAM }
@@ -1903,8 +2155,8 @@ NAM_national_programmes = {
 				NAM_naval_shipyard_ready = yes
 			}
 			custom_trigger_tooltip = {
-				tooltip = NAM_naval_order_free_tt
-				NOT = { has_country_flag = NAM_ship_order_paid }
+				tooltip = NAM_naval_slip_free_tt
+				NAM_naval_slip_available = yes
 			}
 		}
 		cost = 0
@@ -1928,7 +2180,7 @@ NAM_national_programmes = {
 							has_completed_focus = NAM_pw_escort_fleet
 						}
 						has_tech = ADISCORD_tech_destroyer_hull_2155
-						NOT = { has_country_flag = NAM_ship_order_paid }
+						NAM_naval_slip_available = yes
 						NOT = { has_political_power < 100 }
 					}
 					add_political_power = -100
@@ -1941,9 +2193,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_country_flag = NAM_program_naval_workshops_commissioned
-						owns_state = 700
-						controls_state = 700
+						NAM_naval_workshops_supply = yes
 					}
 				}
 				custom_effect_tooltip = NAM_shipyard_third_hull_tt
@@ -1977,8 +2227,8 @@ NAM_national_programmes = {
 				NAM_naval_shipyard_ready = yes
 			}
 			custom_trigger_tooltip = {
-				tooltip = NAM_naval_order_free_tt
-				NOT = { has_country_flag = NAM_ship_order_paid }
+				tooltip = NAM_naval_slip_free_tt
+				NAM_naval_slip_available = yes
 			}
 		}
 		cost = 0
@@ -2002,7 +2252,7 @@ NAM_national_programmes = {
 							has_completed_focus = NAM_pw_strike_fleet
 						}
 						has_tech = ADISCORD_tech_submarine_hull_2155
-						NOT = { has_country_flag = NAM_ship_order_paid }
+						NAM_naval_slip_available = yes
 						NOT = { has_political_power < 100 }
 					}
 					add_political_power = -100
@@ -2015,9 +2265,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_country_flag = NAM_program_naval_workshops_commissioned
-						owns_state = 700
-						controls_state = 700
+						NAM_naval_workshops_supply = yes
 					}
 				}
 				custom_effect_tooltip = NAM_shipyard_third_hull_tt
@@ -2811,6 +3059,7 @@ NAM_national_programmes = {
 			OR = {
 				has_completed_focus = NAM_air_interceptors
 				has_completed_focus = NAM_pw_air_defence
+				NAM_air_trial_available = yes
 			}
 		}
 		available = {
@@ -2836,6 +3085,7 @@ NAM_national_programmes = {
 						OR = {
 							has_completed_focus = NAM_air_interceptors
 							has_completed_focus = NAM_pw_air_defence
+							NAM_air_trial_available = yes
 						}
 						NOT = { has_political_power < 30 }
 						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
@@ -2849,17 +3099,58 @@ NAM_national_programmes = {
 					set_temp_variable = { var = NAM_treasury_amount value = 300 }
 					NAM_spend_treasury = yes
 				}
-				add_equipment_to_stockpile = {
-					type = ADISCORD_fighter_airframe_2163
-					amount = 24
-					producer = NAM
+				if = {
+					limit = {
+						hidden_trigger = {
+							NOT = { has_completed_focus = NAM_pw_air_defence }
+							NOT = { has_completed_focus = NAM_air_interceptors }
+						}
+					}
+					custom_effect_tooltip = NAM_air_trial_spent_tt
+					hidden_effect = { set_country_flag = NAM_air_trial_used }
 				}
 				if = {
-					limit = { has_completed_focus = NAM_pw_southern_air_command }
-					add_equipment_to_stockpile = {
-						type = ADISCORD_fighter_airframe_2163
-						amount = 12
-						producer = NAM
+					limit = { hidden_trigger = { has_completed_focus = NAM_pw_air_defence } }
+					if = {
+						limit = {
+							hidden_trigger = {
+								has_completed_focus = NAM_pw_engine_workshops
+								NOT = { has_equipment = { ADISCORD_fighter_airframe_2163 < 12 } }
+							}
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_fighter_airframe_2163
+							amount = -12
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_fighter_airframe_2161
+							amount = 12
+							producer = NAM
+						}
+					}
+					NAM_air_deliver_batch = { model = ADISCORD_fighter_airframe_2161 }
+				}
+				else = { NAM_air_deliver_batch = { model = ADISCORD_fighter_airframe_2163 } }
+				if = {
+					limit = {
+						hidden_trigger = {
+							has_country_flag = NAM_air_instructor
+							has_country_flag = { flag = NAM_air_instructor value < 2 }
+						}
+					}
+					custom_effect_tooltip = NAM_air_fighter_instructor_tt
+					hidden_effect = {
+						set_country_flag = {
+							flag = NAM_air_instructor
+							value = 2
+						}
+						add_ace = {
+							name = "Ирина"
+							surname = "Седова"
+							callsign = "Чайка"
+							type = fighter_unique
+							is_female = yes
+						}
 					}
 				}
 			}
@@ -2874,6 +3165,7 @@ NAM_national_programmes = {
 			OR = {
 				has_completed_focus = NAM_air_support
 				has_completed_focus = NAM_pw_frontline_air
+				NAM_air_trial_available = yes
 			}
 		}
 		available = {
@@ -2899,6 +3191,7 @@ NAM_national_programmes = {
 						OR = {
 							has_completed_focus = NAM_air_support
 							has_completed_focus = NAM_pw_frontline_air
+							NAM_air_trial_available = yes
 						}
 						NOT = { has_political_power < 30 }
 						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
@@ -2912,17 +3205,57 @@ NAM_national_programmes = {
 					set_temp_variable = { var = NAM_treasury_amount value = 300 }
 					NAM_spend_treasury = yes
 				}
-				add_equipment_to_stockpile = {
-					type = ADISCORD_cas_airframe_2170
-					amount = 24
-					producer = NAM
+				if = {
+					limit = {
+						hidden_trigger = {
+							NOT = { has_completed_focus = NAM_pw_frontline_air }
+							NOT = { has_completed_focus = NAM_air_support }
+						}
+					}
+					custom_effect_tooltip = NAM_air_trial_spent_tt
+					hidden_effect = { set_country_flag = NAM_air_trial_used }
 				}
 				if = {
-					limit = { has_completed_focus = NAM_pw_southern_air_command }
-					add_equipment_to_stockpile = {
-						type = ADISCORD_cas_airframe_2170
-						amount = 12
-						producer = NAM
+					limit = { hidden_trigger = { has_completed_focus = NAM_pw_frontline_air } }
+					if = {
+						limit = {
+							hidden_trigger = {
+								has_completed_focus = NAM_pw_engine_workshops
+								NOT = { has_equipment = { ADISCORD_cas_airframe_2170 < 12 } }
+							}
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_cas_airframe_2170
+							amount = -12
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_attack_airframe_2163
+							amount = 12
+							producer = NAM
+						}
+					}
+					NAM_air_deliver_batch = { model = ADISCORD_attack_airframe_2163 }
+				}
+				else = { NAM_air_deliver_batch = { model = ADISCORD_cas_airframe_2170 } }
+				if = {
+					limit = {
+						hidden_trigger = {
+							has_country_flag = NAM_air_instructor
+							has_country_flag = { flag = NAM_air_instructor value < 2 }
+						}
+					}
+					custom_effect_tooltip = NAM_air_cas_instructor_tt
+					hidden_effect = {
+						set_country_flag = {
+							flag = NAM_air_instructor
+							value = 2
+						}
+						add_ace = {
+							name = "Андрей"
+							surname = "Рудин"
+							callsign = "Филин"
+							type = support_unique
+						}
 					}
 				}
 			}
@@ -3599,8 +3932,14 @@ NAM_national_programmes = {
 	NAM_mil_field_security = {
 		icon = generic_fortify_the_borders
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_field_guards }
+		visible = {
+			OR = {
+				has_completed_focus = NAM_field_guards
+				has_completed_focus = NAM_pw_staff_exercises
+			}
+		}
 		available = {
+			NOT = { has_dynamic_modifier = { modifier = NAM_mil_mobile_operation } }
 			custom_trigger_tooltip = {
 				tooltip = NAM_mil_security_operable_tt
 				NAM_mil_security_operable = yes
@@ -3628,8 +3967,14 @@ NAM_national_programmes = {
 	NAM_mil_mobile_surge = {
 		icon = generic_operation
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_mobile_columns }
+		visible = {
+			OR = {
+				has_completed_focus = NAM_mobile_columns
+				has_completed_focus = NAM_pw_staff_exercises
+			}
+		}
 		available = {
+			NOT = { has_decision = NAM_mil_field_security }
 			custom_trigger_tooltip = {
 				tooltip = NAM_mil_mobile_open_tt
 				NAM_mil_mobile_operation_open = yes
@@ -3650,6 +3995,7 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_mil_mobile_operation_open = yes
+						NOT = { has_decision = NAM_mil_field_security }
 						NOT = { has_political_power < 40 }
 						NOT = { has_fuel < 3000 }
 						NOT = { has_dynamic_modifier = { modifier = NAM_mil_mobile_operation } }
@@ -3860,14 +4206,17 @@ NAM_national_programmes = {
 	NAM_econ_insured_freighters = {
 		icon = ADISCORD_factory
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_insured_cargoes }
+		visible = {
+			OR = {
+				has_completed_focus = NAM_insured_cargoes
+				has_completed_focus = NAM_board_company_docks
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_econ_operable_tt
-				NAM_independent_programmes_operable = yes
+				tooltip = NAM_insured_freight_route_tt
+				NAM_insured_freight_route = yes
 			}
-			owns_state = 700
-			controls_state = 700
 		}
 		cost = 0
 		custom_cost_text = NAM_econ_insured_freighters_cost
@@ -3882,9 +4231,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NAM_independent_programmes_operable = yes
-						owns_state = 700
-						controls_state = 700
+						NAM_insured_freight_route = yes
 						NOT = { has_political_power < 35 }
 						check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 						NOT = { has_country_flag = NAM_econ_insured_freighters_paid }
@@ -3902,22 +4249,14 @@ NAM_national_programmes = {
 			}
 		}
 		cancel_trigger = {
-			NOT = {
-				AND = {
-					NAM_independent_programmes_operable = yes
-					owns_state = 700
-					controls_state = 700
-				}
-			}
+			NAM_insured_freight_route = no
 		}
 		remove_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
 						has_country_flag = NAM_econ_insured_freighters_paid
-						NAM_independent_programmes_operable = yes
-						owns_state = 700
-						controls_state = 700
+						NAM_insured_freight_route = yes
 					}
 				}
 				custom_effect_tooltip = NAM_econ_insured_freighters_delivered_tt
@@ -4736,25 +5075,17 @@ NAM_national_programmes = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		visible = {
-			OR = {
-				has_completed_focus = NAM_second_drilling_crew
-				has_completed_focus = NAM_pw_energy_commission
-			}
-		}
+		visible = { NAM_emergency_service_authorised = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_econ_operable_tt
 				NAM_independent_programmes_operable = yes
+				NAM_emergency_service_authorised = yes
 			}
 			FROM = {
 				custom_trigger_tooltip = {
 					tooltip = NAM_econ_emergency_service_site_tt
-					is_owned_by = NAM
-					is_controlled_by = NAM
-					has_variable = NAM_field_capacity
-					NOT = { has_state_flag = NAM_wells_scorched }
-					check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+					NAM_emergency_service_site = yes
 				}
 				custom_trigger_tooltip = {
 					tooltip = NAM_project_state_ready_tt
@@ -4780,12 +5111,9 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_independent_programmes_operable = yes
+						NAM_emergency_service_authorised = yes
 						FROM = {
-							is_owned_by = NAM
-							is_controlled_by = NAM
-							has_variable = NAM_field_capacity
-							NOT = { has_state_flag = NAM_wells_scorched }
-							check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+							NAM_emergency_service_site = yes
 						}
 						NAM_project_slot_free = yes
 						FROM = { NAM_project_state_ready = yes }
@@ -4801,9 +5129,16 @@ NAM_national_programmes = {
 				custom_effect_tooltip = NAM_econ_emergency_service_result_tt
 				if = {
 					limit = {
-						has_completed_focus = NAM_pw_energy_commission
+						hidden_trigger = {
+							has_completed_focus = NAM_pw_power_grid
+							FROM = { NOT = { has_state_flag = NAM_grid_feeder } }
+						}
 					}
-					custom_effect_tooltip = NAM_pw_grid_emergency_bonus_tt
+					custom_effect_tooltip = NAM_grid_connect_tt
+				}
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_repair_depots } }
+					custom_effect_tooltip = NAM_repair_depots_service_tt
 				}
 				hidden_effect = {
 					FROM = {
@@ -4818,12 +5153,9 @@ NAM_national_programmes = {
 			NOT = {
 				AND = {
 					NAM_independent_programmes_operable = yes
+					NAM_emergency_service_authorised = yes
 					FROM = {
-						is_owned_by = NAM
-						is_controlled_by = NAM
-						has_variable = NAM_field_capacity
-						NOT = { has_state_flag = NAM_wells_scorched }
-						check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+						NAM_emergency_service_site = yes
 					}
 				}
 			}
@@ -4833,12 +5165,9 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_independent_programmes_operable = yes
+						NAM_emergency_service_authorised = yes
 						FROM = {
-							is_owned_by = NAM
-							is_controlled_by = NAM
-							has_variable = NAM_field_capacity
-							NOT = { has_state_flag = NAM_wells_scorched }
-							check_variable = { var = NAM_field_condition value = 100 compare = less_than }
+							NAM_emergency_service_site = yes
 						}
 						FROM = {
 							has_state_flag = NAM_project_in_progress
@@ -4847,16 +5176,22 @@ NAM_national_programmes = {
 						}
 					}
 				}
-				custom_effect_tooltip = NAM_econ_emergency_service_delivered_tt
-				if = {
-					limit = {
-						has_completed_focus = NAM_pw_energy_commission
-					}
-					custom_effect_tooltip = NAM_pw_grid_emergency_bonus_tt
-				}
 				hidden_effect = {
 					FROM = {
 						NAM_project_close = yes
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_repair_depots } }
+							clr_state_flag = NAM_wells_scorched
+							if = {
+								limit = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+								remove_dynamic_modifier = { modifier = NAM_scorched_wells_modifier }
+							}
+							set_state_flag = NAM_field_spare_pump
+						}
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_pw_power_grid } }
+							set_state_flag = NAM_grid_feeder
+						}
 						add_to_variable = { var = NAM_field_condition value = 50 }
 						if = {
 							limit = {
@@ -4908,7 +5243,18 @@ NAM_national_programmes = {
 				}
 			}
 		}
-		ai_will_do = { base = 6 }
+		ai_will_do = {
+			base = 6
+			modifier = {
+				factor = 0
+				has_war = no
+				FROM = {
+					check_variable = { var = NAM_field_condition value = 100 compare = greater_than_or_equals }
+					NOT = { has_state_flag = NAM_wells_scorched }
+					NOT = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+				}
+			}
+		}
 	}
 
 	NAM_econ_export_dispatch = {
@@ -6226,7 +6572,7 @@ NAM_national_programmes = {
 	NAM_export_fuel = {
 		icon = generic_industry
 		visible = {
-			has_completed_focus = NAM_export_quays
+			NAM_exchange_sale_authorized = yes
 			owns_state = 700
 			controls_state = 700
 		}
@@ -6247,6 +6593,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						NAM_exchange_sale_authorized = yes
 						NAM_country_operable = yes
 						owns_state = 700
 						controls_state = 700
@@ -6256,15 +6603,182 @@ NAM_national_programmes = {
 				}
 				add_political_power = -25
 				add_fuel = -60000
-				custom_effect_tooltip = NAM_econ_export_sale_tt
-				hidden_effect = {
-					set_temp_variable = { var = NAM_treasury_amount value = 400 }
-					NAM_add_treasury = yes
+				if = {
+					limit = {
+						hidden_trigger = {
+							has_completed_focus = NAM_oil_exchange
+							has_completed_focus = NAM_export_consortium
+						}
+					}
+					custom_effect_tooltip = NAM_exchange_consortium_sale_tt
+					hidden_effect = { set_temp_variable = { var = NAM_treasury_amount value = 500 } }
+				}
+				else = {
+					custom_effect_tooltip = NAM_econ_export_sale_tt
+					hidden_effect = { set_temp_variable = { var = NAM_treasury_amount value = 400 } }
+				}
+				NAM_settle_harbour_sale = yes
+				if = {
+					limit = { hidden_trigger = { NAM_exchange_can_write_receipt = yes } }
+					custom_effect_tooltip = NAM_exchange_receipt_issued_tt
+					hidden_effect = { add_to_variable = { var = NAM_exchange_receipts value = 1 } }
 				}
 			}
 		}
 		ai_will_do = {
 			base = 5
+			modifier = {
+				factor = 0
+				has_war = yes
+				has_fuel < 120000
+			}
+		}
+	}
+
+	NAM_exchange_chassis = {
+		icon = ADISCORD_factory
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_domestic_designs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_chassis_works_site_tt
+				NAM_chassis_works_operable = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_chassis_exchange_cost
+		custom_cost_trigger = {
+			NOT = { has_equipment = { motorized_equipment < 100 } }
+			NOT = { has_equipment = { support_equipment < 45 } }
+		}
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_chassis_works_operable = yes
+						NOT = { has_equipment = { motorized_equipment < 100 } }
+						NOT = { has_equipment = { support_equipment < 45 } }
+					}
+				}
+				hidden_effect = {
+					add_equipment_to_stockpile = {
+						type = motorized_equipment
+						amount = -100
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -45
+					}
+				}
+				NAM_order_grant_motor_technology = yes
+				add_equipment_to_stockpile = {
+					type = ADISCORD_armored_carrier_2163
+					amount = 75
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				OR = {
+					has_equipment = { motorized_equipment < 300 }
+					has_equipment = { support_equipment < 150 }
+				}
+			}
+		}
+	}
+
+	NAM_issue_harbour_bonds = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = { NAM_prag_bonds_authorised = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			owns_state = 700
+			controls_state = 700
+			custom_trigger_tooltip = {
+				tooltip = NAM_bond_certified_tt
+				has_country_flag = NAM_certified_export
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_bond_subscription_tt
+				NAM_bond_credit_available = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { NAM_bond_issue_ready = yes } }
+				custom_effect_tooltip = NAM_bond_issue_tt
+				hidden_effect = {
+					clr_country_flag = NAM_certified_export
+					add_to_variable = { var = NAM_bond_balance value = 660 }
+					set_temp_variable = { var = NAM_treasury_amount value = 600 }
+					NAM_add_treasury = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	NAM_exchange_redeem = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_oil_exchange
+			check_variable = { NAM_exchange_receipts > 0 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_exchange_storage_tt
+				NAM_exchange_can_receive_lot = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_exchange_redemption_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 550 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_oil_exchange
+						check_variable = { NAM_exchange_receipts > 0 }
+						NAM_exchange_can_receive_lot = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 550 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 550 }
+					NAM_spend_treasury = yes
+					subtract_from_variable = { var = NAM_exchange_receipts value = 1 }
+				}
+				add_fuel = 60000
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				has_war = yes
+				has_fuel < 30000
+			}
 		}
 	}
 
@@ -6543,14 +7057,66 @@ NAM_national_programmes = {
 		}
 	}
 
+	NAM_hire_relief_shift = {
+		icon = generic_construction
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_pw_labour_code }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_labour_shift_cost
+		custom_cost_trigger = { NAM_labour_shift_affordable = yes }
+		days_remove = 90
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pw_operable = yes
+						has_completed_focus = NAM_pw_labour_code
+						NOT = { has_variable = NAM_labour_shift_workers }
+						NAM_labour_shift_affordable = yes
+					}
+				}
+				custom_effect_tooltip = NAM_labour_shift_result_tt
+				hidden_effect = {
+					if = {
+						limit = { NAM_labour_shift_can_draw_fund = yes }
+						clr_country_flag = NAM_crisis_fund
+					}
+					else = {
+						set_temp_variable = { var = NAM_treasury_amount value = 300 }
+						NAM_spend_treasury = yes
+					}
+					add_manpower = -600
+					set_variable = { var = NAM_labour_shift_workers value = 600 }
+				}
+			}
+		}
+		cancel_trigger = { NAM_pw_operable = no }
+		cancel_effect = { hidden_effect = { NAM_labour_shift_release = yes } }
+		remove_effect = { hidden_effect = { NAM_labour_shift_release = yes } }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				OR = {
+					NAM_project_slot_free = yes
+					check_variable = { NAM_projects_in_progress >= 3 }
+				}
+			}
+		}
+	}
+
 	NAM_veteran_housing = {
 		icon = generic_industry
 		allowed = { tag = NAM }
 		visible = {
-			OR = {
-				has_completed_focus = NAM_civil_dividend
-				has_completed_focus = NAM_south_heritage
-			}
+			NAM_veteran_housing_authorised = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -6575,10 +7141,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						OR = {
-							has_completed_focus = NAM_civil_dividend
-							has_completed_focus = NAM_south_heritage
-						}
+						NAM_veteran_housing_authorised = yes
 						NAM_veteran_housing_ready = yes
 						NOT = { has_country_flag = NAM_pw_civil_busy }
 						NOT = { has_country_flag = NAM_veteran_housing_paid }
@@ -6592,10 +7155,18 @@ NAM_national_programmes = {
 					NAM_spend_treasury = yes
 				}
 				hidden_effect = {
-					set_country_flag = NAM_veteran_housing_paid
+					if = {
+						limit = { NAM_housing_series_available = yes }
+						set_country_flag = { flag = NAM_veteran_housing_paid value = 2 }
+					}
+					else = { set_country_flag = NAM_veteran_housing_paid }
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_veteran_housing_result_tt
+				if = {
+					limit = { hidden_trigger = { NAM_housing_series_available = yes } }
+					custom_effect_tooltip = NAM_veteran_housing_series_tt
+				}
 			}
 		}
 		cancel_trigger = { NAM_veteran_housing_ready = no }
@@ -7071,6 +7642,10 @@ NAM_national_programmes = {
 					NAM_spend_treasury = yes
 					FROM = {
 						set_variable = { var = NAM_project_deposit value = 150 }
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_pw_labour_inspection } }
+							set_variable = { var = NAM_project_pp_deposit value = 25 }
+						}
 						NAM_project_begin = yes
 					}
 				}
@@ -7195,6 +7770,10 @@ NAM_national_programmes = {
 					NAM_spend_treasury = yes
 					FROM = {
 						set_variable = { var = NAM_project_deposit value = 300 }
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_pw_labour_inspection } }
+							set_variable = { var = NAM_project_pp_deposit value = 40 }
+						}
 						NAM_project_begin = yes
 					}
 				}
@@ -7215,7 +7794,15 @@ NAM_national_programmes = {
 		cancel_effect = {
 			custom_effect_tooltip = NAM_project_refund_tt
 			hidden_effect = {
-				FROM = { NAM_project_release = yes }
+				FROM = {
+					if = {
+						limit = {
+							has_state_flag = NAM_project_in_progress
+							check_variable = { var = NAM_project_deposit value = 300 compare = equals }
+						}
+						NAM_project_release = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -7305,6 +7892,10 @@ NAM_national_programmes = {
 					NAM_spend_treasury = yes
 					FROM = {
 						set_variable = { var = NAM_project_deposit value = 350 }
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_pw_labour_inspection } }
+							set_variable = { var = NAM_project_pp_deposit value = 35 }
+						}
 						NAM_project_begin = yes
 					}
 				}
@@ -7319,7 +7910,15 @@ NAM_national_programmes = {
 		cancel_effect = {
 			custom_effect_tooltip = NAM_project_refund_tt
 			hidden_effect = {
-				FROM = { NAM_project_release = yes }
+				FROM = {
+					if = {
+						limit = {
+							has_state_flag = NAM_project_in_progress
+							check_variable = { var = NAM_project_deposit value = 350 compare = equals }
+						}
+						NAM_project_release = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -7388,6 +7987,10 @@ NAM_national_programmes = {
 					NAM_spend_treasury = yes
 					FROM = {
 						set_variable = { var = NAM_project_deposit value = 250 }
+						if = {
+							limit = { NAM = { has_completed_focus = NAM_pw_labour_inspection } }
+							set_variable = { var = NAM_project_pp_deposit value = 30 }
+						}
 						NAM_project_begin = yes
 					}
 				}
@@ -7402,7 +8005,15 @@ NAM_national_programmes = {
 		cancel_effect = {
 			custom_effect_tooltip = NAM_project_refund_tt
 			hidden_effect = {
-				FROM = { NAM_project_release = yes }
+				FROM = {
+					if = {
+						limit = {
+							has_state_flag = NAM_project_in_progress
+							check_variable = { var = NAM_project_deposit value = 250 compare = equals }
+						}
+						NAM_project_release = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -7414,7 +8025,7 @@ NAM_national_programmes = {
 	NAM_pw_veteran_course = {
 		icon = ADISCORD_arms_supply
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_veterans_return }
+		visible = { NAM_pw_veteran_course_authorised = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_veteran_course_ready_tt
@@ -7438,7 +8049,7 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_completed_focus = NAM_veterans_return
+						NAM_pw_veteran_course_authorised = yes
 						NAM_pw_veteran_course_ready = yes
 						NOT = { has_country_flag = NAM_pw_military_busy }
 						NOT = { has_country_flag = NAM_pw_veteran_course_paid }
@@ -7663,6 +8274,223 @@ NAM_national_programmes = {
 		ai_will_do = { base = 8 }
 	}
 
+	NAM_convert_wartime_plant = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_pw_demobilisation_board
+			FROM = {
+				NOT = { has_state_flag = NAM_demobilised_plant }
+				OR = {
+					arms_factory > 0
+					has_state_flag = NAM_plant_conversion_underway
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_plant_conversion_peace_tt
+				NAM_plant_conversion_authorised = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_project_slot_free_tt
+				NAM_project_slot_free = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_project_state_ready_tt
+					NAM_project_state_ready = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_plant_conversion_site_tt
+					NAM_plant_conversion_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_4000_workers
+		custom_cost_trigger = { NOT = { has_manpower < 4000 } }
+		days_remove = 42
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_plant_conversion_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_plant_conversion_authorised = yes
+						NAM_project_slot_free = yes
+						NOT = { has_manpower < 4000 }
+						FROM = {
+							NAM_project_state_ready = yes
+							NAM_plant_conversion_site = yes
+						}
+					}
+					add_manpower = -4000
+					FROM = {
+						set_state_flag = NAM_plant_conversion_underway
+						NAM_project_begin = yes
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_plant_conversion_lost_tt
+				OR = {
+					NAM_plant_conversion_authorised = no
+					FROM = { NAM_plant_conversion_site = no }
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_plant_conversion_refund_tt
+			hidden_effect = { FROM = { NAM_plant_conversion_cancel = yes } }
+		}
+		remove_effect = { hidden_effect = { FROM = { NAM_plant_conversion_settle = yes } } }
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				num_of_military_factories < 12
+			}
+		}
+	}
+
+	NAM_pw_municipal_workshop = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_municipal_land
+			NAM_pw_operable = yes
+			FROM = { NOT = { has_state_flag = NAM_municipal_workshop_chartered } }
+		}
+		available = {
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
+			custom_trigger_tooltip = {
+				tooltip = NAM_project_slot_free_tt
+				NAM_project_slot_free = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_municipal_workshop_site_tt
+					NAM_municipal_workshop_site = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_project_state_ready_tt
+					NAM_project_state_ready = yes
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_remove = 49
+		modifier = { civilian_factory_use = 3 }
+		complete_effect = {
+			custom_effect_tooltip = NAM_municipal_workshop_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_completed_focus = NAM_municipal_land
+						NAM_pw_operable = yes
+						NAM_project_slot_free = yes
+						FROM = {
+							NAM_municipal_workshop_site = yes
+							NAM_project_state_ready = yes
+						}
+					}
+					FROM = {
+						set_state_flag = NAM_municipal_workshop_underway
+						NAM_project_begin = yes
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NAM_pw_operable = no
+				FROM = { NAM_municipal_workshop_site = no }
+			}
+		}
+		cancel_effect = { hidden_effect = { FROM = { NAM_municipal_workshop_close = yes } } }
+		remove_effect = {
+			custom_effect_tooltip = NAM_municipal_workshop_result_tt
+			hidden_effect = {
+				FROM = {
+					if = {
+						limit = {
+							has_state_flag = NAM_municipal_workshop_underway
+							has_state_flag = NAM_project_in_progress
+							NAM_municipal_workshop_site = yes
+							NAM = { NAM_pw_operable = yes }
+						}
+						add_extra_state_shared_building_slots = 2
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+						set_state_flag = NAM_municipal_workshop_chartered
+					}
+					NAM_municipal_workshop_close = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_pw_tenant_petition = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_tenant_councils
+			NAM_pw_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_tenant_petition_open_tt
+				NAM_tenant_petition_open = yes
+			}
+			FROM = { is_controlled_by = ROOT }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_tenant_petition_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_tenant_petition_open = yes
+						FROM = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+					}
+					FROM = { save_global_event_target_as = NAM_tenant_petition_site }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 3
+				FROM = { infrastructure < 5 }
+			}
+		}
+	}
+
 	NAM_pw_district_congress = {
 		icon = generic_industry
 		allowed = { tag = NAM }
@@ -7708,11 +8536,31 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_pw_district_congress_result_tt
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_tenant_councils } }
+					custom_effect_tooltip = NAM_tenant_congress_agenda_tt
+				}
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_workers_inspection } }
+					custom_effect_tooltip = NAM_workers_inspection_congress_tt
+				}
 			}
 		}
 		cancel_trigger = { NAM_pw_district_congress_ready = no }
 		remove_effect = {
 			custom_effect_tooltip = NAM_pw_district_congress_result_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_event_target = NAM_tenant_petition_site
+					}
+				}
+				custom_effect_tooltip = NAM_tenant_petition_recipient_tt
+			}
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_workers_inspection } }
+				custom_effect_tooltip = NAM_workers_inspection_congress_tt
+			}
 			hidden_effect = { NAM_pw_district_congress_settle = yes }
 		}
 		cancel_effect = {
@@ -7724,6 +8572,11 @@ NAM_national_programmes = {
 			modifier = {
 				factor = 0
 				check_variable = { var = NAM_grp_dist_support value = 80 compare = greater_than_or_equals }
+				NOT = { has_completed_focus = NAM_tenant_councils }
+				OR = {
+					NOT = { has_completed_focus = NAM_workers_inspection }
+					NOT = { any_owned_state = { NAM_workers_inspection_field = yes } }
+				}
 			}
 		}
 	}
@@ -7773,6 +8626,14 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_pw_district_schools_result_tt
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_schools } }
+					custom_effect_tooltip = NAM_khazar_school_exchange_tt
+				}
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_regional_university } }
+					custom_effect_tooltip = NAM_regional_medical_course_tt
+				}
 			}
 		}
 		cancel_trigger = { NAM_pw_district_schools_ready = no }
@@ -7782,6 +8643,14 @@ NAM_national_programmes = {
 				custom_effect_tooltip = NAM_registered_volunteers_tt
 			}
 			custom_effect_tooltip = NAM_pw_district_schools_result_tt
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_schools } }
+				custom_effect_tooltip = NAM_khazar_school_exchange_tt
+			}
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_regional_university } }
+				custom_effect_tooltip = NAM_regional_medical_course_tt
+			}
 			hidden_effect = { NAM_pw_district_schools_settle = yes }
 		}
 		cancel_effect = {
@@ -8255,13 +9124,15 @@ NAM_national_programmes = {
 		icon = generic_construction
 		allowed = { tag = NAM }
 		state_target = yes
-		targets = { 231 }
+		targets = { 231 690 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			has_completed_focus = NAM_island_accounts
-			FROM = { NOT = { has_state_flag = NAM_steel_mine_expanded } }
+			FROM = {
+				NAM_steel_survey_authorised = yes
+				NOT = { has_state_flag = NAM_steel_mine_expanded }
+			}
 		}
 		available = {
 			FROM = {
@@ -8291,7 +9162,6 @@ NAM_national_programmes = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_completed_focus = NAM_island_accounts
 						FROM = {
 							NAM_steel_site = yes
 							NAM_project_state_ready = yes
@@ -8376,6 +9246,139 @@ NAM_national_programmes = {
 			hidden_effect = { NAM_open_fuel_release = yes }
 		}
 		ai_will_do = { base = 20 }
+	}
+
+	NAM_hum_finance_island_cooperative = {
+		icon = ADISCORD_construction
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 225 226 227 228 229 230 231 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = {
+			has_completed_focus = NAM_hum_exile_parliament
+			NAM_hum_government_operable = yes
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_hum_cooperative_site_tt
+					NAM_hum_cooperative_site = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_250_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_hum_exile_parliament
+						NAM_hum_government_operable = yes
+						FROM = { NAM_hum_cooperative_site = yes }
+						NOT = { has_political_power < 35 }
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+				}
+				FROM = {
+					if = {
+						limit = {
+							NOT = { free_building_slots = { building = industrial_complex size > 0 include_locked = no } }
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+				custom_effect_tooltip = NAM_hum_cooperative_influence_tt
+				hidden_effect = {
+					add_political_power = -35
+					set_temp_variable = { var = NAM_treasury_amount value = 250 }
+					NAM_spend_treasury = yes
+					subtract_from_variable = { var = NAM_corp_influence value = 4 }
+					NAM_corp_influence_clamp = yes
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_hum_refit_landing_transports = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_hum_salvation_cabinet
+			NAM_hum_government_operable = yes
+			NAM_exile_return_programme_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_refit_island_tt
+				NAM_overseas_service_operable = yes
+			}
+			NOT = { num_of_civilian_factories_available_for_projects < 2 }
+		}
+		cost = 0
+		days_remove = 35
+		days_re_enable = 35
+		fire_only_once = no
+		modifier = { civilian_factory_use = 2 }
+		complete_effect = {
+			custom_effect_tooltip = NAM_hum_refit_result_tt
+			hidden_effect = {
+				set_country_flag = NAM_hum_transport_refit_underway
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_refit_cancel_tt
+				NAM_overseas_service_operable = no
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				clr_country_flag = NAM_hum_transport_refit_underway
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = NAM_hum_transport_refit_underway
+						NAM_overseas_service_operable = yes
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = convoy_1
+					amount = 12
+					producer = NAM
+				}
+				if = {
+					limit = { hidden_trigger = { NAM_exile_return_programme_open = yes } }
+					custom_effect_tooltip = NAM_hum_refit_drill_tt
+					hidden_effect = {
+						add_to_variable = { var = NAM_revenge_readiness value = 8 }
+						NAM_revenge_readiness_clamp = yes
+					}
+				}
+			}
+			hidden_effect = {
+				clr_country_flag = NAM_hum_transport_refit_underway
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 
 	# Island shipping, public works and concessions share the national programmes panel.
@@ -8576,7 +9579,7 @@ NAM_national_programmes = {
 		icon = generic_naval
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_harbour_service
+			NAM_convoy_service_authorised = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8598,7 +9601,7 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_overseas_service_operable = yes
-						has_completed_focus = NAM_harbour_service
+						NAM_convoy_service_authorised = yes
 						NOT = { has_political_power < 25 }
 						check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 					}
@@ -8638,6 +9641,199 @@ NAM_national_programmes = {
 		ai_will_do = {
 			base = 5
 		}
+	}
+
+	NAM_return_charter_freighters = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_defeat_hidden_reserve
+			NAM_return_supply_open = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_return_freighter_cost
+		custom_cost_trigger = { NOT = { has_fuel < 30000 } }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_return_supply_open = yes
+						has_completed_focus = NAM_defeat_hidden_reserve
+						ADISCORD_has_operational_naval_base = yes
+						NOT = { has_fuel < 30000 }
+					}
+				}
+				hidden_effect = { add_fuel = -30000 }
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_concealed_reserve } }
+					add_equipment_to_stockpile = {
+						type = convoy
+						amount = 18
+						producer = NAM
+					}
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = convoy
+						amount = 12
+						producer = NAM
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				OR = {
+					has_fuel < 60000
+					NOT = { has_equipment = { convoy < 40 } }
+				}
+			}
+		}
+	}
+
+	NAM_return_commission_yard = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 700 225 226 227 228 229 230 231 }
+		target_trigger = { always = yes }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = {
+			NAM_return_supply_open = yes
+			has_country_flag = NAM_return_yard_warrant
+			FROM = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_return_yard_site_tt
+				FROM = { NAM_return_yard_site = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_return_yard_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_return_supply_open = yes
+						has_country_flag = NAM_return_yard_warrant
+						FROM = { NAM_return_yard_site = yes }
+						check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					clr_country_flag = NAM_return_yard_warrant
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_spend_treasury = yes
+				}
+				FROM = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 100
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	NAM_cabinet_install_machine_tools = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 700 228 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = {
+			has_completed_focus = NAM_defeat_rump_cabinet
+			OR = {
+				has_country_flag = NAM_cabinet_machine_tools_in_store
+				FROM = { has_state_flag = NAM_cabinet_installing_tools }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_cabinet_tool_site_tt
+					NAM_cabinet_tool_site = yes
+					NAM_project_state_ready = yes
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_project_slot_free_tt
+				NAM_project_slot_free = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_25_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		days_remove = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_cabinet_install_machine_tools_unlock_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_flag = NAM_cabinet_machine_tools_in_store
+						FROM = {
+							NAM_cabinet_tool_site = yes
+							NAM_project_state_ready = yes
+						}
+						NAM_project_slot_free = yes
+						NOT = { has_political_power < 25 }
+						check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+					}
+					clr_country_flag = NAM_cabinet_machine_tools_in_store
+					add_political_power = -25
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					NAM_spend_treasury = yes
+					FROM = {
+						set_variable = { var = NAM_project_deposit value = 500 }
+						set_variable = { var = NAM_project_pp_deposit value = 25 }
+						set_state_flag = NAM_cabinet_installing_tools
+						NAM_project_begin = yes
+					}
+				}
+			}
+		}
+		cancel_trigger = { FROM = { NAM_cabinet_tool_site = no } }
+		cancel_effect = {
+			custom_effect_tooltip = NAM_cabinet_tools_refund_tt
+			hidden_effect = { FROM = { NAM_cabinet_return_tools = yes } }
+		}
+		remove_effect = {
+			hidden_effect = { FROM = { NAM_cabinet_install_tools = yes } }
+		}
+		ai_will_do = { base = 12 }
 	}
 
 	NAM_island_concession_231 = {
@@ -8834,6 +10030,7 @@ NAM_national_programmes = {
 			OR = {
 				has_completed_focus = NAM_regional_trusts
 				has_completed_focus = NAM_pw_state_chamber
+				has_completed_focus = NAM_svetlogorsk_settlement
 			}
 		}
 		available = {
@@ -8862,6 +10059,7 @@ NAM_national_programmes = {
 						OR = {
 							has_completed_focus = NAM_regional_trusts
 							has_completed_focus = NAM_pw_state_chamber
+							has_completed_focus = NAM_svetlogorsk_settlement
 						}
 						NAM_pw_regional_contracts_ready = yes
 						NOT = { has_country_flag = NAM_pw_civil_busy }
@@ -8878,6 +10076,10 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_civil_busy
 				}
 				custom_effect_tooltip = NAM_pw_regional_contracts_result_tt
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_svetlogorsk_settlement } }
+					custom_effect_tooltip = NAM_svetlogorsk_trust_works_tt
+				}
 			}
 		}
 		cancel_trigger = { NAM_pw_regional_contracts_ready = no }
@@ -8899,6 +10101,10 @@ NAM_national_programmes = {
 				custom_effect_tooltip = NAM_standards_trust_contract_tt
 			}
 			custom_effect_tooltip = NAM_pw_regional_contracts_result_tt
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_svetlogorsk_settlement } }
+				custom_effect_tooltip = NAM_svetlogorsk_trust_works_tt
+			}
 			hidden_effect = { NAM_pw_regional_contracts_settle = yes }
 		}
 		cancel_effect = {
@@ -8906,6 +10112,60 @@ NAM_national_programmes = {
 			hidden_effect = { NAM_pw_regional_contracts_refund = yes }
 		}
 		ai_will_do = { base = 8 }
+	}
+
+	NAM_house_returnees = {
+		icon = ADISCORD_construction
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 701 720 721 722 723 727 }
+		target_trigger = { always = yes }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = {
+			has_completed_focus = NAM_returnee_offices
+			FROM = {
+				is_owned_by = NAM
+				NAM_returnee_region = yes
+				NOT = { has_variable = NAM_returnee_settlement }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_returnee_balance_tt
+				check_variable = { var = NAM_returnee_register value = 2000 compare = greater_than_or_equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_returnee_site_tt
+				NAM_pw_operable = yes
+				FROM = { NAM_returnee_site = yes }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_returnee_offices
+						NAM_pw_operable = yes
+						check_variable = { var = NAM_returnee_register value = 2000 compare = greater_than_or_equals }
+						FROM = { NAM_returnee_site = yes }
+					}
+				}
+				custom_effect_tooltip = NAM_returnee_placement_tt
+				hidden_effect = {
+					subtract_from_variable = { var = NAM_returnee_register value = 2000 }
+					FROM = {
+						add_manpower = 2000
+						set_variable = { var = NAM_returnee_settlement value = 1 }
+						NAM_returnee_deliver_grant = yes
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
 	}
 
 	NAM_pw_public_utilities = {
@@ -9139,10 +10399,145 @@ NAM_national_programmes = {
 		ai_will_do = { base = 8 }
 	}
 
+	NAM_prag_collect_award = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_commercial_courts
+			NAM_prag_warrant_free = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_prag_delivery_port_tt
+				NAM_prag_delivery_port = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_prag_warrant_cost
+		custom_cost_trigger = { NAM_prag_warrant_free = yes }
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_commercial_courts
+						NAM_prag_delivery_port = yes
+						NAM_prag_warrant_free = yes
+					}
+				}
+				custom_effect_tooltip = NAM_prag_collect_award_unlock_tt
+				hidden_effect = {
+					subtract_from_variable = { var = NAM_prag_warrants value = 1 }
+					add_to_variable = { var = NAM_open_fuel_reserve value = 60000 }
+					NAM_open_fuel_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				NOT = { has_fuel < 30000 }
+			}
+		}
+	}
+
+	NAM_prag_municipal_delivery = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_prag_ending_republic
+			NAM_prag_warrant_free = yes
+			NOT = { has_country_flag = NAM_crisis_fund }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_prag_delivery_port_tt
+				NAM_prag_delivery_port = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_prag_warrant_cost
+		custom_cost_trigger = { NAM_prag_warrant_free = yes }
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_prag_ending_republic
+						NAM_prag_delivery_port = yes
+						NAM_prag_warrant_free = yes
+						NOT = { has_country_flag = NAM_crisis_fund }
+					}
+				}
+				custom_effect_tooltip = NAM_prag_municipal_delivery_unlock_tt
+				hidden_effect = {
+					subtract_from_variable = { var = NAM_prag_warrants value = 1 }
+					set_country_flag = NAM_crisis_fund
+					add_to_variable = { var = NAM_open_fuel_reserve value = 40000 }
+					NAM_open_fuel_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 8
+		}
+	}
+
+	NAM_prag_redeem_debentures = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_prag_ending_directorate
+			NAM_prag_warrant_free = yes
+			check_variable = { NAM_bond_balance > 0 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_prag_delivery_port_tt
+				NAM_prag_delivery_port = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_prag_warrant_cost
+		custom_cost_trigger = { NAM_prag_warrant_free = yes }
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_prag_ending_directorate
+						NAM_prag_delivery_port = yes
+						NAM_prag_warrant_free = yes
+						check_variable = { NAM_bond_balance > 0 }
+					}
+				}
+				custom_effect_tooltip = NAM_prag_redeem_debentures_unlock_tt
+				hidden_effect = {
+					subtract_from_variable = { var = NAM_prag_warrants value = 1 }
+					set_temp_variable = { var = NAM_bond_payment value = NAM_bond_balance }
+					clamp_temp_variable = { var = NAM_bond_payment min = 0 max = 600 }
+					subtract_from_variable = { var = NAM_bond_balance value = NAM_bond_payment }
+					set_temp_variable = { var = NAM_bank_oil value = 600 }
+					subtract_from_temp_variable = { var = NAM_bank_oil value = NAM_bond_payment }
+					multiply_temp_variable = { var = NAM_bank_oil value = 100 }
+					add_to_variable = { var = NAM_open_fuel_reserve value = NAM_bank_oil }
+					NAM_open_fuel_release = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 9
+		}
+	}
+
 	NAM_pw_contract_arbitration = {
 		icon = generic_industry
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_commercial_courts }
+		visible = {
+			has_completed_focus = NAM_commercial_courts
+			OR = {
+				NAM_prag_court_can_register = yes
+				has_country_flag = NAM_pw_contract_arbitration_paid
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_contract_arbitration_ready_tt
@@ -9168,6 +10563,7 @@ NAM_national_programmes = {
 					hidden_trigger = {
 						has_completed_focus = NAM_commercial_courts
 						NAM_pw_contract_arbitration_ready = yes
+						NAM_prag_court_can_register = yes
 						NOT = { has_country_flag = NAM_pw_civil_busy }
 						NOT = { has_country_flag = NAM_pw_contract_arbitration_paid }
 						NOT = { has_political_power < 35 }
@@ -9181,7 +10577,6 @@ NAM_national_programmes = {
 					set_country_flag = NAM_pw_contract_arbitration_paid
 					set_country_flag = NAM_pw_civil_busy
 				}
-				custom_effect_tooltip = NAM_pw_contract_arbitration_result_tt
 			}
 		}
 		cancel_trigger = { NAM_pw_contract_arbitration_ready = no }
@@ -9276,7 +10671,7 @@ NAM_national_programmes = {
 		custom_cost_text = NAM_pw_barter_charter_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 25 }
-			NOT = { has_fuel < 60000 }
+			NAM_prag_charter_cargo_available = yes
 		}
 		fire_only_once = no
 		days_remove = 42
@@ -9289,13 +10684,16 @@ NAM_national_programmes = {
 						NAM_pw_barter_charter_ready = yes
 						NAM_pw_barter_charter_slot_free = yes
 						NOT = { has_political_power < 25 }
-						NOT = { has_fuel < 60000 }
+						NAM_prag_charter_cargo_available = yes
 					}
 				}
-				custom_effect_tooltip = NAM_pw_barter_charter_result_tt
 				hidden_effect = {
 					add_political_power = -25
-					add_fuel = -60000
+					if = {
+						limit = { NAM_prag_charter_uses_warrant = yes }
+						set_country_flag = NAM_prag_warrant_pledged
+					}
+					else = { add_fuel = -60000 }
 					set_country_flag = NAM_pw_barter_charter_paid
 					if = {
 						limit = {
@@ -9602,6 +11000,247 @@ NAM_national_programmes = {
 			hidden_effect = { NAM_war_refugee_registration_refund = yes }
 		}
 		ai_will_do = { base = 8 }
+	}
+
+	NAM_pw_district_allotment = {
+		icon = ADISCORD_treasury
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 701 720 721 722 723 727 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			OR = {
+				has_completed_focus = NAM_civil_service_exam
+				has_completed_focus = NAM_appointed_prefects
+			}
+			FROM = {
+				is_owned_by = NAM
+				NOT = { has_dynamic_modifier = { modifier = NAM_border_autonomous_district } }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_district_audit_ready_tt
+				NAM_district_audit_ready = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_pw_district_allotment_site_tt
+					NAM_pw_district_allotment_site = yes
+					NOT = { has_variable = NAM_pw_allotment_authority }
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_district_allotment_queue_tt
+				OR = {
+					has_completed_focus = NAM_reconstruction_statute
+					NOT = { has_country_flag = NAM_pw_civil_busy }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_district_audit_cost
+		custom_cost_trigger = { NOT = { has_political_power < 25 } }
+		fire_only_once = no
+		days_remove = 28
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_political_power < 25 }
+						NAM_district_audit_ready = yes
+						FROM = {
+							NAM_pw_district_allotment_site = yes
+							NOT = { has_variable = NAM_pw_allotment_authority }
+						}
+						OR = {
+							has_completed_focus = NAM_reconstruction_statute
+							NOT = { has_country_flag = NAM_pw_civil_busy }
+						}
+					}
+				}
+				add_political_power = -25
+				hidden_effect = {
+					if = {
+						limit = { has_completed_focus = NAM_reconstruction_statute }
+						FROM = { set_variable = { var = NAM_pw_allotment_authority value = 2 } }
+					}
+					else = {
+						FROM = { set_variable = { var = NAM_pw_allotment_authority value = 1 } }
+						set_country_flag = NAM_pw_civil_busy
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_civil_service_exam } }
+					custom_effect_tooltip = NAM_pw_exam_allotment_tt
+					if = {
+						limit = { hidden_trigger = { has_completed_focus = NAM_district_inspectorate } }
+						custom_effect_tooltip = NAM_pw_inspect_road_tt
+					}
+				}
+				else = {
+					custom_effect_tooltip = NAM_pw_prefect_allotment_tt
+					if = {
+						limit = { hidden_trigger = { has_completed_focus = NAM_district_inspectorate } }
+						custom_effect_tooltip = NAM_pw_inspect_fleet_tt
+					}
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NAM_district_audit_ready = no
+				FROM = { NAM_pw_district_allotment_site = no }
+			}
+		}
+		remove_effect = {
+			FROM = { NAM_pw_district_allotment_settle = yes }
+		}
+		cancel_effect = {
+			FROM = { NAM_pw_district_allotment_refund = yes }
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	NAM_pw_register_district_titles = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 701 720 721 722 723 727 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_pw_provincial_records
+			FROM = {
+				is_owned_by = NAM
+				NOT = { has_dynamic_modifier = { modifier = NAM_border_autonomous_district } }
+				NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_pw_central_civil_district_tt
+					NAM_pw_central_civil_district = yes
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				if = {
+					limit = {
+						hidden_trigger = {
+							NAM = { has_completed_focus = NAM_pw_provincial_records }
+							NAM_pw_central_civil_district = yes
+							NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+						}
+					}
+					add_dynamic_modifier = { modifier = NAM_pw_district_title_books }
+					if = {
+						limit = {
+							NAM_border_integration_site = yes
+							has_resistance = yes
+						}
+						add_compliance = 5
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	NAM_pw_hear_district_appeals = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 700 719 701 720 721 722 723 727 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_pw_administrative_courts
+			FROM = {
+				is_owned_by = NAM
+				NOT = { has_dynamic_modifier = { modifier = NAM_border_autonomous_district } }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_pw_central_civil_district_tt
+					NAM_pw_central_civil_district = yes
+				}
+				NOT = { has_dynamic_modifier = { modifier = NAM_pw_civil_court_awards } }
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				if = {
+					limit = {
+						hidden_trigger = {
+							NAM = { has_completed_focus = NAM_pw_administrative_courts }
+							NAM_pw_central_civil_district = yes
+							NOT = { has_dynamic_modifier = { modifier = NAM_pw_civil_court_awards } }
+						}
+					}
+					if = {
+						limit = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+						add_dynamic_modifier = {
+							modifier = NAM_pw_civil_court_awards
+							days = 180
+						}
+					}
+					else = {
+						add_dynamic_modifier = {
+							modifier = NAM_pw_civil_court_awards
+							days = 90
+						}
+					}
+					if = {
+						limit = {
+							NAM_border_integration_site = yes
+							has_resistance = yes
+						}
+						add_resistance = -5
+						if = {
+							limit = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+							add_compliance = 5
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = { resistance > 5 }
+					NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
+				}
+			}
+		}
 	}
 
 	NAM_border_reconstruction = {
@@ -10019,7 +11658,12 @@ NAM_national_programmes = {
 	NAM_agreement_settlement = {
 		icon = generic_political_discourse
 		allowed = { tag = NAM }
-		visible = { has_active_mission = NAM_agreement_crisis }
+		visible = {
+			OR = {
+				has_active_mission = NAM_agreement_crisis
+				NAM_labour_mediation_pending = yes
+			}
+		}
 		available = { NAM_agreement_peace = yes }
 		cost = 0
 		custom_cost_text = NAM_agreement_settlement_cost
@@ -10028,40 +11672,76 @@ NAM_national_programmes = {
 			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
 		}
 		complete_effect = {
-			custom_effect_tooltip = NAM_agreement_settlement_tt
-			hidden_effect = {
-				if = {
-					limit = {
+			if = {
+				limit = {
+					hidden_trigger = {
 						NAM_agreement_peace = yes
-						has_active_mission = NAM_agreement_crisis
+						OR = {
+							has_active_mission = NAM_agreement_crisis
+							NAM_labour_mediation_pending = yes
+						}
 						NOT = { has_political_power < 75 }
 						check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
 					}
+				}
+				hidden_effect = {
 					add_political_power = -75
 					set_temp_variable = { var = NAM_treasury_amount value = 600 }
 					NAM_spend_treasury = yes
-					if = {
-						limit = { check_variable = { NAM_agreement_current = 1 } }
-						set_variable = { var = NAM_grp_nam_support value = 40 }
+				}
+				if = {
+					limit = {
+						hidden_trigger = {
+							NAM_labour_mediation_pending = yes
+							has_idea = NAM_agreement_oil_failure
+							OR = {
+								NOT = { has_active_mission = NAM_agreement_crisis }
+								check_variable = { NAM_agreement_current = 2 }
+							}
+						}
 					}
-					if = {
-						limit = { check_variable = { NAM_agreement_current = 2 } }
-						set_variable = { var = NAM_grp_oil_support value = 40 }
+					remove_ideas = NAM_agreement_oil_failure
+				}
+				else_if = {
+					limit = {
+						hidden_trigger = {
+							NAM_labour_mediation_pending = yes
+							has_idea = NAM_agreement_dist_failure
+							OR = {
+								NOT = { has_active_mission = NAM_agreement_crisis }
+								check_variable = { NAM_agreement_current = 3 }
+							}
+						}
 					}
-					if = {
-						limit = { check_variable = { NAM_agreement_current = 3 } }
-						set_variable = { var = NAM_grp_dist_support value = 40 }
+					remove_ideas = NAM_agreement_dist_failure
+				}
+				if = {
+					limit = { hidden_trigger = { has_active_mission = NAM_agreement_crisis } }
+					custom_effect_tooltip = NAM_agreement_settlement_tt
+					hidden_effect = {
+						if = {
+							limit = { check_variable = { NAM_agreement_current = 1 } }
+							set_variable = { var = NAM_grp_nam_support value = 40 }
+						}
+						if = {
+							limit = { check_variable = { NAM_agreement_current = 2 } }
+							set_variable = { var = NAM_grp_oil_support value = 40 }
+						}
+						if = {
+							limit = { check_variable = { NAM_agreement_current = 3 } }
+							set_variable = { var = NAM_grp_dist_support value = 40 }
+						}
+						if = {
+							limit = { check_variable = { NAM_agreement_current = 4 } }
+							set_variable = { var = NAM_grp_garr_support value = 40 }
+						}
+						if = {
+							limit = { check_variable = { NAM_agreement_current = 5 } }
+							set_variable = { var = NAM_grp_trade_support value = 40 }
+						}
+						NAM_groups_refresh = yes
+						NAM_agreement_finish = yes
 					}
-					if = {
-						limit = { check_variable = { NAM_agreement_current = 4 } }
-						set_variable = { var = NAM_grp_garr_support value = 40 }
-					}
-					if = {
-						limit = { check_variable = { NAM_agreement_current = 5 } }
-						set_variable = { var = NAM_grp_trade_support value = 40 }
-					}
-					NAM_groups_refresh = yes
-					NAM_agreement_finish = yes
 				}
 			}
 		}
@@ -10726,16 +12406,117 @@ NAM_national_programmes = {
 			}
 		}
 		remove_effect = {
-			custom_effect_tooltip = NAM_program_strategic_reserve_result_tt
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_program_strategic_reserve_paid } }
+				custom_effect_tooltip = NAM_program_strategic_reserve_result_tt
+			}
 			hidden_effect = {
 				NAM_program_strategic_reserve_settle = yes
 			}
 		}
 		cancel_effect = {
-			custom_effect_tooltip = NAM_pw_refund_tt
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_program_strategic_reserve_paid } }
+				custom_effect_tooltip = NAM_pw_refund_tt
+			}
 			hidden_effect = {
 				NAM_program_strategic_reserve_refund = yes
 			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	NAM_pw_release_reserve = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_pw_war_accounts
+			has_completed_focus = NAM_pw_strategic_reserve
+			has_country_flag = NAM_program_strategic_reserve_paid
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_reserve_advance_ready_tt
+				NAM_pw_reserve_advance_ready = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { NAM_pw_reserve_advance_ready = yes } }
+				hidden_effect = {
+					clr_country_flag = NAM_program_strategic_reserve_paid
+					clr_country_flag = NAM_pw_military_busy
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 18000
+					producer = NAM
+				}
+				custom_effect_tooltip = NAM_pw_release_reserve_balance_tt
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				has_war = yes
+				has_equipment = { infantry_equipment < 3000 }
+			}
+		}
+	}
+
+	NAM_pw_harbour_slipway = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_pw_war_accounts
+			has_completed_focus = NAM_pw_development_fund
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_harbour_slipway_site_tt
+				NAM_pw_harbour_slipway_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_pw_harbour_slipway_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 56
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = NAM_pw_harbour_slipway_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_pw_harbour_slipway_site = yes
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						NOT = { has_country_flag = NAM_pw_harbour_slipway_paid }
+						check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 900 }
+					NAM_spend_treasury = yes
+					set_country_flag = NAM_pw_harbour_slipway_paid
+					set_country_flag = NAM_pw_civil_busy
+				}
+			}
+		}
+		cancel_trigger = { NAM_pw_harbour_slipway_site = no }
+		remove_effect = {
+			custom_effect_tooltip = NAM_pw_harbour_slipway_result_tt
+			hidden_effect = { NAM_pw_harbour_slipway_settle = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_pw_refund_tt
+			hidden_effect = { NAM_pw_harbour_slipway_refund = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -11032,6 +12813,76 @@ NAM_national_programmes = {
 		ai_will_do = { base = 5 }
 	}
 
+	NAM_grid_send_generator = {
+		icon = generic_construction
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 688 689 690 719 }
+		on_map_mode = map_only
+		visible = {
+			has_completed_focus = NAM_pw_grid_dispatch
+			FROM = { has_state_flag = NAM_grid_feeder }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_grid_held_field_tt
+				FROM = { NAM_grid_operating_field = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_grid_generator_free_tt
+				NAM_grid_generator_free = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_grid_generator_cost
+		custom_cost_trigger = { NOT = { has_fuel < 15000 } }
+		days_remove = 60
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_pw_grid_dispatch
+						NAM_pw_operable = yes
+						FROM = { NAM_grid_operating_field = yes }
+						NAM_grid_generator_free = yes
+						NOT = { has_fuel < 15000 }
+					}
+				}
+				custom_effect_tooltip = NAM_grid_generator_result_tt
+				hidden_effect = {
+					add_fuel = -15000
+					FROM = { set_state_flag = NAM_grid_mobile_generator }
+					NAM_oil_refresh = yes
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_grid_lost_field_tt
+				FROM = { NAM_grid_operating_field = no }
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_grid_generator_ends_tt
+			hidden_effect = { FROM = { NAM_grid_recall_generator = yes } }
+		}
+		remove_effect = { hidden_effect = { FROM = { NAM_grid_recall_generator = yes } } }
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				OR = {
+					has_fuel < 45000
+					FROM = { check_variable = { var = NAM_field_condition value = 80 compare = less_than } }
+				}
+			}
+		}
+	}
+
 	NAM_program_oilfield_substations = {
 		icon = generic_industry
 		allowed = { tag = NAM }
@@ -11108,12 +12959,114 @@ NAM_national_programmes = {
 		ai_will_do = { base = 5 }
 	}
 
+	NAM_program_city_water = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 688 700 }
+		target_trigger = { always = yes }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_pw_water_intakes
+			FROM = { NOT = { has_state_flag = NAM_city_water_connected } }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_city_water_pumps_tt
+				NAM_city_water_pumping_capacity = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_city_water_site_tt
+				FROM = { NAM_city_water_site = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_civil_free_tt
+				NOT = { has_country_flag = NAM_pw_civil_busy }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_t300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 42
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_pw_water_intakes
+						NAM_pw_operable = yes
+						NAM_city_water_pumping_capacity = yes
+						FROM = {
+							NAM_city_water_site = yes
+							NOT = { has_state_flag = NAM_city_water_paid }
+						}
+						NOT = { has_country_flag = NAM_pw_civil_busy }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { FROM = { state = 688 } } }
+					custom_effect_tooltip = NAM_city_water_factory_tt
+				}
+				else = { custom_effect_tooltip = NAM_city_water_yard_tt }
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_spend_treasury = yes
+					set_country_flag = NAM_pw_civil_busy
+					FROM = { set_state_flag = NAM_city_water_paid }
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_city_water_cancel_tt
+				OR = {
+					NAM_pw_operable = no
+					NAM_city_water_pumping_capacity = no
+					FROM = { NAM_city_water_site = no }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_pw_operable = yes
+						NAM_city_water_pumping_capacity = yes
+						FROM = {
+							has_state_flag = NAM_city_water_paid
+							NAM_city_water_site = yes
+						}
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { FROM = { state = 688 } } }
+					custom_effect_tooltip = NAM_city_water_factory_tt
+				}
+				else = { custom_effect_tooltip = NAM_city_water_yard_tt }
+			}
+			hidden_effect = { FROM = { NAM_city_water_settle = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_city_water_refund_tt
+			hidden_effect = { FROM = { NAM_city_water_refund = yes } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
 	NAM_program_irrigation_works = {
 		icon = generic_industry
 		allowed = { tag = NAM }
 		visible = {
 			has_completed_focus = NAM_pw_irrigation_works
-			NOT = { has_country_flag = NAM_south_coast_canal_open }
+			689 = { NOT = { has_dynamic_modifier = { modifier = NAM_south_coast_irrigation } } }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -11512,7 +13465,10 @@ NAM_national_programmes = {
 	NAM_program_flight_schools = {
 		icon = generic_industry
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_pw_flight_schools }
+		visible = {
+			has_completed_focus = NAM_pw_flight_schools
+			NOT = { has_country_flag = NAM_air_instructor }
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -11535,13 +13491,13 @@ NAM_national_programmes = {
 		}
 		fire_only_once = no
 		days_remove = 28
-		days_re_enable = 180
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
 						NAM_pw_operable = yes
 						has_completed_focus = NAM_pw_flight_schools
+						NOT = { has_country_flag = NAM_air_instructor }
 						NOT = { has_country_flag = NAM_program_flight_schools_paid }
 						NOT = { has_country_flag = NAM_pw_military_busy }
 						check_variable = {
@@ -11562,7 +13518,6 @@ NAM_national_programmes = {
 					set_country_flag = NAM_program_flight_schools_paid
 					set_country_flag = NAM_pw_military_busy
 				}
-				custom_effect_tooltip = NAM_program_flight_schools_result_tt
 			}
 		}
 		cancel_trigger = {
@@ -12341,7 +14296,7 @@ NAM_national_programmes = {
 	NAM_program_reserve_centres = {
 		icon = generic_industry
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_pw_reserve_centres }
+		visible = { has_completed_focus = NAM_pw_army_review }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -12369,7 +14324,7 @@ NAM_national_programmes = {
 				limit = {
 					hidden_trigger = {
 						NAM_pw_operable = yes
-						has_completed_focus = NAM_pw_reserve_centres
+						has_completed_focus = NAM_pw_army_review
 						NOT = { has_country_flag = NAM_pw_military_busy }
 						NOT = { has_country_flag = NAM_program_reserve_centres_paid }
 						check_variable = {
@@ -12689,7 +14644,6 @@ NAM_national_programmes = {
 					set_country_flag = NAM_program_airfield_network_paid
 					set_country_flag = NAM_pw_civil_busy
 				}
-				custom_effect_tooltip = NAM_program_airfield_network_result_tt
 			}
 		}
 		cancel_trigger = {
@@ -12761,7 +14715,6 @@ NAM_national_programmes = {
 					set_country_flag = NAM_program_radar_posts_paid
 					set_country_flag = NAM_pw_civil_busy
 				}
-				custom_effect_tooltip = NAM_program_radar_posts_result_tt
 			}
 		}
 		cancel_trigger = {
@@ -12786,13 +14739,24 @@ NAM_national_programmes = {
 	}
 
 	NAM_program_air_supply = {
-		icon = generic_industry
+		icon = ADISCORD_arms_supply
 		allowed = { tag = NAM }
-		visible = { has_completed_focus = NAM_pw_air_supply }
+		state_target = yes
+		targets = { 67 688 689 690 719 701 720 721 722 723 727 699 }
+		on_map_mode = map_only
+		visible = {
+			has_completed_focus = NAM_pw_air_supply
+			FROM = {
+				OR = {
+					has_state_flag = NAM_air_bridge_running
+					NAM_air_bridge_destination = yes
+				}
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
+				tooltip = NAM_air_bridge_departure_tt
+				NAM_air_bridge_departure = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_military_free_tt
@@ -12801,61 +14765,63 @@ NAM_national_programmes = {
 		}
 		cost = 0
 		custom_cost_text = NAM_program_air_supply_cost
-		custom_cost_trigger = {
-			check_variable = {
-				var = ADISCORD_economy_treasury
-				value = 700
-				compare = greater_than_or_equals
-			}
-		}
-		fire_only_once = no
+		custom_cost_trigger = { NAM_air_bridge_affordable = yes }
 		days_remove = 63
-		days_re_enable = 180
+		days_re_enable = 30
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						NAM_pw_operable = yes
-						has_completed_focus = NAM_pw_air_supply
-						NOT = { has_country_flag = NAM_program_air_supply_paid }
+						NAM_air_bridge_departure = yes
+						NAM_air_bridge_affordable = yes
 						NOT = { has_country_flag = NAM_pw_military_busy }
-						check_variable = {
-							var = ADISCORD_economy_treasury
-							value = 700
-							compare = greater_than_or_equals
+						FROM = {
+							NAM_air_bridge_destination = yes
+							NOT = { has_state_flag = NAM_air_bridge_running }
 						}
 					}
 				}
-				hidden_effect = {
-					set_temp_variable = {
-						var = NAM_treasury_amount
-						value = 700
-					}
-					NAM_spend_treasury = yes
-					set_country_flag = NAM_program_air_supply_paid
-					set_country_flag = NAM_pw_military_busy
-				}
 				custom_effect_tooltip = NAM_program_air_supply_result_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 350 }
+					NAM_spend_treasury = yes
+					add_fuel = -15000
+					add_equipment_to_stockpile = {
+						type = ADISCORD_transport_airframe_2162
+						amount = -12
+					}
+					set_country_flag = NAM_pw_military_busy
+					FROM = {
+						set_state_flag = NAM_air_bridge_running
+						add_dynamic_modifier = { modifier = NAM_air_bridge_deliveries }
+					}
+				}
 			}
 		}
 		cancel_trigger = {
-			NOT = {
-				NAM_pw_operable = yes
-			}
-		}
-		remove_effect = {
-			custom_effect_tooltip = NAM_program_air_supply_result_tt
-			hidden_effect = {
-				NAM_program_air_supply_settle = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_air_bridge_lost_tt
+				OR = {
+					NAM_air_bridge_departure = no
+					FROM = { NAM_air_bridge_destination = no }
+				}
 			}
 		}
 		cancel_effect = {
-			custom_effect_tooltip = NAM_pw_refund_tt
-			hidden_effect = {
-				NAM_program_air_supply_refund = yes
+			custom_effect_tooltip = NAM_air_bridge_end_tt
+			hidden_effect = { FROM = { NAM_air_bridge_close = yes } }
+		}
+		remove_effect = { hidden_effect = { FROM = { NAM_air_bridge_close = yes } } }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = no
+					FROM = { NOT = { any_neighbor_state = { controller = { has_war_with = NAM } } } }
+				}
 			}
 		}
-		ai_will_do = { base = 10 }
 	}
 }
 
@@ -13676,7 +15642,10 @@ NAM_treasury = {
 	NAM_crisis_fund = {
 		icon = ADISCORD_treasury
 		visible = {
-			has_completed_focus = NAM_crisis_office
+			OR = {
+				has_completed_focus = NAM_crisis_office
+				has_completed_focus = NAM_pw_social_budget
+			}
 			NOT = { has_country_flag = NAM_crisis_fund }
 		}
 		available = {
@@ -13698,13 +15667,20 @@ NAM_treasury = {
 				limit = {
 					hidden_trigger = {
 						NAM_independent_programmes_operable = yes
-						has_completed_focus = NAM_crisis_office
+						OR = {
+							has_completed_focus = NAM_crisis_office
+							has_completed_focus = NAM_pw_social_budget
+						}
 						NOT = { has_country_flag = NAM_crisis_fund }
 						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 					}
 				}
 				hidden_effect = { ADISCORD_economy_spend_250 = yes }
 				custom_effect_tooltip = NAM_crisis_fund_tt
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_pw_social_budget } }
+					custom_effect_tooltip = NAM_social_budget_shift_tt
+				}
 				hidden_effect = { set_country_flag = NAM_crisis_fund }
 			}
 		}
@@ -15124,6 +17100,118 @@ NAM_exile_politics = {
 # Humanist exile: foreign corporations finance the return through free zones,
 # island steel, leased labour and innovation; their influence is the price.
 NAM_free_zones = {
+	NAM_board_tender_rail = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_can_sell_rail = yes
+			NOT = { has_country_flag = NAM_board_tender_rail_closed }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_tender_rail_unlock_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_can_sell_rail = yes
+						NOT = { has_country_flag = NAM_board_tender_rail_closed }
+					}
+					set_country_flag = NAM_board_tender_rail_closed
+					country_event = { id = ADISCORD_nam_story.24 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NOT = {
+					OR = {
+						NAM_board_minister_2 = yes
+						NAM_board_minister_5 = yes
+					}
+				}
+			}
+		}
+	}
+
+	NAM_board_tender_yards = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_can_sell_yards = yes
+			NOT = { has_country_flag = NAM_board_tender_yards_closed }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_tender_yards_unlock_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_can_sell_yards = yes
+						NOT = { has_country_flag = NAM_board_tender_yards_closed }
+					}
+					set_country_flag = NAM_board_tender_yards_closed
+					country_event = { id = ADISCORD_nam_story.25 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NOT = {
+					OR = {
+						NAM_board_minister_3 = yes
+						NAM_board_minister_4 = yes
+					}
+				}
+			}
+		}
+	}
+
+	NAM_board_tender_depots = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_can_sell_depots = yes
+			NOT = { has_country_flag = NAM_board_tender_depots_closed }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_tender_depots_unlock_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_can_sell_depots = yes
+						NOT = { has_country_flag = NAM_board_tender_depots_closed }
+					}
+					set_country_flag = NAM_board_tender_depots_closed
+					country_event = { id = ADISCORD_nam_story.26 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NOT = {
+					OR = {
+						NAM_board_minister_1 = yes
+						NAM_board_minister_6 = yes
+						AND = {
+							has_war = no
+							NOT = { has_political_power < 75 }
+						}
+					}
+				}
+			}
+		}
+	}
+
 	# Thirty days of negotiation with the investors; the zone opens on an
 	# island Svetlogorye still owns and controls.
 	NAM_corp_charter_free_zone = {
@@ -15135,8 +17223,7 @@ NAM_free_zones = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			NAM_corp_open = yes
-			has_completed_focus = NAM_hum_free_zones
+			NAM_corp_charter_authorized = yes
 			FROM = {
 				is_owned_by = ROOT
 				NOT = { has_state_flag = NAM_free_zone }
@@ -15156,7 +17243,7 @@ NAM_free_zones = {
 		days_remove = 30
 		cancel_trigger = {
 			OR = {
-				NAM_country_operable = no
+				NAM_corp_zone_operable = no
 				FROM = { NOT = { is_owned_by = ROOT } }
 				FROM = { NOT = { is_controlled_by = ROOT } }
 			}
@@ -15164,8 +17251,19 @@ NAM_free_zones = {
 		complete_effect = {
 			custom_effect_tooltip = NAM_corp_charter_started_tt
 			hidden_effect = {
-				FROM = { set_state_flag = NAM_free_zone_pending }
-				add_to_variable = { var = NAM_free_zones_pending value = 1 }
+				if = {
+					limit = {
+						NAM_corp_charter_authorized = yes
+						NAM_corp_zone_slot_free = yes
+						FROM = {
+							NAM_owned_overseas_district = yes
+							NOT = { has_state_flag = NAM_free_zone }
+							NOT = { has_state_flag = NAM_free_zone_pending }
+						}
+					}
+					FROM = { set_state_flag = NAM_free_zone_pending }
+					add_to_variable = { var = NAM_free_zones_pending value = 1 }
+				}
 			}
 		}
 		remove_effect = {
@@ -15201,26 +17299,33 @@ NAM_free_zones = {
 			NAM_country_operable = yes
 			custom_trigger_tooltip = {
 				tooltip = NAM_corp_owns_island_tt
-				any_owned_state = { NAM_rw_island_state = yes }
+				any_owned_state = { NAM_corp_steel_site = yes }
 			}
 		}
 		cost = 0
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
-			custom_effect_tooltip = NAM_corp_sell_steel_tt
-			hidden_effect = {
-				every_owned_state = {
-					limit = { NAM_rw_island_state = yes }
-					add_dynamic_modifier = {
-						modifier = NAM_corp_steel_export_state
-						days = 60
-					}
+			if = {
+				limit = { hidden_trigger = { any_owned_state = { NAM_corp_steel_site = yes } } }
+				custom_effect_tooltip = NAM_corp_sell_steel_tt
+				if = {
+					limit = { hidden_trigger = { NOT = { has_country_flag = NAM_corp_takeover } } }
+					custom_effect_tooltip = NAM_corp_export_influence_tt
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
-				NAM_corp_capital_add = yes
-				add_to_variable = { var = NAM_corp_influence value = 3 }
-				NAM_corp_influence_clamp = yes
+				hidden_effect = {
+					random_owned_state = {
+						limit = { NAM_corp_steel_site = yes }
+						add_dynamic_modifier = {
+							modifier = NAM_corp_steel_export_state
+							days = 60
+						}
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+					add_to_variable = { var = NAM_corp_influence value = 3 }
+					NAM_corp_influence_clamp = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -15289,16 +17394,21 @@ NAM_free_zones = {
 		}
 	}
 
-	# An innovation park with the investors' engineers: ninety days of work,
-	# then two research breakthroughs in industry.
+	# The licence and pilot batch settle together when the order matures.
 	NAM_corp_innovation_park = {
 		icon = ADISCORD_science
 		allowed = { tag = NAM }
 		visible = {
 			NAM_corp_open = yes
-			has_completed_focus = NAM_hum_innovation_parks
+			OR = {
+				has_completed_focus = NAM_hum_innovation_parks
+				has_completed_focus = NAM_board_humanist_facade
+			}
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			NAM_country_operable = yes
+			hidden_trigger = { NOT = { has_variable = NAM_corp_park_deposit } }
+		}
 		cost = 0
 		custom_cost_text = NAM_cost_corp_park
 		custom_cost_trigger = {
@@ -15315,6 +17425,8 @@ NAM_free_zones = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						NAM_corp_open = yes
+						NOT = { has_variable = NAM_corp_park_deposit }
 						NOT = { has_political_power < 25 }
 						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
 					}
@@ -15335,13 +17447,27 @@ NAM_free_zones = {
 						check_variable = { var = NAM_corp_park_deposit value = 0 compare = greater_than }
 					}
 				}
-				add_tech_bonus = {
-					name = NAM_corp_innovation_park
-					bonus = 0.5
-					uses = 2
-					category = industry
+				if = {
+					limit = { NOT = { has_tech = ADISCORD_tech_armored_rail_convoys } }
+					set_technology = { ADISCORD_tech_armored_rail_convoys = 1 }
 				}
-				custom_effect_tooltip = NAM_corp_park_done_tt
+				add_equipment_to_stockpile = {
+					type = armored_train_equipment_1
+					amount = 12
+					producer = NAM
+				}
+				if = {
+					limit = { has_completed_focus = NAM_board_humanist_facade }
+					add_equipment_to_stockpile = {
+						type = motorized_equipment_1
+						amount = 100
+						producer = NAM
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { NOT = { has_country_flag = NAM_corp_takeover } } }
+					custom_effect_tooltip = NAM_corp_park_done_tt
+				}
 				hidden_effect = {
 					clear_variable = NAM_corp_park_deposit
 					add_to_variable = { var = NAM_corp_influence value = 5 }
@@ -15363,7 +17489,10 @@ NAM_free_zones = {
 		allowed = { tag = NAM }
 		visible = {
 			NAM_corp_open = yes
-			has_completed_focus = NAM_hum_credit_arms
+			OR = {
+				has_completed_focus = NAM_hum_credit_arms
+				has_completed_focus = NAM_board_purge_ministers
+			}
 		}
 		available = { NAM_country_operable = yes }
 		cost = 0
@@ -15396,7 +17525,22 @@ NAM_free_zones = {
 					amount = 30
 					producer = NAM
 				}
-				custom_effect_tooltip = NAM_corp_influence_up_2_tt
+				if = {
+					limit = { has_completed_focus = NAM_board_purge_ministers }
+					if = {
+						limit = { NOT = { has_tech = ADISCORD_tech_armored_carrier_program } }
+						set_technology = { ADISCORD_tech_armored_carrier_program = 1 }
+					}
+					add_equipment_to_stockpile = {
+						type = ADISCORD_armored_carrier_2163
+						amount = 40
+						producer = NAM
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { NOT = { has_country_flag = NAM_corp_takeover } } }
+					custom_effect_tooltip = NAM_corp_influence_up_2_tt
+				}
 				hidden_effect = {
 					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
 					NAM_corp_capital_add = yes
@@ -15556,37 +17700,267 @@ NAM_free_zones = {
 	}
 
 	# ----- Corporate state: the districts of the corporations -----
+	NAM_board_post_contract_guard = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 67 69 701 260 253 241 }
+		target_trigger = { always = yes }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_board_security_contracts
+			NAM_board_operable = yes
+			FROM = { NAM_board_guard_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_guard_relief_tt
+				FROM = { NOT = { has_state_flag = NAM_board_guard_post } }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_board_guard
+		custom_cost_trigger = {
+			NOT = { has_equipment = { infantry_equipment < 300 } }
+			NOT = { has_equipment = { motorized_equipment < 20 } }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_board_security_contracts
+						NAM_board_operable = yes
+						NOT = { has_equipment = { infantry_equipment < 300 } }
+						NOT = { has_equipment = { motorized_equipment < 20 } }
+						FROM = {
+							NAM_board_guard_site = yes
+							NOT = { has_state_flag = NAM_board_guard_post }
+						}
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { FROM = { state = 67 } } }
+					custom_effect_tooltip = NAM_board_guard_field_tt
+				}
+				else = { custom_effect_tooltip = NAM_board_guard_district_tt }
+				hidden_effect = {
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+					add_equipment_to_stockpile = { type = motorized_equipment amount = -20 }
+					FROM = { set_state_flag = { flag = NAM_board_guard_post days = 90 } }
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_loren_book_oil_cargo = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_board_homeland_concession
+			NAM_corp_open = yes
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_loren_lease_site_tt
+				NAM_loren_lease_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_loren_loading_slot_tt
+				NOT = { has_variable = NAM_loren_cargo_quote }
+				check_variable = { var = NAM_oil_free_land_units value = 1 compare = greater_than_or_equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_loren_cargo_clearance_tt
+				NAM_loren_cargo_can_clear = yes
+			}
+		}
+		cost = 0
+		days_remove = 30
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_board_homeland_concession
+						NAM_loren_lease_operable = yes
+						NOT = { has_variable = NAM_loren_cargo_quote }
+						check_variable = { var = NAM_oil_free_land_units value = 1 compare = greater_than_or_equals }
+						NAM_loren_cargo_can_clear = yes
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { NAM_loren_premium_quote = yes } }
+					custom_effect_tooltip = NAM_loren_quote_35_tt
+					hidden_effect = { set_variable = { var = NAM_loren_cargo_quote value = 35 } }
+				}
+				else = {
+					custom_effect_tooltip = NAM_loren_quote_25_tt
+					hidden_effect = { set_variable = { var = NAM_loren_cargo_quote value = 25 } }
+				}
+				hidden_effect = { NAM_oil_refresh = yes }
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_loren_loading_interrupted_tt
+				OR = {
+					NAM_loren_lease_operable = no
+					NAM_loren_loading_route = no
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_variable = NAM_loren_cargo_quote
+						NAM_loren_lease_operable = yes
+						NAM_loren_loading_route = yes
+						NAM_loren_cargo_can_clear = yes
+					}
+				}
+				custom_effect_tooltip = NAM_loren_delivery_tt
+				hidden_effect = {
+					add_fuel = -15000
+					set_temp_variable = { var = NAM_corp_capital_change value = NAM_loren_cargo_quote }
+					NAM_corp_capital_add = yes
+				}
+			}
+			else = { custom_effect_tooltip = NAM_loren_no_delivery_tt }
+			hidden_effect = { NAM_loren_close_cargo = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_loren_no_delivery_tt
+			hidden_effect = { NAM_loren_close_cargo = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 6
+				NOT = { has_fuel < 45000 }
+			}
+		}
+	}
+
+	NAM_board_issue_war_shares = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = { FROM = { NAM_board_federal_subject = yes } }
+		visible = {
+			has_completed_focus = NAM_board_stock_mobilisation
+			NAM_corp_open = yes
+			has_country_flag = NAM_corp_takeover
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_auction_clear_tt
+				FROM = { NAM_board_trading_concession = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_stock_register_tt
+				FROM = { NOT = { has_variable = NAM_board_stock_coupon } }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_board_stock
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_board_stock_mobilisation
+						NAM_board_operable = yes
+						check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+						FROM = {
+							NAM_board_trading_concession = yes
+							NOT = { has_variable = NAM_board_stock_coupon }
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_stock_dividends_tt
+				hidden_effect = {
+					FROM = { set_variable = { var = NAM_board_stock_coupon value = 1 } }
+					set_temp_variable = { var = NAM_corp_capital_change value = -25 }
+					NAM_corp_capital_add = yes
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1800
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 60
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 50
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
 	# The board auctions a district's concession to the next corporation.
 	NAM_corp_auction_district = {
 		icon = ADISCORD_deal
 		allowed = { tag = NAM }
 		target_array = NAM.NAM_federal_districts
 		target_trigger = {
-			FROM = {
-				exists = yes
-				is_subject_of = ROOT
-				has_variable = NAM_corp_district_owner
-			}
+			FROM = { NAM_board_federal_subject = yes }
 		}
 		visible = {
 			has_completed_focus = NAM_board_district_auction
 			NAM_corp_open = yes
 			has_country_flag = NAM_corp_takeover
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_auction_clear_tt
+				FROM = { NAM_board_trading_concession = yes }
+			}
+		}
 		cost = 20
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
-			custom_effect_tooltip = NAM_corp_auction_tt
-			hidden_effect = {
-				FROM = {
-					NAM_corp_district_rotate = yes
-					add_stability = -0.05
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						FROM = { NAM_board_trading_concession = yes }
+					}
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
-				NAM_corp_capital_add = yes
+				custom_effect_tooltip = NAM_corp_auction_tt
+				hidden_effect = {
+					FROM = {
+						NAM_corp_district_rotate = yes
+						add_stability = -0.05
+					}
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
 			}
+			else = { add_political_power = 20 }
 		}
 		ai_will_do = {
 			base = 5
@@ -15599,11 +17973,16 @@ NAM_free_zones = {
 		allowed = { tag = NAM }
 		visible = {
 			has_completed_focus = NAM_board_constitution
-			NAM_corp_open = yes
-			has_country_flag = NAM_corp_takeover
+			NAM_board_operable = yes
 			has_country_flag = NAM_corp_dispute_open
+			event_target:NAM_corp_dispute_district = { NAM_corp_live_disputed_district = yes }
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_hearing_jurisdiction_tt
+				event_target:NAM_corp_dispute_district = { NAM_corp_case_can_be_heard = yes }
+			}
+		}
 		cost = 0
 		custom_cost_text = NAM_cost_corp_arbitration
 		custom_cost_trigger = {
@@ -15615,6 +17994,7 @@ NAM_free_zones = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						event_target:NAM_corp_dispute_district = { NAM_corp_case_can_be_heard = yes }
 						NOT = { has_political_power < 25 }
 						check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
 					}
@@ -15640,28 +18020,52 @@ NAM_free_zones = {
 		allowed = { tag = NAM }
 		target_array = NAM.NAM_federal_districts
 		target_trigger = {
-			FROM = {
-				exists = yes
-				is_subject_of = ROOT
-				has_variable = NAM_corp_district_owner
-			}
+			FROM = { NAM_board_federal_subject = yes }
 		}
 		visible = {
-			has_completed_focus = NAM_board_shareholders
+			OR = {
+				has_completed_focus = NAM_board_shareholders
+				has_completed_focus = NAM_board_union_of_boards
+			}
 			NAM_corp_open = yes
 			has_country_flag = NAM_corp_takeover
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_corp_auction_clear_tt
+				FROM = { NAM_board_trading_concession = yes }
+			}
+		}
 		cost = 15
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
-			custom_effect_tooltip = NAM_corp_renewal_tt
-			hidden_effect = {
-				FROM = { add_stability = 0.05 }
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_operable = yes
+						FROM = { NAM_board_trading_concession = yes }
+					}
+				}
+				custom_effect_tooltip = NAM_corp_renewal_tt
+				if = {
+					limit = {
+						hidden_trigger = { has_completed_focus = NAM_board_union_of_boards }
+					}
+					custom_effect_tooltip = NAM_board_renewal_delivery_tt
+					hidden_effect = { FROM = { NAM_board_ship_district_order = yes } }
+				}
+				hidden_effect = {
+					FROM = { add_stability = 0.05 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					NAM_corp_capital_add = yes
+				}
 			}
+			else = { add_political_power = 15 }
 		}
 		ai_will_do = {
 			base = 10
@@ -15672,6 +18076,355 @@ NAM_free_zones = {
 # After the wars of the exile: the junta's labour camps and requisitions on
 # the conquered states, or the humanists' council of federal districts.
 NAM_southern_lands = {
+	NAM_hum_send_southern_mandate = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		targets = { EFL AZH RHM SDR KDR }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			NAM_hum_southern_mandate_open = yes
+			NOT = { has_country_flag = NAM_hum_southern_mandate_sent }
+			FROM = {
+				OR = {
+					NAM_wor_independent_target = yes
+					NAM_board_federal_subject = yes
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_southern_recipient_tt
+				FROM = {
+					OR = {
+						NAM_hum_voluntary_district = yes
+						NAM_hum_mandate_workshop_site = yes
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_southern_funding_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_hum_southern_mandate_open = yes
+						NOT = { has_country_flag = NAM_hum_southern_mandate_sent }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+						FROM = {
+							OR = {
+								NAM_hum_voluntary_district = yes
+								NAM_hum_mandate_workshop_site = yes
+							}
+						}
+					}
+				}
+				if = {
+					limit = { hidden_trigger = { FROM = { NAM_hum_voluntary_district = yes } } }
+					custom_effect_tooltip = NAM_hum_southern_accession_tt
+					hidden_effect = { FROM = { set_country_flag = { flag = NAM_hum_southern_letter value = 1 days = 14 } } }
+				}
+				else = {
+					custom_effect_tooltip = NAM_hum_southern_workshop_tt
+					hidden_effect = { FROM = { set_country_flag = { flag = NAM_hum_southern_letter value = 2 days = 14 } } }
+				}
+				hidden_effect = {
+					set_country_flag = NAM_hum_southern_mandate_sent
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						country_event = { id = ADISCORD_nam_resource_war.113 hours = 1 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				FROM = { NAM_hum_voluntary_district = yes }
+			}
+		}
+	}
+
+	NAM_hum_establish_caravan_depot = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 69 701 260 253 241 }
+		target_trigger = { always = yes }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_hum_caravan_charter
+			NAM_hum_government_operable = yes
+			FROM = { NAM_hum_union_market = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_caravan_road_tt
+				NAM_program_southern_corridor_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_caravan_site_tt
+				FROM = { NAM_hum_caravan_destination = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_hum_caravan_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			NOT = { has_equipment = { motorized_equipment < 60 } }
+		}
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_hum_government_operable = yes
+						has_completed_focus = NAM_hum_caravan_charter
+						NAM_program_southern_corridor_site = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+						NOT = { has_equipment = { motorized_equipment < 60 } }
+						FROM = {
+							NAM_hum_union_market = yes
+							NAM_hum_caravan_destination = yes
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_hum_establish_caravan_depot_result_tt
+				if = {
+					limit = { hidden_trigger = { FROM = { infrastructure < 5 } } }
+					custom_effect_tooltip = NAM_hum_caravan_road_improvement_tt
+				}
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 250 }
+					NAM_spend_treasury = yes
+					FROM = {
+						owner = {
+							NAM = {
+								send_equipment = {
+									equipment = motorized_equipment
+									amount = 60
+									target = PREV
+								}
+							}
+						}
+						add_to_variable = { var = NAM_hum_market_lots value = 1 }
+						if = {
+							limit = { infrastructure < 5 }
+							add_building_construction = {
+								type = infrastructure
+								level = 1
+								instant_build = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_hum_collect_market_freight = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_hum_common_market
+			NAM_hum_government_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_caravan_road_tt
+				NAM_program_southern_corridor_site = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_market_stock_tt
+				NAM_hum_market_freight_waiting = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_market_convoy_ready_tt
+				NOT = { has_country_flag = NAM_hum_market_convoy_out }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_hum_common_market
+						NAM_hum_government_operable = yes
+						NAM_program_southern_corridor_site = yes
+						NAM_hum_market_freight_waiting = yes
+						NOT = { has_country_flag = NAM_hum_market_convoy_out }
+					}
+				}
+				custom_effect_tooltip = NAM_hum_market_convoy_result_tt
+				hidden_effect = {
+					set_country_flag = {
+						flag = NAM_hum_market_convoy_out
+						value = 1
+						days = 30
+					}
+					69 = { NAM_hum_collect_local_freight = yes }
+					701 = { NAM_hum_collect_local_freight = yes }
+					260 = { NAM_hum_collect_local_freight = yes }
+					253 = { NAM_hum_collect_local_freight = yes }
+					241 = { NAM_hum_collect_local_freight = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	NAM_hum_place_union_order = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 69 701 260 253 241 }
+		target_trigger = { always = yes }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_hum_union_currency
+			NAM_hum_government_operable = yes
+			FROM = { NAM_hum_union_market = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hum_union_order_site_tt
+				FROM = {
+					NAM_hum_district_workshop = yes
+					NOT = { has_state_flag = NAM_hum_union_order_paid }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_t300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_remove = 35
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_hum_union_currency
+						NAM_hum_government_operable = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+						FROM = {
+							NAM_hum_district_workshop = yes
+							NOT = { has_state_flag = NAM_hum_union_order_paid }
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_hum_place_union_order_result_tt
+				if = {
+					limit = {
+						hidden_trigger = {
+							has_completed_focus = NAM_hum_common_market
+							FROM = { NAM_hum_market_freight_available = yes }
+						}
+					}
+					custom_effect_tooltip = NAM_hum_market_gun_order_tt
+					hidden_effect = {
+						FROM = {
+							subtract_from_variable = { var = NAM_hum_market_lots value = 1 }
+							set_state_flag = NAM_hum_order_reserved_lot
+						}
+					}
+				}
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_spend_treasury = yes
+					FROM = { set_state_flag = NAM_hum_union_order_paid }
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NAM_hum_government_operable = no
+				FROM = { NAM_hum_district_workshop = no }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_hum_government_operable = yes
+						FROM = {
+							NAM_hum_district_workshop = yes
+							has_state_flag = NAM_hum_union_order_paid
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_hum_union_order_delivery_tt
+				if = {
+					limit = { hidden_trigger = { FROM = { has_state_flag = NAM_hum_order_reserved_lot } } }
+					custom_effect_tooltip = NAM_hum_market_gun_delivery_tt
+				}
+			}
+			hidden_effect = { FROM = { NAM_hum_union_order_settle = yes } }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_hum_union_order_refund_tt
+			hidden_effect = { FROM = { NAM_hum_union_order_refund = yes } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	NAM_hum_endow_district_faculty = {
+		icon = ADISCORD_science
+		allowed = { tag = NAM }
+		target_array = NAM.NAM_federal_districts
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			has_completed_focus = NAM_hum_union_university
+			NAM_hum_government_operable = yes
+			FROM = {
+				is_subject_of = NAM
+				has_country_flag = NAM_federal_district
+				NOT = { has_country_flag = NAM_hum_district_faculty }
+			}
+		}
+		available = { FROM = { has_capitulated = no } }
+		cost = 0
+		custom_cost_text = NAM_cost_t300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_hum_union_university
+						NAM_hum_government_operable = yes
+						FROM = { NAM_hum_faculty_district = yes }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_spend_treasury = yes
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						set_country_flag = NAM_hum_district_faculty
+					}
+				}
+				FROM = { add_research_slot = 1 }
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
 	# Thirty days to fence the camp; then forced labour extracts the state's
 	# resources for Svetlogorye and nothing is built there.
 	NAM_radical_labour_camp = {
@@ -15692,7 +18445,7 @@ NAM_southern_lands = {
 			has_completed_focus = NAM_rad_labour_camps
 			FROM = {
 				is_owned_by = ROOT
-				has_state_flag = NAM_conquered_state
+				NAM_rad_direct_rule = yes
 				NOT = { has_state_flag = NAM_labour_camp_building }
 				NOT = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
 			}
@@ -15708,6 +18461,7 @@ NAM_southern_lands = {
 			OR = {
 				NAM_country_operable = no
 				FROM = { NOT = { is_owned_by = ROOT } }
+				FROM = { NOT = { is_controlled_by = ROOT } }
 			}
 		}
 		complete_effect = {
@@ -15753,7 +18507,7 @@ NAM_southern_lands = {
 			has_completed_focus = NAM_rad_spoils_of_return
 			FROM = {
 				is_owned_by = ROOT
-				has_state_flag = NAM_conquered_state
+				NAM_rad_direct_rule = yes
 				NOT = { has_state_flag = NAM_state_stripped }
 			}
 		}
@@ -15766,12 +18520,182 @@ NAM_southern_lands = {
 		complete_effect = {
 			custom_effect_tooltip = NAM_strip_state_tt
 			hidden_effect = {
-				FROM = { NAM_radical_strip = yes }
+				FROM = {
+					if = {
+						limit = {
+							is_owned_by = NAM
+							is_controlled_by = NAM
+							NAM_rad_direct_rule = yes
+							NOT = { has_state_flag = NAM_state_stripped }
+						}
+						NAM_radical_strip = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
 			base = 10
 		}
+	}
+
+	NAM_rad_garrison_requisition = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.NAM_conquered_states
+		target_trigger = { FROM = { has_state_flag = NAM_conquered_state } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_rad_southern_tribute
+			FROM = {
+				is_owned_by = NAM
+				NAM_rad_direct_rule = yes
+				industrial_complex > 0
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_requisition_district_tt
+				FROM = { NAM_rad_requisition_district = yes }
+			}
+			FROM = { NOT = { has_dynamic_modifier = { modifier = NAM_rad_requisitioned_market } } }
+		}
+		cost = 15
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_rad_southern_tribute
+						FROM = {
+							NAM_rad_requisition_district = yes
+							NOT = { has_dynamic_modifier = { modifier = NAM_rad_requisitioned_market } }
+						}
+					}
+				}
+				FROM = {
+					add_dynamic_modifier = {
+						modifier = NAM_rad_requisitioned_market
+						days = 90
+					}
+				}
+				if = {
+					limit = {
+						hidden_trigger = {
+							has_completed_focus = NAM_rad_kadir_tolls
+							FROM = { state = 241 }
+						}
+					}
+					custom_effect_tooltip = NAM_rad_kadir_requisition_tt
+				}
+				else_if = {
+					limit = {
+						hidden_trigger = {
+							has_completed_focus = NAM_rad_kadir_tolls
+							FROM = { state = 249 }
+						}
+					}
+					custom_effect_tooltip = NAM_rad_basiran_requisition_tt
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = no
+					FROM = { NOT = { any_neighbor_state = { controller = { has_war_with = NAM } } } }
+				}
+			}
+		}
+	}
+
+	NAM_rad_levy_transport = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.NAM_conquered_states
+		target_trigger = { FROM = { has_state_flag = NAM_conquered_state } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_rad_hostage_system
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { has_state_flag = NAM_rad_transport_levied }
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			FROM = { NAM_rad_transport_available = yes }
+		}
+		cost = 15
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						FROM = { NAM_rad_transport_available = yes }
+					}
+				}
+				FROM = {
+					hidden_effect = { set_state_flag = NAM_rad_transport_levied }
+					remove_building = {
+						type = infrastructure
+						level = 1
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 100
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				NOT = { has_equipment = { motorized_equipment > 299 } }
+			}
+		}
+	}
+
+	NAM_rad_install_council = {
+		icon = generic_constitutional_guarantees
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.NAM_conquered_states
+		target_trigger = { FROM = { has_state_flag = NAM_conquered_state } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = NAM_rad_collaborator_councils
+			FROM = {
+				is_owned_by = ROOT
+				NAM_rad_direct_rule = yes
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+			FROM = { NAM_rad_council_available = yes }
+		}
+		cost = 25
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_rad_install_council_unlock_tt
+			hidden_effect = {
+				FROM = {
+					if = {
+						limit = { NAM_rad_council_available = yes }
+						NAM_rad_devolve_district = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
 	}
 
 	# The council of federal districts sits with one district's delegates:
@@ -15855,6 +18779,84 @@ NAM_consolidation = {
 		}
 	}
 
+	NAM_rad_deploy_command_post = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		state_target = yes
+		target_array = NAM.owned_states
+		target_trigger = {
+			FROM = {
+				OR = {
+					has_state_flag = NAM_conquered_state
+					is_capital = yes
+				}
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = {
+			has_completed_focus = NAM_rad_garrison_rule
+			FROM = {
+				NAM_rad_command_post_site = yes
+				NOT = { has_dynamic_modifier = { modifier = NAM_rad_command_post } }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_command_post_order_tt
+				has_country_flag = NAM_rad_garrison_order_active
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_rad_command_post_staffed_tt
+					NAM_rad_command_post_staffed = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_rad_command_post_cost
+		custom_cost_trigger = { NAM_rad_command_post_stocks = yes }
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_rad_garrison_rule
+						has_country_flag = NAM_rad_garrison_order_active
+						NAM_rad_command_post_stocks = yes
+						FROM = {
+							NAM_rad_command_post_site = yes
+							NAM_rad_command_post_staffed = yes
+							NOT = { has_dynamic_modifier = { modifier = NAM_rad_command_post } }
+						}
+					}
+				}
+				FROM = {
+					if = {
+						limit = { infrastructure < 5 }
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
+					}
+					add_dynamic_modifier = { modifier = NAM_rad_command_post }
+				}
+				hidden_effect = {
+					add_equipment_to_stockpile = {
+						type = motorized_equipment
+						amount = -30
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = -60
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	# Ninety days of reinforced garrisons in the conquered states: +3
 	# consolidation and 20 treasury of upkeep every month.
 	NAM_rad_garrison_order = {
@@ -15934,12 +18936,44 @@ NAM_consolidation = {
 			NAM_consolidation_open = yes
 			has_country_flag = NAM_exile_humanist
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_hum_federal_seat_ready_tt
+					NAM_board_operating_district = yes
+				}
+			}
+		}
 		cost = 30
 		fire_only_once = no
 		days_re_enable = 120
 		complete_effect = {
 			custom_effect_tooltip = NAM_hum_federal_treaty_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_hum_government_operable = yes
+						NOT = { has_global_flag = NAM_great_war_won }
+						NOT = { has_completed_focus = NAM_hum_metropole_charter }
+						FROM = { NOT = { has_country_flag = NAM_hum_federal_treaty_signed } }
+					}
+				}
+				custom_effect_tooltip = NAM_hum_treaty_muster_tt
+				hidden_effect = { FROM = { set_country_flag = NAM_hum_federal_treaty_signed } }
+			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						NAM_hum_government_operable = yes
+						NOT = { has_global_flag = NAM_great_war_won }
+						has_completed_focus = NAM_hum_districts_charter
+						FROM = { has_country_flag = NAM_hum_federal_treaty_signed }
+					}
+				}
+				custom_effect_tooltip = NAM_hum_treaty_signed_tt
+			}
 			hidden_effect = {
 				FROM = {
 					add_stability = 0.05
@@ -15958,16 +18992,33 @@ NAM_consolidation = {
 	}
 
 	# Sixty days of rebuilding the war-torn districts with foreign capital; the
-	# deposit returns if the work is interrupted.
+	# deposit returns if the work is interrupted. After the takeover the
+	# corporate tree replaces the humanist harbour focus, so its reconstruction
+	# tenders open the same fund.
 	NAM_hum_reconstruction_fund = {
 		icon = ADISCORD_construction
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_hum_harbour_rebuilding
+			OR = {
+				has_completed_focus = NAM_hum_harbour_rebuilding
+				has_completed_focus = NAM_board_reconstruction_tenders
+			}
 			NAM_consolidation_open = yes
 			has_country_flag = NAM_exile_humanist
 		}
-		available = { NAM_country_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_harbour_receipt_tt
+				NOT = { has_variable = NAM_hum_reconstruction_deposit }
+			}
+			if = {
+				limit = { has_completed_focus = NAM_board_reconstruction_tenders }
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_harbour_site_tt
+					NAM_board_harbour_works_operable = yes
+				}
+			}
+		}
 		cost = 0
 		custom_cost_text = NAM_cost_hum_reconstruction
 		custom_cost_trigger = {
@@ -15977,16 +19028,41 @@ NAM_consolidation = {
 		days_remove = 60
 		days_re_enable = 30
 		cancel_trigger = {
-			NAM_country_operable = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_harbour_cancel_tt
+				OR = {
+					NAM_country_operable = no
+					AND = {
+						700 = { has_state_flag = NAM_board_harbour_contract }
+						NAM_board_harbour_works_operable = no
+					}
+				}
+			}
 		}
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						NAM_consolidation_open = yes
+						has_country_flag = NAM_exile_humanist
+						OR = {
+							has_completed_focus = NAM_hum_harbour_rebuilding
+							has_completed_focus = NAM_board_reconstruction_tenders
+						}
+						OR = {
+							NOT = { has_completed_focus = NAM_board_reconstruction_tenders }
+							NAM_board_harbour_works_operable = yes
+						}
+						NOT = { has_variable = NAM_hum_reconstruction_deposit }
 						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
 					}
 				}
 				custom_effect_tooltip = NAM_hum_reconstruction_started_tt
+				if = {
+					limit = { hidden_trigger = { has_completed_focus = NAM_board_reconstruction_tenders } }
+					custom_effect_tooltip = NAM_board_harbour_works_tt
+					hidden_effect = { 700 = { set_state_flag = NAM_board_harbour_contract } }
+				}
 				hidden_effect = {
 					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
 					NAM_corp_capital_add = yes
@@ -15998,16 +19074,29 @@ NAM_consolidation = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						check_variable = { var = NAM_hum_reconstruction_deposit value = 0 compare = greater_than }
+						has_variable = NAM_hum_reconstruction_deposit
+						NAM_country_operable = yes
+						OR = {
+							700 = { NOT = { has_state_flag = NAM_board_harbour_contract } }
+							NAM_board_harbour_works_operable = yes
+						}
 					}
 				}
 				custom_effect_tooltip = NAM_hum_reconstruction_done_tt
+				if = {
+					limit = { hidden_trigger = { 700 = { has_state_flag = NAM_board_harbour_contract } } }
+					700 = {
+						NAM_board_complete_harbour_works = yes
+						hidden_effect = { clr_state_flag = NAM_board_harbour_contract }
+					}
+				}
 				hidden_effect = {
 					clear_variable = NAM_hum_reconstruction_deposit
 					set_temp_variable = { var = NAM_cons_change value = 10 }
 					NAM_consolidation_add = yes
 				}
 			}
+			else = { hidden_effect = { NAM_hum_reconstruction_refund = yes } }
 		}
 		cancel_effect = {
 			custom_effect_tooltip = NAM_hum_reconstruction_refund_tt

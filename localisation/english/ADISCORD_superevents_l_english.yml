@@ -30,37 +30,10 @@
   superevent_stelander_party_victory_title: "Party Victory in Stelander"
   superevent_stelander_party_victory_quote: "The object of power is power.\n\n- George Orwell, Nineteen Eighty-Four"
   superevent_stelander_party_victory_comment: "The Party retains power"
-  superevent_stelander_party_victory_houses_title: "The High Houses Rule Stelander"
-  superevent_stelander_party_victory_houses_quote: "If we want things to stay as they are, things will have to change.\n\n- Giuseppe Tomasi di Lampedusa, The Leopard"
-  superevent_stelander_party_victory_houses_comment: "Cyan Crowe and the Chamber take the victory"
-  superevent_stelander_party_victory_festival_title: "The Festival Goes On!"
-  superevent_stelander_party_victory_festival_quote: "Bread and circuses.\n\n- Juvenal, Satires"
-  superevent_stelander_party_victory_festival_comment: "Rufus Hedersett celebrates the victory"
-  superevent_stelander_party_victory_staff_title: "Stelander's Generals Take Power"
-  superevent_stelander_party_victory_staff_quote: "Let him who desires peace prepare for war.\n\n- Vegetius, Epitoma rei militaris"
-  superevent_stelander_party_victory_staff_comment: "August Veil imposes peace by regulation"
-  superevent_stelander_party_victory_wallets_title: "The Stelander Showcase Reopens"
-  superevent_stelander_party_victory_wallets_quote: "Endless money forms the sinews of war.\n\n- Cicero, Philippics"
-  superevent_stelander_party_victory_wallets_comment: "Pavel Lanskoy opens the season"
-  superevent_stelander_party_victory_silence_title: "Silence over Stelander"
-  superevent_stelander_party_victory_silence_quote: "They make a desert and call it peace.\n\n- Tacitus, Agricola"
-  superevent_stelander_party_victory_silence_comment: "Vera Korvina keeps the silence"
-  superevent_stelander_party_victory_regent_title: "Nodrul Celebrates a Stelander Victory"
-  superevent_stelander_party_victory_regent_quote: "The strong do what they can and the weak suffer what they must.\n\n- Thucydides, History of the Peloponnesian War"
-  superevent_stelander_party_victory_regent_comment: "Edgar Renner signs for Stelander"
 
   superevent_stelander_shabrat_victory_title: "Shabrat's Victory in Stelander"
   superevent_stelander_shabrat_victory_quote: "What's past is prologue.\n\n- William Shakespeare, The Tempest"
   superevent_stelander_shabrat_victory_comment: "The civil war is over"
-  superevent_stelander_shabrat_victory_staff_title: "Shabrat's Staff Takes Stelander"
-  superevent_stelander_shabrat_victory_staff_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, On War"
-  superevent_stelander_shabrat_victory_staff_comment: "The Officers' Directory promises order"
-  superevent_stelander_shabrat_victory_councils_title: "The Mountain Councils Enter Fada"
-  superevent_stelander_shabrat_victory_councils_quote: "Man is born free, and everywhere he is in chains.\n\n- Jean-Jacques Rousseau, The Social Contract"
-  superevent_stelander_shabrat_victory_councils_comment: "The passes gain a voice"
-  superevent_stelander_shabrat_victory_truth_title: "A Court of Truth in Fada"
-  superevent_stelander_shabrat_victory_truth_quote: "And ye shall know the truth, and the truth shall make you free.\n\n- The Gospel of John, 8:32"
-  superevent_stelander_shabrat_victory_truth_comment: "The Lower Market archives go on public display"
 
   superevent_nam_resource_war_title: "The Resource War"
   superevent_nam_resource_war_quote: "A few profit - and the many pay.\n\n- Smedley Butler, War Is a Racket"
@@ -136,3 +109,182 @@
  # Source: Alexander Pushkin, Boris Godunov, 1825. English translation for this localisation.
  superevent_rus_khan_died_quote:0 "How heavy you are, crown of Monomakh!\n\n- Alexander Pushkin, Boris Godunov"
  superevent_rus_khan_died_comment:0 "The empire did not long outlive its Khan"
+
+  superevent_nam_resource_war_service_title: "The Resource War: The Governors' Order"
+  superevent_nam_resource_war_service_quote: "By dawn forty tankers had passed the eastern checkpoint. The road back was empty."
+  superevent_nam_resource_war_service_comment: "The governors post guards at the oilfields"
+
+  superevent_nam_resource_war_district_title: "The Resource War: The District Militias"
+  superevent_nam_resource_war_district_quote: "Yesterday we handed in our passes at the gate. Today they hand out rifles there."
+  superevent_nam_resource_war_district_comment: "The night shift stays at the oilfields"
+
+  superevent_stelander_party_victory_houses_title: "The High Houses Rule Stelander"
+  superevent_stelander_party_victory_houses_quote: "If we want things to stay as they are, things will have to change.\n\n- Giuseppe Tomasi di Lampedusa, The Leopard"
+  superevent_stelander_party_victory_houses_comment: "Cyan Crowe and the Chamber take the victory"
+
+  superevent_stelander_party_victory_staff_title: "Stelander's Generals Take Power"
+  superevent_stelander_party_victory_staff_quote: "Let him who desires peace prepare for war.\n\n- Vegetius, Epitoma rei militaris"
+  superevent_stelander_party_victory_staff_comment: "August Veil imposes peace by regulation"
+
+  superevent_stelander_party_victory_wallets_title: "The Stelander Showcase Reopens"
+  superevent_stelander_party_victory_wallets_quote: "Endless money forms the sinews of war.\n\n- Cicero, Philippics"
+  superevent_stelander_party_victory_wallets_comment: "Pavel Lanskoy opens the season"
+
+  superevent_stelander_party_victory_silence_title: "Silence over Stelander"
+  superevent_stelander_party_victory_silence_quote: "They make a desert and call it peace.\n\n- Tacitus, Agricola"
+  superevent_stelander_party_victory_silence_comment: "Vera Korvina keeps the silence"
+
+  superevent_stelander_party_victory_regent_title: "Nodrul Celebrates a Stelander Victory"
+  superevent_stelander_party_victory_regent_quote: "The strong do what they can and the weak suffer what they must.\n\n- Thucydides, History of the Peloponnesian War"
+  superevent_stelander_party_victory_regent_comment: "Edgar Renner signs for Stelander"
+
+  superevent_stelander_shabrat_victory_staff_title: "Shabrat's Staff Takes Stelander"
+  superevent_stelander_shabrat_victory_staff_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, On War"
+  superevent_stelander_shabrat_victory_staff_comment: "The Officers' Directory promises order"
+
+  superevent_stelander_shabrat_victory_councils_title: "The Mountain Councils Enter Fada"
+  superevent_stelander_shabrat_victory_councils_quote: "Man is born free, and everywhere he is in chains.\n\n- Jean-Jacques Rousseau, The Social Contract"
+  superevent_stelander_shabrat_victory_councils_comment: "The passes gain a voice"
+
+  superevent_stelander_shabrat_victory_truth_title: "A Court of Truth in Fada"
+  superevent_stelander_shabrat_victory_truth_quote: "And ye shall know the truth, and the truth shall make you free.\n\n- The Gospel of John, 8:32"
+  superevent_stelander_shabrat_victory_truth_comment: "The Lower Market archives go on public display"
+
+  superevent_stelander_party_victory_festival_title: "The Festival Goes On!"
+  superevent_stelander_party_victory_festival_quote: "Bread and circuses.\n\n- Juvenal, Satires"
+  superevent_stelander_party_victory_festival_comment: "Rufus Hedersett celebrates the victory"
+
+  superevent_south_houses_title: "Concessions of the Ten"
+  superevent_south_houses_quote: "The first tanker carries one trading house's seal. The other nine houses are waiting their turn."
+  superevent_south_houses_comment: "The concessions take effect"
+
+  superevent_south_cities_title: "The Southern City Charters"
+  superevent_south_cities_quote: "Each city takes its own copy of the treaty home from Khazar. The signatures are the same on every copy."
+  superevent_south_cities_comment: "The cities ratify the charters"
+
+  superevent_south_nur_title: "Nur Takes Charge of the South"
+  superevent_south_nur_quote: "Station clocks are being set to Khazar time. From today, the trains run to a single timetable."
+  superevent_south_nur_comment: "The Directorate takes over the railways"
+
+  superevent_south_regency_title: "The Regency Divides the South"
+  superevent_south_regency_quote: "Surveyors went out with the first grants of land. The people who live here will learn their new landlord's name from the boundary post."
+  superevent_south_regency_comment: "The Regency assigns the fiefs"
+
+  superevent_south_commune_title: "Victory of the Fire Commune"
+  superevent_south_commune_quote: "The shift council has the pump room keys. For the first time, the foreman signing the log was elected on the shop floor."
+  superevent_south_commune_comment: "The councils take over the oilfields"
+
+  superevent_south_conclave_title: "The Council of Nine Holds the South"
+  superevent_south_conclave_quote: "The registers from the captured stations have reached Khazar. All nine seats in the council chamber are still occupied."
+  superevent_south_conclave_comment: "The Conclave takes charge"
+
+  superevent_south_service_title: "Governorships of the South"
+  superevent_south_service_quote: "The first report from Khazar bears the new governor's seal. The next is due in a week."
+  superevent_south_service_comment: "The appointments are signed"
+
+  superevent_south_charter_title: "The South Signs the Oil Charter"
+  superevent_south_charter_quote: "Beside Svetlogorsk's signature there was room for every district seal. The last space was filled by dusk."
+  superevent_south_charter_comment: "The charter is ratified"
+
+  superevent_south_contracts_title: "Svetlogorye's Southern Contracts"
+  superevent_south_contracts_quote: "The first fuel shipment crosses the border on a new waybill. Dispatchers on both sides sign for it."
+  superevent_south_contracts_comment: "Deliveries resume"
+
+  superevent_south_rump_title: "The Southern Ports Reopen"
+  superevent_south_rump_quote: "The coast service is taking ships bound for the mainland again. The old quays are already short of pilots."
+  superevent_south_rump_comment: "The harbour is open"
+
+  superevent_south_revenge_title: "Victory for the Mainland Veterans"
+  superevent_south_revenge_quote: "They are lifting the barrier on the road where fuel tribute used to be collected. The veterans step aside for the first bus."
+  superevent_south_revenge_comment: "Svetlogorye returns"
+
+  superevent_south_radical_title: "The Strongholds Take the South"
+  superevent_south_radical_quote: "The first ship's hold takes three machine tools and a spare drive for each. The captain signs for the entire load."
+  superevent_south_radical_comment: "Karamyshev claims the spoils"
+
+  superevent_south_free_islands_title: "Victory of the Free Islands"
+  superevent_south_free_islands_quote: "The ferry is taking passengers for the return crossing too. On the quay, families separated by the war check the lists."
+  superevent_south_free_islands_comment: "A homecoming on the quay"
+
+  superevent_south_boards_title: "The Boards Acquire the South"
+  superevent_south_boards_quote: "The inventory lists the wells, the workshops and even the clock over the gate. Only the chairman's signature is missing."
+  superevent_south_boards_comment: "The assets pass to the boards"
+
+  superevent_south_restitution_title: "The Alliance Holds the Oil Belt"
+  superevent_south_restitution_quote: "The forward units have returned to the line. From behind the embankment the men can hear the oilfield pump running again."
+  superevent_south_restitution_comment: "Shahrabad's campaign is repelled"
+
+  superevent_west_worker_title: "The West Joins the Confederation"
+  superevent_west_worker_quote: "The Itoran delegates have desks in the common chamber. Supplies for the towns on both sides of the former front are first on the agenda."
+  superevent_west_worker_comment: "The republics convene"
+
+  superevent_west_petrichev_title: "Imperial Vorkerland Wins the West"
+  superevent_west_petrichev_quote: "The garrison train has reached the Old March. The stationmaster takes the coming month's timetable from the commandant."
+  superevent_west_petrichev_comment: "The imperial mandate takes effect"
+
+  superevent_west_veyran_title: "Restoration of the Veyran Empire"
+  superevent_west_veyran_quote: "The seal came out of a museum case. Vlad Petrichev was the first to set his signature beneath it."
+  superevent_west_veyran_comment: "The act of restoration is signed"
+
+  superevent_west_dorian_title: "The Forul Technical Union"
+  superevent_west_dorian_quote: "The dispatcher closed the western circuit. For the first time since the war began, the ammeter settled at its working load."
+  superevent_west_dorian_comment: "The grid takes the load"
+
+  superevent_west_anton_title: "Anton Bagli's Western Settlement"
+  superevent_west_anton_quote: "The first shipment of medicine has reached the western hospitals. Doctors have cleared the wards where stretchers were stored during the fighting."
+  superevent_west_anton_comment: "The first hospitals reopen"
+
+  superevent_west_shield_title: "Victory of the Humanist Shield"
+  superevent_west_shield_quote: "The morning bus crossed the northern corridor under Itoran escort. Every seat on the return journey has been sold."
+  superevent_west_shield_comment: "The guarantees take effect"
+
+  superevent_west_emergency_title: "Itora's Emergency Trusteeship"
+  superevent_west_emergency_quote: "The night operator finished his shift. By morning, the man at the switchboard had been sent by an Itoran commissioner."
+  superevent_west_emergency_comment: "The commissioners take charge"
+
+  superevent_west_revanche_title: "Itora's War of Revanche"
+  superevent_west_revanche_quote: "The old boundary stone was lifted into a lorry and driven away. Surveyors will have to chart the whole march again."
+  superevent_west_revanche_comment: "The frontier is redrawn"
+
+  superevent_west_committee_title: "The Itoran Committee's Western Peace"
+  superevent_west_committee_quote: "An Itoran signalman took the keys to the northern line. Two freight trains had passed by evening."
+  superevent_west_committee_comment: "The corridor passes to Itora"
+
+  superevent_vorkerland_world_empire_title: "The World Empire of Vorkerland"
+  superevent_vorkerland_world_empire_quote: "The first edition sold while the ink was still fresh. By evening the typesetters were using the new name of the state."
+  superevent_vorkerland_world_empire_comment: "Send the edition to press"
+
+  superevent_south_iron_title: "The Iron Ladder in the South"
+  superevent_south_iron_quote: "Barracks and civil offices received the same list of appointments. By noon the new governors had taken their oaths."
+  superevent_south_iron_comment: "The executive takes office"
+
+  superevent_south_civil_service_title: "Victory of the Service Republic"
+  superevent_south_civil_service_quote: "On Monday the district office opened at the usual hour. Its first appointment notice went up beside the public opening times."
+  superevent_south_civil_service_comment: "The civil service opens"
+
+  superevent_south_federation_title: "The Federation's Southern Districts"
+  superevent_south_federation_quote: "The delegates are returning from Svetlogorsk with signed charters. Each will be read aloud at an open session back home."
+  superevent_south_federation_comment: "The Federation receives the districts"
+
+  superevent_south_oil_union_title: "Victory of the Oil Union"
+  superevent_south_oil_union_quote: "At the junction between two district pipelines, the crew waited for working pressure. The southern line is part of the common network."
+  superevent_south_oil_union_comment: "Open the valve"
+
+  superevent_south_contract_republic_title: "The Republic of Contracts Wins the South"
+  superevent_south_contract_republic_quote: "The town service is running through the old checkpoint. The conductor has the old ticket stock and a new timetable."
+  superevent_south_contract_republic_comment: "The first service departs"
+
+  superevent_south_directorate_title: "Victory of the Business Council"
+  superevent_south_directorate_quote: "Requisitions from the southern plants have reached the marshalling yard. The Business Council starts with the allocation of empty tankers."
+  superevent_south_directorate_comment: "Approve the delivery schedule"
+
+  superevent_south_nam_title: "Svetlogorye Wins the Southern War"
+  superevent_south_nam_quote: "The last barrier has come down on the road to the furnaces of Khazar. Fuel tankers from Svetlogorye were using it by morning."
+  superevent_south_nam_comment: "The southern road is open"
+
+  superevent_west_council_title: "The Emergency Council's Western Mandate"
+  superevent_west_council_quote: "The new timetable for the western stations carries two signatures. The army and the civil administration have each taken a copy."
+  superevent_west_council_comment: "The council approves the mandate"
+ superevent_west_world_empire_title: "The World Empire of Vorkerland defeats Itora"
+ superevent_west_world_empire_quote: "The signalman broke the wire seal on the lever. For the first time since war began, a freight train took the western line."
+ superevent_west_world_empire_comment: "The western line is open"

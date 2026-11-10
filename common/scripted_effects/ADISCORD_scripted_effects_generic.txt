@@ -468,7 +468,7 @@ ADISCORD_initialize_foreign_minister = {
 			add_ideas = minister_WPS_Armin_Vogt
 		}
 		else_if = {
-			limit = { tag = WRK }
+			limit = { tag = event_target:ADISCORD_vorkerland_nation }
 			add_ideas = minister_WRK_Viktor_Lansky
 		}
 		else_if = {

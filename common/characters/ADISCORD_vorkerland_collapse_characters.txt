@@ -949,7 +949,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -958,7 +958,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -991,7 +991,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1000,7 +1000,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1033,7 +1033,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1042,7 +1042,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1076,7 +1076,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1085,7 +1085,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1119,7 +1119,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1128,7 +1128,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1162,7 +1162,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1171,7 +1171,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1204,7 +1204,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1213,7 +1213,7 @@ characters = {
 				OR = {
 					tag = TVA
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_utilitarian
 					}
 				}
@@ -1247,7 +1247,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1256,7 +1256,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1289,7 +1289,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1298,7 +1298,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1331,7 +1331,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1340,7 +1340,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1374,7 +1374,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1383,7 +1383,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1417,7 +1417,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1426,7 +1426,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1460,7 +1460,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1469,7 +1469,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1502,7 +1502,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}
@@ -1511,7 +1511,7 @@ characters = {
 				OR = {
 					tag = WKR
 					AND = {
-						tag = WRK
+						tag = event_target:ADISCORD_vorkerland_nation
 						has_country_flag = ADISCORD_vorkerland_route_worker
 					}
 				}

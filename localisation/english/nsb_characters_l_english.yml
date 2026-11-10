@@ -1577,3 +1577,6 @@
  VAD_party_representatives_republic_technocracy: "Nikolay Litvinov"
  VAD_party_representatives_republic_etatism: "Pavel Orekhov"
  VAD_party_representatives_republic_hedonism: "Andrey Vlasov"
+ SNG_governor_council: "Governorate Chancellery"
+ minister_SNG_Andrey_Ternov: "Andrey Ternov"
+ minister_SNG_Andrey_Ternov_desc: "Commissioner for External Relations. Conducts the governorate's correspondence with its neighbours, though the Union reads every letter first."

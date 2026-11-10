@@ -5,6 +5,9 @@ import unittest
 from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 
 ROOT = Path(__file__).resolve().parents[2]
+# The country that currently is Vorkerland: the dormant WRK during the war,
+# the claimant that unified it afterwards.
+NATION = "event_target:ADISCORD_vorkerland_nation"
 
 
 def read(path: str) -> str:
@@ -80,7 +83,8 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_central_initiative_rolled }", guard)
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(f"{tag} = {{ exists = yes is_ai = yes", guard)
-        self.assertIn("WRK = { exists = yes is_ai = no }", guard)
+        self.assertIn(f"NOT = {{ {NATION} = {{ exists = yes is_ai = no }} }}", guard)
+        self.assertNotIn("WRK", guard)
         roll = named_block(effect, "random_list")
         awards = re.findall(
             r'(\d+)\s*=\s*\{\s*(WKR|VAD|TVA)\s*=\s*\{\s*add_timed_idea\s*=\s*\{\s*idea\s*=\s*ADISCORD_vorkerland_central_initiative\s+days\s*=\s*(\d+)',
@@ -103,8 +107,9 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         for token in ("is_ai = no", "has_capitulated = yes",
                       "has_global_flag = ADISCORD_vorkerland_collapse_finished"):
             self.assertIn(token, cancel)
-        for tag in ("WKR", "VAD", "TVA", "WRK"):
-            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", cancel)
+        for scope in ("WKR", "VAD", "TVA", NATION):
+            self.assertIn(f"{scope} = {{ exists = yes is_ai = no }}", cancel)
+        self.assertNotIn("WRK", cancel)
         cleanup = named_block(self.effects, "ADISCORD_vorkerland_clear_claimant_war_modifiers")
         self.assertIn("remove_ideas = ADISCORD_vorkerland_central_initiative", cleanup)
 

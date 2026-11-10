@@ -463,7 +463,7 @@ ideas = {
 						exists = yes
 						is_ai = no
 					}
-					WRK = {
+					event_target:ADISCORD_vorkerland_nation = {
 						exists = yes
 						is_ai = no
 					}
@@ -3051,6 +3051,26 @@ ideas = {
 			modifier = {
 				stability_factor = 0.05
 				political_power_factor = 0.05
+			}
+		}
+
+		WRK_empire_delta_open_crown_registers = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				stability_factor = 0.05
+				political_power_factor = 0.05
+			}
+		}
+
+		WRK_empire_delta_civic_oath = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			modifier = {
+				army_org_factor = 0.05
+				stability_factor = 0.03
 			}
 		}
 

@@ -3112,6 +3112,208 @@ VAL_partner_arsenal_funds_ready = { check_variable = { var = ADISCORD_economy_tr
 
 VAL_partner_strategic_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
 
+# --- peace_reckoning ---
+# COUNTRY VAL. The postwar balance exists exactly while the reckoning is open.
+VAL_peace_crisis_active = {
+	tag = VAL
+	has_power_balance = { id = VAL_peace_balance }
+}
+
+VAL_peace_regime_chosen = {
+	has_variable = VAL_peace_regime
+}
+
+VAL_peace_regime_throne = {
+	check_variable = { var = VAL_peace_regime value = 1 compare = equals }
+}
+
+VAL_peace_regime_cabinet = {
+	check_variable = { var = VAL_peace_regime value = 2 compare = equals }
+}
+
+VAL_peace_regime_charter = {
+	check_variable = { var = VAL_peace_regime value = 3 compare = equals }
+}
+
+VAL_peace_regime_captains = {
+	check_variable = { var = VAL_peace_regime value = 4 compare = equals }
+}
+
+VAL_peace_answer_chosen = {
+	OR = {
+		has_completed_focus = VAL_peace_land_for_service
+		has_completed_focus = VAL_peace_workers_charter
+		has_completed_focus = VAL_peace_shift_law
+	}
+}
+
+# Shares in the coup range leave the captains one outcome; a plot exposed by
+# Solgalov earlier in the same reckoning can no longer seize power.
+VAL_peace_captains_forced = {
+	NOT = { power_balance_value = { id = VAL_peace_balance value < 0.90 } }
+	NOT = { has_country_flag = VAL_peace_plot_exposed }
+}
+
+# The throne and the charter overlap in the middle range, so the reckoning never lacks an answer.
+VAL_peace_throne_open = {
+	NOT = { power_balance_value = { id = VAL_peace_balance value > 0.20 } }
+	NOT = { has_country_flag = VAL_peace_truth_public }
+}
+
+VAL_peace_cabinet_open = {
+	OR = {
+		has_completed_focus = VAL_peace_workers_charter
+		check_variable = { var = VAL_peace_strike value = 30 compare = less_than_or_equals }
+		has_country_flag = VAL_peace_velsky_holds_file
+	}
+}
+
+VAL_peace_charter_open = {
+	OR = {
+		NOT = { power_balance_value = { id = VAL_peace_balance value < -0.20 } }
+		has_completed_focus = VAL_peace_land_for_service
+		has_country_flag = VAL_daughter_secret_told
+	}
+}
+
+VAL_peace_companies_payable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+}
+
+VAL_peace_shifts_payable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+VAL_peace_order_payable = {
+	NOT = { has_political_power < 50 }
+	NOT = { has_equipment = { infantry_equipment < 5400 } }
+}
+
+# COUNTRY VAL. Kefreyt's own Stelander administration bears the settlers' land.
+VAL_peace_has_stelander_administration = {
+	OR = {
+		STP = {
+			exists = yes
+			is_subject_of = VAL
+		}
+		STS = {
+			exists = yes
+			is_subject_of = VAL
+		}
+	}
+}
+
+# --- east_final_war ---
+# Kefreyt's last war: side 1 is Kefreyt, side 2 the rival. Rival kind 1 is the
+# Montar Empire, kind 2 the Khan's Last Empire after the coalition was beaten.
+VAL_east_khan_victorious = {
+	RUS = {
+		exists = yes
+		is_subject = no
+		has_variable = RUS_crisis_phase
+		check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+	}
+}
+
+# A crisis that never began counts as closed; a running coalition war does not.
+VAL_east_khan_question_closed = {
+	OR = {
+		RUS = { exists = no }
+		RUS = { is_subject = yes }
+		RUS = { NOT = { has_variable = RUS_crisis_phase } }
+		RUS = { check_variable = { var = RUS_crisis_phase value = 3 compare = greater_than_or_equals } }
+	}
+}
+
+VAL_east_montar_available = {
+	MON = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
+}
+
+VAL_east_rival_exists = {
+	OR = {
+		VAL_east_khan_victorious = yes
+		VAL_east_montar_available = yes
+	}
+}
+
+VAL_east_final_active = {
+	has_global_flag = VAL_east_final_started
+	NOT = { has_global_flag = VAL_east_final_resolved }
+}
+
+VAL_east_final_can_start = {
+	tag = VAL
+	VAL_nw_operational = yes
+	VAL_peace_regime_chosen = yes
+	has_war = no
+	VAL_east_khan_question_closed = yes
+	VAL_east_rival_exists = yes
+	RUS_crisis_regional_wars_available = yes
+	NOT = { has_global_flag = VAL_east_final_started }
+	NOT = { has_global_flag = VAL_east_final_resolved }
+}
+
+VAL_east_on_val_side = {
+	has_variable = VAL_east_side
+	check_variable = { var = VAL_east_side value = 1 compare = equals }
+}
+
+VAL_east_on_rival_side = {
+	has_variable = VAL_east_side
+	check_variable = { var = VAL_east_side value = 2 compare = equals }
+}
+
+VAL_east_rival_is_montar = {
+	check_variable = { var = global.VAL_east_rival_kind value = 1 compare = equals }
+}
+
+VAL_east_rival_is_khan = {
+	check_variable = { var = global.VAL_east_rival_kind value = 2 compare = equals }
+}
+
+# GLOBAL. A champion that left the war or the map ends the campaign by control.
+VAL_east_final_broken = {
+	OR = {
+		VAL = { exists = no }
+		AND = {
+			VAL_east_rival_is_montar = yes
+			OR = {
+				MON = { exists = no }
+				NOT = { VAL = { has_war_with = MON } }
+			}
+		}
+		AND = {
+			VAL_east_rival_is_khan = yes
+			OR = {
+				RUS = { exists = no }
+				NOT = { VAL = { has_war_with = RUS } }
+			}
+		}
+	}
+}
+
+# STATE. Occupation of the other side's key ground scores; one's own land does not.
+VAL_east_state_held_by_val_side = {
+	controller = { VAL_east_on_val_side = yes }
+}
+
+VAL_east_state_held_by_rival_side = {
+	controller = { VAL_east_on_rival_side = yes }
+}
+
+VAL_east_rent_buyer_exists = {
+	any_other_country = {
+		has_war = yes
+		NOT = { has_war_with = ROOT }
+		NOT = { is_subject_of = ROOT }
+	}
+}
+
 # --- external_order_ledger ---
 # COUNTRY partner. Route choice is fixed at acceptance; only authored destinations participate.
 VAL_order_partner_route_open = {
@@ -3139,7 +3341,7 @@ VAL_order_debts_settled = {
 			COF = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
 			TFF = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
 			YPR = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-			WRK = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
 			WKR = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
 			VAD = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
 			TVA = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }

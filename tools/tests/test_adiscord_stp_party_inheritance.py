@@ -280,7 +280,7 @@ class PartyInheritanceScriptTests(unittest.TestCase):
                 self.assertTrue(super_ru.get(key) and super_en.get(key), key)
             self.assertIn(
                 f"STP = {{ check_variable = {{ var = STP_pv_outcome value = {outcome} compare = equals }} }}",
-                superevent_loc,
+                text(EVENTS),
             )
             for key in (f"ADISCORD_STP_pv.50.t{outcome}", f"ADISCORD_STP_pv.50.d{outcome}"):
                 self.assertTrue(ru.get(key) and en.get(key), key)
@@ -359,6 +359,50 @@ class PartyInheritanceScriptTests(unittest.TestCase):
 
 
 class PartyInheritanceEventTests(unittest.TestCase):
+    def test_prewar_arrest_selects_one_execution_notice_and_the_same_petitions(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar, selected_effects
+
+        settlement = top_level(EFFECTS)["STP_pv_settle_resistance_prisoners"]
+        for arrested, notice in ((False, "51"), (True, "52")):
+            facts = {("STP", "has_country_flag", "STP_shabrat_was_arrested"): arrested}
+            entries = list(selected_effects(settlement, facts))
+            self.assertEqual(
+                [(scalar(e.value, "id"), scalar(e.value, "days"))
+                 for _, e in entries if e.key == "country_event"],
+                [(f"ADISCORD_STP_pv.{notice}", "3"), ("ADISCORD_STP_pv.53", "5")],
+            )
+            self.assertEqual(
+                {scope for scope, e in entries if e.key == "STP_pv_retire_resistance_leaders"},
+                {"STP", "STS"},
+            )
+
+    def test_oath_returns_only_defeated_officers_with_their_party_portraits(self):
+        from itertools import product
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, selected_effects
+
+        transfer = top_level(EFFECTS)["STP_pv_reinstate_officers"]
+        gate = top_level(TRIGGERS)["STP_pv_has_reinstateable_officers"]
+        officers = ("STP_Leonid_Barchel", "STP_Edmund_Ravel")
+        for annexed, barchel, ravel in product((False, True), repeat=3):
+            facts = {("STS", "exists", "no"): annexed}
+            present = dict(zip(officers, (barchel, ravel)))
+            facts.update({("STS", "has_character", name): value for name, value in present.items()})
+            expected = {name for name, value in present.items() if value and annexed}
+            self.assertEqual(matches_conditions(gate, facts), bool(expected))
+            entries = list(selected_effects(transfer, facts))
+            self.assertEqual(
+                {(scope, scalar(e.value, "character"), scalar(e.value, "target_country"))
+                 for scope, e in entries if e.key == "set_nationality"},
+                {("STS", name, "STP") for name in expected},
+            )
+            portraits = {scalar(e.value, "character"): e.value for scope, e in entries
+                         if scope == "STP" and e.key == "set_portraits"}
+            self.assertEqual(set(portraits), expected)
+            for name, portrait in portraits.items():
+                army = block(portrait, "army")
+                self.assertEqual(scalar(army, "large"), f"GFX_portrait_{name}")
+                self.assertEqual(scalar(army, "small"), f"GFX_portrait_{name}_small")
+
     def test_events_are_registered_and_every_displayed_key_is_localised(self):
         events = text(EVENTS)
         section = events[events.index("add_namespace = ADISCORD_STP_pv"):]

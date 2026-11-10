@@ -72,6 +72,9 @@ class Scenario:
                 predicate = replace(entry, key="AND", value=self.expand(TRIGGERS[entry.key]))
                 result.append(predicate if entry.value == "yes" else
                               replace(entry, key="NOT", value=[predicate]))
+            elif entry.key == "tag" and entry.value == "event_target:ADISCORD_vorkerland_nation":
+                # The simulated country is the one Doctor Worx unified.
+                result.append(replace(entry, key="always", value="yes"))
             elif entry.key == "has_country_leader":
                 result.append(replace(entry, key="always", value="yes" if self.worx else "no"))
             elif entry.key == "has_dynamic_modifier":

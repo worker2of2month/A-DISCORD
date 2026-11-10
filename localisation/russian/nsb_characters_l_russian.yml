@@ -1676,3 +1676,6 @@
  VAD_party_representatives_republic_technocracy: "Николай Литвинов"
  VAD_party_representatives_republic_etatism: "Павел Орехов"
  VAD_party_representatives_republic_hedonism: "Андрей Власов"
+ SNG_governor_council: "Канцелярия наместничества"
+ minister_SNG_Andrey_Ternov: "Андрей Тернов"
+ minister_SNG_Andrey_Ternov_desc: "Уполномоченный по внешним связям. Ведёт переписку наместничества с соседями, но каждое её письмо сначала читают в Союзе."

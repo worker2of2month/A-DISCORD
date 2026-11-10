@@ -3,7 +3,7 @@ ideas = {
 		# Vorkerland: one campaign spirit per postwar route.
 		ADISCORD_west_wrk_solidarity_committees = {
 			picture = generic_constitutional_guarantees
-			allowed = { original_tag = WRK }
+			allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
@@ -15,7 +15,7 @@ ideas = {
 
 		ADISCORD_west_wrk_imperial_columns = {
 			picture = generic_war_preparation
-			allowed = { original_tag = WRK }
+			allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
@@ -27,7 +27,7 @@ ideas = {
 
 		ADISCORD_west_wrk_engineer_battalions = {
 			picture = generic_production_bonus
-			allowed = { original_tag = WRK }
+			allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
@@ -89,7 +89,7 @@ ideas = {
 		# Timed war measures bought through the western war decisions.
 		ADISCORD_west_wrk_corridor_push = {
 			picture = generic_war_preparation
-			allowed = { original_tag = WRK }
+			allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
 			allowed_civil_war = { always = yes }
 			cancel = { NOT = { has_war_with = IVN } }
 			removal_cost = -1
@@ -103,7 +103,7 @@ ideas = {
 			picture = generic_fortify_the_borders
 			allowed = { original_tag = IVN }
 			allowed_civil_war = { always = yes }
-			cancel = { NOT = { has_war_with = WRK } }
+			cancel = { NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation } }
 			removal_cost = -1
 			modifier = {
 				army_core_defence_factor = 0.10

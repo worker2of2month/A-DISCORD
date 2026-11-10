@@ -18,14 +18,18 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.validators._vorkerland_release_contract import (
+        VORKERLAND_NATION,
         base_front_controls,
+        direct_statements,
         validate_adaptive_fronts,
         validate_release_hook_normal_branches,
         validate_release_interceptor_structure,
     )
 except ModuleNotFoundError:
     from _vorkerland_release_contract import (
+        VORKERLAND_NATION,
         base_front_controls,
+        direct_statements,
         validate_adaptive_fronts,
         validate_release_hook_normal_branches,
         validate_release_interceptor_structure,
@@ -208,6 +212,24 @@ LOCAL_RIVALRY_EDGES = (
 CENTRAL_BRACKET_TAGS = frozenset(CENTRAL_MINOR_TARGETS)
 CLOSED_ZONE_BRACKET_TAGS = frozenset({"RZA", "MLR", "IRT", "ERT", "SCA"})
 MAIN_CLAIMANTS = frozenset({"WKR", "VAD", "TVA"})
+# Each claimant unifies the country on its own tag and records its route flag.
+UNIFICATION_ROUTES = (
+    ("wkr", "WKR", "ADISCORD_vorkerland_route_worker"),
+    ("vad", "VAD", "ADISCORD_vorkerland_route_joint"),
+    ("tva", "TVA", "ADISCORD_vorkerland_route_utilitarian"),
+)
+# Claimant-war command spirits that must not outlive the war on the winner.
+WINNER_WARTIME_SPIRITS = {
+    "WKR": (
+        "ADISCORD_vorkerland_wkr_front_operations_bureau",
+        "ADISCORD_vorkerland_wkr_republican_mission_commands",
+        "ADISCORD_vorkerland_wkr_normative_campaign_tables",
+    ),
+    "VAD": (
+        "ADISCORD_vorkerland_vad_restoration_war_cabinet_2",
+        "ADISCORD_vorkerland_vad_dual_authority_protocol_2",
+    ),
+}
 EMERGENCY_TEMPLATE_EFFECTS = {
     "ADISCORD_vorkerland_ensure_emergency_militia_template": "Emergency Militia",
     "ADISCORD_vorkerland_ensure_worker_home_guard_template": "Worker Home Guard",
@@ -288,6 +310,11 @@ def balanced(source: str) -> bool:
                 if depth < 0:
                     return False
     return depth == 0 and not quoted
+
+
+def without_comments(source: str) -> str:
+    """Return script text with every ``#`` comment removed."""
+    return "\n".join(line.split("#", 1)[0] for line in source.splitlines())
 
 
 def named_block(source: str, name: str) -> str:
@@ -708,8 +735,8 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
         'phase_effects',
     )
-    tva_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
-    tva_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
+    tva_formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_tva")
+    tva_formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_tva")
     for token in (
         "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
         "drop_cosmetic_tag = yes",
@@ -776,24 +803,30 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     ):
         if token not in anton_promoter:
             issues.append(
-                f"Anton Bagley's promotion effect is not transfer-safe: missing {token}"
+                f"Anton Bagley's promotion effect ignores an existing leader role: "
+                f"missing {token}"
             )
     worker_formation = named_block(
-        phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
+        phase_effects, "ADISCORD_vorkerland_unify_under_wkr"
     )
-    completion = named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+    completion = named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr")
     worker_formation += completion
     if not re.search(
         r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*"
         r"ADISCORD_vorkerland_worker_utilitarian_outcome\s*\}\s*WKR_appoint_executive\s*=\s*yes",
         completion,
     ):
-        issues.append("restored WRK must apply the recorded executive mandate")
+        issues.append("unified Vorkerland must apply the recorded executive mandate")
     else:
-        worker_formation += named_block(
+        executive = named_block(
             read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
             "WKR_appoint_executive",
         )
+        worker_formation += executive
+        # Anton already serves the winning claimant, so the appointment reaches
+        # him through the shared promoter and not through a character transfer.
+        if "ADISCORD_vorkerland_promote_anton_bagley = yes" in executive:
+            worker_formation += anton_promoter
     for token in (
         "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
@@ -802,45 +835,19 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_promote_anton_bagley = yes",
     ):
         if token not in worker_formation:
-            issues.append(f"Anton Bagley's restored-WRK succession is missing {token}")
+            issues.append(
+                f"Anton Bagley's unified-country succession is missing {token}"
+            )
     if "recruit_character =" in worker_formation:
-        issues.append("restored WRK recruits characters outside country history")
+        issues.append("unified Vorkerland recruits characters outside country history")
 
-    for formation_name, source_tag, wartime_ideas in (
-        (
-            "ADISCORD_vorkerland_form_wrk_from_wkr",
-            "WKR",
-            (
-                "ADISCORD_vorkerland_wkr_front_operations_bureau",
-                "ADISCORD_vorkerland_wkr_republican_mission_commands",
-                "ADISCORD_vorkerland_wkr_normative_campaign_tables",
-            ),
+    validate_unification_under_winner(
+        phase_effects,
+        source_section(
+            read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'phase_events'
         ),
-        (
-            "ADISCORD_vorkerland_form_wrk_from_vad",
-            "VAD",
-            (
-                "ADISCORD_vorkerland_vad_restoration_war_cabinet_2",
-                "ADISCORD_vorkerland_vad_dual_authority_protocol_2",
-            ),
-        ),
-    ):
-        formation = named_block(phase_effects, formation_name)
-        source_scope = "\n".join(named_blocks(formation, source_tag))
-        for idea in wartime_ideas:
-            token = f"remove_ideas = {idea}"
-            if token not in source_scope:
-                issues.append(
-                    f"{formation_name} must remove terminal wartime spirit {idea} "
-                    f"inside the surviving {source_tag} scope"
-                )
-            elif formation.find(token) >= formation.find(
-                f"change_tag_from = {source_tag}"
-            ):
-                issues.append(
-                    f"{formation_name} must remove terminal wartime spirit {idea} "
-                    "before the player-tag handoff"
-                )
+        issues,
+    )
 
     vad_setup = named_block(claimant_setup, "VAD")
     joint_vad = named_block(vad_setup, "if")
@@ -864,8 +871,8 @@ def validate_countries(root: Path, issues: list[str]) -> None:
                 f"survivor joint government incorrectly borrows Vlad's imperial identity: {token}"
             )
 
-    vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
-    vad_formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad")
+    vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_vad")
+    vad_formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_vad")
     joint_identity = re.search(
         r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
         r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
@@ -900,6 +907,207 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     viktor_portrait = root / "gfx" / "leaders" / "ZTA" / "portrait_ZTA_Viktor_Holt.png"
     if not viktor_portrait.exists():
         issues.append("Viktor Holt portrait filename was not migrated")
+
+
+def validate_unification_under_winner(
+    phase_effects: str, phase_events: str, issues: list[str]
+) -> None:
+    """The civil-war winner keeps its own tag and becomes the nation target."""
+
+    target_name = VORKERLAND_NATION.split(":", 1)[1]
+    dispatch = named_block(
+        event_block(phase_events, "ADISCORD_vorkerland_phase.6"), "immediate"
+    )
+    roster_call = "ADISCORD_vorkerland_adopt_retired_roster"
+    retired_roster = named_block(named_block(phase_effects, roster_call), "WRK")
+    if (
+        "every_character = {" not in retired_roster
+        or f"set_nationality = {{ target_country = {VORKERLAND_NATION} }}"
+        not in retired_roster
+    ):
+        issues.append("the retired WRK roster does not join the unified country")
+    for suffix, tag, route_flag in UNIFICATION_ROUTES:
+        unify_name = f"ADISCORD_vorkerland_unify_under_{suffix}"
+        unify = named_block(phase_effects, unify_name)
+        own_scope_calls = [
+            block
+            for block in named_blocks(dispatch, tag)
+            if "yes" in direct_statements(block, unify_name)
+        ]
+        if len(own_scope_calls) != 1 or dispatch.count(f"{unify_name} = yes") != 1:
+            issues.append(
+                f"phase.6 must run {unify_name} exactly once inside the {tag} scope"
+            )
+        # Nested settlements read the target, so the rebinding opens the effect.
+        rebinds_first = re.match(
+            rf"\s*{unify_name}\s*=\s*\{{"
+            rf"\s*clear_global_event_target\s*=\s*{target_name}"
+            rf"\s+save_global_event_target_as\s*=\s*{target_name}\s",
+            without_comments(unify),
+        )
+        if (
+            not rebinds_first
+            or unify.count("clear_global_event_target =") != 1
+            or unify.count("save_global_event_target_as =") != 1
+        ):
+            issues.append(
+                f"{unify_name} must first rebind the Vorkerland nation target to {tag}"
+            )
+        for transfer in (
+            "change_tag_from",
+            "set_nationality",
+            "inherit_technology",
+            "ADISCORD_copy_development_from_prev",
+            "ADISCORD_vorkerland_transfer_military_staff_to_wrk",
+        ):
+            if transfer in unify:
+                issues.append(
+                    f"{unify_name} still moves the winning {tag} into another "
+                    f"country: {transfer}"
+                )
+        # The effect runs in the winner's scope, so only a direct statement
+        # reaches the country that would otherwise keep these spirits.
+        own_removals = direct_statements(unify, "remove_ideas")
+        for idea in WINNER_WARTIME_SPIRITS.get(tag, ()):
+            if idea not in own_removals:
+                issues.append(
+                    f"{unify_name} must remove terminal wartime spirit {idea} "
+                    f"in the winning {tag}'s own scope"
+                )
+        if "yes" not in direct_statements(unify, roster_call):
+            issues.append(
+                f"{unify_name} does not adopt the retired WRK roster in the {tag} scope"
+            )
+        if route_flag not in direct_statements(unify, "set_country_flag"):
+            issues.append(f"{unify_name} does not record {route_flag} on {tag}")
+        if (
+            "country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"
+            not in unify
+        ):
+            issues.append(f"{unify_name} does not queue the delayed settlement")
+        settle_name = f"ADISCORD_vorkerland_settle_unification_under_{suffix}"
+        settle = named_block(phase_effects, settle_name)
+        for transfer in (
+            f"annex_country = {{ target = {tag}",
+            "change_tag_from",
+            "set_nationality",
+        ):
+            if transfer in settle:
+                issues.append(
+                    f"{settle_name} must leave the winning {tag} on its own tag: "
+                    f"{transfer}"
+                )
+        for loser in sorted(MAIN_CLAIMANTS - {tag}):
+            annexation = (
+                f"if = {{ limit = {{ country_exists = {loser} }} "
+                f"annex_country = {{ target = {loser} transfer_troops = yes }} }}"
+            )
+            if annexation not in settle:
+                issues.append(
+                    f"{settle_name} does not absorb the defeated {loser} with its army"
+                )
+        if "yes" not in direct_statements(
+            settle, "ADISCORD_vorkerland_finalize_unified_territory"
+        ):
+            issues.append(f"{settle_name} does not finalize the unified territory")
+    # The premature-release guard ends with the reunification; from then on only
+    # a coreless WRK keeps a peace conference from releasing the retired tag.
+    retired_cores = named_block(
+        phase_effects, "ADISCORD_vorkerland_inherit_retired_cores"
+    )
+    if (
+        "ADISCORD_vorkerland_inherit_retired_cores = yes"
+        not in named_block(phase_effects, "ADISCORD_vorkerland_finalize_unified_territory")
+        or "limit = { is_core_of = WRK }" not in retired_cores
+        or f"add_core_of = {VORKERLAND_NATION}" not in retired_cores
+        or "remove_core_of = WRK" not in retired_cores
+    ):
+        issues.append(
+            "the retired WRK keeps cores that a later peace could release beside "
+            "the unified country"
+        )
+    for removed in (
+        "ADISCORD_vorkerland_transfer_military_staff_to_wrk",
+        "ADISCORD_vorkerland_inherit_worker_reform_spirits",
+    ):
+        if removed in phase_effects:
+            issues.append(f"retired winner-transfer effect survived: {removed}")
+    worker_settlement = named_block(
+        phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr"
+    )
+    # The worker route ends only the pre-collapse crisis spirits; a scrub of the
+    # reform stage would discard what WKR earned during the war.
+    if sorted(direct_statements(worker_settlement, "remove_ideas")) != [
+        "WRK_ashes_of_the_crown",
+        "WRK_constitution_of_the_republic",
+        "WRK_hourglass_of_discord",
+    ] or "ADISCORD_vorkerland_scrub_precollapse_crisis = yes" in worker_settlement:
+        issues.append(
+            "the worker settlement must end exactly the three pre-collapse crisis "
+            "spirits and keep the WKR reform stage"
+        )
+
+
+def nation_target_startup_issues(
+    startups: list[tuple[str, str]], bound_by_history: bool
+) -> list[str]:
+    """Check comment-free ``(file name, on_startup block)`` pairs in hook order.
+
+    Hooks of one name run in file-name order, after country history.
+    """
+    if bound_by_history:
+        return []
+    binding = "save_global_event_target_as = " + VORKERLAND_NATION.split(":", 1)[1]
+    binders = [name for name, startup in startups if binding in startup]
+    if not binders:
+        return ["no on_startup hook binds the Vorkerland nation target to WRK"]
+    found: list[str] = []
+    for name, startup in startups:
+        if name != binders[0]:
+            if VORKERLAND_NATION in startup:
+                found.append(
+                    f"{name}: on_startup reads the Vorkerland nation target before "
+                    f"{binders[0]} binds it"
+                )
+            continue
+        if not any(binding in scope for scope in named_blocks(startup, "WRK")):
+            found.append(
+                f"{name}: on_startup must bind the Vorkerland nation target "
+                "in the WRK scope"
+            )
+        first_read = startup.find(VORKERLAND_NATION)
+        if 0 <= first_read < startup.find(binding):
+            found.append(
+                f"{name}: on_startup reads the Vorkerland nation target before "
+                "binding it"
+            )
+        break
+    return found
+
+
+def validate_nation_target_binding(root: Path, issues: list[str]) -> None:
+    """The nation target is bound to WRK before any startup hook reads it."""
+
+    binding = "save_global_event_target_as = " + VORKERLAND_NATION.split(":", 1)[1]
+    bound_by_history = any(
+        binding in without_comments(history.read_text(encoding="utf-8-sig"))
+        for history in (root / "history" / "countries").glob("WRK - *.txt")
+    )
+    hook_files = sorted(
+        (root / "common" / "on_actions").glob("*.txt"),
+        key=lambda hook_file: hook_file.name.lower(),
+    )
+    startups = [
+        (
+            hook_file.name,
+            named_block(
+                without_comments(hook_file.read_text(encoding="utf-8-sig")),
+                "on_startup",
+            ),
+        )
+        for hook_file in hook_files
+    ]
+    issues.extend(nation_target_startup_issues(startups, bound_by_history))
 
 
 def validate_premature_wrk_release_contract(
@@ -1302,6 +1510,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 f"collapse startup contains forbidden old-save behavior: {forbidden}"
             )
 
+    validate_nation_target_binding(root, issues)
+
     if named_block(rom_tru_on_actions, "on_startup"):
         issues.append("ROM/TRU war content must start only from fresh on_war edges")
 
@@ -1366,7 +1576,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "tag = PWR",
         "country_exists = IVN",
-        "country_exists = WRK",
+        f"{VORKERLAND_NATION} = {{ exists = yes }}",
         "owns_state = 90",
         "owns_state = 91",
         "owns_state = 93",
@@ -1765,8 +1975,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "collapse opening news option A does not acknowledge the civil war"
         )
     teardown = named_block(effects, "ADISCORD_vorkerland_teardown_confederation")
-    if "is_subject_of = WRK" in teardown:
-        issues.append("collapse teardown still assumes WRK is every country's overlord")
+    if re.search(
+        rf"\bis_subject_of\s*=\s*(?:WRK|{re.escape(VORKERLAND_NATION)})\b", teardown
+    ):
+        issues.append(
+            "collapse teardown still assumes Vorkerland is every country's overlord"
+        )
     for effect_name, portrait in (
         (
             "ADISCORD_vorkerland_appoint_rom_etatist",
@@ -2256,7 +2470,32 @@ def validate_events(root: Path, issues: list[str]) -> None:
         named_block(decisions, "ADISCORD_vorkerland_continue_reunification"), "allowed"
     )
     if "NOT = { tag = WRK }" not in reunification_allowed:
-        issues.append("WRK can still launch post-victory reunification wars")
+        issues.append("the retired WRK tag can launch reunification wars")
+    # The winner keeps a claimant tag, so the category's terminal gate is what
+    # withdraws the decision from the unified country.
+    collapse_category = named_block(
+        source_section(
+            read(
+                root,
+                "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
+                issues,
+            ),
+            'collapse_categories',
+        ),
+        "ADISCORD_vorkerland_collapse_category",
+    )
+    categorized_reunification = named_block(
+        named_block(decisions, "ADISCORD_vorkerland_collapse_category"),
+        "ADISCORD_vorkerland_continue_reunification",
+    )
+    category_ends_with_collapse = (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }"
+        in named_block(collapse_category, "visible")
+    )
+    if not categorized_reunification or not category_ends_with_collapse:
+        issues.append(
+            "the unified country can still launch post-victory reunification wars"
+        )
 
     for name, block in (
         (
@@ -2340,7 +2579,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ("WKR", "wkr"),
         ("VAD", "vad"),
         ("TVA", "tva"),
-        ("WRK", "wrk"),
+        (VORKERLAND_NATION, "wrk"),
     ):
         if f"tag = {tag}" not in pending_trigger:
             issues.append(f"living-winner settlement trigger lacks {tag}")
@@ -3484,10 +3723,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     for token in (
         "is_subject_of = WKR",
+        f"is_subject_of = {VORKERLAND_NATION}",
         "remove_ideas = ADISCORD_vorkerland_republics_from_the_ruins",
     ):
         if token not in republic_sync:
-            issues.append(f"WRK subject-spirit synchronizer is missing {token}")
+            issues.append(f"Vorkerland subject-spirit synchronizer is missing {token}")
 
     for patron, flag, spirit, rifles in (
         (
@@ -3669,7 +3909,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "Worker free-republic settlement must roll independently for ROM and TRU"
         )
     worker_map = named_block(map_effects, "ADISCORD_vorkerland_apply_worker_map")
-    finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
+    finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunification")
     if "ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes" not in finalizer:
         issues.append(
             "verified Worker reunification does not resolve unguaranteed free republics"
@@ -3694,7 +3934,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             if forbidden in map_effect:
                 issues.append(
-                    f"{route} claimant outcome announces/finalizes before verified WRK: {forbidden}"
+                    f"{route} claimant outcome announces/finalizes before verified reunification: {forbidden}"
                 )
 
     for key in (
@@ -4080,7 +4320,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"WKR home-guard effect is not bounded: {forbidden}")
     relocation = named_block(effects, "ADISCORD_vorkerland_relocate_legacy_armies")
     if "tag = WRK" not in relocation:
-        issues.append("legacy WRK formations are not evacuated before transfer_troops")
+        issues.append(
+            "pre-collapse Vorkerland formations are not evacuated before transfer_troops"
+        )
     if "tag = WKR" in relocation:
         issues.append(
             "legacy relocation erases WKR's authored state-33 home-guard deployment"
@@ -4201,7 +4443,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append(
             "regional combatants are missing from the bounded emergency-levy allowlist"
         )
-    for tag in ("WRK", "VAD", "TVA", "IVN", "EXZ"):
+    for tag in ("WRK", VORKERLAND_NATION, "VAD", "TVA", "IVN", "EXZ"):
         if f"tag = {tag}" in minor_trigger:
             issues.append(f"{tag}: must not receive the minor emergency levy")
     levies = named_block(effects, "ADISCORD_vorkerland_raise_emergency_levies")
@@ -4379,7 +4621,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "set_cosmetic_tag = ROM_frealor_republic",
         "set_cosmetic_tag = TRU_zolotorevsk_republic",
         "set_cosmetic_tag = ZAO_zaozersk_republic",
-        "OR = { is_subject_of = WKR is_subject_of = WRK }",
+        f"OR = {{ is_subject_of = WKR is_subject_of = {VORKERLAND_NATION} }}",
         "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
         "else = { drop_cosmetic_tag = yes }",
     ):
@@ -5106,7 +5348,7 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         ):
             if premature in block:
                 issues.append(
-                    f"{name} claimant outcome finalizes before verified WRK: {premature}"
+                    f"{name} claimant outcome finalizes before verified reunification: {premature}"
                 )
 
     reunification = named_block(
@@ -5125,7 +5367,7 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         postwar_decisions, "ADISCORD_vorkerland_recognize_free_republics"
     )
     if not recognition:
-        issues.append("WRK cannot recognise the free ROM/TRU republics")
+        issues.append("unified Vorkerland cannot recognise the free ROM/TRU republics")
     else:
         for token in (
             "has_country_flag = ADISCORD_vorkerland_focus_worker_free_republics",
@@ -5316,15 +5558,15 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
     elect_worker = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_worcker")
     elect_mark = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_yastrebtsev")
     elect_necro = named_block(phase_effects, "ADISCORD_vorkerland_wrk_elect_filopo")
-    finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
-    formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
-    formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+    finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunification")
+    formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_wkr")
+    formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr")
     choice = event_block(events, "ADISCORD_vorkerland_collapse.100")
     result = event_block(events, "ADISCORD_vorkerland_collapse.101")
 
     if finalizer.count("ADISCORD_vorkerland_offer_worker_mandate = yes") != 1:
         issues.append(
-            "verified WRK finalizer must offer Nikita's postwar mandate exactly once"
+            "verified reunification must offer Nikita's postwar mandate exactly once"
         )
     if not re.search(
         r"has_country_flag\s*=\s*ADISCORD_vorkerland_route_worker[\s\S]*?"
@@ -5397,12 +5639,23 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         if token not in usurp:
             issues.append(f"usurpation path is missing {token}")
 
+    # The candidates wait on the retired WRK roster unless the collapse already
+    # moved them to WKR; adopting that roster puts both on the unified country.
+    wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
+    retired_roster = named_block(
+        named_block(phase_effects, "ADISCORD_vorkerland_adopt_retired_roster"), "WRK"
+    )
     if (
-        "character = WRK_Mark_Yastrebtsev" not in formation
-        or "character = WRK_Necro_Filopo" not in formation
+        "ADISCORD_vorkerland_adopt_retired_roster = yes" not in formation
+        or "every_character = {" not in retired_roster
+        or f"set_nationality = {{ target_country = {VORKERLAND_NATION} }}"
+        not in retired_roster
+        or "recruit_character = WRK_Mark_Yastrebtsev" not in wrk_history
+        or "recruit_character = WRK_Necro_Filopo" not in wrk_history
     ):
         issues.append(
-            "restored WRK does not reclaim the postwar election candidates from WKR"
+            "unified Vorkerland does not adopt the postwar election candidates "
+            "from the retired WRK roster"
         )
 
     if not choice or not result:
@@ -5572,7 +5825,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         issues.append("Vorkerland exhaustion must not add a daily pulse")
 
     finish = named_block(map_effects, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
-    for tag in ("WKR", "WRK", "VAD", "TVA"):
+    for tag in ("WKR", VORKERLAND_NATION, "VAD", "TVA"):
         if (
             f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}"
             not in finish
@@ -5585,17 +5838,17 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
             ),
             'phase_effects',
         ),
-        "ADISCORD_vorkerland_finalize_reunified_wrk",
+        "ADISCORD_vorkerland_finalize_reunification",
     )
     if "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes" not in finalizer:
-        issues.append("verified WRK finalizer does not finish civil-war exhaustion")
+        issues.append("verified reunification does not finish civil-war exhaustion")
     for outcome in ("worker", "vlad", "dorian"):
         outcome_effect = named_block(
             map_effects, f"ADISCORD_vorkerland_apply_{outcome}_map"
         )
         if "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes" in outcome_effect:
             issues.append(
-                f"{outcome} claimant outcome ends exhaustion before verified WRK"
+                f"{outcome} claimant outcome ends exhaustion before verified reunification"
             )
 
     update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
@@ -5989,7 +6242,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         for token in (
             "hidden = yes",
             "is_triggered_only = yes",
-            f'play_song = "{sound_effect.removesuffix("_sound_e")}"',
+            f"sound_effect = {sound_effect}",
         ):
             if token not in audio_proxy:
                 issues.append(f"{audio_id}: unscoped audio proxy is missing {token}")

@@ -27,21 +27,21 @@
   "hoi4_runtime_verified": false,
   "source_blend_sha256": "c0a60ef2df328511e76f3f61ae879008655782b96c7a8aefb188dce6195e0513",
   "input_sha256": {
-    "tools/builders/build_adiscord_nam_oilfields.py": "aeb7ecacf7276b0301de9d49f8b85ba103f677d3a92947ce2892ca13f2784e3d",
+    "tools/builders/build_adiscord_nam_oilfields.py": "6d1fee7fbaa63ee404fc997ca94bb53ca5ac713bcbf29377898e64d4c5f7bdfc",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
     "map/heightmap.bmp": "80a3d7f8d1d01c2207b25307077d9bbb6672c1ca69b363b6418d79c202dc6100",
-    "map/provinces.bmp": "dcc212c9d5d2ee68e21f556d857ad70bb2eea4a8a4cec74a9ea6d66f6beb8106",
+    "map/provinces.bmp": "7b5e93949aec084af4f0475c0f4651f47391a88eef6bd230f8eedd52f6415010",
     "map/rivers.bmp": "e4ce6cf8f622c2076773cbb7f4856488400fa94c2330810b5fc4d4c357be79ad",
-    "map/definition.csv": "7d495806170ad61581985ba3340090a8ff4140a895210ac192da4a1350a09a7c",
-    "map/buildings.txt": "7da9cba59e5e150e0bfce6c1cdf7d944916f305af86e1c329ecf7fe59599ada4",
-    "history/states/67-67.txt": "dbd9511621585daa3df1474c2043361e538e9262757679296c07dde636e2ac0c",
-    "history/states/689-South-Coast.txt": "384d9f188bf374a2c971d70bc4b177e2d24ca8f75bd6280c19ad0524bff2d7b7",
-    "history/states/690-Dryriver.txt": "759a89857617bd9f2b5f108678e36db85b40870e7bac0c5ddbe3d82a8e6eec84"
+    "map/definition.csv": "7d0f0b162198cd33c1e3321506fea145acc9699b73c0a6490ae9f84a05cc62b2",
+    "map/buildings.txt": "bc4111f8919d4f0e4818cf24f1417d312f7730cfe4ebda2e08105a2d9f6a2d9f",
+    "history/states/67-67.txt": "af69cc35030e0d3c20890442addcab8029de548e31fadfa8a4eea1bfaea8689f",
+    "history/states/689-South-Coast.txt": "19c29ea559833fdb2b1c0ec08cefa9656573c366a07a7d9444797f23c594764d",
+    "history/states/690-Dryriver.txt": "09d3fa8961b6be7f595de488fd2952065cdfdf6a0405610aaa72dd4cd2f074c7"
   },
   "placements": [
     {
       "state": 67,
-      "oil": 80,
+      "oil": 40,
       "province": 4912,
       "position": [
         3728.0,
@@ -52,7 +52,7 @@
     },
     {
       "state": 67,
-      "oil": 80,
+      "oil": 40,
       "province": 11069,
       "position": [
         3648.0,
@@ -63,7 +63,7 @@
     },
     {
       "state": 689,
-      "oil": 36,
+      "oil": 24,
       "province": 2299,
       "position": [
         3704.0,
@@ -74,7 +74,7 @@
     },
     {
       "state": 690,
-      "oil": 24,
+      "oil": 16,
       "province": 9641,
       "position": [
         3665.0,

@@ -812,7 +812,11 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
             set(re.findall(r"\btag\s*=\s*([A-Z]{3})", sync)),
             {"VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"},
         )
-        self.assertIn("OR = { is_subject_of = WRK is_subject_of = WKR }", sync)
+        # The overlord is whichever country is Vorkerland, or the WKR claimant
+        # during the civil war.
+        nation = "event_target:ADISCORD_vorkerland_nation"
+        self.assertIn(f"OR = {{ is_subject_of = {nation} is_subject_of = WKR }}", sync)
+        self.assertEqual(set(re.findall(r"\bis_subject_of\s*=\s*(\S+)", sync)), {nation, "WKR"})
         self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_started", sync)
         for ideology in ("pragmatism", "technocracy", "etatism", "chauvinism"):
             self.assertIn(f"ideology = {ideology}", sync)

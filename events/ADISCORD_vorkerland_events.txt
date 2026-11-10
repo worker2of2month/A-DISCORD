@@ -708,7 +708,7 @@ country_event = {
 	id = ADISCORD_vorkerland_claimant.32
 	title = ADISCORD_vorkerland_claimant.32.t
 	desc = ADISCORD_vorkerland_claimant.32.d
-	picture = GFX_event_adiscord_parliament_chamber
+	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = TVA }
@@ -770,7 +770,7 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		ADISCORD_vorkerland_collapse_not_started = yes
 	}
 
@@ -845,7 +845,7 @@ country_event = {
 				tree = ADISCORD_vorkerland_wkr_focus
 				keep_completed = yes
 			}
-			annex_country = { target = WRK transfer_troops = yes }
+			annex_country = { target = event_target:ADISCORD_vorkerland_nation transfer_troops = yes }
 			ADISCORD_vorkerland_relocate_legacy_armies = yes
 			ADISCORD_vorkerland_teardown_confederation = yes
 			ADISCORD_vorkerland_align_wtd_with_worx = yes
@@ -1057,7 +1057,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = { tag = event_target:ADISCORD_vorkerland_nation tag = WKR }
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_claim_wars_authorized }
 	}
@@ -1082,7 +1082,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = { tag = event_target:ADISCORD_vorkerland_nation tag = WKR }
 		has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
 		NOT = { has_global_flag = ADISCORD_vorkerland_local_bracket_stage_central }
 	}
@@ -1117,7 +1117,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR tag = RUS }
+		OR = { tag = event_target:ADISCORD_vorkerland_nation tag = WKR tag = RUS }
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	}
 	immediate = { ADISCORD_vorkerland_verify_local_bracket_wars = yes }
@@ -1416,7 +1416,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = { tag = event_target:ADISCORD_vorkerland_nation tag = WKR }
 		has_global_flag = ADISCORD_vorkerland_collapse_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
 	}
@@ -2098,7 +2098,7 @@ country_event = {
 	timeout_days = 21
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_country_flag = ADISCORD_vorkerland_route_worker
 		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
@@ -2139,7 +2139,7 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_country_flag = ADISCORD_vorkerland_worker_elections_scheduled
 	}
 
@@ -2185,15 +2185,15 @@ news_event = {
 	id = ADISCORD_vorkerland_news.3
 	title = ADISCORD_vorkerland_news.3.t
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_worker_elected } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_elected } }
 		text = ADISCORD_vorkerland_news.3.worker.d
 	}
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_yastrebtsev_elected } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_yastrebtsev_elected } }
 		text = ADISCORD_vorkerland_news.3.yastrebtsev.d
 	}
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_filopo_elected } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_filopo_elected } }
 		text = ADISCORD_vorkerland_news.3.filopo.d
 	}
 	picture = GFX_news_event_adiscord_parliament_chamber
@@ -2689,7 +2689,7 @@ country_event = {
 
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		ADISCORD_vorkerland_collapse_not_started = yes
 	}
 
@@ -2847,8 +2847,8 @@ country_event = {
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
 				}
 			}
-			WRK = {
-				ADISCORD_vorkerland_form_wrk_from_wkr = yes
+			WKR = {
+				ADISCORD_vorkerland_unify_under_wkr = yes
 			}
 		}
 		else_if = {
@@ -2859,8 +2859,8 @@ country_event = {
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
 				}
 			}
-			WRK = {
-				ADISCORD_vorkerland_form_wrk_from_vad = yes
+			VAD = {
+				ADISCORD_vorkerland_unify_under_vad = yes
 			}
 		}
 		else_if = {
@@ -2871,8 +2871,8 @@ country_event = {
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
 				}
 			}
-			WRK = {
-				ADISCORD_vorkerland_form_wrk_from_tva = yes
+			TVA = {
+				ADISCORD_vorkerland_unify_under_tva = yes
 			}
 		}
 	}
@@ -2884,13 +2884,14 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_reunification
 	}
 
 	immediate = {
 		# A human wartime administration follows the united state only when
-		# WRK has no human controller. Queue settlement before changing control.
+		# the unified country has no human controller. Queue settlement before
+		# changing control.
 		if = {
 			limit = {
 				is_ai = yes
@@ -2936,8 +2937,8 @@ country_event = {
 			change_tag_from = YOR
 		}
 		else = {
-			ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes
-			ADISCORD_vorkerland_verify_reunified_wrk = yes
+			ADISCORD_vorkerland_finish_delayed_unification = yes
+			ADISCORD_vorkerland_verify_reunification = yes
 			ADISCORD_vorkerland_story_offer_post_reunification = yes
 			if = {
 				limit = {
@@ -2950,7 +2951,7 @@ country_event = {
 			else_if = {
 				limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
 				set_global_flag = ADISCORD_vorkerland_reunification_failed
-				log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
+				log = "[ADISCORD][VORKERLAND][RECOVERY] Vorkerland unification failed its postconditions after one retry."
 			}
 		}
 	}
@@ -3173,7 +3174,7 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_reunification_verified
 		NOT = { has_country_flag = ADISCORD_vorkerland_story_postwar_choice_resolved }
 		OR = {
@@ -3536,8 +3537,8 @@ country_event = {
 				limit = {
 					ADISCORD_vorkerland_pw_sovereign = yes
 					OR = {
-						EBA = { is_subject_of = WRK }
-						PIV = { is_subject_of = WRK }
+						EBA = { is_subject_of = event_target:ADISCORD_vorkerland_nation }
+						PIV = { is_subject_of = event_target:ADISCORD_vorkerland_nation }
 					}
 				}
 				country_event = {
@@ -3571,7 +3572,7 @@ news_event = {
 	id = ADISCORD_vorkerland_postwar.5
 	title = ADISCORD_vorkerland_postwar.5.t
 	desc = ADISCORD_vorkerland_postwar.5.d
-	picture = GFX_news_event_adiscord_military_planning
+	picture = GFX_news_event_vorkerland_world_empire
 	major = yes
 	is_triggered_only = yes
 	fire_only_once = no
@@ -3585,7 +3586,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_country_flag = ADISCORD_vorkerland_central_unifier
 	}
 	immediate = {
@@ -3625,7 +3626,7 @@ country_event = {
 	fire_only_once = yes
 	timeout_days = 14
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 		NOT = { has_variable = ADISCORD_vorkerland_prep_patron }
 	}
@@ -3753,7 +3754,7 @@ country_event = {
 				NOT = { has_war_with = FROM }
 				FROM = {
 					ADISCORD_vorkerland_prep_diplomacy_open = yes
-					NOT = { tag = WRK }
+					NOT = { tag = event_target:ADISCORD_vorkerland_nation }
 				}
 				OR = {
 					AND = {
@@ -3940,7 +3941,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4004,7 +4005,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4040,7 +4041,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4084,7 +4085,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4118,7 +4119,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4150,7 +4151,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4182,7 +4183,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4215,7 +4216,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -4254,7 +4255,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
 	}
 	immediate = {
@@ -5007,27 +5008,27 @@ news_event = {
 	id = ADISCORD_vorkerland_postwar.61
 	title = {
 		text = ADISCORD_vorkerland_postwar.61.t_empire
-		trigger = { WRK = { has_cosmetic_tag = WRK_veyran_empire } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_veyran_empire } }
 	}
 	title = {
 		text = ADISCORD_vorkerland_postwar.61.t_worker
-		trigger = { WRK = { has_cosmetic_tag = WRK_western_eastern_union } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_western_eastern_union } }
 	}
 	title = {
 		text = ADISCORD_vorkerland_postwar.61.t_technical
-		trigger = { WRK = { has_cosmetic_tag = WRK_forul_technical_union } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_forul_technical_union } }
 	}
 	desc = {
 		text = ADISCORD_vorkerland_postwar.61.d_empire
-		trigger = { WRK = { has_cosmetic_tag = WRK_veyran_empire } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_veyran_empire } }
 	}
 	desc = {
 		text = ADISCORD_vorkerland_postwar.61.d_worker
-		trigger = { WRK = { has_cosmetic_tag = WRK_western_eastern_union } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_western_eastern_union } }
 	}
 	desc = {
 		text = ADISCORD_vorkerland_postwar.61.d_technical
-		trigger = { WRK = { has_cosmetic_tag = WRK_forul_technical_union } }
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_forul_technical_union } }
 	}
 	picture = GFX_news_event_adiscord_imperial_proclamation
 	major = yes

@@ -470,6 +470,8 @@ class EventWindowUiTests(unittest.TestCase):
                         self.assertRegex(
                             Path(texture).name, r"^[a-z0-9]+(?:_[a-z0-9]+)*\.png$"
                         )
+                        if Path(texture).stem.endswith("_print"):
+                            expected = (396, 140)
                     with Image.open(ROOT / texture) as artwork:
                         self.assertEqual(artwork.size, expected)
                         self.assertEqual(
@@ -486,6 +488,7 @@ class EventWindowUiTests(unittest.TestCase):
         from tools.builders.build_adiscord_event_pictures import (
             ART,
             NEWS_SCENES,
+            PRINT_NEWS,
             formatted_art,
         )
 
@@ -493,6 +496,12 @@ class EventWindowUiTests(unittest.TestCase):
             if "news" not in formats:
                 continue
             with self.subTest(scene=scene):
+                if scene in PRINT_NEWS:
+                    plate = ROOT / "gfx/event_pictures/standard/news" / (PRINT_NEWS[scene] + ".png")
+                    with Image.open(plate) as source:
+                        expected = source.convert("RGB").resize((396, 140), Image.Resampling.LANCZOS)
+                    self.assertEqual(formatted_art(scene, "news").tobytes(), expected.tobytes())
+                    continue
                 name = NEWS_SCENES.get(scene, scene)
                 with Image.open(
                     ROOT / "tools/assets/source/event_pictures/news" / (name + ".png")
@@ -579,7 +588,8 @@ class StelanderNewsArtworkTests(unittest.TestCase):
             path = ROOT / texture
             with Image.open(path) as bitmap:
                 self.assertEqual(bitmap.width, 396, event_id)
-                self.assertEqual(bitmap.height, 153, event_id)
+                expected_height = 140 if path.stem.endswith("_print") else 153
+                self.assertEqual(bitmap.height, expected_height, event_id)
 
 
 if __name__ == "__main__":

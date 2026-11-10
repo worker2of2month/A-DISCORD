@@ -1,5 +1,6 @@
 """Cross-file contracts for the playable preparation, not a Clausewitz emulator."""
 
+from dataclasses import replace
 from pathlib import Path
 import json
 import re
@@ -92,6 +93,17 @@ def focus_exclusion_crossings(focuses, visible_positions):
     return sorted(crossings)
 
 
+def event_target(name, facts):
+    """Resolve a global event target from explicit scenario facts.
+
+    Startup binds the Vorkerland country target to WRK. A fixture set after the
+    unification records the winner as ("event_target", "ADISCORD_vorkerland_nation").
+    """
+    key = name.removeprefix("event_target:")
+    default = "WRK" if key == "ADISCORD_vorkerland_nation" else None
+    return facts.get(("event_target", key), default)
+
+
 def matches_conditions(items, facts, scope="STP"):
     """Select parsed branches from explicit scenario facts, not a game simulation."""
 
@@ -112,6 +124,16 @@ def matches_conditions(items, facts, scope="STP"):
         }[operator]
 
     def matches(entry):
+        # A target the fixture binds is resolved; an unbound one keeps the
+        # handling of any other unknown scope or literal value.
+        if entry.key.startswith("event_target:") and isinstance(entry.value, list):
+            target = event_target(entry.key, facts)
+            if target is not None:
+                return matches_conditions(entry.value, facts, target)
+        if isinstance(entry.value, str) and entry.value.startswith("event_target:"):
+            target = event_target(entry.value, facts)
+            if target is not None:
+                entry = replace(entry, value=target)
         if entry.key == "custom_trigger_tooltip":
             return matches_conditions(
                 [child for child in entry.value if child.key != "tooltip"], facts, scope
@@ -331,6 +353,14 @@ def selected_effects(items, facts, scope="STP"):
         elif entry.key == "faction_leader":
             yield from selected_effects(
                 entry.value, facts, facts[(scope, "faction_leader")]
+            )
+        elif (
+            entry.key.startswith("event_target:")
+            and isinstance(entry.value, list)
+            and event_target(entry.key, facts) is not None
+        ):
+            yield from selected_effects(
+                entry.value, facts, event_target(entry.key, facts)
             )
         elif re.fullmatch(r"[A-Z]{3}|\d+|ROOT|FROM", entry.key) and isinstance(
             entry.value, list

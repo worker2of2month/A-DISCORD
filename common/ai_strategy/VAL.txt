@@ -18,10 +18,11 @@ VAL_Wants_To_Sell_Stuff = {
 
 ADISCORD_VAL_export_buyer_WRK = {
 	allowed = {
-		original_tag = WRK
+		OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA }
 		has_dlc = "Arms Against Tyranny"
 	}
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		country_exists = VAL
 		NOT = { has_war_with = VAL }
 	}
@@ -155,8 +156,8 @@ ADISCORD_VAL_export_accept_WRK = {
 		has_dlc = "Arms Against Tyranny"
 	}
 	enable = {
-		country_exists = WRK
-		NOT = { has_war_with = WRK }
+		event_target:ADISCORD_vorkerland_nation = { tag = WRK exists = yes }
+		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -171,6 +172,76 @@ ADISCORD_VAL_export_accept_WRK = {
 		value = 200
 	}
 }
+
+ADISCORD_VAL_export_accept_WKR = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		event_target:ADISCORD_vorkerland_nation = { tag = WKR exists = yes }
+		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = WKR
+		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = WKR
+		value = 200
+	}
+}
+
+ADISCORD_VAL_export_accept_VAD = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		event_target:ADISCORD_vorkerland_nation = { tag = VAD exists = yes }
+		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = VAD
+		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = VAD
+		value = 200
+	}
+}
+
+ADISCORD_VAL_export_accept_TVA = {
+	allowed = {
+		original_tag = VAL
+		has_dlc = "Arms Against Tyranny"
+	}
+	enable = {
+		event_target:ADISCORD_vorkerland_nation = { tag = TVA exists = yes }
+		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = TVA
+		target = market_access_rights
+		value = 200
+	}
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = TVA
+		value = 200
+	}
+}
+
 ADISCORD_VAL_export_accept_STP = {
 	allowed = {
 		original_tag = VAL

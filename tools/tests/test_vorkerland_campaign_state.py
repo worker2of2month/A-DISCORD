@@ -51,20 +51,30 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
             'vorkerland_collapse',
         )
-        self.assertEqual(named_block(on_actions, "on_monthly_TVA"), "")
-        for tag in ("WKR", "VAD"):
+        # Whichever claimant is the unified country carries the western crisis
+        # clock on its own monthly hook; the guard fails for the other tags.
+        western_clock = (
+            "if = { limit = { tag = event_target:ADISCORD_vorkerland_nation "
+            "ADISCORD_west_crisis_open = yes } ADISCORD_west_crisis_month = yes }"
+        )
+        scaling = "ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes"
+        hooks = {}
+        for tag in ("WKR", "VAD", "TVA"):
             hook = named_block(on_actions, f"on_monthly_{tag}")
             self.assertTrue(hook, f"missing on_monthly_{tag}")
-            self.assertEqual(
-                hook.count(
-                    "ADISCORD_vorkerland_refresh_war_economy_dynamic_state = yes"
-                ),
-                1,
-            )
-            self.assertIn("ADISCORD_vorkerland_is_live_claimant = yes", hook)
+            hooks[tag] = " ".join(re.sub(r"#[^\n]*", "", hook).split())
+            self.assertEqual(hooks[tag].count(western_clock), 1, tag)
+            self.assertEqual(hooks[tag].count("ADISCORD_west_crisis_month = yes"), 1, tag)
             self.assertNotIn("ADISCORD_vorkerland_refresh_doctrine_dynamic_state", hook)
             self.assertNotIn("every_country", hook)
             self.assertNotIn("every_state", hook)
+        # TVA has no monthly factory scaling: its hook is the clock alone.
+        self.assertEqual(
+            hooks["TVA"], f"on_monthly_TVA = {{ effect = {{ {western_clock} }} }}"
+        )
+        for tag in ("WKR", "VAD"):
+            self.assertEqual(hooks[tag].count(scaling), 1, tag)
+            self.assertIn("ADISCORD_vorkerland_is_live_claimant = yes", hooks[tag])
 
     def test_dynamic_effect_owners_are_split(self) -> None:
         legacy = (
@@ -170,7 +180,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             'phase_effects',
         )
         showdown = named_block(phase, "ADISCORD_vorkerland_set_phase_central_showdown")
-        terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunification")
         self.assertIn("ADISCORD_vorkerland_reconcile_campaign_state = yes", showdown)
         self.assertIn("ADISCORD_vorkerland_reconcile_campaign_state = yes", terminal)
 
@@ -217,16 +227,23 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertIn("ROOT = { VAD_settle_oath_handoff = yes }", annex)
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         for claimant in ("wkr", "vad", "tva"):
-            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            handoff = named_block(effects, f"ADISCORD_vorkerland_unify_under_{claimant}")
             self.assertEqual(handoff.count("VAD_settle_oath_handoff = yes"), 1, claimant)
             self.assertLess(handoff.index("transfer_state = 32"), handoff.index("VAD_settle_oath_handoff = yes"))
             self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"), handoff.index("load_focus_tree"))
             self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"),
                             handoff.index("country_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }"))
             self.assertLess(handoff.index("VAD_settle_oath_handoff = yes"),
-                            re.search(r"\bchange_tag_from\s*=", handoff).start())
-            completion = named_block(effects, f"ADISCORD_vorkerland_complete_wrk_from_{claimant}")
-            self.assertRegex(completion, r"annex_country\s*=\s*\{\s*target = VAD")
+                            handoff.index("VAD = { VAD_close_administration = yes }"))
+            # The winner stays on its own tag, so no player handoff can
+            # invalidate the scope before the paid oath is settled.
+            self.assertNotRegex(handoff, r"\bchange_tag_from\s*=")
+            completion = named_block(effects, f"ADISCORD_vorkerland_settle_unification_under_{claimant}")
+            annexes_vad = r"annex_country\s*=\s*\{\s*target = VAD"
+            if claimant == "vad":
+                self.assertNotRegex(completion, annexes_vad)
+            else:
+                self.assertRegex(completion, annexes_vad)
 
     def test_factory_orders_settle_before_native_peace_or_player_handoff(self) -> None:
         on_actions = read_country_on_actions(
@@ -242,7 +259,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
                             for block in named_blocks(annex, "ROOT")))
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         for claimant in ("wkr", "vad", "tva"):
-            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            handoff = named_block(effects, f"ADISCORD_vorkerland_unify_under_{claimant}")
             self.assertEqual(handoff.count("WKR_settle_council_order_handoff = yes"), 1)
             self.assertLess(handoff.index("transfer_state = 32"), handoff.index("WKR_settle_council_order_handoff"))
             self.assertLess(handoff.index("WKR_settle_council_order_handoff"), handoff.index("WKR_close_administration"))
@@ -266,7 +283,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertLess(annex.index("WKR_settle_railway_handoff"), annex.index("WKR_close_railway_councils"))
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         for claimant in ("wkr", "vad", "tva"):
-            handoff = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{claimant}")
+            handoff = named_block(effects, f"ADISCORD_vorkerland_unify_under_{claimant}")
             self.assertEqual(handoff.count("WKR_settle_railway_handoff = yes"), 1)
             self.assertLess(handoff.index("transfer_state = 32"), handoff.index("WKR_settle_railway_handoff"))
             self.assertLess(handoff.index("WKR_settle_railway_handoff"), handoff.index("WKR_close_administration"))

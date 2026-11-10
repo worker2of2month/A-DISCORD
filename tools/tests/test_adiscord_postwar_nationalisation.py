@@ -183,7 +183,7 @@ class PostwarNationalisationTests(unittest.TestCase):
             'cost': '50',
             'days_remove': '120',
             'fire_only_once': 'no',
-            'state_target': 'yes',
+            'state_target': 'any_owned_state',
             'on_map_mode': 'map_and_decisions_view',
             'cancel_if_not_visible': 'yes',
         }.items():

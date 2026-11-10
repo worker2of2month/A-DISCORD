@@ -3375,6 +3375,63 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertIn("attack = -0.7", self.block(terrain_source, "vorkernsberg"))
         self.assertIn(";vorkernsberg;", self.read("map/definition.csv"))
 
+    def test_southern_city_terrains_shift_urban_roles_by_surroundings(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        units = parse_clausewitz(self.read("common/units/ADISCORD_land_units.txt"))[0].value
+        expected = {
+            "desert_city": {
+                "ADISCORD_urban_breacher": {"attack": 0.55, "defence": 0.50},
+                "ADISCORD_territorial": {"defence": 0.10},
+                "ADISCORD_assault_infantry": {"attack": 0.10},
+                "ADISCORD_mechanized_infantry": {"attack": -0.05},
+                "ADISCORD_recon_platform": {"movement": 0.10},
+                "ADISCORD_light_tank": {"attack": -0.10},
+                "ADISCORD_combat_platform": {"attack": -0.10},
+                "STP_taran": {"attack": 0.20, "movement": -0.10},
+                "ADISCORD_heavy_platform": {"attack": -0.25, "defence": -0.10, "movement": -0.15},
+                "ADISCORD_regimental_pioneers": {"attack": 0.03},
+            },
+            "hill_city": {
+                "ADISCORD_urban_breacher": {"attack": 0.65, "defence": 0.65, "movement": -0.05},
+                "ADISCORD_militia": {"defence": 0.10},
+                "ADISCORD_territorial": {"defence": 0.20},
+                "ADISCORD_assault_infantry": {"attack": 0.10},
+                "ADISCORD_mechanized_infantry": {"attack": -0.15, "movement": -0.10},
+                "mountaineers": {"attack": 0.10, "defence": 0.05, "movement": 0.05},
+                "ADISCORD_line_artillery": {"movement": -0.05},
+                "ADISCORD_recon_platform": {"movement": 0.05},
+                "ADISCORD_light_tank": {"attack": -0.20, "movement": -0.10},
+                "ADISCORD_combat_platform": {"attack": -0.20, "movement": -0.10},
+                "STP_taran": {"attack": 0.10, "movement": -0.30},
+                "ADISCORD_heavy_platform": {"attack": -0.40, "defence": -0.15, "movement": -0.35},
+                "ADISCORD_regimental_pioneers": {"attack": 0.05},
+            },
+        }
+        for terrain, table in expected.items():
+            affected = {}
+            for unit in units:
+                modifiers = [entry for entry in unit.value if entry.key == terrain]
+                if modifiers:
+                    self.assertEqual(len(modifiers), 1, unit.key)
+                    affected[unit.key] = {stat.key: float(stat.value) for stat in modifiers[0].value}
+            self.assertEqual(affected, table, terrain)
+        terrain_source = self.read("common/terrain/00_terrain.txt")
+        self.assertIn("attack = -0.25", self.block(terrain_source, "desert_city"))
+        self.assertIn("attack = -0.4", self.block(terrain_source, "hill_city"))
+        sprites = self.read("interface/ADISCORD_terrain.gfx")
+        for terrain in expected:
+            for suffix in ("", "_winter"):
+                self.assertIn(f'name = "GFX_terrain_{terrain}{suffix}"', sprites)
+            self.assertTrue((ROOT / f"gfx/interface/terrains/{terrain}.dds").is_file())
+            for path in (
+                "localisation/russian/state_l_russian.yml",
+                "localisation/english/ADISCORD_terrain_l_english.yml",
+            ):
+                source = self.read(path)
+                self.assertRegex(source, rf'(?m)^ {terrain}: "[^"]+"\r?$')
+                self.assertRegex(source, rf'(?m)^ {terrain}_desc: "[^"]+"\r?$')
+
     def test_city_terrain_preserves_shield_doctrine_reward(self):
         from tools.builders import build_adiscord_doctrine_system as doctrines
 
@@ -3384,7 +3441,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
             "ADISCORD_special_forces_shield_formations_covered_crossings",
         )
         unit = self.block(reward, "ADISCORD_urban_breacher")
-        for terrain in ("urban", "vorkernsberg"):
+        for terrain in ("urban", "vorkernsberg", "desert_city", "hill_city"):
             self.assertEqual(
                 self.block(unit, terrain).strip(),
                 "attack = 0.06",
@@ -3397,16 +3454,32 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         alternatives = self.block(gain_xp, "OR")
         self.assertEqual(
             re.findall(r"is_fighting_in_terrain\s*=\s*(\w+)", alternatives),
-            ["urban", "vorkernsberg"],
+            ["urban", "vorkernsberg", "desert_city", "hill_city"],
         )
         for name, expected in (
             ("urban_assault_specialist", {"movement": 0.05, "attack": 0.1, "defence": 0.1}),
             ("expert_improviser", {"movement": 0.1}),
         ):
             modifier = self.block(self.block(source, name), "modifier")
-            for terrain in ("urban", "vorkernsberg"):
+            for terrain in ("urban", "vorkernsberg", "desert_city", "hill_city"):
                 values = re.findall(r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(modifier, terrain))
                 self.assertEqual({key: float(value) for key, value in values}, expected)
+
+    def test_terrain_specialists_count_their_own_city_at_half_strength(self):
+        source = self.read("common/unit_leader/00_traits.txt")
+        for name, base, city in (
+            ("desert_fox", "desert", "desert_city"),
+            ("hill_fighter", "hills", "hill_city"),
+        ):
+            trait = self.block(source, name)
+            self.assertEqual(
+                re.findall(r"is_fighting_in_terrain\s*=\s*(\w+)", self.block(trait, "gain_xp")),
+                [base, city],
+            )
+            values = re.findall(
+                r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(self.block(trait, "modifier"), city)
+            )
+            self.assertEqual({key: float(value) for key, value in values}, {"attack": 0.05, "defence": 0.05})
 
     def test_new_icon_frames_are_different_in_every_supported_size(self):
         from PIL import Image

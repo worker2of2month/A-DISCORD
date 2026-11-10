@@ -287,7 +287,7 @@ class SharedAircraftTests(unittest.TestCase):
         routes = self.routes()
         groups = {
             "": "DEF",
-            "SHL": "ARB", "AZH": "ARB", "GLP": "ARB", "KDR": "ARB",
+            "SHL": "SHL", "AZH": "ARB", "GLP": "ARB", "KDR": "ARB",
             "KYZ": "ARB", "MZR": "ARB", "RHM": "ARB", "SDR": "ARB", "SLF": "ARB",
             "WRK": "WRK", "DAN": "WRK", "EYR": "WRK", "EGC": "WRK",
             "RIV": "WRK", "YOR": "WRK", "ZAO": "WRK", "PWR": "WRK",
@@ -321,6 +321,18 @@ class SharedAircraftTests(unittest.TestCase):
             self.assertEqual(routes.get(f"{tag}_ADISCORD_fighter_2_entity"),
                              f"ADISCORD_{family}_future_fighter_entity")
 
+    def test_desert_models_survive_each_shahrabad_course(self):
+        routes = self.routes()
+        for country in ("SHL", "SHL_conclave_of_ten", "SHL_southern_compact",
+                        "SHL_iron_directorate", "SHL_hereditary_republic", "SHL_commune_of_fire"):
+            for route in ("light_armor", "medium_armor", "heavy_armor", "ADISCORD_combat_platform_2150",
+                          "ADISCORD_heavy_combat_platform_2200"):
+                self.assertEqual(routes[f"{country}_{route}_entity"], "ADISCORD_SHL_tank_entity")
+            for level, prefix in enumerate(("early_", "", "future_")):
+                for role in ("fighter", "cas"):
+                    self.assertEqual(routes[f"{country}_ADISCORD_{role}_{level}_entity"],
+                                     f"ADISCORD_SHL_{prefix}{role}_entity")
+
     def test_registered_minors_and_native_air_sprites_have_a_complete_fallback(self):
         from tools.assets.source.country_vehicles import package_vehicles as package
         from tools.assets.source.build_northern_infantry import ARAB_TAGS
@@ -345,7 +357,7 @@ class SharedAircraftTests(unittest.TestCase):
         self.assertTrue(path.is_file(), "Shared aircraft package has not been built")
         report = json.loads(path.read_text())
         hashes = set()
-        for family in ("DEF", "ARB", "WRK", "RUS", "NAM"):
+        for family in ("DEF", "ARB", "WRK", "RUS", "NAM", "SHL"):
             for role in ("fighter", "cas"):
                 for prefix in ("early_", "", "future_"):
                     name = f"{family}_{prefix}{role}"
@@ -360,7 +372,7 @@ class SharedAircraftTests(unittest.TestCase):
                     for filename, expected in row["files"].items():
                         self.assertEqual(hashlib.sha256((DEST / filename).read_bytes()).hexdigest(), expected)
                     hashes.add(row["files"][name + ".mesh"])
-        self.assertEqual(len(hashes), 30)
+        self.assertEqual(len(hashes), 36)
 
 
 class GroundVehicleIdleTests(unittest.TestCase):
@@ -398,7 +410,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
 
         report = json.loads(builder.REPORT.read_text())
         self.assertEqual(report["generator_sha256"], builder.digest(Path(builder.__file__)))
-        self.assertEqual(set(report["models"]), {"VAL_apc", "STP_apc", "STS_apc", "NAM_apc", "NOD_apc"})
+        self.assertEqual(set(report["models"]), {"VAL_apc", "STP_apc", "STS_apc", "NAM_apc", "NOD_apc", "SHL_apc", "SHL_tank"})
         hashes = set()
         for name, row in report["models"].items():
             with self.subTest(name=name):
@@ -419,11 +431,12 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
                     self.assertLess(metrics["loop_error"], .001)
                     self.assertGreater(metrics["max_vertex_motion"], .05 if clip == "idle" else .10)
                 wheels = row["animations"]["move"]["moving_bones"]
-                expected_wheels = {"VAL_apc": 8, "STP_apc": 6, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 4}
+                expected_wheels = {"VAL_apc": 8, "STP_apc": 6, "STS_apc": 6, "NAM_apc": 8, "NOD_apc": 4,
+                                   "SHL_apc": 6, "SHL_tank": 6}
                 self.assertEqual(len(wheels), expected_wheels[name])
                 self.assertEqual(row["animations"]["attack"]["moving_bones"], ["gun"])
                 self.assertLess(row["animations"]["attack"]["combat_heading_error_degrees"], .06)
-        self.assertEqual(len(hashes), 5)
+        self.assertEqual(len(hashes), 7)
 
     def test_carriers_resolve_for_equipment_levels_and_country_identities(self):
         from tools.assets.source.country_vehicles import package_vehicles as registry
@@ -439,7 +452,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         )
         for identity in registry.country_families():
             tag = identity.split("_", 1)[0]
-            if tag not in ("VAL", "STP", "STS", "NAM", "NOD"):
+            if tag not in ("VAL", "STP", "STS", "NAM", "NOD", "SHL"):
                 continue
             for suffix in expected_routes:
                 with self.subTest(identity=identity, suffix=suffix):
@@ -456,7 +469,7 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         entities = {re.search(r'\bname = "([^"]+)"', block)[1]: block
                     for block in blocks(assets, "entity")}
         infantry = (ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset").read_text()
-        for tag in ("VAL", "STP", "STS", "NAM", "NOD"):
+        for tag in ("VAL", "STP", "STS", "NAM", "NOD", "SHL"):
             wrapper = entities[f"ADISCORD_{tag}_apc_entity"]
             vehicle = entities[f"ADISCORD_{tag}_apc_vehicle_entity"]
             escort = entities[f"ADISCORD_{tag}_apc_escort_entity"]
@@ -490,12 +503,12 @@ class ArmoredPersonnelCarrierTests(unittest.TestCase):
         self.assertFalse(raw.startswith(b"\xef\xbb\xbf"))
         self.assertEqual(raw.decode("utf-8"), registry.apc_model_pools())
         countries = parse_clausewitz(raw.decode("utf-8"))
-        self.assertEqual({row.key for row in countries}, {"VAL", "STP", "STS", "NAM", "NOD"})
-        for tag in ("VAL", "STP", "STS", "NAM", "NOD"):
+        self.assertEqual({row.key for row in countries}, {"VAL", "STP", "STS", "NAM", "NOD", "SHL"})
+        for tag in ("VAL", "STP", "STS", "NAM", "NOD", "SHL"):
             country = one(countries, tag)
             self.assertEqual(
                 {row.key for row in country},
-                {"infantry_equipment", "artillery_equipment"} if tag != "NOD" else {"infantry_equipment"},
+                {"infantry_equipment", "artillery_equipment"} if tag not in ("NOD", "SHL") else {"infantry_equipment"},
             )
             for equipment in country:
                 with self.subTest(tag=tag, equipment=equipment.key):

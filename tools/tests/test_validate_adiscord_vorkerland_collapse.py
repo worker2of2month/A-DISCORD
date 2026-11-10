@@ -32,7 +32,11 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 
 
 from tools.lib.paths import source_section
-from tools.validators._vorkerland_release_contract import base_front_controls, validate_adaptive_fronts
+from tools.validators._vorkerland_release_contract import (
+    VORKERLAND_NATION as NATION,
+    base_front_controls,
+    validate_adaptive_fronts,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -393,6 +397,11 @@ country_event = {
         wrk_history = read("history/countries/WRK - WorkerLand.txt")
         self.assertEqual(wrk_history.count(f"set_country_flag = {marker}"), 1)
         self.assertEqual(startup.count(f"clr_country_flag = {marker}"), 1)
+        # Vorkerland is WRK from the first day: the nation target is bound before
+        # this or any other startup hook reads it.
+        binding_issues: list[str] = []
+        collapse_validator.validate_nation_target_binding(ROOT, binding_issues)
+        self.assertEqual(binding_issues, [])
         self.assertEqual(startup.count("country_event = {"), 2)
         self.assertIn("id = ADISCORD_vorkerland_preparation.1 days = 14", startup)
         for forbidden in (
@@ -594,15 +603,11 @@ country_event = {
             issues,
         )
 
-        for guard in ("tag = VLA is_subject_of = WKR", "tag = VLA is_subject_of = WRK"):
-            issues = []
-            validate_premature_wrk_release_contract(
-                triggers,
-                on_actions,
-                capitulation,
-                release_effects,
-                issues,
-            )
+        for guard in (
+            "tag = VLA is_subject_of = WKR",
+            f"tag = VLA is_subject_of = {NATION}",
+        ):
+            self.assertEqual(on_actions.count(guard), 1, guard)
             mutated = on_actions.replace(guard, "tag = VLA is_subject_of = BROKEN", 1)
             issues = []
             validate_premature_wrk_release_contract(
@@ -723,7 +728,7 @@ country_event = {
             audio_proxy = event_block(news, audio_id)
             self.assertNotIn("limit = { is_ai = no }", audio_proxy)
             self.assertIn(
-                f'play_song = "{sound_effect.removesuffix("_sound_e")}"', audio_proxy
+                f"sound_effect = {sound_effect}", audio_proxy
             )
 
         sound_effects = read("sound/superevents_effects.asset")
@@ -1485,7 +1490,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for tag in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
             self.assertIn(f"tag = {tag}", minor)
         self.assertIn("ADISCORD_vorkerland_is_regional_combatant = yes", minor)
-        for tag in ("WRK", "VAD", "TVA", "IVN", "EXZ"):
+        for tag in ("WRK", NATION, "VAD", "TVA", "IVN", "EXZ"):
             self.assertNotIn(f"tag = {tag}", minor)
 
         effects = source_section(
@@ -1629,7 +1634,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         }.items():
             self.assertRegex(
                 relocation,
-                rf"teleport_armies\s*=\s*\{{\s*limit\s*=\s*\{{\s*tag\s*=\s*{tag}\s*\}}\s*to_state\s*=\s*{capital}\s*\}}",
+                rf"teleport_armies\s*=\s*\{{\s*limit\s*=\s*\{{\s*tag\s*=\s*{re.escape(tag)}\s*\}}\s*to_state\s*=\s*{capital}\s*\}}",
                 tag,
             )
         initial = named_block(effects, "ADISCORD_vorkerland_apply_initial_map")
@@ -1728,7 +1733,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             ("WKR", "wkr"),
             ("VAD", "vad"),
             ("TVA", "tva"),
-            ("WRK", "wrk"),
+            (NATION, "wrk"),
         ):
             self.assertIn(f"tag = {tag}", pending)
             self.assertIn(
@@ -1753,7 +1758,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             settlement,
         )
         startup = named_block(on_actions, "on_startup")
-        for tag in ("WKR", "VAD", "TVA", "WRK"):
+        for tag in ("WKR", "VAD", "TVA", "WRK", NATION):
             self.assertNotIn(
                 f"{tag} = {{ ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = yes }}",
                 startup,
@@ -1912,7 +1917,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         # Startup has no scope. Use the permanent landmark state even if WRK
         # no longer exists after the civil war.
         self.assertIn(f"{sync_name} = yes", named_block(startup, "40"))
-        self.assertNotIn(f"{sync_name} = yes", named_block(startup, "WRK"))
+        for country_scope in ("WRK", NATION):
+            self.assertNotIn(
+                f"{sync_name} = yes", named_block(startup, country_scope), country_scope
+            )
         self.assertNotIn(
             'type="ADISCORD_vorkerland_pyramid_entity"', read("map/ambient_object.txt")
         )
@@ -2244,6 +2252,35 @@ class BorderWarArchitectureTests(unittest.TestCase):
         allowed = named_block(reunification, "allowed")
         self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", allowed)
         self.assertIn("NOT = { tag = WRK }", allowed)
+        # The winner keeps a claimant tag; the category's terminal gate is what
+        # withdraws the decision once the reunification is verified.
+        self.assertTrue(
+            named_block(
+                named_block(decisions, "ADISCORD_vorkerland_collapse_category"),
+                "ADISCORD_vorkerland_continue_reunification",
+            )
+        )
+        category = named_block(
+            source_section(
+                read("common/decisions/categories/ADISCORD_vorkerland_categories.txt"),
+                'collapse_categories',
+            ),
+            "ADISCORD_vorkerland_collapse_category",
+        )
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
+            named_block(category, "visible"),
+        )
+        finalizer = named_block(
+            source_section(
+                read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                'phase_effects',
+            ),
+            "ADISCORD_vorkerland_finalize_reunification",
+        )
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_collapse_finished", finalizer
+        )
 
     def test_no_timeout_fragmentation_outcome_exists(self) -> None:
         combined = "\n".join(
@@ -2505,7 +2542,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         for token in (
             "tag = PWR",
             "country_exists = IVN",
-            "country_exists = WRK",
+            f"{NATION} = {{ exists = yes }}",
             "owns_state = 90",
             "owns_state = 91",
             "owns_state = 93",
@@ -2801,6 +2838,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         )
         teardown = named_block(effects, "ADISCORD_vorkerland_teardown_confederation")
         self.assertNotIn("is_subject_of = WRK", teardown)
+        self.assertNotIn(f"is_subject_of = {NATION}", teardown)
         self.assertNotIn("create_faction", outbreak)
         self.assertNotIn("add_to_faction", outbreak)
         for tag in (
@@ -3298,8 +3336,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertNotIn("ruling_party = utilitarism", tva_setup)
         self.assertNotIn("GFX_portrait_WRK_Anton_Bagley", tva_setup)
 
-        formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
-        formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
+        formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_tva")
+        formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_tva")
         for token in (
             "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
             "drop_cosmetic_tag = yes",
@@ -3352,18 +3390,19 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "collapse_map_effects",
         )
         worker_formation = named_block(
-            phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
+            phase_effects, "ADISCORD_vorkerland_unify_under_wkr"
         )
-        completion = named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_wkr")
+        completion = named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_wkr")
         self.assertRegex(
             completion,
             r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*"
             r"ADISCORD_vorkerland_worker_utilitarian_outcome\s*\}\s*WKR_appoint_executive\s*=\s*yes",
         )
         worker_formation += completion
-        worker_formation += named_block(
+        executive = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "WKR_appoint_executive"
         )
+        worker_formation += executive
         recovery_en = source_section(
             read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
             'recovery_l_english',
@@ -3392,7 +3431,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn(
             "has_country_leader = { character = WRK_Anton_Bagley ruling_only = no }",
             named_block(named_block(successor, "if"), "limit"),
-            "A transferred leader role must be detected before Anton rules WRK",
+            "An existing leader role must be detected before Anton rules the country",
         )
         self.assertIn("promote_character = {", successor)
         self.assertLess(
@@ -3403,18 +3442,23 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
             "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
-            "character = WRK_Anton_Bagley",
             "ruling_party = utilitarism",
             "ADISCORD_vorkerland_promote_anton_bagley = yes",
         ):
             self.assertIn(token, worker_formation)
+        # Anton already serves the winning WKR: the settled country appoints him
+        # through the shared promoter and never moves him between countries.
+        self.assertIn("ADISCORD_vorkerland_promote_anton_bagley = yes", executive)
+        self.assertIn("character = WRK_Anton_Bagley", successor)
+        for transfer in ("set_nationality", "change_tag_from", "inherit_technology"):
+            self.assertNotIn(transfer, worker_formation, transfer)
         self.assertLess(
             worker_formation.index("ADISCORD_vorkerland_promote_anton_bagley = yes"),
             worker_formation.index("ruling_party = utilitarism"),
-            "Anton must be registered before restored WRK switches to utilitarism",
+            "Anton must be registered before the unified country switches to utilitarism",
         )
         finalizer = named_block(
-            phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk"
+            phase_effects, "ADISCORD_vorkerland_finalize_reunification"
         )
         self.assertIn(
             "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer
@@ -3490,8 +3534,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'phase_effects',
         )
-        formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
-        formation += named_block(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_vad")
+        formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_vad")
+        formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_vad")
         characters = read(
             "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
         )
@@ -3506,9 +3550,11 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", joint)
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", imperial)
         self.assertIn("portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar", imperial)
-        self.assertIn(
-            "has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", formation
-        )
+        # VAD wins on its own tag: the council, Nikita and Vlad stay where the war
+        # left them, and only the retired WRK roster joins the country.
+        self.assertNotIn("set_nationality", formation)
+        self.assertNotIn("change_tag_from", formation)
+        self.assertIn("ADISCORD_vorkerland_adopt_retired_roster = yes", formation)
         self.assertIn(
             "has_global_flag = ADISCORD_vorkerland_joint_government_formed", formation
         )
@@ -3556,7 +3602,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("fire_only_once = no", news)
         for winner in ("worker", "yastrebtsev", "filopo"):
             self.assertIn(
-                f"WRK = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}",
+                f"{NATION} = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}",
                 news,
             )
             for language in ("russian", "english"):
@@ -3944,6 +3990,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
         for tag in (
             "WRK",
+            "WKR",
             "VAD",
             "VLA",
             "ZAO",
@@ -4787,7 +4834,8 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertIn(f"target = {tag} type = annex_everything", settlement)
             self.assertIn(
                 f"{tag} = {{ exists = yes is_subject = no has_capitulated = no "
-                "NOT = { is_in_faction_with = WRK } NOT = { has_war_with = WRK } }",
+                f"NOT = {{ is_in_faction_with = {NATION} }} "
+                f"NOT = {{ has_war_with = {NATION} }} }}",
                 settlement,
             )
         self.assertLess(
@@ -4800,7 +4848,7 @@ class InterventionAndVisualTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'phase_effects',
         )
-        finalizer = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
+        finalizer = named_block(phase, "ADISCORD_vorkerland_finalize_reunification")
         self.assertIn(
             "ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes", finalizer
         )
@@ -5134,7 +5182,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }", sync)
         sol = named_block(sync, "if")
         self.assertIn("limit = { tag = SOL }", sol)
-        self.assertIn("OR = { is_subject_of = WKR is_subject_of = WRK }", sol)
+        self.assertIn(
+            f"OR = {{ is_subject_of = WKR is_subject_of = {NATION} }}", sol
+        )
         self.assertIn(
             "set_cosmetic_tag = SOL_vorkerland_worker_protectorate",
             sol,
@@ -5173,11 +5223,11 @@ class InterventionAndVisualTests(unittest.TestCase):
     def test_wrk_characters_are_recruited_in_history_not_runtime_effects(self) -> None:
         formation = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
-            "ADISCORD_vorkerland_form_wrk_from_wkr",
+            "ADISCORD_vorkerland_unify_under_wkr",
         )
         formation += named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
-            "ADISCORD_vorkerland_complete_wrk_from_wkr",
+            "ADISCORD_vorkerland_settle_unification_under_wkr",
         )
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -5188,10 +5238,24 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertIn(f"recruit_character = {character}", history)
             self.assertNotIn(f"recruit_character = {character}", effects)
             self.assertNotIn(f"recruit_character = {character}", formation)
+        # The winning WKR is never annexed, so nobody has to be moved out of it;
+        # the retired WRK roster joins the country once it is the nation target.
+        self.assertNotIn("annex_country = { target = WKR", formation)
+        self.assertNotIn("set_nationality", formation)
         self.assertLess(
-            formation.index("character = WRK_Anton_Bagley"),
-            formation.index("annex_country = { target = WKR"),
+            formation.index("save_global_event_target_as = ADISCORD_vorkerland_nation"),
+            formation.index("ADISCORD_vorkerland_adopt_retired_roster = yes"),
         )
+        roster = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_adopt_retired_roster",
+        )
+        self.assertIn(
+            f"set_nationality = {{ target_country = {NATION} }}",
+            named_block(named_block(roster, "WRK"), "every_character"),
+        )
+        for candidate in ("WRK_Mark_Yastrebtsev", "WRK_Necro_Filopo"):
+            self.assertIn(f"recruit_character = {candidate}", history)
 
     def test_player_facing_names_are_short_and_not_legacy_cringe(self) -> None:
         loc = source_section(
@@ -5515,6 +5579,235 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         self.assertTrue(
             any("hand-written as well as generated" in issue for issue in issues),
             issues,
+        )
+
+
+class UnificationUnderWinnerTests(unittest.TestCase):
+    """The civil-war winner keeps its tag and becomes the nation target."""
+
+    rebinding = (
+        "\tclear_global_event_target = ADISCORD_vorkerland_nation\n"
+        "\tsave_global_event_target_as = ADISCORD_vorkerland_nation\n"
+    )
+    settlement_queue = (
+        "\tcountry_event = { id = ADISCORD_vorkerland_phase.7 hours = 1 }\n}\n"
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
+        cls.phase_events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'phase_events'
+        )
+
+    def issues(self, effects: str | None = None, events: str | None = None) -> list[str]:
+        found: list[str] = []
+        collapse_validator.validate_unification_under_winner(
+            self.phase_effects if effects is None else effects,
+            self.phase_events if events is None else events,
+            found,
+        )
+        return found
+
+    def test_every_route_unifies_the_country_under_the_winning_tag(self) -> None:
+        self.assertEqual(self.issues(), [])
+        for suffix, tag, route_flag in collapse_validator.UNIFICATION_ROUTES:
+            with self.subTest(winner=tag):
+                unify = named_block(
+                    self.phase_effects, f"ADISCORD_vorkerland_unify_under_{suffix}"
+                )
+                self.assertIn("transfer_state = 32", unify)
+                self.assertIn(f"32 = {{ set_state_controller_to = {tag} }}", unify)
+                focus_tree = named_block(unify, "load_focus_tree")
+                self.assertIn("keep_completed = yes", focus_tree)
+                self.assertIn("copy_completed_from = WRK", focus_tree)
+                self.assertIn(f"set_country_flag = {route_flag}", unify)
+
+    def test_validator_rejects_moving_the_winner_into_another_country(self) -> None:
+        first_loser_release = (
+            "\tif = { limit = { country_exists = VAD } VAD = { "
+            "ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }\n"
+        )
+        queue = self.settlement_queue
+        mutations = (
+            (
+                "player handoff restored",
+                queue,
+                "\tchange_tag_from = WKR\n" + queue,
+                "moves the winning WKR into another country: change_tag_from",
+            ),
+            (
+                "technology copied into a second country",
+                queue,
+                "\tinherit_technology = WKR\n" + queue,
+                "moves the winning WKR into another country: inherit_technology",
+            ),
+            (
+                "ruler moved to the retired tag",
+                queue,
+                "\tWKR = { set_nationality = { target_country = WRK "
+                "character = WRK_Anton_Bagley } }\n" + queue,
+                "moves the winning WKR into another country: set_nationality",
+            ),
+            (
+                "staff transfer restored",
+                queue,
+                "\tWKR = { ADISCORD_vorkerland_transfer_military_staff_to_wrk = yes }\n"
+                + queue,
+                "retired winner-transfer effect survived",
+            ),
+            (
+                "nation target left on the retired tag",
+                self.rebinding,
+                "",
+                "must first rebind the Vorkerland nation target to WKR",
+            ),
+            (
+                "nation target cleared after binding",
+                self.rebinding,
+                "".join(reversed(self.rebinding.splitlines(keepends=True))),
+                "must first rebind the Vorkerland nation target to WKR",
+            ),
+            (
+                "nation target rebound after a nested effect read it",
+                self.rebinding + first_loser_release,
+                first_loser_release + self.rebinding,
+                "must first rebind the Vorkerland nation target to WKR",
+            ),
+            (
+                "wartime spirit removed from another country",
+                "\tremove_ideas = ADISCORD_vorkerland_wkr_front_operations_bureau\n",
+                "\tVAD = { remove_ideas = ADISCORD_vorkerland_wkr_front_operations_bureau }\n",
+                "terminal wartime spirit ADISCORD_vorkerland_wkr_front_operations_bureau",
+            ),
+            (
+                "retired roster left behind",
+                "\tADISCORD_vorkerland_adopt_retired_roster = yes\n",
+                "",
+                "does not adopt the retired WRK roster in the WKR scope",
+            ),
+            (
+                "retired roster kept on the retired tag",
+                f"set_nationality = {{ target_country = {NATION} }}",
+                "set_nationality = { target_country = WRK }",
+                "retired WRK roster does not join the unified country",
+            ),
+            (
+                "route flag dropped",
+                "\tset_country_flag = ADISCORD_vorkerland_route_worker\n" + queue,
+                queue,
+                "does not record ADISCORD_vorkerland_route_worker on WKR",
+            ),
+            (
+                "winner annexed by its own settlement",
+                "if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }",
+                "if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }",
+                "must leave the winning WKR on its own tag",
+            ),
+            (
+                "defeated claimant loses its army",
+                "annex_country = { target = VAD transfer_troops = yes }",
+                "annex_country = { target = VAD transfer_troops = no }",
+                "does not absorb the defeated VAD with its army",
+            ),
+            (
+                "territory finalizer skipped",
+                "\tADISCORD_vorkerland_finalize_unified_territory = yes\n",
+                "",
+                "does not finalize the unified territory",
+            ),
+            (
+                "retired tag keeps its cores",
+                "\t\tremove_core_of = WRK\n",
+                "",
+                "retired WRK keeps cores",
+            ),
+            (
+                "retired cores dropped without an heir",
+                f"\t\tadd_core_of = {NATION}\n\t\tremove_core_of = WRK\n",
+                "\t\tremove_core_of = WRK\n",
+                "retired WRK keeps cores",
+            ),
+            (
+                "worker reform stage scrubbed",
+                "\tremove_ideas = WRK_constitution_of_the_republic\n\tif = {\n",
+                "\tremove_ideas = WRK_constitution_of_the_republic\n"
+                "\tADISCORD_vorkerland_scrub_precollapse_crisis = yes\n\tif = {\n",
+                "keep the WKR reform stage",
+            ),
+        )
+        for label, before, after, expected in mutations:
+            with self.subTest(mutation=label):
+                altered = self.phase_effects.replace(before, after, 1)
+                self.assertNotEqual(altered, self.phase_effects)
+                issues = self.issues(effects=altered)
+                self.assertTrue(any(expected in issue for issue in issues), issues)
+
+    def test_validator_rejects_unifying_outside_the_winner_scope(self) -> None:
+        call = "\t\t\t\tADISCORD_vorkerland_unify_under_tva = yes\n"
+        mutations = (
+            ("called from the event scope", "\t\t\tTVA = {\n" + call + "\t\t\t}\n", call),
+            (
+                "called in the retired country",
+                "\t\t\tTVA = {\n" + call,
+                "\t\t\tWRK = {\n" + call,
+            ),
+        )
+        for label, before, after in mutations:
+            with self.subTest(mutation=label):
+                altered = self.phase_events.replace(before, after, 1)
+                self.assertNotEqual(altered, self.phase_events)
+                issues = self.issues(events=altered)
+                self.assertTrue(
+                    any("inside the TVA scope" in issue for issue in issues), issues
+                )
+
+    def test_nation_target_is_bound_before_any_startup_reader(self) -> None:
+        check = collapse_validator.nation_target_startup_issues
+        binder = (
+            "on_startup = {\n\teffect = {\n\t\tWRK = {\n"
+            "\t\t\tsave_global_event_target_as = ADISCORD_vorkerland_nation\n"
+            "\t\t}\n\t}\n}"
+        )
+        reader = (
+            "on_startup = {\n\teffect = {\n"
+            f"\t\t{NATION} = {{ add_stability = 0.05 }}\n"
+            "\t}\n}"
+        )
+        self.assertEqual(check([("01_bind.txt", binder), ("02_read.txt", reader)], False), [])
+        self.assertEqual(check([("00_read.txt", reader), ("01_bind.txt", binder)], True), [])
+        early = check([("00_read.txt", reader), ("01_bind.txt", binder)], False)
+        self.assertEqual(len(early), 1, early)
+        self.assertIn("00_read.txt", early[0])
+        self.assertIn("before 01_bind.txt binds it", early[0])
+        self.assertTrue(
+            any("no on_startup hook binds" in issue for issue in check([("00_read.txt", reader)], False))
+        )
+        guarded = (
+            "on_startup = {\n\teffect = {\n\t\tif = {\n"
+            "\t\t\tlimit = { NOT = { has_event_target = ADISCORD_vorkerland_nation } }\n"
+            "\t\t\tWRK = { save_global_event_target_as = ADISCORD_vorkerland_nation }\n"
+            "\t\t}\n\t}\n}"
+        )
+        self.assertEqual(check([("01_bind.txt", guarded)], False), [])
+        foreign = binder.replace("\t\tWRK = {", "\t\tWKR = {")
+        issues = check([("01_bind.txt", foreign)], False)
+        self.assertTrue(any("in the WRK scope" in issue for issue in issues), issues)
+        later_scope = binder.replace(
+            "\t\tWRK = {", "\t\tWRK = { add_stability = 0.05 }\n\t\tWRK = {"
+        )
+        self.assertEqual(check([("01_bind.txt", later_scope)], False), [])
+        read_first = binder.replace(
+            "\t\tWRK = {", f"\t\t{NATION} = {{ add_stability = 0.05 }}\n\t\tWRK = {{"
+        )
+        self.assertTrue(
+            any(
+                "before binding it" in issue
+                for issue in check([("01_bind.txt", read_first)], False)
+            )
         )
 
 

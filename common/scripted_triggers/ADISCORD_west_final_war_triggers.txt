@@ -1,10 +1,10 @@
 # Western final war: reunified Vorkerland against Itora.
-# Side numbers: 1 = Vorkerland (WRK), 2 = Itora (IVN).
+# Side numbers: 1 = Vorkerland (its country target), 2 = Itora (IVN).
 
-# GLOBAL. Only a verified reunified WRK can claim the west.
+# GLOBAL. Only a verified unified Vorkerland can claim the west.
 ADISCORD_west_wrk_reunified = {
 	has_global_flag = ADISCORD_vorkerland_collapse_finished
-	WRK = {
+	event_target:ADISCORD_vorkerland_nation = {
 		exists = yes
 		has_country_flag = ADISCORD_vorkerland_central_unifier
 	}
@@ -13,6 +13,7 @@ ADISCORD_west_wrk_reunified = {
 # GLOBAL. The western clock runs from reunification to the final campaign.
 ADISCORD_west_crisis_open = {
 	NOT = { has_global_flag = RUS_crisis_world_ended }
+	NAM_veyran_invasion_active = no
 
 	has_global_flag = ADISCORD_fresh_campaign_contract_v1
 	ADISCORD_west_wrk_reunified = yes
@@ -44,10 +45,10 @@ ADISCORD_west_reconstruction_grace_elapsed = {
 ADISCORD_west_final_can_start = {
 	ADISCORD_west_crisis_open = yes
 	ADISCORD_west_reconstruction_grace_elapsed = yes
-	WRK = { ADISCORD_west_champion_viable = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes }
 	IVN = {
 		ADISCORD_west_champion_viable = yes
-		NOT = { has_war_with = WRK }
+		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
 	}
 	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
 	# Itora's revolt of the marches pauses the western question for both sides.
@@ -96,9 +97,9 @@ ADISCORD_west_needs_side_choice = {
 # GLOBAL. Either champion has lost its sovereignty or the two no longer fight.
 ADISCORD_west_final_broken = {
 	OR = {
-		NOT = { WRK = { ADISCORD_west_champion_viable = yes } }
+		NOT = { event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes } }
 		NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
-		NOT = { WRK = { has_war_with = IVN } }
+		NOT = { event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN } }
 	}
 }
 
@@ -188,7 +189,7 @@ ADISCORD_west_leans_to_ivn_ally = {
 ADISCORD_west_leans_to_root_ally = {
 	OR = {
 		AND = {
-			ROOT = { tag = WRK }
+			ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			ADISCORD_west_leans_to_wrk_ally = yes
 		}
 		AND = {
@@ -211,7 +212,7 @@ ADISCORD_west_grants_ivn_transit = {
 ADISCORD_west_lean_contested_by_root = {
 	OR = {
 		AND = {
-			ROOT = { tag = WRK }
+			ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
 			check_variable = { var = ADISCORD_west_lean value = -40 compare = greater_than_or_equals }
 			check_variable = { var = ADISCORD_west_lean value = 50 compare = less_than }
 		}

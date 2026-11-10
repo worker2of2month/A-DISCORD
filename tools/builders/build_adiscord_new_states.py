@@ -33,6 +33,8 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
+# Combat terrains of city provinces: city VPs and settlement checks accept each.
+CITY_TERRAINS = frozenset({"urban", "vorkernsberg", "desert_city", "hill_city"})
 
 NAM_SVETLOGORSK_STATE_ID = 688
 NAM_SVETLOGORSK_PROVINCES = (
@@ -1675,7 +1677,7 @@ def render_state(
     urban_provinces = {
         int(fields[0])
         for line in (ROOT / "map" / "definition.csv").read_text(encoding="utf-8-sig").splitlines()
-        if len(fields := line.split(";")) > 6 and fields[0].isdigit() and fields[6] == "urban"
+        if len(fields := line.split(";")) > 6 and fields[0].isdigit() and fields[6] in CITY_TERRAINS
     }
     centres = {
         **CAPITALS,

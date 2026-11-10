@@ -3,16 +3,21 @@ from tools.lib.on_actions import read_country_on_actions
 
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
+from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_diplomacy import (
     CORE_PACKAGES,
+    DIPLOMACY_DECISIONS,
     DIPLOMACY_EFFECTS,
     DIPLOMACY_ON_ACTIONS,
     HISTORICAL_WRK_VAD_STATES,
     LIVE_ALLY_OR_FOREIGN_STATES,
     MATERIALIZE_WKR_PROTECTORATE,
+    NATION_TARGET,
+    ROOT,
     SOLAR_STATES,
     TERMINAL_CONTRACTS,
     VAD_SOLAR_BORDER_PAIRS,
@@ -142,10 +147,19 @@ class PeacefulAllianceTests(unittest.TestCase):
         factions = {"WKR": "WKR", "VHV": "WKR", "TVA": None, "VAD": None}
         flags = {"VHV": {auxiliary}}
         root = "TVA"
+        # The claimants are still fighting, so the nation target names WRK.
+        nation = "WRK"
+
+        def resolve(value, previous):
+            return {"ROOT": root, "PREV": previous, NATION_TARGET: nation}.get(
+                value, value
+            )
 
         def evaluate(items, scope, previous=None):
             def matches(entry):
                 key, value = entry.key, entry.value
+                if key == NATION_TARGET and isinstance(value, list):
+                    return evaluate(value, nation, scope)
                 if key == "AND":
                     return evaluate(value, scope, previous)
                 if key == "NOT":
@@ -168,12 +182,12 @@ class PeacefulAllianceTests(unittest.TestCase):
                 if key in factions and isinstance(value, list):
                     return evaluate(value, key, scope)
                 if key == "is_in_faction_with":
-                    target = {"ROOT": root, "PREV": previous}.get(value, value)
+                    target = resolve(value, previous)
                     return bool(factions.get(scope)) and factions.get(
                         scope
                     ) == factions.get(target)
                 if key == "tag":
-                    return scope == value
+                    return scope == resolve(value, previous)
                 if key == "has_country_flag":
                     return value in flags.get(scope, set())
                 if key == "has_global_flag":
@@ -401,6 +415,71 @@ class IndependentCorePackageTests(unittest.TestCase):
     def test_public_decisions_are_independent_explicit_packages(self) -> None:
         issues = validate_core_packages()
         self.assertEqual(issues, [], issue_report(issues))
+
+    def test_packages_belong_to_the_nation_target_not_to_the_wrk_tag(self) -> None:
+        decisions = read(DIPLOMACY_DECISIONS)
+        for decision_id, states in CORE_PACKAGES.items():
+            block = compact(named_block(decisions, decision_id))
+            with self.subTest(decision=decision_id):
+                self.assertIn(
+                    "allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }",
+                    block,
+                )
+                self.assertIn(
+                    "ADISCORD_vorkerland_is_not_wartime_claimant = yes",
+                    compact(named_block(named_block(decisions, decision_id), "visible")),
+                )
+                self.assertEqual(
+                    block.count(f"add_core_of = {NATION_TARGET}"), len(states)
+                )
+                self.assertNotIn("add_core_of = WRK", block)
+
+        decision_id = "ADISCORD_vorkerland_restore_core_rimat"
+        package = named_block(decisions, decision_id)
+        nation_core = f"202 = {{ add_core_of = {NATION_TARGET} }}"
+        cases = (
+            (
+                (nation_core, "202 = { add_core_of = WRK }"),
+                (
+                    f"{decision_id} must award exactly its package to the nation target",
+                    f"{decision_id} must explicitly add the nation core to state 202",
+                ),
+            ),
+            (
+                (
+                    "allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }",
+                    "allowed = { tag = WRK }",
+                ),
+                (
+                    f"{decision_id} allowed must admit exactly WRK and the three "
+                    "claimant tags",
+                ),
+            ),
+            (
+                ("ADISCORD_vorkerland_is_not_wartime_claimant = yes ", ""),
+                (
+                    f"{decision_id} visible must withhold the decision from wartime "
+                    "claimants through ADISCORD_vorkerland_is_not_wartime_claimant",
+                ),
+            ),
+        )
+        target = (ROOT / DIPLOMACY_DECISIONS).resolve()
+        for (old, new), expected in cases:
+            self.assertIn(old, package)
+            mutated = decisions.replace(package, package.replace(old, new, 1), 1)
+
+            def served(path, *args, mutated=mutated, **kwargs):
+                if Path(path).resolve() == target:
+                    return mutated
+                return read_focus_source(path, *args, **kwargs)
+
+            with self.subTest(expected=expected[0]), patch(
+                "tools.validators.validate_adiscord_vorkerland_diplomacy.read_focus_source",
+                side_effect=served,
+            ):
+                issues = validate_core_packages()
+                for diagnostic in expected:
+                    self.assertIn(diagnostic, issues, issue_report(issues))
 
 
 class IntegratedDiplomacyContractTests(unittest.TestCase):

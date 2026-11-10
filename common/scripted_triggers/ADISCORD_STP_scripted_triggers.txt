@@ -103,6 +103,16 @@ STP_pw_party_specialists_available = {
 	}
 }
 
+STP_pv_has_reinstateable_officers = {
+	STS = {
+		exists = no
+		OR = {
+			has_character = STP_Leonid_Barchel
+			has_character = STP_Edmund_Ravel
+		}
+	}
+}
+
 STP_party_minister_change_allowed = {
 	custom_trigger_tooltip = {
 		tooltip = STP_party_minister_change_allowed_tt
@@ -451,6 +461,38 @@ STP_region_map_shows_contested = {
 	NOT = { STP_region_resistance_leaning = yes }
 	NOT = { STP_region_party_leaning = yes }
 	NOT = { STP_region_local_forces_leaning = yes }
+}
+
+# STATE: frame of the region strip for the regions panel, left in the temporary
+# variable STP_region_map_frame. Each forecast predicate is read once. Later
+# assignments override earlier ones in the order in which the seven status
+# layers were stacked, so the result is the topmost layer that would be shown.
+STP_region_map_set_frame = {
+	set_temp_variable = { var = STP_region_map_frame value = 1 }
+	if = {
+		limit = { STP_region_resistance_leaning = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 2 }
+	}
+	if = {
+		limit = { STP_region_party_leaning = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 4 }
+	}
+	if = {
+		limit = { STP_region_party_entrenched = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 5 }
+	}
+	if = {
+		limit = { STP_cw_region_goes_to_resistance = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 3 }
+	}
+	if = {
+		limit = { STP_region_local_forces_leaning = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 6 }
+	}
+	if = {
+		limit = { STP_cw_region_goes_to_republics = yes }
+		set_temp_variable = { var = STP_region_map_frame value = 7 }
+	}
 }
 
 # COUNTRY: state flags are authoritative while inspection missions are alive.

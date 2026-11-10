@@ -7,21 +7,21 @@ country_event = {
 	desc = {
 		text = ADISCORD_west.1.d_wrk_worker
 		trigger = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_country_flag = ADISCORD_vorkerland_route_worker
 		}
 	}
 	desc = {
 		text = ADISCORD_west.1.d_wrk_joint
 		trigger = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
 	}
 	desc = {
 		text = ADISCORD_west.1.d_wrk_utilitarian
 		trigger = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			NOT = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			NOT = { has_country_flag = ADISCORD_vorkerland_route_joint }
 		}
@@ -181,7 +181,7 @@ country_event = {
 		ADISCORD_west_final_active = yes
 		exists = yes
 		has_variable = ADISCORD_west_side
-		WRK = { has_war_with = IVN }
+		event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN }
 	}
 
 	immediate = {
@@ -197,7 +197,7 @@ country_event = {
 		ADISCORD_west_final_active = yes
 		exists = yes
 		has_variable = ADISCORD_west_side
-		WRK = { has_war_with = IVN }
+		event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN }
 	}
 
 	immediate = {
@@ -276,7 +276,7 @@ news_event = {
 		trigger = {
 			has_global_flag = ADISCORD_west_hegemon_WRK
 			NOT = { has_global_flag = ADISCORD_west_unopposed }
-			check_variable = { var = global.ADISCORD_west_terms value = 1 compare = equals }
+			check_variable = { var = global.ADISCORD_west_subject_type value = 5 compare = equals }
 		}
 	}
 	desc = {
@@ -557,7 +557,7 @@ country_event = {
 			if = {
 				limit = {
 					FROM = { ADISCORD_west_champion_viable = yes }
-					WRK = { has_war_with = IVN }
+					event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN }
 				}
 				ADISCORD_west_answer_call_to_arms = yes
 				FROM = { country_event = { id = ADISCORD_west.47 hours = 1 } }
@@ -567,7 +567,7 @@ country_event = {
 			base = 0
 			modifier = {
 				add = 100
-				FROM = { tag = WRK }
+				FROM = { tag = event_target:ADISCORD_vorkerland_nation }
 				ADISCORD_west_leans_to_wrk_ally = yes
 			}
 			modifier = {
@@ -588,7 +588,7 @@ country_event = {
 			base = 0
 			modifier = {
 				add = 100
-				FROM = { tag = WRK }
+				FROM = { tag = event_target:ADISCORD_vorkerland_nation }
 				NOT = { ADISCORD_west_leans_to_wrk_ally = yes }
 			}
 			modifier = {

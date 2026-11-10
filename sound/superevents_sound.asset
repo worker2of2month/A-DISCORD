@@ -84,14 +84,6 @@ sound = {
 	file = "superevents/superevent_rus_khan_defeated_sound.wav"
 }
 
-# "Richat" by Mark Petrie. All rights reserved.
-# Source: https://markpetrie.bandcamp.com/track/richat
-# Excerpt 00:50-01:45, fades and loudness normalization to -18 LUFS / -3 dBTP.
-sound = {
-	name = "superevent_vorkerland_joint_victory_sound"
-	file = "superevents/superevent_vorkerland_joint_victory_sound.wav"
-}
-
 # CC0 effects: craigsmith (bells), SoundsExciting (crowd), ted (fireworks).
 # https://freesound.org/people/craigsmith/sounds/480014/
 # https://freesound.org/people/SoundsExciting/sounds/365132/
@@ -101,9 +93,100 @@ sound = {
 	file = "superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
 }
 
-# Vangelis, 1492: Conquest of Paradise (1992).
-# Excerpt 00:00-01:00, four-second fade-out and constant gain of +3.06 dB.
+# Mind Terrorist, Revolt Against the Modern World (Spiritual Revolution), 0-30 s.
+# https://youtu.be/CVTlt9mqQEY | https://archive.org/details/02.-revolt-against-the-modern-world
 sound = {
-	name = "superevent_stelander_shabrat_republic_sound"
-	file = "superevents/superevent_stelander_shabrat_republic_sound.wav"
+	name = "superevent_nam_resource_war_service_sound"
+	file = "superevents/superevent_nam_resource_war_service_sound.wav"
+}
+
+# Public Service Broadcasting, Signal 30 (Inform - Educate - Entertain), 0-42 s.
+# https://youtu.be/YdInjTOAmBc | https://publicservicebroadcasting.bandcamp.com/album/inform-educate-entertain
+sound = {
+	name = "superevent_nam_resource_war_district_sound"
+	file = "superevents/superevent_nam_resource_war_district_sound.wav"
+}
+
+# Kevin MacLeod, Industrial Cinematic, 25-55 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600047
+sound = {
+	name = "superevent_south_nur_sound"
+	file = "superevents/superevent_south_nur_sound.wav"
+}
+
+# Kevin MacLeod, Moorland, 18-48 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200106
+sound = {
+	name = "superevent_south_regency_sound"
+	file = "superevents/superevent_south_regency_sound.wav"
+}
+
+# Kevin MacLeod, Steel Rods, 9-41 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200052
+sound = {
+	name = "superevent_south_commune_sound"
+	file = "superevents/superevent_south_commune_sound.wav"
+}
+
+# Musopen, 0-32 s.
+# https://archive.org/download/MusopenCollectionAsFlac/Brahms_SymphonyNo.4inEMinor/JohannesBrahms-SymphonyNo.4InEMinorOp.98-01-AllegroNonTroppo.mp3
+sound = {
+	name = "superevent_west_petrichev_sound"
+	file = "superevents/superevent_west_petrichev_sound.wav"
+}
+
+# Musopen, 0-30 s.
+# https://archive.org/download/MusopenCollectionAsFlac/Brahms_SymphonyNo.4inEMinor/JohannesBrahms-SymphonyNo.4InEMinorOp.98-04-AllegroEnergicoEPassionato.mp3
+sound = {
+	name = "superevent_west_veyran_sound"
+	file = "superevents/superevent_west_veyran_sound.wav"
+}
+
+# MASTER BOOT RECORD, IRQ 0 SYSTEM CLOCK (INTERRUPT REQUEST), 28-55 s.
+# https://masterbootrecord.bandcamp.com/track/irq-0-system-clock
+sound = {
+	name = "superevent_west_dorian_sound"
+	file = "superevents/superevent_west_dorian_sound.wav"
+}
+
+# Musopen, 0-32 s.
+# https://archive.org/download/MusopenCollectionAsFlac/Mendelssohn_ItalianSymphony/FelixMendelssohn-SymphonyNo.4InAMajorOp.90italian-03-ConMotoModerato.mp3
+sound = {
+	name = "superevent_west_shield_sound"
+	file = "superevents/superevent_west_shield_sound.wav"
+}
+
+# Musopen, 1-31 s.
+# https://archive.org/download/MusopenCollectionAsFlac/Brahms_SymphonyNo.3inFMajor/JohannesBrahms-SymphonyNo.3InFMajorOp.90-04-Allegro.mp3
+sound = {
+	name = "superevent_west_emergency_sound"
+	file = "superevents/superevent_west_emergency_sound.wav"
+}
+
+# Musopen, 0-31 s.
+# https://archive.org/download/MusopenCollectionAsFlac/Mendelssohn_StringQuartetNo.6inFMinorOp.80/FelixMendelssohn-StringQuartetNo.6InFMinorOp.80-02-AllegroAssai.mp3
+sound = {
+	name = "superevent_west_revanche_sound"
+	file = "superevents/superevent_west_revanche_sound.wav"
+}
+
+# Musopen, 0-34 s. Original printing press sound design precedes the orchestra.
+# https://archive.org/download/MusopenCollectionAsFlac/Beethoven_EgmontOvertureOp.84/LudwigVanBeethoven-EgmontOvertureOp.84.mp3
+sound = {
+	name = "superevent_vorkerland_world_empire_sound"
+	file = "superevents/superevent_vorkerland_world_empire_sound.wav"
+}
+
+# Kevin MacLeod, Machinations, 36-68 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100510
+sound = {
+	name = "superevent_south_iron_sound"
+	file = "superevents/superevent_south_iron_sound.wav"
+}
+
+# Kevin MacLeod, Division, 26-54 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700027
+sound = {
+	name = "superevent_south_directorate_sound"
+	file = "superevents/superevent_south_directorate_sound.wav"
 }

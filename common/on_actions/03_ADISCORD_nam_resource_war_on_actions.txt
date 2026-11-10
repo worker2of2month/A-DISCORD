@@ -1,18 +1,42 @@
 on_actions = {
 	on_puppet = {
-		effect = { NAM_sync_neighbor_governor = yes }
+		effect = {
+			NAM_sync_neighbor_governor = yes
+			NAM_board_subject_change = yes
+		}
 	}
 
 	on_release_as_puppet = {
-		effect = { NAM_sync_neighbor_governor = yes }
+		effect = {
+			NAM_sync_neighbor_governor = yes
+			NAM_board_subject_change = yes
+		}
 	}
 
 	on_subject_free = {
-		effect = { NAM_sync_neighbor_governor = yes }
+		effect = {
+			NAM_sync_neighbor_governor = yes
+			NAM_board_subject_change = yes
+		}
 	}
 
 	on_release_as_free = {
-		effect = { NAM_sync_neighbor_governor = yes }
+		effect = {
+			NAM_sync_neighbor_governor = yes
+			NAM_board_subject_change = yes
+		}
+	}
+
+	on_liberate = {
+		effect = {
+			NAM_board_subject_change = yes
+		}
+	}
+
+	on_subject_autonomy_level_change = {
+		effect = {
+			NAM_board_subject_change = yes
+		}
 	}
 
 	on_ruling_party_change = {
@@ -21,6 +45,13 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			if = {
+				limit = {
+					FROM.FROM = { state = 701 }
+					NAM = { has_completed_focus = NAM_board_eflor_oil }
+				}
+				NAM = { NAM_board_queue_recount = yes }
+			}
 			if = {
 				limit = {
 					OR = {
@@ -115,6 +146,15 @@ on_actions = {
 			NAM_pirate_monthly = yes
 			NAM_corp_monthly = yes
 			NAM_consolidation_monthly = yes
+			NAM_rad_collect_kadir_tolls = yes
 		}
+	}
+
+	on_monthly_EFL = {
+		effect = { NAM_rw_fill_tribute_tanks = yes }
+	}
+
+	on_monthly_AZH = {
+		effect = { NAM_rw_fill_tribute_tanks = yes }
 	}
 }

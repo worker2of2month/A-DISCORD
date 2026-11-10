@@ -100,8 +100,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_pw_veteran_course
-			custom_effect_tooltip = NAM_pw_veteran_course_unlock_tt
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_pw_family_pensions } } }
+				unlock_decision_tooltip = NAM_pw_veteran_course
+				custom_effect_tooltip = NAM_pw_veteran_course_unlock_tt
+			}
 			add_stability = 0.03
 			add_manpower = 4000
 			army_experience = 15
@@ -171,8 +174,16 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
 				NAM_refresh_administration = yes
 			}
-			unlock_decision_tooltip = NAM_veteran_housing
-			custom_effect_tooltip = NAM_veteran_housing_unlock_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_pw_standard_projects }
+						NOT = { has_completed_focus = NAM_south_heritage }
+					}
+				}
+				unlock_decision_tooltip = NAM_veteran_housing
+				custom_effect_tooltip = NAM_veteran_housing_unlock_tt
+			}
 			custom_effect_tooltip = NAM_grp_civil_dividend_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_grp_dist_support value = 8 }
@@ -300,20 +311,26 @@ focus_tree = {
 			focus = NAM_pw_naval_review
 		}
 		available = {
-			has_capitulated = no
-			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			owns_state = 688
 			controls_state = 688
+			controls_province = 689
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			688 = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = dockyard
-					level = 1
-					instant_build = yes
+				if = {
+					limit = { free_building_slots = { building = dockyard size > 0 include_locked = yes } }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
 				}
 			}
 			add_equipment_to_stockpile = {
@@ -349,6 +366,7 @@ focus_tree = {
 					limit = {
 						owns_state = 700
 						controls_state = 700
+						controls_province = 16716
 						700 = { free_building_slots = { building = naval_facility size > 0 province = 16716 } }
 					}
 					700 = {
@@ -739,7 +757,10 @@ focus_tree = {
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_service_state
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -777,7 +798,10 @@ focus_tree = {
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_service_state
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -845,7 +869,10 @@ focus_tree = {
 			focus = NAM_law_after_war
 		}
 		available = {
-			NAM_independent_programmes_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_programmes_operable_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -903,7 +930,10 @@ focus_tree = {
 			focus = NAM_law_after_war
 		}
 		available = {
-			NAM_independent_programmes_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_programmes_operable_tt
+				NAM_independent_programmes_operable = yes
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -1010,7 +1040,10 @@ focus_tree = {
 			has_capitulated = no
 			has_war = no
 			owns_state = 230
-			VAL = { has_country_flag = VAL_nam_concession_active }
+			custom_trigger_tooltip = {
+				tooltip = NAM_val_concession_active_tt
+				VAL = { has_country_flag = VAL_nam_concession_active }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1140,10 +1173,26 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			add_political_power = 60
-			add_fuel = 8000
+			hidden_effect = { set_variable = { var = NAM_exchange_receipts value = 0 } }
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOR = {
+							has_completed_focus = NAM_export_quays
+							has_completed_focus = NAM_customs_clearinghouse
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_export_fuel
+				custom_effect_tooltip = NAM_export_fuel_unlock_tt
+			}
+			unlock_decision_tooltip = NAM_exchange_redeem
+			custom_effect_tooltip = NAM_exchange_redeem_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_export_consortium } }
+				custom_effect_tooltip = NAM_exchange_consortium_tt
+			}
+			else = { custom_effect_tooltip = NAM_exchange_public_tt }
 		}
 		ai_will_do = {
 			base = 5
@@ -1534,7 +1583,10 @@ focus_tree = {
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_federal_charter
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1577,7 +1629,10 @@ focus_tree = {
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_federal_charter
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -1647,8 +1702,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1677,8 +1735,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1704,8 +1765,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1731,8 +1795,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1774,8 +1841,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1809,8 +1879,11 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			ADISCORD_south_final_active = yes
-			has_country_flag = ADISCORD_south_north_leader
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1837,7 +1910,7 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			NAM_country_operable = yes
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1854,7 +1927,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			if = {
-				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_civil_dividend } } }
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_civil_dividend }
+						NOT = { has_completed_focus = NAM_pw_standard_projects }
+					}
+				}
 				unlock_decision_tooltip = NAM_veteran_housing
 				custom_effect_tooltip = NAM_veteran_housing_unlock_tt
 			}
@@ -1870,6 +1948,267 @@ focus_tree = {
 	}
 
 	focus = {
+		id = NAM_svetlogorsk_settlement
+		icon = GFX_focus_NAM_recognition
+		x = 84
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_south_heritage }
+		mutually_exclusive = { focus = NAM_veyran_union_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_svetlogorsk_settlement_tt
+			hidden_effect = { set_cosmetic_tag = NAM_svetlogorye_derzhava }
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_regional_trusts }
+						NOT = { has_completed_focus = NAM_pw_state_chamber }
+					}
+				}
+				unlock_decision_tooltip = NAM_pw_regional_contracts
+				custom_effect_tooltip = NAM_pw_regional_contracts_unlock_tt
+			}
+			custom_effect_tooltip = NAM_svetlogorsk_trust_works_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_union_charter
+		icon = GFX_focus_NAM_rom_address
+		x = 88
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_south_heritage }
+		mutually_exclusive = { focus = NAM_svetlogorsk_settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_veyran_union_charter_tt
+			hidden_effect = { set_cosmetic_tag = NAM_veyran_union }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_embarkation_staff
+		icon = GFX_focus_NAM_mobile_columns
+		x = 88
+		y = 16
+		cost = 2
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_union_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_restored_dockyards } }
+				set_technology = { ADISCORD_tech_restored_dockyards = 1 }
+			}
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 20
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_convoy_charter
+		icon = GFX_focus_NAM_wrk_return_cargo
+		x = 86
+		y = 17
+		cost = 4
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_embarkation_staff }
+		mutually_exclusive = { focus = NAM_veyran_arsenal_contract }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_contract_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_veyran_contract_price_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_spend_treasury = yes
+			}
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 45
+				producer = NAM
+			}
+			add_fuel = 35000
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_arsenal_contract
+		icon = GFX_focus_NAM_metropolitan_depots
+		x = 90
+		y = 17
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_embarkation_staff }
+		mutually_exclusive = { focus = NAM_veyran_convoy_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_contract_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_veyran_contract_price_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_spend_treasury = yes
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1600
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 72
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_counterplan
+		icon = GFX_focus_NAM_underground_reports
+		x = 88
+		y = 18
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_NAVY_XP }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = {
+			focus = NAM_veyran_convoy_charter
+			focus = NAM_veyran_arsenal_contract
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_unifier_tt
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+				ADISCORD_west_wrk_reunified = yes
+				event_target:ADISCORD_vorkerland_nation = {
+					is_subject = no
+					has_capitulated = no
+					OR = {
+						has_country_flag = ADISCORD_vorkerland_route_worker
+						has_country_flag = ADISCORD_vorkerland_route_joint
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_worker } } }
+				custom_effect_tooltip = NAM_veyran_plan_ports_tt
+				add_intel = {
+					target = event_target:ADISCORD_vorkerland_nation
+					navy_intel = 25
+				}
+			}
+			else_if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_joint } } }
+				custom_effect_tooltip = NAM_veyran_plan_sappers_tt
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 240
+					producer = NAM
+				}
+			}
+			else_if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_utilitarian } } }
+				custom_effect_tooltip = NAM_veyran_plan_columns_tt
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 180
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_invasion
+		icon = GFX_focus_NAM_imperial_gendarmes
+		x = 88
+		y = 19
+		cost = 2
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_counterplan }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_can_invade_tt
+				NAM_veyran_can_invade = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_veyran_invasion_tt
+			hidden_effect = { NAM_veyran_start_invasion = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
 		id = NAM_rus_crisis_watch
 		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		x = 94
@@ -1882,19 +2221,41 @@ focus_tree = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			hidden_trigger = {
 				has_global_flag = ADISCORD_south_final_resolved
 				has_global_flag = ADISCORD_south_hegemon_NAM
 			}
-			RUS = { RUS_crisis_project_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_crisis_active_tt
+				RUS = { RUS_crisis_project_active = yes }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_war_support = 0.05
-			add_political_power = 30
+			custom_effect_tooltip = NAM_rus_watch_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
+				NAM_oil_refresh = yes
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOR = {
+							has_completed_focus = NAM_supports_export_houses
+							has_completed_focus = NAM_contract_bureau
+							has_completed_focus = NAM_defeat_oil_union
+							has_completed_focus = NAM_normalisation
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_oil_contract_offer
+				custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
+			}
 		}
 		ai_will_do = {
 			base = 30
@@ -1915,30 +2276,24 @@ focus_tree = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			hidden_trigger = {
 				has_global_flag = ADISCORD_south_final_resolved
 				has_global_flag = ADISCORD_south_hegemon_NAM
 			}
-			RUS = { RUS_crisis_project_active = yes }
-			any_country = {
-				has_country_flag = RUS_crisis_defender
-				NOT = { tag = NAM }
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_crisis_active_tt
+				RUS = { RUS_crisis_project_active = yes }
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			every_country = {
-				limit = {
-					has_country_flag = RUS_crisis_defender
-					NOT = { tag = NAM }
-				}
-				add_fuel = 4000
-			}
-			add_stability = 0.05
-			add_war_support = 0.03
+			unlock_decision_tooltip = NAM_rus_send_relief
+			custom_effect_tooltip = NAM_rus_send_relief_unlock_tt
 		}
 		ai_will_do = {
 			base = 20
@@ -1959,26 +2314,24 @@ focus_tree = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			hidden_trigger = {
 				has_global_flag = ADISCORD_south_final_resolved
 				has_global_flag = ADISCORD_south_hegemon_NAM
 			}
-			RUS = { RUS_crisis_project_active = yes }
+			custom_trigger_tooltip = {
+				tooltip = NAM_rus_crisis_active_tt
+				RUS = { RUS_crisis_project_active = yes }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_receive_250_tt
-			hidden_effect = { NAM_receive_250 = yes }
-			add_political_power = 100
-			custom_effect_tooltip = NAM_grp_rus_demand_share_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 6 }
-				add_to_variable = { var = NAM_grp_oil_support value = 4 }
-				NAM_groups_refresh = yes
-			}
+			unlock_decision_tooltip = NAM_rus_offer_barter
+			custom_effect_tooltip = NAM_rus_offer_barter_unlock_tt
 		}
 		ai_will_do = {
 			base = 20
@@ -2001,8 +2354,10 @@ focus_tree = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			hidden_trigger = {
 				has_global_flag = ADISCORD_south_final_resolved
 				has_global_flag = ADISCORD_south_hegemon_NAM
@@ -2011,12 +2366,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_command_power = 30
-			army_experience = 25
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 27000
-				producer = NAM
+			army_experience = 15
+			unlock_decision_tooltip = NAM_rus_send_column
+			custom_effect_tooltip = NAM_rus_send_column_unlock_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOR = {
+							has_completed_focus = NAM_commercial_reserve
+							has_completed_focus = NAM_warehouse_receipts
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_pw_barter_charter
+				custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
 			}
 		}
 		ai_will_do = {
@@ -2066,8 +2429,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_regional_trusts }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2091,8 +2456,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_state_plan }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2116,8 +2483,10 @@ focus_tree = {
 			focus = NAM_regional_trusts
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2155,8 +2524,10 @@ focus_tree = {
 			focus = NAM_unified_standards
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			owns_state = 67
 			controls_state = 67
 			owns_state = 688
@@ -2194,8 +2565,10 @@ focus_tree = {
 			focus = NAM_state_logistics_grid
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2222,8 +2595,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_municipal_services }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2251,8 +2626,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_public_utilities }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2280,8 +2657,10 @@ focus_tree = {
 			focus = NAM_municipal_services
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2292,7 +2671,9 @@ focus_tree = {
 					add_idea = NAM_adm_civic_audit_idea
 				}
 			}
+			custom_effect_tooltip = NAM_returnee_audit_tt
 			hidden_effect = {
+				NAM_returnee_audit_rolls = yes
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.08 }
 				add_to_variable = { var = NAM_adm_tax_collection value = 0.1 }
 				NAM_refresh_administration = yes
@@ -2320,8 +2701,10 @@ focus_tree = {
 			focus = NAM_civic_audit
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			owns_state = 689
 			controls_state = 689
 			owns_state = 690
@@ -2394,8 +2777,10 @@ focus_tree = {
 			focus = NAM_civic_audit
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2430,8 +2815,10 @@ focus_tree = {
 			focus = NAM_law_after_war
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_prewar_pragmatic_mandate_tt
 				NAM_prewar_pragmatic_mandate = yes
@@ -2461,12 +2848,16 @@ focus_tree = {
 			focus = NAM_pragmatic_compact
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_collect_award
+			custom_effect_tooltip = NAM_prag_collect_award_unlock_tt
 			unlock_decision_tooltip = NAM_pw_contract_arbitration
 			custom_effect_tooltip = NAM_pw_contract_arbitration_unlock_tt
 		}
@@ -2490,8 +2881,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_machine_tool_contracts }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2519,8 +2912,10 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_export_clearing }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2548,23 +2943,26 @@ focus_tree = {
 			focus = NAM_machine_tool_contracts
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_contract_register_idea
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_warehouse_receipts }
+						NOT = { has_completed_focus = NAM_commercial_reserve }
+						NOT = { has_completed_focus = NAM_rus_expedition_staff }
+					}
 				}
+				unlock_decision_tooltip = NAM_pw_barter_charter
+				custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_admin_expense value = -0.1 }
-				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_prag_endorsement_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2585,8 +2983,10 @@ focus_tree = {
 			focus = NAM_pragmatic_compact
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			owns_state = 700
 			controls_state = 700
 		}
@@ -2619,8 +3019,10 @@ focus_tree = {
 			focus = NAM_port_agreement
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			owns_state = 700
 			controls_state = 700
 		}
@@ -2672,8 +3074,10 @@ focus_tree = {
 			focus = NAM_port_agreement
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2706,8 +3110,10 @@ focus_tree = {
 			focus = NAM_contract_register
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2744,23 +3150,15 @@ focus_tree = {
 		}
 		prerequisite = { focus = NAM_prag_partner_supply }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_balanced_accounts_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_trade_income value = 0.15 }
-				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.05 }
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_prag_guarantee_book_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2782,12 +3180,16 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_prag_ending_directorate }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_municipal_delivery
+			custom_effect_tooltip = NAM_prag_municipal_delivery_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -2799,10 +3201,10 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.1 }
 				NAM_refresh_administration = yes
 			}
-			custom_effect_tooltip = NAM_pragmatic_ending_tt
+			NAM_apply_ending_prag_republic = yes
 			hidden_effect = {
-				set_country_flag = NAM_ladder_settled
-				NAM_rom_take_pragmatism = yes
+				set_variable = { var = NAM_prog_ending value = 5 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2825,12 +3227,22 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_prag_ending_republic }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_redeem_debentures
+			custom_effect_tooltip = NAM_prag_redeem_debentures_unlock_tt
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_municipal_bonds } } }
+				unlock_decision_tooltip = NAM_issue_harbour_bonds
+				custom_effect_tooltip = NAM_issue_harbour_bonds_unlock_tt
+			}
+			custom_effect_tooltip = NAM_prag_director_stamp_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -2843,10 +3255,10 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_stability_factor value = -0.05 }
 				NAM_refresh_administration = yes
 			}
-			custom_effect_tooltip = NAM_pragmatic_ending_tt
+			NAM_apply_ending_prag_directorate = yes
 			hidden_effect = {
-				set_country_flag = NAM_ladder_settled
-				NAM_rom_take_pragmatism = yes
+				set_variable = { var = NAM_prog_ending value = 6 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -2872,13 +3284,18 @@ focus_tree = {
 			AZH = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
 			}
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2908,8 +3325,10 @@ focus_tree = {
 			focus = NAM_prag_settlement_agreements
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2955,8 +3374,10 @@ focus_tree = {
 		}
 		prerequisite = { focus = NAM_balanced_accounts }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
 			has_war = no
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_ready_tt
@@ -2986,9 +3407,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_appointed_prefects }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2999,6 +3425,9 @@ focus_tree = {
 					add_idea = NAM_adm_civil_service_exam_idea
 				}
 			}
+			unlock_decision_tooltip = NAM_pw_district_allotment
+			custom_effect_tooltip = NAM_pw_district_allotment_unlock_tt
+			custom_effect_tooltip = NAM_pw_exam_allotment_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.06 }
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
@@ -3021,9 +3450,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_civil_service_exam }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3034,6 +3468,9 @@ focus_tree = {
 					add_idea = NAM_adm_appointed_prefects_idea
 				}
 			}
+			unlock_decision_tooltip = NAM_pw_district_allotment
+			custom_effect_tooltip = NAM_pw_district_allotment_unlock_tt
+			custom_effect_tooltip = NAM_pw_prefect_allotment_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_political_power_gain value = 0.15 }
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.04 }
@@ -3056,9 +3493,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_distribution_board }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3090,9 +3532,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_building_code }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3124,9 +3571,14 @@ focus_tree = {
 			focus = NAM_distribution_board
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3161,9 +3613,14 @@ focus_tree = {
 			focus = NAM_works_commission
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3186,9 +3643,14 @@ focus_tree = {
 			focus = NAM_works_commission
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 			owns_state = 700
 			controls_state = 700
 		}
@@ -3234,9 +3696,14 @@ focus_tree = {
 			focus = NAM_works_commission
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3268,9 +3735,14 @@ focus_tree = {
 			focus = NAM_development_bank
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3281,6 +3753,11 @@ focus_tree = {
 					add_idea = NAM_adm_district_inspectorate_idea
 				}
 			}
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_civil_service_exam } }
+				custom_effect_tooltip = NAM_pw_inspect_road_tt
+			}
+			else = { custom_effect_tooltip = NAM_pw_inspect_fleet_tt }
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_tax_collection value = 0.08 }
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.04 }
@@ -3305,9 +3782,14 @@ focus_tree = {
 			focus = NAM_engineering_collegium
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_service_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3322,7 +3804,7 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.05 }
 				NAM_refresh_administration = yes
 			}
-			add_political_power = 100
+			custom_effect_tooltip = NAM_pw_local_allotment_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3343,9 +3825,14 @@ focus_tree = {
 			focus = NAM_port_agreement
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3373,9 +3860,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_domestic_designs }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3412,9 +3904,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_foreign_patents }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3425,6 +3922,8 @@ focus_tree = {
 					add_idea = NAM_adm_domestic_designs_idea
 				}
 			}
+			unlock_decision_tooltip = NAM_exchange_chassis
+			custom_effect_tooltip = NAM_exchange_chassis_unlock_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.035 }
 				NAM_refresh_administration = yes
@@ -3450,9 +3949,14 @@ focus_tree = {
 			focus = NAM_domestic_designs
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3463,7 +3967,21 @@ focus_tree = {
 					add_idea = NAM_adm_customs_clearinghouse_idea
 				}
 			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOR = {
+							has_completed_focus = NAM_export_quays
+							has_completed_focus = NAM_oil_exchange
+						}
+					}
+				}
+				unlock_decision_tooltip = NAM_export_fuel
+				custom_effect_tooltip = NAM_export_fuel_unlock_tt
+			}
+			custom_effect_tooltip = NAM_bond_stamp_tt
 			hidden_effect = {
+				set_variable = { var = NAM_bond_balance value = 0 }
 				add_to_variable = { var = NAM_adm_trade_income value = 0.08 }
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.04 }
 				NAM_refresh_administration = yes
@@ -3491,9 +4009,14 @@ focus_tree = {
 			focus = NAM_insured_caravans
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3525,13 +4048,27 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_licensed_assembly }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_second_drilling_crew }
+					NOT = { has_completed_focus = NAM_pw_energy_commission }
+				}
+				unlock_decision_tooltip = NAM_econ_emergency_service
+				custom_effect_tooltip = NAM_econ_emergency_service_unlock_tt
+			}
+			custom_effect_tooltip = NAM_repair_depots_service_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -3564,9 +4101,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_repair_depots }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 			owns_state = 700
 			controls_state = 700
 		}
@@ -3621,9 +4163,14 @@ focus_tree = {
 			focus = NAM_freight_exchange
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3658,9 +4205,14 @@ focus_tree = {
 			focus = NAM_customs_clearinghouse
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3670,6 +4222,15 @@ focus_tree = {
 					remove_idea = NAM_administration_dummy_idea
 					add_idea = NAM_adm_municipal_bonds_idea
 				}
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_prag_ending_directorate } } }
+				unlock_decision_tooltip = NAM_issue_harbour_bonds
+				custom_effect_tooltip = NAM_issue_harbour_bonds_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_prag_ending_directorate } }
+				custom_effect_tooltip = NAM_prag_municipal_subscription_tt
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_civilian_speed value = 0.1 }
@@ -3699,9 +4260,14 @@ focus_tree = {
 			focus = NAM_port_polytechnic
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3712,6 +4278,7 @@ focus_tree = {
 					add_idea = NAM_adm_commercial_commonwealth_idea
 				}
 			}
+			custom_effect_tooltip = NAM_bond_second_issue_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_trade_income value = 0.1 }
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
@@ -3738,9 +4305,14 @@ focus_tree = {
 			focus = NAM_municipal_services
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3767,15 +4339,22 @@ focus_tree = {
 			focus = NAM_district_council
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 8000
-			add_stability = 0.03
+			add_manpower = 4000
+			unlock_decision_tooltip = NAM_house_returnees
+			custom_effect_tooltip = NAM_house_returnees_unlock_tt
+			hidden_effect = { add_to_variable = { var = NAM_returnee_register value = 4000 } }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3796,9 +4375,14 @@ focus_tree = {
 			focus = NAM_open_libraries
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3834,9 +4418,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_tenant_councils }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3847,6 +4436,8 @@ focus_tree = {
 					add_idea = NAM_adm_municipal_land_idea
 				}
 			}
+			unlock_decision_tooltip = NAM_pw_municipal_workshop
+			custom_effect_tooltip = NAM_pw_municipal_workshop_unlock_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_civilian_speed value = 0.12 }
 				NAM_refresh_administration = yes
@@ -3875,9 +4466,14 @@ focus_tree = {
 		}
 		mutually_exclusive = { focus = NAM_municipal_land }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3888,6 +4484,8 @@ focus_tree = {
 					add_idea = NAM_adm_tenant_councils_idea
 				}
 			}
+			unlock_decision_tooltip = NAM_pw_tenant_petition
+			custom_effect_tooltip = NAM_pw_tenant_petition_unlock_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.05 }
@@ -3914,9 +4512,14 @@ focus_tree = {
 			focus = NAM_tenant_councils
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -3950,9 +4553,14 @@ focus_tree = {
 			focus = NAM_oil_fund
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 			owns_state = 689
 			controls_state = 689
 		}
@@ -3997,13 +4605,19 @@ focus_tree = {
 			focus = NAM_water_boards
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_workers_inspection_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -4011,6 +4625,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
+				NAM_workers_inspection_dispatch = yes
 				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.08 }
 				NAM_refresh_administration = yes
 			}
@@ -4037,13 +4652,29 @@ focus_tree = {
 			focus = NAM_workers_inspection
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_oil_fund }
+						NOT = { has_completed_focus = NAM_relief_register }
+					}
+				}
+				unlock_decision_tooltip = NAM_pw_district_schools
+				custom_effect_tooltip = NAM_pw_district_schools_unlock_tt
+			}
+			custom_effect_tooltip = NAM_regional_university_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -4051,6 +4682,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
+				NAM_regional_medical_course = yes
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
 				NAM_refresh_administration = yes
 			}
@@ -4077,9 +4709,14 @@ focus_tree = {
 			focus = NAM_regional_university
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -4095,7 +4732,8 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.04 }
 				NAM_refresh_administration = yes
 			}
-			add_political_power = 75
+			custom_effect_tooltip = NAM_returnee_citizenship_tt
+			hidden_effect = { add_to_variable = { var = NAM_returnee_register value = 4000 } }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4445,19 +5083,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_provincial_records_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_compliance_gain
-					value = 0.03
-				}
-				NAM_refresh_administration = yes
-			}
+			unlock_decision_tooltip = NAM_pw_register_district_titles
+			custom_effect_tooltip = NAM_pw_register_district_titles_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4488,19 +5115,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_administrative_courts_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_resistance_growth
-					value = -0.05
-				}
-				NAM_refresh_administration = yes
-			}
+			unlock_decision_tooltip = NAM_pw_hear_district_appeals
+			custom_effect_tooltip = NAM_pw_hear_district_appeals_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4894,19 +5510,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_labour_code_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_stability_factor
-					value = 0.04
-				}
-				NAM_refresh_administration = yes
-			}
+			unlock_decision_tooltip = NAM_hire_relief_shift
+			custom_effect_tooltip = NAM_hire_relief_shift_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4979,6 +5584,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_pw_insurance_claim_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -5086,6 +5692,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_pw_family_pensions_claim_tt
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_veterans_return } } }
+				unlock_decision_tooltip = NAM_pw_veteran_course
+				custom_effect_tooltip = NAM_pw_veteran_course_unlock_tt
+			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -5133,19 +5745,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_labour_inspection_administration_preview
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_field_repair_trained = no
+						NOT = { has_completed_focus = NAM_rescue_college }
+					}
 				}
+				unlock_decision_tooltip = NAM_project_repair_wells
+				custom_effect_tooltip = NAM_project_repair_wells_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_efficiency_gain
-					value = 0.04
-				}
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_labour_inspection_receipts_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5208,23 +5818,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_arbitration_commissions_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_stability_factor
-					value = 0.03
-				}
-				add_to_variable = {
-					var = NAM_adm_industrial_capacity_factory
-					value = 0.02
-				}
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_labour_mediation_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5287,23 +5881,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_social_budget_administration_preview
-				}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_crisis_office } } }
+				unlock_decision_tooltip = NAM_crisis_fund
+				custom_effect_tooltip = NAM_crisis_fund_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_admin_expense
-					value = -0.03
-				}
-				add_to_variable = {
-					var = NAM_adm_tax_collection
-					value = 0.03
-				}
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_social_budget_shift_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5725,19 +6308,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_standard_projects_administration_preview
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_civil_dividend }
+						NOT = { has_completed_focus = NAM_south_heritage }
+					}
 				}
+				unlock_decision_tooltip = NAM_veteran_housing
+				custom_effect_tooltip = NAM_veteran_housing_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_civilian_speed
-					value = 0.05
-				}
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_standard_housing_blueprint_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5771,19 +6352,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_local_design_offices_administration_preview
-				}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_island_accounts } } }
+				unlock_decision_tooltip = NAM_project_steel
+				custom_effect_tooltip = NAM_project_steel_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_research_speed_factor
-					value = 0.03
-				}
-				NAM_refresh_administration = yes
-			}
+			custom_effect_tooltip = NAM_local_design_steel_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -6089,7 +6663,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6137,7 +6711,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6174,7 +6748,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 			owns_state = 700
 			controls_state = 700
 		}
@@ -6211,23 +6785,20 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_war_accounts_administration_preview
-				}
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_pw_development_fund } }
+				unlock_decision_tooltip = NAM_pw_release_reserve
+				custom_effect_tooltip = NAM_pw_release_reserve_unlock_tt
 			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_admin_expense
-					value = -0.04
-				}
-				NAM_refresh_administration = yes
+			if = {
+				limit = { NOT = { has_completed_focus = NAM_pw_strategic_reserve } }
+				unlock_decision_tooltip = NAM_pw_harbour_slipway
+				custom_effect_tooltip = NAM_pw_harbour_slipway_unlock_tt
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -6256,11 +6827,23 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_completed_focus = NAM_oil_fund }
+						NOT = { has_completed_focus = NAM_relief_register }
+						NOT = { has_completed_focus = NAM_regional_university }
+					}
+				}
+				unlock_decision_tooltip = NAM_pw_district_schools
+				custom_effect_tooltip = NAM_pw_district_schools_unlock_tt
+			}
+			custom_effect_tooltip = NAM_khazar_school_exchange_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -6301,7 +6884,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6346,12 +6929,14 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			add_manpower = 4000
+			unlock_decision_tooltip = NAM_convert_wartime_plant
+			custom_effect_tooltip = NAM_convert_wartime_plant_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -6380,7 +6965,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6425,7 +7010,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6474,7 +7059,7 @@ focus_tree = {
 				tooltip = NAM_prewar_service_mandate_tt
 				NAM_prewar_service_mandate = yes
 			}
-			has_global_flag = ADISCORD_south_hegemon_NAM
+			hidden_trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -6756,6 +7341,7 @@ focus_tree = {
 			if = {
 				limit = {
 					NOT = { has_completed_focus = NAM_second_drilling_crew }
+					NOT = { has_completed_focus = NAM_repair_depots }
 				}
 				unlock_decision_tooltip = NAM_econ_emergency_service
 				custom_effect_tooltip = NAM_econ_emergency_service_unlock_tt
@@ -6811,6 +7397,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_grid_connect_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -6875,6 +7462,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_program_city_water
+			custom_effect_tooltip = NAM_program_city_water_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -7004,6 +7593,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_grid_send_generator
+			custom_effect_tooltip = NAM_grid_send_generator_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -7868,7 +8459,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			army_experience = 40
+			unlock_decision_tooltip = NAM_program_reserve_centres
+			custom_effect_tooltip = NAM_program_reserve_centres_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -7901,6 +8493,7 @@ focus_tree = {
 					add_idea = NAM_pw_breakthrough_army_garrison_preview
 				}
 			}
+			custom_effect_tooltip = NAM_pw_breakthrough_issue_tt
 			hidden_effect = {
 				add_to_variable = {
 					var = NAM_gar_army_org
@@ -7944,6 +8537,7 @@ focus_tree = {
 					add_idea = NAM_pw_mobile_army_garrison_preview
 				}
 			}
+			custom_effect_tooltip = NAM_pw_mobile_issue_tt
 			hidden_effect = {
 				add_to_variable = {
 					var = NAM_gar_army_speed
@@ -7979,8 +8573,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_program_reserve_centres
-			custom_effect_tooltip = NAM_program_reserve_centres_unlock_tt
+			custom_effect_tooltip = NAM_pw_reserve_network_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8029,8 +8622,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_mil_carrier_contract
-			custom_effect_tooltip = NAM_mil_carrier_contract_unlock_tt
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_motor_pool } } }
+				unlock_decision_tooltip = NAM_mil_carrier_contract
+				custom_effect_tooltip = NAM_mil_carrier_contract_unlock_tt
+			}
 			NAM_order_grant_motor_technology = yes
 			add_equipment_to_stockpile = {
 				type = ADISCORD_armored_carrier_2163
@@ -8095,9 +8691,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_mil_command_course
-			custom_effect_tooltip = NAM_mil_command_course_unlock_tt
-			army_experience = 30
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_officer_courses } } }
+				unlock_decision_tooltip = NAM_mil_command_course
+				custom_effect_tooltip = NAM_mil_command_course_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_field_guards } } }
+				unlock_decision_tooltip = NAM_mil_field_security
+				custom_effect_tooltip = NAM_mil_field_security_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_mobile_columns } } }
+				unlock_decision_tooltip = NAM_mil_mobile_surge
+				custom_effect_tooltip = NAM_mil_mobile_surge_unlock_tt
+			}
+			custom_effect_tooltip = NAM_pw_staff_operations_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8122,7 +8731,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_pw_combined_orders_tt
+			if = {
+				limit = { hidden_trigger = { has_completed_focus = NAM_pw_engineer_units } }
+				custom_effect_tooltip = NAM_pw_combined_engineers_tt
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						OR = {
+							has_completed_focus = NAM_pw_field_workshops
+							has_completed_focus = NAM_motor_pool
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_pw_combined_carriers_tt
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8204,7 +8827,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			navy_experience = 40
+			navy_experience = 15
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "NAM_auxiliary_patrol_design"
+					type = ADISCORD_coastal_patrol_ship_1
+				}
+			}
+			unlock_decision_tooltip = NAM_pw_patrol_refit
+			custom_effect_tooltip = NAM_pw_patrol_refit_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8236,9 +8872,9 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			set_technology = { ADISCORD_tech_destroyer_hull_2155 = 1 }
-			hidden_effect = {
-				if = {
-					limit = {
+			if = {
+				limit = {
+					hidden_trigger = {
 						NOT = {
 							AND = {
 								has_completed_focus = NAM_naval_construction
@@ -8246,15 +8882,17 @@ focus_tree = {
 							}
 						}
 					}
+				}
+				hidden_effect = {
 					create_equipment_variant = {
 						name = "ADISCORD_escort_ship_2155"
 						type = ADISCORD_escort_ship_2155
 						allow_without_tech = yes
 					}
 				}
+				unlock_decision_tooltip = NAM_escort_order
+				custom_effect_tooltip = NAM_escort_order_unlock_tt
 			}
-			unlock_decision_tooltip = NAM_escort_order
-			custom_effect_tooltip = NAM_escort_order_unlock_tt
 			create_ship = {
 				type = ADISCORD_escort_ship_2155
 				equipment_variant = "ADISCORD_escort_ship_2155"
@@ -8291,9 +8929,9 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			set_technology = { ADISCORD_tech_submarine_hull_2155 = 1 }
-			hidden_effect = {
-				if = {
-					limit = {
+			if = {
+				limit = {
+					hidden_trigger = {
 						NOT = {
 							AND = {
 								has_completed_focus = NAM_naval_construction
@@ -8301,15 +8939,17 @@ focus_tree = {
 							}
 						}
 					}
+				}
+				hidden_effect = {
 					create_equipment_variant = {
 						name = "ADISCORD_submarine_2155"
 						type = ADISCORD_submarine_2155
 						allow_without_tech = yes
 					}
 				}
+				unlock_decision_tooltip = NAM_submarine_order
+				custom_effect_tooltip = NAM_submarine_order_unlock_tt
 			}
-			unlock_decision_tooltip = NAM_submarine_order
-			custom_effect_tooltip = NAM_submarine_order_unlock_tt
 			create_ship = {
 				type = ADISCORD_submarine_2155
 				equipment_variant = "ADISCORD_submarine_2155"
@@ -8432,8 +9072,12 @@ focus_tree = {
 				custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
 			}
 			set_technology = { ADISCORD_tech_svetlogorsk_marine_corps = 1 }
-			unlock_decision_tooltip = NAM_marine_detachment_order
-			custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_marine_arsenal } } }
+				unlock_decision_tooltip = NAM_marine_detachment_order
+				custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
+			}
+			custom_effect_tooltip = NAM_pw_landing_intake_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8504,7 +9148,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			air_experience = 40
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_air_interceptors } } }
+				unlock_decision_tooltip = NAM_air_fighter_order
+				custom_effect_tooltip = NAM_air_fighter_order_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_air_support } } }
+				unlock_decision_tooltip = NAM_air_cas_order
+				custom_effect_tooltip = NAM_air_cas_order_unlock_tt
+			}
+			custom_effect_tooltip = NAM_air_trial_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8532,13 +9186,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_air_fighter_order
-			custom_effect_tooltip = NAM_air_fighter_order_unlock_tt
-			add_equipment_to_stockpile = {
-				type = ADISCORD_fighter_airframe_2163
-				amount = 24
-				producer = NAM
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = NAM_air_trial_used
+						NOT = { has_completed_focus = NAM_air_interceptors }
+					}
+				}
+				unlock_decision_tooltip = NAM_air_fighter_order
+				custom_effect_tooltip = NAM_air_fighter_order_unlock_tt
 			}
+			custom_effect_tooltip = NAM_air_fighter_series_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8566,13 +9224,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_air_cas_order
-			custom_effect_tooltip = NAM_air_cas_order_unlock_tt
-			add_equipment_to_stockpile = {
-				type = ADISCORD_cas_airframe_2170
-				amount = 24
-				producer = NAM
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = NAM_air_trial_used
+						NOT = { has_completed_focus = NAM_air_support }
+					}
+				}
+				unlock_decision_tooltip = NAM_air_cas_order
+				custom_effect_tooltip = NAM_air_cas_order_unlock_tt
 			}
+			custom_effect_tooltip = NAM_air_cas_series_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8672,33 +9334,25 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_tech_bonus = {
-				name = NAM_pw_engine_workshops
-				bonus = 0.75
-				uses = 1
-				category = air_equipment
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_pw_air_defence
+						NOT = { has_tech = ADISCORD_tech_high_altitude_interceptors }
+					}
+				}
+				set_technology = { ADISCORD_tech_high_altitude_interceptors = 1 }
 			}
 			if = {
 				limit = {
-					owns_state = 700
-					controls_state = 700
-					700 = { free_building_slots = { building = arms_factory size > 0 include_locked = no } }
-				}
-				700 = {
-					add_building_construction = {
-						type = arms_factory
-						level = 1
-						instant_build = yes
+					hidden_trigger = {
+						has_completed_focus = NAM_pw_frontline_air
+						NOT = { has_tech = ADISCORD_tech_precision_glide_bomb_kits }
 					}
 				}
+				set_technology = { ADISCORD_tech_precision_glide_bomb_kits = 1 }
 			}
-			else = {
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 220
-					producer = NAM
-				}
-			}
+			custom_effect_tooltip = NAM_air_workshop_exchange_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8748,6 +9402,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_air_bridge_forward_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_air_dummy_idea
@@ -8808,9 +9463,14 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_common_fuel_market }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8848,9 +9508,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_cooperative_congress }
 		mutually_exclusive = { focus = NAM_tool_cooperatives }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8880,9 +9545,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_cooperative_congress }
 		mutually_exclusive = { focus = NAM_haulage_cooperatives }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8914,9 +9584,14 @@ focus_tree = {
 			focus = NAM_tool_cooperatives
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 			owns_state = 689
 			controls_state = 689
 		}
@@ -8963,9 +9638,14 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_district_scholarships }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -8996,9 +9676,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_relief_register }
 		mutually_exclusive = { focus = NAM_mobile_clinics }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9027,9 +9712,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_relief_register }
 		mutually_exclusive = { focus = NAM_relief_trains }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9065,9 +9755,14 @@ focus_tree = {
 			focus = NAM_mobile_clinics
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9105,9 +9800,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_district_fair }
 		prerequisite = { focus = NAM_rescue_college }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_district_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
 			owns_state = 690
 			controls_state = 690
 		}
@@ -9154,9 +9854,14 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_merchant_charter }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9191,9 +9896,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_freight_brokerage }
 		mutually_exclusive = { focus = NAM_tractor_leasing }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9218,9 +9928,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_freight_brokerage }
 		mutually_exclusive = { focus = NAM_chartered_tonnage }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9247,9 +9962,14 @@ focus_tree = {
 			focus = NAM_tractor_leasing
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 			owns_state = 700
 			controls_state = 700
 		}
@@ -9296,9 +10016,14 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_port_polytechnic }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9370,9 +10095,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_testing_office }
 		mutually_exclusive = { focus = NAM_relay_trials }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9401,9 +10131,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_testing_office }
 		mutually_exclusive = { focus = NAM_precision_gauges }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -9442,9 +10177,14 @@ focus_tree = {
 			focus = NAM_relay_trials
 		}
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 			owns_state = 688
 			controls_state = 688
 		}
@@ -9512,9 +10252,14 @@ focus_tree = {
 		prerequisite = { focus = NAM_licensed_workshop }
 		prerequisite = { focus = NAM_bonded_terminal }
 		available = {
-			has_capitulated = no
-			NAM_pw_operable = yes
-			NAM_prewar_pragmatic_mandate = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no

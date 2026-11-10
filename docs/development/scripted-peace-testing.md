@@ -248,7 +248,7 @@ that campaign. A champion's capitulation settles every participant; other
 defeated participants stay occupied until that settlement. Native peace,
 annexation or subjugation outside it resolves the campaign by control of the
 key districts, and the Restitution Alliance only repels it.
-The western final war follows the same contract for reunified WRK and IVN. Its
+The western final war follows the same contract for unified Vorkerland and IVN. Its
 `west_final` sections run after `south_final`; a champion's capitulation
 settles every participant, and an external end resolves it by points: each
 side scores the northern corridor districts it controls and the opposing

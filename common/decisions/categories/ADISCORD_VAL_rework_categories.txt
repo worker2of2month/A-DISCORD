@@ -3,8 +3,48 @@ VAL_new_world_category = {
 	allowed = { tag = VAL }
 	visible = {
 		OR = {
-			has_completed_focus = VAL_Return_To_World_Market
+			has_focus_tree = VAL_new_world_focus
 			VAL_nw_khan_threat = yes
+		}
+	}
+	visible_when_empty = yes
+}
+
+VAL_peace_order_category = {
+	priority = 945
+	allowed = { tag = VAL }
+	visible = {
+		VAL_peace_regime_chosen = yes
+		OR = {
+			has_completed_focus = VAL_throne_crown_register
+			has_completed_focus = VAL_cabinet_civil_combine
+			has_completed_focus = VAL_charter_mercenary_power
+			has_completed_focus = VAL_captains_war_export
+		}
+	}
+}
+
+VAL_east_war_category = {
+	priority = 1010
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			has_completed_focus = VAL_east_arsenal
+			has_completed_focus = VAL_east_final
+			VAL_east_final_active = yes
+		}
+	}
+	visible_when_empty = yes
+}
+
+# The delivery of a paid foreign order outlives the reckoning that sent it.
+VAL_peace_payroll_category = {
+	priority = 955
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			VAL_peace_crisis_active = yes
+			has_variable = VAL_peace_order_deposit
 		}
 	}
 	visible_when_empty = yes
@@ -44,6 +84,7 @@ VAL_rework_debug = {
 }
 
 VAL_reclamation = {
+	picture = GFX_ADISCORD_decision_picture_land_reclamation
 	allowed = { tag = VAL }
 	visible = { has_completed_focus = VAL_reclamation_survey }
 	visible_when_empty = no
@@ -74,6 +115,7 @@ VAL_livonn_settlement_category = {
 }
 
 VAL_foreign_sales = {
+	picture = GFX_ADISCORD_decision_picture_deal
 	priority = 950
 	allowed = { tag = VAL }
 	visible = {

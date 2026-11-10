@@ -168,6 +168,30 @@ autonomy_state = {
 	can_lose_level = { always = no }
 }
 
+autonomy_state = {
+	id = autonomy_NAM_imperial_governorate
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.0
+	use_overlord_color = no
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		can_be_spymaster = no
+	}
+	allowed_levels_filter = { autonomy_NAM_imperial_governorate }
+	modifier = {
+		cic_to_overlord_factor = 1.0
+		mic_to_overlord_factor = 1.0
+		resources_to_overlord_factor = 1.0
+	}
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}
+
 # Contract members retain their armies; their obligations are trade and civilian capacity.
 autonomy_state = {
 	id = autonomy_NAM_economic_contract

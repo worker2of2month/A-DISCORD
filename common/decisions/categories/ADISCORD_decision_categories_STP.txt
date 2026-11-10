@@ -136,6 +136,7 @@ STP_imperial_union_category = {
 
 STP_postwar_reconstruction_drive = {
 	icon = ADISCORD_factory
+	picture = GFX_ADISCORD_decision_picture_land_reclamation
 	allowed = { tag = STS }
 	visible = {
 		tag = STS

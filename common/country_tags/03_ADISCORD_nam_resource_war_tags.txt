@@ -1,1 +1,2 @@
 SLF = "countries/SLF.txt"
+SNG = "countries/SNG.txt"

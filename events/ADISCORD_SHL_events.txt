@@ -102,7 +102,7 @@ country_event = {
 	id = ADISCORD_SHL.3
 	title = ADISCORD_SHL.3.t
 	desc = ADISCORD_SHL.3.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_railway_signal_box
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -148,7 +148,7 @@ country_event = {
 	id = ADISCORD_SHL.6
 	title = ADISCORD_SHL.6.t
 	desc = ADISCORD_SHL.6.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_port_machinery_unloading
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -577,7 +577,7 @@ country_event = {
 	id = ADISCORD_SHL.55
 	title = ADISCORD_SHL.55.t
 	desc = ADISCORD_SHL.55.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_village_fingerprint_signing
 	is_triggered_only = yes
 	trigger = { tag = KYZ }
 	option = {
@@ -625,7 +625,7 @@ country_event = {
 	id = ADISCORD_SHL.57
 	title = ADISCORD_SHL.57.t
 	desc = ADISCORD_SHL.57.d
-	picture = GFX_event_adiscord_military_headquarters
+	picture = GFX_event_adiscord_valley_irrigation_survey
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -1189,7 +1189,7 @@ country_event = {
 	id = ADISCORD_SHL.112
 	title = ADISCORD_SHL.112.t
 	desc = ADISCORD_SHL.112.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_village_fingerprint_signing
 	is_triggered_only = yes
 	trigger = { tag = KYZ }
 	option = {
@@ -1215,7 +1215,7 @@ country_event = {
 	id = ADISCORD_SHL.113
 	title = ADISCORD_SHL.113.t
 	desc = ADISCORD_SHL.113.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_road_barrier_bus
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -2477,7 +2477,7 @@ country_event = {
 	id = ADISCORD_shl_life.24
 	title = ADISCORD_shl_life.24.t
 	desc = ADISCORD_shl_life.24.d
-	picture = GFX_event_adiscord_administrative_office
+	picture = GFX_event_adiscord_valley_irrigation_survey
 	is_triggered_only = yes
 	fire_only_once = no
 	trigger = {

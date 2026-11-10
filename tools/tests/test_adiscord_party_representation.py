@@ -15,6 +15,10 @@ TAGS = (
     "NAM", "STP", "STS", "SRP", "VAL", "SHL", "RUS", "IVN", "IVC",
     "WRK", "WKR", "TVA", "VAD", "NOD", "AZH", "EFL", "SLF",
 )
+NATION_TARGET = "event_target:ADISCORD_vorkerland_nation"
+# A route profile is named after the roster it renames. The WRK roster serves
+# whichever country is Vorkerland, so its profiles select that country.
+PROFILE_COUNTRIES = {"WRK": NATION_TARGET}
 
 
 def parsed(path):
@@ -129,7 +133,7 @@ class PartyRepresentationTests(unittest.TestCase):
         for name, body in profiles.items():
             tag = name[:3]
             with self.subTest(profile=name):
-                self.assertEqual(scalar(block(block(body, "if"), "limit"), "tag"), tag)
+                self.assertEqual(scalar(block(block(body, "if"), "limit"), "tag"), PROFILE_COUNTRIES.get(tag, tag))
                 callers = [key for key, value in effects.items() if key != name and any(entry.key == name for entry in walk(value))]
                 self.assertTrue(callers, name)
                 hidden = block(block(body, "if"), "hidden_effect")
@@ -162,6 +166,24 @@ class PartyRepresentationTests(unittest.TestCase):
                     value = self.localisation["russian"][key][0][1]
                     self.assertNotIn(value, names_by_country.setdefault(tag, set()))
                     names_by_country[tag].add(value)
+
+    def test_vorkerland_unifier_holds_the_roster_its_route_names_address(self):
+        effects = {
+            entry.key: entry.value
+            for entry in parsed(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        }
+        adoption = effects["ADISCORD_vorkerland_adopt_retired_roster"]
+        transfer = block(block(block(adoption, "WRK"), "every_character"), "set_nationality")
+        self.assertEqual(scalar(transfer, "target_country"), NATION_TARGET)
+        for winner in ("wkr", "vad", "tva"):
+            with self.subTest(winner=winner):
+                steps = [entry.key for entry in effects[f"ADISCORD_vorkerland_unify_under_{winner}"]]
+                # The roster moves once the target names the winner, before the
+                # delayed settlement applies the route names.
+                self.assertLess(steps.index("save_global_event_target_as"),
+                                steps.index("ADISCORD_vorkerland_adopt_retired_roster"))
+                self.assertLess(steps.index("ADISCORD_vorkerland_adopt_retired_roster"),
+                                steps.index("country_event"))
 
     def test_nam_collapse_reduces_support_once_before_the_announcement(self):
         effects = parsed(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")

@@ -13,13 +13,13 @@ focus_tree = {
 
 	shared_focus = VAL_Naval_Contract_Office
 
-	# Opening
+	# Reckoning: the trunk joins both bills and ends with the chosen regime.
 
 	focus = {
 		id = VAL_nw_price
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		x = 18
+		x = 12
 		y = 0
 		cost = 1
 		# A paid trial or retirement settles the balance itself; its receipt is never cancelled here.
@@ -44,18 +44,1621 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAL_peace_silent_lines
+		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
+		x = 12
+		y = 1
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_price
+		}
+		completion_reward = {
+			VAL_advance_economic_recovery = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_100 = yes
+			}
+			country_event = { id = val_peace.2 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_two_bills
+		icon = GFX_focus_VAL_Central_Payment_Office
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 4
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_silent_lines
+		}
+		prerequisite = {
+			focus = VAL_peace_tishin_list
+		}
+		prerequisite = {
+			focus = VAL_peace_kilnet
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			unlock_decision_tooltip = VAL_peace_foreign_order
+			country_event = { id = val_peace.25 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_land_for_service
+		icon = GFX_focus_VAL_Market_Roads_North
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_DECISIONS }
+		x = 8
+		y = 5
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_two_bills
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_workers_charter
+			focus = VAL_peace_shift_law
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = 0.15 }
+			custom_effect_tooltip = VAL_peace_strike_minus_25_tt
+			custom_effect_tooltip = VAL_peace_land_base_tt
+			every_subject_country = {
+				limit = {
+					OR = {
+						tag = STP
+						tag = STS
+					}
+				}
+				add_stability = -0.05
+			}
+			unlock_decision_tooltip = VAL_peace_allot_plots
+			hidden_effect = {
+				set_temp_variable = { var = VAL_peace_strike_delta value = -25 }
+				VAL_peace_apply_strike = yes
+			}
+			country_event = { id = val_peace.26 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_peace_workers_charter
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 5
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_two_bills
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_land_for_service
+			focus = VAL_peace_shift_law
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = -0.05 }
+			custom_effect_tooltip = VAL_peace_strike_minus_35_tt
+			custom_effect_tooltip = VAL_peace_charter_base_tt
+			custom_effect_tooltip = VAL_peace_charter_output_tt
+			unlock_decision_tooltip = VAL_peace_convert_line
+			hidden_effect = {
+				set_temp_variable = { var = VAL_peace_strike_delta value = -35 }
+				VAL_peace_apply_strike = yes
+			}
+			country_event = { id = val_peace.27 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_shift_law
+		icon = GFX_focus_VAL_Three_Shift_Arsenals
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 16
+		y = 5
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_two_bills
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_land_for_service
+			focus = VAL_peace_workers_charter
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = 0.10 }
+			add_stability = -0.05
+			custom_effect_tooltip = VAL_peace_strike_minus_20_tt
+			custom_effect_tooltip = VAL_peace_shift_floor_tt
+			unlock_decision_tooltip = VAL_peace_rushed_shifts
+			hidden_effect = {
+				set_temp_variable = { var = VAL_peace_strike_delta value = -20 }
+				VAL_peace_apply_strike = yes
+			}
+			country_event = { id = val_peace.28 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_peace_archive
+		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		x = 12
+		y = 6
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_land_for_service
+			focus = VAL_peace_workers_charter
+			focus = VAL_peace_shift_law
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			country_event = { id = val_peace.30 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_night_of_registers
+		icon = GFX_focus_VAL_Closed_Ledgers
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		x = 12
+		y = 7
+		cost = 2
+		prerequisite = {
+			focus = VAL_peace_archive
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_peace_night_tt
+			hidden_effect = {
+				VAL_peace_open_reckoning = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Exactly one regime root is shown; every root stands on the same place.
+
+	focus = {
+		id = VAL_peace_throne
+		icon = GFX_focus_VAL_The_Weaponry_Baron
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 8
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_night_of_registers
+		}
+		available = {
+			VAL_peace_regime_throne = yes
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10800
+				producer = VAL
+			}
+			add_command_power = 50
+			country_event = { id = val_peace.50 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_cabinet
+		icon = GFX_focus_VAL_State_Contract
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 12
+		y = 8
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_night_of_registers
+		}
+		available = {
+			VAL_peace_regime_cabinet = yes
+		}
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = industrial_complex size > 1 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
+				}
+			}
+			custom_effect_tooltip = VAL_peace_treasury_300_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
+			}
+			country_event = { id = val_peace.51 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_charter
+		icon = GFX_focus_VAL_Contract_General_Staff
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 12
+		y = 8
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_night_of_registers
+		}
+		available = {
+			VAL_peace_regime_charter = yes
+		}
+		completion_reward = {
+			army_experience = 50
+			add_command_power = 50
+			country_event = { id = val_peace.52 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_captains
+		icon = GFX_focus_VAL_Vorons_Companies
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 12
+		y = 8
+		cost = 5
+		prerequisite = {
+			focus = VAL_peace_night_of_registers
+		}
+		available = {
+			VAL_peace_regime_captains = yes
+		}
+		completion_reward = {
+			add_manpower = 10000
+			add_war_support = 0.10
+			country_event = { id = val_peace.53 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_nw_arbitration
+		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 12
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_cabinet
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_commercial_access_tt
+				VAL_nw_has_commercial_access = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_nw_admin_delta
+			}
+			hidden_effect = {
+				VAL_nw_improve_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_nw_army_guarantee
+		icon = GFX_focus_VAL_Contracts_Outlive_Kings
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 12
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_charter
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_nw_army_guarantee_delta
+			}
+			hidden_effect = {
+				VAL_nw_adopt_army_guarantee = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Arsenal Throne
+
+	focus = {
+		id = VAL_throne_heir_officer
+		icon = GFX_focus_VAL_Loyal_Captains_Honours
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 10
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_throne
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_heir_clerk
+		}
+		completion_reward = {
+			army_experience = 25
+			effect_tooltip = {
+				add_ideas = VAL_throne_officer_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_army_org value = 0.03 }
+				add_to_variable = { var = VAL_peace_order_war_support value = 0.05 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.54 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_heir_clerk
+		icon = GFX_focus_VAL_Ministry_Auditors
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 14
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_throne
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_heir_officer
+		}
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				add_ideas = VAL_throne_clerk_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_pp value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_stability value = 0.03 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.55 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_throne_crown_register
+		icon = GFX_focus_VAL_State_Contract
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_throne_heir_officer
+			focus = VAL_throne_heir_clerk
+		}
+		completion_reward = {
+			add_command_power = 25
+			unlock_decision_tooltip = VAL_throne_crown_order
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_purge
+		icon = GFX_focus_VAL_State_Above_Captains
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 10
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_throne_crown_register
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_patents
+		}
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				add_ideas = VAL_throne_purge_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_command_gain value = -0.10 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.56 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_throne_patents
+		icon = GFX_focus_VAL_Contractor_Officers
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 14
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_throne_crown_register
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_purge
+		}
+		completion_reward = {
+			add_command_power = 50
+			effect_tooltip = {
+				add_ideas = VAL_throne_patents_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_attack value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_command_gain value = 0.10 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.57 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_arsenal_monopoly
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 12
+		cost = 4
+		prerequisite = {
+			focus = VAL_throne_purge
+			focus = VAL_throne_patents
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = VAL_throne_arsenal_monopoly
+				bonus = 0.5
+				uses = 2
+				category = infantry_weapons
+			}
+			effect_tooltip = {
+				add_ideas = VAL_throne_monopoly_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_military_income value = 0.10 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_memorial
+		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 10
+		y = 13
+		cost = 3
+		prerequisite = {
+			focus = VAL_throne_arsenal_monopoly
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_confession
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_peace_truth_hidden_tt
+				NOT = { has_country_flag = VAL_peace_truth_public }
+			}
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_throne_memorial_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_war_support value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_pp value = 0.05 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.58 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_confession
+		icon = GFX_focus_VAL_Two_Concurrent_Narratives
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 14
+		y = 13
+		cost = 3
+		prerequisite = {
+			focus = VAL_throne_arsenal_monopoly
+		}
+		mutually_exclusive = {
+			focus = VAL_throne_memorial
+		}
+		completion_reward = {
+			add_stability = -0.05
+			custom_effect_tooltip = VAL_peace_truth_told_tt
+			effect_tooltip = {
+				add_ideas = VAL_throne_confession_delta
+			}
+			hidden_effect = {
+				set_country_flag = VAL_peace_truth_public
+				add_to_variable = { var = VAL_peace_order_army_org value = 0.03 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.59 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_throne_two_crowns
+		icon = GFX_focus_VAL_One_Ledger_One_Banner
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 14
+		cost = 5
+		prerequisite = {
+			focus = VAL_throne_memorial
+			focus = VAL_throne_confession
+		}
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = VAL_east_casus_throne_tt
+			hidden_effect = {
+				set_variable = { var = VAL_east_casus value = 1 }
+			}
+			country_event = { id = val_peace.60 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Cabinet instead of staff
+
+	focus = {
+		id = VAL_cabinet_open_estimates
+		icon = GFX_focus_VAL_Contract_Accounting_Office
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 10
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_arbitration
+		}
+		mutually_exclusive = {
+			focus = VAL_cabinet_velsky_apparatus
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_cabinet_estimates_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_admin_expense value = -0.05 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.61 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_velsky_apparatus
+		icon = GFX_focus_VAL_Provincial_Brokers
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 14
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_arbitration
+		}
+		mutually_exclusive = {
+			focus = VAL_cabinet_open_estimates
+		}
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				add_ideas = VAL_cabinet_apparatus_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_pp value = 0.10 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.62 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_civil_combine
+		icon = GFX_focus_VAL_econ_integrated_economy
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 12
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_open_estimates
+			focus = VAL_cabinet_velsky_apparatus
+		}
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			unlock_decision_tooltip = VAL_cabinet_civil_lines
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_highland_bread
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_STELANDER }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 10
+		y = 12
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_civil_combine
+		}
+		mutually_exclusive = {
+			focus = VAL_cabinet_zone_clearing
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_peace_has_stelander_administration_tt
+				VAL_peace_has_stelander_administration = yes
+			}
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_cabinet_bread_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_weekly_income value = 15 }
+				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.03 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.63 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_zone_clearing
+		icon = GFX_focus_VAL_Field_Repair_Corps
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 14
+		y = 12
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_civil_combine
+		}
+		mutually_exclusive = {
+			focus = VAL_cabinet_highland_bread
+		}
+		completion_reward = {
+			every_owned_state = {
+				limit = {
+					is_controlled_by = ROOT
+					OR = {
+						state = 168
+						state = 169
+						state = 176
+						state = 177
+						state = 187
+						state = 188
+						state = 189
+						state = 192
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+				if = {
+					limit = { infrastructure < 5 }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			country_event = { id = val_peace.64 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_not_for_sale
+		icon = GFX_focus_VAL_Field_Surgeons
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 12
+		y = 13
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_highland_bread
+			focus = VAL_cabinet_zone_clearing
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_cabinet_not_for_sale_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.05 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.65 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_defence_treaty
+		icon = GFX_focus_VAL_Operational_Reserves
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_CONTRACTS }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 12
+		y = 14
+		cost = 5
+		prerequisite = {
+			focus = VAL_cabinet_not_for_sale
+		}
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = VAL_east_casus_cabinet_tt
+			hidden_effect = {
+				set_variable = { var = VAL_east_casus value = 2 }
+			}
+			country_event = { id = val_peace.66 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Army Charter
+
+	focus = {
+		id = VAL_charter_district_captains
+		icon = GFX_focus_VAL_Provincial_Brokers
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 10
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_army_guarantee
+		}
+		mutually_exclusive = {
+			focus = VAL_charter_single_staff
+		}
+		completion_reward = {
+			add_manpower = 5000
+			effect_tooltip = {
+				add_ideas = VAL_charter_district_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_conscription value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_stability value = -0.03 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.67 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_charter_single_staff
+		icon = GFX_focus_VAL_Operational_Directorate
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 14
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_army_guarantee
+		}
+		mutually_exclusive = {
+			focus = VAL_charter_district_captains
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_charter_staff_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_planning value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_command_gain value = 0.10 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.68 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_company_statute
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 12
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_charter_district_captains
+			focus = VAL_charter_single_staff
+		}
+		completion_reward = {
+			army_experience = 25
+			add_tech_bonus = {
+				name = VAL_charter_company_statute
+				bonus = 0.5
+				uses = 2
+				category = support_tech
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_tribunal
+		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 10
+		y = 12
+		cost = 3
+		prerequisite = {
+			focus = VAL_charter_company_statute
+		}
+		mutually_exclusive = {
+			focus = VAL_charter_silence
+		}
+		completion_reward = {
+			add_stability = -0.05
+			add_war_support = 0.05
+			add_political_power = 75
+			custom_effect_tooltip = VAL_peace_truth_told_tt
+			hidden_effect = {
+				set_country_flag = VAL_peace_truth_public
+			}
+			country_event = { id = val_peace.69 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_charter_silence
+		icon = GFX_focus_VAL_Reserve_Accounting
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 14
+		y = 12
+		cost = 3
+		prerequisite = {
+			focus = VAL_charter_company_statute
+		}
+		mutually_exclusive = {
+			focus = VAL_charter_tribunal
+		}
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = VAL_charter_silence_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_army_org value = 0.03 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.70 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_mercenary_power
+		icon = GFX_focus_VAL_Hire_Out_War
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 12
+		y = 13
+		cost = 4
+		prerequisite = {
+			focus = VAL_charter_tribunal
+			focus = VAL_charter_silence
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_100 = yes
+			}
+			unlock_decision_tooltip = VAL_peace_rent_companies
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_general_campaign
+		icon = GFX_focus_VAL_Logistics_Command
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 12
+		y = 14
+		cost = 5
+		prerequisite = {
+			focus = VAL_charter_mercenary_power
+		}
+		completion_reward = {
+			add_command_power = 50
+			custom_effect_tooltip = VAL_east_casus_charter_tt
+			hidden_effect = {
+				set_variable = { var = VAL_east_casus value = 3 }
+			}
+			country_event = { id = val_peace.71 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Captains' Republic
+
+	focus = {
+		id = VAL_captains_common_purse
+		icon = GFX_focus_VAL_Paid_Loyalty
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 10
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_captains
+		}
+		mutually_exclusive = {
+			focus = VAL_captains_shares_forever
+		}
+		completion_reward = {
+			add_stability = -0.03
+			custom_effect_tooltip = VAL_peace_treasury_300_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
+			}
+			country_event = { id = val_peace.72 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_captains_shares_forever
+		icon = GFX_focus_VAL_Westerholm_Concessions
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 14
+		y = 9
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_captains
+		}
+		mutually_exclusive = {
+			focus = VAL_captains_common_purse
+		}
+		completion_reward = {
+			add_war_support = 0.05
+			effect_tooltip = {
+				add_ideas = VAL_captains_shares_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_attack value = 0.05 }
+				add_to_variable = { var = VAL_peace_order_factory_output value = -0.05 }
+				VAL_peace_order_update = yes
+			}
+			country_event = { id = val_peace.73 }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_captains_war_export
+		icon = GFX_focus_VAL_Hire_Out_War
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 12
+		y = 10
+		cost = 3
+		prerequisite = {
+			focus = VAL_captains_common_purse
+			focus = VAL_captains_shares_forever
+		}
+		completion_reward = {
+			army_experience = 20
+			unlock_decision_tooltip = VAL_peace_rent_companies
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_captains_greitz_passes
+		icon = GFX_focus_VAL_Gromovs_Assault_Tables
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 12
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_captains_war_export
+		}
+		completion_reward = {
+			add_command_power = 50
+			add_tech_bonus = {
+				name = VAL_captains_greitz_passes
+				bonus = 0.5
+				uses = 2
+				category = artillery
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_captains_last_buyer
+		icon = GFX_focus_VAL_Arms_For_The_Burning
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 12
+		y = 12
+		cost = 5
+		prerequisite = {
+			focus = VAL_captains_greitz_passes
+		}
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = VAL_east_casus_captains_tt
+			hidden_effect = {
+				set_variable = { var = VAL_east_casus value = 4 }
+			}
+			country_event = { id = val_peace.74 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# The last war of the east
+
+	focus = {
+		id = VAL_east_question
+		icon = GFX_focus_VAL_Border_Survey_Corps
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 15
+		cost = 3
+		prerequisite = {
+			focus = VAL_throne_two_crowns
+			focus = VAL_cabinet_defence_treaty
+			focus = VAL_charter_general_campaign
+			focus = VAL_captains_last_buyer
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_khan_question_closed_tt
+				VAL_east_khan_question_closed = yes
+			}
+		}
+		completion_reward = {
+			add_political_power = 50
+			if = {
+				limit = { VAL_east_rival_exists = no }
+				custom_effect_tooltip = VAL_east_uncontested_tt
+				hidden_effect = { VAL_east_settle_uncontested = yes }
+			}
+			country_event = { id = val_peace.80 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_east_shards
+		icon = GFX_focus_VAL_Trading_Partners
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION }
+		x = 10
+		y = 16
+		cost = 4
+		prerequisite = {
+			focus = VAL_east_question
+		}
+		mutually_exclusive = {
+			focus = VAL_east_arsenal
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_east_shards_tt
+			add_war_support = 0.03
+			add_political_power = 50
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_east_arsenal
+		icon = GFX_focus_VAL_Arsenal_Reserve
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 14
+		y = 16
+		cost = 4
+		prerequisite = {
+			focus = VAL_east_question
+		}
+		mutually_exclusive = {
+			focus = VAL_east_shards
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10800
+				producer = VAL
+			}
+			unlock_decision_tooltip = VAL_east_war_stockpile
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_east_final
+		icon = GFX_focus_VAL_Seize_The_Northern_Passes
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 17
+		cost = 3
+		prerequisite = {
+			focus = VAL_east_shards
+			focus = VAL_east_arsenal
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			army_experience = 25
+			unlock_decision_tooltip = VAL_east_declare
+			custom_effect_tooltip = VAL_east_war_by_decision_tt
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Shifts: the strike in the contaminated works.
+
+	focus = {
+		id = VAL_peace_ash_shifts
+		icon = GFX_focus_VAL_The_Harvest_Of_Ash
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
+		x = 8
+		y = 1
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_price
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			VAL_advance_economic_recovery = yes
+			unlock_decision_tooltip = VAL_peace_medical_exit
+			country_event = { id = val_peace.20 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_water_convoys
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 6
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_ash_shifts
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_gate_garrison
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_peace_strike_minus_8_tt
+			random_owned_controlled_state = {
+				limit = {
+					OR = {
+						state = 176
+						state = 177
+						state = 187
+						state = 188
+						state = 189
+						state = 192
+					}
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			unlock_decision_tooltip = VAL_peace_water_delivery
+			hidden_effect = {
+				set_temp_variable = { var = VAL_peace_strike_delta value = -8 }
+				VAL_peace_apply_strike = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_gate_garrison
+		icon = GFX_focus_VAL_Keep_The_Arsenals
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 10
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_ash_shifts
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_water_convoys
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
+			custom_effect_tooltip = VAL_peace_strike_minus_15_tt
+			unlock_decision_tooltip = VAL_peace_shift_patrol
+			hidden_effect = {
+				set_temp_variable = { var = VAL_peace_strike_delta value = -15 }
+				VAL_peace_apply_strike = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_peace_tishin_list
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY }
+		x = 8
+		y = 3
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_water_convoys
+			focus = VAL_peace_gate_garrison
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			country_event = { id = val_peace.24 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Companies: the captains' bill.
+
+	focus = {
+		id = VAL_peace_captains_bill
+		icon = GFX_focus_VAL_Price_Of_Loyalty
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 16
+		y = 1
+		cost = 2
+		prerequisite = {
+			focus = VAL_nw_price
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_command_power = 25
+			unlock_decision_tooltip = VAL_peace_krutov_inspection
+			country_event = { id = val_peace.10 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_registry_audit
+		icon = GFX_focus_VAL_Krutovs_Eyes
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 14
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_captains_bill
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_share_ledger
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = -0.10 }
+			army_experience = 15
+			unlock_decision_tooltip = VAL_peace_disband_company
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_peace_share_ledger
+		icon = GFX_focus_VAL_Company_Mandates
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 18
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_captains_bill
+		}
+		mutually_exclusive = {
+			focus = VAL_peace_registry_audit
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = 0.10 }
+			add_stability = 0.03
+			unlock_decision_tooltip = VAL_peace_grant_share
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_peace_kilnet
+		icon = GFX_focus_VAL_Captains_Cannot_Veto
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION }
+		x = 16
+		y = 3
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_registry_audit
+			focus = VAL_peace_share_ledger
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			country_event = { id = val_peace.11 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
 	# Republics
 
 	focus = {
 		id = VAL_nw_council
 		icon = GFX_focus_VAL_Count_The_Captains
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 4
-		y = 1
+		x = 28
+		y = 0
 		cost = 2
-		prerequisite = {
-			focus = VAL_nw_price
-		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_offer_concession
 			country_event = { id = val_rework.134 }
@@ -69,8 +1672,8 @@ focus_tree = {
 		id = VAL_nw_register
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 2
-		y = 2
+		x = 26
+		y = 1
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_council
@@ -95,8 +1698,8 @@ focus_tree = {
 		id = VAL_nw_charters
 		icon = GFX_focus_VAL_The_Contract_State
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 6
-		y = 2
+		x = 30
+		y = 1
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_council
@@ -117,8 +1720,8 @@ focus_tree = {
 		id = VAL_nw_clearing
 		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
-		x = 4
-		y = 3
+		x = 28
+		y = 2
 		cost = 2
 		prerequisite = {
 			focus = VAL_nw_register
@@ -150,12 +1753,9 @@ focus_tree = {
 		id = VAL_nw_khan
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
-		y = 1
+		x = 34
+		y = 0
 		cost = 1
-		prerequisite = {
-			focus = VAL_nw_price
-		}
 		completion_reward = {
 			army_experience = 10
 			if = {
@@ -178,14 +1778,17 @@ focus_tree = {
 		id = VAL_nw_bloc_accord
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
-		y = 2
+		x = 32
+		y = 1
 		cost = 2
 		prerequisite = {
 			focus = VAL_nw_khan
 		}
 		mutually_exclusive = {
 			focus = VAL_nw_bloc_confront
+		}
+		bypass = {
+			VAL_east_khan_victorious = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -206,14 +1809,17 @@ focus_tree = {
 		id = VAL_nw_bloc_confront
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 2
+		x = 36
+		y = 1
 		cost = 2
 		prerequisite = {
 			focus = VAL_nw_khan
 		}
 		mutually_exclusive = {
 			focus = VAL_nw_bloc_accord
+		}
+		bypass = {
+			VAL_east_khan_victorious = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -235,12 +1841,41 @@ focus_tree = {
 		}
 	}
 
+	# Only the credited victor over the Khan receives settlement rights.
+	focus = {
+		id = VAL_nw_zones
+		icon = GFX_focus_VAL_Reclamation_Land_Register
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_nw_has_settlement_rights = yes
+		}
+		x = 32
+		y = 2
+		cost = 3
+		prerequisite = {
+			focus = VAL_nw_khan
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_settlement_rights_tt
+				VAL_nw_has_settlement_rights = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_crisis_establish_special_zone
+			country_event = { id = val_rework.137 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
 	focus = {
 		id = VAL_nw_tsaygen_strike
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 14
-		y = 3
+		x = 36
+		y = 2
 		cost = 2
 		prerequisite = {
 			focus = VAL_nw_bloc_confront
@@ -270,8 +1905,8 @@ focus_tree = {
 		id = VAL_nw_beyond_perimeter
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 14
-		y = 4
+		x = 36
+		y = 3
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_tsaygen_strike
@@ -301,12 +1936,9 @@ focus_tree = {
 		id = VAL_nw_perimeter
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 24
-		y = 1
+		x = 46
+		y = 0
 		cost = 2
-		prerequisite = {
-			focus = VAL_nw_price
-		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_survey
 		}
@@ -319,8 +1951,8 @@ focus_tree = {
 		id = VAL_nw_inventory
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 24
-		y = 2
+		x = 46
+		y = 1
 		cost = 2
 		prerequisite = {
 			focus = VAL_nw_perimeter
@@ -343,8 +1975,8 @@ focus_tree = {
 		id = VAL_nw_foundries
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 22
-		y = 3
+		x = 44
+		y = 2
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_inventory
@@ -370,8 +2002,8 @@ focus_tree = {
 		id = VAL_nw_dispatch
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 26
-		y = 3
+		x = 48
+		y = 2
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_inventory
@@ -397,8 +2029,8 @@ focus_tree = {
 		id = VAL_nw_restart
 		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 24
-		y = 4
+		x = 46
+		y = 3
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_foundries
@@ -428,8 +2060,8 @@ focus_tree = {
 		id = VAL_nw_archives
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 24
-		y = 5
+		x = 46
+		y = 4
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_restart
@@ -446,8 +2078,8 @@ focus_tree = {
 		id = VAL_nw_alloys
 		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 24
-		y = 6
+		x = 46
+		y = 5
 		cost = 4
 		prerequisite = {
 			focus = VAL_nw_archives
@@ -471,153 +2103,14 @@ focus_tree = {
 		}
 	}
 
-	# Commonwealth
-
-	focus = {
-		id = VAL_nw_commission
-		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		x = 32
-		y = 1
-		cost = 1
-		prerequisite = {
-			focus = VAL_nw_price
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_nw_khan_settled_tt
-				VAL_nw_khan_settled = yes
-			}
-		}
-		completion_reward = {
-			add_political_power = 50
-			hidden_effect = {
-				country_event = { id = val_rework.137 }
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = VAL_nw_cabinet
-		icon = GFX_focus_VAL_The_Contract_State
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
-		x = 30
-		y = 2
-		cost = 3
-		prerequisite = {
-			focus = VAL_nw_commission
-		}
-		mutually_exclusive = {
-			focus = VAL_nw_army_guarantee
-		}
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_nw_cabinet_delta
-			}
-			hidden_effect = {
-				VAL_nw_adopt_cabinet = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = VAL_nw_army_guarantee
-		icon = GFX_focus_VAL_Contracts_Outlive_Kings
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
-		x = 34
-		y = 2
-		cost = 3
-		prerequisite = {
-			focus = VAL_nw_commission
-		}
-		mutually_exclusive = {
-			focus = VAL_nw_cabinet
-		}
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_nw_army_guarantee_delta
-			}
-			hidden_effect = {
-				VAL_nw_adopt_army_guarantee = yes
-			}
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	# Only the credited victor over the Khan receives settlement rights.
-	focus = {
-		id = VAL_nw_zones
-		icon = GFX_focus_VAL_Reclamation_Land_Register
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		allow_branch = {
-			VAL_nw_has_settlement_rights = yes
-		}
-		x = 36
-		y = 2
-		cost = 3
-		prerequisite = {
-			focus = VAL_nw_commission
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_nw_has_settlement_rights_tt
-				VAL_nw_has_settlement_rights = yes
-			}
-		}
-		completion_reward = {
-			unlock_decision_tooltip = RUS_crisis_establish_special_zone
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
-	focus = {
-		id = VAL_nw_arbitration
-		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		x = 32
-		y = 3
-		cost = 3
-		prerequisite = {
-			focus = VAL_nw_cabinet
-			focus = VAL_nw_army_guarantee
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_nw_has_commercial_access_tt
-				VAL_nw_has_commercial_access = yes
-			}
-		}
-		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_nw_admin_delta
-			}
-			hidden_effect = {
-				VAL_nw_improve_administration = yes
-			}
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
 	# Finale
 
 	focus = {
 		id = VAL_nw_generation
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 18
-		y = 7
+		x = 37
+		y = 6
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_clearing
@@ -628,9 +2121,6 @@ focus_tree = {
 		prerequisite = {
 			focus = VAL_nw_bloc_accord
 			focus = VAL_nw_bloc_confront
-		}
-		prerequisite = {
-			focus = VAL_nw_arbitration
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -655,20 +2145,17 @@ focus_tree = {
 		id = VAL_nw_steel_peace
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 18
-		y = 8
+		x = 12
+		y = 18
 		cost = 5
 		prerequisite = {
-			focus = VAL_nw_generation
+			focus = VAL_east_final
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = VAL_nw_khan_settled_tt
-				VAL_nw_khan_settled = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = VAL_nw_two_restored_works_tt
-				VAL_nw_two_restored_works = yes
+				tooltip = VAL_east_not_lost_tt
+				has_global_flag = VAL_east_final_resolved
+				NOT = { has_global_flag = VAL_east_hegemon_rival }
 			}
 		}
 		completion_reward = {

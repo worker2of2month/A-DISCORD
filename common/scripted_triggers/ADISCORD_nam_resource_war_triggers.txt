@@ -214,6 +214,42 @@ NAM_island_route_operable = {
 	NAM = { NAM_independent_programmes_operable = yes }
 }
 
+NAM_convoy_service_authorised = {
+	OR = {
+		has_completed_focus = NAM_harbour_service
+		has_completed_focus = NAM_defeat_harbour_economy
+		has_completed_focus = NAM_board_private_navy
+	}
+}
+
+# STATE. The remaining cabinet can install its machinery at either surviving port.
+NAM_cabinet_tool_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NAM = {
+		NAM_independent_programmes_operable = yes
+		has_focus_tree = NAM_defeated_focus
+	}
+	OR = {
+		AND = {
+			state = 700
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			}
+		}
+		AND = {
+			state = 228
+			free_building_slots = {
+				building = dockyard
+				size > 0
+				include_locked = yes
+			}
+		}
+	}
+}
+
 NAM_island_public_works_site = {
 	NAM_owned_overseas_district = yes
 	infrastructure < 5
@@ -271,6 +307,57 @@ NAM_rw_can_go_into_exile = {
 ADISCORD_nam_resource_war_preparation = {
 	has_global_flag = ADISCORD_nam_resource_war_scheduled
 	ADISCORD_nam_resource_war_ready = yes
+}
+
+NAM_rw_tribute_creditor = {
+	exists = yes
+	NOT = { has_war_with = NAM }
+}
+
+NAM_rw_two_tribute_creditors = {
+	EFL = { NAM_rw_tribute_creditor = yes }
+	AZH = { NAM_rw_tribute_creditor = yes }
+}
+
+NAM_rw_tribute_buyout_affordable = {
+	has_country_flag = NAM_rw_tribute
+	OR = {
+		EFL = { NAM_rw_tribute_creditor = yes }
+		AZH = { NAM_rw_tribute_creditor = yes }
+	}
+	OR = {
+		AND = {
+			NOT = { has_country_flag = { flag = NAM_rw_tribute days > 121 } }
+			OR = {
+				NOT = { has_fuel < 90000 }
+				AND = {
+					NOT = { has_fuel < 45000 }
+					NAM_rw_two_tribute_creditors = no
+				}
+			}
+		}
+		AND = {
+			has_country_flag = { flag = NAM_rw_tribute days > 121 }
+			NOT = { has_country_flag = { flag = NAM_rw_tribute days > 243 } }
+			OR = {
+				NOT = { has_fuel < 60000 }
+				AND = {
+					NOT = { has_fuel < 30000 }
+					NAM_rw_two_tribute_creditors = no
+				}
+			}
+		}
+		AND = {
+			has_country_flag = { flag = NAM_rw_tribute days > 243 }
+			OR = {
+				NOT = { has_fuel < 30000 }
+				AND = {
+					NOT = { has_fuel < 15000 }
+					NAM_rw_two_tribute_creditors = no
+				}
+			}
+		}
+	}
 }
 
 NAM_country_operable = {
@@ -494,6 +581,7 @@ NAM_admin_programme_operable = {
 # COUNTRY NAM. The compromise route can reopen trade without the prewar bureau.
 NAM_oil_trade_authorized = {
 	OR = {
+		has_completed_focus = NAM_rus_crisis_watch
 		has_completed_focus = NAM_supports_export_houses
 		has_completed_focus = NAM_contract_bureau
 		has_completed_focus = NAM_defeat_oil_union
@@ -589,10 +677,117 @@ NAM_fuel_embargo_target_valid = {
 	}
 }
 
-# COUNTRY NAM. Parallel field projects: NAM_project_slots, never more than two.
+# Existing projects finish when the relief shift leaves. Only new orders need a free crew.
 NAM_project_slot_free = {
-	check_variable = { var = NAM_project_slots value = NAM_projects_in_progress compare = greater_than }
-	check_variable = { var = NAM_projects_in_progress value = 2 compare = less_than }
+	OR = {
+		AND = {
+			check_variable = { var = NAM_project_slots value = NAM_projects_in_progress compare = greater_than }
+			check_variable = { NAM_projects_in_progress < 2 }
+		}
+		AND = {
+			check_variable = { NAM_labour_shift_workers > 0 }
+			check_variable = { var = NAM_project_slots value = NAM_projects_in_progress compare = greater_than_or_equals }
+			check_variable = { NAM_projects_in_progress < 3 }
+		}
+	}
+}
+
+NAM_labour_shift_can_draw_fund = {
+	has_completed_focus = NAM_pw_social_budget
+	has_country_flag = NAM_crisis_fund
+	check_variable = { ADISCORD_economy_treasury < 300 }
+}
+
+NAM_labour_shift_affordable = {
+	NOT = { has_manpower < 600 }
+	OR = {
+		check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		NAM_labour_shift_can_draw_fund = yes
+	}
+}
+
+NAM_labour_mediation_pending = {
+	has_completed_focus = NAM_pw_arbitration_commissions
+	OR = {
+		has_idea = NAM_agreement_oil_failure
+		has_idea = NAM_agreement_dist_failure
+	}
+}
+
+NAM_emergency_service_authorised = {
+	OR = {
+		has_completed_focus = NAM_second_drilling_crew
+		has_completed_focus = NAM_pw_energy_commission
+		has_completed_focus = NAM_repair_depots
+	}
+}
+
+# COUNTRY NAM. Power can come from either bank of the grid while the plant is held.
+NAM_grid_has_power = {
+	OR = {
+		AND = {
+			owns_state = 690
+			controls_state = 690
+			OR = {
+				has_country_flag = NAM_program_regional_power_commissioned
+				has_country_flag = NAM_dryriver_power_cooperative
+			}
+		}
+		688 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower }
+		}
+	}
+}
+
+# STATE. The installed feeder stays with its site, including during occupation.
+NAM_grid_operating_field = {
+	has_state_flag = NAM_grid_feeder
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_wells_scorched }
+	NOT = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+}
+
+NAM_grid_generator_free = {
+	NOT = {
+		OR = {
+			67 = { has_state_flag = NAM_grid_mobile_generator }
+			688 = { has_state_flag = NAM_grid_mobile_generator }
+			689 = { has_state_flag = NAM_grid_mobile_generator }
+			690 = { has_state_flag = NAM_grid_mobile_generator }
+			719 = { has_state_flag = NAM_grid_mobile_generator }
+		}
+	}
+}
+
+# STATE. A partnership can reopen a burned site. A crew can also wire a healthy field.
+NAM_emergency_service_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	has_variable = NAM_field_capacity
+	OR = {
+		AND = {
+			NOT = { has_state_flag = NAM_wells_scorched }
+			NOT = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+			check_variable = { NAM_field_condition < 100 }
+		}
+		AND = {
+			NAM = { has_completed_focus = NAM_pw_power_grid }
+			NOT = { has_state_flag = NAM_grid_feeder }
+			NOT = { has_state_flag = NAM_wells_scorched }
+			NOT = { has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier } }
+		}
+		AND = {
+			NAM = { has_completed_focus = NAM_repair_depots }
+			OR = {
+				has_state_flag = NAM_wells_scorched
+				has_dynamic_modifier = { modifier = NAM_scorched_wells_modifier }
+				NOT = { has_state_flag = NAM_field_spare_pump }
+			}
+		}
+	}
 }
 
 # STATE. Owned and controlled by Svetlogorye with no project in progress.
@@ -655,7 +850,146 @@ NAM_south_fuel_recipient = {
 # COUNTRY NAM. Svetlogorye fights in the Khan's crisis coalition.
 NAM_rus_coalition_member = {
 	has_country_flag = RUS_crisis_defender
+	is_in_array = { array = global.RUS_crisis_defenders value = THIS }
+	NOT = { has_country_flag = RUS_crisis_entry_pending }
+	NOT = { is_subject_of = RUS }
+	NOT = { is_in_faction_with = RUS }
 	has_war_with = RUS
+}
+
+# COUNTRY NAM. The emergency debate is settled locally once the foreign office opens.
+NAM_rus_emergency_debate = {
+	NAM_country_operable = yes
+	NAM_rus_coalition_member = yes
+	NOT = { has_completed_focus = NAM_rus_crisis_watch }
+	any_of_scopes = {
+		array = global.RUS_crisis_defenders
+		NAM_rus_active_defender = yes
+	}
+}
+
+# COUNTRY recipient. Registration precedes entry into the common war.
+NAM_rus_active_defender = {
+	exists = yes
+	has_capitulated = no
+	NOT = { tag = NAM }
+	NOT = { has_war_with = NAM }
+	NOT = { is_subject_of = RUS }
+	NOT = { is_in_faction_with = RUS }
+	has_country_flag = RUS_crisis_defender
+	NOT = { has_country_flag = RUS_crisis_entry_pending }
+	is_in_array = { array = global.RUS_crisis_defenders value = THIS }
+	has_war_with = RUS
+	RUS = {
+		RUS_crisis_project_active = yes
+		check_variable = { RUS_crisis_phase = 2 }
+	}
+	NAM = {
+		NAM_country_operable = yes
+		NOT = { is_subject_of = RUS }
+		RUS_crisis_side_compatible = yes
+	}
+}
+
+NAM_exchange_sale_authorized = {
+	OR = {
+		has_completed_focus = NAM_export_quays
+		has_completed_focus = NAM_oil_exchange
+		has_completed_focus = NAM_customs_clearinghouse
+	}
+}
+
+# STATE. Both assembly cities can receive chassis overland.
+NAM_chassis_works_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	OR = {
+		industrial_complex > 0
+		arms_factory > 0
+	}
+}
+
+NAM_chassis_works_operable = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_domestic_designs
+	OR = {
+		688 = { NAM_chassis_works_site = yes }
+		700 = { NAM_chassis_works_site = yes }
+	}
+}
+
+NAM_bond_credit_available = {
+	OR = {
+		check_variable = { NAM_bond_balance = 0 }
+		AND = {
+			has_completed_focus = NAM_commercial_commonwealth
+			check_variable = { var = NAM_bond_balance value = 660 compare = less_than_or_equals }
+		}
+	}
+}
+
+NAM_prag_bonds_authorised = {
+	OR = {
+		has_completed_focus = NAM_municipal_bonds
+		has_completed_focus = NAM_prag_ending_directorate
+	}
+}
+
+NAM_bond_issue_ready = {
+	NAM_pw_operable = yes
+	NAM_prag_bonds_authorised = yes
+	has_country_flag = NAM_certified_export
+	owns_state = 700
+	controls_state = 700
+	NAM_bond_credit_available = yes
+}
+
+NAM_exchange_can_write_receipt = {
+	has_completed_focus = NAM_oil_exchange
+	OR = {
+		check_variable = { var = NAM_exchange_receipts value = 1 compare = less_than }
+		AND = {
+			has_completed_focus = NAM_state_refineries
+			check_variable = { var = NAM_exchange_receipts value = 2 compare = less_than }
+		}
+	}
+}
+
+NAM_exchange_can_receive_lot = {
+	NAM_country_operable = yes
+	owns_state = 700
+	controls_state = 700
+	NAM_exchange_fuel_room = yes
+}
+
+NAM_exchange_fuel_room = {
+	set_temp_variable = { var = NAM_exchange_tank_room value = max_fuel_k }
+	subtract_from_temp_variable = { var = NAM_exchange_tank_room value = fuel_k }
+	check_variable = { var = NAM_exchange_tank_room value = 60 compare = greater_than_or_equals }
+}
+
+NAM_rus_fuel_room = {
+	set_temp_variable = { var = NAM_rus_space value = max_fuel_k }
+	subtract_from_temp_variable = { var = NAM_rus_space value = fuel_k }
+	check_variable = { var = NAM_rus_space value = 30 compare = greater_than_or_equals }
+}
+
+# COUNTRY recipient in both the targeted decision and the diplomatic reply.
+NAM_rus_fuel_shipment_ready = {
+	NAM_rus_active_defender = yes
+	NOT = { has_country_flag = NAM_rus_received_fuel }
+	NAM_rus_fuel_room = yes
+	NAM = { NOT = { has_fuel < 30000 } }
+}
+
+NAM_rus_barter_available = {
+	NAM_rus_fuel_shipment_ready = yes
+	NOT = { has_country_flag = NAM_rus_barter_declined }
+	NOT = { has_equipment = { motorized_equipment < 100 } }
+	NAM = {
+		NAM_pw_operable = yes
+		has_completed_focus = NAM_rus_demand_share
+	}
 }
 
 # ----- Ladder of seals -----
@@ -794,7 +1128,7 @@ NAM_colonial_programme_operable = {
 	NAM_country_operable = yes
 	NAM_colony_phase = yes
 	is_subject = yes
-	WRK = { exists = yes }
+	event_target:ADISCORD_vorkerland_nation = { exists = yes }
 }
 
 # COUNTRY NAM. Only one counterinsurgency sweep runs at a time.
@@ -856,6 +1190,28 @@ NAM_ai_war_of_return_target = {
 NAM_war_of_return_active = {
 	has_global_flag = NAM_war_of_return_started
 	NOT = { has_global_flag = NAM_war_of_return_resolved }
+}
+
+# COUNTRY NAM. The compromise keeps its own preparation and field campaign.
+NAM_return_supply_open = {
+	NAM_country_operable = yes
+	is_subject = no
+	has_completed_focus = NAM_defeat_revenge
+	has_global_flag = ADISCORD_nam_resource_war_compromise
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+	NOT = { has_global_flag = NAM_war_of_return_resolved }
+}
+
+NAM_return_yard_site = {
+	OR = {
+		state = 700
+		NAM_rw_island_state = yes
+	}
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	naval_base > 0
+	dockyard < 20
+	free_building_slots = { building = dockyard size > 0 include_locked = yes }
 }
 
 # ----- Exile revolution -----
@@ -961,11 +1317,38 @@ NAM_wor_target_valid = {
 	}
 }
 
-# Any scope. Eflor or Azhar still stands outside Svetlogorye's power.
+# STATE. Only Eflor and Azhar enter the return war against the island government.
+NAM_exile_resistance_site = {
+	NOT = { has_global_flag = NAM_war_of_return_won }
+	NOT = { is_controlled_by = NAM }
+	controller = {
+		NOT = { is_subject_of = NAM }
+		NOT = { is_in_faction_with = NAM }
+		OR = {
+			has_war_with = NAM
+			AND = {
+				NOT = { NAM_war_of_return_active = yes }
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+				NAM_wor_target_valid = yes
+			}
+		}
+	}
+}
+
+# COUNTRY. Subjects can fight beside their overlord, but cannot found the coalition.
+NAM_wor_independent_target = {
+	NAM_wor_target_valid = yes
+	is_subject = no
+}
+
+# Any scope. An independent Eflor or Azhar can lead the return war.
 NAM_wor_principal_standing = {
 	OR = {
-		EFL = { NAM_wor_target_valid = yes }
-		AZH = { NAM_wor_target_valid = yes }
+		EFL = { NAM_wor_independent_target = yes }
+		AZH = { NAM_wor_independent_target = yes }
 	}
 }
 
@@ -973,9 +1356,9 @@ NAM_wor_principal_standing = {
 NAM_great_war_target_left = {
 	OR = {
 		NAM_wor_principal_standing = yes
-		RHM = { NAM_wor_target_valid = yes }
-		SDR = { NAM_wor_target_valid = yes }
-		KDR = { NAM_wor_target_valid = yes }
+		RHM = { NAM_wor_independent_target = yes }
+		SDR = { NAM_wor_independent_target = yes }
+		KDR = { NAM_wor_independent_target = yes }
 	}
 }
 
@@ -1089,6 +1472,102 @@ NAM_wor_campaign_lost_outside_treaty = {
 }
 
 # ----- Consolidation of the returned south -----
+# STATE. The junta may requisition workshops and run camps until it cedes the district to a council.
+NAM_rad_direct_rule = {
+	has_state_flag = NAM_conquered_state
+	NOT = { has_state_flag = NAM_rad_local_council }
+}
+
+NAM_rad_held_direct_district = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NAM_rad_direct_rule = yes
+}
+
+NAM_rad_command_post_site = {
+	OR = {
+		NAM_rad_held_direct_district = yes
+		AND = {
+			is_capital = yes
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NOT = { has_state_flag = NAM_rad_local_council }
+			NAM = {
+				NOT = {
+					any_of_scopes = {
+						array = NAM_conquered_states
+						NAM_rad_held_direct_district = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# STATE. A division physically posted here operates the store, including on a home capital.
+NAM_rad_command_post_staffed = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_rad_local_council }
+	NAM = {
+		NAM_country_operable = yes
+		is_subject = no
+		has_country_flag = NAM_exile_radical
+		divisions_in_state = { state = PREV size > 0 }
+	}
+}
+
+NAM_rad_command_post_stocks = {
+	NOT = { has_equipment = { motorized_equipment < 30 } }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+NAM_rad_sardan_levy_district = {
+	is_core_of = SDR
+	NAM_rad_held_direct_district = yes
+}
+
+NAM_rad_requisition_district = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	industrial_complex > 0
+	NAM_rad_direct_rule = yes
+	NAM = {
+		NAM_country_operable = yes
+		is_subject = no
+		has_country_flag = NAM_exile_radical
+	}
+}
+
+# STATE. The caravan market needs civilian workshops and a serviceable road.
+NAM_rad_caravan_market = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	industrial_complex > 0
+	infrastructure > 1
+	NOT = { has_dynamic_modifier = { modifier = NAM_rad_requisitioned_market } }
+}
+
+NAM_rad_transport_available = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	infrastructure > 1
+	hidden_trigger = {
+		has_state_flag = NAM_conquered_state
+		NOT = { has_state_flag = NAM_rad_transport_levied }
+	}
+}
+
+NAM_rad_council_available = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	hidden_trigger = { NAM_rad_direct_rule = yes }
+	custom_trigger_tooltip = {
+		tooltip = NAM_rad_no_camp_building_tt
+		NOT = { has_state_flag = NAM_labour_camp_building }
+	}
+}
+
 # COUNTRY NAM. The consolidation runs after the exile war was won.
 NAM_consolidation_open = {
 	tag = NAM
@@ -1104,6 +1583,451 @@ NAM_corp_open = {
 	NAM_country_operable = yes
 }
 
+NAM_board_can_sell_rail = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+}
+
+NAM_board_can_sell_yards = {
+	NAM_board_operable = yes
+	has_completed_focus = NAM_board_island_concessions
+	check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+}
+
+NAM_board_can_sell_depots = {
+	NAM_board_operable = yes
+	has_completed_focus = NAM_board_shareholders
+	check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+}
+
+NAM_hum_government_operable = {
+	NAM_corp_open = yes
+	is_subject = no
+	NOT = { has_country_flag = NAM_corp_takeover }
+}
+
+# COUNTRY NAM. Completing the Call closes the civil mandate, even with a letter abroad.
+NAM_hum_southern_mandate_open = {
+	NAM_hum_government_operable = yes
+	has_completed_focus = NAM_hum_southern_offer
+	has_global_flag = NAM_war_of_return_won
+	has_war = no
+	NOT = { has_completed_focus = NAM_hum_union_call }
+	NOT = { has_global_flag = NAM_great_war_started }
+	NOT = { has_global_flag = NAM_great_war_won }
+	NOT = { ADISCORD_south_final_active = yes }
+}
+
+# COUNTRY district, before the declaration. Its other wars and alliances stay outside this call.
+NAM_hum_federal_muster_eligible = {
+	NAM_board_operating_district = yes
+	has_war = no
+	OR = {
+		is_in_faction = no
+		is_in_faction_with = NAM
+	}
+	OR = {
+		NAM = { has_completed_focus = NAM_hum_metropole_charter }
+		AND = {
+			NAM = { has_completed_focus = NAM_hum_districts_charter }
+			has_country_flag = NAM_hum_federal_treaty_signed
+		}
+	}
+}
+
+# COUNTRY recipient. A separate independent power must remain available for the great war.
+NAM_hum_voluntary_district = {
+	NAM_wor_independent_target = yes
+	has_war = no
+	is_in_faction = no
+	NOT = { any_subject_country = { always = yes } }
+	capital_scope = {
+		is_owned_by = PREV
+		is_controlled_by = PREV
+	}
+	OR = {
+		AND = {
+			NOT = { tag = EFL }
+			EFL = { NAM_wor_independent_target = yes }
+		}
+		AND = {
+			NOT = { tag = AZH }
+			AZH = { NAM_wor_independent_target = yes }
+		}
+		AND = {
+			NOT = { tag = RHM }
+			RHM = { NAM_wor_independent_target = yes }
+		}
+		AND = {
+			NOT = { tag = SDR }
+			SDR = { NAM_wor_independent_target = yes }
+		}
+		AND = {
+			NOT = { tag = KDR }
+			KDR = { NAM_wor_independent_target = yes }
+		}
+	}
+}
+
+NAM_hum_mandate_workshop_site = {
+	NAM_board_operating_district = yes
+	capital_scope = {
+		free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+	}
+}
+
+# COUNTRY recipient. The quoted terms stay tied to the recipient's original status.
+NAM_hum_southern_letter_live = {
+	has_country_flag = NAM_hum_southern_letter
+	NAM = {
+		NAM_hum_southern_mandate_open = yes
+		check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	}
+	OR = {
+		AND = {
+			has_country_flag = { flag = NAM_hum_southern_letter value < 2 }
+			NAM_hum_voluntary_district = yes
+		}
+		AND = {
+			has_country_flag = { flag = NAM_hum_southern_letter value > 1 }
+			NAM_hum_mandate_workshop_site = yes
+		}
+	}
+}
+
+NAM_hum_cooperative_site = {
+	NAM_owned_overseas_district = yes
+	industrial_complex < 2
+	free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+}
+
+# STATE. Each market belongs to its own signatory, including after a change of borders.
+NAM_hum_union_market = {
+	owner = {
+		exists = yes
+		is_subject_of = NAM
+		has_country_flag = NAM_federal_district
+		has_capitulated = no
+	}
+	OR = {
+		AND = {
+			state = 69
+			is_owned_by = AZH
+			is_controlled_by = AZH
+		}
+		AND = {
+			state = 701
+			is_owned_by = EFL
+			is_controlled_by = EFL
+		}
+		AND = {
+			state = 260
+			is_owned_by = SDR
+			is_controlled_by = SDR
+		}
+		AND = {
+			state = 253
+			is_owned_by = RHM
+			is_controlled_by = RHM
+		}
+		AND = {
+			state = 241
+			is_owned_by = KDR
+			is_controlled_by = KDR
+		}
+	}
+}
+
+# STATE market. Full roads can still serve a commercial run under the common charter.
+NAM_hum_caravan_destination = {
+	OR = {
+		infrastructure < 5
+		NAM = { has_completed_focus = NAM_hum_common_market }
+	}
+}
+
+NAM_hum_market_freight_available = {
+	NAM_hum_union_market = yes
+	check_variable = { var = NAM_hum_market_lots value = 1 compare = greater_than_or_equals }
+}
+
+# COUNTRY NAM. Each founding market has its own warehouse.
+NAM_hum_market_freight_waiting = {
+	OR = {
+		69 = { NAM_hum_market_freight_available = yes }
+		701 = { NAM_hum_market_freight_available = yes }
+		260 = { NAM_hum_market_freight_available = yes }
+		253 = { NAM_hum_market_freight_available = yes }
+		241 = { NAM_hum_market_freight_available = yes }
+	}
+}
+
+NAM_hum_district_workshop = {
+	NAM_hum_union_market = yes
+	arms_factory > 0
+}
+
+NAM_hum_faculty_district = {
+	exists = yes
+	is_subject_of = NAM
+	has_country_flag = NAM_federal_district
+	has_capitulated = no
+	NOT = { has_country_flag = NAM_hum_district_faculty }
+}
+
+NAM_corp_steel_site = {
+	NAM_owned_overseas_district = yes
+	check_variable = { var = resource@steel value = 8 compare = greater_than_or_equals }
+	NOT = { has_dynamic_modifier = { modifier = NAM_corp_steel_export_state } }
+}
+
+NAM_corp_live_disputed_district = {
+	NAM_board_federal_subject = yes
+	has_variable = NAM_corp_district_owner
+	has_country_flag = NAM_corp_disputed
+	has_variable = NAM_corp_dispute_claimant
+}
+
+NAM_corp_case_can_be_heard = {
+	NAM_corp_live_disputed_district = yes
+	NAM_board_operating_district = yes
+	NAM = { NAM_board_operable = yes }
+}
+
+NAM_board_operable = {
+	NAM_corp_open = yes
+	has_country_flag = NAM_corp_takeover
+	is_subject = no
+}
+
+NAM_board_held_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+}
+
+# STATE 67. Ten units of physical oil correspond to one working unit of throughput.
+NAM_loren_working_field = {
+	NAM_board_held_site = yes
+	NOT = { has_state_flag = NAM_wells_scorched }
+	check_variable = { var = NAM_field_oil value = 10 compare = greater_than_or_equals }
+}
+
+NAM_loren_lease_operable = {
+	NAM_board_operable = yes
+	67 = {
+		has_state_flag = NAM_loren_lease
+		NAM_loren_working_field = yes
+	}
+}
+
+# COUNTRY NAM. A signed quote survives the sale of the depots during loading.
+NAM_loren_premium_quote = {
+	OR = {
+		check_variable = { NAM_loren_cargo_quote = 35 }
+		AND = {
+			NOT = { has_variable = NAM_loren_cargo_quote }
+			check_variable = { NAM_board_lot_depots = 1 }
+		}
+	}
+}
+
+NAM_loren_cargo_can_clear = {
+	NOT = { has_fuel < 15000 }
+	check_variable = { var = NAM_corp_capital value = 99975 compare = less_than_or_equals }
+	OR = {
+		NAM_loren_premium_quote = no
+		check_variable = { var = NAM_corp_capital value = 99965 compare = less_than_or_equals }
+	}
+}
+
+NAM_loren_loading_route = {
+	OR = {
+		check_variable = { var = NAM_oil_free_land_units value = 0 compare = greater_than_or_equals }
+		AND = {
+			67 = { has_state_flag = NAM_board_guard_post }
+			check_variable = { var = NAM_oil_free_land_units value = -1 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# STATE. Foreign guard details are posted in the operating district's own disputed capital.
+NAM_board_guard_site = {
+	OR = {
+		AND = {
+			state = 67
+			NAM_board_held_site = yes
+		}
+		AND = {
+			NAM_hum_union_market = yes
+			is_capital = yes
+			owner = {
+				NAM_board_operating_district = yes
+				NAM_corp_live_disputed_district = yes
+			}
+		}
+	}
+}
+
+NAM_board_harbour_works_operable = {
+	NAM_board_operable = yes
+	700 = { NAM_board_held_site = yes }
+}
+
+NAM_board_office_site = {
+	NAM_board_held_site = yes
+	ADISCORD_business_center < 3
+	free_building_slots = { building = ADISCORD_business_center size > 0 include_locked = yes }
+}
+
+NAM_board_housing_site = {
+	NAM_board_held_site = yes
+	industrial_complex < 20
+	free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+}
+
+NAM_board_dock_site = {
+	NAM_board_held_site = yes
+	is_coastal = yes
+	naval_base > 0
+}
+
+NAM_board_yard_site = {
+	NAM_board_dock_site = yes
+	dockyard < 20
+	free_building_slots = { building = dockyard size > 0 include_locked = yes }
+}
+
+NAM_board_airport_site = {
+	NAM_board_held_site = yes
+	air_base < 10
+}
+
+NAM_insured_freight_route = {
+	OR = {
+		AND = {
+			NAM_independent_programmes_operable = yes
+			owns_state = 700
+			controls_state = 700
+		}
+		AND = {
+			NAM_board_operable = yes
+			has_completed_focus = NAM_board_company_docks
+			any_owned_state = { NAM_board_dock_site = yes }
+		}
+	}
+}
+
+NAM_board_minister_1 = {
+	has_idea = minister_NAM_Boris_Nar
+}
+
+NAM_board_minister_2 = {
+	has_idea = minister_NAM_Fedot_Mir
+}
+
+NAM_board_minister_3 = {
+	has_idea = minister_NAM_Pavel_Ordyntsev
+}
+
+NAM_board_minister_4 = {
+	has_idea = minister_NAM_Mara_Kluch
+}
+
+NAM_board_minister_5 = {
+	has_idea = NAM_board_labor_nominee
+}
+
+NAM_board_minister_6 = {
+	has_idea = NAM_board_bank_nominee
+}
+
+NAM_board_has_charter_cosmetic = {
+	OR = {
+		has_cosmetic_tag = EFL_NAM_corp_1
+		has_cosmetic_tag = EFL_NAM_corp_2
+		has_cosmetic_tag = EFL_NAM_corp_3
+		has_cosmetic_tag = EFL_NAM_corp_4
+		has_cosmetic_tag = EFL_NAM_corp_5
+		has_cosmetic_tag = EFL_NAM_corp_6
+		has_cosmetic_tag = AZH_NAM_corp_1
+		has_cosmetic_tag = AZH_NAM_corp_2
+		has_cosmetic_tag = AZH_NAM_corp_3
+		has_cosmetic_tag = AZH_NAM_corp_4
+		has_cosmetic_tag = AZH_NAM_corp_5
+		has_cosmetic_tag = AZH_NAM_corp_6
+		has_cosmetic_tag = SDR_NAM_corp_1
+		has_cosmetic_tag = SDR_NAM_corp_2
+		has_cosmetic_tag = SDR_NAM_corp_3
+		has_cosmetic_tag = SDR_NAM_corp_4
+		has_cosmetic_tag = SDR_NAM_corp_5
+		has_cosmetic_tag = SDR_NAM_corp_6
+		has_cosmetic_tag = RHM_NAM_corp_1
+		has_cosmetic_tag = RHM_NAM_corp_2
+		has_cosmetic_tag = RHM_NAM_corp_3
+		has_cosmetic_tag = RHM_NAM_corp_4
+		has_cosmetic_tag = RHM_NAM_corp_5
+		has_cosmetic_tag = RHM_NAM_corp_6
+		has_cosmetic_tag = KDR_NAM_corp_1
+		has_cosmetic_tag = KDR_NAM_corp_2
+		has_cosmetic_tag = KDR_NAM_corp_3
+		has_cosmetic_tag = KDR_NAM_corp_4
+		has_cosmetic_tag = KDR_NAM_corp_5
+		has_cosmetic_tag = KDR_NAM_corp_6
+	}
+}
+
+NAM_board_federal_subject = {
+	exists = yes
+	is_subject_of = NAM
+	has_country_flag = NAM_federal_district
+}
+
+# COUNTRY district. Its federal title survives a temporary loss of the capital;
+# appointments and construction require the district administration to be operating.
+NAM_board_operating_district = {
+	NAM_board_federal_subject = yes
+	has_capitulated = no
+	capital_scope = {
+		is_owned_by = PREV
+		is_controlled_by = PREV
+	}
+}
+
+NAM_board_title_available = {
+	NAM_board_operating_district = yes
+	NOT = { has_country_flag = NAM_corp_disputed }
+}
+
+NAM_board_trading_concession = {
+	NAM_board_title_available = yes
+	has_variable = NAM_corp_district_owner
+}
+
+NAM_board_eflor_terminal = {
+	701 = {
+		is_owned_by = EFL
+		is_controlled_by = EFL
+	}
+}
+
+NAM_board_factory_site = {
+	NAM_board_operating_district = yes
+	capital_scope = {
+		free_building_slots = {
+			building = arms_factory
+			size > 0
+			include_locked = yes
+		}
+	}
+}
+
+NAM_board_current_concession = {
+	exists = yes
+	is_subject_of = NAM
+	has_variable = NAM_corp_district_owner
+	NOT = { has_country_flag = NAM_corp_disputed }
+}
+
 # COUNTRY NAM. A free zone may be chartered: NAM_free_zone_slots, never more
 # than three zones chartered or in negotiation.
 NAM_corp_zone_slot_free = {
@@ -1111,6 +2035,31 @@ NAM_corp_zone_slot_free = {
 	add_to_temp_variable = { var = NAM_corp_zones_used value = NAM_free_zones_pending }
 	check_variable = { var = NAM_free_zone_slots value = NAM_corp_zones_used compare = greater_than }
 	check_variable = { var = NAM_corp_zones_used value = 3 compare = less_than }
+}
+
+NAM_corp_zone_operable = {
+	NAM_country_operable = yes
+	OR = {
+		NOT = { has_country_flag = NAM_corp_takeover }
+		is_subject = no
+	}
+}
+
+NAM_corp_charter_authorized = {
+	NAM_corp_open = yes
+	OR = {
+		AND = {
+			NOT = { has_country_flag = NAM_corp_takeover }
+			has_completed_focus = NAM_hum_free_zones
+		}
+		AND = {
+			NAM_board_operable = yes
+			OR = {
+				has_completed_focus = NAM_hum_free_zones
+				has_completed_focus = NAM_board_company_capital
+			}
+		}
+	}
 }
 
 # STATE field. Another independent country owns a lost Svetlogorsk field.
@@ -1475,6 +2424,34 @@ NAM_pw_operable = {
 	has_global_flag = ADISCORD_nam_resource_war_nam_victory
 }
 
+NAM_air_bridge_affordable = {
+	NOT = { has_equipment = { ADISCORD_transport_airframe_2162 < 12 } }
+	NOT = { has_fuel < 15000 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+}
+
+NAM_air_bridge_departure = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_air_supply
+	owns_state = 700
+	controls_state = 700
+	700 = { air_base > 0 }
+}
+
+NAM_air_bridge_destination = {
+	is_controlled_by = NAM
+	OR = {
+		is_owned_by = NAM
+		NAM = { has_completed_focus = NAM_pw_ground_control }
+	}
+}
+
+NAM_air_trial_available = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_air_review
+	NOT = { has_country_flag = NAM_air_trial_used }
+}
+
 NAM_pw_capital_civil_site = {
 	owns_state = 700
 	controls_state = 700
@@ -1514,6 +2491,25 @@ NAM_pw_district_civil_site = {
 NAM_veteran_housing_ready = {
 	NAM_pw_operable = yes
 	NAM_pw_capital_civil_site = yes
+	OR = {
+		NOT = { has_country_flag = { flag = NAM_veteran_housing_paid value > 1 } }
+		NAM_pw_district_civil_site = yes
+	}
+}
+
+# The signed order reserves the district copy only when both sites can take it.
+NAM_housing_series_available = {
+	has_completed_focus = NAM_pw_standard_projects
+	has_country_flag = NAM_veteran_housing_blueprint
+	NAM_pw_district_civil_site = yes
+}
+
+NAM_veteran_housing_authorised = {
+	OR = {
+		has_completed_focus = NAM_civil_dividend
+		has_completed_focus = NAM_south_heritage
+		has_completed_focus = NAM_pw_standard_projects
+	}
 }
 
 NAM_postwar_rearmament_ready = {
@@ -1523,6 +2519,31 @@ NAM_postwar_rearmament_ready = {
 NAM_district_audit_ready = {
 	NAM_pw_operable = yes
 	check_variable = { var = NAM_grp_dist_support value = 30 compare = greater_than_or_equals }
+}
+
+NAM_pw_district_allotment_site = {
+	NAM_pw_central_civil_district = yes
+	OR = {
+		AND = {
+			NAM = { has_completed_focus = NAM_civil_service_exam }
+			OR = {
+				infrastructure < 5
+				NOT = { has_state_flag = NAM_pw_allotment_site_opened }
+			}
+		}
+		AND = {
+			NAM = { has_completed_focus = NAM_appointed_prefects }
+			infrastructure > 0
+			NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_fleet_called } }
+		}
+	}
+}
+
+NAM_pw_veteran_course_authorised = {
+	OR = {
+		has_completed_focus = NAM_veterans_return
+		has_completed_focus = NAM_pw_family_pensions
+	}
 }
 
 NAM_pw_veteran_course_ready = {
@@ -1549,15 +2570,63 @@ NAM_pw_state_arsenal_ready = {
 	}
 }
 
+NAM_workers_inspection_field = {
+	NAM_field_repair_possible = yes
+	has_variable = NAM_field_capacity
+	NOT = { has_state_flag = NAM_project_in_progress }
+	check_variable = { var = NAM_field_condition value = 80 compare = less_than }
+}
+
 NAM_pw_district_congress_ready = {
 	NAM_pw_operable = yes
+}
+
+NAM_municipal_workshop_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_municipal_workshop_chartered }
+	industrial_complex < 20
+	free_building_slots = { building = industrial_complex size > 1 include_locked = yes }
+}
+
+NAM_plant_conversion_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	arms_factory > 0
+	industrial_complex < 19
+	free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+	NOT = { has_state_flag = NAM_demobilised_plant }
+}
+
+NAM_plant_conversion_authorised = {
+	NAM_pw_operable = yes
+	has_global_flag = ADISCORD_south_hegemon_NAM
+	has_completed_focus = NAM_pw_demobilisation_board
+	has_war = no
+}
+
+NAM_tenant_petition_open = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_tenant_councils
+	has_country_flag = NAM_pw_district_congress_paid
+	NOT = { has_event_target = NAM_tenant_petition_site }
 }
 
 NAM_pw_district_schools_unlocked = {
 	OR = {
 		has_completed_focus = NAM_oil_fund
 		has_completed_focus = NAM_relief_register
+		has_completed_focus = NAM_regional_university
+		has_completed_focus = NAM_pw_southern_schools
 	}
+}
+
+NAM_khazar_teaching_partner = {
+	exists = yes
+	has_capitulated = no
+	is_subject_of = NAM
+	owns_state = 699
+	controls_state = 699
 }
 
 NAM_pw_district_schools_ready = {
@@ -1634,6 +2703,7 @@ NAM_field_repair_unlocked = {
 	OR = {
 		NAM_field_repair_trained = yes
 		has_completed_focus = NAM_rescue_college
+		has_completed_focus = NAM_pw_labour_inspection
 	}
 }
 
@@ -1722,6 +2792,25 @@ NAM_crisis_case_5 = {
 	NAM_crisis_pending_5 = yes
 }
 
+NAM_industrial_claim_payable = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_insurance_fund
+	NOT = { has_country_flag = NAM_industrial_claim_paid }
+	OR = {
+		AND = {
+			NAM_crisis_case_1 = yes
+			NOT = { has_completed_focus = NAM_field_firefighters }
+		}
+		NAM_crisis_case_2 = yes
+	}
+}
+
+NAM_garrison_families_entitled = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_family_pensions
+	NAM_crisis_case_5 = yes
+}
+
 NAM_rw_coalition_landing_ready = {
 	is_ai = yes
 	has_capitulated = no
@@ -1772,17 +2861,43 @@ NAM_naval_observation_ready = {
 }
 
 NAM_naval_shipyard_ready = {
+	OR = {
+		AND = {
+			NAM_naval_home_port = yes
+			700 = { dockyard > 0 }
+		}
+		AND = {
+			NAM_pw_operable = yes
+			controls_province = 689
+			688 = {
+				is_owned_by = NAM
+				is_controlled_by = NAM
+				naval_base > 0
+				dockyard > 0
+			}
+		}
+	}
+}
+
+NAM_naval_slip_available = {
+	NOT = { has_country_flag = NAM_ship_order_paid }
+	NOT = { has_country_flag = NAM_pw_patrol_refit_paid }
+}
+
+NAM_naval_workshops_supply = {
+	has_country_flag = NAM_program_naval_workshops_commissioned
 	NAM_naval_home_port = yes
-	700 = { dockyard > 0 }
 }
 
 NAM_naval_marines_ready = {
 	NAM_naval_home_port = yes
 	has_tech = ADISCORD_tech_svetlogorsk_marine_corps
-	check_variable = {
-		var = num_battalions_with_type@ADISCORD_marine_infantry
-		value = 4
-		compare = less_than
+	OR = {
+		check_variable = { num_battalions_with_type@ADISCORD_marine_infantry < 4 }
+		AND = {
+			has_completed_focus = NAM_pw_landing_supply
+			check_variable = { num_battalions_with_type@ADISCORD_marine_infantry < 7 }
+		}
 	}
 }
 
@@ -1802,7 +2917,21 @@ NAM_chromium_site = {
 	NOT = { has_state_flag = NAM_chromium_mine_expanded }
 }
 
+NAM_steel_survey_authorised = {
+	OR = {
+		AND = {
+			state = 231
+			NAM = { has_completed_focus = NAM_island_accounts }
+		}
+		AND = {
+			state = 690
+			NAM = { has_completed_focus = NAM_pw_local_design_offices }
+		}
+	}
+}
+
 NAM_steel_site = {
+	NAM_steel_survey_authorised = yes
 	is_owned_by = NAM
 	is_controlled_by = NAM
 	NAM = { NAM_independent_programmes_operable = yes }
@@ -1855,6 +2984,26 @@ NAM_prewar_service_mandate = {
 	check_variable = { NAM_prewar_balance < -0.25 }
 }
 
+NAM_veyran_southern_route = {
+	has_global_flag = ADISCORD_nam_resource_war_nam_victory
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+	has_global_flag = ADISCORD_south_hegemon_NAM
+	NAM_prewar_service_mandate = yes
+	has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+}
+
+NAM_veyran_rom_mandate = {
+	NAM_veyran_southern_route = yes
+	NAM_country_operable = yes
+	is_subject = no
+	has_government = etatism
+	has_completed_focus = NAM_service_state
+	OR = {
+		has_completed_focus = NAM_ladder_ending_iron
+		has_completed_focus = NAM_ladder_ending_service
+	}
+}
+
 NAM_prewar_pragmatic_mandate = {
 	has_variable = NAM_prewar_balance
 	NOT = { check_variable = { NAM_prewar_balance < -0.25 } }
@@ -1873,6 +3022,25 @@ NAM_pw_public_utilities_ready = {
 	NAM_pw_operable = yes
 }
 
+NAM_returnee_region = {
+	OR = {
+		NAM_field_state = yes
+		state = 700
+		AND = {
+			NAM_border_integration_region = yes
+			NAM = { has_completed_focus = NAM_common_citizenship }
+		}
+	}
+}
+
+NAM_returnee_site = {
+	NAM_returnee_region = yes
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_variable = NAM_returnee_settlement }
+	NOT = { has_state_flag = NAM_project_in_progress }
+}
+
 NAM_pw_municipal_services_ready = {
 	NAM_pw_operable = yes
 }
@@ -1887,6 +3055,47 @@ NAM_pw_import_machine_tools_ready = {
 	NAM_pw_operable = yes
 	controls_state = 700
 	700 = { naval_base > 0 }
+}
+
+# A charter bought with a warrant keeps it in the register until delivery.
+NAM_prag_warrant_free = {
+	OR = {
+		check_variable = { NAM_prag_warrants > 1 }
+		AND = {
+			check_variable = { NAM_prag_warrants > 0 }
+			NOT = { has_country_flag = NAM_prag_warrant_pledged }
+		}
+	}
+}
+
+NAM_prag_court_can_register = {
+	OR = {
+		check_variable = { var = NAM_prag_warrants value = 1 compare = less_than }
+		AND = {
+			has_completed_focus = NAM_balanced_accounts
+			check_variable = { var = NAM_prag_warrants value = 2 compare = less_than }
+		}
+	}
+}
+
+NAM_prag_delivery_port = {
+	NAM_pw_operable = yes
+	owns_state = 700
+	controls_state = 700
+	controls_province = 16716
+	700 = { naval_base > 0 }
+}
+
+NAM_prag_charter_uses_warrant = {
+	has_completed_focus = NAM_contract_register
+	NAM_prag_warrant_free = yes
+}
+
+NAM_prag_charter_cargo_available = {
+	OR = {
+		NAM_prag_charter_uses_warrant = yes
+		NOT = { has_fuel < 60000 }
+	}
 }
 
 NAM_pw_contract_arbitration_ready = {
@@ -1958,6 +3167,21 @@ NAM_border_integration_site = {
 	is_controlled_by = NAM
 	NOT = { is_core_of = NAM }
 	NAM = { NAM_pw_operable = yes }
+}
+
+# STATE. Self-governing border districts retain jurisdiction over their property.
+NAM_pw_central_civil_district = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	OR = {
+		is_core_of = NAM
+		NAM_border_integration_region = yes
+	}
+	NOT = { has_dynamic_modifier = { modifier = NAM_border_autonomous_district } }
+	NAM = {
+		NAM_pw_operable = yes
+		NAM_prewar_service_mandate = yes
+	}
 }
 
 NAM_border_citizenship_ready = {
@@ -2311,9 +3535,41 @@ NAM_program_oilfield_substations_ready = {
 	}
 }
 
+# COUNTRY NAM. Mobile pumps serve one line. The Dry River station can feed the second.
+NAM_city_water_pumping_capacity = {
+	OR = {
+		AND = {
+			688 = { NOT = { has_state_flag = NAM_city_water_connected } }
+			700 = { NOT = { has_state_flag = NAM_city_water_connected } }
+		}
+		AND = {
+			has_country_flag = NAM_program_regional_power_commissioned
+			owns_state = 690
+			controls_state = 690
+		}
+	}
+}
+
+# STATE destination. Each connection has a local workshop and needs room for its building.
+NAM_city_water_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_city_water_connected }
+	OR = {
+		AND = {
+			state = 688
+			free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+		}
+		AND = {
+			state = 700
+			free_building_slots = { building = dockyard size > 0 include_locked = yes }
+		}
+	}
+}
+
 NAM_program_irrigation_works_ready = {
 	NAM_pw_operable = yes
-	NOT = { has_country_flag = NAM_south_coast_canal_open }
+	689 = { NOT = { has_dynamic_modifier = { modifier = NAM_south_coast_irrigation } } }
 	owns_state = 689
 	controls_state = 689
 }
@@ -2344,6 +3600,30 @@ NAM_program_development_fund_ready = {
 	owns_state = 700
 	controls_state = 700
 	NOT = { has_country_flag = NAM_program_development_fund_commissioned }
+}
+
+NAM_pw_reserve_advance_ready = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_war_accounts
+	has_completed_focus = NAM_pw_strategic_reserve
+	has_country_flag = {
+		flag = NAM_program_strategic_reserve_paid
+		days > 27
+	}
+}
+
+NAM_pw_harbour_slipway_site = {
+	NAM_pw_operable = yes
+	has_completed_focus = NAM_pw_war_accounts
+	has_completed_focus = NAM_pw_development_fund
+	has_country_flag = NAM_program_development_fund_commissioned
+	owns_state = 700
+	controls_state = 700
+	controls_province = 16716
+	700 = {
+		naval_base > 0
+		free_building_slots = { building = dockyard size > 0 include_locked = no }
+	}
 }
 
 NAM_program_regional_power_ready = {
@@ -2442,6 +3722,9 @@ NAM_pw_state_arsenal_unlocked = {
 
 NAM_pw_barter_charter_unlocked = {
 	OR = {
+		NAM_prag_charter_uses_warrant = yes
+		has_country_flag = NAM_prag_warrant_pledged
+		has_completed_focus = NAM_rus_expedition_staff
 		has_completed_focus = NAM_warehouse_receipts
 		has_completed_focus = NAM_commercial_reserve
 	}
@@ -2482,5 +3765,64 @@ NAM_field_can_drill = {
 	OR = {
 		check_variable = { var = NAM_field_capacity value = NAM_field_max_capacity compare = less_than }
 		NAM_artel_survey_open = yes
+	}
+}
+
+# All three central mandates bind their winner as the Vorkerland country target
+# before verification.
+# The original empire can also own the federal district before the collapse.
+NAM_veyran_can_invade = {
+	NAM_veyran_rom_mandate = yes
+	has_completed_focus = NAM_veyran_union_charter
+	NOT = { has_variable = NAM_veyran_campaign }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	NOT = { country_exists = SNG }
+	has_war = no
+	NOT = { is_in_faction_with = event_target:ADISCORD_vorkerland_nation }
+	NOT = { has_variable = ADISCORD_south_side }
+	has_global_flag = ADISCORD_vorkerland_reunification_verified
+	ADISCORD_west_wrk_reunified = yes
+	ADISCORD_west_final_active = no
+	event_target:ADISCORD_vorkerland_nation = {
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		owns_state = 32
+		controls_state = 32
+		NOT = { has_variable = ADISCORD_west_side }
+		NOT = { has_country_flag = ADISCORD_vorkerland_pw_settlement_scheduled }
+	}
+}
+
+NAM_veyran_invasion_active = {
+	NAM = { check_variable = { var = NAM_veyran_campaign value = 1 compare = equals } }
+}
+
+# FROM is the credited victor. An ally must actually be fighting this loser.
+NAM_veyran_capitulation_managed = {
+	NAM_veyran_invasion_active = yes
+	NAM = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+	FROM = { has_war_with = ROOT }
+	OR = {
+		AND = {
+			ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
+			NAM = { exists = yes is_subject = no has_capitulated = no }
+			FROM = {
+				OR = {
+					tag = NAM
+					has_war_together_with = NAM
+				}
+			}
+		}
+		AND = {
+			ROOT = { tag = NAM }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes is_subject = no has_capitulated = no }
+			FROM = {
+				OR = {
+					tag = event_target:ADISCORD_vorkerland_nation
+					has_war_together_with = event_target:ADISCORD_vorkerland_nation
+				}
+			}
+		}
 	}
 }

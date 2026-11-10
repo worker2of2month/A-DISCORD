@@ -50,14 +50,14 @@ ADISCORD_vorkerland_collapse_category = {
 ADISCORD_vorkerland_prewar_category = {
 	allowed = {
 		OR = {
-			tag = WRK
+			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }
 			tag = EYR
 			tag = EGC
 			tag = RIV
 			tag = YOR
 		}
 	}
-	visible = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+	visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_prewar }
 }
 
 ADISCORD_vorkerland_vad_administration = {
@@ -75,6 +75,7 @@ ADISCORD_vorkerland_wkr_administration = {
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	icon = ADISCORD_deal
+	picture = GFX_ADISCORD_decision_picture_deal
 	allowed = {
 		OR = {
 			tag = WRK
@@ -125,7 +126,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 			has_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
 			has_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
 			AND = {
-				tag = WRK
+				tag = event_target:ADISCORD_vorkerland_nation
 				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 				has_global_flag = ADISCORD_vorkerland_reunification_verified
 			}
@@ -178,8 +179,8 @@ ADISCORD_vorkerland_rom_tru_category = {
 
 WRK_worx_research_category = {
 	icon = ADISCORD_science
-	allowed = { tag = WRK }
-	visible = { WRK_worx_mandate = yes }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+	visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes WRK_worx_mandate = yes }
 	visible_when_empty = yes
 	priority = 90
 	scripted_gui = ADISCORD_vorkerland_worx_panel
@@ -189,8 +190,8 @@ WRK_worx_research_category = {
 # Imperial appointments remain available after the court balance is settled.
 ADISCORD_vorkerland_empire_category = {
 	icon = ADISCORD_deal
-	allowed = { tag = WRK }
-	visible = { ADISCORD_vorkerland_world_empire_active = yes }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+	visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes ADISCORD_vorkerland_world_empire_active = yes }
 	visible_when_empty = yes
 	priority = 90
 }

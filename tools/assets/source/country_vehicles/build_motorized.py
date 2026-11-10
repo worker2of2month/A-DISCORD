@@ -27,12 +27,13 @@ STAGE = Path(tempfile.gettempdir()) / "adiscord-country-apc"
 DEST = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
 PREVIEWS = ROOT / "docs/development/previews/country-apc"
 REPORT = ROOT / "docs/development/model-verification/country_apc.json"
-TAGS = ("VAL", "STP", "STS", "NAM", "NOD")
+TAGS = ("VAL", "STP", "STS", "NAM", "NOD", "SHL")
 CLIPS = ("idle", "move", "attack")
 # The native motorized frame parks its vehicle at this yaw in every attack frame.
 # Counter-rotate the turret so the barrel follows the escort's combat heading.
 ATTACK_TURRET_YAW = math.radians(54.57114218169362)
 PAINTS = {
+    "SHL": ((181, 135, 82), (69, 48, 60), (219, 178, 102)),
     "VAL": ((77, 94, 112), (39, 49, 61), (185, 194, 199)),
     "STP": ((88, 96, 64), (44, 52, 37), (188, 184, 150)),
     "STS": ((67, 88, 99), (34, 47, 58), (167, 196, 197)),
@@ -51,6 +52,13 @@ def write_changed(path, data):
         path.write_bytes(data)
 
 
+def model_names(tags):
+    for tag in tags:
+        yield f"{tag}_apc"
+        if tag == "SHL":
+            yield "SHL_tank"
+
+
 def native_files(name):
     return [f"{name}.mesh", *[f"{name}_{clip}.anim" for clip in CLIPS],
             *[f"{name}_{channel}.dds" for channel in ("diffuse", "normal", "specular")]]
@@ -60,9 +68,12 @@ def prepare(tags=TAGS):
     from PIL import Image, ImageDraw
     from tools.assets.source.build_shl_palace import dds_bytes
 
-    for tag in tags:
+    for name in model_names(tags):
+        tag = name[:3]
         base, dark, accent = PAINTS[tag]
         marking = {"STP": "STS", "STS": "NOD"}.get(tag, tag)
+        if name == "SHL_tank":
+            base, dark = (154, 112, 78), (58, 48, 51)
         palette = [base, dark, (23, 25, 25), (105, 113, 113), accent,
                    (34, 63, 75), accent, (15, 20, 21), base,
                    tuple(min(255, c + 18) for c in base), (140, 35, 27),
@@ -92,7 +103,13 @@ def prepare(tags=TAGS):
                 for y in range(8, 128, 10):
                     draw.line((0, y, 128, y), fill=(52, 58, 57), width=2)
             if index == 8:
-                if marking == "VAL":
+                if marking == "SHL":
+                    draw.polygon(((64,12),(113,64),(64,116),(15,64)), fill=dark)
+                    draw.line(((64,25),(99,64),(64,103),(29,64),(64,25)), fill=accent, width=5)
+                    draw.line((64,39,64,89), fill=accent, width=4)
+                    draw.line((43,64,85,64), fill=accent, width=4)
+                    draw.ellipse((58,58,70,70), fill=(246,225,179))
+                elif marking == "VAL":
                     draw.polygon(((25, 94), (64, 24), (103, 94), (82, 94), (64, 60), (46, 94)), fill=accent)
                 elif marking == "STP":
                     points = []
@@ -119,7 +136,7 @@ def prepare(tags=TAGS):
             "normal": Image.new("RGBA", atlas.size, (128, 128, 0, 128)),
             "specular": specular,
         }.items():
-            write_changed(STAGE / f"{tag}_apc_{channel}.dds", dds_bytes(texture))
+            write_changed(STAGE / f"{name}_{channel}.dds", dds_bytes(texture))
 
 
 def wheel(model, side, y, index, radius, half_track):
@@ -398,17 +415,162 @@ def sts_vehicle(model, body):
     model.rod((-.89, 2.62, 2.30), (-.89, 2.62, 3.36), .020, 3, body)
 
 
-def vehicle(tag):
-    model = native.Model(f"{tag}_apc")
+def desert_carrier(model, body):
+    # Forward armoured driving compartment, rear troop bed under a tensioned awning.
+    chassis(model, body, (-2.57, .66, 2.55), .79, 1.37, -3.72, 3.54)
+    hull(model, [(.80, 1.86, -3.10, 3.14, .29), (1.40, 2.91, -3.74, 3.55, .48),
+                (1.74, 2.65, -3.42, 3.46, .23)], 0, body)
+    hull(model, [(1.73, 2.64, -2.9, -.18, .22), (2.39, 2.19, -2.27, -.17, .18),
+                (2.48, 1.94, -2.12, -.23, .15)], 9, body)
+    for side in (-1, 1):
+        model.plate([(side * .08, -2.84, 1.84), (side * 1.10, -2.84, 1.84),
+                     (side * .92, -2.37, 2.32), (side * .08, -2.37, 2.32)], .055, 5, body, axis=1)
+        model.rod((side * .30, -2.83, 1.91), (side * .91, -2.60, 2.13), .022, 12, body)
+        model.rod((side * .68, -2.73, 2.02), (side * 1.01, -2.60, 2.15), .029, 12, body)
+        model.rod((side * 1.19, -2.04, 2.12), (side * 1.59, -2.17, 2.43), .034, 3, body)
+        model.box((side * 1.60, -2.17, 2.47), (.17, .10, .27), 1, body)
+        headlamp(model, body, side * 1.04, -3.57, 1.49)
+        # Sand channels ride on the cab flanks, within reach of the front wheels.
+        for z in (1.61, 1.82):
+            model.rod((side * 1.40, -2.20, z), (side * 1.40, -.52, z), .033, 12, body)
+        for j in range(8):
+            y = -2.16 + .225 * j
+            model.rod((side * 1.405, y, 1.61), (side * 1.405, y, 1.82), .042, 3, body)
+        model.rod((side * 1.40, -2.14, 1.28), (side * 1.40, -.25, 1.28), .075, 12, body)
+        for y in (-.38, .72, 1.82, 2.92):
+            model.box((side * 1.25, y, 1.94), (.17, 1.02, .43), 0, body)
+            model.box((side * 1.35, y, 2.06), (.06, .96, .07), 4, body)
+            model.rod((side * 1.28, y, 1.8), (side * 1.28, y, 2.49), .044, 3, body)
+        model.box((side * 1.36, 1.77, 1.86), (.04, .43, .39), 8, body)
+    model.box((0, -3.29, 1.75), (1.40, .49, .07), 7, body)
+    model.box((0, 3.47, 1.71), (1.65, .085, .74), 1, body)
+    for z in (1.48, 1.76, 2.04):
+        model.box((0, 3.53, z), (1.42, .045, .052), 3, body)
+    # Stitched roof bays sag between their transverse bows.
+    for bay in range(3):
+        pts = []
+        for j in range(7):
+            v = j / 6
+            for i in range(13):
+                u = (i - 6) / 6
+                pts.append((1.4 * u, .13 + bay * 1.06 + v * 1.06,
+                            2.78 - .31 * u * u - .10 * math.sin(math.pi * v) * (1 - .4 * u * u)))
+        faces = [(13 * j + i, 13 * j + i + 1, 13 * j + i + 14, 13 * j + i + 13)
+                 for j in range(6) for i in range(12)]
+        model.solid(pts, faces, 13, body, True)
+        for j in (0, 1):
+            # Two narrow indigo selvedges stitched into the left side of each bay.
+            u0 = -.82 + .11 * j
+            band = []
+            for k in range(7):
+                v = k / 6
+                for u in (u0, u0 + .040):
+                    band.append((1.4 * u, .13 + bay * 1.06 + v * 1.06,
+                                 2.785 - .31 * u * u - .10 * math.sin(math.pi * v) * (1 - .4 * u * u)))
+            model.solid(band, [(2 * k, 2 * k + 1, 2 * k + 3, 2 * k + 2) for k in range(6)], 1, body, True)
+        for side in (-1, 1):
+            y = .13 + bay * 1.06
+            model.plate([(side * 1.4, y, 2.47), (side * 1.4, y + 1.06, 2.47),
+                         (side * 1.4, y + .94, 2.32), (side * 1.4, y + .60, 2.26),
+                         (side * 1.4, y + .11, 2.32)], .036, 11, body, axis=0)
+            model.rod((side * 1.28, y, 2.12), (side * 1.39, y, 2.47), .043, 3, body)
+    turret = model.bone("turret", (0, -1.39, 2.50), body)
+    gun = model.bone("gun", (0, -1.55, 2.84), turret)
+    model.rod((0, -1.39, 2.47), (0, -1.39, 2.60), .54, 1, turret, sides=16)
+    hull(model, [(2.56, 1.10, -1.93, -.87, .18), (2.99, .85, -1.72, -.90, .15)], 0, turret)
+    model.box((-.37, -1.47, 2.91), (.21, .35, .24), 1, turret)
+    model.box((-.37, -1.654, 2.92), (.16, .025, .13), 5, turret)
+    gun_barrel(model, gun, 0, -1.67, -3.13, 2.85, .076)
+
+
+def desert_tank(model, body):
+    from tools.assets.source.build_taran import TRACK_CENTER, TRACK_LENGTH, track_path
+
+    model.links = {}
+    model.wheels = []
+    hull(model, [(.62, 2.59, -3.18, 3.17, .45), (1.19, 3.98, -4.07, 3.67, .65),
+                (1.71, 3.68, -2.78, 3.30, .51)], 0, body)
+    turret = model.bone("turret", (0, -.40, 1.79), body)
+    gun = model.bone("gun", (0, -1.80, 2.29), turret)
+    model.rod((0, -.4, 1.68), (0, -.4, 1.92), 1.18, 1, turret, sides=24)
+    hull(model, [(1.83, 2.29, -1.85, 1.35, .43), (2.12, 3.10, -2.32, 1.67, .67),
+                (2.53, 2.31, -1.73, 1.19, .55), (2.58, 1.92, -1.51, .97, .45)], 9, turret)
+    model.box((0, -2.09, 2.25), (.74, .79, .47), 1, gun)
+    model.rod((0, -2.26, 2.28), (0, -3.64, 2.28), .23, 1, gun, end_radius=.185)
+    model.rod((0, -3.6, 2.28), (0, -6.2, 2.28), .13, 3, gun, end_radius=.094)
+    for y in (-3.41, -3.62, -4.89):
+        model.rod((0, y + .07, 2.28), (0, y - .07, 2.28), .166, 4, gun)
+    gun_barrel(model, gun, 0, -6.17, -6.64, 2.28, .135)
+    model.rod((-.58, -.41, 2.53), (-.58, -.41, 2.69), .46, 1, turret, sides=18)
+    model.rod((-.58, -.41, 2.68), (-.58, -.41, 2.73), .39, 0, turret, sides=18)
+    model.box((.57, -.83, 2.68), (.45, .50, .27), 1, turret)
+    model.box((.57, -1.09, 2.68), (.34, .022, .14), 5, turret)
+    for side in (-1, 1):
+        x = side * 1.88
+        for i in range(32):
+            distance = TRACK_LENGTH * i / 32
+            y, z, angle = track_path(distance)
+            bone = f"track_{i:02d}"
+            if bone not in model.links:
+                model.bone(bone, (0, y, z))
+                model.links[bone] = distance
+            rotation = Matrix.Rotation(angle, 3, "X")
+            model.box((x, y, z), (.83, TRACK_LENGTH / 32 * .97, .13), 2, bone, rotation)
+            model.box(Vector((x, y, z)) + rotation @ Vector((0, 0, .08)), (.75, .12, .09), 12, bone, rotation)
+        for i, y in enumerate((-2.85, -1.72, -.57, .57, 1.72, 2.85)):
+            bone = f"wheel_{i}"
+            if bone not in model.wheels:
+                model.bone(bone, (0, y, TRACK_CENTER))
+                model.wheels.append(bone)
+            model.rod((x - .32, y, TRACK_CENTER), (x + .32, y, TRACK_CENTER), .61, 2, bone, sides=20)
+            model.rod((x + side * .32, y, TRACK_CENTER), (x + side * .37, y, TRACK_CENTER), .46, 0, bone, sides=16)
+            model.rod((x + side * .37, y, TRACK_CENTER), (x + side * .42, y, TRACK_CENTER), .19, 1, bone, sides=8)
+        for i, y in enumerate((-2.36, -1.21, -.06, 1.09, 2.24)):
+            model.plate([(side * 2.18, y - .54, 1.74), (side * 2.18, y + .54, 1.74),
+                         (side * 2.34, y + .44, 1.03), (side * 2.34, y - .27, .90)],
+                        .09, 9 if i%2 else 0, body, axis=0)
+        for y in (-.91, -.23, .45):
+            model.plate([(side * 1.25, y - .24, 2.44), (side * 1.25, y + .30, 2.44),
+                         (side * 1.58, y + .31, 2.11), (side * 1.58, y - .33, 2.11)],
+                        .07, 1, turret, axis=0)
+        model.box((side * .92, .73, 2.56), (.40, .46, .055), 8, turret)
+        model.rod((side * 1.36, 2.64, 1.64), (side * 1.36, 2.64, 2.31), .26, 12, body)
+        for z in (1.76, 1.88, 2.00, 2.12, 2.26):
+            model.rod((side * 1.36, 2.64, z), (side * 1.36, 2.64, z + .045), .30, 4, body)
+        # Recovery rope follows the glacis and terminates at the towing lugs.
+        rope = [(side * 1.29, -3.47, 1.46), (side * 1.01, -3.40, 1.52),
+                (side * .72, -3.12, 1.65), (side * .48, -2.91, 1.73)]
+        for a, b in zip(rope, rope[1:]):
+            model.rod(a, b, .037, 3, body)
+        for x, y, z in (rope[0], rope[-1]):
+            model.box((x, y, z), (.16, .15, .10), 1, body)
+        headlamp(model, body, side * 1.38, -3.44, 1.51)
+    # A strapped sun fly under the bustle breaks up the rear outline.
+    model.rod((-1.18, 1.44, 2.20), (1.18, 1.44, 2.20), .245, 13, turret, sides=16)
+    for x in (-.93, -.34, .34, .93):
+        model.rod((x - .047, 1.44, 2.20), (x + .047, 1.44, 2.20), .25, 11, turret, sides=16)
+    model.box((0, 2.58, 1.74), (1.73, 1.06, .08), 7, body)
+    for y in (2.17, 2.33, 2.49, 2.65, 2.81, 2.97):
+        model.box((0, y, 1.80), (1.60, .053, .06), 3, body)
+    for side, label in ((-1, "left"), (1, "right")):
+        model.locators[label + "_wheel"] = ((side * 1.88, 2.53, .14), "vehicle_root")
+        model.locators[label + "_tracks"] = model.locators[label + "_wheel"]
+        model.locators[label + "_exhaust"] = ((side * 1.36, 3.35, 1.54), body)
+    model.locators["root"] = ((0, 0, 0), "vehicle_root")
+
+
+def vehicle(name):
+    model = native.Model(name)
     body = model.bone("hull", (0, 0, 1.5))
-    builders = {"VAL": val_vehicle, "STP": stp_vehicle,
-                "STS": sts_vehicle, "NAM": nam_vehicle, "NOD": nod_vehicle}
-    builders[tag](model, body)
+    builders = {"VAL_apc": val_vehicle, "STP_apc": stp_vehicle, "STS_apc": sts_vehicle,
+                "NAM_apc": nam_vehicle, "NOD_apc": nod_vehicle,
+                "SHL_apc": desert_carrier, "SHL_tank": desert_tank}
+    builders[name](model, body)
     return model
 
 
 def animate(model, rig, clip):
-    if clip == "idle":
+    if clip == "idle" and not model.name.startswith("SHL_"):
         from tools.assets.source.country_vehicles.build_idle import export_idle
 
         export_idle(rig, model.name, STAGE / f"{model.name}_idle.anim", pdx)
@@ -418,16 +580,31 @@ def animate(model, rig, clip):
         bone.matrix_basis = Matrix.Identity(4)
         bone.rotation_mode = "XYZ"
     scene = bpy.context.scene
-    end = 61 if clip == "move" else 31
+    end = {"move": 61, "attack": 31, "idle": 271}[clip]
     scene.frame_start, scene.frame_end = 1, end
     scene.render.fps = 30
+    tracked = hasattr(model, "links")
+    if tracked:
+        from tools.assets.source.build_taran import track_path, TRACK_LENGTH
+    wheel_turns = 4 if tracked else 2
     for frame in range(1, end + 1):
         t = (frame - 1) / (end - 1)
+        if clip == "move" and tracked:
+            for bone_name, distance in model.links.items():
+                y0, z0, angle0 = track_path(distance)
+                y, z, angle = track_path((distance - t * TRACK_LENGTH) % TRACK_LENGTH)
+                bone = rig.pose.bones[bone_name]
+                bone.location = (0, y - y0, z - z0)
+                bone.rotation_euler.x = angle - angle0
         for name in model.wheels:
-            rig.pose.bones[name].rotation_euler.x = math.tau * 2 * t if clip == "move" else 0
+            rig.pose.bones[name].rotation_euler.x = math.tau * wheel_turns * t if clip == "move" else 0
         rig.pose.bones["hull"].location.z = .025 * math.sin(math.tau * 2 * t) if clip == "move" else 0
         recoil = max(0, 1 - abs(t - .1) / .1) if clip == "attack" else 0
-        rig.pose.bones["turret"].rotation_euler.z = ATTACK_TURRET_YAW if clip == "attack" else 0
+        rig.pose.bones["turret"].rotation_euler.z = ATTACK_TURRET_YAW if clip == "attack" and model.name.endswith("_apc") else 0
+        if clip == "idle":
+            phase = math.tau * t
+            rig.pose.bones["turret"].rotation_euler.z = .095 * math.sin(phase)
+            rig.pose.bones["gun"].rotation_euler.x = -.018 * (1 - math.cos(2 * phase))
         rig.pose.bones["gun"].location.y = .15 * recoil
         for bone in rig.pose.bones:
             bone.keyframe_insert("location", frame=frame)
@@ -439,14 +616,13 @@ def animate(model, rig, clip):
     rig.animation_data.action.use_fake_user = True
 
 
-def export(tag):
+def export(name):
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    name = f"{tag}_apc"
     material = pdx.create_shader(SimpleNamespace(
         shader=["PdxMeshAdvanced"], diff=[f"{name}_diffuse.dds"],
         n=[f"{name}_normal.dds"], spec=[f"{name}_specular.dds"],
     ), name, str(STAGE))
-    model = vehicle(tag)
+    model = vehicle(name)
     obj, rig = model.object(material)
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
@@ -475,8 +651,7 @@ def export(tag):
     bpy.ops.wm.save_as_mainfile(filepath=str(STAGE / f"{name}.blend"))
 
 
-def verify(tag):
-    name = f"{tag}_apc"
+def verify(name):
     path = STAGE / f"{name}.mesh"
     tree = pdx_data.read_meshfile(str(path))
     report = {"triangles": 0, "vertices": 0, "materials": 0}
@@ -533,7 +708,7 @@ def verify(tag):
         metrics = {"max_vertex_motion": motion, "loop_error": loop_error}
         if clip == "attack":
             # Compose the native wrapper yaw with the reimported gun transform.
-            wrapper = Matrix.Rotation(-ATTACK_TURRET_YAW, 3, "Z")
+            wrapper = Matrix.Rotation(-ATTACK_TURRET_YAW if name.endswith("_apc") else 0, 3, "Z")
             forward = Vector((0, -1, 0))
             error = max((wrapper @ (pose["gun"].to_3x3() @ forward)).angle(forward)
                         for pose in poses)
@@ -554,6 +729,16 @@ def verify(tag):
                                 for row0, row1 in zip(poses[0][bone], pose[bone]) for a, b in zip(row0, row1))
                 assert delta > .10, (name, clip, bone, delta)
             metrics["moving_bones"] = selected
+            if name == "SHL_tank" and clip == "move":
+                links = [n for n in poses[0] if n.startswith("track_")]
+                assert links and all(max((p[n].translation - poses[0][n].translation).length
+                                         for p in poses) > .1 for n in links)
+                # Both surfaces at the top contact must travel towards the bow.
+                top = Vector((0, 0, .61))
+                wheel_step = poses[1]["wheel_0"] @ top - poses[0]["wheel_0"] @ top
+                tread_step = poses[1]["track_04"].translation - poses[0]["track_04"].translation
+                assert wheel_step.y < 0 and tread_step.y < 0, (wheel_step, tread_step)
+                metrics["animated_track_links"] = len(links)
         report["animations"][clip] = metrics
     report["native_reimport"] = True
     report["rigid_skin_slots_validated"] = True
@@ -563,8 +748,7 @@ def verify(tag):
     return report
 
 
-def render(tag):
-    name = f"{tag}_apc"
+def render(name):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     pdx.import_meshfile(str(STAGE / f"{name}.mesh"), join_materials=False)
     native.preview_materials()
@@ -604,8 +788,7 @@ def package(apply=False):
     assert report["generator_sha256"] == digest(Path(__file__)), "Rebuild after generator edits"
     assert report["idle_generator_sha256"] == digest(SOURCE / "build_idle.py"), "Rebuild after idle edits"
     files = {REPORT: report_path.read_bytes()}
-    for tag in TAGS:
-        name = f"{tag}_apc"
+    for name in model_names(TAGS):
         row = report["models"][name]
         assert set(row["files"]) == set(native_files(name))
         for filename, expected in row["files"].items():
@@ -629,10 +812,9 @@ def stage_preserved_models(tags):
         return {}
     installed = json.loads(REPORT.read_text())["models"]
     preserved = {}
-    for tag in TAGS:
-        if tag in tags:
+    for name in model_names(TAGS):
+        if name[:3] in tags:
             continue
-        name = f"{tag}_apc"
         row = installed[name]
         for filename, expected in row["files"].items():
             assert digest(DEST / filename) == expected, f"Installed export changed: {filename}"
@@ -671,10 +853,10 @@ def main():
         report = {"generator_sha256": digest(Path(__file__)),
                   "idle_generator_sha256": digest(SOURCE / "build_idle.py"),
                   "models": stage_preserved_models(tags)}
-        for tag in tags:
-            export(tag)
-            report["models"][f"{tag}_apc"] = verify(tag)
-            render(tag)
+        for name in model_names(tags):
+            export(name)
+            report["models"][name] = verify(name)
+            render(name)
         write_changed(STAGE / REPORT.name, (json.dumps(report, indent=2) + "\n").encode())
         print(json.dumps(report, indent=2), flush=True)
     elif package(args.apply) and args.check:

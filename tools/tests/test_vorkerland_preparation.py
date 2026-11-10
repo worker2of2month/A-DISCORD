@@ -119,7 +119,8 @@ class Script:
         self.random_weights = []
         self.game_rules = {"allow_volunteers": "LIMITED"}
         self.arrays = defaultdict(list)
-        self.event_targets = {}
+        # Startup binds the country target to WRK; unification rebinds it.
+        self.event_targets = {"ADISCORD_vorkerland_nation": "WRK"}
         self.root = "WRK"
         self.source = "32"
         self.scopes["WRK"].variables[P + "patron"] = 1
@@ -290,7 +291,7 @@ class Script:
             elif key == "has_dynamic_modifier":
                 ok = fields(value)["modifier"] in state.flags
             elif key == "is_subject_of":
-                ok = state.subject == value
+                ok = state.subject == (self.scope(value, current, previous) or value)
             elif key == "has_war_with":
                 ok = self.scope(value, current, previous) in state.enemies
             elif key == "has_war_together_with":
@@ -333,7 +334,7 @@ class Script:
             elif self.scope(key, current, previous) is not None:
                 self.run(value, self.scope(key, current, previous), current)
             elif key in EFFECTS and (
-                key.startswith((P, V + "wkr_", V + "tva_", V + "vad_", "TVA_", "VAD_", "WKR_"))
+                key.startswith((P, V + "wkr_", V + "tva_", V + "vad_", "TVA_", "VAD_", "WKR_", "WRK_party_representatives_"))
                 or key in (V + "refresh_doctrine_dynamic_state", V + "apply_focus_doctrine",
                            V + "ensure_worker_home_guard_template", V + "promote_nikita_worcker",
                            V + "promote_anton_bagley", V + "form_joint_government",
@@ -342,6 +343,8 @@ class Script:
                            V + "empire_install_governor")
             ):
                 self.effect(key, current, previous)
+            elif key == "ADISCORD_superevent_enqueue":
+                self.calls.append((key, current, state.variables["ADISCORD_superevent_request"]))
             elif key == "random_list":
                 choices = [(self.number(weight, current, previous), effects) for weight, _, effects in value]
                 self.random_weights.append(tuple(weight for weight, _ in choices))
@@ -450,7 +453,7 @@ class Script:
                 state.leader_ideology = data["ideology"]
             elif key == "set_nationality":
                 data = fields(value)
-                target = self.scopes[data["target_country"]]
+                target = self.scopes[self.scope(data["target_country"], current, previous) or data["target_country"]]
                 target.character_roles[data["character"]] = state.character_roles.pop(data["character"])
                 if state.leader == data["character"]:
                     state.leader = ""
@@ -922,7 +925,7 @@ class FieldTrialAccountingTests(unittest.TestCase):
         script.run(self.order["cancel_effect"])
         self.assertFalse([call for call in script.calls if call[0] in ("add_tech_bonus", "country_event")])
         for route in ("wkr", "vad", "tva"):
-            keys = [key for key, _, _ in walk(EFFECTS[V + "form_wrk_from_" + route])]
+            keys = [key for key, _, _ in walk(EFFECTS[V + "unify_under_" + route])]
             self.assertLess(keys.index("transfer_state"), keys.index(V + "tva_settle_trial_handoff"))
             self.assertLess(keys.index(V + "tva_settle_trial_handoff"), keys.index("load_focus_tree"))
 
@@ -1546,22 +1549,33 @@ class VADPoliticalMandateTests(unittest.TestCase):
             self.assertEqual(restored.scopes["VAD"], expected)
 
     def test_handoff_uses_selected_course_not_rescue_and_keeps_nikita(self):
-        handoff = EFFECTS[V + "form_wrk_from_vad"]
-        transfers = [item for item in handoff if item[0] == "if"
-                     and any(key == "set_nationality" for key, _, _ in walk(item[2]))]
-        completion = EFFECTS[V + "complete_wrk_from_vad"]
+        handoff = EFFECTS[V + "unify_under_vad"]
+        rebinding = handoff[:2]
+        self.assertEqual([key for key, _, _ in rebinding],
+                         ["clear_global_event_target", "save_global_event_target_as"])
+        completion = EFFECTS[V + "settle_unification_under_vad"]
+        # VAD unifies the country on its own tag, so no character leaves it.
+        for block in (handoff, completion):
+            self.assertFalse(any(key == "set_nationality" for key, _, _ in walk(block)))
         final = next(i for i, item in enumerate(completion) if item[0] == "if"
                      and ("has_global_flag", "=", V + "joint_government_formed") in fields(item[2])["limit"])
         for entry in self.entries:
             script = self.campaign()
             self.complete(script, "VAD_proclaim_joint_charter")
             self.complete(script, entry)
-            expected = script.scopes["VAD"].leader
-            script.run(transfers, "WRK")
-            self.assertIn(expected, script.scopes["WRK"].character_roles)
-            self.assertIn("WRK_Nikita_Worcker", script.scopes["WRK"].character_roles)
-            script.run(completion[final:final + 3], "WRK")
-            self.assertEqual(script.scopes["WRK"].leader, expected)
+            country = script.scopes["VAD"]
+            expected = country.leader, country.leader_ideology
+            script.run(rebinding, "VAD")
+            self.assertEqual(script.event_targets["ADISCORD_vorkerland_nation"], "VAD")
+            self.assertEqual((country.leader, country.leader_ideology), expected)
+            # The settlement seats the chosen government from the course
+            # flags; it does not depend on who the leader cache reports.
+            country.leader = ""
+            country.leader_ideology = ""
+            script.run(completion[final:final + 3], "VAD")
+            self.assertEqual((country.leader, country.leader_ideology), expected)
+            self.assertIn("WRK_Nikita_Worcker", country.character_roles)
+            self.assertFalse(script.scopes["WRK"].character_roles)
 
 
 class VADCollegialMandateTests(unittest.TestCase):
@@ -1579,6 +1593,18 @@ class VADCollegialMandateTests(unittest.TestCase):
             script.scopes["WKR"].character_roles["WRK_Nikita_Worcker"] = {"neo_vorkerism"}
             script.scopes["WKR"].leader = "WRK_Nikita_Worcker"
         return script
+
+    def mandate_handoff(self):
+        """The unification steps that carry the staff mandate, in script order.
+
+        VAD unifies the country on its own tag: it first becomes the country
+        target, and the mandate handoff then runs in that same scope.
+        """
+        steps = ("clear_global_event_target", "save_global_event_target_as",
+                 "VAD_transfer_collegial_mandate")
+        actions = [item for item in EFFECTS[V + "unify_under_vad"] if item[0] in steps]
+        self.assertEqual([key for key, _, _ in actions], list(steps))
+        return actions
 
     def test_unrescued_worker_allows_an_actual_petrichev_staff_mandate(self):
         for outcome in ("dead", "escaped"):
@@ -1650,24 +1676,24 @@ class VADCollegialMandateTests(unittest.TestCase):
                    "VAD_staff_supply": 0, "VAD_staff_authority": -.05,
                    "VAD_staff_stability": 0, "VAD_staff_command": 0}
         country.variables.update(mandate)
-        handoff = EFFECTS[V + "form_wrk_from_vad"]
-        actions = [item for item in handoff if item[0] == "VAD_transfer_collegial_mandate"
-                   or item[0] == "if" and any(key == "set_nationality" for key, _, _ in walk(item[2]))]
-        script.run(actions, "WRK")
-        target = script.scopes["WRK"]
-        self.assertEqual({key: target.variables.get(key) for key in mandate}, mandate)
-        self.assertIn("pragmatism_ideology", target.character_roles["WRK_Vlad_Petrichev"])
-        completion = EFFECTS[V + "complete_wrk_from_vad"]
+        script.run(self.mandate_handoff(), "VAD")
+        self.assertEqual(script.event_targets["ADISCORD_vorkerland_nation"], "VAD")
+        self.assertEqual({key: country.variables.get(key) for key in mandate}, mandate)
+        self.assertIn("pragmatism_ideology", country.character_roles["WRK_Vlad_Petrichev"])
+        self.assertFalse(mandate.keys() & script.scopes["WRK"].variables.keys())
+        self.assertFalse(script.scopes["WRK"].character_roles)
+        completion = EFFECTS[V + "settle_unification_under_vad"]
         start = next(i for i, item in enumerate(completion) if item[0] == "if"
                      and ("has_global_flag", "=", V + "joint_government_formed") in fields(item[2])["limit"])
-        script.run(completion[start:start + 3], "WRK")
-        self.assertEqual((target.leader, target.leader_ideology), ("WRK_Vlad_Petrichev", "pragmatism_ideology"))
-        self.assertEqual(target.cosmetic, "VAD_vorkerland_collegial_staff")
-        target.flags.add(V + "route_joint")
-        target.focuses.add("WRK_joint_restore_unity_tower")
+        script.run(completion[start:start + 3], "VAD")
+        self.assertEqual((country.leader, country.leader_ideology), ("WRK_Vlad_Petrichev", "pragmatism_ideology"))
+        self.assertEqual(country.cosmetic, "VAD_vorkerland_collegial_staff")
+        self.assertEqual({key: country.variables.get(key) for key in mandate}, mandate)
+        country.flags.add(V + "route_joint")
+        country.focuses.add("WRK_joint_restore_unity_tower")
         script.globals.update({V + "collapse_finished", V + "reunification_verified"})
-        self.assertFalse(script.conditions(TRIGGERS[V + "petrichev_empire_can_form"], "WRK"))
-        self.assertFalse(script.conditions(TRIGGERS[V + "world_empire_can_form"], "WRK"))
+        self.assertFalse(script.conditions(TRIGGERS[V + "petrichev_empire_can_form"], "VAD"))
+        self.assertFalse(script.conditions(TRIGGERS[V + "world_empire_can_form"], "VAD"))
 
     def test_both_staff_policies_rejoin_readiness_with_exact_aggregate_previews(self):
         options = {
@@ -1702,25 +1728,33 @@ class VADCollegialMandateTests(unittest.TestCase):
             self.base.complete(script, "VAD_convene_collegial_staff")
             self.base.complete(script, policy)
             self.base.complete(script, "VAD_codify_staff_mandate")
-            mandate = {key: value for key, value in script.scopes["VAD"].variables.items()
+            country = script.scopes["VAD"]
+            mandate = {key: value for key, value in country.variables.items()
                        if key.startswith("VAD_staff_")}
-            handoff = EFFECTS[V + "form_wrk_from_vad"]
-            actions = [item for item in handoff if item[0] == "VAD_transfer_collegial_mandate"
-                       or item[0] == "if" and any(key == "set_nationality" for key, _, _ in walk(item[2]))]
-            script.run(actions, "WRK")
+            self.assertTrue(mandate)
+            self.assertIn("VAD_collegial_staff_dynamic", country.flags)
+            script.run(self.mandate_handoff(), "VAD")
+            # The wartime administration closes on the winner itself and
+            # takes the aggregate with it; the mandate values stay.
             script.effect("VAD_close_administration", "VAD")
-            target = script.scopes["WRK"]
-            target.flags.add(V + "route_joint")
-            # Ordinary IDs absent from the destination tree are not copied by load_focus_tree.
-            target.focuses.clear()
-            completion = EFFECTS[V + "complete_wrk_from_vad"]
+            self.assertNotIn("VAD_collegial_staff_dynamic", country.flags)
+            self.assertEqual({key: country.variables.get(key) for key in mandate}, mandate)
+            country.flags.add(V + "route_joint")
+            # Ordinary IDs absent from the destination tree are not kept by load_focus_tree.
+            country.focuses.clear()
+            completion = EFFECTS[V + "settle_unification_under_vad"]
             start = next(i for i, item in enumerate(completion) if item[0] == "if"
                          and ("has_global_flag", "=", V + "joint_government_formed") in fields(item[2])["limit"])
-            script.run(completion[start:start + 3], "WRK")
-            self.assertEqual({key: target.variables.get(key) for key in mandate}, mandate)
-            self.assertIn("VAD_collegial_staff_dynamic", target.flags)
-            self.assertNotIn("VAD_collegial_staff_dynamic", script.scopes["VAD"].flags)
-            self.assertEqual(target.leader_ideology, "pragmatism_ideology")
+            settled = len(script.calls)
+            script.run(completion[start:start + 3], "VAD")
+            self.assertEqual({key: country.variables.get(key) for key in mandate}, mandate)
+            restored = [current for key, current, value in script.calls[settled:]
+                        if key == "add_dynamic_modifier"
+                        and fields(value)["modifier"] == "VAD_collegial_staff_dynamic"]
+            self.assertEqual(restored, ["VAD"])
+            self.assertIn("VAD_collegial_staff_dynamic", country.flags)
+            self.assertEqual(country.leader_ideology, "pragmatism_ideology")
+            self.assertFalse(mandate.keys() & script.scopes["WRK"].variables.keys())
 
     def test_ai_takeover_reaches_readiness_without_reversing_either_staff_policy(self):
         for policy in ("VAD_require_collective_directives", "VAD_delegate_to_front_commands"):
@@ -2045,25 +2079,43 @@ class WKRPoliticalMandateTests(unittest.TestCase):
             self.assertEqual((country.leader, country.power_balances), before)
 
     def test_handoff_preserves_actual_course_after_leader_cache_is_cleared(self):
-        handoff = EFFECTS[V + "form_wrk_from_wkr"]
+        handoff = EFFECTS[V + "unify_under_wkr"]
+        rebinding = handoff[:2]
+        self.assertEqual([key for key, _, _ in rebinding],
+                         ["clear_global_event_target", "save_global_event_target_as"])
         choice = next(item for item in handoff if item[0] == "if"
                       and any(key == "WKR_executive_course" for key, _, _ in walk(item[2])))
         index = handoff.index(choice)
-        completion = EFFECTS[V + "complete_wrk_from_wkr"]
+        completion = EFFECTS[V + "settle_unification_under_wkr"]
+        # WKR unifies the country on its own tag, so no character leaves it.
+        for block in (handoff, completion):
+            self.assertFalse(any(key == "set_nationality" for key, _, _ in walk(block)))
         final = next(i for i, item in enumerate(completion) if item[0] == "if"
                      and any(key == "has_country_flag" and value == V + "worker_utilitarian_outcome"
                              for key, _, value in walk(item[2])))
+        receipt = V + "worker_utilitarian_outcome"
         for fate, suffix in product(("safe_with_loyalists", "rescued_by_vlad", "killed", "missing"), ("a", "b")):
             with self.subTest(fate=fate, suffix=suffix):
                 script = self.campaign(fate)
                 self.select(script, suffix)
-                expected = script.scopes["WKR"].leader
-                script.run(handoff[index:index + 2], "WRK")
-                self.assertEqual(script.scopes["WKR"].leader, "")
-                self.assertIn(expected, script.scopes["WRK"].character_roles)
-                script.run(completion[final:final + 3], "WRK")
-                self.assertEqual(script.scopes["WRK"].leader, expected)
-                self.assertEqual(script.scopes["WRK"].government, "utilitarism" if suffix == "b" else "pragmatism")
+                country = script.scopes["WKR"]
+                expected = country.leader
+                roster = set(country.character_roles)
+                # The receipt is written both ways: a stale one must not survive.
+                if suffix == "a":
+                    country.flags.add(receipt)
+                script.run(rebinding + handoff[index:index + 2], "WKR")
+                self.assertEqual(script.event_targets["ADISCORD_vorkerland_nation"], "WKR")
+                self.assertEqual(country.leader, expected)
+                self.assertEqual(set(country.character_roles), roster)
+                self.assertNotIn(expected, script.scopes["WRK"].character_roles)
+                self.assertEqual(receipt in country.flags, suffix == "b")
+                # The settlement follows the receipt, not the leader cache.
+                country.leader = ""
+                country.leader_ideology = ""
+                script.run(completion[final:final + 3], "WKR")
+                self.assertEqual(country.leader, expected)
+                self.assertEqual(country.government, "utilitarism" if suffix == "b" else "pragmatism")
 
     def test_leadership_change_preserves_paid_factory_order(self):
         factory = WKRCouncilFormationTests()
@@ -3425,7 +3477,7 @@ class WartimeProgrammeAccounting(unittest.TestCase):
                 script.run(order["cancel_effect"])
                 self.assertEqual((script.scopes, script.calls), delivered)
         for route in ("wkr", "vad", "tva"):
-            body = EFFECTS[V + "form_wrk_from_" + route]
+            body = EFFECTS[V + "unify_under_" + route]
             keys = [key for key, _, _ in walk(body)]
             self.assertLess(keys.index("transfer_state"), keys.index(V + "wkr_settle_programme_handoff"))
 
@@ -3640,7 +3692,7 @@ class PreparationAccounting(unittest.TestCase):
 
     def test_pending_reserves_are_recovered_before_successor_annexation(self):
         for suffix in ("wkr", "vad", "tva"):
-            effect = EFFECTS[V + "complete_wrk_from_" + suffix]
+            effect = EFFECTS[V + "settle_unification_under_" + suffix]
             keys = [key for key, _, _ in walk(effect)]
             self.assertLess(keys.index(P + "return_reserves_to_successor"), keys.index("annex_country"))
         script = Script()
@@ -7585,3 +7637,115 @@ class VADJointProgrammeTests(unittest.TestCase):
             script.effect(V + "form_joint_government")
         news = [fields(value)["id"] for key, _, value in script.calls if key == "news_event"]
         self.assertEqual(news, [V + "story.44"])
+
+
+class UnifierOwnReceiptTests(unittest.TestCase):
+    """The winner unifies the country on its own tag and settles its own paid work.
+
+    Each handoff then runs in the scope of the country that holds the receipt,
+    followed by the closing of that country's wartime administration.
+    """
+
+    def settle(self, script, winner, handoffs):
+        unification = EFFECTS[V + "unify_under_" + winner.lower()]
+        called = [key for key, _, _ in unification]
+        closing = (winner, "=", [(winner + "_close_administration", "=", "yes")])
+        self.assertIn(closing, unification)
+        for handoff in handoffs:
+            self.assertEqual(called.count(handoff), 1)
+            self.assertLess(called.index(handoff), unification.index(closing))
+        script.run(unification[:2], winner)
+        self.assertEqual(script.event_targets["ADISCORD_vorkerland_nation"], winner)
+        # A repeated callback finds the receipt already released.
+        for _ in range(2):
+            for handoff in handoffs:
+                script.effect(handoff, winner)
+            script.effect(winner + "_close_administration", winner)
+
+    def campaign(self, fixture):
+        script = fixture.campaign()
+        self.retired_stock = dict(script.scopes["WRK"].resources)
+        return script
+
+    def assert_retired_tag_untouched(self, script):
+        self.assertEqual(dict(script.scopes["WRK"].resources), self.retired_stock)
+
+    def test_vad_settles_its_own_district_oath_exactly_once(self):
+        fixture = VADDistrictAdministrationTests()
+        fixture.setUpClass()
+        for name in ("charter", "commandant"):
+            with self.subTest(order=name):
+                script = self.campaign(fixture)
+                before = dict(script.scopes["VAD"].resources)
+                self.assertTrue(fixture.start(script, name))
+                self.assertNotEqual(dict(script.scopes["VAD"].resources), before)
+                self.settle(script, "VAD", ("VAD_settle_oath_handoff",))
+                fixture.assert_released(script)
+                self.assertEqual(dict(script.scopes["VAD"].resources), before)
+                self.assertNotIn("VAD_bop", script.scopes["VAD"].power_balances)
+                self.assert_retired_tag_untouched(script)
+
+    def test_wkr_settles_its_own_council_and_railway_orders_exactly_once(self):
+        handoffs = ("WKR_settle_council_order_handoff", "WKR_settle_railway_handoff")
+        councils = WKRCouncilFormationTests()
+        councils.setUpClass()
+        for count in councils.orders:
+            with self.subTest(council_order=count):
+                script = self.campaign(councils)
+                before = dict(script.scopes["WKR"].resources)
+                self.assertTrue(councils.start(script, count))
+                self.assertNotEqual(dict(script.scopes["WKR"].resources), before)
+                self.settle(script, "WKR", handoffs)
+                councils.assert_receipt_closed(script)
+                self.assertEqual(dict(script.scopes["WKR"].resources), before)
+                self.assert_retired_tag_untouched(script)
+        railway = WKRRailwayCouncilTests()
+        railway.setUpClass()
+        script = self.campaign(railway)
+        before = dict(script.scopes["WKR"].resources)
+        self.assertTrue(railway.start(script))
+        self.assertNotEqual(dict(script.scopes["WKR"].resources), before)
+        script.globals.add(V + "phase_reunification")
+        self.settle(script, "WKR", handoffs)
+        railway.assert_closed(script)
+        self.assertEqual(dict(script.scopes["WKR"].resources), before)
+        self.assert_retired_tag_untouched(script)
+
+    def test_wkr_settles_its_own_wartime_programme_exactly_once(self):
+        programmes = WartimeProgrammeAccounting()
+        programmes.setUpClass()
+        for name in programmes.orders:
+            with self.subTest(programme=name):
+                script = self.campaign(programmes)
+                before = dict(script.scopes["WKR"].resources)
+                self.assertTrue(programmes.start(script, name))
+                self.assertNotEqual(dict(script.scopes["WKR"].resources), before)
+                self.settle(script, "WKR", (V + "wkr_settle_programme_handoff",))
+                self.assertEqual(dict(script.scopes["WKR"].resources), before)
+                self.assertNotIn("WKR_programme_deposit", script.scopes["WKR"].variables)
+                self.assert_retired_tag_untouched(script)
+
+    def test_tva_settles_its_own_programme_and_trial_exactly_once(self):
+        handoffs = (V + "tva_settle_trial_handoff", "TVA_settle_administration_handoff")
+        programmes = TVAAdministrationTests()
+        programmes.setUpClass()
+        for name in programmes.orders:
+            with self.subTest(programme=name):
+                script = self.campaign(programmes)
+                before = dict(script.scopes["TVA"].resources)
+                self.assertTrue(programmes.start(script, name))
+                self.assertNotEqual(dict(script.scopes["TVA"].resources), before)
+                self.settle(script, "TVA", handoffs)
+                self.assertEqual(dict(script.scopes["TVA"].resources), before)
+                self.assertNotIn("TVA_programme_pp", script.scopes["TVA"].variables)
+                self.assert_retired_tag_untouched(script)
+        trial = FieldTrialAccountingTests()
+        trial.setUpClass()
+        script = self.campaign(trial)
+        before = dict(script.scopes["TVA"].resources)
+        self.assertTrue(trial.start(script))
+        self.assertNotEqual(dict(script.scopes["TVA"].resources), before)
+        self.settle(script, "TVA", handoffs)
+        self.assertEqual(dict(script.scopes["TVA"].resources), before)
+        self.assertNotIn(V + "tva_trial_paid", script.scopes["TVA"].flags)
+        self.assert_retired_tag_untouched(script)

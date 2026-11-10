@@ -42,6 +42,7 @@ NAM_free_zones = {
 	icon = generic_industry
 	allowed = { tag = NAM }
 	visible = { NAM_corp_open = yes }
+	scripted_gui = ADISCORD_NAM_board_panel
 	visible_when_empty = yes
 	priority = 25
 }
@@ -59,7 +60,12 @@ NAM_consolidation = {
 NAM_southern_lands = {
 	icon = generic_political_discourse
 	allowed = { tag = NAM }
-	visible = { has_country_flag = NAM_southern_lands_open }
+	visible = {
+		OR = {
+			has_country_flag = NAM_southern_lands_open
+			NAM_hum_southern_mandate_open = yes
+		}
+	}
 	priority = 22
 }
 

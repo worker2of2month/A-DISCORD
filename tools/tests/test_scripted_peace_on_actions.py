@@ -31,6 +31,7 @@ ORDER = {
         'shahrabad',
         'south_final',
         'west_final',
+        'east_final',
         'vorkerland_diplomacy',
         'kefreyt_northern_reservations',
         'bezhaysk',
@@ -43,6 +44,7 @@ ORDER = {
         'shahrabad',
         'south_final',
         'west_final',
+        'east_final',
         'vorkerland_collapse',
         'rin',
         'itora_revolt',
@@ -52,8 +54,8 @@ ORDER = {
     ],
     'on_before_peace_conference_start': ['kefreyt'],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
-    'on_annex': ['vorkerland_collapse', 'nam', 'stelander', 'kefreyt', 'shahrabad', 'south_final', 'west_final'],
-    'on_puppet': ['vorkerland_collapse', 'nam', 'shahrabad', 'south_final', 'west_final'],
+    'on_annex': ['vorkerland_collapse', 'nam', 'stelander', 'kefreyt', 'shahrabad', 'south_final', 'west_final', 'east_final'],
+    'on_puppet': ['vorkerland_collapse', 'nam', 'shahrabad', 'south_final', 'west_final', 'east_final'],
     'on_state_control_changed': ['livonn', 'frontier'],
 }
 

@@ -30,71 +30,8 @@ defined_text = {
 		localization_key = superevent_stelander_empire_quote
 	}
 	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_houses_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_festival_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_staff_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_wallets_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_silence_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_regent_quote
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_staff_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_councils_quote
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_truth_quote
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
@@ -142,7 +79,7 @@ defined_text = {
 		trigger = {
 			has_global_flag = superevent_itora_vorkerland_war
 			has_global_flag = ADISCORD_vorkerland_worker_won
-			WRK = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
 		}
 		localization_key = superevent_itora_vorkerland_war_anton_quote
 	}
@@ -189,6 +126,186 @@ defined_text = {
 		localization_key = superevent_rus_khan_died_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_service }
+		localization_key = superevent_nam_resource_war_service_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_district }
+		localization_key = superevent_nam_resource_war_district_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_houses }
+		localization_key = superevent_stelander_party_victory_houses_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_staff }
+		localization_key = superevent_stelander_party_victory_staff_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_wallets }
+		localization_key = superevent_stelander_party_victory_wallets_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_silence }
+		localization_key = superevent_stelander_party_victory_silence_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_regent }
+		localization_key = superevent_stelander_party_victory_regent_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
+		localization_key = superevent_stelander_shabrat_victory_staff_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
+		localization_key = superevent_stelander_shabrat_victory_councils_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
+		localization_key = superevent_stelander_shabrat_victory_truth_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_festival }
+		localization_key = superevent_stelander_party_victory_festival_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_houses }
+		localization_key = superevent_south_houses_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_cities }
+		localization_key = superevent_south_cities_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nur }
+		localization_key = superevent_south_nur_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_regency }
+		localization_key = superevent_south_regency_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_commune }
+		localization_key = superevent_south_commune_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_conclave }
+		localization_key = superevent_south_conclave_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_service }
+		localization_key = superevent_south_service_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_charter }
+		localization_key = superevent_south_charter_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contracts }
+		localization_key = superevent_south_contracts_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_rump }
+		localization_key = superevent_south_rump_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_revenge }
+		localization_key = superevent_south_revenge_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_radical }
+		localization_key = superevent_south_radical_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_free_islands }
+		localization_key = superevent_south_free_islands_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_boards }
+		localization_key = superevent_south_boards_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_restitution }
+		localization_key = superevent_south_restitution_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_worker }
+		localization_key = superevent_west_worker_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_petrichev }
+		localization_key = superevent_west_petrichev_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_veyran }
+		localization_key = superevent_west_veyran_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_dorian }
+		localization_key = superevent_west_dorian_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_anton }
+		localization_key = superevent_west_anton_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_shield }
+		localization_key = superevent_west_shield_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_emergency }
+		localization_key = superevent_west_emergency_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_revanche }
+		localization_key = superevent_west_revanche_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_committee }
+		localization_key = superevent_west_committee_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_world_empire }
+		localization_key = superevent_vorkerland_world_empire_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_iron }
+		localization_key = superevent_south_iron_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_civil_service }
+		localization_key = superevent_south_civil_service_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_federation }
+		localization_key = superevent_south_federation_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_oil_union }
+		localization_key = superevent_south_oil_union_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contract_republic }
+		localization_key = superevent_south_contract_republic_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_directorate }
+		localization_key = superevent_south_directorate_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nam }
+		localization_key = superevent_south_nam_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_council }
+		localization_key = superevent_west_council_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_world_empire }
+		localization_key = superevent_west_world_empire_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -225,71 +342,8 @@ defined_text = {
 		localization_key = superevent_stelander_empire_title
 	}
 	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_houses_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_festival_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_staff_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_wallets_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_silence_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_regent_title
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_staff_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_councils_title
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_truth_title
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
@@ -361,6 +415,186 @@ defined_text = {
 		localization_key = superevent_rus_khan_died_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_service }
+		localization_key = superevent_nam_resource_war_service_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_district }
+		localization_key = superevent_nam_resource_war_district_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_houses }
+		localization_key = superevent_stelander_party_victory_houses_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_staff }
+		localization_key = superevent_stelander_party_victory_staff_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_wallets }
+		localization_key = superevent_stelander_party_victory_wallets_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_silence }
+		localization_key = superevent_stelander_party_victory_silence_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_regent }
+		localization_key = superevent_stelander_party_victory_regent_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
+		localization_key = superevent_stelander_shabrat_victory_staff_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
+		localization_key = superevent_stelander_shabrat_victory_councils_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
+		localization_key = superevent_stelander_shabrat_victory_truth_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_festival }
+		localization_key = superevent_stelander_party_victory_festival_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_houses }
+		localization_key = superevent_south_houses_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_cities }
+		localization_key = superevent_south_cities_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nur }
+		localization_key = superevent_south_nur_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_regency }
+		localization_key = superevent_south_regency_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_commune }
+		localization_key = superevent_south_commune_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_conclave }
+		localization_key = superevent_south_conclave_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_service }
+		localization_key = superevent_south_service_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_charter }
+		localization_key = superevent_south_charter_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contracts }
+		localization_key = superevent_south_contracts_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_rump }
+		localization_key = superevent_south_rump_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_revenge }
+		localization_key = superevent_south_revenge_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_radical }
+		localization_key = superevent_south_radical_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_free_islands }
+		localization_key = superevent_south_free_islands_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_boards }
+		localization_key = superevent_south_boards_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_restitution }
+		localization_key = superevent_south_restitution_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_worker }
+		localization_key = superevent_west_worker_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_petrichev }
+		localization_key = superevent_west_petrichev_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_veyran }
+		localization_key = superevent_west_veyran_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_dorian }
+		localization_key = superevent_west_dorian_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_anton }
+		localization_key = superevent_west_anton_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_shield }
+		localization_key = superevent_west_shield_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_emergency }
+		localization_key = superevent_west_emergency_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_revanche }
+		localization_key = superevent_west_revanche_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_committee }
+		localization_key = superevent_west_committee_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_world_empire }
+		localization_key = superevent_vorkerland_world_empire_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_iron }
+		localization_key = superevent_south_iron_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_civil_service }
+		localization_key = superevent_south_civil_service_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_federation }
+		localization_key = superevent_south_federation_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_oil_union }
+		localization_key = superevent_south_oil_union_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contract_republic }
+		localization_key = superevent_south_contract_republic_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_directorate }
+		localization_key = superevent_south_directorate_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nam }
+		localization_key = superevent_south_nam_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_council }
+		localization_key = superevent_west_council_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_world_empire }
+		localization_key = superevent_west_world_empire_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -397,71 +631,8 @@ defined_text = {
 		localization_key = superevent_stelander_empire_comment
 	}
 	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_houses_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_festival_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_staff_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_wallets_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_silence_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_party_victory
-			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
-		}
-		localization_key = superevent_stelander_party_victory_regent_comment
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_staff_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_councils_comment
-	}
-	text = {
-		trigger = {
-			has_global_flag = superevent_stelander_shabrat_victory
-			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
-		}
-		localization_key = superevent_stelander_shabrat_victory_truth_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
@@ -531,6 +702,186 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_rus_khan_died }
 		localization_key = superevent_rus_khan_died_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_service }
+		localization_key = superevent_nam_resource_war_service_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_resource_war_district }
+		localization_key = superevent_nam_resource_war_district_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_houses }
+		localization_key = superevent_stelander_party_victory_houses_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_staff }
+		localization_key = superevent_stelander_party_victory_staff_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_wallets }
+		localization_key = superevent_stelander_party_victory_wallets_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_silence }
+		localization_key = superevent_stelander_party_victory_silence_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_regent }
+		localization_key = superevent_stelander_party_victory_regent_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
+		localization_key = superevent_stelander_shabrat_victory_staff_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
+		localization_key = superevent_stelander_shabrat_victory_councils_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
+		localization_key = superevent_stelander_shabrat_victory_truth_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory_festival }
+		localization_key = superevent_stelander_party_victory_festival_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_houses }
+		localization_key = superevent_south_houses_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_cities }
+		localization_key = superevent_south_cities_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nur }
+		localization_key = superevent_south_nur_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_regency }
+		localization_key = superevent_south_regency_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_commune }
+		localization_key = superevent_south_commune_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_conclave }
+		localization_key = superevent_south_conclave_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_service }
+		localization_key = superevent_south_service_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_charter }
+		localization_key = superevent_south_charter_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contracts }
+		localization_key = superevent_south_contracts_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_rump }
+		localization_key = superevent_south_rump_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_revenge }
+		localization_key = superevent_south_revenge_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_radical }
+		localization_key = superevent_south_radical_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_free_islands }
+		localization_key = superevent_south_free_islands_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_boards }
+		localization_key = superevent_south_boards_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_restitution }
+		localization_key = superevent_south_restitution_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_worker }
+		localization_key = superevent_west_worker_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_petrichev }
+		localization_key = superevent_west_petrichev_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_veyran }
+		localization_key = superevent_west_veyran_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_dorian }
+		localization_key = superevent_west_dorian_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_anton }
+		localization_key = superevent_west_anton_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_shield }
+		localization_key = superevent_west_shield_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_emergency }
+		localization_key = superevent_west_emergency_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_revanche }
+		localization_key = superevent_west_revanche_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_committee }
+		localization_key = superevent_west_committee_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_world_empire }
+		localization_key = superevent_vorkerland_world_empire_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_iron }
+		localization_key = superevent_south_iron_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_civil_service }
+		localization_key = superevent_south_civil_service_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_federation }
+		localization_key = superevent_south_federation_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_oil_union }
+		localization_key = superevent_south_oil_union_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_contract_republic }
+		localization_key = superevent_south_contract_republic_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_directorate }
+		localization_key = superevent_south_directorate_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_nam }
+		localization_key = superevent_south_nam_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_council }
+		localization_key = superevent_west_council_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_west_world_empire }
+		localization_key = superevent_west_world_empire_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

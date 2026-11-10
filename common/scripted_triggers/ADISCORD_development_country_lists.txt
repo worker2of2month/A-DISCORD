@@ -6,7 +6,7 @@ ADISCORD_is_playable_development_country = {
 		original_tag = STP
 		original_tag = STS
 		original_tag = SRP
-		original_tag = WRK
+		tag = event_target:ADISCORD_vorkerland_nation
 		original_tag = WKR
 		original_tag = TVA
 		original_tag = SHL
@@ -20,7 +20,11 @@ ADISCORD_is_secondary_development_country = {
 		original_tag = PIV
 		original_tag = RUS
 		original_tag = NAM
-		original_tag = VAD
+		AND = {
+			original_tag = VAD
+			# Once VAD has unified Vorkerland it is in the playable list above.
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+		}
 		original_tag = ROM
 		original_tag = SOL
 		original_tag = TRU

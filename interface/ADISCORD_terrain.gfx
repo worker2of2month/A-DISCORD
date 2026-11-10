@@ -24,4 +24,21 @@ spriteTypes = {
 		name = "GFX_terrain_reactor_zone_winter"
 		textureFile = "gfx/interface/terrains/reactor_zone.dds"
 	}
+	# Southern cities show the same panorama in every season.
+	spriteType = {
+		name = "GFX_terrain_desert_city"
+		textureFile = "gfx/interface/terrains/desert_city.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_desert_city_winter"
+		textureFile = "gfx/interface/terrains/desert_city.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_hill_city"
+		textureFile = "gfx/interface/terrains/hill_city.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_hill_city_winter"
+		textureFile = "gfx/interface/terrains/hill_city.dds"
+	}
 }

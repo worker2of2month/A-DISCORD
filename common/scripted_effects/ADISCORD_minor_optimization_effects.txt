@@ -184,7 +184,7 @@ ADISCORD_economy_refresh_terminal_assistance_country = {
 }
 
 ADISCORD_economy_refresh_vorkerland_terminal_assistance = {
-	WRK = { ADISCORD_economy_refresh_terminal_assistance_country = yes }
+	event_target:ADISCORD_vorkerland_nation = { ADISCORD_economy_refresh_terminal_assistance_country = yes }
 	WKR = { ADISCORD_economy_refresh_terminal_assistance_country = yes }
 	VAD = { ADISCORD_economy_refresh_terminal_assistance_country = yes }
 	TVA = { ADISCORD_economy_refresh_terminal_assistance_country = yes }

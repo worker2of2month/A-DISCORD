@@ -14,6 +14,12 @@ from tools.lib.paths import source_section
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# Global event target naming the country that currently is Vorkerland: WRK
+# until a claimant unifies the country, that claimant afterwards.
+NATION_TARGET = "event_target:ADISCORD_vorkerland_nation"
+# Any of the three claimants can unify Vorkerland and continue under its tag.
+CLAIMANT_TAGS = frozenset({"WKR", "VAD", "TVA"})
+
 # The former monolith path is an explicit tooling view over these native trees.
 FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 LIFECYCLE_TREES = {
@@ -35,11 +41,11 @@ LIFECYCLE_TREES = {
     ),
     "ADISCORD_vorkerland_settlement_focus": (
         Path("common/national_focus/ADISCORD_Vorkerland_settlement.txt"),
-        frozenset({"WRK"}),
+        CLAIMANT_TAGS,
     ),
     "ADISCORD_vorkerland_joint_postwar_focus": (
         Path("common/national_focus/ADISCORD_Vorkerland_joint_postwar.txt"),
-        frozenset({"WRK"}),
+        CLAIMANT_TAGS,
     ),
 }
 WRK_PREWAR_ROOT = "WRK_measure_confederation_fault_lines"
@@ -1643,8 +1649,9 @@ NEW_WARTIME_FOCUSES = {
 
 PREWAR_CARRYOVER_EFFECT = "ADISCORD_vorkerland_inherit_wrk_prewar_preparations"
 PREWAR_CARRYOVER_FLAG = "ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1"
-DORMANT_WRK_SCRUB_EFFECT = "ADISCORD_vorkerland_scrub_dormant_wrk_crisis"
-WORKER_REFORM_INHERIT_EFFECT = "ADISCORD_vorkerland_inherit_worker_reform_spirits"
+PRECOLLAPSE_CRISIS_SCRUB_EFFECT = "ADISCORD_vorkerland_scrub_precollapse_crisis"
+# The stage a worker reform chain has reached. WKR earns it during the war and
+# keeps it when it unifies the country.
 WORKER_REFORM_STAGE_IDEAS = (
     "WRK_birthplace_of_the_first_revolution_renewed_mandate",
     "WRK_birthplace_of_the_first_revolution_front_republic",
@@ -1653,21 +1660,31 @@ WORKER_REFORM_STAGE_IDEAS = (
     "ADISCORD_vorkerland_erased_nations_relief_1",
     "ADISCORD_vorkerland_erased_nations",
 )
-DORMANT_WRK_CRISIS_IDEAS = (
+# Spirits of the pre-collapse crisis; they end with the war on every route.
+PRECOLLAPSE_CRISIS_IDEAS = (
     "WRK_ashes_of_the_crown",
     "WRK_hourglass_of_discord",
     "WRK_constitution_of_the_republic",
+)
+PRECOLLAPSE_SCRUBBED_IDEAS = (
+    *PRECOLLAPSE_CRISIS_IDEAS,
     *WORKER_REFORM_STAGE_IDEAS,
 )
-WRK_FORMATION_EFFECTS = {
-    "WKR": "ADISCORD_vorkerland_form_wrk_from_wkr",
-    "VAD": "ADISCORD_vorkerland_form_wrk_from_vad",
-    "TVA": "ADISCORD_vorkerland_form_wrk_from_tva",
+UNIFICATION_EFFECTS = {
+    "WKR": "ADISCORD_vorkerland_unify_under_wkr",
+    "VAD": "ADISCORD_vorkerland_unify_under_vad",
+    "TVA": "ADISCORD_vorkerland_unify_under_tva",
 }
-WRK_COMPLETION_EFFECTS = {
-    tag: f"ADISCORD_vorkerland_complete_wrk_from_{tag.lower()}"
-    for tag in WRK_FORMATION_EFFECTS
+UNIFICATION_SETTLEMENT_EFFECTS = {
+    tag: f"ADISCORD_vorkerland_settle_unification_under_{tag.lower()}"
+    for tag in UNIFICATION_EFFECTS
 }
+# Effects that carry a winner's state into another country object. The winner
+# keeps its own country, so the lifecycle neither defines nor calls them.
+RETIRED_HANDOFF_EFFECTS = (
+    "ADISCORD_vorkerland_inherit_worker_reform_spirits",
+    "ADISCORD_vorkerland_transfer_military_staff_to_wrk",
+)
 
 POSTWAR_SETTLEMENT_IDEAS = {
     "WRK_worker_write_constitutional_guarantees": (
@@ -3711,6 +3728,57 @@ def _check_focus_reference_order(source: str, blocks: dict[str, str]) -> list[st
     return issues
 
 
+def unification_spirit_issues(settlements: dict[str, str], effects: str) -> list[str]:
+    """Check which spirits each winner's settlement ends and which it keeps.
+
+    The winner keeps its own country. WKR carries the worker reform stage it
+    reached during the war and ends only the pre-collapse crisis spirits; VAD
+    and TVA run the whole scrub, which also clears any worker reform stage.
+    `settlements` maps a winner tag to its settlement effect, `effects` is
+    the scripted-effect file that owns the lifecycle.
+    """
+    issues: list[str] = []
+    script = "\n".join(line.split("#", 1)[0] for line in effects.splitlines())
+    for retired in RETIRED_HANDOFF_EFFECTS:
+        if re.search(rf"(?<![\w.]){re.escape(retired)}(?!\w)", script):
+            issues.append(
+                f"retired handoff effect {retired} must not be defined or called"
+            )
+    scrub_call = f"{PRECOLLAPSE_CRISIS_SCRUB_EFFECT} = yes"
+    for winner_tag, settlement in settlements.items():
+        if not settlement:
+            continue
+        name = UNIFICATION_SETTLEMENT_EFFECTS[winner_tag]
+        if re.search(
+            rf"\bannex_country\s*=\s*\{{\s*target\s*=\s*{winner_tag}\b", settlement
+        ):
+            issues.append(f"{name} must not annex its winner {winner_tag}")
+        removed = Counter(
+            re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", settlement)
+        )
+        granted = set(re.findall(r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", settlement))
+        if winner_tag != "WKR":
+            if settlement.count(scrub_call) != 1:
+                issues.append(
+                    f"{name} must invoke {PRECOLLAPSE_CRISIS_SCRUB_EFFECT} exactly once"
+                )
+            continue
+        if scrub_call in settlement:
+            issues.append(
+                f"{name} must keep the worker reform stage instead of running "
+                f"{PRECOLLAPSE_CRISIS_SCRUB_EFFECT}"
+            )
+        for idea_id in PRECOLLAPSE_CRISIS_IDEAS:
+            if removed[idea_id] != 1:
+                issues.append(f"{name} must end {idea_id} exactly once")
+        for idea_id in WORKER_REFORM_STAGE_IDEAS:
+            if removed[idea_id] or idea_id in granted:
+                issues.append(
+                    f"{name} must leave the worker reform stage {idea_id} untouched"
+                )
+    return issues
+
+
 def collect_issues() -> list[str]:
     issues: list[str] = []
     for shadow_path in (
@@ -3834,8 +3902,15 @@ def collect_issues() -> list[str]:
             )
         if not re.search(r"\bfactor\s*=\s*0\b", country):
             issues.append(f"{tree_id} selector must start from factor 0")
-        if not re.search(r"\badd\s*=\s*100\b", country):
-            issues.append(f"{tree_id} selector must add weight 100 for its tags")
+        # A unified claimant still matches its wartime tree by tag, so the
+        # postwar selectors outrank it.
+        postwar = tree_id in (
+            "ADISCORD_vorkerland_settlement_focus",
+            "ADISCORD_vorkerland_joint_postwar_focus",
+        )
+        weight = 200 if postwar else 100
+        if not re.search(rf"\badd\s*=\s*{weight}\b", country):
+            issues.append(f"{tree_id} selector must add weight {weight} for its tags")
         collapse_gate = "has_global_flag = ADISCORD_vorkerland_collapse_started"
         if tree_id == "ADISCORD_vorkerland_prewar_focus" and f"NOT = {{ {collapse_gate} }}" not in country:
             issues.append("the prewar tree selector must end at the collapse")
@@ -3846,8 +3921,20 @@ def collect_issues() -> list[str]:
         joint_route = "has_country_flag = ADISCORD_vorkerland_route_joint"
         if tree_id == "ADISCORD_vorkerland_joint_postwar_focus" and joint_route not in country:
             issues.append("the restoration postwar tree must select the VAD successor")
-        if tree_id == "ADISCORD_vorkerland_settlement_focus" and f"NOT = {{ {joint_route} }}" not in country:
-            issues.append("the worker/technical settlement tree must exclude the VAD successor")
+        # Only the claimant that unified the country carries a route flag, so a
+        # wartime claimant matches neither postwar tree.
+        routes = set(
+            re.findall(r"has_country_flag = (ADISCORD_vorkerland_route_\w+)", country)
+        )
+        if postwar and routes != (
+            {"ADISCORD_vorkerland_route_joint"}
+            if tree_id == "ADISCORD_vorkerland_joint_postwar_focus"
+            else {
+                "ADISCORD_vorkerland_route_worker",
+                "ADISCORD_vorkerland_route_utilitarian",
+            }
+        ):
+            issues.append(f"{tree_id} selector must name exactly its unification routes")
         # Completed preparation is copied through its owner before loading WKR.
         if tree_id == "ADISCORD_vorkerland_wkr_focus" and re.search(
             r"(?m)^\tshared_focus\s*=\s*WRK_", tree
@@ -3901,11 +3988,10 @@ def collect_issues() -> list[str]:
 
     lifecycle_effect_names = (
         PREWAR_CARRYOVER_EFFECT,
-        DORMANT_WRK_SCRUB_EFFECT,
-        WORKER_REFORM_INHERIT_EFFECT,
+        PRECOLLAPSE_CRISIS_SCRUB_EFFECT,
         "ADISCORD_vorkerland_verify_collapse_materialized",
-        *WRK_FORMATION_EFFECTS.values(),
-        *WRK_COMPLETION_EFFECTS.values(),
+        *UNIFICATION_EFFECTS.values(),
+        *UNIFICATION_SETTLEMENT_EFFECTS.values(),
     )
     lifecycle_effects: dict[str, str] = {}
     try:
@@ -3957,66 +4043,26 @@ def collect_issues() -> list[str]:
                 "verified WKR tree installation must invoke the idempotent prewar carryover"
             )
 
-    dormant_scrub = lifecycle_effects.get(DORMANT_WRK_SCRUB_EFFECT, "")
-    if dormant_scrub:
+    crisis_scrub = lifecycle_effects.get(PRECOLLAPSE_CRISIS_SCRUB_EFFECT, "")
+    if crisis_scrub:
         scrubbed_ideas = Counter(
-            re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", dormant_scrub)
+            re.findall(r"\bremove_ideas\s*=\s*([A-Za-z0-9_]+)", crisis_scrub)
         )
-        for idea_id in DORMANT_WRK_CRISIS_IDEAS:
+        for idea_id in PRECOLLAPSE_SCRUBBED_IDEAS:
             if scrubbed_ideas[idea_id] != 1:
                 issues.append(
-                    f"dormant WRK crisis scrub must remove {idea_id} exactly once"
+                    f"pre-collapse crisis scrub must remove {idea_id} exactly once"
                 )
 
-    worker_inheritance = lifecycle_effects.get(WORKER_REFORM_INHERIT_EFFECT, "")
-    if worker_inheritance:
-        if worker_inheritance.count(f"{DORMANT_WRK_SCRUB_EFFECT} = yes") != 1:
-            issues.append(
-                "worker reform inheritance must begin from the common dormant-WRK scrub"
-            )
-        if (
-            len(_blocks(worker_inheritance, "if")) != 2
-            or len(_blocks(worker_inheritance, "else_if")) != 4
-        ):
-            issues.append(
-                "worker reform inheritance must keep two exact three-stage fallback chains"
-            )
-        inherited_ideas = re.findall(
-            r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", worker_inheritance
+    issues.extend(
+        unification_spirit_issues(
+            {
+                tag: lifecycle_effects.get(name, "")
+                for tag, name in UNIFICATION_SETTLEMENT_EFFECTS.items()
+            },
+            read(PHASE_EFFECTS_FILE),
         )
-        if Counter(inherited_ideas) != Counter(WORKER_REFORM_STAGE_IDEAS):
-            issues.append(
-                "worker reform inheritance must add only the six exact reform stages"
-            )
-        for idea_id in WORKER_REFORM_STAGE_IDEAS:
-            if worker_inheritance.count(f"WKR = {{ has_idea = {idea_id} }}") != 1:
-                issues.append(
-                    f"worker reform inheritance must read {idea_id} from WKR exactly once"
-                )
-
-    for winner_tag, formation_name in WRK_COMPLETION_EFFECTS.items():
-        formation = lifecycle_effects.get(formation_name, "")
-        if not formation:
-            continue
-        route_bridge = (
-            WORKER_REFORM_INHERIT_EFFECT
-            if winner_tag == "WKR"
-            else DORMANT_WRK_SCRUB_EFFECT
-        )
-        bridge_token = f"{route_bridge} = yes"
-        annex_token = (
-            f"annex_country = {{ target = {winner_tag} transfer_troops = yes }}"
-        )
-        if formation.count(bridge_token) != 1:
-            issues.append(f"{formation_name} must invoke {route_bridge} exactly once")
-        if formation.count(annex_token) != 1:
-            issues.append(
-                f"{formation_name} must annex its winner {winner_tag} exactly once"
-            )
-        elif formation.find(bridge_token) > formation.find(annex_token):
-            issues.append(
-                f"{formation_name} must preserve/scrub dormant WRK before annexing {winner_tag}"
-            )
+    )
 
     category_by_focus: dict[str, tuple[str, str | None]] = {}
     for focus_id in PREWAR_WRK_FOCUSES:
@@ -4188,8 +4234,12 @@ def collect_issues() -> list[str]:
                 issues.append(
                     f"{focus_id} allow_branch must hide outside postwar integration"
                 )
-            if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != {"WRK"}:
-                issues.append(f"{focus_id} must expose only the reunified WRK block")
+            # Any claimant tag may hold the postwar tree; the branch opens
+            # only for the one that is the nation target.
+            if re.findall(r"\btag\s*=\s*(\S+)", allow) != [NATION_TARGET]:
+                issues.append(
+                    f"{focus_id} must expose only the block of the unified nation target"
+                )
             if f"has_country_flag = {gate}" not in allow:
                 issues.append(f"{focus_id} is not isolated behind {gate}")
             cost_expected = {1, 2, 3, 4, 5, 6, 7}
@@ -5945,7 +5995,7 @@ def collect_issues() -> list[str]:
         issues.append(
             "TVA emergency administration must reward an already upgraded directorate"
         )
-    tva_formation = _blocks(phase_effects, "ADISCORD_vorkerland_complete_wrk_from_tva")
+    tva_formation = _blocks(phase_effects, "ADISCORD_vorkerland_settle_unification_under_tva")
     if (
         len(tva_formation) != 1
         or tva_formation[0].count(

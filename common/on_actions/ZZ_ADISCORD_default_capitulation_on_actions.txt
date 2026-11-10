@@ -264,7 +264,7 @@ on_actions = {
 						}
 						else_if = {
 							limit = {
-								tag = WRK
+								tag = event_target:ADISCORD_vorkerland_nation
 								exists = yes
 								is_subject = no
 								NOT = { has_capitulated = yes }

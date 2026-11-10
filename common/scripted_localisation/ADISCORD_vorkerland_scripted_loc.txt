@@ -451,7 +451,7 @@ defined_text = {
 defined_text = {
 	name = GetVorkerlandPreparationSummary
 	text = {
-		trigger = { tag = WRK }
+		trigger = { tag = event_target:ADISCORD_vorkerland_nation }
 		localization_key = ADISCORD_vorkerland_prep_federal_summary
 	}
 	text = { localization_key = ADISCORD_vorkerland_prep_district_summary }
@@ -496,7 +496,7 @@ defined_text = {
 	name = GetVorkerlandTreatyTiming
 	text = {
 		trigger = {
-			FROM = { tag = WRK }
+			FROM = { tag = event_target:ADISCORD_vorkerland_nation }
 		}
 		localization_key = ADISCORD_vorkerland_prep_treaty_deferred
 	}
@@ -952,15 +952,6 @@ defined_text = {
 		localization_key = ADISCORD_vorkerland_postwar.60.d_petrichev
 	}
 	text = { localization_key = ADISCORD_vorkerland_postwar.60.d_worcker }
-}
-
-defined_text = {
-	name = GetVorkerlandEmpireWesternVictoryDesc
-	text = {
-		trigger = { ADISCORD_vorkerland_petrichev_empire = yes }
-		localization_key = ADISCORD_vorkerland_postwar.61.d_empire_petrichev
-	}
-	text = { localization_key = ADISCORD_vorkerland_postwar.61.d_empire_worcker }
 }
 
 defined_text = {

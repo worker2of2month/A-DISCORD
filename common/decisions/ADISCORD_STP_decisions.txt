@@ -11516,7 +11516,7 @@ STP_postwar_administration = {
 	STP_pw_nationalise_region = {
 		icon = generic_nationalism
 		allowed = { OR = { tag = STP tag = STS } }
-		state_target = yes
+		state_target = any_owned_state
 		target_trigger = {
 			FROM = {
 				is_owned_by = ROOT
@@ -24791,7 +24791,7 @@ STP_pw_programme = {
 	STP_pw_civic_district_roads = {
 		icon = ADISCORD_construction
 		allowed = { tag = STS }
-		state_target = yes
+		state_target = any_owned_state
 		target_trigger = {
 			FROM = {
 				is_owned_by = ROOT
@@ -24890,7 +24890,7 @@ STP_pw_programme = {
 	STP_pw_civic_civil_enterprises = {
 		icon = ADISCORD_factory
 		allowed = { tag = STS }
-		state_target = yes
+		state_target = any_owned_state
 		target_trigger = {
 			FROM = {
 				is_owned_by = ROOT

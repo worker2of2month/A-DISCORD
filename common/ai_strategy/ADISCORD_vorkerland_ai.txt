@@ -5761,10 +5761,10 @@ ADISCORD_difficulty_vorkerland_field_supply = {
 		}
 	}
 	enable = {
-		ADISCORD_difficulty_ai_advanced = yes
-		ADISCORD_difficulty_ai_military_context = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_difficulty_ai_military_context = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -5787,8 +5787,9 @@ ADISCORD_difficulty_vorkerland_field_supply = {
 # from 20 military factories and 16 from 40, leaving the rest for rifles and
 # the generic minima. A rifle emergency or a healthy stock releases them.
 ADISCORD_vorkerland_wrk_squad_weapons_floor = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_finished
 		has_war = yes
 		num_of_military_factories > 19
@@ -5807,8 +5808,9 @@ ADISCORD_vorkerland_wrk_squad_weapons_floor = {
 }
 
 ADISCORD_vorkerland_wrk_squad_weapons_floor_large = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		has_global_flag = ADISCORD_vorkerland_collapse_finished
 		has_war = yes
 		num_of_military_factories > 39
@@ -5830,8 +5832,9 @@ ADISCORD_vorkerland_wrk_squad_weapons_floor_large = {
 # war never saves enough to leave its default civilian economy. Partial
 # mobilisation is kept here only while war economy is within reach.
 ADISCORD_vorkerland_wrk_wartime_economy_law = {
-	allowed = { tag = WRK }
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
 		is_ai = yes
 		has_capitulated = no
 		has_war = yes

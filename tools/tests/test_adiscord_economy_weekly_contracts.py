@@ -6847,7 +6847,7 @@ ADISCORD_bad_assistance_owner = {
             'phase_effects',
         )
         finalizer = unique_block(
-            phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk"
+            phase_effects, "ADISCORD_vorkerland_finalize_reunification"
         )
         self.assertLess(
             finalizer.find("set_global_flag = ADISCORD_vorkerland_collapse_finished"),

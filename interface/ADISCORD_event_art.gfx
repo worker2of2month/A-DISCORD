@@ -6,7 +6,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_parliament_chamber"
-		texturefile = "gfx/event_pictures/standard/news/parliament_chamber.png"
+		texturefile = "gfx/event_pictures/standard/news/parliament_chamber_print.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_negotiation_table"
@@ -42,7 +42,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_army_formation"
-		texturefile = "gfx/event_pictures/standard/news/military_formation.png"
+		texturefile = "gfx/event_pictures/standard/news/military_formation_print.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_treaty_signing"
@@ -70,11 +70,15 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_kefreyt_address"
-		texturefile = "gfx/event_pictures/standard/news/kefreyt_address.png"
+		texturefile = "gfx/event_pictures/standard/news/kefreyt_address_print.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_imperial_proclamation"
 		texturefile = "gfx/event_pictures/standard/news/imperial_proclamation.png"
+	}
+	spriteType = {
+		name = "GFX_news_event_vorkerland_world_empire"
+		texturefile = "gfx/event_pictures/standard/news/vorkerland_world_empire_news_print.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_stelander_empire"
@@ -97,7 +101,67 @@ spriteTypes = {
 		texturefile = "gfx/event_pictures/standard/country/school_classroom.png"
 	}
 	spriteType = {
+		name = "GFX_event_adiscord_burning_shabrat_posters"
+		texturefile = "gfx/event_pictures/standard/country/burning_shabrat_posters.png"
+	}
+	spriteType = {
 		name = "GFX_event_adiscord_factory_workshop"
 		texturefile = "gfx/event_pictures/standard/country/factory_workshop.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_valley_irrigation_survey"
+		texturefile = "gfx/event_pictures/standard/country/valley_irrigation_survey.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_signal_archive_basement"
+		texturefile = "gfx/event_pictures/standard/country/signal_archive_basement.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_village_fingerprint_signing"
+		texturefile = "gfx/event_pictures/standard/country/village_fingerprint_signing.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_registry_office_keys"
+		texturefile = "gfx/event_pictures/standard/country/registry_office_keys.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_pipeline_welding"
+		texturefile = "gfx/event_pictures/standard/country/pipeline_welding.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_port_machinery_unloading"
+		texturefile = "gfx/event_pictures/standard/country/port_machinery_unloading.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_road_barrier_bus"
+		texturefile = "gfx/event_pictures/standard/country/road_barrier_bus.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_freighter_docking"
+		texturefile = "gfx/event_pictures/standard/country/freighter_docking.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_ledger_handover"
+		texturefile = "gfx/event_pictures/standard/country/ledger_handover.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_mountain_militia_assembly"
+		texturefile = "gfx/event_pictures/standard/country/mountain_militia_assembly.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_field_switchboard"
+		texturefile = "gfx/event_pictures/standard/country/field_switchboard.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_pier_evacuation"
+		texturefile = "gfx/event_pictures/standard/country/pier_evacuation.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_rail_yard_waybills"
+		texturefile = "gfx/event_pictures/standard/country/rail_yard_waybills.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_railway_signal_box"
+		texturefile = "gfx/event_pictures/standard/country/railway_signal_box.png"
 	}
 }

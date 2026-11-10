@@ -1,4 +1,16 @@
 characters = {
+	SNG_governor_council = {
+		name = SNG_governor_council
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SNG_governor_council
+			}
+		}
+		country_leader = {
+			ideology = etatism_ideology
+		}
+	}
+
 	######   #######  ##     ## ##    ## ######## ########  ##    ##    ##       ########    ###    ########  ######## ########   ######
 	##    ## ##     ## ##     ## ###   ##    ##    ##     ##  ##  ##     ##       ##         ## ##   ##     ## ##       ##     ## ##    ##
 	##       ##     ## ##     ## ####  ##    ##    ##     ##   ####      ##       ##        ##   ##  ##     ## ##       ##     ## ##

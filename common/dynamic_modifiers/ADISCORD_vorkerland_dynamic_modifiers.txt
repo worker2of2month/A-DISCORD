@@ -373,7 +373,7 @@ TVA_administration_dynamic = {
 WRK_empire_officer_estate = {
 	icon = GFX_modifiers_generic_military_plans
 	enable = {
-		is_owned_and_controlled_by = WRK
+		is_owned_and_controlled_by = event_target:ADISCORD_vorkerland_nation
 		owner = { ADISCORD_vorkerland_petrichev_empire = yes }
 	}
 	local_manpower = 0.15

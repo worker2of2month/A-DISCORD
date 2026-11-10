@@ -198,10 +198,10 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
                 f"{tag} = {{ clr_country_flag = ADISCORD_vorkerland_central_unifier }}",
                 rejection,
             )
-            self.assertIn(f"ADISCORD_vorkerland_form_wrk_from_{tag.lower()} = yes", phase_six)
+            self.assertIn(f"ADISCORD_vorkerland_unify_under_{tag.lower()} = yes", phase_six)
         self.assertLess(
             immediate.index("ADISCORD_vorkerland_coalition_victory_ready"),
-            immediate.index("ADISCORD_vorkerland_form_wrk_from_"),
+            immediate.index("ADISCORD_vorkerland_unify_under_"),
         )
 
     def test_startup_does_not_requeue_old_showdown_controller_events(self) -> None:

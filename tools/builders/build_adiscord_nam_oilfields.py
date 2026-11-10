@@ -32,8 +32,11 @@ REPORT = Path("docs/development/model-verification/NAM_oilfield.json")
 PREVIEW = Path("docs/development/previews/NAM_oilfield")
 MARKER = "ADISCORD NAM oilfields"
 SCALE = .16
-MIN_OIL = 24
 TOWERS = ((-8, -2, 22), (7, -2, 20), (-1, 7, 24))
+# One initial production unit represents eight oil. Single-unit sites use ordinary map buildings.
+OIL_PER_UNIT = 8
+MIN_OIL = 2 * OIL_PER_UNIT
+OIL_PER_CLUSTER = len(TOWERS) * OIL_PER_UNIT
 FILES = [NAME + suffix for suffix in (".mesh", "_diffuse.dds", "_normal.dds", "_specular.dds")]
 INPUTS = (
     Path(__file__).relative_to(ROOT),
@@ -118,7 +121,7 @@ def placements():
                         continue
                     score = (col - cx) ** 2 + (row - cy) ** 2 + span * 100
                     candidates.append((score, province, x, z, round(float(patch.max()) - .1, 3)))
-        count = math.ceil(state["oil"] / 40)
+        count = math.ceil(state["oil"] / OIL_PER_CLUSTER)
         for _, province, x, z, height in sorted(candidates):
             if any((x - p["position"][0]) ** 2 + (z - p["position"][2]) ** 2 < 16 ** 2 for p in result):
                 continue
@@ -489,10 +492,22 @@ def apply(executable):
         run_blender(executable, ["--build-dir", str(stage)])
         assert hashes == input_hashes(), "Model inputs changed during export"
         report = json.loads((stage / "native.json").read_text(encoding="utf-8"))
+        source = ROOT / SOURCE
+        previous = json.loads((ROOT / REPORT).read_text(encoding="utf-8")) if (ROOT / REPORT).exists() else {}
+        # Blender rewrites file metadata on export. A map-only rebuild can keep a verified
+        # editable scene when its native mesh, textures and reimport measurements all match.
+        keep_source = (
+            source.is_file()
+            and digest(source) == previous.get("source_blend_sha256")
+            and all(previous.get(key) == value for key, value in report.items() if key != "source_blend_sha256")
+        )
         report["input_sha256"] = hashes
         report["placements"] = placements()
         contents = {ROOT / MODEL_DIR / name: (stage / name).read_bytes() for name in FILES}
-        contents[ROOT / SOURCE] = (stage / SOURCE.name).read_bytes()
+        if keep_source:
+            report["source_blend_sha256"] = previous["source_blend_sha256"]
+        else:
+            contents[source] = (stage / SOURCE.name).read_bytes()
         contents[ROOT / REPORT] = (json.dumps(report, indent=2) + "\n").encode()
         contents.update(section_outputs())
         for path, data in contents.items():

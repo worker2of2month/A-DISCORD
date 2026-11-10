@@ -125,7 +125,7 @@ RUS_crisis_regional_hegemony = {
 			has_global_flag = ADISCORD_west_final_resolved
 			OR = {
 				AND = {
-					tag = WRK
+					tag = event_target:ADISCORD_vorkerland_nation
 					has_global_flag = ADISCORD_west_hegemon_WRK
 				}
 				AND = {
@@ -286,6 +286,18 @@ RUS_crisis_entry_still_valid = {
 	RUS_crisis_side_compatible = yes
 	NOT = { has_global_flag = RUS_crisis_world_ended }
 	RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+}
+
+# COUNTRY defender. The AI Khan keeps the northern crowns as vassals of the
+# Last Empire; the zone republics and every victim of a human Khan are annexed.
+RUS_crisis_keeps_as_vassal = {
+	exists = yes
+	RUS = { is_ai = yes }
+	OR = {
+		tag = MON
+		tag = RIN
+		tag = VLD
+	}
 }
 
 # COUNTRY. The epilogue is terminal; earlier regional wars remain independent.
@@ -1955,6 +1967,7 @@ RUS_crisis_other_major_required = {
 		has_country_flag = VAL_frontier_added_major
 		has_country_flag = VAL_northern_coalition_added_major
 		has_country_flag = VAL_final_war_added_major
+		has_country_flag = VAL_east_added_major
 		has_country_flag = ADISCORD_vorkerland_pw_added_major
 		has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 	}

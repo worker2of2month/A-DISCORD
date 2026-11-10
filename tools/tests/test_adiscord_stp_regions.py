@@ -4,6 +4,7 @@ import re
 import subprocess
 import sys
 import unittest
+from itertools import product
 from pathlib import Path
 
 from PIL import Image, ImageChops
@@ -885,11 +886,67 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         gfx = read(GFX)
         for state_id in PARTICIPATING_STATES:
             self.assertIn(f"GFX_STP_regions_state_{state_id}", gfx)
+            control = f"STP_regions_{state_id}_state"
+            self.assertEqual(gui.count(f'name = "{control}"'), 1)
+            self.assertIn(f"{control}_visible = {{", scripted_gui)
+            self.assertIn(
+                f"{control} = {{ frame = STP_regions_{state_id}_frame }}", scripted_gui
+            )
             for frame in STATUS_FRAMES:
-                control = f"STP_regions_{state_id}_{frame}"
-                self.assertIn(f'name = "{control}"', gui)
-                self.assertIn(f"{control}_visible", scripted_gui)
+                self.assertNotIn(f"STP_regions_{state_id}_{frame}", gui)
         self.assertEqual(gfx.count("noOfFrames = 7"), len(PARTICIPATING_STATES))
+        self.assertEqual(len(STATUS_FRAMES), 7)
+
+    def test_region_frame_is_the_topmost_status_layer(self) -> None:
+        triggers = read(TRIGGERS)
+        predicates = (
+            "STP_cw_region_goes_to_resistance",
+            "STP_cw_region_goes_to_republics",
+            "STP_region_resistance_leaning",
+            "STP_region_party_leaning",
+            "STP_region_party_entrenched",
+            "STP_region_local_forces_leaning",
+        )
+        layers = (
+            "STP_region_map_shows_contested",
+            "STP_region_map_shows_resistance_leaning",
+            "STP_region_map_shows_resistance_held",
+            "STP_region_map_shows_party_leaning",
+            "STP_region_map_shows_party_held",
+            "STP_region_map_shows_local_leaning",
+            "STP_region_map_shows_republics_held",
+        )
+        layer_conditions = {
+            name: re.findall(
+                r"(NOT = \{ )?(\w+) = yes", named_block(triggers, name).split("{", 1)[1]
+            )
+            for name in layers
+        }
+        assignments = re.findall(
+            r"(?:limit = \{ (\w+) = yes \}\s+)?"
+            r"set_temp_variable = \{ var = STP_region_map_frame value = (\d) \}",
+            named_block(triggers, "STP_region_map_set_frame"),
+        )
+        self.assertEqual(len(assignments), len(layers))
+        self.assertEqual(
+            {predicate for predicate, _ in assignments if predicate}, set(predicates)
+        )
+        for values in product((False, True), repeat=len(predicates)):
+            facts = dict(zip(predicates, values))
+            shown = [
+                index
+                for index, name in enumerate(layers, 1)
+                if all(
+                    facts[predicate] != bool(negated)
+                    for negated, predicate in layer_conditions[name]
+                )
+            ]
+            frame = 0
+            for predicate, value in assignments:
+                if not predicate or facts[predicate]:
+                    frame = int(value)
+            with self.subTest(**facts):
+                self.assertEqual(frame, max(shown))
 
     def test_region_map_builder_is_registered_and_current(self) -> None:
         registry = read(ROOT / "tools/data/generated_output_owners.json")
@@ -1027,13 +1084,16 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             named_block(triggers, "STP_cw_second_inspection_unlocked"),
         )
         for state_id in PARTICIPATING_STATES:
-            self.assertIn(
-                f"STP_regions_{state_id}_resistance_entrenched_visible = {{ {state_id} = {{ STP_region_map_shows_resistance_held = yes }} }}",
-                gui,
-            )
-            self.assertIn(
-                f"STP_regions_{state_id}_local_dominant_visible = {{ {state_id} = {{ STP_region_map_shows_republics_held = yes }} }}",
-                gui,
+            self.assertIn(f"{state_id} = {{ STP_region_map_set_frame = yes }}", gui)
+        frame_trigger = named_block(triggers, "STP_region_map_set_frame")
+        for predicate, frame in (
+            ("STP_cw_region_goes_to_resistance", 3),
+            ("STP_cw_region_goes_to_republics", 7),
+        ):
+            self.assertRegex(
+                frame_trigger,
+                rf"limit = \{{ {predicate} = yes \}}\s+"
+                rf"set_temp_variable = \{{ var = STP_region_map_frame value = {frame} \}}",
             )
         self.assertNotIn(
             "every_owned_state = {",

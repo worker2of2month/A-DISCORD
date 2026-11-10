@@ -3,11 +3,13 @@
 
 focus_tree = {
 	id = ADISCORD_vorkerland_joint_postwar_focus
+	# A route flag exists only on the claimant that unified the country, so a
+	# wartime claimant never matches; the weight outranks its wartime tree.
 	country = {
 		factor = 0
 		modifier = {
-			add = 100
-			tag = WRK
+			add = 200
+			OR = { tag = WKR tag = VAD tag = TVA }
 			has_global_flag = ADISCORD_vorkerland_collapse_started
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -30,7 +32,7 @@ focus_tree = {
 		y = 0
 		cost = 2
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -56,7 +58,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_convene_restoration_council
 		cost = 2
 		prerequisite = { focus = WRK_joint_convene_restoration_council }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -79,7 +81,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_convene_restoration_council
 		cost = 2
 		prerequisite = { focus = WRK_joint_convene_restoration_council }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -101,7 +103,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_establish_military_districts
 		cost = 3
 		prerequisite = { focus = WRK_joint_establish_military_districts }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -128,7 +130,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_publish_amnesty_registers }
 		prerequisite = { focus = WRK_joint_reopen_district_rail_commands }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -175,7 +177,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_issue_integration_warrants
 		cost = 3
 		prerequisite = { focus = WRK_joint_issue_integration_warrants }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -204,7 +206,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_restore_central_chancery }
 		mutually_exclusive = { focus = WRK_joint_retain_emergency_inspectorate }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -232,7 +234,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_restore_central_chancery }
 		mutually_exclusive = { focus = WRK_joint_civilianize_district_police }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -263,7 +265,7 @@ focus_tree = {
 			focus = WRK_joint_civilianize_district_police
 			focus = WRK_joint_retain_emergency_inspectorate
 		}
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -289,7 +291,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_codify_single_chain_of_command
 		cost = 5
 		prerequisite = { focus = WRK_joint_codify_single_chain_of_command }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -372,7 +374,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_impose_reunification_settlement
 		cost = 4
 		prerequisite = { focus = WRK_joint_impose_reunification_settlement }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -403,7 +405,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_restore_unity_tower }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 			has_global_flag = ADISCORD_vorkerland_collegial_staff_formed
@@ -434,7 +436,7 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = WRK_joint_restore_unity_tower }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -478,7 +480,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_restore_civil_service }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -512,7 +514,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_audit_district_arsenals }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -539,7 +541,7 @@ focus_tree = {
 		prerequisite = { focus = WRK_joint_train_postwar_officers }
 		mutually_exclusive = { focus = WRK_joint_inspect_remaining_arsenals }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -565,7 +567,7 @@ focus_tree = {
 		prerequisite = { focus = WRK_joint_train_postwar_officers }
 		mutually_exclusive = { focus = WRK_joint_transfer_garrisons_to_civil_order }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -602,7 +604,7 @@ focus_tree = {
 			focus = WRK_joint_inspect_remaining_arsenals
 		}
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -640,7 +642,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_ratify_common_state_budget
 		cost = 3
 		prerequisite = { focus = WRK_joint_ratify_common_state_budget }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -662,7 +664,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_west_frontier_commands
 		cost = 3
 		prerequisite = { focus = WRK_joint_west_frontier_commands }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -688,7 +690,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_west_imperial_columns
 		cost = 5
 		prerequisite = { focus = WRK_joint_west_imperial_columns }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = {
 			has_completed_focus = WRK_joint_pw_field_exercises
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
@@ -723,7 +725,7 @@ focus_tree = {
 		relative_position_id = WRK_joint_west_imperial_columns
 		cost = 3
 		prerequisite = { focus = WRK_joint_west_imperial_columns }
-		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		allow_branch = { tag = event_target:ADISCORD_vorkerland_nation has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_global_flag = ADISCORD_west_hegemon_WRK
@@ -748,7 +750,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_convene_restoration_council }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -780,7 +782,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_pw_census }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -821,7 +823,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_veteran_housing }
 		mutually_exclusive = { focus = WRK_joint_pw_veteran_housing }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -852,7 +854,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_food_reserve }
 		mutually_exclusive = { focus = WRK_joint_pw_food_reserve }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -908,7 +910,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_food_reserve focus = WRK_joint_pw_veteran_housing }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -939,7 +941,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_municipal_network }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -979,7 +981,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_convene_restoration_council }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1019,7 +1021,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_veteran_cadres }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1056,7 +1058,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_pw_rearmament }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1097,7 +1099,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_pw_officer_school }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1138,7 +1140,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_artillery }
 		mutually_exclusive = { focus = WRK_joint_pw_artillery }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1188,7 +1190,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_motor_pool }
 		mutually_exclusive = { focus = WRK_joint_pw_motor_pool }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1236,7 +1238,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_motor_pool focus = WRK_joint_pw_artillery }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1280,7 +1282,7 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = WRK_joint_pw_reserve }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1328,7 +1330,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_convene_restoration_council }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1384,7 +1386,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_arsenals }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1427,7 +1429,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_standards }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1485,7 +1487,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_transport_works }
 		mutually_exclusive = { focus = WRK_joint_pw_transport_works }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1554,7 +1556,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_machine_tools }
 		mutually_exclusive = { focus = WRK_joint_pw_machine_tools }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1626,7 +1628,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_machine_tools focus = WRK_joint_pw_transport_works }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1666,7 +1668,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_impose_reunification_settlement }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1696,7 +1698,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = WRK_joint_pw_territorial_council }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1733,7 +1735,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_procurement_audit }
 		mutually_exclusive = { focus = WRK_joint_pw_procurement_audit }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1775,7 +1777,7 @@ focus_tree = {
 		mutually_exclusive = { focus = WRK_joint_pw_local_charters }
 		mutually_exclusive = { focus = WRK_joint_pw_local_charters }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1813,7 +1815,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_local_charters focus = WRK_joint_pw_procurement_audit }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1842,7 +1844,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_treasury }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1873,7 +1875,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_defence_compact }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1903,7 +1905,7 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = WRK_joint_pw_subject_charter }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1941,7 +1943,7 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = WRK_joint_pw_ebern_campaign }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}
@@ -1979,7 +1981,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = WRK_joint_pw_afrela_campaign }
 		allow_branch = {
-			tag = WRK
+			tag = event_target:ADISCORD_vorkerland_nation
 			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 			has_country_flag = ADISCORD_vorkerland_route_joint
 		}

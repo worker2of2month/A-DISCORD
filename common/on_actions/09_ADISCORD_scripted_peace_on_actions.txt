@@ -907,6 +907,15 @@ on_actions = {
 				# END bezhaysk:on_capitulation_immediate
 
 				# BEGIN nam:on_capitulation_immediate
+				# A second delivery after white peace can repeat both native hooks.
+				if = {
+					limit = {
+						ROOT = { has_country_flag = NAM_veyran_capitulation_reserved }
+						FROM = { has_war_with = ROOT }
+					}
+					ROOT = { clr_country_flag = NAM_veyran_capitulation_reserved }
+				}
+				NAM_veyran_handle_capitulation = yes
 				ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
 				if = {
 					limit = {
@@ -1102,7 +1111,7 @@ on_actions = {
 				if = {
 					limit = {
 						ROOT = { tag = VLA has_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement }
-						FROM = { tag = WRK }
+						FROM = { tag = event_target:ADISCORD_vorkerland_nation }
 					}
 					set_global_flag = skip_default_capitulation
 					FROM = { ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = yes }
@@ -1171,7 +1180,7 @@ on_actions = {
 						OR = {
 							NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 							AND = {
-								FROM = { tag = WRK }
+								FROM = { tag = event_target:ADISCORD_vorkerland_nation }
 								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 								has_global_flag = ADISCORD_vorkerland_reunification_verified
 							}
@@ -1209,7 +1218,7 @@ on_actions = {
 									VAD = { exists = yes NOT = { has_capitulated = yes } }
 								}
 								AND = {
-									tag = WRK
+									tag = event_target:ADISCORD_vorkerland_nation
 									has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 									has_global_flag = ADISCORD_vorkerland_reunification_verified
 								}
@@ -1241,7 +1250,7 @@ on_actions = {
 						FROM = {
 							if = {
 								limit = {
-									tag = WRK
+									tag = event_target:ADISCORD_vorkerland_nation
 									has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 									has_global_flag = ADISCORD_vorkerland_reunification_verified
 								}
@@ -1715,6 +1724,15 @@ on_actions = {
 				# END itora_revolt:on_capitulation
 
 				# BEGIN nam:on_capitulation
+				NAM_veyran_handle_capitulation = yes
+				if = {
+					limit = { ROOT = { has_country_flag = NAM_veyran_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = { tag = NAM }
+					NAM_board_queue_recount = yes
+				}
 				# Recheck this native defeat before the generic annexation fallback.
 				ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
 				if = {
@@ -1885,7 +1903,7 @@ on_actions = {
 					}
 					set_global_flag = skip_default_capitulation
 					if = {
-						limit = { ROOT = { tag = WRK } }
+						limit = { ROOT = { tag = event_target:ADISCORD_vorkerland_nation } }
 						ADISCORD_west_final_resolve_ivn_victory = yes
 					}
 					else_if = {
@@ -1894,6 +1912,37 @@ on_actions = {
 					}
 				}
 				# END west_final:on_capitulation
+				# BEGIN east_final:on_capitulation
+				# A champion's defeat settles Kefreyt's last war. The Khan's own
+				# dissolution already ran in the immediate callback.
+				if = {
+					limit = {
+						VAL_east_final_active = yes
+						ROOT = { has_variable = VAL_east_side }
+						FROM = { has_variable = VAL_east_side }
+					}
+					if = {
+						limit = { ROOT = { tag = VAL } }
+						set_global_flag = skip_default_capitulation
+						VAL_east_resolve_rival_victory = yes
+					}
+					else_if = {
+						limit = {
+							ROOT = { tag = RUS }
+							VAL_east_rival_is_khan = yes
+						}
+						VAL_east_record_khan_defeat = yes
+					}
+					else_if = {
+						limit = {
+							ROOT = { tag = MON }
+							VAL_east_rival_is_montar = yes
+						}
+						set_global_flag = skip_default_capitulation
+						VAL_east_resolve_val_victory = yes
+					}
+				}
+				# END east_final:on_capitulation
 
 				# BEGIN vorkerland_diplomacy:on_capitulation
 				if = {
@@ -2091,6 +2140,10 @@ on_actions = {
 			clr_country_flag = ADISCORD_bezhaysk_capitulation_pending
 			# END stelander:on_uncapitulation
 			# BEGIN nam:on_uncapitulation
+			if = {
+				limit = { tag = NAM }
+				NAM_board_queue_recount = yes
+			}
 			ADISCORD_nam_resource_war_record_uncapitulation = yes
 			# END nam:on_uncapitulation
 		}
@@ -2108,6 +2161,7 @@ on_actions = {
 					VAL_trace_scripted_peace_country = yes
 				}
 				# BEGIN nam:on_peace
+				NAM_veyran_close_external = yes
 				ADISCORD_nam_resource_war_close_external = yes
 				NAM_war_of_return_close_external = yes
 				NAM_great_war_close_external = yes
@@ -2121,6 +2175,9 @@ on_actions = {
 				# BEGIN west_final:on_peace
 				ADISCORD_west_final_close_external = yes
 				# END west_final:on_peace
+				# BEGIN east_final:on_peace
+				VAL_east_final_close_external = yes
+				# END east_final:on_peace
 				if = {
 					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
 					log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
@@ -2358,6 +2415,7 @@ on_actions = {
 			}
 			# END vorkerland_collapse:on_puppet
 			# BEGIN nam:on_puppet
+			NAM_veyran_close_external = yes
 			ADISCORD_nam_resource_war_close_external = yes
 			NAM_war_of_return_close_external = yes
 			NAM_great_war_close_external = yes
@@ -2371,6 +2429,9 @@ on_actions = {
 			# BEGIN west_final:on_puppet
 			ADISCORD_west_final_close_external = yes
 			# END west_final:on_puppet
+			# BEGIN east_final:on_puppet
+			VAL_east_final_close_external = yes
+			# END east_final:on_puppet
 		}
 	}
 	on_annex = {
@@ -2423,6 +2484,7 @@ on_actions = {
 				}
 				# END vorkerland_collapse:on_annex
 				# BEGIN nam:on_annex
+				NAM_veyran_close_external = yes
 				ADISCORD_nam_resource_war_close_external = yes
 				NAM_war_of_return_close_external = yes
 				NAM_great_war_close_external = yes
@@ -2430,6 +2492,10 @@ on_actions = {
 				if = {
 					limit = { FROM = { OR = { tag = EFL tag = AZH } } }
 					FROM = { NAM_rw_clear_punishment = yes }
+				}
+				if = {
+					limit = { FROM = { has_variable = NAM_corp_district_owner } }
+					NAM = { NAM_board_queue_recount = yes }
 				}
 				# END nam:on_annex
 				# BEGIN stelander:on_annex
@@ -2485,6 +2551,9 @@ on_actions = {
 				# BEGIN west_final:on_annex
 				ADISCORD_west_final_close_external = yes
 				# END west_final:on_annex
+				# BEGIN east_final:on_annex
+				VAL_east_final_close_external = yes
+				# END east_final:on_annex
 			}
 		}
 	}

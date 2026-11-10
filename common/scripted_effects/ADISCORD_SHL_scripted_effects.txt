@@ -2258,6 +2258,7 @@ SHL_ensure_levy_template = {
 		limit = { NOT = { has_template = "Furnace Levy" } }
 		division_template = {
 			name = "Furnace Levy"
+			override_model = SHL_ADISCORD_militia_entity
 			template_counter = 7
 			division_names_group = SHL_INF_01
 			is_locked = yes
@@ -8618,6 +8619,7 @@ SHL_ensure_border_watch_template = {
 		limit = { NOT = { has_template = "Border Watch" } }
 		division_template = {
 			name = "Border Watch"
+			override_model = SHL_ADISCORD_militia_entity
 			template_counter = 9
 			division_names_group = SHL_GAR_01
 			is_locked = yes

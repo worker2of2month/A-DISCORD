@@ -1425,11 +1425,11 @@ focus_tree = {
 		prerequisite = { focus = VAL_Brokered_Steel }
 		allow_branch = {
 			has_completed_focus = VAL_Brokered_Steel
-			WRK = { exists = yes }
+			event_target:ADISCORD_vorkerland_nation = { exists = yes }
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 		}
 		completion_reward = {
-			add_intel = { target = WRK army_intel = 10 }
+			add_intel = { target = event_target:ADISCORD_vorkerland_nation army_intel = 10 }
 			VAL_offer_westerholm_concession = yes
 		}
 		ai_will_do = { base = 5 }
@@ -4027,7 +4027,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Reopen_Trade_Routes_tt VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
+			VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
 		ai_will_do = { base = 30 }
 	}
 
@@ -4050,43 +4050,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Settle_Industrial_Debts_tt VAL_advance_economic_recovery = yes add_political_power = 35 add_stability = 0.02 }
-		ai_will_do = { base = 30 }
-	}
-
-	focus = {
-		id = VAL_Return_To_World_Market
-		dynamic = yes
-		allow_branch = {
-			OR = {
-				has_completed_focus = VAL_Campaign_Secured
-				has_completed_focus = VAL_Returning_Buyers
-			}
-		}
-		icon = GFX_focus_VAL_Return_To_World_Market
-		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
-		x = 22
-		y = 18
-		cost = 5
-		prerequisite = { focus = VAL_Reopen_Trade_Routes }
-		prerequisite = { focus = VAL_Settle_Industrial_Debts }
-		prerequisite = { focus = VAL_Returning_Buyers }
-		available = {
-			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
-			custom_trigger_tooltip = { tooltip = VAL_commonwealth_required_tt has_country_flag = VAL_commonwealth_proclaimed }
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			effect_tooltip = { add_ideas = VAL_arsenal_quality_delta }
-			hidden_effect = {
-				VAL_reform_mercenary_payroll = yes
-				set_country_flag = VAL_economic_recovery_completed
-				VAL_advance_economic_recovery = yes
-				VAL_restore_arsenal_reputation = yes
-				country_event = { id = val_rework.124 hours = 1 }
-			}
-			custom_effect_tooltip = VAL_next_chapter_tt
-		}
+			VAL_advance_economic_recovery = yes add_political_power = 35 add_stability = 0.02 }
 		ai_will_do = { base = 30 }
 	}
 

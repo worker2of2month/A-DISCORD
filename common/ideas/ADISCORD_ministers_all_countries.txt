@@ -116,8 +116,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_europe_4
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_hos_emergency_bureau }
 		}
@@ -417,8 +417,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_europe_5
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_def_red_alarmist }
 		}
@@ -451,6 +451,8 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_def_quota_battalions }
+			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Ruslan_Pike = {
 			name = minister_VAD_Ruslan_Pike
@@ -718,8 +720,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_europe_6
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_eco_smokestack_planner }
 		}
@@ -752,6 +754,8 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_eco_quota_keeper }
+			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Yulia_Mera = {
 			name = minister_VAD_Yulia_Mera
@@ -1027,8 +1031,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_south_america_2
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_hea_triage_boards }
 		}
@@ -1336,8 +1340,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_asia_2
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_edu_factory_schools }
 		}
@@ -1370,6 +1374,8 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_edu_registry_schools }
+			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Lidia_Takt = {
 			name = minister_VAD_Lidia_Takt
@@ -1637,8 +1643,8 @@ ideas = {
 			default = no
 			cost = 75
 			picture = generic_political_advisor_arab_1
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			allowed_to_remove = { }
 			traits = { minister_trait_WRK_int_internal_watch }
 		}
@@ -2038,8 +2044,8 @@ ideas = {
 			picture = generic_political_advisor_europe_5
 			cost = 75
 			removal_cost = -1
-			allowed = { tag = WRK }
-			visible = { tag = WRK }
+			allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+			visible = { tag = event_target:ADISCORD_vorkerland_nation }
 			available = { STP_party_minister_change_allowed = yes }
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_minister }
@@ -2139,12 +2145,14 @@ ideas = {
 			}
 			on_add = {
 				hidden_effect = {
+					NAM_board_queue_recount = yes
 					ADISCORD_economy_mark_dirty = yes
 					ADISCORD_economy_queue_law_refresh = yes
 				}
 			}
 			on_remove = {
 				hidden_effect = {
+					NAM_board_queue_recount = yes
 					ADISCORD_economy_mark_dirty = yes
 					ADISCORD_economy_queue_law_refresh = yes
 				}
@@ -4200,6 +4208,36 @@ ideas = {
 			removal_cost = -1
 			allowed = { tag = SLF }
 			visible = { tag = SLF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SNG_Andrey_Ternov = {
+			name = minister_SNG_Andrey_Ternov
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SNG }
+			visible = { tag = SNG }
 			available = { STP_party_minister_change_allowed = yes }
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_commissioner }

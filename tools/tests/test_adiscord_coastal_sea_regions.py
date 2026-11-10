@@ -284,6 +284,24 @@ class CoastalSeaRegionTests(unittest.TestCase):
     # borders the Devyatipechye cluster besides its mountain parent 2407.
     HOUSE_TOWN_NEIGHBOURS = {16899: {2407, 16739, 16793, 16794}}
 
+    def test_arab_cities_use_desert_and_hill_city_terrain(self) -> None:
+        terrain = {}
+        for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines():
+            fields = line.split(";")
+            if len(fields) >= 8 and fields[0].isdigit():
+                terrain[int(fields[0])] = fields[6]
+        arab = geography.ARAB_CITIES | geography.ARAB_URBAN_GROWTH
+        self.assertEqual(set(geography.ARAB_CITY_TERRAIN), arab)
+        self.assertLessEqual(geography.ARAB_HILL_CITIES | geography.ARAB_FARMLAND_CITIES, arab)
+        self.assertFalse(geography.ARAB_HILL_CITIES & geography.ARAB_FARMLAND_CITIES)
+        for province, expected in geography.ARAB_CITY_TERRAIN.items():
+            self.assertEqual(terrain[province], expected, province)
+        # Lower Loren and the northern settlements keep ordinary city terrain.
+        for province in geography.URBAN_GROWTH - arab:
+            self.assertEqual(terrain[province], "urban", province)
+        used = {value for value in terrain.values() if value in states.CITY_TERRAINS}
+        self.assertEqual(used, states.CITY_TERRAINS)
+
     def test_shahrabad_house_towns_are_urban_provinces_inside_their_parents(self) -> None:
         from scipy.ndimage import label
 
@@ -308,7 +326,10 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     (state_id, parent, value, name),
                 )
                 self.assertNotIn("sectors", entry)
-                self.assertEqual(definitions[province][4:8], ["land", "false", "urban", "3"])
+                self.assertEqual(
+                    definitions[province][4:8],
+                    ["land", "false", geography.ARAB_CITY_TERRAIN[province], "3"],
+                )
                 # The painted blob is exactly the authored mask; the parent keeps
                 # one connected body and is the town's only neighbour unless the
                 # town grew into its parent's remnant.

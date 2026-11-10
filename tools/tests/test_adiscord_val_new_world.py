@@ -798,27 +798,30 @@ class NewWorldRouteTests(unittest.TestCase):
     def test_finale_does_not_require_finishing_the_military_or_all_side_programmes(self):
         focuses = tree_focuses()
         war = {"VAL_nw_tsaygen_strike", "VAL_nw_beyond_perimeter", "VAL_nw_zones"}
+        roots = {"VAL_peace_throne", "VAL_peace_cabinet", "VAL_peace_charter", "VAL_peace_captains"}
         for chosen in (
-            {"VAL_nw_register", "VAL_nw_bloc_accord", "VAL_nw_foundries", "VAL_nw_cabinet"},
-            {"VAL_nw_charters", "VAL_nw_bloc_confront", "VAL_nw_dispatch", "VAL_nw_army_guarantee"},
+            {"VAL_nw_register", "VAL_nw_bloc_accord", "VAL_nw_foundries", "VAL_peace_water_convoys",
+             "VAL_peace_registry_audit", "VAL_peace_workers_charter", "VAL_east_shards"},
+            {"VAL_nw_charters", "VAL_nw_bloc_confront", "VAL_nw_dispatch", "VAL_peace_gate_garrison",
+             "VAL_peace_share_ledger", "VAL_peace_shift_law", "VAL_east_arsenal"},
         ):
-            excluded = {scalar(block(focuses[name], "mutually_exclusive"), "focus") for name in chosen} | war
-            reachable = set()
-            for _ in range(len(focuses)):
-                for name, focus in focuses.items():
-                    if name in excluded:
-                        continue
-                    prerequisites = [e.value for e in focus if e.key == "prerequisite"]
-                    if all(any(p.value in reachable for p in group) for group in prerequisites):
-                        reachable.add(name)
-            self.assertIn("VAL_nw_steel_peace", reachable, chosen)
-        final_conditions = block(focuses["VAL_nw_steel_peace"], "available")
-        world = ContractWorld()
-        world.data["RUS"]["vars"]["RUS_crisis_phase"] = 5
-        for state in ("176", "177"):
-            world.data[state]["flags"].add("RUS_reactor_works_restored")
-            world.data[state]["buildings"]["industrial_complex"] = 1
-        self.assertTrue(world.matches(final_conditions))
+            for regime in sorted(roots):
+                excluded = set(war) | (roots - {regime})
+                for name in chosen:
+                    excluded |= {e.value for group in (e.value for e in focuses[name] if e.key == "mutually_exclusive")
+                                 for e in group if e.key == "focus"}
+                reachable = set()
+                for _ in range(len(focuses)):
+                    for name, focus in focuses.items():
+                        if name in excluded:
+                            continue
+                        prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                        if all(any(p.value in reachable for p in group) for group in prerequisites):
+                            reachable.add(name)
+                self.assertIn("VAL_nw_steel_peace", reachable, (chosen, regime))
+        final_conditions = [e.value for e in walk(block(focuses["VAL_nw_steel_peace"], "available"))
+                            if e.key == "has_global_flag"]
+        self.assertEqual(final_conditions, ["VAL_east_final_resolved", "VAL_east_hegemon_rival"])
 
     def test_recognition_is_rechecked_in_the_shared_settlement_effect(self):
         roots = entries("common/decisions/ADISCORD_RUS_decisions.txt")
@@ -845,7 +848,7 @@ class NewWorldRouteTests(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             rows = {}
             for line in path.read_text(encoding="utf-8-sig").splitlines():
-                if re.match(r"\s+(?:VAL_nw_|val_rework\.(?:12[4-9]|13[014-8]|18[0-4]))", line):
+                if re.match(r"\s+(?:VAL_nw_|VAL_peace_|VAL_throne_|VAL_cabinet_|VAL_charter_|VAL_captains_|VAL_east_|val_peace\.|val_rework\.(?:12[4-9]|13[014-8]|18[0-4]))", line):
                     match = re.fullmatch(r' ([\w.]+):\d+ "([^"\\]*(?:\\.[^"\\]*)*)"', line)
                     self.assertIsNotNone(match, line)
                     self.assertNotIn(match[1], rows)
@@ -886,8 +889,8 @@ class NewWorldRouteTests(unittest.TestCase):
             completed.add(name)
         for name, focus in focuses.items():
             for exclusive in (e.value for e in focus if e.key == "mutually_exclusive"):
-                rival = scalar(exclusive, "focus")
-                self.assertEqual((name in completed) + (rival in completed), 1, (name, rival))
+                group = {name} | {e.value for e in exclusive if e.key == "focus"}
+                self.assertEqual(len(group & completed), 1, group)
 
     def test_transition_preserves_completed_unlocks_and_runs_without_event_answer(self):
         events = entries("events/ADISCORD_VAL_contract_events.txt")
@@ -905,7 +908,7 @@ class NewWorldRouteTests(unittest.TestCase):
     def test_new_tree_is_registered_complete_and_has_no_unreachable_prerequisites(self):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
         focuses = tree_focuses()
-        self.assertEqual(len(focuses), 24)
+        self.assertEqual(len(focuses), 73)
         reachable = set()
         for _ in range(len(focuses)):
             for name, focus in focuses.items():
@@ -914,30 +917,46 @@ class NewWorldRouteTests(unittest.TestCase):
                     reachable.add(name)
                 for group in prerequisites:
                     self.assertTrue(all(p.value in focuses for p in group), name)
-                # Only the settlement-rights branch depends on the Khan's victor.
-                if name != "VAL_nw_zones":
-                    self.assertNotIn("allow_branch", {e.key for e in focus}, name)
+                # Only the settlement-rights branch and the chosen regime are gated.
+                gates = [e.value for e in focus if e.key == "allow_branch"]
+                if name != "VAL_nw_zones" and gates:
+                    self.assertEqual(len(gates[0]), 1, name)
+                    self.assertTrue(gates[0][0].key.startswith("VAL_peace_regime_"), name)
         self.assertEqual(reachable, set(focuses))
-        self.assertEqual(len({(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}), 24)
+        places = {(tuple(e.key for e in block(f, "allow_branch")) if any(e.key == "allow_branch" for e in f) else (),
+                   scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}
+        self.assertEqual(len(places), 73)
 
     def test_every_branch_has_a_symmetric_exclusive_pair(self):
         focuses = tree_focuses()
         pairs = set()
         for name, focus in focuses.items():
             for exclusive in (e.value for e in focus if e.key == "mutually_exclusive"):
-                rival = scalar(exclusive, "focus")
-                rival_list = [scalar(e.value, "focus") for e in focuses[rival] if e.key == "mutually_exclusive"]
-                self.assertIn(name, rival_list)
-                pairs.add(frozenset((name, rival)))
+                rivals = {e.value for e in exclusive if e.key == "focus"}
+                for rival in rivals:
+                    rival_list = {e.value for group in (g.value for g in focuses[rival] if g.key == "mutually_exclusive")
+                                  for e in group if e.key == "focus"}
+                    self.assertIn(name, rival_list)
+                pairs.add(frozenset({name} | rivals))
         self.assertEqual(pairs, {
             frozenset(("VAL_nw_register", "VAL_nw_charters")),
             frozenset(("VAL_nw_bloc_accord", "VAL_nw_bloc_confront")),
             frozenset(("VAL_nw_foundries", "VAL_nw_dispatch")),
-            frozenset(("VAL_nw_cabinet", "VAL_nw_army_guarantee")),
+            frozenset(("VAL_peace_water_convoys", "VAL_peace_gate_garrison")),
+            frozenset(("VAL_peace_registry_audit", "VAL_peace_share_ledger")),
+            frozenset(("VAL_peace_land_for_service", "VAL_peace_workers_charter", "VAL_peace_shift_law")),
+            frozenset(("VAL_throne_heir_officer", "VAL_throne_heir_clerk")),
+            frozenset(("VAL_throne_purge", "VAL_throne_patents")),
+            frozenset(("VAL_throne_memorial", "VAL_throne_confession")),
+            frozenset(("VAL_cabinet_open_estimates", "VAL_cabinet_velsky_apparatus")),
+            frozenset(("VAL_cabinet_highland_bread", "VAL_cabinet_zone_clearing")),
+            frozenset(("VAL_charter_district_captains", "VAL_charter_single_staff")),
+            frozenset(("VAL_charter_tribunal", "VAL_charter_silence")),
+            frozenset(("VAL_captains_common_purse", "VAL_captains_shares_forever")),
+            frozenset(("VAL_east_shards", "VAL_east_arsenal")),
         })
         for pair in pairs:
-            first, second = sorted(pair)
-            self.assertEqual(scalar(focuses[first], "y"), scalar(focuses[second], "y"))
+            self.assertEqual(len({scalar(focuses[name], "y") for name in pair}), 1, pair)
             for name in pair:
                 rewards = [e.key for e in block(focuses[name], "completion_reward")]
                 self.assertTrue(rewards, name)
@@ -962,9 +981,11 @@ class NewWorldRouteTests(unittest.TestCase):
 class NewWorldSettlementTests(unittest.TestCase):
     @staticmethod
     def modifier_variables():
-        modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
-                         "VAL_nw_industrial_network")
-        return {e.value: e.key for e in modifier if e.key not in ("enable", "icon")}
+        modifiers = entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+        variables = {}
+        for name in ("VAL_nw_industrial_network", "VAL_peace_order"):
+            variables.update({e.value: e.key for e in block(modifiers, name) if e.key not in ("enable", "icon")})
+        return variables
 
     @staticmethod
     def preview(name):
@@ -978,7 +999,7 @@ class NewWorldSettlementTests(unittest.TestCase):
         for variable, modifier in variables.items():
             change = round(after.get(variable, 0) - before.get(variable, 0), 6)
             if change:
-                delta[modifier] = change
+                delta[modifier] = round(delta.get(modifier, 0) + change, 6)
         return delta
 
     def test_root_waits_for_paid_consolidation_and_opens_the_settlement(self):

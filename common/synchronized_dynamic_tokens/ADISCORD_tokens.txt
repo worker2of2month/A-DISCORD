@@ -127,6 +127,8 @@ RUS_bunker_upgrade_4
 RUS_bunker_upgrade_5
 RUS_bunker_energy_sale
 VAL_council_ultimatum
+VAL_peace_reckoning
+VAL_east_deadline
 VAL_command_trial_timer
 VAL_command_retirements_timer
 VAL_council_staff_program_timer

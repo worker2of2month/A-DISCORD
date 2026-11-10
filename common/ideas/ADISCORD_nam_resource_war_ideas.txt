@@ -1,4 +1,64 @@
 ideas = {
+	political_advisor_minister_of_economy = {
+		NAM_board_bank_nominee = {
+			name = NAM_board_bank_nominee
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = { NAM_board_operable = yes }
+			allowed_to_remove = { always = yes }
+			on_add = {
+				custom_effect_tooltip = NAM_board_bank_appointment_tt
+				hidden_effect = { NAM_board_queue_recount = yes }
+			}
+			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 0
+					check_variable = { var = NAM_board_sectors_6 value = 0 compare = equals }
+					check_variable = { var = NAM_board_districts_6 value = 0 compare = equals }
+				}
+				modifier = {
+					factor = 4
+					has_war = no
+				}
+			}
+		}
+	}
+
+	political_advisor_minister_of_education = {
+		NAM_board_labor_nominee = {
+			name = NAM_board_labor_nominee
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = { NAM_board_operable = yes }
+			allowed_to_remove = { always = yes }
+			on_add = {
+				custom_effect_tooltip = NAM_board_labor_appointment_tt
+				hidden_effect = { NAM_board_queue_recount = yes }
+			}
+			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 0
+					check_variable = { var = NAM_board_sectors_5 value = 0 compare = equals }
+					check_variable = { var = NAM_board_districts_5 value = 0 compare = equals }
+				}
+				modifier = {
+					factor = 4
+					check_variable = { NAM_board_sectors_5 > 1 }
+				}
+			}
+		}
+	}
+
 	hidden_ideas = {
 		ADISCORD_nam_last_line_administration = {
 			allowed = { always = no }
@@ -746,6 +806,36 @@ ideas = {
 			}
 		}
 
+		NAM_spirit_prag_republic = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				ADISCORD_economy_tax_collection_factor = 0.08
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_spirit_prag_directorate = {
+			picture = generic_production_bonus
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.08
+				production_speed_buildings_factor = 0.05
+				political_power_gain = -0.05
+			}
+		}
+
 		# ----- Exile revolution -----
 		# The pillars' junta: the exile lives for the return and from the sea.
 		NAM_exile_pillar_junta = {
@@ -947,16 +1037,6 @@ ideas = {
 			}
 		}
 
-		NAM_adm_contract_register_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.1
-				stability_factor = 0.05
-			}
-		}
-
 		NAM_prag_convoy_insurance_idea = {
 			name = NAM_navy_dynamic
 			picture = GFX_idea_NAM_national_spirit
@@ -964,16 +1044,6 @@ ideas = {
 			modifier = {
 				convoy_escort_efficiency = 0.15
 				repair_speed_factor = 0.10
-			}
-		}
-
-		NAM_adm_balanced_accounts_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_trade_income_factor = 0.15
-				research_speed_factor = 0.05
 			}
 		}
 
@@ -1425,24 +1495,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_provincial_records_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				compliance_gain = 0.03
-			}
-		}
-
-		NAM_pw_administrative_courts_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				resistance_growth = -0.05
-			}
-		}
-
 		NAM_pw_public_procurement_administration_preview = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit
@@ -1491,15 +1543,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_labour_code_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.04
-			}
-		}
-
 		NAM_pw_insurance_fund_administration_preview = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit
@@ -1517,35 +1560,6 @@ ideas = {
 			modifier = {
 				stability_factor = 0.04
 				ADISCORD_economy_admin_expense_factor = 0.02
-			}
-		}
-
-		NAM_pw_labour_inspection_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.04
-			}
-		}
-
-		NAM_pw_arbitration_commissions_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.03
-				industrial_capacity_factory = 0.02
-			}
-		}
-
-		NAM_pw_social_budget_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.03
-				ADISCORD_economy_tax_collection_factor = 0.03
 			}
 		}
 
@@ -1597,24 +1611,6 @@ ideas = {
 			}
 		}
 
-		NAM_pw_standard_projects_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				production_speed_industrial_complex_factor = 0.05
-			}
-		}
-
-		NAM_pw_local_design_offices_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				research_speed_factor = 0.03
-			}
-		}
-
 		NAM_pw_southern_intelligence_garrison_preview = {
 			name = NAM_garrison_dynamic
 			picture = GFX_idea_generic_fortify_the_borders
@@ -1648,15 +1644,6 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.05
-			}
-		}
-
-		NAM_pw_war_accounts_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
 			}
 		}
 

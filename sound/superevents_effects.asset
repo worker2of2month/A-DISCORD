@@ -194,7 +194,7 @@ soundeffect = {
 	name = superevent_vorkerland_joint_victory_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_vorkerland_joint_victory_sound
+		sound = superevent_west_petrichev_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -218,7 +218,535 @@ soundeffect = {
 	name = superevent_stelander_shabrat_republic_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_stelander_shabrat_republic_sound
+		sound = superevent_stelander_shabrat_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+}
+
+soundeffect = {
+	name = superevent_nam_resource_war_service_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_nam_resource_war_service_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_nam_resource_war_district_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_nam_resource_war_district_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_houses_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_staff_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_party_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_wallets_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_silence_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_emergency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_regent_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_party_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_shabrat_victory_staff_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_shabrat_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+}
+
+soundeffect = {
+	name = superevent_stelander_shabrat_victory_councils_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_shabrat_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+}
+
+soundeffect = {
+	name = superevent_stelander_shabrat_victory_truth_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_shabrat_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+}
+
+soundeffect = {
+	name = superevent_south_houses_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_cities_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_nur_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_nur_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_regency_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_commune_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_commune_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_conclave_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_service_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_iron_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_charter_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_contracts_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_rump_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_revenge_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_iron_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_radical_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_commune_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_free_islands_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_boards_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_restitution_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_nur_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_worker_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_vorkerland_worker_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_petrichev_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_petrichev_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_veyran_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_veyran_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_dorian_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_dorian_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_anton_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_vorkerland_utilitarian_victory_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_shield_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_shield_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_emergency_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_emergency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_revanche_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_revanche_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_committee_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_emergency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_vorkerland_world_empire_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_vorkerland_world_empire_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_iron_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_iron_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_civil_service_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_iron_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_federation_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_regency_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_oil_union_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_nur_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_contract_republic_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_directorate_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_directorate_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_nam_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_iron_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_council_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_west_petrichev_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_west_world_empire_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_vorkerland_world_empire_sound
 	}
 	is3d = no
 	max_audible = 1

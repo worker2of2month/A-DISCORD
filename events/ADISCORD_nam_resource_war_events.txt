@@ -1082,7 +1082,7 @@ country_event = {
 	id = ADISCORD_nam_resource_war.81
 	title = ADISCORD_nam_resource_war.81.t
 	desc = ADISCORD_nam_resource_war.81.d
-	picture = GFX_event_adiscord_expedition_camp
+	picture = GFX_event_adiscord_pier_evacuation
 	is_triggered_only = yes
 	timeout_days = 7
 	trigger = {
@@ -1372,7 +1372,7 @@ country_event = {
 	id = ADISCORD_nam_resource_war.85
 	title = ADISCORD_nam_resource_war.85.t
 	desc = ADISCORD_nam_resource_war.85.d
-	picture = GFX_event_adiscord_factory_workshop
+	picture = GFX_event_adiscord_pipeline_welding
 	is_triggered_only = yes
 	trigger = {
 		tag = NAM
@@ -2186,6 +2186,8 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.103.a
 		custom_effect_tooltip = NAM_corp_takeover_tt
+		unlock_decision_tooltip = NAM_board_tender_rail
+		custom_effect_tooltip = NAM_board_tender_rail_unlock_tt
 		hidden_effect = { NAM_corp_takeover = yes }
 	}
 }
@@ -2364,45 +2366,164 @@ country_event = {
 	trigger = {
 		tag = NAM
 		has_country_flag = NAM_corp_takeover
+		event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
 	}
 
 	option = {
 		name = ADISCORD_nam_resource_war.108.a
-		add_stability = -0.02
-		custom_effect_tooltip = NAM_corp_108_a_tt
-		hidden_effect = {
-			if = {
-				limit = { event_target:NAM_corp_dispute_district = { exists = yes } }
-				event_target:NAM_corp_dispute_district = { NAM_corp_dispute_award_claimant = yes }
+		trigger = {
+			event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
+		}
+		if = {
+			limit = {
+				hidden_trigger = {
+					event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
+				}
 			}
-			clr_country_flag = NAM_corp_dispute_open
-			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-			NAM_corp_capital_add = yes
+			custom_effect_tooltip = NAM_corp_108_a_tt
+			add_stability = -0.02
+			hidden_effect = {
+				event_target:NAM_corp_case_district = { NAM_corp_dispute_award_claimant = yes }
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
 		}
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.108.b
 		trigger = {
+			event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
 			check_variable = { var = NAM_corp_capital value = 20 compare = greater_than_or_equals }
 		}
-		custom_effect_tooltip = NAM_corp_108_b_tt
-		hidden_effect = {
-			if = {
-				limit = { event_target:NAM_corp_dispute_district = { exists = yes } }
-				event_target:NAM_corp_dispute_district = { NAM_corp_dispute_clear = yes }
+		if = {
+			limit = {
+				hidden_trigger = {
+					event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
+					check_variable = { var = NAM_corp_capital value = 20 compare = greater_than_or_equals }
+				}
 			}
-			clr_country_flag = NAM_corp_dispute_open
-			set_temp_variable = { var = NAM_corp_capital_change value = -20 }
-			NAM_corp_capital_add = yes
+			custom_effect_tooltip = NAM_corp_108_b_tt
+			hidden_effect = {
+				event_target:NAM_corp_case_district = { NAM_corp_dispute_clear = yes }
+				set_temp_variable = { var = NAM_corp_capital_change value = -20 }
+				NAM_corp_capital_add = yes
+			}
 		}
 		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.108.c
+		trigger = {
+			event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes }
+		}
 		custom_effect_tooltip = NAM_corp_108_c_tt
 		ai_chance = { base = 30 }
 	}
+	option = {
+		name = ADISCORD_nam_resource_war.108.closed
+		trigger = { NOT = { event_target:NAM_corp_case_district = { NAM_corp_case_can_be_heard = yes } } }
+		if = {
+			limit = {
+				hidden_trigger = {
+					event_target:NAM_corp_case_district = { NAM_corp_live_disputed_district = yes }
+				}
+			}
+			custom_effect_tooltip = NAM_corp_hearing_jurisdiction_tt
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.111
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { has_country_flag = NAM_corp_takeover }
+	immediate = { NAM_board_recount = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.112
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { has_variable = NAM_corp_district_owner }
+	immediate = { NAM_board_sync_district_status = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.113
+	title = ADISCORD_nam_resource_war.113.t
+	desc = {
+		trigger = { has_country_flag = { flag = NAM_hum_southern_letter value < 2 } }
+		text = ADISCORD_nam_resource_war.113.d
+	}
+	desc = {
+		trigger = { has_country_flag = { flag = NAM_hum_southern_letter value > 1 } }
+		text = ADISCORD_nam_resource_war.113.d_partner
+	}
+	desc = {
+		trigger = { NOT = { has_country_flag = NAM_hum_southern_letter } }
+		text = ADISCORD_nam_resource_war.113.d_expired
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = ADISCORD_nam_resource_war.113.a
+		trigger = { NAM_hum_southern_letter_live = yes }
+		hidden_effect = {
+			if = {
+				limit = { NAM_hum_southern_letter_live = yes }
+				NAM = { country_event = { id = ADISCORD_nam_resource_war.115 hours = 1 } }
+			}
+			clr_country_flag = NAM_hum_southern_letter
+		}
+		ai_chance = { base = 55 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.113.b
+		trigger = {
+			NAM_hum_southern_letter_live = yes
+			has_country_flag = { flag = NAM_hum_southern_letter value < 2 }
+		}
+		custom_effect_tooltip = NAM_hum_accession_reply_tt
+		hidden_effect = { NAM_hum_sign_southern_mandate = yes }
+		ai_chance = { base = 45 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.113.c
+		trigger = {
+			NAM_hum_southern_letter_live = yes
+			has_country_flag = { flag = NAM_hum_southern_letter value > 1 }
+		}
+		custom_effect_tooltip = NAM_hum_workshop_reply_tt
+		hidden_effect = { NAM_hum_sign_southern_mandate = yes }
+		ai_chance = { base = 95 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.113.close
+		trigger = { NAM_hum_southern_letter_live = no }
+		hidden_effect = { clr_country_flag = NAM_hum_southern_letter }
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.114
+	title = ADISCORD_nam_resource_war.114.t
+	desc = ADISCORD_nam_resource_war.114.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_war.114.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.115
+	title = ADISCORD_nam_resource_war.115.t
+	desc = ADISCORD_nam_resource_war.115.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_war.115.a }
 }
 
 add_namespace = ADISCORD_nam_groups
@@ -2437,19 +2558,31 @@ country_event = {
 			has_country_flag = NAM_coup_succeeded
 		}
 	}
+	desc = {
+		text = ADISCORD_nam_groups.11.d_prag_republic
+		trigger = { check_variable = { var = NAM_prog_ending value = 5 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_nam_groups.11.d_prag_directorate
+		trigger = { check_variable = { var = NAM_prog_ending value = 6 compare = equals } }
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 
 	option = {
 		name = ADISCORD_nam_groups.11.a
 		hidden_effect = {
+			# Only the ladder (1, 2) and compact (5, 6) endings leave Rom in office.
 			if = {
 				limit = {
 					has_country_leader = {
 						character = NAM_Egor_Rom
 						ruling_only = yes
 					}
-					check_variable = { var = NAM_prog_ending value = 3 compare = less_than }
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 3 compare = less_than }
+						check_variable = { var = NAM_prog_ending value = 4 compare = greater_than }
+					}
 				}
 				country_event = { id = ADISCORD_nam_story.40 days = 60 }
 			}
@@ -2702,6 +2835,10 @@ country_event = {
 			if = {
 				limit = { hidden_trigger = { NAM_crisis_case_1 = yes } }
 				if = {
+					limit = { hidden_trigger = { NAM_industrial_claim_payable = yes } }
+					NAM_settle_industrial_claim = yes
+				}
+				else_if = {
 					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
@@ -2715,6 +2852,10 @@ country_event = {
 		}
 		ai_chance = {
 			base = 50
+			modifier = {
+				factor = 0
+				NAM_industrial_claim_payable = yes
+			}
 			modifier = {
 				factor = 0
 				has_country_flag = NAM_crisis_fund
@@ -2731,6 +2872,10 @@ country_event = {
 		NAM_crisis_default_1 = yes
 		ai_chance = {
 			base = 50
+			modifier = {
+				factor = 0
+				NAM_industrial_claim_payable = yes
+			}
 			modifier = {
 				factor = 0
 				has_country_flag = NAM_crisis_fund
@@ -2765,9 +2910,26 @@ country_event = {
 			base = 80
 			modifier = {
 				factor = 0
+				NAM_industrial_claim_payable = yes
+			}
+			modifier = {
+				factor = 0
 				has_completed_focus = NAM_field_firefighters
 			}
 		}
+	}
+
+	option = {
+		name = NAM_claim_industrial_cover
+		trigger = {
+			NAM_crisis_case_1 = yes
+			NAM_industrial_claim_payable = yes
+		}
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_case_1 = yes } }
+			NAM_settle_industrial_claim = yes
+		}
+		ai_chance = { base = 300 }
 	}
 
 	option = {
@@ -2836,6 +2998,10 @@ country_event = {
 			if = {
 				limit = { hidden_trigger = { NAM_crisis_case_2 = yes } }
 				if = {
+					limit = { hidden_trigger = { NAM_industrial_claim_payable = yes } }
+					NAM_settle_industrial_claim = yes
+				}
+				else_if = {
 					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
@@ -2866,6 +3032,10 @@ country_event = {
 			base = 50
 			modifier = {
 				factor = 0
+				NAM_industrial_claim_payable = yes
+			}
+			modifier = {
+				factor = 0
 				has_country_flag = NAM_crisis_fund
 			}
 		}
@@ -2892,6 +3062,25 @@ country_event = {
 		}
 		ai_chance = {
 			base = 80
+			modifier = {
+				factor = 0
+				NAM_industrial_claim_payable = yes
+			}
+		}
+	}
+
+	option = {
+		name = NAM_claim_industrial_cover
+		trigger = {
+			NAM_crisis_case_2 = yes
+			NAM_industrial_claim_payable = yes
+		}
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_case_2 = yes } }
+			NAM_settle_industrial_claim = yes
+		}
+		ai_chance = {
+			base = 300
 		}
 	}
 
@@ -3174,6 +3363,10 @@ country_event = {
 			if = {
 				limit = { hidden_trigger = { NAM_crisis_case_5 = yes } }
 				if = {
+					limit = { hidden_trigger = { NAM_garrison_families_entitled = yes } }
+					NAM_pay_garrison_families = yes
+				}
+				else_if = {
 					limit = { hidden_trigger = { has_country_flag = NAM_crisis_fund } }
 					custom_effect_tooltip = NAM_crisis_fund_used_tt
 					hidden_effect = {
@@ -3204,6 +3397,10 @@ country_event = {
 			base = 50
 			modifier = {
 				factor = 0
+				NAM_garrison_families_entitled = yes
+			}
+			modifier = {
+				factor = 0
 				has_country_flag = NAM_crisis_fund
 			}
 		}
@@ -3230,6 +3427,25 @@ country_event = {
 		}
 		ai_chance = {
 			base = 80
+			modifier = {
+				factor = 0
+				NAM_garrison_families_entitled = yes
+			}
+		}
+	}
+
+	option = {
+		name = NAM_claim_pension_arrears
+		trigger = {
+			NAM_crisis_case_5 = yes
+			NAM_garrison_families_entitled = yes
+		}
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_case_5 = yes } }
+			NAM_pay_garrison_families = yes
+		}
+		ai_chance = {
+			base = 300
 		}
 	}
 
@@ -3467,10 +3683,20 @@ country_event = {
 	desc = ADISCORD_nam_oil.10.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
-	trigger = { tag = NAM }
+	trigger = {
+		NAM_rus_emergency_debate = yes
+		NOT = { has_country_flag = NAM_rus_oil_offered }
+	}
+	immediate = { set_country_flag = NAM_rus_oil_offered }
 
 	option = {
+		name = ADISCORD_nam_oil.10.close
+		trigger = { NAM_rus_emergency_debate = no }
+		ai_chance = { base = 1 }
+	}
+	option = {
 		name = ADISCORD_nam_oil.10.a
+		trigger = { NAM_rus_emergency_debate = yes }
 		add_political_power = 50
 		custom_effect_tooltip = NAM_oil_10_a_tt
 		hidden_effect = {
@@ -3486,7 +3712,13 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_oil.10.b
-		trigger = { NAM_rus_coalition_member = yes }
+		trigger = {
+			NAM_rus_emergency_debate = yes
+			any_of_scopes = {
+				array = global.RUS_crisis_defenders
+				NAM_rus_fuel_shipment_ready = yes
+			}
+		}
 		add_war_support = 0.05
 		custom_effect_tooltip = NAM_oil_10_b_tt
 		hidden_effect = {
@@ -3506,8 +3738,13 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_oil.10.c
 		trigger = {
-			NAM_rus_coalition_member = yes
+			NAM_rus_emergency_debate = yes
 			NAM_oil_trade_authorized = yes
+			any_of_scopes = {
+				array = global.RUS_crisis_defenders
+				NAM_rus_active_defender = yes
+				NAM_oil_buyer_eligible = yes
+			}
 		}
 		custom_effect_tooltip = NAM_oil_10_c_tt
 		hidden_effect = {
@@ -3517,6 +3754,69 @@ country_event = {
 			}
 		}
 		ai_chance = { base = 30 }
+	}
+}
+
+# COUNTRY buyer. No cargo is reserved; both stocks and the front are checked at settlement.
+country_event = {
+	id = ADISCORD_nam_oil.11
+	title = ADISCORD_nam_oil.11.t
+	desc = ADISCORD_nam_oil.11.d
+	picture = GFX_event_adiscord_rail_yard_waybills
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_nam_oil.11.a
+		trigger = {
+			has_country_flag = NAM_rus_barter_pending
+			NAM_rus_barter_available = yes
+		}
+		hidden_effect = {
+			clr_country_flag = NAM_rus_barter_pending
+			set_country_flag = NAM_rus_barter_declined
+		}
+		ai_chance = { base = 10 }
+	}
+	option = {
+		name = ADISCORD_nam_oil.11.b
+		trigger = {
+			has_country_flag = NAM_rus_barter_pending
+			NAM_rus_barter_available = yes
+		}
+		custom_effect_tooltip = ADISCORD_nam_oil.11.result_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = NAM_rus_barter_pending
+					NAM_rus_barter_available = yes
+				}
+				clr_country_flag = NAM_rus_barter_pending
+				send_equipment = {
+					equipment = motorized_equipment
+					amount = 100
+					target = NAM
+				}
+				NAM_rus_supply_member = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_equipment = { motorized_equipment < 200 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_oil.11.c
+		trigger = {
+			OR = {
+				NOT = { has_country_flag = NAM_rus_barter_pending }
+				NAM_rus_barter_available = no
+			}
+		}
+		hidden_effect = { clr_country_flag = NAM_rus_barter_pending }
+		ai_chance = { base = 1 }
 	}
 }
 
@@ -3823,7 +4123,7 @@ country_event = {
 	id = ADISCORD_nam_resource_war.88
 	title = ADISCORD_nam_resource_war.88.t
 	desc = ADISCORD_nam_resource_war.88.d
-	picture = GFX_event_adiscord_expedition_camp
+	picture = GFX_event_adiscord_railway_signal_box
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = NAM }
@@ -4375,6 +4675,232 @@ country_event = {
 	option = { name = ADISCORD_nam_story.23.a }
 }
 
+country_event = {
+	id = ADISCORD_nam_story.24
+	title = ADISCORD_nam_story.24.t
+	desc = ADISCORD_nam_story.24.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = NAM_board_tender_keep
+		custom_effect_tooltip = NAM_board_tender_keep_tt
+		hidden_effect = {
+			clr_country_flag = NAM_board_tender_rail_closed
+			if = {
+				limit = { check_variable = { var = NAM_board_lot_rail value = 0 compare = equals } }
+				set_country_flag = {
+					flag = NAM_board_tender_rail_closed
+					value = 1
+					days = 30
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				factor = 0
+				NAM_board_can_sell_rail = yes
+				OR = {
+					NAM_board_minister_2 = yes
+					NAM_board_minister_5 = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_2
+		trigger = { NAM_board_can_sell_rail = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_2_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_rail = yes }
+				set_variable = { var = NAM_board_lot_rail value = 2 }
+				clr_country_flag = NAM_board_tender_rail_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_2 = no
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_5
+		trigger = { NAM_board_can_sell_rail = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_5_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_rail = yes }
+				set_variable = { var = NAM_board_lot_rail value = 5 }
+				clr_country_flag = NAM_board_tender_rail_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_5 = no
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.25
+	title = ADISCORD_nam_story.25.t
+	desc = ADISCORD_nam_story.25.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = NAM_board_tender_keep
+		custom_effect_tooltip = NAM_board_tender_keep_tt
+		hidden_effect = {
+			clr_country_flag = NAM_board_tender_yards_closed
+			if = {
+				limit = { check_variable = { var = NAM_board_lot_yards value = 0 compare = equals } }
+				set_country_flag = {
+					flag = NAM_board_tender_yards_closed
+					value = 1
+					days = 30
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				factor = 0
+				NAM_board_can_sell_yards = yes
+				OR = {
+					NAM_board_minister_3 = yes
+					NAM_board_minister_4 = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_3
+		trigger = { NAM_board_can_sell_yards = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_3_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_yards = yes }
+				set_variable = { var = NAM_board_lot_yards value = 3 }
+				clr_country_flag = NAM_board_tender_yards_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_3 = no
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_4
+		trigger = { NAM_board_can_sell_yards = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_4_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_yards = yes }
+				set_variable = { var = NAM_board_lot_yards value = 4 }
+				clr_country_flag = NAM_board_tender_yards_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_4 = no
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.26
+	title = ADISCORD_nam_story.26.t
+	desc = ADISCORD_nam_story.26.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = NAM_board_tender_keep
+		custom_effect_tooltip = NAM_board_tender_keep_tt
+		hidden_effect = {
+			clr_country_flag = NAM_board_tender_depots_closed
+			if = {
+				limit = { check_variable = { var = NAM_board_lot_depots value = 0 compare = equals } }
+				set_country_flag = {
+					flag = NAM_board_tender_depots_closed
+					value = 1
+					days = 30
+				}
+			}
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				factor = 0
+				NAM_board_can_sell_depots = yes
+				OR = {
+					NAM_board_minister_1 = yes
+					NAM_board_minister_6 = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_1
+		trigger = { NAM_board_can_sell_depots = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_1_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_depots = yes }
+				set_variable = { var = NAM_board_lot_depots value = 1 }
+				clr_country_flag = NAM_board_tender_depots_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_1 = no
+			}
+		}
+	}
+	option = {
+		name = NAM_board_tender_accept_6
+		trigger = { NAM_board_can_sell_depots = yes }
+		custom_effect_tooltip = NAM_board_tender_bid_6_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_board_can_sell_depots = yes }
+				set_variable = { var = NAM_board_lot_depots value = 6 }
+				clr_country_flag = NAM_board_tender_depots_closed
+				NAM_board_recount = yes
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_board_minister_6 = no
+				OR = {
+					has_war = yes
+					has_political_power < 75
+				}
+			}
+		}
+	}
+}
+
 # Defeat: the roll call after the compromise peace.
 country_event = {
 	id = ADISCORD_nam_story.31
@@ -4444,8 +4970,8 @@ country_event = {
 	option = { name = ADISCORD_nam_story.34.a }
 }
 
-# Rom's last note: ADISCORD_nam_groups.11 queues it for the two ladder endings
-# while Rom still rules.
+# Rom's last note: ADISCORD_nam_groups.11 queues it for the ladder and compact
+# endings while Rom still rules.
 country_event = {
 	id = ADISCORD_nam_story.40
 	title = ADISCORD_nam_story.40.t
@@ -4456,6 +4982,14 @@ country_event = {
 	desc = {
 		text = ADISCORD_nam_story.40.d_service
 		trigger = { check_variable = { var = NAM_prog_ending value = 2 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.40.d_prag_republic
+		trigger = { check_variable = { var = NAM_prog_ending value = 5 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.40.d_prag_directorate
+		trigger = { check_variable = { var = NAM_prog_ending value = 6 compare = equals } }
 	}
 	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
@@ -4469,7 +5003,29 @@ country_event = {
 		OR = {
 			check_variable = { var = NAM_prog_ending value = 1 compare = equals }
 			check_variable = { var = NAM_prog_ending value = 2 compare = equals }
+			check_variable = { var = NAM_prog_ending value = 5 compare = equals }
+			check_variable = { var = NAM_prog_ending value = 6 compare = equals }
 		}
 	}
 	option = { name = ADISCORD_nam_memoir.close }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.408
+	title = ADISCORD_nam_resource_war.408.t
+	desc = ADISCORD_nam_resource_war.408.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_nam_resource_war.408.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.409
+	title = ADISCORD_nam_resource_war.409.t
+	desc = ADISCORD_nam_resource_war.409.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+
+	option = { name = ADISCORD_nam_resource_war.409.a }
 }
