@@ -2839,12 +2839,202 @@ ADISCORD_vorkerland_is_preparation_heir = {
 	}
 }
 
+# COUNTRY WRK. The apparatus named in preparation.1 opens its own focus branch;
+# the other two stay hidden. The variable is unset until that choice.
+ADISCORD_vorkerland_prewar_patron_committees = {
+	has_variable = ADISCORD_vorkerland_prep_patron
+	check_variable = { var = ADISCORD_vorkerland_prep_patron value = 1 compare = equals }
+}
+
+ADISCORD_vorkerland_prewar_patron_staff = {
+	has_variable = ADISCORD_vorkerland_prep_patron
+	check_variable = { var = ADISCORD_vorkerland_prep_patron value = 2 compare = equals }
+}
+
+ADISCORD_vorkerland_prewar_patron_network = {
+	has_variable = ADISCORD_vorkerland_prep_patron
+	check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals }
+}
+
 ADISCORD_vorkerland_prep_open = {
 	tag = event_target:ADISCORD_vorkerland_nation
 	has_global_flag = ADISCORD_vorkerland_phase_prewar
 	NOT = { has_capitulated = yes }
 	is_subject = no
 	has_variable = ADISCORD_vorkerland_prep_patron
+}
+
+# --- capital unrest triggers ---
+
+# COUNTRY. The committees keep the unrest ledger of the capital until the collapse.
+WRK_unrest_active = {
+	ADISCORD_vorkerland_prep_open = yes
+	ADISCORD_vorkerland_prewar_patron_committees = yes
+}
+
+# COUNTRY. The workers' guard runs one patrol at a time. A targeted decision
+# is not visible to has_decision, so the district flag is the record.
+WRK_unrest_patrol_free = {
+	NOT = {
+		OR = {
+			32 = { has_state_flag = WRK_unrest_patrol }
+			33 = { has_state_flag = WRK_unrest_patrol }
+			34 = { has_state_flag = WRK_unrest_patrol }
+			35 = { has_state_flag = WRK_unrest_patrol }
+			36 = { has_state_flag = WRK_unrest_patrol }
+			37 = { has_state_flag = WRK_unrest_patrol }
+			38 = { has_state_flag = WRK_unrest_patrol }
+			39 = { has_state_flag = WRK_unrest_patrol }
+		}
+	}
+}
+
+# The civil evacuation leaves the Tower through the South-Eastern district, the
+# military one through the South-Western, North-Western and Northern districts,
+# as the capital panel draws them. A riot on the way strands the convoy.
+WRK_unrest_civil_route_clear = {
+	33 = { NOT = { has_state_flag = WRK_unrest_riot } }
+}
+
+WRK_unrest_military_route_clear = {
+	36 = { NOT = { has_state_flag = WRK_unrest_riot } }
+	37 = { NOT = { has_state_flag = WRK_unrest_riot } }
+	38 = { NOT = { has_state_flag = WRK_unrest_riot } }
+}
+
+# --- capital cell triggers ---
+
+# COUNTRY. Worx's engineers build their network of cells until the collapse.
+WRK_cells_active = {
+	ADISCORD_vorkerland_prep_open = yes
+	ADISCORD_vorkerland_prewar_patron_network = yes
+}
+
+# COUNTRY. One cell is planted or expanded at a time. A targeted decision is
+# not visible to has_decision, so the district flag is the record.
+WRK_cells_work_free = {
+	NOT = {
+		OR = {
+			32 = { has_state_flag = WRK_cell_work }
+			33 = { has_state_flag = WRK_cell_work }
+			34 = { has_state_flag = WRK_cell_work }
+			35 = { has_state_flag = WRK_cell_work }
+			36 = { has_state_flag = WRK_cell_work }
+			37 = { has_state_flag = WRK_cell_work }
+			38 = { has_state_flag = WRK_cell_work }
+			39 = { has_state_flag = WRK_cell_work }
+		}
+	}
+}
+
+# COUNTRY. The capital panel belongs to the apparatus that keeps a ledger there.
+WRK_capital_panel_visible = {
+	OR = {
+		WRK_unrest_active = yes
+		WRK_cells_active = yes
+	}
+}
+
+# STATE. Street strip of the capital panel. Committees: 2 calm, 1 tense,
+# 5 strike, 6 riot. Network: 4 cell, 5 exposed cell, 1 none.
+WRK_capital_set_state_frame = {
+	set_temp_variable = { var = WRK_capital_frame value = 1 }
+	if = {
+		limit = { has_variable = WRK_unrest }
+		if = {
+			limit = { check_variable = { var = WRK_unrest value = 40 compare = less_than } }
+			set_temp_variable = { var = WRK_capital_frame value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = WRK_unrest value = 60 compare = greater_than_or_equals } }
+			set_temp_variable = { var = WRK_capital_frame value = 5 }
+		}
+		if = {
+			limit = { has_state_flag = WRK_unrest_riot }
+			set_temp_variable = { var = WRK_capital_frame value = 6 }
+		}
+	}
+	if = {
+		limit = { check_variable = { var = WRK_cell_level value = 0 compare = greater_than } }
+		set_temp_variable = { var = WRK_capital_frame value = 4 }
+		if = {
+			limit = { has_state_flag = WRK_cell_exposed }
+			set_temp_variable = { var = WRK_capital_frame value = 5 }
+		}
+	}
+}
+
+# STATE. Marker. Committees: 4 strike, 5 riot, 6 patrol. Network: 2 hidden
+# cell, 3 exposed cell; a legal collegium needs no marker.
+WRK_capital_set_marker_frame = {
+	set_temp_variable = { var = WRK_capital_frame value = 1 }
+	if = {
+		limit = { check_variable = { var = WRK_unrest value = 60 compare = greater_than_or_equals } }
+		set_temp_variable = { var = WRK_capital_frame value = 4 }
+	}
+	if = {
+		limit = { has_state_flag = WRK_unrest_riot }
+		set_temp_variable = { var = WRK_capital_frame value = 5 }
+	}
+	if = {
+		limit = { has_state_flag = WRK_unrest_patrol }
+		set_temp_variable = { var = WRK_capital_frame value = 6 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = WRK_cell_level value = 0 compare = greater_than }
+			NOT = { has_state_flag = WRK_cell_legal }
+		}
+		set_temp_variable = { var = WRK_capital_frame value = 2 }
+	}
+	if = {
+		limit = { has_state_flag = WRK_cell_exposed }
+		set_temp_variable = { var = WRK_capital_frame value = 3 }
+	}
+}
+
+# COUNTRY. Route layer: 1 none, 2 civil, 3 military, by the Tower's project.
+WRK_capital_set_route_frame = {
+	set_temp_variable = { var = WRK_capital_frame value = 1 }
+	if = {
+		limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 1 compare = equals } } }
+		set_temp_variable = { var = WRK_capital_frame value = 2 }
+	}
+	if = {
+		limit = { 40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 2 compare = equals } } }
+		set_temp_variable = { var = WRK_capital_frame value = 3 }
+	}
+}
+
+# COUNTRY. The Tower's streets show the apparatus that holds the last order.
+WRK_capital_set_tower_frame = {
+	set_temp_variable = { var = WRK_capital_frame value = 1 }
+	if = {
+		limit = { ADISCORD_vorkerland_prewar_patron_committees = yes }
+		set_temp_variable = { var = WRK_capital_frame value = 2 }
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_prewar_patron_staff = yes }
+		set_temp_variable = { var = WRK_capital_frame value = 3 }
+	}
+	if = {
+		limit = { ADISCORD_vorkerland_prewar_patron_network = yes }
+		set_temp_variable = { var = WRK_capital_frame value = 4 }
+	}
+}
+
+# COUNTRY. Legend markers. Committees: patrol, strike, riot. Network: hidden
+# cell, exposed cell, and an empty third slot.
+WRK_capital_set_legend_frames = {
+	set_temp_variable = { var = WRK_capital_legend_1 value = 6 }
+	set_temp_variable = { var = WRK_capital_legend_2 value = 4 }
+	set_temp_variable = { var = WRK_capital_legend_3 value = 5 }
+	if = {
+		limit = { WRK_cells_active = yes }
+		set_temp_variable = { var = WRK_capital_legend_1 value = 2 }
+		set_temp_variable = { var = WRK_capital_legend_2 value = 3 }
+		set_temp_variable = { var = WRK_capital_legend_3 value = 1 }
+	}
 }
 
 # The last common budget opens a third slot.

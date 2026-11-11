@@ -47,6 +47,13 @@ on_actions = {
 			}
 		}
 	}
+	# WRK exists only before the collapse; each effect guards its own apparatus.
+	on_monthly_WRK = {
+		effect = {
+			WRK_unrest_monthly = yes
+			WRK_cells_monthly = yes
+		}
+	}
 	on_monthly_WKR = {
 		effect = {
 			# The unified country carries the western crisis clock on its own tag.

@@ -1,0 +1,241 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_contamination_iii"
+		texturefile = "gfx/interface/state_modifiers/adiscord/contamination_iii.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_contamination_ii"
+		texturefile = "gfx/interface/state_modifiers/adiscord/contamination_ii.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_contamination_i"
+		texturefile = "gfx/interface/state_modifiers/adiscord/contamination_i.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_reactor_industrial_legacy"
+		texturefile = "gfx/interface/state_modifiers/adiscord/reactor_industrial_legacy.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_reclamation_stage_3"
+		texturefile = "gfx/interface/state_modifiers/adiscord/reclamation_stage_3.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_regional_autonomy"
+		texturefile = "gfx/interface/state_modifiers/adiscord/regional_autonomy.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_civil_war_attrition"
+		texturefile = "gfx/interface/state_modifiers/adiscord/civil_war_attrition.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_vad_chartered_district"
+		texturefile = "gfx/interface/state_modifiers/adiscord/vad_chartered_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_railway_council"
+		texturefile = "gfx/interface/state_modifiers/adiscord/railway_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_airfield_workshop"
+		texturefile = "gfx/interface/state_modifiers/adiscord/airfield_workshop.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_commandant_district"
+		texturefile = "gfx/interface/state_modifiers/adiscord/commandant_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_district_uprising"
+		texturefile = "gfx/interface/state_modifiers/adiscord/district_uprising.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_military_governorate"
+		texturefile = "gfx/interface/state_modifiers/adiscord/military_governorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_civil_governorate"
+		texturefile = "gfx/interface/state_modifiers/adiscord/civil_governorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_crown_governorate"
+		texturefile = "gfx/interface/state_modifiers/adiscord/crown_governorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_rail_crews"
+		texturefile = "gfx/interface/state_modifiers/adiscord/rail_crews.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_officer_estate"
+		texturefile = "gfx/interface/state_modifiers/adiscord/officer_estate.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_recruitment_disruption"
+		texturefile = "gfx/interface/state_modifiers/adiscord/recruitment_disruption.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_rotated_garrison"
+		texturefile = "gfx/interface/state_modifiers/adiscord/rotated_garrison.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_field_depot"
+		texturefile = "gfx/interface/state_modifiers/adiscord/field_depot.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_district_privileges"
+		texturefile = "gfx/interface/state_modifiers/adiscord/district_privileges.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_district_collateral"
+		texturefile = "gfx/interface/state_modifiers/adiscord/district_collateral.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_prepared_interchange"
+		texturefile = "gfx/interface/state_modifiers/adiscord/prepared_interchange.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_local_militia"
+		texturefile = "gfx/interface/state_modifiers/adiscord/local_militia.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_march_commitment"
+		texturefile = "gfx/interface/state_modifiers/adiscord/march_commitment.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_scorched_wells"
+		texturefile = "gfx/interface/state_modifiers/adiscord/scorched_wells.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_oil_strike"
+		texturefile = "gfx/interface/state_modifiers/adiscord/oil_strike.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_island_convoy"
+		texturefile = "gfx/interface/state_modifiers/adiscord/island_convoy.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_steel_levy"
+		texturefile = "gfx/interface/state_modifiers/adiscord/steel_levy.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_free_zone"
+		texturefile = "gfx/interface/state_modifiers/adiscord/free_zone.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_company_quarters"
+		texturefile = "gfx/interface/state_modifiers/adiscord/company_quarters.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_air_bridge"
+		texturefile = "gfx/interface/state_modifiers/adiscord/air_bridge.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_tenant_supply_depot"
+		texturefile = "gfx/interface/state_modifiers/adiscord/tenant_supply_depot.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_steel_export"
+		texturefile = "gfx/interface/state_modifiers/adiscord/steel_export.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_corporate_board"
+		texturefile = "gfx/interface/state_modifiers/adiscord/corporate_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_conquered_state"
+		texturefile = "gfx/interface/state_modifiers/adiscord/conquered_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_requisitioned_market"
+		texturefile = "gfx/interface/state_modifiers/adiscord/requisitioned_market.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_command_post"
+		texturefile = "gfx/interface/state_modifiers/adiscord/command_post.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_labour_camp"
+		texturefile = "gfx/interface/state_modifiers/adiscord/labour_camp.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_stripped_state"
+		texturefile = "gfx/interface/state_modifiers/adiscord/stripped_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_forward_depot"
+		texturefile = "gfx/interface/state_modifiers/adiscord/forward_depot.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_hydropower"
+		texturefile = "gfx/interface/state_modifiers/adiscord/hydropower.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_guarded_wells"
+		texturefile = "gfx/interface/state_modifiers/adiscord/guarded_wells.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_district_fleet_called"
+		texturefile = "gfx/interface/state_modifiers/adiscord/district_fleet_called.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_title_books"
+		texturefile = "gfx/interface/state_modifiers/adiscord/title_books.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_civil_court_awards"
+		texturefile = "gfx/interface/state_modifiers/adiscord/civil_court_awards.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_border_autonomy"
+		texturefile = "gfx/interface/state_modifiers/adiscord/border_autonomy.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_ADISCORD_coast_irrigation"
+		texturefile = "gfx/interface/state_modifiers/adiscord/coast_irrigation.png"
+	}
+}

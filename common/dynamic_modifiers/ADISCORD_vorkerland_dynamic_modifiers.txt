@@ -1,13 +1,13 @@
 # --- collapse_dynamic_modifiers ---
 ADISCORD_vorkerland_reactor_industrial_legacy = {
 	enable = { always = yes }
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_reactor_industrial_legacy
 	custom_modifier_tooltip = ADISCORD_vorkerland_reactor_industrial_legacy_tt
 }
 
 ADISCORD_vorkerland_dirty_state = {
 	enable = { always = yes }
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_contamination_iii
 	local_manpower = -0.75
 	state_resources_factor = -0.60
 	local_building_slots_factor = -0.40
@@ -19,7 +19,7 @@ ADISCORD_vorkerland_dirty_state = {
 # Conquering claimants and foreign countries must not inherit its bonuses.
 ADISCORD_vorkerland_regional_autonomy = {
 	enable = { always = yes }
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_regional_autonomy
 	remove_trigger = {
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
@@ -47,7 +47,7 @@ ADISCORD_vorkerland_macri_volunteer_corps = {
 # Applied to central states for the duration of the civil war.
 # Attacker modifiers omit enable/remove_trigger; war settlement removes this explicitly.
 ADISCORD_vorkerland_civil_war_attrition = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_civil_war_attrition
 	attacker_modifier = yes
 	enable = { always = yes }
 	enable = { always = yes }
@@ -106,7 +106,7 @@ ADISCORD_vorkerland_wkr_councils = {
 # District oaths (VAD), state scope. Applied when a charter or commandant rule
 # is sealed and retired with the civil-war modifiers.
 ADISCORD_vorkerland_vad_chartered_district = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_vad_chartered_district
 	enable = {
 		is_owned_and_controlled_by = VAD
 		VAD = { VAD_administration_active = yes }
@@ -116,7 +116,7 @@ ADISCORD_vorkerland_vad_chartered_district = {
 }
 
 WKR_railway_council = {
-	icon = GFX_idea_generic_logistics
+	icon = GFX_modifiers_ADISCORD_railway_council
 	enable = {
 		is_owned_and_controlled_by = WKR
 		is_fully_controlled_by = WKR
@@ -128,7 +128,7 @@ WKR_railway_council = {
 }
 
 WKR_airfield_workshop = {
-	icon = GFX_idea_generic_production_bonus
+	icon = GFX_modifiers_ADISCORD_airfield_workshop
 	enable = {
 		WKR_railway_council_site = yes
 		air_base > 0
@@ -139,7 +139,7 @@ WKR_airfield_workshop = {
 }
 
 ADISCORD_vorkerland_vad_commandant_district = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_commandant_district
 	enable = {
 		is_owned_and_controlled_by = VAD
 		VAD = { VAD_administration_active = yes }
@@ -152,7 +152,7 @@ ADISCORD_vorkerland_vad_commandant_district = {
 }
 
 ADISCORD_vorkerland_vad_district_uprising = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_district_uprising
 	enable = {
 		is_owned_and_controlled_by = VAD
 		VAD = { VAD_administration_active = yes }
@@ -276,25 +276,25 @@ ADISCORD_vorkerland_empire_court = {
 # STATE. An installed imperial governor; the governor focus choice decides
 # which administration the decision installs.
 WRK_empire_military_governorate = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_military_governorate
 	local_manpower = 0.25
 	local_supplies = 0.20
 }
 
 WRK_empire_civil_governorate = {
-	icon = GFX_idea_generic_production_bonus
+	icon = GFX_modifiers_ADISCORD_civil_governorate
 	local_factories = 0.10
 	state_production_speed_buildings_factor = 0.15
 }
 
 WRK_empire_crown_governorate = {
-	icon = GFX_idea_generic_central_management
+	icon = GFX_modifiers_ADISCORD_crown_governorate
 	local_manpower = 0.10
 }
 
 ADISCORD_vorkerland_prep_rail_crews = {
 	enable = { always = yes }
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_rail_crews
 	local_supplies = 0.20
 	remove_trigger = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 }
@@ -371,7 +371,7 @@ TVA_administration_dynamic = {
 }
 
 WRK_empire_officer_estate = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_officer_estate
 	enable = {
 		is_owned_and_controlled_by = event_target:ADISCORD_vorkerland_nation
 		owner = { ADISCORD_vorkerland_petrichev_empire = yes }
@@ -381,7 +381,7 @@ WRK_empire_officer_estate = {
 }
 
 VAD_crown_recruitment_disruption = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_recruitment_disruption
 	enable = {
 		is_owned_and_controlled_by = VAD
 		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
@@ -391,7 +391,7 @@ VAD_crown_recruitment_disruption = {
 }
 
 VAD_staff_rotated_garrison = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_rotated_garrison
 	enable = {
 		is_owned_and_controlled_by = VAD
 		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
@@ -402,7 +402,7 @@ VAD_staff_rotated_garrison = {
 }
 
 VAD_staff_field_depot = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_field_depot
 	enable = {
 		is_owned_and_controlled_by = VAD
 		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_commandant_district }
@@ -427,7 +427,7 @@ VAD_collegial_staff_dynamic = {
 }
 
 VAD_crown_district_privileges = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_district_privileges
 	enable = {
 		is_owned_and_controlled_by = VAD
 		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
@@ -438,7 +438,7 @@ VAD_crown_district_privileges = {
 }
 
 VAD_crown_district_collateral = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_district_collateral
 	enable = {
 		is_owned_and_controlled_by = VAD
 		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_chartered_district }
@@ -448,7 +448,7 @@ VAD_crown_district_collateral = {
 }
 
 WKR_prepared_interchange = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_modifiers_ADISCORD_prepared_interchange
 	enable = {
 		WKR_railway_council_site = yes
 		WKR = { WKR_administration_active = yes }
@@ -460,7 +460,7 @@ WKR_prepared_interchange = {
 }
 
 VAD_local_militia = {
-	icon = GFX_idea_generic_manpower_bonus
+	icon = GFX_modifiers_ADISCORD_local_militia
 	custom_modifier_tooltip = VAD_local_militia_tt
 	enable = {
 		is_owned_and_controlled_by = VAD
@@ -473,7 +473,7 @@ VAD_local_militia = {
 }
 
 VAD_march_commitment = {
-	icon = GFX_idea_generic_production_bonus
+	icon = GFX_modifiers_ADISCORD_march_commitment
 	enable = {
 		VAD_final_operations_district = yes
 		VAD = { VAD_central_campaign_active = yes }

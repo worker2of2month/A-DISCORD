@@ -3649,8 +3649,11 @@ country_event = {
 						value = 1
 					}
 				}
+				WRK_unrest_initialize = yes
+				mark_focus_tree_layout_dirty = yes
 			}
 		}
+		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_worker_tt
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_tt
 	}
 	option = {
@@ -3672,8 +3675,10 @@ country_event = {
 						value = 2
 					}
 				}
+				mark_focus_tree_layout_dirty = yes
 			}
 		}
+		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_army_tt
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_tt
 	}
 	option = {
@@ -3695,9 +3700,40 @@ country_event = {
 						value = 3
 					}
 				}
+				WRK_cells_initialize = yes
+				mark_focus_tree_layout_dirty = yes
 			}
 		}
+		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_technical_tt
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_tt
+	}
+}
+
+# A district of the capital has risen. The consequences were applied when
+# the riot began; this window only reports them.
+country_event = {
+	id = ADISCORD_vorkerland_preparation.60
+	title = ADISCORD_vorkerland_preparation.60.t
+	desc = ADISCORD_vorkerland_preparation.60.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_vorkerland_preparation.60.a
+		custom_effect_tooltip = WRK_unrest_riot_report_tt
+	}
+}
+
+# The committees have found a cell of the network. The consequences were
+# applied at the exposure; this window only reports them.
+country_event = {
+	id = ADISCORD_vorkerland_preparation.61
+	title = ADISCORD_vorkerland_preparation.61.t
+	desc = ADISCORD_vorkerland_preparation.61.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_vorkerland_preparation.61.a
+		custom_effect_tooltip = WRK_cell_exposure_report_tt
 	}
 }
 

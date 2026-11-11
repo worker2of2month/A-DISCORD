@@ -28,6 +28,8 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
+# The first state owns the authored dam position; the second copies it.
+SHARED_BORDER_DAM_STATES = (28, 53)
 PORT_ANCHOR_TYPES = {
     "coastal_bunker",
     "dockyard",
@@ -277,7 +279,11 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
                     f"map/buildings.txt:{line_number}: {building_type} is not positioned in a state province"
                 )
             recorded_state = int(fields[0])
-            if recorded_state != actual_state:
+            # The shared border dam rounds into one province for both rows.
+            if recorded_state != actual_state and not (
+                is_shared_border_dam(fields)
+                and actual_state in SHARED_BORDER_DAM_STATES
+            ):
                 mismatches.append(
                     BuildingMismatch(
                         line=line_number,
@@ -337,7 +343,8 @@ def synchronize_buildings(
             fields[0] = str(mismatch.actual_state)
             lines[mismatch.line - 1] = ";".join(fields)
         lines, _height_changes = mountain_building_heights(root, lines)
-        lines = interior_dam_anchor(lines)
+        lines = shared_border_dam_anchor(lines)
+        lines, _dam_changes = dam_province_plan(root, lines)
         lines = bezhaysk_castle_clearance(lines)
         lines = khan_bunker_clearance(lines)
         lines = permanent_landmark_clearance(lines)
@@ -349,16 +356,100 @@ def synchronize_buildings(
     return mismatches
 
 
-def interior_dam_anchor(lines: list[str]) -> list[str]:
-    """Keep the dam inside its state under both native truncation and rounding."""
+def is_shared_border_dam(fields: list[str]) -> bool:
+    return fields[1] == "dam_spawn" and int(fields[0]) in SHARED_BORDER_DAM_STATES
+
+
+def shared_border_dam_anchor(lines: list[str]) -> list[str]:
+    """Give the 28/53 border dam one anchor so both states draw a single model.
+
+    The dam stands on the boundary of provinces 145 and 70; separate anchors
+    leave two models on either side of the river. The state 28 row is the
+    authored position, and the state 53 row copies its coordinates and rotation.
+    """
+    source_state, copy_state = (str(state) for state in SHARED_BORDER_DAM_STATES)
+    source = next(
+        (
+            line.split(";")
+            for line in lines
+            if line.split(";")[:2] == [source_state, "dam_spawn"]
+        ),
+        None,
+    )
+    if source is None:
+        return list(lines)
+    shared = ";".join([copy_state, *source[1:]])
     result = []
     for line in lines:
-        fields = line.split(";")
-        if fields[:2] == ["53", "dam_spawn"]:
-            fields[2], fields[4] = "3751.00", "947.00"
-            line = ";".join(fields)
+        if line.split(";")[:2] == [copy_state, "dam_spawn"]:
+            continue
         result.append(line)
+        if line.split(";")[:2] == [source_state, "dam_spawn"]:
+            result.append(shared)
     return result
+
+
+def load_dam_province_by_state(root: Path = ROOT) -> dict[int, int]:
+    dam_provinces: dict[int, int] = {}
+    for path in sorted((root / "history" / "states").glob("*.txt")):
+        source = path.read_text(encoding="utf-8-sig", errors="strict")
+        state_match = re.search(r"\bid\s*=\s*(\d+)", source)
+        dam_match = re.search(r"\b(\d+)\s*=\s*\{[^{}]*\bdam\s*=", source)
+        if state_match and dam_match:
+            dam_provinces[int(state_match.group(1))] = int(dam_match.group(1))
+    return dam_provinces
+
+
+def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int]]:
+    """Keep each dam anchor in the province whose history holds the dam.
+
+    ``dam_spawn`` is province-scoped: an anchor in a neighbouring province of
+    the same state leaves the dam without a model. A stray anchor moves to the
+    nearest integer pixel of the dam province, so truncation and rounding agree.
+    The shared border dam is exempt because it deliberately sits on the boundary.
+    """
+    dam_provinces = load_dam_province_by_state(root)
+    colors = load_province_by_color(root)
+    result = list(lines)
+    changed = []
+    with (
+        Image.open(root / "map/provinces.bmp") as provinces,
+        Image.open(root / "map/heightmap.bmp") as heights,
+    ):
+        def province_at(px: int, pz: int) -> int | None:
+            return colors.get(provinces.getpixel((px, provinces.height - 1 - pz)))
+
+        for index, line in enumerate(lines):
+            fields = line.split(";")
+            if fields[1] != "dam_spawn" or is_shared_border_dam(fields):
+                continue
+            province_id = dam_provinces.get(int(fields[0]))
+            if province_id is None:
+                continue
+            x, z = float(fields[2]), float(fields[4])
+            if all(
+                province_at(convert(x), convert(z)) == province_id
+                for convert in (int, round)
+            ):
+                continue
+            candidates = [
+                (px, pz)
+                for px in range(max(0, int(x) - 12), min(provinces.width, int(x) + 13))
+                for pz in range(max(0, int(z) - 12), min(provinces.height, int(z) + 13))
+                if province_at(px, pz) == province_id
+            ]
+            if not candidates:
+                raise RuntimeError(f"province {province_id}: no nearby dam anchor")
+            px, pz = min(
+                candidates,
+                key=lambda point: ((point[0] - x) ** 2 + (point[1] - z) ** 2, point),
+            )
+            fields[2] = f"{px:.2f}"
+            fields[3] = f"{heights.getpixel((px, provinces.height - 1 - pz)) / 10:.2f}"
+            fields[4] = f"{pz:.2f}"
+            result[index] = ";".join(fields)
+            changed.append(index + 1)
+    return result, changed
 
 
 def bezhaysk_castle_clearance(lines: list[str]) -> list[str]:
@@ -426,7 +517,11 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
         fields = line.split(";")
         if len(fields) == 7 and fields[0].isdigit():
             state_id = int(fields[0])
-            if fields[1] not in SEA_POSITIONED_TYPES | PORT_ANCHOR_TYPES:
+            # The border dam is placed on its river crossing, next to the landmark.
+            if (
+                fields[1] not in SEA_POSITIONED_TYPES | PORT_ANCHOR_TYPES
+                and not is_shared_border_dam(fields)
+            ):
                 x, z = float(fields[2]), float(fields[4])
                 for zone_state, landmark_x, landmark_z, radius, dx, dy, dz in zones:
                     if zone_state == state_id and (
@@ -687,8 +782,13 @@ def validate(root: Path = ROOT) -> list[str]:
         f"map/unitstacks.txt:{line}: Khan unit anchor lies outside its province"
         for line in stack_changes
     )
-    if interior_dam_anchor(lines) != lines:
-        issues.append("state 53 dam_spawn must use its interior integer anchor")
+    if shared_border_dam_anchor(lines) != lines:
+        issues.append("states 28 and 53 dam_spawn must share one border anchor")
+    _planned_dams, dam_changes = dam_province_plan(root, lines)
+    issues.extend(
+        f"map/buildings.txt:{line}: dam_spawn lies outside its dam province"
+        for line in dam_changes
+    )
     if bezhaysk_castle_clearance(lines) != lines:
         issues.append("state 41 building visuals overlap the Grayson castle footprint")
     if khan_bunker_clearance(lines) != lines:

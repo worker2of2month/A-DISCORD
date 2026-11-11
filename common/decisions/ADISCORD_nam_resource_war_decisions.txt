@@ -7104,7 +7104,7 @@ NAM_national_programmes = {
 				factor = 0
 				OR = {
 					NAM_project_slot_free = yes
-					check_variable = { NAM_projects_in_progress >= 3 }
+					check_variable = { NAM_projects_in_progress > 2 }
 				}
 			}
 		}

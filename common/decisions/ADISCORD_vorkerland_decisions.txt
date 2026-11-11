@@ -966,6 +966,526 @@ ADISCORD_vorkerland_prewar_category = {
 		ai_will_do = { base = 2 }
 	}
 
+	# --- capital unrest ---
+	# Measures of the committees' branch on the eight capital districts. The
+	# instant measures share one district cooldown flag; the patrol holds the
+	# district flag WRK_unrest_patrol from payment until it ends or is cancelled.
+
+	WRK_issue_capital_rations = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_committee_ration_reserve
+			WRK_unrest_active = yes
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_no_riot_tt
+					NOT = { has_state_flag = WRK_unrest_riot }
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_measure_ready_tt
+					NOT = { has_state_flag = WRK_unrest_measure_recent }
+				}
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_unrest_reduce_25_tt
+				hidden_effect = {
+					set_temp_variable = { var = WRK_unrest_delta value = -25 }
+					WRK_unrest_change = yes
+					set_state_flag = { flag = WRK_unrest_measure_recent days = 45 value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 4
+				FROM = { check_variable = { var = WRK_unrest value = 55 compare = greater_than } }
+			}
+		}
+	}
+
+	WRK_unrest_cede_shop_to_committee = {
+		icon = generic_political_discourse
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_factory_committee_councils
+			WRK_unrest_active = yes
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_measure_ready_tt
+					NOT = { has_state_flag = WRK_unrest_measure_recent }
+				}
+			}
+		}
+		cost = 45
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = ADISCORD_vorkerland_prewar_bop
+				value = 0.05
+			}
+			FROM = {
+				custom_effect_tooltip = WRK_unrest_reduce_30_tt
+				WRK_unrest_end_riot = yes
+				hidden_effect = {
+					set_temp_variable = { var = WRK_unrest_delta value = -30 }
+					WRK_unrest_change = yes
+					set_state_flag = { flag = WRK_unrest_measure_recent days = 45 value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 4
+				FROM = { check_variable = { var = WRK_unrest value = 70 compare = greater_than } }
+			}
+		}
+	}
+
+	WRK_unrest_send_plenipotentiary = {
+		icon = generic_political_pressure
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_committee_emergency_plenipotentiaries
+			WRK_unrest_active = yes
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_measure_ready_tt
+					NOT = { has_state_flag = WRK_unrest_measure_recent }
+				}
+			}
+		}
+		cost = 30
+		fire_only_once = no
+		complete_effect = {
+			add_stability = -0.01
+			FROM = {
+				custom_effect_tooltip = WRK_unrest_reduce_35_tt
+				WRK_unrest_end_riot = yes
+				hidden_effect = {
+					# The spill below returns 8 to every district, this one included.
+					set_temp_variable = { var = WRK_unrest_delta value = -43 }
+					WRK_unrest_change = yes
+					set_state_flag = { flag = WRK_unrest_measure_recent days = 45 value = 1 }
+				}
+			}
+			custom_effect_tooltip = WRK_unrest_spill_tt
+			hidden_effect = { WRK_unrest_spill = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 4
+				FROM = { has_state_flag = WRK_unrest_riot }
+			}
+		}
+	}
+
+	WRK_unrest_workers_patrol = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_committee_workers_guard
+			WRK_unrest_active = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_unrest_patrol_free_tt
+				WRK_unrest_patrol_free = yes
+			}
+		}
+		cost = 40
+		days_remove = 21
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = WRK_unrest_patrol_begin_tt
+			hidden_effect = {
+				FROM = { set_state_flag = WRK_unrest_patrol }
+			}
+		}
+		# The collapse ends the ledger; a patrol cut short returns its price.
+		cancel_trigger = {
+			OR = {
+				NOT = { WRK_unrest_active = yes }
+				FROM = {
+					NOT = { is_owned_by = ROOT }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { has_state_flag = WRK_unrest_patrol } }
+					FROM = { clr_state_flag = WRK_unrest_patrol }
+					add_political_power = 40
+				}
+			}
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_unrest_reduce_40_tt
+				WRK_unrest_end_riot = yes
+				hidden_effect = {
+					if = {
+						limit = { has_state_flag = WRK_unrest_patrol }
+						clr_state_flag = WRK_unrest_patrol
+						set_temp_variable = { var = WRK_unrest_delta value = -40 }
+						WRK_unrest_change = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 6
+				FROM = { check_variable = { var = WRK_unrest value = 70 compare = greater_than } }
+			}
+		}
+	}
+
+	# --- capital cells ---
+	# Operations of the engineers' branch on the eight capital districts. Planting
+	# and expanding share one slot: the district flag WRK_cell_work holds it from
+	# payment until the work ends or is cancelled.
+
+	WRK_cell_plant = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_reopen_emergency_workshops
+			WRK_cells_active = yes
+			FROM = { check_variable = { var = WRK_cell_level value = 1 compare = less_than } }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_cells_work_free_tt
+				WRK_cells_work_free = yes
+			}
+		}
+		cost = 30
+		days_remove = 21
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = WRK_cell_work_begin_tt
+			hidden_effect = {
+				FROM = { set_state_flag = WRK_cell_work }
+			}
+		}
+		# The collapse ends the network's ledger; work cut short returns its price.
+		cancel_trigger = {
+			OR = {
+				NOT = { WRK_cells_active = yes }
+				FROM = {
+					NOT = { is_owned_by = ROOT }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { has_state_flag = WRK_cell_work } }
+					FROM = { clr_state_flag = WRK_cell_work }
+					add_political_power = 30
+				}
+			}
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_cell_plant_result_tt
+				hidden_effect = {
+					if = {
+						limit = { has_state_flag = WRK_cell_work }
+						clr_state_flag = WRK_cell_work
+						set_variable = { var = WRK_cell_level value = 1 }
+						set_temp_variable = { var = WRK_cell_delta value = 10 }
+						WRK_cell_heat_change = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	WRK_cell_expand = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_worx_network_register
+			WRK_cells_active = yes
+			FROM = {
+				check_variable = { var = WRK_cell_level value = 0 compare = greater_than }
+				check_variable = { var = WRK_cell_level value = 3 compare = less_than }
+				NOT = { has_state_flag = WRK_cell_legal }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = WRK_cells_work_free_tt
+				WRK_cells_work_free = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = WRK_cell_not_exposed_tt
+					NOT = { has_state_flag = WRK_cell_exposed }
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cell_not_dormant_tt
+					NOT = { has_state_flag = WRK_cell_dormant }
+				}
+			}
+		}
+		cost = 40
+		days_remove = 28
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = WRK_cell_work_begin_tt
+			hidden_effect = {
+				FROM = { set_state_flag = WRK_cell_work }
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { WRK_cells_active = yes }
+				FROM = {
+					NOT = { is_owned_by = ROOT }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { has_state_flag = WRK_cell_work } }
+					FROM = { clr_state_flag = WRK_cell_work }
+					add_political_power = 40
+				}
+			}
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_cell_expand_result_tt
+				hidden_effect = {
+					if = {
+						limit = { has_state_flag = WRK_cell_work }
+						clr_state_flag = WRK_cell_work
+						add_to_variable = { var = WRK_cell_level value = 1 }
+						clamp_variable = { var = WRK_cell_level min = 0 max = 3 }
+						set_temp_variable = { var = WRK_cell_delta value = 15 }
+						WRK_cell_heat_change = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				FROM = { check_variable = { var = WRK_cell_heat value = 50 compare = greater_than } }
+			}
+		}
+	}
+
+	WRK_cell_lie_low = {
+		icon = generic_political_discourse
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_machine_tool_fund
+			WRK_cells_active = yes
+			FROM = {
+				check_variable = { var = WRK_cell_level value = 0 compare = greater_than }
+				NOT = { has_state_flag = WRK_cell_legal }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = WRK_cell_not_exposed_tt
+					NOT = { has_state_flag = WRK_cell_exposed }
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cell_not_dormant_tt
+					NOT = { has_state_flag = WRK_cell_dormant }
+				}
+			}
+		}
+		cost = 20
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_cell_lie_low_tt
+				hidden_effect = {
+					set_temp_variable = { var = WRK_cell_delta value = -30 }
+					WRK_cell_heat_change = yes
+					set_state_flag = { flag = WRK_cell_dormant days = 45 value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				FROM = { check_variable = { var = WRK_cell_heat value = 70 compare = greater_than } }
+			}
+		}
+	}
+
+	WRK_cell_forge_passes = {
+		icon = generic_political_pressure
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_network_closed_laboratories
+			WRK_cells_active = yes
+			FROM = { has_state_flag = WRK_cell_exposed }
+		}
+		cost = 45
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_cell_forge_passes_tt
+				hidden_effect = {
+					clr_state_flag = WRK_cell_exposed
+					set_variable = { var = WRK_cell_heat value = 50 }
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	WRK_cell_legalize = {
+		icon = generic_diplomatic_treaty
+		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+		state_target = yes
+		targets = { 32 33 34 35 36 37 38 39 }
+		target_trigger = {
+			FROM = { is_owned_by = ROOT }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			has_completed_focus = WRK_network_district_collegia
+			WRK_cells_active = yes
+			FROM = {
+				check_variable = { var = WRK_cell_level value = 0 compare = greater_than }
+				NOT = { has_state_flag = WRK_cell_legal }
+				NOT = { has_state_flag = WRK_cell_work }
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				custom_effect_tooltip = WRK_cell_legalize_tt
+				hidden_effect = {
+					set_state_flag = WRK_cell_legal
+					clr_state_flag = WRK_cell_exposed
+					set_variable = { var = WRK_cell_heat value = 0 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 6
+				FROM = { has_state_flag = WRK_cell_exposed }
+			}
+		}
+	}
+
 	# The centre's emergency levy and the districts' mandates move the prewar
 	# balance; each can be repeated after sixty days.
 	ADISCORD_vorkerland_prewar_central_levy = {

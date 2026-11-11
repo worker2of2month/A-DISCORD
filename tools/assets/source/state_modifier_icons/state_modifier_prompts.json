@@ -1,0 +1,387 @@
+{
+  "tool": "built-in image_gen",
+  "runtime_size": [
+    32,
+    32
+  ],
+  "tier_order": [
+    "III",
+    "II",
+    "I"
+  ],
+  "tier_semantics": "Three existing contamination severities in descending order, sharing identical base artwork with only the Roman numeral overlay changed. Fully reclaimed land uses the house-and-spade icon without a rank. Artwork and display labels only.",
+  "icons": [
+    {
+      "file": "contamination_iii",
+      "modifier": "ADISCORD_vorkerland_dirty_state",
+      "prompt": "Create a single unique game UI state modifier icon for a Hearts of Iron IV post-apocalyptic mod: CONTAMINATED TERRITORY. A compact realistic hand-painted isometric vignette: two corroded industrial waste barrels, one leaking toxic yellow-green fluid into cracked dark soil, small damaged radiation hazard placard behind them. No words, no letters, no numbers. Strong immediately readable silhouette and large bold shapes, restrained gritty HOI4 illustrated strategy-game inventory art, aged steel, charcoal earth, warning yellow and muted radioactive green. Transparent background, isolated object cluster centered with generous clean transparent margins. Square canvas, fills 80 percent, suitable for downscaling to a tiny 60 pixel interface icon. No square tile, no border, no circular badge, no scenery background, no glow cloud, no UI mockup. Professional polished painted game asset, clear edges, subtle overhead light.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/contamination_iii.png",
+      "sprite": "GFX_modifiers_ADISCORD_contamination_iii",
+      "tier": "III",
+      "overlay": {
+        "shared_base": true,
+        "font": "Georgia Bold",
+        "font_size_px": 15,
+        "outline_px": 2.4,
+        "alignment": "bottom-right",
+        "right_px": 30,
+        "bottom_px": 30,
+        "face": "#FFFAE5",
+        "outline": "#0C0D0E"
+      }
+    },
+    {
+      "file": "contamination_ii",
+      "modifier": "VAL_reclamation_stage_1_modifier",
+      "prompt": "Create a single unique game UI state modifier icon for a Hearts of Iron IV post-apocalyptic mod: CONTAMINATED TERRITORY. A compact realistic hand-painted isometric vignette: two corroded industrial waste barrels, one leaking toxic yellow-green fluid into cracked dark soil, small damaged radiation hazard placard behind them. No words, no letters, no numbers. Strong immediately readable silhouette and large bold shapes, restrained gritty HOI4 illustrated strategy-game inventory art, aged steel, charcoal earth, warning yellow and muted radioactive green. Transparent background, isolated object cluster centered with generous clean transparent margins. Square canvas, fills 80 percent, suitable for downscaling to a tiny 60 pixel interface icon. No square tile, no border, no circular badge, no scenery background, no glow cloud, no UI mockup. Professional polished painted game asset, clear edges, subtle overhead light.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/contamination_ii.png",
+      "sprite": "GFX_modifiers_ADISCORD_contamination_ii",
+      "tier": "II",
+      "overlay": {
+        "shared_base": true,
+        "font": "Georgia Bold",
+        "font_size_px": 15,
+        "outline_px": 2.4,
+        "alignment": "bottom-right",
+        "right_px": 30,
+        "bottom_px": 30,
+        "face": "#FFFAE5",
+        "outline": "#0C0D0E"
+      }
+    },
+    {
+      "file": "contamination_i",
+      "modifier": "VAL_reclamation_stage_2_modifier",
+      "prompt": "Create a single unique game UI state modifier icon for a Hearts of Iron IV post-apocalyptic mod: CONTAMINATED TERRITORY. A compact realistic hand-painted isometric vignette: two corroded industrial waste barrels, one leaking toxic yellow-green fluid into cracked dark soil, small damaged radiation hazard placard behind them. No words, no letters, no numbers. Strong immediately readable silhouette and large bold shapes, restrained gritty HOI4 illustrated strategy-game inventory art, aged steel, charcoal earth, warning yellow and muted radioactive green. Transparent background, isolated object cluster centered with generous clean transparent margins. Square canvas, fills 80 percent, suitable for downscaling to a tiny 60 pixel interface icon. No square tile, no border, no circular badge, no scenery background, no glow cloud, no UI mockup. Professional polished painted game asset, clear edges, subtle overhead light.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/contamination_i.png",
+      "sprite": "GFX_modifiers_ADISCORD_contamination_i",
+      "tier": "I",
+      "overlay": {
+        "shared_base": true,
+        "font": "Georgia Bold",
+        "font_size_px": 15,
+        "outline_px": 2.4,
+        "alignment": "bottom-right",
+        "right_px": 30,
+        "bottom_px": 30,
+        "face": "#FFFAE5",
+        "outline": "#0C0D0E"
+      }
+    },
+    {
+      "file": "reactor_industrial_legacy",
+      "modifier": "ADISCORD_vorkerland_reactor_industrial_legacy",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Salvaged reactor machinery: a broken steel turbine rotor and copper coils resting against a small cracked reactor casing; cool blue steel and warm copper, valuable industrial salvage, no radiation placard.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/reactor_industrial_legacy.png",
+      "sprite": "GFX_modifiers_ADISCORD_reactor_industrial_legacy"
+    },
+    {
+      "file": "reclamation_stage_3",
+      "modifier": "VAL_reclamation_stage_3_modifier",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Reclaimed land ready for resettlement: small clean brick house with a sturdy spade and two fresh green leaves rising from dark earth, optimistic but weathered practical reconstruction, muted green and brick red.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/reclamation_stage_3.png",
+      "sprite": "GFX_modifiers_ADISCORD_reclamation_stage_3"
+    },
+    {
+      "file": "regional_autonomy",
+      "modifier": "ADISCORD_vorkerland_regional_autonomy",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Regional autonomy: a small municipal hall with a short blue pennant behind a large bronze key resting on an unfurled unlettered parchment charter; provincial self-government, blue and aged brass.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/regional_autonomy.png",
+      "sprite": "GFX_modifiers_ADISCORD_regional_autonomy"
+    },
+    {
+      "file": "civil_war_attrition",
+      "modifier": "ADISCORD_vorkerland_civil_war_attrition",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Civil-war exhausted district: battered military helmet on a broken wagon wheel with one spent shell and torn muted red cloth, damaged supplies, bleak charcoal and faded red.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/civil_war_attrition.png",
+      "sprite": "GFX_modifiers_ADISCORD_civil_war_attrition"
+    },
+    {
+      "file": "vad_chartered_district",
+      "modifier": "ADISCORD_vorkerland_vad_chartered_district",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Chartered district oath: a tightly rolled ivory parchment charter with large intact red wax seal and simple brass crown seal matrix; oath of provincial allegiance, antique parchment, crimson and gold.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/vad_chartered_district.png",
+      "sprite": "GFX_modifiers_ADISCORD_vad_chartered_district"
+    },
+    {
+      "file": "railway_council",
+      "modifier": "WKR_railway_council",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A large rugged locomotive wheel with a red railway signal lantern and heavy spanner, workers maintaining a railway junction. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/railway_council.png",
+      "sprite": "GFX_modifiers_ADISCORD_railway_council"
+    },
+    {
+      "file": "airfield_workshop",
+      "modifier": "WKR_airfield_workshop",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A broad silver aircraft propeller crossed by a heavy mechanic spanner above a small olive tool chest, airfield repair workshops. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/airfield_workshop.png",
+      "sprite": "GFX_modifiers_ADISCORD_airfield_workshop"
+    },
+    {
+      "file": "commandant_district",
+      "modifier": "ADISCORD_vorkerland_vad_commandant_district",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A dark officer peaked cap on a compact concrete checkpoint barrier with a red-white boom gate, military district administration. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/commandant_district.png",
+      "sprite": "GFX_modifiers_ADISCORD_commandant_district"
+    },
+    {
+      "file": "district_uprising",
+      "modifier": "ADISCORD_vorkerland_vad_district_uprising",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A blazing wooden street barricade with a raised red torn pennant and broken officer baton, local uprising. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/district_uprising.png",
+      "sprite": "GFX_modifiers_ADISCORD_district_uprising"
+    },
+    {
+      "file": "military_governorate",
+      "modifier": "WRK_empire_military_governorate",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A brass imperial crown above a steel officer helmet and two sturdy crossed sabres, military governorship. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/military_governorate.png",
+      "sprite": "GFX_modifiers_ADISCORD_military_governorate"
+    },
+    {
+      "file": "civil_governorate",
+      "modifier": "WRK_empire_civil_governorate",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A brass imperial crown above a squat brick factory and a broad masonry trowel, civil industrial governorship. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/civil_governorate.png",
+      "sprite": "GFX_modifiers_ADISCORD_civil_governorate"
+    },
+    {
+      "file": "crown_governorate",
+      "modifier": "WRK_empire_crown_governorate",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A prominent golden royal crown resting on a rolled violet-bound parchment and heavy brass key, direct crown district. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/crown_governorate.png",
+      "sprite": "GFX_modifiers_ADISCORD_crown_governorate"
+    },
+    {
+      "file": "rail_crews",
+      "modifier": "ADISCORD_vorkerland_prep_rail_crews",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A short section of heavy railway track with a large crossed track hammer and amber work lantern, railway repair crews. Fill almost all the square with just 4 percent transparent margin, very clear chunky silhouettes, no elaborate scene, no letters or numerals.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/rail_crews.png",
+      "sprite": "GFX_modifiers_ADISCORD_rail_crews"
+    },
+    {
+      "file": "officer_estate",
+      "modifier": "WRK_empire_officer_estate",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: An officer's gold epaulette laid over a small stone manor house and wheat sheaf, landed officer estate; gold and olive. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/officer_estate.png",
+      "sprite": "GFX_modifiers_ADISCORD_officer_estate"
+    },
+    {
+      "file": "recruitment_disruption",
+      "modifier": "VAD_crown_recruitment_disruption",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A closed brick workshop doorway with a large abandoned work glove and military recruitment scroll bearing a red wax seal, labour disruption from recruitment; ochre and faded red. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/recruitment_disruption.png",
+      "sprite": "GFX_modifiers_ADISCORD_recruitment_disruption"
+    },
+    {
+      "file": "rotated_garrison",
+      "modifier": "VAD_staff_rotated_garrison",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A sturdy military backpack with helmet and a pair of bold curved bronze arrows circling it, garrison rotation; steel and olive. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/rotated_garrison.png",
+      "sprite": "GFX_modifiers_ADISCORD_rotated_garrison"
+    },
+    {
+      "file": "field_depot",
+      "modifier": "VAD_staff_field_depot",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Three stacked olive ammunition boxes under a small khaki canvas shelter with a red supply pennant, district field depot. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/field_depot.png",
+      "sprite": "GFX_modifiers_ADISCORD_field_depot"
+    },
+    {
+      "file": "district_privileges",
+      "modifier": "VAD_crown_district_privileges",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A brass crown above an intact red wax charter seal and two stacked gold coins, district charter privileges, crimson and antique gold. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/district_privileges.png",
+      "sprite": "GFX_modifiers_ADISCORD_district_privileges"
+    },
+    {
+      "file": "district_collateral",
+      "modifier": "VAD_crown_district_collateral",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A large iron padlock and chain wrapped around a red wax-sealed deed scroll and a small factory gear, pledged district collateral; charcoal and red. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/district_collateral.png",
+      "sprite": "GFX_modifiers_ADISCORD_district_collateral"
+    },
+    {
+      "file": "prepared_interchange",
+      "modifier": "WKR_prepared_interchange",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A heavy railway switch mechanism behind a compact sandbag barrier with two steel anti-tank obstacles, fortified railway junction, grey steel and muted tan. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/prepared_interchange.png",
+      "sprite": "GFX_modifiers_ADISCORD_prepared_interchange"
+    },
+    {
+      "file": "local_militia",
+      "modifier": "VAD_local_militia",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A civilian brown work cap and simple wooden-stock rifle over a small shield-shaped iron street sign, locally recruited militia, worn brown and steel. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/local_militia.png",
+      "sprite": "GFX_modifiers_ADISCORD_local_militia"
+    },
+    {
+      "file": "march_commitment",
+      "modifier": "VAD_march_commitment",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A worn army marching boot on an olive ammunition crate with a small forward-pointing red pennant, district industry committed to a campaign. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/march_commitment.png",
+      "sprite": "GFX_modifiers_ADISCORD_march_commitment"
+    },
+    {
+      "file": "scorched_wells",
+      "modifier": "NAM_scorched_wells_modifier",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A broken oil pumpjack with a large orange oil-well fire and ruptured black pipe; scorched oil wells. Isolated fire plume with no smoke background. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/scorched_wells.png",
+      "sprite": "GFX_modifiers_ADISCORD_scorched_wells"
+    },
+    {
+      "file": "oil_strike",
+      "modifier": "NAM_klyuchevsk_oil_strike",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A large red closed industrial valve in front of an idle compact oil pumpjack, a worker's leather glove gripping its wheel; oilfield labour strike, no people or arms beyond the glove. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/oil_strike.png",
+      "sprite": "GFX_modifiers_ADISCORD_oil_strike"
+    },
+    {
+      "file": "island_convoy",
+      "modifier": "NAM_island_convoy_route",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A compact blue-grey cargo ship carrying two rust-red cargo crates above a small turquoise wave with a large brass anchor; reliable island supply convoy. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/island_convoy.png",
+      "sprite": "GFX_modifiers_ADISCORD_island_convoy"
+    },
+    {
+      "file": "steel_levy",
+      "modifier": "NAM_island_steel_levy_modifier",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A strapped bundle of silver steel ingots beside an iron requisition stamp with a red impression seal; compulsory local steel levy. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/steel_levy.png",
+      "sprite": "GFX_modifiers_ADISCORD_steel_levy"
+    },
+    {
+      "file": "free_zone",
+      "modifier": "NAM_free_zone_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: An open blue harbour gate beside two stacked cargo crates and a simple gold coin; chartered free trade zone, bright pale blue. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/free_zone.png",
+      "sprite": "GFX_modifiers_ADISCORD_free_zone"
+    },
+    {
+      "file": "company_quarters",
+      "modifier": "NAM_board_company_quarters_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A squat red brick workers' apartment block beside a factory gear and yellow hardhat; company-built industrial housing. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/company_quarters.png",
+      "sprite": "GFX_modifiers_ADISCORD_company_quarters"
+    },
+    {
+      "file": "air_bridge",
+      "modifier": "NAM_air_bridge_deliveries",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A small silver twin-engine cargo airplane flying above a single large olive parachute supply crate; bold blue wing accent, no sky, compact silhouette. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/air_bridge.png",
+      "sprite": "GFX_modifiers_ADISCORD_air_bridge"
+    },
+    {
+      "file": "tenant_supply_depot",
+      "modifier": "NAM_tenant_supply_depot",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A sturdy brown supply chest with a large blue key and silver rail repair wrench; a leased local supply depot. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/tenant_supply_depot.png",
+      "sprite": "GFX_modifiers_ADISCORD_tenant_supply_depot"
+    },
+    {
+      "file": "steel_export",
+      "modifier": "NAM_corp_steel_export_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: Three silver steel ingots loaded into a small navy-blue cargo crate with a large brass outward arrow; local steel exports. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/steel_export.png",
+      "sprite": "GFX_modifiers_ADISCORD_steel_export"
+    },
+    {
+      "file": "corporate_board",
+      "modifier": "NAM_corporate_board_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A black leather executive briefcase in front of a small factory topped by one gold gear; corporate district management, dark blue and brass. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/corporate_board.png",
+      "sprite": "GFX_modifiers_ADISCORD_corporate_board"
+    },
+    {
+      "file": "conquered_state",
+      "modifier": "NAM_conquered_state_modifier",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A heavy military boot pressing down on a cracked small brick municipal building, red occupation pennant, suppressed conquered territory. No people, isolated symbol. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/conquered_state.png",
+      "sprite": "GFX_modifiers_ADISCORD_conquered_state"
+    },
+    {
+      "file": "requisitioned_market",
+      "modifier": "NAM_rad_requisitioned_market",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A small market stall with a red cloth awning and two food crates secured by an olive military helmet; military requisition of civilian market stores. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/requisitioned_market.png",
+      "sprite": "GFX_modifiers_ADISCORD_requisitioned_market"
+    },
+    {
+      "file": "command_post",
+      "modifier": "NAM_rad_command_post",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A rugged olive field radio with large antenna behind a small concrete bunker and folded unlettered map; local military command post. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/command_post.png",
+      "sprite": "GFX_modifiers_ADISCORD_command_post"
+    },
+    {
+      "file": "labour_camp",
+      "modifier": "NAM_labour_camp_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A heavy pickaxe and ore cart behind a stout short barbed-wire fence with a watchtower, forced labour extraction; cold grey steel, dull rust, no people. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/labour_camp.png",
+      "sprite": "GFX_modifiers_ADISCORD_labour_camp"
+    },
+    {
+      "file": "stripped_state",
+      "modifier": "NAM_stripped_state",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A broken empty wooden storage crate with its lid torn off and one large empty metal spool beside it, completely stripped local workshops; dry grey wood. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/stripped_state.png",
+      "sprite": "GFX_modifiers_ADISCORD_stripped_state"
+    },
+    {
+      "file": "forward_depot",
+      "modifier": "NAM_mil_forward_depot",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A rugged olive supply truck nose beside a large ammunition box and sandbag barrier, frontline supply depot; khaki and muted orange. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/forward_depot.png",
+      "sprite": "GFX_modifiers_ADISCORD_forward_depot"
+    },
+    {
+      "file": "hydropower",
+      "modifier": "NAM_svetlogorsk_hydropower",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A compact curved concrete hydroelectric dam with three strong blue water streams and one big brass lightning bolt, hydroelectric power; bright blue and grey. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/hydropower.png",
+      "sprite": "GFX_modifiers_ADISCORD_hydropower"
+    },
+    {
+      "file": "guarded_wells",
+      "modifier": "NAM_guarded_wells_modifier",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A sturdy steel shield and olive helmet protecting a small black oil pumpjack, one red valve, guarded oil wells; no fire. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/guarded_wells.png",
+      "sprite": "GFX_modifiers_ADISCORD_guarded_wells"
+    },
+    {
+      "file": "district_fleet_called",
+      "modifier": "NAM_pw_district_fleet_called",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A weathered tan transport truck in front of a broad red outbound arrow and a small empty local supply rack, district vehicle fleet called away. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/district_fleet_called.png",
+      "sprite": "GFX_modifiers_ADISCORD_district_fleet_called"
+    },
+    {
+      "file": "title_books",
+      "modifier": "NAM_pw_district_title_books",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A thick green cadastral ledger with a large brass key and small ivory unlettered land parcel plan tucked inside, registered property titles; green and gold. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/title_books.png",
+      "sprite": "GFX_modifiers_ADISCORD_title_books"
+    },
+    {
+      "file": "civil_court_awards",
+      "modifier": "NAM_pw_civil_court_awards",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A large wooden judge gavel on an ivory sealed deed beside a small masonry trowel, civil court settlement enabling reconstruction; chestnut, parchment and blue seal. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/civil_court_awards.png",
+      "sprite": "GFX_modifiers_ADISCORD_civil_court_awards"
+    },
+    {
+      "file": "border_autonomy",
+      "modifier": "NAM_border_autonomous_district",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A squat frontier boundary stone with a broad green pennant and a bronze key resting on a rough parchment charter, autonomous border district. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/border_autonomy.png",
+      "sprite": "GFX_modifiers_ADISCORD_border_autonomy"
+    },
+    {
+      "file": "coast_irrigation",
+      "modifier": "NAM_south_coast_irrigation",
+      "prompt": "Create ONE unique Hearts of Iron IV post-apocalyptic game state-modifier icon. Single compact hand-painted realistic object vignette, isolated on fully transparent background, no text/letters/numbers, no framing tile or border. Very bold silhouette, just 2-3 large overlapping objects; must stay distinct at 32x32 pixels. Gritty strategy-game illustration with aged materials and crisp highlighted edges, restrained charcoal/steel/brass palette with one meaningful accent. Center composition, fills 82% of square canvas, clean transparent margin, no background scenery, no floating particles. SUBJECT: A thick silver irrigation pipe pouring blue water onto two green crop rows beside a large wheat sheaf, reclaimed coastal irrigation; blue and green. Fill nearly the entire square with 4 percent transparent margin. ONLY named objects, no people, no scene, no background haze, no letters or numerals. Chunky simple clearly distinct silhouette at 32 pixels.",
+      "runtime": "gfx/interface/state_modifiers/adiscord/coast_irrigation.png",
+      "sprite": "GFX_modifiers_ADISCORD_coast_irrigation"
+    }
+  ]
+}

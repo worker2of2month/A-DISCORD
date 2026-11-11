@@ -86,7 +86,7 @@ NAM_seal_discipline_dynamic = {
 
 # STATE. Scorched wells yield nothing to any owner or occupier for 180 days.
 NAM_scorched_wells_modifier = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_scorched_wells
 	enable = { always = yes }
 	state_resources_factor = -1.0
 	army_speed_factor_for_controller = NAM_scorched_enemy_speed
@@ -95,7 +95,7 @@ NAM_scorched_wells_modifier = {
 }
 
 NAM_klyuchevsk_oil_strike = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_oil_strike
 	enable = { NAM_exile_resistance_site = yes }
 	remove_trigger = { NAM_exile_resistance_site = no }
 	state_resources_factor = -0.50
@@ -122,7 +122,7 @@ NAM_fuel_embargo_modifier = {
 
 # STATE island. Regular convoys carry the islands' ore and their supplies.
 NAM_island_convoy_route = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_modifiers_ADISCORD_island_convoy
 	enable = { NAM_island_route_operable = yes }
 	remove_trigger = { NOT = { NAM_island_route_operable = yes } }
 	state_resources_factor = 0.15
@@ -130,7 +130,7 @@ NAM_island_convoy_route = {
 
 # STATE. A lost district suspends the same levy until recapture or the term ends.
 NAM_island_steel_levy_modifier = {
-	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	icon = GFX_modifiers_ADISCORD_steel_levy
 	enable = { NAM_island_levy_state_active = yes }
 	remove_trigger = { NAM = { NAM_island_levy_running = no } }
 	state_resources_factor = -0.15
@@ -174,7 +174,7 @@ NAM_board_industrial_policy = {
 # STATE island. A chartered free zone: no taxes, fast construction for the
 # investors and a richer output.
 NAM_free_zone_state = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_modifiers_ADISCORD_free_zone
 	enable = { always = yes }
 	remove_trigger = { NOT = { is_owned_by = NAM } }
 	state_production_speed_buildings_factor = 0.25
@@ -183,13 +183,13 @@ NAM_free_zone_state = {
 }
 
 NAM_board_company_quarters_state = {
-	icon = GFX_focus_VAL_Bread_From_Barracks
+	icon = GFX_modifiers_ADISCORD_company_quarters
 	enable = { NAM_board_held_site = yes }
 	state_production_speed_industrial_complex_factor = 0.35
 }
 
 NAM_air_bridge_deliveries = {
-	icon = GFX_focus_RUS_aviation_fuel_reserve
+	icon = GFX_modifiers_ADISCORD_air_bridge
 	enable = {
 		NAM_air_bridge_destination = yes
 		NAM = { NAM_air_bridge_departure = yes }
@@ -198,7 +198,7 @@ NAM_air_bridge_deliveries = {
 }
 
 NAM_tenant_supply_depot = {
-	icon = GFX_focus_NAM_open_ledgers
+	icon = GFX_modifiers_ADISCORD_tenant_supply_depot
 	enable = {
 		is_owned_by = NAM
 		is_controlled_by = NAM
@@ -210,14 +210,14 @@ NAM_tenant_supply_depot = {
 
 # STATE island. The island steel sold abroad for 60 days.
 NAM_corp_steel_export_state = {
-	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	icon = GFX_modifiers_ADISCORD_steel_export
 	enable = { always = yes }
 	state_resource_steel = -8
 }
 
 # STATE island after the corporate takeover. A corporate board governs it.
 NAM_corporate_board_state = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_modifiers_ADISCORD_corporate_board
 	enable = { always = yes }
 	remove_trigger = { NOT = { is_owned_by = NAM } }
 	state_resources_factor = 0.15
@@ -280,7 +280,7 @@ NAM_corp_owner_6_district = {
 
 # STATE conquered by the pillars' junta. Nothing is developed for its people.
 NAM_conquered_state_modifier = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_conquered_state
 	enable = { always = yes }
 	remove_trigger = { NOT = { is_owned_by = NAM } }
 	state_production_speed_buildings_factor = -0.75
@@ -290,7 +290,7 @@ NAM_conquered_state_modifier = {
 
 # STATE. Civilian workshops and market stores provision the garrison.
 NAM_rad_requisitioned_market = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_modifiers_ADISCORD_requisitioned_market
 	enable = { NAM_rad_requisition_district = yes }
 	remove_trigger = { NAM_rad_requisition_district = no }
 	local_supplies = 1.5
@@ -298,7 +298,7 @@ NAM_rad_requisitioned_market = {
 }
 
 NAM_rad_command_post = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_modifiers_ADISCORD_command_post
 	enable = { NAM_rad_command_post_staffed = yes }
 	remove_trigger = {
 		OR = {
@@ -312,7 +312,7 @@ NAM_rad_command_post = {
 
 # STATE conquered. Forced labour extracts its resources for Svetlogorye.
 NAM_labour_camp_state = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_labour_camp
 	enable = { always = yes }
 	remove_trigger = { NOT = { is_owned_by = NAM } }
 	state_resources_factor = 0.50
@@ -324,7 +324,7 @@ NAM_labour_camp_state = {
 
 # STATE conquered and requisitioned: its depots and workshops were emptied.
 NAM_stripped_state = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_stripped_state
 	enable = { always = yes }
 	state_resources_factor = -0.25
 	compliance_growth = -0.05
@@ -351,7 +351,7 @@ NAM_mil_mobile_operation = {
 
 # STATE. Supply remains local and closes when the defended campaign ends.
 NAM_mil_forward_depot = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_modifiers_ADISCORD_forward_depot
 	enable = {
 		is_owned_by = NAM
 		is_controlled_by = NAM
@@ -378,7 +378,7 @@ NAM_mil_forward_depot = {
 
 # STATE. Grid capacity belongs to the physical hydroelectric works.
 NAM_svetlogorsk_hydropower = {
-	icon = GFX_focus_generic_hydroelectric_energy
+	icon = GFX_modifiers_ADISCORD_hydropower
 	enable = { always = yes }
 	state_production_speed_buildings_factor = 0.15
 }
@@ -394,7 +394,7 @@ NAM_captured_wells_shock = {
 }
 
 NAM_guarded_wells_modifier = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_modifiers_ADISCORD_guarded_wells
 	enable = {
 		ADISCORD_nam_resource_war_active = yes
 		is_owned_by = NAM
@@ -406,27 +406,27 @@ NAM_guarded_wells_modifier = {
 }
 
 NAM_pw_district_fleet_called = {
-	icon = GFX_focus_NAM_mobile_columns
+	icon = GFX_modifiers_ADISCORD_district_fleet_called
 	enable = { always = yes }
 	local_supplies = -0.5
 }
 
 # Title deeds survive a change of government. Their use requires jurisdiction.
 NAM_pw_district_title_books = {
-	icon = GFX_focus_NAM_last_centre_register
+	icon = GFX_modifiers_ADISCORD_title_books
 	enable = { NAM_pw_central_civil_district = yes }
 	local_building_slots = 1
 }
 
 NAM_pw_civil_court_awards = {
-	icon = GFX_focus_RUS_district_courts
+	icon = GFX_modifiers_ADISCORD_civil_court_awards
 	enable = { NAM_pw_central_civil_district = yes }
 	state_production_speed_buildings_factor = 0.20
 }
 
 # Autonomy is a permanent term of NAM citizenship, dormant under a foreign owner.
 NAM_border_autonomous_district = {
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_border_autonomy
 	enable = { is_owned_by = NAM }
 	local_factories = -0.50
 	state_production_speed_buildings_factor = -0.50
@@ -436,7 +436,7 @@ NAM_border_autonomous_district = {
 
 # STATE South Coast. Food from the irrigated plots reaches local supply while NAM holds the canal.
 NAM_south_coast_irrigation = {
-	icon = GFX_idea_ADISCORD_economic_system_agrarian
+	icon = GFX_modifiers_ADISCORD_coast_irrigation
 	enable = {
 		is_owned_by = NAM
 		is_controlled_by = NAM

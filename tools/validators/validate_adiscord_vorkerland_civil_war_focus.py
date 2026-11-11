@@ -118,41 +118,73 @@ PREWAR_WRK_EXPANSION_FOCUSES = (
 )
 
 PREWAR_WRK_PROGRAMME_FOCUSES = (
-    "WRK_reopen_emergency_workshops",
-    "WRK_prioritize_arsenal_output",
-    "WRK_preserve_machine_tools",
-    "WRK_collect_officer_returns",
-    "WRK_contract_local_garrisons",
-    "WRK_prepare_officer_reserve",
     "WRK_prepare_civil_evacuation",
     "WRK_prepare_military_evacuation",
 )
 
-# Preparation institutions: centre-district balance, camps and tower protection.
+# Common trunk institutions: centre-district balance and tower protection.
 PREWAR_WRK_HOURGLASS_FOCUSES = (
     "WRK_emergency_central_budget",
     "WRK_district_emergency_powers",
     "WRK_requisition_commissions",
     "WRK_district_treasuries",
     "WRK_last_common_budget",
-    "WRK_party_cell_rolls",
-    "WRK_factory_committee_councils",
-    "WRK_district_staff_exercises",
-    "WRK_petrichev_depots",
-    "WRK_worx_network_register",
-    "WRK_machine_tool_fund",
-    "WRK_stake_on_one_pillar",
-    "WRK_balance_the_pillars",
     "WRK_inspect_the_unity_tower",
     "WRK_reinforce_the_tower_guard",
     "WRK_disperse_the_government",
 )
+
+# preparation.1 names one apparatus; only its branch is drawn. Each entry is
+# the scripted trigger of the allow_branch gate and the branch in tree order:
+# entry, resource pair, two programme steps, political pair, mandate.
+PREWAR_WRK_PATRON_BRANCHES = {
+    "ADISCORD_vorkerland_prewar_patron_committees": (
+        "WRK_party_cell_rolls",
+        "WRK_factory_committee_councils",
+        "WRK_committee_emergency_plenipotentiaries",
+        "WRK_committee_workers_guard",
+        "WRK_committee_ration_reserve",
+        "WRK_committee_chairmans_mandate",
+        "WRK_committee_bagley_executive",
+        "WRK_mandate_of_the_committees",
+    ),
+    "ADISCORD_vorkerland_prewar_patron_staff": (
+        "WRK_collect_officer_returns",
+        "WRK_contract_local_garrisons",
+        "WRK_prepare_officer_reserve",
+        "WRK_district_staff_exercises",
+        "WRK_petrichev_depots",
+        "WRK_staff_escort_for_the_chairman",
+        "WRK_staff_reserve_headquarters",
+        "WRK_mandate_of_the_staff",
+    ),
+    "ADISCORD_vorkerland_prewar_patron_network": (
+        "WRK_reopen_emergency_workshops",
+        "WRK_prioritize_arsenal_output",
+        "WRK_preserve_machine_tools",
+        "WRK_worx_network_register",
+        "WRK_machine_tool_fund",
+        "WRK_network_closed_laboratories",
+        "WRK_network_district_collegia",
+        "WRK_mandate_of_the_network",
+    ),
+}
+PREWAR_WRK_PATRON_GATES = {
+    focus_id: gate
+    for gate, focus_ids in PREWAR_WRK_PATRON_BRANCHES.items()
+    for focus_id in focus_ids
+}
 
 PREWAR_WRK_FOCUSES = (
     *PREWAR_WRK_BASE_FOCUSES,
     *PREWAR_WRK_EXPANSION_FOCUSES,
     *PREWAR_WRK_PROGRAMME_FOCUSES,
     *PREWAR_WRK_HOURGLASS_FOCUSES,
+    *(
+        focus_id
+        for focus_ids in PREWAR_WRK_PATRON_BRANCHES.values()
+        for focus_id in focus_ids
+    ),
 )
 
 PREWAR_VAD_BASE_FOCUSES = (
@@ -886,8 +918,8 @@ def wrk_focus_texture_path(focus_id: str) -> str:
 
 def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
     issues: list[str] = []
-    if len(WRK_TREE_FOCUSES) != 68 or len(set(WRK_TREE_FOCUSES)) != 68:
-        issues.append("WRK drop-in focus icon manifest must contain 68 unique ids")
+    if len(WRK_TREE_FOCUSES) != 78 or len(set(WRK_TREE_FOCUSES)) != 78:
+        issues.append("WRK drop-in focus icon manifest must contain 78 unique ids")
     for focus_id in FOCUS_IDS:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
@@ -2446,7 +2478,7 @@ DEPTH_AI_PLANS = {
 
 LAYOUT_BANDS = {
     "postwar_expansion": ((8, 28), (1, 17)),
-    "prewar_WRK": ((0, 29), (0, 5)),
+    "prewar_WRK": ((0, 29), (0, 6)),
     "prewar_VAD": ((24, 32), (0, 8)),
     "war_WKR": ((0, 24), (7, 20)),
     "war_VAD": ((26, 64), (7, 20)),
@@ -2490,12 +2522,6 @@ LAYOUT_MIN_UNIT_DROP_SHARE = 0.85
 LAYOUT_WIDE_DROPS = {
     ("TVA_integrate_field_results", "TVA_publish_the_reconstruction_index"): (2, "keeps both policy cards below the occupied defensive-survey row"),
     ("TVA_integrate_field_results", "TVA_divert_the_research_budget"): (2, "aligns the conversion alternative with the public report below the defensive survey"),
-('WRK_factory_committee_councils', 'WRK_stake_on_one_pillar'): (3,
-                                                                 'joins the industrial and staff '
-                                                                 'programmes below their delivery row'),
- ('WRK_factory_committee_councils', 'WRK_balance_the_pillars'): (3,
-                                                                 'places the political alternatives on '
-                                                                 'the common camp settlement row'),
  ('WKR_empower_front_executive', 'WKR_authorize_normative_command'): (2,
                                                                       'places both priorities below '
                                                                       'the empty staff corridor on row '
@@ -2821,6 +2847,19 @@ def expected_localisation_keys() -> set[str]:
         "WRK_last_common_budget_slot_tt",
         "WRK_reinforce_the_tower_guard_tt",
         "WRK_disperse_the_government_tt",
+        "WRK_committee_workers_guard_heir_tt",
+        "WRK_committee_chairmans_mandate_tt",
+        "WRK_committee_chairmans_mandate_heir_tt",
+        "WRK_committee_bagley_executive_heir_tt",
+        "WRK_mandate_of_the_committees_heir_tt",
+        "WRK_staff_escort_for_the_chairman_tt",
+        "WRK_staff_escort_for_the_chairman_heir_tt",
+        "WRK_staff_reserve_headquarters_tt",
+        "WRK_staff_reserve_headquarters_heir_tt",
+        "WRK_mandate_of_the_staff_heir_tt",
+        "WRK_network_closed_laboratories_heir_tt",
+        "WRK_network_district_collegia_heir_tt",
+        "WRK_mandate_of_the_network_heir_tt",
         "ADISCORD_vorkerland_prewar_category",
         "ADISCORD_vorkerland_prewar_category_desc",
         "ADISCORD_vorkerland_prewar_hide_reserves",
@@ -3948,9 +3987,9 @@ def collect_issues() -> list[str]:
     for focus_id in RETIRED_WARTIME_FOCUSES:
         if focus_id in blocks:
             issues.append(f"retired wartime filler must be removed: {focus_id}")
-    if len(FOCUS_IDS) != 253:
+    if len(FOCUS_IDS) != 263:
         issues.append(
-            f"validator manifest must contain 253 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain 263 definitions, found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 
@@ -4130,6 +4169,15 @@ def collect_issues() -> list[str]:
             )
             if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != expected_tags:
                 issues.append(f"{focus_id} must expose only the prewar {gate} block")
+            patron_gates = set(
+                re.findall(r"\b(ADISCORD_vorkerland_prewar_patron_[a-z]+)\s*=\s*yes\b", allow)
+            )
+            expected_patron = PREWAR_WRK_PATRON_GATES.get(focus_id)
+            if patron_gates != ({expected_patron} if expected_patron else set()):
+                issues.append(
+                    f"{focus_id} allow_branch must name exactly the patron gate "
+                    f"{expected_patron}, found {sorted(patron_gates)}"
+                )
             cost_expected = {1, 2, 3, 4, 5}
         elif category == "wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
@@ -7286,6 +7334,11 @@ def _can_share_view(left: str, right: str) -> bool:
     # WRK and autonomous-district preparation use disjoint tag gates.
     if ((left in PREWAR_WRK_FOCUSES and right in PREWAR_VAD_FOCUSES)
             or (right in PREWAR_WRK_FOCUSES and left in PREWAR_VAD_FOCUSES)):
+        return False
+    # Only the branch of the apparatus named in preparation.1 is drawn.
+    left_gate = PREWAR_WRK_PATRON_GATES.get(left)
+    right_gate = PREWAR_WRK_PATRON_GATES.get(right)
+    if left_gate and right_gate and left_gate != right_gate:
         return False
     left_route = _postwar_route_of(left)
     right_route = _postwar_route_of(right)

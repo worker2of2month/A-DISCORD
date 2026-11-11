@@ -2047,6 +2047,9 @@ ADISCORD_vorkerland_wkr_remaining_fronts_plan = {
 }
 
 # --- vorkerland_support_plans ---
+# The prewar plans name the common trunk only. The branch of the chosen
+# apparatus is hidden from the other two, so its focuses are ordered by
+# their own ai_will_do weights.
 ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	name = "WRK prewar compact"
 	desc = ""
@@ -2070,10 +2073,6 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 		WRK_district_emergency_powers
 		WRK_district_treasuries
 		WRK_last_common_budget
-		WRK_reopen_emergency_workshops
-		WRK_preserve_machine_tools
-		WRK_collect_officer_returns
-		WRK_contract_local_garrisons
 		WRK_convene_council_of_republics
 		WRK_bind_districts_to_charter
 		WRK_issue_continuity_orders
@@ -2106,10 +2105,6 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 		WRK_emergency_central_budget
 		WRK_requisition_commissions
 		WRK_last_common_budget
-		WRK_reopen_emergency_workshops
-		WRK_prioritize_arsenal_output
-		WRK_collect_officer_returns
-		WRK_prepare_officer_reserve
 		WRK_inventory_emergency_stores
 		WRK_disperse_railway_reserves
 		WRK_issue_continuity_orders

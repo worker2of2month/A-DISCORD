@@ -467,6 +467,7 @@ defined_text = {
 				check_variable = { var = ADISCORD_vorkerland_prep_project value = 1 compare = equals }
 				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
 			}
+			WRK_unrest_civil_route_clear = yes
 		}
 		localization_key = ADISCORD_vorkerland_fate_forecast_loyalists
 	}
@@ -476,8 +477,19 @@ defined_text = {
 				check_variable = { var = ADISCORD_vorkerland_prep_project value = 2 compare = equals }
 				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
 			}
+			WRK_unrest_military_route_clear = yes
 		}
 		localization_key = ADISCORD_vorkerland_fate_forecast_vlad
+	}
+	# A finished evacuation reaches this entry only when a riot blocks its route.
+	text = {
+		trigger = {
+			40 = {
+				has_variable = ADISCORD_vorkerland_prep_project
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		localization_key = ADISCORD_vorkerland_fate_forecast_blocked
 	}
 	text = {
 		trigger = { has_completed_focus = WRK_reinforce_the_tower_guard }
@@ -1142,4 +1154,117 @@ defined_text = {
 		localization_key = TVA_public_audit_assessment_good
 	}
 	text = { localization_key = TVA_public_audit_assessment_bad }
+}
+
+# STATE. Unrest of one capital district as the committees' ledger records it.
+defined_text = {
+	name = WRKGetUnrestStatus
+	text = {
+		trigger = { has_state_flag = WRK_unrest_riot }
+		localization_key = WRK_unrest_status_riot
+	}
+	text = {
+		trigger = { has_state_flag = WRK_unrest_patrol }
+		localization_key = WRK_unrest_status_patrol
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_unrest value = 60 compare = greater_than_or_equals } }
+		localization_key = WRK_unrest_status_strike
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_unrest value = 40 compare = greater_than_or_equals } }
+		localization_key = WRK_unrest_status_tense
+	}
+	text = { localization_key = WRK_unrest_status_calm }
+}
+
+# COUNTRY. The ledger is part of the prewar category text for the committees only.
+defined_text = {
+	name = GetVorkerlandUnrestReport
+	text = {
+		trigger = { WRK_unrest_active = yes }
+		localization_key = WRK_unrest_report
+	}
+	text = { localization_key = ADISCORD_vorkerland_no_text }
+}
+
+# COUNTRY. How the chosen apparatus weighs the roll when no evacuation decides Worker's fate.
+defined_text = {
+	name = GetVorkerlandFateBranchNote
+	text = {
+		trigger = { has_completed_focus = WRK_committee_chairmans_mandate }
+		localization_key = ADISCORD_vorkerland_fate_note_chairman
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_escort_for_the_chairman }
+		localization_key = ADISCORD_vorkerland_fate_note_escort
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_reserve_headquarters }
+		localization_key = ADISCORD_vorkerland_fate_note_reserve
+	}
+	text = { localization_key = ADISCORD_vorkerland_no_text }
+}
+
+# STATE. One capital district in the ledger of Worx's network.
+defined_text = {
+	name = WRKGetCellStatus
+	text = {
+		trigger = { has_state_flag = WRK_cell_exposed }
+		localization_key = WRK_cell_status_exposed
+	}
+	text = {
+		trigger = { has_state_flag = WRK_cell_legal }
+		localization_key = WRK_cell_status_legal
+	}
+	text = {
+		trigger = {
+			check_variable = { var = WRK_cell_level value = 0 compare = greater_than }
+			has_state_flag = WRK_cell_dormant
+		}
+		localization_key = WRK_cell_status_dormant
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_cell_level value = 0 compare = greater_than } }
+		localization_key = WRK_cell_status_hidden
+	}
+	text = { localization_key = WRK_cell_status_none }
+}
+
+# COUNTRY. The network's ledger is part of the prewar category text for the engineers only.
+defined_text = {
+	name = GetVorkerlandCellReport
+	text = {
+		trigger = { WRK_cells_active = yes }
+		localization_key = WRK_cell_report
+	}
+	text = { localization_key = ADISCORD_vorkerland_no_text }
+}
+
+# COUNTRY. Legend of the capital panel for the apparatus that keeps the ledger.
+defined_text = {
+	name = GetVorkerlandCapitalLegend1
+	text = {
+		trigger = { WRK_cells_active = yes }
+		localization_key = WRK_capital_legend_cell
+	}
+	text = { localization_key = WRK_capital_legend_patrol }
+}
+
+defined_text = {
+	name = GetVorkerlandCapitalLegend2
+	text = {
+		trigger = { WRK_cells_active = yes }
+		localization_key = WRK_capital_legend_exposed
+	}
+	text = { localization_key = WRK_capital_legend_strike }
+}
+
+defined_text = {
+	name = GetVorkerlandCapitalLegend3
+	text = {
+		trigger = { WRK_cells_active = yes }
+		localization_key = ADISCORD_vorkerland_no_text
+	}
+	text = { localization_key = WRK_capital_legend_riot }
 }

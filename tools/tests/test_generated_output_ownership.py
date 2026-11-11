@@ -72,6 +72,7 @@ REQUIRED_FAMILIES = {
     "resource_assets",
     "strategic_regions",
     "stp_regions_map",
+    "vorkerland_capital_map",
     "nam_basin_map",
     "nam_piracy_map",
     "nam_naval_models",

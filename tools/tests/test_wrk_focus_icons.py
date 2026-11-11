@@ -24,11 +24,11 @@ class WrkFocusIconSlotTests(unittest.TestCase):
         cls.shine = read(SHINE_FILE)
 
     def test_manifest_covers_prewar_and_postwar_wrk_only(self) -> None:
-        self.assertEqual(len(WRK_TREE_FOCUSES), 68)
+        self.assertEqual(len(WRK_TREE_FOCUSES), 78)
         self.assertTrue(
             all(focus_id.startswith("WRK_") for focus_id in WRK_TREE_FOCUSES)
         )
-        self.assertEqual(len(set(WRK_TREE_FOCUSES)), 68)
+        self.assertEqual(len(set(WRK_TREE_FOCUSES)), 78)
 
     def test_each_wrk_focus_uses_its_drop_in_sprite(self) -> None:
         for focus_id in WRK_TREE_FOCUSES:

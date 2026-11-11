@@ -84,6 +84,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     PREWAR_WRK_CARRYOVER_FOCUSES,
     PREWAR_WRK_EXPANSION_FOCUSES,
     PREWAR_WRK_FOCUSES,
+    PREWAR_WRK_PATRON_BRANCHES,
     RETREAT_HOOKS,
     ROOT,
     RUSSIAN_LOCALISATION,
@@ -262,12 +263,15 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
         # The worker and technocratic routes continue in their own trees after the Unity Tower.
-        self.assertEqual(len(self.blocks), 293)
+        self.assertEqual(len(self.blocks), 303)
         self.assertEqual(len(DEPTH_FOCUSES), 45)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
         self.assertEqual(len(TVA_VARIANT_FOCUSES), 6)
-        self.assertEqual(len(PREWAR_WRK_FOCUSES), 34)
+        self.assertEqual(len(PREWAR_WRK_FOCUSES), 44)
+        self.assertEqual(
+            [len(branch) for branch in PREWAR_WRK_PATRON_BRANCHES.values()], [8, 8, 8]
+        )
         self.assertEqual(len(PREWAR_VAD_FOCUSES), 15)
         self.assertEqual(len(PREWAR_WRK_EXPANSION_FOCUSES), 4)
         self.assertEqual(len(PREWAR_VAD_EXPANSION_FOCUSES), 4)
@@ -289,6 +293,22 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             all(len(route) == (12 if flag.endswith("_joint") else 11)
                 for flag, route in POSTWAR_ROUTE_FOCUSES.items())
         )
+
+    def test_patron_branches_are_gated_and_never_drawn_together(self) -> None:
+        committees, staff, network = PREWAR_WRK_PATRON_BRANCHES.values()
+        for cell in zip(committees, staff, network):
+            for index, left in enumerate(cell):
+                for right in cell[index + 1:]:
+                    self.assertFalse(_can_share_view(left, right), (left, right))
+        self.assertTrue(_can_share_view(committees[0], committees[1]))
+        self.assertTrue(_can_share_view(staff[0], "WRK_measure_confederation_fault_lines"))
+        gates = set(PREWAR_WRK_PATRON_BRANCHES)
+        for focus_id in PREWAR_WRK_FOCUSES:
+            expected = {
+                gate for gate, branch in PREWAR_WRK_PATRON_BRANCHES.items() if focus_id in branch
+            }
+            found = {gate for gate in gates if f"{gate} = yes" in self.blocks[focus_id]}
+            self.assertEqual(found, expected, focus_id)
 
     def test_each_claimant_has_a_compact_wartime_route(self) -> None:
         for tag, expected in {"WKR": 17, "VAD": 21, "TVA": 18}.items():

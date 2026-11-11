@@ -104,7 +104,7 @@ VAL_partner_market_income = {
 # These are the net penalties after replacing the original contaminated-state modifier.
 VAL_reclamation_stage_1_modifier = {
 	enable = { always = yes }
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_contamination_ii
 	local_manpower = -0.50
 	state_resources_factor = -0.40
 	local_building_slots_factor = -0.266667
@@ -114,7 +114,7 @@ VAL_reclamation_stage_1_modifier = {
 
 VAL_reclamation_stage_2_modifier = {
 	enable = { always = yes }
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_modifiers_ADISCORD_contamination_i
 	local_manpower = -0.25
 	state_resources_factor = -0.20
 	local_building_slots_factor = -0.133333
@@ -124,7 +124,7 @@ VAL_reclamation_stage_2_modifier = {
 
 VAL_reclamation_stage_3_modifier = {
 	enable = { always = yes }
-	icon = GFX_modifiers_generic_military_plans
+	icon = GFX_modifiers_ADISCORD_reclamation_stage_3
 	local_manpower = 0.0
 	state_resources_factor = 0.0
 	local_building_slots_factor = 0.0

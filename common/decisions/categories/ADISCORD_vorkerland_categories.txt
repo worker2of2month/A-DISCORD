@@ -58,6 +58,7 @@ ADISCORD_vorkerland_prewar_category = {
 		}
 	}
 	visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_prewar }
+	scripted_gui = ADISCORD_vorkerland_capital_panel
 }
 
 ADISCORD_vorkerland_vad_administration = {

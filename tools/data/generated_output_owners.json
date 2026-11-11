@@ -42,6 +42,7 @@
     "doctrine_system",
     "val_operations_map",
     "stp_regions_map",
+    "vorkerland_capital_map",
     "nam_basin_map",
     "nam_piracy_map",
     "island_administration_icon",
@@ -1677,6 +1678,36 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map", "--apply"],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
+    },
+    {
+      "id": "vorkerland_capital_map",
+      "owner_module": "tools.builders.build_adiscord_vorkerland_capital_map",
+      "output_globs": [
+        "gfx/interface/vorkerland_capital/*.png",
+        "interface/ADISCORD_vorkerland.gui",
+        "interface/ADISCORD_vorkerland.gfx",
+        "docs/mockups/vorkerland_capital.html",
+        "docs/development/previews/vorkerland_capital/review.png"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_vorkerland_capital_map.py",
+        "history/states/32-*.txt",
+        "history/states/33-*.txt",
+        "history/states/34-*.txt",
+        "history/states/35-*.txt",
+        "history/states/36-*.txt",
+        "history/states/37-*.txt",
+        "history/states/38-*.txt",
+        "history/states/39-*.txt",
+        "history/states/40-*.txt",
+        "map/definition.csv",
+        "map/provinces.bmp"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_capital_map"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_capital_map", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns PNG exports, the standalone HTML mockup and only BEGIN/END GENERATED WRK CAPITAL VISUALS sections in the shared Vorkerland GUI/GFX. The development review image is opt-in with --preview."
     },
     {
       "id": "stp_regions_map",

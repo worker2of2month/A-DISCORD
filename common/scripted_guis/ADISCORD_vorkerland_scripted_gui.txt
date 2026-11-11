@@ -8,4 +8,147 @@ scripted_gui = {
 			WRK_worx_needle = { x = WRK_worx_needle_x }
 		}
 	}
+	# Capital map of the prewar category. Each layer reads the frame that its
+	# own visibility trigger has just computed; nothing is stored between frames.
+	ADISCORD_vorkerland_capital_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_vorkerland_capital_window"
+		visible = { WRK_capital_panel_visible = yes }
+		ai_enabled = { always = no }
+		triggers = {
+			WRK_capital_32_state_visible = {
+				32 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_32_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_32_marker_visible = {
+				32 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_32_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_33_state_visible = {
+				33 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_33_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_33_marker_visible = {
+				33 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_33_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_34_state_visible = {
+				34 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_34_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_34_marker_visible = {
+				34 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_34_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_35_state_visible = {
+				35 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_35_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_35_marker_visible = {
+				35 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_35_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_36_state_visible = {
+				36 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_36_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_36_marker_visible = {
+				36 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_36_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_37_state_visible = {
+				37 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_37_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_37_marker_visible = {
+				37 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_37_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_38_state_visible = {
+				38 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_38_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_38_marker_visible = {
+				38 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_38_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_39_state_visible = {
+				39 = { WRK_capital_set_state_frame = yes }
+				set_temp_variable = { var = WRK_capital_39_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_39_marker_visible = {
+				39 = { WRK_capital_set_marker_frame = yes }
+				set_temp_variable = { var = WRK_capital_39_marker_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_40_state_visible = {
+				WRK_capital_set_tower_frame = yes
+				set_temp_variable = { var = WRK_capital_40_state_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_40_marker_visible = {
+				set_temp_variable = { var = WRK_capital_40_marker_frame value = 1 }
+				always = yes
+			}
+			WRK_capital_route_visible = {
+				WRK_capital_set_route_frame = yes
+				set_temp_variable = { var = WRK_capital_route_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_capital_legend_icon_1_visible = {
+				WRK_capital_set_legend_frames = yes
+				set_temp_variable = { var = WRK_capital_legend_icon_1_frame value = WRK_capital_legend_1 }
+				always = yes
+			}
+			WRK_capital_legend_icon_2_visible = {
+				WRK_capital_set_legend_frames = yes
+				set_temp_variable = { var = WRK_capital_legend_icon_2_frame value = WRK_capital_legend_2 }
+				always = yes
+			}
+			WRK_capital_legend_icon_3_visible = {
+				WRK_capital_set_legend_frames = yes
+				set_temp_variable = { var = WRK_capital_legend_icon_3_frame value = WRK_capital_legend_3 }
+				always = yes
+			}
+		}
+		properties = {
+			WRK_capital_32_state = { frame = WRK_capital_32_state_frame }
+			WRK_capital_32_marker = { frame = WRK_capital_32_marker_frame }
+			WRK_capital_33_state = { frame = WRK_capital_33_state_frame }
+			WRK_capital_33_marker = { frame = WRK_capital_33_marker_frame }
+			WRK_capital_34_state = { frame = WRK_capital_34_state_frame }
+			WRK_capital_34_marker = { frame = WRK_capital_34_marker_frame }
+			WRK_capital_35_state = { frame = WRK_capital_35_state_frame }
+			WRK_capital_35_marker = { frame = WRK_capital_35_marker_frame }
+			WRK_capital_36_state = { frame = WRK_capital_36_state_frame }
+			WRK_capital_36_marker = { frame = WRK_capital_36_marker_frame }
+			WRK_capital_37_state = { frame = WRK_capital_37_state_frame }
+			WRK_capital_37_marker = { frame = WRK_capital_37_marker_frame }
+			WRK_capital_38_state = { frame = WRK_capital_38_state_frame }
+			WRK_capital_38_marker = { frame = WRK_capital_38_marker_frame }
+			WRK_capital_39_state = { frame = WRK_capital_39_state_frame }
+			WRK_capital_39_marker = { frame = WRK_capital_39_marker_frame }
+			WRK_capital_40_state = { frame = WRK_capital_40_state_frame }
+			WRK_capital_40_marker = { frame = WRK_capital_40_marker_frame }
+			WRK_capital_route = { frame = WRK_capital_route_frame }
+			WRK_capital_legend_icon_1 = { frame = WRK_capital_legend_icon_1_frame }
+			WRK_capital_legend_icon_2 = { frame = WRK_capital_legend_icon_2_frame }
+			WRK_capital_legend_icon_3 = { frame = WRK_capital_legend_icon_3_frame }
+		}
+	}
 }
