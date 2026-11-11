@@ -189,6 +189,12 @@ class ContractWorld:
                 taken |= active
             elif key == "ADISCORD_economy_mark_dirty":
                 self.dirty.add(scope)
+            elif key.startswith("ADISCORD_economy_receive_") and key[len("ADISCORD_economy_receive_"):].isdigit():
+                # Shared fixed-amount treasury receipt from ADISCORD_shared_action_effects.txt.
+                amount = int(key[len("ADISCORD_economy_receive_"):])
+                for name in ("ADISCORD_economy_treasury", "ADISCORD_economy_current_month_action_income"):
+                    country["vars"][name] = country["vars"].get(name, 0) + amount
+                self.dirty.add(scope)
             elif key in ("VAL_refresh_arsenal_reputation", "ADISCORD_release_non_participating_minor_optimization"):
                 pass
             elif key in self.effects:
@@ -908,7 +914,7 @@ class NewWorldRouteTests(unittest.TestCase):
     def test_new_tree_is_registered_complete_and_has_no_unreachable_prerequisites(self):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
         focuses = tree_focuses()
-        self.assertEqual(len(focuses), 73)
+        self.assertEqual(len(focuses), 88)
         reachable = set()
         for _ in range(len(focuses)):
             for name, focus in focuses.items():
@@ -923,9 +929,9 @@ class NewWorldRouteTests(unittest.TestCase):
                     self.assertEqual(len(gates[0]), 1, name)
                     self.assertTrue(gates[0][0].key.startswith("VAL_peace_regime_"), name)
         self.assertEqual(reachable, set(focuses))
-        places = {(tuple(e.key for e in block(f, "allow_branch")) if any(e.key == "allow_branch" for e in f) else (),
-                   scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}
-        self.assertEqual(len(places), 73)
+        # Regime lanes never share a cell, so any set of visible branches stays readable.
+        places = {(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}
+        self.assertEqual(len(places), 88)
 
     def test_every_branch_has_a_symmetric_exclusive_pair(self):
         focuses = tree_focuses()
@@ -953,6 +959,8 @@ class NewWorldRouteTests(unittest.TestCase):
             frozenset(("VAL_charter_district_captains", "VAL_charter_single_staff")),
             frozenset(("VAL_charter_tribunal", "VAL_charter_silence")),
             frozenset(("VAL_captains_common_purse", "VAL_captains_shares_forever")),
+            frozenset(("VAL_captains_greitz_passes", "VAL_captains_river_raids")),
+            frozenset(("VAL_east_trade_missions", "VAL_east_krutov_network")),
             frozenset(("VAL_east_shards", "VAL_east_arsenal")),
         })
         for pair in pairs:

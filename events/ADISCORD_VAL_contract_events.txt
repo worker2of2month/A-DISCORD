@@ -5791,16 +5791,37 @@ country_event = {
 	option = { name = val_peace.80.a }
 }
 
+# COUNTRY VAL. The .rival variants follow a declaration by the rival.
 country_event = {
 	id = val_peace.81
 	title = val_peace.81.t
 	desc = {
-		trigger = { VAL_east_rival_is_khan = yes }
+		trigger = {
+			VAL_east_rival_is_khan = yes
+			NOT = { has_global_flag = VAL_east_rival_declared }
+		}
 		text = val_peace.81.khan
 	}
 	desc = {
-		trigger = { VAL_east_rival_is_montar = yes }
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			NOT = { has_global_flag = VAL_east_rival_declared }
+		}
 		text = val_peace.81.d
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_khan = yes
+			has_global_flag = VAL_east_rival_declared
+		}
+		text = val_peace.81.rival_khan
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			has_global_flag = VAL_east_rival_declared
+		}
+		text = val_peace.81.rival
 	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
@@ -5810,14 +5831,41 @@ country_event = {
 
 news_event = {
 	id = val_peace.82
-	title = val_peace.82.t
+	title = {
+		trigger = { NOT = { has_global_flag = VAL_east_rival_declared } }
+		text = val_peace.82.t
+	}
+	title = {
+		trigger = { has_global_flag = VAL_east_rival_declared }
+		text = val_peace.82.t_rival
+	}
 	desc = {
-		trigger = { VAL_east_rival_is_khan = yes }
+		trigger = {
+			VAL_east_rival_is_khan = yes
+			NOT = { has_global_flag = VAL_east_rival_declared }
+		}
 		text = val_peace.82.khan
 	}
 	desc = {
-		trigger = { VAL_east_rival_is_montar = yes }
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			NOT = { has_global_flag = VAL_east_rival_declared }
+		}
 		text = val_peace.82.d
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_khan = yes
+			has_global_flag = VAL_east_rival_declared
+		}
+		text = val_peace.82.rival_khan
+	}
+	desc = {
+		trigger = {
+			VAL_east_rival_is_montar = yes
+			has_global_flag = VAL_east_rival_declared
+		}
+		text = val_peace.82.rival
 	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
@@ -5828,8 +5876,22 @@ news_event = {
 # COUNTRY rival. A human rival learns the stakes of the same campaign.
 country_event = {
 	id = val_peace.83
-	title = val_peace.83.t
-	desc = val_peace.83.d
+	title = {
+		trigger = { NOT = { has_global_flag = VAL_east_rival_declared } }
+		text = val_peace.83.t
+	}
+	title = {
+		trigger = { has_global_flag = VAL_east_rival_declared }
+		text = val_peace.83.t_rival
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = VAL_east_rival_declared } }
+		text = val_peace.83.d
+	}
+	desc = {
+		trigger = { has_global_flag = VAL_east_rival_declared }
+		text = val_peace.83.rival
+	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	option = { name = val_peace.83.a }
@@ -5909,4 +5971,437 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = VAL }
 	option = { name = val_peace.88.a }
+}
+
+# --- east_contest ---
+# COUNTRY VAL. The contest for the zone republics opens; the desc follows the rival.
+country_event = {
+	id = val_peace.89
+	title = val_peace.89.t
+	desc = {
+		trigger = { VAL_east_rival_is_khan = yes }
+		text = val_peace.89.khan
+	}
+	desc = {
+		trigger = { VAL_east_rival_is_montar = yes }
+		text = val_peace.89.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.89.a
+		custom_effect_tooltip = VAL_east_contest_begin_tt
+	}
+}
+
+# COUNTRY republic inside the rival's faction; FROM is Kefreyt. The first
+# option keeps the alliance when the offer lapses.
+country_event = {
+	id = val_peace.90
+	title = val_peace.90.t
+	desc = val_peace.90.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_offer_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.90.a
+		trigger = { has_country_flag = VAL_east_offer_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contestable = yes
+				is_in_faction_with = event_target:VAL_east_rival
+			}
+		}
+		custom_effect_tooltip = VAL_east_stay_in_rival_faction_tt
+		hidden_effect = { VAL_east_contest_refuse_leave = yes }
+	}
+	option = {
+		name = val_peace.90.b
+		trigger = {
+			has_country_flag = VAL_east_offer_pending
+			VAL_east_contestable = yes
+			is_in_faction_with = event_target:VAL_east_rival
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_east_leave_rival_faction_tt
+		hidden_effect = { VAL_east_contest_accept_leave = yes }
+	}
+	option = {
+		name = val_peace.90.c
+		trigger = { NOT = { has_country_flag = VAL_east_offer_pending } }
+	}
+}
+
+# COUNTRY VAL. FROM is the republic that answered val_peace.90.
+country_event = {
+	id = val_peace.91
+	title = val_peace.91.t
+	desc = {
+		trigger = { FROM = { NOT = { is_in_faction_with = event_target:VAL_east_rival } } }
+		text = val_peace.91.accepted
+	}
+	desc = {
+		trigger = { FROM = { is_in_faction_with = event_target:VAL_east_rival } }
+		text = val_peace.91.refused
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.91.a }
+}
+
+# COUNTRY republic outside every faction; FROM is Kefreyt. The first option
+# keeps it out of the rival's alliance when the offer lapses.
+country_event = {
+	id = val_peace.92
+	title = val_peace.92.t
+	desc = val_peace.92.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_offer_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.92.a
+		trigger = { has_country_flag = VAL_east_offer_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contestable = yes
+				is_in_faction = no
+				event_target:VAL_east_rival = { is_faction_leader = yes }
+			}
+		}
+		custom_effect_tooltip = VAL_east_refuse_rival_faction_tt
+		hidden_effect = { VAL_east_contest_refuse_join = yes }
+	}
+	option = {
+		name = val_peace.92.b
+		trigger = {
+			has_country_flag = VAL_east_offer_pending
+			VAL_east_contestable = yes
+			is_in_faction = no
+			event_target:VAL_east_rival = { is_faction_leader = yes }
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_east_join_rival_faction_tt
+		hidden_effect = { VAL_east_contest_accept_join = yes }
+	}
+	option = {
+		name = val_peace.92.c
+		trigger = { NOT = { has_country_flag = VAL_east_offer_pending } }
+	}
+}
+
+# COUNTRY VAL. FROM is the republic that joined the rival's faction.
+country_event = {
+	id = val_peace.93
+	title = val_peace.93.t
+	desc = val_peace.93.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.93.a }
+}
+
+# COUNTRY VAL. The AI rejects while its camp is at least as large as the
+# rival's. The first option is also the answer to a lapsed ultimatum.
+country_event = {
+	id = val_peace.94
+	title = val_peace.94.t
+	desc = {
+		trigger = { VAL_east_rival_is_khan = yes }
+		text = val_peace.94.khan
+	}
+	desc = {
+		trigger = { VAL_east_rival_is_montar = yes }
+		text = val_peace.94.d
+	}
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		VAL_east_contest_active = yes
+	}
+	timeout_days = 14
+	immediate = { VAL_east_contest_count_camps = yes }
+	option = {
+		name = val_peace.94.a
+		trigger = { VAL_east_contest_active = yes }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = VAL_east_val_camp value = VAL_east_rival_camp compare = less_than }
+			}
+		}
+		custom_effect_tooltip = VAL_east_contest_reject_tt
+		hidden_effect = {
+			VAL_east_final_start_by_rival = yes
+			VAL_east_contest_close = yes
+		}
+	}
+	option = {
+		name = val_peace.94.b
+		trigger = { VAL_east_contest_active = yes }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = VAL_east_val_camp value = VAL_east_rival_camp compare = greater_than_or_equals }
+			}
+		}
+		effect_tooltip = {
+			add_stability = -0.10
+			add_war_support = -0.10
+		}
+		custom_effect_tooltip = VAL_east_contest_concede_tt
+		hidden_effect = { VAL_east_contest_concede = yes }
+	}
+	option = {
+		name = val_peace.94.c
+		trigger = { NOT = { VAL_east_contest_active = yes } }
+	}
+}
+
+# COUNTRY human rival; FROM is Kefreyt. Silence is a retreat, not a war.
+country_event = {
+	id = val_peace.95
+	title = val_peace.95.t
+	desc = val_peace.95.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { VAL_east_contest_active = yes }
+	timeout_days = 14
+	option = {
+		name = val_peace.95.a
+		trigger = { VAL_east_contest_active = yes }
+		ai_chance = { factor = 1 }
+		custom_effect_tooltip = VAL_east_contest_back_down_tt
+		hidden_effect = { VAL_east_contest_rival_backs_down = yes }
+	}
+	option = {
+		name = val_peace.95.b
+		trigger = { VAL_east_contest_active = yes }
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = VAL_east_contest_declare_tt
+		hidden_effect = {
+			VAL = { VAL_east_final_start_by_rival = yes }
+			VAL_east_contest_close = yes
+		}
+	}
+	option = {
+		name = val_peace.95.c
+		trigger = { NOT = { VAL_east_contest_active = yes } }
+	}
+}
+
+country_event = {
+	id = val_peace.96
+	title = val_peace.96.t
+	desc = val_peace.96.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.96.a }
+}
+
+# COUNTRY republic; FROM is Kefreyt. Regime offers: the first option refuses
+# and is the answer to a lapsed offer; acceptance rechecks both sides.
+country_event = {
+	id = val_peace.97
+	title = val_peace.97.t
+	desc = val_peace.97.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_tool_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.97.a
+		trigger = { has_country_flag = VAL_east_tool_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contest_active = yes
+				VAL_throne_crown_march_eligible = yes
+				VAL = { VAL_throne_crown_march_affordable = yes }
+			}
+		}
+		custom_effect_tooltip = VAL_east_tool_refuse_tt
+		hidden_effect = { VAL_east_decline_tool = yes }
+	}
+	option = {
+		name = val_peace.97.b
+		trigger = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_throne_crown_march_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_throne_crown_march_affordable = yes
+			}
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_throne_crown_march_accept_tt
+		hidden_effect = { VAL_throne_accept_crown_march = yes }
+	}
+	option = {
+		name = val_peace.97.c
+		trigger = { NOT = { has_country_flag = VAL_east_tool_pending } }
+	}
+}
+
+country_event = {
+	id = val_peace.98
+	title = val_peace.98.t
+	desc = val_peace.98.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_tool_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.98.a
+		trigger = { has_country_flag = VAL_east_tool_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contest_active = yes
+				VAL_cabinet_treaty_eligible = yes
+				VAL = { VAL_cabinet_treaty_affordable = yes }
+			}
+		}
+		custom_effect_tooltip = VAL_east_tool_refuse_tt
+		hidden_effect = { VAL_east_decline_tool = yes }
+	}
+	option = {
+		name = val_peace.98.b
+		trigger = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_cabinet_treaty_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_cabinet_treaty_affordable = yes
+			}
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_cabinet_treaty_membership_accept_tt
+		hidden_effect = { VAL_cabinet_accept_treaty_membership = yes }
+	}
+	option = {
+		name = val_peace.98.c
+		trigger = { NOT = { has_country_flag = VAL_east_tool_pending } }
+	}
+}
+
+country_event = {
+	id = val_peace.99
+	title = val_peace.99.t
+	desc = val_peace.99.d
+	picture = GFX_event_adiscord_mountain_militia_assembly
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_tool_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.99.a
+		trigger = { has_country_flag = VAL_east_tool_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contest_active = yes
+				VAL_charter_garrison_eligible = yes
+				VAL = { VAL_charter_garrison_affordable = yes }
+			}
+		}
+		custom_effect_tooltip = VAL_east_tool_refuse_tt
+		hidden_effect = { VAL_east_decline_tool = yes }
+	}
+	option = {
+		name = val_peace.99.b
+		trigger = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_charter_garrison_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_charter_garrison_affordable = yes
+			}
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_charter_garrison_treaty_accept_tt
+		hidden_effect = { VAL_charter_accept_garrison_treaty = yes }
+	}
+	option = {
+		name = val_peace.99.c
+		trigger = { NOT = { has_country_flag = VAL_east_tool_pending } }
+	}
+}
+
+country_event = {
+	id = val_peace.100
+	title = val_peace.100.t
+	desc = val_peace.100.d
+	picture = GFX_event_adiscord_ledger_handover
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_east_tool_pending }
+	timeout_days = 14
+	option = {
+		name = val_peace.100.a
+		trigger = { has_country_flag = VAL_east_tool_pending }
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				VAL_east_contest_active = yes
+				VAL_captains_hire_eligible = yes
+				VAL = { VAL_captains_hire_affordable = yes }
+			}
+		}
+		custom_effect_tooltip = VAL_east_tool_refuse_tt
+		hidden_effect = { VAL_east_decline_tool = yes }
+	}
+	option = {
+		name = val_peace.100.b
+		trigger = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_captains_hire_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_captains_hire_affordable = yes
+			}
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_captains_hire_companies_accept_tt
+		hidden_effect = { VAL_captains_accept_hire_companies = yes }
+	}
+	option = {
+		name = val_peace.100.c
+		trigger = { NOT = { has_country_flag = VAL_east_tool_pending } }
+	}
+}
+
+# COUNTRY VAL. FROM is the republic; only a refusal leaves the 90-day cooldown.
+country_event = {
+	id = val_peace.101
+	title = val_peace.101.t
+	desc = {
+		trigger = { FROM = { NOT = { has_country_flag = VAL_east_tool_cooldown } } }
+		text = val_peace.101.accepted
+	}
+	desc = {
+		trigger = { FROM = { has_country_flag = VAL_east_tool_cooldown } }
+		text = val_peace.101.refused
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.101.a }
 }

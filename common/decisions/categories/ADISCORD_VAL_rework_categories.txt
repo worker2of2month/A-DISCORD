@@ -37,6 +37,19 @@ VAL_east_war_category = {
 	visible_when_empty = yes
 }
 
+# Paid operations of the contest settle after it ends, so their receipts keep it open.
+VAL_east_contest_category = {
+	priority = 1005
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			VAL_east_contest_active = yes
+			VAL_east_contest_receipts_open = yes
+		}
+	}
+	visible_when_empty = yes
+}
+
 # The delivery of a paid foreign order outlives the reckoning that sent it.
 VAL_peace_payroll_category = {
 	priority = 955

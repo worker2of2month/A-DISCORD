@@ -103,8 +103,10 @@ VAL_new_world_plan = {
 	}
 	# The Khan focus comes first: its warning may already be running. Then one
 	# alternative of each exclusive choice: water convoys, the register audit and
-	# the workers' charter; every regime branch is listed because only the regime
-	# chosen at the reckoning can be taken; concessions, accord, foundries, arsenal.
+	# the workers' charter; the regime roots and the eastern question follow, so the
+	# contest for the republics starts early; every regime branch is listed because
+	# only the regime chosen at the reckoning can be taken; trade missions, Greitz
+	# passes, concessions, accord, foundries, arsenal.
 	ai_national_focuses = {
 		VAL_nw_price
 		VAL_nw_khan
@@ -120,29 +122,43 @@ VAL_new_world_plan = {
 		VAL_peace_archive
 		VAL_peace_night_of_registers
 		VAL_peace_throne
+		VAL_peace_cabinet
+		VAL_peace_charter
+		VAL_peace_captains
+		VAL_east_question
+		VAL_east_trade_missions
+		VAL_east_border_posts
 		VAL_throne_heir_officer
 		VAL_throne_crown_register
+		VAL_throne_cadet_companies
+		VAL_throne_court_armourers
 		VAL_throne_patents
 		VAL_throne_arsenal_monopoly
+		VAL_throne_crown_marches
 		VAL_throne_memorial
 		VAL_throne_two_crowns
-		VAL_peace_cabinet
 		VAL_nw_arbitration
 		VAL_cabinet_open_estimates
 		VAL_cabinet_civil_combine
+		VAL_cabinet_reconstruction_loans
+		VAL_cabinet_eastern_mission
 		VAL_cabinet_zone_clearing
 		VAL_cabinet_not_for_sale
+		VAL_cabinet_civil_defence
 		VAL_cabinet_defence_treaty
-		VAL_peace_charter
 		VAL_nw_army_guarantee
 		VAL_charter_single_staff
 		VAL_charter_company_statute
+		VAL_charter_staff_academy
+		VAL_charter_garrison_contracts
 		VAL_charter_silence
 		VAL_charter_mercenary_power
+		VAL_charter_veteran_reserve
 		VAL_charter_general_campaign
-		VAL_peace_captains
 		VAL_captains_common_purse
 		VAL_captains_war_export
+		VAL_captains_officers_assembly
+		VAL_captains_company_markets
 		VAL_captains_greitz_passes
 		VAL_captains_last_buyer
 		VAL_nw_perimeter
@@ -157,7 +173,6 @@ VAL_new_world_plan = {
 		VAL_nw_archives
 		VAL_nw_alloys
 		VAL_nw_generation
-		VAL_east_question
 		VAL_east_arsenal
 		VAL_east_final
 		VAL_nw_steel_peace

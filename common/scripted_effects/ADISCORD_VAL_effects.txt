@@ -1558,6 +1558,911 @@ VAL_peace_install_regime = {
 	}
 }
 
+# --- east_contest ---
+# COUNTRY VAL. Opens the contest for the zone republics once, from the eastern
+# question focus or the monthly clock. Without a rival the east is settled.
+VAL_east_contest_begin = {
+	if = {
+		limit = { VAL_east_contest_can_begin = yes }
+		set_global_flag = VAL_east_contest_started
+		clear_variable = VAL_east_contest_wait
+		VAL_east_select_rival = yes
+		SLA = { VAL_east_contest_seed = yes }
+		RZA = { VAL_east_contest_seed = yes }
+		MLR = { VAL_east_contest_seed = yes }
+		ERT = { VAL_east_contest_seed = yes }
+		IRT = { VAL_east_contest_seed = yes }
+		SCA = { VAL_east_contest_seed = yes }
+		TMR = { VAL_east_contest_seed = yes }
+		VEL = { VAL_east_contest_seed = yes }
+		RLY = { VAL_east_contest_seed = yes }
+		activate_mission = VAL_east_contest_deadline
+		country_event = { id = val_peace.89 hours = 6 }
+	}
+	else_if = {
+		limit = { VAL_east_rival_exists = no }
+		VAL_east_settle_uncontested = yes
+	}
+}
+
+# COUNTRY republic. Initial lean, including the eastern focuses Kefreyt
+# completed before the contest began; later completions shift it directly.
+VAL_east_contest_seed = {
+	if = {
+		limit = { VAL_east_contestable = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_variable = { var = VAL_east_lean value = 50 }
+		if = {
+			limit = { has_country_flag = VAL_nw_concession }
+			add_to_variable = { var = VAL_east_lean value = 20 }
+		}
+		if = {
+			limit = { has_country_flag = VAL_nw_sovereignty_recognized }
+			add_to_variable = { var = VAL_east_lean value = 10 }
+		}
+		if = {
+			limit = { is_in_faction_with = event_target:VAL_east_rival }
+			add_to_variable = { var = VAL_east_lean value = -20 }
+		}
+		if = {
+			limit = { VAL_east_borders_rival = yes }
+			add_to_variable = { var = VAL_east_lean value = -10 }
+		}
+		if = {
+			limit = { VAL = { has_completed_focus = VAL_east_trade_missions } }
+			add_to_variable = { var = VAL_east_lean value = 5 }
+		}
+		if = {
+			limit = { VAL = { has_completed_focus = VAL_cabinet_eastern_mission } }
+			add_to_variable = { var = VAL_east_lean value = 5 }
+		}
+		if = {
+			limit = {
+				VAL = { has_completed_focus = VAL_east_krutov_network }
+				is_in_faction_with = event_target:VAL_east_rival
+			}
+			add_to_variable = { var = VAL_east_lean value = 5 }
+		}
+		if = {
+			limit = {
+				VAL = { has_completed_focus = VAL_east_shards }
+				has_country_flag = VAL_nw_concession
+			}
+			add_to_variable = { var = VAL_east_lean value = 15 }
+		}
+		clamp_variable = { var = VAL_east_lean min = 0 max = 100 }
+	}
+}
+
+# COUNTRY republic. Input: temporary VAL_east_lean_delta. A republic that became
+# contestable after the start is seeded first.
+VAL_east_contest_add_lean = {
+	if = {
+		limit = {
+			VAL_east_contest_active = yes
+			VAL_east_contestable = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = VAL_east_lean } }
+			VAL_east_contest_seed = yes
+		}
+		add_to_variable = { var = VAL_east_lean value = VAL_east_lean_delta }
+		clamp_variable = { var = VAL_east_lean min = 0 max = 100 }
+	}
+}
+
+# COUNTRY VAL. Focus rewards set temporary VAL_east_lean_delta first. Before the
+# contest these are no-ops: the start seeds every completed focus itself.
+VAL_east_contest_shift_all = {
+	set_temp_variable = { var = VAL_east_lean_filter value = 0 }
+	VAL_east_contest_shift_roster = yes
+}
+
+VAL_east_contest_shift_rival_members = {
+	set_temp_variable = { var = VAL_east_lean_filter value = 1 }
+	VAL_east_contest_shift_roster = yes
+}
+
+VAL_east_contest_shift_partners = {
+	set_temp_variable = { var = VAL_east_lean_filter value = 2 }
+	VAL_east_contest_shift_roster = yes
+}
+
+# GLOBAL. Inputs: temporary VAL_east_lean_delta and VAL_east_lean_filter
+# (0 all, 1 rival faction members, 2 concession partners, 3 neutrals).
+VAL_east_contest_shift_roster = {
+	if = {
+		limit = { VAL_east_contest_active = yes }
+		SLA = { VAL_east_contest_shift_republic = yes }
+		RZA = { VAL_east_contest_shift_republic = yes }
+		MLR = { VAL_east_contest_shift_republic = yes }
+		ERT = { VAL_east_contest_shift_republic = yes }
+		IRT = { VAL_east_contest_shift_republic = yes }
+		SCA = { VAL_east_contest_shift_republic = yes }
+		TMR = { VAL_east_contest_shift_republic = yes }
+		VEL = { VAL_east_contest_shift_republic = yes }
+		RLY = { VAL_east_contest_shift_republic = yes }
+	}
+}
+
+VAL_east_contest_shift_republic = {
+	if = {
+		limit = {
+			VAL_east_contestable = yes
+			OR = {
+				check_variable = { var = VAL_east_lean_filter value = 0 compare = equals }
+				AND = {
+					check_variable = { var = VAL_east_lean_filter value = 1 compare = equals }
+					is_in_faction_with = event_target:VAL_east_rival
+				}
+				AND = {
+					check_variable = { var = VAL_east_lean_filter value = 2 compare = equals }
+					has_country_flag = VAL_nw_concession
+				}
+				AND = {
+					check_variable = { var = VAL_east_lean_filter value = 3 compare = equals }
+					has_variable = VAL_east_lean
+					NOT = { VAL_east_in_val_camp = yes }
+					NOT = { VAL_east_in_rival_camp = yes }
+				}
+			}
+		}
+		VAL_east_contest_add_lean = yes
+	}
+}
+
+# COUNTRY VAL from on_monthly_VAL. Counts four months after the regime choice
+# when the eastern question focus is skipped, then applies the rival's pressure
+# to the nine fixed republics only.
+VAL_east_contest_monthly = {
+	if = {
+		limit = {
+			VAL_peace_regime_chosen = yes
+			NOT = { has_global_flag = VAL_east_contest_started }
+			NOT = { has_global_flag = VAL_east_final_started }
+			NOT = { has_global_flag = VAL_east_final_resolved }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_east_contest_wait value = 4 compare = less_than } }
+			add_to_variable = { var = VAL_east_contest_wait value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = VAL_east_contest_wait value = 4 compare = greater_than_or_equals } }
+			VAL_east_contest_begin = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_flag = VAL_east_contest_started
+			NOT = { has_global_flag = VAL_east_final_resolved }
+		}
+		VAL_east_contest_reconcile = yes
+		if = {
+			limit = { VAL_east_contest_active = yes }
+			SLA = { VAL_east_contest_pressure = yes }
+			RZA = { VAL_east_contest_pressure = yes }
+			MLR = { VAL_east_contest_pressure = yes }
+			ERT = { VAL_east_contest_pressure = yes }
+			IRT = { VAL_east_contest_pressure = yes }
+			SCA = { VAL_east_contest_pressure = yes }
+			TMR = { VAL_east_contest_pressure = yes }
+			VEL = { VAL_east_contest_pressure = yes }
+			RLY = { VAL_east_contest_pressure = yes }
+		}
+	}
+	if = {
+		limit = {
+			has_variable = VAL_east_contest_wait
+			OR = {
+				has_global_flag = VAL_east_contest_started
+				has_global_flag = VAL_east_final_resolved
+			}
+		}
+		clear_variable = VAL_east_contest_wait
+	}
+}
+
+# GLOBAL. A contest whose champion or rival can no longer act ends; once no
+# rival remains, the east passes to an independent Kefreyt.
+VAL_east_contest_reconcile = {
+	if = {
+		limit = {
+			VAL_east_contest_active = yes
+			OR = {
+				VAL = { VAL_nw_operational = no }
+				VAL_east_contest_rival_valid = no
+			}
+		}
+		VAL_east_contest_close = yes
+	}
+	if = {
+		limit = {
+			has_global_flag = VAL_east_contest_started
+			NOT = { has_global_flag = VAL_east_final_started }
+			NOT = { has_global_flag = VAL_east_final_resolved }
+			VAL_east_rival_exists = no
+			VAL = { VAL_nw_operational = yes }
+		}
+		VAL = { VAL_east_settle_uncontested = yes }
+	}
+}
+
+# COUNTRY republic. Monthly rival pressure: 5, +3 inside the rival's faction,
+# -2 after Krutov's network, -3 under a garrison treaty, never below 0;
+# exposed agents stop it entirely.
+VAL_east_contest_pressure = {
+	if = {
+		limit = { VAL_east_contestable = yes }
+		if = {
+			limit = { NOT = { has_variable = VAL_east_lean } }
+			VAL_east_contest_seed = yes
+		}
+		if = {
+			limit = { NOT = { has_country_flag = VAL_east_agents_exposed } }
+			set_temp_variable = { var = VAL_east_pressure value = 5 }
+			if = {
+				limit = { is_in_faction_with = event_target:VAL_east_rival }
+				add_to_temp_variable = { var = VAL_east_pressure value = 3 }
+			}
+			if = {
+				limit = { VAL = { has_completed_focus = VAL_east_krutov_network } }
+				add_to_temp_variable = { var = VAL_east_pressure value = -2 }
+			}
+			if = {
+				limit = { has_country_flag = VAL_east_garrisoned }
+				add_to_temp_variable = { var = VAL_east_pressure value = -3 }
+			}
+			clamp_temp_variable = { var = VAL_east_pressure min = 0 max = 8 }
+			subtract_from_variable = { var = VAL_east_lean value = VAL_east_pressure }
+			clamp_variable = { var = VAL_east_lean min = 0 max = 100 }
+		}
+		VAL_east_contest_check_camp = yes
+	}
+}
+
+# COUNTRY republic. One open camp offer at a time; a refusal waits 90 days.
+VAL_east_contest_check_camp = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = VAL_east_offer_pending }
+			NOT = { has_country_flag = VAL_east_offer_cooldown }
+		}
+		if = {
+			limit = { VAL_east_leave_offer_valid = yes }
+			set_country_flag = { flag = VAL_east_offer_pending days = 30 }
+			country_event = { id = val_peace.90 hours = 6 }
+		}
+		else_if = {
+			limit = { VAL_east_join_offer_valid = yes }
+			set_country_flag = { flag = VAL_east_offer_pending days = 30 }
+			country_event = { id = val_peace.92 hours = 6 }
+		}
+	}
+}
+
+# COUNTRY republic. A faction leader dismantles its own bloc to change sides.
+VAL_east_leave_current_faction = {
+	if = {
+		limit = { is_faction_leader = yes }
+		dismantle_faction = yes
+	}
+	else_if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
+}
+
+# COUNTRY republic. Answers to val_peace.90; Kefreyt learns the answer from val_peace.91.
+VAL_east_contest_accept_leave = {
+	if = {
+		limit = { has_country_flag = VAL_east_offer_pending }
+		clr_country_flag = VAL_east_offer_pending
+		if = {
+			limit = {
+				VAL_east_contestable = yes
+				is_in_faction_with = event_target:VAL_east_rival
+			}
+			VAL_east_leave_current_faction = yes
+			VAL = { country_event = { id = val_peace.91 hours = 6 } }
+		}
+	}
+}
+
+VAL_east_contest_refuse_leave = {
+	if = {
+		limit = { has_country_flag = VAL_east_offer_pending }
+		clr_country_flag = VAL_east_offer_pending
+		if = {
+			limit = {
+				VAL_east_contestable = yes
+				is_in_faction_with = event_target:VAL_east_rival
+			}
+			set_country_flag = { flag = VAL_east_offer_cooldown days = 90 }
+			# The lean falls to ten points below the current threshold.
+			if = {
+				limit = {
+					VAL = { has_completed_focus = VAL_east_shards }
+					check_variable = { var = VAL_east_lean value = 50 compare = greater_than }
+				}
+				set_variable = { var = VAL_east_lean value = 50 }
+			}
+			else_if = {
+				limit = {
+					VAL = { NOT = { has_completed_focus = VAL_east_shards } }
+					check_variable = { var = VAL_east_lean value = 60 compare = greater_than }
+				}
+				set_variable = { var = VAL_east_lean value = 60 }
+			}
+			VAL = { country_event = { id = val_peace.91 hours = 6 } }
+		}
+	}
+}
+
+# COUNTRY republic. Answers to val_peace.92; Kefreyt is told of a new member by val_peace.93.
+VAL_east_contest_accept_join = {
+	if = {
+		limit = { has_country_flag = VAL_east_offer_pending }
+		clr_country_flag = VAL_east_offer_pending
+		if = {
+			limit = {
+				VAL_east_contestable = yes
+				is_in_faction = no
+				event_target:VAL_east_rival = { is_faction_leader = yes }
+			}
+			event_target:VAL_east_rival = { add_to_faction = PREV }
+			VAL = { country_event = { id = val_peace.93 hours = 6 } }
+		}
+	}
+}
+
+VAL_east_contest_refuse_join = {
+	if = {
+		limit = { has_country_flag = VAL_east_offer_pending }
+		clr_country_flag = VAL_east_offer_pending
+		set_country_flag = { flag = VAL_east_offer_cooldown days = 90 }
+	}
+}
+
+# COUNTRY VAL from the mission timeout. A human rival chooses war or retreat;
+# otherwise Kefreyt receives the ultimatum.
+VAL_east_contest_ultimatum = {
+	VAL_east_contest_reconcile = yes
+	if = {
+		limit = { VAL_east_contest_active = yes }
+		if = {
+			limit = { event_target:VAL_east_rival = { is_ai = no } }
+			event_target:VAL_east_rival = { country_event = { id = val_peace.95 hours = 6 } }
+		}
+		else = {
+			country_event = { id = val_peace.94 hours = 6 }
+		}
+	}
+}
+
+# COUNTRY VAL. Republics that would fight on each side; read by the AI answer
+# to val_peace.94 and cleared when the contest ends.
+VAL_east_contest_count_camps = {
+	set_temp_variable = { var = VAL_east_val_count value = 0 }
+	set_temp_variable = { var = VAL_east_rival_count value = 0 }
+	SLA = { VAL_east_contest_count_republic = yes }
+	RZA = { VAL_east_contest_count_republic = yes }
+	MLR = { VAL_east_contest_count_republic = yes }
+	ERT = { VAL_east_contest_count_republic = yes }
+	IRT = { VAL_east_contest_count_republic = yes }
+	SCA = { VAL_east_contest_count_republic = yes }
+	TMR = { VAL_east_contest_count_republic = yes }
+	VEL = { VAL_east_contest_count_republic = yes }
+	RLY = { VAL_east_contest_count_republic = yes }
+	set_variable = { var = VAL_east_val_camp value = VAL_east_val_count }
+	set_variable = { var = VAL_east_rival_camp value = VAL_east_rival_count }
+}
+
+VAL_east_contest_count_republic = {
+	if = {
+		limit = { VAL_east_joins_val_side = yes }
+		add_to_temp_variable = { var = VAL_east_val_count value = 1 }
+	}
+	else_if = {
+		limit = {
+			VAL_east_contestable = yes
+			OR = {
+				VAL_east_joins_rival_side = yes
+				is_in_faction_with = event_target:VAL_east_rival
+			}
+		}
+		add_to_temp_variable = { var = VAL_east_rival_count value = 1 }
+	}
+}
+
+# COUNTRY VAL. Kefreyt yields the east: AI republics outside its camp enter the
+# rival's faction, and the east closes without a hegemon or a war.
+VAL_east_contest_concede = {
+	if = {
+		limit = { VAL_east_contest_active = yes }
+		SLA = { VAL_east_contest_concede_republic = yes }
+		RZA = { VAL_east_contest_concede_republic = yes }
+		MLR = { VAL_east_contest_concede_republic = yes }
+		ERT = { VAL_east_contest_concede_republic = yes }
+		IRT = { VAL_east_contest_concede_republic = yes }
+		SCA = { VAL_east_contest_concede_republic = yes }
+		TMR = { VAL_east_contest_concede_republic = yes }
+		VEL = { VAL_east_contest_concede_republic = yes }
+		RLY = { VAL_east_contest_concede_republic = yes }
+		add_stability = -0.10
+		add_war_support = -0.10
+		VAL_east_contest_close = yes
+		VAL_east_resolve_by_concession = yes
+	}
+}
+
+# COUNTRY republic. A human republic keeps its own diplomacy.
+VAL_east_contest_concede_republic = {
+	if = {
+		limit = {
+			VAL_east_contestable = yes
+			is_ai = yes
+			NOT = { VAL_east_in_val_camp = yes }
+			NOT = { is_in_faction_with = VAL }
+			NOT = { is_in_faction_with = event_target:VAL_east_rival }
+			event_target:VAL_east_rival = { is_faction_leader = yes }
+		}
+		VAL_east_leave_current_faction = yes
+		event_target:VAL_east_rival = { add_to_faction = PREV }
+	}
+}
+
+# GLOBAL. The resolved flags of a hegemon-free east without the armistice
+# notice of val_peace.84, which describes a fought war.
+VAL_east_resolve_by_concession = {
+	set_global_flag = VAL_east_final_resolved
+	set_global_flag = VAL_east_stalemate
+}
+
+# GLOBAL. The rival yields. Neutrals lean toward Kefreyt and keep their lean
+# for Kefreyt's own later declaration, which binds the camps and clears it.
+VAL_east_contest_rival_backs_down = {
+	if = {
+		limit = { VAL_east_contest_active = yes }
+		set_temp_variable = { var = VAL_east_lean_delta value = 20 }
+		set_temp_variable = { var = VAL_east_lean_filter value = 3 }
+		VAL_east_contest_shift_roster = yes
+		VAL_east_contest_end = yes
+		VAL = { country_event = { id = val_peace.96 hours = 6 } }
+	}
+}
+
+# GLOBAL. Ends the deadline, offers and temporary flags. Paid operations keep
+# their receipts until their own decision settles them.
+VAL_east_contest_end = {
+	if = {
+		limit = { VAL_east_contest_active = yes }
+		set_global_flag = VAL_east_contest_closed
+		VAL = {
+			remove_mission = VAL_east_contest_deadline
+			clear_variable = VAL_east_val_camp
+			clear_variable = VAL_east_rival_camp
+		}
+		SLA = { VAL_east_contest_clear_republic = yes }
+		RZA = { VAL_east_contest_clear_republic = yes }
+		MLR = { VAL_east_contest_clear_republic = yes }
+		ERT = { VAL_east_contest_clear_republic = yes }
+		IRT = { VAL_east_contest_clear_republic = yes }
+		SCA = { VAL_east_contest_clear_republic = yes }
+		TMR = { VAL_east_contest_clear_republic = yes }
+		VEL = { VAL_east_contest_clear_republic = yes }
+		RLY = { VAL_east_contest_clear_republic = yes }
+	}
+}
+
+VAL_east_contest_clear_republic = {
+	clr_country_flag = VAL_east_offer_pending
+	clr_country_flag = VAL_east_offer_cooldown
+	clr_country_flag = VAL_east_agents_exposed
+	clr_country_flag = VAL_east_garrisoned
+	clr_country_flag = VAL_east_credit_cooldown
+	clr_country_flag = VAL_east_tool_pending
+	clr_country_flag = VAL_east_tool_cooldown
+}
+
+# GLOBAL. Every terminal outcome: war binding, concession, a vanished champion
+# or rival, a settled east and the end of the last war.
+VAL_east_contest_close = {
+	VAL_east_contest_end = yes
+	SLA = { clear_variable = VAL_east_lean }
+	RZA = { clear_variable = VAL_east_lean }
+	MLR = { clear_variable = VAL_east_lean }
+	ERT = { clear_variable = VAL_east_lean }
+	IRT = { clear_variable = VAL_east_lean }
+	SCA = { clear_variable = VAL_east_lean }
+	TMR = { clear_variable = VAL_east_lean }
+	VEL = { clear_variable = VAL_east_lean }
+	RLY = { clear_variable = VAL_east_lean }
+}
+
+# COUNTRY VAL with the republic in FROM. Rifles and political capital leave at once.
+VAL_east_contest_grant_arms_credit = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_east_arms_credit_affordable = yes
+			FROM = {
+				VAL_east_contestable = yes
+				NOT = { has_country_flag = VAL_east_credit_cooldown }
+			}
+		}
+		add_political_power = -25
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
+		FROM = {
+			set_country_flag = { flag = VAL_east_credit_cooldown days = 60 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 2700 producer = VAL }
+			set_temp_variable = { var = VAL_east_lean_delta value = 15 }
+			VAL_east_contest_add_lean = yes
+		}
+	}
+}
+
+# COUNTRY VAL with the republic in FROM. The republic's receipt holds the
+# payment until delivery or refund.
+VAL_east_contest_share_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_east_share_affordable = yes
+			FROM = {
+				VAL_east_contestable = yes
+				NOT = { has_variable = VAL_east_share_deposit }
+			}
+		}
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		FROM = { set_variable = { var = VAL_east_share_deposit value = 150 } }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_east_contest_share_finish = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			FROM = {
+				has_variable = VAL_east_share_deposit
+				VAL_east_contestable = yes
+			}
+		}
+		FROM = {
+			clear_variable = VAL_east_share_deposit
+			if = {
+				limit = {
+					capital_scope = {
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+							include_locked = no
+						}
+					}
+				}
+				capital_scope = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+			}
+			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = VAL_east_lean_delta value = 20 }
+			VAL_east_contest_add_lean = yes
+		}
+	}
+	else = { VAL_east_contest_share_refund = yes }
+}
+
+VAL_east_contest_share_refund = {
+	if = {
+		limit = { FROM = { has_variable = VAL_east_share_deposit } }
+		FROM = { clear_variable = VAL_east_share_deposit }
+		add_political_power = 25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL with the republic in FROM. The native 50 political power is
+# returned when the target leaves the contest before the agents are named.
+VAL_east_contest_expose_begin = {
+	FROM = { set_variable = { var = VAL_east_exposure_deposit value = 50 } }
+}
+
+VAL_east_contest_expose_finish = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			FROM = {
+				has_variable = VAL_east_exposure_deposit
+				VAL_east_contestable = yes
+			}
+		}
+		FROM = {
+			clear_variable = VAL_east_exposure_deposit
+			set_country_flag = { flag = VAL_east_agents_exposed days = 120 }
+			set_temp_variable = { var = VAL_east_lean_delta value = 10 }
+			if = {
+				limit = { is_in_faction_with = event_target:VAL_east_rival }
+				set_temp_variable = { var = VAL_east_lean_delta value = 15 }
+			}
+			VAL_east_contest_add_lean = yes
+		}
+	}
+	else = { VAL_east_contest_expose_refund = yes }
+}
+
+VAL_east_contest_expose_refund = {
+	if = {
+		limit = { FROM = { has_variable = VAL_east_exposure_deposit } }
+		FROM = { clear_variable = VAL_east_exposure_deposit }
+		add_political_power = 50
+	}
+}
+
+# COUNTRY VAL with the republic in FROM.
+VAL_east_contest_instructors_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_east_instructors_affordable = yes
+			FROM = {
+				VAL_east_contestable = yes
+				NOT = { has_variable = VAL_east_instructors_deposit }
+			}
+		}
+		add_political_power = -50
+		add_manpower = -1000
+		FROM = { set_variable = { var = VAL_east_instructors_deposit value = 1000 } }
+	}
+}
+
+VAL_east_contest_instructors_finish = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			FROM = {
+				has_variable = VAL_east_instructors_deposit
+				VAL_east_contestable = yes
+			}
+		}
+		FROM = {
+			clear_variable = VAL_east_instructors_deposit
+			army_experience = 10
+			set_temp_variable = { var = VAL_east_lean_delta value = 10 }
+			VAL_east_contest_add_lean = yes
+		}
+	}
+	else = { VAL_east_contest_instructors_refund = yes }
+}
+
+VAL_east_contest_instructors_refund = {
+	if = {
+		limit = { FROM = { has_variable = VAL_east_instructors_deposit } }
+		FROM = { clear_variable = VAL_east_instructors_deposit }
+		add_political_power = 50
+		add_manpower = 1000
+	}
+}
+
+# COUNTRY VAL with the republic in FROM. Regime tools only send the offer;
+# nothing is paid until the republic accepts.
+VAL_throne_offer_crown_march = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_throne_crown_march_affordable = yes
+			FROM = {
+				VAL_throne_crown_march_eligible = yes
+				VAL_east_tool_idle = yes
+			}
+		}
+		FROM = {
+			set_country_flag = { flag = VAL_east_tool_pending days = 15 }
+			country_event = { id = val_peace.97 }
+		}
+	}
+}
+
+VAL_cabinet_offer_treaty_membership = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_cabinet_treaty_affordable = yes
+			FROM = {
+				VAL_cabinet_treaty_eligible = yes
+				VAL_east_tool_idle = yes
+			}
+		}
+		FROM = {
+			set_country_flag = { flag = VAL_east_tool_pending days = 15 }
+			country_event = { id = val_peace.98 }
+		}
+	}
+}
+
+VAL_charter_offer_garrison_treaty = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_charter_garrison_affordable = yes
+			FROM = {
+				VAL_charter_garrison_eligible = yes
+				VAL_east_tool_idle = yes
+			}
+		}
+		FROM = {
+			set_country_flag = { flag = VAL_east_tool_pending days = 15 }
+			country_event = { id = val_peace.99 }
+		}
+	}
+}
+
+VAL_captains_offer_hire_companies = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_east_contest_active = yes
+			VAL_captains_hire_affordable = yes
+			FROM = {
+				VAL_captains_hire_eligible = yes
+				VAL_east_tool_idle = yes
+			}
+		}
+		FROM = {
+			set_country_flag = { flag = VAL_east_tool_pending days = 15 }
+			country_event = { id = val_peace.100 }
+		}
+	}
+}
+
+# COUNTRY republic. Acceptance rechecks both sides before the single payment;
+# a failed recheck counts as a refusal. val_peace.101 reports the answer.
+VAL_throne_accept_crown_march = {
+	if = {
+		limit = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_throne_crown_march_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_throne_crown_march_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_east_tool_pending
+		if = {
+			limit = { NOT = { is_in_faction_with = VAL } }
+			VAL_east_leave_current_faction = yes
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5400 producer = VAL }
+		VAL = {
+			add_political_power = -100
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -5400 }
+			puppet = {
+				target = PREV
+				end_wars = no
+				end_civil_wars = no
+			}
+			country_event = { id = val_peace.101 }
+		}
+	}
+	else = { VAL_east_decline_tool = yes }
+}
+
+VAL_cabinet_accept_treaty_membership = {
+	if = {
+		limit = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_cabinet_treaty_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_cabinet_treaty_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_east_tool_pending
+		VAL_east_leave_current_faction = yes
+		VAL = {
+			add_political_power = -75
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = VAL_east_defence_treaty
+				}
+			}
+			add_to_faction = PREV
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_peace.101 }
+		}
+	}
+	else = { VAL_east_decline_tool = yes }
+}
+
+VAL_charter_accept_garrison_treaty = {
+	if = {
+		limit = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_charter_garrison_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_charter_garrison_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_east_tool_pending
+		set_country_flag = VAL_east_garrisoned
+		give_military_access = VAL
+		VAL = {
+			add_political_power = -50
+			add_manpower = -3000
+			country_event = { id = val_peace.101 }
+		}
+		set_temp_variable = { var = VAL_east_lean_delta value = 20 }
+		VAL_east_contest_add_lean = yes
+	}
+	else = { VAL_east_decline_tool = yes }
+}
+
+VAL_captains_accept_hire_companies = {
+	if = {
+		limit = {
+			has_country_flag = VAL_east_tool_pending
+			VAL_east_contest_active = yes
+			VAL_captains_hire_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_captains_hire_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_east_tool_pending
+		add_manpower = -3000
+		ADISCORD_economy_initialize_country = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+			add_manpower = 3000
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_peace.101 }
+		}
+		set_temp_variable = { var = VAL_east_lean_delta value = 15 }
+		VAL_east_contest_add_lean = yes
+	}
+	else = { VAL_east_decline_tool = yes }
+}
+
+# COUNTRY republic. The refusal cooldown is also what val_peace.101 reads.
+VAL_east_decline_tool = {
+	if = {
+		limit = { has_country_flag = VAL_east_tool_pending }
+		clr_country_flag = VAL_east_tool_pending
+		set_country_flag = { flag = VAL_east_tool_cooldown days = 90 }
+		VAL = { country_event = { id = val_peace.101 } }
+	}
+}
+
 # --- east_final_war ---
 # COUNTRY VAL. Without a surviving rival the east is already Kefreyt's.
 VAL_east_settle_uncontested = {
@@ -1570,7 +2475,21 @@ VAL_east_settle_uncontested = {
 		set_global_flag = VAL_east_final_resolved
 		set_global_flag = VAL_east_hegemon_VAL
 		set_global_flag = VAL_east_unopposed
+		VAL_east_contest_close = yes
 		country_event = { id = val_peace.88 days = 1 }
+	}
+}
+
+# GLOBAL. The Khan's victory makes him the rival; otherwise the Montar Empire is.
+VAL_east_select_rival = {
+	if = {
+		limit = { VAL_east_khan_victorious = yes }
+		set_variable = { var = global.VAL_east_rival_kind value = 2 }
+		RUS = { save_global_event_target_as = VAL_east_rival }
+	}
+	else = {
+		set_variable = { var = global.VAL_east_rival_kind value = 1 }
+		MON = { save_global_event_target_as = VAL_east_rival }
 	}
 }
 
@@ -1580,26 +2499,41 @@ VAL_east_final_start = {
 		limit = { VAL_east_final_can_start = yes }
 		set_global_flag = VAL_east_final_started
 		set_variable = { var = VAL_east_side value = 1 }
-		if = {
-			limit = { VAL_east_khan_victorious = yes }
-			set_variable = { var = global.VAL_east_rival_kind value = 2 }
-			RUS = {
-				set_variable = { var = VAL_east_side value = 2 }
-				save_global_event_target_as = VAL_east_rival
-			}
-		}
-		else = {
-			set_variable = { var = global.VAL_east_rival_kind value = 1 }
-			MON = {
-				set_variable = { var = VAL_east_side value = 2 }
-				save_global_event_target_as = VAL_east_rival
-			}
-		}
+		VAL_east_select_rival = yes
+		event_target:VAL_east_rival = { set_variable = { var = VAL_east_side value = 2 } }
 		VAL_east_prepare_champion = yes
 		event_target:VAL_east_rival = { VAL_east_prepare_champion = yes }
 		declare_war_on = {
 			target = event_target:VAL_east_rival
 			type = annex_everything
+		}
+		VAL_east_bind_sides = yes
+		VAL_east_apply_war_spirit = yes
+		activate_mission = VAL_east_deadline
+		country_event = { id = val_peace.81 hours = 1 }
+		news_event = { id = val_peace.82 hours = 2 }
+		event_target:VAL_east_rival = { country_event = { id = val_peace.83 hours = 1 } }
+	}
+}
+
+# COUNTRY VAL. The rival opens the same campaign. Without a chosen casus
+# VAL_east_casus stays 0: no war spirit, and the settlement keeps vassals.
+VAL_east_final_start_by_rival = {
+	if = {
+		limit = { VAL_east_final_rival_can_start = yes }
+		set_global_flag = VAL_east_final_started
+		# Events 81-83 read the declaring side until the campaign closes.
+		set_global_flag = VAL_east_rival_declared
+		set_variable = { var = VAL_east_side value = 1 }
+		VAL_east_select_rival = yes
+		event_target:VAL_east_rival = { set_variable = { var = VAL_east_side value = 2 } }
+		VAL_east_prepare_champion = yes
+		event_target:VAL_east_rival = {
+			VAL_east_prepare_champion = yes
+			declare_war_on = {
+				target = VAL
+				type = annex_everything
+			}
 		}
 		VAL_east_bind_sides = yes
 		VAL_east_apply_war_spirit = yes
@@ -1626,8 +2560,9 @@ VAL_east_prepare_champion = {
 	}
 }
 
-# COUNTRY VAL. Subjects follow their overlord. Concession partners stand with
-# Kefreyt after the shards' union; the rival's faction stands with the rival.
+# COUNTRY VAL. Subjects follow their overlord. The contest's camps decide the
+# zone republics: Kefreyt's camp joins Kefreyt, the rival's camp and faction
+# join the rival, neutrals stay out. The lean is cleared after binding.
 VAL_east_bind_sides = {
 	every_subject_country = {
 		set_variable = { var = VAL_east_side value = 1 }
@@ -1640,24 +2575,15 @@ VAL_east_bind_sides = {
 			}
 		}
 	}
-	if = {
-		limit = { has_completed_focus = VAL_east_shards }
-		every_country = {
-			limit = {
-				has_country_flag = VAL_nw_concession
-				VAL_nw_concession_valid = yes
-				is_subject = no
-				NOT = { has_war_with = VAL }
-				NOT = { is_in_faction_with = event_target:VAL_east_rival }
-			}
-			set_variable = { var = VAL_east_side value = 1 }
-			add_to_war = {
-				targeted_alliance = VAL
-				enemy = event_target:VAL_east_rival
-				hostility_reason = asked_to_join
-			}
-		}
-	}
+	SLA = { VAL_east_bind_republic = yes }
+	RZA = { VAL_east_bind_republic = yes }
+	MLR = { VAL_east_bind_republic = yes }
+	ERT = { VAL_east_bind_republic = yes }
+	IRT = { VAL_east_bind_republic = yes }
+	SCA = { VAL_east_bind_republic = yes }
+	TMR = { VAL_east_bind_republic = yes }
+	VEL = { VAL_east_bind_republic = yes }
+	RLY = { VAL_east_bind_republic = yes }
 	event_target:VAL_east_rival = {
 		every_subject_country = {
 			set_variable = { var = VAL_east_side value = 2 }
@@ -1685,6 +2611,40 @@ VAL_east_bind_sides = {
 				enemy = VAL
 				hostility_reason = asked_to_join
 			}
+		}
+	}
+	VAL_east_contest_close = yes
+}
+
+# COUNTRY republic of the fixed roster, called by VAL_east_bind_sides.
+VAL_east_bind_republic = {
+	if = {
+		limit = {
+			NOT = { has_variable = VAL_east_side }
+			VAL_east_joins_val_side = yes
+		}
+		set_variable = { var = VAL_east_side value = 1 }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		if = {
+			limit = { NOT = { has_war_with = event_target:VAL_east_rival } }
+			add_to_war = {
+				targeted_alliance = VAL
+				enemy = event_target:VAL_east_rival
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = VAL_east_side }
+			VAL_east_joins_rival_side = yes
+		}
+		set_variable = { var = VAL_east_side value = 2 }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		add_to_war = {
+			targeted_alliance = event_target:VAL_east_rival
+			enemy = VAL
+			hostility_reason = asked_to_join
 		}
 	}
 }
@@ -1898,8 +2858,10 @@ VAL_east_count_occupied_state = {
 	}
 }
 
-# GLOBAL. Called from on_peace for wars ended outside the settlement.
+# GLOBAL. Called from on_peace, on_annex and on_puppet for wars ended outside
+# the settlement; the same hooks end a contest whose champion or rival fell.
 VAL_east_final_close_external = {
+	VAL_east_contest_reconcile = yes
 	if = {
 		limit = {
 			VAL_east_final_active = yes
@@ -1962,6 +2924,8 @@ VAL_east_mark_losers = {
 # GLOBAL. Campaign-only status ends on every terminal path.
 VAL_east_close_campaign = {
 	clr_global_flag = VAL_east_final_started
+	clr_global_flag = VAL_east_rival_declared
+	VAL_east_contest_close = yes
 	VAL = {
 		remove_mission = VAL_east_deadline
 		VAL_east_close_champion = yes

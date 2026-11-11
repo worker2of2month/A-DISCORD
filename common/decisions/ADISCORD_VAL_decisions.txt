@@ -5603,6 +5603,502 @@ VAL_east_war_category = {
 	}
 }
 
+# --- east_contest ---
+# The contest for the zone republics: its deadline, Kefreyt's operations and
+# the regime tools. Targets are the fixed roster; receipts live on the target.
+VAL_east_contest_category = {
+
+	VAL_east_contest_deadline = {
+		icon = generic_political_discourse
+		allowed = { tag = VAL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 360
+		timeout_effect = {
+			custom_effect_tooltip = VAL_east_contest_deadline_timeout_tt
+			hidden_effect = { VAL_east_contest_ultimatum = yes }
+		}
+	}
+
+	VAL_east_contest_arms_credit = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_east_question
+			FROM = { VAL_east_contestable = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_credit_ready_tt
+					NOT = { has_country_flag = VAL_east_credit_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_east_contest_arms_credit_cost
+		custom_cost_trigger = { VAL_east_arms_credit_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_east_contest_arms_credit_tt
+			hidden_effect = { VAL_east_contest_grant_arms_credit = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				FROM = { VAL_east_near_val_camp = yes }
+			}
+			modifier = {
+				factor = 0.2
+				FROM = { VAL_east_in_val_camp = yes }
+			}
+		}
+	}
+
+	VAL_east_contest_share = {
+		icon = ADISCORD_construction
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_east_trade_missions
+			FROM = {
+				OR = {
+					VAL_east_contestable = yes
+					has_variable = VAL_east_share_deposit
+				}
+			}
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_operation_idle_tt
+					NOT = { has_variable = VAL_east_share_deposit }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_east_contest_share_cost
+		custom_cost_trigger = { VAL_east_share_affordable = yes }
+		days_remove = 60
+		complete_effect = {
+			custom_effect_tooltip = VAL_east_contest_share_tt
+			hidden_effect = { VAL_east_contest_share_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_government_unavailable_tt
+					VAL_nw_operational = no
+				}
+				FROM = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_target_lost_tt
+						VAL_east_contestable = no
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_east_contest_share_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_east_contest_share_result_tt
+			hidden_effect = { VAL_east_contest_share_finish = yes }
+		}
+		ai_will_do = {
+			base = 6
+			modifier = {
+				factor = 3
+				FROM = { VAL_east_near_val_camp = yes }
+			}
+			modifier = {
+				factor = 0.2
+				FROM = { VAL_east_in_val_camp = yes }
+			}
+		}
+	}
+
+	VAL_east_contest_expose_agents = {
+		icon = ADISCORD_inspection
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_east_krutov_network
+			FROM = {
+				OR = {
+					VAL_east_contestable = yes
+					has_variable = VAL_east_exposure_deposit
+				}
+			}
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_agents_free_tt
+					NOT = { has_country_flag = VAL_east_agents_exposed }
+				}
+			}
+		}
+		cost = 50
+		days_remove = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_east_contest_expose_agents_tt
+			hidden_effect = { VAL_east_contest_expose_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_government_unavailable_tt
+					VAL_nw_operational = no
+				}
+				FROM = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_target_lost_tt
+						VAL_east_contestable = no
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_east_contest_expose_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_east_contest_expose_agents_result_tt
+			hidden_effect = { VAL_east_contest_expose_finish = yes }
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 4
+				FROM = { is_in_faction_with = event_target:VAL_east_rival }
+			}
+		}
+	}
+
+	VAL_east_contest_instructors = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_east_border_posts
+			FROM = {
+				OR = {
+					VAL_east_contestable = yes
+					has_variable = VAL_east_instructors_deposit
+				}
+			}
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_operation_idle_tt
+					NOT = { has_variable = VAL_east_instructors_deposit }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_east_contest_instructors_cost
+		custom_cost_trigger = { VAL_east_instructors_affordable = yes }
+		days_remove = 45
+		complete_effect = {
+			custom_effect_tooltip = VAL_east_contest_instructors_tt
+			hidden_effect = { VAL_east_contest_instructors_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_government_unavailable_tt
+					VAL_nw_operational = no
+				}
+				FROM = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_target_lost_tt
+						VAL_east_contestable = no
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_east_contest_instructors_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_east_contest_instructors_result_tt
+			hidden_effect = { VAL_east_contest_instructors_finish = yes }
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				FROM = { VAL_east_near_val_camp = yes }
+			}
+		}
+	}
+
+	VAL_throne_crown_march = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_throne_crown_marches
+			FROM = { VAL_east_contestable = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_in_val_camp_tt
+					VAL_east_in_val_camp = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_outside_rival_faction_tt
+					NOT = { is_in_faction_with = event_target:VAL_east_rival }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_idle_tt
+					NOT = { has_country_flag = VAL_east_tool_pending }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_ready_tt
+					NOT = { has_country_flag = VAL_east_tool_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_throne_crown_march_cost
+		custom_cost_trigger = { VAL_throne_crown_march_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_consent_tt
+			custom_effect_tooltip = VAL_throne_crown_march_tt
+			hidden_effect = { VAL_throne_offer_crown_march = yes }
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				FROM = { is_ai = no }
+			}
+		}
+	}
+
+	VAL_cabinet_treaty_membership = {
+		icon = ADISCORD_deal
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_cabinet_eastern_mission
+			FROM = { VAL_east_contestable = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_own_faction_tt
+				OR = {
+					is_in_faction = no
+					is_faction_leader = yes
+				}
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_lean_60_tt
+					has_variable = VAL_east_lean
+					check_variable = { var = VAL_east_lean value = 60 compare = greater_than_or_equals }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_outside_val_faction_tt
+					NOT = { is_in_faction_with = VAL }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_idle_tt
+					NOT = { has_country_flag = VAL_east_tool_pending }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_ready_tt
+					NOT = { has_country_flag = VAL_east_tool_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_cabinet_treaty_membership_cost
+		custom_cost_trigger = { VAL_cabinet_treaty_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_consent_tt
+			custom_effect_tooltip = VAL_cabinet_treaty_membership_tt
+			hidden_effect = { VAL_cabinet_offer_treaty_membership = yes }
+		}
+		ai_will_do = {
+			base = 12
+			modifier = {
+				factor = 2
+				FROM = { VAL_east_in_val_camp = no }
+			}
+			modifier = {
+				factor = 0
+				FROM = { is_ai = no }
+			}
+		}
+	}
+
+	VAL_charter_garrison_treaty = {
+		icon = generic_fortify_the_borders
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_charter_garrison_contracts
+			FROM = { VAL_east_contestable = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_lean_50_tt
+					has_variable = VAL_east_lean
+					check_variable = { var = VAL_east_lean value = 50 compare = greater_than_or_equals }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_not_garrisoned_tt
+					NOT = { has_country_flag = VAL_east_garrisoned }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_idle_tt
+					NOT = { has_country_flag = VAL_east_tool_pending }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_ready_tt
+					NOT = { has_country_flag = VAL_east_tool_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_charter_garrison_treaty_cost
+		custom_cost_trigger = { VAL_charter_garrison_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_consent_tt
+			custom_effect_tooltip = VAL_charter_garrison_treaty_tt
+			hidden_effect = { VAL_charter_offer_garrison_treaty = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				FROM = { VAL_east_near_val_camp = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { is_ai = no }
+			}
+		}
+	}
+
+	VAL_captains_hire_companies = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
+		visible = {
+			has_completed_focus = VAL_captains_company_markets
+			FROM = { VAL_east_contestable = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_contest_active_tt
+				VAL_east_contest_active = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_contestable_tt
+					VAL_east_contestable = yes
+				}
+				NOT = { has_manpower < 3000 }
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_idle_tt
+					NOT = { has_country_flag = VAL_east_tool_pending }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_east_tool_ready_tt
+					NOT = { has_country_flag = VAL_east_tool_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_captains_hire_companies_cost
+		custom_cost_trigger = { VAL_captains_hire_affordable = yes }
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_consent_tt
+			custom_effect_tooltip = VAL_captains_hire_companies_tt
+			hidden_effect = { VAL_captains_offer_hire_companies = yes }
+		}
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 3
+				FROM = { VAL_east_near_val_camp = yes }
+			}
+			modifier = {
+				factor = 0
+				FROM = { is_ai = no }
+			}
+		}
+	}
+}
+
 # --- commanders_council ---
 VAL_council_government_category = {
 	VAL_council_ultimatum = {

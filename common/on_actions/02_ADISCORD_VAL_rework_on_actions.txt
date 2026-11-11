@@ -166,6 +166,8 @@ on_actions = {
 		effect = {
 			VAL_nw_reconcile_partners = yes
 			VAL_peace_monthly = yes
+			# Fixed nine-republic roster; no world scan.
+			VAL_east_contest_monthly = yes
 			# Bounded fallback for partner capitulation or disappearance without a VAL war callback.
 			VAL_reconcile_market_contract_lifecycle = yes
 			if = {

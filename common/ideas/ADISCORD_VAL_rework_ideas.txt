@@ -244,6 +244,42 @@ ideas = {
 			}
 		}
 
+		VAL_throne_cadets_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { conscription_factor = 0.05 }
+		}
+
+		VAL_cabinet_loans_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { consumer_goods_factor = -0.05 }
+		}
+
+		VAL_charter_academy_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { planning_speed = 0.05 }
+		}
+
+		VAL_charter_veterans_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { conscription_factor = 0.03 }
+		}
+
+		VAL_captains_assembly_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { stability_factor = 0.05 }
+		}
+
+		VAL_captains_raids_delta = {
+			name = VAL_peace_order
+			allowed = { always = no }
+			modifier = { army_attack_factor = 0.03 }
+		}
+
 		VAL_nw_guarded_caravans = {
 			picture = VAL_contract_state
 			allowed = { tag = VAL }

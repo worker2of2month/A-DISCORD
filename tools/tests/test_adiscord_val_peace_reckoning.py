@@ -20,6 +20,8 @@ DECISIONS = "common/decisions/ADISCORD_VAL_decisions.txt"
 EVENTS = "events/ADISCORD_VAL_contract_events.txt"
 TREE = "focus_trees/VAL/new_world/focuses.txt"
 PEACE = "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+RUS_TRIGGERS = "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt"
+REPUBLICS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")
 REGIMES = {
     1: "VAL_peace_throne",
     2: "VAL_peace_cabinet",
@@ -43,6 +45,7 @@ class ReckoningWorld(ContractWorld):
         # Parsing the effect files dominates the cost; the parsed views are immutable.
         if ReckoningWorld._parsed is None:
             super().__init__()
+            self.triggers.update({e.key: e.value for e in entries(RUS_TRIGGERS)})
             ReckoningWorld._parsed = (self.effects, self.triggers, self.data.default_factory)
         else:
             self.effects, self.triggers, factory = ReckoningWorld._parsed
@@ -57,6 +60,8 @@ class ReckoningWorld(ContractWorld):
         self.global_flags = set()
         self.calls = []
         self.intercept = set()
+        self.stack = []
+        self.joined = []
 
     def number(self, value, scope):
         if value in self.temps:
@@ -64,6 +69,29 @@ class ReckoningWorld(ContractWorld):
         if value.startswith("global."):
             return self.globals.get(value.removeprefix("global."), 0)
         return super().number(value, scope)
+
+    def resolve(self, value, scope):
+        if value == "PREV":
+            return self.stack[-1]
+        if value == "ROOT":
+            return "VAL"
+        if value == "capital_scope":
+            return self.data[scope].get("capital", "capital_" + scope)
+        return self.scope(value, scope)
+
+    @staticmethod
+    def is_scope(key):
+        return key not in ("NOT", "AND") and bool(re.fullmatch(r"[A-Z]{3}|\d+|FROM|PREV|capital_scope|event_target:\w+", key))
+
+    def countries(self):
+        return [tag for tag in list(self.data) if re.fullmatch(r"[A-Z]{3}", tag) and self.data[tag]["exists"]]
+
+    def enter(self, rows, scope, target, run):
+        self.stack.append(scope)
+        try:
+            return run(rows, target)
+        finally:
+            self.stack.pop()
 
     COMPARE = {
         "equals": lambda a, b: a == b,
@@ -75,8 +103,29 @@ class ReckoningWorld(ContractWorld):
 
     def matches(self, rows, scope="VAL"):
         plain = []
-        for row in rows:
-            if row.key == "has_global_flag":
+        index = 0
+        while index < len(rows):
+            row = rows[index]
+            index += 1
+            if not row.key and row.value == "has_manpower":
+                op, threshold = rows[index].value, float(rows[index + 1].value)
+                index += 2
+                current = self.data[scope]["manpower"]
+                if not (current < threshold if op == "<" else current > threshold):
+                    return False
+            elif not row.key:
+                plain.extend(rows[index - 1:index + 2])
+                index += 2
+            elif row.key == "is_neighbor_of":
+                if row.value not in self.data[scope].get("neighbors", set()):
+                    return False
+            elif row.key == "free_building_slots":
+                if self.data[scope].get("free_slots", 0) <= 0:
+                    return False
+            elif isinstance(row.value, list) and self.is_scope(row.key):
+                if not self.enter(row.value, scope, self.resolve(row.key, scope), self.matches):
+                    return False
+            elif row.key == "has_global_flag":
                 if row.value not in self.global_flags:
                     return False
             elif row.key == "check_variable":
@@ -95,9 +144,6 @@ class ReckoningWorld(ContractWorld):
                     return False
             elif row.key in self.triggers:
                 if self.matches(self.triggers[row.key], scope) != (row.value == "yes"):
-                    return False
-            elif isinstance(row.value, list) and re.fullmatch(r"[A-Z]{3}", row.key):
-                if not self.matches(row.value, row.key):
                     return False
             else:
                 plain.append(row)
@@ -119,14 +165,56 @@ class ReckoningWorld(ContractWorld):
                 self.execute(value, scope)
             elif key in self.effects and key not in self.intercept:
                 self.execute(self.effects[key], scope)
-            elif isinstance(value, list) and re.fullmatch(r"[A-Z]{3}|\d+", key):
-                self.execute(value, key)
+            elif isinstance(value, list) and self.is_scope(key):
+                self.enter(value, scope, self.resolve(key, scope), self.execute)
             elif key in self.intercept:
                 self.calls.append((scope, key))
             elif key in ("set_temp_variable", "add_to_temp_variable"):
                 name = scalar(value, "var")
                 amount = self.number(scalar(value, "value"), scope)
                 self.temps[name] = amount if key == "set_temp_variable" else self.temps.get(name, 0) + amount
+            elif key == "set_variable" and scalar(value, "var").startswith("global."):
+                self.globals[scalar(value, "var").removeprefix("global.")] = self.number(scalar(value, "value"), scope)
+            elif key == "clamp_temp_variable":
+                name = scalar(value, "var")
+                self.temps[name] = max(float(scalar(value, "min")), min(float(scalar(value, "max")), self.temps.get(name, 0)))
+            elif key in ("every_subject_country", "every_country"):
+                limit = block(value, "limit") if any(e.key == "limit" for e in value) else []
+                body = [e for e in value if e.key != "limit"]
+                for tag in self.countries():
+                    if key == "every_subject_country" and self.data[tag]["subject"] != scope:
+                        continue
+                    if self.enter(limit, scope, tag, self.matches):
+                        self.enter(body, scope, tag, self.execute)
+            elif key == "add_to_war":
+                ally = self.resolve(scalar(value, "targeted_alliance"), scope)
+                enemy = self.resolve(scalar(value, "enemy"), scope)
+                self.joined.append((scope, ally, enemy))
+                country["wars"].add(enemy)
+                self.data[enemy]["wars"].add(scope)
+            elif key == "declare_war_on":
+                enemy = self.resolve(scalar(value, "target"), scope)
+                self.joined.append((scope, scope, enemy))
+                country["wars"].add(enemy)
+                self.data[enemy]["wars"].add(scope)
+            elif key == "create_faction_from_template":
+                country.update(faction=scope, leader=True)
+                country["faction_name"] = scalar(value, "name")
+            elif key == "add_to_faction":
+                self.data[self.resolve(value, scope)]["faction"] = country["faction"]
+            elif key == "dismantle_faction":
+                for tag in self.countries():
+                    if self.data[tag]["faction"] == country["faction"] and tag != scope:
+                        self.data[tag]["faction"] = None
+                country.update(faction=None, leader=False)
+            elif key == "puppet":
+                self.data[self.resolve(scalar(value, "target"), scope)]["subject"] = scope
+            elif key == "give_military_access":
+                country.setdefault("access", set()).add(self.resolve(value, scope))
+            elif key in ("add_stability", "add_war_support"):
+                country[key] = country.get(key, 0) + float(value)
+            elif key in ("ADISCORD_economy_initialize_country", "set_major"):
+                pass
             elif key == "multiply_variable":
                 name = scalar(value, "var")
                 country["vars"][name] = country["vars"].get(name, 0) * self.number(scalar(value, "value"), scope)
@@ -475,6 +563,520 @@ class EastFinalWarTests(unittest.TestCase):
             casus[name] = int(scalar(block(block(reward, "hidden_effect"), "set_variable"), "value"))
         self.assertEqual(sorted(casus.values()), [1, 2, 3, 4])
         self.assertEqual(casus["VAL_captains_last_buyer"], 4)
+
+
+def contest_world(focuses=()):
+    """A cabinet Kefreyt facing an AI Montar Empire before the contest begins."""
+    world = ReckoningWorld()
+    world.data["VAL"]["vars"]["VAL_peace_regime"] = 2
+    world.data["VAL"]["focuses"].update(focuses)
+    return world
+
+
+def started(world, **leans):
+    world.run("VAL_east_contest_begin")
+    for tag, lean in leans.items():
+        world.data[tag]["vars"]["VAL_east_lean"] = lean
+    world.events.clear()
+    return world
+
+
+def rival_faction(world, *members):
+    world.data["MON"].update(faction="MON", leader=True)
+    for tag in members:
+        world.data[tag]["faction"] = "MON"
+
+
+def lean(world, tag):
+    return world.data[tag]["vars"].get("VAL_east_lean")
+
+
+def contest_decisions():
+    return {e.key: e.value for e in block(entries(DECISIONS), "VAL_east_contest_category")}
+
+
+def ai_weight(world, option, scope="VAL"):
+    chance = block(option, "ai_chance")
+    total = float(scalar(chance, "factor"))
+    for modifier in (e.value for e in chance if e.key == "modifier"):
+        if world.matches([e for e in modifier if e.key != "factor"], scope):
+            total *= float(scalar(modifier, "factor"))
+    return total
+
+
+def options(event_id):
+    return {scalar(e.value, "name"): e.value for e in country_event(event_id) if e.key == "option"}
+
+
+class EastContestTests(unittest.TestCase):
+    TOOLS = {
+        "VAL_throne_crown_march": ("VAL_throne_crown_marches", "VAL_throne_offer_crown_march",
+                                   "VAL_throne_accept_crown_march", "val_peace.97"),
+        "VAL_cabinet_treaty_membership": ("VAL_cabinet_eastern_mission", "VAL_cabinet_offer_treaty_membership",
+                                          "VAL_cabinet_accept_treaty_membership", "val_peace.98"),
+        "VAL_charter_garrison_treaty": ("VAL_charter_garrison_contracts", "VAL_charter_offer_garrison_treaty",
+                                        "VAL_charter_accept_garrison_treaty", "val_peace.99"),
+        "VAL_captains_hire_companies": ("VAL_captains_company_markets", "VAL_captains_offer_hire_companies",
+                                        "VAL_captains_accept_hire_companies", "val_peace.100"),
+    }
+
+    def test_begin_seeds_lean_with_focuses_completed_before_the_contest(self):
+        world = contest_world(("VAL_east_trade_missions", "VAL_cabinet_eastern_mission",
+                               "VAL_east_krutov_network", "VAL_east_shards"))
+        world.temps["VAL_east_lean_delta"] = 5
+        world.run("VAL_east_contest_shift_all")
+        self.assertIsNone(lean(world, "SLA"))
+        world.data["SLA"]["flags"].update({"VAL_nw_concession", "VAL_nw_sovereignty_recognized"})
+        rival_faction(world, "RZA")
+        world.data["MLR"]["neighbors"] = {"MON"}
+        world.data["IRT"]["subject"] = "VAL"
+        world.run("VAL_east_contest_begin")
+        world.run("VAL_east_contest_begin")
+        self.assertEqual(lean(world, "SLA"), 100)
+        self.assertEqual(lean(world, "RZA"), 45)
+        self.assertEqual(lean(world, "MLR"), 50)
+        self.assertEqual(lean(world, "ERT"), 60)
+        self.assertIsNone(lean(world, "IRT"))
+        self.assertEqual(world.targets["VAL_east_rival"], "MON")
+        self.assertEqual(world.globals["VAL_east_rival_kind"], 1)
+        self.assertIn("VAL_east_contest_deadline", world.data["VAL"]["missions"])
+        self.assertEqual(world.events, [("VAL", "val_peace.89")])
+        plain = contest_world()
+        started(plain)
+        self.assertEqual(lean(plain, "ERT"), 50)
+
+    def test_shift_effects_follow_their_roster_and_clamp(self):
+        world = started(contest_world(), SLA=98, RZA=50, MLR=50)
+        rival_faction(world, "RZA")
+        world.data["MLR"]["flags"].add("VAL_nw_concession")
+        world.temps["VAL_east_lean_delta"] = 5
+        world.run("VAL_east_contest_shift_rival_members")
+        world.run("VAL_east_contest_shift_partners")
+        world.run("VAL_east_contest_shift_all")
+        self.assertEqual((lean(world, "SLA"), lean(world, "RZA"), lean(world, "MLR"), lean(world, "ERT")),
+                         (100, 60, 60, 55))
+
+    def test_monthly_clock_starts_the_contest_or_settles_an_empty_east(self):
+        world = contest_world()
+        for _ in range(3):
+            world.run("VAL_east_contest_monthly")
+        self.assertNotIn("VAL_east_contest_started", world.global_flags)
+        self.assertEqual(world.data["VAL"]["vars"]["VAL_east_contest_wait"], 3)
+        world.run("VAL_east_contest_monthly")
+        self.assertIn("VAL_east_contest_started", world.global_flags)
+        self.assertNotIn("VAL_east_contest_wait", world.data["VAL"]["vars"])
+        self.assertEqual(lean(world, "SLA"), 50)
+        empty = contest_world()
+        empty.data["MON"]["subject"] = "RUS"
+        for _ in range(4):
+            empty.run("VAL_east_contest_monthly")
+        self.assertNotIn("VAL_east_contest_started", empty.global_flags)
+        self.assertTrue({"VAL_east_final_resolved", "VAL_east_hegemon_VAL"} <= empty.global_flags)
+        self.assertEqual(empty.events, [("VAL", "val_peace.88")])
+
+    def test_monthly_pressure_reads_factions_counterpressure_flags_and_floor(self):
+        for krutov, expected in ((False, (45, 42, 50, 48, 0)), (True, (47, 44, 50, 50, 0))):
+            with self.subTest(krutov=krutov):
+                world = started(contest_world(("VAL_east_krutov_network",) if krutov else ()),
+                                SLA=50, RZA=50, MLR=50, ERT=50, TMR=3)
+                rival_faction(world, "RZA")
+                world.data["MLR"]["flags"].add("VAL_east_agents_exposed")
+                world.data["ERT"]["flags"].add("VAL_east_garrisoned")
+                world.run("VAL_east_contest_monthly")
+                self.assertEqual(tuple(lean(world, t) for t in ("SLA", "RZA", "MLR", "ERT", "TMR")), expected)
+        released = started(contest_world())
+        released.data["IRT"]["subject"] = None
+        released.data["IRT"]["vars"].pop("VAL_east_lean", None)
+        released.run("VAL_east_contest_monthly")
+        self.assertEqual(lean(released, "IRT"), 45)
+
+    def test_camp_offers_are_guarded_and_answers_follow_the_spec(self):
+        world = started(contest_world(), RZA=80, MLR=30)
+        rival_faction(world, "RZA")
+        world.run("VAL_east_contest_monthly")
+        self.assertEqual(lean(world, "RZA"), 72)
+        self.assertEqual(sorted(world.events), [("MLR", "val_peace.92"), ("RZA", "val_peace.90")])
+        world.events.clear()
+        world.data["RZA"]["vars"]["VAL_east_lean"] = 90
+        world.run("VAL_east_contest_monthly")
+        self.assertEqual(world.events, [])
+        world.run("VAL_east_contest_refuse_leave", "RZA")
+        self.assertEqual(lean(world, "RZA"), 60)
+        self.assertIn("VAL_east_offer_cooldown", world.data["RZA"]["flags"])
+        self.assertEqual(world.data["RZA"]["faction"], "MON")
+        world.run("VAL_east_contest_accept_join", "MLR")
+        self.assertEqual(world.data["MLR"]["faction"], "MON")
+        self.assertEqual(world.events, [("VAL", "val_peace.91"), ("VAL", "val_peace.93")])
+        world.run("VAL_east_contest_accept_join", "MLR")
+        self.assertEqual(len(world.events), 2)
+
+        leave = started(contest_world(("VAL_east_shards",)), RZA=70)
+        rival_faction(leave, "RZA")
+        leave.run("VAL_east_contest_monthly")
+        self.assertEqual(leave.events, [("RZA", "val_peace.90")])
+        leave.run("VAL_east_contest_accept_leave", "RZA")
+        self.assertIsNone(leave.data["RZA"]["faction"])
+        # Without a rival faction nothing invites a republic in the rival's camp.
+        lone = started(contest_world(), MLR=20)
+        lone.run("VAL_east_contest_monthly")
+        self.assertEqual(lone.events, [])
+        for event_id, refuse, accept in (("val_peace.90", "VAL_east_contest_refuse_leave", "VAL_east_contest_accept_leave"),
+                                         ("val_peace.92", "VAL_east_contest_refuse_join", "VAL_east_contest_accept_join")):
+            answers = options(event_id)
+            self.assertEqual(scalar(block(answers[event_id + ".a"], "hidden_effect"), refuse), "yes")
+            self.assertEqual(scalar(block(answers[event_id + ".b"], "hidden_effect"), accept), "yes")
+
+    def test_binding_reads_camps_and_clears_the_contest(self):
+        for shards in (False, True):
+            with self.subTest(shards=shards):
+                world = started(contest_world(("VAL_east_shards",) if shards else ()),
+                                SLA=80, RZA=80, MLR=20, ERT=65, SCA=50)
+                rival_faction(world, "RZA")
+                world.data["SCA"]["flags"].add("VAL_nw_concession")
+                world.data["IRT"]["subject"] = "VAL"
+                world.data["VAL"]["vars"]["VAL_east_side"] = 1
+                world.data["MON"]["vars"]["VAL_east_side"] = 2
+                world.data["SLA"]["flags"].add("VAL_east_garrisoned")
+                world.run("VAL_east_bind_sides")
+                sides = {t: world.data[t]["vars"].get("VAL_east_side") for t in REPUBLICS}
+                self.assertEqual(sides, {"SLA": 1, "RZA": 2, "MLR": 2, "ERT": 1 if shards else None, "IRT": 1,
+                                         "SCA": None, "TMR": None, "VEL": None, "RLY": None})
+                self.assertIn(("SLA", "VAL", "MON"), world.joined)
+                self.assertIn(("MLR", "MON", "VAL"), world.joined)
+                self.assertIn(("RZA", "MON", "VAL"), world.joined)
+                self.assertFalse([t for t in REPUBLICS if lean(world, t) is not None])
+                self.assertNotIn("VAL_east_contest_deadline", world.data["VAL"]["missions"])
+                self.assertNotIn("VAL_east_garrisoned", world.data["SLA"]["flags"])
+                self.assertIn("VAL_east_contest_closed", world.global_flags)
+
+    def test_the_rival_can_declare_the_last_war_without_a_casus(self):
+        world = started(contest_world(), SLA=80)
+        world.intercept = {"VAL_east_prepare_champion"}
+        world.data["VAL"]["wars"].add("MON")
+        world.run("VAL_east_final_start_by_rival")
+        self.assertNotIn("VAL_east_final_started", world.global_flags)
+        world.data["VAL"]["wars"].clear()
+        world.data["MON"]["wars"].clear()
+        world.run("VAL_east_final_start_by_rival")
+        world.run("VAL_east_final_start_by_rival")
+        self.assertEqual([j for j in world.joined if j[0] == "MON"], [("MON", "MON", "VAL")])
+        self.assertTrue({"VAL_east_final_started", "VAL_east_rival_declared", "VAL_east_contest_closed"}
+                        <= world.global_flags)
+        self.assertEqual(world.data["SLA"]["vars"]["VAL_east_side"], 1)
+        self.assertEqual(world.data["MON"]["vars"]["VAL_east_side"], 2)
+        self.assertEqual(world.data["VAL"]["missions"], {"VAL_east_deadline"})
+        self.assertEqual(world.events, [("VAL", "val_peace.81"), ("news", "val_peace.82"), ("MON", "val_peace.83")])
+        spirit = {k: v for k, v in world.data["VAL"]["vars"].items() if k.startswith("VAL_east_war_")}
+        self.assertEqual(set(spirit.values()), {0})
+        world.intercept = set()
+        world.run("VAL_east_close_campaign")
+        self.assertNotIn("VAL_east_rival_declared", world.global_flags)
+        for event_id in ("val_peace.81", "val_peace.82", "val_peace.83"):
+            texts = [scalar(e.value, "text") for e in country_event(event_id) if e.key == "desc"]
+            self.assertTrue([t for t in texts if ".rival" in t], event_id)
+
+    def test_every_terminal_path_closes_the_contest(self):
+        def assert_closed(world, keep_leans=False):
+            self.assertIn("VAL_east_contest_closed", world.global_flags)
+            self.assertNotIn("VAL_east_contest_deadline", world.data["VAL"]["missions"])
+            for tag in REPUBLICS:
+                self.assertFalse({f for f in world.data[tag]["flags"] if f.startswith("VAL_east_")}, tag)
+            if not keep_leans:
+                self.assertFalse([t for t in REPUBLICS if lean(world, t) is not None])
+
+        def prepared(**leans):
+            world = started(contest_world(), **leans)
+            for flag in ("VAL_east_offer_pending", "VAL_east_tool_cooldown", "VAL_east_agents_exposed"):
+                world.data["SLA"]["flags"].add(flag)
+            return world
+
+        conceded = prepared(SLA=80, RZA=20, MLR=50)
+        rival_faction(conceded)
+        conceded.data["MLR"]["ai"] = False
+        conceded.run("VAL_east_contest_concede")
+        assert_closed(conceded)
+        self.assertEqual((conceded.data["RZA"]["faction"], conceded.data["MLR"]["faction"],
+                          conceded.data["SLA"]["faction"]), ("MON", None, None))
+        self.assertAlmostEqual(conceded.data["VAL"]["add_stability"], -0.10)
+        self.assertAlmostEqual(conceded.data["VAL"]["add_war_support"], -0.10)
+        self.assertTrue({"VAL_east_final_resolved", "VAL_east_stalemate"} <= conceded.global_flags)
+        self.assertEqual(conceded.events, [])
+
+        retreat = prepared(SLA=80, ERT=50, MLR=20)
+        retreat.run("VAL_east_contest_rival_backs_down", "MON")
+        assert_closed(retreat, keep_leans=True)
+        self.assertEqual((lean(retreat, "SLA"), lean(retreat, "ERT"), lean(retreat, "MLR")), (80, 70, 20))
+        self.assertEqual(retreat.events, [("VAL", "val_peace.96")])
+        retreat.data["VAL"]["vars"]["VAL_east_side"] = 1
+        retreat.data["MON"]["vars"]["VAL_east_side"] = 2
+        retreat.run("VAL_east_bind_sides")
+        self.assertEqual(retreat.data["ERT"]["vars"]["VAL_east_side"], 1)
+        self.assertIsNone(lean(retreat, "ERT"))
+
+        vanished = prepared(SLA=80)
+        vanished.data["MON"]["exists"] = False
+        vanished.run("VAL_east_contest_monthly")
+        assert_closed(vanished)
+        self.assertIn("VAL_east_hegemon_VAL", vanished.global_flags)
+        self.assertEqual(vanished.events, [("VAL", "val_peace.88")])
+
+        subjugated = prepared(SLA=80)
+        subjugated.data["VAL"]["subject"] = "MON"
+        subjugated.run("VAL_east_final_close_external")
+        assert_closed(subjugated)
+        self.assertNotIn("VAL_east_final_resolved", subjugated.global_flags)
+
+        effects = {e.key: e.value for e in entries(EFFECTS)}
+        for name in ("VAL_east_bind_sides", "VAL_east_close_campaign", "VAL_east_settle_uncontested",
+                     "VAL_east_contest_concede", "VAL_east_contest_reconcile"):
+            self.assertIn("VAL_east_contest_close", {e.key for e in walk(effects[name])}, name)
+        self.assertIn("VAL_east_contest_reconcile", {e.key for e in effects["VAL_east_final_close_external"]})
+        monthly = (ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt").read_text(encoding="utf-8")
+        self.assertIn("VAL_east_contest_monthly = yes", monthly[monthly.index("on_monthly_VAL"):])
+
+    def test_arms_credit_pays_once_at_the_exact_price(self):
+        world = started(contest_world(), SLA=50)
+        world.target = "SLA"
+        world.data["VAL"]["rifles"] = {"VAL": 2699.5}
+        world.run("VAL_east_contest_grant_arms_credit")
+        self.assertEqual(lean(world, "SLA"), 50)
+        world.data["VAL"]["rifles"] = {"VAL": 5400}
+        world.data["VAL"]["pp"] = 25
+        world.run("VAL_east_contest_grant_arms_credit")
+        world.data["VAL"]["pp"] = 100
+        world.run("VAL_east_contest_grant_arms_credit")
+        self.assertEqual(world.data["VAL"]["rifles"]["VAL"], 2700)
+        self.assertEqual(world.data["VAL"]["pp"], 100)
+        self.assertEqual(world.data["SLA"]["rifles"]["VAL"], 7700)
+        self.assertEqual(lean(world, "SLA"), 65)
+        self.assertIn("VAL_east_credit_cooldown", world.data["SLA"]["flags"])
+
+    def test_share_and_instructors_debit_once_and_refund_exactly(self):
+        decisions = contest_decisions()
+        for slot in (1, 0):
+            with self.subTest(slot=slot):
+                world = started(contest_world(), SLA=50)
+                world.target = "SLA"
+                country = world.data["VAL"]
+                country["vars"]["ADISCORD_economy_treasury"] = 149.99
+                country["pp"] = 25
+                world.run("VAL_east_contest_share_begin")
+                self.assertNotIn("VAL_east_share_deposit", world.data["SLA"]["vars"])
+                country["vars"]["ADISCORD_economy_treasury"] = 150
+                world.run("VAL_east_contest_share_begin")
+                country["vars"]["ADISCORD_economy_treasury"] = 300
+                country["pp"] = 50
+                world.run("VAL_east_contest_share_begin")
+                self.assertEqual((country["vars"]["ADISCORD_economy_treasury"], country["pp"]), (300, 50))
+                self.assertEqual(country["vars"]["ADISCORD_economy_current_month_action_costs"], 150)
+                world.data["SLA"]["capital"] = "500"
+                world.data["500"]["free_slots"] = slot
+                world.run("VAL_east_contest_share_finish")
+                world.run("VAL_east_contest_share_finish")
+                self.assertEqual(world.data["500"]["buildings"]["industrial_complex"], slot)
+                self.assertEqual(world.data["SLA"]["vars"].get("ADISCORD_economy_treasury", 0), 150 * (1 - slot))
+                self.assertEqual(lean(world, "SLA"), 70)
+                self.assertEqual((country["vars"]["ADISCORD_economy_treasury"], country["pp"]), (300, 50))
+
+        lost = started(contest_world(), SLA=50)
+        lost.target = "SLA"
+        lost.data["VAL"]["vars"]["ADISCORD_economy_treasury"] = 150
+        lost.data["VAL"]["pp"] = 25
+        lost.run("VAL_east_contest_share_begin")
+        lost.data["SLA"]["subject"] = "MON"
+        lost.execute(block(decisions["VAL_east_contest_share"], "cancel_effect"))
+        lost.run("VAL_east_contest_share_finish")
+        lost.run("VAL_east_contest_share_refund")
+        self.assertEqual((lost.data["VAL"]["vars"]["ADISCORD_economy_treasury"], lost.data["VAL"]["pp"]), (150, 25))
+        self.assertEqual(lost.data["VAL"]["vars"]["ADISCORD_economy_current_month_action_income"], 150)
+
+        drill = started(contest_world(), SLA=50)
+        drill.target = "SLA"
+        drill.data["VAL"].update(pp=50, manpower=999.5)
+        drill.run("VAL_east_contest_instructors_begin")
+        self.assertEqual(drill.data["VAL"]["manpower"], 999.5)
+        drill.data["VAL"]["manpower"] = 1000
+        drill.run("VAL_east_contest_instructors_begin")
+        drill.data["VAL"].update(pp=50, manpower=1000)
+        drill.run("VAL_east_contest_instructors_begin")
+        self.assertEqual((drill.data["VAL"]["pp"], drill.data["VAL"]["manpower"]), (50, 1000))
+        drill.run("VAL_east_contest_instructors_finish")
+        drill.run("VAL_east_contest_instructors_finish")
+        self.assertEqual(drill.data["SLA"]["army_experience"], 10)
+        self.assertEqual(lean(drill, "SLA"), 60)
+        self.assertEqual((drill.data["VAL"]["pp"], drill.data["VAL"]["manpower"]), (50, 1000))
+        drill.data["VAL"].update(pp=50, manpower=1000)
+        drill.run("VAL_east_contest_instructors_begin")
+        drill.data["SLA"]["wars"].add("VAL")
+        drill.execute(block(decisions["VAL_east_contest_instructors"], "cancel_effect"))
+        drill.run("VAL_east_contest_instructors_refund")
+        self.assertEqual((drill.data["VAL"]["pp"], drill.data["VAL"]["manpower"]), (50, 1000))
+
+    def test_exposure_targets_the_rival_faction_and_refunds_a_lost_target(self):
+        world = started(contest_world(), RZA=50)
+        rival_faction(world, "RZA")
+        world.target = "RZA"
+        world.run("VAL_east_contest_expose_begin")
+        world.run("VAL_east_contest_expose_finish")
+        self.assertEqual(lean(world, "RZA"), 65)
+        self.assertIn("VAL_east_agents_exposed", world.data["RZA"]["flags"])
+        world.target = "SLA"
+        world.run("VAL_east_contest_expose_begin")
+        world.data["SLA"]["subject"] = "MON"
+        world.run("VAL_east_contest_expose_finish")
+        world.run("VAL_east_contest_expose_refund")
+        self.assertEqual(world.data["VAL"]["pp"], 1050)
+        self.assertEqual(scalar(contest_decisions()["VAL_east_contest_expose_agents"], "cost"), "50")
+
+    def test_regime_tools_pay_only_after_consent(self):
+        def tool_world(**values):
+            world = started(contest_world(), SLA=values.pop("lean"))
+            world.target = "SLA"
+            country = world.data["VAL"]
+            country.update(pp=values.pop("pp", 0), manpower=values.pop("manpower", 0))
+            country["rifles"] = {"VAL": values.pop("rifles", 0)}
+            country["vars"]["ADISCORD_economy_treasury"] = values.pop("treasury", 0)
+            world.data["SLA"].update(manpower=values.pop("republic_manpower", 0), rifles={})
+            return world
+
+        setups = {
+            "VAL_throne_crown_march": dict(lean=80, pp=100, rifles=5400),
+            "VAL_cabinet_treaty_membership": dict(lean=60, pp=75, treasury=100),
+            "VAL_charter_garrison_treaty": dict(lean=50, pp=50, manpower=3000),
+            "VAL_captains_hire_companies": dict(lean=50, treasury=150, republic_manpower=3000),
+        }
+        decisions = contest_decisions()
+        for name, (focus, offer, accept, event_id) in self.TOOLS.items():
+            with self.subTest(tool=name):
+                self.assertIn(focus, {e.value for e in walk(block(decisions[name], "visible")) if isinstance(e.value, str)})
+                self.assertEqual(scalar(block(block(decisions[name], "complete_effect"), "hidden_effect"), offer), "yes")
+                answers = options(event_id)
+                self.assertEqual(scalar(block(answers[event_id + ".b"], "hidden_effect"), accept), "yes")
+                self.assertEqual(scalar(block(answers[event_id + ".a"], "hidden_effect"), "VAL_east_decline_tool"), "yes")
+
+                world = tool_world(**dict(setups[name]))
+                before = (world.data["VAL"]["pp"], world.data["VAL"]["manpower"],
+                          dict(world.data["VAL"]["rifles"]), world.data["VAL"]["vars"]["ADISCORD_economy_treasury"])
+                world.run(offer)
+                self.assertEqual(world.events, [("SLA", event_id)])
+                self.assertIn("VAL_east_tool_pending", world.data["SLA"]["flags"])
+                after = (world.data["VAL"]["pp"], world.data["VAL"]["manpower"],
+                         dict(world.data["VAL"]["rifles"]), world.data["VAL"]["vars"]["ADISCORD_economy_treasury"])
+                self.assertEqual(before, after)
+                world.run("VAL_east_decline_tool", "SLA")
+                world.run(offer)
+                self.assertEqual(world.events, [("SLA", event_id), ("VAL", "val_peace.101")])
+                self.assertIn("VAL_east_tool_cooldown", world.data["SLA"]["flags"])
+
+                broke = tool_world(**dict(setups[name]))
+                broke.run(offer)
+                broke.data["VAL"].update(pp=0, manpower=0, rifles={})
+                broke.data["VAL"]["vars"]["ADISCORD_economy_treasury"] = 0
+                broke.run(accept, "SLA")
+                self.assertIn("VAL_east_tool_cooldown", broke.data["SLA"]["flags"])
+                self.assertIsNone(broke.data["SLA"]["subject"])
+
+                paid = tool_world(**dict(setups[name]))
+                paid.run(offer)
+                paid.run(accept, "SLA")
+                paid.run(accept, "SLA")
+                self.assertEqual(paid.events[-1], ("VAL", "val_peace.101"))
+                self.assertNotIn("VAL_east_tool_cooldown", paid.data["SLA"]["flags"])
+                val, sla = paid.data["VAL"], paid.data["SLA"]
+                self.assertEqual(val["pp"], 0)
+                if name == "VAL_throne_crown_march":
+                    self.assertEqual(sla["subject"], "VAL")
+                    self.assertEqual((sum(val["rifles"].values()), sla["rifles"]["VAL"]), (0, 5400))
+                elif name == "VAL_cabinet_treaty_membership":
+                    self.assertEqual((val["faction"], val["leader"], sla["faction"]), ("VAL", True, "VAL"))
+                    self.assertEqual(val["faction_name"], "VAL_east_defence_treaty")
+                    self.assertEqual(val["vars"]["ADISCORD_economy_treasury"], 0)
+                elif name == "VAL_charter_garrison_treaty":
+                    self.assertEqual((val["manpower"], sla["access"], lean(paid, "SLA")), (0, {"VAL"}, 70))
+                    self.assertIn("VAL_east_garrisoned", sla["flags"])
+                else:
+                    self.assertEqual((val["manpower"], sla["manpower"]), (3000, 0))
+                    self.assertEqual((val["vars"]["ADISCORD_economy_treasury"], sla["vars"]["ADISCORD_economy_treasury"]),
+                                     (0, 150))
+                    self.assertEqual(lean(paid, "SLA"), 65)
+
+    def test_deadline_sends_the_ultimatum_and_the_ai_compares_camps(self):
+        category = contest_decisions()
+        mission = category["VAL_east_contest_deadline"]
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "360")
+        self.assertEqual(scalar(block(block(mission, "available"), "hidden_trigger"), "always"), "no")
+        self.assertEqual(scalar(block(block(mission, "timeout_effect"), "hidden_effect"), "VAL_east_contest_ultimatum"), "yes")
+        tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text(encoding="utf-8").split()
+        self.assertIn("VAL_east_contest_deadline", tokens)
+
+        human = started(contest_world())
+        human.data["MON"]["ai"] = False
+        human.run("VAL_east_contest_ultimatum")
+        self.assertEqual(human.events, [("MON", "val_peace.95")])
+        retreat = options("val_peace.95")
+        self.assertEqual(scalar(block(retreat["val_peace.95.a"], "hidden_effect"), "VAL_east_contest_rival_backs_down"), "yes")
+
+        event = country_event("val_peace.94")
+        answers = options("val_peace.94")
+        for leans, expected in ((dict(SLA=80, MLR=20), "val_peace.94.a"),
+                                (dict(SLA=80, MLR=20, TMR=25), "val_peace.94.b"),
+                                ({}, "val_peace.94.a")):
+            with self.subTest(leans=leans):
+                world = started(contest_world(), **leans)
+                world.run("VAL_east_contest_ultimatum")
+                self.assertEqual(world.events, [("VAL", "val_peace.94")])
+                world.execute(block(event, "immediate"))
+                weights = {name: ai_weight(world, answers[name]) for name in ("val_peace.94.a", "val_peace.94.b")}
+                self.assertEqual([name for name, weight in weights.items() if weight > 0], [expected])
+        reject = block(answers["val_peace.94.a"], "hidden_effect")
+        self.assertEqual([e.key for e in reject], ["VAL_east_final_start_by_rival", "VAL_east_contest_close"])
+
+    def test_decisions_follow_the_cost_contract_and_their_unlocking_focus(self):
+        unlocks = {
+            "VAL_east_contest_arms_credit": "VAL_east_question",
+            "VAL_east_contest_share": "VAL_east_trade_missions",
+            "VAL_east_contest_expose_agents": "VAL_east_krutov_network",
+            "VAL_east_contest_instructors": "VAL_east_border_posts",
+        }
+        unlocks.update({name: focus for name, (focus, *_rest) in self.TOOLS.items()})
+        decisions = contest_decisions()
+        for name, focus in unlocks.items():
+            with self.subTest(decision=name):
+                decision = decisions[name]
+                self.assertEqual([e.value for e in block(decision, "targets")], list(REPUBLICS))
+                self.assertIn(focus, {e.value for e in walk(block(decision, "visible")) if isinstance(e.value, str)})
+                available = {e.key for e in walk(block(decision, "available"))}
+                self.assertTrue({"VAL_east_contestable", "VAL_east_contest_active"} <= available)
+                if any(e.key == "custom_cost_text" for e in decision):
+                    self.assertEqual(scalar(decision, "cost"), "0")
+                    self.assertTrue(block(decision, "custom_cost_trigger"))
+        categories = entries("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        category = block(categories, "VAL_east_contest_category")
+        self.assertEqual(scalar(category, "visible_when_empty"), "yes")
+        self.assertIn("VAL_east_contest_active", {e.key for e in walk(block(category, "visible"))})
+
+    def test_contest_localisation_has_every_referenced_key(self):
+        rows = {}
+        for line in (ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml").read_text(encoding="utf-8-sig").splitlines():
+            match = re.match(r" ([\w.]+):\d+ ", line)
+            if match:
+                rows[match[1]] = line
+        keys = {"VAL_east_contest_category", "VAL_east_contest_category_desc", "VAL_east_defence_treaty"}
+        for name, decision in contest_decisions().items():
+            keys |= {name, name + "_desc"}
+            keys |= {e.value for e in walk(decision) if e.key in ("tooltip", "custom_effect_tooltip")}
+            for cost in (e.value for e in decision if e.key == "custom_cost_text"):
+                keys |= {cost, cost + "_blocked", cost + "_tooltip"}
+        loc = (ROOT / "common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt").read_text(encoding="utf-8")
+        keys |= set(re.findall(r"localization_key = (VAL_EAST_CONTEST_\w+)", loc))
+        for number in range(89, 102):
+            event = country_event(f"val_peace.{number}")
+            keys |= {e.value for e in walk(event) if e.key in ("title", "text", "name", "custom_effect_tooltip")
+                     and isinstance(e.value, str)}
+            keys |= {e.value for e in event if e.key == "desc" and isinstance(e.value, str)}
+        for event_id in ("val_peace.81", "val_peace.82", "val_peace.83"):
+            keys |= {e.value for e in walk(country_event(event_id)) if e.key == "text"}
+        self.assertFalse(sorted(key for key in keys if key not in rows))
 
 
 class KhanVictoryTests(unittest.TestCase):

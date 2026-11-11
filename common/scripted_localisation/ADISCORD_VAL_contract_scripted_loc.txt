@@ -1606,3 +1606,75 @@ defined_text = {
 	text = { trigger = { has_country_flag = VAL_north_coercive } localization_key = VAL_NW_EPILOGUE_COERCIVE }
 	text = { localization_key = VAL_NW_COURSE_NONE }
 }
+
+# --- east_contest ---
+# Category panel of the contest: the current camp threshold and one line per
+# republic that is contestable and holds a lean. Evaluated in VAL scope.
+defined_text = {
+	name = VALGetEastContestThreshold
+	text = { trigger = { has_completed_focus = VAL_east_shards } localization_key = VAL_EAST_CONTEST_THRESHOLD_60 }
+	text = { localization_key = VAL_EAST_CONTEST_THRESHOLD_70 }
+}
+defined_text = {
+	name = VALGetEastContestSLA
+	text = { trigger = { SLA = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { SLA = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_SLA_VAL }
+	text = { trigger = { SLA = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_SLA_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_SLA_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestRZA
+	text = { trigger = { RZA = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { RZA = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_RZA_VAL }
+	text = { trigger = { RZA = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_RZA_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_RZA_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestMLR
+	text = { trigger = { MLR = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { MLR = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_MLR_VAL }
+	text = { trigger = { MLR = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_MLR_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_MLR_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestERT
+	text = { trigger = { ERT = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { ERT = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_ERT_VAL }
+	text = { trigger = { ERT = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_ERT_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_ERT_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestIRT
+	text = { trigger = { IRT = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { IRT = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_IRT_VAL }
+	text = { trigger = { IRT = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_IRT_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_IRT_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestSCA
+	text = { trigger = { SCA = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { SCA = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_SCA_VAL }
+	text = { trigger = { SCA = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_SCA_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_SCA_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestTMR
+	text = { trigger = { TMR = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { TMR = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_TMR_VAL }
+	text = { trigger = { TMR = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_TMR_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_TMR_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestVEL
+	text = { trigger = { VEL = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { VEL = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_VEL_VAL }
+	text = { trigger = { VEL = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_VEL_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_VEL_NEUTRAL }
+}
+defined_text = {
+	name = VALGetEastContestRLY
+	text = { trigger = { RLY = { OR = { NOT = { VAL_east_contestable = yes } NOT = { has_variable = VAL_east_lean } } } } localization_key = VAL_EAST_CONTEST_NONE }
+	text = { trigger = { RLY = { VAL_east_in_val_camp = yes } } localization_key = VAL_EAST_CONTEST_RLY_VAL }
+	text = { trigger = { RLY = { VAL_east_in_rival_camp = yes } } localization_key = VAL_EAST_CONTEST_RLY_RIVAL }
+	text = { localization_key = VAL_EAST_CONTEST_RLY_NEUTRAL }
+}

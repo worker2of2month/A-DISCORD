@@ -3609,8 +3609,8 @@
           "english": "Salik-Bandar"
         },
         "VICTORY_POINTS_1198": {
-          "russian": "Зархан",
-          "english": "Zarkhan"
+          "russian": "Нижнелоренск",
+          "english": "Nizhnelorensk"
         },
         "VICTORY_POINTS_16899": {
           "russian": "Зархан",
@@ -3663,6 +3663,14 @@
         "VICTORY_POINTS_7908": {
           "russian": "Заречье",
           "english": "Zarechye"
+        },
+        "VICTORY_POINTS_16900": {
+          "russian": "Мостовое",
+          "english": "Mostovoye"
+        },
+        "VICTORY_POINTS_16901": {
+          "russian": "Заставье",
+          "english": "Zastavye"
         },
         "VICTORY_POINTS_2443": {
           "russian": "Мерса",
