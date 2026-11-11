@@ -117,73 +117,230 @@ PREWAR_WRK_EXPANSION_FOCUSES = (
     "WRK_place_reserves_under_worker",
 )
 
-PREWAR_WRK_PROGRAMME_FOCUSES = (
-    "WRK_prepare_civil_evacuation",
-    "WRK_prepare_military_evacuation",
-)
-
-# Common trunk institutions: centre-district balance and tower protection.
-PREWAR_WRK_HOURGLASS_FOCUSES = (
-    "WRK_emergency_central_budget",
-    "WRK_district_emergency_powers",
-    "WRK_requisition_commissions",
-    "WRK_district_treasuries",
-    "WRK_last_common_budget",
-    "WRK_inspect_the_unity_tower",
-    "WRK_reinforce_the_tower_guard",
-    "WRK_disperse_the_government",
-)
-
-# preparation.1 names one apparatus; only its branch is drawn. Each entry is
-# the scripted trigger of the allow_branch gate and the branch in tree order:
-# entry, resource pair, two programme steps, political pair, mandate.
-PREWAR_WRK_PATRON_BRANCHES = {
-    "ADISCORD_vorkerland_prewar_patron_committees": (
-        "WRK_party_cell_rolls",
-        "WRK_factory_committee_councils",
-        "WRK_committee_emergency_plenipotentiaries",
-        "WRK_committee_workers_guard",
-        "WRK_committee_ration_reserve",
-        "WRK_committee_chairmans_mandate",
-        "WRK_committee_bagley_executive",
-        "WRK_mandate_of_the_committees",
+# preparation.1 names one apparatus, and only its tree is drawn under the
+# shared root. A tree is a list of blocks in canvas order; a block maps its
+# focuses to their cells. A new block is added here and nowhere else: the
+# patron gate, the cell, the band and the block rules of every focus follow
+# from this manifest.
+PREWAR_WRK_ROOT_CELL = (16, 0)
+PREWAR_WRK_TREES = {
+    "committees": (
+        (
+            "budget",
+            {
+                "WRK_emergency_central_budget": (0, 1),
+                "WRK_district_emergency_powers": (2, 1),
+                "WRK_requisition_commissions": (0, 2),
+                "WRK_district_treasuries": (2, 2),
+                "WRK_last_common_budget": (1, 3),
+            },
+        ),
+        (
+            "tower",
+            {
+                "WRK_inspect_the_unity_tower": (6, 1),
+                "WRK_reinforce_the_tower_guard": (5, 2),
+                "WRK_disperse_the_government": (7, 2),
+            },
+        ),
+        (
+            "capital",
+            {
+                "WRK_committee_district_canteens": (11, 1),
+                "WRK_committee_arbitration_boards": (11, 2),
+                "WRK_committee_second_guard_shift": (10, 3),
+                "WRK_committee_district_agitators": (12, 3),
+                "WRK_committee_district_musters": (11, 4),
+                "WRK_committee_store_keys": (11, 5),
+            },
+        ),
+        (
+            "core",
+            {
+                "WRK_party_cell_rolls": (16, 1),
+                "WRK_factory_committee_councils": (15, 2),
+                "WRK_committee_emergency_plenipotentiaries": (17, 2),
+                "WRK_committee_workers_guard": (16, 3),
+                "WRK_committee_ration_reserve": (16, 4),
+                "WRK_committee_chairmans_mandate": (15, 5),
+                "WRK_committee_bagley_executive": (17, 5),
+                "WRK_mandate_of_the_committees": (16, 6),
+            },
+        ),
+        (
+            "politics",
+            {
+                "WRK_convene_council_of_republics": (22, 1),
+                "WRK_inventory_emergency_stores": (24, 1),
+                "WRK_bind_districts_to_charter": (22, 2),
+                "WRK_disperse_railway_reserves": (24, 2),
+                "WRK_issue_continuity_orders": (23, 3),
+                "WRK_open_worker_vadl_backchannel": (26, 4),
+                "WRK_offer_emergency_compact": (26, 5),
+                "WRK_mobilize_loyal_republics": (24, 4),
+                "WRK_place_reserves_under_worker": (24, 5),
+                "WRK_prepare_civil_evacuation": (20, 4),
+                "WRK_prepare_military_evacuation": (22, 4),
+            },
+        ),
     ),
-    "ADISCORD_vorkerland_prewar_patron_staff": (
-        "WRK_collect_officer_returns",
-        "WRK_contract_local_garrisons",
-        "WRK_prepare_officer_reserve",
-        "WRK_district_staff_exercises",
-        "WRK_petrichev_depots",
-        "WRK_staff_escort_for_the_chairman",
-        "WRK_staff_reserve_headquarters",
-        "WRK_mandate_of_the_staff",
+    "staff": (
+        (
+            "purse",
+            {
+                "WRK_staff_depot_ledgers": (6, 1),
+                "WRK_staff_commanders_funds": (5, 2),
+                "WRK_staff_centre_quartermaster": (7, 2),
+                "WRK_staff_supply_contracts": (6, 3),
+                "WRK_staff_war_chest": (6, 4),
+            },
+        ),
+        (
+            "court",
+            {
+                "WRK_staff_standing_invitations": (11, 1),
+                "WRK_staff_adjutants_at_court": (11, 2),
+                "WRK_staff_second_section_archive": (10, 3),
+                "WRK_staff_officers_assembly": (12, 3),
+                "WRK_staff_district_pledges": (11, 4),
+                "WRK_staff_council_of_allies": (11, 5),
+            },
+        ),
+        (
+            "core",
+            {
+                "WRK_collect_officer_returns": (16, 1),
+                "WRK_contract_local_garrisons": (15, 2),
+                "WRK_prepare_officer_reserve": (17, 2),
+                "WRK_district_staff_exercises": (16, 3),
+                "WRK_petrichev_depots": (16, 4),
+                "WRK_staff_escort_for_the_chairman": (15, 5),
+                "WRK_staff_reserve_headquarters": (17, 5),
+                "WRK_mandate_of_the_staff": (16, 6),
+            },
+        ),
+        (
+            "army",
+            {
+                "WRK_staff_railway_commandants": (21, 1),
+                "WRK_staff_arsenal_seals": (20, 2),
+                "WRK_staff_garrison_roads": (22, 2),
+                "WRK_staff_cadre_regiments": (21, 3),
+                "WRK_staff_district_arsenal_lists": (21, 4),
+            },
+        ),
+        (
+            "tower",
+            {
+                "WRK_staff_tower_survey": (26, 1),
+                "WRK_staff_military_route": (25, 2),
+                "WRK_staff_let_the_tower_fall": (27, 2),
+                "WRK_staff_commanders_oaths": (26, 3),
+                "WRK_staff_joint_government_draft": (25, 4),
+                "WRK_staff_emergency_command": (27, 4),
+                "WRK_staff_government_guards": (26, 5),
+                "WRK_staff_last_order_draft": (26, 6),
+            },
+        ),
     ),
-    "ADISCORD_vorkerland_prewar_patron_network": (
-        "WRK_reopen_emergency_workshops",
-        "WRK_prioritize_arsenal_output",
-        "WRK_preserve_machine_tools",
-        "WRK_worx_network_register",
-        "WRK_machine_tool_fund",
-        "WRK_network_closed_laboratories",
-        "WRK_network_district_collegia",
-        "WRK_mandate_of_the_network",
+    "network": (
+        (
+            "funds",
+            {
+                "WRK_network_workshop_accounts": (6, 1),
+                "WRK_network_diverted_orders": (5, 2),
+                "WRK_network_patent_pool": (7, 2),
+                "WRK_network_district_bank_credit": (6, 3),
+                "WRK_network_shadow_budget": (6, 4),
+            },
+        ),
+        (
+            "cells",
+            {
+                "WRK_network_supply_runs": (11, 1),
+                "WRK_network_shift_rosters": (11, 2),
+                "WRK_network_second_crew": (10, 3),
+                "WRK_network_fallback_addresses": (12, 3),
+                "WRK_network_reserve_rolls": (11, 4),
+                "WRK_network_trusted_storekeepers": (11, 5),
+            },
+        ),
+        (
+            "core",
+            {
+                "WRK_reopen_emergency_workshops": (16, 1),
+                "WRK_prioritize_arsenal_output": (15, 2),
+                "WRK_preserve_machine_tools": (17, 2),
+                "WRK_worx_network_register": (16, 3),
+                "WRK_machine_tool_fund": (16, 4),
+                "WRK_network_closed_laboratories": (15, 5),
+                "WRK_network_district_collegia": (17, 5),
+                "WRK_mandate_of_the_network": (16, 6),
+            },
+        ),
+        (
+            "plants",
+            {
+                "WRK_network_plant_inventory": (21, 1),
+                "WRK_network_tooling_line": (20, 2),
+                "WRK_network_test_stands": (22, 2),
+                "WRK_network_pilot_shop": (21, 3),
+                "WRK_network_prototype_reserve": (21, 4),
+            },
+        ),
+        (
+            "tower",
+            {
+                "WRK_network_tower_exchange": (26, 1),
+                "WRK_network_relay_by_wire": (25, 2),
+                "WRK_network_open_broadcast": (27, 2),
+                "WRK_network_technical_continuity": (26, 3),
+                "WRK_network_tower_shelter": (25, 4),
+                "WRK_network_blind_the_tower": (27, 4),
+                "WRK_network_listening_logs": (26, 5),
+                "WRK_network_tower_duty_roster": (26, 6),
+            },
+        ),
     ),
 }
+# Free columns between two blocks of one tree, and between two focuses of a row.
+PREWAR_WRK_BLOCK_GAP = 2
+PREWAR_WRK_CELL_GAP = 1
+
+
+def prewar_wrk_patron_gate(tree: str) -> str:
+    """Scripted trigger every focus of one tree names in its allow_branch."""
+
+    return f"ADISCORD_vorkerland_prewar_patron_{tree}"
+
+
+def prewar_wrk_tree_focuses(tree: str) -> tuple[str, ...]:
+    return tuple(
+        focus_id for _block, cells in PREWAR_WRK_TREES[tree] for focus_id in cells
+    )
+
+
 PREWAR_WRK_PATRON_GATES = {
-    focus_id: gate
-    for gate, focus_ids in PREWAR_WRK_PATRON_BRANCHES.items()
-    for focus_id in focus_ids
+    focus_id: prewar_wrk_patron_gate(tree)
+    for tree in PREWAR_WRK_TREES
+    for focus_id in prewar_wrk_tree_focuses(tree)
+}
+PREWAR_WRK_CELLS = {
+    WRK_PREWAR_ROOT: PREWAR_WRK_ROOT_CELL,
+    **{
+        focus_id: cell
+        for blocks in PREWAR_WRK_TREES.values()
+        for _block, cells in blocks
+        for focus_id, cell in cells.items()
+    },
 }
 
 PREWAR_WRK_FOCUSES = (
-    *PREWAR_WRK_BASE_FOCUSES,
-    *PREWAR_WRK_EXPANSION_FOCUSES,
-    *PREWAR_WRK_PROGRAMME_FOCUSES,
-    *PREWAR_WRK_HOURGLASS_FOCUSES,
+    WRK_PREWAR_ROOT,
     *(
         focus_id
-        for focus_ids in PREWAR_WRK_PATRON_BRANCHES.values()
-        for focus_id in focus_ids
+        for tree in PREWAR_WRK_TREES
+        for focus_id in prewar_wrk_tree_focuses(tree)
     ),
 )
 
@@ -403,10 +560,7 @@ SHOWDOWN_FOCUSES = {
 }
 
 PREWAR_EXPANSION_POSITIONS = {
-    "WRK_open_worker_vadl_backchannel": (23, 4),
-    "WRK_offer_emergency_compact": (23, 5),
-    "WRK_mobilize_loyal_republics": (21, 4),
-    "WRK_place_reserves_under_worker": (21, 5),
+    **{focus_id: PREWAR_WRK_CELLS[focus_id] for focus_id in PREWAR_WRK_EXPANSION_FOCUSES},
     "VAD_prepare_vadl_worker_terms": (28, 4),
     "VAD_ratify_emergency_compact": (28, 5),
     "VAD_activate_eastern_mandate": (26, 4),
@@ -843,6 +997,355 @@ POSTWAR_ROUTE_FOCUSES = {
     ),
 }
 
+# Executive Committee branch of the worker route. It is drawn only for the
+# government that unified the country on the executive course, stays outside
+# the common terminal paths and is never a prerequisite of the Unity Tower.
+POSTWAR_EXECUTIVE_ROUTE = "ADISCORD_vorkerland_route_worker"
+POSTWAR_EXECUTIVE_GATE = "ADISCORD_vorkerland_worker_utilitarian_outcome"
+POSTWAR_EXECUTIVE_FOCUSES = (
+    "WRK_executive_keep_the_executive_committee",
+    "WRK_executive_open_single_delivery_ledger",
+    "WRK_executive_demobilize_by_norm",
+    "WRK_executive_set_reconstruction_norms",
+    "WRK_executive_contract_surviving_republics",
+    "WRK_executive_audit_the_districts",
+    "WRK_executive_publish_accountable_budget",
+)
+POSTWAR_EXECUTIVE_POSITIONS = {
+    "WRK_executive_keep_the_executive_committee": (8, 22),
+    "WRK_executive_open_single_delivery_ledger": (7, 23),
+    "WRK_executive_demobilize_by_norm": (9, 23),
+    "WRK_executive_set_reconstruction_norms": (6, 24),
+    "WRK_executive_contract_surviving_republics": (8, 24),
+    "WRK_executive_audit_the_districts": (7, 25),
+    "WRK_executive_publish_accountable_budget": (7, 26),
+}
+POSTWAR_EXECUTIVE_COSTS = {
+    "WRK_executive_keep_the_executive_committee": 2,
+    "WRK_executive_open_single_delivery_ledger": 3,
+    "WRK_executive_demobilize_by_norm": 2,
+    "WRK_executive_set_reconstruction_norms": 3,
+    "WRK_executive_contract_surviving_republics": 3,
+    "WRK_executive_audit_the_districts": 3,
+    "WRK_executive_publish_accountable_budget": 3,
+}
+POSTWAR_EXECUTIVE_PREREQUISITES = {
+    "WRK_executive_keep_the_executive_committee": (
+        frozenset({"WRK_worker_convene_reunification_congress"}),
+    ),
+    "WRK_executive_open_single_delivery_ledger": (
+        frozenset({"WRK_executive_keep_the_executive_committee"}),
+    ),
+    "WRK_executive_demobilize_by_norm": (
+        frozenset({"WRK_executive_keep_the_executive_committee"}),
+    ),
+    "WRK_executive_set_reconstruction_norms": (
+        frozenset({"WRK_executive_open_single_delivery_ledger"}),
+    ),
+    "WRK_executive_contract_surviving_republics": (
+        frozenset({"WRK_executive_open_single_delivery_ledger"}),
+    ),
+    "WRK_executive_audit_the_districts": (
+        frozenset(
+            {
+                "WRK_executive_set_reconstruction_norms",
+                "WRK_executive_contract_surviving_republics",
+            }
+        ),
+    ),
+    "WRK_executive_publish_accountable_budget": (
+        frozenset({"WRK_executive_audit_the_districts"}),
+    ),
+}
+POSTWAR_EXECUTIVE_CHOICE = (
+    "WRK_executive_set_reconstruction_norms",
+    "WRK_executive_contract_surviving_republics",
+)
+POSTWAR_EXECUTIVE_FINAL = "WRK_executive_publish_accountable_budget"
+# One working day of a focus is seven days; the whole branch has to fit beside
+# the common settlement path before the Unity Tower replaces the tree.
+POSTWAR_EXECUTIVE_MAX_PATH_UNITS = 16
+# Native goal art that shows the action of each committee focus.
+POSTWAR_EXECUTIVE_TEXTURES = {
+    "WRK_executive_keep_the_executive_committee": (
+        "gfx/interface/goals/focus_generic_improve_the_administration.dds"
+    ),
+    "WRK_executive_open_single_delivery_ledger": (
+        "gfx/interface/goals/focus_generic_central_planning.dds"
+    ),
+    "WRK_executive_demobilize_by_norm": (
+        "gfx/interface/goals/focus_generic_soldier_salute.dds"
+    ),
+    "WRK_executive_set_reconstruction_norms": (
+        "gfx/interface/goals/focus_generic_industry_investment.dds"
+    ),
+    "WRK_executive_contract_surviving_republics": (
+        "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
+    ),
+    "WRK_executive_audit_the_districts": (
+        "gfx/interface/goals/focus_generic_commission.dds"
+    ),
+    "WRK_executive_publish_accountable_budget": (
+        "gfx/interface/goals/focus_generic_currency_reforms.dds"
+    ),
+}
+# Paid programmes opened by settlement focuses: focus -> (decision, unlock
+# flag, receipt variable). The flag outlives the settlement tree.
+SETTLEMENT_PROGRAMMES = {
+    "WRK_worker_fund_cooperative_reconstruction": (
+        "ADISCORD_vorkerland_worker_cooperative_works",
+        "ADISCORD_vorkerland_focus_worker_cooperative_works",
+        "ADISCORD_vorkerland_worker_works_deposit",
+    ),
+    "WRK_executive_set_reconstruction_norms": (
+        "WRK_executive_norm_order",
+        "ADISCORD_vorkerland_focus_executive_norm_orders",
+        "WRK_executive_order_deposit",
+    ),
+    "WRK_executive_contract_surviving_republics": (
+        "WRK_executive_republic_contract",
+        "ADISCORD_vorkerland_focus_executive_republic_contracts",
+        "WRK_executive_order_deposit",
+    ),
+    "WRK_executive_audit_the_districts": (
+        "WRK_executive_district_audit",
+        "ADISCORD_vorkerland_focus_executive_district_audits",
+        "WRK_executive_order_deposit",
+    ),
+}
+SETTLEMENT_AGGREGATE = "ADISCORD_vorkerland_postwar_institutions"
+SETTLEMENT_AGGREGATE_FILE = Path(
+    "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
+)
+# Each government of the worker route has its own AI plan; a plan names only
+# focuses its government can see.
+SETTLEMENT_AI_PLAN = "ADISCORD_vorkerland_wrk_postwar_executive_plan"
+CONGRESS_AI_PLAN = "ADISCORD_vorkerland_wrk_postwar_worker_plan"
+
+# The confederation tree after the Unity Tower. The root and the western
+# branch are shared; the three domestic branches exist once per government in
+# the same cells, and allow_branch draws exactly one set.
+CONFEDERATION_FILE = Path("focus_trees/Vorkerland/worker_confederation/focuses.txt")
+CONFEDERATION_SHARED_FOCUSES = (
+    "WRK_conf_council_of_republics",
+    "WRK_worker_west_mandate_offices",
+    "WRK_conf_solidarity_abroad",
+    "WRK_conf_charter_for_the_west",
+    "WRK_worker_west_solidarity_committees",
+    "WRK_conf_southern_solidarity",
+    "WRK_worker_west_mandate_for_itora",
+    "WRK_worker_west_confederate_charter",
+)
+# Branch -> (congress focuses, Executive Committee focuses), each in tree order.
+CONFEDERATION_BRANCHES = {
+    "reconstruction": (
+        (
+            "WRK_conf_veteran_resettlement",
+            "WRK_conf_cooperative_workshops",
+            "WRK_conf_workers_housing",
+            "WRK_conf_municipal_councils",
+            "WRK_conf_social_guarantees",
+        ),
+        (
+            "WRK_exec_district_inventory",
+            "WRK_exec_reconstruction_work_orders",
+            "WRK_exec_second_construction_trust",
+            "WRK_exec_rolling_district_audit",
+            "WRK_exec_ration_by_ledger",
+        ),
+    ),
+    "industry": (
+        (
+            "WRK_conf_production_councils",
+            "WRK_conf_republican_arsenals",
+            "WRK_conf_shared_standards",
+            "WRK_conf_research_soviets",
+        ),
+        (
+            "WRK_exec_plant_norm_tables",
+            "WRK_exec_norm_series",
+            "WRK_exec_republic_supply_chain",
+            "WRK_exec_acceptance_commission",
+            "WRK_exec_central_order_bureau",
+        ),
+    ),
+    "army": (
+        (
+            "WRK_conf_republican_militias",
+            "WRK_conf_elected_officers",
+            "WRK_conf_people_in_arms",
+            "WRK_conf_red_engineers",
+            "WRK_conf_army_of_the_republics",
+        ),
+        (
+            "WRK_exec_paid_cadre",
+            "WRK_exec_staff_by_examination",
+            "WRK_exec_fortress_schedules",
+            "WRK_exec_motor_columns",
+            "WRK_exec_cadre_army",
+        ),
+    ),
+}
+CONFEDERATION_COUNCIL_FOCUSES = tuple(
+    focus_id for council, _executive in CONFEDERATION_BRANCHES.values() for focus_id in council
+)
+CONFEDERATION_EXECUTIVE_FOCUSES = tuple(
+    focus_id for _council, executive in CONFEDERATION_BRANCHES.values() for focus_id in executive
+)
+CONFEDERATION_EXECUTIVE_CHOICES = (
+    ("WRK_exec_second_construction_trust", "WRK_exec_rolling_district_audit"),
+    ("WRK_exec_norm_series", "WRK_exec_republic_supply_chain"),
+    ("WRK_exec_fortress_schedules", "WRK_exec_motor_columns"),
+)
+CONFEDERATION_EXECUTIVE_POSITIONS = {
+    "WRK_exec_district_inventory": (1, 1),
+    "WRK_exec_reconstruction_work_orders": (1, 2),
+    "WRK_exec_second_construction_trust": (0, 3),
+    "WRK_exec_rolling_district_audit": (2, 3),
+    "WRK_exec_ration_by_ledger": (1, 4),
+    "WRK_exec_plant_norm_tables": (5, 1),
+    "WRK_exec_norm_series": (4, 2),
+    "WRK_exec_republic_supply_chain": (6, 2),
+    "WRK_exec_acceptance_commission": (5, 3),
+    "WRK_exec_central_order_bureau": (5, 4),
+    "WRK_exec_paid_cadre": (8, 1),
+    "WRK_exec_staff_by_examination": (8, 2),
+    "WRK_exec_fortress_schedules": (7, 3),
+    "WRK_exec_motor_columns": (9, 3),
+    "WRK_exec_cadre_army": (8, 4),
+}
+CONFEDERATION_EXECUTIVE_TEXTURES = {
+    "WRK_exec_district_inventory": (
+        "gfx/interface/goals/focus_generic_improve_the_administration_2.dds"
+    ),
+    "WRK_exec_reconstruction_work_orders": "gfx/interface/goals/focus_generic_public_works.dds",
+    "WRK_exec_second_construction_trust": "gfx/interface/goals/goal_generic_construction2.dds",
+    "WRK_exec_rolling_district_audit": (
+        "gfx/interface/goals/focus_generic_reduce_unneccessary_expenditure.dds"
+    ),
+    "WRK_exec_ration_by_ledger": "gfx/interface/goals/focus_generic_welfare.dds",
+    "WRK_exec_plant_norm_tables": "gfx/interface/goals/focus_generic_modernize_industry.dds",
+    "WRK_exec_norm_series": "gfx/interface/goals/focus_generic_mass_production.dds",
+    "WRK_exec_republic_supply_chain": "gfx/interface/goals/focus_generic_arms_trade.dds",
+    "WRK_exec_acceptance_commission": "gfx/interface/goals/focus_generic_industrial_experts.dds",
+    "WRK_exec_central_order_bureau": "gfx/interface/goals/focus_generic_stockpile_currency.dds",
+    "WRK_exec_paid_cadre": (
+        "gfx/interface/goals/focus_generic_commonwealth_build_infantry.dds"
+    ),
+    "WRK_exec_staff_by_examination": (
+        "gfx/interface/goals/focus_generic_advanced_military_studies.dds"
+    ),
+    "WRK_exec_fortress_schedules": "gfx/interface/goals/goal_generic_fortify_city.dds",
+    "WRK_exec_motor_columns": "gfx/interface/goals/focus_generic_truck.dds",
+    "WRK_exec_cadre_army": "gfx/interface/goals/focus_generic_combined_arms.dds",
+}
+# Programmes opened in the confederation tree: focus -> (decision, unlock
+# flag, receipt variable). Cadre orders keep a receipt of their own.
+CONFEDERATION_PROGRAMMES = {
+    "WRK_exec_plant_norm_tables": (
+        "WRK_executive_arsenal_order",
+        "ADISCORD_vorkerland_focus_executive_arsenal_orders",
+        "WRK_executive_order_deposit",
+    ),
+    "WRK_exec_paid_cadre": (
+        "WRK_executive_depot_issue",
+        "ADISCORD_vorkerland_focus_executive_depot_issues",
+        "WRK_executive_cadre_deposit",
+    ),
+    "WRK_exec_staff_by_examination": (
+        "WRK_executive_cadre_course",
+        "ADISCORD_vorkerland_focus_executive_cadre_courses",
+        "WRK_executive_cadre_deposit",
+    ),
+}
+# Settlement orders a government may have skipped before the Tower; the
+# confederation focus opens the order only when its flag is still missing.
+CONFEDERATION_LATE_UNLOCKS = {
+    "WRK_exec_district_inventory": (
+        "WRK_executive_district_audit",
+        "ADISCORD_vorkerland_focus_executive_district_audits",
+    ),
+    "WRK_exec_norm_series": (
+        "WRK_executive_norm_order",
+        "ADISCORD_vorkerland_focus_executive_norm_orders",
+    ),
+    "WRK_exec_republic_supply_chain": (
+        "WRK_executive_republic_contract",
+        "ADISCORD_vorkerland_focus_executive_republic_contracts",
+    ),
+}
+# Standing upgrades: focus -> (flag, effect that reads it at delivery).
+CONFEDERATION_ORDER_UPGRADES = {
+    "WRK_exec_rolling_district_audit": (
+        "ADISCORD_vorkerland_focus_executive_rolling_audit",
+        "WRK_executive_audit_reward",
+    ),
+    "WRK_exec_norm_series": (
+        "ADISCORD_vorkerland_focus_executive_norm_series",
+        "WRK_executive_norm_reward",
+    ),
+    "WRK_exec_republic_supply_chain": (
+        "ADISCORD_vorkerland_focus_executive_supply_chain",
+        "WRK_executive_contract_reward",
+    ),
+    "WRK_exec_central_order_bureau": (
+        "ADISCORD_vorkerland_focus_executive_order_bureau",
+        "WRK_executive_order_rebate",
+    ),
+}
+# State-targeted committee orders: decision -> (cached site trigger, delivery
+# effect, done-once state flag). Slot tests stay out of the cached list.
+COMMITTEE_STATE_ORDERS = {
+    "WRK_executive_norm_order": (
+        "WRK_executive_norm_site",
+        "WRK_executive_finish_norm_order",
+        "WRK_executive_norm_built",
+    ),
+    "WRK_executive_district_audit": (
+        "WRK_executive_audit_site",
+        "WRK_executive_finish_district_audit",
+        "WRK_executive_district_audited",
+    ),
+    "WRK_executive_arsenal_order": (
+        "WRK_executive_arsenal_site",
+        "WRK_executive_finish_arsenal_order",
+        "WRK_executive_arsenal_built",
+    ),
+}
+COMMITTEE_TRIGGER_FILE = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+SETTLEMENT_LOCALISATION_KEYS = (
+    "WRK_worker_compact_fund_tt",
+    "ADISCORD_vorkerland_pw_delta_worker_congress",
+    "ADISCORD_vorkerland_pw_delta_worker_cooperatives",
+    "ADISCORD_vorkerland_pw_delta_worker_housing",
+    "ADISCORD_vorkerland_pw_delta_worker_grants",
+    "ADISCORD_vorkerland_worker_cooperative_works",
+    "ADISCORD_vorkerland_worker_cooperative_works_desc",
+    "ADISCORD_vorkerland_worker_cooperative_works_idle_tt",
+    "ADISCORD_vorkerland_worker_cooperative_works_order_tt",
+    "ADISCORD_vorkerland_worker_cooperative_brigades",
+    "ADISCORD_vorkerland_worker_cooperative_brigades_desc",
+    "WRK_executive_audit_recovery_tt",
+    "WRK_executive_branch_closes_tt",
+    "ADISCORD_vorkerland_pw_delta_exec_committee",
+    "ADISCORD_vorkerland_pw_delta_exec_ledger",
+    "ADISCORD_vorkerland_pw_delta_exec_norms",
+    "ADISCORD_vorkerland_pw_delta_exec_demobilization",
+    "ADISCORD_vorkerland_pw_delta_exec_budget",
+    "WRK_executive_order_slot_tt",
+    "WRK_executive_norm_order",
+    "WRK_executive_norm_order_desc",
+    "WRK_executive_norm_order_tt",
+    "WRK_executive_norm_room_tt",
+    "WRK_executive_republic_contract",
+    "WRK_executive_republic_contract_desc",
+    "WRK_executive_republic_contract_tt",
+    "WRK_executive_contract_lean_tt",
+    "WRK_executive_district_audit",
+    "WRK_executive_district_audit_desc",
+    "WRK_executive_district_audit_tt",
+)
+
 # The War for the West follows the joint route's reconstruction in a separate
 # band. Its drop-in sprites resolve to existing native goal art rather than the
 # shared fallback, so they stay outside the drop-in texture manifest; the
@@ -891,6 +1394,7 @@ RECONSTRUCTION_FOCUS_IDS = tuple(
 WRK_TREE_FOCUSES = (
     *PREWAR_WRK_FOCUSES,
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_worker"],
+    *POSTWAR_EXECUTIVE_FOCUSES,
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_joint"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_utilitarian"],
 )
@@ -904,8 +1408,21 @@ def focus_icon_name(focus_id: str) -> str:
     return f"GFX_focus_{focus_id}"
 
 
+# Sprites of both Executive Committee branches name native goal art.
+EXECUTIVE_TEXTURES = {**POSTWAR_EXECUTIVE_TEXTURES, **CONFEDERATION_EXECUTIVE_TEXTURES}
+
+
 def focus_texture_path(focus_id: str) -> str:
-    return FOCUS_FALLBACK_TEXTURE
+    return EXECUTIVE_TEXTURES.get(focus_id, FOCUS_FALLBACK_TEXTURE)
+
+
+def _sprite_texture(source: str, sprite: str) -> str | None:
+    """Texture of one sprite definition, read from its own block."""
+
+    match = re.search(
+        rf'name\s*=\s*"{re.escape(sprite)}"\s+texturefile\s*=\s*"([^"]+)"', source
+    )
+    return match.group(1) if match else None
 
 
 def wrk_focus_icon_name(focus_id: str) -> str:
@@ -918,8 +1435,22 @@ def wrk_focus_texture_path(focus_id: str) -> str:
 
 def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
     issues: list[str] = []
-    if len(WRK_TREE_FOCUSES) != 78 or len(set(WRK_TREE_FOCUSES)) != 78:
-        issues.append("WRK drop-in focus icon manifest must contain 78 unique ids")
+    if len(WRK_TREE_FOCUSES) != 139 or len(set(WRK_TREE_FOCUSES)) != 139:
+        issues.append("WRK drop-in focus icon manifest must contain 139 unique ids")
+    # Committee focuses name native art: bind each sprite to its own texture
+    # instead of accepting that texture anywhere in the file.
+    if len(set(EXECUTIVE_TEXTURES.values())) != len(EXECUTIVE_TEXTURES):
+        issues.append("Executive Committee focuses must not share one picture")
+    for focus_id, texture in EXECUTIVE_TEXTURES.items():
+        sprite = focus_icon_name(focus_id)
+        for source_name, source, name in (
+            (FOCUS_GFX_FILE.as_posix(), focus_gfx, sprite),
+            (SHINE_FILE.as_posix(), shine_source, f"{sprite}_shine"),
+        ):
+            if _sprite_texture(source, name) != texture:
+                issues.append(f"{name} in {source_name} must use {texture}")
+        if texture == FOCUS_FALLBACK_TEXTURE:
+            issues.append(f"{sprite} must not use the placeholder texture")
     for focus_id in FOCUS_IDS:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
@@ -959,6 +1490,7 @@ FOCUS_IDS = (
     *TVA_VARIANT_FOCUSES,
     *SHOWDOWN_FOCUSES["TVA"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_worker"],
+    *POSTWAR_EXECUTIVE_FOCUSES,
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_joint"],
     *POSTWAR_ROUTE_FOCUSES["ADISCORD_vorkerland_route_utilitarian"],
     "WKR_convene_the_production_soviet",
@@ -1142,7 +1674,7 @@ def lifecycle_tree(focus_id: str) -> str:
         return "ADISCORD_vorkerland_prewar_focus"
     if focus_id.startswith("WRK_joint_"):
         return "ADISCORD_vorkerland_joint_postwar_focus"
-    if focus_id.startswith(("WRK_worker_", "WRK_utilitarian_")):
+    if focus_id.startswith(("WRK_worker_", "WRK_executive_", "WRK_utilitarian_")):
         return "ADISCORD_vorkerland_settlement_focus"
     if focus_id.startswith("WRK_"):
         return "ADISCORD_vorkerland_prewar_focus"
@@ -2478,7 +3010,7 @@ DEPTH_AI_PLANS = {
 
 LAYOUT_BANDS = {
     "postwar_expansion": ((8, 28), (1, 17)),
-    "prewar_WRK": ((0, 29), (0, 6)),
+    "prewar_WRK": ((0, 27), (0, 6)),
     "prewar_VAD": ((24, 32), (0, 8)),
     "war_WKR": ((0, 24), (7, 20)),
     "war_VAD": ((26, 64), (7, 20)),
@@ -2501,7 +3033,7 @@ POSTWAR_BAND_BY_ROUTE = {
 }
 
 LAYOUT_ANCHORS = {
-    "WRK_measure_confederation_fault_lines": (15, 0),
+    WRK_PREWAR_ROOT: PREWAR_WRK_ROOT_CELL,
     "VAD_review_district_obligations": (25, 0),
     "WKR_affirm_worker_mandate": (8, 7),
     "VAD_proclaim_joint_charter": (44, 7),
@@ -2828,6 +3360,7 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_unlock_core_restoration_decisions_tt",
         "WRK_worker_recognize_free_republics_tt",
         "WRK_worker_write_constitutional_guarantees_tt",
+        *SETTLEMENT_LOCALISATION_KEYS,
         "TVA_technocratic_directorate_tt",
         "WRK_technocratic_reconstruction_mandate_tt",
         "WRK_technocratic_republic_settlement_tt",
@@ -2840,6 +3373,7 @@ def expected_localisation_keys() -> set[str]:
         "TVA_open_the_remaining_fronts_available_tt",
         "TVA_open_the_remaining_fronts_effect_tt",
         "ADISCORD_vorkerland_prewar_compact_requires_both_tt",
+        "ADISCORD_vorkerland_prewar_compact_centre_absent_tt",
         "ADISCORD_vorkerland_prewar_wrk_compact_course_tt",
         "ADISCORD_vorkerland_prewar_wrk_hardline_course_tt",
         "ADISCORD_vorkerland_prewar_district_compact_course_tt",
@@ -3905,6 +4439,35 @@ def collect_issues() -> list[str]:
     issues.extend(_check_depth_ai_plans())
     issues.extend(_check_war_economy_dynamic(blocks, source))
     issues.extend(_check_focus_gfx(focus_gfx, shine_source))
+    issues.extend(
+        _check_settlement_branch(
+            blocks,
+            grid,
+            focus_decisions,
+            read(COLLAPSE_IDEAS_FILE),
+            read(SETTLEMENT_AGGREGATE_FILE),
+            read(WKR_AI_PLAN_FILE),
+        )
+    )
+    issues.extend(
+        committee_order_issues(
+            focus_decisions, read(PHASE_EFFECTS_FILE), read(COMMITTEE_TRIGGER_FILE)
+        )
+    )
+    issues.extend(
+        _check_confederation_tree(
+            read(CONFEDERATION_FILE),
+            focus_decisions,
+            read(PHASE_EFFECTS_FILE),
+            read(COLLAPSE_IDEAS_FILE),
+            read(SETTLEMENT_AGGREGATE_FILE),
+            read(WKR_AI_PLAN_FILE),
+            {
+                "English": localisation_entries(read(ENGLISH_LOCALISATION)),
+                "Russian": localisation_entries(read(RUSSIAN_LOCALISATION)),
+            },
+        )
+    )
 
     tree_ids = [
         match[1]
@@ -3987,9 +4550,9 @@ def collect_issues() -> list[str]:
     for focus_id in RETIRED_WARTIME_FOCUSES:
         if focus_id in blocks:
             issues.append(f"retired wartime filler must be removed: {focus_id}")
-    if len(FOCUS_IDS) != 263:
+    if len(FOCUS_IDS) != 324:
         issues.append(
-            f"validator manifest must contain 263 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain 324 definitions, found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 
@@ -4134,6 +4697,8 @@ def collect_issues() -> list[str]:
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("postwar", route_flag)
+    for focus_id in POSTWAR_EXECUTIVE_FOCUSES:
+        category_by_focus[focus_id] = ("postwar_executive", POSTWAR_EXECUTIVE_ROUTE)
     for route_flag, focus_ids in RECONSTRUCTION_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("reconstruction", route_flag)
@@ -4172,7 +4737,10 @@ def collect_issues() -> list[str]:
             patron_gates = set(
                 re.findall(r"\b(ADISCORD_vorkerland_prewar_patron_[a-z]+)\s*=\s*yes\b", allow)
             )
+            # Only the root is shared: every other WRK focus belongs to one tree.
             expected_patron = PREWAR_WRK_PATRON_GATES.get(focus_id)
+            if gate == "WRK" and focus_id != WRK_PREWAR_ROOT and expected_patron is None:
+                issues.append(f"{focus_id} belongs to no prewar tree of PREWAR_WRK_TREES")
             if patron_gates != ({expected_patron} if expected_patron else set()):
                 issues.append(
                     f"{focus_id} allow_branch must name exactly the patron gate "
@@ -4273,7 +4841,13 @@ def collect_issues() -> list[str]:
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one idempotent showdown bypass")
-        elif category in {"postwar", "reconstruction", "west", "postwar_expansion"}:
+        elif category in {
+            "postwar",
+            "postwar_executive",
+            "reconstruction",
+            "west",
+            "postwar_expansion",
+        }:
             if flags != {POSTWAR_PHASE}:
                 issues.append(
                     f"{focus_id} must be postwar-only, found phases {sorted(flags)}"
@@ -4290,6 +4864,14 @@ def collect_issues() -> list[str]:
                 )
             if f"has_country_flag = {gate}" not in allow:
                 issues.append(f"{focus_id} is not isolated behind {gate}")
+            # The committee branch belongs to one government of the route;
+            # the congress government must never see it.
+            executive_gate = f"has_country_flag = {POSTWAR_EXECUTIVE_GATE}"
+            if (executive_gate in allow) != (category == "postwar_executive"):
+                issues.append(
+                    f"{focus_id} allow_branch must name {POSTWAR_EXECUTIVE_GATE} "
+                    "exactly when it belongs to the Executive Committee branch"
+                )
             cost_expected = {1, 2, 3, 4, 5, 6, 7}
         else:
             issues.append(f"{focus_id} is not classified in the lifecycle manifest")
@@ -7320,10 +7902,773 @@ def _check_depth_ai_plans() -> list[str]:
     return issues
 
 
+# Reward classes that carry a settlement focus. Political power and stability
+# accompany a reward; they are never the reward itself.
+SETTLEMENT_SUBSTANTIVE_REWARDS = {
+    "aggregate": ("add_to_variable = { var = ADISCORD_vorkerland_pw_",),
+    "programme": tuple(
+        f"unlock_decision_tooltip = {decision}"
+        for decision, _flag, _deposit in SETTLEMENT_PROGRAMMES.values()
+    ),
+    "public_unlock": (
+        "ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked",
+        "unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics",
+    ),
+    "reform": ("ADISCORD_reform_",),
+    "treasury": ("add_to_variable = { var = ADISCORD_economy_treasury ",),
+    "influence": ("add_to_variable = { var = ADISCORD_west_influence_power ",),
+    "institution": (
+        "add_ideas = ADISCORD_vorkerland_worker_",
+        "add_ideas = ADISCORD_vorkerland_erased_nations_relief_",
+    ),
+    "material": ("add_equipment_to_stockpile", "add_building_construction"),
+    "manpower": ("add_manpower",),
+    "command": ("add_command_power",),
+    "experience": ("army_experience",),
+}
+# Aggregate modifiers that feed the weekly budget through the economy cache.
+SETTLEMENT_ECONOMIC_MODIFIERS = frozenset(
+    {
+        "industrial_capacity_factory",
+        "industry_repair_factor",
+        "production_factory_max_efficiency_factor",
+        "production_factory_efficiency_gain_factor",
+        "production_speed_buildings_factor",
+        "consumer_goods_factor",
+    }
+)
+
+
+def settlement_reward_classes(block: str) -> set[str]:
+    """Substantive reward classes of one settlement focus."""
+
+    rewards = _blocks(block, "completion_reward")
+    reward = " ".join(rewards[0].split()) if len(rewards) == 1 else ""
+    return {
+        name
+        for name, tokens in SETTLEMENT_SUBSTANTIVE_REWARDS.items()
+        if any(token in reward for token in tokens)
+    }
+
+
+def settlement_aggregate_fields(dynamic: str) -> dict[str, str]:
+    """Country variable -> modifier of the postwar aggregate."""
+
+    definitions = _blocks(dynamic, SETTLEMENT_AGGREGATE)
+    if len(definitions) != 1:
+        return {}
+    return {
+        variable: modifier
+        for modifier, variable in re.findall(
+            r"(?m)^\s*([a-z_]+)\s*=\s*(ADISCORD_vorkerland_pw_[a-z_]+)\s*$",
+            definitions[0],
+        )
+    }
+
+
+def settlement_aggregate_delta(
+    block: str, fields: dict[str, str], ideas: str
+) -> tuple[dict[str, float], dict[str, float], list[str]]:
+    """Applied aggregate change, previewed change and preview defects of a focus."""
+
+    issues: list[str] = []
+    reward = " ".join("\n".join(_blocks(block, "completion_reward")).split())
+    applied: Counter[str] = Counter()
+    for variable, raw in re.findall(
+        r"add_to_variable = \{ var = (ADISCORD_vorkerland_pw_[a-z_]+) value = (-?\d+(?:\.\d+)?) \}",
+        reward,
+    ):
+        if variable not in fields:
+            issues.append(f"{variable} is not read by {SETTLEMENT_AGGREGATE}")
+            continue
+        applied[fields[variable]] += float(raw)
+    shown: Counter[str] = Counter()
+    for idea_id in re.findall(
+        r"effect_tooltip = \{ add_ideas = (ADISCORD_vorkerland_pw_delta_[a-z_]+) \}",
+        reward,
+    ):
+        definitions = _blocks(ideas, idea_id)
+        if len(definitions) != 1:
+            issues.append(f"preview idea {idea_id} must have one definition")
+            continue
+        if not re.search(r"allowed\s*=\s*\{\s*always\s*=\s*no\s*\}", definitions[0]):
+            issues.append(f"preview idea {idea_id} must never be installable")
+        for modifiers in _blocks(definitions[0], "modifier"):
+            for modifier, raw in re.findall(
+                r"(?m)^\s*([a-z_]+)\s*=\s*(-?\d+(?:\.\d+)?)\s*$", modifiers
+            ):
+                shown[modifier] += float(raw)
+    for hidden in _blocks(block, "hidden_effect"):
+        if "add_ideas = ADISCORD_vorkerland_pw_delta_" in hidden:
+            issues.append("a preview idea is installed by a hidden effect")
+    rounded_applied = {key: round(value, 6) for key, value in applied.items()}
+    rounded_shown = {key: round(value, 6) for key, value in shown.items()}
+    if applied:
+        if "ADISCORD_vorkerland_pw_ensure_institutions = yes" not in reward:
+            issues.append("an aggregate change must install the aggregate")
+        if (
+            set(applied) & SETTLEMENT_ECONOMIC_MODIFIERS
+            and "ADISCORD_economy_mark_dirty = yes" not in reward
+        ):
+            issues.append("an economic aggregate change must invalidate the economy cache")
+    return rounded_applied, rounded_shown, issues
+
+
+def settlement_free_path_units(blocks: dict[str, str]) -> int:
+    """Focus units of the committee branch with one alternative of its choice."""
+
+    skipped = POSTWAR_EXECUTIVE_CHOICE[1]
+    return sum(
+        _focus_cost(blocks.get(focus_id, ""))
+        for focus_id in POSTWAR_EXECUTIVE_FOCUSES
+        if focus_id != skipped
+    )
+
+
+def planned_focuses(plans: str, plan_id: str) -> list[str] | None:
+    """Focuses an AI plan names, in order; None when the plan is not defined once."""
+
+    definitions = _blocks(plans, plan_id)
+    if len(definitions) != 1:
+        return None
+    focus_lists = _blocks(definitions[0], "ai_national_focuses")
+    return re.findall(r"\b(WRK_[A-Za-z0-9_]+)\b", focus_lists[0]) if focus_lists else []
+
+
+def programme_contract_issues(
+    blocks: dict[str, str], programmes: dict[str, tuple[str, str, str]], decisions: str
+) -> list[str]:
+    """A paid programme: one native debit, one receipt, a gate and a refund path."""
+
+    issues: list[str] = []
+    for focus_id, (decision_id, flag, deposit) in programmes.items():
+        block = blocks.get(focus_id, "")
+        if block.count(f"unlock_decision_tooltip = {decision_id}") != 1:
+            issues.append(f"{focus_id} must show the unlock of {decision_id} once")
+        if block.count(f"set_country_flag = {flag}") != 1:
+            issues.append(f"{focus_id} must set the programme unlock {flag} once")
+        definitions = _blocks(decisions, decision_id)
+        if len(definitions) != 1:
+            issues.append(f"programme {decision_id} must have one definition")
+            continue
+        decision = " ".join(definitions[0].split())
+        cost = re.search(r"\bcost = (\d+)\b", decision)
+        if cost is None or int(cost.group(1)) <= 0:
+            issues.append(f"programme {decision_id} must have a native price")
+            continue
+        for token, reason in (
+            (f"has_country_flag = {flag}", "is not gated by its focus unlock"),
+            ("ADISCORD_vorkerland_is_not_wartime_claimant = yes", "must hide for wartime claimants"),
+            ("fire_only_once = no", "must be repeatable"),
+            (
+                f"set_variable = {{ var = {deposit} value = {cost.group(1)} }}",
+                "must record a receipt equal to its price",
+            ),
+            ("cancel_trigger = {", "needs a cancellation condition"),
+            ("cancel_effect = {", "must settle its receipt on cancellation"),
+            ("remove_effect = {", "must deliver through its completion callback"),
+            ("effect_tooltip = {", "must preview its result"),
+        ):
+            if token not in decision:
+                issues.append(f"programme {decision_id} {reason}")
+        if not re.search(r"\bdays_remove = \d+\b", decision):
+            issues.append(f"programme {decision_id} needs a duration")
+        if "custom_cost_text" in decision or "custom_cost_trigger" in decision:
+            issues.append(f"programme {decision_id} must keep its native single-currency price")
+        available = " ".join("\n".join(_blocks(definitions[0], "available")).split())
+        if deposit.startswith("WRK_executive_") and "WRK_executive_orders_open = yes" not in decision:
+            issues.append(f"programme {decision_id} must belong to the executive government")
+        if deposit == "WRK_executive_order_deposit":
+            if "WRK_executive_order_slot_free = yes" not in available:
+                issues.append(f"programme {decision_id} must wait for the shared receipt")
+        elif f"NOT = {{ has_variable = {deposit} }}" not in available:
+            issues.append(f"programme {decision_id} must wait for its own receipt")
+    return issues
+
+
+def committee_order_issues(decisions: str, effects: str, triggers: str) -> list[str]:
+    """State-targeted committee orders: a real limit and no slot test in the cached list."""
+
+    issues: list[str] = []
+    for decision_id, (site, finish, done_flag) in COMMITTEE_STATE_ORDERS.items():
+        definitions = _blocks(decisions, decision_id)
+        site_blocks = _blocks(triggers, site)
+        finish_blocks = _blocks(effects, finish)
+        if len(definitions) != 1 or len(site_blocks) != 1 or len(finish_blocks) != 1:
+            issues.append(f"committee order {decision_id} lacks its decision, site or delivery")
+            continue
+        decision = " ".join(definitions[0].split())
+        cached = " ".join(site_blocks[0].split())
+        delivery = " ".join(finish_blocks[0].split())
+        if f"target_trigger = {{ FROM = {{ {site} = yes }} }}" not in decision:
+            issues.append(f"committee order {decision_id} must list its targets through {site}")
+        # A cached target list holds persistent facts only; anything that
+        # changes with construction is tested when the order is placed.
+        if "free_building_slots" in cached:
+            issues.append(f"{site} must keep building-slot tests out of the cached target list")
+        if "is_owned_and_controlled_by = ROOT" not in cached:
+            issues.append(f"{site} must require the region to be held")
+        if f"NOT = {{ has_state_flag = {done_flag} }}" not in cached:
+            issues.append(f"{site} must stop at one {decision_id} per region")
+        if delivery.count(f"set_state_flag = {done_flag}") != 1:
+            issues.append(f"{finish} must mark the region with {done_flag} once")
+        if f"{site} = yes" not in delivery:
+            issues.append(f"{finish} must recheck {site} at delivery")
+        room = re.search(r"FROM = \{ (WRK_executive_\w+_room) = yes \}", decision)
+        if room is not None:
+            room_blocks = _blocks(triggers, room.group(1))
+            available = " ".join("\n".join(_blocks(definitions[0], "available")).split())
+            if len(room_blocks) != 1 or "free_building_slots" not in room_blocks[0]:
+                issues.append(f"{room.group(1)} must test the building slot of the region")
+            if f"FROM = {{ {room.group(1)} = yes }}" not in available:
+                issues.append(f"{decision_id} must test its building slot when the order is placed")
+            if f"{room.group(1)} = yes" not in delivery:
+                issues.append(f"{finish} must recheck {room.group(1)} at delivery")
+    arsenal_site = " ".join("\n".join(_blocks(triggers, "WRK_executive_arsenal_site")).split())
+    if "has_state_flag = WRK_executive_district_audited" not in arsenal_site.replace(
+        "NOT = { has_state_flag = WRK_executive_district_audited }", ""
+    ):
+        issues.append("an arsenal order must need a region the audit has put on the books")
+    lean = " ".join("\n".join(_blocks(effects, "WRK_executive_contract_lean")).split())
+    lean_gate = " ".join("\n".join(_blocks(triggers, "WRK_executive_contract_lean_open")).split())
+    if (
+        "limit = { WRK_executive_contract_lean_open = yes }" not in lean
+        or lean.count("add_to_variable = { var = WRK_executive_contract_leans value = 1 }") != 1
+        or "check_variable = { var = WRK_executive_contract_leans value = 5 compare = less_than }"
+        not in lean_gate
+    ):
+        issues.append("the republic contract's lean must stop after five counted deliveries")
+    return issues
+
+
+CONFEDERATION_SUBSTANTIVE_REWARDS = {
+    **SETTLEMENT_SUBSTANTIVE_REWARDS,
+    "programme": (
+        *(
+            f"unlock_decision_tooltip = {decision}"
+            for decision, _flag, _deposit in CONFEDERATION_PROGRAMMES.values()
+        ),
+        "unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district",
+    ),
+    "upgrade": tuple(
+        f"set_country_flag = {flag}" for flag, _effect in CONFEDERATION_ORDER_UPGRADES.values()
+    ),
+    "rebuild_slot": ("custom_effect_tooltip = WRK_route_rebuild_slot_tt",),
+    "growth": ("_development_monthly_growth = yes",),
+    "sites": ("add_extra_state_shared_building_slots",),
+}
+
+
+def confederation_reward_classes(block: str) -> set[str]:
+    """Substantive reward classes of one Executive Committee focus of the confederation."""
+
+    rewards = _blocks(block, "completion_reward")
+    reward = " ".join(rewards[0].split()) if len(rewards) == 1 else ""
+    return {
+        name
+        for name, tokens in CONFEDERATION_SUBSTANTIVE_REWARDS.items()
+        if any(token in reward for token in tokens)
+    }
+
+
+def confederation_government(focus_id: str) -> str:
+    """Which government draws a confederation focus: congress, executive or both."""
+
+    if focus_id in CONFEDERATION_COUNCIL_FOCUSES:
+        return "congress"
+    if focus_id in CONFEDERATION_EXECUTIVE_FOCUSES:
+        return "executive"
+    return "shared"
+
+
+def confederation_can_share_view(left: str, right: str) -> bool:
+    """Only one government's domestic branches are drawn, so their cells may coincide."""
+
+    governments = {confederation_government(left), confederation_government(right)}
+    return governments != {"congress", "executive"}
+
+
+def confederation_view(government: str) -> tuple[str, ...]:
+    """Focuses the given government sees in the confederation tree."""
+
+    domestic = (
+        CONFEDERATION_COUNCIL_FOCUSES
+        if government == "congress"
+        else CONFEDERATION_EXECUTIVE_FOCUSES
+    )
+    return (*CONFEDERATION_SHARED_FOCUSES, *domestic)
+
+
+def confederation_reachable(blocks: dict[str, str], government: str) -> set[str]:
+    """Focuses a government can complete; a hidden prerequisite never counts."""
+
+    view = set(confederation_view(government))
+    reachable: set[str] = set()
+    pending = set(view)
+    while pending:
+        ready = {
+            focus_id
+            for focus_id in pending
+            if all(
+                group & reachable
+                for group in _prerequisite_groups(blocks.get(focus_id, ""))
+            )
+        }
+        if not ready:
+            break
+        reachable |= ready
+        pending -= ready
+    return reachable
+
+
+def confederation_path_units(blocks: dict[str, str], focus_ids: tuple[str, ...]) -> int:
+    """Focus units of one branch with a single alternative of its exclusive pair."""
+
+    skipped: set[str] = set()
+    for focus_id in focus_ids:
+        if focus_id in skipped:
+            continue
+        skipped |= _mutually_exclusive_focuses(blocks.get(focus_id, "")) & set(focus_ids)
+    return sum(
+        _focus_cost(blocks.get(focus_id, "")) for focus_id in focus_ids if focus_id not in skipped
+    )
+
+
+def _check_confederation_tree(
+    source: str,
+    decisions: str,
+    effects: str,
+    ideas: str,
+    dynamic: str,
+    plans: str,
+    localisations: dict[str, dict[str, str]],
+) -> list[str]:
+    """Two governments share the confederation tree without sharing its domestic content."""
+
+    issues: list[str] = []
+    try:
+        blocks = focus_blocks(source)
+    except ValueError as exc:
+        return [f"confederation tree could not be parsed: {exc}"]
+    grid = resolved_positions(blocks)
+    manifest = (
+        *CONFEDERATION_SHARED_FOCUSES,
+        *CONFEDERATION_COUNCIL_FOCUSES,
+        *CONFEDERATION_EXECUTIVE_FOCUSES,
+    )
+    if set(blocks) != set(manifest) or len(manifest) != len(set(manifest)):
+        issues.append(
+            "confederation focuses differ from the manifest: "
+            f"missing={sorted(set(manifest) - set(blocks))}, extra={sorted(set(blocks) - set(manifest))}"
+        )
+        return issues
+
+    gate = f"has_country_flag = {POSTWAR_EXECUTIVE_GATE}"
+    for focus_id, block in blocks.items():
+        allow = " ".join(_allow_branch(block).split())
+        government = confederation_government(focus_id)
+        expected = {
+            "congress": f"allow_branch = {{ NOT = {{ {gate} }} }}",
+            "executive": f"allow_branch = {{ {gate} }}",
+            "shared": "",
+        }[government]
+        if allow != expected:
+            issues.append(
+                f"{focus_id} belongs to the {government} view and must carry "
+                f"{expected or 'no allow_branch'}, found {allow or 'none'}"
+            )
+
+    for government in ("congress", "executive"):
+        view = confederation_view(government)
+        cells: dict[tuple[int, int], str] = {}
+        rows: dict[int, list[tuple[int, str]]] = {}
+        for focus_id in view:
+            cell = grid.get(focus_id)
+            if cell is None:
+                issues.append(f"{focus_id} has no grid cell")
+                continue
+            if cell in cells:
+                issues.append(
+                    f"{government} view draws {cells[cell]} and {focus_id} in cell {cell}"
+                )
+            cells[cell] = focus_id
+            rows.setdefault(cell[1], []).append((cell[0], focus_id))
+        for row in rows.values():
+            ordered = sorted(row)
+            for (left_x, left), (right_x, right) in zip(ordered, ordered[1:]):
+                if right_x - left_x < 2:
+                    issues.append(
+                        f"{government} view: {left} and {right} need a free cell between them"
+                    )
+        unreachable = sorted(set(view) - confederation_reachable(blocks, government))
+        if unreachable:
+            issues.append(f"the {government} government cannot reach {unreachable}")
+        for focus_id in view:
+            for prerequisite in _prerequisites(blocks[focus_id]):
+                if prerequisite not in blocks:
+                    issues.append(f"{focus_id} requires unknown focus {prerequisite}")
+                    continue
+                if grid[prerequisite][1] >= grid[focus_id][1]:
+                    issues.append(f"{focus_id} must be drawn below {prerequisite}")
+    for cell_owner, cell in grid.items():
+        for other, other_cell in grid.items():
+            if (
+                cell_owner < other
+                and cell == other_cell
+                and confederation_can_share_view(cell_owner, other)
+            ):
+                issues.append(f"grid cell {cell} is shared by {cell_owner} and {other}")
+
+    # A shared focus that needs one government's branch names the other
+    # government's counterpart in the same prerequisite block.
+    council = set(CONFEDERATION_COUNCIL_FOCUSES)
+    executive = set(CONFEDERATION_EXECUTIVE_FOCUSES)
+    for focus_id in CONFEDERATION_SHARED_FOCUSES:
+        for group in _prerequisite_groups(blocks[focus_id]):
+            if bool(group & council) != bool(group & executive):
+                issues.append(
+                    f"shared focus {focus_id} needs {sorted(group)} of one government only"
+                )
+    for focus_id in (*CONFEDERATION_COUNCIL_FOCUSES, *CONFEDERATION_EXECUTIVE_FOCUSES):
+        other = executive if focus_id in council else council
+        if _prerequisites(blocks[focus_id]) & other:
+            issues.append(f"{focus_id} requires a focus of the other government")
+        if _mutually_exclusive_focuses(blocks[focus_id]) & other:
+            issues.append(f"{focus_id} excludes a focus of the other government")
+
+    for focus_id in CONFEDERATION_EXECUTIVE_FOCUSES:
+        if grid.get(focus_id) != CONFEDERATION_EXECUTIVE_POSITIONS[focus_id]:
+            issues.append(
+                f"{focus_id} position {grid.get(focus_id)} != "
+                f"{CONFEDERATION_EXECUTIVE_POSITIONS[focus_id]}"
+            )
+        icon = re.findall(r"(?m)^\s*icon\s*=\s*([A-Za-z0-9_]+)\s*$", blocks[focus_id])
+        if icon != [focus_icon_name(focus_id)]:
+            issues.append(f"{focus_id} must use icon {focus_icon_name(focus_id)}, found {icon}")
+        classes = confederation_reward_classes(blocks[focus_id])
+        if len(classes) < 2:
+            issues.append(
+                f"{focus_id} needs two substantive rewards besides political power "
+                f"and stability, found {sorted(classes)}"
+            )
+        if "ADISCORD_reform_" in blocks[focus_id]:
+            issues.append(
+                f"{focus_id} must not repeat a development reform of the congress branches"
+            )
+        ai = _blocks(blocks[focus_id], "ai_will_do")
+        if len(ai) != 1 or not re.search(r"\bbase\s*=\s*[1-9]\d*\b", ai[0]):
+            issues.append(f"{focus_id} must define a positive AI weight")
+
+    fields = settlement_aggregate_fields(dynamic)
+    for focus_id, block in blocks.items():
+        applied, shown, defects = settlement_aggregate_delta(block, fields, ideas)
+        issues.extend(f"{focus_id}: {defect}" for defect in defects)
+        if applied != shown:
+            issues.append(
+                f"{focus_id} previews {shown} but applies {applied} to the aggregate"
+            )
+
+    for left, right in CONFEDERATION_EXECUTIVE_CHOICES:
+        for focus_id, other in ((left, right), (right, left)):
+            if _mutually_exclusive_focuses(blocks[focus_id]) != {other}:
+                issues.append(f"{focus_id} must be mutually exclusive with {other}")
+        if _focus_cost(blocks[left]) != _focus_cost(blocks[right]):
+            issues.append(f"{left} and {right} must take the same time")
+        rejoin = [
+            focus_id
+            for focus_id in CONFEDERATION_EXECUTIVE_FOCUSES
+            if frozenset({left, right}) in _prerequisite_groups(blocks[focus_id])
+        ]
+        if len(rejoin) != 1:
+            issues.append(
+                f"{left} and {right} must rejoin in one prerequisite block, found {rejoin}"
+            )
+        # The alternatives change different things, not the same value twice.
+        left_delta = settlement_aggregate_delta(blocks[left], fields, ideas)[0]
+        right_delta = settlement_aggregate_delta(blocks[right], fields, ideas)[0]
+        if not left_delta or not right_delta or set(left_delta) == set(right_delta):
+            issues.append(f"{left} and {right} must change different parts of the aggregate")
+    paired = {focus_id for pair in CONFEDERATION_EXECUTIVE_CHOICES for focus_id in pair}
+    for focus_id in CONFEDERATION_EXECUTIVE_FOCUSES:
+        if focus_id not in paired and _mutually_exclusive_focuses(blocks[focus_id]):
+            issues.append(f"{focus_id} has an undeclared exclusive choice")
+
+    for branch, (council_ids, executive_ids) in CONFEDERATION_BRANCHES.items():
+        council_units = confederation_path_units(blocks, council_ids)
+        executive_units = confederation_path_units(blocks, executive_ids)
+        if council_units != executive_units:
+            issues.append(
+                f"{branch} takes {council_units * 7} days for the congress and "
+                f"{executive_units * 7} days for the Executive Committee"
+            )
+        pairs = [pair for pair in CONFEDERATION_EXECUTIVE_CHOICES if pair[0] in executive_ids]
+        if len(pairs) != 1:
+            issues.append(f"the Executive Committee {branch} branch needs one exclusive pair")
+
+    issues.extend(programme_contract_issues(blocks, CONFEDERATION_PROGRAMMES, decisions))
+    for focus_id, (decision_id, flag) in CONFEDERATION_LATE_UNLOCKS.items():
+        reward = " ".join("\n".join(_blocks(blocks[focus_id], "completion_reward")).split())
+        expected = (
+            f"if = {{ limit = {{ NOT = {{ has_country_flag = {flag} }} }} "
+            f"unlock_decision_tooltip = {decision_id} "
+            f"hidden_effect = {{ set_country_flag = {flag} }} }}"
+        )
+        if expected not in reward:
+            issues.append(
+                f"{focus_id} must open {decision_id} only for a government that skipped it"
+            )
+        if f"has_country_flag = {flag}" not in " ".join(
+            "\n".join(_blocks(decisions, decision_id)).split()
+        ):
+            issues.append(f"{decision_id} is not gated by {flag}")
+    for focus_id, (flag, consumer) in CONFEDERATION_ORDER_UPGRADES.items():
+        if blocks[focus_id].count(f"set_country_flag = {flag}") != 1:
+            issues.append(f"{focus_id} must set the standing upgrade {flag} once")
+        if f"has_country_flag = {flag}" not in "\n".join(_blocks(effects, consumer)):
+            issues.append(f"upgrade {flag} is not read by {consumer}")
+
+    for plan_id, government, hidden in (
+        (SETTLEMENT_AI_PLAN, "executive", council),
+        (CONGRESS_AI_PLAN, "congress", executive),
+    ):
+        planned = planned_focuses(plans, plan_id)
+        definitions = _blocks(plans, plan_id)
+        if planned is None:
+            issues.append(f"AI plan {plan_id} must have one definition")
+            continue
+        enable = " ".join("\n".join(_blocks(definitions[0], "enable")).split())
+        excluded = f"NOT = {{ {gate} }}" in enable
+        required = gate in enable.replace(f"NOT = {{ {gate} }}", "")
+        if (government == "executive") != required or (government == "congress") != excluded:
+            issues.append(f"AI plan {plan_id} must be enabled for the {government} government only")
+        named_hidden = sorted(set(planned) & hidden)
+        if named_hidden:
+            issues.append(f"AI plan {plan_id} names focuses hidden from its government {named_hidden}")
+        missing = sorted(set(CONFEDERATION_SHARED_FOCUSES) - set(planned))
+        if missing:
+            issues.append(f"AI plan {plan_id} lacks shared focuses {missing}")
+        visible = [focus_id for focus_id in planned if focus_id in blocks]
+        done: set[str] = set()
+        for focus_id in visible:
+            if _mutually_exclusive_focuses(blocks[focus_id]) & done:
+                issues.append(f"AI plan {plan_id} takes both alternatives at {focus_id}")
+            if not all(group & done for group in _prerequisite_groups(blocks[focus_id])):
+                issues.append(f"AI plan {plan_id} reaches {focus_id} before its prerequisites")
+            done.add(focus_id)
+        if government == "executive":
+            takeable = executive - {right for _left, right in CONFEDERATION_EXECUTIVE_CHOICES}
+            chosen = done & executive
+            if len(chosen) != len(takeable) or any(
+                len(chosen & set(pair)) != 1 for pair in CONFEDERATION_EXECUTIVE_CHOICES
+            ):
+                issues.append(
+                    f"AI plan {plan_id} must take every Executive Committee focus with "
+                    f"one alternative of each pair, found {sorted(chosen)}"
+                )
+
+    tooltip_keys = set(
+        re.findall(r"\bcustom_effect_tooltip\s*=\s*([A-Za-z0-9_]+)", source)
+    )
+    preview_keys = set(
+        re.findall(r"add_ideas = (ADISCORD_vorkerland_pw_delta_[a-z_]+)", source)
+    )
+    decision_keys = {
+        key
+        for decision, _flag, _deposit in CONFEDERATION_PROGRAMMES.values()
+        for key in (decision, f"{decision}_desc", f"{decision}_tt")
+    }
+    focus_keys = {
+        key
+        for focus_id in CONFEDERATION_EXECUTIVE_FOCUSES
+        for key in (focus_id, f"{focus_id}_desc")
+    }
+    for language, entries in localisations.items():
+        missing = sorted((tooltip_keys | preview_keys | decision_keys | focus_keys) - set(entries))
+        if missing:
+            issues.append(f"{language} localisation lacks confederation keys {missing}")
+        for key in sorted(focus_keys | decision_keys):
+            value = entries.get(key, "")
+            if key.endswith("_desc") and re.search(r"[§£%]|\d", value):
+                issues.append(f"{language} {key} must stay narrative and state no effects")
+    return issues
+
+
+def _check_settlement_branch(
+    blocks: dict[str, str],
+    grid: dict[str, tuple[int, int]],
+    decisions: str,
+    ideas: str,
+    dynamic: str,
+    plans: str,
+) -> list[str]:
+    """Worker settlement rewards and the Executive Committee branch.
+
+    The common route has to pay a real result for every focus, and the branch
+    of the executive government has to be a set of choices that the congress
+    government neither sees nor needs.
+    """
+
+    issues: list[str] = []
+    worker_route = POSTWAR_ROUTE_FOCUSES[POSTWAR_EXECUTIVE_ROUTE]
+    fields = settlement_aggregate_fields(dynamic)
+    if not fields:
+        issues.append(f"{SETTLEMENT_AGGREGATE} must have one readable definition")
+
+    for focus_id in (*worker_route, *POSTWAR_EXECUTIVE_FOCUSES):
+        block = blocks.get(focus_id, "")
+        classes = settlement_reward_classes(block)
+        if len(classes) < 2:
+            issues.append(
+                f"settlement focus {focus_id} needs two substantive rewards besides "
+                f"political power and stability, found {sorted(classes)}"
+            )
+        applied, shown, defects = settlement_aggregate_delta(block, fields, ideas)
+        issues.extend(f"{focus_id}: {defect}" for defect in defects)
+        if applied != shown:
+            issues.append(
+                f"{focus_id} previews {shown} but applies {applied} to the aggregate"
+            )
+
+    for focus_id in POSTWAR_EXECUTIVE_FOCUSES:
+        block = blocks.get(focus_id, "")
+        if grid.get(focus_id) != POSTWAR_EXECUTIVE_POSITIONS[focus_id]:
+            issues.append(
+                f"{focus_id} position {grid.get(focus_id)} != "
+                f"{POSTWAR_EXECUTIVE_POSITIONS[focus_id]}"
+            )
+        if _focus_cost(block) != POSTWAR_EXECUTIVE_COSTS[focus_id]:
+            issues.append(
+                f"{focus_id} cost {_focus_cost(block)} != {POSTWAR_EXECUTIVE_COSTS[focus_id]}"
+            )
+        if _prerequisite_groups(block) != POSTWAR_EXECUTIVE_PREREQUISITES[focus_id]:
+            issues.append(
+                f"{focus_id} prerequisites {_prerequisite_groups(block)} != "
+                f"{POSTWAR_EXECUTIVE_PREREQUISITES[focus_id]}"
+            )
+
+    # A free cell separates neighbours on a row, across both groups.
+    rows: dict[int, list[tuple[int, str]]] = {}
+    for focus_id in (*worker_route, *POSTWAR_EXECUTIVE_FOCUSES):
+        if focus_id in grid:
+            rows.setdefault(grid[focus_id][1], []).append((grid[focus_id][0], focus_id))
+    for row in rows.values():
+        ordered = sorted(row)
+        for (left_x, left), (right_x, right) in zip(ordered, ordered[1:]):
+            if right_x - left_x < 2:
+                issues.append(f"{left} and {right} need a free cell between them")
+
+    # The congress government never depends on the committee.
+    for focus_id in worker_route:
+        if _prerequisites(blocks.get(focus_id, "")) & set(POSTWAR_EXECUTIVE_FOCUSES):
+            issues.append(f"{focus_id} must not require an Executive Committee focus")
+
+    left, right = POSTWAR_EXECUTIVE_CHOICE
+    for focus_id, other in ((left, right), (right, left)):
+        block = blocks.get(focus_id, "")
+        if _mutually_exclusive_focuses(block) != {other}:
+            issues.append(f"{focus_id} must be mutually exclusive with {other}")
+        ai = _blocks(block, "ai_will_do")
+        if len(ai) != 1 or not _blocks(ai[0], "modifier"):
+            issues.append(f"committee choice {focus_id} needs contextual AI weighting")
+    rejoin = [
+        focus_id
+        for focus_id in POSTWAR_EXECUTIVE_FOCUSES
+        if frozenset(POSTWAR_EXECUTIVE_CHOICE) in _prerequisite_groups(blocks.get(focus_id, ""))
+    ]
+    if len(rejoin) != 1:
+        issues.append(
+            "the committee choice must rejoin in one prerequisite block naming both "
+            f"alternatives, found {rejoin}"
+        )
+    for focus_id in POSTWAR_EXECUTIVE_FOCUSES:
+        exclusive = _mutually_exclusive_focuses(blocks.get(focus_id, ""))
+        if focus_id not in POSTWAR_EXECUTIVE_CHOICE and exclusive:
+            issues.append(f"{focus_id} has an undeclared exclusive choice {sorted(exclusive)}")
+
+    units = settlement_free_path_units(blocks)
+    if not 12 <= units <= POSTWAR_EXECUTIVE_MAX_PATH_UNITS:
+        issues.append(
+            f"the committee branch costs {units} units ({units * 7} days), expected "
+            f"84-{POSTWAR_EXECUTIVE_MAX_PATH_UNITS * 7} days"
+        )
+    opened = [
+        focus_id for focus_id in POSTWAR_EXECUTIVE_FOCUSES if focus_id in SETTLEMENT_PROGRAMMES
+    ]
+    if len(opened) < 2:
+        issues.append("the committee branch must open at least two paid programmes")
+
+    # The Tower replaces the tree: it warns the executive government and its
+    # AI finishes the committee programme first.
+    tower = blocks.get(POSTWAR_ROUTE_TERMINALS[POSTWAR_EXECUTIVE_ROUTE], "")
+    unfinished = " ".join(
+        (
+            f"has_country_flag = {POSTWAR_EXECUTIVE_GATE}",
+            f"NOT = {{ has_completed_focus = {POSTWAR_EXECUTIVE_FINAL} }}",
+        )
+    )
+    tower_reward = " ".join("\n".join(_blocks(tower, "completion_reward")).split())
+    if f"{unfinished} }} custom_effect_tooltip = WRK_executive_branch_closes_tt" not in tower_reward:
+        issues.append("the worker Unity Tower must warn about unfinished committee focuses")
+    tower_ai = " ".join("\n".join(_blocks(tower, "ai_will_do")).split())
+    if f"modifier = {{ factor = 0 {unfinished} }}" not in tower_ai:
+        issues.append("the executive AI must finish the committee branch before the Tower")
+
+    issues.extend(programme_contract_issues(blocks, SETTLEMENT_PROGRAMMES, decisions))
+
+    housing_pair = next(
+        pair for pair in POSTWAR_POLICY_CHOICE_PAIRS if pair[0] in worker_route
+    )
+    for plan_id in (SETTLEMENT_AI_PLAN, CONGRESS_AI_PLAN):
+        route_plan = planned_focuses(plans, plan_id)
+        if route_plan is None:
+            issues.append(f"AI plan {plan_id} must have one definition")
+            continue
+        taken = [focus_id for focus_id in housing_pair if focus_id in route_plan]
+        if len(taken) != 1:
+            issues.append(
+                f"AI plan {plan_id} must take exactly one of the housing and grants "
+                f"alternatives, found {taken}"
+            )
+        hidden = sorted(set(route_plan) & set(POSTWAR_EXECUTIVE_FOCUSES))
+        if plan_id == CONGRESS_AI_PLAN and hidden:
+            issues.append(f"AI plan {plan_id} names focuses hidden from its government {hidden}")
+
+    planned = planned_focuses(plans, SETTLEMENT_AI_PLAN)
+    if planned is not None:
+        chosen = [focus_id for focus_id in POSTWAR_EXECUTIVE_CHOICE if focus_id in planned]
+        if len(chosen) != 1:
+            issues.append(
+                f"AI plan must take exactly one committee alternative, found {chosen}"
+            )
+        expected = set(POSTWAR_EXECUTIVE_FOCUSES) - set(POSTWAR_EXECUTIVE_CHOICE) | set(chosen)
+        named = {focus_id for focus_id in planned if focus_id in POSTWAR_EXECUTIVE_FOCUSES}
+        if named != expected:
+            issues.append(
+                f"AI plan committee focuses {sorted(named)} != {sorted(expected)}"
+            )
+        terminal = POSTWAR_ROUTE_TERMINALS[POSTWAR_EXECUTIVE_ROUTE]
+        if terminal in planned and any(
+            planned.index(focus_id) > planned.index(terminal) for focus_id in named
+        ):
+            issues.append("AI plan must finish the committee branch before the Unity Tower")
+        done: set[str] = set()
+        for focus_id in planned:
+            if focus_id not in named:
+                done.add(focus_id)
+                continue
+            if not all(group & done for group in _prerequisite_groups(blocks.get(focus_id, ""))):
+                issues.append(f"AI plan reaches {focus_id} before its prerequisites")
+            done.add(focus_id)
+    return issues
+
+
 def _postwar_route_of(focus_id: str) -> str | None:
     for route in ("worker", "joint", "utilitarian"):
         if focus_id.startswith(f"WRK_{route}_"):
             return route
+    # The committee branch is drawn on the worker route's canvas.
+    if focus_id in POSTWAR_EXECUTIVE_FOCUSES:
+        return "worker"
     return None
 
 
@@ -7335,7 +8680,7 @@ def _can_share_view(left: str, right: str) -> bool:
     if ((left in PREWAR_WRK_FOCUSES and right in PREWAR_VAD_FOCUSES)
             or (right in PREWAR_WRK_FOCUSES and left in PREWAR_VAD_FOCUSES)):
         return False
-    # Only the branch of the apparatus named in preparation.1 is drawn.
+    # Only the tree of the apparatus named in preparation.1 is drawn.
     left_gate = PREWAR_WRK_PATRON_GATES.get(left)
     right_gate = PREWAR_WRK_PATRON_GATES.get(right)
     if left_gate and right_gate and left_gate != right_gate:
@@ -7428,6 +8773,73 @@ def _check_layout(
             issues.append(f"{focus_id} uses unsupported search filters {unknown}")
 
     issues.extend(_check_layout_pitch(blocks, grid))
+    issues.extend(prewar_tree_issues(blocks, grid))
+    return issues
+
+
+def prewar_tree_issues(
+    blocks: dict[str, str], grid: dict[str, tuple[int, int]]
+) -> list[str]:
+    """Hold each apparatus tree to its manifest and to the block layout.
+
+    A tree is drawn alone, so its rules are local: every focus sits in its
+    manifest cell; a block hangs from the shared root, keeps its other
+    prerequisites inside itself and offers one exclusive choice; neighbours in
+    a row keep a free cell between them and blocks keep free columns.
+    """
+
+    issues: list[str] = []
+    for tree, tree_blocks in PREWAR_WRK_TREES.items():
+        previous_right: int | None = None
+        rows: dict[int, list[tuple[int, str]]] = {}
+        for name, cells in tree_blocks:
+            label = f"prewar {tree} block {name}"
+            members = set(cells)
+            for focus_id, cell in cells.items():
+                if grid.get(focus_id) != cell:
+                    issues.append(
+                        f"{focus_id} must sit at {cell} of the {label}, found {grid.get(focus_id)}"
+                    )
+                rows.setdefault(cell[1], []).append((cell[0], focus_id))
+            left = min(x for x, _y in cells.values())
+            right = max(x for x, _y in cells.values())
+            if previous_right is not None and left - previous_right <= PREWAR_WRK_BLOCK_GAP:
+                issues.append(
+                    f"{label} starts at column {left}; {PREWAR_WRK_BLOCK_GAP} free "
+                    f"columns must follow column {previous_right}"
+                )
+            previous_right = right
+            entries = 0
+            paired = False
+            for focus_id in cells:
+                block = blocks.get(focus_id, "")
+                prerequisites = {
+                    token for group in _prerequisite_groups(block) for token in group
+                }
+                if WRK_PREWAR_ROOT in prerequisites:
+                    entries += 1
+                    prerequisites.discard(WRK_PREWAR_ROOT)
+                outside = sorted(prerequisites - members)
+                if outside:
+                    issues.append(f"{focus_id} of the {label} depends on {outside} outside it")
+                exclusive = _mutually_exclusive_focuses(block)
+                if exclusive - members:
+                    issues.append(
+                        f"{focus_id} of the {label} excludes {sorted(exclusive - members)} outside it"
+                    )
+                paired = paired or bool(exclusive)
+            if not entries:
+                issues.append(f"{label} must hang from {WRK_PREWAR_ROOT}")
+            if not paired:
+                issues.append(f"{label} must offer a mutually exclusive pair")
+        for y, row in sorted(rows.items()):
+            row.sort()
+            for (left_x, left_id), (right_x, right_id) in zip(row, row[1:]):
+                if right_x - left_x <= PREWAR_WRK_CELL_GAP:
+                    issues.append(
+                        f"{left_id} and {right_id} of the prewar {tree} tree are neighbours "
+                        f"in row {y} without a free cell between them"
+                    )
     return issues
 
 

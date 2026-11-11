@@ -20364,8 +20364,14 @@ STP_ch_chapters = {
 				}
 			}
 		}
+		# The AI holds its sovereignty course through the earlier stages and
+		# yields only under the final ultimatum.
 		ai_will_do = {
-			base = 1
+			base = 0
+			modifier = {
+				add = 1
+				has_active_mission = STP_ch_pressure_4
+			}
 		}
 	}
 	STP_ch_northern_guarantees = {

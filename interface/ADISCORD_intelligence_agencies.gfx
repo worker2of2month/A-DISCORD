@@ -1,0 +1,133 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_agency_stp"
+		texturefile = "gfx/interface/intelligence/agencies/agency_stp.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_val"
+		texturefile = "gfx/interface/intelligence/agencies/agency_val.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_nam"
+		texturefile = "gfx/interface/intelligence/agencies/agency_nam.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_rus"
+		texturefile = "gfx/interface/intelligence/agencies/agency_rus.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_wrk"
+		texturefile = "gfx/interface/intelligence/agencies/agency_wrk.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_nod"
+		texturefile = "gfx/interface/intelligence/agencies/agency_nod.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_ivn"
+		texturefile = "gfx/interface/intelligence/agencies/agency_ivn.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_vad"
+		texturefile = "gfx/interface/intelligence/agencies/agency_vad.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_wkr"
+		texturefile = "gfx/interface/intelligence/agencies/agency_wkr.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_tva"
+		texturefile = "gfx/interface/intelligence/agencies/agency_tva.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_sts"
+		texturefile = "gfx/interface/intelligence/agencies/agency_sts.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_srp"
+		texturefile = "gfx/interface/intelligence/agencies/agency_srp.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_nam_charter"
+		texturefile = "gfx/interface/intelligence/agencies/agency_nam_charter.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_rus_last_empire"
+		texturefile = "gfx/interface/intelligence/agencies/agency_rus_last_empire.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_rus_black_banner"
+		texturefile = "gfx/interface/intelligence/agencies/agency_rus_black_banner.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl_conclave"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl_conclave.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl_treaty"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl_treaty.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl_directorate"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl_directorate.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl_regent"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl_regent.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_shl_commune"
+		texturefile = "gfx/interface/intelligence/agencies/agency_shl_commune.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_generic"
+		texturefile = "gfx/interface/intelligence/agencies/agency_generic.dds"
+		noOfFrames = 2
+	}
+}

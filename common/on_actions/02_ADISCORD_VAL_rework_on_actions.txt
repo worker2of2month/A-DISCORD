@@ -329,6 +329,17 @@ on_actions = {
 				}
 				remove_ideas = VAL_ai_scripted_war_command
 			}
+			# AI-only reserve floor: keeps the recruitment and expansion gates open
+			# when the AI leaves its paid manpower programmes unused.
+			if = {
+				limit = {
+					is_ai = yes
+					has_capitulated = no
+					is_subject = no
+					has_manpower < 30000
+				}
+				add_manpower = 2500
+			}
 		}
 	}
 }

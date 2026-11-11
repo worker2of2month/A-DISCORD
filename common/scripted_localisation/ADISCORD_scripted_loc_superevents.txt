@@ -306,6 +306,10 @@ defined_text = {
 		localization_key = superevent_west_world_empire_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_veyran_proclamation }
+		localization_key = superevent_nam_veyran_proclamation_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -595,6 +599,10 @@ defined_text = {
 		localization_key = superevent_west_world_empire_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_veyran_proclamation }
+		localization_key = superevent_nam_veyran_proclamation_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -882,6 +890,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_west_world_empire }
 		localization_key = superevent_west_world_empire_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_veyran_proclamation }
+		localization_key = superevent_nam_veyran_proclamation_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

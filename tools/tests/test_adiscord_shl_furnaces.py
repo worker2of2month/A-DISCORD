@@ -975,6 +975,14 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.run("SHL_run_cycle")
         self.assertEqual(m.variables["SHL"]["SHL_cycle_number"], 1)
 
+    def test_cycle_survives_callback_that_crosses_midnight_early(self):
+        m = self.machine
+        m.run("SHL_schedule_cycle")
+        m.flag_days["SHL"]["SHL_cycle_pending"] = 27
+        m.run("SHL_run_cycle")
+        self.assertEqual(m.variables["SHL"]["SHL_cycle_number"], 1)
+        self.assertIn("SHL_cycle_pending", m.flags["SHL"])
+
     def test_four_project_stages_deliver_one_site_and_consume_exact_prices(self):
         m = self.machine
         m.variables["SHL"]["SHL_reserve_stock"] = 1

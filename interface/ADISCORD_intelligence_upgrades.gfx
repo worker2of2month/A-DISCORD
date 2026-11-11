@@ -1,0 +1,107 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_economy"
+		texturefile = "gfx/interface/intelligence/upgrades/economy.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_army"
+		texturefile = "gfx/interface/intelligence/upgrades/army.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_navy"
+		texturefile = "gfx/interface/intelligence/upgrades/navy.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_airforce"
+		texturefile = "gfx/interface/intelligence/upgrades/airforce.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_defense"
+		texturefile = "gfx/interface/intelligence/upgrades/defense.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_resistance"
+		texturefile = "gfx/interface/intelligence/upgrades/resistance.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_blueprints"
+		texturefile = "gfx/interface/intelligence/upgrades/blueprints.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_radios"
+		texturefile = "gfx/interface/intelligence/upgrades/radios.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_ink"
+		texturefile = "gfx/interface/intelligence/upgrades/ink.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_sabotage"
+		texturefile = "gfx/interface/intelligence/upgrades/sabotage.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_last_protocol"
+		texturefile = "gfx/interface/intelligence/upgrades/last_protocol.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_training"
+		texturefile = "gfx/interface/intelligence/upgrades/training.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_commando"
+		texturefile = "gfx/interface/intelligence/upgrades/commando.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_interrogation"
+		texturefile = "gfx/interface/intelligence/upgrades/interrogation.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_diplomacy"
+		texturefile = "gfx/interface/intelligence/upgrades/diplomacy.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_propaganda"
+		texturefile = "gfx/interface/intelligence/upgrades/propaganda.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_crypto_department"
+		texturefile = "gfx/interface/intelligence/upgrades/crypto_department.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_decryption"
+		texturefile = "gfx/interface/intelligence/upgrades/decryption.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_computing"
+		texturefile = "gfx/interface/intelligence/upgrades/computing.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_encryption"
+		texturefile = "gfx/interface/intelligence/upgrades/encryption.dds"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_agency_upgrade_secure_crypto"
+		texturefile = "gfx/interface/intelligence/upgrades/secure_crypto.dds"
+	}
+
+}

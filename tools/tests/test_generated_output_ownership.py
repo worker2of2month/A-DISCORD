@@ -48,6 +48,7 @@ REQUIRED_FAMILIES = {
     "deployment_ui_assets",
     "diplomacy_ui_assets",
     "western_diplomacy_assets",
+    "west_influence_map",
     "event_ui_assets",
     "focus_ui_assets",
     "focus_trees",
@@ -58,6 +59,7 @@ REQUIRED_FAMILIES = {
     "exclusion_zone_boundaries",
     "inner_frontier_countries",
     "intelligence_ui_assets",
+    "operation_art",
     "island_administration_icon",
     "ivn_geography",
     "logistics_ui_assets",
@@ -249,7 +251,7 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         entry = self.entries["intelligence_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
-            for path in intelligence_ui_assets.expected_outputs()
+            for path in intelligence_ui_assets.expected_outputs(include_preview=True)
         }
         self.assertEqual(set(entry["output_globs"]), expected_paths)
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))

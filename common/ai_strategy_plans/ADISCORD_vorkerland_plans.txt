@@ -2047,9 +2047,11 @@ ADISCORD_vorkerland_wkr_remaining_fronts_plan = {
 }
 
 # --- vorkerland_support_plans ---
-# The prewar plans name the common trunk only. The branch of the chosen
-# apparatus is hidden from the other two, so its focuses are ordered by
-# their own ai_will_do weights.
+# The prewar plans belong to the committees' tree, one per course toward the
+# districts. Each names one alternative of every exclusive pair and fits the
+# 350 days before the collapse; the Unity Tower block is left to the focus
+# weights. Every plan names the tree of one apparatus only: a focus hidden from
+# the country would stall its AI.
 ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	name = "WRK prewar compact"
 	desc = ""
@@ -2059,6 +2061,7 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		ADISCORD_vorkerland_prewar_patron_committees = yes
 		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
 	}
 	abort = {
@@ -2070,15 +2073,26 @@ ADISCORD_vorkerland_wrk_prewar_compact_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
-		WRK_district_emergency_powers
-		WRK_district_treasuries
-		WRK_last_common_budget
 		WRK_convene_council_of_republics
 		WRK_bind_districts_to_charter
 		WRK_issue_continuity_orders
 		WRK_prepare_military_evacuation
 		WRK_open_worker_vadl_backchannel
 		WRK_offer_emergency_compact
+		WRK_committee_district_canteens
+		WRK_committee_arbitration_boards
+		WRK_party_cell_rolls
+		WRK_factory_committee_councils
+		WRK_committee_workers_guard
+		WRK_committee_ration_reserve
+		WRK_committee_chairmans_mandate
+		WRK_mandate_of_the_committees
+		WRK_district_emergency_powers
+		WRK_district_treasuries
+		WRK_last_common_budget
+		WRK_committee_second_guard_shift
+		WRK_committee_district_musters
+		WRK_committee_store_keys
 	}
 	weight = { factor = 4 }
 }
@@ -2092,6 +2106,7 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 		tag = event_target:ADISCORD_vorkerland_nation
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		ADISCORD_vorkerland_prewar_patron_committees = yes
 		has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
 	}
 	abort = {
@@ -2102,15 +2117,174 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 	}
 	ai_national_focuses = {
 		WRK_measure_confederation_fault_lines
-		WRK_emergency_central_budget
-		WRK_requisition_commissions
-		WRK_last_common_budget
 		WRK_inventory_emergency_stores
 		WRK_disperse_railway_reserves
 		WRK_issue_continuity_orders
 		WRK_prepare_civil_evacuation
 		WRK_mobilize_loyal_republics
 		WRK_place_reserves_under_worker
+		WRK_committee_district_canteens
+		WRK_committee_arbitration_boards
+		WRK_party_cell_rolls
+		WRK_factory_committee_councils
+		WRK_committee_workers_guard
+		WRK_committee_ration_reserve
+		WRK_committee_chairmans_mandate
+		WRK_mandate_of_the_committees
+		WRK_emergency_central_budget
+		WRK_requisition_commissions
+		WRK_last_common_budget
+		WRK_committee_second_guard_shift
+		WRK_committee_district_musters
+		WRK_committee_store_keys
+	}
+	weight = { factor = 4 }
+}
+
+# The staff's tree, one plan per course toward the Tower: the AI course chosen
+# at the start of the crisis decides whether the staff takes Worker out by
+# the military route or lets the Tower fall. The court comes first, then the
+# branch under the root and the Tower, so the evacuation project has time to
+# finish; the last two Tower focuses are left to the focus weights.
+ADISCORD_vorkerland_wrk_prewar_staff_rescue_plan = {
+	name = "WRK prewar staff rescue"
+	desc = ""
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
+	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		ADISCORD_vorkerland_prewar_patron_staff = yes
+		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		}
+	}
+	ai_national_focuses = {
+		WRK_measure_confederation_fault_lines
+		WRK_staff_standing_invitations
+		WRK_staff_adjutants_at_court
+		WRK_collect_officer_returns
+		WRK_contract_local_garrisons
+		WRK_district_staff_exercises
+		WRK_petrichev_depots
+		WRK_staff_reserve_headquarters
+		WRK_mandate_of_the_staff
+		WRK_staff_tower_survey
+		WRK_staff_military_route
+		WRK_staff_commanders_oaths
+		WRK_staff_joint_government_draft
+		WRK_staff_depot_ledgers
+		WRK_staff_commanders_funds
+		WRK_staff_supply_contracts
+		WRK_staff_war_chest
+		WRK_staff_railway_commandants
+		WRK_staff_arsenal_seals
+		WRK_staff_cadre_regiments
+		WRK_staff_district_arsenal_lists
+		WRK_staff_second_section_archive
+		WRK_staff_district_pledges
+		WRK_staff_council_of_allies
+	}
+	weight = { factor = 4 }
+}
+
+ADISCORD_vorkerland_wrk_prewar_staff_command_plan = {
+	name = "WRK prewar staff command"
+	desc = ""
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
+	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		ADISCORD_vorkerland_prewar_patron_staff = yes
+		has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course
+	}
+	abort = {
+		OR = {
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		}
+	}
+	ai_national_focuses = {
+		WRK_measure_confederation_fault_lines
+		WRK_staff_standing_invitations
+		WRK_staff_adjutants_at_court
+		WRK_collect_officer_returns
+		WRK_contract_local_garrisons
+		WRK_district_staff_exercises
+		WRK_petrichev_depots
+		WRK_staff_reserve_headquarters
+		WRK_mandate_of_the_staff
+		WRK_staff_tower_survey
+		WRK_staff_let_the_tower_fall
+		WRK_staff_commanders_oaths
+		WRK_staff_emergency_command
+		WRK_staff_depot_ledgers
+		WRK_staff_commanders_funds
+		WRK_staff_supply_contracts
+		WRK_staff_war_chest
+		WRK_staff_railway_commandants
+		WRK_staff_arsenal_seals
+		WRK_staff_cadre_regiments
+		WRK_staff_district_arsenal_lists
+		WRK_staff_second_section_archive
+		WRK_staff_district_pledges
+		WRK_staff_council_of_allies
+	}
+	weight = { factor = 4 }
+}
+
+# The network's tree: the cells first, the branch under the root, then the
+# funds, the plants and the Tower up to its second choice. The last two Tower
+# focuses are left to the focus weights.
+ADISCORD_vorkerland_wrk_prewar_network_plan = {
+	name = "WRK prewar network"
+	desc = ""
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
+	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		ADISCORD_vorkerland_prewar_patron_network = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		}
+	}
+	ai_national_focuses = {
+		WRK_measure_confederation_fault_lines
+		WRK_network_supply_runs
+		WRK_network_shift_rosters
+		WRK_reopen_emergency_workshops
+		WRK_preserve_machine_tools
+		WRK_worx_network_register
+		WRK_machine_tool_fund
+		WRK_network_closed_laboratories
+		WRK_mandate_of_the_network
+		WRK_network_workshop_accounts
+		WRK_network_patent_pool
+		WRK_network_district_bank_credit
+		WRK_network_shadow_budget
+		WRK_network_plant_inventory
+		WRK_network_tooling_line
+		WRK_network_pilot_shop
+		WRK_network_prototype_reserve
+		WRK_network_second_crew
+		WRK_network_reserve_rolls
+		WRK_network_trusted_storekeepers
+		WRK_network_tower_exchange
+		WRK_network_relay_by_wire
+		WRK_network_technical_continuity
+		WRK_network_tower_shelter
 	}
 	weight = { factor = 4 }
 }
@@ -2180,6 +2354,7 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
 		has_country_flag = ADISCORD_vorkerland_route_worker
+		NOT = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
 	}
 	abort = {
 		OR = {
@@ -2187,6 +2362,8 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		}
 	}
+	# The congress government: of each exclusive pair the plan takes housing,
+	# the armed people and the municipal councils.
 	ai_national_focuses = {
 		WRK_worker_convene_reunification_congress
 		WRK_worker_open_erased_nations_archives
@@ -2194,6 +2371,7 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 		WRK_worker_fund_cooperative_reconstruction
 		WRK_worker_restore_displaced_councils
 		WRK_worker_authorize_homecoming_commissions
+		WRK_worker_prioritize_housing_guarantees
 		WRK_worker_ratify_republican_compact
 		WRK_worker_write_constitutional_guarantees
 		WRK_worker_restore_unity_tower
@@ -2215,6 +2393,70 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 		WRK_conf_municipal_councils
 		WRK_conf_social_guarantees
 		WRK_conf_research_soviets
+		WRK_conf_southern_solidarity
+		WRK_worker_west_confederate_charter
+	}
+
+	weight = { factor = 4 }
+}
+
+# The Executive Committee walks the same route with its own domestic content.
+# Its settlement branch leaves with that tree, so it precedes the Unity Tower.
+# Of each exclusive pair the plan takes the local grants, the reconstruction
+# norms, the serial plants, the fortress schedules and the second trust.
+ADISCORD_vorkerland_wrk_postwar_executive_plan = {
+	name = "WRK postwar executive"
+	desc = ""
+	allowed = { OR = { original_tag = WRK original_tag = WKR original_tag = VAD original_tag = TVA } }
+	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		tag = event_target:ADISCORD_vorkerland_nation
+		is_ai = yes
+		has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+		has_country_flag = ADISCORD_vorkerland_route_worker
+		has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+	}
+	abort = {
+		OR = {
+			NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		}
+	}
+	ai_national_focuses = {
+		WRK_worker_convene_reunification_congress
+		WRK_executive_keep_the_executive_committee
+		WRK_worker_open_erased_nations_archives
+		WRK_worker_recognize_free_republics
+		WRK_executive_open_single_delivery_ledger
+		WRK_worker_fund_cooperative_reconstruction
+		WRK_executive_set_reconstruction_norms
+		WRK_worker_restore_displaced_councils
+		WRK_worker_authorize_homecoming_commissions
+		WRK_executive_audit_the_districts
+		WRK_worker_devolve_reconstruction_grants
+		WRK_worker_ratify_republican_compact
+		WRK_executive_demobilize_by_norm
+		WRK_executive_publish_accountable_budget
+		WRK_worker_write_constitutional_guarantees
+		WRK_worker_restore_unity_tower
+		WRK_conf_council_of_republics
+		WRK_worker_west_mandate_offices
+		WRK_exec_paid_cadre
+		WRK_conf_charter_for_the_west
+		WRK_exec_plant_norm_tables
+		WRK_conf_solidarity_abroad
+		WRK_exec_staff_by_examination
+		WRK_exec_norm_series
+		WRK_exec_district_inventory
+		WRK_exec_reconstruction_work_orders
+		WRK_exec_fortress_schedules
+		WRK_worker_west_solidarity_committees
+		WRK_exec_cadre_army
+		WRK_worker_west_mandate_for_itora
+		WRK_exec_acceptance_commission
+		WRK_exec_second_construction_trust
+		WRK_exec_ration_by_ledger
+		WRK_exec_central_order_bureau
 		WRK_conf_southern_solidarity
 		WRK_worker_west_confederate_charter
 	}

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
+from copy import deepcopy
+from itertools import product
 from pathlib import Path
 import re
 import unittest
@@ -35,6 +37,18 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     DEPTH_TIMED_IDEAS,
     DEPTH_VARIANT_IDENTITY,
     COLLAPSE_IDEAS_FILE,
+    COMMITTEE_STATE_ORDERS,
+    COMMITTEE_TRIGGER_FILE,
+    CONFEDERATION_BRANCHES,
+    CONFEDERATION_COUNCIL_FOCUSES,
+    CONFEDERATION_EXECUTIVE_CHOICES,
+    CONFEDERATION_EXECUTIVE_FOCUSES,
+    CONFEDERATION_FILE,
+    CONFEDERATION_LATE_UNLOCKS,
+    CONFEDERATION_ORDER_UPGRADES,
+    CONFEDERATION_PROGRAMMES,
+    CONFEDERATION_SHARED_FOCUSES,
+    CONGRESS_AI_PLAN,
     CONTINUOUS_FOCUS_FILE,
     CORE_DECISIONS,
     DIPLOMACY_DECISIONS_FILE,
@@ -53,6 +67,12 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     MOBILE_REPAIR_IDEA,
     PHASE_EFFECTS_FILE,
     POSTWAR_PHASE,
+    POSTWAR_EXECUTIVE_CHOICE,
+    POSTWAR_EXECUTIVE_FINAL,
+    POSTWAR_EXECUTIVE_FOCUSES,
+    POSTWAR_EXECUTIVE_GATE,
+    POSTWAR_EXECUTIVE_POSITIONS,
+    POSTWAR_EXECUTIVE_ROUTE,
     POSTWAR_IDEA_LOCALISATION_IDS,
     POSTWAR_POLICY_CHOICE_PAIRS,
     POSTWAR_ROUTE_FOCUSES,
@@ -84,11 +104,23 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     PREWAR_WRK_CARRYOVER_FOCUSES,
     PREWAR_WRK_EXPANSION_FOCUSES,
     PREWAR_WRK_FOCUSES,
-    PREWAR_WRK_PATRON_BRANCHES,
+    PREWAR_WRK_BLOCK_GAP,
+    PREWAR_WRK_CELLS,
+    PREWAR_WRK_PATRON_GATES,
+    PREWAR_WRK_ROOT_CELL,
+    PREWAR_WRK_TREES,
+    WRK_PREWAR_ROOT,
+    prewar_tree_issues,
+    prewar_wrk_patron_gate,
+    prewar_wrk_tree_focuses,
     RETREAT_HOOKS,
     ROOT,
     RUSSIAN_LOCALISATION,
     RUSSIAN_POSTWAR_IDEA_LOCALISATION,
+    SETTLEMENT_AGGREGATE_FILE,
+    SETTLEMENT_AI_PLAN,
+    SETTLEMENT_LOCALISATION_KEYS,
+    SETTLEMENT_PROGRAMMES,
     SHINE_FILE,
     SHOWDOWN_PHASE,
     SHOWDOWN_AI_PLANS,
@@ -149,6 +181,15 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     _blocks,
     _allow_branch,
     _check_focus_reference_order,
+    _check_confederation_tree,
+    _check_settlement_branch,
+    committee_order_issues,
+    confederation_can_share_view,
+    confederation_path_units,
+    confederation_reachable,
+    confederation_reward_classes,
+    confederation_view,
+    planned_focuses,
     _focus_cost,
     _mutually_exclusive_focuses,
     _phase_flags,
@@ -163,6 +204,10 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     focus_blocks,
     localisation_entries,
     read,
+    settlement_aggregate_delta,
+    settlement_aggregate_fields,
+    settlement_free_path_units,
+    settlement_reward_classes,
     unification_spirit_issues,
 )
 
@@ -263,14 +308,30 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
         # The worker and technocratic routes continue in their own trees after the Unity Tower.
-        self.assertEqual(len(self.blocks), 303)
+        self.assertEqual(len(self.blocks), 364)
+        self.assertEqual(len(POSTWAR_EXECUTIVE_FOCUSES), 7)
         self.assertEqual(len(DEPTH_FOCUSES), 45)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
         self.assertEqual(len(TVA_VARIANT_FOCUSES), 6)
-        self.assertEqual(len(PREWAR_WRK_FOCUSES), 44)
+        # The shared root and the three trees of the apparatuses.
+        self.assertEqual(len(PREWAR_WRK_FOCUSES), 98)
         self.assertEqual(
-            [len(branch) for branch in PREWAR_WRK_PATRON_BRANCHES.values()], [8, 8, 8]
+            {
+                tree: [(name, len(cells)) for name, cells in blocks]
+                for tree, blocks in PREWAR_WRK_TREES.items()
+            },
+            {
+                "committees": [
+                    ("budget", 5), ("tower", 3), ("capital", 6), ("core", 8), ("politics", 11),
+                ],
+                "staff": [
+                    ("purse", 5), ("court", 6), ("core", 8), ("army", 5), ("tower", 8),
+                ],
+                "network": [
+                    ("funds", 5), ("cells", 6), ("core", 8), ("plants", 5), ("tower", 8),
+                ],
+            },
         )
         self.assertEqual(len(PREWAR_VAD_FOCUSES), 15)
         self.assertEqual(len(PREWAR_WRK_EXPANSION_FOCUSES), 4)
@@ -294,21 +355,104 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 for flag, route in POSTWAR_ROUTE_FOCUSES.items())
         )
 
-    def test_patron_branches_are_gated_and_never_drawn_together(self) -> None:
-        committees, staff, network = PREWAR_WRK_PATRON_BRANCHES.values()
-        for cell in zip(committees, staff, network):
-            for index, left in enumerate(cell):
-                for right in cell[index + 1:]:
-                    self.assertFalse(_can_share_view(left, right), (left, right))
-        self.assertTrue(_can_share_view(committees[0], committees[1]))
-        self.assertTrue(_can_share_view(staff[0], "WRK_measure_confederation_fault_lines"))
-        gates = set(PREWAR_WRK_PATRON_BRANCHES)
-        for focus_id in PREWAR_WRK_FOCUSES:
-            expected = {
-                gate for gate, branch in PREWAR_WRK_PATRON_BRANCHES.items() if focus_id in branch
-            }
-            found = {gate for gate in gates if f"{gate} = yes" in self.blocks[focus_id]}
-            self.assertEqual(found, expected, focus_id)
+    def test_patron_trees_are_gated_and_never_drawn_together(self) -> None:
+        trees = {tree: prewar_wrk_tree_focuses(tree) for tree in PREWAR_WRK_TREES}
+        self.assertEqual(PREWAR_WRK_FOCUSES[0], WRK_PREWAR_ROOT)
+        self.assertEqual(
+            set(PREWAR_WRK_FOCUSES), {WRK_PREWAR_ROOT, *(f for tree in trees.values() for f in tree)}
+        )
+        gates = {prewar_wrk_patron_gate(tree) for tree in trees}
+        for tree, focus_ids in trees.items():
+            for focus_id in focus_ids:
+                with self.subTest(focus_id=focus_id):
+                    # Every focus but the root names exactly the gate of its own tree.
+                    found = {gate for gate in gates if f"{gate} = yes" in self.blocks[focus_id]}
+                    self.assertEqual(found, {prewar_wrk_patron_gate(tree)})
+                    self.assertEqual(PREWAR_WRK_PATRON_GATES[focus_id], prewar_wrk_patron_gate(tree))
+                    self.assertTrue(_can_share_view(focus_id, WRK_PREWAR_ROOT))
+                    self.assertTrue(_can_share_view(focus_id, focus_ids[0]))
+                    for other, other_ids in trees.items():
+                        if other != tree:
+                            self.assertFalse(_can_share_view(focus_id, other_ids[0]))
+        self.assertNotIn(WRK_PREWAR_ROOT, PREWAR_WRK_PATRON_GATES)
+        self.assertFalse([gate for gate in gates if f"{gate} = yes" in self.blocks[WRK_PREWAR_ROOT]])
+
+    def test_prewar_trees_follow_their_manifest_and_the_block_layout(self) -> None:
+        grid = resolved_positions(self.blocks)
+        self.assertEqual(prewar_tree_issues(self.blocks, grid), [])
+        self.assertEqual(grid[WRK_PREWAR_ROOT], PREWAR_WRK_ROOT_CELL)
+        self.assertEqual(LAYOUT_ANCHORS[WRK_PREWAR_ROOT], PREWAR_WRK_ROOT_CELL)
+        for focus_id, cell in PREWAR_WRK_CELLS.items():
+            self.assertEqual(grid[focus_id], cell, focus_id)
+        # The band holds the widest tree and nothing more.
+        (left, right), (top, bottom) = LAYOUT_BANDS["prewar_WRK"]
+        columns = [x for x, _y in PREWAR_WRK_CELLS.values()]
+        rows = [y for _x, y in PREWAR_WRK_CELLS.values()]
+        self.assertEqual((min(columns), min(rows), max(rows)), (left, top, bottom))
+        self.assertLessEqual(max(columns), right)
+        # Worker's blocks, left to right, two free columns apart.
+        spans = [
+            (name, min(x for x, _y in cells.values()), max(x for x, _y in cells.values()))
+            for name, cells in PREWAR_WRK_TREES["committees"]
+        ]
+        self.assertEqual(
+            spans,
+            [("budget", 0, 2), ("tower", 5, 7), ("capital", 10, 12), ("core", 15, 17), ("politics", 20, 26)],
+        )
+        for (_name, _left, right), (_next, left, _right) in zip(spans, spans[1:]):
+            self.assertEqual(left - right - 1, PREWAR_WRK_BLOCK_GAP)
+        # The staff and the network stand in the same template columns around the core.
+        for tree, names in (
+            ("staff", ("purse", "court", "core", "army", "tower")),
+            ("network", ("funds", "cells", "core", "plants", "tower")),
+        ):
+            self.assertEqual(
+                [
+                    (name, min(x for x, _y in cells.values()), max(x for x, _y in cells.values()))
+                    for name, cells in PREWAR_WRK_TREES[tree]
+                ],
+                list(zip(names, (5, 10, 15, 20, 25), (7, 12, 17, 22, 27))),
+            )
+        # The two template trees fill the same cells.
+        self.assertEqual(
+            sorted(cell for _name, cells in PREWAR_WRK_TREES["staff"] for cell in cells.values()),
+            sorted(cell for _name, cells in PREWAR_WRK_TREES["network"] for cell in cells.values()),
+        )
+        # A moved focus, a dropped exclusive pair and a crowded row are all reported.
+        moved = dict(grid)
+        moved["WRK_committee_store_keys"] = (11, 6)
+        self.assertIn(
+            "WRK_committee_store_keys must sit at (11, 5) of the prewar committees block capital, "
+            "found (11, 6)",
+            prewar_tree_issues(self.blocks, moved),
+        )
+        unpaired = dict(self.blocks)
+        for focus_id in ("WRK_reinforce_the_tower_guard", "WRK_disperse_the_government"):
+            unpaired[focus_id] = re.sub(r"\n\t\tmutually_exclusive = \{[^\n]*", "", unpaired[focus_id])
+        self.assertIn(
+            "prewar committees block tower must offer a mutually exclusive pair",
+            prewar_tree_issues(unpaired, grid),
+        )
+        crowded = {
+            "committees": (
+                ("budget", {"WRK_emergency_central_budget": (0, 1), "WRK_district_emergency_powers": (1, 1)}),
+                ("tower", {"WRK_inspect_the_unity_tower": (3, 1)}),
+            ),
+        }
+        with patch(
+            "tools.validators.validate_adiscord_vorkerland_civil_war_focus.PREWAR_WRK_TREES", crowded
+        ):
+            issues = prewar_tree_issues(self.blocks, grid)
+        self.assertIn(
+            "WRK_emergency_central_budget and WRK_district_emergency_powers of the prewar committees "
+            "tree are neighbours in row 1 without a free cell between them",
+            issues,
+        )
+        self.assertIn(
+            "prewar committees block tower starts at column 3; 2 free columns must follow column 1",
+            issues,
+        )
+        self.assertIn("prewar committees block tower must offer a mutually exclusive pair", issues)
 
     def test_each_claimant_has_a_compact_wartime_route(self) -> None:
         for tag, expected in {"WKR": 17, "VAD": 21, "TVA": 18}.items():
@@ -2788,19 +2932,34 @@ class PrewarPreparationTests(unittest.TestCase):
 
     def test_extra_cache_slots_belong_to_the_depot_focuses(self) -> None:
         slots = _blocks(self.triggers, "ADISCORD_vorkerland_reserve_cache_slot_free")[0]
+        # The centre's caches are a capability of its tree; the districts name their own focus.
+        self.assertIn("WRK_capability_extra_caches = yes", slots)
+        self.assertIn("has_completed_focus = VAD_disperse_eastern_depots", slots)
+        self.assertEqual(
+            self.capability("WRK_capability_extra_caches"), ["WRK_disperse_railway_reserves"]
+        )
         for focus_id in ("WRK_disperse_railway_reserves", "VAD_disperse_eastern_depots"):
             with self.subTest(focus_id=focus_id):
-                self.assertIn(f"has_completed_focus = {focus_id}", slots)
                 self.assertIn("ADISCORD_vorkerland_reserve_cache_extra_slots_tt", self.blocks[focus_id])
+
+    def capability(self, name: str) -> list[str]:
+        """Focuses that grant one capability of the prewar preparation."""
+
+        definition = _blocks(self.triggers, name)
+        self.assertEqual(len(definition), 1, name)
+        return re.findall(r"has_completed_focus = (\w+)", definition[0])
 
     def test_prewar_mandate_seeds_the_opening_legitimacy(self) -> None:
         initialize = self.effect("ADISCORD_vorkerland_initialize_legitimacy")
-        for focus_id, value in (
-            ("WRK_convene_council_of_republics", "0.10"),
-            ("WRK_bind_districts_to_charter", "0.05"),
+        # The heir holds the copied focus record, so legitimacy asks the capability.
+        for capability, focus_id, value in (
+            ("WRK_capability_council_mandate", "WRK_convene_council_of_republics", "0.10"),
+            ("WRK_capability_charter_mandate", "WRK_bind_districts_to_charter", "0.05"),
         ):
             with self.subTest(focus_id=focus_id):
-                self.assertIn(f"has_completed_focus = {focus_id}", initialize)
+                self.assertIn(f"{capability} = yes", initialize)
+                self.assertNotIn(f"has_completed_focus = {focus_id}", initialize)
+                self.assertEqual(self.capability(capability), [focus_id])
                 self.assertIn(f"value = {value} }}", initialize)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified", initialize)
         self.assertLess(
@@ -2818,7 +2977,10 @@ class PrewarPreparationTests(unittest.TestCase):
         carryover = self.effect(PREWAR_CARRYOVER_EFFECT)
         scope = next(
             block for block in _blocks(carryover, "if")
-            if "has_completed_focus = WRK_offer_emergency_compact" in block
+            if "WRK_capability_emergency_compact = yes" in block
+        )
+        self.assertEqual(
+            self.capability("WRK_capability_emergency_compact"), ["WRK_offer_emergency_compact"]
         )
         self.assertIn("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified", scope)
         self.assertIn("amount = 5000 producer = WKR", scope)
@@ -3088,6 +3250,1457 @@ class WarLegacyTests(unittest.TestCase):
         self.assertIn("add_to_variable = { var = ADISCORD_vorkerland_vad_commandants value = 1 }", seal)
         iterations = _blocks(self.effects, "ADISCORD_vorkerland_pw_record_trial_iterations")[0]
         self.assertIn("max = 8", iterations)
+
+
+def settlement_script_class():
+    """Simulator of the preparation suite, extended for the postwar worker route.
+
+    This slice runs from source; other subsystems and native calls are
+    recorded at their boundary.
+    """
+
+    from tools.tests.test_vorkerland_preparation import EFFECTS, Script, V, fields
+
+    class SettlementScript(Script):
+        EXPANDED = ("WRK_executive_", V + "worker_", V + "pw_ensure_institutions")
+        RECORDED = (
+            "ADISCORD_reform_",
+            "ADISCORD_increase_",
+            "ADISCORD_west_push_lean",
+            V + "restore_unity_tower",
+            V + "schedule_route_tree",
+        )
+
+        def run(self, block, current=None, previous=None):
+            current = current or self.root
+            translated = []
+            for key, operator, value in block:
+                if key in EFFECTS and key.startswith(self.EXPANDED):
+                    translated.append(("hidden_effect", "=", EFFECTS[key]))
+                elif key.startswith(self.RECORDED):
+                    self.calls.append((key, current, value))
+                elif key == "add_extra_state_shared_building_slots":
+                    # A shared slot serves either kind of factory. Earlier
+                    # effects of the block run first, as in the engine.
+                    super().run(translated, current, previous)
+                    translated = []
+                    state = self.scopes[current]
+                    state.variables["shared_building_slots"] = (
+                        state.variables.get("shared_building_slots", 0) + float(value)
+                    )
+                    for building in ("industrial_complex", "arms_factory"):
+                        state.resources[building + "_slots"] += float(value)
+                elif key == "add_ideas":
+                    translated.append(("set_country_flag", "=", value))
+                elif key == "random_owned_controlled_state":
+                    # The engine picks any matching region; the fixture takes
+                    # the first so that the result is repeatable.
+                    limit = fields(value).get("limit", [])
+                    body = [item for item in value if item[0] != "limit"]
+                    held = sorted(
+                        name
+                        for name, scope in self.scopes.items()
+                        if name.isdigit() and scope.owner == scope.controller == current
+                    )
+                    for name in held:
+                        if self.conditions(limit, name, current):
+                            translated.append((name, "=", body))
+                            break
+                else:
+                    translated.append((key, operator, value))
+            super().run(translated, current, previous)
+
+    return SettlementScript
+
+
+def start_programme(script, nation: str, decision: dict, target: str | None = None) -> bool:
+    """Place a paid programme the way the engine does: gates, one native debit, effect."""
+
+    country = script.scopes[nation]
+    gates = [decision["visible"], decision["available"]]
+    if "state_target" in decision:
+        assert target in [value for _key, _op, value in decision["targets"]], target
+        script.source = target
+        gates += [decision["target_root_trigger"], decision["target_trigger"]]
+    if not all(script.conditions(gate) for gate in gates):
+        return False
+    price = float(decision["cost"])
+    if country.resources["pp"] < price:
+        return False
+    country.resources["pp"] -= price
+    script.run(decision["complete_effect"])
+    return True
+
+
+class WorkerSettlementTests(unittest.TestCase):
+    """Execute the worker settlement rewards and paid programmes from source.
+
+    The native decision cost is an engine boundary: the fixture debits it once
+    when a programme starts and the scripts only keep its receipt.
+    """
+
+    NATION = "WKR"
+    SITE = "201"
+    OTHER_SITE = "32"
+    WORKS = "ADISCORD_vorkerland_worker_cooperative_works"
+    WORKS_RECEIPT = "ADISCORD_vorkerland_worker_works_deposit"
+    ORDER_RECEIPT = "WRK_executive_order_deposit"
+    ORDERS = (
+        "WRK_executive_norm_order",
+        "WRK_executive_republic_contract",
+        "WRK_executive_district_audit",
+    )
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        from tools.tests.test_vorkerland_preparation import V, fields, parse, walk
+
+        cls.Script = settlement_script_class()
+        cls.V = V
+        cls.fields = staticmethod(fields)
+        cls.blocks = focus_blocks(source_section(read(FOCUS_FILE), "civil_war_focus"))
+        cls.grid = resolved_positions(cls.blocks)
+        cls.worker_route = POSTWAR_ROUTE_FOCUSES[POSTWAR_EXECUTIVE_ROUTE]
+        cls.settlement = (*cls.worker_route, *POSTWAR_EXECUTIVE_FOCUSES)
+        source = read(Path("focus_trees/Vorkerland/settlement/focuses.txt"))
+        cls.focuses = {
+            fields(value)["id"]: fields(value)
+            for key, _, value in walk(parse(source))
+            if key == "focus" and isinstance(value, list)
+        }
+        cls.decision_source = read(DIPLOMACY_DECISIONS_FILE)
+        operations = fields(parse(cls.decision_source))[V + "focus_operations_category"]
+        operations = fields(operations)
+        cls.programmes = {
+            decision: fields(operations[decision])
+            for decision, _flag, _receipt in SETTLEMENT_PROGRAMMES.values()
+        }
+        cls.ideas = read(COLLAPSE_IDEAS_FILE)
+        cls.dynamic = read(SETTLEMENT_AGGREGATE_FILE)
+        cls.aggregate = settlement_aggregate_fields(cls.dynamic)
+        cls.plans = read(WKR_AI_PLAN_FILE)
+
+    def campaign(self, executive: bool = True):
+        V = self.V
+        script = self.Script()
+        script.root = self.NATION
+        script.globals = {
+            V + "phase_postwar_integration",
+            V + "reunification_verified",
+            V + "collapse_finished",
+        }
+        script.event_targets["ADISCORD_vorkerland_nation"] = self.NATION
+        country = script.scopes[self.NATION]
+        country.resources.clear()
+        country.resources["pp"] = 200
+        country.flags.update({POSTWAR_EXECUTIVE_ROUTE, V + "central_unifier"})
+        if executive:
+            country.flags.add(POSTWAR_EXECUTIVE_GATE)
+        for _focus, (_decision, flag, _receipt) in SETTLEMENT_PROGRAMMES.items():
+            country.flags.add(flag)
+        for state in (self.SITE, self.OTHER_SITE, "40", "200"):
+            scope = script.scopes[state]
+            scope.owner = scope.controller = self.NATION
+            scope.resources.update(industrial_complex_slots=1, infrastructure_slots=1)
+        return script
+
+    def start(self, script, name: str, target: str | None = None) -> bool:
+        return start_programme(script, self.NATION, self.programmes[name], target)
+
+    def target(self, name: str) -> str | None:
+        return self.SITE if "state_target" in self.programmes[name] else None
+
+    def assert_order_closed(self, script) -> None:
+        country = script.scopes[self.NATION]
+        self.assertNotIn(self.ORDER_RECEIPT, country.variables)
+        self.assertFalse({flag for flag in country.flags if flag.endswith("_pending")})
+        for state in (self.SITE, self.OTHER_SITE):
+            self.assertNotIn("WRK_executive_order_site", script.scopes[state].flags)
+
+    def test_committee_branch_is_drawn_only_for_the_executive_government(self) -> None:
+        for executive in (True, False):
+            script = self.campaign(executive)
+            visible = {
+                name
+                for name, focus in self.focuses.items()
+                if script.conditions(focus["allow_branch"])
+            }
+            expected = set(self.worker_route)
+            if executive:
+                expected |= set(POSTWAR_EXECUTIVE_FOCUSES)
+            self.assertEqual(visible, expected, executive)
+        # The congress government completes its route without the committee.
+        committee = set(POSTWAR_EXECUTIVE_FOCUSES)
+        for focus_id in self.worker_route:
+            self.assertFalse(_prerequisites(self.blocks[focus_id]) & committee, focus_id)
+        paths = _postwar_completion_paths(
+            self.blocks, self.worker_route, POSTWAR_ROUTE_TERMINALS[POSTWAR_EXECUTIVE_ROUTE]
+        )
+        self.assertEqual({len(path) for path in paths}, {10})
+
+    def test_committee_branch_is_a_choice_that_rejoins_and_fits_before_the_tower(self) -> None:
+        left, right = POSTWAR_EXECUTIVE_CHOICE
+        self.assertEqual(_mutually_exclusive_focuses(self.blocks[left]), {right})
+        self.assertEqual(_mutually_exclusive_focuses(self.blocks[right]), {left})
+        rejoin = [
+            focus_id
+            for focus_id in POSTWAR_EXECUTIVE_FOCUSES
+            if frozenset({left, right}) in _prerequisite_groups(self.blocks[focus_id])
+        ]
+        self.assertEqual(rejoin, ["WRK_executive_audit_the_districts"])
+        # Each alternative opens its own programme and neither repeats the other.
+        self.assertIn(left, SETTLEMENT_PROGRAMMES)
+        self.assertIn(right, SETTLEMENT_PROGRAMMES)
+        self.assertNotEqual(
+            settlement_reward_classes(self.blocks[left]),
+            settlement_reward_classes(self.blocks[right]),
+        )
+        self.assertEqual(settlement_free_path_units(self.blocks), 16)
+        cells = [self.grid[focus_id] for focus_id in self.settlement]
+        self.assertEqual(len(cells), len(set(cells)))
+        self.assertEqual(
+            {focus_id: self.grid[focus_id] for focus_id in POSTWAR_EXECUTIVE_FOCUSES},
+            POSTWAR_EXECUTIVE_POSITIONS,
+        )
+        tower = self.focuses[POSTWAR_ROUTE_TERMINALS[POSTWAR_EXECUTIVE_ROUTE]]
+        script = self.campaign()
+        weight = self.fields(tower["ai_will_do"])["modifier"]
+        conditions = [item for item in weight if item[0] != "factor"]
+        self.assertEqual(self.fields(weight)["factor"], "0")
+        self.assertTrue(script.conditions(conditions))
+        script.scopes[self.NATION].focuses.add(POSTWAR_EXECUTIVE_FINAL)
+        self.assertFalse(script.conditions(conditions))
+        self.assertFalse(self.campaign(executive=False).conditions(conditions))
+
+    def test_every_settlement_focus_pays_two_substantive_rewards(self) -> None:
+        for focus_id in self.settlement:
+            with self.subTest(focus_id=focus_id):
+                self.assertGreaterEqual(
+                    len(settlement_reward_classes(self.blocks[focus_id])), 2
+                )
+        token = (
+            "focus = {\n\tcompletion_reward = {\n\t\tadd_political_power = 5\n"
+            "\t\tadd_stability = 0.01\n\t}\n}"
+        )
+        self.assertEqual(settlement_reward_classes(token), set())
+
+    def test_aggregate_previews_equal_the_executed_change(self) -> None:
+        V = self.V
+        council_output = V + "pw_council_output"
+        changed = 0
+        for focus_id in self.settlement:
+            with self.subTest(focus_id=focus_id):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                country.variables[council_output] = 0.06
+                country.flags.update({V + "erased_nations", V + "erased_nations_relief_1"})
+                before = dict(country.variables)
+                script.run(self.focuses[focus_id]["completion_reward"])
+                executed = {
+                    modifier: round(
+                        country.variables.get(variable, 0) - before.get(variable, 0), 6
+                    )
+                    for variable, modifier in self.aggregate.items()
+                    if country.variables.get(variable, 0) != before.get(variable, 0)
+                }
+                applied, shown, defects = settlement_aggregate_delta(
+                    self.blocks[focus_id], self.aggregate, self.ideas
+                )
+                self.assertEqual(defects, [])
+                self.assertEqual(applied, shown)
+                expected = dict(shown)
+                if focus_id == "WRK_worker_convene_reunification_congress":
+                    # The councils' own share is shown by its dedicated tooltip.
+                    expected["industrial_capacity_factory"] = 0.06
+                self.assertEqual(executed, expected)
+                if executed:
+                    changed += 1
+                    self.assertIn(V + "postwar_institutions", country.flags)
+                # A preview idea is shown, never installed.
+                self.assertFalse(
+                    {flag for flag in country.flags if flag.startswith(V + "pw_delta_")}
+                )
+        self.assertEqual(changed, 9)
+
+    def test_treasury_tooltips_state_the_executed_amount(self) -> None:
+        treasury = "ADISCORD_economy_treasury"
+        ledger = "ADISCORD_economy_current_month_action_income"
+        for focus_id, tooltip in (
+            ("WRK_worker_ratify_republican_compact", "WRK_worker_compact_fund_tt"),
+            ("WRK_executive_audit_the_districts", "WRK_executive_audit_recovery_tt"),
+        ):
+            script = self.campaign()
+            country = script.scopes[self.NATION]
+            script.run(self.focuses[focus_id]["completion_reward"])
+            amount = country.variables[treasury]
+            self.assertGreater(amount, 0)
+            # The monthly ledger records the same receipt.
+            self.assertEqual(country.variables[ledger], amount)
+            self.assertIn(f"custom_effect_tooltip = {tooltip}", self.blocks[focus_id])
+            for path in (ENGLISH_LOCALISATION, RUSSIAN_LOCALISATION):
+                value = localisation_entries(read(path))[tooltip]
+                self.assertIn(
+                    f"§G+{amount:g}§! £ADISCORD_economy_treasury_texticon", value, (path, tooltip)
+                )
+
+    def test_orders_charge_the_native_price_once_and_share_one_receipt(self) -> None:
+        for name in self.ORDERS:
+            with self.subTest(name=name):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                price = float(self.programmes[name]["cost"])
+                self.assertTrue(self.start(script, name, self.target(name)))
+                self.assertEqual(country.resources["pp"], 200 - price)
+                self.assertEqual(country.variables[self.ORDER_RECEIPT], price)
+                paid = deepcopy(script.scopes)
+                for other in self.ORDERS:
+                    other_target = (
+                        self.OTHER_SITE if "state_target" in self.programmes[other] else None
+                    )
+                    self.assertFalse(self.start(script, other, other_target), other)
+                    self.assertEqual(script.scopes, paid)
+                # The congress government and a locked programme get no order.
+                self.assertFalse(
+                    self.start(self.campaign(executive=False), name, self.target(name))
+                )
+                locked = self.campaign()
+                flag = next(
+                    flag
+                    for decision, flag, _receipt in SETTLEMENT_PROGRAMMES.values()
+                    if decision == name
+                )
+                locked.scopes[self.NATION].flags.discard(flag)
+                self.assertFalse(self.start(locked, name, self.target(name)))
+
+    def test_delivery_equals_the_preview_and_closes_the_receipt(self) -> None:
+        delivered = {
+            # The order brings its own slot and fills it; the old one stays free.
+            "WRK_executive_norm_order": ({}, {"industrial_complex": 1, "industrial_complex_slots": 1}, 1),
+            "WRK_executive_republic_contract": (
+                {"infantry_equipment": 5000, "support_equipment": 150}, {}, 0,
+            ),
+            "WRK_executive_district_audit": ({"infantry_equipment": 600}, {}, 1),
+        }
+        for name in self.ORDERS:
+            with self.subTest(name=name):
+                decision = self.programmes[name]
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                site = script.scopes[self.SITE]
+                self.assertTrue(self.start(script, name, self.target(name)))
+                paid = country.resources["pp"]
+                preview = deepcopy(script)
+                preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+                script.run(decision["remove_effect"])
+                for scope in (self.NATION, self.SITE):
+                    self.assertEqual(
+                        dict(script.scopes[scope].resources),
+                        dict(preview.scopes[scope].resources),
+                    )
+                self.assertEqual(
+                    site.variables.get("shared_building_slots", 0),
+                    preview.scopes[self.SITE].variables.get("shared_building_slots", 0),
+                )
+                gained, built, slots = delivered[name]
+                for resource, amount in gained.items():
+                    self.assertEqual(country.resources[resource], amount)
+                for resource, amount in built.items():
+                    self.assertEqual(site.resources[resource], amount)
+                self.assertEqual(site.variables.get("shared_building_slots", 0), slots)
+                self.assertEqual(country.resources["pp"], paid)
+                self.assert_order_closed(script)
+                settled = deepcopy(script.scopes)
+                script.run(decision["remove_effect"])
+                script.run(decision["cancel_effect"])
+                self.assertEqual(script.scopes, settled)
+        script = self.campaign()
+        self.assertTrue(self.start(script, "WRK_executive_republic_contract"))
+        script.scopes["TRU"].enemies.add(self.NATION)
+        script.run(self.programmes["WRK_executive_republic_contract"]["remove_effect"])
+        leans = [scope for key, scope, _ in script.calls if key == "ADISCORD_west_push_lean"]
+        self.assertEqual(leans, ["ROM"])
+        self.assertEqual(script.scopes[self.NATION].variables["ADISCORD_west_push"], 5)
+
+    def test_each_region_is_audited_once(self) -> None:
+        audit = "WRK_executive_district_audit"
+        script = self.campaign()
+        self.assertTrue(self.start(script, audit, self.SITE))
+        script.run(self.programmes[audit]["remove_effect"])
+        self.assertIn("WRK_executive_district_audited", script.scopes[self.SITE].flags)
+        self.assertFalse(self.start(script, audit, self.SITE))
+        self.assertTrue(self.start(script, audit, self.OTHER_SITE))
+
+    def test_cancellation_and_a_failed_delivery_refund_the_price_exactly_once(self) -> None:
+        causes = ("subject", "capitulation", "site_lost", "no_room")
+        for name, cause, callback in product(
+            self.ORDERS, causes, ("cancel_effect", "remove_effect")
+        ):
+            decision = self.programmes[name]
+            targeted = "state_target" in decision
+            if cause == "site_lost" and not targeted:
+                continue
+            if cause == "no_room" and (name != "WRK_executive_norm_order" or callback != "remove_effect"):
+                continue
+            with self.subTest(name=name, cause=cause, callback=callback):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                site = script.scopes[self.SITE]
+                self.assertTrue(self.start(script, name, self.target(name)))
+                self.assertLess(country.resources["pp"], 200)
+                if cause == "subject":
+                    country.subject = "IVN"
+                elif cause == "capitulation":
+                    country.capitulated = True
+                elif cause == "site_lost":
+                    site.controller = "IVN"
+                else:
+                    site.resources["industrial_complex_slots"] = 0
+                if cause != "no_room":
+                    self.assertTrue(script.conditions(decision["cancel_trigger"]))
+                script.run(decision[callback])
+                script.run(decision[callback])
+                script.run(decision["cancel_effect"])
+                self.assertEqual(country.resources["pp"], 200)
+                self.assert_order_closed(script)
+                self.assertEqual(country.resources["infantry_equipment"], 0)
+                self.assertEqual(site.resources["industrial_complex"], 0)
+                self.assertEqual(site.variables.get("shared_building_slots", 0), 0)
+                self.assertNotIn("WRK_executive_district_audited", site.flags)
+                self.assertNotIn("WRK_executive_norm_built", site.flags)
+
+    def test_norm_orders_build_one_plant_per_region(self) -> None:
+        norm = "WRK_executive_norm_order"
+        decision = self.programmes[norm]
+        script = self.campaign()
+        country = script.scopes[self.NATION]
+        site = script.scopes[self.SITE]
+        country.resources["pp"] = 1000
+        self.assertTrue(self.start(script, norm, self.SITE))
+        script.run(decision["remove_effect"])
+        self.assertIn("WRK_executive_norm_built", site.flags)
+        self.assertEqual(site.resources["industrial_complex"], 1)
+        # The order brought its own slot, yet the region is closed for good.
+        site.resources["industrial_complex_slots"] = 5
+        self.assertFalse(self.start(script, norm, self.SITE))
+        self.assertEqual(country.resources["pp"], 950)
+        self.assertTrue(self.start(script, norm, self.OTHER_SITE))
+        script.run(decision["remove_effect"])
+        self.assertEqual(script.scopes[self.OTHER_SITE].resources["industrial_complex"], 1)
+        self.assertFalse(self.start(script, norm, self.OTHER_SITE))
+        # A refunded order leaves the region open.
+        retry = self.campaign()
+        self.assertTrue(self.start(retry, norm, self.SITE))
+        retry.scopes[self.SITE].controller = "IVN"
+        retry.run(decision["cancel_effect"])
+        retry.scopes[self.SITE].controller = self.NATION
+        self.assertTrue(self.start(retry, norm, self.SITE))
+
+    def test_state_orders_keep_slot_tests_out_of_the_cached_target_list(self) -> None:
+        from tools.tests.test_vorkerland_preparation import TRIGGERS, walk
+
+        effects = read(PHASE_EFFECTS_FILE)
+        triggers = read(COMMITTEE_TRIGGER_FILE)
+        self.assertEqual(committee_order_issues(self.decision_source, effects, triggers), [])
+        for decision_id, (site, _finish, done_flag) in COMMITTEE_STATE_ORDERS.items():
+            with self.subTest(decision_id=decision_id):
+                cached = [key for key, _op, _value in walk(TRIGGERS[site])]
+                self.assertNotIn("free_building_slots", cached)
+                self.assertIn("is_owned_and_controlled_by", cached)
+                self.assertIn(done_flag, [value for _key, _op, value in walk(TRIGGERS[site])])
+        # A norm order with no room is refused when it is placed, with a reason.
+        norm = self.programmes["WRK_executive_norm_order"]
+        self.assertIn("WRK_executive_norm_room_tt", [value for _k, _o, value in walk(norm["available"])])
+        script = self.campaign()
+        script.scopes[self.SITE].resources["industrial_complex_slots"] = 0
+        script.source = self.SITE
+        self.assertTrue(script.conditions(norm["target_trigger"]))
+        self.assertFalse(script.conditions(norm["available"]))
+        self.assertFalse(self.start(script, "WRK_executive_norm_order", self.SITE))
+        broken = triggers.replace(
+            "WRK_executive_norm_site = {\n\tis_owned_and_controlled_by = ROOT\n",
+            "WRK_executive_norm_site = {\n\tis_owned_and_controlled_by = ROOT\n"
+            "\tfree_building_slots = { building = industrial_complex size > 0 }\n",
+            1,
+        )
+        self.assertNotEqual(broken, triggers)
+        self.assertIn(
+            "WRK_executive_norm_site must keep building-slot tests out of the cached target list",
+            committee_order_issues(self.decision_source, effects, broken),
+        )
+        farmed = triggers.replace(
+            "\tNOT = { has_state_flag = WRK_executive_norm_built }\n", "", 1
+        )
+        self.assertNotEqual(farmed, triggers)
+        self.assertIn(
+            "WRK_executive_norm_site must stop at one WRK_executive_norm_order per region",
+            committee_order_issues(self.decision_source, effects, farmed),
+        )
+
+    def test_contract_lean_stops_after_five_counted_deliveries(self) -> None:
+        contract = "WRK_executive_republic_contract"
+        decision = self.programmes[contract]
+        script = self.campaign()
+        country = script.scopes[self.NATION]
+        country.resources["pp"] = 1000
+        for delivery in range(1, 8):
+            self.assertTrue(self.start(script, contract))
+            script.run(decision["remove_effect"])
+            leans = [scope for key, scope, _ in script.calls if key == "ADISCORD_west_push_lean"]
+            self.assertEqual(len(leans), 2 * min(delivery, 5), delivery)
+        self.assertEqual(country.variables["WRK_executive_contract_leans"], 5)
+        # The goods keep coming; only the political effect is spent.
+        self.assertEqual(country.resources["infantry_equipment"], 7 * 5000)
+        effects = read(PHASE_EFFECTS_FILE)
+        triggers = read(COMMITTEE_TRIGGER_FILE)
+        gate = "var = WRK_executive_contract_leans value = 5 compare = less_than"
+        self.assertEqual(triggers.count(gate), 1)
+        uncapped = triggers.replace(gate, gate.replace("value = 5 ", "value = 500 "))
+        self.assertIn(
+            "the republic contract's lean must stop after five counted deliveries",
+            committee_order_issues(self.decision_source, effects, uncapped),
+        )
+
+    def test_order_tooltips_name_every_refund_path_and_the_limit(self) -> None:
+        for path, words in (
+            (RUSSIAN_LOCALISATION, ("капитуляция", "утрата самостоятельности", "Потеря региона")),
+            (ENGLISH_LOCALISATION, ("capitulation", "loss of independence", "Loss of the region")),
+        ):
+            entries = localisation_entries(read(path))
+            for key in ("WRK_executive_norm_order_tt", "WRK_executive_district_audit_tt"):
+                with self.subTest(path=path, key=key):
+                    for word in words:
+                        self.assertIn(word, entries[key])
+                    # One per region, shown as a number.
+                    self.assertIn("§Y1§!", entries[key])
+            self.assertIn("§Y5§!", entries["WRK_executive_contract_lean_tt"])
+            self.assertNotRegex(entries["WRK_executive_norm_order_desc"], r"\d|§|£")
+
+    def test_callback_of_another_order_or_region_settles_nothing(self) -> None:
+        for name in self.ORDERS:
+            script = self.campaign()
+            self.assertTrue(self.start(script, name, self.target(name)))
+            paid = deepcopy(script.scopes)
+            for other in self.ORDERS:
+                if other == name:
+                    continue
+                for callback in ("remove_effect", "cancel_effect"):
+                    script.run(self.programmes[other][callback])
+                    self.assertEqual(script.scopes, paid, (name, other, callback))
+            if "state_target" in self.programmes[name]:
+                script.source = self.OTHER_SITE
+                for callback in ("remove_effect", "cancel_effect"):
+                    script.run(self.programmes[name][callback])
+                    self.assertEqual(script.scopes, paid, (name, callback))
+
+    def test_cooperative_works_are_paid_once_and_delivered_as_previewed(self) -> None:
+        decision = self.programmes[self.WORKS]
+        brigades = self.V + "worker_cooperative_brigades"
+        for executive in (True, False):
+            script = self.campaign(executive)
+            country = script.scopes[self.NATION]
+            self.assertTrue(self.start(script, self.WORKS))
+            self.assertEqual(country.resources["pp"], 170)
+            self.assertEqual(country.variables[self.WORKS_RECEIPT], float(decision["cost"]))
+            paid = deepcopy(script.scopes)
+            self.assertFalse(self.start(script, self.WORKS))
+            self.assertEqual(script.scopes, paid)
+            preview = deepcopy(script)
+            preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+            script.run(decision["remove_effect"])
+            self.assertEqual(dict(country.resources), dict(preview.scopes[self.NATION].resources))
+            self.assertEqual(country.resources["train_equipment"], 10)
+            self.assertEqual(country.resources["pp"], 170)
+            self.assertIn(brigades, country.flags)
+            terms = [
+                self.fields(value)
+                for key, _scope, value in script.calls
+                if key == "add_timed_idea"
+            ]
+            self.assertEqual(terms, [{"idea": brigades, "days": "60"}])
+            self.assertNotIn(self.WORKS_RECEIPT, country.variables)
+            settled = deepcopy((script.scopes, script.calls))
+            script.run(decision["remove_effect"])
+            script.run(decision["cancel_effect"])
+            self.assertEqual((script.scopes, script.calls), settled)
+            # A new contract waits until the brigades have left.
+            self.assertFalse(self.start(script, self.WORKS))
+            country.flags.discard(brigades)
+            self.assertTrue(self.start(script, self.WORKS))
+        locked = self.campaign()
+        locked.scopes[self.NATION].flags.discard(
+            SETTLEMENT_PROGRAMMES["WRK_worker_fund_cooperative_reconstruction"][1]
+        )
+        self.assertFalse(self.start(locked, self.WORKS))
+
+    def test_cooperative_works_refund_when_the_country_loses_its_independence(self) -> None:
+        decision = self.programmes[self.WORKS]
+        for cause, callback in product(
+            ("subject", "capitulation"), ("cancel_effect", "remove_effect")
+        ):
+            with self.subTest(cause=cause, callback=callback):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                self.assertTrue(self.start(script, self.WORKS))
+                if cause == "subject":
+                    country.subject = "IVN"
+                else:
+                    country.capitulated = True
+                self.assertTrue(script.conditions(decision["cancel_trigger"]))
+                script.run(decision[callback])
+                script.run(decision[callback])
+                script.run(decision["cancel_effect"])
+                self.assertEqual(country.resources["pp"], 200)
+                self.assertNotIn(self.WORKS_RECEIPT, country.variables)
+                self.assertEqual(country.resources["train_equipment"], 0)
+                self.assertFalse([call for call in script.calls if call[0] == "add_timed_idea"])
+
+    def test_programme_unlocks_outlive_the_settlement_tree(self) -> None:
+        for focus_id, (decision, flag, _receipt) in SETTLEMENT_PROGRAMMES.items():
+            with self.subTest(focus_id=focus_id):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                country.flags.discard(flag)
+                script.run(self.focuses[focus_id]["completion_reward"])
+                self.assertIn(flag, country.flags)
+                # The next tree is loaded without the completed settlement focuses.
+                country.focuses.clear()
+                country.resources["pp"] = 200
+                self.assertTrue(self.start(script, decision, self.target(decision)))
+                self.assertNotIn("has_completed_focus", _blocks(self.decision_source, decision)[0])
+
+    def contract_issues(self, blocks=None, decisions=None, plans=None, ideas=None) -> list[str]:
+        return _check_settlement_branch(
+            blocks or self.blocks,
+            resolved_positions(blocks) if blocks else self.grid,
+            decisions or self.decision_source,
+            ideas or self.ideas,
+            self.dynamic,
+            plans or self.plans,
+        )
+
+    def test_contract_rejects_a_broken_branch(self) -> None:
+        self.assertEqual(self.contract_issues(), [])
+        tower_id = POSTWAR_ROUTE_TERMINALS[POSTWAR_EXECUTIVE_ROUTE]
+        norms, contracts = POSTWAR_EXECUTIVE_CHOICE
+
+        def mutated(focus_id: str, old: str, new: str) -> dict[str, str]:
+            self.assertEqual(self.blocks[focus_id].count(old), 1, (focus_id, old))
+            return {**self.blocks, focus_id: self.blocks[focus_id].replace(old, new)}
+
+        required = mutated(
+            tower_id,
+            "prerequisite = { focus = WRK_worker_write_constitutional_guarantees }",
+            "prerequisite = { focus = WRK_worker_write_constitutional_guarantees }\n"
+            f"\t\tprerequisite = {{ focus = {POSTWAR_EXECUTIVE_FINAL} }}",
+        )
+        self.assertIn(
+            f"{tower_id} must not require an Executive Committee focus",
+            self.contract_issues(blocks=required),
+        )
+        preview = mutated(
+            norms,
+            "var = ADISCORD_vorkerland_pw_construction value = 0.10",
+            "var = ADISCORD_vorkerland_pw_construction value = 0.15",
+        )
+        self.assertTrue(
+            [issue for issue in self.contract_issues(blocks=preview) if issue.startswith(f"{norms} previews")]
+        )
+        unread = mutated(
+            norms,
+            "var = ADISCORD_vorkerland_pw_construction value = 0.10",
+            "var = ADISCORD_vorkerland_pw_unread value = 0.10",
+        )
+        self.assertIn(
+            f"{norms}: ADISCORD_vorkerland_pw_unread is not read by ADISCORD_vorkerland_postwar_institutions",
+            self.contract_issues(blocks=unread),
+        )
+        merged = mutated(
+            norms, f"mutually_exclusive = {{ focus = {contracts} }}", ""
+        )
+        self.assertIn(
+            f"{norms} must be mutually exclusive with {contracts}",
+            self.contract_issues(blocks=merged),
+        )
+        ungated = mutated(
+            tower_id, f"has_country_flag = {POSTWAR_EXECUTIVE_GATE}\n\t\t\t\tNOT", "NOT"
+        )
+        self.assertIn(
+            "the executive AI must finish the committee branch before the Tower",
+            self.contract_issues(blocks=ungated),
+        )
+        receipt = "set_variable = { var = WRK_executive_order_deposit value = 50 }"
+        self.assertEqual(self.decision_source.count(receipt), 1)
+        underpaid = self.decision_source.replace(receipt, receipt.replace("50", "40"))
+        self.assertIn(
+            "programme WRK_executive_norm_order must record a receipt equal to its price",
+            self.contract_issues(decisions=underpaid),
+        )
+        both = self.plans.replace(f"\t\t{norms}\n", f"\t\t{norms}\n\t\t{contracts}\n", 1)
+        self.assertNotEqual(both, self.plans)
+        self.assertIn(
+            f"AI plan must take exactly one committee alternative, found {[norms, contracts]}",
+            self.contract_issues(plans=both),
+        )
+        plan = _blocks(self.plans, SETTLEMENT_AI_PLAN)[0]
+        late = self.plans.replace(
+            plan,
+            plan.replace(f"\t\t{POSTWAR_EXECUTIVE_FINAL}\n", "", 1).replace(
+                f"\t\t{tower_id}\n", f"\t\t{tower_id}\n\t\t{POSTWAR_EXECUTIVE_FINAL}\n", 1
+            ),
+            1,
+        )
+        self.assertNotEqual(late, self.plans)
+        self.assertIn(
+            "AI plan must finish the committee branch before the Unity Tower",
+            self.contract_issues(plans=late),
+        )
+        # Each government has its own plan, and each plan takes one of the
+        # housing and grants alternatives.
+        congress = _blocks(self.plans, CONGRESS_AI_PLAN)[0]
+        housing, grants = next(
+            pair for pair in POSTWAR_POLICY_CHOICE_PAIRS if pair[0] in self.worker_route
+        )
+        self.assertEqual(
+            [name for name in (housing, grants) if f"\t\t{name}\n" in congress], [housing]
+        )
+        self.assertEqual(
+            [name for name in (housing, grants) if f"\t\t{name}\n" in plan], [grants]
+        )
+        undecided = self.plans.replace(congress, congress.replace(f"\t\t{housing}\n", "", 1), 1)
+        self.assertIn(
+            f"AI plan {CONGRESS_AI_PLAN} must take exactly one of the housing and grants "
+            "alternatives, found []",
+            self.contract_issues(plans=undecided),
+        )
+        leaked = self.plans.replace(
+            congress,
+            congress.replace(f"\t\t{tower_id}\n", f"\t\t{norms}\n\t\t{tower_id}\n", 1),
+            1,
+        )
+        self.assertIn(
+            f"AI plan {CONGRESS_AI_PLAN} names focuses hidden from its government ['{norms}']",
+            self.contract_issues(plans=leaked),
+        )
+
+    def test_settlement_text_is_bilingual_narrative_and_plain_ascii(self) -> None:
+        focus_keys = [
+            key
+            for focus_id in POSTWAR_EXECUTIVE_FOCUSES
+            for key in (focus_id, f"{focus_id}_desc")
+        ]
+        narrative = [key for key in (*focus_keys, *SETTLEMENT_LOCALISATION_KEYS) if key.endswith("_desc")]
+        self.assertEqual(len(narrative), 12)
+        for path in (ENGLISH_LOCALISATION, RUSSIAN_LOCALISATION):
+            raw = (ROOT / path).read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), path)
+            text = raw.decode("utf-8-sig")
+            for key in (*focus_keys, *SETTLEMENT_LOCALISATION_KEYS):
+                with self.subTest(path=path, key=key):
+                    lines = re.findall(
+                        rf'(?m)^ {re.escape(key)}:(?:\d+)? "((?:[^"\\\r\n]|\\.)*)"\r?$', text
+                    )
+                    self.assertEqual(len(lines), 1)
+                    value = lines[0]
+                    self.assertTrue(value.strip())
+                    for character in ("\u2013", "\u2014", "\u00ab", "\u00bb"):
+                        self.assertNotIn(character, value)
+                    if key in narrative:
+                        # Prices, durations and results stay in the effect block.
+                        self.assertNotRegex(value, r"[§£%]|\d")
+        russian = (ROOT / RUSSIAN_LOCALISATION).read_text(encoding="utf-8-sig")
+        english = (ROOT / ENGLISH_LOCALISATION).read_text(encoding="utf-8-sig")
+        committee = "\n".join(
+            line for line in russian.splitlines() if line.startswith(" WRK_executive_")
+        )
+        self.assertIn("Багли", committee)
+        self.assertNotIn("Бэгли", committee)
+        self.assertIn(
+            "Bagley",
+            "\n".join(line for line in english.splitlines() if line.startswith(" WRK_executive_")),
+        )
+
+
+class ExecutiveConfederationTests(unittest.TestCase):
+    """Two governments share the confederation tree after the Unity Tower.
+
+    The congress keeps its council branches; the Executive Committee draws its
+    own in the same cells. Its rewards and orders are executed from source.
+    """
+
+    NATION = "WKR"
+    SITE = "201"
+    OTHER_SITE = "32"
+    CIVIL_RECEIPT = "WRK_executive_order_deposit"
+    CADRE_RECEIPT = "WRK_executive_cadre_deposit"
+    CADRE_ORDERS = ("WRK_executive_cadre_course", "WRK_executive_depot_issue")
+    STATE_ORDERS = tuple(COMMITTEE_STATE_ORDERS)
+    CONTRACT = "WRK_executive_republic_contract"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        from tools.tests.test_vorkerland_preparation import V, fields, parse, walk
+
+        cls.Script = settlement_script_class()
+        cls.V = V
+        cls.fields = staticmethod(fields)
+        cls.source = read(CONFEDERATION_FILE)
+        cls.blocks = focus_blocks(cls.source)
+        cls.grid = resolved_positions(cls.blocks)
+        cls.focuses = {
+            fields(value)["id"]: fields(value)
+            for key, _, value in walk(parse(cls.source))
+            if key == "focus" and isinstance(value, list)
+        }
+        cls.decision_source = read(DIPLOMACY_DECISIONS_FILE)
+        operations = fields(fields(parse(cls.decision_source))[V + "focus_operations_category"])
+        cls.orders = {
+            name: fields(operations[name])
+            for name in (*cls.STATE_ORDERS, cls.CONTRACT, *cls.CADRE_ORDERS)
+        }
+        cls.effects = read(PHASE_EFFECTS_FILE)
+        cls.ideas = read(COLLAPSE_IDEAS_FILE)
+        cls.dynamic = read(SETTLEMENT_AGGREGATE_FILE)
+        cls.aggregate = settlement_aggregate_fields(cls.dynamic)
+        cls.plans = read(WKR_AI_PLAN_FILE)
+        cls.parsed_plans = fields(parse(cls.plans))
+        cls.localisations = {
+            "English": localisation_entries(read(ENGLISH_LOCALISATION)),
+            "Russian": localisation_entries(read(RUSSIAN_LOCALISATION)),
+        }
+        cls.unlocks = {
+            decision: flag
+            for programmes in (SETTLEMENT_PROGRAMMES, CONFEDERATION_PROGRAMMES)
+            for decision, flag, _receipt in programmes.values()
+        }
+
+    def campaign(self, executive: bool = True, unlocked: bool = True):
+        V = self.V
+        script = self.Script()
+        script.root = self.NATION
+        script.globals = {
+            V + "phase_postwar_integration",
+            V + "reunification_verified",
+            V + "collapse_finished",
+            V + "unity_tower_restored",
+        }
+        script.event_targets["ADISCORD_vorkerland_nation"] = self.NATION
+        country = script.scopes[self.NATION]
+        country.resources.clear()
+        country.resources["pp"] = 1000
+        country.flags.update({POSTWAR_EXECUTIVE_ROUTE, V + "central_unifier"})
+        if executive:
+            country.flags.add(POSTWAR_EXECUTIVE_GATE)
+        if unlocked:
+            country.flags.update(self.unlocks.values())
+        for state, arsenal_slots in ((self.SITE, 0), (self.OTHER_SITE, 1)):
+            scope = script.scopes[state]
+            scope.owner = scope.controller = self.NATION
+            scope.cores.add(self.NATION)
+            scope.resources.update(
+                industrial_complex_slots=1, arms_factory_slots=arsenal_slots, infrastructure_slots=1
+            )
+        script.scopes["capital_" + self.NATION].resources["infrastructure_slots"] = 1
+        return script
+
+    def start(self, script, name: str, target: str | None = None) -> bool:
+        return start_programme(script, self.NATION, self.orders[name], target)
+
+    def issues(self, source=None, plans=None, decisions=None) -> list[str]:
+        return _check_confederation_tree(
+            source or self.source,
+            decisions or self.decision_source,
+            self.effects,
+            self.ideas,
+            self.dynamic,
+            plans or self.plans,
+            self.localisations,
+        )
+
+    def test_each_government_sees_only_its_own_domestic_branches(self) -> None:
+        for executive, government in ((True, "executive"), (False, "congress")):
+            script = self.campaign(executive)
+            visible = {
+                name
+                for name, focus in self.focuses.items()
+                if script.conditions(focus.get("allow_branch", []))
+            }
+            view = confederation_view(government)
+            self.assertEqual(visible, set(view), government)
+            cells = [self.grid[name] for name in view]
+            self.assertEqual(len(cells), len(set(cells)), government)
+        self.assertEqual(
+            (
+                len(CONFEDERATION_SHARED_FOCUSES),
+                len(CONFEDERATION_COUNCIL_FOCUSES),
+                len(CONFEDERATION_EXECUTIVE_FOCUSES),
+            ),
+            (8, 14, 15),
+        )
+        self.assertEqual(len(self.blocks), 37)
+        # The two governments' branches occupy the same part of the canvas,
+        # which is legal only because they are never drawn together.
+        council = {self.grid[name] for name in CONFEDERATION_COUNCIL_FOCUSES}
+        executive = {self.grid[name] for name in CONFEDERATION_EXECUTIVE_FOCUSES}
+        self.assertEqual(len(council & executive), 13)
+        self.assertFalse(
+            confederation_can_share_view(
+                CONFEDERATION_COUNCIL_FOCUSES[0], CONFEDERATION_EXECUTIVE_FOCUSES[0]
+            )
+        )
+        self.assertTrue(
+            confederation_can_share_view(
+                CONFEDERATION_SHARED_FOCUSES[0], CONFEDERATION_EXECUTIVE_FOCUSES[0]
+            )
+        )
+        self.assertTrue(
+            confederation_can_share_view(
+                CONFEDERATION_EXECUTIVE_FOCUSES[0], CONFEDERATION_EXECUTIVE_FOCUSES[1]
+            )
+        )
+
+    def test_both_governments_reach_every_shared_focus(self) -> None:
+        for government in ("congress", "executive"):
+            view = set(confederation_view(government))
+            self.assertEqual(confederation_reachable(self.blocks, government), view)
+        mandate = _prerequisite_groups(self.blocks["WRK_worker_west_mandate_for_itora"])
+        self.assertIn(
+            frozenset({"WRK_conf_army_of_the_republics", "WRK_exec_cadre_army"}), mandate
+        )
+        # Without its own army final in that block the Executive Committee
+        # could never open the western mandate.
+        severed = self.source.replace("\t\t\tfocus = WRK_exec_cadre_army\n", "", 1)
+        self.assertNotEqual(severed, self.source)
+        issues = self.issues(source=severed)
+        self.assertIn(
+            "the executive government cannot reach ['WRK_worker_west_mandate_for_itora']", issues
+        )
+        self.assertIn(
+            "shared focus WRK_worker_west_mandate_for_itora needs "
+            "['WRK_conf_army_of_the_republics'] of one government only",
+            issues,
+        )
+
+    def test_branches_take_the_same_time_for_both_governments(self) -> None:
+        days = {}
+        for branch, (council, executive) in CONFEDERATION_BRANCHES.items():
+            council_days = confederation_path_units(self.blocks, council) * 7
+            executive_days = confederation_path_units(self.blocks, executive) * 7
+            self.assertEqual(council_days, executive_days, branch)
+            days[branch] = executive_days
+        self.assertEqual(days, {"reconstruction": 77, "industry": 91, "army": 91})
+        for left, right in CONFEDERATION_EXECUTIVE_CHOICES:
+            self.assertEqual(_mutually_exclusive_focuses(self.blocks[left]), {right})
+            self.assertEqual(_mutually_exclusive_focuses(self.blocks[right]), {left})
+            rejoin = [
+                name
+                for name in CONFEDERATION_EXECUTIVE_FOCUSES
+                if frozenset({left, right}) in _prerequisite_groups(self.blocks[name])
+            ]
+            self.assertEqual(len(rejoin), 1, (left, right))
+
+    def test_every_committee_focus_pays_two_substantive_rewards(self) -> None:
+        for name in CONFEDERATION_EXECUTIVE_FOCUSES:
+            with self.subTest(name=name):
+                self.assertGreaterEqual(len(confederation_reward_classes(self.blocks[name])), 2)
+                # The congress branches own the development reforms of this tree.
+                self.assertNotIn("ADISCORD_reform_", self.blocks[name])
+        reforms = re.findall(r"ADISCORD_reform_(\w+)_development = yes", self.source)
+        self.assertCountEqual(reforms, ("society", "social_system", "army", "state", "economic"))
+
+    def test_aggregate_previews_equal_the_executed_change(self) -> None:
+        V = self.V
+        changed = 0
+        for name in CONFEDERATION_EXECUTIVE_FOCUSES:
+            with self.subTest(name=name):
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                before = dict(country.variables)
+                script.run(self.focuses[name]["completion_reward"])
+                executed = {
+                    modifier: round(
+                        country.variables.get(variable, 0) - before.get(variable, 0), 6
+                    )
+                    for variable, modifier in self.aggregate.items()
+                    if country.variables.get(variable, 0) != before.get(variable, 0)
+                }
+                applied, shown, defects = settlement_aggregate_delta(
+                    self.blocks[name], self.aggregate, self.ideas
+                )
+                self.assertEqual(defects, [])
+                self.assertEqual(applied, shown)
+                self.assertEqual(executed, shown)
+                if executed:
+                    changed += 1
+                    self.assertIn(V + "postwar_institutions", country.flags)
+                self.assertFalse(
+                    {flag for flag in country.flags if flag.startswith(V + "pw_delta_")}
+                )
+        self.assertEqual(changed, 11)
+
+    def test_money_and_growth_tooltips_state_the_executed_amount(self) -> None:
+        treasury = "ADISCORD_economy_treasury"
+        for name, tooltip in (
+            ("WRK_exec_district_inventory", "WRK_exec_inventory_treasury_tt"),
+            ("WRK_exec_rolling_district_audit", "WRK_exec_rolling_audit_treasury_tt"),
+            ("WRK_exec_central_order_bureau", "WRK_exec_order_bureau_treasury_tt"),
+        ):
+            script = self.campaign()
+            script.run(self.focuses[name]["completion_reward"])
+            amount = script.scopes[self.NATION].variables[treasury]
+            self.assertEqual(
+                script.scopes[self.NATION].variables["ADISCORD_economy_current_month_action_income"],
+                amount,
+            )
+            for entries in self.localisations.values():
+                self.assertIn(
+                    f"§G+{amount:g}§! £ADISCORD_economy_treasury_texticon", entries[tooltip]
+                )
+        for name, axis in (
+            ("WRK_exec_district_inventory", "society"),
+            ("WRK_exec_ration_by_ledger", "social_system"),
+            ("WRK_exec_central_order_bureau", "economic"),
+            ("WRK_exec_staff_by_examination", "army"),
+        ):
+            script = self.campaign()
+            script.run(self.focuses[name]["completion_reward"])
+            calls = [key for key, _scope, _value in script.calls if key.startswith("ADISCORD_increase_")]
+            self.assertEqual(calls, [f"ADISCORD_increase_{axis}_development_monthly_growth"] * 2)
+            for entries in self.localisations.values():
+                self.assertIn(
+                    f"§G+{len(calls)}§! £ADISCORD_country_development_texticon",
+                    entries[f"WRK_exec_{axis}_growth_tt"],
+                )
+
+    def test_late_unlocks_open_only_what_the_settlement_skipped(self) -> None:
+        for name, (decision, flag) in CONFEDERATION_LATE_UNLOCKS.items():
+            with self.subTest(name=name):
+                skipped = self.campaign(unlocked=False)
+                country = skipped.scopes[self.NATION]
+                skipped.run(self.focuses[name]["completion_reward"])
+                self.assertIn(flag, country.flags)
+                gained_by_skipper = country.resources["pp"]
+                finished = self.campaign(unlocked=False)
+                country = finished.scopes[self.NATION]
+                country.flags.add(flag)
+                finished.run(self.focuses[name]["completion_reward"])
+                self.assertIn(flag, country.flags)
+                if name == "WRK_exec_district_inventory":
+                    # The government that already runs audits is paid for two.
+                    self.assertEqual(country.resources["pp"] - gained_by_skipper, 50)
+                    self.assertEqual(float(self.orders[decision]["cost"]) * 2, 50)
+                else:
+                    self.assertEqual(country.resources["pp"], gained_by_skipper)
+        # A government that skipped the whole settlement branch can still
+        # place an order of each civil kind after these focuses.
+        script = self.campaign(unlocked=False)
+        country = script.scopes[self.NATION]
+        self.assertFalse(self.start(script, "WRK_executive_district_audit", self.SITE))
+        script.run(self.focuses["WRK_exec_district_inventory"]["completion_reward"])
+        self.assertTrue(self.start(script, "WRK_executive_district_audit", self.SITE))
+        script.run(self.orders["WRK_executive_district_audit"]["remove_effect"])
+        self.assertFalse(self.start(script, "WRK_executive_norm_order", self.SITE))
+        script.run(self.focuses["WRK_exec_norm_series"]["completion_reward"])
+        self.assertTrue(self.start(script, "WRK_executive_norm_order", self.SITE))
+
+    def test_committee_opens_district_reconstruction_for_its_own_government(self) -> None:
+        from tools.tests.test_vorkerland_preparation import TRIGGERS
+
+        V = self.V
+        script = self.campaign()
+        country = script.scopes[self.NATION]
+        opened = TRIGGERS[V + "pw_reconstruction_open"]
+        slot = TRIGGERS[V + "pw_rebuild_slot_free"]
+        self.assertFalse(script.conditions(opened))
+        country.focuses.add("WRK_exec_reconstruction_work_orders")
+        self.assertTrue(script.conditions(opened))
+        for extra, capacity in (
+            ((), 1),
+            (("WRK_exec_second_construction_trust",), 2),
+            (("WRK_exec_ration_by_ledger",), 3),
+            (("WRK_exec_second_construction_trust", "WRK_exec_ration_by_ledger"), 3),
+        ):
+            country.focuses = {"WRK_exec_reconstruction_work_orders", *extra}
+            for active in range(4):
+                country.variables[V + "pw_rebuild_active"] = active
+                self.assertEqual(script.conditions(slot), active < capacity, (extra, active))
+        for name in ("WRK_exec_second_construction_trust", "WRK_exec_ration_by_ledger"):
+            self.assertIn("custom_effect_tooltip = WRK_route_rebuild_slot_tt", self.blocks[name])
+        self.assertIn(
+            "unlock_decision_tooltip = ADISCORD_vorkerland_pw_rebuild_district",
+            self.blocks["WRK_exec_reconstruction_work_orders"],
+        )
+
+    def test_cadre_orders_run_beside_the_civil_orders_on_their_own_receipt(self) -> None:
+        results = {
+            "WRK_executive_cadre_course": {"army_experience": 40, "command": 15},
+            "WRK_executive_depot_issue": {
+                "artillery_equipment": 250, "support_equipment": 250, "motorized_equipment": 150,
+            },
+        }
+        for name in self.CADRE_ORDERS:
+            with self.subTest(name=name):
+                decision = self.orders[name]
+                price = float(decision["cost"])
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                # A civil order in progress does not hold the cadre order back.
+                self.assertTrue(self.start(script, "WRK_executive_norm_order", self.SITE))
+                civil = country.resources["pp"]
+                self.assertTrue(self.start(script, name))
+                self.assertEqual(country.resources["pp"], civil - price)
+                self.assertEqual(country.variables[self.CADRE_RECEIPT], price)
+                self.assertEqual(country.variables[self.CIVIL_RECEIPT], 50)
+                paid = deepcopy(script.scopes)
+                for other in self.CADRE_ORDERS:
+                    self.assertFalse(self.start(script, other), other)
+                    self.assertEqual(script.scopes, paid)
+                preview = deepcopy(script)
+                preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+                script.run(decision["remove_effect"])
+                self.assertEqual(
+                    dict(country.resources), dict(preview.scopes[self.NATION].resources)
+                )
+                for resource, amount in results[name].items():
+                    self.assertEqual(country.resources[resource], amount)
+                self.assertEqual(country.resources["pp"], civil - price)
+                self.assertNotIn(self.CADRE_RECEIPT, country.variables)
+                # The civil receipt is untouched by the cadre delivery.
+                self.assertEqual(country.variables[self.CIVIL_RECEIPT], 50)
+                self.assertIn("WRK_executive_norm_order_pending", country.flags)
+                settled = deepcopy(script.scopes)
+                script.run(decision["remove_effect"])
+                script.run(decision["cancel_effect"])
+                for other in self.CADRE_ORDERS:
+                    script.run(self.orders[other]["cancel_effect"])
+                self.assertEqual(script.scopes, settled)
+                self.assertFalse(self.start(self.campaign(executive=False), name))
+                locked = self.campaign()
+                locked.scopes[self.NATION].flags.discard(self.unlocks[name])
+                self.assertFalse(self.start(locked, name))
+
+    def test_cadre_orders_refund_once_when_the_country_loses_its_independence(self) -> None:
+        for name, cause, callback in product(
+            self.CADRE_ORDERS, ("subject", "capitulation"), ("cancel_effect", "remove_effect")
+        ):
+            with self.subTest(name=name, cause=cause, callback=callback):
+                decision = self.orders[name]
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                self.assertTrue(self.start(script, name))
+                if cause == "subject":
+                    country.subject = "IVN"
+                else:
+                    country.capitulated = True
+                self.assertTrue(script.conditions(decision["cancel_trigger"]))
+                script.run(decision[callback])
+                script.run(decision[callback])
+                script.run(decision["cancel_effect"])
+                self.assertEqual(country.resources["pp"], 1000)
+                self.assertNotIn(self.CADRE_RECEIPT, country.variables)
+                self.assertFalse({flag for flag in country.flags if flag.endswith("_pending")})
+                self.assertEqual(country.resources["army_experience"], 0)
+                self.assertEqual(country.resources["artillery_equipment"], 0)
+
+    def test_arsenal_order_builds_once_in_the_slot_an_audit_opened(self) -> None:
+        arsenal = "WRK_executive_arsenal_order"
+        audit = "WRK_executive_district_audit"
+        decision = self.orders[arsenal]
+        script = self.campaign()
+        country = script.scopes[self.NATION]
+        site = script.scopes[self.SITE]
+        # An unaudited region is not on the books, whatever slots it has.
+        self.assertFalse(self.start(script, arsenal, self.OTHER_SITE))
+        self.assertFalse(self.start(script, arsenal, self.SITE))
+        self.assertTrue(self.start(script, audit, self.SITE))
+        script.run(self.orders[audit]["remove_effect"])
+        self.assertEqual(site.resources["arms_factory_slots"], 1)
+        before = country.resources["pp"]
+        self.assertTrue(self.start(script, arsenal, self.SITE))
+        self.assertEqual(country.resources["pp"], before - 60)
+        self.assertEqual(country.variables[self.CIVIL_RECEIPT], 60)
+        preview = deepcopy(script)
+        preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+        script.run(decision["remove_effect"])
+        self.assertEqual(dict(site.resources), dict(preview.scopes[self.SITE].resources))
+        self.assertEqual(site.resources["arms_factory"], 1)
+        self.assertEqual(site.resources["arms_factory_slots"], 0)
+        self.assertIn("WRK_executive_arsenal_built", site.flags)
+        self.assertNotIn(self.CIVIL_RECEIPT, country.variables)
+        settled = deepcopy(script.scopes)
+        script.run(decision["remove_effect"])
+        script.run(decision["cancel_effect"])
+        self.assertEqual(script.scopes, settled)
+        site.resources["arms_factory_slots"] = 3
+        self.assertFalse(self.start(script, arsenal, self.SITE))
+        # A slot the player used meanwhile, or a lost region, returns the price.
+        for cause in ("no_slot", "site_lost", "subject"):
+            with self.subTest(cause=cause):
+                retry = self.campaign()
+                country = retry.scopes[self.NATION]
+                site = retry.scopes[self.SITE]
+                site.flags.add("WRK_executive_district_audited")
+                site.resources["arms_factory_slots"] = 1
+                self.assertTrue(self.start(retry, arsenal, self.SITE))
+                if cause == "no_slot":
+                    site.resources["arms_factory_slots"] = 0
+                elif cause == "site_lost":
+                    site.controller = "IVN"
+                else:
+                    country.subject = "IVN"
+                if cause != "no_slot":
+                    self.assertTrue(retry.conditions(decision["cancel_trigger"]))
+                retry.run(decision["remove_effect"])
+                retry.run(decision["cancel_effect"])
+                self.assertEqual(country.resources["pp"], 1000)
+                self.assertNotIn(self.CIVIL_RECEIPT, country.variables)
+                self.assertEqual(site.resources["arms_factory"], 0)
+                self.assertNotIn("WRK_executive_arsenal_built", site.flags)
+        # No slot at all is refused when the order is placed.
+        full = self.campaign()
+        full.scopes[self.SITE].flags.add("WRK_executive_district_audited")
+        self.assertFalse(self.start(full, arsenal, self.SITE))
+        self.assertEqual(full.scopes[self.NATION].resources["pp"], 1000)
+
+    def test_standing_upgrades_change_the_delivery_and_its_preview(self) -> None:
+        cases = {
+            "WRK_exec_norm_series": ("WRK_executive_norm_order", self.SITE),
+            "WRK_exec_rolling_district_audit": ("WRK_executive_district_audit", self.SITE),
+            "WRK_exec_republic_supply_chain": (self.CONTRACT, None),
+        }
+        outcomes = {}
+        for upgraded in (False, True):
+            for name, (order, target) in cases.items():
+                decision = self.orders[order]
+                script = self.campaign()
+                country = script.scopes[self.NATION]
+                site = script.scopes[self.SITE]
+                if upgraded:
+                    country.flags.add(CONFEDERATION_ORDER_UPGRADES[name][0])
+                self.assertTrue(self.start(script, order, target))
+                preview = deepcopy(script)
+                preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+                script.run(decision["remove_effect"])
+                for scope in (self.NATION, self.SITE):
+                    self.assertEqual(
+                        dict(script.scopes[scope].resources),
+                        dict(preview.scopes[scope].resources),
+                        (name, upgraded),
+                    )
+                self.assertEqual(
+                    site.variables.get("shared_building_slots", 0),
+                    preview.scopes[self.SITE].variables.get("shared_building_slots", 0),
+                )
+                outcomes[name, upgraded] = (
+                    site.variables.get("shared_building_slots", 0),
+                    site.resources["infrastructure"],
+                    country.resources["infantry_equipment"],
+                    country.resources["artillery_equipment"],
+                )
+        self.assertEqual(outcomes["WRK_exec_norm_series", False], (1, 0, 0, 0))
+        self.assertEqual(outcomes["WRK_exec_norm_series", True], (2, 0, 0, 0))
+        self.assertEqual(outcomes["WRK_exec_rolling_district_audit", False], (1, 0, 600, 0))
+        self.assertEqual(outcomes["WRK_exec_rolling_district_audit", True], (1, 1, 900, 0))
+        self.assertEqual(outcomes["WRK_exec_republic_supply_chain", False], (0, 0, 5000, 0))
+        self.assertEqual(outcomes["WRK_exec_republic_supply_chain", True], (0, 0, 5000, 100))
+        # The numbers in the focus tooltips are the delivered differences.
+        for entries in self.localisations.values():
+            self.assertIn("§G1§!", entries["WRK_exec_norm_series_tt"])
+            self.assertIn("§G300§! £infantry_equipment_texticon", entries["WRK_exec_rolling_audit_tt"])
+            self.assertIn("§G100§! £artillery_texticon", entries["WRK_exec_supply_chain_tt"])
+            self.assertIn("§G10§! £political_power_texticon", entries["WRK_exec_order_bureau_tt"])
+
+    def test_order_bureau_returns_its_overhead_on_every_accepted_civil_order(self) -> None:
+        bureau = CONFEDERATION_ORDER_UPGRADES["WRK_exec_central_order_bureau"][0]
+        for order in (*self.STATE_ORDERS, self.CONTRACT):
+            with self.subTest(order=order):
+                decision = self.orders[order]
+                target = self.SITE if "state_target" in decision else None
+                for rebate in (0, 10):
+                    script = self.campaign()
+                    country = script.scopes[self.NATION]
+                    site = script.scopes[self.SITE]
+                    site.flags.add("WRK_executive_district_audited")
+                    site.resources["arms_factory_slots"] = 1
+                    if order == "WRK_executive_district_audit":
+                        site.flags.discard("WRK_executive_district_audited")
+                    if rebate:
+                        country.flags.add(bureau)
+                    self.assertTrue(self.start(script, order, target))
+                    paid = country.resources["pp"]
+                    preview = deepcopy(script)
+                    preview.run(self.fields(decision["complete_effect"])["effect_tooltip"])
+                    script.run(decision["remove_effect"])
+                    self.assertEqual(country.resources["pp"], paid + rebate)
+                    self.assertEqual(preview.scopes[self.NATION].resources["pp"], paid + rebate)
+                    # A refunded order earns no rebate.
+                    refund = self.campaign()
+                    country = refund.scopes[self.NATION]
+                    site = refund.scopes[self.SITE]
+                    site.flags.add("WRK_executive_district_audited")
+                    site.resources["arms_factory_slots"] = 1
+                    if order == "WRK_executive_district_audit":
+                        site.flags.discard("WRK_executive_district_audited")
+                    country.flags.add(bureau)
+                    self.assertTrue(self.start(refund, order, target))
+                    country.subject = "IVN"
+                    refund.run(decision["remove_effect"])
+                    self.assertEqual(country.resources["pp"], 1000)
+        # The cadre receipt is not a civil order.
+        script = self.campaign()
+        country = script.scopes[self.NATION]
+        country.flags.add(bureau)
+        self.assertTrue(self.start(script, "WRK_executive_cadre_course"))
+        paid = country.resources["pp"]
+        script.run(self.orders["WRK_executive_cadre_course"]["remove_effect"])
+        self.assertEqual(country.resources["pp"], paid)
+
+    def test_ai_plans_name_only_focuses_their_government_can_see(self) -> None:
+        for plan_id, government in (
+            (SETTLEMENT_AI_PLAN, "executive"), (CONGRESS_AI_PLAN, "congress"),
+        ):
+            with self.subTest(plan_id=plan_id):
+                planned = planned_focuses(self.plans, plan_id)
+                view = set(confederation_view(government))
+                confederation = [name for name in planned if name in self.blocks]
+                self.assertEqual(set(confederation) - view, set())
+                self.assertEqual(len(confederation), len(set(confederation)))
+                self.assertLessEqual(set(CONFEDERATION_SHARED_FOCUSES), set(confederation))
+                self.assertIn("WRK_worker_west_mandate_for_itora", confederation)
+                done: set[str] = set()
+                for name in confederation:
+                    self.assertTrue(
+                        all(group & done for group in _prerequisite_groups(self.blocks[name])),
+                        name,
+                    )
+                    self.assertFalse(_mutually_exclusive_focuses(self.blocks[name]) & done, name)
+                    done.add(name)
+                script = self.campaign(executive=government == "executive")
+                script.scopes[self.NATION].ai = True
+                enable = self.fields(self.parsed_plans[plan_id])["enable"]
+                self.assertTrue(script.conditions(enable))
+                other = self.campaign(executive=government != "executive")
+                other.scopes[self.NATION].ai = True
+                self.assertFalse(other.conditions(enable))
+        executive = planned_focuses(self.plans, SETTLEMENT_AI_PLAN)
+        for pair in CONFEDERATION_EXECUTIVE_CHOICES:
+            self.assertEqual(len([name for name in pair if name in executive]), 1, pair)
+        taken = [name for name in executive if name in CONFEDERATION_EXECUTIVE_FOCUSES]
+        self.assertEqual(len(taken), 12)
+
+    def test_contract_rejects_a_broken_tree(self) -> None:
+        self.assertEqual(self.issues(), [])
+        gate = f"has_country_flag = {POSTWAR_EXECUTIVE_GATE}"
+        council_id = "WRK_conf_veteran_resettlement"
+        council = self.blocks[council_id]
+        ungated = self.source.replace(
+            council, council.replace(f"\t\tallow_branch = {{ NOT = {{ {gate} }} }}\n", "", 1), 1
+        )
+        self.assertNotEqual(ungated, self.source)
+        issues = self.issues(source=ungated)
+        self.assertTrue(
+            [issue for issue in issues if issue.startswith(f"{council_id} belongs to the congress view")]
+        )
+        self.assertNotEqual(issues, [])
+        executive_id = "WRK_exec_cadre_army"
+        moved = self.source.replace(
+            self.blocks[executive_id],
+            self.blocks[executive_id].replace("\t\tx = 8\n\t\ty = 4\n", "\t\tx = 12\n\t\ty = 5\n", 1),
+            1,
+        )
+        self.assertNotEqual(moved, self.source)
+        self.assertIn(
+            "executive view draws WRK_worker_west_mandate_for_itora and WRK_exec_cadre_army "
+            "in cell (12, 5)",
+            self.issues(source=moved),
+        )
+        crowded = self.source.replace(
+            self.blocks["WRK_exec_republic_supply_chain"],
+            self.blocks["WRK_exec_republic_supply_chain"].replace("\t\tx = 6\n", "\t\tx = 7\n", 1),
+            1,
+        )
+        self.assertIn(
+            "executive view: WRK_exec_republic_supply_chain and WRK_exec_staff_by_examination "
+            "need a free cell between them",
+            self.issues(source=crowded),
+        )
+        cloned = self.source.replace(
+            "\t\t\tadd_command_power = 25\n\t\t\tadd_manpower = 8000\n",
+            "\t\t\tadd_command_power = 25\n\t\t\tADISCORD_reform_army_development = yes\n",
+            1,
+        )
+        self.assertNotEqual(cloned, self.source)
+        self.assertIn(
+            f"{executive_id} must not repeat a development reform of the congress branches",
+            self.issues(source=cloned),
+        )
+        slow = self.source.replace(
+            self.blocks[executive_id], self.blocks[executive_id].replace("\t\tcost = 3\n", "\t\tcost = 6\n", 1), 1
+        )
+        self.assertIn(
+            "army takes 91 days for the congress and 112 days for the Executive Committee",
+            self.issues(source=slow),
+        )
+        plan = _blocks(self.plans, SETTLEMENT_AI_PLAN)[0]
+        leaked = self.plans.replace(
+            plan, plan.replace("\t\tWRK_exec_paid_cadre\n", "\t\tWRK_conf_republican_militias\n", 1), 1
+        )
+        self.assertNotEqual(leaked, self.plans)
+        self.assertIn(
+            f"AI plan {SETTLEMENT_AI_PLAN} names focuses hidden from its government "
+            "['WRK_conf_republican_militias']",
+            self.issues(plans=leaked),
+        )
+        both = self.plans.replace(
+            plan,
+            plan.replace(
+                "\t\tWRK_exec_fortress_schedules\n",
+                "\t\tWRK_exec_fortress_schedules\n\t\tWRK_exec_motor_columns\n",
+                1,
+            ),
+            1,
+        )
+        self.assertIn(
+            f"AI plan {SETTLEMENT_AI_PLAN} takes both alternatives at WRK_exec_motor_columns",
+            self.issues(plans=both),
+        )
+        receipt = "set_variable = { var = WRK_executive_cadre_deposit value = 40 }"
+        self.assertEqual(self.decision_source.count(receipt), 1)
+        self.assertIn(
+            "programme WRK_executive_cadre_course must record a receipt equal to its price",
+            self.issues(decisions=self.decision_source.replace(receipt, receipt.replace("40", "30"))),
+        )
+
+    def test_committee_text_is_bilingual_narrative_and_plain_ascii(self) -> None:
+        keys = {
+            key for name in CONFEDERATION_EXECUTIVE_FOCUSES for key in (name, f"{name}_desc")
+        }
+        keys |= set(re.findall(r"custom_effect_tooltip = (\w+)", self.source))
+        keys |= set(re.findall(r"add_ideas = (ADISCORD_vorkerland_pw_delta_\w+)", self.source))
+        for decision, _flag, _receipt in CONFEDERATION_PROGRAMMES.values():
+            keys |= {decision, f"{decision}_desc", f"{decision}_tt"}
+        keys |= {"WRK_executive_arsenal_room_tt", "WRK_executive_cadre_slot_tt"}
+        for path in (ENGLISH_LOCALISATION, RUSSIAN_LOCALISATION):
+            raw = (ROOT / path).read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), path)
+            text = raw.decode("utf-8-sig")
+            for key in sorted(keys):
+                with self.subTest(path=path, key=key):
+                    lines = re.findall(
+                        rf'(?m)^ {re.escape(key)}:(?:\d+)? "((?:[^"\\\r\n]|\\.)*)"\r?$', text
+                    )
+                    self.assertEqual(len(lines), 1)
+                    value = lines[0]
+                    self.assertTrue(value.strip())
+                    for character in ("\u2013", "\u2014", "\u00ab", "\u00bb"):
+                        self.assertNotIn(character, value)
+                    if key.endswith("_desc"):
+                        self.assertNotRegex(value, r"[§£%]|\d")
+            committee = "\n".join(
+                line for line in text.splitlines() if line.startswith((" WRK_exec_", " WRK_executive_"))
+            )
+            self.assertNotIn("Бэгли", committee)
+        self.assertIn("Багли", self.localisations["Russian"]["WRK_exec_paid_cadre_desc"])
+        self.assertIn("Bagley", self.localisations["English"]["WRK_exec_paid_cadre_desc"])
 
 
 if __name__ == "__main__":

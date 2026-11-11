@@ -1963,7 +1963,15 @@ VAL_reclamation = {
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_roads_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
-		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+		# Wartime work needs a treasury cushion beyond the project's own price.
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_war = yes
+				NOT = { VAL_can_spend_1000 = yes }
+			}
+		}
 	}
 
 	VAL_reclamation_water = {
@@ -1993,7 +2001,15 @@ VAL_reclamation = {
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_water_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
-		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+		# Wartime work needs a treasury cushion beyond the project's own price.
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_war = yes
+				NOT = { VAL_can_spend_1000 = yes }
+			}
+		}
 	}
 
 	VAL_reclamation_settlement = {
@@ -2023,7 +2039,15 @@ VAL_reclamation = {
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_settlement_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
-		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+		# Wartime work needs a treasury cushion beyond the project's own price.
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_war = yes
+				NOT = { VAL_can_spend_1000 = yes }
+			}
+		}
 	}
 
 	VAL_reclamation_industry = {
@@ -2061,7 +2085,15 @@ VAL_reclamation = {
 			custom_effect_tooltip = VAL_reclamation_industry_refund_tt
 			hidden_effect = { VAL_reclamation_refund_industry = yes }
 		}
-		ai_will_do = { base = 4 modifier = { factor = 0 has_war = yes } }
+		# Wartime work needs a treasury cushion beyond the project's own price.
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				has_war = yes
+				NOT = { check_variable = { var = ADISCORD_economy_treasury value = 2000 compare = greater_than_or_equals } }
+			}
+		}
 	}
 
 

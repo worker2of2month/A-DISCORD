@@ -450,6 +450,54 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             manifest_provinces <= validator.APPROVED_NON_URBAN_SETTLEMENT_VPS
         )
 
+    def test_western_war_theatre_settlements_are_named_objectives(self) -> None:
+        corridor_states = (71, 90, 91, 93, 94, 194, 195, 196, 322, 328)
+        settlements = {
+            **{
+                state_id: builder.REGIONAL_SETTLEMENTS[state_id]
+                for state_id in corridor_states
+            },
+            **builder.IVANLAND_RURAL_SETTLEMENTS,
+        }
+        # A rural marker never takes a carved city or its parent province.
+        carved = set(builder.IVANLAND_CITY_PROVINCES) | set(
+            builder.IVANLAND_CITY_PROVINCES.values()
+        )
+        localisation = {
+            language: (
+                builder.ROOT / f"localisation/{language}/victory_points_l_{language}.yml"
+            ).read_text(encoding="utf-8-sig")
+            for language in ("russian", "english")
+        }
+        for state_id, points in settlements.items():
+            with self.subTest(state=state_id):
+                path = builder.state_path(state_id)
+                state = path.read_text(encoding="utf-8-sig")
+                provinces = builder.state_file_provinces(path)
+                actual = dict(
+                    re.findall(r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", state)
+                )
+                for province, value, name in points:
+                    self.assertIn(province, provinces)
+                    self.assertNotIn(province, carved)
+                    self.assertEqual(actual.get(str(province)), str(value))
+                    self.assertRegex(
+                        localisation["russian"],
+                        rf'(?m)^\s*VICTORY_POINTS_{province}:\s*"{re.escape(name)}"',
+                    )
+                    self.assertRegex(
+                        localisation["english"],
+                        rf'(?m)^\s*VICTORY_POINTS_{province}:\s*".+"',
+                    )
+        # The Itoran mandates and the corridor successors keep their capitals.
+        for state_id, province in ((90, 5135), (91, 4007), (194, 2339), (195, 8032), (196, 7129)):
+            self.assertEqual(builder.REGIONAL_SETTLEMENTS[state_id][0][0], province)
+        for state_id, points in builder.IVANLAND_RURAL_SETTLEMENTS.items():
+            self.assertEqual(
+                builder.IVANLAND_OVERHAUL_VICTORY_POINTS[state_id][-len(points):],
+                tuple((province, value) for province, value, _name in points),
+            )
+
     def test_exact_vp_replacement_removes_extras_and_is_idempotent(self) -> None:
         source = (
             "state={\n\tprovinces={ 10 20 }\n\thistory={\n"

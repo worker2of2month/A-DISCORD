@@ -190,3 +190,8 @@ sound = {
 	name = "superevent_south_directorate_sound"
 	file = "superevents/superevent_south_directorate_sound.wav"
 }
+
+sound = {
+	name = "superevent_nam_veyran_proclamation_sound"
+	file = "superevents/superevent_nam_veyran_proclamation_sound.wav"
+}

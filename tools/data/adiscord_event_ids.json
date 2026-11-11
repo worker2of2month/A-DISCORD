@@ -8221,6 +8221,22 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_preparation.62",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 62,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_vorkerland_preparation.63",
+      "namespace": "ADISCORD_vorkerland_preparation",
+      "number": 63,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_preparation",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.100",
       "namespace": "ADISCORD_STP_pc",
       "number": 100,
@@ -8312,6 +8328,14 @@
       "id": "ADISCORD_STP_pc.111",
       "namespace": "ADISCORD_STP_pc",
       "number": 111,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "ADISCORD_STP_pc",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.112",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 112,
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "ADISCORD_STP_pc",
       "status": "active"

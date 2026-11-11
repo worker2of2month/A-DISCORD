@@ -3650,6 +3650,7 @@ country_event = {
 					}
 				}
 				WRK_unrest_initialize = yes
+				country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
 				mark_focus_tree_layout_dirty = yes
 			}
 		}
@@ -3675,6 +3676,8 @@ country_event = {
 						value = 2
 					}
 				}
+				WRK_intrigue_initialize = yes
+				country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
 				mark_focus_tree_layout_dirty = yes
 			}
 		}
@@ -3701,6 +3704,7 @@ country_event = {
 					}
 				}
 				WRK_cells_initialize = yes
+				country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
 				mark_focus_tree_layout_dirty = yes
 			}
 		}
@@ -3734,6 +3738,37 @@ country_event = {
 	option = {
 		name = ADISCORD_vorkerland_preparation.61.a
 		custom_effect_tooltip = WRK_cell_exposure_report_tt
+	}
+}
+
+# Ledger of the chosen apparatus, every 30 days from its choice until the
+# prewar phase closes. Each effect guards its own apparatus, so a month in
+# which the preparation is suspended passes without a tick and the chain goes
+# on; it ends only when the phase flag is gone at the collapse.
+country_event = {
+	id = ADISCORD_vorkerland_preparation.63
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
+	immediate = {
+		WRK_unrest_monthly = yes
+		WRK_cells_monthly = yes
+		WRK_intrigue_monthly = yes
+		country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
+	}
+}
+
+# A figure of the court has turned against the staff. The consequences were
+# applied when the loyalty fell; this window only reports them.
+country_event = {
+	id = ADISCORD_vorkerland_preparation.62
+	title = ADISCORD_vorkerland_preparation.62.t
+	desc = ADISCORD_vorkerland_preparation.62.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_vorkerland_preparation.62.a
+		custom_effect_tooltip = WRK_intrigue_hostile_report_tt
 	}
 }
 

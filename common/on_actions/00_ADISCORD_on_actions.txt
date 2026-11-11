@@ -64,6 +64,7 @@ on_actions = {
 				}
 				every_country = {
 					ADISCORD_initialize_foreign_minister = yes
+					ADISCORD_initialize_intelligence_agency = yes
 					ADISCORD_grant_starting_technology_profile = yes
 					if = {
 						limit = {

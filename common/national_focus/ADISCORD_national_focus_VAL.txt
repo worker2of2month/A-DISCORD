@@ -3138,7 +3138,7 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_roads
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 shared_focus = {
@@ -3181,7 +3181,7 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_water
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 shared_focus = {
@@ -3238,7 +3238,7 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_settlement
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 shared_focus = {

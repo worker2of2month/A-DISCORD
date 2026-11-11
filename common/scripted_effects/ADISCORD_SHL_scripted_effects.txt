@@ -147,9 +147,12 @@ SHL_schedule_cycle = {
 	}
 }
 
+# A 28-day event rescheduled from its own immediate block fires one hour early
+# each cycle; once that hour crosses midnight the flag age reads 27 days.
+# Callbacks queued by an older clock are still younger than this threshold.
 SHL_run_cycle = {
 	if = {
-		limit = { has_country_flag = { flag = SHL_cycle_pending days > 27 } }
+		limit = { has_country_flag = { flag = SHL_cycle_pending days > 26 } }
 		clr_country_flag = SHL_cycle_pending
 		if = {
 			limit = { SHL_country_operable = yes }

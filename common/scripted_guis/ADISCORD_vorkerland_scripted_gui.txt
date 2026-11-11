@@ -15,7 +15,4579 @@ scripted_gui = {
 		window_name = "ADISCORD_vorkerland_capital_window"
 		visible = { WRK_capital_panel_visible = yes }
 		ai_enabled = { always = no }
+		# BEGIN WRK CAPITAL EFFECTS
+		effects = {
+			WRK_capital_32_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 32 }
+			}
+			WRK_capital_32_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 32 }
+			}
+			WRK_capital_32_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						32 = {
+							is_owned_by = ROOT
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_32_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						32 = {
+							is_owned_by = ROOT
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_32_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						32 = {
+							is_owned_by = ROOT
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_32_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						32 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_32_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						32 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						32 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_32_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						32 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						32 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_32_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						32 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						32 = {
+							is_owned_by = ROOT
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_32_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						32 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						32 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_32_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						32 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						32 = {
+							is_owned_by = ROOT
+						}
+						32 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 32 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_33_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 33 }
+			}
+			WRK_capital_33_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 33 }
+			}
+			WRK_capital_33_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						33 = {
+							is_owned_by = ROOT
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_33_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						33 = {
+							is_owned_by = ROOT
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_33_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						33 = {
+							is_owned_by = ROOT
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_33_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						33 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_33_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						33 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						33 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_33_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						33 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						33 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_33_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						33 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						33 = {
+							is_owned_by = ROOT
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_33_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						33 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						33 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_33_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						33 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						33 = {
+							is_owned_by = ROOT
+						}
+						33 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 33 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_34_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 34 }
+			}
+			WRK_capital_34_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 34 }
+			}
+			WRK_capital_34_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						34 = {
+							is_owned_by = ROOT
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_34_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						34 = {
+							is_owned_by = ROOT
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_34_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						34 = {
+							is_owned_by = ROOT
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_34_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						34 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_34_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						34 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						34 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_34_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						34 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						34 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_34_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						34 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						34 = {
+							is_owned_by = ROOT
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_34_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						34 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						34 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_34_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						34 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						34 = {
+							is_owned_by = ROOT
+						}
+						34 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 34 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_35_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 35 }
+			}
+			WRK_capital_35_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 35 }
+			}
+			WRK_capital_35_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						35 = {
+							is_owned_by = ROOT
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_35_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						35 = {
+							is_owned_by = ROOT
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_35_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						35 = {
+							is_owned_by = ROOT
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_35_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						35 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_35_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						35 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						35 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_35_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						35 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						35 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_35_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						35 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						35 = {
+							is_owned_by = ROOT
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_35_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						35 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						35 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_35_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						35 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						35 = {
+							is_owned_by = ROOT
+						}
+						35 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 35 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_36_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 36 }
+			}
+			WRK_capital_36_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 36 }
+			}
+			WRK_capital_36_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						36 = {
+							is_owned_by = ROOT
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_36_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						36 = {
+							is_owned_by = ROOT
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_36_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						36 = {
+							is_owned_by = ROOT
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_36_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						36 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_36_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						36 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						36 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_36_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						36 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						36 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_36_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						36 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						36 = {
+							is_owned_by = ROOT
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_36_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						36 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						36 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_36_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						36 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						36 = {
+							is_owned_by = ROOT
+						}
+						36 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 36 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_37_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 37 }
+			}
+			WRK_capital_37_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 37 }
+			}
+			WRK_capital_37_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						37 = {
+							is_owned_by = ROOT
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_37_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						37 = {
+							is_owned_by = ROOT
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_37_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						37 = {
+							is_owned_by = ROOT
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_37_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						37 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_37_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						37 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						37 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_37_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						37 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						37 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_37_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						37 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						37 = {
+							is_owned_by = ROOT
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_37_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						37 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						37 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_37_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						37 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						37 = {
+							is_owned_by = ROOT
+						}
+						37 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 37 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_38_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 38 }
+			}
+			WRK_capital_38_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 38 }
+			}
+			WRK_capital_38_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						38 = {
+							is_owned_by = ROOT
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_38_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						38 = {
+							is_owned_by = ROOT
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_38_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						38 = {
+							is_owned_by = ROOT
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_38_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						38 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_38_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						38 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						38 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_38_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						38 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						38 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_38_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						38 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						38 = {
+							is_owned_by = ROOT
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_38_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						38 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						38 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_38_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						38 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						38 = {
+							is_owned_by = ROOT
+						}
+						38 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 38 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_39_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 39 }
+			}
+			WRK_capital_39_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 39 }
+			}
+			WRK_capital_39_WRK_issue_capital_rations_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_unrest_active = yes
+						39 = {
+							is_owned_by = ROOT
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_no_riot_tt
+								NOT = {
+									has_state_flag = WRK_unrest_riot
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_issue_capital_rations }
+				}
+			}
+			WRK_capital_39_WRK_unrest_cede_shop_to_committee_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_factory_committee_councils
+						WRK_unrest_active = yes
+						39 = {
+							is_owned_by = ROOT
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_unrest_cede_shop_to_committee }
+				}
+			}
+			WRK_capital_39_WRK_unrest_send_plenipotentiary_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_emergency_plenipotentiaries
+						WRK_unrest_active = yes
+						39 = {
+							is_owned_by = ROOT
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_unrest_measure_ready_tt
+								NOT = {
+									has_state_flag = WRK_unrest_measure_recent
+								}
+							}
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_unrest_send_plenipotentiary }
+				}
+			}
+			WRK_capital_39_WRK_unrest_workers_patrol_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_committee_workers_guard
+						WRK_unrest_active = yes
+						39 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_unrest_patrol_free_tt
+							WRK_unrest_patrol_free = yes
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_unrest_workers_patrol }
+				}
+			}
+			WRK_capital_39_WRK_cell_plant_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						WRK_cells_active = yes
+						39 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 1
+								compare = less_than
+							}
+						}
+						39 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						NOT = { has_political_power < 30 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_cell_plant }
+				}
+			}
+			WRK_capital_39_WRK_cell_expand_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_worx_network_register
+						WRK_cells_active = yes
+						39 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							check_variable = {
+								var = WRK_cell_level
+								value = 3
+								compare = less_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						39 = {
+							is_owned_by = ROOT
+						}
+						custom_trigger_tooltip = {
+							tooltip = WRK_cells_work_free_tt
+							WRK_cells_work_free = yes
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 40 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_cell_expand }
+				}
+			}
+			WRK_capital_39_WRK_cell_lie_low_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_machine_tool_fund
+						WRK_cells_active = yes
+						39 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						39 = {
+							is_owned_by = ROOT
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_exposed_tt
+								NOT = {
+									has_state_flag = WRK_cell_exposed
+								}
+							}
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_not_dormant_tt
+								NOT = {
+									has_state_flag = WRK_cell_dormant
+								}
+							}
+						}
+						NOT = { has_political_power < 20 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_cell_lie_low }
+				}
+			}
+			WRK_capital_39_WRK_cell_forge_passes_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_closed_laboratories
+						WRK_cells_active = yes
+						39 = {
+							has_state_flag = WRK_cell_exposed
+						}
+						39 = {
+							is_owned_by = ROOT
+						}
+						NOT = { has_political_power < 45 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_cell_forge_passes }
+				}
+			}
+			WRK_capital_39_WRK_cell_legalize_click = {
+				if = {
+					limit = {
+						check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+						ADISCORD_vorkerland_is_not_wartime_claimant = yes
+						has_completed_focus = WRK_network_district_collegia
+						WRK_cells_active = yes
+						39 = {
+							check_variable = {
+								var = WRK_cell_level
+								value = 0
+								compare = greater_than
+							}
+							NOT = {
+								has_state_flag = WRK_cell_legal
+							}
+						}
+						39 = {
+							is_owned_by = ROOT
+						}
+						39 = {
+							custom_trigger_tooltip = {
+								tooltip = WRK_cell_no_work_tt
+								NOT = {
+									has_state_flag = WRK_cell_work
+								}
+							}
+						}
+						NOT = { has_political_power < 35 }
+					}
+					activate_targeted_decision = { target = 39 decision = WRK_cell_legalize }
+				}
+			}
+			WRK_capital_40_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 40 }
+			}
+			WRK_capital_40_marker_select_click = {
+				set_variable = { var = WRK_capital_selected_state value = 40 }
+			}
+		}
+		# END WRK CAPITAL EFFECTS
 		triggers = {
+		# BEGIN WRK CAPITAL TRIGGERS
+			WRK_capital_legend_text_1_visible = { always = no }
+			WRK_capital_legend_text_2_visible = { always = no }
+			WRK_capital_legend_text_3_visible = { always = no }
+			WRK_capital_32_select_click_enabled = { always = yes }
+			WRK_capital_32_marker_select_click_enabled = { always = yes }
+			WRK_capital_32_marker_select_visible = {
+				32 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_32_selected_visible = { OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } } }
+			WRK_capital_32_detail_visible = { OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } } }
+			WRK_capital_32_WRK_issue_capital_rations_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_32_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				32 = {
+					is_owned_by = ROOT
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_32_WRK_unrest_cede_shop_to_committee_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_32_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				32 = {
+					is_owned_by = ROOT
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_32_WRK_unrest_send_plenipotentiary_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_32_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				32 = {
+					is_owned_by = ROOT
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_32_WRK_unrest_workers_patrol_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_32_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				32 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_32_WRK_cell_plant_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_32_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				32 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_32_WRK_cell_expand_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_32_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				32 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_32_WRK_cell_lie_low_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_32_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				32 = {
+					is_owned_by = ROOT
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_32_WRK_cell_forge_passes_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				32 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_32_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				32 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				32 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_32_WRK_cell_legalize_visible = {
+				OR = { NOT = { has_variable = WRK_capital_selected_state } check_variable = { var = WRK_capital_selected_state value = 32 compare = equals } }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_32_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				32 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				32 = {
+					is_owned_by = ROOT
+				}
+				32 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_33_select_click_enabled = { always = yes }
+			WRK_capital_33_marker_select_click_enabled = { always = yes }
+			WRK_capital_33_marker_select_visible = {
+				33 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_33_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 33 compare = equals } }
+			WRK_capital_33_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 33 compare = equals } }
+			WRK_capital_33_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_33_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				33 = {
+					is_owned_by = ROOT
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_33_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_33_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				33 = {
+					is_owned_by = ROOT
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_33_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_33_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				33 = {
+					is_owned_by = ROOT
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_33_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_33_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				33 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_33_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_33_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				33 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_33_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_33_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				33 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_33_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_33_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				33 = {
+					is_owned_by = ROOT
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_33_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				33 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_33_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				33 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				33 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_33_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 33 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_33_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				33 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				33 = {
+					is_owned_by = ROOT
+				}
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_34_select_click_enabled = { always = yes }
+			WRK_capital_34_marker_select_click_enabled = { always = yes }
+			WRK_capital_34_marker_select_visible = {
+				34 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_34_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 34 compare = equals } }
+			WRK_capital_34_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 34 compare = equals } }
+			WRK_capital_34_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_34_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				34 = {
+					is_owned_by = ROOT
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_34_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_34_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				34 = {
+					is_owned_by = ROOT
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_34_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_34_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				34 = {
+					is_owned_by = ROOT
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_34_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_34_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				34 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_34_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_34_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				34 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_34_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_34_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				34 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_34_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_34_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				34 = {
+					is_owned_by = ROOT
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_34_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				34 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_34_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				34 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				34 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_34_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 34 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_34_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				34 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				34 = {
+					is_owned_by = ROOT
+				}
+				34 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_35_select_click_enabled = { always = yes }
+			WRK_capital_35_marker_select_click_enabled = { always = yes }
+			WRK_capital_35_marker_select_visible = {
+				35 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_35_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 35 compare = equals } }
+			WRK_capital_35_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 35 compare = equals } }
+			WRK_capital_35_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_35_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				35 = {
+					is_owned_by = ROOT
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_35_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_35_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				35 = {
+					is_owned_by = ROOT
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_35_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_35_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				35 = {
+					is_owned_by = ROOT
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_35_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_35_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				35 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_35_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_35_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				35 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_35_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_35_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				35 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_35_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_35_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				35 = {
+					is_owned_by = ROOT
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_35_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				35 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_35_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				35 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				35 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_35_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 35 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_35_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				35 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				35 = {
+					is_owned_by = ROOT
+				}
+				35 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_36_select_click_enabled = { always = yes }
+			WRK_capital_36_marker_select_click_enabled = { always = yes }
+			WRK_capital_36_marker_select_visible = {
+				36 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_36_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 36 compare = equals } }
+			WRK_capital_36_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 36 compare = equals } }
+			WRK_capital_36_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_36_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				36 = {
+					is_owned_by = ROOT
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_36_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_36_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				36 = {
+					is_owned_by = ROOT
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_36_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_36_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				36 = {
+					is_owned_by = ROOT
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_36_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_36_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				36 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_36_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_36_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				36 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_36_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_36_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				36 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_36_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_36_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				36 = {
+					is_owned_by = ROOT
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_36_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				36 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_36_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				36 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				36 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_36_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 36 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_36_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				36 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				36 = {
+					is_owned_by = ROOT
+				}
+				36 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_37_select_click_enabled = { always = yes }
+			WRK_capital_37_marker_select_click_enabled = { always = yes }
+			WRK_capital_37_marker_select_visible = {
+				37 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_37_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 37 compare = equals } }
+			WRK_capital_37_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 37 compare = equals } }
+			WRK_capital_37_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_37_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				37 = {
+					is_owned_by = ROOT
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_37_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_37_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				37 = {
+					is_owned_by = ROOT
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_37_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_37_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				37 = {
+					is_owned_by = ROOT
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_37_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_37_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				37 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_37_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_37_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				37 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_37_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_37_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				37 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_37_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_37_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				37 = {
+					is_owned_by = ROOT
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_37_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				37 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_37_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				37 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				37 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_37_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 37 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_37_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				37 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				37 = {
+					is_owned_by = ROOT
+				}
+				37 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_38_select_click_enabled = { always = yes }
+			WRK_capital_38_marker_select_click_enabled = { always = yes }
+			WRK_capital_38_marker_select_visible = {
+				38 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_38_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 38 compare = equals } }
+			WRK_capital_38_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 38 compare = equals } }
+			WRK_capital_38_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_38_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				38 = {
+					is_owned_by = ROOT
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_38_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_38_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				38 = {
+					is_owned_by = ROOT
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_38_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_38_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				38 = {
+					is_owned_by = ROOT
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_38_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_38_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				38 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_38_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_38_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				38 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_38_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_38_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				38 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_38_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_38_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				38 = {
+					is_owned_by = ROOT
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_38_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				38 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_38_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				38 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				38 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_38_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 38 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_38_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				38 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				38 = {
+					is_owned_by = ROOT
+				}
+				38 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_39_select_click_enabled = { always = yes }
+			WRK_capital_39_marker_select_click_enabled = { always = yes }
+			WRK_capital_39_marker_select_visible = {
+				39 = { WRK_capital_set_marker_frame = yes }
+				check_variable = { var = WRK_capital_frame value = 1 compare = greater_than }
+			}
+			WRK_capital_39_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 39 compare = equals } }
+			WRK_capital_39_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 39 compare = equals } }
+			WRK_capital_39_WRK_issue_capital_rations_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+			}
+			WRK_capital_39_WRK_issue_capital_rations_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_unrest_active = yes
+				39 = {
+					is_owned_by = ROOT
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_no_riot_tt
+						NOT = {
+							has_state_flag = WRK_unrest_riot
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_39_WRK_unrest_cede_shop_to_committee_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+			}
+			WRK_capital_39_WRK_unrest_cede_shop_to_committee_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_factory_committee_councils
+				WRK_unrest_active = yes
+				39 = {
+					is_owned_by = ROOT
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_39_WRK_unrest_send_plenipotentiary_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+			}
+			WRK_capital_39_WRK_unrest_send_plenipotentiary_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_emergency_plenipotentiaries
+				WRK_unrest_active = yes
+				39 = {
+					is_owned_by = ROOT
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_unrest_measure_ready_tt
+						NOT = {
+							has_state_flag = WRK_unrest_measure_recent
+						}
+					}
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_39_WRK_unrest_workers_patrol_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+			}
+			WRK_capital_39_WRK_unrest_workers_patrol_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_committee_workers_guard
+				WRK_unrest_active = yes
+				39 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_unrest_patrol_free_tt
+					WRK_unrest_patrol_free = yes
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_39_WRK_cell_plant_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+			}
+			WRK_capital_39_WRK_cell_plant_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 1
+						compare = less_than
+					}
+				}
+				39 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				NOT = { has_political_power < 30 }
+			}
+			WRK_capital_39_WRK_cell_expand_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_39_WRK_cell_expand_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_worx_network_register
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					check_variable = {
+						var = WRK_cell_level
+						value = 3
+						compare = less_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				39 = {
+					is_owned_by = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = WRK_cells_work_free_tt
+					WRK_cells_work_free = yes
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 40 }
+			}
+			WRK_capital_39_WRK_cell_lie_low_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_39_WRK_cell_lie_low_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_machine_tool_fund
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				39 = {
+					is_owned_by = ROOT
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_exposed_tt
+						NOT = {
+							has_state_flag = WRK_cell_exposed
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_not_dormant_tt
+						NOT = {
+							has_state_flag = WRK_cell_dormant
+						}
+					}
+				}
+				NOT = { has_political_power < 20 }
+			}
+			WRK_capital_39_WRK_cell_forge_passes_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				39 = {
+					has_state_flag = WRK_cell_exposed
+				}
+			}
+			WRK_capital_39_WRK_cell_forge_passes_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_closed_laboratories
+				WRK_cells_active = yes
+				39 = {
+					has_state_flag = WRK_cell_exposed
+				}
+				39 = {
+					is_owned_by = ROOT
+				}
+				NOT = { has_political_power < 45 }
+			}
+			WRK_capital_39_WRK_cell_legalize_visible = {
+				check_variable = { var = WRK_capital_selected_state value = 39 compare = equals }
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+			}
+			WRK_capital_39_WRK_cell_legalize_click_enabled = {
+				ADISCORD_vorkerland_is_not_wartime_claimant = yes
+				has_completed_focus = WRK_network_district_collegia
+				WRK_cells_active = yes
+				39 = {
+					check_variable = {
+						var = WRK_cell_level
+						value = 0
+						compare = greater_than
+					}
+					NOT = {
+						has_state_flag = WRK_cell_legal
+					}
+				}
+				39 = {
+					is_owned_by = ROOT
+				}
+				39 = {
+					custom_trigger_tooltip = {
+						tooltip = WRK_cell_no_work_tt
+						NOT = {
+							has_state_flag = WRK_cell_work
+						}
+					}
+				}
+				NOT = { has_political_power < 35 }
+			}
+			WRK_capital_40_select_click_enabled = { always = yes }
+			WRK_capital_40_marker_select_click_enabled = { always = yes }
+			WRK_capital_40_marker_select_visible = { always = no }
+			WRK_capital_40_selected_visible = { check_variable = { var = WRK_capital_selected_state value = 40 compare = equals } }
+			WRK_capital_40_detail_visible = { check_variable = { var = WRK_capital_selected_state value = 40 compare = equals } }
+		# END WRK CAPITAL TRIGGERS
 			WRK_capital_32_state_visible = {
 				32 = { WRK_capital_set_state_frame = yes }
 				set_temp_variable = { var = WRK_capital_32_state_frame value = WRK_capital_frame }
@@ -113,17 +4685,17 @@ scripted_gui = {
 			WRK_capital_legend_icon_1_visible = {
 				WRK_capital_set_legend_frames = yes
 				set_temp_variable = { var = WRK_capital_legend_icon_1_frame value = WRK_capital_legend_1 }
-				always = yes
+				always = no
 			}
 			WRK_capital_legend_icon_2_visible = {
 				WRK_capital_set_legend_frames = yes
 				set_temp_variable = { var = WRK_capital_legend_icon_2_frame value = WRK_capital_legend_2 }
-				always = yes
+				always = no
 			}
 			WRK_capital_legend_icon_3_visible = {
 				WRK_capital_set_legend_frames = yes
 				set_temp_variable = { var = WRK_capital_legend_icon_3_frame value = WRK_capital_legend_3 }
-				always = yes
+				always = no
 			}
 		}
 		properties = {
@@ -149,6 +4721,78 @@ scripted_gui = {
 			WRK_capital_legend_icon_1 = { frame = WRK_capital_legend_icon_1_frame }
 			WRK_capital_legend_icon_2 = { frame = WRK_capital_legend_icon_2_frame }
 			WRK_capital_legend_icon_3 = { frame = WRK_capital_legend_icon_3_frame }
+		}
+	}
+	# Court of the confederation in its own decision category. Each card reads
+	# the frame its visibility trigger has just computed from the Tower's ledger.
+	ADISCORD_vorkerland_intrigue_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_vorkerland_intrigue_window"
+		visible = { WRK_intrigue_active = yes }
+		ai_enabled = { always = no }
+		triggers = {
+			WRK_intrigue_1_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_1 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_1_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_intrigue_2_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_2 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_2_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_intrigue_3_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_3 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_3_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_intrigue_4_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_4 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_4_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_intrigue_5_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_5 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_5_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+			WRK_intrigue_6_card_visible = {
+				40 = {
+					set_temp_variable = { var = WRK_intrigue_value value = WRK_intrigue_6 }
+					WRK_intrigue_set_card_frame = yes
+				}
+				set_temp_variable = { var = WRK_intrigue_6_card_frame value = WRK_capital_frame }
+				always = yes
+			}
+		}
+		properties = {
+			WRK_intrigue_1_card = { frame = WRK_intrigue_1_card_frame }
+			WRK_intrigue_1_portrait = { image = "[WRKGetIntriguePortrait1]" }
+			WRK_intrigue_2_card = { frame = WRK_intrigue_2_card_frame }
+			WRK_intrigue_2_portrait = { image = "[WRKGetIntriguePortrait2]" }
+			WRK_intrigue_3_card = { frame = WRK_intrigue_3_card_frame }
+			WRK_intrigue_3_portrait = { image = "[WRKGetIntriguePortrait3]" }
+			WRK_intrigue_4_card = { frame = WRK_intrigue_4_card_frame }
+			WRK_intrigue_4_portrait = { image = "[WRKGetIntriguePortrait4]" }
+			WRK_intrigue_5_card = { frame = WRK_intrigue_5_card_frame }
+			WRK_intrigue_5_portrait = { image = "[WRKGetIntriguePortrait5]" }
+			WRK_intrigue_6_card = { frame = WRK_intrigue_6_card_frame }
+			WRK_intrigue_6_portrait = { image = "[WRKGetIntriguePortrait6]" }
 		}
 	}
 }

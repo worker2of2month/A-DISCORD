@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import unittest
 
 
@@ -62,6 +63,159 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
                 self.assertIn(
                     "type = ai_wanted_divisions_factor value = -1000", profile
                 )
+
+    def test_ai_war_replacements_stay_below_the_recruitment_brake(self):
+        strategies = read("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+        brake = block(strategies, "STP_cw_ai_preserve_replacement_reserve")
+        for tag in ("STP", "STS", "NOD"):
+            self.assertIn(f"original_tag = {tag}", brake)
+        self.assertIn("is_ai = yes", brake)
+        self.assertIn("has_war = yes", brake)
+        reserve = int(re.search(r"has_manpower < (\d+)", brake).group(1))
+        self.assertIn("type = ai_wanted_divisions_factor value = -1000", brake)
+
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        tick = block(effects, "STP_cw_ai_war_replacements_tick")
+        self.assertIn("is_ai = yes", tick)
+        self.assertIn("has_capitulated = no", tick)
+        ceiling = int(re.search(r"has_manpower < (\d+)", tick).group(1))
+        grant = int(re.search(r"add_manpower = (\d+)", tick).group(1))
+        # A grant that crosses the brake would fund new formations.
+        self.assertLessEqual(ceiling + grant, reserve)
+        self.assertNotIn("has_war_with = STS", tick)
+        self.assertNotIn("has_war_with = STP", tick)
+
+        hooks = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        for tag in ("STP", "STS", "NOD"):
+            with self.subTest(hook=tag):
+                weekly = block(hooks, f"on_weekly_{tag}")
+                self.assertEqual(
+                    weekly.count("STP_cw_ai_war_replacements_tick = yes"), 1
+                )
+
+    def test_ai_kefreyt_prepares_from_the_party_external_mandate(self):
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        threat = block(triggers, "VAL_ai_party_campaign_threat")
+        self.assertIn("has_completed_focus = STP_pw_party_external_mandate", threat)
+        self.assertIn("NOT = { has_war_with = VAL }", threat)
+        self.assertIn("NOT = { is_in_faction_with = VAL }", threat)
+        for flag in (
+            "STP_pw_party_kefreyt_subject_pending",
+            "STP_pw_party_kefreyt_victory",
+        ):
+            self.assertIn(f"NOT = {{ has_country_flag = {flag} }}", threat)
+        focuses = read("common/national_focus/ADISCORD_STP_civil_war.txt")
+        campaign = focuses.index("id = STP_pw_party_kefreyt_campaign")
+        self.assertIn(
+            "prerequisite = { focus = STP_pw_party_external_mandate }",
+            focuses[campaign : campaign + 300],
+        )
+
+        strategies = read("common/ai_strategy/VAL.txt")
+        for name, target, extra in (
+            ("VAL_prepare_against_party_campaign", "STP", None),
+            ("VAL_prepare_against_party_patron", "NOD", "is_in_faction_with = STP"),
+        ):
+            with self.subTest(strategy=name):
+                profile = block(strategies, name)
+                self.assertIn("allowed = { tag = VAL }", profile)
+                self.assertIn("is_ai = yes", profile)
+                self.assertIn("VAL_ai_party_campaign_threat = yes", profile)
+                self.assertIn("type = prepare_for_war", profile)
+                self.assertIn(f"id = {target}", profile)
+                if extra:
+                    self.assertIn(extra, profile)
+
+        recruitment = block(
+            read("common/ai_strategy/ADISCORD_STP_civil_war.txt"),
+            "VAL_cw_republics_war_recruitment",
+        )
+        self.assertIn("difficulty > 2", recruitment)
+        self.assertIn("VAL_ai_party_campaign_threat = yes", recruitment)
+        for enemy in ("SRP", "STS", "STP", "NOD"):
+            self.assertIn(f"has_war_with = {enemy}", recruitment)
+        self.assertIn("NOT = { has_manpower < 15000 }", recruitment)
+
+        command = block(
+            read("common/ideas/ADISCORD_VAL_rework_ideas.txt"),
+            "VAL_ai_scripted_war_command",
+        )
+        self.assertIn("army_core_defence_factor = 0.10", command)
+
+    def test_party_kefreyt_campaign_warns_kefreyt_when_the_focus_is_selected(self):
+        call = "select_effect = { hidden_effect = { STP_pw_party_warn_kefreyt = yes } }"
+        for path in (
+            "focus_trees/STP/postwar/party/focuses.txt",
+            "common/national_focus/ADISCORD_STP_civil_war.txt",
+        ):
+            with self.subTest(path=path):
+                focuses = read(path)
+                start = focuses.index("id = STP_pw_party_kefreyt_campaign")
+                reward = focuses.index("completion_reward", start)
+                self.assertIn(call, focuses[start:reward])
+                self.assertEqual(focuses.count(call), 1)
+
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        warn = block(effects, "STP_pw_party_warn_kefreyt")
+        self.assertIn("tag = STP", warn)
+        self.assertIn("NOT = { has_war_with = STP }", warn)
+        self.assertIn("NOT = { has_idea = STP_pw_party_kefreyt_defence_ready }", warn)
+        self.assertIn("STP_pw_party_kefreyt_warning_expired = no", warn)
+        self.assertIn("country_event = { id = ADISCORD_STP_pc.112 hours = 1 }", warn)
+
+        events = read("events/ADISCORD_STP_events.txt")
+        start = events.index("id = ADISCORD_STP_pc.112")
+        event = events[start : events.index("country_event = {", start)]
+        self.assertIn("is_triggered_only = yes", event)
+        self.assertIn("tag = VAL", event)
+        self.assertIn("STP_pw_party_kefreyt_warning_expired = no", event)
+        self.assertIn(
+            "immediate = { add_ideas = STP_pw_party_kefreyt_defence_ready }", event
+        )
+
+        expired = block(
+            read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+            "STP_pw_party_kefreyt_warning_expired",
+        )
+        for clause in (
+            "is_subject = yes",
+            "STP = { exists = no }",
+            "STP = { is_in_faction_with = VAL }",
+            "hidden_trigger = {",
+            "has_country_flag = STP_pw_party_kefreyt_subject_pending",
+            "has_country_flag = STP_pw_party_kefreyt_victory",
+        ):
+            self.assertIn(clause, expired)
+
+        ideas = read("common/ideas/ADISCORD_STP_civil_war_ideas.txt")
+        ready = block(ideas, "STP_pw_party_kefreyt_defence_ready")
+        self.assertIn("NOT = { has_war_with = STP }", ready)
+        self.assertIn("STP_pw_party_kefreyt_warning_expired = yes", ready)
+        shabrat = block(ideas, "STP_pc_campaign_defence")
+        party = block(ideas, "STP_pw_party_kefreyt_defence")
+        bonus = "modifier = { army_defence_factor = 0.08 }"
+        self.assertIn(bonus, shabrat)
+        self.assertIn(bonus, party)
+
+        hooks = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        self.assertEqual(
+            hooks.count("FROM = { STP_pw_party_apply_kefreyt_defence = yes }"), 1
+        )
+        self.assertEqual(hooks.count("STP_pw_party_apply_kefreyt_defence = yes"), 2)
+
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_STP_l_{language}.yml")
+            for key in (
+                "ADISCORD_STP_pc.112.t",
+                "ADISCORD_STP_pc.112.d",
+                "ADISCORD_STP_pc.112.a",
+                "STP_pw_party_kefreyt_defence_ready",
+                "STP_pw_party_kefreyt_defence_ready_desc",
+                "STP_pw_party_kefreyt_defence",
+                "STP_pw_party_kefreyt_defence_desc",
+            ):
+                with self.subTest(language=language, key=key):
+                    self.assertRegex(text, r'(?m)^ ' + re.escape(key) + r':\d* "[^\n]+"\r?$')
 
     def test_battle_for_stelander_backs_shabrat_only(self):
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")

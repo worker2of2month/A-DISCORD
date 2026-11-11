@@ -45,6 +45,8 @@ TREES = {
                         "ADISCORD_NAM_exile_corporate.txt"),
 }
 EXILE = ("exile_radical", "exile_humanist", "exile_corporate")
+NATIONAL_CATEGORIES = ("NAM_national_programmes", "NAM_defence_orders", "NAM_basin_economy", "NAM_administration",
+                       "NAM_postwar_orders", "NAM_postwar_programmes")
 BOARD_PROFILES = (
     (("output", 1), ("construction", 2)),
     (("output", 2), ("growth", 3)),
@@ -111,6 +113,12 @@ def read(path):
 
 def parsed(path):
     return parse_clausewitz(read(path))
+
+
+def national_decisions():
+    """National orders: the map panel's category and its departments."""
+    source = parsed(f"common/decisions/{BASE}_decisions.txt")
+    return {e.key: e.value for category in NATIONAL_CATEGORIES for e in block(source, category)}
 
 
 def tree_focuses(kind):
@@ -4616,7 +4624,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def independence_projects(self):
         source = parsed(f"common/decisions/{BASE}_decisions.txt")
-        return {e.key: e.value for category in ("NAM_national_programmes", "NAM_restitution")
+        return {e.key: e.value for category in ("NAM_administration", "NAM_restitution")
                 for e in block(source, category) if e.key.startswith("NAM_ind_")}
 
     def independent_facts(self):
@@ -5445,7 +5453,7 @@ class NamCampaignTests(unittest.TestCase):
         cls.effects = {}
         for path in (f"common/scripted_effects/{BASE}_effects.txt", "common/scripted_effects/ADISCORD_shared_action_effects.txt"):
             cls.effects.update({e.key: e.value for e in parsed(path)})
-        cls.decisions = {e.key: e.value for e in block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_national_programmes")}
+        cls.decisions = national_decisions()
         cls.missions = {decision.key: decision.value
                         for category in parsed(f"common/decisions/{BASE}_decisions.txt")
                         for decision in category.value

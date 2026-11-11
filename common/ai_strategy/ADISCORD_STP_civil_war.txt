@@ -423,33 +423,9 @@ VAL_cw_front_against_srp = {
 	enable = { has_war_with = SRP }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = SRP value = 120 }
+	# One mandatory order: a difficulty caution variant would switch the attacks
+	# off exactly when the understrength army reaches the Livonn river line.
 	ai_strategy = { type = front_control tag = SRP ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = SRP
-			ADISCORD_difficulty_enemy_requires_caution = yes
-		}
-		ratio = 0.01
-		priority = 1401
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
-		manual_attack = no
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = SRP
-			ADISCORD_difficulty_enemy_allows_push = yes
-		}
-		ratio = 0.01
-		priority = 1401
-		ordertype = front
-		execution_type = rush_weak
-		execute_order = yes
-		manual_attack = yes
-	}
 	ai_strategy = { type = conquer id = SRP value = 200 }
 	ai_strategy = { type = consider_weak id = SRP value = 30 }
 }
@@ -473,14 +449,21 @@ VAL_cw_republics_war_army = {
 	ai_strategy = { type = force_concentration_factor value = 50 }
 }
 
-# Advanced difficulty raises Kefreyt's wartime recruitment above the fiscal
-# brakes; the replacement reserve guard in VAL.txt still outranks this.
+# Advanced difficulty raises Kefreyt's recruitment above the fiscal brakes in
+# its Stelander wars and under the party's standing threat; the replacement
+# reserve guard in VAL.txt still outranks this.
 VAL_cw_republics_war_recruitment = {
 	allowed = { original_tag = VAL }
 	enable = {
 		is_ai = yes
 		difficulty > 2
-		has_war_with = SRP
+		OR = {
+			has_war_with = SRP
+			has_war_with = STS
+			has_war_with = STP
+			has_war_with = NOD
+			VAL_ai_party_campaign_threat = yes
+		}
 		NOT = { has_manpower < 15000 }
 	}
 	abort_when_not_enabled = yes
@@ -570,6 +553,30 @@ STS_shabrat_cautious_nod_front = {
 		execution_type = careful
 		execute_order = yes
 		manual_attack = no
+	}
+}
+
+# Assault waves outrank the weakness brake, so a smaller resistance army still
+# strikes NOD's weak sectors. An empty rifle stock keeps the cautious profile.
+STS_shabrat_nod_assault_wave = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = NOD
+		has_country_flag = STS_ai_nod_assault_wave
+		NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = NOD
+		ratio = 0.01
+		priority = 1950
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
 	}
 }
 
@@ -1267,6 +1274,27 @@ STS_cw_ai_force_saturation = {
 		has_global_flag = STP_cw_started
 		has_war_with = STP
 		NOT = { num_divisions < 24 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}
+
+# The native AI keeps raising formations until the field army falls to 70% of
+# its manpower. Below this reserve the last recruits go to the existing
+# formations. This reduces formation demand; it does not cancel a queue.
+STP_cw_ai_preserve_replacement_reserve = {
+	allowed = {
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war = yes
+		has_manpower < 15000
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }

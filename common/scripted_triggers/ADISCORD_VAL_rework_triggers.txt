@@ -2093,6 +2093,21 @@ VAL_northern_expansion_deferred = {
 	NOT = { has_country_flag = VAL_stelander_defeated }
 }
 
+# COUNTRY VAL. AI-only route: the AI always takes the expansion course, where a
+# frontier treaty closes the deferral decision and the full campaign is rarely
+# won. Its commercial recovery resumes once the buyers have returned and no
+# border operation or mobilization is running.
+VAL_ai_economic_settlement_ready = {
+	is_ai = yes
+	has_completed_focus = VAL_Returning_Buyers
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	VAL_frontier_idle = yes
+	NOT = { has_country_flag = VAL_campaign_mobilizing }
+	NOT = { has_country_flag = VAL_stelander_defeated }
+}
+
 # Commercial recovery does not certify territorial victory or remove a resource shortage.
 VAL_economic_settlement_ready = {
 	OR = {
@@ -2102,6 +2117,7 @@ VAL_economic_settlement_ready = {
 			has_completed_focus = VAL_Returning_Buyers
 			has_completed_focus = VAL_Contingency_Ledgers
 		}
+		VAL_ai_economic_settlement_ready = yes
 	}
 }
 
@@ -4029,5 +4045,21 @@ VAL_ai_scripted_war_bonus_active = {
 		has_war_with = STS
 		has_war_with = STP
 		has_war_with = NOD
+	}
+}
+
+# COUNTRY VAL. The party government has taken its external mandate and can
+# still open the Kefreyt operation; this precedes the campaign warning event.
+VAL_ai_party_campaign_threat = {
+	has_capitulated = no
+	is_subject = no
+	STP = {
+		exists = yes
+		has_capitulated = no
+		has_completed_focus = STP_pw_party_external_mandate
+		NOT = { has_war_with = VAL }
+		NOT = { is_in_faction_with = VAL }
+		NOT = { has_country_flag = STP_pw_party_kefreyt_subject_pending }
+		NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
 	}
 }

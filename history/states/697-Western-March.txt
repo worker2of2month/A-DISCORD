@@ -17,6 +17,7 @@ state={
 		owner = IVN
 		add_core_of = IVN
 		victory_points = { 16828 3 }
+		victory_points = { 5055 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

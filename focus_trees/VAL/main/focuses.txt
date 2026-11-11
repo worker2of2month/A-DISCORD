@@ -861,7 +861,7 @@ focus_tree = {
 		id = VAL_Pact_Of_Four
 		icon = GFX_focus_VAL_Company_Mandates
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION }
-		x = 38
+		x = 40
 		y = 6
 		offset = {
 			x = 26
@@ -3109,7 +3109,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_roads
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 	focus = {
@@ -3152,7 +3152,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_water
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 	focus = {
@@ -3209,7 +3209,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_settlement
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 	focus = {

@@ -550,6 +550,12 @@ class BezhayskCampaignFixture(BezhayskStelanderFixture):
         self.events = []
         self.flags[winner].add("STP_cw_postwar")
         self.capitulated = set()
+        self.victor = None
+
+    def resolve(self, token, stack):
+        if token == "FROM" and self.victor:
+            return self.victor
+        return super().resolve(token, stack)
 
     def number(self, value, country):
         if value == "num_divisions":
@@ -751,6 +757,27 @@ class BezhayskCampaignTests(unittest.TestCase):
                 self.assertIn(frozenset((winner, "NOD")), model.wars)
                 model.fire("on_capitulation", order[0])
                 self.assertEqual(len(model.annexed), 6)
+
+    def test_capitulation_credited_to_alliance_member_counts_as_defeat(self):
+        for winner in ("STP", "STS"):
+            model = BezhayskCampaignFixture(winner)
+            model.call("STP_bezhaysk_begin_campaign")
+            model.wars.discard(frozenset((winner, "NOD")))
+            model.factions.update({winner: "consortium", "NOD": "consortium"})
+            model.victor = "NOD"
+            model.fire("on_capitulation_immediate", "BLD")
+            self.assertIn("STP_bezhaysk_defeated", model.flags["BLD"])
+            self.assertFalse(model.annexed)
+            model.victor = None
+            model.fire("on_capitulation_immediate", "BJK")
+            self.assertEqual(set(model.annexed), set(REALM))
+
+    def test_capitulation_to_an_outside_victor_is_not_a_campaign_defeat(self):
+        model = BezhayskCampaignFixture()
+        model.call("STP_bezhaysk_begin_campaign")
+        model.victor = "VAL"
+        model.fire("on_capitulation_immediate", "BLD")
+        self.assertNotIn("STP_bezhaysk_defeated", model.flags["BLD"])
 
     def test_annexed_attacker_releases_majors_without_scheduling_dead_country(self):
         model = BezhayskCampaignFixture()

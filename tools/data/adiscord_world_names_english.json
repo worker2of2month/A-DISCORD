@@ -3667,6 +3667,66 @@
         "VICTORY_POINTS_2443": {
           "russian": "Мерса",
           "english": "Mersa"
+        },
+        "VICTORY_POINTS_12241": {
+          "russian": "Старый Тракт",
+          "english": "Old Highway"
+        },
+        "VICTORY_POINTS_5135": {
+          "russian": "Норвейн",
+          "english": "Norvein"
+        },
+        "VICTORY_POINTS_4007": {
+          "russian": "Крайт",
+          "english": "Krait"
+        },
+        "VICTORY_POINTS_3729": {
+          "russian": "Вальден",
+          "english": "Valden"
+        },
+        "VICTORY_POINTS_4166": {
+          "russian": "Солен",
+          "english": "Solen"
+        },
+        "VICTORY_POINTS_2304": {
+          "russian": "Восточный Пост",
+          "english": "Eastern Post"
+        },
+        "VICTORY_POINTS_9492": {
+          "russian": "Пустырь",
+          "english": "Pustyr"
+        },
+        "VICTORY_POINTS_638": {
+          "russian": "Малая Ольсия",
+          "english": "Little Olsiya"
+        },
+        "VICTORY_POINTS_3245": {
+          "russian": "Кордонный Перевал",
+          "english": "Cordon Pass"
+        },
+        "VICTORY_POINTS_4739": {
+          "russian": "Дальняя Серенга",
+          "english": "Far Serenga"
+        },
+        "VICTORY_POINTS_9608": {
+          "russian": "Марково",
+          "english": "Markovo"
+        },
+        "VICTORY_POINTS_5055": {
+          "russian": "Западномарск",
+          "english": "Zapadnomarsk"
+        },
+        "VICTORY_POINTS_1890": {
+          "russian": "Южномарск",
+          "english": "Yuzhnomarsk"
+        },
+        "VICTORY_POINTS_8615": {
+          "russian": "Пущанск",
+          "english": "Pushchansk"
+        },
+        "VICTORY_POINTS_3503": {
+          "russian": "Взморье",
+          "english": "Vzmorye"
         }
       }
     }

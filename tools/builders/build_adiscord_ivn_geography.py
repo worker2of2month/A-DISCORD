@@ -80,8 +80,9 @@ NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
 )
 PROVINCE_MANIFEST_PATH = ROOT / "tools/data/adiscord_ivn_provinces.json"
 PROVINCE_MANIFEST = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
-# Every IVN victory point is a whole urban province; the island
-# administration keeps compact urban footprints inside rural provinces.
+# Every IVN city victory point is a whole urban province; rural settlement
+# markers stay ordinary provinces, and the island administration keeps
+# compact urban footprints inside rural provinces.
 CITY_PROVINCES = frozenset(int(city) for city in PROVINCE_MANIFEST["cities"].values())
 SETTLEMENT_PROVINCES = frozenset({579, 6905, 11841}) | CITY_PROVINCES
 # Mainland relief of the Itoran civil-war theatre. Heights are a pure function

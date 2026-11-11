@@ -1,7 +1,17 @@
 # Postwar directorate: institutions, personal research and the western settlement.
 focus_tree = {
 	id = ADISCORD_vorkerland_technical_directorate_focus
-	country = { factor = 0 }
+	# When the engine selects a tree by weight again, the restored Tower
+	# keeps the route in this tree instead of the settlement graph.
+	country = {
+		factor = 0
+		modifier = {
+			add = 300
+			OR = { tag = WKR tag = VAD tag = TVA }
+			has_global_flag = ADISCORD_vorkerland_unity_tower_restored
+			has_country_flag = ADISCORD_vorkerland_route_utilitarian
+		}
+	}
 	default = no
 	continuous_focus_position = { x = 1300 y = 1500 }
 

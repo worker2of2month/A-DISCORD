@@ -310,7 +310,7 @@ class IntelligenceUiContractTests(unittest.TestCase):
             self.assertNotIn(f'"{vanilla}"', gui)
 
     def test_preview_places_both_headers_side_by_side_for_review(self) -> None:
-        outputs = builder.expected_outputs()
+        outputs = builder.expected_outputs(include_preview=True)
         branch_path = OUTPUT_DIR / "ADISCORD_intelligence_branches_header.dds"
         agents_path = OUTPUT_DIR / "ADISCORD_intelligence_agents_header.dds"
         self.assertIn(branch_path, outputs)

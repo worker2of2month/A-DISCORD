@@ -75,3 +75,22 @@ defined_text = {
 		localization_key = ADISCORD_west_lean_undecided
 	}
 }
+
+# BEGIN GENERATED WEST INFLUENCE MAP
+defined_text = {
+	name = ADISCORDWestMapStatus
+	text = {
+		trigger = { tag = event_target:ADISCORD_vorkerland_nation }
+		localization_key = ADISCORD_west_map_champion_wrk
+	}
+	text = {
+		trigger = { tag = IVN }
+		localization_key = ADISCORD_west_map_champion_ivn
+	}
+	text = {
+		trigger = { ADISCORD_west_regional_country = no }
+		localization_key = ADISCORD_west_map_outside
+	}
+	text = { localization_key = ADISCORD_west_map_owner_status }
+}
+# END GENERATED WEST INFLUENCE MAP

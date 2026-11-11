@@ -1581,7 +1581,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_convene_council_of_republics"
-		texturefile = "gfx/interface/goals/focus_generic_advisors.dds"
+		texturefile = "gfx/interface/goals/focus_generic_conference.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_inventory_emergency_stores"
@@ -1601,11 +1601,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_open_worker_vadl_backchannel"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_offer_emergency_compact"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/goal_generic_improve_relations.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_mobilize_loyal_republics"
@@ -1654,6 +1654,94 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_WRK_worker_write_constitutional_guarantees"
 		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_keep_the_executive_committee"
+		texturefile = "gfx/interface/goals/focus_generic_improve_the_administration.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_open_single_delivery_ledger"
+		texturefile = "gfx/interface/goals/focus_generic_central_planning.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_demobilize_by_norm"
+		texturefile = "gfx/interface/goals/focus_generic_soldier_salute.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_set_reconstruction_norms"
+		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_contract_surviving_republics"
+		texturefile = "gfx/interface/goals/focus_generic_diplomatic_treaty.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_audit_the_districts"
+		texturefile = "gfx/interface/goals/focus_generic_commission.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_executive_publish_accountable_budget"
+		texturefile = "gfx/interface/goals/focus_generic_currency_reforms.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_district_inventory"
+		texturefile = "gfx/interface/goals/focus_generic_improve_the_administration_2.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_reconstruction_work_orders"
+		texturefile = "gfx/interface/goals/focus_generic_public_works.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_second_construction_trust"
+		texturefile = "gfx/interface/goals/goal_generic_construction2.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_rolling_district_audit"
+		texturefile = "gfx/interface/goals/focus_generic_reduce_unneccessary_expenditure.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_ration_by_ledger"
+		texturefile = "gfx/interface/goals/focus_generic_welfare.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_plant_norm_tables"
+		texturefile = "gfx/interface/goals/focus_generic_modernize_industry.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_norm_series"
+		texturefile = "gfx/interface/goals/focus_generic_mass_production.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_republic_supply_chain"
+		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_acceptance_commission"
+		texturefile = "gfx/interface/goals/focus_generic_industrial_experts.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_central_order_bureau"
+		texturefile = "gfx/interface/goals/focus_generic_stockpile_currency.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_paid_cadre"
+		texturefile = "gfx/interface/goals/focus_generic_commonwealth_build_infantry.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_staff_by_examination"
+		texturefile = "gfx/interface/goals/focus_generic_advanced_military_studies.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_fortress_schedules"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_motor_columns"
+		texturefile = "gfx/interface/goals/focus_generic_truck.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_exec_cadre_army"
+		texturefile = "gfx/interface/goals/focus_generic_combined_arms.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_joint_convene_restoration_council"
@@ -2907,12 +2995,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_WRK_prepare_civil_evacuation"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/focus_generic_government_in_exile.dds"
 	}
 
 	spriteType = {
 		name = "GFX_focus_WRK_prepare_military_evacuation"
-		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+		texturefile = "gfx/interface/goals/focus_generic_truck.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_emergency_central_budget"
@@ -2956,7 +3044,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_machine_tool_fund"
-		texturefile = "gfx/interface/goals/focus_generic_industry_investment.dds"
+		texturefile = "gfx/interface/goals/focus_generic_modernize_industry.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_committee_emergency_plenipotentiaries"
@@ -2983,6 +3071,30 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/goal_generic_major_alliance.dds"
 	}
 	spriteType = {
+		name = "GFX_focus_WRK_committee_district_canteens"
+		texturefile = "gfx/interface/goals/focus_generic_agricultural_subsidies.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_committee_arbitration_boards"
+		texturefile = "gfx/interface/goals/focus_generic_sympathetic_judges.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_committee_second_guard_shift"
+		texturefile = "gfx/interface/goals/focus_generic_soldier_salute.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_committee_district_agitators"
+		texturefile = "gfx/interface/goals/focus_generic_public_meetings.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_committee_district_musters"
+		texturefile = "gfx/interface/goals/focus_generic_limited_social_mobilization.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_committee_store_keys"
+		texturefile = "gfx/interface/goals/goal_generic_small_arms.dds"
+	}
+	spriteType = {
 		name = "GFX_focus_WRK_staff_escort_for_the_chairman"
 		texturefile = "gfx/interface/goals/goal_generic_special_forces.dds"
 	}
@@ -2995,6 +3107,102 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/focus_generic_military_dictatorship.dds"
 	}
 	spriteType = {
+		name = "GFX_focus_WRK_staff_depot_ledgers"
+		texturefile = "gfx/interface/goals/focus_generic_stockpile_fuel.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_commanders_funds"
+		texturefile = "gfx/interface/goals/focus_generic_stockpile_currency.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_centre_quartermaster"
+		texturefile = "gfx/interface/goals/focus_generic_reinforcing_the_supply_network.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_supply_contracts"
+		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_war_chest"
+		texturefile = "gfx/interface/goals/focus_generic_money_for_equipment.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_standing_invitations"
+		texturefile = "gfx/interface/goals/goal_generic_improve_relations.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_adjutants_at_court"
+		texturefile = "gfx/interface/goals/focus_generic_soldier_salute.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_second_section_archive"
+		texturefile = "gfx/interface/goals/focus_generic_secret_service_agency.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_officers_assembly"
+		texturefile = "gfx/interface/goals/focus_generic_public_meetings.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_district_pledges"
+		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_council_of_allies"
+		texturefile = "gfx/interface/goals/focus_generic_conference.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_railway_commandants"
+		texturefile = "gfx/interface/goals/focus_generic_railroad.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_arsenal_seals"
+		texturefile = "gfx/interface/goals/goal_generic_small_arms.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_garrison_roads"
+		texturefile = "gfx/interface/goals/goal_generic_construct_infrastructure.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_cadre_regiments"
+		texturefile = "gfx/interface/goals/focus_generic_full_social_mobilization.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_district_arsenal_lists"
+		texturefile = "gfx/interface/goals/goal_generic_army_artillery.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_tower_survey"
+		texturefile = "gfx/interface/goals/goal_generic_fortify_city.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_military_route"
+		texturefile = "gfx/interface/goals/focus_generic_truck.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_let_the_tower_fall"
+		texturefile = "gfx/interface/goals/focus_generic_surrender.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_commanders_oaths"
+		texturefile = "gfx/interface/goals/goal_generic_national_unity.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_joint_government_draft"
+		texturefile = "gfx/interface/goals/goal_generic_military_deal.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_emergency_command"
+		texturefile = "gfx/interface/goals/focus_generic_national_security.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_government_guards"
+		texturefile = "gfx/interface/goals/focus_generic_home_defense.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_staff_last_order_draft"
+		texturefile = "gfx/interface/goals/focus_generic_improve_the_administration.dds"
+	}
+	spriteType = {
 		name = "GFX_focus_WRK_network_closed_laboratories"
 		texturefile = "gfx/interface/goals/goal_generic_scientific_exchange.dds"
 	}
@@ -3005,6 +3213,102 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_WRK_mandate_of_the_network"
 		texturefile = "gfx/interface/goals/focus_generic_energy.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_workshop_accounts"
+		texturefile = "gfx/interface/goals/focus_generic_stockpile_currency.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_diverted_orders"
+		texturefile = "gfx/interface/goals/focus_generic_smugglers.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_patent_pool"
+		texturefile = "gfx/interface/goals/focus_generic_socialist_science.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_district_bank_credit"
+		texturefile = "gfx/interface/goals/focus_generic_devaluation.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_shadow_budget"
+		texturefile = "gfx/interface/goals/focus_generic_money_for_equipment.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_supply_runs"
+		texturefile = "gfx/interface/goals/focus_generic_reinforcing_the_supply_network.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_shift_rosters"
+		texturefile = "gfx/interface/goals/focus_generic_full_employment.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_second_crew"
+		texturefile = "gfx/interface/goals/focus_generic_worker_expansion.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_fallback_addresses"
+		texturefile = "gfx/interface/goals/focus_generic_infiltration.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_reserve_rolls"
+		texturefile = "gfx/interface/goals/focus_generic_manpower.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_trusted_storekeepers"
+		texturefile = "gfx/interface/goals/focus_generic_secret_agent_operative.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_plant_inventory"
+		texturefile = "gfx/interface/goals/focus_generic_industrial_experts.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_tooling_line"
+		texturefile = "gfx/interface/goals/goal_generic_construct_mil_factory.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_test_stands"
+		texturefile = "gfx/interface/goals/focus_generic_license_production.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_pilot_shop"
+		texturefile = "gfx/interface/goals/focus_generic_mass_production.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_prototype_reserve"
+		texturefile = "gfx/interface/goals/goal_generic_secret_weapon.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_tower_exchange"
+		texturefile = "gfx/interface/goals/focus_generic_radio_communication.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_relay_by_wire"
+		texturefile = "gfx/interface/goals/focus_generic_cryptologic_bomb.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_open_broadcast"
+		texturefile = "gfx/interface/goals/goal_generic_propaganda.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_technical_continuity"
+		texturefile = "gfx/interface/goals/focus_generic_improve_the_administration_2.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_tower_shelter"
+		texturefile = "gfx/interface/goals/goal_generic_defence.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_blind_the_tower"
+		texturefile = "gfx/interface/goals/focus_generic_sabotage.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_listening_logs"
+		texturefile = "gfx/interface/goals/focus_generic_whispers.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_network_tower_duty_roster"
+		texturefile = "gfx/interface/goals/goal_generic_radar.dds"
 	}
 	spriteType = {
 		name = "GFX_focus_WRK_inspect_the_unity_tower"

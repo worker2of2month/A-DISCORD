@@ -163,4 +163,797 @@ guiTypes = {
 			}
 		}
 	}
+
+	# BEGIN GENERATED WEST INFLUENCE MAP
+	containerWindowType = {
+		name = "ADISCORD_west_influence_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 420 }
+
+		iconType = {
+			name = "ADISCORD_west_map_panel"
+			position = { x = 0 y = 0 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_panel"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "ADISCORD_west_map_scale"
+			position = { x = 12 y = 7 }
+			text = "ADISCORD_west_map_scale"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 22
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "ADISCORD_west_map_rules_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_background"
+			position = { x = 12 y = 34 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_background"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_25"
+			position = { x = 188 y = 171 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_25"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_25_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_26"
+			position = { x = 216 y = 204 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_26"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_26_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_27"
+			position = { x = 336 y = 229 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_27"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_27_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_32"
+			position = { x = 319 y = 243 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_32"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_32_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_33"
+			position = { x = 327 y = 250 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_33"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_33_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_34"
+			position = { x = 330 y = 241 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_34"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_34_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_35"
+			position = { x = 320 y = 234 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_35"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_35_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_36"
+			position = { x = 311 y = 234 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_36"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_36_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_37"
+			position = { x = 309 y = 241 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_37"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_37_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_38"
+			position = { x = 310 y = 250 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_38"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_38_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_39"
+			position = { x = 313 y = 254 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_39"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_39_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_40"
+			position = { x = 327 y = 249 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_40"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_40_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_71"
+			position = { x = 211 y = 205 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_71"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_71_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_72"
+			position = { x = 292 y = 179 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_72"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_72_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_73"
+			position = { x = 305 y = 176 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_73"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_73_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_80"
+			position = { x = 362 y = 195 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_80"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_80_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_82"
+			position = { x = 282 y = 221 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_82"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_82_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_90"
+			position = { x = 221 y = 201 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_90"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_90_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_91"
+			position = { x = 242 y = 192 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_91"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_91_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_92"
+			position = { x = 248 y = 176 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_92"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_92_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_93"
+			position = { x = 252 y = 176 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_93"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_93_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_94"
+			position = { x = 258 y = 173 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_94"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_94_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_95"
+			position = { x = 236 y = 174 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_95"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_95_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_96"
+			position = { x = 222 y = 189 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_96"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_96_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_97"
+			position = { x = 226 y = 166 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_97"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_97_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_98"
+			position = { x = 215 y = 165 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_98"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_98_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_99"
+			position = { x = 215 y = 183 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_99"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_99_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_100"
+			position = { x = 196 y = 190 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_100"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_100_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_101"
+			position = { x = 180 y = 203 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_101"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_101_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_103"
+			position = { x = 218 y = 212 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_103"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_103_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_127"
+			position = { x = 209 y = 99 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_127"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_127_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_128"
+			position = { x = 136 y = 44 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_128"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_128_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_129"
+			position = { x = 222 y = 113 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_129"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_129_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_130"
+			position = { x = 236 y = 98 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_130"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_130_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_131"
+			position = { x = 224 y = 94 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_131"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_131_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_132"
+			position = { x = 215 y = 78 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_132"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_132_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_144"
+			position = { x = 342 y = 178 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_144"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_144_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_145"
+			position = { x = 328 y = 176 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_145"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_145_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_146"
+			position = { x = 346 y = 193 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_146"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_146_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_150"
+			position = { x = 353 y = 180 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_150"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_150_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_164"
+			position = { x = 249 y = 112 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_164"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_164_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_194"
+			position = { x = 254 y = 198 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_194"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_194_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_195"
+			position = { x = 267 y = 173 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_195"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_195_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_196"
+			position = { x = 280 y = 174 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_196"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_196_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_199"
+			position = { x = 327 y = 201 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_199"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_199_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_200"
+			position = { x = 356 y = 322 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_200"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_200_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_201"
+			position = { x = 185 y = 285 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_201"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_201_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_202"
+			position = { x = 208 y = 230 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_202"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_202_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_315"
+			position = { x = 378 y = 228 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_315"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_315_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_316"
+			position = { x = 362 y = 234 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_316"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_316_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_317"
+			position = { x = 349 y = 229 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_317"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_317_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_318"
+			position = { x = 324 y = 223 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_318"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_318_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_319"
+			position = { x = 316 y = 212 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_319"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_319_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_320"
+			position = { x = 307 y = 224 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_320"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_320_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_321"
+			position = { x = 303 y = 212 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_321"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_321_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_322"
+			position = { x = 284 y = 211 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_322"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_322_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_323"
+			position = { x = 292 y = 228 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_323"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_323_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_324"
+			position = { x = 291 y = 245 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_324"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_324_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_325"
+			position = { x = 278 y = 236 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_325"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_325_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_328"
+			position = { x = 253 y = 219 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_328"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_328_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_693"
+			position = { x = 130 y = 67 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_693"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_693_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_694"
+			position = { x = 129 y = 89 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_694"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_694_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_695"
+			position = { x = 187 y = 122 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_695"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_695_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_696"
+			position = { x = 216 y = 51 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_696"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_696_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_697"
+			position = { x = 57 y = 77 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_697"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_697_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_698"
+			position = { x = 198 y = 151 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_698"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_698_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_713"
+			position = { x = 204 y = 141 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_713"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_713_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_714"
+			position = { x = 139 y = 175 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_714"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_714_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_715"
+			position = { x = 194 y = 95 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_715"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_715_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_716"
+			position = { x = 205 y = 126 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_716"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_716_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_717"
+			position = { x = 176 y = 154 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_717"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_717_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_PWR"
+			position = { x = 12 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_PWR_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_PWR"
+			position = { x = 15 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_PWR"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_PSD"
+			position = { x = 52 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_PSD_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_PSD"
+			position = { x = 55 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_PSD"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_ZAO"
+			position = { x = 92 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_ZAO_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_ZAO"
+			position = { x = 95 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_ZAO"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_WIT"
+			position = { x = 132 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_WIT_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_WIT"
+			position = { x = 135 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_WIT"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_IIA"
+			position = { x = 172 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_IIA_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_IIA"
+			position = { x = 175 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_IIA"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_IBA"
+			position = { x = 212 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_IBA_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_IBA"
+			position = { x = 215 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_IBA"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_IBL"
+			position = { x = 252 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_IBL_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_IBL"
+			position = { x = 255 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_IBL"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_WPA"
+			position = { x = 292 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_WPA_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_WPA"
+			position = { x = 295 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_WPA"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_WPS"
+			position = { x = 332 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_WPS_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_WPS"
+			position = { x = 335 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_WPS"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_ROM"
+			position = { x = 372 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_ROM_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_ROM"
+			position = { x = 375 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_ROM"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_country_TRU"
+			position = { x = 412 y = 345 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_badge"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_TRU_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_flag_TRU"
+			position = { x = 415 y = 348 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_flag_TRU"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "ADISCORD_west_map_legend"
+			position = { x = 12 y = 380 }
+			text = "ADISCORD_west_map_legend"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 34
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "ADISCORD_west_map_rules_tt"
+		}
+
+	}
+	# END GENERATED WEST INFLUENCE MAP
 }

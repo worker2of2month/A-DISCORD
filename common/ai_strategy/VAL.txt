@@ -668,6 +668,42 @@ STS_final_campaign_prepare_VAL = {
 	}
 }
 
+# The party's Kefreyt operation follows its external mandate within weeks. The
+# army mans both hostile borders from the mandate, before the campaign warning.
+VAL_prepare_against_party_campaign = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		VAL_ai_party_campaign_threat = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = STP
+		value = 150
+	}
+}
+
+VAL_prepare_against_party_patron = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		VAL_ai_party_campaign_threat = yes
+		NOD = {
+			exists = yes
+			has_capitulated = no
+			is_in_faction_with = STP
+			NOT = { has_war_with = VAL }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
+}
+
 VAL_resource_volunteers_to_NAM = {
 	allowed = { tag = VAL }
 	enable = { has_idea = VAL_resource_volunteer_mandate has_war = no NAM = { VAL_resource_aid_recipient = yes } }

@@ -113,6 +113,38 @@ NAM_national_programmes = {
 	scripted_gui = ADISCORD_NAM_basin_panel
 }
 
+# National orders grouped by department. Each decision opens through its own
+# focus, so an empty department stays hidden.
+NAM_defence_orders = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = NAM }
+	priority = 22
+}
+
+NAM_basin_economy = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	priority = 22
+}
+
+NAM_administration = {
+	icon = generic_political_discourse
+	allowed = { tag = NAM }
+	priority = 22
+}
+
+NAM_postwar_orders = {
+	icon = generic_political_discourse
+	allowed = { tag = NAM }
+	priority = 22
+}
+
+NAM_postwar_programmes = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	priority = 22
+}
+
 NAM_public_campaigns = {
 	icon = ADISCORD_propaganda
 	allowed = { tag = NAM }

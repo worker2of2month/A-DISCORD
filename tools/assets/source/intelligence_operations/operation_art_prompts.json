@@ -1,0 +1,1246 @@
+{
+  "style": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops.",
+  "export": {
+    "gaussian_blur_radius": 0.3,
+    "crt": "Supplied RGBA layer, resized to 448x255 and center-cropped; soft-light blend at original alpha after tonal normalization and light blur.",
+    "contrast": 1.08,
+    "autocontrast_cutoff_percent": [
+      0.3,
+      0.3
+    ]
+  },
+  "overlay": {
+    "source_file": "CRTEffectUseGlow.png",
+    "sha256": "f0ce2c1e17ad48859f0fb405d6a32628efe01a119c4110a2094faf8aa36201e9"
+  },
+  "scenes": {
+    "military_mole": {
+      "source_file": "exec-029ae75a-3b74-46d0-9b8c-975ba6e7061d.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration, not a cinematic poster. Muted desaturated olive-grey palette, subtle analog grain and faint scanline texture, natural imperfect light, restrained contrast, readable broad shapes. Every visible person's entire face must be anonymized with an obvious coarse square mosaic of opaque grey pixels, including background faces; preserve bodies and clothes. No recognizable identities. No text, letters, timestamps, UI, labels, symbols, flags, logos, watermark, decorative border or collage. Landscape 5:4 composition with important action safely inside central square so both 210x176 and 85x85 crops read well. Scene: Two plain-uniformed staff officers inside a worn concrete command post, one discreetly handing a sealed folder to the other beside a folded military map. Rebuilt industrial equipment, simple field radios, olive work uniforms without insignia. Waist-up medium shot, candid off-axis camera. Both faces strongly obscured by coarse square mosaic censorship.",
+      "edits": [
+        "Edit this image, preserve its scene, framing, environment, clothes and lighting. Keep ONLY the seated man on the right receiving the folder pixelated: he is the undercover agent. Replace the mosaics on the standing officer on the left and all background people with natural ordinary fictional adult faces. Apply very light uniform photographic blur across whole photo, retaining readable action and coarse agent mosaic. Do not censor anyone else. No text or border. Do not add scanlines or CRT effects; these will be composited at export."
+      ],
+      "redaction": "agent_only",
+      "source_sha256": "19e81e7580596b7901755cec22570b80d16461c1cacbd02d83d9e1383838ae0a"
+    },
+    "cipher": {
+      "source_file": "exec-e228fa3f-3728-4cba-8677-43af1035f0bc.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration, not a cinematic poster. Muted desaturated olive-grey palette, subtle analog grain and faint scanline texture, natural imperfect light, restrained contrast, readable broad shapes. Every visible person's entire face must be anonymized with an obvious coarse square mosaic of opaque grey pixels, including background faces; preserve bodies and clothes. No recognizable identities. No text, letters, timestamps, UI, labels, symbols, flags, logos, watermark, decorative border or collage. Landscape 5:4 composition with important action safely inside central square so both 210x176 and 85x85 crops read well. Scene: A gloved intelligence operative at a cramped workbench extracting a small cipher module from a rugged field communications terminal, with cables and a paper codebook whose pages show no legible text. One visible head partly in profile fully obscured by square mosaic redaction. The module, hands and terminal dominate the central composition.",
+      "edits": [
+        "Edit this image, preserve its scene, framing, environment, clothes and lighting. Keep ONLY the foreground person extracting the module pixelated: this is the undercover agent. Replace both background men's face mosaics with natural ordinary fictional adult faces. Apply very light uniform photographic blur across whole photo, retaining readable action and coarse agent mosaic. Do not censor anyone else. No text or border. Do not add scanlines or CRT effects; these will be composited at export."
+      ],
+      "redaction": "agent_only",
+      "source_sha256": "a1ae307f2055d96ccc9702b387ae8f4c405f979bb71bdc225e77ca32d187b8b6"
+    },
+    "rescue": {
+      "source_file": "exec-0b8e8b0e-d9c7-44f6-b235-234d5e95d485.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration, not a cinematic poster. Muted desaturated olive-grey palette, subtle analog grain and faint scanline texture, natural imperfect light, restrained contrast, readable broad shapes. Every visible person's entire face must be anonymized with an obvious coarse square mosaic of opaque grey pixels, including background faces; preserve bodies and clothes. No recognizable identities. No text, letters, timestamps, UI, labels, symbols, flags, logos, watermark, decorative border or collage. Landscape 5:4 composition with important action safely inside central square so both 210x176 and 85x85 crops read well. Scene: Two plainclothes intelligence operatives helping a weary adult prisoner in a plain grey jacket out of a dim concrete detention corridor toward the open rear door of a utilitarian van. Non-graphic, no injuries or violence. Three adult faces visibly covered by coarse opaque mosaic redaction. Tight candid medium shot, dusty industrial surroundings.",
+      "edits": [],
+      "redaction": "rescue_group",
+      "source_sha256": "c85313af07d24414d7707b9fa1c1878d6ee6103caf9d1375151746a161919081"
+    },
+    "civilian_cover": {
+      "source_file": "exec-0e44e1fd-0106-42ca-8b8c-882928a7215e.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Inside a municipal records office, a single undercover agent centered at filing cabinets quietly takes a folder. ONLY this agent has a mosaicked face. Two clerks nearby have natural clearly visible uncovered faces. Concrete archive, aged paper, desk lamp, close medium view.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "5fd93084a0249db9d7c0fa4005e5890fdf7e54d39fb3b64a8c18beb8d5798fc5"
+    },
+    "naval_mole": {
+      "source_file": "exec-4decccd9-998e-4af9-acdc-c63ed6564a29.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: At an industrial drydock, an undercover agent in unmarked dockworker coat receives a ship maintenance folder from a naval engineer. ONLY the receiving agent's face is mosaicked, engineer face is natural and visible. Repaired grey patrol vessel and cranes behind them, chest-up view.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "570509c4b61aea7114a832d1e05eee2f7a8105dc5d9990dd9eb07cde6345f91d"
+    },
+    "airfield_mole": {
+      "source_file": "exec-78beb720-c098-4d28-849e-bce13daf42b0.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Inside a rough airfield hangar, a mechanic showing an aircraft maintenance diagram to an undercover agent. ONLY the agent on the right has a mosaicked face, mechanic face fully visible. Restored utilitarian aircraft engine in background, no insignia, medium shot.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "22100489985258130a66b0a799ad4d2456417d215e7b15e750478c0fe467965f"
+    },
+    "false_intelligence": {
+      "source_file": "exec-e37c081c-8b8a-4366-961f-099f24053ad2.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Undercover agent planting a misleading folder of photographs beside a scale model of military decoy vehicles on a cluttered desk. One agent with mosaicked face, an ordinary logistics worker with clear uncensored face in background. Make the decoy tank miniature and dossier readable visual objects.",
+      "edits": [
+        "Edit the documentary photograph using the supplied black-and-white selection mask. The photograph is the workshop scene with an undercover agent leaning over a table. The WHITE mask marks the lower-right area containing the miniature military vehicle diorama. Remove the whole miniature tank/truck diorama and its raised display base in that marked region. Reconstruct plain worn tabletop and the existing workshop background naturally in its place. Preserve the agent, his mosaic face redaction, hands, folder and photographs, table maps, background worker with uncovered face, framing, colors and lighting. Do not add new props, text or censorship. Keep everything outside the marked area unchanged. Output the edited photograph, not the mask."
+      ],
+      "redaction": "agent_only",
+      "source_sha256": "167d19268314036f1b8f05817bb603c4a022e96fc23ae190b2e0dfe4d0344f74"
+    },
+    "coup": {
+      "source_file": "exec-6601eefb-2c2b-4748-98e2-68450f26381a.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent quietly briefing two local militia officers at a table in a shabby administration building. ONLY the agent leaning over the table has mosaicked face; both officers have natural visible faces. Envelopes and map, window overlooking civic square, restrained tense candid scene, no violence.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "b6ad8e5dd75671db63b3bda3a9f618279e79d24b78759f12cc0e19737848096d"
+    },
+    "resistance_supply": {
+      "source_file": "exec-e08e1189-efe1-4202-83f9-5932a6445eac.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent helping an ordinary resistance quartermaster open wooden equipment crates inside a brick warehouse. ONLY agent's face mosaicked; quartermaster face fully visible. Covered rifles and ammunition cases, no combat, medium shot with hands and crate prominent.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "78c83d6f657dfeb3c07bbf7b6c7a2c87f3e4cb6cc1f5dc41c092c1ad430ece3f"
+    },
+    "resistance_contact": {
+      "source_file": "exec-13de0554-7653-46a7-86bc-9b5b80289746.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent discreetly passing a small folded note to an ordinary civilian in a worn coat beside a railway station wall. ONLY agent on left has mosaicked face. Civilian face fully visible. Damp brick, industrial town, tight medium candid view.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "29e4f164b5b57ee262d64872a331a9c6baaf97795caf848ebfaa01d9524bf45a"
+    },
+    "collaboration": {
+      "source_file": "exec-7602c51b-e00b-4a80-b8fa-0447aed550a2.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent and two local civil officials negotiating at a worn wooden desk in a restored concrete office. ONLY agent seated on left has mosaicked face. Both civilian officials' faces natural and uncovered. Modest suits, paper folders, handshake central, no flags.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "f0e3b610548a1e9c342fe68315ddd725246a7ed1ef0169b34b196359244ae5e1"
+    },
+    "strike": {
+      "source_file": "exec-e261096a-5cfa-46c2-9ede-a3acb867f631.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Undercover observer using binoculars and a folded map to guide distant friendly units from a ruined concrete rooftop. A single agent, face covered by coarse square mosaic. Distant industrial bridge and roads in view, rugged radio on ledge. No battle or explosions.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "5a572b46a0963ff251461435f8728fcf55e23b8b0bcce61a60c732b2aba527d3"
+    },
+    "blueprints": {
+      "source_file": "exec-adce433e-0e4e-4a58-adba-fc0acf42717c.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Undercover agent inside an industrial design office photographing a large engineering blueprint with a small camera. ONLY this agent's face mosaicked. An ordinary engineer with natural visible face checking a prototype behind. Drafting table, metal components, technical drawings without readable text.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "6a7de6668e1b99bdd506a07a96f55a7fb0eb8cbc1d5fb14f3376cf9077412563"
+    },
+    "sabotage": {
+      "source_file": "exec-81fa9511-39d7-4f69-ba5f-332527b16d05.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent crouching beside an industrial electrical cabinet in a railway maintenance depot, quietly disconnecting a cable with a compact tool. Single visible person with mosaicked face. Heavy machinery and steel girders, no instruction diagram, no explosions or injuries.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "93ccaae8855d253cbe73e212df846f1141f6cf72ae5dad61359ec90e853a8f38"
+    },
+    "border": {
+      "source_file": "exec-6d45df4c-b351-4e07-8d92-06db56453674.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Undercover agent traveling in ordinary weathered civilian clothes showing a plain passport booklet to a border guard at a road checkpoint. ONLY traveler's face mosaicked. Guard face visible naturally. Barrier and utilitarian bus behind, medium close view, no flags, no readable text.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "a33a87b4f490f275bdeb0654d3ece28fcbb34bac45d1cc540d0bccf01bf63951"
+    },
+    "air_extraction": {
+      "source_file": "exec-babdf23b-967b-46f6-9d8f-3164e90cdb10.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: An undercover agent with a small travel bag approaching the open door of a battered transport helicopter on a remote dirt airstrip. ONLY agent's face mosaicked. A pilot beside door has clearly visible natural face. Rotor still, overcast light, medium shot so agent and door dominate.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "b3ad90a833abe8ca733ae8b94f24f14b9d73a60a66b61314c9df8acfe0eae88f"
+    },
+    "coastal_extraction": {
+      "source_file": "exec-19139ae5-0b3b-40ee-a1ed-eca9671eafe9.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: REGENERATE a coastal extraction with a completely new, simple physically credible composition. Side-on medium documentary shot of a small weathered motor launch ALREADY underway near an industrial quay in calm water. One undercover passenger sits securely on a simple bench near the center, both hands naturally resting on a canvas travel bag on his lap, his face alone covered by coarse mosaic. An ordinary older boatman sits at the stern operating the outboard tiller, face fully visible, no censorship. Both men are fully inside the boat, no boarding action, no handshake, nobody stepping over gunwales. Clearly coherent single boat hull, low gunwales, benches, interior floor, motor attached to stern. A very distant low submarine silhouette may sit in mist far behind. No other foreground people. Keep bodies and hand anatomy natural; waist-up framing with just enough hull to explain the scene.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "a51831adb0a6486ab33c660b7b6baf846ced701f34d6f20589224fc8f2ba2ea2"
+    },
+    "safehouse": {
+      "source_file": "exec-18c5b4e7-3f2b-48ce-9165-04b5af32bb88.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Single undercover agent with mosaicked face pulling a heavy curtain across a dim apartment window, a travel bag and field radio on simple table. Weathered wallpaper and concrete industrial housing outside. Quiet safehouse atmosphere, restrained soft natural light.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "0bf27fa7de4e5cb0653d3d44be1fd19530c29a9338873cbf5be94caed14635ab"
+    },
+    "recruitment": {
+      "source_file": "exec-367ab3bc-ce11-4a99-b568-cb26421ed137.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Undercover handler in civilian coat discreetly sliding a sealed envelope across a small cafe table to an ordinary adult contact. ONLY handler face mosaicked; contact face fully visible. Two cups, dim worn public room, waist-up candid view, no brands.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "d27378e0bfc605460544f7d910ae17bce8bb4e0fd941b8f4477d96c858533e6b"
+    },
+    "radio": {
+      "source_file": "exec-04d2f86f-d579-4806-a260-10a01bf614b9.png",
+      "prompt": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops. Scene: Single undercover radio operator with mosaicked face wearing headphones and tuning a rugged field transceiver in a brick basement. Coiled wire, battery, wall map without writing. Close medium view centered on hands, radio and head.",
+      "edits": [],
+      "redaction": "agent_only",
+      "source_sha256": "07bc284c3073a66bdb16b86731e8f3af205f4b7736c593c359eeea1209e8b918"
+    }
+  },
+  "bindings": {
+    "GFX_operations_boost_resistance": {
+      "path": "gfx/interface/operations/boost_resistance.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "resistance_supply",
+      "sha256": "bc569b38473e33c1e349467dcda232a51115cbbe879c726902aafd27951f3630"
+    },
+    "GFX_operations_capture_ciphers": {
+      "path": "gfx/interface/operations/capture_ciphers.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "cipher",
+      "sha256": "cfb5ed116a21151b81406eb34a784bc8705b5fb91b37863b130019fb973acffd"
+    },
+    "GFX_operations_collaboration_government": {
+      "path": "gfx/interface/operations/collaboration_government.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "collaboration",
+      "sha256": "d87f27c17b487a998e07194c19dba0a02974dfe193a098f613bec8b9bab64c45"
+    },
+    "GFX_operations_coordinated_strike": {
+      "path": "gfx/interface/operations/coordinated_strike.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "strike",
+      "sha256": "92824a9b1573ee826dc877062dd0028160c8e940bda516f67926f3fa93cdf377"
+    },
+    "GFX_operations_coup_government": {
+      "path": "gfx/interface/operations/coup_government.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "coup",
+      "sha256": "4d1a155b442435cec259507eea42309b4f730ba45dc079f75ffdf3d40e0ddae7"
+    },
+    "GFX_operations_fake_intel": {
+      "path": "gfx/interface/operations/fake_intel.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "false_intelligence",
+      "sha256": "189f6af6b1d1a1b3fb0b9d58768df33b13fb931e54c9cc622a6ed209ae1c7a4c"
+    },
+    "GFX_operations_infiltrate_air_forces": {
+      "path": "gfx/interface/operations/infiltrate_air_forces.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "airfield_mole",
+      "sha256": "54d29abb6d97b78341297946571585d82e53a3aa7d6caa5b32a8ad1319ffe782"
+    },
+    "GFX_operations_infiltrate_armed_forces": {
+      "path": "gfx/interface/operations/infiltrate_armed_forces.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "military_mole",
+      "sha256": "e01b4aa943edeabeb78c35850bb03605cd0b3fa839613d543185efb09fd28d38"
+    },
+    "GFX_operations_infiltrate_civilian_govt": {
+      "path": "gfx/interface/operations/infiltrate_civilian_govt.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "civilian_cover",
+      "sha256": "0e4a04a65fe2e2f7f47a2f7d6e41bf14806bb60938424968ccc98df2a038b5d8"
+    },
+    "GFX_operations_infiltrate_naval_forces": {
+      "path": "gfx/interface/operations/infiltrate_naval_forces.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "naval_mole",
+      "sha256": "de8f4e0d2149690b1ea5e033d5d99c174c428eb114980f3b8546b5626e944a37"
+    },
+    "GFX_operations_make_resistance_contacts": {
+      "path": "gfx/interface/operations/make_resistance_contacts.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "resistance_contact",
+      "sha256": "72dcda4f40aec96668ade3391aa2fe57ea03de661f18e2da9a1897046ecb3acd"
+    },
+    "GFX_operations_rescue_captured_operative": {
+      "path": "gfx/interface/operations/rescue_captured_operative.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "rescue",
+      "sha256": "5262746645569be8f65a488bbb64ed62abdff18e4792fa3fc095643045405bfa"
+    },
+    "GFX_operations_steal_blueprints": {
+      "path": "gfx/interface/operations/steal_blueprints.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "blueprints",
+      "sha256": "a499369390a179215d787a5a4339d658aa2132ad2867d6e4025b921f631a0446"
+    },
+    "GFX_operations_targeted_sabotage": {
+      "path": "gfx/interface/operations/targeted_sabotage.dds",
+      "size": [
+        85,
+        85
+      ],
+      "scene": "sabotage",
+      "sha256": "20e5757ef4ec110ebb3f6432787dd01860d2bc7ac9778ecc3903954ab1f61426"
+    },
+    "GFX_phase_capture_cyphers_raid": {
+      "path": "gfx/interface/operations/images/phase_capture_cyphers_raid.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "cipher",
+      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+    },
+    "GFX_phase_capture_cyphers_raid_small": {
+      "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_raid_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "cipher",
+      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+    },
+    "GFX_phase_capture_cyphers_reverse_engineer": {
+      "path": "gfx/interface/operations/images/phase_capture_cyphers_reverse_engineer.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "cipher",
+      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+    },
+    "GFX_phase_capture_cyphers_reverse_engineer_small": {
+      "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_reverse_engineer_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "cipher",
+      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+    },
+    "GFX_phase_capture_cyphers_smuggle": {
+      "path": "gfx/interface/operations/images/phase_capture_cyphers_smuggle.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "cipher",
+      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+    },
+    "GFX_phase_capture_cyphers_smuggle_small": {
+      "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_smuggle_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "cipher",
+      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+    },
+    "GFX_phase_collaboration_government_contact_military_officers": {
+      "path": "gfx/interface/operations/images/phase_collaboration_government_contact_military_officers.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "military_mole",
+      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+    },
+    "GFX_phase_collaboration_government_contact_military_officers_small": {
+      "path": "gfx/interface/operations/phases_small/phase_collaboration_government_contact_military_officers_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "military_mole",
+      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+    },
+    "GFX_phase_collaboration_government_set_up_planning_committees": {
+      "path": "gfx/interface/operations/images/phase_collaboration_government_set_up_planning_committees.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "collaboration",
+      "sha256": "c89fb302e042e56ffe655c884cd90d43b41fe9fed8137425e9b9034aa1100ea7"
+    },
+    "GFX_phase_collaboration_government_set_up_planning_committees_small": {
+      "path": "gfx/interface/operations/phases_small/phase_collaboration_government_set_up_planning_committees_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "collaboration",
+      "sha256": "75432947ab12167558421892db7031f9c92b59f1e90b0f958b387dac2b15bc32"
+    },
+    "GFX_phase_collaboration_government_train_paramilitary_forces": {
+      "path": "gfx/interface/operations/images/phase_collaboration_government_train_paramilitary_forces.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_supply",
+      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+    },
+    "GFX_phase_collaboration_government_train_paramilitary_forces_small": {
+      "path": "gfx/interface/operations/phases_small/phase_collaboration_government_train_paramilitary_forces_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_supply",
+      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+    },
+    "GFX_phase_coordinate_strike_mark_targets": {
+      "path": "gfx/interface/operations/images/phase_coordinate_strike_mark_targets.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "strike",
+      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+    },
+    "GFX_phase_coordinate_strike_mark_targets_small": {
+      "path": "gfx/interface/operations/phases_small/phase_coordinate_strike_mark_targets_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "strike",
+      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+    },
+    "GFX_phase_coordinated_strike_direct_units": {
+      "path": "gfx/interface/operations/images/phase_coordinated_strike_direct_units.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "strike",
+      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+    },
+    "GFX_phase_coordinated_strike_direct_units_small": {
+      "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_direct_units_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "strike",
+      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+    },
+    "GFX_phase_coordinated_strike_occupy_bridges": {
+      "path": "gfx/interface/operations/images/phase_coordinated_strike_occupy_bridges.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "strike",
+      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+    },
+    "GFX_phase_coordinated_strike_occupy_bridges_small": {
+      "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_occupy_bridges_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "strike",
+      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+    },
+    "GFX_phase_coordinated_strike_sabotage_communications": {
+      "path": "gfx/interface/operations/images/phase_coordinated_strike_sabotage_communications.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_coordinated_strike_sabotage_communications_small": {
+      "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_sabotage_communications_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_coordinated_strike_scout_target": {
+      "path": "gfx/interface/operations/images/phase_coordinated_strike_scout_target.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "strike",
+      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+    },
+    "GFX_phase_coordinated_strike_scout_target_small": {
+      "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_scout_target_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "strike",
+      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+    },
+    "GFX_phase_exfiltration_air_pickup": {
+      "path": "gfx/interface/operations/images/phase_exfiltration_air_pickup.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "air_extraction",
+      "sha256": "9a14d1af88de17817c526ccc6b954a93c826e6a600e35acac581fe0195e0a8cf"
+    },
+    "GFX_phase_exfiltration_air_pickup_small": {
+      "path": "gfx/interface/operations/phases_small/phase_exfiltration_air_pickup_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "air_extraction",
+      "sha256": "1753cd2583e586273077ddaba396b4eaf5f9bae0c7be9b2e986a0d67c39ee2e8"
+    },
+    "GFX_phase_exfiltration_border": {
+      "path": "gfx/interface/operations/images/phase_exfiltration_border.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "border",
+      "sha256": "22b29c1ace8706f0d789a5ba2873e42a7514dc285e0c64dcf20206d359bdf89b"
+    },
+    "GFX_phase_exfiltration_border_small": {
+      "path": "gfx/interface/operations/phases_small/phase_exfiltration_border_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "border",
+      "sha256": "90692693a4f051ca3dadb54c143e974b86b50e1728f7b97d66217ef1048242f3"
+    },
+    "GFX_phase_exfiltration_go_to_ground": {
+      "path": "gfx/interface/operations/images/phase_exfiltration_go_to_ground.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "safehouse",
+      "sha256": "52b0ac5431caedd3c74a5e299116241d17d39b3d7a69fe440f7954cbe03b854d"
+    },
+    "GFX_phase_exfiltration_go_to_ground_small": {
+      "path": "gfx/interface/operations/phases_small/phase_exfiltration_go_to_ground_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "safehouse",
+      "sha256": "6b27961ed4e9e5a2cd88dd56a0641418a7ef98b3893b01f4f0cc658aa7edae48"
+    },
+    "GFX_phase_exfiltration_submarine_pickup": {
+      "path": "gfx/interface/operations/images/phase_exfiltration_submarine_pickup.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "coastal_extraction",
+      "sha256": "1f981ce8a31801ab91b1dcd8c992d82e01bd0821cf7277c3f30642cfd61257ce"
+    },
+    "GFX_phase_exfiltration_submarine_pickup_small": {
+      "path": "gfx/interface/operations/phases_small/phase_exfiltration_submarine_pickup_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "coastal_extraction",
+      "sha256": "92278a6033d6a52798cf0a41190b85d571cf8fd8ed52b9611dbcb9033bd47417"
+    },
+    "GFX_phase_fake_intel_decoy_tanks": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_decoy_tanks.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "false_intelligence",
+      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+    },
+    "GFX_phase_fake_intel_decoy_tanks_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_decoy_tanks_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "false_intelligence",
+      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+    },
+    "GFX_phase_fake_intel_deliberate_leaks": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_deliberate_leaks.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "false_intelligence",
+      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+    },
+    "GFX_phase_fake_intel_deliberate_leaks_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_deliberate_leaks_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "false_intelligence",
+      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+    },
+    "GFX_phase_fake_intel_plant_evidence": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_plant_evidence.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "false_intelligence",
+      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+    },
+    "GFX_phase_fake_intel_plant_evidence_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_plant_evidence_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "false_intelligence",
+      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+    },
+    "GFX_phase_fake_intel_press_releases": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_press_releases.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "false_intelligence",
+      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+    },
+    "GFX_phase_fake_intel_press_releases_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_press_releases_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "false_intelligence",
+      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+    },
+    "GFX_phase_fake_intel_radio_deception": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_radio_deception.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "radio",
+      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+    },
+    "GFX_phase_fake_intel_radio_deception_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_radio_deception_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "radio",
+      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+    },
+    "GFX_phase_fake_intel_release_pow": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_release_pow.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "rescue",
+      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+    },
+    "GFX_phase_fake_intel_release_pow_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_release_pow_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "rescue",
+      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+    },
+    "GFX_phase_fake_intel_utilize_double_agents": {
+      "path": "gfx/interface/operations/images/phase_fake_intel_utilize_double_agents.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "recruitment",
+      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+    },
+    "GFX_phase_fake_intel_utilize_double_agents_small": {
+      "path": "gfx/interface/operations/phases_small/phase_fake_intel_utilize_double_agents_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "recruitment",
+      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+    },
+    "GFX_phase_free_operative_free_in_transit": {
+      "path": "gfx/interface/operations/images/phase_free_operative_free_in_transit.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "rescue",
+      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+    },
+    "GFX_phase_free_operative_free_in_transit_small": {
+      "path": "gfx/interface/operations/phases_small/phase_free_operative_free_in_transit_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "rescue",
+      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+    },
+    "GFX_phase_free_operative_liberate_camp": {
+      "path": "gfx/interface/operations/images/phase_free_operative_liberate_camp.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "rescue",
+      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+    },
+    "GFX_phase_free_operative_liberate_camp_small": {
+      "path": "gfx/interface/operations/phases_small/phase_free_operative_liberate_camp_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "rescue",
+      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+    },
+    "GFX_phase_free_operative_smuggle_in_escape_gear": {
+      "path": "gfx/interface/operations/images/phase_free_operative_smuggle_in_escape_gear.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "rescue",
+      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+    },
+    "GFX_phase_free_operative_smuggle_in_escape_gear_small": {
+      "path": "gfx/interface/operations/phases_small/phase_free_operative_smuggle_in_escape_gear_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "rescue",
+      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+    },
+    "GFX_phase_infiltrate_military_bribe": {
+      "path": "gfx/interface/operations/images/phase_infiltrate_military_bribe.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "military_mole",
+      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+    },
+    "GFX_phase_infiltrate_military_bribe_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_bribe_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "military_mole",
+      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+    },
+    "GFX_phase_infiltrate_military_ideological_supporter": {
+      "path": "gfx/interface/operations/images/phase_infiltrate_military_ideological_supporter.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "military_mole",
+      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+    },
+    "GFX_phase_infiltrate_military_ideological_supporter_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_ideological_supporter_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "military_mole",
+      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+    },
+    "GFX_phase_infiltrate_military_seduction": {
+      "path": "gfx/interface/operations/images/phase_infiltrate_military_seduction.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "recruitment",
+      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+    },
+    "GFX_phase_infiltrate_military_seduction_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_seduction_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "recruitment",
+      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+    },
+    "GFX_phase_infiltrate_military_turned_pow": {
+      "path": "gfx/interface/operations/images/phase_infiltrate_military_turned_pow.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "recruitment",
+      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+    },
+    "GFX_phase_infiltrate_military_turned_pow_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_turned_pow_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "recruitment",
+      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+    },
+    "GFX_phase_infiltration_airplane": {
+      "path": "gfx/interface/operations/images/phase_infiltration_airplane.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "air_extraction",
+      "sha256": "9a14d1af88de17817c526ccc6b954a93c826e6a600e35acac581fe0195e0a8cf"
+    },
+    "GFX_phase_infiltration_airplane_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltration_airplane_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "air_extraction",
+      "sha256": "1753cd2583e586273077ddaba396b4eaf5f9bae0c7be9b2e986a0d67c39ee2e8"
+    },
+    "GFX_phase_infiltration_border": {
+      "path": "gfx/interface/operations/images/phase_infiltration_border.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "border",
+      "sha256": "22b29c1ace8706f0d789a5ba2873e42a7514dc285e0c64dcf20206d359bdf89b"
+    },
+    "GFX_phase_infiltration_border_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltration_border_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "border",
+      "sha256": "90692693a4f051ca3dadb54c143e974b86b50e1728f7b97d66217ef1048242f3"
+    },
+    "GFX_phase_infiltration_diplomatic": {
+      "path": "gfx/interface/operations/images/phase_infiltration_diplomatic.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "civilian_cover",
+      "sha256": "98a98e9e7df451dbbe63417582103cbd6a6a3f87cfa4c366d95d192bdf477024"
+    },
+    "GFX_phase_infiltration_diplomatic_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltration_diplomatic_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "civilian_cover",
+      "sha256": "8f3535e14a38b5136a3e96a4a95e9501d8fe0952597c9d9da5dc1330925998e0"
+    },
+    "GFX_phase_infiltration_submarine": {
+      "path": "gfx/interface/operations/images/phase_infiltration_submarine.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "coastal_extraction",
+      "sha256": "1f981ce8a31801ab91b1dcd8c992d82e01bd0821cf7277c3f30642cfd61257ce"
+    },
+    "GFX_phase_infiltration_submarine_small": {
+      "path": "gfx/interface/operations/phases_small/phase_infiltration_submarine_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "coastal_extraction",
+      "sha256": "92278a6033d6a52798cf0a41190b85d571cf8fd8ed52b9611dbcb9033bd47417"
+    },
+    "GFX_phase_lar_fra_coup_launch_coup_small": {
+      "path": "gfx/interface/operations/phases_small/phase_lar_fra_launch_coup_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "coup",
+      "sha256": "6ce7ff6f8b89dd5c5e177cdc2a6056b788f598542548c11e42b30278e6251dfc"
+    },
+    "GFX_phase_lar_fra_coup_pre_position_units": {
+      "path": "gfx/interface/operations/images/phase_lar_fra_coup_pre_position_units.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "coup",
+      "sha256": "72036d6e83d4674f9ce94e07aec35ad20a6da1eb16acb3c365ee992f03935eb9"
+    },
+    "GFX_phase_lar_fra_coup_pre_position_units_small": {
+      "path": "gfx/interface/operations/phases_small/phase_lar_fra_coup_pre_position_units_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "coup",
+      "sha256": "6ce7ff6f8b89dd5c5e177cdc2a6056b788f598542548c11e42b30278e6251dfc"
+    },
+    "GFX_phase_lar_fra_launch_coup": {
+      "path": "gfx/interface/operations/images/phase_lar_fra_launch_coup.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "coup",
+      "sha256": "72036d6e83d4674f9ce94e07aec35ad20a6da1eb16acb3c365ee992f03935eb9"
+    },
+    "GFX_phase_resistance_contacts_briefings": {
+      "path": "gfx/interface/operations/images/phase_resistance_contacts_briefings.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_contact",
+      "sha256": "b7da1b7da3486f507c61ef6d8dd4009c2203b3450eee22be6a01673ba31b2352"
+    },
+    "GFX_phase_resistance_contacts_briefings_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_contacts_briefings_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_contact",
+      "sha256": "b3ab866a4ebfc107a55aea5e0440bf239455821cbef2c75fca3ffeb89d763690"
+    },
+    "GFX_phase_resistance_contacts_radio_circuits": {
+      "path": "gfx/interface/operations/images/phase_resistance_contacts_radio_circuits.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "radio",
+      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+    },
+    "GFX_phase_resistance_contacts_radio_circuits_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_contacts_radio_circuits_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "radio",
+      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+    },
+    "GFX_phase_resistance_support_arms_depots": {
+      "path": "gfx/interface/operations/images/phase_resistance_support_arms_depots.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_supply",
+      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+    },
+    "GFX_phase_resistance_support_arms_depots_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_support_arms_depots_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_supply",
+      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+    },
+    "GFX_phase_resistance_support_coordinate_groups": {
+      "path": "gfx/interface/operations/images/phase_resistance_support_coordinate_groups.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_contact",
+      "sha256": "b7da1b7da3486f507c61ef6d8dd4009c2203b3450eee22be6a01673ba31b2352"
+    },
+    "GFX_phase_resistance_support_coordinate_groups_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_support_coordinate_groups_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_contact",
+      "sha256": "b3ab866a4ebfc107a55aea5e0440bf239455821cbef2c75fca3ffeb89d763690"
+    },
+    "GFX_phase_resistance_support_distribute_weapons": {
+      "path": "gfx/interface/operations/images/phase_resistance_support_distribute_weapons.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_supply",
+      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+    },
+    "GFX_phase_resistance_support_distribute_weapons_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_support_distribute_weapons_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_supply",
+      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+    },
+    "GFX_phase_resistance_support_organize_training": {
+      "path": "gfx/interface/operations/images/phase_resistance_support_organize_training.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "resistance_supply",
+      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+    },
+    "GFX_phase_resistance_support_organize_training_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_support_organize_training_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "resistance_supply",
+      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+    },
+    "GFX_phase_resistance_support_pidgeons": {
+      "path": "gfx/interface/operations/images/phase_resistance_support_pidgeons.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "radio",
+      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+    },
+    "GFX_phase_resistance_support_pidgeons_small": {
+      "path": "gfx/interface/operations/phases_small/phase_resistance_support_pidgeons_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "radio",
+      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+    },
+    "GFX_phase_steal_blueprints_infiltrate_naval_design_office": {
+      "path": "gfx/interface/operations/images/phase_steal_blueprints_infiltrate_naval_design_office.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "blueprints",
+      "sha256": "c83b9bc3128f3360066f2712a8a70cb027bbe1b627283e96656520e6628024b7"
+    },
+    "GFX_phase_steal_blueprints_infiltrate_naval_design_office_small": {
+      "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_infiltrate_naval_design_office_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "blueprints",
+      "sha256": "4fc59c73a0a8ebd4fe139b89edc1e3e7213c134ca11514a4f923bc6cc296ad8a"
+    },
+    "GFX_phase_steal_blueprints_middle_manager": {
+      "path": "gfx/interface/operations/images/phase_steal_blueprints_middle_manager.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "civilian_cover",
+      "sha256": "98a98e9e7df451dbbe63417582103cbd6a6a3f87cfa4c366d95d192bdf477024"
+    },
+    "GFX_phase_steal_blueprints_middle_manager_small": {
+      "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_middle_manager_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "civilian_cover",
+      "sha256": "8f3535e14a38b5136a3e96a4a95e9501d8fe0952597c9d9da5dc1330925998e0"
+    },
+    "GFX_phase_steal_blueprints_steal_prototype": {
+      "path": "gfx/interface/operations/images/phase_steal_blueprints_steal_prototype.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "blueprints",
+      "sha256": "c83b9bc3128f3360066f2712a8a70cb027bbe1b627283e96656520e6628024b7"
+    },
+    "GFX_phase_steal_blueprints_steal_prototype_small": {
+      "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_steal_prototype_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "blueprints",
+      "sha256": "4fc59c73a0a8ebd4fe139b89edc1e3e7213c134ca11514a4f923bc6cc296ad8a"
+    },
+    "GFX_phase_targeted_sabotage_burn_storage": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_burn_storage.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_burn_storage_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_burn_storage_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_collapse_tunnel": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_collapse_tunnel.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_collapse_tunnel_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_collapse_tunnel_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_destroy_bridge": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_destroy_bridge.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_destroy_bridge_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_destroy_bridge_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_destroy_mining_equipment": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_destroy_mining_equipment.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_destroy_mining_equipment_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_destroy_mining_equipment_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_immobilize_rolling_stock": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_immobilize_rolling_stock.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_immobilize_rolling_stock_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_immobilize_rolling_stock_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_organize_more_meetings": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_organize_more_meetings.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "collaboration",
+      "sha256": "c89fb302e042e56ffe655c884cd90d43b41fe9fed8137425e9b9034aa1100ea7"
+    },
+    "GFX_phase_targeted_sabotage_organize_more_meetings_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_organize_more_meetings_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "collaboration",
+      "sha256": "75432947ab12167558421892db7031f9c92b59f1e90b0f958b387dac2b15bc32"
+    },
+    "GFX_phase_targeted_sabotage_plant_explosives": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_plant_explosives.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_plant_explosives_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_plant_explosives_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    },
+    "GFX_phase_targeted_sabotage_remove_roadsigns": {
+      "path": "gfx/interface/operations/images/phase_targeted_sabotage_remove_roadsigns.dds",
+      "size": [
+        210,
+        176
+      ],
+      "scene": "sabotage",
+      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+    },
+    "GFX_phase_targeted_sabotage_remove_roadsigns_small": {
+      "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_remove_roadsigns_small.dds",
+      "size": [
+        59,
+        58
+      ],
+      "scene": "sabotage",
+      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+    }
+  }
+}

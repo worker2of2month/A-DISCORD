@@ -57,8 +57,38 @@ ADISCORD_vorkerland_prewar_category = {
 			tag = YOR
 		}
 	}
-	visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes has_global_flag = ADISCORD_vorkerland_phase_prewar }
+	# The capital panel has to be on screen from the day the apparatus is named,
+	# before any decision is listed, so the category stays open when empty.
+	# An autonomous district has one decision here, the reserve cache: it sees
+	# the category only while a region of its own can still take or is still
+	# hiding a cache, and never as an empty heading.
+	visible = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		has_global_flag = ADISCORD_vorkerland_phase_prewar
+		OR = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			AND = {
+				has_completed_focus = VAD_review_district_obligations
+				any_owned_state = {
+					NOT = { has_state_flag = ADISCORD_vorkerland_reserve_cache_ready }
+				}
+			}
+		}
+	}
+	visible_when_empty = yes
 	scripted_gui = ADISCORD_vorkerland_capital_panel
+}
+
+# The confederation's power brokers as Petrichev's staff courts them before the collapse.
+ADISCORD_vorkerland_court_category = {
+	icon = ADISCORD_deal
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+	visible = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		WRK_intrigue_active = yes
+	}
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_vorkerland_intrigue_panel
 }
 
 ADISCORD_vorkerland_vad_administration = {

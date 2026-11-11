@@ -1,7 +1,7 @@
 """Build WRK capital street maps, sprite bindings and a self-contained review mockup.
 
-Owns gfx/interface/vorkerland_capital/*.png, the marked sections in the existing
-ADISCORD_vorkerland.gui/gfx, and docs/mockups/vorkerland_capital.html.
+Owns capital PNGs, marked visual/interaction sections in existing interfaces,
+scripted GUI and localisation, the compact category description and HTML mockup.
 Default mode compares bytes without writing. Requires Pillow and NumPy.
 """
 
@@ -23,9 +23,13 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[2]
+if __package__ in (None, ""):
+    sys.path.insert(0, str(ROOT))
 OUT = Path("gfx/interface/vorkerland_capital")
 GUI = Path("interface/ADISCORD_vorkerland.gui")
 GFX = Path("interface/ADISCORD_vorkerland.gfx")
+SGUI = Path("common/scripted_guis/ADISCORD_vorkerland_scripted_gui.txt")
+DECISIONS = Path("common/decisions/ADISCORD_vorkerland_decisions.txt")
 MOCKUP = Path("docs/mockups/vorkerland_capital.html")
 PREVIEW = Path("docs/development/previews/vorkerland_capital/review.png")
 STATES = (32, 33, 34, 35, 36, 37, 38, 39, 40)
@@ -44,24 +48,40 @@ STATE_LABELS = {
 DEMO_STATE_FRAMES = {32: 2, 33: 3, 34: 3, 35: 2, 36: 4, 37: 5, 38: 6, 39: 4, 40: 3}
 DEMO_MARKER_FRAMES = {32: 2, 33: 6, 34: 3, 35: 2, 36: 3, 37: 4, 38: 5, 39: 6, 40: 1}
 WIDTH, HEIGHT = 330, 290
+MAP_X = 65
 SS = 3
 SEED = 320336373840
 BEGIN = "# BEGIN GENERATED WRK CAPITAL VISUALS"
 END = "# END GENERATED WRK CAPITAL VISUALS"
-GRAPHITE = (32, 39, 43)
-TURQUOISE = (162, 218, 213)
+GRAPHITE = (24, 25, 23)
+TURQUOISE = (153, 169, 151)
 WORKER = (235, 203, 100)
 STAFF = (179, 154, 242)
 WORX = (169, 214, 111)
 RED = (244, 101, 101)
 WHITE = (219, 230, 230)
-MUTED = (109, 129, 136)
+MUTED = (144, 132, 99)
+HIT_ALPHA = 8
 FRAME_COUNTS = {
     "WRK_capital_marker": 6,
     "WRK_capital_route": 3,
     "WRK_intrigue_card": 3,
     **{f"WRK_capital_state_{state}": 6 for state in STATES},
+    **{f"WRK_capital_select_{state}": 3 for state in STATES},
+    "WRK_capital_action": 3,
+    "WRK_capital_marker_select": 3,
 }
+ACTIONS = (
+    ("WRK_issue_capital_rations", "Пайки", "Rations", 0),
+    ("WRK_unrest_cede_shop_to_committee", "Цех комитету", "Committee shop", 1),
+    ("WRK_unrest_send_plenipotentiary", "Уполномоченный", "Commissioner", 2),
+    ("WRK_unrest_workers_patrol", "Рабочий патруль", "Worker patrol", 3),
+    ("WRK_cell_plant", "Создать ячейку", "Plant cell", 0),
+    ("WRK_cell_expand", "Расширить сеть", "Expand network", 1),
+    ("WRK_cell_lie_low", "Залечь на дно", "Lie low", 2),
+    ("WRK_cell_forge_passes", "Новые пропуска", "Forge passes", 3),
+    ("WRK_cell_legalize", "Легализовать", "Legalize", 4),
+)
 
 
 def canvas(size=(WIDTH, HEIGHT), color=(0, 0, 0, 0)):
@@ -196,9 +216,9 @@ def street_network(geometry):
                 if not (-15 < point[0] < WIDTH + 15 and -15 < point[1] < HEIGHT + 15):
                     continue
                 if rng.random() > 0.13:
-                    stroke(local, [point, nodes[i + 1, j]], (*TURQUOISE, 150), 0.65)
+                    stroke(local, [point, nodes[i + 1, j]], (*TURQUOISE, 100), 0.55)
                 if rng.random() > 0.12:
-                    stroke(local, [point, nodes[i, j + 1]], (*TURQUOISE, 150), 0.65)
+                    stroke(local, [point, nodes[i, j + 1]], (*TURQUOISE, 100), 0.55)
         for axis in range(2):
             for lane in (-38, 0, 42):
                 points = [project(lane + 3 * math.sin(v / 37), v) if axis == 0
@@ -328,12 +348,18 @@ def card_strip():
 def render_images():
     geometry = geography()
     streets = street_network(geometry)
-    background = Image.new("RGBA", (WIDTH, HEIGHT), (*GRAPHITE, 255))
+    # A translucent engraved plan lets the native decision-category paper show.
+    background = Image.new("RGBA", (WIDTH, HEIGHT))
+    grid = ImageDraw.Draw(background)
+    for x in range(8, WIDTH, 24):
+        grid.line((x, 0, x, HEIGHT), fill=(*MUTED, 18))
+    for y in range(8, HEIGHT, 24):
+        grid.line((0, y, WIDTH, y), fill=(*MUTED, 18))
     background.alpha_composite(streets)
     for mask in geometry["masks"].values():
         rim = ImageChops.subtract(mask, mask.filter(ImageFilter.MinFilter(3)))
         edge = Image.new("RGBA", background.size, (*MUTED, 120))
-        edge.putalpha(rim.point(lambda value: value * 100 // 255))
+        edge.putalpha(rim.point(lambda value: value * 190 // 255))
         background.alpha_composite(edge)
     ornament = canvas()
     x, y = geometry["anchors"][40]
@@ -343,18 +369,56 @@ def render_images():
     polygon(ornament, [(x - 17, y - 7), (x - 7, y - 7), (x - 9, y - 19),
                       (x - 11, y - 19), (x - 12, y - 27), (x - 13, y - 19), (x - 15, y - 19)], WHITE)
     stroke(ornament, [(x - 12, y - 15), (x - 12, y - 9)], GRAPHITE, 1)
-    background.alpha_composite(finish(ornament))
+    tower = finish(ornament)
+    background.alpha_composite(tower)
+    # The offset tower and its leader belong to state 40 for hover purposes.
+    # Dilate the rendered footprint by two pixels, including antialiased edges.
+    tower_area = tower.getchannel("A").point(lambda value: 255 if value else 0)
+    tower_area = tower_area.filter(ImageFilter.MaxFilter(5))
+    tower_hit = ImageChops.lighter(geometry["masks"][40], tower_area)
     images = {"WRK_capital_map_background.png": background}
     for state, mask in geometry["masks"].items():
         images[f"WRK_capital_state_{state}.png"] = state_strip(streets, mask)
+        # Reserve the complete tower hit area before assigning neighbouring
+        # districts, so each pixel has one tooltip owner in every street frame.
+        hit_mask = tower_hit if state == 40 else ImageChops.subtract(mask, tower_hit)
+        hit = Image.new("RGBA", (WIDTH, HEIGHT), GRAPHITE)
+        hit.putalpha(hit_mask.point(lambda value: HIT_ALPHA if value else 0))
+        images[f"WRK_capital_hit_{state}.png"] = hit
+        select = Image.new("RGBA", (WIDTH * 3, HEIGHT))
+        edge = ImageChops.subtract(hit_mask, hit_mask.filter(ImageFilter.MinFilter(3)))
+        for frame, opacity in enumerate((HIT_ALPHA, 42, 60)):
+            layer = Image.new("RGBA", (WIDTH, HEIGHT), WORKER)
+            alpha = hit_mask.point(lambda value: opacity if value else 0)
+            if frame:
+                alpha = ImageChops.lighter(alpha, edge)
+            layer.putalpha(alpha)
+            select.paste(layer, (frame * WIDTH, 0))
+        images[f"WRK_capital_select_{state}.png"] = select
+        selected = Image.new("RGBA", (WIDTH, HEIGHT), WORKER)
+        selected.putalpha(edge)
+        images[f"WRK_capital_selected_{state}.png"] = selected
     images["WRK_capital_marker.png"] = marker_strip()
     images["WRK_capital_route.png"] = route_strip(geometry)
     images["WRK_intrigue_card.png"] = card_strip()
-    panel = canvas((460, 360), (*GRAPHITE, 255))
-    rectangle(panel, (0.5, 0.5, 459, 359), outline=(65, 81, 87, 255), width=1)
+    panel = canvas((460, 524))
     stroke(panel, [(10, 39), (450, 39)], (*MUTED, 125), 0.7)
-    stroke(panel, [(345, 48), (345, 338)], (*MUTED, 125), 0.7)
+    stroke(panel, [(10, 352), (450, 352)], (*MUTED, 160), 0.7)
     images["WRK_capital_panel.png"] = finish(panel)
+    action = Image.new("RGBA", (214 * 3, 28))
+    for frame, color in enumerate(((37, 38, 32), (65, 62, 44), (88, 78, 47))):
+        draw = ImageDraw.Draw(action)
+        x = frame * 214
+        draw.rectangle((x, 0, x + 213, 27), fill=(*color, 245), outline=(*MUTED, 255))
+        draw.line((x + 2, 2, x + 211, 2), fill=(174, 158, 113))
+    images["WRK_capital_action.png"] = action
+    marker_select = Image.new('RGBA', (84, 28))
+    draw = ImageDraw.Draw(marker_select)
+    for frame in range(3):
+        x = frame * 28
+        draw.ellipse((x + 1, 1, x + 26, 26), fill=(*WORKER, 8),
+                     outline=(*WORKER, 8 if frame == 0 else 200), width=1)
+    images['WRK_capital_marker_select.png'] = marker_select
     portrait = canvas((156, 210), (*GRAPHITE, 255))
     ellipse(portrait, (48, 30, 108, 98), (67, 83, 90, 255))
     ellipse(portrait, (14, 107, 142, 257), (67, 83, 90, 255))
@@ -367,7 +431,7 @@ def render_images():
     return images, geometry
 
 
-def icon(name, sprite, x, y, frame=1, scale=None, transparent=False):
+def icon(name, sprite, x, y, frame=1, scale=None, transparent=False, tooltip=None):
     lines = ["\t\ticonType = {", f'\t\t\tname = "{name}"',
              f"\t\t\tposition = {{ x = {x} y = {y} }}", f'\t\t\tquadTextureSprite = "{sprite}"',
              f"\t\t\tframe = {frame}"]
@@ -375,48 +439,263 @@ def icon(name, sprite, x, y, frame=1, scale=None, transparent=False):
         lines.append(f"\t\t\tscale = {scale}")
     if transparent:
         lines.append("\t\t\talwaystransparent = yes")
+    if tooltip is not None:
+        lines.append(f'\t\t\tpdx_tooltip = "{tooltip}"')
     return "\n".join([*lines, "\t\t}"])
 
 
-def textbox(name, text, x, y, width, height, font="hoi_16mbs", centered=False):
+def textbox(name, text, x, y, width, height, font="hoi_16mbs", centered=False, tooltip=None):
     lines = ["\t\tinstantTextBoxType = {", f'\t\t\tname = "{name}"',
              f"\t\t\tposition = {{ x = {x} y = {y} }}", f'\t\t\ttext = "{text}"',
              f'\t\t\tfont = "{font}"', f"\t\t\tmaxWidth = {width}", f"\t\t\tmaxHeight = {height}",
-             "\t\t\tfixedsize = yes", "\t\t\talwaystransparent = yes"]
+             "\t\t\tfixedsize = yes"]
+    lines.append(f'\t\t\tpdx_tooltip = "{tooltip}"' if tooltip else "\t\t\talwaystransparent = yes")
     if centered:
         lines.append("\t\t\tformat = center")
     return "\n".join([*lines, "\t\t}"])
 
 
+def button(name, sprite, x, y, tooltip, label=""):
+    return '\n'.join(['\t\tbuttonType = {', f'\t\t\tname = "{name}"',
+                      f'\t\t\tposition = {{ x = {x} y = {y} }}',
+                      f'\t\t\tquadTextureSprite = "{sprite}"',
+                      f'\t\t\tbuttonText = "{label}"', '\t\t\tbuttonFont = "hoi_16mbs"',
+                      '\t\t\tclicksound = click_default', f'\t\t\tpdx_tooltip = "{tooltip}"', '\t\t}'])
+
+
 def gui_block(geometry):
     parts = ['\n'.join(['\t# Generated by tools/builders/build_adiscord_vorkerland_capital_map.py.',
              '\tcontainerWindowType = {', '\t\tname = "ADISCORD_vorkerland_capital_window"',
-             '\t\tposition = { x = 0 y = 0 }', '\t\tsize = { width = 460 height = 360 }',
+             '\t\tposition = { x = 0 y = 0 }', '\t\tsize = { width = 460 height = 524 }',
              '\t\tclipping = no']), icon("WRK_capital_panel", "GFX_WRK_capital_panel", 0, 0, transparent=True),
-             textbox("WRK_capital_title", "WRK_capital_title", 10, 8, 440, 26, "hoi_20b", True),
-             icon("WRK_capital_map", "GFX_WRK_capital_map_background", 10, 48, transparent=True)]
+             textbox("WRK_capital_title", "WRK_capital_title", 10, 6, 330, 24, "hoi_20b"),
+             textbox("WRK_capital_overview", "WRK_capital_overview", 350, 10, 100, 22,
+                     centered=True, tooltip="WRK_capital_overview_tt"),
+             icon("WRK_capital_map", "GFX_WRK_capital_map_background", MAP_X, 48, transparent=True)]
     for state in STATES:
-        parts.append(icon(f"WRK_capital_{state}_state", f"GFX_WRK_capital_state_{state}", 10, 48, transparent=True))
-    parts.append(icon("WRK_capital_route", "GFX_WRK_capital_route", 10, 48, transparent=True))
+        parts.append(icon(f"WRK_capital_{state}_hit", f"GFX_WRK_capital_hit_{state}", MAP_X, 48,
+                          tooltip=f"WRK_capital_{state}_tt"))
+    for state in STATES:
+        parts.append(icon(f"WRK_capital_{state}_selected", f"GFX_WRK_capital_selected_{state}",
+                          MAP_X, 48, transparent=True))
+    for state in STATES:
+        parts.append(icon(f"WRK_capital_{state}_state", f"GFX_WRK_capital_state_{state}", MAP_X, 48, transparent=True))
+    parts.append(icon("WRK_capital_route", "GFX_WRK_capital_route", MAP_X, 48, transparent=True))
     for state in STATES:
         x, y = geometry["markers"][state]
-        parts.append(icon(f"WRK_capital_{state}_marker", "GFX_WRK_capital_marker", 10 + x - 14, 48 + y - 14))
+        parts.append(icon(f"WRK_capital_{state}_marker", "GFX_WRK_capital_marker", MAP_X + x - 14, 48 + y - 14,
+                          tooltip=f"WRK_capital_{state}_tt"))
+    # Native input surfaces are the last map children, above every decorative layer.
+    for state in STATES:
+        parts.append(button(f"WRK_capital_{state}_select", f"GFX_WRK_capital_select_{state}",
+                            MAP_X, 48, f"WRK_capital_{state}_tt"))
+    for state in STATES:
+        x, y = geometry["markers"][state]
+        parts.append(button(f"WRK_capital_{state}_marker_select", "GFX_WRK_capital_marker_select",
+                            MAP_X + x - 14, 48 + y - 14, f"WRK_capital_{state}_tt"))
     for number, y in enumerate((65, 155, 245), 1):
         parts.append(icon(f"WRK_capital_legend_icon_{number}", "GFX_WRK_capital_marker", 386, y, number + 2, transparent=True))
         parts.append(textbox(f"WRK_capital_legend_text_{number}", f"WRK_capital_legend_{number}",
                              350, y + 36, 100, 44, centered=True))
+    for state in STATES:
+        parts.append(textbox(f"WRK_capital_{state}_detail", f"WRK_capital_detail_{state}",
+                             12, 360, 436, 52, tooltip=f"WRK_capital_{state}_tt"))
+        if state == 40:
+            continue
+        for decision, _, _, slot in ACTIONS:
+            parts.append(button(f"WRK_capital_{state}_{decision}", "GFX_WRK_capital_action",
+                                12 + (slot % 2) * 222, 418 + (slot // 2) * 34,
+                                f"WRK_capital_action_{decision}_tt", f"WRK_capital_action_{decision}"))
     parts.append('\n'.join(['\t}', '', '\tcontainerWindowType = {', '\t\tname = "ADISCORD_vorkerland_intrigue_window"',
                            '\t\tposition = { x = 0 y = 0 }', '\t\tsize = { width = 460 height = 360 }', '\t\tclipping = no']))
     for number in range(1, 7):
         x = 5 + ((number - 1) % 2) * 230
         y = 14 + ((number - 1) // 2) * 112
         prefix = f"WRK_intrigue_{number}"
-        parts.extend([icon(prefix + "_card", "GFX_WRK_intrigue_card", x, y),
+        parts.extend([icon(prefix + "_card", "GFX_WRK_intrigue_card", x, y, tooltip=prefix + "_tt"),
                       icon(prefix + "_portrait", "GFX_WRK_intrigue_portrait_empty", x + 11, y + 11, scale=0.28, transparent=True),
                       textbox(prefix + "_name", prefix + "_name", x + 66, y + 11, 130, 44),
                       textbox(prefix + "_status", prefix + "_status", x + 12, y + 76, 196, 20)])
     parts.append('\t}')
     return "\n\n".join(parts) + "\n"
+
+
+def decision_definitions():
+    from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+    roots = parse_clausewitz((ROOT / DECISIONS).read_text(encoding="utf-8-sig"))
+    return {decision.key: {entry.key: entry.value for entry in decision.value}
+            for category in roots if isinstance(category.value, list)
+            for decision in category.value if isinstance(decision.value, list)}
+
+
+def native_conditions(entries, state, indent=4):
+    """Bind the native decision's FROM target without duplicating its conditions."""
+    lines = []
+    for entry in entries:
+        key = str(state) if entry.key == "FROM" else entry.key
+        prefix = '\t' * indent
+        if isinstance(entry.value, list):
+            lines.extend([f'{prefix}{key} = {{', native_conditions(entry.value, state, indent + 1), prefix + '}'])
+        else:
+            value = str(state) if entry.value == "FROM" else entry.value
+            if not key:
+                raise ValueError('Unsupported bare token in decision condition')
+            if entry.quoted:
+                value = json.dumps(value, ensure_ascii=False)
+            lines.append(f'{prefix}{key} = {value}')
+    return '\n'.join(lines)
+
+
+def selection_condition(state):
+    check = f'check_variable = {{ var = WRK_capital_selected_state value = {state} compare = equals }}'
+    if state == 32:
+        return f'OR = {{ NOT = {{ has_variable = WRK_capital_selected_state }} {check} }}'
+    return check
+
+
+def interaction_sections():
+    definitions = decision_definitions()
+    effects = []
+    triggers = [f'\t\t\tWRK_capital_legend_text_{n}_visible = {{ always = no }}' for n in range(1, 4)]
+    for state in STATES:
+        selected = selection_condition(state)
+        effects.append(f'\t\t\tWRK_capital_{state}_select_click = {{\n'
+                       f'\t\t\t\tset_variable = {{ var = WRK_capital_selected_state value = {state} }}\n\t\t\t}}')
+        effects.append(f'\t\t\tWRK_capital_{state}_marker_select_click = {{\n'
+                       f'\t\t\t\tset_variable = {{ var = WRK_capital_selected_state value = {state} }}\n\t\t\t}}')
+        for suffix in ('select', 'marker_select'):
+            triggers.append(f'\t\t\tWRK_capital_{state}_{suffix}_click_enabled = {{ always = yes }}')
+        if state == 40:
+            triggers.append('\t\t\tWRK_capital_40_marker_select_visible = { always = no }')
+        else:
+            triggers.append(f'\t\t\tWRK_capital_{state}_marker_select_visible = {{\n'
+                            f'\t\t\t\t{state} = {{ WRK_capital_set_marker_frame = yes }}\n'
+                            '\t\t\t\tcheck_variable = { var = WRK_capital_frame value = 1 compare = greater_than }\n\t\t\t}')
+        for suffix in ('selected', 'detail'):
+            triggers.append(f'\t\t\tWRK_capital_{state}_{suffix}_visible = {{ {selected} }}')
+        if state == 40:
+            continue
+        for decision, _, _, _ in ACTIONS:
+            fields = definitions[decision]
+            # These decisions gate repetition through their own district flags.
+            # Reject incompatible additions rather than bypass an engine cooldown.
+            if any(key in fields for key in ('days_re_enable', 'custom_cost_trigger', 'custom_cost_text')):
+                raise ValueError(f'Unsupported native decision cost/cooldown: {decision}')
+            conditions = [*fields.get('visible', []), *fields.get('target_trigger', []), *fields.get('available', [])]
+            native = native_conditions(conditions, state)
+            price = int(fields['cost'])
+            enabled = native + f'\n\t\t\t\tNOT = {{ has_political_power < {price} }}'
+            name = f'WRK_capital_{state}_{decision}'
+            visibility = native_conditions(fields.get('visible', []), state)
+            triggers.append(f'\t\t\t{name}_visible = {{\n\t\t\t\t{selected}\n{visibility}\n\t\t\t}}')
+            triggers.append(f'\t\t\t{name}_click_enabled = {{\n{enabled}\n\t\t\t}}')
+            effects.append(f'\t\t\t{name}_click = {{\n\t\t\t\tif = {{\n\t\t\t\t\tlimit = {{\n'
+                           f'\t\t\t\t\t\t{selected}\n' + '\n'.join('\t\t' + line for line in enabled.splitlines()) + '\n\t\t\t\t\t}\n'
+                           f'\t\t\t\t\tactivate_targeted_decision = {{ target = {state} decision = {decision} }}\n'
+                           '\t\t\t\t}\n\t\t\t}')
+    return '\n'.join(effects), '\n'.join(triggers)
+
+
+def interaction_gui():
+    source = (ROOT / SGUI).read_bytes()
+    newline = '\r\n' if b'\r\n' in source else '\n'
+    text = source.decode('utf-8')
+    start = text.index('\tADISCORD_vorkerland_capital_panel = {')
+    end = text.index('\tADISCORD_vorkerland_intrigue_panel = {', start)
+    panel = text[start:end]
+    # Keep named frame bindings available to the mechanical script, but hide the
+    # redundant legend icons together with their text; district tooltips explain them.
+    for n in range(1, 4):
+        pattern = rf'(WRK_capital_legend_icon_{n}_visible = \{{.*?)(always = (?:yes|no))(\s*\}})'
+        panel, count = re.subn(pattern, lambda match: match[1] + 'always = no' + match[3], panel, flags=re.S)
+        if count != 1:
+            raise ValueError(f'Expected one capital legend frame binding: {n}')
+    effects, triggers = interaction_sections()
+    for kind, body in (('EFFECTS', '\t\teffects = {\n' + effects + '\n\t\t}'), ('TRIGGERS', triggers)):
+        begin, finish = f'# BEGIN WRK CAPITAL {kind}', f'# END WRK CAPITAL {kind}'
+        block = ('\t\t' + begin + '\n' + body + '\n\t\t' + finish + '\n').replace('\n', newline)
+        if begin in panel:
+            pattern = r'(?m)^[\t ]*' + begin + r'\r?\n.*?^[\t ]*' + finish + r'\r?\n'
+            panel = re.sub(pattern, lambda _: block, panel, flags=re.S)
+        elif kind == 'EFFECTS':
+            panel = panel.replace('\t\ttriggers = {', block + '\t\ttriggers = {', 1)
+        else:
+            panel = panel.replace('\t\ttriggers = {' + newline, '\t\ttriggers = {' + newline + block, 1)
+    return (text[:start] + panel + text[end:]).encode('utf-8')
+
+
+def interaction_localisation(language):
+    path = Path(f'localisation/{language}/ADISCORD_vorkerland_l_{language}.yml')
+    source = (ROOT / path).read_text(encoding='utf-8-sig')
+    russian = language == 'russian'
+    old = re.search(r'(?m)^ WRK_capital_overview_tt:\d* "(.*)"$', source)
+    if old is None:
+        old = re.search(r'(?m)^ ADISCORD_vorkerland_prewar_category_desc:\d* "(.*)"$', source)
+    report = old[1]
+    compact = ('Комитеты' if russian else 'Committees') + ': §Y[?global.ADISCORD_vorkerland_camp_committees|0]§!   '
+    compact += ('Штаб' if russian else 'Staff') + ': §Y[?global.ADISCORD_vorkerland_camp_staff|0]§!   '
+    compact += ('Инженеры' if russian else 'Engineers') + ': §Y[?global.ADISCORD_vorkerland_camp_engineers|0]§!'
+    source = re.sub(r'(?m)^( ADISCORD_vorkerland_prewar_category_desc:\d* )".*"$',
+                    lambda match: match[1] + '"' + compact + '"', source)
+    texts = {'WRK_capital_overview': 'Сводка' if russian else 'Report',
+             'WRK_capital_overview_tt': report,
+             'WRK_capital_symbols_tt': ('Щит - патруль. Восклицательный знак - волнения. Знак запрета - бунт. Наклонная черта - раскрытая ячейка.' if russian else
+                                        'Shield: patrol. Exclamation mark: unrest. No-entry sign: riot. Diagonal slash: exposed cell.')}
+    previous_symbols = re.search(r'(?m)^ WRK_capital_symbols_tt:\d* "(.*)"$', source)
+
+    def district_tooltip(match):
+        body = match[2]
+        suffixes = ['\\n\\n$WRK_capital_symbols_tt$']
+        if previous_symbols:
+            suffixes.append('\\n\\n' + previous_symbols[1])
+        for suffix in suffixes:
+            if body.endswith(suffix):
+                body = body[:-len(suffix)]
+        # Export complete tooltip text, without a second localisation lookup.
+        return match[1] + body + '\\n\\n' + texts['WRK_capital_symbols_tt'] + match[3]
+
+    for state in STATES:
+        pattern = rf'(?m)^( WRK_capital_{state}_tt:\d* ")(.*)(")$'
+        source = re.sub(pattern, district_tooltip, source)
+    for state in STATES:
+        note = f'[{state}.WRKGetCapitalDistrictNote]' if state != 40 else (
+            'Эвакуация и судьба Уоркера - в подсказке.' if russian else 'Hover for evacuation and Worker\'s fate.')
+        texts[f'WRK_capital_detail_{state}'] = f'§Y[{state}.GetName]§!\\n' + note
+    results_ru = ('Недовольство -25; с хлебным резервом -30. Без бунта. Перерыв между мерами 45 дней.',
+                  'Недовольство -30, прекращает бунт. Баланс сил +0.05 к округам. Перерыв 45 дней.',
+                  'Недовольство -35, прекращает бунт. Стабильность -1%; другие районы без патруля +8. Перерыв 45 дней.',
+                  '21 день без роста недовольства, затем -40 и прекращение бунта. Одновременно один патруль.',
+                  'Через 21 день ячейка уровня 1. Внимание +10; с аварийными мастерскими +5. Один проект сети одновременно.',
+                  'Через 28 дней уровень ячейки +1, внимание +15. Нужна скрытая действующая ячейка ниже уровня 3. Один проект сети одновременно.',
+                  'Внимание -30. Ячейка бездействует 45 дней. Нельзя применить к раскрытой или уже бездействующей ячейке.',
+                  'Раскрытая ячейка снова скрыта; внимание становится 50.',
+                  'Внимание 0, ячейка защищена от раскрытия. Расширение закрывается; при расколе учитывается как уровень 1. Нельзя во время работ.')
+    results_en = ('Unrest -25, or -30 with the ration reserve. No riot. Shared measure cooldown: 45 days.',
+                  'Unrest -30; ends the riot. Balance +0.05 toward districts. Shared cooldown: 45 days.',
+                  'Unrest -35; ends the riot. Stability -1%; other unpatrolled districts +8. Shared cooldown: 45 days.',
+                  'No unrest growth for 21 days, then -40 and ends the riot. One patrol at a time.',
+                  'Level 1 cell after 21 days. Heat +10, or +5 with emergency workshops. One network project at a time.',
+                  'After 28 days: cell level +1, heat +15. Requires an active hidden cell below level 3. One network project at a time.',
+                  'Heat -30. Cell dormant for 45 days. Requires a hidden, active cell.',
+                  'Exposed cell becomes hidden; heat becomes 50.',
+                  'Heat 0; protected from exposure. Cannot expand; counts as level 1 on collapse. Requires no ongoing work.')
+    definitions = decision_definitions()
+    for index, (decision, ru, en, _) in enumerate(ACTIONS):
+        price = definitions[decision]['cost']
+        key = 'WRK_capital_action_' + decision
+        texts[key] = f'{ru if russian else en}  {price} £political_power_texticon'
+        texts[key + '_tt'] = f'§Y${decision}$§!\\n{price} £political_power_texticon\\n' + (results_ru if russian else results_en)[index]
+        focus = next((e.value for e in definitions[decision].get('visible', []) if e.key == 'has_completed_focus'), None)
+        if focus:
+            texts[key + '_tt'] += ('\\nНужен фокус: ' if russian else '\\nRequires focus: ') + f'${focus}$'
+    begin, end = '# BEGIN WRK CAPITAL INTERACTION TEXT', '# END WRK CAPITAL INTERACTION TEXT'
+    content = begin + '\n' + '\n'.join(f' {key}:0 "{value}"' for key, value in texts.items()) + '\n' + end + '\n'
+    if begin in source:
+        source = re.sub(re.escape(begin) + r'\n.*?' + re.escape(end) + r'\n', lambda _: content, source, flags=re.S)
+    else:
+        source = source.rstrip('\n') + '\n\n' + content
+    return path, source.encode('utf-8-sig')
 
 
 def gfx_block(images):
@@ -456,117 +735,108 @@ def png_bytes(image):
     return stream.getvalue()
 
 
+def hit_rows(image):
+    """Browser backgrounds ignore alpha for pointer tests; export exact PNG runs."""
+    rows = []
+    for row in np.asarray(image.getchannel("A")):
+        occupied = np.pad((row > 0).astype(np.int8), (1, 1))
+        edges = np.flatnonzero(np.diff(occupied))
+        rows.append(edges.reshape(-1, 2).tolist())
+    return rows
+
+
 def mockup_html(images, geometry):
     assets = {Path(name).stem: "data:image/png;base64," + base64.b64encode(png_bytes(image)).decode()
               for name, image in images.items()}
-    data = json.dumps({"assets": assets, "markers": geometry["markers"], "anchors": geometry["anchors"],
-                       "states": STATES, "labels": STATE_LABELS,
-                       "stateFrames": DEMO_STATE_FRAMES, "markerFrames": DEMO_MARKER_FRAMES}, separators=(",", ":"))
-    template = r'''<!doctype html>
+    with Image.open(ROOT / "gfx/interface/decisions/ui/ADISCORD_decisions_category_desc_tile.dds") as texture:
+        assets["paper"] = "data:image/png;base64," + base64.b64encode(png_bytes(texture.crop((16, 16, 32, 32)).convert("RGBA"))).decode()
+    data = json.dumps({"assets": assets, "markers": geometry["markers"], "states": STATES, "labels": STATE_LABELS,
+                       "hitRows": {state: hit_rows(images[f"WRK_capital_hit_{state}.png"]) for state in STATES}}, separators=(",", ":"))
+    return (r'''<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <!-- Generated by tools/builders/build_adiscord_vorkerland_capital_map.py. -->
-<html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WRK | Политическая карта столицы</title>
-<style>
-:root{color-scheme:dark;--bg:#151b1f;--panel:#20272b;--line:#3e5057;--text:#dbe6e6;--muted:#9bafb6}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui,sans-serif}
-main{max-width:1120px;margin:40px auto;padding:0 30px}h1{font-size:32px;letter-spacing:-1px;margin:12px 0}
-h2{font-size:18px;font-weight:550;margin:0 0 18px}p{line-height:1.6;color:var(--muted)}
-.eyebrow{font-size:11px;letter-spacing:3px;color:#a2dad5}.intro{max-width:740px;margin-bottom:30px}
-.workbench{display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap}.panel{position:relative;width:460px;height:360px;flex-shrink:0}
-.sprite{position:absolute;background-repeat:no-repeat;pointer-events:none}.title{position:absolute;top:8px;left:10px;width:440px;text-align:center;font-size:20px;font-weight:650;line-height:26px}
-.legend{position:absolute;left:350px;width:100px;text-align:center;font-size:14px;line-height:20px}
-.card-name{position:absolute;width:130px;font-size:15px;line-height:19px}.card-status{position:absolute;width:196px;font-size:14px;line-height:20px}
-.controls{width:460px;display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 28px}button,select{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:8px 10px;border-radius:3px;font:inherit;cursor:pointer}
-button[aria-pressed=true]{border-color:#a2dad5}label{display:grid;gap:5px;color:var(--muted);font-size:12px}select{max-width:146px;font-size:12px}
-.swatches{display:flex;gap:22px;flex-wrap:wrap;margin:28px 0}.swatch{display:flex;align-items:center;gap:9px}.swatch i{width:23px;height:3px;display:block}
-.samples{padding:24px 0;border-top:1px solid var(--line)}.sample-row{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}.sample{width:134px;color:var(--muted);font-size:12px;line-height:1.5}.sample .tile{position:relative;height:40px}
-.note{border-left:2px solid #a2dad5;padding-left:14px;font-size:13px;max-width:900px}.small{font-size:12px}footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-</style><main>
-<div class="eyebrow">ВОРКЕРЛАНД / WRK / ДОВОЕННЫЙ ЭТАП</div>
-<h1>Город под наблюдением</h1>
-<p class="intro">Политическое влияние читается по улицам. Опасность - по красным знакам.
-Геометрия девяти штатов столицы взята из карты мода, включая Старый Воркенсберг,
-Нефтегазовый и Промышленный дистрикты; уличная сеть процедурная.
-Окна ниже показаны в размере 1:1, 460x360. Это макет, не снимок из игры.</p>
-<div class="workbench"><section><h2>Столица / карта влияния</h2><div id="capital" class="panel"></div>
-<div class="controls" id="routes"></div><div class="controls" id="districts"></div></section>
-<section><h2>Фигуры / отношение к штабу</h2><div id="intrigue" class="panel"></div>
-<p class="small">Шесть мест для персонажей. Имена и силуэты демонстрационные.<br>Карточки: нейтрален, за штаб, против. Портреты назначает механика.</p></section></div>
-<div class="swatches"><span class="swatch"><i style="background:#ebcb64"></i>Комитеты Уоркера</span>
-<span class="swatch"><i style="background:#b39af2"></i>Штаб Петрищева</span>
-<span class="swatch"><i style="background:#a9d66f"></i>Сеть Воркса</span>
-<span class="swatch"><i style="background:#a2dad5"></i>Базовые улицы</span></div>
-<section class="samples"><h2>Метки / порядок кадров</h2><div class="sample-row" id="markers"></div></section>
-<section class="samples"><h2>Улицы / порядок кадров</h2><div class="sample-row" id="states"></div></section>
-<p class="note">Гражданский путь: Башня (40), дистрикты 32 и 33, восточный край.
-Военный путь: Башня (40), дистрикты 38, 37 и 36, северный край. Сплошная часть переходит в пунктир.
-Булавка отмечает начало, дом - выход. Светлый силуэт со шпилем обозначает Башню Единства.</p>
-<footer>Легенда в игре: WRK_capital_legend_1..3. Тексты здесь нужны только для согласования оформления.
-GUI и спрайты готовы к подключению внешним scripted GUI; смена кадров в макете не реализует игровые механики.</footer>
+<title>Столица Воркерланда</title><style>
+*{box-sizing:border-box}body{margin:0;background:#171714;color:#e0dfd5;font:14px Arial,sans-serif}
+main{margin:30px auto;width:480px;max-width:100%}.category{border:1px solid #72674b;padding:8px;background:#11110f}
+h1{text-align:center;font-size:17px;margin:0;padding:12px;border:1px solid #514a36;background:#1d1c18}
+.camps{font-size:13px;margin:12px 4px 0}.camps b{color:#dac375}.panel{position:relative;width:460px;height:524px;margin:auto}
+.sprite{position:absolute;pointer-events:none;background-repeat:no-repeat}.title{position:absolute;left:10px;top:8px;font-size:20px;font-weight:bold}
+.report{position:absolute;right:10px;top:10px;font-size:13px;color:#d7c395}.legend{position:absolute;left:350px;width:100px;text-align:center;font-size:13px;pointer-events:none}
+.detail{position:absolute;left:12px;top:360px;width:436px;height:52px;line-height:22px}.detail b{color:#ddc680}
+.actions{position:absolute;left:12px;top:418px;width:436px;display:grid;grid-template-columns:214px 214px;gap:6px 8px}
+button{font:13px Arial;color:#ddd9ca;background:#28271f;border:1px solid #88794f;padding:5px 3px;height:28px;cursor:pointer}
+button:hover{background:#49432c;border-color:#dcc482}button:disabled{opacity:.35;cursor:default}
+.controls{display:flex;gap:8px;margin:14px 0}.controls button[aria-pressed=true]{color:#eacf8a;border-color:#eacf8a}
+.note{font-size:12px;color:#a8a38e;line-height:1.5}
+</style><main><div class="controls"><button id="mode-unrest" aria-pressed="true">Комитеты</button><button id="mode-cells">Сеть Воркса</button></div>
+<section class="category" id="category"><h1>Наследство Конфедерации</h1><div class="camps">Комитеты: <b>40</b> &nbsp; Штаб: <b>30</b> &nbsp; Инженеры: <b>30</b></div>
+<div class="panel" id="capital"><div class="title">Столица Воркерланда</div><span class="report" title="Объекты наследства, лагеря, баланс центра и округов, правила недовольства и сети.">Сводка</span><div class="detail" id="detail"></div><div class="actions" id="actions"></div></div></section>
+<p class="note">Нажмите на район. Наведение выделяет контур; карточка и меры относятся к выбранному району. Значения демонстрационные. Кнопки здесь изменяют только макет.</p>
 </main><script>
-const data=__DATA__;
-function sprite(parent,name,w,h,x,y,frame=1,scale=1){const el=document.createElement('div');el.className='sprite';
-Object.assign(el.style,{width:w+'px',height:h+'px',left:x+'px',top:y+'px',backgroundImage:`url("${data.assets[name]}")`,backgroundPosition:`-${(frame-1)*w}px 0`,transform:`scale(${scale})`,transformOrigin:'top left'});parent.append(el);return el}
-function text(parent,cls,value,x,y){let el=document.createElement('div');el.className=cls;el.textContent=value;el.style.left=x+'px';el.style.top=y+'px';parent.append(el);return el}
-const cap=document.getElementById('capital');sprite(cap,'WRK_capital_panel',460,360,0,0);
-text(cap,'title','Политическая карта столицы',10,8);sprite(cap,'WRK_capital_map_background',330,290,10,48);
-const stateIds=data.states,stateNames=['Без подсветки','Комитеты Уоркера','Штаб Петрищева','Сеть Воркса','Оспаривается','Бунт'];
-const markerNames=['Пусто','Ячейка','Ячейка раскрыта','Волнения','Бунт','Патруль'];
-const overlays={},markers={};stateIds.forEach(s=>overlays[s]=sprite(cap,'WRK_capital_state_'+s,330,290,10,48,data.stateFrames[s]));
-const route=sprite(cap,'WRK_capital_route',330,290,10,48,2);
-stateIds.forEach(s=>{const [x,y]=data.markers[s];markers[s]=sprite(cap,'WRK_capital_marker',28,28,x-4,y+34,data.markerFrames[s]);});
-['Ячейка раскрыта','Волнения','Бунт'].forEach((s,i)=>{sprite(cap,'WRK_capital_marker',28,28,386,65+i*90,i+3);text(cap,'legend',s,350,101+i*90);});
-['Без маршрута','Гражданский','Военный'].forEach((name,i)=>{let b=document.createElement('button');b.textContent=name;b.setAttribute('aria-pressed',i===1);b.onclick=()=>{route.style.backgroundPosition=`-${i*330}px 0`;document.querySelectorAll('#routes button').forEach(el=>el.setAttribute('aria-pressed',el===b));};document.getElementById('routes').append(b);});
-stateIds.forEach(s=>{let l=document.createElement('div');l.style.width='146px';let name=document.createElement('div');name.textContent=s+' / '+data.labels[s];name.style.minHeight='38px';l.append(name);
-for(const [names,frames,layer,width,label] of [[stateNames,data.stateFrames,overlays,330,'Влияние'],[markerNames,data.markerFrames,markers,28,'Метка']]){let select=document.createElement('select');select.setAttribute('aria-label',label+': '+data.labels[s]);select.style.width='146px';names.forEach((n,j)=>{let o=document.createElement('option');o.textContent=n;o.value=j;o.selected=j===frames[s]-1;select.append(o);});select.onchange=()=>layer[s].style.backgroundPosition=`-${select.value*width}px 0`;l.append(select);}document.getElementById('districts').append(l);});
-const intrigue=document.getElementById('intrigue');for(let i=0;i<6;i++){let x=5+(i%2)*230,y=14+Math.floor(i/2)*112;
-sprite(intrigue,'WRK_intrigue_card',220,100,x,y,i%3+1);sprite(intrigue,'WRK_intrigue_portrait_empty',156,210,x+11,y+11,1,.28);
-text(intrigue,'card-name','Фигура '+String(i+1).padStart(2,'0'),x+66,y+11);text(intrigue,'card-status',['Нейтрален','За штаб','Против'][i%3],x+12,y+76);}
-markerNames.forEach((name,i)=>{let s=document.createElement('div');s.className='sample';let tile=document.createElement('div');tile.className='tile';s.append(tile);sprite(tile,'WRK_capital_marker',28,28,0,0,i+1);s.append(document.createTextNode((i+1)+' / '+name));document.getElementById('markers').append(s);});
-stateNames.forEach((name,i)=>{let s=document.createElement('div');s.className='sample';let tile=document.createElement('div');tile.className='tile';tile.style.height='110px';tile.style.overflow='hidden';
-sprite(tile,'WRK_capital_map_background',330,290,-190,-160);sprite(tile,'WRK_capital_state_33',330,290,-190,-160,i+1);s.append(tile,document.createTextNode((i+1)+' / '+name));document.getElementById('states').append(s);});
-</script></html>
-'''
-    return template.replace("__DATA__", data).encode("utf-8")
+const data=__DATA__,cap=document.getElementById('capital');
+document.getElementById('category').style.backgroundImage=`url("${data.assets.paper}")`;
+function sprite(name,w,h,x,y,frame=1){const e=document.createElement('div');e.className='sprite';Object.assign(e.style,{width:w+'px',height:h+'px',left:x+'px',top:y+'px',backgroundImage:`url("${data.assets[name]}")`,backgroundPosition:`-${(frame-1)*w}px 0`});cap.append(e);return e;}
+function capitalHitAt(x,y){if(x<0||x>=330||y<0||y>=290)return null;x=Math.floor(x);y=Math.floor(y);for(const s of data.states)if(data.hitRows[s][y].some(([a,b])=>x>=a&&x<b))return s;return null;}
+sprite('WRK_capital_panel',460,524,0,0);sprite('WRK_capital_map_background',330,290,65,48);
+const streets={},selects={},markers={};
+data.states.forEach(s=>{selects[s]=sprite('WRK_capital_selected_'+s,330,290,65,48);streets[s]=sprite('WRK_capital_state_'+s,330,290,65,48);});
+sprite('WRK_capital_route',330,290,65,48);
+data.states.forEach(s=>{const [x,y]=data.markers[s];markers[s]=sprite('WRK_capital_marker',28,28,x+51,y+34);});
+let selected=32,hover=null,mode='unrest';const unrest={32:25,33:30,34:35,35:30,36:40,37:65,38:35,39:45,40:0},cells={32:0,33:1,34:0,35:2,36:0,37:1,38:0,39:3,40:0},patrol=new Set();
+function status(s){if(s===40)return 'Эвакуация и судьба Уоркера - в подсказке';if(mode==='cells')return 'Сеть: '+(cells[s]?'ячейка уровня '+cells[s]:'ячейки нет');return 'Недовольство: '+unrest[s]+' / 100 - '+(patrol.has(s)?'патруль':unrest[s]>=100?'бунт':unrest[s]>=60?'волнения':unrest[s]>=40?'напряжённо':'спокойно');}
+function paint(){for(const s of data.states){let f=mode==='cells'?(cells[s]?4:1):unrest[s]>=100?6:unrest[s]>=60?5:unrest[s]<40?2:1;if(s===40)f=1;streets[s].style.backgroundPosition=`-${(f-1)*330}px 0`;let m=mode==='cells'?(cells[s]?2:1):patrol.has(s)?6:unrest[s]>=100?5:unrest[s]>=60?4:1;markers[s].style.backgroundPosition=`-${(m-1)*28}px 0`;selects[s].style.display=s===selected||s===hover?'block':'none';selects[s].style.opacity=s===selected?'1':'.5';}
+}
+function detail(){document.getElementById('detail').innerHTML='<b>'+data.labels[selected]+'</b><br>'+status(selected);const box=document.getElementById('actions');box.replaceChildren();if(selected===40)return;
+const actions=mode==='unrest'?[['Пайки 35',()=>unrest[selected]=Math.max(0,unrest[selected]-25)],['Цех комитету 45',()=>unrest[selected]=Math.max(0,unrest[selected]-30)],['Уполномоченный 30',()=>unrest[selected]=Math.max(0,unrest[selected]-35)],['Рабочий патруль 40',()=>patrol.add(selected)]]:[['Создать ячейку 30',()=>cells[selected]=1],['Расширить сеть 40',()=>cells[selected]=Math.min(3,cells[selected]+1)],['Залечь на дно 20',()=>{}],['Новые пропуска 45',()=>{}],['Легализовать 35',()=>{}]];
+actions.forEach(([label,run],i)=>{let b=document.createElement('button');b.textContent=label+' ◆';b.title='Демонстрация. В игре проверяются фокус, цена, состояние района и занятость операции.';b.disabled=mode==='cells'&&((i===0&&cells[selected]>0)||(i>0&&cells[selected]===0));b.onclick=()=>{run();paint();detail();};box.append(b);});}
+function point(e){const r=cap.getBoundingClientRect();return capitalHitAt(e.clientX-r.left-65,e.clientY-r.top-48);}
+cap.addEventListener('pointermove',e=>{hover=point(e);cap.style.cursor=hover?'pointer':'default';cap.title=hover?data.labels[hover]+'\n'+status(hover)+'\nЩит - патруль; ! - волнения; запрет - бунт.':'';paint();});
+cap.addEventListener('pointerleave',()=>{hover=null;paint();});cap.addEventListener('click',e=>{const s=point(e);if(s){selected=s;paint();detail();}});
+for(const m of ['unrest','cells'])document.getElementById('mode-'+m).onclick=()=>{mode=m;for(const n of ['unrest','cells'])document.getElementById('mode-'+n).setAttribute('aria-pressed',n===m);paint();detail();};paint();detail();
+</script></html>'''.replace('__DATA__',data)).encode('utf-8')
 
 
 def review_image(images, geometry):
-    sheet = Image.new("RGBA", (960, 810), (21, 27, 31, 255))
+    """Compose the native-size category with demonstration values in memory."""
+    from PIL import ImageFont
+
+    def font(size):
+        for name in ('C:/Windows/Fonts/arial.ttf', 'DejaVuSans.ttf'):
+            try:
+                return ImageFont.truetype(name, size)
+            except OSError:
+                pass
+        return ImageFont.load_default()
+
+    with Image.open(ROOT / 'gfx/interface/decisions/ui/ADISCORD_decisions_category_desc_tile.dds') as texture:
+        tile = texture.crop((16, 16, 32, 32)).convert('RGBA')
+    sheet = Image.new('RGBA', (480, 602), (*GRAPHITE, 255))
+    for y in range(0, 602, 16):
+        for x in range(0, 480, 16):
+            sheet.alpha_composite(tile, (x, y))
+    panel = images['WRK_capital_panel.png'].copy()
+    panel.alpha_composite(images['WRK_capital_map_background.png'], (MAP_X, 48))
+    for state in STATES:
+        frame = 5 if state == 37 else 2 if state in (32, 33, 34, 35, 38) else 1
+        panel.alpha_composite(images[f'WRK_capital_state_{state}.png'].crop(((frame - 1) * WIDTH, 0, frame * WIDTH, HEIGHT)), (MAP_X, 48))
+    panel.alpha_composite(images['WRK_capital_selected_37.png'], (MAP_X, 48))
+    x, y = geometry['markers'][37]
+    panel.alpha_composite(images['WRK_capital_marker.png'].crop((84, 0, 112, 28)), (MAP_X + x - 14, y + 34))
+    draw = ImageDraw.Draw(panel)
+    draw.text((10, 8), 'Столица Воркерланда', font=font(19), fill=WHITE)
+    draw.text((353, 12), 'Сводка', font=font(13), fill=WORKER)
+    draw.text((12, 360), 'Северо-Западный дистрикт', font=font(17), fill=WORKER)
+    draw.text((12, 386), 'Недовольство: 65 / 100 - волнения', font=font(14), fill=WHITE)
+    prices = (35, 45, 30, 40)
+    for index, (_, label, _, slot) in enumerate(ACTIONS[:4]):
+        x, y = 12 + (slot % 2) * 222, 418 + (slot // 2) * 34
+        panel.alpha_composite(images['WRK_capital_action.png'].crop((0, 0, 214, 28)), (x, y))
+        draw.text((x + 107, y + 6), f'{label}  {prices[index]}', font=font(13), fill=WHITE, anchor='mt')
+    sheet.alpha_composite(panel, (10, 70))
     draw = ImageDraw.Draw(sheet)
-    draw.text((20, 10), "WRK CAPITAL / CIVILIAN + MILITARY ROUTES / 1:1", fill=WHITE)
-    for route, origin in ((1, (10, 40)), (2, (490, 40))):
-        panel = images["WRK_capital_panel.png"].copy()
-        panel.alpha_composite(images["WRK_capital_map_background.png"], (10, 48))
-        for state in STATES:
-            frame = DEMO_STATE_FRAMES[state] - 1
-            panel.alpha_composite(images[f"WRK_capital_state_{state}.png"].crop((frame * WIDTH, 0, (frame + 1) * WIDTH, HEIGHT)), (10, 48))
-        panel.alpha_composite(images["WRK_capital_route.png"].crop((route * WIDTH, 0, (route + 1) * WIDTH, HEIGHT)), (10, 48))
-        for state in STATES:
-            frame = DEMO_MARKER_FRAMES[state] - 1
-            x, y = geometry["markers"][state]
-            panel.alpha_composite(images["WRK_capital_marker.png"].crop((frame * 28, 0, (frame + 1) * 28, 28)), (x - 4, y + 34))
-        pd = ImageDraw.Draw(panel)
-        pd.text((14, 14), "CAPITAL / " + ("CIVILIAN" if route == 1 else "MILITARY"), fill=WHITE)
-        for n, label in enumerate(("Exposed", "Unrest", "Revolt")):
-            panel.alpha_composite(images["WRK_capital_marker.png"].crop(((n + 2) * 28, 0, (n + 3) * 28, 28)), (386, 65 + n * 90))
-            pd.text((365, 104 + n * 90), label, fill=WHITE)
-        sheet.alpha_composite(panel, origin)
-    for n in range(6):
-        x, y = 15 + n % 2 * 230, 430 + n // 2 * 112
-        frame = n % 3
-        sheet.alpha_composite(images["WRK_intrigue_card.png"].crop((frame * 220, 0, (frame + 1) * 220, 100)), (x, y))
-        portrait = images["WRK_intrigue_portrait_empty.png"].resize((44, 59), Image.Resampling.LANCZOS)
-        sheet.alpha_composite(portrait, (x + 11, y + 11))
-        draw.text((x + 66, y + 12), f"FIGURE {n + 1:02}", fill=WHITE)
-        draw.text((x + 12, y + 78), ("Neutral", "For staff", "Against")[frame], fill=WHITE)
-    draw.text((500, 430), "MARKER FRAMES / 1 EMPTY", fill=WHITE)
-    sheet.alpha_composite(images["WRK_capital_marker.png"], (500, 460))
-    draw.text((500, 520), "STATE FRAMES / 1 EMPTY", fill=WHITE)
-    for n in range(6):
-        patch = images["WRK_capital_map_background.png"].crop((225, 170, 285, 240))
-        patch.alpha_composite(images["WRK_capital_state_33.png"].crop((n * WIDTH + 225, 170, n * WIDTH + 285, 240)))
-        sheet.alpha_composite(patch, (500 + n * 70, 550))
-        draw.text((500 + n * 70, 628), str(n + 1), fill=WHITE)
+    draw.rectangle((1, 1, 478, 600), outline=(*MUTED, 255))
+    draw.rectangle((8, 8, 471, 41), outline=(*MUTED, 200))
+    draw.text((240, 16), 'Наследство Конфедерации', font=font(16), fill=WHITE, anchor='mt')
+    draw.text((22, 50), 'Комитеты: 40     Штаб: 30     Инженеры: 30', font=font(14), fill=WORKER)
     return sheet
 
 
@@ -575,6 +845,10 @@ def build_outputs(include_preview=False):
     outputs = {OUT / name: png_bytes(image) for name, image in images.items()}
     outputs[GUI] = replace_section((ROOT / GUI).read_bytes(), gui_block(geometry))
     outputs[GFX] = replace_section((ROOT / GFX).read_bytes(), gfx_block(images))
+    outputs[SGUI] = interaction_gui()
+    for language in ('russian', 'english'):
+        path, contents = interaction_localisation(language)
+        outputs[path] = contents
     outputs[MOCKUP] = mockup_html(images, geometry)
     if include_preview:
         outputs[PREVIEW] = png_bytes(review_image(images, geometry))

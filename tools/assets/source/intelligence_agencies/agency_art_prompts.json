@@ -1,0 +1,195 @@
+{
+  "tool": "built-in image_gen",
+  "asset_type": "intelligence_agency_insignia",
+  "export": {
+    "format": "DDS RGBA8",
+    "frame_size": [
+      119,
+      119
+    ],
+    "frames": 2,
+    "badge_max_size": [
+      107,
+      107
+    ],
+    "second_frame": "gold selection outline"
+  },
+  "assets": [
+    {
+      "id": "stp",
+      "prompt": "Use case: logo-brand. Create ONE original intelligence agency insignia for the fictional post-apocalyptic state of Stelander in the Hearts of Iron IV mod A-Discord: the Secret Chancellery of the High Houses. A closed watchful eye above an antique vertical key, within a dignified dark plum enamel heraldic seal with aged gold metal edging, subtle geometric house crests integrated into the border. Serious state-security emblem, elegant and ominous, not fantasy magic. Professional hand-painted strategy-game UI asset, shallow embossed metal relief, restrained highlights, crisp readable silhouette, few large shapes readable at 100 pixels. Front-facing, perfectly centered isolated emblem, square image with generous transparent margin. No lettering, no words, no digits, no watermark, no backdrop, no scene, no external cast shadow. Actual transparent background.",
+      "transparent_background": true,
+      "source_sha256": "0961c2256333b91529692fdc466dc8f35443d2f189da87971d4a709b4fa37a38",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_stp.dds",
+      "runtime_sha256": "2398b62ba59bd4da06a8ab324184c33d4592b2dbd2b3fe7744ec575c8f14f305"
+    },
+    {
+      "id": "val",
+      "prompt": "Use case: logo-brand. Create ONE original intelligence-agency insignia for the fictional post-apocalyptic state in Hearts of Iron IV mod A-Discord. Agency: Kefreyt Contract Intelligence Directorate. Design: A broad angular gunmetal shield bearing a single vertical dagger over a folded contract with a bold circular wax seal. Burnished steel, ivory enamel and dark oxblood red accents; austere arms-manufacturing state. Professional hand-painted strategy-game UI asset, shallow embossed metal and enamel relief, restrained highlights, crisp readable silhouette, few large shapes clearly readable at 100 pixels. Front-facing and centered, square composition, generous transparent margin around the entire badge. No text, letters, digits, watermark, scene, background or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "b301fef46b4a0be78a12e86370ef73fab3fc8b443c0059b6a65ead575570b12a",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_val.dds",
+      "runtime_sha256": "0c4ae6fab480568b07c8e2cf33c7e542f4836022dbb3db3e157eea27ed3b5d0e"
+    },
+    {
+      "id": "nam",
+      "prompt": "Use case: logo-brand. Create ONE original intelligence-agency insignia for the fictional post-apocalyptic state in Hearts of Iron IV mod A-Discord. Agency: Svetlogorye Governor's Special Chancellery. Design: A bold vertical black oil drop on an ivory stepped administrative seal, framed by five ascending brass steps and a severe dark green shield. A bureaucratic oil state, authoritative and industrial. Professional hand-painted strategy-game UI asset, shallow embossed metal and enamel relief, restrained highlights, crisp readable silhouette, few large shapes clearly readable at 100 pixels. Front-facing and centered, square composition, generous transparent margin around the entire badge. No text, letters, digits, watermark, scene, background or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "2e4e2b0bff62c5b26264d476f24e77b9fda75c0cf9e730a17bf705b73242f51d",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_nam.dds",
+      "runtime_sha256": "4bb6df2b9f23216451485cc1e997d5f0cb68eb9ae6c6a0d8bd2f0e8e2792b46e"
+    },
+    {
+      "id": "shl",
+      "prompt": "Use case: logo-brand. Create ONE original intelligence-agency insignia for the fictional post-apocalyptic state in Hearts of Iron IV mod A-Discord. Agency: Shahrabad Secret Service of the Nine Furnaces. Design: Exactly nine large stylized copper flames evenly arranged around a central black circular aperture, forming a strong circular institutional badge. Burnished copper, charcoal enamel, amber inner flame accents. A desert industrial oligarchy. Professional hand-painted strategy-game UI asset, shallow embossed metal and enamel relief, restrained highlights, crisp readable silhouette, few large shapes clearly readable at 100 pixels. Front-facing and centered, square composition, generous transparent margin around the entire badge. No text, letters, digits, watermark, scene, background or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "e0bc577d6c39836f48d6cd2823183e6e901ef804c0da48c5a913a972ee19971f",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl.dds",
+      "runtime_sha256": "a6ab2d2f73e3ec77ba2e1124137fcb938f54f4e48eb82a34a89a362e591bba34"
+    },
+    {
+      "id": "rus",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Khan's Staff Intelligence Directorate: A single watchful silver falcon with folded angular wings in front of a flowing black military banner on a spear, framed by a narrow aged bronze oval. Black enamel, pale silver and restrained brass. Severe steppe military command insignia. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "1e3d4ea7150c5a7855a37ae266b07da2dde15f7c0d45561da171b8e2442c1cf9",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_rus.dds",
+      "runtime_sha256": "9cc6e6c8704f4c88c3d93948450dbbd9f4fcdab6765afd1b96e10929015771b5"
+    },
+    {
+      "id": "wrk",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Vorkerland Imperial State Security Directorate: An imposing imperial dark blue shield bearing a tall silver key and a small stylized gold crown, framed by sober geometric brass laurel branches. Hierarchical bureaucratic empire, worn but dignified, no real-world national emblem. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "d7fa9980f0b5b51f11f7f3c761dda7ea8ec06ff980b6bdaf51b6e88ee8c6b5ff",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_wrk.dds",
+      "runtime_sha256": "fe580098b0c6b9029748440ed862c87834a184f60aa327c83969635374f529b6"
+    },
+    {
+      "id": "nod",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Nodrul Republican Intelligence Bureau: A large silver northern compass star above a single symmetrical pair of outstretched wings on a deep ice-blue round shield. Silver edging, midnight navy enamel and pale blue accents. Rational republican northern state-security seal. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "24649ed82650548f6e662f08ff867277910558d5d0226e58565c99eeb3805d04",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_nod.dds",
+      "runtime_sha256": "2efd1c6c83cc30ce61f3e1163fb2eed071e5efe25e69e17d07386aa494fc6890"
+    },
+    {
+      "id": "ivn",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Itora External Observation Directorate: A silver watchtower above a distant horizontal horizon, with a small radiant watching eye in the tower window, within an elongated indigo shield bordered in silver. Restrained teal accents; patient external surveillance. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "e7b61085ad635daa0a2be326728c76dc9373007eeb0bca1f0dfddf33ebf92a3e",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_ivn.dds",
+      "runtime_sha256": "d0d2e6e9af215d84892290349ecbd5c035b3fef0bee3c7487414d7eaf14d55c6"
+    },
+    {
+      "id": "vad",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Vorkerland Central District Security Directorate: A rigorous interlocking geometric silver shield enclosing a square administrative seal with a central dark sapphire eye-shaped aperture. Angular office-state heraldry, slate-blue enamel and silver metal, small brass accent. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "1a1798a5f391a7f468a5f9da949a453befd82c8c112fb05e9855f558bdc6ced0",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_vad.dds",
+      "runtime_sha256": "5752971e4d80dca296eb2d668b705c8730b67a5db19ee80aebb726b2008472d1"
+    },
+    {
+      "id": "wkr",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Vorkerland Emergency Government Special Department: An austere broad brushed-steel shield with one powerful vertical ivory searchlight beam emerging from a small red circular lamp at its base, with two angular protective wings. Charcoal and dark red enamel, industrial emergency republic insignia. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "a9b2ddfe282c9d02534a0beeb3d1df02b6e57b7e9b5fa638130c37bad427eda7",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_wkr.dds",
+      "runtime_sha256": "f42399e4464951f0415992fa94195a28cb4bbd3b1c0d51de2cdb8183d78d0731"
+    },
+    {
+      "id": "tva",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Vorkerland Technical Intelligence Bureau: A large teal optical lens enclosed in a precise steel gear with four bold circuit traces radiating outward into an angular dark graphite shield. Cool silver metal, emerald-teal glass, no tiny decorative circuitry. Technocratic observation and analysis. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "640c9517bacce75dbe358cca051649ead5d153b1ac982329ce1ec1bb879b215d",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_tva.dds",
+      "runtime_sha256": "50f55c356c517e29804b5cf0c79ef4a3a2217bba05af7b40c47fb87a9db77501"
+    },
+    {
+      "id": "sts",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Stelander Resistance Intelligence Service: A concealed upward silver dagger breaking a single heavy chain link, in front of a dark forest-green triangular shield with subtle plum enamel remnants. Improvised but disciplined resistance insignia, silver and dark green. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "f4508e36d9c84b29bdd576607926428deb7dc3dc538c5139487975e8fa405f48",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_sts.dds",
+      "runtime_sha256": "013a36aa26c5b15d6b4d1926a8cf0cc3f3c2efafb67451387e5265a414293c4c"
+    },
+    {
+      "id": "srp",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Inter-Republic Intelligence Bureau: Three interlocking silver small shields unified beneath a single broad gold compass star, on a deep blue round enamel badge. A federation of equal republics, restrained laurel at bottom, balanced official insignia. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "17b85d446cbc9e0c88f2be4e4f93202739947b8ac1bf95b23050123633822930",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_srp.dds",
+      "runtime_sha256": "c9f3c9307035e0155a8f05d59c7bf1796355159625872ac81c032bb42e8097b8"
+    },
+    {
+      "id": "nam_charter",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Svetlogorye Oil Charter Security Bureau: An open ivory charter bearing one black oil drop, held within an interlocking ring of three equal brass seals, on a dark green circular enamel badge. Horizontal, cooperative district charter imagery rather than a hierarchy. Brass, forest green and ivory. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "1725f66fd7520131973087319565e95dc0332a8cf6e659777608a492d0a546b1",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_nam_charter.dds",
+      "runtime_sha256": "fd097de6d84992672f886225dd9003c450abf234dc0faba16995a07dcb134181"
+    },
+    {
+      "id": "rus_last_empire",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Last Empire Distant Observation Service: A large silver falcon with outspread wings enclosing a circular midnight-blue astronomical lens and a thin golden horizon, beneath a restrained geometric imperial crown. A scholarly imperial surveillance service, silver, blue and antique gold. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "ac44901c180fd7854cfb5fcf54de1e7bed28a456634be8e02d8a25b7c2b8ec93",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_rus_last_empire.dds",
+      "runtime_sha256": "5648df8096f799cfebc6865484ba3c47f8afc31773a460f0981c076807efc769"
+    },
+    {
+      "id": "rus_black_banner",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Black Banner Empire Special Directorate: A severe black angular shield carrying a bold silver downward falcon head, crossed short military spearheads behind it, topped by a flowing black banner edged in dark red. Martial and austere, black enamel, steel and small crimson accents. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "91568d1ccdca4e9a4d1d6dfe36712867bb602031d8ca9ec220f060a73e13b1b0",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_rus_black_banner.dds",
+      "runtime_sha256": "bd5031cd052b97323a8029d18ee6d90fe42e69066882222ba4a0ccfb7741c717"
+    },
+    {
+      "id": "shl_conclave",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Shahrabad Conclave of Ten Secret Service: Ten simplified bronze furnace gates arranged around a single upright golden flame, on a dark charcoal round badge. Exactly ten bold perimeter segments, not text. Copper and amber enamel, a stable expanded industrial conclave. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "0a26fa8bf79d75fb1e41b67792cf379268b23cebe2145ee9dcf041304b485182",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl_conclave.dds",
+      "runtime_sha256": "fdaada92ba7899ad0227c50e947a7d1cc7bcbf44f06035f8cf34281fe6ede70e"
+    },
+    {
+      "id": "shl_treaty",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Shahrabad Southern Treaty Intelligence Bureau: Two broad interlocking silver desert arches forming a protective shield around a small copper flame, with a teal horizontal horizon beneath. Copper, turquoise enamel and silver. Diplomatic coalition of southern cities, balanced and open. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "6cde567f3a4147ec8ab85398b459d4103fbf3c6190802958d9108e25c7af9c81",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl_treaty.dds",
+      "runtime_sha256": "305009ae94dec5e5eefe9307e2023a321fef298cacdf887bd3de178c9ba10d60"
+    },
+    {
+      "id": "shl_directorate",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Shahrabad Furnace Directorate Special Department: A large copper industrial furnace door containing a narrow vertical white eye-shaped slit, on a black angular steel shield. Three bold industrial ribs on each side, amber glow only in the slit. Severe centralized industrial security. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "c265c5a419a0bceac3b0b40e1b5c4ac1b0f3ebb29412eebae84d800a1e95459d",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl_directorate.dds",
+      "runtime_sha256": "5df9ad8bad65493d06b6e33e1d21004c2f640f7b431b4b6d2d3d495392b14f77"
+    },
+    {
+      "id": "shl_regent",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Shahrabad Council of Crests Secret Chancellery: A dark burgundy shield bearing a golden ceremonial key and one copper flame, topped by a modest angular regent's coronet, flanked by two small blank heraldic shields. Old industrial houses, gold and burgundy enamel, guarded aristocratic dignity. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "055ea683fb2aa5d502095575136c1b5930074de8939535bce0318c534d398d4b",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl_regent.dds",
+      "runtime_sha256": "d7345abbf959fddbdd8725b3599dc27ffbaab03033ab103af0a2db91fb9b1575"
+    },
+    {
+      "id": "shl_commune",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. Shahrabad Fire Commune Intelligence Commission: Two powerful silver worker's hands protecting a single copper flame, framed by a half steel gear and a deep red enamel round shield. Workers' communal vigilance, industrial and disciplined, warm copper with dark red and steel, no real-world symbols. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "5445e1d93f78bdba02c3b4e0889b3480877bf931721b0d674fa9e99e09a153a1",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_shl_commune.dds",
+      "runtime_sha256": "1ab0d7dae25bec32e36a503a19598105bfb0d2cb839920c39d8d4932a4c243d5"
+    },
+    {
+      "id": "generic",
+      "prompt": "Use case: logo-brand. ONE original intelligence agency insignia for fictional post-apocalyptic A-Discord. A-Discord National Intelligence Bureau: A single large silver watchful eye over a small vertical key, enclosed by a simple dark charcoal shield with a steel rim. Neutral national security insignia without country-specific symbols, subdued silver and slate enamel. Professional hand-painted strategy-game UI insignia, shallow embossed metal and enamel relief, restrained highlights, front-facing, crisp readable silhouette with few large shapes readable at 100 pixels. Square composition, centered complete badge with generous transparent margin. No text, lettering, numbers, watermark, background, scene or external shadow. Genuine transparent background.",
+      "transparent_background": true,
+      "source_sha256": "a936a022ce4919a195eeb46fed1073cb01f39011fbbe100d41dde6d2d07a1878",
+      "runtime_file": "gfx/interface/intelligence/agencies/agency_generic.dds",
+      "runtime_sha256": "e3afc23b85bd846a3296865793e62a2d9ab68ffa1a927010762f0738388223ce"
+    }
+  ]
+}

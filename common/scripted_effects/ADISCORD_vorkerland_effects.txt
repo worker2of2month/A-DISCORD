@@ -294,14 +294,14 @@ ADISCORD_vorkerland_initialize_legitimacy = {
 	if = {
 		limit = {
 			tag = WKR
-			has_completed_focus = WRK_convene_council_of_republics
+			WRK_capability_council_mandate = yes
 		}
 		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.10 }
 	}
 	if = {
 		limit = {
 			tag = WKR
-			has_completed_focus = WRK_bind_districts_to_charter
+			WRK_capability_charter_mandate = yes
 		}
 		add_to_variable = { var = ADISCORD_vorkerland_legitimacy value = 0.05 }
 	}
@@ -4212,6 +4212,10 @@ ADISCORD_vorkerland_apply_initial_map = {
 	ADISCORD_vorkerland_split_external_gate = yes
 	ADISCORD_vorkerland_prepare_initial_combatants = yes
 	ADISCORD_vorkerland_relocate_legacy_armies = yes
+	# Agencies belong to the materialized claimant, including after unification.
+	WKR = { ADISCORD_initialize_intelligence_agency = yes }
+	VAD = { ADISCORD_initialize_intelligence_agency = yes }
+	TVA = { ADISCORD_initialize_intelligence_agency = yes }
 }
 
 # Country-scoped exhaustion. WKR, VAD and TVA update only from bounded war,
@@ -4755,6 +4759,10 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 70 }
 						has_global_flag = superevent_west_world_empire
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 71 }
+						has_global_flag = superevent_nam_veyran_proclamation
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4837,6 +4845,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_south_nam
 					has_global_flag = superevent_west_council
 					has_global_flag = superevent_west_world_empire
+					has_global_flag = superevent_nam_veyran_proclamation
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -5122,6 +5131,10 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 70 } }
 			set_global_flag = superevent_west_world_empire
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 71 } }
+			set_global_flag = superevent_nam_veyran_proclamation
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 		if = {
 			limit = {
@@ -5189,6 +5202,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_south_nam
 	clr_global_flag = superevent_west_council
 	clr_global_flag = superevent_west_world_empire
+	clr_global_flag = superevent_nam_veyran_proclamation
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
@@ -5222,6 +5236,7 @@ ADISCORD_vorkerland_play_superevent_sound = {
 			OR = {
 				has_global_flag = superevent_val_commonwealth
 				has_global_flag = superevent_stelander_great
+				has_global_flag = superevent_nam_veyran_proclamation
 			}
 		}
 		play_song = "two_minutes_of_silence"
@@ -5442,6 +5457,121 @@ ADISCORD_vorkerland_record_regional_diplomacy_outcomes = {
 		clr_global_flag = ADISCORD_vorkerland_volnograd_winner_eba
 		set_global_flag = ADISCORD_vorkerland_volnograd_winner_tgd
 		set_global_flag = ADISCORD_vorkerland_volnograd_terminal_verified
+	}
+	ADISCORD_vorkerland_retire_dead_breakaway_claims = yes
+}
+
+# A breakaway of the collapse that no longer exists gives up its claims. Its
+# cores would otherwise let the peace conference that ends the central war
+# release it again as a puppet on part of a region it had already lost. SOL
+# keeps its cores: the protectorate and the restoration release it by name.
+ADISCORD_vorkerland_retire_dead_breakaway_claims = {
+	if = {
+		limit = { NOT = { country_exists = CSL } }
+		104 = { remove_core_of = CSL }
+	}
+	if = {
+		limit = { NOT = { country_exists = SRA } }
+		198 = { remove_core_of = SRA }
+		307 = { remove_core_of = SRA }
+		310 = { remove_core_of = SRA }
+	}
+	if = {
+		limit = { NOT = { country_exists = DVA } }
+		144 = { remove_core_of = DVA }
+		145 = { remove_core_of = DVA }
+		319 = { remove_core_of = DVA }
+		321 = { remove_core_of = DVA }
+	}
+	if = {
+		limit = { NOT = { country_exists = ZTA } }
+		199 = { remove_core_of = ZTA }
+	}
+	if = {
+		limit = { NOT = { country_exists = EBA } }
+		197 = { remove_core_of = EBA }
+		311 = { remove_core_of = EBA }
+		312 = { remove_core_of = EBA }
+		313 = { remove_core_of = EBA }
+		314 = { remove_core_of = EBA }
+	}
+	if = {
+		limit = { NOT = { country_exists = TGD } }
+		105 = { remove_core_of = TGD }
+	}
+	if = {
+		limit = { NOT = { country_exists = WPA } }
+		195 = { remove_core_of = WPA }
+	}
+	if = {
+		limit = { NOT = { country_exists = WPS } }
+		196 = { remove_core_of = WPS }
+		322 = { remove_core_of = WPS }
+	}
+	if = {
+		limit = { NOT = { country_exists = PSD } }
+		93 = { remove_core_of = PSD }
+		94 = { remove_core_of = PSD }
+		194 = { remove_core_of = PSD }
+		328 = { remove_core_of = PSD }
+	}
+	if = {
+		limit = { NOT = { country_exists = VHV } }
+		315 = { remove_core_of = VHV }
+		316 = { remove_core_of = VHV }
+		317 = { remove_core_of = VHV }
+	}
+	if = {
+		limit = { NOT = { country_exists = OSV } }
+		318 = { remove_core_of = OSV }
+		320 = { remove_core_of = OSV }
+	}
+	if = {
+		limit = { NOT = { country_exists = NDN } }
+		27 = { remove_core_of = NDN }
+	}
+	if = {
+		limit = { NOT = { country_exists = SWB } }
+		35 = { remove_core_of = SWB }
+	}
+	if = {
+		limit = { NOT = { country_exists = REV } }
+		82 = { remove_core_of = REV }
+		323 = { remove_core_of = REV }
+	}
+	if = {
+		limit = { NOT = { country_exists = EYR } }
+		75 = { remove_core_of = EYR }
+		102 = { remove_core_of = EYR }
+		106 = { remove_core_of = EYR }
+		109 = { remove_core_of = EYR }
+		111 = { remove_core_of = EYR }
+		325 = { remove_core_of = EYR }
+	}
+	if = {
+		limit = { NOT = { country_exists = EGC } }
+		81 = { remove_core_of = EGC }
+		110 = { remove_core_of = EGC }
+		124 = { remove_core_of = EGC }
+	}
+	if = {
+		limit = { NOT = { country_exists = RIV } }
+		79 = { remove_core_of = RIV }
+		306 = { remove_core_of = RIV }
+		308 = { remove_core_of = RIV }
+		309 = { remove_core_of = RIV }
+		327 = { remove_core_of = RIV }
+	}
+	if = {
+		limit = { NOT = { country_exists = YOR } }
+		102 = { remove_core_of = YOR }
+		107 = { remove_core_of = YOR }
+		108 = { remove_core_of = YOR }
+		109 = { remove_core_of = YOR }
+		111 = { remove_core_of = YOR }
+		121 = { remove_core_of = YOR }
+		122 = { remove_core_of = YOR }
+		123 = { remove_core_of = YOR }
 	}
 }
 
@@ -8523,7 +8653,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		}
 		if = {
 			limit = {
-				has_completed_focus = WRK_offer_emergency_compact
+				WRK_capability_emergency_compact = yes
 				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
 			}
 			event_target:ADISCORD_vorkerland_preparation_heir = {
@@ -8538,8 +8668,8 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
 			}
 		}
-		# Branch of the chosen apparatus. Only one branch is ever visible, so at
-		# most one mandate and one alternative of each pair can be completed.
+		# Tree of the chosen apparatus. Only one tree is ever drawn, so at most
+		# one mandate and one alternative of each pair can be completed.
 		if = {
 			limit = { has_completed_focus = WRK_committee_workers_guard }
 			event_target:ADISCORD_vorkerland_preparation_heir = {
@@ -8617,6 +8747,48 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 				add_war_support = 0.05
 			}
 		}
+		if = {
+			limit = { has_completed_focus = WRK_staff_district_arsenal_lists }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WKR }
+				add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 40 producer = WKR }
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_staff_joint_government_draft }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_political_power = 50
+				add_stability = 0.03
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_staff_emergency_command }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_command_power = 20
+				army_experience = 20
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_staff_last_order_draft }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_political_power = 40
+				add_war_support = 0.03
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_network_prototype_reserve }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 60 producer = WKR }
+				add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = WKR }
+			}
+		}
+		if = {
+			limit = { has_completed_focus = WRK_network_tower_duty_roster }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_command_power = 20
+				add_political_power = 40
+			}
+		}
 		32 = { WRK_unrest_settle_district = yes }
 		33 = { WRK_unrest_settle_district = yes }
 		34 = { WRK_unrest_settle_district = yes }
@@ -8633,6 +8805,9 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		37 = { WRK_cell_settle_district = yes }
 		38 = { WRK_cell_settle_district = yes }
 		39 = { WRK_cell_settle_district = yes }
+		40 = { WRK_intrigue_settle = yes }
+		36 = { WRK_prototype_settle = yes }
+		37 = { WRK_cadre_settle = yes }
 		ADISCORD_vorkerland_grant_camp_packages = yes
 		set_country_flag = ADISCORD_vorkerland_wrk_prewar_preparations_inherited_v1
 	}
@@ -12313,6 +12488,7 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_south_nam days > 6 }
 					has_global_flag = { flag = superevent_west_council days > 6 }
 					has_global_flag = { flag = superevent_west_world_empire days > 6 }
+					has_global_flag = { flag = superevent_nam_veyran_proclamation days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -12564,6 +12740,10 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_west_world_empire days > 6 } }
 				clr_global_flag = superevent_west_world_empire
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_nam_veyran_proclamation days > 6 } }
+				clr_global_flag = superevent_nam_veyran_proclamation
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}
@@ -13321,6 +13501,401 @@ ADISCORD_vorkerland_pw_finish_rebuild = {
 	}
 }
 
+# COUNTRY. Cooperative works of the Worker settlement: rolling stock for the
+# reopened lines and a fixed term of repair brigades.
+ADISCORD_vorkerland_worker_cooperative_works_reward = {
+	add_equipment_to_stockpile = {
+		type = train_equipment_1
+		amount = 10
+		producer = ROOT
+	}
+	add_timed_idea = {
+		idea = ADISCORD_vorkerland_worker_cooperative_brigades
+		days = 60
+	}
+}
+
+# COUNTRY. The native decision cost is the only debit; the deposit is its
+# receipt until the brigades are delivered or the payment is returned.
+ADISCORD_vorkerland_worker_refund_cooperative_works = {
+	if = {
+		limit = { has_variable = ADISCORD_vorkerland_worker_works_deposit }
+		add_political_power = ADISCORD_vorkerland_worker_works_deposit
+		clear_variable = ADISCORD_vorkerland_worker_works_deposit
+	}
+}
+
+ADISCORD_vorkerland_worker_finish_cooperative_works = {
+	if = {
+		limit = {
+			has_variable = ADISCORD_vorkerland_worker_works_deposit
+			ADISCORD_vorkerland_pw_sovereign = yes
+		}
+		ADISCORD_vorkerland_worker_cooperative_works_reward = yes
+		clear_variable = ADISCORD_vorkerland_worker_works_deposit
+	}
+	else = {
+		ADISCORD_vorkerland_worker_refund_cooperative_works = yes
+	}
+}
+
+# Orders of the Executive Committee. The native decision cost is the only
+# debit; WRK_executive_order_deposit is its receipt from payment to delivery
+# or refund, and one receipt serves every civil order. The cadre orders of
+# the army keep a receipt of their own further below.
+WRK_executive_clear_order = {
+	clear_variable = WRK_executive_order_deposit
+	clr_country_flag = WRK_executive_norm_order_pending
+	clr_country_flag = WRK_executive_republic_contract_pending
+	clr_country_flag = WRK_executive_district_audit_pending
+	clr_country_flag = WRK_executive_arsenal_order_pending
+}
+
+WRK_executive_refund_order = {
+	if = {
+		limit = { has_variable = WRK_executive_order_deposit }
+		add_political_power = WRK_executive_order_deposit
+		WRK_executive_clear_order = yes
+	}
+}
+
+# COUNTRY. The Central Order Bureau returns its overhead on every accepted
+# civil order; it is part of the delivery, so the preview shows it as well.
+WRK_executive_order_rebate = {
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_focus_executive_order_bureau }
+		add_political_power = 10
+	}
+}
+
+# STATE target; ROOT is the unified country.
+WRK_executive_norm_reward = {
+	add_extra_state_shared_building_slots = 1
+	add_building_construction = {
+		type = industrial_complex
+		level = 1
+		instant_build = yes
+	}
+	# A serial plant leaves the next bay of the same site ready.
+	if = {
+		limit = {
+			ROOT = { has_country_flag = ADISCORD_vorkerland_focus_executive_norm_series }
+		}
+		add_extra_state_shared_building_slots = 1
+	}
+	ROOT = { WRK_executive_order_rebate = yes }
+}
+
+# STATE target; ROOT is the unified country. The site flag ties the receipt to
+# this region, so a callback from another region or another order settles nothing.
+WRK_executive_finish_norm_order = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_norm_order_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		if = {
+			limit = {
+				ROOT = { WRK_executive_orders_open = yes }
+				WRK_executive_norm_site = yes
+				WRK_executive_norm_room = yes
+			}
+			WRK_executive_norm_reward = yes
+			set_state_flag = WRK_executive_norm_built
+			ROOT = {
+				WRK_executive_clear_order = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = {
+			ROOT = { WRK_executive_refund_order = yes }
+		}
+	}
+}
+
+WRK_executive_cancel_norm_order = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_norm_order_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		ROOT = { WRK_executive_refund_order = yes }
+	}
+}
+
+# STATE target; ROOT is the unified country. The audit puts idle premises on
+# the books of this region and hands the unlisted depot stock to the army.
+# The opened slot is what an arsenal order later builds in.
+WRK_executive_audit_reward = {
+	add_extra_state_shared_building_slots = 1
+	ROOT = {
+		add_equipment_to_stockpile = {
+			type = infantry_equipment_0
+			amount = 600
+			producer = ROOT
+		}
+	}
+	# A rolling audit follows the supply line itself: the road is put in
+	# order and the stock found along it is taken on the books too.
+	if = {
+		limit = {
+			ROOT = { has_country_flag = ADISCORD_vorkerland_focus_executive_rolling_audit }
+		}
+		if = {
+			limit = {
+				free_building_slots = {
+					building = infrastructure
+					size > 0
+				}
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		ROOT = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 300
+				producer = ROOT
+			}
+		}
+	}
+	ROOT = { WRK_executive_order_rebate = yes }
+}
+
+WRK_executive_finish_district_audit = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_district_audit_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		if = {
+			limit = {
+				ROOT = { WRK_executive_orders_open = yes }
+				WRK_executive_audit_site = yes
+			}
+			WRK_executive_audit_reward = yes
+			set_state_flag = WRK_executive_district_audited
+			ROOT = { WRK_executive_clear_order = yes }
+		}
+		else = {
+			ROOT = { WRK_executive_refund_order = yes }
+		}
+	}
+}
+
+WRK_executive_cancel_district_audit = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_district_audit_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		ROOT = { WRK_executive_refund_order = yes }
+	}
+}
+
+# COUNTRY. Workshops of the surviving republics deliver against the contract.
+WRK_executive_contract_reward = {
+	add_equipment_to_stockpile = {
+		type = infantry_equipment_0
+		amount = 5000
+		producer = ROOT
+	}
+	add_equipment_to_stockpile = {
+		type = support_equipment_1
+		amount = 150
+		producer = ROOT
+	}
+	# A standing supply chain adds the guns the republics used to keep.
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_focus_executive_supply_chain }
+		add_equipment_to_stockpile = {
+			type = artillery_equipment
+			amount = 100
+			producer = ROOT
+		}
+	}
+	WRK_executive_order_rebate = yes
+}
+
+# COUNTRY. A free republic that still trades with the country leans towards it
+# with a paid delivery. Five deliveries count: trade supports the western
+# policy of the focuses and decisions, it does not replace it.
+WRK_executive_contract_lean = {
+	if = {
+		limit = { WRK_executive_contract_lean_open = yes }
+		add_to_variable = { var = WRK_executive_contract_leans value = 1 }
+		set_temp_variable = { var = ADISCORD_west_push value = 5 }
+		if = {
+			limit = { ROM = { WRK_executive_contract_partner = yes } }
+			ROM = { ADISCORD_west_push_lean = yes }
+		}
+		if = {
+			limit = { TRU = { WRK_executive_contract_partner = yes } }
+			TRU = { ADISCORD_west_push_lean = yes }
+		}
+	}
+}
+
+WRK_executive_finish_republic_contract = {
+	if = {
+		limit = { has_country_flag = WRK_executive_republic_contract_pending }
+		if = {
+			limit = { WRK_executive_orders_open = yes }
+			WRK_executive_contract_reward = yes
+			WRK_executive_contract_lean = yes
+			WRK_executive_clear_order = yes
+		}
+		else = {
+			WRK_executive_refund_order = yes
+		}
+	}
+}
+
+WRK_executive_cancel_republic_contract = {
+	if = {
+		limit = { has_country_flag = WRK_executive_republic_contract_pending }
+		WRK_executive_refund_order = yes
+	}
+}
+
+# STATE target; ROOT is the unified country. The arsenal is built in a free
+# slot of an audited region; it adds none of its own.
+WRK_executive_arsenal_reward = {
+	add_building_construction = {
+		type = arms_factory
+		level = 1
+		instant_build = yes
+	}
+	ROOT = { WRK_executive_order_rebate = yes }
+}
+
+WRK_executive_finish_arsenal_order = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_arsenal_order_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		if = {
+			limit = {
+				ROOT = { WRK_executive_orders_open = yes }
+				WRK_executive_arsenal_site = yes
+				WRK_executive_arsenal_room = yes
+			}
+			WRK_executive_arsenal_reward = yes
+			set_state_flag = WRK_executive_arsenal_built
+			ROOT = {
+				WRK_executive_clear_order = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = {
+			ROOT = { WRK_executive_refund_order = yes }
+		}
+	}
+}
+
+WRK_executive_cancel_arsenal_order = {
+	if = {
+		limit = {
+			has_state_flag = WRK_executive_order_site
+			ROOT = { has_country_flag = WRK_executive_arsenal_order_pending }
+		}
+		clr_state_flag = WRK_executive_order_site
+		ROOT = { WRK_executive_refund_order = yes }
+	}
+}
+
+# Cadre orders of the paid army. They run beside the civil orders on their own
+# receipt, WRK_executive_cadre_deposit, under the same accounting.
+WRK_executive_clear_cadre_order = {
+	clear_variable = WRK_executive_cadre_deposit
+	clr_country_flag = WRK_executive_cadre_course_pending
+	clr_country_flag = WRK_executive_depot_issue_pending
+}
+
+WRK_executive_refund_cadre_order = {
+	if = {
+		limit = { has_variable = WRK_executive_cadre_deposit }
+		add_political_power = WRK_executive_cadre_deposit
+		WRK_executive_clear_cadre_order = yes
+	}
+}
+
+# COUNTRY. A paid course of the cadre: officers leave it with a common drill.
+WRK_executive_cadre_course_reward = {
+	army_experience = 40
+	add_command_power = 15
+}
+
+WRK_executive_finish_cadre_course = {
+	if = {
+		limit = { has_country_flag = WRK_executive_cadre_course_pending }
+		if = {
+			limit = { WRK_executive_orders_open = yes }
+			WRK_executive_cadre_course_reward = yes
+			WRK_executive_clear_cadre_order = yes
+		}
+		else = {
+			WRK_executive_refund_cadre_order = yes
+		}
+	}
+}
+
+WRK_executive_cancel_cadre_course = {
+	if = {
+		limit = { has_country_flag = WRK_executive_cadre_course_pending }
+		WRK_executive_refund_cadre_order = yes
+	}
+}
+
+# COUNTRY. One depot issue is the heavy kit of a cadre brigade.
+WRK_executive_depot_issue_reward = {
+	add_equipment_to_stockpile = {
+		type = artillery_equipment
+		amount = 250
+		producer = ROOT
+	}
+	add_equipment_to_stockpile = {
+		type = support_equipment_1
+		amount = 250
+		producer = ROOT
+	}
+	add_equipment_to_stockpile = {
+		type = motorized_equipment_1
+		amount = 150
+		producer = ROOT
+	}
+}
+
+WRK_executive_finish_depot_issue = {
+	if = {
+		limit = { has_country_flag = WRK_executive_depot_issue_pending }
+		if = {
+			limit = { WRK_executive_orders_open = yes }
+			WRK_executive_depot_issue_reward = yes
+			WRK_executive_clear_cadre_order = yes
+		}
+		else = {
+			WRK_executive_refund_cadre_order = yes
+		}
+	}
+}
+
+WRK_executive_cancel_depot_issue = {
+	if = {
+		limit = { has_country_flag = WRK_executive_depot_issue_pending }
+		WRK_executive_refund_cadre_order = yes
+	}
+}
+
 # --- preparation_effects ---
 
 # Prewar crisis. The balance between the centre and the districts lives on
@@ -13411,6 +13986,14 @@ ADISCORD_vorkerland_camp_staff_add_20 = {
 	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_add_20_tt
 	hidden_effect = {
 		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = 20 }
+		ADISCORD_vorkerland_camp_clamp = yes
+	}
+}
+
+ADISCORD_vorkerland_camp_staff_sub_5 = {
+	custom_effect_tooltip = ADISCORD_vorkerland_camp_staff_sub_5_tt
+	hidden_effect = {
+		add_to_variable = { var = global.ADISCORD_vorkerland_camp_staff value = -5 }
 		ADISCORD_vorkerland_camp_clamp = yes
 	}
 }
@@ -13561,13 +14144,21 @@ ADISCORD_vorkerland_grant_camp_packages = {
 # --- capital unrest ---
 # The committees' preparation mechanic. Eight capital districts carry
 # WRK_unrest (0-100) from the moment preparation.1 names the committees until
-# the collapse; the Tower has no ledger. WRK's monthly hook drives growth, the
+# the collapse; the Tower has no ledger. The 30-day ledger event drives growth, the
 # branch decisions lower it, and the heir is paid for every district still calm.
 
-# COUNTRY WRK. Runs once: the district variable is its own guard.
+# COUNTRY WRK. Runs once: the district variable is its own guard. The country
+# variables are the numbers the committees' focuses change; the report and
+# the tooltips print them, so a number is never stated twice.
 WRK_unrest_initialize = {
 	if = {
 		limit = { 32 = { NOT = { has_variable = WRK_unrest } } }
+		set_variable = { var = WRK_unrest_growth value = 5 }
+		set_variable = { var = WRK_unrest_growth_crisis value = 8 }
+		set_variable = { var = WRK_unrest_patrol_limit value = 1 }
+		set_variable = { var = WRK_unrest_cooldown value = 45 }
+		set_variable = { var = WRK_unrest_calm_manpower value = 2000 }
+		set_variable = { var = WRK_unrest_calm_rifles value = 1500 }
 		32 = { set_variable = { var = WRK_unrest value = 25 } }
 		33 = { set_variable = { var = WRK_unrest value = 30 } }
 		34 = { set_variable = { var = WRK_unrest value = 35 } }
@@ -13579,7 +14170,7 @@ WRK_unrest_initialize = {
 	}
 }
 
-# COUNTRY WRK, from its monthly hook.
+# COUNTRY WRK, from the 30-day ledger event preparation.63.
 WRK_unrest_monthly = {
 	if = {
 		limit = { WRK_unrest_active = yes }
@@ -13603,10 +14194,10 @@ WRK_unrest_grow = {
 	}
 	else_if = {
 		limit = { NOT = { has_state_flag = WRK_unrest_patrol } }
-		set_temp_variable = { var = WRK_unrest_delta value = 5 }
+		set_temp_variable = { var = WRK_unrest_delta value = PREV.WRK_unrest_growth }
 		if = {
 			limit = { PREV = { has_stability < 0.4 } }
-			set_temp_variable = { var = WRK_unrest_delta value = 8 }
+			set_temp_variable = { var = WRK_unrest_delta value = PREV.WRK_unrest_growth_crisis }
 		}
 		WRK_unrest_change = yes
 	}
@@ -13642,6 +14233,19 @@ WRK_unrest_start_riot = {
 	}
 }
 
+# STATE, ROOT = WRK. An instant measure closes its district for the cooldown
+# the report prints. A flag takes a literal duration, so each value of the
+# country variable has its own line here.
+WRK_unrest_mark_measure = {
+	if = {
+		limit = { ROOT = { check_variable = { var = WRK_unrest_cooldown value = 45 compare = less_than } } }
+		set_state_flag = { flag = WRK_unrest_measure_recent days = 30 value = 1 }
+	}
+	else = {
+		set_state_flag = { flag = WRK_unrest_measure_recent days = 45 value = 1 }
+	}
+}
+
 # STATE. The measure that restores order names the result; the district keeps
 # its remaining unrest and can rise again.
 WRK_unrest_end_riot = {
@@ -13652,8 +14256,7 @@ WRK_unrest_end_riot = {
 	}
 }
 
-# COUNTRY WRK. A plenipotentiary pushes the anger into the neighbouring
-# districts. The target is included; its own measure already offsets the share.
+# COUNTRY WRK. A plenipotentiary pushes the anger into the other districts.
 WRK_unrest_spill = {
 	32 = { WRK_unrest_spill_district = yes }
 	33 = { WRK_unrest_spill_district = yes }
@@ -13665,10 +14268,30 @@ WRK_unrest_spill = {
 	39 = { WRK_unrest_spill_district = yes }
 }
 
-# STATE, PREV = WRK.
+# STATE, PREV = WRK. The district the plenipotentiary was sent to is passed
+# over, and a district under patrol holds.
 WRK_unrest_spill_district = {
-	set_temp_variable = { var = WRK_unrest_delta value = 8 }
-	WRK_unrest_change = yes
+	if = {
+		limit = { has_state_flag = WRK_unrest_spill_source }
+		clr_state_flag = WRK_unrest_spill_source
+	}
+	else_if = {
+		limit = { NOT = { has_state_flag = WRK_unrest_patrol } }
+		set_temp_variable = { var = WRK_unrest_delta value = 8 }
+		WRK_unrest_change = yes
+	}
+}
+
+# STATE. A patrol cut short before the collapse returns its price to the
+# confederation. The flag is the receipt: the caller that clears it pays, so
+# the price is never returned twice. A patrol the collapse itself cuts short
+# is returned to the heir by the settlement below.
+WRK_unrest_refund_patrol = {
+	if = {
+		limit = { has_state_flag = WRK_unrest_patrol }
+		clr_state_flag = WRK_unrest_patrol
+		event_target:ADISCORD_vorkerland_nation = { add_political_power = 40 }
+	}
 }
 
 # STATE, when the prewar phase closes. A rioting district hands its finished
@@ -13687,8 +14310,10 @@ WRK_unrest_forfeit_object = {
 	}
 }
 
-# STATE, in the heir's carry-over. A district the committees kept calm pays
-# its package; the ledger entry is then closed.
+# STATE, PREV = WKR, in the heir's carry-over. A district the committees kept
+# calm pays its package; the ledger entry is then closed. WRK is gone by now,
+# so the size of the package is read from the focus record copied to WKR; the
+# same focuses set the numbers WRK's report printed before the collapse.
 WRK_unrest_settle_district = {
 	if = {
 		limit = { has_variable = WRK_unrest }
@@ -13697,15 +14322,298 @@ WRK_unrest_settle_district = {
 				check_variable = { var = WRK_unrest value = 40 compare = less_than }
 				NOT = { has_state_flag = WRK_unrest_riot }
 			}
-			event_target:ADISCORD_vorkerland_preparation_heir = {
-				add_manpower = 2000
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_committee_district_musters } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_manpower = 2500 }
 			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_manpower = 2000 }
+			}
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_committee_store_keys } }
+				event_target:ADISCORD_vorkerland_preparation_heir = {
+					add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = WKR }
+				}
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = {
+					add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
+				}
+			}
+		}
+		if = {
+			limit = { has_state_flag = WRK_unrest_patrol }
+			event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = 40 }
 		}
 		clear_variable = WRK_unrest
 		clr_state_flag = WRK_unrest_riot
 		clr_state_flag = WRK_unrest_patrol
 		clr_state_flag = WRK_unrest_measure_recent
+	}
+}
+
+# --- court intrigue ---
+# The staff's preparation mechanic. Six power brokers of the confederation each
+# hold a loyalty to the staff (0-100) from the moment preparation.1 names
+# Petrichev until the collapse: 1 Yastrebtsev, 2 Filopo, 3 Gordon, 4 Wither,
+# 5 Zogby, 6 Silver. The ledger lives on the Unity Tower (state 40), which
+# outlasts WRK; the heir is paid for every figure at 65 or above.
+
+# COUNTRY WRK. Runs once: the first figure's variable is the guard.
+WRK_intrigue_initialize = {
+	# The numbers the staff's focuses change; the court category, the cards and
+	# the tooltips print them, so a number is never stated twice.
+	if = {
+		limit = { 40 = { NOT = { has_variable = WRK_intrigue_1 } } }
+		set_variable = { var = WRK_intrigue_decay value = 3 }
+		set_variable = { var = WRK_intrigue_decay_crisis value = 5 }
+		set_variable = { var = WRK_intrigue_dossier_limit value = 2 }
+		set_variable = { var = WRK_intrigue_reception value = 8 }
+		set_variable = { var = WRK_intrigue_gift_stability value = 4 }
+		set_variable = { var = WRK_intrigue_gift_people value = 3000 }
+		set_variable = { var = WRK_intrigue_gift_power value = 60 }
+		set_variable = { var = WRK_intrigue_gift_support value = 150 }
+		set_variable = { var = WRK_intrigue_gift_rifles value = 4000 }
+		set_variable = { var = WRK_intrigue_gift_command value = 25 }
+		37 = { set_variable = { var = WRK_cadre_stock value = 0 } }
+	}
+	40 = {
+		if = {
+			limit = { NOT = { has_variable = WRK_intrigue_1 } }
+			set_variable = { var = WRK_intrigue_1 value = 25 }
+			set_variable = { var = WRK_intrigue_2 value = 55 }
+			set_variable = { var = WRK_intrigue_3 value = 45 }
+			set_variable = { var = WRK_intrigue_4 value = 40 }
+			set_variable = { var = WRK_intrigue_5 value = 35 }
+			set_variable = { var = WRK_intrigue_6 value = 60 }
+			set_variable = { var = WRK_intrigue_dossiers value = 0 }
+		}
+	}
+}
+
+# COUNTRY WRK, from the 30-day ledger event. The committees and the engineers court
+# the same people, faster when the centre is visibly failing.
+WRK_intrigue_monthly = {
+	if = {
+		limit = { WRK_intrigue_active = yes }
+		40 = {
+			set_temp_variable = { var = WRK_intrigue_delta value = 0 }
+			if = {
+				limit = { PREV = { has_stability < 0.4 } }
+				subtract_from_temp_variable = { var = WRK_intrigue_delta value = PREV.WRK_intrigue_decay_crisis }
+			}
+			else = {
+				subtract_from_temp_variable = { var = WRK_intrigue_delta value = PREV.WRK_intrigue_decay }
+			}
+			WRK_intrigue_change_all = yes
+		}
+	}
+}
+
+# STATE 40, PREV = WRK. Input: temp WRK_intrigue_delta.
+WRK_intrigue_change_all = {
+	WRK_intrigue_change_1 = yes
+	WRK_intrigue_change_2 = yes
+	WRK_intrigue_change_3 = yes
+	WRK_intrigue_change_4 = yes
+	WRK_intrigue_change_5 = yes
+	WRK_intrigue_change_6 = yes
+}
+
+# STATE 40, PREV = WRK. Input: temp WRK_intrigue_delta. One effect per figure:
+# each moves its own variable and hands the crossing to the shared register.
+WRK_intrigue_change_1 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_1 }
+	add_to_variable = { var = WRK_intrigue_1 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_1 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_1 }
+	WRK_intrigue_register_shift = yes
+}
+
+WRK_intrigue_change_2 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_2 }
+	add_to_variable = { var = WRK_intrigue_2 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_2 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_2 }
+	WRK_intrigue_register_shift = yes
+}
+
+WRK_intrigue_change_3 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_3 }
+	add_to_variable = { var = WRK_intrigue_3 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_3 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_3 }
+	WRK_intrigue_register_shift = yes
+}
+
+WRK_intrigue_change_4 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_4 }
+	add_to_variable = { var = WRK_intrigue_4 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_4 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_4 }
+	WRK_intrigue_register_shift = yes
+}
+
+WRK_intrigue_change_5 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_5 }
+	add_to_variable = { var = WRK_intrigue_5 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_5 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_5 }
+	WRK_intrigue_register_shift = yes
+}
+
+WRK_intrigue_change_6 = {
+	set_temp_variable = { var = WRK_intrigue_before value = WRK_intrigue_6 }
+	add_to_variable = { var = WRK_intrigue_6 value = WRK_intrigue_delta }
+	clamp_variable = { var = WRK_intrigue_6 min = 0 max = 100 }
+	set_temp_variable = { var = WRK_intrigue_after value = WRK_intrigue_6 }
+	WRK_intrigue_register_shift = yes
+}
+
+# STATE 40, PREV = WRK. Inputs: temp WRK_intrigue_before and WRK_intrigue_after.
+# Falling below 35 loses the figure to a rival camp; reaching 65 wins it. One
+# pass reports at most once; the report event is reading only.
+WRK_intrigue_register_shift = {
+	if = {
+		limit = {
+			check_variable = { var = WRK_intrigue_before value = 35 compare = greater_than_or_equals }
+			check_variable = { var = WRK_intrigue_after value = 35 compare = less_than }
+		}
+		PREV = { ADISCORD_vorkerland_camp_staff_sub_5 = yes }
+		if = {
+			limit = {
+				check_variable = { var = WRK_intrigue_reported value = 1 compare = less_than }
+				PREV = { is_ai = no }
+			}
+			set_temp_variable = { var = WRK_intrigue_reported value = 1 }
+			PREV = { country_event = { id = ADISCORD_vorkerland_preparation.62 } }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = WRK_intrigue_before value = 65 compare = less_than }
+			check_variable = { var = WRK_intrigue_after value = 65 compare = greater_than_or_equals }
+		}
+		PREV = { ADISCORD_vorkerland_camp_staff_add_5 = yes }
+	}
+}
+
+# STATE 40; ROOT is the confederation. Output: temp WRK_intrigue_delta. A ready
+# dossier is spent on the conversation. The approaches are open from the day
+# the staff is named; the garrison rolls tell it whom each figure listens to.
+WRK_intrigue_set_approach_delta = {
+	set_temp_variable = { var = WRK_intrigue_delta value = 25 }
+	if = {
+		limit = { check_variable = { var = WRK_intrigue_dossiers value = 0 compare = greater_than } }
+		subtract_from_variable = { var = WRK_intrigue_dossiers value = 1 }
+		set_temp_variable = { var = WRK_intrigue_delta value = 45 }
+	}
+	if = {
+		limit = { ROOT = { has_completed_focus = WRK_collect_officer_returns } }
+		add_to_temp_variable = { var = WRK_intrigue_delta value = 5 }
+	}
+}
+
+# STATE 40, PREV = WKR, in the heir's carry-over. Every figure that stands with
+# the staff brings its own contribution; the ledger is then closed. WRK is
+# gone by now, so the size of a contribution is read from the focus record
+# copied to WKR; the same focuses set the numbers WRK's texts printed.
+WRK_intrigue_settle = {
+	if = {
+		limit = { has_variable = WRK_intrigue_1 }
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_1 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_council_of_allies } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_stability = 0.06 }
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_stability = 0.04 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_2 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_district_pledges } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_manpower = 4500 }
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_manpower = 3000 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_3 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_council_of_allies } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = 90 }
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = 60 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_4 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_district_pledges } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_equipment_to_stockpile = { type = support_equipment_1 amount = 250 producer = WKR } }
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_equipment_to_stockpile = { type = support_equipment_1 amount = 150 producer = WKR } }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_5 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_district_pledges } }
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = WKR } }
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = { add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = WKR } }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = WRK_intrigue_6 value = 65 compare = greater_than_or_equals } }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_staff_council_of_allies } }
+				event_target:ADISCORD_vorkerland_preparation_heir = {
+					add_command_power = 40
+					army_experience = 40
+				}
+			}
+			else = {
+				event_target:ADISCORD_vorkerland_preparation_heir = {
+					add_command_power = 25
+					army_experience = 25
+				}
+			}
+		}
+		clear_variable = WRK_intrigue_1
+		clear_variable = WRK_intrigue_2
+		clear_variable = WRK_intrigue_3
+		clear_variable = WRK_intrigue_4
+		clear_variable = WRK_intrigue_5
+		clear_variable = WRK_intrigue_6
+		if = {
+			limit = { has_state_flag = WRK_intrigue_work }
+			event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = PREV.WRK_intrigue_work_paid }
+		}
+		clear_variable = WRK_intrigue_dossiers
+		clear_variable = WRK_intrigue_work_paid
+		clr_state_flag = WRK_intrigue_work
+		clr_state_flag = WRK_intrigue_reception_recent
+	}
+}
+
+# STATE 40. A conversation or dossier cut short before the collapse returns
+# the price recorded when it began. The flag is the receipt: the caller that
+# clears it pays. Work the collapse cuts short is returned to the heir by the
+# settlement above.
+WRK_intrigue_refund_work = {
+	if = {
+		limit = { has_state_flag = WRK_intrigue_work }
+		clr_state_flag = WRK_intrigue_work
+		event_target:ADISCORD_vorkerland_nation = { add_political_power = PREV.WRK_intrigue_work_paid }
+		clear_variable = WRK_intrigue_work_paid
 	}
 }
 
@@ -13716,10 +14624,19 @@ WRK_unrest_settle_district = {
 # collapse. A hidden cell feeds the workshops and draws attention; at 100 it is
 # exposed and loses a level every month. The heir is paid for what survives.
 
-# COUNTRY WRK. Runs once: the district variable is its own guard.
+# COUNTRY WRK. Runs once: the district variable is its own guard. The country
+# variables are the numbers the network's focuses change; the report and the
+# tooltips print them, so a number is never stated twice.
 WRK_cells_initialize = {
 	if = {
 		limit = { 32 = { NOT = { has_variable = WRK_cell_level } } }
+		set_variable = { var = WRK_cells_yield_rate value = 8 }
+		set_variable = { var = WRK_cell_heat_rate value = 4 }
+		set_variable = { var = WRK_cells_work_limit value = 1 }
+		set_variable = { var = WRK_cell_cover value = 30 }
+		set_variable = { var = WRK_cell_pay_people_rate value = 600 }
+		set_variable = { var = WRK_cell_pay_support_rate value = 50 }
+		set_variable = { var = WRK_prototype_limit value = 2 }
 		32 = {
 			set_variable = { var = WRK_cell_level value = 0 }
 			set_variable = { var = WRK_cell_heat value = 30 }
@@ -13739,6 +14656,7 @@ WRK_cells_initialize = {
 		36 = {
 			set_variable = { var = WRK_cell_level value = 0 }
 			set_variable = { var = WRK_cell_heat value = 15 }
+			set_variable = { var = WRK_prototype_stock value = 0 }
 		}
 		37 = {
 			set_variable = { var = WRK_cell_level value = 0 }
@@ -13755,7 +14673,7 @@ WRK_cells_initialize = {
 	}
 }
 
-# COUNTRY WRK, from its monthly hook. Working cells hand parts to the centre's stores;
+# COUNTRY WRK, from the 30-day ledger event. Working cells hand parts to the centre's stores;
 # the levels are summed in a country variable for one delivery.
 WRK_cells_monthly = {
 	if = {
@@ -13769,9 +14687,19 @@ WRK_cells_monthly = {
 		37 = { WRK_cell_tick = yes }
 		38 = { WRK_cell_tick = yes }
 		39 = { WRK_cell_tick = yes }
+		# Exposure follows the whole round of ticks, so the alarm raised by one
+		# district cannot expose another in the same pass.
+		32 = { WRK_cell_expose_due = yes }
+		33 = { WRK_cell_expose_due = yes }
+		34 = { WRK_cell_expose_due = yes }
+		35 = { WRK_cell_expose_due = yes }
+		36 = { WRK_cell_expose_due = yes }
+		37 = { WRK_cell_expose_due = yes }
+		38 = { WRK_cell_expose_due = yes }
+		39 = { WRK_cell_expose_due = yes }
 		if = {
 			limit = { check_variable = { var = WRK_cells_yield value = 0 compare = greater_than } }
-			multiply_variable = { var = WRK_cells_yield value = 8 }
+			multiply_variable = { var = WRK_cells_yield value = WRK_cells_yield_rate }
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
 				amount = WRK_cells_yield
@@ -13804,18 +14732,19 @@ WRK_cell_tick = {
 			limit = { NOT = { has_state_flag = WRK_cell_dormant } }
 			PREV = { add_to_variable = { var = WRK_cells_yield value = PREV.WRK_cell_level } }
 			set_temp_variable = { var = WRK_cell_delta value = WRK_cell_level }
-			multiply_temp_variable = { var = WRK_cell_delta value = 4 }
-			WRK_cell_heat_change = yes
+			multiply_temp_variable = { var = WRK_cell_delta value = PREV.WRK_cell_heat_rate }
+			WRK_cell_heat_mark = yes
 		}
 	}
 	else = {
 		set_temp_variable = { var = WRK_cell_delta value = -5 }
-		WRK_cell_heat_change = yes
+		WRK_cell_heat_mark = yes
 	}
 }
 
-# STATE, PREV = WRK. Input: temp WRK_cell_delta. A hidden cell is exposed at 100.
-WRK_cell_heat_change = {
+# STATE, PREV = WRK. Input: temp WRK_cell_delta. A hidden cell that reaches
+# 100 is marked for exposure.
+WRK_cell_heat_mark = {
 	add_to_variable = { var = WRK_cell_heat value = WRK_cell_delta }
 	clamp_variable = { var = WRK_cell_heat min = 0 max = 100 }
 	if = {
@@ -13825,6 +14754,22 @@ WRK_cell_heat_change = {
 			NOT = { has_state_flag = WRK_cell_exposed }
 			NOT = { has_state_flag = WRK_cell_legal }
 		}
+		set_state_flag = WRK_cell_due
+	}
+}
+
+# STATE, PREV = WRK. Input: temp WRK_cell_delta. Outside the monthly ledger
+# the exposure follows the change at once.
+WRK_cell_heat_change = {
+	WRK_cell_heat_mark = yes
+	WRK_cell_expose_due = yes
+}
+
+# STATE, PREV = WRK.
+WRK_cell_expose_due = {
+	if = {
+		limit = { has_state_flag = WRK_cell_due }
+		clr_state_flag = WRK_cell_due
 		WRK_cell_expose = yes
 	}
 }
@@ -13856,8 +14801,8 @@ WRK_cells_alarm = {
 	39 = { WRK_cell_alarm_district = yes }
 }
 
-# STATE. The alarm only raises attention: it never exposes a cell by itself,
-# so one exposure cannot cascade through the network within the same day.
+# STATE. The alarm only raises attention. A cell it fills to 100 is exposed
+# by its own next change, never in the pass that raised the alarm.
 WRK_cell_alarm_district = {
 	if = {
 		limit = {
@@ -13870,8 +14815,23 @@ WRK_cell_alarm_district = {
 	}
 }
 
-# STATE, in the heir's carry-over. A hidden cell pays for every level, a legal
-# collegium as one level, an exposed cell nothing; the entry is then closed.
+# STATE. Planting or expansion cut short before the collapse returns the price
+# recorded when it began. The flag is the receipt: the caller that clears it
+# pays. Work the collapse cuts short is returned to the heir by the settlement
+# below.
+WRK_cell_refund_work = {
+	if = {
+		limit = { has_state_flag = WRK_cell_work }
+		clr_state_flag = WRK_cell_work
+		event_target:ADISCORD_vorkerland_nation = { add_political_power = PREV.WRK_cell_work_paid }
+		clear_variable = WRK_cell_work_paid
+	}
+}
+
+# STATE, PREV = WKR, in the heir's carry-over. A hidden cell pays for every
+# level, a legal collegium as one level, an exposed cell nothing; the entry is
+# then closed. WRK is gone by now, so what a level pays is read from the focus
+# record copied to WKR; the same focuses set the numbers WRK's report printed.
 WRK_cell_settle_district = {
 	if = {
 		limit = { has_variable = WRK_cell_level }
@@ -13885,9 +14845,21 @@ WRK_cell_settle_district = {
 				set_variable = { var = WRK_cell_level value = 1 }
 			}
 			set_variable = { var = WRK_cell_pay_people value = WRK_cell_level }
-			multiply_variable = { var = WRK_cell_pay_people value = 600 }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_network_reserve_rolls } }
+				multiply_variable = { var = WRK_cell_pay_people value = 800 }
+			}
+			else = {
+				multiply_variable = { var = WRK_cell_pay_people value = 600 }
+			}
 			set_variable = { var = WRK_cell_pay_support value = WRK_cell_level }
-			multiply_variable = { var = WRK_cell_pay_support value = 50 }
+			if = {
+				limit = { PREV = { has_completed_focus = WRK_network_trusted_storekeepers } }
+				multiply_variable = { var = WRK_cell_pay_support value = 80 }
+			}
+			else = {
+				multiply_variable = { var = WRK_cell_pay_support value = 50 }
+			}
 			event_target:ADISCORD_vorkerland_preparation_heir = {
 				add_manpower = PREV.WRK_cell_pay_people
 				add_equipment_to_stockpile = {
@@ -13897,14 +14869,144 @@ WRK_cell_settle_district = {
 				}
 			}
 		}
+		if = {
+			limit = { has_state_flag = WRK_cell_work }
+			event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = PREV.WRK_cell_work_paid }
+		}
 		clear_variable = WRK_cell_level
 		clear_variable = WRK_cell_heat
 		clear_variable = WRK_cell_pay_people
 		clear_variable = WRK_cell_pay_support
+		clear_variable = WRK_cell_work_paid
+		clr_state_flag = WRK_cell_due
 		clr_state_flag = WRK_cell_exposed
 		clr_state_flag = WRK_cell_legal
 		clr_state_flag = WRK_cell_dormant
 		clr_state_flag = WRK_cell_work
+	}
+}
+
+# --- cadre regiments ---
+# The staff's own programme at the garrison object (state 37). A regiment is
+# paid when it begins; the district flag WRK_cadre_work is the receipt and
+# WRK_cadre_paid the price it records. Finished regiments are counted in
+# WRK_cadre_stock on the state, which outlasts WRK, and paid to the heir.
+
+# STATE 37. A regiment cut short before the collapse returns its recorded
+# price. The caller that clears the receipt pays; a regiment the collapse
+# cuts short is returned to the heir by the settlement below.
+WRK_cadre_refund = {
+	if = {
+		limit = { has_state_flag = WRK_cadre_work }
+		clr_state_flag = WRK_cadre_work
+		event_target:ADISCORD_vorkerland_nation = { add_political_power = PREV.WRK_cadre_paid }
+		clear_variable = WRK_cadre_paid
+	}
+}
+
+# STATE 37. A finished regiment joins the reserve; a receipt already settled adds nothing.
+WRK_cadre_deliver = {
+	if = {
+		limit = { has_state_flag = WRK_cadre_work }
+		clr_state_flag = WRK_cadre_work
+		clear_variable = WRK_cadre_paid
+		add_to_variable = { var = WRK_cadre_stock value = 1 }
+	}
+}
+
+# STATE 37, in the heir's carry-over. Every finished regiment pays its men and
+# rifles, an unfinished one returns its price; the entry is then closed.
+WRK_cadre_settle = {
+	if = {
+		limit = { has_variable = WRK_cadre_stock }
+		if = {
+			limit = { check_variable = { var = WRK_cadre_stock value = 0 compare = greater_than } }
+			set_variable = { var = WRK_cadre_pay_people value = WRK_cadre_stock }
+			multiply_variable = { var = WRK_cadre_pay_people value = 2500 }
+			set_variable = { var = WRK_cadre_pay_rifles value = WRK_cadre_stock }
+			multiply_variable = { var = WRK_cadre_pay_rifles value = 2000 }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_manpower = PREV.WRK_cadre_pay_people
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_0
+					amount = PREV.WRK_cadre_pay_rifles
+					producer = WKR
+				}
+			}
+		}
+		if = {
+			limit = { has_state_flag = WRK_cadre_work }
+			event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = PREV.WRK_cadre_paid }
+		}
+		clear_variable = WRK_cadre_stock
+		clear_variable = WRK_cadre_pay_people
+		clear_variable = WRK_cadre_pay_rifles
+		clear_variable = WRK_cadre_paid
+		clr_state_flag = WRK_cadre_work
+	}
+}
+
+# --- prototype series ---
+# The network's own programme at the industry object (state 36). A series is
+# paid when it begins; the district flag WRK_prototype_work is the receipt and
+# WRK_prototype_paid the price it records. Finished series are counted in
+# WRK_prototype_stock on the state, which outlasts WRK, and paid to the heir.
+
+# STATE 36. A series cut short before the collapse returns its recorded price.
+# The caller that clears the receipt pays; a series the collapse cuts short is
+# returned to the heir by the settlement below.
+WRK_prototype_refund = {
+	if = {
+		limit = { has_state_flag = WRK_prototype_work }
+		clr_state_flag = WRK_prototype_work
+		event_target:ADISCORD_vorkerland_nation = { add_political_power = PREV.WRK_prototype_paid }
+		clear_variable = WRK_prototype_paid
+	}
+}
+
+# STATE 36. A finished series joins the stock; a receipt already settled adds nothing.
+WRK_prototype_deliver = {
+	if = {
+		limit = { has_state_flag = WRK_prototype_work }
+		clr_state_flag = WRK_prototype_work
+		clear_variable = WRK_prototype_paid
+		add_to_variable = { var = WRK_prototype_stock value = 1 }
+	}
+}
+
+# STATE 36, in the heir's carry-over. Every finished series pays its guns and
+# tooling, an unfinished one returns its price; the entry is then closed.
+WRK_prototype_settle = {
+	if = {
+		limit = { has_variable = WRK_prototype_stock }
+		if = {
+			limit = { check_variable = { var = WRK_prototype_stock value = 0 compare = greater_than } }
+			set_variable = { var = WRK_prototype_pay_guns value = WRK_prototype_stock }
+			multiply_variable = { var = WRK_prototype_pay_guns value = 30 }
+			set_variable = { var = WRK_prototype_pay_support value = WRK_prototype_stock }
+			multiply_variable = { var = WRK_prototype_pay_support value = 40 }
+			event_target:ADISCORD_vorkerland_preparation_heir = {
+				add_equipment_to_stockpile = {
+					type = artillery_equipment_1
+					amount = PREV.WRK_prototype_pay_guns
+					producer = WKR
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment_1
+					amount = PREV.WRK_prototype_pay_support
+					producer = WKR
+				}
+			}
+		}
+		if = {
+			limit = { has_state_flag = WRK_prototype_work }
+			event_target:ADISCORD_vorkerland_preparation_heir = { add_political_power = PREV.WRK_prototype_paid }
+		}
+		clear_variable = WRK_prototype_stock
+		clear_variable = WRK_prototype_pay_guns
+		clear_variable = WRK_prototype_pay_support
+		clear_variable = WRK_prototype_paid
+		clr_state_flag = WRK_prototype_work
 	}
 }
 
@@ -14175,30 +15277,55 @@ ADISCORD_vorkerland_prep_resolve_fate = {
 		}
 		set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 	}
+	# The network takes the chairman off the grid through its own cell in the
+	# Central District; without that cell the roll decides, as a riot does for
+	# the two evacuations.
+	else_if = {
+		limit = {
+			40 = {
+				check_variable = {
+					var = ADISCORD_vorkerland_prep_project
+					value = 3
+					compare = equals
+				}
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+			WRK_network_exfiltration_route_clear = yes
+		}
+		set_global_flag = ADISCORD_vorkerland_worker_missing
+	}
 	else = {
 		# The tower guard keeps Worker with the loyalists; a dispersed government
 		# hides him in the districts but cannot lose him in the blast. The chosen
 		# apparatus adds its own weight: the chairman's mandate, the staff escort
-		# or a reserve headquarters that no longer plans around him.
+		# or a reserve headquarters that no longer plans around him, a staff that
+		# leaves the Tower undefended, the network's shelter under the Tower or a
+		# Tower it has cut off from every caller.
 		random_list = {
 			60 = {
 				modifier = { factor = 1.25 has_completed_focus = WRK_reinforce_the_tower_guard }
 				modifier = { factor = 1.25 has_completed_focus = WRK_committee_chairmans_mandate }
+				modifier = { factor = 1.25 has_completed_focus = WRK_network_tower_shelter }
+				modifier = { factor = 0.75 has_completed_focus = WRK_staff_let_the_tower_fall }
 				set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			}
 			25 = {
 				modifier = { factor = 2 has_completed_focus = WRK_staff_escort_for_the_chairman }
 				modifier = { factor = 0.5 has_completed_focus = WRK_staff_reserve_headquarters }
+				modifier = { factor = 0.4 has_completed_focus = WRK_network_blind_the_tower }
 				set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
 			}
 			10 = {
 				modifier = { factor = 0.5 has_completed_focus = WRK_reinforce_the_tower_guard }
 				modifier = { factor = 2 has_completed_focus = WRK_disperse_the_government }
+				modifier = { factor = 2 has_completed_focus = WRK_network_blind_the_tower }
 				set_global_flag = ADISCORD_vorkerland_worker_missing
 			}
 			5 = {
 				modifier = { factor = 0.4 has_completed_focus = WRK_reinforce_the_tower_guard }
 				modifier = { factor = 0 has_completed_focus = WRK_disperse_the_government }
+				modifier = { factor = 0.2 has_completed_focus = WRK_network_tower_shelter }
+				modifier = { factor = 2 has_completed_focus = WRK_staff_let_the_tower_fall }
 				set_global_flag = ADISCORD_vorkerland_worker_killed
 			}
 		}
@@ -14407,6 +15534,18 @@ ADISCORD_vorkerland_prep_receive_asset = {
 					check_variable = {
 						var = ADISCORD_vorkerland_prep_project
 						value = 2
+						compare = equals
+					}
+				}
+			}
+			add_command_power = 15
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					check_variable = {
+						var = ADISCORD_vorkerland_prep_project
+						value = 3
 						compare = equals
 					}
 				}

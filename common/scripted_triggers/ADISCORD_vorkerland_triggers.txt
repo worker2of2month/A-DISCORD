@@ -1839,7 +1839,7 @@ ADISCORD_vorkerland_reserve_cache_slot_free = {
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_reserve_caches_placed value = 4 compare = less_than }
 			OR = {
-				has_completed_focus = WRK_disperse_railway_reserves
+				WRK_capability_extra_caches = yes
 				has_completed_focus = VAD_disperse_eastern_depots
 			}
 		}
@@ -2717,6 +2717,7 @@ ADISCORD_vorkerland_pw_reconstruction_open = {
 	ADISCORD_vorkerland_pw_sovereign = yes
 	OR = {
 		has_completed_focus = WRK_conf_cooperative_workshops
+		has_completed_focus = WRK_exec_reconstruction_work_orders
 		has_completed_focus = WRK_joint_pw_census
 		has_completed_focus = WRK_tech_district_metrics
 		has_completed_focus = WRK_empire_imperial_works
@@ -2732,6 +2733,7 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 2 compare = less_than }
 			OR = {
 				has_completed_focus = WRK_conf_municipal_councils
+				has_completed_focus = WRK_exec_second_construction_trust
 				has_completed_focus = WRK_joint_pw_repair_crews
 				has_completed_focus = WRK_tech_municipal_utilities
 				has_completed_focus = WRK_empire_building_offices
@@ -2742,6 +2744,7 @@ ADISCORD_vorkerland_pw_rebuild_slot_free = {
 			check_variable = { var = ADISCORD_vorkerland_pw_rebuild_active value = 3 compare = less_than }
 			OR = {
 				has_completed_focus = WRK_conf_social_guarantees
+				has_completed_focus = WRK_exec_ration_by_ledger
 				has_completed_focus = WRK_joint_pw_municipal_network
 				has_completed_focus = WRK_tech_measured_economy
 				has_completed_focus = WRK_empire_building_offices
@@ -2756,6 +2759,75 @@ ADISCORD_vorkerland_pw_rebuild_site = {
 	is_core_of = ROOT
 	is_owned_and_controlled_by = ROOT
 	NOT = { has_state_flag = ADISCORD_vorkerland_pw_district_rebuilt }
+}
+
+# COUNTRY. Paid orders of the Executive Committee exist only under the
+# government that unified the country on the executive course; the receipt
+# survives the settlement tree, so the gate reads the outcome, not a focus.
+WRK_executive_orders_open = {
+	ADISCORD_vorkerland_pw_sovereign = yes
+	has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+}
+
+# COUNTRY. Every committee order shares one receipt; a second payment must
+# never overwrite the first.
+WRK_executive_order_slot_free = {
+	NOT = { has_variable = WRK_executive_order_deposit }
+}
+
+# STATE target; ROOT is the unified country. One plant per region; only the
+# persistent facts belong to the cached target list.
+WRK_executive_norm_site = {
+	is_owned_and_controlled_by = ROOT
+	NOT = { has_state_flag = WRK_executive_norm_built }
+}
+
+# STATE target. The order brings its own slot, so only a region at its
+# building limit has no room; checked on ordering and again at delivery.
+WRK_executive_norm_room = {
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+		include_locked = yes
+	}
+}
+
+# STATE target; ROOT is the unified country. An arsenal is placed once, in a
+# region the audit has put on the books.
+WRK_executive_arsenal_site = {
+	is_owned_and_controlled_by = ROOT
+	has_state_flag = WRK_executive_district_audited
+	NOT = { has_state_flag = WRK_executive_arsenal_built }
+}
+
+# STATE target. The arsenal takes a free slot, such as the one the audit
+# opened; checked on ordering and again at delivery.
+WRK_executive_arsenal_room = {
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+	}
+}
+
+# COUNTRY. Paid deliveries move a free republic only so far.
+WRK_executive_contract_lean_open = {
+	check_variable = { var = WRK_executive_contract_leans value = 5 compare = less_than }
+	OR = {
+		ROM = { WRK_executive_contract_partner = yes }
+		TRU = { WRK_executive_contract_partner = yes }
+	}
+}
+
+# STATE target; ROOT is the unified country. Each region is audited once.
+WRK_executive_audit_site = {
+	is_owned_and_controlled_by = ROOT
+	NOT = { has_state_flag = WRK_executive_district_audited }
+}
+
+# COUNTRY ROM or TRU; ROOT is the unified country.
+WRK_executive_contract_partner = {
+	exists = yes
+	NOT = { has_war_with = ROOT }
 }
 
 # --- world_empire_triggers ---
@@ -2856,6 +2928,145 @@ ADISCORD_vorkerland_prewar_patron_network = {
 	check_variable = { var = ADISCORD_vorkerland_prep_patron value = 3 compare = equals }
 }
 
+# COUNTRY, any. The emergency compact is the centre's to offer, and only a
+# centre whose tree holds the offer can sign it. Until preparation.1 names an
+# apparatus the question is open. Lists every apparatus whose tree grants
+# WRK_capability_emergency_compact.
+ADISCORD_vorkerland_prewar_centre_can_offer_compact = {
+	event_target:ADISCORD_vorkerland_nation = {
+		OR = {
+			NOT = { has_variable = ADISCORD_vorkerland_prep_patron }
+			ADISCORD_vorkerland_prewar_patron_committees = yes
+		}
+	}
+}
+
+# COUNTRY. Capabilities of the prewar preparation. Script asks for the
+# capability, never for the focus that grants it: each apparatus reaches a
+# shared system through its own tree, and the focus record copied to the heir
+# answers the same question after the collapse. A capability lists every
+# focus that grants it.
+# The public charter project at the archives.
+WRK_capability_public_charter = {
+	OR = {
+		has_completed_focus = WRK_convene_council_of_republics
+		has_completed_focus = WRK_network_open_broadcast
+	}
+}
+
+# Treaty offers to the autonomous districts.
+WRK_capability_district_offers = {
+	has_completed_focus = WRK_convene_council_of_republics
+}
+
+# The heir opens with the mandate of a convened council.
+WRK_capability_council_mandate = {
+	has_completed_focus = WRK_convene_council_of_republics
+}
+
+# The heir opens with the mandate of the charter.
+WRK_capability_charter_mandate = {
+	has_completed_focus = WRK_bind_districts_to_charter
+}
+
+# The rolling-stock evacuation project.
+WRK_capability_evacuate_trains = {
+	has_completed_focus = WRK_bind_districts_to_charter
+}
+
+# The sealed arsenal reserve project.
+WRK_capability_sealed_reserve = {
+	OR = {
+		has_completed_focus = WRK_inventory_emergency_stores
+		has_completed_focus = WRK_staff_arsenal_seals
+	}
+}
+
+# The mobilisation lists project.
+WRK_capability_mobilisation_lists = {
+	OR = {
+		has_completed_focus = WRK_inventory_emergency_stores
+		has_completed_focus = WRK_network_relay_by_wire
+	}
+}
+
+# The railway protection project.
+WRK_capability_protect_rail = {
+	OR = {
+		has_completed_focus = WRK_disperse_railway_reserves
+		has_completed_focus = WRK_staff_railway_commandants
+	}
+}
+
+# Two more hidden reserve caches.
+WRK_capability_extra_caches = {
+	has_completed_focus = WRK_disperse_railway_reserves
+}
+
+# The civil evacuation project at the Tower.
+WRK_capability_civil_evacuation = {
+	has_completed_focus = WRK_prepare_civil_evacuation
+}
+
+# The military evacuation project at the Tower.
+WRK_capability_military_evacuation = {
+	OR = {
+		has_completed_focus = WRK_prepare_military_evacuation
+		has_completed_focus = WRK_staff_military_route
+	}
+}
+
+# The network's way out of the Tower for the chairman.
+WRK_capability_network_exfiltration = {
+	has_completed_focus = WRK_network_technical_continuity
+}
+
+# Any scope. The network's route out of the Tower runs through its own cell
+# in the Central District: a cell of level 2 or more that the committees have
+# not exposed and that has not gone public as a collegium. A dormant cell
+# still counts; it is hidden.
+WRK_network_exfiltration_route_clear = {
+	32 = {
+		check_variable = { var = WRK_cell_level value = 1 compare = greater_than }
+		NOT = { has_state_flag = WRK_cell_exposed }
+		NOT = { has_state_flag = WRK_cell_legal }
+	}
+}
+
+# The centre's emergency levy.
+WRK_capability_central_levy = {
+	has_completed_focus = WRK_emergency_central_budget
+}
+
+# The districts' emergency mandates.
+WRK_capability_district_mandates = {
+	has_completed_focus = WRK_district_emergency_powers
+}
+
+# Requisition of emergency tools.
+WRK_capability_requisition_tools = {
+	has_completed_focus = WRK_requisition_commissions
+}
+
+# Financing of evacuation stock.
+WRK_capability_evacuation_stock = {
+	has_completed_focus = WRK_district_treasuries
+}
+
+# A third concurrent project at the capital's sites.
+WRK_capability_third_project = {
+	OR = {
+		has_completed_focus = WRK_last_common_budget
+		has_completed_focus = WRK_network_shadow_budget
+		has_completed_focus = WRK_staff_war_chest
+	}
+}
+
+# The centre's signature under the emergency compact.
+WRK_capability_emergency_compact = {
+	has_completed_focus = WRK_offer_emergency_compact
+}
+
 ADISCORD_vorkerland_prep_open = {
 	tag = event_target:ADISCORD_vorkerland_nation
 	has_global_flag = ADISCORD_vorkerland_phase_prewar
@@ -2872,20 +3083,41 @@ WRK_unrest_active = {
 	ADISCORD_vorkerland_prewar_patron_committees = yes
 }
 
-# COUNTRY. The workers' guard runs one patrol at a time. A targeted decision
-# is not visible to has_decision, so the district flag is the record.
+# COUNTRY. The workers' guard runs as many patrols at a time as the report
+# prints: one, or two after the second shift. A targeted decision is not
+# visible to has_decision, so the district flag is the record.
 WRK_unrest_patrol_free = {
-	NOT = {
-		OR = {
-			32 = { has_state_flag = WRK_unrest_patrol }
-			33 = { has_state_flag = WRK_unrest_patrol }
-			34 = { has_state_flag = WRK_unrest_patrol }
-			35 = { has_state_flag = WRK_unrest_patrol }
-			36 = { has_state_flag = WRK_unrest_patrol }
-			37 = { has_state_flag = WRK_unrest_patrol }
-			38 = { has_state_flag = WRK_unrest_patrol }
-			39 = { has_state_flag = WRK_unrest_patrol }
-		}
+	NOT = { WRK_unrest_two_patrols_running = yes }
+	OR = {
+		check_variable = { var = WRK_unrest_patrol_limit value = 1 compare = greater_than }
+		NOT = { WRK_unrest_patrol_running = yes }
+	}
+}
+
+WRK_unrest_patrol_running = {
+	OR = {
+		32 = { has_state_flag = WRK_unrest_patrol }
+		33 = { has_state_flag = WRK_unrest_patrol }
+		34 = { has_state_flag = WRK_unrest_patrol }
+		35 = { has_state_flag = WRK_unrest_patrol }
+		36 = { has_state_flag = WRK_unrest_patrol }
+		37 = { has_state_flag = WRK_unrest_patrol }
+		38 = { has_state_flag = WRK_unrest_patrol }
+		39 = { has_state_flag = WRK_unrest_patrol }
+	}
+}
+
+WRK_unrest_two_patrols_running = {
+	count_triggers = {
+		amount = 2
+		32 = { has_state_flag = WRK_unrest_patrol }
+		33 = { has_state_flag = WRK_unrest_patrol }
+		34 = { has_state_flag = WRK_unrest_patrol }
+		35 = { has_state_flag = WRK_unrest_patrol }
+		36 = { has_state_flag = WRK_unrest_patrol }
+		37 = { has_state_flag = WRK_unrest_patrol }
+		38 = { has_state_flag = WRK_unrest_patrol }
+		39 = { has_state_flag = WRK_unrest_patrol }
 	}
 }
 
@@ -2902,6 +3134,27 @@ WRK_unrest_military_route_clear = {
 	38 = { NOT = { has_state_flag = WRK_unrest_riot } }
 }
 
+# --- court intrigue triggers ---
+
+# COUNTRY. Petrichev's staff courts the confederation's power brokers until the collapse.
+WRK_intrigue_active = {
+	ADISCORD_vorkerland_prep_open = yes
+	ADISCORD_vorkerland_prewar_patron_staff = yes
+}
+
+# STATE 40. Input: temp WRK_intrigue_value. Card: 1 undecided, 2 with the staff, 3 against it.
+WRK_intrigue_set_card_frame = {
+	set_temp_variable = { var = WRK_capital_frame value = 1 }
+	if = {
+		limit = { check_variable = { var = WRK_intrigue_value value = 65 compare = greater_than_or_equals } }
+		set_temp_variable = { var = WRK_capital_frame value = 2 }
+	}
+	if = {
+		limit = { check_variable = { var = WRK_intrigue_value value = 35 compare = less_than } }
+		set_temp_variable = { var = WRK_capital_frame value = 3 }
+	}
+}
+
 # --- capital cell triggers ---
 
 # COUNTRY. Worx's engineers build their network of cells until the collapse.
@@ -2910,19 +3163,62 @@ WRK_cells_active = {
 	ADISCORD_vorkerland_prewar_patron_network = yes
 }
 
-# COUNTRY. One cell is planted or expanded at a time. A targeted decision is
-# not visible to has_decision, so the district flag is the record.
+# COUNTRY. The network plants or expands as many cells at a time as the
+# report prints: one, or two with a second crew. A targeted decision is not
+# visible to has_decision, so the district flag is the record.
 WRK_cells_work_free = {
-	NOT = {
-		OR = {
-			32 = { has_state_flag = WRK_cell_work }
-			33 = { has_state_flag = WRK_cell_work }
-			34 = { has_state_flag = WRK_cell_work }
-			35 = { has_state_flag = WRK_cell_work }
-			36 = { has_state_flag = WRK_cell_work }
-			37 = { has_state_flag = WRK_cell_work }
-			38 = { has_state_flag = WRK_cell_work }
-			39 = { has_state_flag = WRK_cell_work }
+	NOT = { WRK_cells_two_works_running = yes }
+	OR = {
+		check_variable = { var = WRK_cells_work_limit value = 1 compare = greater_than }
+		NOT = { WRK_cells_work_running = yes }
+	}
+}
+
+WRK_cells_work_running = {
+	OR = {
+		32 = { has_state_flag = WRK_cell_work }
+		33 = { has_state_flag = WRK_cell_work }
+		34 = { has_state_flag = WRK_cell_work }
+		35 = { has_state_flag = WRK_cell_work }
+		36 = { has_state_flag = WRK_cell_work }
+		37 = { has_state_flag = WRK_cell_work }
+		38 = { has_state_flag = WRK_cell_work }
+		39 = { has_state_flag = WRK_cell_work }
+	}
+}
+
+WRK_cells_two_works_running = {
+	count_triggers = {
+		amount = 2
+		32 = { has_state_flag = WRK_cell_work }
+		33 = { has_state_flag = WRK_cell_work }
+		34 = { has_state_flag = WRK_cell_work }
+		35 = { has_state_flag = WRK_cell_work }
+		36 = { has_state_flag = WRK_cell_work }
+		37 = { has_state_flag = WRK_cell_work }
+		38 = { has_state_flag = WRK_cell_work }
+		39 = { has_state_flag = WRK_cell_work }
+	}
+}
+
+# COUNTRY. Room for a road at the garrison object, rechecked when the focus
+# that builds there is delivered.
+WRK_staff_garrison_site = {
+	owns_state = 37
+	controls_state = 37
+	37 = { infrastructure < 5 }
+}
+
+# COUNTRY. A factory site at the industry object, rechecked when the focus
+# that builds there is delivered.
+WRK_network_tooling_site = {
+	owns_state = 36
+	controls_state = 36
+	36 = {
+		free_building_slots = {
+			building = arms_factory
+			size > 0
+			include_locked = yes
 		}
 	}
 }
@@ -2973,12 +3269,12 @@ WRK_capital_set_marker_frame = {
 		set_temp_variable = { var = WRK_capital_frame value = 4 }
 	}
 	if = {
-		limit = { has_state_flag = WRK_unrest_riot }
-		set_temp_variable = { var = WRK_capital_frame value = 5 }
-	}
-	if = {
 		limit = { has_state_flag = WRK_unrest_patrol }
 		set_temp_variable = { var = WRK_capital_frame value = 6 }
+	}
+	if = {
+		limit = { has_state_flag = WRK_unrest_riot }
+		set_temp_variable = { var = WRK_capital_frame value = 5 }
 	}
 	if = {
 		limit = {
@@ -2994,6 +3290,8 @@ WRK_capital_set_marker_frame = {
 }
 
 # COUNTRY. Route layer: 1 none, 2 civil, 3 military, by the Tower's project.
+# The network's project 3 leaves through the technical floors and has no
+# street route, so it keeps frame 1.
 WRK_capital_set_route_frame = {
 	set_temp_variable = { var = WRK_capital_frame value = 1 }
 	if = {
@@ -3048,7 +3346,7 @@ ADISCORD_vorkerland_prep_slot_free = {
 			}
 		}
 		AND = {
-			has_completed_focus = WRK_last_common_budget
+			WRK_capability_third_project = yes
 			NOT = {
 				check_variable = {
 					var = ADISCORD_vorkerland_prep_active
@@ -3093,7 +3391,7 @@ ADISCORD_vorkerland_prep_diplomacy_open = {
 	OR = {
 		AND = {
 			ADISCORD_vorkerland_prep_open = yes
-			has_completed_focus = WRK_convene_council_of_republics
+			WRK_capability_district_offers = yes
 		}
 		AND = {
 			OR = {

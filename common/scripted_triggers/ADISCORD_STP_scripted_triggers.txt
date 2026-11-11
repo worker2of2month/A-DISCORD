@@ -660,6 +660,42 @@ VAL_cw_livonn_siege_active = {
 	45 = { is_controlled_by = SRP }
 }
 
+# STATE: an outer republican district in Kefreyt's hands.
+VAL_cw_republic_district_held = {
+	controller = {
+		OR = {
+			tag = VAL
+			is_subject_of = VAL
+		}
+	}
+}
+
+# COUNTRY SRP. The council still holds Livonn but has lost at least two of the
+# three outer districts; STP_cw_republics_siege_tick reads this weekly.
+STP_cw_republics_siege_strain_active = {
+	has_war_with = VAL
+	has_capitulated = no
+	VAL = {
+		has_country_flag = VAL_cw_entered
+		NOT = { has_country_flag = VAL_cw_settled }
+	}
+	45 = { is_controlled_by = SRP }
+	OR = {
+		AND = {
+			43 = { VAL_cw_republic_district_held = yes }
+			44 = { VAL_cw_republic_district_held = yes }
+		}
+		AND = {
+			43 = { VAL_cw_republic_district_held = yes }
+			88 = { VAL_cw_republic_district_held = yes }
+		}
+		AND = {
+			44 = { VAL_cw_republic_district_held = yes }
+			88 = { VAL_cw_republic_district_held = yes }
+		}
+	}
+}
+
 # COUNTRY SRP. Kefreyt holds no republican district at all.
 STP_cw_republics_repelled_val = {
 	has_war_with = VAL
@@ -3048,6 +3084,23 @@ STP_pw_party_can_attack_kefreyt = {
 	NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
 	NOT = { is_in_faction_with = VAL }
 	VAL = { exists = yes has_capitulated = no is_subject = no }
+}
+
+# COUNTRY VAL. The party's Kefreyt operation can no longer be opened.
+STP_pw_party_kefreyt_warning_expired = {
+	OR = {
+		is_subject = yes
+		STP = { exists = no }
+		STP = { is_in_faction_with = VAL }
+		hidden_trigger = {
+			STP = {
+				OR = {
+					has_country_flag = STP_pw_party_kefreyt_subject_pending
+					has_country_flag = STP_pw_party_kefreyt_victory
+				}
+			}
+		}
+	}
 }
 
 # A completed protectorate course may outlive the patron's state or treaty.

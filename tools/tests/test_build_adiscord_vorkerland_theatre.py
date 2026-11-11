@@ -265,6 +265,78 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
                 issues = theatre.validate()
         self.assertIn("MON supply hub 9899 must occur exactly once", issues)
 
+    def test_western_theatre_has_hubs_in_itora_and_the_corridor(self) -> None:
+        hubs = {
+            int(line.split()[1])
+            for line in theatre.SUPPLY_NODES_PATH.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        }
+        self.assertGreaterEqual(len(theatre.ITORA_SUPPLY_HUB_STATES), 10)
+        self.assertTrue(set(theatre.ITORA_SUPPLY_HUB_STATES) <= hubs)
+        self.assertTrue(set(theatre.WEST_CORRIDOR_HUB_STATES) <= hubs)
+        # The corridor states between the two capitals are 71, 90, 91, 93 and 94.
+        self.assertTrue(
+            set(theatre.WEST_CORRIDOR_HUB_STATES.values()) <= {71, 90, 91, 93, 94}
+        )
+        updated = theatre.update_source(normalized_rail_source())
+        self.assertEqual(theatre.update_source(updated), updated)
+        for level, route in theatre.WEST_THEATRE_RAILS:
+            self.assertEqual(
+                updated.splitlines().count(theatre.render_rail_line(level, route)), 1
+            )
+
+    def test_western_trunk_is_level_two_between_the_capitals(self) -> None:
+        for level, _route in theatre.WEST_TRUNK_RAIL_UPGRADES:
+            self.assertEqual(level, 2)
+        source = normalized_rail_source()
+        line = theatre.render_rail_line(*theatre.WEST_TRUNK_RAIL_UPGRADES[2])
+        downgraded = source.replace(line + "\n", "1" + line[1:] + "\n")
+        self.assertNotEqual(downgraded, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(downgraded, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        self.assertIn(
+            "western trunk is not level 2 between Vorkerland and the Itoran capital",
+            issues,
+        )
+
+    def test_cut_itoran_trunk_reports_disconnected_northern_hubs(self) -> None:
+        source = normalized_rail_source()
+        line = theatre.render_rail_line(*theatre.ITORA_SUPPLY_RAILS[0])
+        broken = source.replace(line + "\n", "")
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        for hub in (16830, 16816, 16821, 16822):
+            self.assertIn(
+                f"Itoran supply hub {hub} is disconnected from the capital inside its starting territory",
+                issues,
+            )
+
+    def test_itoran_rails_avoid_carved_city_parents(self) -> None:
+        import json
+
+        manifest = json.loads(
+            (theatre.ROOT / "tools/data/adiscord_ivn_provinces.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        parents = {
+            int(parent)
+            for parent, city in manifest["cities"].items()
+            if int(parent) != int(city)
+        }
+        for _level, route in (
+            *theatre.ITORA_SUPPLY_RAILS,
+            *theatre.WEST_CORRIDOR_RAILS,
+        ):
+            self.assertTrue(parents.isdisjoint(route), route)
+
 
 if __name__ == "__main__":
     unittest.main()

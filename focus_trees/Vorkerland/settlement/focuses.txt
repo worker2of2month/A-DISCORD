@@ -49,14 +49,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = ADISCORD_vorkerland_pw_council_output_tt
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_worker_congress }
 			hidden_effect = {
 				ADISCORD_vorkerland_pw_ensure_institutions = yes
 				add_to_variable = { var = ADISCORD_vorkerland_pw_output value = ADISCORD_vorkerland_pw_council_output }
+				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.05 }
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_political_power = 15
-			add_stability = 0.01
 			add_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_1
+			add_political_power = 25
+			add_stability = 0.03
 		}
 		ai_will_do = { base = 15 }
 	}
@@ -65,6 +67,7 @@ focus_tree = {
 		id = WRK_worker_open_erased_nations_archives
 		icon = GFX_focus_WRK_worker_open_erased_nations_archives
 		search_filters = {
+			FOCUS_FILTER_MANPOWER
 			FOCUS_FILTER_POLITICAL
 		}
 		x = -1
@@ -82,7 +85,9 @@ focus_tree = {
 				remove_ideas = ADISCORD_vorkerland_erased_nations
 				add_ideas = ADISCORD_vorkerland_erased_nations_relief_1
 			}
-			add_political_power = 5
+			ADISCORD_reform_cultural_development = yes
+			add_manpower = 3000
+			add_political_power = 30
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -103,12 +108,16 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 10
-			add_stability = 0.01
 			unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
 			}
+			custom_effect_tooltip = WRK_route_influence_power_5_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_west_influence_power value = 5 }
+			}
+			add_political_power = 25
+			add_stability = 0.02
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -134,8 +143,16 @@ focus_tree = {
 				limit = { controls_state = 200 }
 				200 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			}
-			add_political_power = 10
-			add_stability = 0.01
+			unlock_decision_tooltip = ADISCORD_vorkerland_worker_cooperative_works
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_worker_cooperatives }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_worker_cooperative_works
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_repair value = 0.10 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_political_power = 20
+			add_stability = 0.02
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -162,8 +179,9 @@ focus_tree = {
 				remove_ideas = ADISCORD_vorkerland_erased_nations_relief_1
 				add_ideas = ADISCORD_vorkerland_erased_nations_relief_2
 			}
-			add_political_power = 5
-			add_stability = 0.02
+			ADISCORD_reform_society_development = yes
+			add_political_power = 20
+			add_stability = 0.04
 		}
 		ai_will_do = { base = 13 }
 	}
@@ -187,8 +205,8 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = ADISCORD_vorkerland_pw_council_veterans_tt
 			hidden_effect = { add_manpower = var:ADISCORD_vorkerland_pw_council_veterans }
-			add_political_power = 15
-			add_stability = 0.01
+			add_political_power = 50
+			add_stability = 0.02
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_claimant_homes
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_central_historical
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_oitfort
@@ -207,8 +225,8 @@ focus_tree = {
 		id = WRK_worker_prioritize_housing_guarantees
 		icon = GFX_focus_WRK_worker_prioritize_housing_guarantees
 		search_filters = {
+			FOCUS_FILTER_MANPOWER
 			FOCUS_FILTER_STABILITY
-			FOCUS_FILTER_POLITICAL
 		}
 		x = 1
 		y = 1
@@ -221,7 +239,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_worker_housing_guarantee
-			add_stability = 0.02
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_worker_housing }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_recruitable value = 0.05 }
+			}
+			add_manpower = 4000
+			add_stability = 0.03
 			add_political_power = 10
 		}
 		ai_will_do = {
@@ -234,7 +258,7 @@ focus_tree = {
 		id = WRK_worker_devolve_reconstruction_grants
 		icon = GFX_focus_WRK_worker_devolve_reconstruction_grants
 		search_filters = {
-			FOCUS_FILTER_STABILITY
+			FOCUS_FILTER_INDUSTRY
 			FOCUS_FILTER_POLITICAL
 		}
 		x = -1
@@ -248,7 +272,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_worker_local_reconstruction_grants
-			add_political_power = 20
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_worker_grants }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.10 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			# The first grant opens a council workshop in Kairholm.
+			if = {
+				limit = { controls_state = 201 }
+				201 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			add_political_power = 30
 			add_stability = 0.01
 		}
 		ai_will_do = {
@@ -281,8 +319,14 @@ focus_tree = {
 				remove_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_1
 			}
 			add_ideas = ADISCORD_vorkerland_worker_reconstruction_compact_2
-			add_political_power = 15
-			add_stability = 0.02
+			custom_effect_tooltip = WRK_worker_compact_fund_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_political_power = 30
+			add_stability = 0.03
 		}
 		ai_will_do = { base = 16 }
 	}
@@ -348,8 +392,10 @@ focus_tree = {
 				remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_tva_doctrine }
 			}
 			add_ideas = ADISCORD_vorkerland_worker_constitutional_settlement
-			add_stability = 0.03
-			add_political_power = 25
+			ADISCORD_reform_social_system_development = yes
+			add_stability = 0.05
+			add_war_support = 0.03
+			add_political_power = 50
 			custom_effect_tooltip = WRK_worker_write_constitutional_guarantees_tt
 		}
 		ai_will_do = { base = 16 }
@@ -369,15 +415,314 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			ADISCORD_reform_cultural_development = yes
-			add_stability = 0.01
-			add_political_power = 10
-			add_command_power = 5
+			if = {
+				limit = { controls_state = 40 }
+				40 = {
+					add_extra_state_shared_building_slots = 1
+					if = {
+						limit = {
+							free_building_slots = {
+								building = infrastructure
+								size > 0
+							}
+						}
+						add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+					}
+				}
+			}
+			add_stability = 0.03
+			add_political_power = 25
+			add_command_power = 15
 			ADISCORD_vorkerland_restore_unity_tower = yes
 			# The route's own postwar tree replaces the settlement graph on the next day.
 			custom_effect_tooltip = WRK_worker_confederation_tree_tt
+			# Unfinished committee focuses leave with the settlement graph;
+			# programmes they already opened stay.
+			if = {
+				limit = {
+					has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+					NOT = { has_completed_focus = WRK_executive_publish_accountable_budget }
+				}
+				custom_effect_tooltip = WRK_executive_branch_closes_tt
+			}
 			hidden_effect = { ADISCORD_vorkerland_schedule_route_tree = yes }
 		}
+		# The executive government finishes its own programme before the Tower.
+		ai_will_do = {
+			base = 14
+			modifier = {
+				factor = 0
+				has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+				NOT = { has_completed_focus = WRK_executive_publish_accountable_budget }
+			}
+		}
+	}
+
+	# ---------------------------------------------------------------------
+	# Executive Committee of the Worker route. Drawn only for the government
+	# that unified the country on the executive course; the congress route
+	# never requires it. The Unity Tower replaces this tree, so the branch is
+	# optional and has to be taken before the Tower.
+	# ---------------------------------------------------------------------
+
+	focus = {
+		id = WRK_executive_keep_the_executive_committee
+		icon = GFX_focus_WRK_executive_keep_the_executive_committee
+		search_filters = {
+			FOCUS_FILTER_INDUSTRY
+			FOCUS_FILTER_POLITICAL
+		}
+		x = 6
+		y = 1
+		relative_position_id = WRK_worker_convene_reunification_congress
+		cost = 2
+		prerequisite = { focus = WRK_worker_convene_reunification_congress }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			ADISCORD_reform_state_development = yes
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_exec_committee }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency_gain value = 0.10 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_political_power = 30
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = WRK_executive_open_single_delivery_ledger
+		icon = GFX_focus_WRK_executive_open_single_delivery_ledger
+		search_filters = {
+			FOCUS_FILTER_INDUSTRY
+			FOCUS_FILTER_POLITICAL
+		}
+		x = -1
+		y = 1
+		relative_position_id = WRK_executive_keep_the_executive_committee
+		cost = 3
+		prerequisite = { focus = WRK_executive_keep_the_executive_committee }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_exec_ledger }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_output value = 0.05 }
+				add_to_variable = { var = ADISCORD_vorkerland_pw_efficiency value = 0.05 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 250 producer = ROOT }
+			add_political_power = 15
+		}
 		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_executive_demobilize_by_norm
+		icon = GFX_focus_WRK_executive_demobilize_by_norm
+		search_filters = {
+			FOCUS_FILTER_MANPOWER
+			FOCUS_FILTER_ARMY_XP
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_executive_keep_the_executive_committee
+		cost = 2
+		prerequisite = { focus = WRK_executive_keep_the_executive_committee }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_exec_demobilization }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_training value = -0.10 }
+			}
+			add_manpower = 4000
+			army_experience = 30
+			add_command_power = 15
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	# Build by the committee's own norm tables or buy from the republics.
+	focus = {
+		id = WRK_executive_set_reconstruction_norms
+		icon = GFX_focus_WRK_executive_set_reconstruction_norms
+		search_filters = {
+			FOCUS_FILTER_INDUSTRY
+		}
+		x = -1
+		y = 1
+		relative_position_id = WRK_executive_open_single_delivery_ledger
+		cost = 3
+		prerequisite = { focus = WRK_executive_open_single_delivery_ledger }
+		mutually_exclusive = { focus = WRK_executive_contract_surviving_republics }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_executive_norm_order
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_exec_norms }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_executive_norm_orders
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_construction value = 0.10 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			# The first plant built to the norm stands in the Central District.
+			if = {
+				limit = { controls_state = 32 }
+				32 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			add_political_power = 15
+		}
+		ai_will_do = {
+			base = 12
+			modifier = { factor = 1.5 num_of_civilian_factories < 25 }
+		}
+	}
+
+	focus = {
+		id = WRK_executive_contract_surviving_republics
+		icon = GFX_focus_WRK_executive_contract_surviving_republics
+		search_filters = {
+			FOCUS_FILTER_INTERNATIONAL_TRADE
+			FOCUS_FILTER_POLITICAL
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_executive_open_single_delivery_ledger
+		cost = 3
+		prerequisite = { focus = WRK_executive_open_single_delivery_ledger }
+		mutually_exclusive = { focus = WRK_executive_set_reconstruction_norms }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_executive_republic_contract
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_executive_republic_contracts
+			}
+			custom_effect_tooltip = WRK_route_influence_power_5_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_west_influence_power value = 5 }
+			}
+			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 250 producer = ROOT }
+			add_political_power = 20
+		}
+		ai_will_do = {
+			base = 11
+			modifier = { factor = 1.5 num_of_civilian_factories > 24 }
+		}
+	}
+
+	focus = {
+		id = WRK_executive_audit_the_districts
+		icon = GFX_focus_WRK_executive_audit_the_districts
+		search_filters = {
+			FOCUS_FILTER_STABILITY
+			FOCUS_FILTER_POLITICAL
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_executive_set_reconstruction_norms
+		cost = 3
+		prerequisite = {
+			focus = WRK_executive_set_reconstruction_norms
+			focus = WRK_executive_contract_surviving_republics
+		}
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = WRK_executive_district_audit
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_focus_executive_district_audits
+			}
+			custom_effect_tooltip = WRK_executive_audit_recovery_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_stability = 0.02
+			add_political_power = 20
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_executive_publish_accountable_budget
+		icon = GFX_focus_WRK_executive_publish_accountable_budget
+		search_filters = {
+			FOCUS_FILTER_STABILITY
+			FOCUS_FILTER_POLITICAL
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_executive_audit_the_districts
+		cost = 3
+		prerequisite = { focus = WRK_executive_audit_the_districts }
+		allow_branch = {
+			tag = event_target:ADISCORD_vorkerland_nation
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_country_flag = ADISCORD_vorkerland_route_worker
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+		}
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			ADISCORD_reform_economic_development = yes
+			effect_tooltip = { add_ideas = ADISCORD_vorkerland_pw_delta_exec_budget }
+			hidden_effect = {
+				ADISCORD_vorkerland_pw_ensure_institutions = yes
+				add_to_variable = { var = ADISCORD_vorkerland_pw_consumer_goods value = -0.03 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_stability = 0.03
+			add_political_power = 40
+		}
+		ai_will_do = { base = 16 }
 	}
 
 	# ---------------------------------------------------------------------

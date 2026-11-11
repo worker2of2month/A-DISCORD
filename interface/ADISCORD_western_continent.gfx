@@ -12,4 +12,601 @@ spriteTypes = {
 		looping = yes
 		play_on_show = yes
 	}
+
+	# BEGIN GENERATED WEST INFLUENCE MAP
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_background"
+		texturefile = "gfx/interface/west_influence/background.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_25"
+		texturefile = "gfx/interface/west_influence/state_25.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_26"
+		texturefile = "gfx/interface/west_influence/state_26.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_27"
+		texturefile = "gfx/interface/west_influence/state_27.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_32"
+		texturefile = "gfx/interface/west_influence/state_32.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_33"
+		texturefile = "gfx/interface/west_influence/state_33.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_34"
+		texturefile = "gfx/interface/west_influence/state_34.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_35"
+		texturefile = "gfx/interface/west_influence/state_35.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_36"
+		texturefile = "gfx/interface/west_influence/state_36.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_37"
+		texturefile = "gfx/interface/west_influence/state_37.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_38"
+		texturefile = "gfx/interface/west_influence/state_38.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_39"
+		texturefile = "gfx/interface/west_influence/state_39.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_40"
+		texturefile = "gfx/interface/west_influence/state_40.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_71"
+		texturefile = "gfx/interface/west_influence/state_71.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_72"
+		texturefile = "gfx/interface/west_influence/state_72.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_73"
+		texturefile = "gfx/interface/west_influence/state_73.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_80"
+		texturefile = "gfx/interface/west_influence/state_80.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_82"
+		texturefile = "gfx/interface/west_influence/state_82.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_90"
+		texturefile = "gfx/interface/west_influence/state_90.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_91"
+		texturefile = "gfx/interface/west_influence/state_91.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_92"
+		texturefile = "gfx/interface/west_influence/state_92.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_93"
+		texturefile = "gfx/interface/west_influence/state_93.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_94"
+		texturefile = "gfx/interface/west_influence/state_94.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_95"
+		texturefile = "gfx/interface/west_influence/state_95.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_96"
+		texturefile = "gfx/interface/west_influence/state_96.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_97"
+		texturefile = "gfx/interface/west_influence/state_97.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_98"
+		texturefile = "gfx/interface/west_influence/state_98.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_99"
+		texturefile = "gfx/interface/west_influence/state_99.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_100"
+		texturefile = "gfx/interface/west_influence/state_100.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_101"
+		texturefile = "gfx/interface/west_influence/state_101.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_103"
+		texturefile = "gfx/interface/west_influence/state_103.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_127"
+		texturefile = "gfx/interface/west_influence/state_127.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_128"
+		texturefile = "gfx/interface/west_influence/state_128.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_129"
+		texturefile = "gfx/interface/west_influence/state_129.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_130"
+		texturefile = "gfx/interface/west_influence/state_130.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_131"
+		texturefile = "gfx/interface/west_influence/state_131.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_132"
+		texturefile = "gfx/interface/west_influence/state_132.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_144"
+		texturefile = "gfx/interface/west_influence/state_144.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_145"
+		texturefile = "gfx/interface/west_influence/state_145.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_146"
+		texturefile = "gfx/interface/west_influence/state_146.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_150"
+		texturefile = "gfx/interface/west_influence/state_150.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_164"
+		texturefile = "gfx/interface/west_influence/state_164.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_194"
+		texturefile = "gfx/interface/west_influence/state_194.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_195"
+		texturefile = "gfx/interface/west_influence/state_195.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_196"
+		texturefile = "gfx/interface/west_influence/state_196.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_199"
+		texturefile = "gfx/interface/west_influence/state_199.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_200"
+		texturefile = "gfx/interface/west_influence/state_200.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_201"
+		texturefile = "gfx/interface/west_influence/state_201.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_202"
+		texturefile = "gfx/interface/west_influence/state_202.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_315"
+		texturefile = "gfx/interface/west_influence/state_315.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_316"
+		texturefile = "gfx/interface/west_influence/state_316.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_317"
+		texturefile = "gfx/interface/west_influence/state_317.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_318"
+		texturefile = "gfx/interface/west_influence/state_318.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_319"
+		texturefile = "gfx/interface/west_influence/state_319.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_320"
+		texturefile = "gfx/interface/west_influence/state_320.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_321"
+		texturefile = "gfx/interface/west_influence/state_321.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_322"
+		texturefile = "gfx/interface/west_influence/state_322.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_323"
+		texturefile = "gfx/interface/west_influence/state_323.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_324"
+		texturefile = "gfx/interface/west_influence/state_324.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_325"
+		texturefile = "gfx/interface/west_influence/state_325.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_328"
+		texturefile = "gfx/interface/west_influence/state_328.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_693"
+		texturefile = "gfx/interface/west_influence/state_693.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_694"
+		texturefile = "gfx/interface/west_influence/state_694.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_695"
+		texturefile = "gfx/interface/west_influence/state_695.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_696"
+		texturefile = "gfx/interface/west_influence/state_696.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_697"
+		texturefile = "gfx/interface/west_influence/state_697.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_698"
+		texturefile = "gfx/interface/west_influence/state_698.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_713"
+		texturefile = "gfx/interface/west_influence/state_713.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_714"
+		texturefile = "gfx/interface/west_influence/state_714.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_715"
+		texturefile = "gfx/interface/west_influence/state_715.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_716"
+		texturefile = "gfx/interface/west_influence/state_716.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_state_717"
+		texturefile = "gfx/interface/west_influence/state_717.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_badge"
+		texturefile = "gfx/interface/west_influence/badge.png"
+		noOfFrames = 8
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_PWR"
+		texturefile = "gfx/interface/west_influence/flag_PWR.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_PSD"
+		texturefile = "gfx/interface/west_influence/flag_PSD.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_ZAO"
+		texturefile = "gfx/interface/west_influence/flag_ZAO.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_WIT"
+		texturefile = "gfx/interface/west_influence/flag_WIT.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_IIA"
+		texturefile = "gfx/interface/west_influence/flag_IIA.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_IBA"
+		texturefile = "gfx/interface/west_influence/flag_IBA.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_IBL"
+		texturefile = "gfx/interface/west_influence/flag_IBL.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_WPA"
+		texturefile = "gfx/interface/west_influence/flag_WPA.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_WPS"
+		texturefile = "gfx/interface/west_influence/flag_WPS.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_ROM"
+		texturefile = "gfx/interface/west_influence/flag_ROM.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_flag_TRU"
+		texturefile = "gfx/interface/west_influence/flag_TRU.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_west_map_panel"
+		texturefile = "gfx/interface/west_influence/panel.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+	# END GENERATED WEST INFLUENCE MAP
 }

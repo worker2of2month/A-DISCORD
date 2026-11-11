@@ -340,6 +340,35 @@ on_actions = {
 				limit = { has_variable = STS_ai_wave_start_states }
 				STP_cw_ai_shabrat_clear_offensive = yes
 			}
+			if = {
+				limit = {
+					tag = STS
+					is_ai = yes
+					has_capitulated = no
+					has_war_with = NOD
+				}
+				STP_cw_ai_shabrat_nod_offensive_tick = yes
+			}
+			else_if = {
+				limit = { has_country_flag = STS_ai_nod_wave_cycle }
+				STP_cw_ai_shabrat_clear_nod_offensive = yes
+			}
+			STP_cw_ai_war_replacements_tick = yes
+		}
+	}
+
+	# The guard keeps the hook idle outside the republics war and its cleanup.
+	on_weekly_SRP = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						has_war_with = VAL
+						has_dynamic_modifier = { modifier = STP_cw_republics_siege_strain_dynamic }
+					}
+				}
+				STP_cw_republics_siege_tick = yes
+			}
 		}
 	}
 	# The split creates STS before the actual STP-STS war relation. Reconcile the
@@ -361,6 +390,7 @@ on_actions = {
 					FROM = { tag = VAL }
 				}
 				STP_pw_party_activate_frontier_drill = yes
+				FROM = { STP_pw_party_apply_kefreyt_defence = yes }
 			}
 			if = {
 				limit = {
@@ -368,6 +398,7 @@ on_actions = {
 					FROM = { tag = STP }
 				}
 				FROM = { STP_pw_party_activate_frontier_drill = yes }
+				STP_pw_party_apply_kefreyt_defence = yes
 			}
 			if = {
 				limit = {
@@ -559,6 +590,7 @@ on_actions = {
 				limit = { VAL_nod_can_attack_sts_overlord = yes }
 				VAL_nod_launch_sts_overlord_war = yes
 			}
+			STP_cw_ai_war_replacements_tick = yes
 		}
 	}
 	on_weekly_STP = {
@@ -622,6 +654,7 @@ on_actions = {
 				}
 			}
 			else = { STP_pf_clear = yes }
+			STP_cw_ai_war_replacements_tick = yes
 		}
 	}
 }

@@ -313,17 +313,20 @@ class CountryDevelopmentReformTests(unittest.TestCase):
 
         text = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8")
         creation = parse_clausewitz(named_block(text, "STP_cw_prepare_successor"))[0].value
+        # The development copy is the guarded first branch of the creation effect.
+        copy = [node for node in creation if node.key == "if"][:1]
+        self.assertIn("ADISCORD_copy_development_from_prev", str(copy))
         for tag in ("STS", "SRP"):
             fixture = self.fixture({"STP": {}, tag: {}})
             fixture.run("ADISCORD_initialize_default_country_development", "STP")
             progress = "ADISCORD_army_development_progress"
             fixture.scopes["STP"][progress] = 83.5
-            fixture.execute(creation[:1], tag, "STP", "STP")
+            fixture.execute(copy, tag, "STP", "STP")
             self.assertEqual(fixture.scopes[tag][progress], 83.5)
             fixture.scopes[tag]["STP_cw_templates_loaded"] = True
             fixture.scopes[tag][progress] = 91.75
             fixture.scopes["STP"][progress] = 7
-            fixture.execute(creation[:1], tag, "STP", "STP")
+            fixture.execute(copy, tag, "STP", "STP")
             self.assertEqual(fixture.scopes[tag][progress], 91.75)
 
     def test_reforms_cover_all_six_axes_and_do_not_repeat_along_one_route(self):

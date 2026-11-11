@@ -1,0 +1,27 @@
+# COUNTRY scope. Called only during new-campaign setup or a country's story creation.
+# Existing agencies retain their chosen identity, operatives and upgrades.
+ADISCORD_initialize_intelligence_agency = {
+	if = {
+		limit = {
+			exists = yes
+			has_dlc = "La Resistance"
+			has_intelligence_agency = no
+			OR = {
+				tag = STP
+				tag = VAL
+				tag = NAM
+				tag = SHL
+				tag = RUS
+				tag = NOD
+				tag = IVN
+				tag = VAD
+				tag = WKR
+				tag = TVA
+				tag = STS
+				tag = SRP
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+		}
+		create_intelligence_agency = yes
+	}
+}

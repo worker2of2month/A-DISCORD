@@ -622,13 +622,23 @@ REGIONAL_SETTLEMENTS = {
     63: ((5606, 1, "Милхам"),),
     64: ((16465, 1, "Килнет"),),
     65: ((6440, 1, "Хебтава"),),
+    # Rimat corridor between Vorkerland and Itora: every successor capital and
+    # every state on the two approaches is a war objective.
+    71: ((12241, 1, "Старый Тракт"),),
     88: ((16429, 1, "Шахтёрская пристань"),),
+    90: ((5135, 2, "Норвейн"),),
+    91: ((4007, 2, "Крайт"),),
+    93: ((3729, 1, "Вальден"),),
+    94: ((4166, 1, "Солен"),),
     112: ((3332, 1, "Северный Рейнг"),),
     115: ((1524, 1, "Рейнгский перевал"),),
     116: ((3344, 1, "Нижний Рейнг"),),
     117: ((12455, 2, "Ливен"),),
     174: ((5869, 2, "Феннский перевал"),),
     175: ((10006, 1, "Марен"),),
+    194: ((2339, 2, "Восточная станция"),),
+    195: ((8032, 2, "Норвен"),),
+    196: ((7129, 2, "Центральная станция"),),
     218: ((7047, 2, "Западный Рейнг"),),
     225: ((11393, 2, "Южноостровск"), (11606, 1, "Дальний мыс")),
     226: ((4396, 1, "Малая гавань"), (8537, 1, "Чаечий")),
@@ -674,6 +684,8 @@ REGIONAL_SETTLEMENTS = {
     297: ((3415, 1, "Норан"),),
     299: ((10975, 1, "Кассен"),),
     305: ((10842, 1, "Лерис"),),
+    322: ((2304, 1, "Восточный Пост"),),
+    328: ((9492, 1, "Пустырь"),),
     703: ((443, 1, "Рахма-дех"),),
     707: ((16899, 3, "Зархан"), (9294, 1, "Зархан-кала")),
     709: (
@@ -840,9 +852,8 @@ NAM_VICTORY_BORDER_PROFILES = {
 }
 
 # Every state owned and cored by Ivanland at game start receives a coherent
-# demographic/logistics baseline.  The existing hub in state 25 and its rail
-# spur through states 100 and 99 remain authoritative, so the frontier relies
-# on infrastructure plus local supply rather than a redundant second hub.
+# demographic/logistics baseline. Railways and supply hubs belong to the
+# theatre builder; these profiles set infrastructure and local supply only.
 # The civil-war partition keeps each parent's population and factories:
 # 25 -> 25/713/714, 127 -> 127/715, 695 -> 695/716 and 697 -> 697/717.
 IVANLAND_STATE_PROFILES = {
@@ -996,10 +1007,30 @@ IVANLAND_SETTLEMENT_VICTORY_POINTS = {
     717: ((932, 2), (6350, 2)),
 }
 
+# Second settlements of the widest Itoran states and the only one of the Old
+# March forest. They remain rural markers: the province geometry carves a
+# city only for IVANLAND_SETTLEMENT_VICTORY_POINTS.
+IVANLAND_RURAL_SETTLEMENTS = {
+    101: ((638, 1, "Малая Ольсия"),),
+    127: ((3245, 1, "Кордонный Перевал"),),
+    132: ((4739, 1, "Дальняя Серенга"),),
+    695: ((9608, 1, "Марково"),),
+    697: ((5055, 1, "Западномарск"),),
+    698: ((1890, 1, "Южномарск"),),
+    713: ((8615, 1, "Пущанск"),),
+    714: ((3503, 1, "Взморье"),),
+}
+
 IVANLAND_OVERHAUL_VICTORY_POINTS = {
-    state_id: tuple(
-        (IVANLAND_CITY_PROVINCES.get(province, province), value)
-        for province, value in points
+    state_id: (
+        *(
+            (IVANLAND_CITY_PROVINCES.get(province, province), value)
+            for province, value in points
+        ),
+        *(
+            (province, value)
+            for province, value, _name in IVANLAND_RURAL_SETTLEMENTS.get(state_id, ())
+        ),
     )
     for state_id, points in IVANLAND_SETTLEMENT_VICTORY_POINTS.items()
 }
@@ -1398,8 +1429,15 @@ IVANLAND_SETTLEMENT_NAMES = {
 }
 
 IVANLAND_VICTORY_POINT_NAMES = {
-    IVANLAND_CITY_PROVINCES.get(province, province): name
-    for province, name in IVANLAND_SETTLEMENT_NAMES.items()
+    **{
+        IVANLAND_CITY_PROVINCES.get(province, province): name
+        for province, name in IVANLAND_SETTLEMENT_NAMES.items()
+    },
+    **{
+        province: name
+        for settlements in IVANLAND_RURAL_SETTLEMENTS.values()
+        for province, _value, name in settlements
+    },
 }
 
 GENERATED_VICTORY_POINT_NAMES = {

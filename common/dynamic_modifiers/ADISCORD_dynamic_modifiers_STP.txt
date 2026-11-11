@@ -216,3 +216,13 @@ STP_hw_mandate_dynamic = {
 	war_support_factor = STP_hw_mandate_war_support
 	conscription_factor = STP_hw_mandate_conscription
 }
+
+# Republican council under Kefreyt's siege; STP_cw_republics_siege_tick owns the value.
+STP_cw_republics_siege_strain_dynamic = {
+	icon = GFX_idea_STP_military_administration
+	enable = {
+		tag = SRP
+	}
+	army_defence_factor = STP_cw_siege_strain
+	army_morale_factor = STP_cw_siege_strain
+}

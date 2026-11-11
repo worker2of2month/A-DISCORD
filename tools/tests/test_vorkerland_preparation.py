@@ -75,8 +75,72 @@ PROJECTS = {
     name: block for name, block in DECISIONS.items()
     if "days_remove" in fields(block) and "state_target" in fields(block)
 }
-# Branch of each apparatus named in preparation.1, in tree order: entry,
-# resource pair, two programme steps, political pair, mandate.
+# Capabilities of the prewar preparation: script asks for one of these triggers
+# instead of the focus that grants it, so each apparatus can reach a shared
+# system through its own tree.
+CAPABILITIES = {name: block for name, block in TRIGGERS.items() if name.startswith("WRK_capability_")}
+PREWAR_ROOT = "WRK_measure_confederation_fault_lines"
+PREWAR_FOCUSES = {
+    fields(value)["id"]: fields(value)
+    for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
+    if key == "focus" and isinstance(value, list) and fields(value)["id"].startswith("WRK_")
+}
+
+
+def linked(body, key):
+    """Focuses a prerequisite or mutually_exclusive block of one focus names."""
+
+    return [name for kind, _, name in body.get(key, []) if kind == "focus"]
+
+
+def walk_route(case, route, focuses=None):
+    """Complete a route in order; return its length in days."""
+
+    focuses = focuses or PREWAR_FOCUSES
+    completed = set()
+    for name in route:
+        body = focuses[name]
+        required = linked(body, "prerequisite")
+        case.assertTrue(not required or completed.intersection(required), name)
+        case.assertFalse(completed.intersection(linked(body, "mutually_exclusive")), name)
+        case.assertNotIn(name, completed)
+        completed.add(name)
+    return sum(int(focuses[name]["cost"]) for name in route) * 7
+
+
+def project_gates(block):
+    """Focuses that open a paid project, read through its capability trigger."""
+
+    visible = fields(fields(block)["visible"])
+    if "has_completed_focus" in visible:
+        return [visible["has_completed_focus"]]
+    capabilities = [name for name in visible if name in CAPABILITIES]
+    assert len(capabilities) == 1 and visible[capabilities[0]] == "yes", visible
+    return granting(capabilities[0])
+
+
+def granting(capability):
+    """Focuses that grant one capability, whichever tree they belong to."""
+
+    return [value for key, _, value in walk(CAPABILITIES[capability]) if key == "has_completed_focus"]
+
+
+def patron_of(body):
+    """Tree a prewar focus is drawn in, read from its own allow_branch."""
+
+    gates = [key[len(V + "prewar_patron_"):] for key, _, answer in body["allow_branch"]
+             if key.startswith(V + "prewar_patron_") and answer == "yes"]
+    assert len(gates) <= 1, gates
+    return gates[0] if gates else None
+
+
+# The tree of each apparatus, in source order. Only the root has no patron.
+PREWAR_TREES = {
+    patron: tuple(name for name, body in PREWAR_FOCUSES.items() if patron_of(body) == patron)
+    for patron in ("committees", "staff", "network")
+}
+# Branch of each apparatus under the root, in tree order: entry, resource
+# pair, two programme steps, political pair, mandate.
 PATRON_BRANCHES = {
     "committees": (
         "WRK_party_cell_rolls",
@@ -108,6 +172,7 @@ class Scope:
     variables: dict = field(default_factory=dict)
     flags: set = field(default_factory=set)
     flag_ages: dict = field(default_factory=dict)
+    flag_days: dict = field(default_factory=dict)
     resources: dict = field(default_factory=lambda: defaultdict(float))
     focuses: set = field(default_factory=set)
     cores: set = field(default_factory=set)
@@ -154,9 +219,15 @@ class Script:
             pp=1000, command=100, people=30000,
             infantry_equipment=30000, support_equipment=1000, train_equipment=100,
         )
+        # The fixture country can work every project: it holds the focuses the
+        # projects name, directly or through a capability trigger.
         self.scopes["WRK"].focuses = {
             value for _, block in PROJECTS.items()
             for key, _, value in walk(block) if key == "has_completed_focus"
+        } | {
+            value for _, block in PROJECTS.items()
+            for capability, _, answer in walk(block) if capability in CAPABILITIES and answer == "yes"
+            for key, _, value in walk(TRIGGERS[capability]) if key == "has_completed_focus"
         }
 
     def scope(self, key, current, previous):
@@ -215,6 +286,10 @@ class Script:
                 ok = self.conditions([item for item in value if item[0] != "tooltip"], current, previous)
             elif key == "OR":
                 ok = any(self.conditions([item], current, previous) for item in value)
+            elif key == "count_triggers":
+                amount = int(fields(value)["amount"])
+                met = sum(self.conditions([item], current, previous) for item in value if item[0] != "amount")
+                ok = met >= amount
             elif key == "NOT":
                 ok = not any(self.conditions([item], current, previous) for item in value)
             elif key in TRIGGERS:
@@ -361,7 +436,7 @@ class Script:
                 self.run(value, self.scope(key, current, previous), current)
             elif key in EFFECTS and (
                 key.startswith((P, V + "wkr_", V + "tva_", V + "vad_", "TVA_", "VAD_", "WKR_", "WRK_party_representatives_",
-                                "WRK_unrest_", "WRK_cell_", "WRK_cells_", V + "camp_"))
+                                "WRK_unrest_", "WRK_cell_", "WRK_cells_", "WRK_intrigue_", "WRK_prototype_", "WRK_cadre_", V + "camp_"))
                 or key in (V + "refresh_doctrine_dynamic_state", V + "apply_focus_doctrine",
                            V + "ensure_worker_home_guard_template", V + "promote_nikita_worcker",
                            V + "promote_anton_bagley", V + "form_joint_government",
@@ -399,9 +474,13 @@ class Script:
                 flag = fields(value)["flag"] if isinstance(value, list) else value
                 state.flags.add(flag)
                 state.flag_ages[flag] = 0
+                state.flag_days.pop(flag, None)
+                if isinstance(value, list) and "days" in fields(value):
+                    state.flag_days[flag] = float(fields(value)["days"])
             elif key in ("clr_state_flag", "clr_country_flag"):
                 state.flags.discard(value)
                 state.flag_ages.pop(value, None)
+                state.flag_days.pop(value, None)
             elif key in ("save_global_event_target_as", "save_event_target_as"):
                 self.event_targets[value] = current
             elif key == "clear_global_event_target":
@@ -3618,7 +3697,7 @@ class WartimeProgrammeAccounting(unittest.TestCase):
 
 class PreparationAccounting(unittest.TestCase):
     def test_all_projects_charge_once_and_refund_once(self):
-        self.assertEqual(len(PROJECTS), 12)
+        self.assertEqual(len(PROJECTS), 13)
         for name in PROJECTS:
             with self.subTest(project=name):
                 script = Script()
@@ -3827,113 +3906,357 @@ class PreparationAccounting(unittest.TestCase):
         self.assertEqual(script.scopes["VAD"].resources["infantry_equipment"], 8100)
 
     def test_all_programmes_have_real_focus_gates_and_fit_the_prewar_window(self):
-        focus_blocks = {
-            fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
-            if key == "focus" and isinstance(value, list)
-        }
-
         def finish_day(name):
-            focus = focus_blocks[name]
-            prerequisites = [value for key, _, value in focus.get("prerequisite", []) if key == "focus"]
-            return float(focus["cost"]) * 7 + min((finish_day(p) for p in prerequisites), default=0)
+            focus = PREWAR_FOCUSES[name]
+            return float(focus["cost"]) * 7 + min((finish_day(p) for p in linked(focus, "prerequisite")), default=0)
 
         for name, block in PROJECTS.items():
-            gate = fields(fields(block)["visible"])["has_completed_focus"]
-            self.assertIn(("unlock_decision_tooltip", "=", name), focus_blocks[gate]["completion_reward"])
-            self.assertLessEqual(finish_day(gate), 84)
-            self.assertLess(finish_day(gate) + int(fields(block)["days_remove"]) + 21, 350)
+            gates = project_gates(block)
+            self.assertTrue(gates, name)
+            for gate in gates:
+                self.assertIn(("unlock_decision_tooltip", "=", name), PREWAR_FOCUSES[gate]["completion_reward"])
+                self.assertLessEqual(finish_day(gate), 84)
+                self.assertLess(finish_day(gate) + int(fields(block)["days_remove"]) + 21, 350)
+
+    def test_every_consumer_reads_the_capability_not_the_focus(self):
+        granted = {focus: capability for capability in CAPABILITIES for focus in granting(capability)}
+        self.assertEqual(len(CAPABILITIES), 18)
+        for capability, block in CAPABILITIES.items():
+            # A capability is a plain list of the focuses that grant it, one per tree at most.
+            names = granting(capability)
+            self.assertTrue(names, capability)
+            expected = [("has_completed_focus", "=", name) for name in names]
+            self.assertEqual(block, expected if len(names) == 1 else [("OR", "=", expected)], capability)
+            trees = [patron_of(PREWAR_FOCUSES[name]) for name in names]
+            self.assertEqual(len(set(trees)), len(trees), capability)
+        # The network reaches the archive by wire or broadcast; the staff takes the
+        # railway, the arsenal and the Tower's military route; each funds a third
+        # project out of its own purse.
+        self.assertEqual(granting("WRK_capability_mobilisation_lists")[1:], ["WRK_network_relay_by_wire"])
+        self.assertEqual(granting("WRK_capability_public_charter")[1:], ["WRK_network_open_broadcast"])
+        self.assertEqual(granting("WRK_capability_protect_rail")[1:], ["WRK_staff_railway_commandants"])
+        self.assertEqual(granting("WRK_capability_sealed_reserve")[1:], ["WRK_staff_arsenal_seals"])
+        self.assertEqual(granting("WRK_capability_military_evacuation")[1:], ["WRK_staff_military_route"])
+        self.assertEqual(granting("WRK_capability_third_project")[1:],
+                         ["WRK_network_shadow_budget", "WRK_staff_war_chest"])
+        # What stays the committees' alone: the districts' treaties and the compact,
+        # the civil evacuation, the levies and the charter's mandate.
+        for capability in ("WRK_capability_district_offers", "WRK_capability_emergency_compact",
+                           "WRK_capability_civil_evacuation", "WRK_capability_central_levy",
+                           "WRK_capability_district_mandates", "WRK_capability_council_mandate",
+                           "WRK_capability_charter_mandate"):
+            self.assertEqual({patron_of(PREWAR_FOCUSES[name]) for name in granting(capability)}, {"committees"})
+        self.assertEqual(set(granted), {
+            "WRK_convene_council_of_republics", "WRK_inventory_emergency_stores",
+            "WRK_bind_districts_to_charter", "WRK_disperse_railway_reserves",
+            "WRK_prepare_civil_evacuation", "WRK_prepare_military_evacuation",
+            "WRK_emergency_central_budget", "WRK_district_emergency_powers",
+            "WRK_requisition_commissions", "WRK_district_treasuries",
+            "WRK_last_common_budget", "WRK_offer_emergency_compact",
+            "WRK_network_relay_by_wire", "WRK_network_open_broadcast", "WRK_network_shadow_budget",
+            "WRK_staff_railway_commandants", "WRK_staff_arsenal_seals", "WRK_staff_military_route",
+            "WRK_staff_war_chest", "WRK_network_technical_continuity",
+        })
+        sources = (
+            "common/decisions/ADISCORD_vorkerland_decisions.txt",
+            "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+            "common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt",
+            "common/scripted_guis/ADISCORD_vorkerland_scripted_gui.txt",
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "common/ideas/ADISCORD_vorkerland_ideas.txt",
+            "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt",
+            "events/ADISCORD_vorkerland_events.txt",
+        )
+        readers = set()
+        called = set()
+        for path in sources:
+            for name, _, block in parse(read(path)):
+                if not isinstance(block, list):
+                    continue
+                for key, _, value in walk(block):
+                    if key == "has_completed_focus" and value in granted:
+                        readers.add(name)
+                    if key in CAPABILITIES and name not in CAPABILITIES:
+                        self.assertEqual(value, "yes", (name, key))
+                        called.add(key)
+        # The heir's carry-over repeats the material reward of a focus for the
+        # heir; that is the focus itself, not a shared system it opens.
+        carryover = V + "inherit_wrk_prewar_preparations"
+        self.assertEqual(readers, set(CAPABILITIES) | {carryover})
+        regrants = [fields(value) for key, _, value in walk(EFFECTS[carryover]) if key == "if"]
+        for data in regrants:
+            direct = [value for key, _, value in walk(data["limit"]) if key == "has_completed_focus" and value in granted]
+            if direct:
+                self.assertEqual(data["limit"], [("has_completed_focus", "=", direct[0])])
+                self.assertIn("event_target:ADISCORD_vorkerland_preparation_heir", data)
+        # Every capability has a consumer, and the systems that outlive WRK ask
+        # the copied focus record the same question.
+        self.assertEqual(called, set(CAPABILITIES))
+        legitimacy = list(walk(EFFECTS[V + "initialize_legitimacy"]))
+        self.assertIn(("WRK_capability_council_mandate", "=", "yes"), legitimacy)
+        self.assertIn(("WRK_capability_charter_mandate", "=", "yes"), legitimacy)
+        self.assertIn(("WRK_capability_emergency_compact", "=", "yes"), list(walk(EFFECTS[carryover])))
+        # A capability follows whoever holds the focus record.
+        script = Script()
+        for scope in ("WRK", "WKR"):
+            script.scopes[scope].focuses = set()
+            self.assertFalse(script.conditions(CAPABILITIES["WRK_capability_third_project"], scope))
+            script.scopes[scope].focuses = {"WRK_last_common_budget"}
+            self.assertTrue(script.conditions(CAPABILITIES["WRK_capability_third_project"], scope))
+
+    def committee_routes(self):
+        """Every complete walk of the committees' tree: one alternative of each pair."""
+
+        choices = product(
+            (("WRK_emergency_central_budget", "WRK_requisition_commissions"),
+             ("WRK_district_emergency_powers", "WRK_district_treasuries")),
+            ("WRK_reinforce_the_tower_guard", "WRK_disperse_the_government"),
+            ("WRK_committee_second_guard_shift", "WRK_committee_district_agitators"),
+            ("WRK_factory_committee_councils", "WRK_committee_emergency_plenipotentiaries"),
+            ("WRK_committee_chairmans_mandate", "WRK_committee_bagley_executive"),
+            (("WRK_convene_council_of_republics", "WRK_bind_districts_to_charter"),
+             ("WRK_inventory_emergency_stores", "WRK_disperse_railway_reserves")),
+            ("WRK_prepare_civil_evacuation", "WRK_prepare_military_evacuation"),
+            (("WRK_open_worker_vadl_backchannel", "WRK_offer_emergency_compact"),
+             ("WRK_mobilize_loyal_republics", "WRK_place_reserves_under_worker")),
+        )
+        for budget, tower, capital, resource, mandate, politics, evacuation, course in choices:
+            yield evacuation, [
+                PREWAR_ROOT,
+                *politics, "WRK_issue_continuity_orders", evacuation, *course,
+                "WRK_committee_district_canteens", "WRK_committee_arbitration_boards", capital,
+                "WRK_committee_district_musters", "WRK_committee_store_keys",
+                "WRK_party_cell_rolls", resource, "WRK_committee_workers_guard",
+                "WRK_committee_ration_reserve", mandate, "WRK_mandate_of_the_committees",
+                *budget, "WRK_last_common_budget",
+                "WRK_inspect_the_unity_tower", tower,
+            ]
 
     def test_complete_preparation_routes_fit_with_paid_work_and_contests(self):
-        focuses = {
-            fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
-            if key == "focus" and isinstance(value, list)
-        }
-        trunk = (
-            ("WRK_convene_council_of_republics", "WRK_inventory_emergency_stores"),
-            ("WRK_prepare_civil_evacuation", "WRK_prepare_military_evacuation"),
-            ("WRK_open_worker_vadl_backchannel", "WRK_mobilize_loyal_republics"),
+        def paid_work(route, jobs):
+            elapsed = 0
+            # Slots are released when paid work finishes; contests run separately.
+            slots = [0, 0]
+            for name in route:
+                focus = PREWAR_FOCUSES[name]
+                elapsed += int(focus["cost"]) * 7
+                if name not in jobs:
+                    continue
+                unlocked = [v for k, _, v in focus["completion_reward"] if k == "unlock_decision_tooltip"]
+                self.assertEqual(len(unlocked), 1)
+                job = fields(PROJECTS[unlocked[0]])
+                self.assertIn(name, project_gates(PROJECTS[unlocked[0]]))
+                slot = slots.index(min(slots))
+                finish = max(elapsed, slots[slot]) + int(job["days_remove"])
+                slots[slot] = finish
+                self.assertLessEqual(finish + 21, 350)
+
+        routes = list(self.committee_routes())
+        self.assertEqual(len(routes), 256)
+        tree = set(PREWAR_TREES["committees"])
+        self.assertEqual(len(tree), 33)
+        for evacuation, route in routes:
+            with self.subTest(route=route):
+                # The root and the whole tree, less the refused side of its eight choices.
+                self.assertEqual(len(route), 23)
+                self.assertTrue(set(route) <= tree | {PREWAR_ROOT})
+                self.assertEqual(walk_route(self, route), 343)
+                paid_work(route, {evacuation})
+        # The network's tree: one side of each of its seven choices.
+        entry, left, right, first, second, pair_left, pair_right, mandate = PATRON_BRANCHES["network"]
+        network = set(PREWAR_TREES["network"])
+        self.assertEqual(len(network), 32)
+        n = "WRK_network_"
+        choices = product(
+            (n + "diverted_orders", n + "patent_pool"),
+            (n + "second_crew", n + "fallback_addresses"),
+            (left, right), (pair_left, pair_right),
+            (n + "tooling_line", n + "test_stands"),
+            (n + "relay_by_wire", n + "open_broadcast"),
+            (n + "tower_shelter", n + "blind_the_tower"),
         )
+        count = 0
+        for funds, crew, resource, mandate_pair, plant, relay, lever in choices:
+            route = [
+                PREWAR_ROOT,
+                n + "tower_exchange", relay, n + "technical_continuity", lever,
+                n + "listening_logs", n + "tower_duty_roster",
+                n + "supply_runs", n + "shift_rosters", crew, n + "reserve_rolls", n + "trusted_storekeepers",
+                entry, resource, first, second, mandate_pair, mandate,
+                n + "workshop_accounts", funds, n + "district_bank_credit", n + "shadow_budget",
+                n + "plant_inventory", plant, n + "pilot_shop", n + "prototype_reserve",
+            ]
+            count += 1
+            with self.subTest(route=route):
+                self.assertEqual(len(route), 1 + len(network) - 7)
+                self.assertTrue(set(route) <= network | {PREWAR_ROOT})
+                self.assertEqual(walk_route(self, route), 343)
+                paid_work(route, {resource, relay})
+        self.assertEqual(count, 128)
+        # The staff's tree: one side of each of its seven choices.
+        entry, left, right, first, second, pair_left, pair_right, mandate = PATRON_BRANCHES["staff"]
+        staff = set(PREWAR_TREES["staff"])
+        self.assertEqual(len(staff), 32)
+        s = "WRK_staff_"
+        choices = product(
+            (s + "commanders_funds", s + "centre_quartermaster"),
+            (s + "second_section_archive", s + "officers_assembly"),
+            (left, right), (pair_left, pair_right),
+            (s + "arsenal_seals", s + "garrison_roads"),
+            (s + "military_route", s + "let_the_tower_fall"),
+            (s + "joint_government_draft", s + "emergency_command"),
+        )
+        count = 0
+        for purse, court, resource, mandate_pair, army, relay, government in choices:
+            route = [
+                PREWAR_ROOT,
+                s + "tower_survey", relay, s + "commanders_oaths", government,
+                s + "government_guards", s + "last_order_draft",
+                s + "railway_commandants", army, s + "cadre_regiments", s + "district_arsenal_lists",
+                s + "standing_invitations", s + "adjutants_at_court", court, s + "district_pledges",
+                s + "council_of_allies",
+                entry, resource, first, second, mandate_pair, mandate,
+                s + "depot_ledgers", purse, s + "supply_contracts", s + "war_chest",
+            ]
+            count += 1
+            with self.subTest(route=route):
+                self.assertEqual(len(route), 1 + len(staff) - 7)
+                self.assertTrue(set(route) <= staff | {PREWAR_ROOT})
+                self.assertEqual(walk_route(self, route), 343)
+                jobs = {resource, s + "railway_commandants"} | ({relay, army} & {s + "military_route", s + "arsenal_seals"})
+                paid_work(route, jobs)
+        self.assertEqual(count, 128)
+
+    def test_mandate_route_takes_133_days_from_the_choice_in_every_tree(self):
+        # The root ends on day 14, as preparation.1 arrives.
+        self.assertEqual(int(PREWAR_FOCUSES[PREWAR_ROOT]["cost"]) * 7, 14)
         for patron, (entry, left, right, first, second, pair_left, pair_right, mandate) in PATRON_BRANCHES.items():
-            for resource, politics, evacuation, course, mandate_pair in product(
-                (left, right), *trunk, (pair_left, pair_right)
-            ):
-                route = [
-                    "WRK_measure_confederation_fault_lines",
-                    entry, resource, politics,
-                    "WRK_bind_districts_to_charter" if politics == trunk[0][0] else "WRK_disperse_railway_reserves",
-                    "WRK_issue_continuity_orders", evacuation, course,
-                    "WRK_offer_emergency_compact" if course == trunk[2][0] else "WRK_place_reserves_under_worker",
-                    first, second, mandate_pair, mandate,
-                ]
-                # Only the staff and the network branch gate a paid object project.
-                jobs = {evacuation} if patron == "committees" else {resource, evacuation}
-                with self.subTest(route=route):
-                    elapsed = 0
-                    completed = set()
-                    # Slots are released when paid work finishes; contests run separately.
-                    slots = [0, 0]
-                    for name in route:
-                        focus = focuses[name]
-                        required = [v for k, _, v in focus.get("prerequisite", []) if k == "focus"]
-                        self.assertTrue(not required or completed.intersection(required), name)
-                        exclusive = [v for k, _, v in focus.get("mutually_exclusive", []) if k == "focus"]
-                        self.assertFalse(completed.intersection(exclusive), name)
-                        elapsed += int(focus["cost"]) * 7
-                        completed.add(name)
-                        if name not in jobs:
-                            continue
-                        unlocked = [v for k, _, v in focus["completion_reward"] if k == "unlock_decision_tooltip"]
-                        self.assertEqual(len(unlocked), 1)
-                        job = fields(PROJECTS[unlocked[0]])
-                        self.assertEqual(fields(job["visible"])["has_completed_focus"], name)
-                        self.assertIn(("has_completed_focus", "=", name), list(walk(job["complete_effect"])))
-                        slot = slots.index(min(slots))
-                        finish = max(elapsed, slots[slot]) + int(job["days_remove"])
-                        slots[slot] = finish
-                        self.assertLessEqual(finish + 21, 350)
-                    self.assertEqual(elapsed, 238)
+            for resource, pair in product((left, right), (pair_left, pair_right)):
+                route = [PREWAR_ROOT, entry, resource, first, second, pair, mandate]
+                self.assertEqual(walk_route(self, route) - 14, 133, patron)
 
     def test_prewar_ai_plans_select_reachable_nonconflicting_programmes(self):
-        focuses = {
-            fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
-            if key == "focus" and isinstance(value, list)
-        }
         plans = fields(parse(read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")))
+        tree = set(PREWAR_TREES["committees"])
+        pairs = {
+            frozenset((name, other))
+            for name in tree for other in linked(PREWAR_FOCUSES[name], "mutually_exclusive")
+        }
+        self.assertEqual(len(pairs), 8)
+        tower = {"WRK_inspect_the_unity_tower", "WRK_reinforce_the_tower_guard", "WRK_disperse_the_government"}
+        routes = {}
         for course in ("compact", "hardline"):
             plan = fields(plans[V + "wrk_prewar_" + course + "_plan"])
             route = [value for _, _, value in plan["ai_national_focuses"]]
-            completed = set()
-            elapsed = 0
+            routes[course] = route
+            elapsed = walk_route(self, route)
+            self.assertEqual(elapsed, 315)
+            # A day lost between two focuses still leaves the plan inside the 350 days.
+            self.assertLessEqual(elapsed + len(route), 350)
+            # The plan names the committees' tree only: a focus hidden from the
+            # country would stall its AI.
+            self.assertTrue(set(route) <= tree | {PREWAR_ROOT}, set(route) - tree)
+            self.assertFalse(set(route) & tower)
+            for pair in pairs:
+                self.assertEqual(len(pair & set(route)), 0 if pair & tower else 1, sorted(pair))
+            # The evacuation project is opened early enough to finish.
+            evacuation = next(name for name in route if name.startswith("WRK_prepare_"))
+            opened = walk_route(self, route[:route.index(evacuation) + 1])
+            project = next(block for block in PROJECTS.values() if evacuation in project_gates(block))
+            self.assertLessEqual(opened + int(fields(project)["days_remove"]) + 21, 350)
+            for patron, value in PATRON_VALUES.items():
+                script = Script()
+                script.scopes["WRK"].variables[P + "patron"] = value
+                if course == "hardline":
+                    script.scopes["WRK"].flags.add(V + "prewar_wrk_hardline_course")
+                self.assertEqual(script.conditions(plan["enable"]), patron == "committees", (course, patron))
+            # Before preparation.1 nobody has a plan: only the root is drawn.
+            script = Script()
+            del script.scopes["WRK"].variables[P + "patron"]
+            self.assertFalse(script.conditions(plan["enable"]))
+        self.assertIn("WRK_offer_emergency_compact", routes["compact"])
+        self.assertIn("WRK_place_reserves_under_worker", routes["hardline"])
+        # The network's plan: its whole tree but the last two Tower focuses.
+        network = set(PREWAR_TREES["network"])
+        plan = fields(plans[V + "wrk_prewar_network_plan"])
+        route = [value for _, _, value in plan["ai_national_focuses"]]
+        elapsed = walk_route(self, route)
+        self.assertEqual(elapsed, 322)
+        self.assertLessEqual(elapsed + len(route), 350)
+        self.assertTrue(set(route) <= network | {PREWAR_ROOT}, set(route) - network)
+        pairs = {
+            frozenset((name, other))
+            for name in network for other in linked(PREWAR_FOCUSES[name], "mutually_exclusive")
+        }
+        self.assertEqual(len(pairs), 7)
+        for pair in pairs:
+            self.assertEqual(len(pair & set(route)), 1, sorted(pair))
+        self.assertEqual(network - set(route) - {name for pair in pairs for name in pair},
+                         {"WRK_network_listening_logs", "WRK_network_tower_duty_roster"})
+        # Its two paid projects are opened early enough to finish.
+        for name in ("WRK_preserve_machine_tools", "WRK_network_relay_by_wire"):
+            opened = walk_route(self, route[:route.index(name) + 1])
+            project = next(block for block in PROJECTS.values() if name in project_gates(block))
+            self.assertLessEqual(opened + int(fields(project)["days_remove"]) + 21, 350)
+        for patron, value in (*PATRON_VALUES.items(), (None, None)):
+            script = Script()
+            del script.scopes["WRK"].variables[P + "patron"]
+            if value is not None:
+                script.scopes["WRK"].variables[P + "patron"] = value
+            self.assertEqual(script.conditions(plan["enable"]), patron == "network", patron)
+        # The staff's plans, one per course toward the Tower: its whole tree but
+        # the last two Tower focuses.
+        staff = set(PREWAR_TREES["staff"])
+        pairs = {
+            frozenset((name, other))
+            for name in staff for other in linked(PREWAR_FOCUSES[name], "mutually_exclusive")
+        }
+        self.assertEqual(len(pairs), 7)
+        courses = {"rescue": ("WRK_staff_military_route", "WRK_staff_joint_government_draft"),
+                   "command": ("WRK_staff_let_the_tower_fall", "WRK_staff_emergency_command")}
+        for course, chosen in courses.items():
+            plan = fields(plans[V + "wrk_prewar_staff_" + course + "_plan"])
+            route = [value for _, _, value in plan["ai_national_focuses"]]
+            elapsed = walk_route(self, route)
+            self.assertEqual(elapsed, 322)
+            self.assertLessEqual(elapsed + len(route), 350)
+            self.assertTrue(set(route) <= staff | {PREWAR_ROOT}, set(route) - staff)
+            self.assertTrue(set(chosen) <= set(route), course)
+            for pair in pairs:
+                self.assertEqual(len(pair & set(route)), 1, sorted(pair))
+            self.assertEqual(staff - set(route) - {name for pair in pairs for name in pair},
+                             {"WRK_staff_government_guards", "WRK_staff_last_order_draft"})
+            # Every paid project the plan opens has time to finish.
             for name in route:
-                focus = focuses[name]
-                parents = [v for k, _, v in focus.get("prerequisite", []) if k == "focus"]
-                exclusive = [v for k, _, v in focus.get("mutually_exclusive", []) if k == "focus"]
-                self.assertTrue(not parents or completed.intersection(parents), name)
-                self.assertFalse(completed.intersection(exclusive), name)
-                completed.add(name)
-                elapsed += int(focus["cost"]) * 7
-            self.assertEqual(elapsed, 147)
-            self.assertEqual(
-                len(completed.intersection(("WRK_prepare_civil_evacuation", "WRK_prepare_military_evacuation"))), 1
-            )
-            # A branch is hidden from two of the three apparatuses; a plan that
-            # named its focuses would stall the AI of the other two.
-            hidden = {name for branch in PATRON_BRANCHES.values() for name in branch}
-            self.assertFalse(completed & hidden)
+                for project in (block for block in PROJECTS.values() if name in project_gates(block)):
+                    opened = walk_route(self, route[:route.index(name) + 1])
+                    self.assertLessEqual(opened + int(fields(project)["days_remove"]) + 21, 350, name)
+            for patron, value in (*PATRON_VALUES.items(), (None, None)):
+                for hardline in (False, True):
+                    script = Script()
+                    del script.scopes["WRK"].variables[P + "patron"]
+                    if value is not None:
+                        script.scopes["WRK"].variables[P + "patron"] = value
+                    if hardline:
+                        script.scopes["WRK"].flags.add(V + "prewar_wrk_hardline_course")
+                    self.assertEqual(script.conditions(plan["enable"]),
+                                     patron == "staff" and hardline == (course == "command"), (course, patron))
+        # A plan names the tree of one apparatus and nothing else.
+        for key, block in plans.items():
+            if not key.startswith(V + "wrk_prewar_"):
+                continue
+            named = {value for item, _, group in block if item == "ai_national_focuses" for _, _, value in group}
+            trees = {patron_of(PREWAR_FOCUSES[name]) for name in named} - {None}
+            self.assertEqual(len(trees), 1, key)
 
     def test_ai_weights_finish_each_apparatus_branch_before_the_collapse(self):
-        focuses = {
-            fields(value)["id"]: fields(value)
-            for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
-            if key == "focus" and isinstance(value, list)
-        }
+        focuses = PREWAR_FOCUSES
         longest_project = max(float(fields(project)["days_remove"]) for project in PROJECTS.values())
         for patron, branch in PATRON_BRANCHES.items():
             with self.subTest(patron=patron):
-                completed = {"WRK_measure_confederation_fault_lines"}
+                completed = {PREWAR_ROOT}
                 elapsed = 0
                 while branch[-1] not in completed:
                     available = []
@@ -3954,8 +4277,8 @@ class PreparationAccounting(unittest.TestCase):
                     elapsed += int(focuses[name]["cost"]) * 7
                 self.assertEqual(len(completed), 7)
                 self.assertEqual(elapsed, 133)
-                # The trunk plan takes 147 days before the branch.
-                self.assertLessEqual(147 + elapsed + longest_project + 21, 350)
+                # Without a plan the branch follows the root at once.
+                self.assertLessEqual(14 + elapsed + longest_project + 21, 350)
 
     def test_timeout_missions_never_auto_succeed(self):
         missions = {name: fields(block) for name, block in DECISIONS.items() if name.startswith(P + "contest_")}
@@ -5735,17 +6058,21 @@ class UnifiedPrewarTreeTests(unittest.TestCase):
             reached = expanded
         self.assertEqual(reached, set(focuses))
         root = focuses["WRK_measure_confederation_fault_lines"]
-        self.assertEqual(root["cost"], "3")
+        # Two weeks: the root ends as preparation.1 arrives, and it is the only
+        # focus every apparatus is shown.
+        self.assertEqual(root["cost"], "2")
+        self.assertIsNone(patron_of(root))
         reward = fields(root["completion_reward"])
         self.assertEqual(reward["add_political_power"], "75")
         self.assertIn(("custom_effect_tooltip", "=", "WRK_prewar_programmes_tt"), root["completion_reward"])
 
-    def test_each_apparatus_sees_only_its_own_branch(self):
-        focuses = {fields(value)["id"]: fields(value)
-                   for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
-                   if key == "focus" and isinstance(value, list) and fields(value)["id"].startswith("WRK_")}
-        branch_of = {name: patron for patron, branch in PATRON_BRANCHES.items() for name in branch}
-        self.assertEqual(len(branch_of), 24)
+    def test_each_apparatus_sees_only_its_own_tree(self):
+        focuses = PREWAR_FOCUSES
+        self.assertEqual({patron: len(tree) for patron, tree in PREWAR_TREES.items()},
+                         {"committees": 33, "staff": 32, "network": 32})
+        self.assertEqual(sum(len(tree) for tree in PREWAR_TREES.values()) + 1, len(focuses))
+        # Only the root is shared.
+        self.assertEqual([name for name, body in focuses.items() if patron_of(body) is None], [PREWAR_ROOT])
         for chosen, value in (*PATRON_VALUES.items(), (None, None)):
             with self.subTest(patron=chosen):
                 script = Script()
@@ -5753,11 +6080,66 @@ class UnifiedPrewarTreeTests(unittest.TestCase):
                 if value is not None:
                     script.scopes["WRK"].variables[P + "patron"] = value
                 visible = {name for name, body in focuses.items() if script.conditions(body["allow_branch"])}
-                self.assertEqual(visible, {name for name in focuses if branch_of.get(name) in (None, chosen)})
-        # The three branches reuse the same cells and never overlap in one view.
+                self.assertEqual(visible, {PREWAR_ROOT, *PREWAR_TREES.get(chosen, ())})
+                # Whatever a tree shows can be reached inside it.
+                reached = {PREWAR_ROOT}
+                while True:
+                    grown = reached | {name for name in visible if set(linked(focuses[name], "prerequisite")) & reached}
+                    if grown == reached:
+                        break
+                    reached = grown
+                self.assertEqual(reached, visible)
+                for name in visible:
+                    self.assertTrue(set(linked(focuses[name], "mutually_exclusive")) <= visible, name)
+        # The three branches under the root reuse the same cells.
         for position in zip(*PATRON_BRANCHES.values()):
             cells = {(focuses[name]["x"], focuses[name]["y"], focuses[name]["cost"]) for name in position}
             self.assertEqual(len(cells), 1, position)
+
+    def test_no_shared_system_requires_a_focus_outside_the_chosen_tree(self):
+        # The staff and the network draw their own trees. Nothing they can open may
+        # wait for a focus they are not shown: a direct focus must be theirs, and a
+        # capability must be granted by a focus of their tree.
+        committees = set(PREWAR_TREES["committees"])
+        decisions = {
+            key: value
+            for key, _, value in walk(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))
+            if isinstance(value, list) and "complete_effect" in fields(value)
+        }
+        checked = 0
+        for patron in ("staff", "network"):
+            tree = {PREWAR_ROOT, *PREWAR_TREES[patron]}
+            for name in tree:
+                reward = PREWAR_FOCUSES[name]["completion_reward"]
+                for unlocked in (value for key, _, value in reward if key == "unlock_decision_tooltip"):
+                    needed = {value for key, _, value in walk(decisions[unlocked]) if key == "has_completed_focus"}
+                    for key, _, answer in walk(decisions[unlocked]):
+                        if key in CAPABILITIES:
+                            self.assertTrue(set(granting(key)) & tree, (patron, unlocked, key))
+                    self.assertFalse(needed & committees, (patron, unlocked))
+                    # A district focus is the districts' own way to the same decision.
+                    needed = {focus for focus in needed if focus.startswith("WRK_")}
+                    self.assertTrue(needed <= tree, (patron, unlocked, needed - tree))
+                    checked += 1
+        self.assertGreater(checked, 24)
+        # The choice names what each tree holds today.
+        for language, words in (("russian", ("бюджет", "Башня", "дистрикты")), ("english", ("budget", "Tower", "districts"))):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            worker = re.search(r'(?m)^ ' + V + r'prep_patron_worker_tt:0 "(.*)"$', text).group(1)
+            for word in words:
+                self.assertIn(word, worker, language)
+        for language, words in (("russian", ("касса", "двор", "армия", "Башня")),
+                                ("english", ("war chest", "court", "army", "Tower"))):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            army = re.search(r'(?m)^ ' + V + r'prep_patron_army_tt:0 "(.*)"$', text).group(1)
+            for word in words:
+                self.assertIn(word, army.split(". ")[0], language)
+        for language, words in (("russian", ("средства", "ячейки", "заводы", "Башни")),
+                                ("english", ("funds", "cells", "plants", "Tower"))):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            technical = re.search(r'(?m)^ ' + V + r'prep_patron_technical_tt:0 "(.*)"$', text).group(1)
+            for word in words:
+                self.assertIn(word, technical.split(". ")[0], language)
 
     def test_last_order_names_the_apparatus_once_and_redraws_the_tree(self):
         options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
@@ -5793,7 +6175,7 @@ class UnifiedPrewarTreeTests(unittest.TestCase):
             if ("custom_effect_tooltip", "=", name + "_heir_tt") in body["completion_reward"]
         }
         self.assertEqual(set(packages), previewed)
-        self.assertEqual(len(previewed), 10)
+        self.assertEqual(len(previewed), 16)
         for language in ("russian", "english"):
             text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
             for name, effects in packages.items():
@@ -5822,7 +6204,156 @@ class UnifiedPrewarTreeTests(unittest.TestCase):
         self.assertEqual(weights["25"], {
             ("2", "WRK_staff_escort_for_the_chairman"),
             ("0.5", "WRK_staff_reserve_headquarters"),
+            ("0.4", "WRK_network_blind_the_tower"),
         })
+        self.assertIn(("1.25", "WRK_network_tower_shelter"), weights["60"])
+        self.assertIn(("0.75", "WRK_staff_let_the_tower_fall"), weights["60"])
+        self.assertIn(("2", "WRK_staff_let_the_tower_fall"), weights["5"])
+        self.assertIn(("0.2", "WRK_network_tower_shelter"), weights["5"])
+        self.assertIn(("2", "WRK_network_blind_the_tower"), weights["10"])
+
+    def fate_odds(self, completed):
+        """Shares of the four outcomes, in the order of the random list."""
+
+        fate = next(value for key, _, value in walk(EFFECTS[P + "resolve_fate"]) if key == "random_list")
+        weights = []
+        for weight, _, effects in fate:
+            share = float(weight)
+            for key, _, value in effects:
+                if key == "modifier" and fields(value)["has_completed_focus"] in completed:
+                    share *= float(fields(value)["factor"])
+            weights.append(share)
+        return [100 * share / sum(weights) for share in weights]
+
+    def fate_text(self, name, completed):
+        """Localisation key a scripted text resolves to for a set of focuses."""
+
+        texts = [value for key, _, value in parse(read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt"))
+                 if key == "defined_text" and fields(value)["name"] == name]
+        self.assertEqual(len(texts), 1, name)
+        script = Script()
+        script.scopes["WRK"].focuses = set(completed)
+        for key, _, value in texts[0]:
+            if key == "text" and script.conditions(fields(value).get("trigger", [])):
+                return fields(value)["localization_key"]
+        raise AssertionError(name)
+
+    def test_fate_texts_state_the_roll_for_every_reachable_choice(self):
+        guard, disperse = "WRK_reinforce_the_tower_guard", "WRK_disperse_the_government"
+        chairman, bagley = "WRK_committee_chairmans_mandate", "WRK_committee_bagley_executive"
+        escort, reserve = "WRK_staff_escort_for_the_chairman", "WRK_staff_reserve_headquarters"
+        # Each tree reaches only its own levers, one alternative of each pair.
+        levers = {name for _, _, effects in next(
+            value for key, _, value in walk(EFFECTS[P + "resolve_fate"]) if key == "random_list")
+            for key, _, value in effects if key == "modifier" for name in [fields(value)["has_completed_focus"]]}
+        shelter, blind = "WRK_network_tower_shelter", "WRK_network_blind_the_tower"
+        fall = "WRK_staff_let_the_tower_fall"
+        self.assertEqual(levers, {guard, disperse, chairman, escort, reserve, shelter, blind, fall})
+        self.assertEqual(patron_of(PREWAR_FOCUSES[fall]), "staff")
+        self.assertEqual(linked(PREWAR_FOCUSES[fall], "mutually_exclusive"), ["WRK_staff_military_route"])
+        self.assertEqual({patron_of(PREWAR_FOCUSES[name]) for name in (shelter, blind)}, {"network"})
+        self.assertEqual(linked(PREWAR_FOCUSES[shelter], "mutually_exclusive"), [blind])
+        self.assertEqual({patron_of(PREWAR_FOCUSES[name]) for name in (guard, disperse, chairman)}, {"committees"})
+        self.assertEqual({patron_of(PREWAR_FOCUSES[name]) for name in (escort, reserve)}, {"staff"})
+        self.assertEqual(linked(PREWAR_FOCUSES[guard], "mutually_exclusive"), [disperse])
+        self.assertEqual(linked(PREWAR_FOCUSES[chairman], "mutually_exclusive"), [bagley])
+        self.assertEqual(linked(PREWAR_FOCUSES[escort], "mutually_exclusive"), [reserve])
+        reachable = [
+            *(frozenset(tower + mandate) for tower in ((), (guard,), (disperse,)) for mandate in ((), (chairman,))),
+            *(frozenset(core + tower) for core in ((), (escort,), (reserve,)) for tower in ((), (fall,))
+              if core or tower),
+            frozenset((shelter,)), frozenset((blind,)),
+        ]
+        keys = {}
+        for completed in reachable:
+            keys[completed] = self.fate_text("GetVorkerlandWorkerFateOdds", completed)
+        self.assertEqual(len(set(keys.values())), len(reachable))
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for completed, key in keys.items():
+                line = re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text).group(1)
+                shown = [int(number) for number in re.findall(r"§Y(\d+)%§!", line)]
+                exact = self.fate_odds(completed)
+                self.assertEqual(len(shown), 4, (language, key))
+                for stated, share in zip(shown, exact):
+                    self.assertLess(abs(stated - share), 0.75, (language, key, shown, exact))
+                self.assertLessEqual(abs(sum(shown) - 100), 1, (language, key))
+            # The forecast states the roll through the same texts and no figure of its own.
+            for key in ("fate_forecast_roll", "fate_forecast_blocked"):
+                line = re.search(r'(?m)^ ' + V + key + r':0 "(.*)"$', text).group(1)
+                self.assertIn("[GetVorkerlandWorkerFateOdds]", line, (language, key))
+                self.assertNotIn("%", line, (language, key))
+            self.assertNotIn("GetVorkerlandFateBranchNote", text)
+            # A focus that moves the roll shows the roll with itself complete and the roll today.
+            for focus, loc in ((guard, "GetVorkerlandFateWithGuard"), (disperse, "GetVorkerlandFateWithDispersal"),
+                               (chairman, "GetVorkerlandFateWithChairman"), (escort, "GetVorkerlandFateWithEscort"),
+                               (reserve, "GetVorkerlandFateWithReserve"), (fall, "GetVorkerlandFateWithFall")):
+                line = re.search(r'(?m)^ ' + focus + r'_tt:0 "(.*)"$', text).group(1)
+                self.assertIn(f"[{loc}]", line, (language, focus))
+                self.assertIn("[GetVorkerlandWorkerFateOdds]", line, (language, focus))
+                self.assertNotIn("%", line, (language, focus))
+                self.assertIn(("custom_effect_tooltip", "=", focus + "_tt"), PREWAR_FOCUSES[focus]["completion_reward"])
+        # "With this focus" is the text the forecast gives once the focus is complete.
+        for focus, loc, others in (
+            (guard, "GetVorkerlandFateWithGuard", ((), (chairman,))),
+            (disperse, "GetVorkerlandFateWithDispersal", ((), (chairman,))),
+            (chairman, "GetVorkerlandFateWithChairman", ((), (guard,), (disperse,))),
+            (escort, "GetVorkerlandFateWithEscort", ((), (fall,))),
+            (reserve, "GetVorkerlandFateWithReserve", ((), (fall,))),
+            (fall, "GetVorkerlandFateWithFall", ((), (escort,), (reserve,))),
+        ):
+            for held in others:
+                self.assertEqual(self.fate_text(loc, held), keys[frozenset((focus, *held))], (focus, held))
+                self.assertEqual(self.fate_text(loc, (focus, *held)), keys[frozenset((focus, *held))], (focus, held))
+        # The network has no other lever, so each of its two focuses names its own line.
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for focus in (shelter, blind):
+                line = re.search(r'(?m)^ ' + focus + r'_tt:0 "(.*)"$', text).group(1)
+                self.assertIn("$" + keys[frozenset((focus,))] + "$", line, (language, focus))
+                self.assertIn("[GetVorkerlandWorkerFateOdds]", line, (language, focus))
+                self.assertNotIn("%", line, (language, focus))
+                self.assertIn(("custom_effect_tooltip", "=", focus + "_tt"), PREWAR_FOCUSES[focus]["completion_reward"])
+
+    def test_district_compact_names_a_centre_that_cannot_offer_it(self):
+        focuses = {fields(value)["id"]: fields(value)
+                   for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
+                   if key == "focus" and isinstance(value, list)}
+        can_offer = TRIGGERS[V + "prewar_centre_can_offer_compact"]
+        # The offer is a focus of the committees' tree and of no other.
+        offers = [focus for key, _, focus in CAPABILITIES["WRK_capability_emergency_compact"]]
+        self.assertEqual({patron_of(PREWAR_FOCUSES[name]) for name in offers}, {"committees"})
+        reward = focuses["VAD_ratify_emergency_compact"]["completion_reward"]
+        branches = [(key, fields(value)) for key, _, value in reward if key in ("if", "else")]
+        self.assertEqual([key for key, _ in branches], ["if", "else"])
+        self.assertEqual(branches[0][1]["limit"], [(V + "prewar_centre_can_offer_compact", "=", "yes")])
+        self.assertEqual(branches[0][1]["custom_effect_tooltip"], V + "prewar_compact_requires_both_tt")
+        self.assertEqual(branches[1][1]["custom_effect_tooltip"], V + "prewar_compact_centre_absent_tt")
+        for patron, value in (*PATRON_VALUES.items(), (None, None)):
+            script = Script()
+            script.root = "EYR"
+            del script.scopes["WRK"].variables[P + "patron"]
+            if value is not None:
+                script.scopes["WRK"].variables[P + "patron"] = value
+            # Until the centre has chosen, the offer is still possible.
+            self.assertEqual(script.conditions(can_offer), patron in (None, "committees"), patron)
+            # Ratifying without an offer gives nothing and takes nothing.
+            if patron in ("staff", "network"):
+                script.scopes["EYR"].flags.add(V + "district_compact_committed")
+                script.effect(V + "resolve_prewar_compact")
+                self.assertNotIn(V + "prewar_compact_ratified", script.globals)
+                self.assertFalse(script.scopes["EYR"].resources["infantry_equipment"])
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            self.assertTrue(re.search(r'(?m)^ ' + V + r'prewar_compact_centre_absent_tt:0 "(.+)"$', text), language)
+
+    def test_prewar_titles_fit_two_lines_in_both_languages(self):
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for name in PREWAR_FOCUSES:
+                title = re.search(r'(?m)^ ' + name + r':\d* "(.*)"$', text).group(1)
+                self.assertLessEqual(len(title), 30, (language, name, title))
+                self.assertTrue(re.search(r'(?m)^ ' + name + r'_desc:\d* "(.+)"$', text), (language, name))
 
 
 class WKRAirRailProgrammeTests(unittest.TestCase):
@@ -7998,7 +8529,7 @@ class CapitalUnrestTests(unittest.TestCase):
     def test_measures_change_the_named_amount_and_share_the_district_cooldown(self):
         script = self.campaign()
         script.scopes["WRK"].focuses.update({
-            "WRK_committee_ration_reserve", "WRK_factory_committee_councils",
+            "WRK_factory_committee_councils",
             "WRK_committee_emergency_plenipotentiaries", "WRK_committee_workers_guard",
         })
         for name in UNREST_DISTRICTS:
@@ -8025,6 +8556,43 @@ class CapitalUnrestTests(unittest.TestCase):
         self.assertNotIn("WRK_unrest_riot", script.scopes["34"].flags)
         self.assertAlmostEqual(script.scopes["WRK"].resources["stability"], -0.01)
 
+    def test_rations_are_open_from_the_choice_and_the_reserve_makes_them_go_further(self):
+        focuses = {fields(value)["id"]: fields(value)
+                   for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
+                   if key == "focus" and isinstance(value, list)}
+        rations = UNREST_DECISIONS["WRK_issue_capital_rations"]
+        # The base measure reads no focus: it is usable the day the committees are named.
+        self.assertNotIn("has_completed_focus", fields(rations["visible"]))
+        script = self.campaign()
+        self.assertNotIn("WRK_committee_ration_reserve", script.scopes["WRK"].focuses)
+        script.scopes["32"].variables["WRK_unrest"] = 70
+        self.apply(script, "WRK_issue_capital_rations", "32")
+        self.assertEqual(script.scopes["32"].variables["WRK_unrest"], 45)
+        # The other measures still wait for their focuses.
+        for name in ("WRK_unrest_cede_shop_to_committee", "WRK_unrest_send_plenipotentiary",
+                     "WRK_unrest_workers_patrol"):
+            self.assertFalse(script.conditions(UNREST_DECISIONS[name]["visible"]), name)
+        # The reserve no longer unlocks the measure; it makes each issue go further.
+        reserve = focuses["WRK_committee_ration_reserve"]["completion_reward"]
+        self.assertIn(("custom_effect_tooltip", "=", "WRK_committee_ration_reserve_issue_tt"), reserve)
+        self.assertFalse([value for key, _, value in reserve if key == "unlock_decision_tooltip"])
+        script.scopes["WRK"].focuses.add("WRK_committee_ration_reserve")
+        script.scopes["33"].variables["WRK_unrest"] = 70
+        self.apply(script, "WRK_issue_capital_rations", "33")
+        self.assertEqual(script.scopes["33"].variables["WRK_unrest"], 40)
+        target = fields(rations["complete_effect"])["FROM"]
+        deltas = [float(fields(value)["value"]) for key, _, value in walk(target)
+                  if key == "set_temp_variable" and fields(value)["var"] == "WRK_unrest_delta"]
+        self.assertEqual(deltas, [-25, -30])
+        bonus = next(fields(value) for key, _, value in target if key == "if")
+        self.assertEqual(bonus["limit"], [("ROOT", "=", [("has_completed_focus", "=", "WRK_committee_ration_reserve")])])
+        self.assertEqual(bonus["custom_effect_tooltip"], "WRK_unrest_ration_reserve_tt")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            # The preview line and the focus line state the difference the script applies.
+            self.assertIn("§G-5§!", re.search(r'(?m)^ WRK_unrest_ration_reserve_tt:0 "(.*)"$', text).group(1))
+            self.assertIn("§G5§!", re.search(r'(?m)^ WRK_committee_ration_reserve_issue_tt:0 "(.*)"$', text).group(1))
+
     def test_plenipotentiary_can_push_a_neighbour_into_riot(self):
         script = self.campaign()
         script.scopes["WRK"].focuses.add("WRK_committee_emergency_plenipotentiaries")
@@ -8032,6 +8600,45 @@ class CapitalUnrestTests(unittest.TestCase):
         self.apply(script, "WRK_unrest_send_plenipotentiary", "32")
         self.assertIn("WRK_unrest_riot", script.scopes["35"].flags)
         self.assertEqual(script.scopes["35"].variables["WRK_unrest"], 100)
+
+    def test_plenipotentiary_spill_passes_over_its_own_district_and_a_patrol(self):
+        script = self.campaign()
+        script.scopes["WRK"].focuses.add("WRK_committee_emergency_plenipotentiaries")
+        for name in UNREST_DISTRICTS:
+            script.scopes[name].variables["WRK_unrest"] = 50
+        script.scopes["36"].flags.add("WRK_unrest_patrol")
+        self.apply(script, "WRK_unrest_send_plenipotentiary", "33")
+        expected = {name: 58 for name in UNREST_DISTRICTS}
+        expected.update({"33": 15, "36": 50})
+        self.assertEqual(self.unrest(script), expected)
+        self.assertNotIn("WRK_unrest_spill_source", script.scopes["33"].flags)
+        # A patrolled target takes the same named amount.
+        script.scopes["36"].variables["WRK_unrest"] = 90
+        self.apply(script, "WRK_unrest_send_plenipotentiary", "36")
+        self.assertEqual(script.scopes["36"].variables["WRK_unrest"], 55)
+        self.assertNotIn("WRK_unrest_spill_source", script.scopes["36"].flags)
+
+    def test_collapse_returns_the_price_of_a_running_patrol_to_the_heir_once(self):
+        script = self.campaign()
+        script.scopes["WRK"].focuses.add("WRK_committee_workers_guard")
+        patrol = UNREST_DECISIONS["WRK_unrest_workers_patrol"]
+        self.apply(script, "WRK_unrest_workers_patrol", "34")
+        script.scopes["34"].variables["WRK_unrest"] = 80
+        # The confederation is annexed in the collapse event: the close keeps the receipt.
+        script.effect(P + "close_prewar")
+        self.assertIn("WRK_unrest_patrol", script.scopes["34"].flags)
+        self.assertEqual(script.scopes["WRK"].resources["pp"], 1000)
+        script.event_targets[V + "preparation_heir"] = "WKR"
+        heir = script.scopes["WKR"].resources
+        paid = heir["pp"]
+        for _ in range(2):
+            script.effect("WRK_unrest_settle_district", "34", "WKR")
+        self.assertEqual(heir["pp"], paid + 40)
+        script.source = "34"
+        script.run(patrol["cancel_effect"])
+        script.run(patrol["remove_effect"])
+        self.assertEqual((heir["pp"], script.scopes["WRK"].resources["pp"]), (paid + 40, 1000))
+        self.assertNotIn("WRK_unrest", script.scopes["34"].variables)
 
     def test_patrol_is_exclusive_holds_the_district_and_refunds_once_when_cut_short(self):
         script = self.campaign()
@@ -8095,7 +8702,7 @@ class CapitalUnrestTests(unittest.TestCase):
         script.scopes["36"].variables["WRK_unrest"] = 10
         for _ in range(2):
             for name in UNREST_DISTRICTS:
-                script.effect("WRK_unrest_settle_district", name)
+                script.effect("WRK_unrest_settle_district", name, "WKR")
         heir = script.scopes["WKR"].resources
         self.assertEqual((heir["people"], heir["infantry_equipment"]), (2000, 1500))
         for name in UNREST_DISTRICTS:
@@ -8120,11 +8727,81 @@ class CapitalUnrestTests(unittest.TestCase):
         for name, binding in properties.items():
             frame = fields(binding)["frame"]
             self.assertEqual(frame, name + "_frame")
-            self.assertIn(("always", "=", "yes"), triggers[name + "_visible"])
+            expected_visible = "no" if name.startswith("WRK_capital_legend_icon_") else "yes"
+            self.assertIn(("always", "=", expected_visible), triggers[name + "_visible"])
             self.assertIn(frame, str(triggers[name + "_visible"]))
         self.assertEqual(panel["visible"], [("WRK_capital_panel_visible", "=", "yes")])
         categories = fields(parse(read("common/decisions/categories/ADISCORD_vorkerland_categories.txt")))
         self.assertEqual(fields(categories[V + "prewar_category"])["scripted_gui"], V + "capital_panel")
+
+    def test_capital_panel_is_on_screen_from_the_choice_and_never_for_the_districts(self):
+        categories = fields(parse(read("common/decisions/categories/ADISCORD_vorkerland_categories.txt")))
+        category = fields(categories[V + "prewar_category"])
+        # The panel belongs to the category, so the category stays open with nothing listed.
+        self.assertEqual(category["visible_when_empty"], "yes")
+        options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
+        for index, panel in ((0, True), (1, False), (2, True)):
+            script = Script()
+            country = script.scopes["WRK"]
+            del country.variables[P + "patron"]
+            country.focuses.clear()
+            self.assertTrue(script.conditions(category["visible"]))
+            self.assertFalse(script.conditions(TRIGGERS["WRK_capital_panel_visible"]))
+            script.run(options[index]["hidden_effect"])
+            self.assertTrue(script.conditions(category["visible"]))
+            self.assertEqual(script.conditions(TRIGGERS["WRK_capital_panel_visible"]), panel)
+            script.globals.discard(V + "phase_prewar")
+            self.assertFalse(script.conditions(category["visible"]))
+        # An autonomous district has exactly one decision here, the reserve cache.
+        decisions = fields(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))[V + "prewar_category"]
+        self.assertGreater(len(decisions), 30)
+        districts = ("EYR", "EGC", "RIV", "YOR")
+        shared = [name for name, _, decision in decisions
+                  if any(tag in str(fields(decision)["allowed"]) for tag in districts)]
+        self.assertEqual(shared, [V + "prewar_hide_reserves"])
+        cache = fields(dict((name, decision) for name, _, decision in decisions)[V + "prewar_hide_reserves"])
+        # It sees the category from the focus that opens the cache, while a region
+        # of its own can still take or is still hiding one, and never as an empty heading.
+        for district in districts:
+            script = Script()
+            script.root = district
+            country = script.scopes[district]
+            country.focuses.clear()
+            for state in ("75", "106"):
+                script.scopes[state].owner = script.scopes[state].controller = district
+            self.assertFalse(script.conditions(category["visible"]), district)
+            self.assertFalse(script.conditions(cache["visible"]), district)
+            country.focuses.add("VAD_review_district_obligations")
+            self.assertTrue(script.conditions(category["visible"]), district)
+            self.assertTrue(script.conditions(cache["visible"]), district)
+            self.assertFalse(script.conditions(TRIGGERS["WRK_capital_panel_visible"]), district)
+            script.scopes["75"].flags.update({V + "reserve_cache", V + "reserve_cache_ready"})
+            script.scopes["106"].flags.add(V + "reserve_cache")
+            self.assertTrue(script.conditions(category["visible"]), district)
+            script.scopes["106"].flags.add(V + "reserve_cache_ready")
+            self.assertFalse(script.conditions(category["visible"]), district)
+        # The court keeps its own category, open the same way.
+        self.assertEqual(fields(categories[V + "court_category"])["visible_when_empty"], "yes")
+
+    def test_the_choice_says_where_each_mechanic_is(self):
+        options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
+        places = {
+            V + "prep_patron_worker_tt": V + "prewar_category",
+            V + "prep_patron_army_tt": V + "court_category",
+            V + "prep_patron_technical_tt": V + "prewar_category",
+        }
+        self.assertEqual([option["custom_effect_tooltip"] for option in options], [V + "prep_patron_tt"] * 3)
+        shown = [[value for key, _, value in EVENTS[V + "preparation.1"][index][2] if key == "custom_effect_tooltip"]
+                 for index, (key, _, _) in enumerate(EVENTS[V + "preparation.1"]) if key == "option"]
+        self.assertEqual([tooltips[0] for tooltips in shown], list(places))
+        for language, tab in (("russian", "вкладке решений"), ("english", "decisions tab")):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for key, category in places.items():
+                line = re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text).group(1)
+                self.assertIn(tab, line, (language, key))
+                # The category is named by its own key, so the sentence cannot drift from the tab.
+                self.assertIn(f'\\"${category}$\\"', line, (language, key))
+                self.assertTrue(re.search(r'(?m)^ ' + category + r':0 "(.+)"$', text), category)
 
     def test_previews_state_the_applied_amounts_in_both_languages(self):
         amounts = {}
@@ -8139,8 +8816,7 @@ class CapitalUnrestTests(unittest.TestCase):
         self.assertEqual(amounts, {
             "WRK_issue_capital_rations": (-25, "WRK_unrest_reduce_25_tt"),
             "WRK_unrest_cede_shop_to_committee": (-30, "WRK_unrest_reduce_30_tt"),
-            # The spill returns 8 to the target as well.
-            "WRK_unrest_send_plenipotentiary": (-43, "WRK_unrest_reduce_35_tt"),
+            "WRK_unrest_send_plenipotentiary": (-35, "WRK_unrest_reduce_35_tt"),
             "WRK_unrest_workers_patrol": (-40, "WRK_unrest_reduce_40_tt"),
         })
         for language in ("russian", "english"):
@@ -8150,13 +8826,163 @@ class CapitalUnrestTests(unittest.TestCase):
                 self.assertIn(f"§G-{amount}§!", line)
             self.assertIn("§R+8§!", re.search(r'(?m)^ WRK_unrest_spill_tt:0 "(.*)"$', text).group(1))
             report = re.search(r'(?m)^ WRK_unrest_report:0 "(.*)"$', text).group(1)
-            for token in ("§Y5§!", "§Y8§!", "§Y40%§!", "§Y60§!", "§Y100§!", "§Y40§!", "§G+2000§!", "§G+1500§!"):
+            for token in ("§Y40%§!", "§Y60§!", "§Y100§!", "§Y40§!"):
                 self.assertIn(token, report, (language, token))
             for name in UNREST_DISTRICTS:
                 self.assertIn(f"[{name}.WRKGetUnrestStatus]", report)
             riot = re.search(r'(?m)^ WRK_unrest_riot_report_tt:0 "(.*)"$', text).group(1)
             for token in ("§R-3%§!", "§R-10§!", "§R-1%§!"):
                 self.assertIn(token, riot, (language, token))
+
+    # Capital block of the committees' tree: focus -> (country variable, value
+    # at the choice, value after the focus).
+    CAPITAL_VALUES = {
+        "WRK_committee_district_canteens": ("WRK_unrest_growth", 5, 4),
+        "WRK_committee_arbitration_boards": ("WRK_unrest_growth_crisis", 8, 6),
+        "WRK_committee_second_guard_shift": ("WRK_unrest_patrol_limit", 1, 2),
+        "WRK_committee_district_agitators": ("WRK_unrest_cooldown", 45, 30),
+        "WRK_committee_district_musters": ("WRK_unrest_calm_manpower", 2000, 2500),
+        "WRK_committee_store_keys": ("WRK_unrest_calm_rifles", 1500, 2500),
+    }
+
+    def complete(self, script, name):
+        script.run(PREWAR_FOCUSES[name]["completion_reward"], "WRK")
+        script.scopes["WRK"].focuses.add(name)
+
+    def test_capital_focuses_change_one_printed_value_and_pay_a_material_reward(self):
+        material = {"add_stability", "add_political_power", "add_manpower", "add_command_power",
+                    "army_experience", "add_equipment_to_stockpile"}
+        script = self.campaign()
+        start = dict(script.scopes["WRK"].variables)
+        for name, (variable, before, after) in self.CAPITAL_VALUES.items():
+            with self.subTest(focus=name):
+                self.assertEqual(patron_of(PREWAR_FOCUSES[name]), "committees")
+                self.assertEqual(start[variable], before)
+                reward = PREWAR_FOCUSES[name]["completion_reward"]
+                self.assertEqual(reward[0], ("custom_effect_tooltip", "=", name + "_tt"))
+                writes = [fields(value) for key, _, value in walk(reward) if key == "set_variable"]
+                self.assertEqual(writes, [{"var": variable, "value": str(after)}])
+                paid = [key for key, _, _ in reward if key in material or key.startswith(V + "camp_")]
+                self.assertGreaterEqual(len(paid), 2, name)
+                self.assertTrue(set(paid) & material, name)
+                fresh = self.campaign()
+                self.complete(fresh, name)
+                changed = {key: value for key, value in fresh.scopes["WRK"].variables.items()
+                           if start.get(key) != value and key.startswith("WRK_unrest_")}
+                self.assertEqual(changed, {variable: after})
+                for language in ("russian", "english"):
+                    text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+                    line = re.search(r'(?m)^ ' + name + r'_tt:0 "(.*)"$', text).group(1)
+                    shown = [int(number) for number in re.findall(r"§[YG]\+?(\d+)§!", line)]
+                    self.assertEqual(shown, [after, before], (language, name))
+        # Three steps: growth, the reach of the measures, the heir's package.
+        capital = [name for name in PREWAR_TREES["committees"] if name in self.CAPITAL_VALUES]
+        self.assertEqual(capital, list(self.CAPITAL_VALUES))
+        pair = ("WRK_committee_second_guard_shift", "WRK_committee_district_agitators")
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[0]], "mutually_exclusive"), [pair[1]])
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[1]], "mutually_exclusive"), [pair[0]])
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_committee_district_musters"], "prerequisite"), list(pair))
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_committee_store_keys"], "prerequisite"),
+                         ["WRK_committee_district_musters"])
+
+    def test_the_mechanic_reads_the_values_the_focuses_change(self):
+        # Growth, in calm and in crisis.
+        script = self.campaign()
+        self.complete(script, "WRK_committee_district_canteens")
+        start = self.unrest(script)
+        script.effect("WRK_unrest_monthly")
+        self.assertEqual(self.unrest(script), {name: value + 4 for name, value in start.items()})
+        script.scopes["WRK"].resources["has_stability"] = 0.39
+        script.effect("WRK_unrest_monthly")
+        self.assertEqual(self.unrest(script), {name: value + 12 for name, value in start.items()})
+        self.complete(script, "WRK_committee_arbitration_boards")
+        script.effect("WRK_unrest_monthly")
+        self.assertEqual(self.unrest(script), {name: value + 18 for name, value in start.items()})
+        # A second patrol, and never a third.
+        script = self.campaign()
+        script.scopes["WRK"].focuses.add("WRK_committee_workers_guard")
+        patrol = UNREST_DECISIONS["WRK_unrest_workers_patrol"]
+        self.apply(script, "WRK_unrest_workers_patrol", "32")
+        self.assertFalse(script.conditions(patrol["available"]))
+        self.complete(script, "WRK_committee_second_guard_shift")
+        self.apply(script, "WRK_unrest_workers_patrol", "33")
+        self.assertFalse(script.conditions(patrol["available"]))
+        script.source = "32"
+        script.run(patrol["remove_effect"])
+        self.assertTrue(script.conditions(patrol["available"]))
+        # The cooldown of a district is the printed number of days.
+        for focus, days in ((None, 45), ("WRK_committee_district_agitators", 30)):
+            script = self.campaign()
+            if focus:
+                self.complete(script, focus)
+            self.assertEqual(script.scopes["WRK"].variables["WRK_unrest_cooldown"], days)
+            script.scopes["32"].variables["WRK_unrest"] = 70
+            self.apply(script, "WRK_issue_capital_rations", "32")
+            self.assertEqual(script.scopes["32"].flag_days["WRK_unrest_measure_recent"], days)
+        marks = [name for name, decision in UNREST_DECISIONS.items()
+                 if ("WRK_unrest_mark_measure", "=", "yes") in list(walk(decision["complete_effect"]))]
+        self.assertEqual(marks, ["WRK_issue_capital_rations", "WRK_unrest_cede_shop_to_committee",
+                                 "WRK_unrest_send_plenipotentiary"])
+        literal = [value for decision in UNREST_DECISIONS.values()
+                   for key, _, value in walk(decision["complete_effect"]) if key == "set_state_flag"
+                   and isinstance(value, list) and fields(value)["flag"] == "WRK_unrest_measure_recent"]
+        self.assertFalse(literal)
+
+    def test_heir_package_is_read_from_the_copied_focus_record(self):
+        settle = list(walk(EFFECTS["WRK_unrest_settle_district"]))
+        # WRK no longer exists at the settlement: nothing there reads its variables.
+        self.assertFalse([value for key, _, value in settle if isinstance(value, str) and "WRK_unrest_calm" in value])
+        cases = (
+            ((), 2000, 1500),
+            (("WRK_committee_district_musters",), 2500, 1500),
+            (("WRK_committee_district_musters", "WRK_committee_store_keys"), 2500, 2500),
+        )
+        for record, people, rifles in cases:
+            with self.subTest(record=record):
+                script = self.campaign()
+                for name in record:
+                    self.complete(script, name)
+                printed = script.scopes["WRK"].variables
+                script.effect(P + "close_prewar")
+                script.event_targets[V + "preparation_heir"] = "WKR"
+                # copy_completed_from hands WKR the record; WRK's own is not consulted.
+                script.scopes["WKR"].focuses = set(record)
+                script.scopes["WRK"].focuses = set()
+                for name in UNREST_DISTRICTS:
+                    script.scopes[name].variables["WRK_unrest"] = 55
+                script.scopes["32"].variables["WRK_unrest"] = 39
+                script.effect("WRK_unrest_settle_district", "32", "WKR")
+                script.effect("WRK_unrest_settle_district", "33", "WKR")
+                heir = script.scopes["WKR"].resources
+                self.assertEqual((heir["people"], heir["infantry_equipment"]), (people, rifles))
+                # The report printed the same package before the collapse.
+                self.assertEqual((printed["WRK_unrest_calm_manpower"], printed["WRK_unrest_calm_rifles"]),
+                                 (people, rifles))
+
+    def test_report_and_tooltips_print_the_current_values_in_both_languages(self):
+        printed = {
+            "WRK_unrest_report": ("[?WRK_unrest_growth|0]", "[?WRK_unrest_growth_crisis|0]",
+                                  "[?WRK_unrest_cooldown|0]", "[?WRK_unrest_patrol_limit|0]",
+                                  "[?WRK_unrest_calm_manpower|0]", "[?WRK_unrest_calm_rifles|0]"),
+            "WRK_unrest_measure_ready_tt": ("[?ROOT.WRK_unrest_cooldown|0]",),
+            "WRK_unrest_patrol_free_tt": ("[?ROOT.WRK_unrest_patrol_limit|0]",),
+            "WRK_unrest_patrol_begin_tt": ("[?WRK_unrest_patrol_limit|0]",),
+        }
+        stale = ("§Y5§!", "§Y8§!", "§Y45§!", "§G+2000§!", "§G+1500§!")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for key, tokens in printed.items():
+                line = re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text).group(1)
+                for token in tokens:
+                    self.assertIn(token, line, (language, key))
+                for token in stale:
+                    self.assertNotIn(token, line, (language, key))
+        # Every printed variable is set at the choice, before any text can show it.
+        script = self.campaign()
+        for tokens in printed.values():
+            for token in tokens:
+                name = token.strip("[]?").split("|")[0].removeprefix("ROOT.")
+                self.assertIn(name, script.scopes["WRK"].variables)
 
 
 CELL_DECISIONS = {
@@ -8165,8 +8991,15 @@ CELL_DECISIONS = {
     if key in ("WRK_cell_plant", "WRK_cell_expand", "WRK_cell_lie_low", "WRK_cell_forge_passes",
                "WRK_cell_legalize") and isinstance(value, list)
 }
+# Planting is the base operation, open from the day the network is named; every
+# other operation is opened by its own focus.
+CELL_BASE_OPERATION = "WRK_cell_plant"
+NETWORK_DECISIONS = {
+    key: fields(value)
+    for key, _, value in walk(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))
+    if key in ("WRK_network_sell_parts", "WRK_network_prototype_series") and isinstance(value, list)
+}
 CELL_FOCUSES = {
-    "WRK_cell_plant": "WRK_reopen_emergency_workshops",
     "WRK_cell_expand": "WRK_worx_network_register",
     "WRK_cell_lie_low": "WRK_machine_tool_fund",
     "WRK_cell_forge_passes": "WRK_network_closed_laboratories",
@@ -8227,10 +9060,49 @@ class CapitalCellTests(unittest.TestCase):
         focuses = {fields(value)["id"]: fields(value)
                    for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
                    if key == "focus" and isinstance(value, list)}
-        self.assertEqual(set(CELL_DECISIONS), set(CELL_FOCUSES))
+        self.assertEqual(set(CELL_DECISIONS), {CELL_BASE_OPERATION, *CELL_FOCUSES})
         for name, focus in CELL_FOCUSES.items():
             self.assertEqual(fields(CELL_DECISIONS[name]["visible"])["has_completed_focus"], focus)
             self.assertIn(("unlock_decision_tooltip", "=", name), focuses[focus]["completion_reward"])
+        self.assertNotIn("has_completed_focus", fields(CELL_DECISIONS[CELL_BASE_OPERATION]["visible"]))
+        self.assertFalse([focus for focus in focuses.values()
+                          if ("unlock_decision_tooltip", "=", CELL_BASE_OPERATION) in focus["completion_reward"]])
+
+    def test_planting_is_open_from_the_choice_and_the_workshops_cover_it(self):
+        focuses = {fields(value)["id"]: fields(value)
+                   for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
+                   if key == "focus" and isinstance(value, list)}
+        plant = CELL_DECISIONS[CELL_BASE_OPERATION]
+        script = self.campaign()
+        script.scopes["WRK"].focuses.clear()
+        heat = script.scopes["36"].variables["WRK_cell_heat"]
+        self.apply(script, CELL_BASE_OPERATION, "36")
+        self.assertEqual((script.scopes["36"].variables["WRK_cell_level"], script.scopes["36"].variables["WRK_cell_heat"]),
+                         (1, heat + 10))
+        # No other operation is on the list before its focus.
+        for name in CELL_FOCUSES:
+            script.source = "36"
+            self.assertFalse(script.conditions(CELL_DECISIONS[name]["visible"]), name)
+        # The workshops no longer unlock the planting; they halve the attention it draws.
+        workshops = focuses["WRK_reopen_emergency_workshops"]["completion_reward"]
+        self.assertIn(("custom_effect_tooltip", "=", "WRK_reopen_emergency_workshops_cover_tt"), workshops)
+        script.scopes["WRK"].focuses.add("WRK_reopen_emergency_workshops")
+        heat = script.scopes["37"].variables["WRK_cell_heat"]
+        self.apply(script, CELL_BASE_OPERATION, "37")
+        self.assertEqual((script.scopes["37"].variables["WRK_cell_level"], script.scopes["37"].variables["WRK_cell_heat"]),
+                         (1, heat + 5))
+        # The receipt and the price are the same with or without the focus.
+        script.source = "38"
+        script.run(plant["complete_effect"])
+        self.assertEqual(script.scopes["38"].variables["WRK_cell_work_paid"], 30)
+        target = fields(plant["remove_effect"])["FROM"]
+        bonus = next(fields(value) for key, _, value in target if key == "if")
+        self.assertEqual(bonus["limit"], [("ROOT", "=", [("has_completed_focus", "=", "WRK_reopen_emergency_workshops")])])
+        self.assertEqual(bonus["custom_effect_tooltip"], "WRK_cell_plant_cover_tt")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            self.assertIn("§G-5§!", re.search(r'(?m)^ WRK_cell_plant_cover_tt:0 "(.*)"$', text).group(1))
+            self.assertIn("§G5§!", re.search(r'(?m)^ WRK_reopen_emergency_workshops_cover_tt:0 "(.*)"$', text).group(1))
 
     def test_planting_and_expanding_share_one_slot_and_stop_at_level_three(self):
         script = self.campaign()
@@ -8262,8 +9134,9 @@ class CapitalCellTests(unittest.TestCase):
                 decision = CELL_DECISIONS[name]
                 script.source = "36"
                 self.assertFalse(script.conditions(decision["cancel_trigger"]))
-                script.run(decision["complete_effect"])
                 before = dict(script.scopes["36"].variables)
+                script.run(decision["complete_effect"])
+                self.assertEqual(script.scopes["36"].variables["WRK_cell_work_paid"], price)
                 script.globals.discard(V + "phase_prewar")
                 self.assertTrue(script.conditions(decision["cancel_trigger"]))
                 script.run(decision["cancel_effect"])
@@ -8272,6 +9145,50 @@ class CapitalCellTests(unittest.TestCase):
                 self.assertEqual(script.scopes["WRK"].resources["pp"], 1000 + price)
                 self.assertEqual(dict(script.scopes["36"].variables), before)
                 self.assertNotIn("WRK_cell_work", script.scopes["36"].flags)
+
+    def test_collapse_returns_the_recorded_price_of_cell_work_to_the_heir_once(self):
+        for name, price, district in (("WRK_cell_plant", 30, "35"), ("WRK_cell_expand", 40, "36")):
+            with self.subTest(operation=name):
+                script = self.campaign()
+                script.scopes[district].variables["WRK_cell_level"] = 1 if name == "WRK_cell_expand" else 0
+                decision = CELL_DECISIONS[name]
+                script.source = district
+                script.run(decision["complete_effect"])
+                script.effect(P + "close_prewar")
+                self.assertIn("WRK_cell_work", script.scopes[district].flags)
+                script.event_targets[V + "preparation_heir"] = "TVA"
+                heir = script.scopes["TVA"].resources
+                paid = heir["pp"]
+                for _ in range(2):
+                    script.effect("WRK_cell_settle_district", district, "WKR")
+                self.assertEqual(heir["pp"], paid + price)
+                script.run(decision["cancel_effect"])
+                script.run(decision["remove_effect"])
+                self.assertEqual((heir["pp"], script.scopes["WRK"].resources["pp"]), (paid + price, 1000))
+                self.assertFalse({key for key in script.scopes[district].variables if key.startswith("WRK_cell")})
+                self.assertNotIn("WRK_cell_work", script.scopes[district].flags)
+
+    def test_expansion_of_a_lost_cell_returns_its_price_and_plants_nothing(self):
+        for lost in ("exposed", "combed"):
+            with self.subTest(lost=lost):
+                script = self.campaign()
+                site = script.scopes["36"]
+                site.variables["WRK_cell_level"] = 1
+                expand = CELL_DECISIONS["WRK_cell_expand"]
+                script.source = "36"
+                script.run(expand["complete_effect"])
+                if lost == "exposed":
+                    site.flags.add("WRK_cell_exposed")
+                else:
+                    site.variables["WRK_cell_level"] = 0
+                heat = site.variables["WRK_cell_heat"]
+                script.run(expand["remove_effect"])
+                script.run(expand["remove_effect"])
+                self.assertEqual(script.scopes["WRK"].resources["pp"], 1040)
+                self.assertEqual(site.variables["WRK_cell_level"], 1 if lost == "exposed" else 0)
+                self.assertEqual(site.variables["WRK_cell_heat"], heat)
+                self.assertNotIn("WRK_cell_work", site.flags)
+                self.assertNotIn("WRK_cell_work_paid", site.variables)
 
     def test_monthly_tick_feeds_the_stores_and_draws_attention_by_level(self):
         script = self.campaign()
@@ -8301,25 +9218,49 @@ class CapitalCellTests(unittest.TestCase):
                 script.scopes["WRK"].ai = not human
                 camp = "global." + V + "camp_engineers"
                 script.scopes["WRK"].variables[camp] = 60
-                for district, (level, heat) in {"33": (3, 90), "34": (2, 92), "35": (1, 40), "36": (2, 95)}.items():
+                # The exposed district sits between an earlier and a later neighbour that
+                # the alarm fills to 100: neither may be exposed in the same pass.
+                cells = {"32": (1, 86), "33": (3, 90), "34": (2, 82), "35": (1, 40), "36": (2, 95)}
+                for district, (level, heat) in cells.items():
                     script.scopes[district].variables.update({"WRK_cell_level": level, "WRK_cell_heat": heat})
                 script.scopes["36"].flags.add("WRK_cell_legal")
-                script.source = "33"
-                script.effect("WRK_cell_tick", "33", "WRK")
+                script.effect("WRK_cells_monthly")
                 self.assertIn("WRK_cell_exposed", script.scopes["33"].flags)
                 self.assertEqual(script.scopes["WRK"].variables[camp], 55)
-                # The alarm fills the neighbour to 100 but leaves its exposure to the next tick.
-                self.assertEqual(script.scopes["34"].variables["WRK_cell_heat"], 100)
-                self.assertNotIn("WRK_cell_exposed", script.scopes["34"].flags)
-                self.assertEqual(script.scopes["35"].variables["WRK_cell_heat"], 50)
+                for district in ("32", "34"):
+                    self.assertEqual(script.scopes[district].variables["WRK_cell_heat"], 100)
+                    self.assertNotIn("WRK_cell_exposed", script.scopes[district].flags)
+                    self.assertNotIn("WRK_cell_due", script.scopes[district].flags)
+                self.assertEqual(script.scopes["35"].variables["WRK_cell_heat"], 54)
                 self.assertEqual(script.scopes["36"].variables["WRK_cell_heat"], 95)
-                self.assertEqual(script.scopes["37"].variables["WRK_cell_heat"], 10)
+                self.assertEqual(script.scopes["37"].variables["WRK_cell_heat"], 5)
                 reports = [value for key, _, value in script.calls if key == "country_event"]
                 self.assertEqual(len(reports), 1 if human else 0)
                 self.assertEqual(script.event_targets["WRK_cell_exposed_district"], "33")
+                # Each of them is exposed by its own next tick.
                 script.effect("WRK_cells_monthly")
+                self.assertIn("WRK_cell_exposed", script.scopes["32"].flags)
                 self.assertIn("WRK_cell_exposed", script.scopes["34"].flags)
                 self.assertNotIn("WRK_cell_exposed", script.scopes["36"].flags)
+                self.assertEqual(script.scopes["WRK"].variables[camp], 45)
+
+    def test_expansion_that_fills_the_attention_exposes_the_cell_at_once(self):
+        script = self.campaign()
+        site = script.scopes["36"]
+        site.variables.update({"WRK_cell_level": 1, "WRK_cell_heat": 48})
+        self.apply(script, "WRK_cell_expand", "36")
+        self.assertEqual((site.variables["WRK_cell_level"], site.variables["WRK_cell_heat"]), (2, 63))
+        self.assertNotIn("WRK_cell_exposed", site.flags)
+        site.variables["WRK_cell_heat"] = 40
+        site.flags.discard("WRK_cell_dormant")
+        expand = CELL_DECISIONS["WRK_cell_expand"]
+        script.source = "36"
+        script.run(expand["complete_effect"])
+        site.variables["WRK_cell_heat"] = 90
+        script.run(expand["remove_effect"])
+        self.assertEqual((site.variables["WRK_cell_level"], site.variables["WRK_cell_heat"]), (3, 100))
+        self.assertIn("WRK_cell_exposed", site.flags)
+        self.assertNotIn("WRK_cell_due", site.flags)
 
     def test_exposed_cell_is_combed_out_one_level_a_month(self):
         script = self.campaign()
@@ -8369,10 +9310,11 @@ class CapitalCellTests(unittest.TestCase):
             script.scopes[district].variables["WRK_cell_level"] = level
         script.scopes["33"].flags.add("WRK_cell_legal")
         script.scopes["34"].flags.add("WRK_cell_exposed")
-        script.scopes["35"].flags.update({"WRK_cell_dormant", "WRK_cell_work"})
+        script.scopes["35"].flags.update({"WRK_cell_dormant", "WRK_cell_work", "WRK_cell_due"})
+        script.scopes["35"].variables["WRK_cell_work_paid"] = 40
         for _ in range(2):
             for district in UNREST_DISTRICTS:
-                script.effect("WRK_cell_settle_district", district)
+                script.effect("WRK_cell_settle_district", district, "WKR")
         heir = script.scopes["TVA"].resources
         # Hidden 3, a legal collegium as 1, a dormant 1; the exposed cell pays nothing.
         self.assertEqual((heir["people"], heir["support_equipment"]), (5 * 600, 5 * 50))
@@ -8407,9 +9349,12 @@ class CapitalCellTests(unittest.TestCase):
             return [float(fields(value)["value"]) for item, _, value in walk(CELL_DECISIONS[name][key])
                     if item == "set_temp_variable" and fields(value)["var"] == "WRK_cell_delta"]
 
-        self.assertEqual(deltas("WRK_cell_plant", "remove_effect"), [10])
+        # Planting draws 10, or 5 once the emergency workshops cover it.
+        self.assertEqual(deltas("WRK_cell_plant", "remove_effect"), [10, 5])
         self.assertEqual(deltas("WRK_cell_expand", "remove_effect"), [15])
-        self.assertEqual(deltas("WRK_cell_lie_low", "complete_effect"), [-30])
+        cover = [fields(value) for item, _, value in walk(CELL_DECISIONS["WRK_cell_lie_low"]["complete_effect"])
+                 if item == "subtract_from_temp_variable"]
+        self.assertEqual(cover, [{"var": "WRK_cell_delta", "value": "ROOT.WRK_cell_cover"}])
         for language in ("russian", "english"):
             text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
 
@@ -8418,14 +9363,1059 @@ class CapitalCellTests(unittest.TestCase):
 
             self.assertIn("§R+10§!", value("WRK_cell_plant_result_tt"))
             self.assertIn("§R+15§!", value("WRK_cell_expand_result_tt"))
-            self.assertIn("§G-30§!", value("WRK_cell_lie_low_tt"))
+            self.assertIn("§G-[?ROOT.WRK_cell_cover|0]§!", value("WRK_cell_lie_low_tt"))
             self.assertIn("§Y45§!", value("WRK_cell_lie_low_tt"))
             self.assertIn("§Y50§!", value("WRK_cell_forge_passes_tt"))
             report = value("WRK_cell_report")
-            for token in ("§Y8§!", "§Y4§!", "§Y5§!", "§Y100§!", "§G+600§!", "§G+50§!", "§Y1§!"):
+            for token in ("§Y5§!", "§Y100§!", "§Y1§!"):
                 self.assertIn(token, report, (language, token))
             for district in UNREST_DISTRICTS:
                 self.assertIn(f"[{district}.WRKGetCellStatus]", report)
             exposure = value("WRK_cell_exposure_report_tt")
             for token in ("§R-5§!", "§R+10§!"):
                 self.assertIn(token, exposure, (language, token))
+
+    # Cell block of the network's tree: focus -> (country variable, value at
+    # the choice, value after the focus).
+    CELL_VALUES = {
+        "WRK_network_supply_runs": ("WRK_cells_yield_rate", 8, 10),
+        "WRK_network_shift_rosters": ("WRK_cell_heat_rate", 4, 3),
+        "WRK_network_second_crew": ("WRK_cells_work_limit", 1, 2),
+        "WRK_network_fallback_addresses": ("WRK_cell_cover", 30, 45),
+        "WRK_network_reserve_rolls": ("WRK_cell_pay_people_rate", 600, 800),
+        "WRK_network_trusted_storekeepers": ("WRK_cell_pay_support_rate", 50, 80),
+    }
+
+    def complete(self, script, name):
+        script.run(PREWAR_FOCUSES[name]["completion_reward"], "WRK")
+        script.scopes["WRK"].focuses.add(name)
+
+    def test_cell_focuses_change_one_printed_value_and_pay_a_material_reward(self):
+        material = {"add_stability", "add_political_power", "add_manpower", "add_command_power",
+                    "army_experience", "add_equipment_to_stockpile"}
+        start = dict(self.campaign().scopes["WRK"].variables)
+        for name, (variable, before, after) in self.CELL_VALUES.items():
+            with self.subTest(focus=name):
+                self.assertEqual(patron_of(PREWAR_FOCUSES[name]), "network")
+                self.assertEqual(start[variable], before)
+                reward = PREWAR_FOCUSES[name]["completion_reward"]
+                self.assertEqual(reward[0], ("custom_effect_tooltip", "=", name + "_tt"))
+                writes = [fields(value) for key, _, value in walk(reward) if key == "set_variable"]
+                self.assertEqual(writes, [{"var": variable, "value": str(after)}])
+                paid = [key for key, _, _ in reward if key in material or key.startswith(V + "camp_")]
+                self.assertGreaterEqual(len(paid), 2, name)
+                self.assertTrue(set(paid) & material, name)
+                fresh = self.campaign()
+                self.complete(fresh, name)
+                changed = {key: value for key, value in fresh.scopes["WRK"].variables.items()
+                           if start.get(key) != value and key.startswith(("WRK_cell", "WRK_prototype"))}
+                self.assertEqual(changed, {variable: after})
+                for language in ("russian", "english"):
+                    text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+                    line = re.search(r'(?m)^ ' + name + r'_tt:0 "(.*)"$', text).group(1)
+                    shown = [int(number) for number in re.findall(r"§[YG]\+?(\d+)§!", line)]
+                    self.assertEqual(shown, [after, before], (language, name))
+        cells = [name for name in PREWAR_TREES["network"] if name in self.CELL_VALUES]
+        self.assertEqual(cells, list(self.CELL_VALUES))
+        pair = ("WRK_network_second_crew", "WRK_network_fallback_addresses")
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[0]], "mutually_exclusive"), [pair[1]])
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[1]], "mutually_exclusive"), [pair[0]])
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_network_reserve_rolls"], "prerequisite"), list(pair))
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_network_trusted_storekeepers"], "prerequisite"),
+                         ["WRK_network_reserve_rolls"])
+
+    def test_the_cell_mechanic_reads_the_values_the_focuses_change(self):
+        # What a level hands over and draws each month.
+        script = self.campaign()
+        site = script.scopes["33"]
+        site.variables["WRK_cell_level"] = 2
+        stores = script.scopes["WRK"].resources
+        script.effect("WRK_cells_monthly")
+        self.assertEqual((stores["support_equipment"], site.variables["WRK_cell_heat"]), (1000 + 16, 10 + 8))
+        self.complete(script, "WRK_network_supply_runs")
+        before = stores["support_equipment"]
+        script.effect("WRK_cells_monthly")
+        self.assertEqual((stores["support_equipment"] - before, site.variables["WRK_cell_heat"]), (20, 26))
+        self.complete(script, "WRK_network_shift_rosters")
+        script.effect("WRK_cells_monthly")
+        self.assertEqual(site.variables["WRK_cell_heat"], 32)
+        # A second crew, and never a third.
+        script = self.campaign()
+        plant = CELL_DECISIONS["WRK_cell_plant"]
+        self.assertTrue(self.usable(script, "WRK_cell_plant", "32"))
+        script.run(plant["complete_effect"])
+        self.assertFalse(self.usable(script, "WRK_cell_plant", "33"))
+        self.complete(script, "WRK_network_second_crew")
+        self.assertTrue(self.usable(script, "WRK_cell_plant", "33"))
+        script.run(plant["complete_effect"])
+        self.assertFalse(self.usable(script, "WRK_cell_plant", "34"))
+        script.source = "32"
+        script.run(plant["remove_effect"])
+        self.assertTrue(self.usable(script, "WRK_cell_plant", "34"))
+        # Lying low sheds the printed amount.
+        for focus, cover in ((None, 30), ("WRK_network_fallback_addresses", 45)):
+            script = self.campaign()
+            if focus:
+                self.complete(script, focus)
+            self.assertEqual(script.scopes["WRK"].variables["WRK_cell_cover"], cover)
+            script.scopes["34"].variables.update({"WRK_cell_level": 1, "WRK_cell_heat": 70})
+            self.apply(script, "WRK_cell_lie_low", "34")
+            self.assertEqual(script.scopes["34"].variables["WRK_cell_heat"], 70 - cover)
+
+    def test_heir_cell_package_is_read_from_the_copied_focus_record(self):
+        settle = list(walk(EFFECTS["WRK_cell_settle_district"]))
+        # WRK no longer exists at the settlement: nothing there reads its rates.
+        self.assertFalse([value for key, _, value in settle if isinstance(value, str) and "_rate" in value])
+        cases = (
+            ((), 600, 50),
+            (("WRK_network_reserve_rolls",), 800, 50),
+            (("WRK_network_reserve_rolls", "WRK_network_trusted_storekeepers"), 800, 80),
+        )
+        for record, people, support in cases:
+            with self.subTest(record=record):
+                script = self.campaign()
+                for name in record:
+                    self.complete(script, name)
+                printed = script.scopes["WRK"].variables
+                script.event_targets[V + "preparation_heir"] = "TVA"
+                # copy_completed_from hands WKR the record; WRK's own is not consulted.
+                script.scopes["WKR"].focuses = set(record)
+                script.scopes["WRK"].focuses = set()
+                script.scopes["32"].variables["WRK_cell_level"] = 2
+                heir = script.scopes["TVA"].resources
+                before = (heir["people"], heir["support_equipment"])
+                for _ in range(2):
+                    script.effect("WRK_cell_settle_district", "32", "WKR")
+                self.assertEqual((heir["people"] - before[0], heir["support_equipment"] - before[1]),
+                                 (2 * people, 2 * support))
+                self.assertEqual((printed["WRK_cell_pay_people_rate"], printed["WRK_cell_pay_support_rate"]),
+                                 (people, support))
+
+    def test_cell_report_and_tooltips_print_the_current_values_in_both_languages(self):
+        printed = {
+            "WRK_cell_report": ("[?WRK_cells_yield_rate|0]", "[?WRK_cell_heat_rate|0]", "[?WRK_cells_work_limit|0]",
+                                "[?WRK_cell_cover|0]", "[?WRK_cell_pay_people_rate|0]",
+                                "[?WRK_cell_pay_support_rate|0]"),
+            "WRK_cell_lie_low_tt": ("[?ROOT.WRK_cell_cover|0]",),
+            "WRK_cells_work_free_tt": ("[?ROOT.WRK_cells_work_limit|0]",),
+            "WRK_cell_work_begin_tt": ("[?WRK_cells_work_limit|0]",),
+            "WRK_prototype_room_tt": ("[?ROOT.WRK_prototype_limit|0]", "[?WRK_prototype_stock|0]"),
+        }
+        stale = ("§Y8§!", "§Y4§!", "§G-30§!", "§G+600§!", "§G+50§!")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for key, tokens in printed.items():
+                line = re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text).group(1)
+                for token in tokens:
+                    self.assertIn(token, line, (language, key))
+                for token in stale:
+                    self.assertNotIn(token, line, (language, key))
+            # The district hover note prints the cell's own level and attention.
+            note = re.search(r'(?m)^ WRK_capital_note_cell:0 "(.*)"$', text).group(1)
+            self.assertIn("[WRKGetCellStatus]", note)
+        script = self.campaign()
+        for key, tokens in printed.items():
+            for token in tokens:
+                name = token.strip("[]?").split("|")[0].removeprefix("ROOT.")
+                holder = script.scopes["36"] if name == "WRK_prototype_stock" else script.scopes["WRK"]
+                self.assertIn(name, holder.variables)
+
+    def test_prototype_series_is_one_receipt_stocked_for_the_heir(self):
+        series = NETWORK_DECISIONS["WRK_network_prototype_series"]
+        self.assertEqual((series["cost"], series["days_remove"]), ("60", "35"))
+        self.assertEqual([value for _, _, value in series["targets"]], ["36"])
+        script = self.campaign()
+        script.source = "36"
+        site = script.scopes["36"]
+        self.assertFalse(script.conditions(series["visible"]))
+        self.complete(script, "WRK_network_plant_inventory")
+        self.assertIn(("unlock_decision_tooltip", "=", "WRK_network_prototype_series"),
+                      PREWAR_FOCUSES["WRK_network_plant_inventory"]["completion_reward"])
+        self.assertTrue(script.conditions(series["visible"]))
+        for expected in (1, 2):
+            self.assertTrue(script.conditions(series["available"]))
+            script.run(series["complete_effect"])
+            self.assertIn("WRK_prototype_work", site.flags)
+            self.assertEqual(site.variables["WRK_prototype_paid"], 60)
+            self.assertFalse(script.conditions(series["cancel_trigger"]))
+            script.run(series["remove_effect"])
+            script.run(series["remove_effect"])
+            self.assertEqual(site.variables["WRK_prototype_stock"], expected)
+            self.assertNotIn("WRK_prototype_work", site.flags)
+            self.assertNotIn("WRK_prototype_paid", site.variables)
+        # The reserve holds two series, three with the pilot shop.
+        self.assertFalse(script.conditions(series["available"]))
+        self.complete(script, "WRK_network_pilot_shop")
+        self.assertEqual(script.scopes["WRK"].variables["WRK_prototype_limit"], 3)
+        self.assertTrue(script.conditions(series["available"]))
+        # Cut short before the collapse: the price returns once and nothing is stocked.
+        script.run(series["complete_effect"])
+        site.owner = "TVA"
+        self.assertTrue(script.conditions(series["cancel_trigger"]))
+        paid = script.scopes["WRK"].resources["pp"]
+        script.run(series["cancel_effect"])
+        script.run(series["cancel_effect"])
+        script.run(series["remove_effect"])
+        self.assertEqual(script.scopes["WRK"].resources["pp"], paid + 60)
+        self.assertEqual(site.variables["WRK_prototype_stock"], 2)
+        # Cut short by the collapse: the heir receives the stock and the price, once.
+        site.owner = "WRK"
+        script.run(series["complete_effect"])
+        script.globals.discard(V + "phase_prewar")
+        self.assertTrue(script.conditions(series["cancel_trigger"]))
+        self.assertIn("WRK_prototype_work", site.flags)
+        script.event_targets[V + "preparation_heir"] = "TVA"
+        heir = script.scopes["TVA"].resources
+        before = (heir["artillery_equipment"], heir["support_equipment"], heir["pp"])
+        confederation = script.scopes["WRK"].resources["pp"]
+        for _ in range(2):
+            script.effect("WRK_prototype_settle", "36", "WKR")
+        script.run(series["cancel_effect"])
+        script.run(series["remove_effect"])
+        self.assertEqual((heir["artillery_equipment"] - before[0], heir["support_equipment"] - before[1],
+                          heir["pp"] - before[2]), (2 * 30, 2 * 40, 60))
+        self.assertEqual(script.scopes["WRK"].resources["pp"], confederation)
+        self.assertFalse({key for key in site.variables if key.startswith("WRK_prototype")})
+        self.assertFalse({flag for flag in site.flags if flag.startswith("WRK_prototype")})
+        carryover = list(walk(EFFECTS[V + "inherit_wrk_prewar_preparations"]))
+        self.assertIn([("WRK_prototype_settle", "=", "yes")], [value for key, _, value in carryover if key == "36"])
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            result = re.search(r'(?m)^ WRK_prototype_result_tt:0 "(.*)"$', text).group(1)
+            self.assertEqual(re.findall(r"§G\+(\d+)§!", result), ["1", "30", "40"], language)
+            self.assertIn("§Y35§!", re.search(r'(?m)^ WRK_prototype_begin_tt:0 "(.*)"$', text).group(1))
+            self.assertEqual(re.findall(r"§Y(\d+)§!", re.search(
+                r'(?m)^ WRK_network_pilot_shop_tt:0 "(.*)"$', text).group(1)), ["3", "2"], language)
+
+    def test_workshop_accounts_trade_exact_stock_for_political_power(self):
+        sale = NETWORK_DECISIONS["WRK_network_sell_parts"]
+        self.assertEqual((sale["cost"], sale["days_re_enable"]), ("0", "30"))
+        script = self.campaign()
+        self.assertFalse(script.conditions(sale["visible"]))
+        self.complete(script, "WRK_network_workshop_accounts")
+        self.assertTrue(script.conditions(sale["visible"]))
+        stores = script.scopes["WRK"].resources
+        stores["support_equipment"] = 79.5
+        self.assertFalse(script.conditions(sale["available"]))
+        stores["support_equipment"] = 80
+        self.assertTrue(script.conditions(sale["available"]))
+        power = stores["pp"]
+        script.run(sale["complete_effect"])
+        self.assertEqual((stores["support_equipment"], stores["pp"] - power), (0, 40))
+        self.assertFalse(script.conditions(sale["available"]))
+
+    def test_tooling_line_rechecks_its_site_at_delivery(self):
+        reward = PREWAR_FOCUSES["WRK_network_tooling_line"]["completion_reward"]
+        for owner, slots, built in (("WRK", 1, True), ("WRK", 0, False), ("TVA", 1, False)):
+            with self.subTest(owner=owner, slots=slots):
+                script = self.campaign()
+                site = script.scopes["36"]
+                site.owner = site.controller = owner
+                site.resources["arms_factory_slots"] = slots
+                stores = script.scopes["WRK"].resources
+                before = stores["support_equipment"]
+                script.run(reward, "WRK")
+                self.assertEqual(site.resources["arms_factory"], 1 if built else 0)
+                self.assertEqual(stores["support_equipment"] - before, 0 if built else 200)
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            line = re.search(r'(?m)^ WRK_network_tooling_line_tt:0 "(.*)"$', text).group(1)
+            self.assertIn("§Y200§!", line)
+
+
+COURT = fields(next(
+    value for key, _, value in parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt"))
+    if key == V + "court_category"
+))
+COURT_START = {1: 25, 2: 55, 3: 45, 4: 40, 5: 35, 6: 60}
+STAFF_DECISIONS = {
+    key: fields(value)
+    for key, _, value in walk(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))
+    if key in ("WRK_staff_depot_requisition", "WRK_staff_cadre_regiment") and isinstance(value, list)
+}
+
+
+class CourtIntrigueTests(unittest.TestCase):
+    def campaign(self):
+        script = Script()
+        country = script.scopes["WRK"]
+        del country.variables[P + "patron"]
+        country.ai = False
+        country.resources["has_stability"] = 0.6
+        country.variables["global." + V + "camp_staff"] = 50
+        # The approaches read no focus; the garrison rolls are added where a test needs them.
+        country.focuses = {"WRK_district_staff_exercises", "WRK_petrichev_depots"}
+        options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
+        script.run(options[1]["hidden_effect"])
+        script.calls.clear()
+        return script
+
+    def loyalty(self, script):
+        return {n: script.scopes["40"].variables.get(f"WRK_intrigue_{n}") for n in COURT_START}
+
+    def usable(self, script, name):
+        decision = fields(COURT[name])
+        return script.conditions(decision["visible"]) and script.conditions(decision.get("available", []))
+
+    def finish(self, script, name):
+        self.assertTrue(self.usable(script, name), name)
+        decision = fields(COURT[name])
+        script.run(decision["complete_effect"])
+        script.run(decision["remove_effect"])
+
+    def staff(self, script):
+        return script.scopes["WRK"].variables["global." + V + "camp_staff"]
+
+    def test_only_the_staff_opens_the_court_and_only_once(self):
+        script = self.campaign()
+        self.assertEqual(self.loyalty(script), COURT_START)
+        self.assertEqual(script.scopes["40"].variables["WRK_intrigue_dossiers"], 0)
+        script.scopes["40"].variables["WRK_intrigue_3"] = 90
+        script.effect("WRK_intrigue_initialize")
+        self.assertEqual(script.scopes["40"].variables["WRK_intrigue_3"], 90)
+        self.assertTrue(script.conditions(TRIGGERS["WRK_intrigue_active"]))
+        self.assertFalse(script.conditions(TRIGGERS["WRK_capital_panel_visible"]))
+        options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
+        for index in (0, 2):
+            other = Script()
+            del other.scopes["WRK"].variables[P + "patron"]
+            other.run(options[index]["hidden_effect"])
+            self.assertFalse(other.conditions(TRIGGERS["WRK_intrigue_active"]))
+            self.assertEqual(set(self.loyalty(other).values()), {None})
+            other.effect("WRK_intrigue_monthly")
+            self.assertEqual(set(self.loyalty(other).values()), {None})
+
+    def test_ledger_event_runs_every_apparatus_and_ends_with_the_prewar_phase(self):
+        options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
+        clock = fields(EVENTS[V + "preparation.63"])
+        self.assertEqual(clock["hidden"], "yes")
+        for index in range(3):
+            script = Script()
+            del script.scopes["WRK"].variables[P + "patron"]
+            script.scopes["WRK"].resources["has_stability"] = 0.6
+            script.run(options[index]["hidden_effect"])
+            first = [fields(value) for key, _, value in script.calls if key == "country_event"]
+            self.assertEqual(first, [{"id": V + "preparation.63", "days": "30"}])
+            script.calls.clear()
+            self.assertTrue(script.conditions(clock["trigger"]))
+            script.run(clock["immediate"])
+            again = [fields(value) for key, _, value in script.calls if key == "country_event"]
+            self.assertIn({"id": V + "preparation.63", "days": "30"}, again)
+            moved = (
+                script.scopes["32"].variables.get("WRK_unrest") == 30,
+                script.scopes["40"].variables.get("WRK_intrigue_1") == 22,
+                script.scopes["32"].variables.get("WRK_cell_heat") == 25,
+            )
+            self.assertEqual(moved, tuple(position == index for position in range(3)))
+            script.globals.discard(V + "phase_prewar")
+            self.assertFalse(script.conditions(clock["trigger"]))
+        hooks = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        self.assertNotIn("on_monthly_WRK", hooks)
+
+    def test_rivals_erode_loyalty_and_a_lost_figure_is_reported_once_per_pass(self):
+        for human in (True, False):
+            with self.subTest(human=human):
+                script = self.campaign()
+                script.scopes["WRK"].ai = not human
+                script.scopes["40"].variables["WRK_intrigue_4"] = 36
+                script.effect("WRK_intrigue_monthly")
+                expected = {n: value - 3 for n, value in COURT_START.items()}
+                expected[4] = 33
+                self.assertEqual(self.loyalty(script), expected)
+                # Wither and Zogby both fall below 35 in this pass.
+                self.assertEqual(self.staff(script), 40)
+                reports = [value for key, _, value in script.calls if key == "country_event"]
+                self.assertEqual(len(reports), 1 if human else 0)
+                script.scopes["WRK"].resources["has_stability"] = 0.39
+                script.effect("WRK_intrigue_monthly")
+                self.assertEqual(self.loyalty(script), {n: value - 5 for n, value in expected.items()})
+                self.assertEqual(self.staff(script), 40)
+
+    def test_approach_holds_the_slot_spends_a_dossier_and_wins_the_figure(self):
+        script = self.campaign()
+        tower = script.scopes["40"]
+        approach = fields(COURT["WRK_intrigue_approach_3"])
+        self.assertEqual((approach["cost"], approach["days_remove"]), ("35", "21"))
+        script.run(approach["complete_effect"])
+        self.assertIn("WRK_intrigue_work", tower.flags)
+        for name in ("WRK_intrigue_approach_1", "WRK_intrigue_approach_3", "WRK_intrigue_compile_dossier"):
+            self.assertFalse(self.usable(script, name), name)
+        script.run(approach["remove_effect"])
+        self.assertEqual(tower.variables["WRK_intrigue_3"], 70)
+        self.assertNotIn("WRK_intrigue_work", tower.flags)
+        self.assertEqual(self.staff(script), 55)
+        # A second callback without the slot changes nothing.
+        script.run(approach["remove_effect"])
+        self.assertEqual(tower.variables["WRK_intrigue_3"], 70)
+        dossier = fields(COURT["WRK_intrigue_compile_dossier"])
+        self.assertEqual((dossier["cost"], dossier["days_remove"]), ("40", "28"))
+        for expected in (1, 2):
+            self.finish(script, "WRK_intrigue_compile_dossier")
+            self.assertEqual(tower.variables["WRK_intrigue_dossiers"], expected)
+        self.assertFalse(self.usable(script, "WRK_intrigue_compile_dossier"))
+        self.finish(script, "WRK_intrigue_approach_1")
+        self.assertEqual((tower.variables["WRK_intrigue_1"], tower.variables["WRK_intrigue_dossiers"]), (70, 1))
+        self.assertEqual(self.staff(script), 60)
+        self.finish(script, "WRK_intrigue_approach_6")
+        self.assertEqual((tower.variables["WRK_intrigue_6"], tower.variables["WRK_intrigue_dossiers"]), (100, 0))
+        self.finish(script, "WRK_intrigue_approach_5")
+        self.assertEqual(tower.variables["WRK_intrigue_5"], 60)
+
+    def test_approaches_are_open_from_the_choice_and_the_rolls_add_to_each_talk(self):
+        script = self.campaign()
+        script.scopes["WRK"].focuses.clear()
+        tower = script.scopes["40"]
+        for figure in COURT_START:
+            name = f"WRK_intrigue_approach_{figure}"
+            self.assertNotIn("has_completed_focus", fields(fields(COURT[name])["visible"]))
+            self.assertTrue(self.usable(script, name), name)
+        # The dossier and the reception still wait for their focuses.
+        for name in ("WRK_intrigue_compile_dossier", "WRK_intrigue_staff_reception"):
+            self.assertFalse(self.usable(script, name), name)
+        self.finish(script, "WRK_intrigue_approach_3")
+        self.assertEqual(tower.variables["WRK_intrigue_3"], COURT_START[3] + 25)
+        script.scopes["WRK"].focuses.add("WRK_collect_officer_returns")
+        self.finish(script, "WRK_intrigue_approach_4")
+        self.assertEqual(tower.variables["WRK_intrigue_4"], COURT_START[4] + 30)
+        tower.variables["WRK_intrigue_dossiers"] = 1
+        self.finish(script, "WRK_intrigue_approach_1")
+        self.assertEqual((tower.variables["WRK_intrigue_1"], tower.variables["WRK_intrigue_dossiers"]),
+                         (COURT_START[1] + 50, 0))
+        # The receipt is the price, with or without the rolls.
+        script.run(fields(COURT["WRK_intrigue_approach_2"])["complete_effect"])
+        self.assertEqual(tower.variables["WRK_intrigue_work_paid"], 35)
+        for figure in COURT_START:
+            result = fields(fields(COURT[f"WRK_intrigue_approach_{figure}"])["remove_effect"])["40"]
+            bonus = next(fields(value) for key, _, value in result if key == "if")
+            self.assertEqual(bonus["limit"], [("ROOT", "=", [("has_completed_focus", "=", "WRK_collect_officer_returns")])])
+            self.assertEqual(bonus["custom_effect_tooltip"], "WRK_intrigue_returns_bonus_tt")
+        gain = [value for key, _, value in walk(EFFECTS["WRK_intrigue_set_approach_delta"])
+                if key == "add_to_temp_variable"]
+        self.assertEqual([fields(value) for value in gain], [{"var": "WRK_intrigue_delta", "value": "5"}])
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for key in ("WRK_intrigue_returns_bonus_tt", "WRK_collect_officer_returns_court_tt"):
+                self.assertIn("§G+5§!", re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text).group(1))
+            self.assertNotIn("WRK_intrigue_unlock_tt", text)
+
+    def test_work_cut_short_by_the_collapse_refunds_once(self):
+        for name, price in (("WRK_intrigue_approach_2", 35), ("WRK_intrigue_compile_dossier", 40)):
+            with self.subTest(work=name):
+                script = self.campaign()
+                decision = fields(COURT[name])
+                self.assertFalse(script.conditions(decision["cancel_trigger"]))
+                before = dict(script.scopes["40"].variables)
+                script.run(decision["complete_effect"])
+                self.assertEqual(script.scopes["40"].variables["WRK_intrigue_work_paid"], price)
+                script.globals.discard(V + "phase_prewar")
+                self.assertTrue(script.conditions(decision["cancel_trigger"]))
+                script.run(decision["cancel_effect"])
+                script.run(decision["cancel_effect"])
+                script.run(decision["remove_effect"])
+                self.assertEqual(script.scopes["WRK"].resources["pp"], 1000 + price)
+                self.assertEqual(dict(script.scopes["40"].variables), before)
+                self.assertNotIn("WRK_intrigue_work", script.scopes["40"].flags)
+
+    def test_collapse_returns_the_recorded_price_of_court_work_to_the_heir_once(self):
+        for name, price in (("WRK_intrigue_approach_4", 35), ("WRK_intrigue_compile_dossier", 40)):
+            with self.subTest(work=name):
+                script = self.campaign()
+                decision = fields(COURT[name])
+                script.run(decision["complete_effect"])
+                script.effect(P + "close_prewar")
+                self.assertIn("WRK_intrigue_work", script.scopes["40"].flags)
+                script.event_targets[V + "preparation_heir"] = "VAD"
+                heir = script.scopes["VAD"].resources
+                paid = heir["pp"]
+                for _ in range(2):
+                    script.effect("WRK_intrigue_settle", "40", "WKR")
+                self.assertEqual(heir["pp"], paid + price)
+                script.run(decision["cancel_effect"])
+                script.run(decision["remove_effect"])
+                self.assertEqual((heir["pp"], script.scopes["WRK"].resources["pp"]), (paid + price, 1000))
+                self.assertFalse({key for key in script.scopes["40"].variables if key.startswith("WRK_intrigue")})
+                self.assertNotIn("WRK_intrigue_work", script.scopes["40"].flags)
+
+    def test_reception_lifts_the_whole_court_and_waits_sixty_days(self):
+        script = self.campaign()
+        script.scopes["40"].variables["WRK_intrigue_6"] = 96
+        reception = fields(COURT["WRK_intrigue_staff_reception"])
+        self.assertEqual(reception["cost"], "50")
+        self.assertTrue(self.usable(script, "WRK_intrigue_staff_reception"))
+        script.run(reception["complete_effect"])
+        expected = {n: value + 8 for n, value in COURT_START.items()}
+        expected[6] = 100
+        self.assertEqual(self.loyalty(script), expected)
+        self.assertFalse(self.usable(script, "WRK_intrigue_staff_reception"))
+        flag = next(fields(value) for key, _, value in walk(reception["complete_effect"])
+                    if key == "set_state_flag" and isinstance(value, list))
+        self.assertEqual((flag["flag"], flag["days"]), ("WRK_intrigue_reception_recent", "60"))
+
+    def test_heir_receives_each_allys_contribution_once_and_the_court_is_closed(self):
+        script = self.campaign()
+        script.event_targets[V + "preparation_heir"] = "VAD"
+        tower = script.scopes["40"]
+        tower.variables.update({f"WRK_intrigue_{n}": 65 for n in COURT_START})
+        tower.variables["WRK_intrigue_2"] = 64
+        tower.flags.update({"WRK_intrigue_work", "WRK_intrigue_reception_recent"})
+        for _ in range(2):
+            script.effect("WRK_intrigue_settle", "40", "WKR")
+        heir = script.scopes["VAD"].resources
+        self.assertAlmostEqual(heir["stability"], 0.04)
+        self.assertEqual(heir["people"], 0)
+        self.assertEqual((heir["pp"], heir["support_equipment"], heir["infantry_equipment"]), (60, 150, 4000))
+        self.assertEqual((heir["command"], heir["army_experience"]), (25, 25))
+        for n in COURT_START:
+            self.assertNotIn(f"WRK_intrigue_{n}", tower.variables)
+        self.assertNotIn("WRK_intrigue_dossiers", tower.variables)
+        self.assertFalse({flag for flag in tower.flags if flag.startswith("WRK_intrigue")})
+        carryover = list(walk(EFFECTS[V + "inherit_wrk_prewar_preparations"]))
+        self.assertIn([("WRK_intrigue_settle", "=", "yes")], [value for key, _, value in carryover if key == "40"])
+
+    def test_court_has_its_own_category_and_every_card_is_driven(self):
+        categories = fields(parse(read("common/decisions/categories/ADISCORD_vorkerland_categories.txt")))
+        category = fields(categories[V + "court_category"])
+        self.assertEqual(category["scripted_gui"], V + "intrigue_panel")
+        self.assertIn(("WRK_intrigue_active", "=", "yes"), category["visible"])
+        self.assertIn((V + "is_not_wartime_claimant", "=", "yes"), category["visible"])
+        self.assertEqual(len(COURT), 8)
+        window = read("interface/ADISCORD_vorkerland.gui")
+        window = window[window.index('name = "ADISCORD_vorkerland_intrigue_window"'):]
+        layers = set(re.findall(r'name = "(WRK_intrigue_\d_(?:card|portrait))"', window))
+        self.assertEqual(len(layers), 12)
+        guis = fields(fields(parse(read("common/scripted_guis/ADISCORD_vorkerland_scripted_gui.txt")))["scripted_gui"])
+        panel = fields(guis[V + "intrigue_panel"])
+        properties = fields(panel["properties"])
+        self.assertEqual(set(properties), layers)
+        sprites = "".join(read(str(path.relative_to(ROOT))) for path in (ROOT / "interface").glob("*.gfx"))
+        scripted = read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt")
+        for n in COURT_START:
+            self.assertEqual(fields(properties[f"WRK_intrigue_{n}_card"])["frame"], f"WRK_intrigue_{n}_card_frame")
+            self.assertIn(f"WRK_intrigue_{n}", str(fields(panel["triggers"])[f"WRK_intrigue_{n}_card_visible"]))
+            # The image property takes its sprite name from a scripted localisation entry.
+            image = fields(properties[f"WRK_intrigue_{n}_portrait"])["image"].strip('"')
+            self.assertEqual(image, f"[WRKGetIntriguePortrait{n}]")
+            entry = re.search(
+                rf'name = WRKGetIntriguePortrait{n}\n\ttext = {{ localization_key = "(GFX_portrait_WRK_\w+)" }}',
+                scripted,
+            )
+            self.assertIn(f'name = "{entry.group(1)}"', sprites)
+        frames = TRIGGERS["WRK_intrigue_set_card_frame"]
+        self.assertIn("65", str(frames))
+        self.assertIn("35", str(frames))
+
+    def test_focuses_open_the_court_and_previews_match_in_both_languages(self):
+        focuses = {fields(value)["id"]: fields(value)
+                   for key, _, value in walk(parse(read("focus_trees/Vorkerland/prewar/focuses.txt")))
+                   if key == "focus" and isinstance(value, list)}
+        self.assertIn(("custom_effect_tooltip", "=", "WRK_collect_officer_returns_court_tt"),
+                      focuses["WRK_collect_officer_returns"]["completion_reward"])
+        for focus, decision in (("WRK_district_staff_exercises", "WRK_intrigue_compile_dossier"),
+                                ("WRK_petrichev_depots", "WRK_intrigue_staff_reception")):
+            self.assertIn(("unlock_decision_tooltip", "=", decision), focuses[focus]["completion_reward"])
+            self.assertEqual(fields(fields(COURT[decision])["visible"])["has_completed_focus"], focus)
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+
+            def value(key):
+                return re.search(r'(?m)^ ' + re.escape(key) + r':0 "(.*)"$', text).group(1)
+
+            desc = value(V + "court_category_desc")
+            for token in ("§Y30§!", "§Y40%§!", "§Y65§!", "§Y35§!"):
+                self.assertIn(token, desc, (language, token))
+            for n in COURT_START:
+                preview = value(f"WRK_intrigue_approach_{n}_tt")
+                self.assertIn("§G+25§!", preview)
+                self.assertIn("§G+45§!", preview)
+                self.assertIn(f"[?WRK_intrigue_{n}|0]", preview)
+                self.assertEqual(value(f"WRK_intrigue_{n}_status"), f"[40.WRKGetIntrigueStatus{n}]")
+                for stance in ("ally", "undecided", "hostile"):
+                    self.assertIn(f"[?WRK_intrigue_{n}|0]", value(f"WRK_intrigue_{stance}_{n}"))
+                self.assertTrue(value(f"WRK_intrigue_approach_{n}"))
+                self.assertTrue(value(f"WRK_intrigue_approach_{n}_desc"))
+            self.assertIn("§G+[?WRK_intrigue_reception|0]§!", value("WRK_intrigue_reception_tt"))
+            self.assertIn("§R-5§!", value("WRK_intrigue_hostile_report_tt"))
+            self.assertIn("§R-5§!", value(V + "camp_staff_sub_5_tt"))
+
+    # Court block of the staff's tree: focus -> ((country variable, value at
+    # the choice, value after the focus), ...).
+    COURT_VALUES = {
+        "WRK_staff_standing_invitations": (("WRK_intrigue_decay", 3, 2),),
+        "WRK_staff_adjutants_at_court": (("WRK_intrigue_decay_crisis", 5, 3),),
+        "WRK_staff_second_section_archive": (("WRK_intrigue_dossier_limit", 2, 3),),
+        "WRK_staff_officers_assembly": (("WRK_intrigue_reception", 8, 12),),
+        "WRK_staff_district_pledges": (("WRK_intrigue_gift_people", 3000, 4500),
+                                       ("WRK_intrigue_gift_support", 150, 250),
+                                       ("WRK_intrigue_gift_rifles", 4000, 6000)),
+        "WRK_staff_council_of_allies": (("WRK_intrigue_gift_stability", 4, 6),
+                                        ("WRK_intrigue_gift_power", 60, 90),
+                                        ("WRK_intrigue_gift_command", 25, 40)),
+    }
+
+    def complete(self, script, name):
+        script.run(PREWAR_FOCUSES[name]["completion_reward"], "WRK")
+        script.scopes["WRK"].focuses.add(name)
+
+    def test_court_focuses_change_printed_values_and_pay_a_material_reward(self):
+        material = {"add_stability", "add_political_power", "add_manpower", "add_command_power",
+                    "army_experience", "add_equipment_to_stockpile"}
+        start = dict(self.campaign().scopes["WRK"].variables)
+        for name, changes in self.COURT_VALUES.items():
+            with self.subTest(focus=name):
+                self.assertEqual(patron_of(PREWAR_FOCUSES[name]), "staff")
+                reward = PREWAR_FOCUSES[name]["completion_reward"]
+                self.assertEqual(reward[0], ("custom_effect_tooltip", "=", name + "_tt"))
+                writes = [fields(value) for key, _, value in walk(reward) if key == "set_variable"]
+                self.assertEqual(writes, [{"var": variable, "value": str(after)} for variable, _, after in changes])
+                for variable, before, _ in changes:
+                    self.assertEqual(start[variable], before)
+                paid = [key for key, _, _ in reward if key in material or key.startswith(V + "camp_")]
+                self.assertGreaterEqual(len(paid), 2, name)
+                self.assertTrue(set(paid) & material, name)
+                fresh = self.campaign()
+                self.complete(fresh, name)
+                changed = {key: value for key, value in fresh.scopes["WRK"].variables.items()
+                           if start.get(key) != value and key.startswith(("WRK_intrigue", "WRK_cadre"))}
+                self.assertEqual(changed, {variable: after for variable, _, after in changes})
+                for language in ("russian", "english"):
+                    text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+                    line = re.search(r'(?m)^ ' + name + r'_tt:0 "(.*)"$', text).group(1)
+                    shown = [int(number) for number in re.findall(r"§[YG]\+?(\d+)%?§!", line) if int(number) != 40
+                             or len(changes) == 3]
+                    expected = [number for _, before, after in changes for number in (after, before)]
+                    self.assertEqual(shown, expected, (language, name))
+        court = [name for name in PREWAR_TREES["staff"] if name in self.COURT_VALUES]
+        self.assertEqual(court, list(self.COURT_VALUES))
+        pair = ("WRK_staff_second_section_archive", "WRK_staff_officers_assembly")
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[0]], "mutually_exclusive"), [pair[1]])
+        self.assertEqual(linked(PREWAR_FOCUSES[pair[1]], "mutually_exclusive"), [pair[0]])
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_staff_district_pledges"], "prerequisite"), list(pair))
+        self.assertEqual(linked(PREWAR_FOCUSES["WRK_staff_council_of_allies"], "prerequisite"),
+                         ["WRK_staff_district_pledges"])
+
+    def test_the_court_reads_the_values_the_focuses_change(self):
+        # Decay, in calm and in crisis.
+        script = self.campaign()
+        self.complete(script, "WRK_staff_standing_invitations")
+        script.effect("WRK_intrigue_monthly")
+        self.assertEqual(self.loyalty(script), {n: value - 2 for n, value in COURT_START.items()})
+        script.scopes["WRK"].resources["has_stability"] = 0.39
+        script.effect("WRK_intrigue_monthly")
+        self.assertEqual(self.loyalty(script), {n: value - 7 for n, value in COURT_START.items()})
+        self.complete(script, "WRK_staff_adjutants_at_court")
+        script.effect("WRK_intrigue_monthly")
+        self.assertEqual(self.loyalty(script), {n: value - 10 for n, value in COURT_START.items()})
+        # A third dossier, and never a fourth.
+        script = self.campaign()
+        for expected in (1, 2):
+            self.finish(script, "WRK_intrigue_compile_dossier")
+            self.assertEqual(script.scopes["40"].variables["WRK_intrigue_dossiers"], expected)
+        self.assertFalse(self.usable(script, "WRK_intrigue_compile_dossier"))
+        self.complete(script, "WRK_staff_second_section_archive")
+        self.finish(script, "WRK_intrigue_compile_dossier")
+        self.assertEqual(script.scopes["40"].variables["WRK_intrigue_dossiers"], 3)
+        self.assertFalse(self.usable(script, "WRK_intrigue_compile_dossier"))
+        # The reception gives the printed amount.
+        for focus, amount in ((None, 8), ("WRK_staff_officers_assembly", 12)):
+            script = self.campaign()
+            if focus:
+                self.complete(script, focus)
+            self.assertEqual(script.scopes["WRK"].variables["WRK_intrigue_reception"], amount)
+            script.run(fields(COURT["WRK_intrigue_staff_reception"])["complete_effect"])
+            self.assertEqual(self.loyalty(script), {n: value + amount for n, value in COURT_START.items()})
+
+    def test_allies_contributions_are_read_from_the_copied_focus_record(self):
+        settle = list(walk(EFFECTS["WRK_intrigue_settle"]))
+        # WRK no longer exists at the settlement: nothing there reads its gift variables.
+        self.assertFalse([value for key, _, value in settle if isinstance(value, str) and "_gift_" in value])
+        cases = (
+            ((), (4, 3000, 60, 150, 4000, 25)),
+            (("WRK_staff_district_pledges",), (4, 4500, 60, 250, 6000, 25)),
+            (("WRK_staff_district_pledges", "WRK_staff_council_of_allies"), (6, 4500, 90, 250, 6000, 40)),
+        )
+        for record, (stability, people, power, support, rifles, command) in cases:
+            with self.subTest(record=record):
+                script = self.campaign()
+                for name in record:
+                    self.complete(script, name)
+                printed = script.scopes["WRK"].variables
+                script.event_targets[V + "preparation_heir"] = "VAD"
+                # copy_completed_from hands WKR the record; WRK's own is not consulted.
+                script.scopes["WKR"].focuses = set(record)
+                script.scopes["WRK"].focuses = set()
+                script.scopes["40"].variables.update({f"WRK_intrigue_{n}": 65 for n in COURT_START})
+                heir = script.scopes["VAD"].resources
+                before = {key: heir[key] for key in ("stability", "people", "pp", "support_equipment",
+                                                     "infantry_equipment", "command", "army_experience")}
+                for _ in range(2):
+                    script.effect("WRK_intrigue_settle", "40", "WKR")
+                self.assertAlmostEqual(heir["stability"] - before["stability"], stability / 100)
+                self.assertEqual(
+                    (heir["people"] - before["people"], heir["pp"] - before["pp"],
+                     heir["support_equipment"] - before["support_equipment"],
+                     heir["infantry_equipment"] - before["infantry_equipment"],
+                     heir["command"] - before["command"], heir["army_experience"] - before["army_experience"]),
+                    (people, power, support, rifles, command, command),
+                )
+                # The court texts printed the same contributions before the collapse.
+                self.assertEqual(
+                    tuple(printed["WRK_intrigue_gift_" + key]
+                          for key in ("stability", "people", "power", "support", "rifles", "command")),
+                    (stability, people, power, support, rifles, command),
+                )
+
+    def test_court_texts_print_the_current_values_in_both_languages(self):
+        gifts = ("stability", "people", "power", "support", "rifles", "command")
+        printed = {
+            V + "court_category_desc": ("[?ROOT.WRK_intrigue_decay|0]", "[?ROOT.WRK_intrigue_decay_crisis|0]",
+                                        "[?ROOT.WRK_intrigue_dossier_limit|0]",
+                                        *(f"[?ROOT.WRK_intrigue_gift_{key}|0]" for key in gifts)),
+            "WRK_intrigue_dossier_room_tt": ("[?WRK_intrigue_dossier_limit|0]",),
+            "WRK_intrigue_dossier_result_tt": ("[?ROOT.WRK_intrigue_dossier_limit|0]",),
+            "WRK_intrigue_reception_tt": ("[?WRK_intrigue_reception|0]",),
+        }
+        for index, key in enumerate(gifts, 1):
+            printed[f"WRK_intrigue_{index}_tt"] = (f"[?ROOT.WRK_intrigue_gift_{key}|0]",)
+        stale = ("§Y3§!", "§Y5§!", "§Y2§!", "§G+8§!", "§G+4%§!", "§G+3000§!", "§G+60§!", "§G+150§!", "§G+4000§!",
+                 "§G+25§!")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            for key, tokens in printed.items():
+                line = re.search(r'(?m)^ ' + re.escape(key) + r':0 "(.*)"$', text).group(1)
+                for token in tokens:
+                    self.assertIn(token, line, (language, key))
+                for token in stale:
+                    self.assertNotIn(token, line, (language, key))
+        script = self.campaign()
+        for tokens in printed.values():
+            for token in tokens:
+                name = token.strip("[]?").split("|")[0].removeprefix("ROOT.")
+                self.assertIn(name, script.scopes["WRK"].variables)
+
+    def test_cadre_regiment_is_one_receipt_kept_for_the_heir(self):
+        regiment = STAFF_DECISIONS["WRK_staff_cadre_regiment"]
+        self.assertEqual((regiment["cost"], regiment["days_remove"]), ("50", "28"))
+        self.assertEqual([value for _, _, value in regiment["targets"]], ["37"])
+        script = self.campaign()
+        script.source = "37"
+        site = script.scopes["37"]
+        self.assertFalse(script.conditions(regiment["visible"]))
+        self.complete(script, "WRK_staff_cadre_regiments")
+        self.assertIn(("unlock_decision_tooltip", "=", "WRK_staff_cadre_regiment"),
+                      PREWAR_FOCUSES["WRK_staff_cadre_regiments"]["completion_reward"])
+        self.assertTrue(script.conditions(regiment["visible"]))
+        for expected in (1, 2):
+            self.assertTrue(script.conditions(regiment["available"]))
+            script.run(regiment["complete_effect"])
+            self.assertIn("WRK_cadre_work", site.flags)
+            self.assertEqual(site.variables["WRK_cadre_paid"], 50)
+            self.assertFalse(script.conditions(regiment["cancel_trigger"]))
+            script.run(regiment["remove_effect"])
+            script.run(regiment["remove_effect"])
+            self.assertEqual(site.variables["WRK_cadre_stock"], expected)
+            self.assertFalse({flag for flag in site.flags if flag.startswith("WRK_cadre")})
+        # Cut short before the collapse: the price returns once and no regiment is added.
+        script.run(regiment["complete_effect"])
+        site.owner = "TVA"
+        self.assertTrue(script.conditions(regiment["cancel_trigger"]))
+        paid = script.scopes["WRK"].resources["pp"]
+        script.run(regiment["cancel_effect"])
+        script.run(regiment["cancel_effect"])
+        script.run(regiment["remove_effect"])
+        self.assertEqual(script.scopes["WRK"].resources["pp"], paid + 50)
+        self.assertEqual(site.variables["WRK_cadre_stock"], 2)
+        # A third regiment is the last.
+        site.owner = "WRK"
+        script.run(regiment["complete_effect"])
+        script.run(regiment["remove_effect"])
+        self.assertFalse(script.conditions(regiment["available"]))
+        site.variables["WRK_cadre_stock"] = 2
+        # Cut short by the collapse: the heir receives the regiments and the price, once.
+        script.run(regiment["complete_effect"])
+        script.globals.discard(V + "phase_prewar")
+        self.assertTrue(script.conditions(regiment["cancel_trigger"]))
+        script.event_targets[V + "preparation_heir"] = "VAD"
+        heir = script.scopes["VAD"].resources
+        before = (heir["people"], heir["infantry_equipment"], heir["pp"])
+        confederation = script.scopes["WRK"].resources["pp"]
+        for _ in range(2):
+            script.effect("WRK_cadre_settle", "37", "WKR")
+        script.run(regiment["cancel_effect"])
+        script.run(regiment["remove_effect"])
+        self.assertEqual((heir["people"] - before[0], heir["infantry_equipment"] - before[1], heir["pp"] - before[2]),
+                         (2 * 2500, 2 * 2000, 50))
+        self.assertEqual(script.scopes["WRK"].resources["pp"], confederation)
+        self.assertFalse({key for key in site.variables if key.startswith("WRK_cadre")})
+        self.assertFalse({flag for flag in site.flags if flag.startswith("WRK_cadre")})
+        carryover = list(walk(EFFECTS[V + "inherit_wrk_prewar_preparations"]))
+        self.assertIn([("WRK_cadre_settle", "=", "yes")], [value for key, _, value in carryover if key == "37"])
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            result = re.search(r'(?m)^ WRK_cadre_result_tt:0 "(.*)"$', text).group(1)
+            self.assertEqual(re.findall(r"§G\+(\d+)§!", result), ["1", "2500", "2000"], language)
+            self.assertIn("§Y28§!", re.search(r'(?m)^ WRK_cadre_begin_tt:0 "(.*)"$', text).group(1))
+            self.assertIn("§Y3§!", re.search(r'(?m)^ WRK_cadre_room_tt:0 "(.*)"$', text).group(1))
+
+    def test_depot_draft_and_garrison_roads_deliver_what_they_state(self):
+        draft = STAFF_DECISIONS["WRK_staff_depot_requisition"]
+        self.assertEqual((draft["cost"], draft["days_re_enable"]), ("45", "45"))
+        script = self.campaign()
+        self.assertFalse(script.conditions(draft["visible"]))
+        self.complete(script, "WRK_staff_depot_ledgers")
+        self.assertTrue(script.conditions(draft["visible"]))
+        stores = script.scopes["WRK"].resources
+        before = (stores["infantry_equipment"], stores["army_experience"])
+        script.run(draft["complete_effect"])
+        self.assertEqual((stores["infantry_equipment"] - before[0], stores["army_experience"] - before[1]), (2500, 5))
+        reward = PREWAR_FOCUSES["WRK_staff_garrison_roads"]["completion_reward"]
+        for owner, level, built in (("WRK", 4, True), ("WRK", 5, False), ("TVA", 2, False)):
+            with self.subTest(owner=owner, level=level):
+                script = self.campaign()
+                site = script.scopes["37"]
+                site.owner = site.controller = owner
+                site.resources["infrastructure"] = level
+                stores = script.scopes["WRK"].resources
+                before = stores["support_equipment"]
+                script.run(reward, "WRK")
+                self.assertEqual(site.resources["infrastructure"], level + (1 if built else 0))
+                self.assertEqual(stores["support_equipment"] - before, 0 if built else 150)
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+            self.assertIn("§Y150§!", re.search(r'(?m)^ WRK_staff_garrison_roads_tt:0 "(.*)"$', text).group(1))
+
+    def test_staff_runs_the_military_route_without_an_unrest_ledger(self):
+        script = self.campaign()
+        self.complete(script, "WRK_staff_military_route")
+        self.assertIn("WRK_staff_military_route", granting("WRK_capability_military_evacuation"))
+        project = fields(PROJECTS[P + "military_evacuation"])
+        script.source = "40"
+        self.assertTrue(script.conditions(project["visible"]))
+        # The staff keeps no unrest ledger, so no riot can close its route.
+        for name in UNREST_DISTRICTS:
+            self.assertNotIn("WRK_unrest", script.scopes[name].variables)
+        self.assertTrue(script.conditions(TRIGGERS["WRK_unrest_military_route_clear"]))
+        tower = script.scopes["40"]
+        tower.variables[P + "project"] = 2
+        texts = next(value for key, _, value in parse(read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt"))
+                     if key == "defined_text" and fields(value)["name"] == "GetVorkerlandWorkerFateForecast")
+        forecast = next(fields(value)["localization_key"] for key, _, value in texts
+                        if key == "text" and script.conditions(fields(value).get("trigger", [])))
+        self.assertEqual(forecast, V + "fate_forecast_vlad")
+        script.effect(P + "resolve_fate")
+        self.assertIn(V + "worker_rescued_by_vlad", script.globals)
+        self.assertFalse(script.random_weights)
+
+
+class CapitalHoverTextTests(unittest.TestCase):
+    def test_every_district_and_card_has_a_hover_text_in_both_languages(self):
+        notes = str(next(
+            value for key, _, value in parse(read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt"))
+            if key == "defined_text" and fields(value)["name"] == "WRKGetCapitalDistrictNote"
+        ))
+        for token in ("WRK_unrest", "WRK_cell_level", "WRK_capital_note_unrest", "WRK_capital_note_cell"):
+            self.assertIn(token, notes)
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+
+            def value(key):
+                return re.search(r'(?m)^ ' + re.escape(key) + r':0 "(.*)"$', text).group(1)
+
+            for district in UNREST_DISTRICTS:
+                hover = value(f"WRK_capital_{district}_tt")
+                self.assertIn(f"[{district}.GetName]", hover)
+                self.assertIn(f"[{district}.WRKGetCapitalDistrictNote]", hover)
+            self.assertIn("$ADISCORD_vorkerland_phase_worker_fate_tt$", value("WRK_capital_40_tt"))
+            self.assertIn("[WRKGetUnrestStatus]", value("WRK_capital_note_unrest"))
+            self.assertIn("[WRKGetCellStatus]", value("WRK_capital_note_cell"))
+            desc = value(V + "court_category_desc")
+            for n in COURT_START:
+                hover = value(f"WRK_intrigue_{n}_tt")
+                self.assertIn(f"[40.WRKGetIntrigueStatus{n}]", hover)
+                # The card repeats the contribution listed in the category text.
+                for amount in re.findall(r"§G\+[0-9%]+§!", hover):
+                    self.assertIn(amount, desc, (language, n, amount))
+
+
+class ConfederationGovernmentTextTests(unittest.TestCase):
+    SHARED = (
+        "WRK_conf_council_of_republics",
+        "WRK_conf_solidarity_abroad",
+        "WRK_conf_charter_for_the_west",
+        "WRK_worker_west_solidarity_committees",
+        "WRK_conf_southern_solidarity",
+    )
+
+    def test_shared_focuses_read_differently_under_each_government(self):
+        scripted = read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt")
+        tree = read("focus_trees/Vorkerland/worker_confederation/focuses.txt")
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+
+            def value(key):
+                return re.search(r'(?m)^ ' + re.escape(key) + r':0? "(.*)"$', text).group(1)
+
+            for focus in self.SHARED:
+                self.assertIn(f"\t\tid = {focus}\n", tree)
+                for suffix in ("", "_desc"):
+                    call = value(focus + suffix)
+                    self.assertRegex(call, r"^\[GetWRKGovernment\w+\]$", (language, focus))
+                    entry = scripted[scripted.index("name = " + call[1:-1] + "\n"):]
+                    entry = entry[:entry.index("\n}\n")]
+                    self.assertIn(
+                        "event_target:" + V + "nation = { has_country_flag = " + V + "worker_utilitarian_outcome }",
+                        entry,
+                    )
+                    self.assertIn(f"localization_key = {focus}{suffix}_executive", entry)
+                    self.assertTrue(entry.rstrip().endswith(f"text = {{ localization_key = {focus}{suffix}_council }}"))
+                    council = value(f"{focus}{suffix}_council")
+                    executive = value(f"{focus}{suffix}_executive")
+                    self.assertTrue(council and executive)
+                    self.assertNotEqual(council, executive)
+                    for token in ("\u2013", "\u2014", "\u00ab", "\u00bb"):
+                        self.assertNotIn(token, executive)
+            self.assertNotIn("делегатов всех", value("WRK_conf_council_of_republics_desc_executive"))
+            self.assertNotIn("council of delegates", value("WRK_conf_council_of_republics_desc_executive"))
+
+
+class VorkerlandDecisionIconTests(unittest.TestCase):
+    # Decision sprites of the base game that Vorkerland decisions use. A name of
+    # a focus or goal sprite resolves to nothing in the decision list.
+    BASE_GAME = frozenset({
+        "generic_air",
+        "generic_army_support",
+        "generic_construction",
+        "generic_fortification",
+        "generic_industry",
+        "generic_naval",
+        "generic_police_action",
+        "generic_political_discourse",
+        "generic_prepare_civil_war",
+        "generic_research",
+    })
+
+    def test_every_decision_icon_names_a_decision_sprite(self):
+        defined = set()
+        for path in (ROOT / "interface").glob("*.gfx"):
+            defined.update(re.findall(r'name\s*=\s*"GFX_decision_([A-Za-z0-9_]+)"', read(str(path.relative_to(ROOT)))))
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        icons = re.findall(r"(?m)^\s*icon = (\S+)", decisions)
+        self.assertGreater(len(icons), 200)
+        unresolved = sorted({icon for icon in icons
+                             if not icon.startswith("GFX_") and icon not in defined and icon not in self.BASE_GAME})
+        self.assertEqual(unresolved, [])
+
+
+class VorkerlandIdeaPictureTests(unittest.TestCase):
+    # Idea sprites of the base game that Vorkerland spirits use. A decision or
+    # focus sprite name resolves to nothing in the spirit list.
+    BASE_GAME = frozenset({
+        "ARG_anti_american_propaganda",
+        "CHI_china_merchant_group",
+        "generic_artillery_regiments",
+        "generic_build_infrastructure",
+        "generic_central_management",
+        "generic_constitutional_guarantees",
+        "generic_disjointed_gov",
+        "generic_fortify_the_borders",
+        "generic_infantry_bonus",
+        "generic_intel_bonus",
+        "generic_manpower_bonus",
+        "generic_neglected_military",
+        "generic_oppression",
+        "generic_political_support",
+        "generic_pp_unity_bonus",
+        "generic_production_bonus",
+        "generic_research_bonus",
+        "generic_reserve_divisions",
+        "generic_volunteer_expedition_bonus",
+        "generic_war_preparation",
+    })
+
+    def test_every_spirit_picture_names_an_idea_sprite(self):
+        defined = set()
+        for path in (ROOT / "interface").glob("*.gfx"):
+            defined.update(re.findall(r'name\s*=\s*"GFX_idea_([A-Za-z0-9_]+)"', read(str(path.relative_to(ROOT)))))
+        pictures = re.findall(r"(?m)^\s*picture = (\S+)", read("common/ideas/ADISCORD_vorkerland_ideas.txt"))
+        self.assertGreater(len(pictures), 200)
+        unresolved = sorted({name for name in pictures
+                             if not name.startswith("GFX_") and name not in defined and name not in self.BASE_GAME})
+        self.assertEqual(unresolved, [])
+
+
+class NetworkTowerProjectTests(unittest.TestCase):
+    NAME = P + "network_exfiltration"
+
+    def finished(self, level=2, flags=()):
+        script = Script()
+        script.start(self.NAME)
+        self.assertEqual(script.scopes["40"].variables[P + "project"], 3)
+        script.effect(P + "finish_project", "40")
+        script.run(fields(DECISIONS[P + "defend_object"])["complete_effect"])
+        script.scopes["32"].variables["WRK_cell_level"] = level
+        script.scopes["32"].flags.update(flags)
+        return script
+
+    def forecast(self, script):
+        texts = next(value for key, _, value in parse(read("common/scripted_localisation/ADISCORD_vorkerland_scripted_loc.txt"))
+                     if key == "defined_text" and fields(value)["name"] == "GetVorkerlandWorkerFateForecast")
+        return next(fields(value)["localization_key"] for key, _, value in texts
+                    if key == "text" and script.conditions(fields(value).get("trigger", [])))
+
+    def test_only_the_network_reaches_the_project_before_the_tower_pair(self):
+        self.assertEqual(granting("WRK_capability_network_exfiltration"), ["WRK_network_technical_continuity"])
+        focus = PREWAR_FOCUSES["WRK_network_technical_continuity"]
+        self.assertEqual(patron_of(focus), "network")
+        self.assertIn(("unlock_decision_tooltip", "=", self.NAME), focus["completion_reward"])
+        project = fields(PROJECTS[self.NAME])
+        self.assertEqual(fields(project["targets"]), {"": "40"})
+        self.assertEqual(project["custom_cost_text"], P + "cost_45_0_0_100_0_0")
+        self.assertNotIn("command_power", str(project["custom_cost_trigger"]))
+
+    def test_open_route_hides_worker_without_a_roll(self):
+        for flags in ((), ("WRK_cell_dormant",)):
+            with self.subTest(flags=flags):
+                script = self.finished(2, flags)
+                self.assertEqual(self.forecast(script), V + "fate_forecast_missing")
+                script.effect(P + "resolve_fate")
+                self.assertIn(V + "worker_missing", script.globals)
+                self.assertFalse(script.random_weights)
+
+    def test_closed_route_leaves_the_fate_to_the_roll(self):
+        for level, flags in ((1, ()), (3, ("WRK_cell_exposed",)), (3, ("WRK_cell_legal",)), (0, ())):
+            with self.subTest(level=level, flags=flags):
+                script = self.finished(level, flags)
+                self.assertEqual(self.forecast(script), V + "fate_forecast_network_blocked")
+                self.assertFalse(script.conditions(TRIGGERS["WRK_network_exfiltration_route_clear"]))
+                # No project branch holds, so the effect falls through to its roll.
+                branches = [fields(value) for key, _, value in EFFECTS[P + "resolve_fate"] if key in ("if", "else_if")]
+                self.assertEqual(len(branches), 3)
+                for branch in branches:
+                    self.assertFalse(script.conditions(branch["limit"]))
+                self.assertIn(("WRK_network_exfiltration_route_clear", "=", "yes"), branches[2]["limit"])
+
+    def test_lost_tower_contest_hands_the_tower_to_the_staff(self):
+        script = Script()
+        script.start(self.NAME)
+        script.effect(P + "finish_project", "40")
+        script.effect(P + "yield_object", "40")
+        script.scopes["32"].variables["WRK_cell_level"] = 3
+        script.effect(P + "resolve_fate")
+        self.assertIn(V + "worker_rescued_by_vlad", script.globals)
+
+    def test_texts_name_the_route_in_both_languages(self):
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml")
+
+            def value(key):
+                return re.search(r'(?m)^ ' + re.escape(key) + r':0 "(.*)"$', text).group(1)
+
+            result = value(self.NAME + "_result_tt")
+            self.assertIn("§Y2§!", result)
+            self.assertIn("[GetVorkerlandNetworkRouteStatus]", result)
+            self.assertIn("[GetVorkerlandWorkerFateOdds]", value(V + "fate_forecast_network_blocked"))
+            for key in (self.NAME, self.NAME + "_desc", V + "fate_forecast_missing",
+                        V + "network_route_open", V + "network_route_closed",
+                        P + "cost_45_0_0_100_0_0", P + "cost_45_0_0_100_0_0_blocked",
+                        P + "cost_45_0_0_100_0_0_tooltip"):
+                self.assertTrue(value(key), (language, key))
+            self.assertLessEqual(len(re.sub(r"\[[^]]*\]", "", value(self.NAME)).rstrip(": ")), 40)

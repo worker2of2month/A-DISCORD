@@ -109,3 +109,43 @@ music = {
 	song = "ADISCORD_radio_tapok_zloy_gorod"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_3teeth_antiflux"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_final_product"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_master_of_decay"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_3teeth_pearls_2_swine"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_das_boot"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_komm_zu_uns"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_sternkrieg"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_trinken_mit_der_kaizer"
+	chance = { base = 10 }
+}

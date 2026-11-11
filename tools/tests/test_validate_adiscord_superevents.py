@@ -38,6 +38,29 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_nam_veyran_proclamation_queues_a_card_for_human_and_ai(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        tree = parse_clausewitz(read_focus_source(ROOT / "common/national_focus/ADISCORD_NAM_postwar.txt"))[0].value
+        focus = next(row.value for row in tree
+                     if row.key == "focus" and scalar(row.value, "id") == "NAM_veyran_union_charter")
+        reward = block(focus, "completion_reward")
+        for ai in (True, False):
+            effects = list(selected_effects(reward, {("NAM", "is_ai"): ai}, "NAM"))
+            requests = [scalar(row.value, "ADISCORD_superevent_request")
+                        for _, row in effects if row.key == "set_temp_variable"]
+            self.assertEqual(requests, ["71"])
+            self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
+            self.assertEqual([row.value for _, row in effects if row.key == "set_cosmetic_tag"],
+                             ["NAM_veyran_union"])
+            self.assertFalse(any(row.key in ("scoped_play_song", "play_song", "sound_effect")
+                                 for _, row in effects))
+        self.assertEqual(PRESENTATIONS[70].name, "superevent_nam_veyran_proclamation")
+        for path in (ROOT / "music").glob("*.asset"):
+            self.assertNotIn('name = "ADISCORD_nam_veyran_proclamation"', path.read_text(encoding="utf-8-sig"))
+        self.assertFalse((ROOT / "music/ADISCORD_nam_veyran_proclamation.ogg").exists())
+
     def test_stelander_personal_victories_select_the_winner_and_keep_previews_safe(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -960,6 +983,7 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_south_nam",
                 "superevent_west_council",
                 "superevent_west_world_empire",
+                "superevent_nam_veyran_proclamation",
             ),
         )
 

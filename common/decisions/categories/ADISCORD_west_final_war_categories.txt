@@ -30,7 +30,8 @@ ADISCORD_west_final_war_category = {
 
 ADISCORD_west_influence_category = {
 	icon = generic_political_discourse
-	picture = GFX_ADISCORD_decision_picture_deal
+	scripted_gui = ADISCORD_west_influence_panel
+	visible_when_empty = yes
 	allowed = {
 		OR = {
 			OR = { tag = WRK tag = WKR tag = VAD tag = TVA }

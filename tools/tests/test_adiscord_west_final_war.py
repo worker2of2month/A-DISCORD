@@ -568,11 +568,16 @@ class WesternInfluenceTests(unittest.TestCase):
         self.assertIn("is_neighbor_of = ROOT", ultimatum)
         self.assertIn("ADISCORD_west_crisis_add = yes", ultimatum)
 
-    def test_category_lists_every_western_state(self):
+    def test_map_tooltips_cover_every_western_state(self):
         for language in ("russian", "english"):
             text = (ROOT / f"localisation/{language}/ADISCORD_west_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
             desc = re.search(r'^ ADISCORD_west_influence_category_desc:0 "([^"]*)"$', text, re.M)[1]
-            self.assertEqual(set(re.findall(r"\[([A-Z]{3})\.ADISCORDWestLean\]", desc)), set(REGIONAL), language)
+            self.assertEqual(desc, "", language)
+            tooltips = re.findall(r'^ ADISCORD_west_map_[A-Z]{3}_tt:0 "([^"]*)"$', text, re.M)
+            self.assertEqual(set(re.findall(r"\[([A-Z]{3})\.ADISCORDWestLean\]", "\n".join(tooltips))), set(REGIONAL), language)
+        category = body(ROOT / "common/decisions/categories/ADISCORD_west_final_war_categories.txt", "ADISCORD_west_influence_category")
+        self.assertIn("scripted_gui = ADISCORD_west_influence_panel", category)
+        self.assertNotIn("picture =", category)
 
 
 class ItoranCourseTests(unittest.TestCase):

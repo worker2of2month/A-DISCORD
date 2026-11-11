@@ -531,7 +531,7 @@ ideas = {
 		# makes the idea flicker on and off as the front oscillates, which forces a
 		# modifier recalculation on every state control change.
 		ADISCORD_vorkerland_organized_defence = {
-			picture = generic_defence_bonus
+			picture = generic_fortify_the_borders
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -792,7 +792,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_vad_solar_corridor_intelligence = {
-			picture = generic_army_support
+			picture = generic_intel_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = { NOT = { OR = { has_war_with = SRA has_war_with = CSL } } }
@@ -1636,7 +1636,7 @@ ideas = {
 
 		# WKR live-showdown programme.
 		ADISCORD_vorkerland_wkr_front_operations_bureau = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -1649,7 +1649,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_wkr_republican_mission_commands = {
-			picture = generic_political_pressure
+			picture = generic_political_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -1715,7 +1715,7 @@ ideas = {
 
 		# VAD live-showdown programme and constitutional upgrades.
 		ADISCORD_vorkerland_vad_campaign_directorate = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -1834,7 +1834,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_tva_linked_fire_control = {
-			picture = generic_army_support
+			picture = generic_artillery_regiments
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -1861,7 +1861,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_tva_live_front_validated = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -1919,7 +1919,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_wkr_chairmans_mandate = {
-			picture = generic_political_pressure
+			picture = generic_political_support
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2004,7 +2004,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_vad_officer_estates = {
-			picture = generic_army_support
+			picture = generic_reserve_divisions
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = { ADISCORD_vorkerland_plan_war_active = no }
@@ -2038,7 +2038,7 @@ ideas = {
 		# VAD / joint council: dual power. Wide, tough and slow, and it cannot
 		# concentrate authority the way the chancery can.
 		ADISCORD_vorkerland_vad_dual_chamber = {
-			picture = generic_national_unity
+			picture = generic_pp_unity_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2068,7 +2068,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_vad_crown_and_council = {
-			picture = generic_national_unity
+			picture = generic_pp_unity_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2084,7 +2084,7 @@ ideas = {
 		}
 
 		VAD_staff_constitution_delta = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.05
@@ -2093,7 +2093,7 @@ ideas = {
 		}
 
 		VAD_staff_collective_delta = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			modifier = {
 				planning_speed = 0.10
@@ -2103,7 +2103,7 @@ ideas = {
 		}
 
 		VAD_staff_delegation_delta = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			modifier = {
 				land_reinforce_rate = 0.03
@@ -2113,7 +2113,7 @@ ideas = {
 		}
 
 		VAD_joint_operational_orders = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2149,7 +2149,7 @@ ideas = {
 		}
 
 		ADISCORD_vorkerland_tva_converted_grid = {
-			picture = generic_construction
+			picture = generic_build_infrastructure
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2213,7 +2213,7 @@ ideas = {
 
 		ADISCORD_vorkerland_tva_certified_cadre = {
 			name = TVA_administration_dynamic
-			picture = generic_army_support
+			picture = generic_reserve_divisions
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2309,7 +2309,7 @@ ideas = {
 		# A professional officer caste, slow to reproduce.
 		ADISCORD_vorkerland_vad_doctrine_officer_estates = {
 			name = ADISCORD_vorkerland_vad_doctrine
-			picture = generic_army_support
+			picture = generic_reserve_divisions
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -2382,7 +2382,7 @@ ideas = {
 
 		# Losses replaced straight off the production line.
 		ADISCORD_vorkerland_tva_doctrine_line_replacement = {
-			picture = generic_army_support
+			picture = generic_reserve_divisions
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = { TVA_frontline_dispatch_context = no }
@@ -2427,7 +2427,7 @@ ideas = {
 
 		# The reserve cadre committed to the final iteration.
 		ADISCORD_vorkerland_tva_reserve_cadre_spent = {
-			picture = generic_army_support
+			picture = generic_neglected_military
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			cancel = { TVA_final_operation_context = no }
@@ -2630,7 +2630,7 @@ ideas = {
 		# Granted only by the two AI-gated one-shot deadline effects and always
 		# removed by the engine after seventy-five days.
 		ADISCORD_vorkerland_ai_breakthrough_window = {
-			picture = generic_army_support
+			picture = generic_infantry_bonus
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -3379,6 +3379,183 @@ ideas = {
 			modifier = {
 				army_org_factor = 0.05
 				army_attack_factor = 0.05
+			}
+		}
+
+		# Worker settlement tree: congress route and the Executive Committee.
+		ADISCORD_vorkerland_pw_delta_worker_congress = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_worker_cooperatives = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industry_repair_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_worker_housing = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				recruitable_population_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_worker_grants = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_committee = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_ledger = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_norms = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_demobilization = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_budget = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		# Executive Committee branches of the confederation tree.
+		ADISCORD_vorkerland_pw_delta_exec_construction_trust = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_rolling_audit = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_ration_ledger = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industry_repair_factor = 0.15
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_plant_norms = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_norm_series = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_supply_chain = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_order_bureau = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_staff_examination = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_fortress_schedules = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.10
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_motor_columns = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+			}
+		}
+
+		ADISCORD_vorkerland_pw_delta_exec_cadre_army = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.10
+				army_org_factor = 0.05
+			}
+		}
+
+		# Delivered by the cooperative works programme for a fixed term.
+		ADISCORD_vorkerland_worker_cooperative_brigades = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				industry_repair_factor = 0.30
+				production_speed_infrastructure_factor = 0.20
+				production_speed_rail_way_factor = 0.20
 			}
 		}
 # --- end_postwar_expansion_ideas ---

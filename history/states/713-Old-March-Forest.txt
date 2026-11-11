@@ -12,6 +12,7 @@ state={
 	history = {
 		owner = IVN
 		add_core_of = IVN
+		victory_points = { 8615 1 }
 		buildings = {
 			infrastructure = 3
 			arms_factory = 1

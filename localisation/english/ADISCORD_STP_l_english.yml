@@ -639,6 +639,8 @@
  VAL_cw_livonn_siege: "Siege of Livonn"
  VAL_cw_livonn_siege_desc: "[43.GetName], [44.GetName] and [88.GetName] are occupied; the republican council holds out only in [45.GetName]. If the siege lasts the full term, the council accepts the Occidian settlement without a storm of the capital. Losing any of the three districts stops the clock."
  VAL_cw_livonn_siege_timeout_tt: "The republican council accepts the Occidian settlement: peace and a temporary Kefreyt administration over [43.GetName], [44.GetName], [45.GetName] and [88.GetName]."
+ STP_cw_republics_siege_strain_dynamic: "Strain of the Besieged Republics"
+ STP_cw_republics_siege_strain_dynamic_desc: "Kefreyt holds the outer districts, and the republican council defends itself without their depots and replacements. The longer the siege lasts, the weaker the council's army becomes. Retaking the districts lifts the strain."
  ADISCORD_STP_cw.23.t: "The Outcome of the Eastern Operation"
  ADISCORD_STP_cw.23.victory: "The Occidian Revival Union's army has been defeated. The states of [43.GetName], [44.GetName] and [88.GetName] are designated for a temporary contract administration under Kefreyt's authority. If the republics are still fighting another war or a third party occupies some districts, the transfer is postponed until conditions normalise and is completed through the decision to establish the administration. Direct annexation of the districts will require a census and subsequent integration focuses.\n\nContract authority has increased by 5. The war with the republics is over; other wars and contracts remain in effect."
  ADISCORD_STP_cw.23.defeat: "The republics repelled the offensive and forced our headquarters to end the operation. The war with them has ended without territorial gains.\n\nContract authority has fallen by 10. The government must restore trust in its orders and supply arrangements; other wars and contracts remain in effect."
@@ -1825,6 +1827,9 @@
  ADISCORD_STP_pc.20.t: "Preparations on the Border"
  ADISCORD_STP_pc.20.d: "After unsuccessful negotiations, Steland has begun funded transport operations towards the border. Headquarters links the movement of these columns to preparations for an offensive.\n\nWe have time to strengthen our defences. Deployment itself does not yet constitute a declaration of war; the neighbouring government has not issued its final order."
  ADISCORD_STP_pc.20.a: "Bring headquarters and the reserves to readiness."
+ ADISCORD_STP_pc.112.t: "The Kefreyt Question Before the Presidium"
+ ADISCORD_STP_pc.112.d: "The reports came from Stelander itself rather than from the border. Our trade representatives learned that the presidium had put the Kefreyt question before a closed session and that the staff had been ordered to plan a separate campaign. Soon afterwards the timetables of the military trains changed, and fuel began to move into the border depots.\n\nNo war has been declared, and the envoys of Stelander still speak of good neighbourliness. Yet a party that has just won a civil war does not open such files as an exercise. The captains demand a clear answer from the government: whose companies will hold the lines, who will pay for the positions, and how many weeks remain."
+ ADISCORD_STP_pc.112.a: "Raise the staffs and assign the defensive lines."
  ADISCORD_STP_pc.21.t: "An Answer to the Proposal"
  ADISCORD_STP_pc.21.val_compact: "Kefreyt has accepted the supply and non-aggression agreement. The agreed payment has been transferred, and the industrial departments of both countries have begun their work. Kefreyt remains independent.\n\nThe government can now ratify the treaty through a separate focus and proceed to shared industrial standards."
  ADISCORD_STP_pc.21.val_client: "Kefreyt has agreed to recognise Steland's political primacy. Its administration remains in place, but its foreign-policy course is now tied to our government.\n\nRatification of the agreement is available. When the Imperial Union is created, Kefreyt will be able to join on the accepted terms."
@@ -6344,6 +6349,10 @@
  STP_pc_campaign_defence_ready_desc:0 "Headquarters has been warned of Steland's preparations. The defensive bonus activates for §Y70§! days when war with Steland begins; a diplomatic resolution ends readiness."
  STP_pc_campaign_defence:0 "Defence against the prepared invasion"
  STP_pc_campaign_defence_desc:0 "The warning allowed headquarters to assign defensive lines in advance. This bonus applies during the war with Steland."
+ STP_pw_party_kefreyt_defence_ready:0 "Defence plan against the Kefreyt campaign"
+ STP_pw_party_kefreyt_defence_ready_desc:0 "Headquarters has been warned of the campaign being prepared by the presidium of Stelander. The defensive bonus activates for §Y70§! days when war with Stelander begins; readiness ends if the threat is closed."
+ STP_pw_party_kefreyt_defence:0 "Defence against the Kefreyt campaign"
+ STP_pw_party_kefreyt_defence_desc:0 "The warning allowed headquarters to assign defensive lines in advance. This bonus applies during the war with Stelander."
 
  STP_pi_house_road_cost:0 "§Y400§! £ADISCORD_economy_treasury_texticon"
  STP_pi_house_road_cost_blocked:0 "§R400§! £ADISCORD_economy_treasury_texticon"
@@ -6911,3 +6920,6 @@
  SRP_etatism_party_long: "£GFX_generic_etatism_military_committee_party_texticon Republican Defence Committee"
  SRP_hedonism_party: "£GFX_generic_hedonism_guild_elite_party_texticon Union of District Trading Houses"
  SRP_hedonism_party_long: "£GFX_generic_hedonism_guild_elite_party_texticon Union of District Trading Houses"
+
+ # Intelligence agency
+ ADISCORD_agency_stp_name: "High Houses Secret Chancellery"

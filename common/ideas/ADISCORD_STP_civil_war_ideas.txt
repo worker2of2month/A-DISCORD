@@ -1505,6 +1505,25 @@ ideas = {
 			modifier = { army_defence_factor = 0.08 }
 		}
 
+		STP_pw_party_kefreyt_defence_ready = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = {
+				NOT = { has_war_with = STP }
+				STP_pw_party_kefreyt_warning_expired = yes
+			}
+			modifier = { }
+		}
+
+		STP_pw_party_kefreyt_defence = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STP } }
+			modifier = { army_defence_factor = 0.08 }
+		}
+
 		STP_cw_party_command_disruption = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }

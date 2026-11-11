@@ -288,3 +288,7 @@
  superevent_west_world_empire_title: "Мировая империя Воркерланда победила Итору"
  superevent_west_world_empire_quote: "Дежурный снял с рычага проволочную пломбу. По западному пути впервые с начала войны пустили товарный состав."
  superevent_west_world_empire_comment: "Западная линия открыта"
+
+ superevent_nam_veyran_proclamation_title:0 "Провозглашение Вейранской империи"
+ superevent_nam_veyran_proclamation_quote:0 "Глава делегации вынул из кармана потемневшую печать. Утром под союзной грамотой стояли обе подписи."
+ superevent_nam_veyran_proclamation_comment:0 "Союзная грамота подписана"

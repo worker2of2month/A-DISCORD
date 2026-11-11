@@ -168,6 +168,7 @@ class WartimeRewardsTests(unittest.TestCase):
             ("STS", "NOD", "STP_pc_nod_campaign_ready", "STP_pc_nod_campaign_plan", 90, "STP_pc_apply_prepared_campaigns"),
             ("VAL", "STS", "STP_pc_campaign_defence_ready", "STP_pc_campaign_defence", 70, "STP_pc_apply_campaign_defence"),
             ("NOD", "STS", "STP_pc_campaign_defence_ready", "STP_pc_campaign_defence", 70, "STP_pc_apply_campaign_defence"),
+            ("VAL", "STP", "STP_pw_party_kefreyt_defence_ready", "STP_pw_party_kefreyt_defence", 70, "STP_pw_party_apply_kefreyt_defence"),
         )
         for tag, enemy, ready, active, days, effect_id in cases:
             with self.subTest(tag=tag, enemy=enemy):

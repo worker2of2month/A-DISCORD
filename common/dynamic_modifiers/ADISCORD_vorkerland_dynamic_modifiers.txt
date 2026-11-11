@@ -248,6 +248,8 @@ ADISCORD_vorkerland_postwar_institutions = {
 	production_factory_max_efficiency_factor = ADISCORD_vorkerland_pw_efficiency
 	production_factory_efficiency_gain_factor = ADISCORD_vorkerland_pw_efficiency_gain
 	production_speed_buildings_factor = ADISCORD_vorkerland_pw_construction
+	recruitable_population_factor = ADISCORD_vorkerland_pw_recruitable
+	consumer_goods_factor = ADISCORD_vorkerland_pw_consumer_goods
 }
 
 # --- world_empire_modifiers ---

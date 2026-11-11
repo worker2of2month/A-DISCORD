@@ -123,7 +123,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_vorkerland_capital_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 360 }
+		size = { width = 460 height = 524 }
 		clipping = no
 
 		iconType = {
@@ -136,27 +136,182 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_capital_title"
-			position = { x = 10 y = 8 }
+			position = { x = 10 y = 6 }
 			text = "WRK_capital_title"
 			font = "hoi_20b"
-			maxWidth = 440
-			maxHeight = 26
+			maxWidth = 330
+			maxHeight = 24
 			fixedsize = yes
 			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_overview"
+			position = { x = 350 y = 10 }
+			text = "WRK_capital_overview"
+			font = "hoi_16mbs"
+			maxWidth = 100
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_overview_tt"
 			format = center
 		}
 
 		iconType = {
 			name = "WRK_capital_map"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_map_background"
 			frame = 1
 			alwaystransparent = yes
 		}
 
 		iconType = {
+			name = "WRK_capital_32_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_32"
+			frame = 1
+			pdx_tooltip = "WRK_capital_32_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_33_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_33"
+			frame = 1
+			pdx_tooltip = "WRK_capital_33_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_34_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_34"
+			frame = 1
+			pdx_tooltip = "WRK_capital_34_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_35_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_35"
+			frame = 1
+			pdx_tooltip = "WRK_capital_35_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_36_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_36"
+			frame = 1
+			pdx_tooltip = "WRK_capital_36_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_37_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_37"
+			frame = 1
+			pdx_tooltip = "WRK_capital_37_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_38_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_38"
+			frame = 1
+			pdx_tooltip = "WRK_capital_38_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_39_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_39"
+			frame = 1
+			pdx_tooltip = "WRK_capital_39_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_40_hit"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_hit_40"
+			frame = 1
+			pdx_tooltip = "WRK_capital_40_tt"
+		}
+
+		iconType = {
+			name = "WRK_capital_32_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_32"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_33_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_33"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_34_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_34"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_35_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_35"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_36_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_36"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_37_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_37"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_38_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_38"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_39_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_39"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_40_selected"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_selected_40"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
 			name = "WRK_capital_32_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_32"
 			frame = 1
 			alwaystransparent = yes
@@ -164,7 +319,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_33_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_33"
 			frame = 1
 			alwaystransparent = yes
@@ -172,7 +327,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_34_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_34"
 			frame = 1
 			alwaystransparent = yes
@@ -180,7 +335,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_35_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_35"
 			frame = 1
 			alwaystransparent = yes
@@ -188,7 +343,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_36_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_36"
 			frame = 1
 			alwaystransparent = yes
@@ -196,7 +351,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_37_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_37"
 			frame = 1
 			alwaystransparent = yes
@@ -204,7 +359,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_38_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_38"
 			frame = 1
 			alwaystransparent = yes
@@ -212,7 +367,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_39_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_39"
 			frame = 1
 			alwaystransparent = yes
@@ -220,7 +375,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_40_state"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_state_40"
 			frame = 1
 			alwaystransparent = yes
@@ -228,7 +383,7 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_route"
-			position = { x = 10 y = 48 }
+			position = { x = 65 y = 48 }
 			quadTextureSprite = "GFX_WRK_capital_route"
 			frame = 1
 			alwaystransparent = yes
@@ -236,65 +391,254 @@ guiTypes = {
 
 		iconType = {
 			name = "WRK_capital_32_marker"
-			position = { x = 166 y = 122 }
+			position = { x = 221 y = 122 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_32_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_33_marker"
-			position = { x = 239 y = 233 }
+			position = { x = 294 y = 233 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_33_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_34_marker"
-			position = { x = 234 y = 163 }
+			position = { x = 289 y = 163 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_34_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_35_marker"
-			position = { x = 175 y = 90 }
+			position = { x = 230 y = 90 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_35_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_36_marker"
-			position = { x = 85 y = 93 }
+			position = { x = 140 y = 93 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_36_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_37_marker"
-			position = { x = 53 y = 179 }
+			position = { x = 108 y = 179 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_37_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_38_marker"
-			position = { x = 101 y = 203 }
+			position = { x = 156 y = 203 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_38_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_39_marker"
-			position = { x = 123 y = 262 }
+			position = { x = 178 y = 262 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_39_tt"
 		}
 
 		iconType = {
 			name = "WRK_capital_40_marker"
-			position = { x = 192 y = 190 }
+			position = { x = 247 y = 190 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
 			frame = 1
+			pdx_tooltip = "WRK_capital_40_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_32"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_32_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_33"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_33_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_34"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_34_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_35"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_35_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_36"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_36_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_37"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_37_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_38"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_38_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_39"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_39_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_40_select"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_select_40"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_40_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_marker_select"
+			position = { x = 221 y = 122 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_32_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_marker_select"
+			position = { x = 294 y = 233 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_33_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_marker_select"
+			position = { x = 289 y = 163 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_34_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_marker_select"
+			position = { x = 230 y = 90 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_35_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_marker_select"
+			position = { x = 140 y = 93 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_36_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_marker_select"
+			position = { x = 108 y = 179 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_37_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_marker_select"
+			position = { x = 156 y = 203 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_38_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_marker_select"
+			position = { x = 178 y = 262 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_39_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_40_marker_select"
+			position = { x = 247 y = 190 }
+			quadTextureSprite = "GFX_WRK_capital_marker_select"
+			buttonText = ""
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_40_tt"
 		}
 
 		iconType = {
@@ -357,6 +701,825 @@ guiTypes = {
 			format = center
 		}
 
+		instantTextBoxType = {
+			name = "WRK_capital_32_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_32"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_32_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_32_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_33_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_33"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_33_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_33_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_34_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_34"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_34_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_34_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_35_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_35"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_35_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_35_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_36_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_36"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_36_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_36_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_37_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_37"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_37_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_37_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_38_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_38"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_38_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_38_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_39_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_39"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_39_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_issue_capital_rations"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_issue_capital_rations"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_issue_capital_rations_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_unrest_cede_shop_to_committee"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_cede_shop_to_committee"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_cede_shop_to_committee_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_unrest_send_plenipotentiary"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_send_plenipotentiary"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_send_plenipotentiary_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_unrest_workers_patrol"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_unrest_workers_patrol"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_unrest_workers_patrol_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_cell_plant"
+			position = { x = 12 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_plant"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_plant_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_cell_expand"
+			position = { x = 234 y = 418 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_expand"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_expand_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_cell_lie_low"
+			position = { x = 12 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_lie_low"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_lie_low_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_cell_forge_passes"
+			position = { x = 234 y = 452 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_forge_passes"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_forge_passes_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_39_WRK_cell_legalize"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_action_WRK_cell_legalize"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_action_WRK_cell_legalize_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_40_detail"
+			position = { x = 12 y = 360 }
+			text = "WRK_capital_detail_40"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 52
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_40_tt"
+		}
+
 	}
 
 	containerWindowType = {
@@ -370,6 +1533,7 @@ guiTypes = {
 			position = { x = 5 y = 14 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_1_tt"
 		}
 
 		iconType = {
@@ -408,6 +1572,7 @@ guiTypes = {
 			position = { x = 235 y = 14 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_2_tt"
 		}
 
 		iconType = {
@@ -446,6 +1611,7 @@ guiTypes = {
 			position = { x = 5 y = 126 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_3_tt"
 		}
 
 		iconType = {
@@ -484,6 +1650,7 @@ guiTypes = {
 			position = { x = 235 y = 126 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_4_tt"
 		}
 
 		iconType = {
@@ -522,6 +1689,7 @@ guiTypes = {
 			position = { x = 5 y = 238 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_5_tt"
 		}
 
 		iconType = {
@@ -560,6 +1728,7 @@ guiTypes = {
 			position = { x = 235 y = 238 }
 			quadTextureSprite = "GFX_WRK_intrigue_card"
 			frame = 1
+			pdx_tooltip = "WRK_intrigue_6_tt"
 		}
 
 		iconType = {

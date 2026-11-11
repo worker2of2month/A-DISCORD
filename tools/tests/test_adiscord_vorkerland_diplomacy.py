@@ -122,6 +122,52 @@ class RegionalTerminalManifestTests(unittest.TestCase):
         self.assertEqual(issues, [], issue_report(issues))
 
 
+class DeadBreakawayClaimTests(unittest.TestCase):
+    """No dead collapse breakaway keeps a core a peace conference could release it on."""
+
+    BREAKAWAYS = (
+        "CSL", "SRA", "DVA", "ZTA", "EBA", "TGD", "WPA", "WPS", "PSD", "VHV", "OSV", "NDN", "SWB", "REV",
+        "EYR", "EGC", "RIV", "YOR",
+    )
+
+    def test_every_granted_core_is_retired_only_once_the_country_is_gone(self) -> None:
+        import re
+
+        effects = read(DIPLOMACY_EFFECTS)
+        granted: dict[str, set[str]] = {tag: set() for tag in self.BREAKAWAYS}
+        for state, tag in re.findall(r"(\d+) = \{[^{}\n]*add_core_of = ([A-Z]{3})", effects):
+            if tag in granted:
+                granted[tag].add(state)
+        for path in (ROOT / "history/states").glob("*.txt"):
+            body = path.read_text(encoding="utf-8", errors="replace")
+            state = re.search(r"\bid\s*=\s*(\d+)", body).group(1)
+            for tag in re.findall(r"add_core_of\s*=\s*([A-Z]{3})", body):
+                if tag in granted:
+                    granted[tag].add(state)
+        retire = named_block(effects, "ADISCORD_vorkerland_retire_dead_breakaway_claims")
+        guards = re.findall(r"limit = \{ NOT = \{ country_exists = ([A-Z]{3}) \} \}", retire)
+        self.assertEqual(tuple(guards), self.BREAKAWAYS)
+        for tag in self.BREAKAWAYS:
+            removed = set(re.findall(rf"(\d+) = \{{ remove_core_of = {tag} \}}", retire))
+            self.assertEqual(removed, granted[tag], tag)
+            self.assertTrue(granted[tag], tag)
+        # SOL is released by name by the protectorate and the restoration.
+        self.assertNotIn("remove_core_of = SOL", retire)
+        self.assertEqual(effects.count("ADISCORD_vorkerland_retire_dead_breakaway_claims = {"), 1)
+
+    def test_claims_are_retired_at_the_bracket_decision_and_before_any_conference(self) -> None:
+        effects = read(DIPLOMACY_EFFECTS)
+        recorder = named_block(effects, "ADISCORD_vorkerland_record_regional_diplomacy_outcomes")
+        self.assertEqual(recorder.count("ADISCORD_vorkerland_retire_dead_breakaway_claims = yes"), 1)
+        peace = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text(encoding="utf-8")
+        start = peace.index("# BEGIN vorkerland_collapse:on_capitulation_immediate")
+        section = peace[start:peace.index("# END vorkerland_collapse:on_capitulation_immediate")]
+        self.assertEqual(section.count("ADISCORD_vorkerland_retire_dead_breakaway_claims = yes"), 1)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_wars_started", section)
+        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }", section)
+        self.assertEqual(peace.count("ADISCORD_vorkerland_retire_dead_breakaway_claims = yes"), 1)
+
+
 class PeacefulAllianceTests(unittest.TestCase):
     def test_sol_and_vla_accept_through_delayed_events_without_offer_side_effects(
         self,

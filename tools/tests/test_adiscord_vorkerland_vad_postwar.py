@@ -13,6 +13,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     POSTWAR_EXPANSION_CHOICES,
     POSTWAR_EXPANSION_IDS,
     POSTWAR_EXPANSION_ROUTES,
+    confederation_view,
     focus_blocks,
     resolved_positions,
 )
@@ -1552,14 +1553,22 @@ class RouteTreeTests(unittest.TestCase):
     def test_exclusive_choices_rejoin_and_finals_follow_the_route(self):
         for route, (folder, tree_id, final, heritage) in self.TREES.items():
             source, focuses = self.trees[route]
-            positions = [(scalar(parse_clausewitz(f)[0].value, "x"), scalar(parse_clausewitz(f)[0].value, "y")) for f in focuses.values()]
-            self.assertEqual(len(positions), len(set(positions)), route)
+            # The confederation tree draws the domestic branches of one government
+            # at a time, so a cell has to be unique within each government's view.
+            views = [tuple(focuses)]
+            if folder == "worker_confederation":
+                views = [confederation_view(government) for government in ("congress", "executive")]
+                self.assertEqual(set().union(*views), set(focuses), route)
+            for view in views:
+                positions = [(scalar(parse_clausewitz(focuses[key])[0].value, "x"), scalar(parse_clausewitz(focuses[key])[0].value, "y")) for key in view]
+                self.assertEqual(len(positions), len(set(positions)), route)
             pairs = set()
             for key, focus in focuses.items():
                 for other in re.findall(r"mutually_exclusive = \{\s*focus = (\w+)\s*\}", focus):
                     self.assertRegex(focuses[other], rf"mutually_exclusive = \{{\s*focus = {key}\s*\}}")
                     pairs.add(frozenset({key, other}))
-            self.assertEqual(len(pairs), 13 if folder == "technical_directorate" else 2, route)
+            # Two choices of the congress and three of the Executive Committee.
+            self.assertEqual(len(pairs), 13 if folder == "technical_directorate" else 5, route)
             children = {key: set() for key in focuses}
             for child, focus in focuses.items():
                 for group in re.findall(r"prerequisite = \{([^}]*)\}", focus):

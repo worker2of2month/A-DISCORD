@@ -240,16 +240,58 @@ INTELLIGENCE_CONTRACTS = (
 )
 
 
+DOSSIER_SURFACES = (
+    ("GFX_operations_clipboard_top_bg", "dossier_top", (500, 129)),
+    ("GFX_operations_clipboard_mid_bg", "dossier_mid", (500, 126)),
+    ("GFX_operations_clipboard_bottom_bg", "dossier_bottom", (500, 209)),
+    ("GFX_phase_title_bg", "dossier_caption", (153, 40)),
+    ("GFX_list_entry_bg", "dossier_resource", (254, 35)),
+    ("GFX_resource_bg", "dossier_equipment", (85, 27)),
+    ("GFX_operation_bottom_bg", "dossier_footer", (752, 40)),
+    ("GFX_container_target_info_bg", "dossier_target", (254, 94)),
+    ("GFX_reward_bg", "dossier_reward", (500, 74)),
+)
+INTELLIGENCE_CONTRACTS += tuple(
+    SpriteContract(
+        source,
+        f"GFX_ADISCORD_intelligence_{role}",
+        f"ADISCORD_intelligence_{role}.dds",
+        "spriteType",
+        size,
+    )
+    for source, role, size in DOSSIER_SURFACES
+)
+INTELLIGENCE_CONTRACTS += (
+    SpriteContract(
+        "GFX_tiled_header",
+        "GFX_ADISCORD_intelligence_dossier_header",
+        "ADISCORD_intelligence_dossier_header.dds",
+        "corneredTileSpriteType",
+        (40, 40),
+        border_size=(8, 8),
+        effect_file=EFFECT,
+    ),
+)
+
+
 VANILLA_FILES = {
-    "countryintelligenceagencyview.gui": "00153f0968113c3f29d914bda227c729ba5d95f5888135c0dd98db89748ef3e5",
-    "countryintelligenceagencyview.gfx": "5c4eb6c934654ff9d8c188c2560d51656b084d8b0de61d18fa4fb16b00c3d7da",
+    "operationoverview.gui": "8205aa3edcbcabff93de754de8babba02b6f7b6db30aebef3521017d299eaa71",
+    "operationoverview.gfx": "5347d49b84e9eba4d69bd6c6ed2811b1be50680ff62b0d188430236d05486dfc",
+    "countryintelligenceagencyview.gui": "e054c3f7498a54211cb0dab874a39dd989b659eca213b227a9cf248525ab2808",
+    "countryintelligenceagencyview.gfx": "ab35b478ca6b1e3e22b471b12730629d1b0643f9255cced8e58df5597aea1950",
     "operative.gui": "bcdfa922932131db91c26dab7323e24456ae094b65c2aa2e7b77478c8dc5aa22",
-    "operativeleader.gui": "cd80a14a5e2b70d11511eadf52a89b15be5188e4e03dce2e1acbc0040ecd79e0",
+    "operativeleader.gui": "d2463ae3fc50eefe575c20a4b02bbab79b9f33e3e63678c3227a1510129410ae",
     "operativeleader.gfx": "f3ff58f344a1dcae6db664bcea70d3fe44ec1e64571f7165f5a135d927218f0f",
 }
 
 
 FILE_REPLACEMENTS = {
+    "operationoverview.gui": {
+        **{source: (f"GFX_ADISCORD_intelligence_{role}", 1) for source, role, _size in DOSSIER_SURFACES},
+        "GFX_list_entry_bg": ("GFX_ADISCORD_intelligence_dossier_resource", 3),
+        "GFX_tiled_paper_w_frame_bg": ("GFX_ADISCORD_intelligence_window_shell", 1),
+        "GFX_tiled_header": ("GFX_ADISCORD_intelligence_dossier_header", 1),
+    },
     "countryintelligenceagencyview.gui": {
         "GFX_tiled_window_1b_thin_border": (
             "GFX_ADISCORD_intelligence_content_tile",
@@ -475,7 +517,31 @@ def render_gui_files() -> dict[Path, bytes]:
         text = _verified_source(name).decode("utf-8-sig")
         for old, (new, expected) in replacements.items():
             text = replace_counted(text, old, new, expected)
+        if name == "operationoverview.gui":
+            # Native code moves the phase containers; retain their anchors and children.
+            text = replace_gui_block(
+                text, "containerWindowType", "operation_phase_titles_view_entry",
+                ((r"position = \{ x=-10 y=50 \}", "position = { x=-10 y=30 }"),),
+            )
+            text = replace_gui_block(
+                text, "containerWindowType", "phase_title_title",
+                ((r"position = \{ x=20 y=90 \}", "position = { x=20 y=124 }"),),
+            )
         if name == "countryintelligenceagencyview.gui":
+            text = replace_gui_block(
+                text,
+                "containerWindowType",
+                "upgrade_entry",
+                (
+                    (r"position = \{ x = 58 y = -22 \}", "position = { x = 10 y = -13 }"),
+                    (r"position = \{ x = 23 y = -26 \}", "position = { x = 23 y = -20 }"),
+                    (r"position = \{ x = 23 y = -40 \}", "position = { x = 23 y = -34 }"),
+                    (r"position = \{ x = 105 y = -18 \}", "position = { x = 105 y = -12 }"),
+                    (r"position = \{ x = 21 y = 32 \}", "position = { x = 21 y = 41 }"),
+                    (r"maxHeight = 42", "maxHeight = 33"),
+                    (r"position = \{ x = 37 y = 63 \}", "position = { x = 37 y = 76 }"),
+                ),
+            )
             text = replace_gui_block(
                 text,
                 "containerWindowType",
@@ -803,12 +869,38 @@ def _cost_tile(metal: Image.Image) -> Image.Image:
     return output
 
 
+def _dossier_surface(contract: SpriteContract, metal: Image.Image) -> Image.Image:
+    role = contract.target_name.rsplit("dossier_", 1)[1]
+    size = contract.total_size
+    if role in {"top", "mid", "bottom", "caption"}:
+        grain = ImageOps.fit(metal.convert("L"), size, method=Image.Resampling.LANCZOS)
+        output = ImageOps.colorize(grain, (182, 177, 157), (220, 216, 199)).convert("RGBA")
+        draw = ImageDraw.Draw(output)
+        edge = (117, 119, 111, 255)
+        draw.line((0, 0, 0, size[1] - 1), fill=edge)
+        draw.line((size[0] - 1, 0, size[0] - 1, size[1] - 1), fill=edge)
+        if role in {"top", "caption"}:
+            draw.line((0, 0, size[0] - 1, 0), fill=edge)
+            draw.line((5, 4, size[0] - 6, 4), fill=VIOLET)
+        if role in {"bottom", "caption"}:
+            draw.line((0, size[1] - 1, size[0] - 1, size[1] - 1), fill=edge)
+        return output
+    palette = PALETTES["intelligence"]
+    output = metal_surface(metal, size, palette, 0.70)
+    outer_frame(output, (0, 0, size[0] - 1, size[1] - 1), palette)
+    draw = ImageDraw.Draw(output)
+    draw.line((4, 3, size[0] - 5, 3), fill=VIOLET if role == "header" else STEEL_BLUE)
+    return output
+
+
 def render_asset(
     contract: SpriteContract,
     metal: Image.Image,
     source_art: Image.Image,
 ) -> Image.Image:
     target = contract.target_name
+    if "_dossier_" in target:
+        return _dossier_surface(contract, metal)
     if target.endswith("creation_glow"):
         output = Image.new("RGBA", contract.total_size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(output, "RGBA")
@@ -896,7 +988,7 @@ def _intelligence_preview(
     return contact_sheet(entries, 1120)
 
 
-def expected_outputs() -> dict[Path, bytes]:
+def expected_outputs(*, include_preview: bool = False) -> dict[Path, bytes]:
     metal = load_surface_source(METAL_SOURCE)
     source_art = load_surface_source(HEADER_SOURCE, minimum_size=(1024, 512))
     assets: list[tuple[SpriteContract, Image.Image]] = []
@@ -908,12 +1000,13 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs.update(
         {
             GFX_OUTPUT: render_gfx().encode("utf-8"),
-            PREVIEW: _png_bytes(_intelligence_preview(assets)),
         }
     )
     outputs.update(
         {OUTPUT_DIR / item.filename: dds_bytes(image) for item, image in assets}
     )
+    if include_preview:
+        outputs[PREVIEW] = _png_bytes(_intelligence_preview(assets))
     return outputs
 
 
@@ -931,6 +1024,7 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument("--preview", action="store_true", help="Include a temporary development contact sheet")
     args = parser.parse_args()
     if not args.apply:
         obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]
@@ -938,7 +1032,7 @@ def main() -> int:
             for path in obsolete:
                 print(f"OBSOLETE: {path}")
             return 1
-    result = apply_or_check(expected_outputs(), args.apply, "Intelligence UI")
+    result = apply_or_check(expected_outputs(include_preview=args.preview), args.apply, "Intelligence UI")
     if result == 0 and args.apply:
         _remove_legacy_outputs()
     return result

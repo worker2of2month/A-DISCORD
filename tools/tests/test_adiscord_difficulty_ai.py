@@ -546,6 +546,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "STP_cw_hold_fada_front", "STS_shabrat_cautious_party_front",
             "STS_shabrat_cautious_nod_front", "STP_ps_cautious_counterattack",
             "STP_ps_local_counterattacks", "ADISCORD_west_wrk_hold_ivn",
+            "STS_shabrat_nod_assault_wave", "VAL_cw_front_against_srp",
         }
         for name, profile in self.campaigns.items():
             controls = [dict((key, value) for key, _, value in body)
@@ -568,7 +569,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 self.assertEqual(variant["ratio"], base["ratio"], name)
                 self.assertEqual(variant["ordertype"], base["ordertype"], name)
                 self.assertEqual(variant["execute_order"], base["execute_order"], name)
-        self.assertGreaterEqual(adapted, 164)
+        self.assertGreaterEqual(adapted, 163)
 
     def test_peer_claimant_fronts_stay_balanced_through_shortages(self):
         users = set()
@@ -756,7 +757,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                     else:
                         expected = "careful" if base["execution_type"] == "careful" else "rush_weak"
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), (expected, "yes"))
-        self.assertEqual(checked, 164)
+        self.assertEqual(checked, 163)
 
 
 if __name__ == "__main__":

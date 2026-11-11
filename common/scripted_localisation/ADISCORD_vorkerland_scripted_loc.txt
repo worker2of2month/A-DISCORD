@@ -457,8 +457,18 @@ defined_text = {
 	text = { localization_key = ADISCORD_vorkerland_prep_district_summary }
 }
 
+# Whether the network's route out of the Tower is open now.
+defined_text = {
+	name = GetVorkerlandNetworkRouteStatus
+	text = {
+		trigger = { WRK_network_exfiltration_route_clear = yes }
+		localization_key = ADISCORD_vorkerland_network_route_open
+	}
+	text = { localization_key = ADISCORD_vorkerland_network_route_closed }
+}
+
 # Worker's fate as the prewar preparation stands. An evacuation project at the
-# Unity Tower decides it; otherwise the tower branch weighs the roll.
+# Unity Tower decides it; otherwise the roll does, with the odds below.
 defined_text = {
 	name = GetVorkerlandWorkerFateForecast
 	text = {
@@ -481,6 +491,26 @@ defined_text = {
 		}
 		localization_key = ADISCORD_vorkerland_fate_forecast_vlad
 	}
+	text = {
+		trigger = {
+			40 = {
+				check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals }
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+			WRK_network_exfiltration_route_clear = yes
+		}
+		localization_key = ADISCORD_vorkerland_fate_forecast_missing
+	}
+	# The network's project without its cell in the Central District.
+	text = {
+		trigger = {
+			40 = {
+				check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals }
+				NOT = { has_state_flag = ADISCORD_vorkerland_prep_pending }
+			}
+		}
+		localization_key = ADISCORD_vorkerland_fate_forecast_network_blocked
+	}
 	# A finished evacuation reaches this entry only when a riot blocks its route.
 	text = {
 		trigger = {
@@ -492,16 +522,139 @@ defined_text = {
 		localization_key = ADISCORD_vorkerland_fate_forecast_blocked
 	}
 	text = {
+		localization_key = ADISCORD_vorkerland_fate_forecast_roll
+	}
+}
+
+# The roll of ADISCORD_vorkerland_prep_resolve_fate for every combination of
+# focuses one tree can reach. Each key states the four outcomes of its own
+# combination, so a text is never a base figure with a correction beside it.
+defined_text = {
+	name = GetVorkerlandWorkerFateOdds
+	text = {
+		trigger = {
+			has_completed_focus = WRK_reinforce_the_tower_guard
+			has_completed_focus = WRK_committee_chairmans_mandate
+		}
+		localization_key = ADISCORD_vorkerland_fate_odds_guard_mandate
+	}
+	text = {
+		trigger = {
+			has_completed_focus = WRK_disperse_the_government
+			has_completed_focus = WRK_committee_chairmans_mandate
+		}
+		localization_key = ADISCORD_vorkerland_fate_odds_disperse_mandate
+	}
+	text = {
 		trigger = { has_completed_focus = WRK_reinforce_the_tower_guard }
-		localization_key = ADISCORD_vorkerland_fate_forecast_guarded
+		localization_key = ADISCORD_vorkerland_fate_odds_guard
 	}
 	text = {
 		trigger = { has_completed_focus = WRK_disperse_the_government }
-		localization_key = ADISCORD_vorkerland_fate_forecast_dispersed
+		localization_key = ADISCORD_vorkerland_fate_odds_disperse
 	}
 	text = {
-		localization_key = ADISCORD_vorkerland_fate_forecast_roll
+		trigger = { has_completed_focus = WRK_committee_chairmans_mandate }
+		localization_key = ADISCORD_vorkerland_fate_odds_mandate
 	}
+	text = {
+		trigger = {
+			has_completed_focus = WRK_staff_escort_for_the_chairman
+			has_completed_focus = WRK_staff_let_the_tower_fall
+		}
+		localization_key = ADISCORD_vorkerland_fate_odds_escort_fall
+	}
+	text = {
+		trigger = {
+			has_completed_focus = WRK_staff_reserve_headquarters
+			has_completed_focus = WRK_staff_let_the_tower_fall
+		}
+		localization_key = ADISCORD_vorkerland_fate_odds_reserve_fall
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_escort_for_the_chairman }
+		localization_key = ADISCORD_vorkerland_fate_odds_escort
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_reserve_headquarters }
+		localization_key = ADISCORD_vorkerland_fate_odds_reserve
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_let_the_tower_fall }
+		localization_key = ADISCORD_vorkerland_fate_odds_fall
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_network_tower_shelter }
+		localization_key = ADISCORD_vorkerland_fate_odds_shelter
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_network_blind_the_tower }
+		localization_key = ADISCORD_vorkerland_fate_odds_blind
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_base }
+}
+
+# The same roll with the named focus complete, for the reward of that focus.
+defined_text = {
+	name = GetVorkerlandFateWithGuard
+	text = {
+		trigger = { has_completed_focus = WRK_committee_chairmans_mandate }
+		localization_key = ADISCORD_vorkerland_fate_odds_guard_mandate
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_guard }
+}
+
+defined_text = {
+	name = GetVorkerlandFateWithDispersal
+	text = {
+		trigger = { has_completed_focus = WRK_committee_chairmans_mandate }
+		localization_key = ADISCORD_vorkerland_fate_odds_disperse_mandate
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_disperse }
+}
+
+defined_text = {
+	name = GetVorkerlandFateWithEscort
+	text = {
+		trigger = { has_completed_focus = WRK_staff_let_the_tower_fall }
+		localization_key = ADISCORD_vorkerland_fate_odds_escort_fall
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_escort }
+}
+
+defined_text = {
+	name = GetVorkerlandFateWithReserve
+	text = {
+		trigger = { has_completed_focus = WRK_staff_let_the_tower_fall }
+		localization_key = ADISCORD_vorkerland_fate_odds_reserve_fall
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_reserve }
+}
+
+defined_text = {
+	name = GetVorkerlandFateWithFall
+	text = {
+		trigger = { has_completed_focus = WRK_staff_escort_for_the_chairman }
+		localization_key = ADISCORD_vorkerland_fate_odds_escort_fall
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_staff_reserve_headquarters }
+		localization_key = ADISCORD_vorkerland_fate_odds_reserve_fall
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_fall }
+}
+
+defined_text = {
+	name = GetVorkerlandFateWithChairman
+	text = {
+		trigger = { has_completed_focus = WRK_reinforce_the_tower_guard }
+		localization_key = ADISCORD_vorkerland_fate_odds_guard_mandate
+	}
+	text = {
+		trigger = { has_completed_focus = WRK_disperse_the_government }
+		localization_key = ADISCORD_vorkerland_fate_odds_disperse_mandate
+	}
+	text = { localization_key = ADISCORD_vorkerland_fate_odds_mandate }
 }
 
 defined_text = {
@@ -1188,24 +1341,6 @@ defined_text = {
 	text = { localization_key = ADISCORD_vorkerland_no_text }
 }
 
-# COUNTRY. How the chosen apparatus weighs the roll when no evacuation decides Worker's fate.
-defined_text = {
-	name = GetVorkerlandFateBranchNote
-	text = {
-		trigger = { has_completed_focus = WRK_committee_chairmans_mandate }
-		localization_key = ADISCORD_vorkerland_fate_note_chairman
-	}
-	text = {
-		trigger = { has_completed_focus = WRK_staff_escort_for_the_chairman }
-		localization_key = ADISCORD_vorkerland_fate_note_escort
-	}
-	text = {
-		trigger = { has_completed_focus = WRK_staff_reserve_headquarters }
-		localization_key = ADISCORD_vorkerland_fate_note_reserve
-	}
-	text = { localization_key = ADISCORD_vorkerland_no_text }
-}
-
 # STATE. One capital district in the ledger of Worx's network.
 defined_text = {
 	name = WRKGetCellStatus
@@ -1267,4 +1402,247 @@ defined_text = {
 		localization_key = ADISCORD_vorkerland_no_text
 	}
 	text = { localization_key = WRK_capital_legend_riot }
+}
+
+# STATE 40. Stance of each figure of the court toward the staff.
+defined_text = {
+	name = WRKGetIntrigueStatus1
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_1 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_1
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_1 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_1
+	}
+	text = { localization_key = WRK_intrigue_undecided_1 }
+}
+
+defined_text = {
+	name = WRKGetIntrigueStatus2
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_2 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_2
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_2 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_2
+	}
+	text = { localization_key = WRK_intrigue_undecided_2 }
+}
+
+defined_text = {
+	name = WRKGetIntrigueStatus3
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_3 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_3
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_3 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_3
+	}
+	text = { localization_key = WRK_intrigue_undecided_3 }
+}
+
+defined_text = {
+	name = WRKGetIntrigueStatus4
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_4 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_4
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_4 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_4
+	}
+	text = { localization_key = WRK_intrigue_undecided_4 }
+}
+
+defined_text = {
+	name = WRKGetIntrigueStatus5
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_5 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_5
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_5 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_5
+	}
+	text = { localization_key = WRK_intrigue_undecided_5 }
+}
+
+defined_text = {
+	name = WRKGetIntrigueStatus6
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_6 value = 65 compare = greater_than_or_equals } }
+		localization_key = WRK_intrigue_ally_6
+	}
+	text = {
+		trigger = { check_variable = { var = WRK_intrigue_6 value = 35 compare = less_than } }
+		localization_key = WRK_intrigue_hostile_6
+	}
+	text = { localization_key = WRK_intrigue_undecided_6 }
+}
+
+# STATE 40.
+defined_text = {
+	name = WRKGetIntrigueDossiers
+	text = { localization_key = WRK_intrigue_dossier_count }
+}
+
+# Shared focuses of the confederation tree read differently under each
+# government: the Executive Committee that unified the country, or the council.
+defined_text = {
+	name = GetWRKGovernmentConfCouncilOfRepublics
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_council_of_republics_executive
+	}
+	text = { localization_key = WRK_conf_council_of_republics_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfCouncilOfRepublicsDesc
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_council_of_republics_desc_executive
+	}
+	text = { localization_key = WRK_conf_council_of_republics_desc_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfSolidarityAbroad
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_solidarity_abroad_executive
+	}
+	text = { localization_key = WRK_conf_solidarity_abroad_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfSolidarityAbroadDesc
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_solidarity_abroad_desc_executive
+	}
+	text = { localization_key = WRK_conf_solidarity_abroad_desc_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfCharterForTheWest
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_charter_for_the_west_executive
+	}
+	text = { localization_key = WRK_conf_charter_for_the_west_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfCharterForTheWestDesc
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_charter_for_the_west_desc_executive
+	}
+	text = { localization_key = WRK_conf_charter_for_the_west_desc_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentWorkerWestSolidarityCommittees
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_worker_west_solidarity_committees_executive
+	}
+	text = { localization_key = WRK_worker_west_solidarity_committees_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentWorkerWestSolidarityCommitteesDesc
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_worker_west_solidarity_committees_desc_executive
+	}
+	text = { localization_key = WRK_worker_west_solidarity_committees_desc_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfSouthernSolidarity
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_southern_solidarity_executive
+	}
+	text = { localization_key = WRK_conf_southern_solidarity_council }
+}
+
+defined_text = {
+	name = GetWRKGovernmentConfSouthernSolidarityDesc
+	text = {
+		trigger = {
+			event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = WRK_conf_southern_solidarity_desc_executive
+	}
+	text = { localization_key = WRK_conf_southern_solidarity_desc_council }
+}
+
+# Sprite names for the court cards: the image property of the intrigue panel
+# reads its sprite through these entries.
+defined_text = {
+	name = WRKGetIntriguePortrait1
+	text = { localization_key = "GFX_portrait_WRK_Mark_Yastrebtsev" }
+}
+
+defined_text = {
+	name = WRKGetIntriguePortrait2
+	text = { localization_key = "GFX_portrait_WRK_Necro_Filopo" }
+}
+
+defined_text = {
+	name = WRKGetIntriguePortrait3
+	text = { localization_key = "GFX_portrait_WRK_Richard_Gordon" }
+}
+
+defined_text = {
+	name = WRKGetIntriguePortrait4
+	text = { localization_key = "GFX_portrait_WRK_Zack_Wither" }
+}
+
+defined_text = {
+	name = WRKGetIntriguePortrait5
+	text = { localization_key = "GFX_portrait_WRK_Bassam_Zogby" }
+}
+
+defined_text = {
+	name = WRKGetIntriguePortrait6
+	text = { localization_key = "GFX_portrait_WRK_Reginald_Silver" }
+}
+
+# STATE. Hover line of a capital district for the apparatus that keeps a ledger there.
+defined_text = {
+	name = WRKGetCapitalDistrictNote
+	text = {
+		trigger = { has_variable = WRK_unrest }
+		localization_key = WRK_capital_note_unrest
+	}
+	text = {
+		trigger = { has_variable = WRK_cell_level }
+		localization_key = WRK_capital_note_cell
+	}
+	text = { localization_key = ADISCORD_vorkerland_no_text }
 }

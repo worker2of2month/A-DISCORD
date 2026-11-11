@@ -288,3 +288,7 @@
  superevent_west_world_empire_title: "The World Empire of Vorkerland defeats Itora"
  superevent_west_world_empire_quote: "The signalman broke the wire seal on the lever. For the first time since war began, a freight train took the western line."
  superevent_west_world_empire_comment: "The western line is open"
+
+ superevent_nam_veyran_proclamation_title:0 "Proclamation of the Veyran Empire"
+ superevent_nam_veyran_proclamation_quote:0 "The head of the delegation drew a tarnished seal from his pocket. By morning, both signatures stood beneath the charter."
+ superevent_nam_veyran_proclamation_comment:0 "The charter is signed"

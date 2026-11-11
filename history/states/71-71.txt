@@ -17,5 +17,6 @@ state={
         }
         add_core_of = PWR
 		victory_points = { 16591 3 }
+		victory_points = { 12241 1 }
 	}
 }

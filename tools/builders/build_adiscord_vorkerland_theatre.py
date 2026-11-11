@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import re
 from collections import defaultdict
+from collections.abc import Callable
 from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
@@ -31,7 +32,7 @@ STARTING_SUPPLY_RAILS = {
 # Capital, forward depot and embarkation port remain connected inside each country.
 COALITION_SUPPLY_RAILS = {
     "EFL": (
-        (2, (16717, 8904, 12830, 786, 5934, 10809, 1200, 6514, 9402, 10422)),
+        (2, (16717, 8904, 12830, 786, 5934, 10809, 1200, 6514, 6847, 1444, 9402, 10422)),
         (2, (10422, 6970, 11035, 9041, 6870, 5979, 6000, 6495)),
     ),
     "AZH": (
@@ -216,6 +217,154 @@ VORKERLAND_SUPPLY_HUB_STATES = {
     4148: 316,
     16642: 318,
 }
+# The western war runs along one trunk from the Vorkerland capital through
+# the northern district and the Rimat corridor to the Itoran capital. Its
+# records already exist; the generator owns their throughput. A hub receives
+# no more than the weakest link behind it, so the two district links are
+# raised together with the corridor.
+VORKERLAND_CAPITAL_PROVINCE = 6713
+WEST_TRUNK_RAIL_UPGRADES = (
+    (2, (16399, 7885, 16388)),
+    (2, (7885, 16395, 12227)),
+    (
+        2,
+        (
+            5135,
+            12072,
+            1029,
+            7764,
+            3743,
+            10388,
+            9453,
+            7869,
+            1128,
+            2339,
+            5469,
+            2571,
+            9908,
+            2620,
+            5568,
+            161,
+            4802,
+            3147,
+            9186,
+            8071,
+            12227,
+        ),
+    ),
+    (2, (16379, 16367, 16355, 16361, 16370, 5135, 6801, 16578)),
+    (2, (16568, 694, 5611, 2380, 16831, 10403, 8328, 11815, 4567, 6010, 16361)),
+    (2, (16568, 694, 5611, 2380, 16831, 10403, 8328)),
+)
+# Itoran lines stay inside the starting borders and use the carved city
+# provinces, never their rural parents: the IVN geography pass rewrites a
+# parent to its city and would otherwise reroute the record.
+ITORA_CAPITAL_PROVINCE = 16568
+ITORA_SUPPLY_RAILS = (
+    # Northern trunk: Old March - Dubravsk - Sredinsk - Verkhnemarsk - Northern March.
+    (
+        2,
+        (
+            16568,
+            9066,
+            16819,
+            4909,
+            1861,
+            7508,
+            8615,
+            10158,
+            10810,
+            16830,
+            3181,
+            482,
+            3541,
+            16820,
+            8068,
+            2736,
+            9053,
+            16816,
+        ),
+    ),
+    # Eastern trunk: Salemar line - Moressa - Vedrina - Serenga.
+    (2, (8328, 9611, 11554, 5788, 2448, 8716, 3182, 8130, 3318, 4260, 4302, 16823)),
+    # Northern frontier.
+    (
+        1,
+        (
+            16816,
+            12614,
+            8345,
+            1697,
+            3131,
+            1971,
+            2805,
+            9790,
+            9862,
+            16822,
+            3598,
+            9685,
+            10130,
+            16824,
+        ),
+    ),
+    (1, (1971, 3803, 8458, 16821, 8284, 16815)),
+    (1, (12614, 1659, 16825)),
+    # Western ring through the Rinval fens and the Longar hill line.
+    (1, (16568, 9614, 401, 7263, 16827, 5273, 16863, 16828, 9132, 5055, 11487, 3304, 3541)),
+    (1, (3181, 2211, 2025, 2157, 16826, 11132, 4037, 9133, 3245, 4553, 9100, 1971)),
+    # Southern towns.
+    (1, (2448, 957, 3951, 838)),
+    (1, (16817, 11396, 882, 1091, 16818, 1421, 7453, 5187, 11985, 3318)),
+    (1, (11815, 11396)),
+    (1, (5611, 10313, 1890, 8839, 3453, 638, 9167, 9327)),
+    (1, (5611, 16829)),
+)
+ITORA_SUPPLY_HUB_STATES = {
+    16830: 716,  # Sredinsk.
+    16816: 127,  # Northern March.
+    16821: 131,
+    16822: 130,
+    16828: 697,  # Rinval.
+    16826: 696,  # Longar.
+    2448: 98,  # Moressa.
+    3318: 95,  # Vedrina.
+    882: 99,  # Lakora.
+    9327: 101,  # Olsia.
+}
+# Corridor feeders give the front a second approach on each flank of the
+# trunk: Serenga - Norven in the north, Talara - Norvein across the border and
+# Rimat - Revel in the south, where the existing Revel spur closes the loop.
+WEST_CORRIDOR_RAILS = (
+    (1, (16823, 6507, 3729, 12738, 4659, 4166, 2896, 4528, 8032)),
+    (1, (1421, 12072)),
+    (
+        1,
+        (
+            16591,
+            4212,
+            672,
+            8468,
+            4771,
+            258,
+            12241,
+            12733,
+            1129,
+            9492,
+            5170,
+            8881,
+            3757,
+            2571,
+            8059,
+        ),
+    ),
+)
+WEST_CORRIDOR_OWNERS = frozenset({"IVN", "PWR", "ZAO", "WRK"})
+WEST_CORRIDOR_HUB_STATES = {3743: 91, 4166: 94, 12241: 71}
+WEST_THEATRE_RAILS = (
+    *WEST_TRUNK_RAIL_UPGRADES,
+    *ITORA_SUPPLY_RAILS,
+    *WEST_CORRIDOR_RAILS,
+)
 RETIRED_MARKERS = (
     "# BEGIN GENERATED: ADISCORD VORKERLAND THEATRE RAILS",
     "# END GENERATED: ADISCORD VORKERLAND THEATRE RAILS",
@@ -274,6 +423,7 @@ def update_source(source: str) -> str:
         *(render_rail_line(level, provinces) for level, provinces in MON_SUPPLY_RAILS),
         render_rail_line(*MON_KALTEN_RAIL),
         *(render_rail_line(level, route) for routes in COALITION_SUPPLY_RAILS.values() for level, route in routes),
+        *(render_rail_line(level, route) for level, route in WEST_THEATRE_RAILS),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -300,7 +450,13 @@ def render_supply_node(province_id: int) -> str:
 
 def update_supply_source(source: str) -> str:
     """Append missing hubs and preserve the formatting of existing records."""
-    hub_states = {**VORKERLAND_SUPPLY_HUB_STATES, **MON_SUPPLY_HUB_STATES, **COALITION_SUPPLY_HUB_STATES}
+    hub_states = {
+        **VORKERLAND_SUPPLY_HUB_STATES,
+        **MON_SUPPLY_HUB_STATES,
+        **COALITION_SUPPLY_HUB_STATES,
+        **ITORA_SUPPLY_HUB_STATES,
+        **WEST_CORRIDOR_HUB_STATES,
+    }
     managed = {
         render_supply_node(province_id) for province_id in hub_states
     }
@@ -319,6 +475,123 @@ def update_supply_source(source: str) -> str:
         if render_supply_node(province_id) not in seen
     )
     return "\n".join(lines) + "\n"
+
+
+def _reached_by_rail(
+    start: int,
+    rail_graph: dict[int, set[int]],
+    allowed: Callable[[int], bool],
+) -> set[int]:
+    """Return the provinces joined to start by rail through allowed provinces."""
+    pending = [start]
+    reached = {start}
+    while pending:
+        province = pending.pop()
+        for neighbour in rail_graph[province]:
+            if neighbour not in reached and allowed(neighbour):
+                reached.add(neighbour)
+                pending.append(neighbour)
+    return reached
+
+
+def west_theatre_issues(
+    rail_lines: list[str],
+    supply_lines: list[str],
+    province_types: dict[int, str],
+    physical: dict[int, set[int]],
+    state_by_province: dict[int, int],
+    state_owners: dict[int, str],
+) -> list[str]:
+    """Validate the Vorkerland-Itora trunk, the Itoran network and corridor feeders."""
+    issues: list[str] = []
+
+    def owner(province: int) -> str | None:
+        return state_owners.get(state_by_province.get(province))
+
+    graphs: dict[int, dict[int, set[int]]] = {
+        1: defaultdict(set),
+        2: defaultdict(set),
+    }
+    for line in rail_lines:
+        fields = line.split()
+        route = _rail_route(line)
+        if route is None or int(fields[0]) < 1:
+            continue
+        for minimum_level, graph in graphs.items():
+            if int(fields[0]) < minimum_level:
+                continue
+            for first, second in zip(route, route[1:]):
+                if second in physical.get(first, set()):
+                    graph[first].add(second)
+                    graph[second].add(first)
+
+    for level, route in WEST_THEATRE_RAILS:
+        label = "-".join(map(str, route))
+        if rail_lines.count(render_rail_line(level, route)) != 1:
+            issues.append(
+                f"western rail {label} must occur exactly once at level {level}"
+            )
+        for province in route:
+            if province_types.get(province) != "land":
+                issues.append(f"western rail leaves land at {province}")
+        for first, second in zip(route, route[1:]):
+            if second not in physical.get(first, set()):
+                issues.append(
+                    f"western rail segment {first}-{second} is not physically adjacent"
+                )
+    for _, route in ITORA_SUPPLY_RAILS:
+        for province in route:
+            if owner(province) != "IVN":
+                issues.append(
+                    f"Itoran railway leaves its starting territory at {province}"
+                )
+    for _, route in WEST_CORRIDOR_RAILS:
+        for province in route:
+            if owner(province) not in WEST_CORRIDOR_OWNERS:
+                issues.append(f"western corridor railway leaves the theatre at {province}")
+
+    # The attacker is supplied only through an unbroken level-2 trunk.
+    trunk = _reached_by_rail(
+        VORKERLAND_CAPITAL_PROVINCE, graphs[2], lambda province: True
+    )
+    if ITORA_CAPITAL_PROVINCE not in trunk:
+        issues.append(
+            "western trunk is not level 2 between Vorkerland and the Itoran capital"
+        )
+    itoran = _reached_by_rail(
+        ITORA_CAPITAL_PROVINCE,
+        graphs[1],
+        lambda province: owner(province) == "IVN",
+    )
+    for hub, expected_state in ITORA_SUPPLY_HUB_STATES.items():
+        if supply_lines.count(render_supply_node(hub)) != 1:
+            issues.append(f"Itoran supply hub {hub} must occur exactly once")
+        if (
+            state_by_province.get(hub) != expected_state
+            or state_owners.get(expected_state) != "IVN"
+        ):
+            issues.append(f"Itoran supply hub {hub} moved outside its starting state")
+        if province_types.get(hub) != "land":
+            issues.append(f"Itoran supply hub {hub} is not on land")
+        if hub not in itoran:
+            issues.append(
+                f"Itoran supply hub {hub} is disconnected from the capital inside its starting territory"
+            )
+    corridor = _reached_by_rail(
+        VORKERLAND_CAPITAL_PROVINCE, graphs[1], lambda province: True
+    )
+    for hub, expected_state in WEST_CORRIDOR_HUB_STATES.items():
+        if supply_lines.count(render_supply_node(hub)) != 1:
+            issues.append(f"western corridor supply hub {hub} must occur exactly once")
+        if state_by_province.get(hub) != expected_state:
+            issues.append(f"western corridor supply hub {hub} moved outside its state")
+        if province_types.get(hub) != "land":
+            issues.append(f"western corridor supply hub {hub} is not on land")
+        if hub not in corridor:
+            issues.append(
+                f"western corridor supply hub {hub} is disconnected from Vorkerland"
+            )
+    return issues
 
 
 def validate() -> list[str]:
@@ -607,6 +880,16 @@ def validate() -> list[str]:
                 )
             if supply_lines.count(render_supply_node(hub)) != 1:
                 issues.append(f"RUS border supply hub {hub} must occur exactly once")
+        issues.extend(
+            west_theatre_issues(
+                source.splitlines(),
+                supply_lines,
+                province_types,
+                physical,
+                state_by_province,
+                state_owners,
+            )
+        )
         campaign_states = {66}
         for tag, core_states in DIRTY_GROUPS.items():
             campaign_states.update(core_states)
@@ -684,7 +967,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Campaign rail validation passed: OSV spur, STP/YPR connections, MON network, RUS campaign spines and managed supply hubs."
+        "Campaign rail validation passed: OSV spur, STP/YPR connections, MON network, RUS campaign spines, western theatre and managed supply hubs."
     )
     return 0
 

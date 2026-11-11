@@ -25,9 +25,51 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_hit_32"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_32.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_32"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_32.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_32"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_32.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_capital_state_33"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_state_33.png"
 		noOfFrames = 6
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_hit_33"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_33.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_33"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_33.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_33"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_33.png"
+		noOfFrames = 1
 		transparencecheck = yes
 	}
 
@@ -39,9 +81,51 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_hit_34"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_34.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_34"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_34.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_34"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_34.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_capital_state_35"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_state_35.png"
 		noOfFrames = 6
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_hit_35"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_35.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_35"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_35.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_35"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_35.png"
+		noOfFrames = 1
 		transparencecheck = yes
 	}
 
@@ -53,9 +137,51 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_hit_36"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_36.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_36"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_36.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_36"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_36.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_capital_state_37"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_state_37.png"
 		noOfFrames = 6
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_hit_37"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_37.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_37"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_37.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_37"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_37.png"
+		noOfFrames = 1
 		transparencecheck = yes
 	}
 
@@ -67,6 +193,27 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_hit_38"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_38.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_38"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_38.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_38"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_38.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_capital_state_39"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_state_39.png"
 		noOfFrames = 6
@@ -74,9 +221,51 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_hit_39"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_39.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_39"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_39.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_39"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_39.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_capital_state_40"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_state_40.png"
 		noOfFrames = 6
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_hit_40"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_hit_40.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_select_40"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_select_40.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_selected_40"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_selected_40.png"
+		noOfFrames = 1
 		transparencecheck = yes
 	}
 
@@ -105,6 +294,20 @@ spriteTypes = {
 		name = "GFX_WRK_capital_panel"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_panel.png"
 		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_action"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_action.png"
+		noOfFrames = 3
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_WRK_capital_marker_select"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_marker_select.png"
+		noOfFrames = 3
 		transparencecheck = yes
 	}
 

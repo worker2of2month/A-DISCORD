@@ -248,3 +248,51 @@ music = {
 	file = "ADISCORD_radio_tapok_zloy_gorod.ogg"
 	volume = 0.65
 }
+
+music = {
+	name = "ADISCORD_3teeth_antiflux"
+	file = "ADISCORD_3teeth_antiflux.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_3teeth_final_product"
+	file = "ADISCORD_3teeth_final_product.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_3teeth_master_of_decay"
+	file = "ADISCORD_3teeth_master_of_decay.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_3teeth_pearls_2_swine"
+	file = "ADISCORD_3teeth_pearls_2_swine.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_das_boot"
+	file = "ADISCORD_das_boot.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_komm_zu_uns"
+	file = "ADISCORD_komm_zu_uns.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_sternkrieg"
+	file = "ADISCORD_sternkrieg.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_trinken_mit_der_kaizer"
+	file = "ADISCORD_trinken_mit_der_kaizer.ogg"
+	volume = 0.65
+}

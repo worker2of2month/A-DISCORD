@@ -118,4 +118,47 @@ spriteTypes = {
         name = "GFX_ADISCORD_intelligence_upgrade_card"
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_upgrade_card.dds"
     }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_top"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_top.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_mid"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_mid.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_bottom"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_bottom.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_caption"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_caption.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_resource"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_resource.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_equipment"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_equipment.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_footer"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_footer.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_target"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_target.dds"
+    }
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_reward"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_reward.dds"
+    }
+    corneredTileSpriteType = {
+        name = "GFX_ADISCORD_intelligence_dossier_header"
+        size = { x = 40 y = 40 }
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_dossier_header.dds"
+        borderSize = { x = 8 y = 8 }
+        effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+    }
 }

@@ -514,7 +514,7 @@ class WarDebugContractTests(unittest.TestCase):
         self.assertEqual(scalar(event_call.value, "hours"), "1")
 
         events = parse_clausewitz(
-            (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text()
+            (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
         )
         event = next(
             e.value
@@ -531,7 +531,7 @@ class WarDebugContractTests(unittest.TestCase):
         self.assertFalse(any(e.key == "add_to_war" for e in walk(immediate)))
 
         effects = parse_clausewitz(
-            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text()
+            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(encoding="utf-8")
         )
         begin = block(effects, "VAL_begin_joint_nod_shabrat_campaign")
         join = next(e for e in walk(begin) if e.key == "add_to_war")
@@ -590,7 +590,7 @@ class WarDebugContractTests(unittest.TestCase):
         )
 
         effects = parse_clausewitz(
-            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text()
+            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(encoding="utf-8")
         )
         for helper in (
             "VAL_debug_force_nodrul_victory",
@@ -630,7 +630,7 @@ class WarDebugContractTests(unittest.TestCase):
 class FrontierWarEntryRegressionTests(unittest.TestCase):
     def effects(self):
         return parse_clausewitz(
-            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text()
+            (ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text(encoding="utf-8")
         )
 
     def test_war_entry_is_confirmed_after_the_declaration_effect_returns(self):
@@ -711,7 +711,7 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
     def test_native_relation_callback_records_guarantors_that_join_later(self):
         source = (
             ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
-        ).read_text()
+        ).read_text(encoding="utf-8")
         self.assertIn("VAL_frontier_register_war_participant = yes", source)
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
 
@@ -730,7 +730,7 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, scalar
 
         events = parse_clausewitz(
-            (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text()
+            (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
         )
         found = [
             e.value
@@ -861,19 +861,24 @@ class EventDrivenPeaceTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import entries, block, walk
 
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        for name in (
-            "STP_cw_settle_union_victory",
-            "STP_cw_settle_nod_victory",
-            "VAL_cw_settle_republics",
-        ):
+        # The union settlements end with the union-wars check. Kefreyt's
+        # settlement owns only its separate front and ends by staging Livonn.
+        final_writes = {
+            "STP_cw_settle_union_victory": "STP_cw_check_union_wars_finished",
+            "STP_cw_settle_nod_victory": "STP_cw_check_union_wars_finished",
+            "VAL_cw_settle_republics": "VAL_cw_stage_livonn_settlement",
+        }
+        for name, final_write in final_writes.items():
             rows = list(walk(block(effects, name)))
             queue = next(
                 e.line for e in rows if e.key == "STP_cw_queue_peace_reconciliation"
             )
-            check = next(
-                e.line for e in rows if e.key == "STP_cw_check_union_wars_finished"
-            )
+            check = next(e.line for e in rows if e.key == final_write)
             self.assertGreater(queue, check)
+            if name == "VAL_cw_settle_republics":
+                self.assertNotIn(
+                    "STP_cw_check_union_wars_finished", {e.key for e in rows}
+                )
 
     def test_queue_requires_pending_work_and_a_surviving_host(self):
         from tools.tests.test_adiscord_stp_preparation import (

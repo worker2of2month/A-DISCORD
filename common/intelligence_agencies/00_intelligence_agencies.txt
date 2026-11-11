@@ -1,1 +1,309 @@
-# Intentionally empty: masks incompatible vanilla 1.19 file for A-Discord total conversion.
+# Native agency profiles. Defaults select new agencies; availability controls the rename/insignia picker.
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_stp
+	names = { "ADISCORD_agency_stp_name" }
+	default = {
+		original_tag = STP
+	}
+	available = {
+		original_tag = STP
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_val
+	names = { "ADISCORD_agency_val_name" }
+	default = {
+		original_tag = VAL
+	}
+	available = {
+		original_tag = VAL
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_nam
+	names = { "ADISCORD_agency_nam_name" }
+	default = {
+		original_tag = NAM
+		NOT = {
+			OR = {
+				has_completed_focus = NAM_federal_charter
+			}
+		}
+	}
+	available = {
+		original_tag = NAM
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl
+	names = { "ADISCORD_agency_shl_name" }
+	default = {
+		original_tag = SHL
+		NOT = {
+			OR = {
+				check_variable = { var = SHL_political_course value = 1 compare = equals }
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+				check_variable = { var = SHL_political_course value = 3 compare = equals }
+				check_variable = { var = SHL_political_course value = 4 compare = equals }
+				check_variable = { var = SHL_political_course value = 5 compare = equals }
+			}
+		}
+	}
+	available = {
+		original_tag = SHL
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_rus
+	names = { "ADISCORD_agency_rus_name" }
+	default = {
+		original_tag = RUS
+		NOT = {
+			OR = {
+				has_cosmetic_tag = RUS_last_empire
+				has_cosmetic_tag = RUS_black_banner_empire
+			}
+		}
+	}
+	available = {
+		original_tag = RUS
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_wrk
+	names = { "ADISCORD_agency_wrk_name" }
+	default = {
+		tag = event_target:ADISCORD_vorkerland_nation
+		NOT = {
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+		}
+	}
+	available = {
+		tag = event_target:ADISCORD_vorkerland_nation
+		NOT = {
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+		}
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_nod
+	names = { "ADISCORD_agency_nod_name" }
+	default = {
+		original_tag = NOD
+	}
+	available = {
+		original_tag = NOD
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_ivn
+	names = { "ADISCORD_agency_ivn_name" }
+	default = {
+		original_tag = IVN
+	}
+	available = {
+		original_tag = IVN
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_vad
+	names = { "ADISCORD_agency_vad_name" }
+	default = {
+		original_tag = VAD
+	}
+	available = {
+		original_tag = VAD
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_wkr
+	names = { "ADISCORD_agency_wkr_name" }
+	default = {
+		original_tag = WKR
+	}
+	available = {
+		original_tag = WKR
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_tva
+	names = { "ADISCORD_agency_tva_name" }
+	default = {
+		original_tag = TVA
+	}
+	available = {
+		original_tag = TVA
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_sts
+	names = { "ADISCORD_agency_sts_name" }
+	default = {
+		original_tag = STS
+	}
+	available = {
+		original_tag = STS
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_srp
+	names = { "ADISCORD_agency_srp_name" }
+	default = {
+		original_tag = SRP
+	}
+	available = {
+		original_tag = SRP
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_nam_charter
+	names = { "ADISCORD_agency_nam_charter_name" }
+	default = {
+		original_tag = NAM
+		has_completed_focus = NAM_federal_charter
+	}
+	available = {
+		original_tag = NAM
+		has_completed_focus = NAM_federal_charter
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_rus_last_empire
+	names = { "ADISCORD_agency_rus_last_empire_name" }
+	default = {
+		original_tag = RUS
+		has_cosmetic_tag = RUS_last_empire
+	}
+	available = {
+		original_tag = RUS
+		has_cosmetic_tag = RUS_last_empire
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_rus_black_banner
+	names = { "ADISCORD_agency_rus_black_banner_name" }
+	default = {
+		original_tag = RUS
+		has_cosmetic_tag = RUS_black_banner_empire
+	}
+	available = {
+		original_tag = RUS
+		has_cosmetic_tag = RUS_black_banner_empire
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl_conclave
+	names = { "ADISCORD_agency_shl_conclave_name" }
+	default = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 1 compare = equals }
+	}
+	available = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 1 compare = equals }
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl_treaty
+	names = { "ADISCORD_agency_shl_treaty_name" }
+	default = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+	}
+	available = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl_directorate
+	names = { "ADISCORD_agency_shl_directorate_name" }
+	default = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+	}
+	available = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl_regent
+	names = { "ADISCORD_agency_shl_regent_name" }
+	default = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 4 compare = equals }
+	}
+	available = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 4 compare = equals }
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_shl_commune
+	names = { "ADISCORD_agency_shl_commune_name" }
+	default = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 5 compare = equals }
+	}
+	available = {
+		original_tag = SHL
+		check_variable = { var = SHL_political_course value = 5 compare = equals }
+	}
+}
+
+intelligence_agency = {
+	picture = GFX_ADISCORD_agency_generic
+	names = { "ADISCORD_agency_generic_name" }
+	default = {
+		NOT = {
+			OR = {
+				original_tag = STP
+				original_tag = VAL
+				original_tag = NAM
+				original_tag = SHL
+				original_tag = RUS
+				tag = event_target:ADISCORD_vorkerland_nation
+				original_tag = NOD
+				original_tag = IVN
+				original_tag = VAD
+				original_tag = WKR
+				original_tag = TVA
+				original_tag = STS
+				original_tag = SRP
+			}
+		}
+	}
+	available = {
+		always = yes
+	}
+}

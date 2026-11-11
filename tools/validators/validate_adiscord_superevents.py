@@ -363,6 +363,10 @@ PRESENTATIONS = (
         "superevent_west_world_empire",
         "superevent_west_world_empire_sound_e",
     ),
+    SupereventPresentation(
+        "superevent_nam_veyran_proclamation",
+        "superevent_nam_veyran_proclamation_sound_e",
+    ),
 )
 
 

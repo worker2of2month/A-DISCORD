@@ -2999,6 +2999,7 @@ STP_cw_materialize_region_assets = {
 }
 
 STP_cw_prepare_successor = {
+	ADISCORD_initialize_intelligence_agency = yes
 	if = {
 		limit = { NOT = { has_country_flag = STP_cw_templates_loaded } }
 		STP = {
@@ -4164,6 +4165,80 @@ STP_cw_ai_shabrat_clear_offensive = {
 	clr_country_flag = STS_ai_assault_wave
 	clr_country_flag = STS_ai_regroup
 	clear_variable = STS_ai_wave_start_states
+}
+
+# The NOD front keeps the same rhythm: the 63-day cycle flag opens with a
+# 42-day assault wave (STS_shabrat_nod_assault_wave) and its remaining 21 days
+# fall back to the ordinary profiles. A hopeless ratio postpones the wave.
+STP_cw_ai_shabrat_nod_offensive_tick = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = STS_ai_nod_wave_cycle }
+			NOT = { fighting_army_strength_ratio = { tag = NOD ratio < 0.4 } }
+		}
+		set_country_flag = { flag = STS_ai_nod_wave_cycle value = 1 days = 63 }
+		set_country_flag = { flag = STS_ai_nod_assault_wave value = 1 days = 42 }
+	}
+}
+
+STP_cw_ai_shabrat_clear_nod_offensive = {
+	clr_country_flag = STS_ai_nod_wave_cycle
+	clr_country_flag = STS_ai_nod_assault_wave
+}
+
+# COUNTRY STP, STS or NOD, weekly. AI-only replacements for a war against a
+# foreign army; the civil war itself keeps the manpower split of its start.
+# The ceiling stays under STP_cw_ai_preserve_replacement_reserve, so these men
+# refill existing formations and never fund new ones.
+STP_cw_ai_war_replacements_tick = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_capitulated = no
+			has_manpower < 10000
+			OR = {
+				AND = {
+					tag = NOD
+					has_war = yes
+				}
+				has_war_with = NOD
+				has_war_with = VAL
+			}
+		}
+		add_manpower = 2000
+	}
+}
+
+# COUNTRY SRP, weekly. Lost districts wear the council's army down: two of the
+# three outer districts cap the strain at 15%, the full Livonn siege at 40%.
+# Retaking ground until fewer than two are lost lifts it completely.
+STP_cw_republics_siege_tick = {
+	if = {
+		limit = { STP_cw_republics_siege_strain_active = yes }
+		if = {
+			limit = { NOT = { has_variable = STP_cw_siege_strain } }
+			set_variable = { var = STP_cw_siege_strain value = 0 }
+		}
+		if = {
+			limit = { VAL = { VAL_cw_livonn_siege_active = yes } }
+			subtract_from_variable = { var = STP_cw_siege_strain value = 0.02 }
+			clamp_variable = { var = STP_cw_siege_strain min = -0.4 max = 0 }
+		}
+		else = {
+			subtract_from_variable = { var = STP_cw_siege_strain value = 0.01 }
+			clamp_variable = { var = STP_cw_siege_strain min = -0.15 max = 0 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = STP_cw_republics_siege_strain_dynamic } } }
+			add_dynamic_modifier = { modifier = STP_cw_republics_siege_strain_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = STP_cw_republics_siege_strain_dynamic } }
+		remove_dynamic_modifier = { modifier = STP_cw_republics_siege_strain_dynamic }
+		clear_variable = STP_cw_siege_strain
+	}
 }
 
 STP_cw_start = {
@@ -6958,6 +7033,36 @@ STP_pc_apply_campaign_defence = {
 		}
 		remove_ideas = STP_pc_campaign_defence_ready
 		add_timed_idea = { idea = STP_pc_campaign_defence days = 70 }
+	}
+}
+
+# COUNTRY STP, on selecting the Kefreyt campaign focus. VAL is alerted once per
+# open threat and keeps the reserved plan while the operation remains possible.
+STP_pw_party_warn_kefreyt = {
+	if = {
+		limit = {
+			tag = STP
+			VAL = {
+				exists = yes
+				has_capitulated = no
+				NOT = { has_war_with = STP }
+				NOT = { has_idea = STP_pw_party_kefreyt_defence_ready }
+				STP_pw_party_kefreyt_warning_expired = no
+			}
+		}
+		VAL = { country_event = { id = ADISCORD_STP_pc.112 hours = 1 } }
+	}
+}
+
+# COUNTRY VAL: the warning reserves its defence bonus until the party's army enters the war.
+STP_pw_party_apply_kefreyt_defence = {
+	if = {
+		limit = {
+			has_war_with = STP
+			has_idea = STP_pw_party_kefreyt_defence_ready
+		}
+		remove_ideas = STP_pw_party_kefreyt_defence_ready
+		add_timed_idea = { idea = STP_pw_party_kefreyt_defence days = 70 }
 	}
 }
 
@@ -19077,10 +19182,13 @@ STP_bezhaysk_accept_defeat = {
 				has_country_flag = STP_bezhaysk_campaign_member
 				has_war_with = PREV
 			}
+			# Alliance members enter the same war; the engine may credit a centre's
+			# capitulation to whichever of them holds the decisive provinces.
 			FROM = {
 				OR = {
 					tag = PREV
 					is_subject_of = PREV
+					is_in_faction_with = PREV
 				}
 			}
 		}

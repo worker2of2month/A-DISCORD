@@ -2006,7 +2006,11 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_veyran_union_charter_tt
-			hidden_effect = { set_cosmetic_tag = NAM_veyran_union }
+			hidden_effect = {
+				set_cosmetic_tag = NAM_veyran_union
+				set_temp_variable = { ADISCORD_superevent_request = 71 }
+				ADISCORD_superevent_enqueue = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

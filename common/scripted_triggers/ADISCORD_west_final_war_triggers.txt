@@ -242,3 +242,58 @@ ADISCORD_west_ivn_league_unlocked = {
 		has_completed_focus = IVN_revanche_iron_protectorate
 	}
 }
+
+# BEGIN GENERATED WEST INFLUENCE MAP
+# COUNTRY. Presentation-only frame; no campaign state is written.
+ADISCORD_west_map_set_country_frame = {
+	set_temp_variable = { var = ADISCORD_west_map_frame value = 2 }
+	if = {
+		limit = { exists = no }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+	}
+	else_if = {
+		limit = { tag = event_target:ADISCORD_vorkerland_nation }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 4 }
+	}
+	else_if = {
+		limit = { tag = IVN }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 6 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_regional_country = no }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_on_wrk_side = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 4 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_on_ivn_side = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 6 }
+	}
+	else_if = {
+		limit = { has_country_flag = ADISCORD_west_neutral }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 7 }
+	}
+	else_if = {
+		limit = { is_subject = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 8 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_leans_to_wrk_ally = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 4 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_leans_to_ivn_ally = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 6 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_grants_wrk_transit = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 3 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_grants_ivn_transit = yes }
+		set_temp_variable = { var = ADISCORD_west_map_frame value = 5 }
+	}
+}
+# END GENERATED WEST INFLUENCE MAP

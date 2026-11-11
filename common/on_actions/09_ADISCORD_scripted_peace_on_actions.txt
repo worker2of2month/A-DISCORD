@@ -72,6 +72,14 @@ on_actions = {
 				}
 				ADISCORD_vorkerland_pw_handle_capitulation = yes
 				RUS_crisis_record_capitulation = yes
+				# Before any peace conference of the collapse can release a dead breakaway.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+					}
+					ADISCORD_vorkerland_retire_dead_breakaway_claims = yes
+				}
 				# END vorkerland_collapse:on_capitulation_immediate
 				# BEGIN kefreyt_northern_reservations:on_capitulation_immediate
 				# Kefreyt's dedicated northern-coalition war owns all three capitulations.

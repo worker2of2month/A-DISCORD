@@ -2368,6 +2368,7 @@ class TestValProgressionContinuation(unittest.TestCase):
             "has_capitulated": False,
             "VAL_frontier_stage": 0,
             "VAL_campaign_objectives_met": False,
+            "is_ai": False,
         }
 
         def evaluate(entry):
@@ -2390,6 +2391,7 @@ class TestValProgressionContinuation(unittest.TestCase):
                 "is_subject",
                 "has_capitulated",
                 "VAL_campaign_objectives_met",
+                "is_ai",
             ):
                 return facts[key] == (value == "yes")
             if key == "check_variable":
@@ -2433,6 +2435,28 @@ class TestValProgressionContinuation(unittest.TestCase):
         flags.clear()
         facts["VAL_campaign_objectives_met"] = True
         self.assertTrue(check("VAL_economic_settlement_ready"))
+
+        # The AI route needs neither the deferral nor the campaign, only peace.
+        facts["VAL_campaign_objectives_met"] = False
+        flags.add("VAL_frontier_treaty_signed")
+        self.assertFalse(check("VAL_economic_settlement_ready"))
+        facts["is_ai"] = True
+        self.assertTrue(check("VAL_economic_settlement_ready"))
+        focuses.remove("VAL_Returning_Buyers")
+        self.assertFalse(check("VAL_economic_settlement_ready"))
+        focuses.add("VAL_Returning_Buyers")
+        for key in ("has_war", "is_subject", "has_capitulated"):
+            with self.subTest(ai_blocker=key):
+                facts[key] = True
+                self.assertFalse(check("VAL_economic_settlement_ready"))
+                facts[key] = False
+        facts["VAL_frontier_stage"] = 1
+        self.assertFalse(check("VAL_economic_settlement_ready"))
+        facts["VAL_frontier_stage"] = 0
+        for flag in ("VAL_campaign_mobilizing", "VAL_stelander_defeated"):
+            flags.add(flag)
+            self.assertFalse(check("VAL_economic_settlement_ready"))
+            flags.remove(flag)
 
 
 class TestValReclamationCategory(unittest.TestCase):
