@@ -3087,6 +3087,25 @@ SHL_keizan_buyout = {
 	}
 }
 
+# COUNTRY KYZ. Cistern Watch is a Mazrah history template; Keizan receives its
+# own locked copy before the war levy, so the AI designer cannot replace it.
+SHL_kyz_prepare_cistern_template = {
+	if = {
+		limit = { NOT = { has_template = "Cistern Watch" } }
+		division_template = {
+			name = "Cistern Watch"
+			template_counter = 80
+			division_names_group = ADISCORD_INF_01
+			is_locked = yes
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				infantry = { x = 1 y = 0 }
+			}
+		}
+	}
+}
+
 # STATE scope, owner KYZ.
 SHL_kyz_raise_cistern_watch = {
 	if = {
@@ -3131,6 +3150,7 @@ SHL_start_kyz_war = {
 				amount = 8000
 				producer = KYZ
 			}
+			SHL_kyz_prepare_cistern_template = yes
 		}
 		280 = { SHL_kyz_raise_cistern_watch = yes }
 		284 = { SHL_kyz_raise_cistern_watch = yes }
@@ -8623,7 +8643,7 @@ SHL_ensure_border_watch_template = {
 		division_template = {
 			name = "Border Watch"
 			override_model = SHL_ADISCORD_militia_entity
-			template_counter = 9
+			template_counter = 80
 			division_names_group = SHL_GAR_01
 			is_locked = yes
 			force_allow_recruiting = no

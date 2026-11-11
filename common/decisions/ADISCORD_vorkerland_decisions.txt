@@ -9349,11 +9349,17 @@ ADISCORD_vorkerland_focus_operations_category = {
 		fire_only_once = yes
 		complete_effect = {
 			if = {
-				limit = { ROM = { exists = yes is_subject = no NOT = { has_war_with = ROOT } } }
+				limit = {
+					ROM = { exists = yes is_subject = no NOT = { has_war_with = ROOT } }
+					NOT = { has_non_aggression_pact_with = ROM }
+				}
 				diplomatic_relation = { country = ROM relation = non_aggression_pact active = yes }
 			}
 			if = {
-				limit = { TRU = { exists = yes is_subject = no NOT = { has_war_with = ROOT } } }
+				limit = {
+					TRU = { exists = yes is_subject = no NOT = { has_war_with = ROOT } }
+					NOT = { has_non_aggression_pact_with = TRU }
+				}
 				diplomatic_relation = { country = TRU relation = non_aggression_pact active = yes }
 			}
 			set_country_flag = ADISCORD_vorkerland_free_republics_recognized

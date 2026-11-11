@@ -70,6 +70,7 @@ focus_tree = {
 			army_experience = 10
 			add_command_power = 15
 			custom_effect_tooltip = RUS_arm_the_border_hosts_tt
+			hidden_effect = { RUS_prepare_rifle_template = yes }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
@@ -402,6 +403,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 160 producer = RUS }
 			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 180 producer = RUS }
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
+			hidden_effect = { RUS_prepare_rifle_template = yes }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
@@ -455,6 +457,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 240 producer = RUS }
 			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 300 producer = RUS }
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 420 producer = RUS }
+			hidden_effect = { RUS_prepare_rifle_template = yes }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
@@ -641,6 +644,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 15000
+			hidden_effect = { RUS_prepare_rifle_template = yes }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.15 start_equipment_factor = 0.75"
@@ -2246,6 +2250,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 160 producer = RUS }
 			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 180 producer = RUS }
 			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
+			hidden_effect = { RUS_prepare_rifle_template = yes }
 			capital_scope = {
 				create_unit = {
 					division = "division_template = \"Khanate Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"

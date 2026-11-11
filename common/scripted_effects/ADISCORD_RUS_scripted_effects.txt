@@ -4605,6 +4605,39 @@ RUS_prepare_hazard_template = {
 	}
 }
 
+# COUNTRY RUS. The AI designer can replace the starting Khanate Rifle Brigade.
+# Focus formations restore its history composition as a locked template;
+# ordinary recruitment stays available.
+RUS_prepare_rifle_template = {
+	if = {
+		limit = { NOT = { has_template = "Khanate Rifle Brigade" } }
+		division_template = {
+			name = "Khanate Rifle Brigade"
+			is_locked = yes
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+			support = {
+				engineer = { x = 0 y = 0 }
+				anti_air = { x = 0 y = 1 }
+				artillery = { x = 1 y = 0 }
+				anti_tank = { x = 1 y = 1 }
+			}
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Khanate Rifle Brigade"
+			force_allow_recruiting = yes
+		}
+	}
+}
+
 # --- rus_reactor_belt ---
 # One country deposit covers a restoration from payment to settlement; the
 # target keeps RUS_reactor_works_in_progress for the same span, so a late

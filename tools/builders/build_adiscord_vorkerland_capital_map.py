@@ -662,22 +662,22 @@ def interaction_localisation(language):
         note = f'[{state}.WRKGetCapitalDistrictNote]' if state != 40 else (
             'Эвакуация и судьба Уоркера - в подсказке.' if russian else 'Hover for evacuation and Worker\'s fate.')
         texts[f'WRK_capital_detail_{state}'] = f'§Y[{state}.GetName]§!\\n' + note
-    results_ru = ('Недовольство -25; с хлебным резервом -30. Без бунта. Перерыв между мерами 45 дней.',
-                  'Недовольство -30, прекращает бунт. Баланс сил +0.05 к округам. Перерыв 45 дней.',
-                  'Недовольство -35, прекращает бунт. Стабильность -1%; другие районы без патруля +8. Перерыв 45 дней.',
-                  '21 день без роста недовольства, затем -40 и прекращение бунта. Одновременно один патруль.',
-                  'Через 21 день ячейка уровня 1. Внимание +10; с аварийными мастерскими +5. Один проект сети одновременно.',
-                  'Через 28 дней уровень ячейки +1, внимание +15. Нужна скрытая действующая ячейка ниже уровня 3. Один проект сети одновременно.',
-                  'Внимание -30. Ячейка бездействует 45 дней. Нельзя применить к раскрытой или уже бездействующей ячейке.',
+    results_ru = ('Недовольство -25; с хлебным резервом -30. Без бунта. Перерыв между мерами [?ROOT.WRK_unrest_cooldown|0] дн..',
+                  'Недовольство -30, прекращает бунт. Баланс сил +0.05 к округам. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн..',
+                  'Недовольство -35, прекращает бунт. Стабильность -1%; другие районы без патруля +8. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн..',
+                  '21 день без роста недовольства, затем -40 и прекращение бунта. Патрулей одновременно: [?ROOT.WRK_unrest_patrol_limit|0].',
+                  'Через 21 день ячейка уровня 1. Внимание +10; с аварийными мастерскими +5. Проектов сети одновременно: [?ROOT.WRK_cells_work_limit|0].',
+                  'Через 28 дней уровень ячейки +1, внимание +15. Нужна скрытая действующая ячейка ниже уровня 3. Проектов сети одновременно: [?ROOT.WRK_cells_work_limit|0].',
+                  'Внимание -[?ROOT.WRK_cell_cover|0]. Ячейка бездействует 45 дней. Нельзя применить к раскрытой или уже бездействующей ячейке.',
                   'Раскрытая ячейка снова скрыта; внимание становится 50.',
                   'Внимание 0, ячейка защищена от раскрытия. Расширение закрывается; при расколе учитывается как уровень 1. Нельзя во время работ.')
-    results_en = ('Unrest -25, or -30 with the ration reserve. No riot. Shared measure cooldown: 45 days.',
-                  'Unrest -30; ends the riot. Balance +0.05 toward districts. Shared cooldown: 45 days.',
-                  'Unrest -35; ends the riot. Stability -1%; other unpatrolled districts +8. Shared cooldown: 45 days.',
-                  'No unrest growth for 21 days, then -40 and ends the riot. One patrol at a time.',
-                  'Level 1 cell after 21 days. Heat +10, or +5 with emergency workshops. One network project at a time.',
-                  'After 28 days: cell level +1, heat +15. Requires an active hidden cell below level 3. One network project at a time.',
-                  'Heat -30. Cell dormant for 45 days. Requires a hidden, active cell.',
+    results_en = ('Unrest -25, or -30 with the ration reserve. No riot. Shared measure cooldown: [?ROOT.WRK_unrest_cooldown|0] days.',
+                  'Unrest -30; ends the riot. Balance +0.05 toward districts. Shared cooldown: [?ROOT.WRK_unrest_cooldown|0] days.',
+                  'Unrest -35; ends the riot. Stability -1%; other unpatrolled districts +8. Shared cooldown: [?ROOT.WRK_unrest_cooldown|0] days.',
+                  'No unrest growth for 21 days, then -40 and ends the riot. Patrols at a time: [?ROOT.WRK_unrest_patrol_limit|0].',
+                  'Level 1 cell after 21 days. Heat +10, or +5 with emergency workshops. Network projects at a time: [?ROOT.WRK_cells_work_limit|0].',
+                  'After 28 days: cell level +1, heat +15. Requires an active hidden cell below level 3. Network projects at a time: [?ROOT.WRK_cells_work_limit|0].',
+                  'Heat -[?ROOT.WRK_cell_cover|0]. Cell dormant for 45 days. Requires a hidden, active cell.',
                   'Exposed cell becomes hidden; heat becomes 50.',
                   'Heat 0; protected from exposure. Cannot expand; counts as level 1 on collapse. Requires no ongoing work.')
     definitions = decision_definitions()

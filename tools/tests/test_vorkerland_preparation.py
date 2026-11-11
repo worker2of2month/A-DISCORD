@@ -206,6 +206,8 @@ class Script:
         self.scopes = defaultdict(Scope)
         self.globals = {V + "phase_prewar"}
         self.calls = []
+        # Non-aggression pacts signed in this run, as resolved pairs of tags.
+        self.pacts = set()
         self.random_index = 0
         self.random_weights = []
         self.game_rules = {"allow_volunteers": "LIMITED"}
@@ -395,6 +397,8 @@ class Script:
                 ok = state.subject == (self.scope(value, current, previous) or value)
             elif key == "has_war_with":
                 ok = self.scope(value, current, previous) in state.enemies
+            elif key == "has_non_aggression_pact_with":
+                ok = frozenset((current, self.scope(value, current, previous))) in self.pacts
             elif key == "has_war_together_with":
                 target = self.scopes[self.scope(value, current, previous)]
                 ok = any(target.war_sides.get(war) == side for war, side in state.war_sides.items())
@@ -611,6 +615,12 @@ class Script:
                          V + "story_report_variant_declaration",
                          V + "ensure_emergency_militia_template", V + "add_legitimacy", V + "join_coalition_of_FROM"):
                 self.calls.append((key, current, value))
+                if key == "diplomatic_relation" and fields(value).get("relation") == "non_aggression_pact":
+                    pair = frozenset((current, self.scope(fields(value)["country"], current, previous)))
+                    if fields(value).get("active") == "yes":
+                        self.pacts.add(pair)
+                    else:
+                        self.pacts.discard(pair)
             else:
                 raise AssertionError(f"Unsupported effect: {key} {value}")
 
@@ -3307,6 +3317,22 @@ class WKRDiplomaticProgrammeTests(unittest.TestCase):
             before = deepcopy((script.scopes, script.calls))
             script.run(EFFECTS[V + "resolve_unguaranteed_free_republics"])
             self.assertEqual((script.scopes, script.calls), before)
+
+    def test_a_pact_signed_by_the_winner_is_not_signed_again(self):
+        # The treaty's pact already binds the unified country when the
+        # settlement honours the signatory: the settlement does not sign it twice.
+        script = self.campaign(recognition=True)
+        self.assertTrue(self.launch(script, self.recognition, "ROM"))
+        self.assertTrue(self.accept(script, "ROM"))
+        script.event_targets["ADISCORD_vorkerland_nation"] = "WKR"
+        script.root = "WKR"
+        script.scopes["DVA"].exists = script.scopes["ZTA"].exists = False
+        script.random_index = 1
+        signed = len([call for call in script.calls if call[0] == "diplomatic_relation"])
+        script.run(EFFECTS[V + "resolve_unguaranteed_free_republics"])
+        pacts = [fields(value)["country"] for key, scope, value in script.calls
+                 if key == "diplomatic_relation" and fields(value)["relation"] == "non_aggression_pact"]
+        self.assertEqual(len(pacts), signed)
 
     def test_exclusive_focus_rewards_open_usable_programmes_with_first_order_funding(self):
         focuses = {fields(value)["id"]: fields(value)

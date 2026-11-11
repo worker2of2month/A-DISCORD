@@ -3591,11 +3591,17 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_resolution_done } }
 		event_target:ADISCORD_vorkerland_nation = {
 			if = {
-				limit = { ROM = { WKR_recognized_republic_survives = yes } }
+				limit = {
+					ROM = { WKR_recognized_republic_survives = yes }
+					NOT = { has_non_aggression_pact_with = ROM }
+				}
 				diplomatic_relation = { country = ROM relation = non_aggression_pact active = yes }
 			}
 			if = {
-				limit = { TRU = { WKR_recognized_republic_survives = yes } }
+				limit = {
+					TRU = { WKR_recognized_republic_survives = yes }
+					NOT = { has_non_aggression_pact_with = TRU }
+				}
 				diplomatic_relation = { country = TRU relation = non_aggression_pact active = yes }
 			}
 		}
@@ -12250,7 +12256,10 @@ WKR_accept_republic_recognition = {
 		}
 		WKR = {
 			add_political_power = -50
-			diplomatic_relation = { country = ROOT relation = non_aggression_pact active = yes }
+			if = {
+				limit = { NOT = { has_non_aggression_pact_with = ROOT } }
+				diplomatic_relation = { country = ROOT relation = non_aggression_pact active = yes }
+			}
 			hidden_effect = {
 				set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = 0.04 }
 				ADISCORD_vorkerland_add_legitimacy = yes
