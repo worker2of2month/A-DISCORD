@@ -93,6 +93,68 @@ class CapitalMapTests(unittest.TestCase):
             visited.append(states)
         self.assertNotEqual(*visited)
 
+    def test_network_link_uses_the_existing_route_predicate_and_project_three(self):
+        from tools.tests.test_vorkerland_preparation import Script, fields, parse, P
+
+        self.assertTrue(hasattr(self.builder, 'network_display_triggers'))
+        triggers = fields(parse(self.builder.network_display_triggers()))
+        for project in (0, 1, 2, 3):
+            for level, flags, clear in ((1, (), False), (2, (), True),
+                                         (3, ('WRK_cell_dormant',), True),
+                                         (2, ('WRK_cell_exposed',), False),
+                                         (3, ('WRK_cell_legal',), False)):
+                script = Script()
+                script.scopes['40'].variables[P + 'project'] = project
+                script.scopes['32'].variables['WRK_cell_level'] = level
+                script.scopes['32'].flags.update(flags)
+                self.assertEqual(script.conditions(triggers['WRK_capital_network_open_visible']), project == 3 and clear)
+                self.assertEqual(script.conditions(triggers['WRK_capital_network_closed_visible']), project == 3 and not clear)
+                script.scopes['40'].flags.add(P + 'pending')
+                self.assertEqual(script.conditions(triggers['WRK_capital_network_open_visible']), project == 3 and clear)
+
+    def test_network_visual_is_separate_from_the_three_street_route_frames(self):
+        self.assertIn('WRK_capital_network_link.png', self.images)
+        image = self.images['WRK_capital_network_link.png']
+        self.assertEqual(image.size, (660, 290))
+        for frame in range(2):
+            self.assertIsNotNone(image.crop((330 * frame, 0, 330 * (frame + 1), 290)).getbbox())
+        self.assertEqual(self.images['WRK_capital_route.png'].size, (990, 290))
+        gui = named_blocks(self.builder.gui_block(self.geometry))
+        for name in ('WRK_capital_network_open', 'WRK_capital_network_closed'):
+            self.assertEqual(gui[name]['alwaystransparent'], 'yes')
+
+    def test_losing_tower_removes_network_link_and_restores_staff_route(self):
+        from tools.tests.test_vorkerland_preparation import Script, fields, parse, P, TRIGGERS
+
+        script = Script()
+        script.start(P + 'network_exfiltration')
+        script.effect(P + 'finish_project', '40')
+        script.effect(P + 'yield_object', '40')
+        script.scopes['32'].variables['WRK_cell_level'] = 3
+        triggers = fields(parse(self.builder.network_display_triggers()))
+        for status in ('open', 'closed'):
+            self.assertFalse(script.conditions(triggers[f'WRK_capital_network_{status}_visible']))
+        script.run(TRIGGERS['WRK_capital_set_route_frame'])
+        self.assertEqual(script.scopes['WRK'].variables['WRK_capital_frame'], 3)
+
+    def test_dynamic_values_and_network_forecast_are_in_the_map_text(self):
+        for language in ('russian', 'english'):
+            _, data = self.builder.interaction_localisation(language)
+            text = data.decode('utf-8-sig')
+            def value(key):
+                return re.search(r'(?m)^ ' + key + r':0 "(.*)"$', text)[1]
+            for action, variable in (('WRK_issue_capital_rations', 'WRK_unrest_cooldown'),
+                                     ('WRK_unrest_workers_patrol', 'WRK_unrest_patrol_limit'),
+                                     ('WRK_cell_plant', 'WRK_cells_work_limit'),
+                                     ('WRK_cell_expand', 'WRK_cells_work_limit'),
+                                     ('WRK_cell_lie_low', 'WRK_cell_cover')):
+                self.assertIn(f'[?ROOT.{variable}|0]', value('WRK_capital_action_' + action + '_tt'))
+            self.assertNotIn('дн..', text)
+            self.assertIn('[GetVorkerlandPrepCommunications]', value('WRK_capital_detail_40'))
+            self.assertIn('[GetVorkerlandNetworkRouteStatus]', value('WRK_capital_network_status'))
+            self.assertIn('[GetVorkerlandWorkerFateForecast]', value('WRK_capital_network_tt'))
+            self.assertIn('[GetVorkerlandWorkerFateForecast]', value('WRK_capital_40_tt'))
+
     def test_generated_section_preserves_unowned_bytes_and_is_idempotent(self):
         source = b'guiTypes = {\r\n\t# user window\r\n}\r\n'
         updated = self.builder.replace_section(source, '\tcontainerWindowType = {\n\t}\n')

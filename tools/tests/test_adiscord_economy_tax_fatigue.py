@@ -145,5 +145,40 @@ class AiTaxPolicyTests(unittest.TestCase):
         self.assertGreaterEqual(policy.count("ADISCORD_economy_decrease_tax_burden = yes"), 6)
 
 
+class AiWarMobilisationTests(unittest.TestCase):
+    def test_war_moves_a_civilian_ai_to_partial_mobilisation_on_the_second_pulse(self):
+        effects = text(EFFECTS)
+        step = definition(effects, "ADISCORD_economy_ai_war_mobilisation_step")
+        for clause in (
+            "is_ai = yes",
+            "has_war = yes",
+            "ADISCORD_economy_has_idea_civilian_oriented_economy = yes",
+            "ADISCORD_economy_has_idea_civilian_economy = yes",
+            "ADISCORD_economy_has_idea_low_economic_mobilisation = yes",
+            "add_ideas = partial_economic_mobilisation",
+            "ADISCORD_economy_mark_dirty = yes",
+        ):
+            self.assertIn(clause, step)
+        for tag in ("WRK", "WKR", "VAD", "TVA"):
+            self.assertIn(f"tag = {tag}", step)
+        # Vorkerland mirrors ADISCORD_vorkerland_wrk_wartime_economy_law.
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_finished", step)
+        self.assertIn("ADISCORD_vorkerland_is_not_wartime_claimant = yes", step)
+        # The first pulse only arms the timed flag; the law moves on the next one.
+        pending = step.index("has_country_flag = ADISCORD_ai_war_mobilisation_pending")
+        self.assertLess(pending, step.index("add_ideas = partial_economic_mobilisation"))
+        self.assertIn(
+            "set_country_flag = { flag = ADISCORD_ai_war_mobilisation_pending value = 1 days = 45 }",
+            step,
+        )
+        monthly = definition(effects, "ADISCORD_economy_monthly_update")
+        self.assertEqual(monthly.count("ADISCORD_economy_ai_war_mobilisation_step = yes"), 1)
+        self.assertLess(
+            monthly.index("ADISCORD_economy_ai_monthly_policy = yes"),
+            monthly.index("ADISCORD_economy_ai_war_mobilisation_step = yes"),
+        )
+        self.assertEqual(ai_policy_contract_issues(effects), [])
+
+
 if __name__ == "__main__":
     unittest.main()

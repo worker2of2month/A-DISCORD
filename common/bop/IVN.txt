@@ -1,0 +1,93 @@
+# COUNTRY IVN. Opened once by IVN_marches_initialize. The Committee holds the
+# negative side and the Staff of the marches the positive side. The revolt
+# reads the value to divide the army; the cabinet's political course during
+# the revolt requires one of the two sides. Each extreme range asks the
+# player for a response once per entry.
+IVN_command_bop = {
+	initial_value = 0.10
+	left_side = IVN_committee_side
+	right_side = IVN_staff_side
+	decision_category = IVN_command_category
+	range = {
+		id = IVN_command_compromise
+		min = -0.10
+		max = 0.10
+		modifier = { stability_factor = 0.03 }
+	}
+	side = {
+		id = IVN_committee_side
+		icon = GFX_bop_DEN_welfare_side
+		range = {
+			id = IVN_committee_influence
+			min = -0.35
+			max = -0.10
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+			}
+		}
+		range = {
+			id = IVN_committee_control
+			min = -0.75
+			max = -0.35
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.10
+				army_org_factor = -0.03
+			}
+		}
+		range = {
+			id = IVN_committee_dominance
+			min = -1.00
+			max = -0.75
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.10
+				army_org_factor = -0.06
+				war_support_factor = -0.10
+			}
+			on_activate = {
+				country_event = { id = ADISCORD_ivn.8 }
+			}
+		}
+	}
+	side = {
+		id = IVN_staff_side
+		icon = GFX_bop_DEN_warfare_side
+		range = {
+			id = IVN_staff_influence
+			min = 0.10
+			max = 0.35
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+		range = {
+			id = IVN_staff_control
+			min = 0.35
+			max = 0.75
+			modifier = {
+				army_org_factor = 0.05
+				planning_speed = 0.10
+				war_support_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+		range = {
+			id = IVN_staff_dominance
+			min = 0.75
+			max = 1.00
+			modifier = {
+				army_org_factor = 0.08
+				planning_speed = 0.15
+				war_support_factor = 0.10
+				stability_factor = -0.08
+				political_power_gain = -0.15
+			}
+			on_activate = {
+				country_event = { id = ADISCORD_ivn.9 }
+			}
+		}
+	}
+}

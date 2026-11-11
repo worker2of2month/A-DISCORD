@@ -263,5 +263,2386 @@ ideas = {
 				conscription = 0.005
 			}
 		}
+
+
+		# ----- Revolt of the marches -----
+		# Removed by IVN_resolve_marches_revolt on every terminal path.
+		IVN_cw_divided_army = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = -0.10
+				war_support_factor = 0.10
+			}
+		}
+
+		IVN_cw_loyal_officers = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_cw_war_bonds = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.10
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		IVN_cw_counterstroke_idea = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				army_org_regain = 0.10
+			}
+		}
+
+		IVN_cw_storm_of_vedrina = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.15
+			}
+		}
+
+		# Holds while IVC exists; the country disappears with it.
+		IVC_legion_vow = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.15
+				army_morale_factor = 0.05
+				consumer_goods_factor = 0.05
+			}
+		}
+
+		IVC_storm_of_the_capital = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.10
+			}
+		}
+
+		# The government the victorious legion brings into IVN.
+		IVN_rule_of_the_legion_council = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				planning_speed = 0.10
+				political_power_gain = -0.10
+				stability_factor = 0.05
+			}
+		}
+
+		IVN_rule_of_the_patriotic_union = {
+			picture = generic_fascism_drift_bonus
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+				war_support_factor = 0.10
+				political_power_gain = 0.10
+				stability_factor = -0.05
+			}
+		}
+
+		# ----- Display-only aggregate previews of the new focuses -----
+
+		IVN_ord_lakora_textile_mills_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_ilvan_canal_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		IVN_ord_committee_war_economy_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		IVN_ord_expedition_storm_columns_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_expedition_field_hospitals_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_frontier_school_grants_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		IVN_ord_frontier_commissars_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_frontier_officer_councils_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_frontier_border_police_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_frontier_lakora_settlers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_frontier_pact_of_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_command_civil_control_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_command_staff_autonomy_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_command_war_ministry_civilians_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_command_parliament_oversight_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_command_staff_academy_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_command_promote_karn_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_command_sideline_karn_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_command_unified_command_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_islands_fisheries_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				stability_factor = 0.01
+			}
+		}
+
+		IVN_ord_islands_refuge_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_islands_fortress_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_cw_defend_the_old_march_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_cw_lakora_line_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_cw_reserve_divisions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_cw_artillery_parks_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_cw_emergency_powers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_cw_government_of_colonels_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		IVN_ord_cw_return_of_the_committee_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		IVN_ord_cw_war_ministry_of_colonels_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.1
+			}
+		}
+
+		IVN_ord_cw_martial_law_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+			}
+		}
+
+		IVN_ord_cw_citizens_committees_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_cw_victory_programme_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		IVN_ord_cw_propaganda_of_unity_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_pw_amnesty_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_pw_tribunals_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		IVN_ord_pw_veterans_settlement_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_pw_frontier_garrisons_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_pw_charter_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_pw_memory_of_the_retreat_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_parliament_coalition_pragmatists_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_parliament_coalition_etatists_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		IVN_ord_parliament_budget_reform_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_parliament_defence_law_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_parliament_press_freedom_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_parliament_republic_of_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		# ----- block_reconstruction -----
+		# IVN_rc_reserve_musters: 180 days after a completed muster.
+		IVN_rc_reserve_drilled = {
+			picture = generic_reserve_divisions
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.15
+				army_core_defence_factor = 0.05
+			}
+		}
+
+		# IVN_rc_field_manoeuvres: 180 days after completed manoeuvres.
+		IVN_rc_manoeuvre_lessons = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				army_org_factor = 0.05
+			}
+		}
+
+		# ----- block_courses -----
+		# ----- Courses of the western question -----
+		# Final spirits of the three course sub-trees; permanent once taken.
+		IVN_sh_spirit_shield_of_free_republics = {
+			picture = generic_constitutional_guarantees
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.10
+				army_core_defence_factor = 0.05
+				army_defence_factor = 0.05
+			}
+		}
+
+		IVN_em_spirit_state_of_emergency = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				conscription = 0.01
+				war_support_factor = 0.05
+				planning_speed = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		IVN_rv_spirit_legion_of_the_west = {
+			picture = generic_fascism_rising
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+				war_support_factor = 0.10
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		# Timed measures of the wartime tiers.
+		IVN_sh_unbroken_line = {
+			picture = generic_wall_line
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.10
+				army_org_regain = 0.10
+			}
+		}
+
+		IVN_sh_liberation_offensive = {
+			picture = generic_volunteer_expedition_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.08
+				supply_consumption_factor = -0.10
+			}
+		}
+
+		IVN_em_storm_of_the_corridor = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.10
+			}
+		}
+
+		IVN_rv_karns_operational_plan = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.15
+				army_org_factor = 0.05
+				army_attack_factor = 0.05
+			}
+		}
+
+		IVN_rv_lightning_march_spirit = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.15
+				supply_consumption_factor = 0.10
+			}
+		}
+
+		IVN_rv_methodical_advance_spirit = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				army_org_regain = 0.10
+			}
+		}
+
+		# ----- block_legion -----
+		# ----- Marches Legion: timed war ideas -----
+		# Granted by IVC focuses and IVC_assault_group_drill; they vanish with
+		# IVC when the revolt ends.
+		IVC_assault_groups_idea = {
+			picture = generic_army_europe_2
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+			}
+		}
+
+		IVC_defence_in_depth_idea = {
+			picture = generic_wall_line
+			allowed = { always = no }
+			modifier = {
+				max_dig_in = 2
+				dig_in_speed_factor = 0.25
+				army_defence_factor = 0.05
+			}
+		}
+
+		IVC_forced_march_idea = {
+			picture = generic_logistics
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.10
+				army_org_regain = 0.05
+			}
+		}
+
+		IVC_offensive_staff_work_idea = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.20
+				max_planning = 0.10
+			}
+		}
+
+		IVC_artillery_preparation_idea = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.06
+				breakthrough_factor = 0.05
+			}
+		}
+
+		IVC_offensive_supply_dumps_idea = {
+			picture = generic_supply_depot
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.15
+				attrition = -0.10
+			}
+		}
+
+		IVC_last_push_idea = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.10
+				army_org_regain = 0.10
+				equipment_capture_factor = 0.10
+			}
+		}
+
+		IVC_march_momentum_idea = {
+			picture = generic_army_europe_5
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.10
+				breakthrough_factor = 0.10
+			}
+		}
+
+		IVC_hill_counteroffensive_idea = {
+			picture = generic_mountain_warfare
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				army_attack_factor = 0.05
+			}
+		}
+
+		IVC_council_unified_command_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.15
+				army_org_regain = 0.10
+			}
+		}
+
+		IVC_union_fervour_idea = {
+			picture = generic_fascism_rising
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.10
+				war_support_factor = 0.05
+			}
+		}
+
+		# ----- block_north -----
+		# ----- Corridor mandate and retreat from the north -----
+		# Spirits of the corridor clients IBA and IBL; one of them is set by the
+		# mandate course and stays with the client.
+		IVN_nm_mandate_commissioners = {
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.10
+				army_org_factor = 0.05
+				political_power_gain = -0.15
+				stability_factor = -0.03
+			}
+		}
+
+		IVN_nm_corridor_self_rule = {
+			picture = generic_local_self_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.10
+				political_power_gain = 0.15
+			}
+		}
+
+		# IVN, 180 days after the purge of the officer corps.
+		IVN_nm_officer_purge = {
+			picture = generic_purge
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = -0.05
+				planning_speed = -0.10
+			}
+		}
+
+		IVN_ord_rc_reconstruction_council_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_civilian_priority_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_rc_military_priority_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		IVN_ord_rc_consumer_cooperatives_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_export_offices_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_private_concessions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		IVN_ord_rc_state_trusts_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+			}
+		}
+
+		IVN_ord_rc_industrial_cluster_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		IVN_ord_rc_northern_military_roads_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+			}
+		}
+
+		IVN_ord_rc_southern_trade_roads_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				production_speed_buildings_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_corridor_staging_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_seaboard_fair_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_rc_capital_development_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_transport_network_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.02
+				stability_factor = 0.01
+			}
+		}
+
+		IVN_ord_rc_academy_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_applied_institutes_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		IVN_ord_rc_free_universities_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				stability_factor = 0.01
+			}
+		}
+
+		IVN_ord_rc_radio_laboratory_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+			}
+		}
+
+		IVN_ord_rc_cipher_bureau_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.02
+			}
+		}
+
+		IVN_ord_rc_republic_of_scholars_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_social_ministry_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_universal_pensions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				consumer_goods_factor = 0.01
+			}
+		}
+
+		IVN_ord_rc_veterans_first_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_public_schools_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_rc_veterans_colonies_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_rc_social_contract_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_rc_labour_code_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_rc_march_councils_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = -0.03
+			}
+		}
+
+		IVN_ord_rc_capital_governors_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_welfare_republic_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_mass_reserve_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_rc_professional_army_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_attack_factor = 0.02
+				conscription = -0.005
+			}
+		}
+
+		IVN_ord_rc_territorial_regiments_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_rc_reserve_officer_school_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_staff_war_games_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_rc_artillery_regiments_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_western_war_plan_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_border_fortresses_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_army_of_the_republic_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+				army_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_rc_coastal_defence_zone_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_sh_league_secretariat_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_sh_civil_defence_council_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_sh_armed_covenant_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_sh_reserve_of_the_republic_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_sh_league_congress_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_sh_free_press_of_the_west_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_sh_defence_in_depth_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_sh_mobile_reserve_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_em_cabinet_of_national_defence_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_em_war_tribunals_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_em_council_of_industrialists_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		IVN_ord_em_labour_conscription_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.04
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_em_trusteeship_plans_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.02
+			}
+		}
+
+		IVN_ord_em_war_economy_law_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_em_shock_army_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_em_total_mobilisation_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.015
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_em_emergency_trusteeship_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		IVN_ord_rv_council_staff_regulations_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.08
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_rv_book_of_grievances_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_rv_arm_the_frontier_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		IVN_ord_rv_union_patriotic_labour_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		IVN_ord_rv_army_of_revenge_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_rv_total_war_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_nm_mandate_council_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_nm_corridor_refugees_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_nm_client_self_government_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_corridor_garrisons_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_corridor_volunteers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_nm_mandate_arsenal_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_corridor_councils_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_nm_corridor_trade_treaty_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_nm_corridor_telegraph_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_nm_krait_university_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_northern_shield_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_northern_border_line_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_artillery_school_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_purge_officer_corps_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_rehabilitate_officers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_citizen_officers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVN_ord_nm_court_of_honour_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_new_field_manual_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_nm_northern_rokada_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_nm_invalid_homes_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_nm_army_after_defeat_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_nm_frontier_reconciliation_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_nm_lesson_of_the_north_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_cb_coastal_blockade_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_cb_air_reconnaissance_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.08
+			}
+		}
+
+		IVN_ord_cb_capital_air_defence_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_cb_refugee_columns_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_cb_northern_battalions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.03
+			}
+		}
+
+		IVN_ord_cb_ring_around_vedrina_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_corridor_administration_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_corridor_census_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVN_ord_wl_corridor_roads_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_northern_republics_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_wl_concert_of_the_west_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_wl_demobilisation_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		IVN_ord_wl_standing_army_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				army_org_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_peace_of_the_victors_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_hegemony_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_count_the_losses_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_quiet_resistance_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_accommodation_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_wl_staff_in_reserve_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_wl_federal_contracts_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		IVN_ord_wl_order_without_commissioners_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		IVN_ord_wl_hegemons_engineers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_rebuild_old_march_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_marches_endure_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_truce_commission_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_line_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_open_corridor_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		IVN_ord_wl_observation_posts_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		IVN_ord_wl_customs_on_the_highway_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		IVN_ord_wl_mixed_commissions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_wl_peace_without_victory_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+			}
+		}
+
+		IVN_ord_wl_long_truce_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				army_defence_factor = 0.02
+			}
+		}
+
+		# Display-only previews of the legion aggregate. IVC_legion_dynamic
+		# holds the real values.
+		IVC_legion_dummy_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		IVC_leg_legion_oath_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVC_leg_veterans_of_the_expedition_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVC_leg_assault_companies_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVC_leg_vedrina_passes_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+			}
+		}
+
+		IVC_leg_frontier_cavalry_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+			}
+		}
+
+		IVC_leg_karn_takes_command_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		IVC_leg_council_of_the_legion_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		IVC_leg_patriotic_union_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+				war_support_factor = 0.05
+			}
+		}
+
+		IVC_leg_council_field_courts_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		IVC_leg_council_officers_cabinet_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVC_leg_union_patriotic_press_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		IVC_leg_new_itora_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		IVC_leg_roads_of_the_legion_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		IVC_leg_war_economy_of_the_marches_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		IVC_leg_shame_of_the_expedition_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		IVC_leg_legion_newspaper_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVC_leg_the_marches_rise_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+			}
+		}
+
+		IVC_leg_northern_contacts_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVC_leg_boreyan_volunteers_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVC_leg_corridor_veterans_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVC_leg_promise_of_revanche_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVC_leg_assault_groups_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVC_leg_fire_and_assault_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				breakthrough_factor = 0.02
+			}
+		}
+
+		IVC_leg_hill_war_of_vedrina_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		IVC_leg_mountain_rifles_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVC_leg_anti_tank_companies_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		IVC_leg_motorised_columns_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+			}
+		}
+
+		IVC_leg_war_on_the_frontier_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		IVC_leg_decisive_march_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+				breakthrough_factor = 0.04
+			}
+		}
+
+		IVC_leg_counterattacks_from_the_hills_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVC_leg_break_the_lakora_line_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+			}
+		}
+
+		IVC_leg_army_of_the_marches_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVC_leg_last_reserves_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVC_leg_council_military_governors_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		IVC_leg_council_staff_academy_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		IVC_leg_council_war_production_board_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		IVC_leg_council_military_railway_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		IVC_leg_council_cross_of_the_marches_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.04
+			}
+		}
+
+		IVC_leg_council_professional_cadres_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				army_org_factor = 0.02
+				conscription = -0.005
+			}
+		}
+
+		IVC_leg_council_rule_of_the_staff_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVC_leg_union_militia_of_the_marches_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		IVC_leg_union_workers_detachments_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		IVC_leg_union_youth_battalions_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVC_leg_union_lists_of_traitors_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.02
+			}
+		}
+
+		IVC_leg_union_great_rally_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVC_leg_union_peoples_legion_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.02
+				army_attack_factor = 0.02
+			}
+		}
+
+		IVC_leg_requisition_committees_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.03
+			}
+		}
+
+		IVC_leg_fair_purchase_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		IVC_leg_labour_service_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		IVC_leg_legion_receipts_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVC_leg_workshop_contracts_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		IVC_leg_rear_of_the_legion_secured_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		IVC_leg_radio_vedrina_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVC_leg_northern_instructors_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		IVC_leg_quiet_northern_border_idea = {
+			name = IVC_legion_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
 	}
 }

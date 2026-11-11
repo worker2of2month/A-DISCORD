@@ -38,3 +38,37 @@ IVN_marches_revolt_ready = {
 	NOT = { has_global_flag = IVN_marches_revolt_resolved }
 	NOT = { country_exists = IVC }
 }
+
+# STATE. An inner frontier march that follows a neighbouring legion march.
+IVN_march_follows_the_legion = {
+	check_variable = { var = IVN_march_trust value = 40 compare = less_than }
+}
+
+# COUNTRY IVN. The Committee holds the balance of command.
+IVN_committee_leads = {
+	power_balance_value = {
+		id = IVN_command_bop
+		value < 0
+	}
+}
+
+# COUNTRY IVN. The Staff of the marches holds the balance of command.
+IVN_staff_leads = {
+	power_balance_value = {
+		id = IVN_command_bop
+		value > 0
+	}
+}
+
+# STATE, ROOT = a side of the revolt. The march touches land ROOT holds, so a
+# defection does not create an island behind the front.
+IVN_march_borders_root_control = {
+	any_neighbor_state = {
+		is_controlled_by = ROOT
+	}
+}
+
+# COUNTRY IVN. The war ended with the cabinet in the capital.
+IVN_cabinet_won_the_revolt = {
+	has_global_flag = IVN_civil_war_won_by_cabinet
+}

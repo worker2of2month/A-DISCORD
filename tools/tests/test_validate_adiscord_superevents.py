@@ -596,14 +596,45 @@ class SupereventContractTests(unittest.TestCase):
             self.assertEqual(len(calls), 2)
             self.assertTrue(all(scalar(call, "hours") == "1" for call in calls))
 
-    def test_itora_civilwar_remains_console_only(self) -> None:
+    def test_itora_civilwar_is_shown_only_by_the_revolt(self) -> None:
         references = []
         for directory in ("common", "events", "focus_trees"):
             for path in (ROOT / directory).rglob("*.txt"):
                 source = path.read_text(encoding="utf-8-sig")
                 if re.search(r"\bADISCORD_superevent\.14\b", source):
                     references.append(path.relative_to(ROOT).as_posix())
-        self.assertEqual(references, ["events/ADISCORD_superevents.txt"])
+        self.assertEqual(
+            references,
+            ["common/scripted_effects/ADISCORD_IVN_scripted_effects.txt", "events/ADISCORD_superevents.txt"],
+        )
+        effects = (ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt").read_text(encoding="utf-8")
+        self.assertEqual(effects.count("IVN_show_civil_war_superevent = yes"), 1)
+        start = effects[effects.index("IVN_start_marches_revolt = {"):]
+        start = start[:start.index("\n}\n")]
+        self.assertIn("IVN_show_civil_war_superevent = yes", start)
+
+    def test_itora_civilwar_dispatch_reaches_human_and_observer(self) -> None:
+        from tools.tests.test_adiscord_rus_last_empire import RusCrisisFixture
+        from tools.tests.test_adiscord_south_final_war import flatten
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        itora = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt").read_text(encoding="utf-8"))
+        for human in (None, "IVC"):
+            world = RusCrisisFixture()
+            world.effects.update({entry.key: entry.value for entry in itora})
+            world.countries.add("IVC")
+            world.ai_countries.add("IVC")
+            world.owners["95"] = "IVC"
+            world.controllers["95"] = "IVC"
+            if human:
+                world.ai_countries.discard(human)
+            world.run("IVN_show_civil_war_superevent", "IVN")
+            self.assertEqual(world.events, [(human or "IVN", "ADISCORD_superevent.14")])
+            calls = [row.value for row in flatten(world.effects["IVN_show_civil_war_superevent"]) if row.key == "country_event"]
+            self.assertEqual(len(calls), 2)
+            self.assertTrue(all(scalar(call, "hours") == "1" for call in calls))
 
     def test_itora_war_console_presentation_has_no_campaign_effects(self) -> None:
         from tools.validators.validate_adiscord_superevents import _event_block, blocks

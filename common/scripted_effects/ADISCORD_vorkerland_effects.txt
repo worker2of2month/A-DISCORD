@@ -3805,7 +3805,9 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 			set_global_flag = ADISCORD_vorkerland_ivanland_failure_news_shown
 			news_event = { id = ADISCORD_vorkerland_news.2 }
 		}
-		# The frontier army that returns from the north turns on the cabinet.
+		# The expedition's return is answered at once; 30 days later the frontier
+		# army that came back from the north turns on the cabinet.
+		IVN = { country_event = { id = ADISCORD_ivn.6 days = 1 } }
 		IVN = { country_event = { id = ADISCORD_ivn.1 days = 30 } }
 	}
 }

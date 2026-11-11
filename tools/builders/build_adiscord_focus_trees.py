@@ -25,6 +25,7 @@ SOURCES = {
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "SHL/shared/focuses.txt": "ADISCORD_SHL_shared.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
+    "IVN/legion/focuses.txt": "ADISCORD_IVC_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
     "VAL/main/focuses.txt": "ADISCORD_national_focus_VAL.txt",
     "VAL/new_world/focuses.txt": "ADISCORD_VAL_new_world.txt",

@@ -660,11 +660,115 @@ class MarchesRevoltTests(unittest.TestCase):
         self.assertIn("character = IVN_Rostislav_Karn", start)
         self.assertLess(start.index("set_global_flag = IVN_marches_revolt_active"), start.index("declare_war_on"))
         self.assertIn("IVN_adopt_emergency_order = yes", start)
-        self.assertIn("transfer_units_fraction = {", start)
+        self.assertIn("IVN_marches_initialize = yes", start)
+        self.assertLess(start.index("IVN_marches_initialize = yes"), start.index("IVN_marches_revolt_states = yes"))
+        self.assertIn("IVN_marches_revolt_transfer_units = yes", start)
         self.assertIn("target = IVN", start)
+        transfer = body(self.IVN_EFFECTS, "IVN_marches_revolt_transfer_units")
+        self.assertEqual(re.findall(r"size = ([\d.]+)", transfer), ["0.5", "0.25", "0.35"])
+        self.assertIn("value > 0.35", transfer)
+        self.assertIn("value < -0.35", transfer)
         states = body(self.IVN_EFFECTS, "IVN_marches_revolt_states")
         self.assertEqual(set(re.findall(r"\b(\d+) = \{ IVN_marches_revolt_take_state = yes \}", states)), {"92", "95", "96", "97"})
-        self.assertIn("is_controlled_by = IVN", body(self.IVN_EFFECTS, "IVN_marches_revolt_take_state"))
+        take = body(self.IVN_EFFECTS, "IVN_marches_revolt_take_state")
+        self.assertIn("is_controlled_by = IVN", take)
+        # Vedrina always rises; the other marches stay loyal from trust 70.
+        self.assertIn("state = 95", take)
+        self.assertIn("check_variable = { var = IVN_march_trust value = 70 compare = less_than }", take)
+
+    def test_inner_marches_follow_a_neighbouring_legion_march(self):
+        defections = body(self.IVN_EFFECTS, "IVN_marches_revolt_defections")
+        chain = {"98": ["97"], "99": ["96", "97"], "100": ["99"], "101": ["100"]}
+        for state, neighbours in chain.items():
+            section = defections[defections.index(f"\t{state} = {{"):]
+            section = section[:section.index("IVN_marches_revolt_take_state = yes")]
+            self.assertIn("IVN_march_follows_the_legion = yes", section, state)
+            for neighbour in neighbours:
+                self.assertIn(f"{neighbour} = {{ is_owned_by = IVC }}", section, state)
+        follows = body(ROOT / "common/scripted_triggers/ADISCORD_IVN_scripted_triggers.txt", "IVN_march_follows_the_legion")
+        self.assertIn("value = 40 compare = less_than", follows)
+
+    def test_trust_and_balance_open_once_and_feed_the_revolt(self):
+        init = body(self.IVN_EFFECTS, "IVN_marches_initialize")
+        self.assertIn("NOT = { has_country_flag = IVN_marches_initialized }", init)
+        self.assertIn("set_power_balance = {", init)
+        self.assertEqual(
+            set(re.findall(r"\b(\d+) = \{ set_variable = \{ var = IVN_march_trust", init)),
+            {"92", "95", "96", "97", "98", "99", "100", "101"},
+        )
+        root = focus_blocks(IVN_TREE)["IVN_committee_report"]
+        self.assertIn(("IVN_marches_initialize", "yes"), [(e.key, e.value) for e in flatten(root)])
+        change = body(self.IVN_EFFECTS, "IVN_march_trust_change")
+        self.assertIn("min = 0", change)
+        self.assertIn("max = 100", change)
+
+    def test_the_revolt_shows_the_civil_war_superevent(self):
+        start = body(self.IVN_EFFECTS, "IVN_start_marches_revolt")
+        self.assertIn("IVN_show_civil_war_superevent = yes", start)
+        show = body(self.IVN_EFFECTS, "IVN_show_civil_war_superevent")
+        self.assertIn("id = ADISCORD_superevent.14", show)
+        gateway = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        gateway = gateway[gateway.index("\tid = ADISCORD_superevent.14\n"):]
+        gateway = gateway[:gateway.index("\n}\n")]
+        self.assertIn("ADISCORD_superevent_request = 17", gateway)
+
+    def test_the_expedition_return_is_answered_before_the_revolt(self):
+        failure = body(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_ivanland_intervention_failure")
+        self.assertLess(
+            failure.index("id = ADISCORD_ivn.6 days = 1"),
+            failure.index("id = ADISCORD_ivn.1 days = 30"),
+        )
+
+    def test_defection_rechecks_the_march_on_delivery_and_refunds(self):
+        decisions = (ROOT / "common/decisions/ADISCORD_IVN_decisions.txt").read_text(encoding="utf-8")
+        for name, owner, threshold in (
+            ("IVN_cw_amnesty_offer", "IVC", "value = 60 compare = greater_than_or_equals"),
+            ("IVC_garrison_appeal", "IVN", "value = 40 compare = less_than"),
+        ):
+            section = decisions[decisions.index(f"\t{name} = {{"):]
+            section = section[:section.index("\n\t}\n")]
+            remove = section[section.index("remove_effect"):]
+            self.assertIn(f"is_owned_by = {owner}", remove, name)
+            self.assertIn(threshold, remove, name)
+            self.assertIn("IVN_march_borders_root_control = yes", remove, name)
+            self.assertIn("IVN_march_defect_to_root = yes", remove, name)
+            self.assertIn("add_political_power = 60", remove.split("else = {")[1], name)
+            self.assertIn("add_political_power = 60", section[section.index("cancel_effect"):section.index("remove_effect")], name)
+            self.assertNotIn("95", re.search(r"targets = \{([^}]*)\}", section).group(1).split(), name)
+
+    def test_resolution_records_the_winner_and_clears_the_war(self):
+        resolve = body(self.IVN_EFFECTS, "IVN_resolve_marches_revolt")
+        for token in (
+            "set_global_flag = IVN_civil_war_won_by_legion",
+            "set_global_flag = IVN_civil_war_won_by_cabinet",
+            "remove_ideas = IVN_cw_divided_army",
+            "remove_ideas = IVN_cw_loyal_officers",
+            "remove_ideas = IVN_cw_war_bonds",
+            "clr_global_flag = IVN_legion_course_council",
+            "clr_global_flag = IVN_legion_course_union",
+            "mark_focus_tree_layout_dirty = yes",
+        ):
+            self.assertIn(token, resolve)
+        handover = body(self.IVN_EFFECTS, "IVN_hand_power_to_legion")
+        self.assertIn("add_ideas = IVN_rule_of_the_legion_council", handover)
+        self.assertIn("add_ideas = IVN_rule_of_the_patriotic_union", handover)
+
+    def test_the_committee_can_reopen_the_humanist_shield(self):
+        self.assertIn("IVN_cw_return_of_the_committee", self.available_of("IVN_humanist_shield"))
+        self.assertIn("IVN_committee_leads", self.available_of("IVN_cw_return_of_the_committee"))
+        self.assertIn("IVN_staff_leads", self.available_of("IVN_cw_government_of_colonels"))
+
+    def available_of(self, name):
+        focus = focus_blocks(IVN_TREE)[name]
+        return repr(next(e.value for e in focus if e.key == "available"))
+
+    def test_focus_and_decision_identifiers_are_distinct(self):
+        decisions = set()
+        source = (ROOT / "common/decisions/ADISCORD_IVN_decisions.txt").read_text(encoding="utf-8")
+        for category in parse_clausewitz(source):
+            decisions |= {entry.key for entry in category.value}
+        focuses = set(focus_blocks(IVN_TREE)) | set(focus_blocks(ROOT / "focus_trees/IVN/legion/focuses.txt"))
+        self.assertEqual(sorted(decisions & focuses), [])
 
     def test_the_legion_appoints_its_foreign_minister_before_budget_initialization(self):
         effects = parse_clausewitz(self.IVN_EFFECTS.read_text(encoding="utf-8"))
@@ -799,12 +903,16 @@ class ItoranAggregateTests(unittest.TestCase):
         self.fields = {e.value: e.key for e in modifier if e.key not in ("icon", "enable")}
         root = next(e.value for e in parse_clausewitz((ROOT / "common/ideas/ADISCORD_IVN_ideas.txt").read_text(encoding="utf-8")) if e.key == "ideas")
         self.display = {}
+        self.previews = set()
         for group in root:
             for idea in group.value:
                 allowed = next(e.value for e in idea.value if e.key == "allowed")
                 self.assertEqual([(e.key, e.value) for e in allowed], [("always", "no")], idea.key)
                 modifier = next(e.value for e in idea.value if e.key == "modifier")
                 self.display[idea.key] = {e.key: float(e.value) for e in modifier}
+                names = [e.value for e in idea.value if e.key == "name"]
+                if names and names[0] in ("IVN_order_dynamic", "IVC_legion_dynamic"):
+                    self.previews.add(idea.key)
 
     def test_every_display_delta_matches_the_applied_change(self):
         checked = 0
@@ -824,11 +932,36 @@ class ItoranAggregateTests(unittest.TestCase):
             self.assertEqual(applied, self.display[swap["add_idea"]], identifier)
             self.assertIn(("IVN_refresh_order", "yes"), [(e.key, e.value) for e in hidden], identifier)
             checked += 1
-        self.assertEqual(checked, 27)
+        self.assertEqual(checked, 191)
+
+    def test_every_legion_delta_matches_the_applied_change(self):
+        dynamic = parse_clausewitz((ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_IVN.txt").read_text(encoding="utf-8"))
+        modifier = next(e.value for e in dynamic if e.key == "IVC_legion_dynamic")
+        fields = {e.value: e.key for e in modifier if e.key not in ("icon", "enable")}
+        checked = 0
+        for identifier, focus in focus_blocks(ROOT / "focus_trees/IVN/legion/focuses.txt").items():
+            reward = next(e.value for e in focus if e.key == "completion_reward")
+            swaps = [e.value for e in flatten(reward) if e.key == "swap_ideas"]
+            if not swaps:
+                continue
+            swap = {e.key: e.value for e in swaps[0]}
+            self.assertEqual(swap["remove_idea"], "IVC_legion_dummy_idea", identifier)
+            self.assertEqual(self.display[swap["remove_idea"]], {}, identifier)
+            hidden = [e.value for e in reward if e.key == "hidden_effect"][-1]
+            applied = {}
+            for entry in hidden:
+                if entry.key == "add_to_variable":
+                    values = {e.key: e.value for e in entry.value}
+                    applied[fields[values["var"]]] = float(values["value"])
+            self.assertEqual(applied, self.display[swap["add_idea"]], identifier)
+            self.assertIn(("IVC_refresh_legion", "yes"), [(e.key, e.value) for e in hidden], identifier)
+            checked += 1
+        self.assertEqual(checked, 55)
 
     def test_display_ideas_are_never_installed(self):
-        text = IVN_TREE.read_text(encoding="utf-8")
-        for name in self.display:
+        text = IVN_TREE.read_text(encoding="utf-8") + (ROOT / "focus_trees/IVN/legion/focuses.txt").read_text(encoding="utf-8")
+        self.assertGreater(len(self.previews), 200)
+        for name in self.previews:
             self.assertNotIn(f"add_ideas = {name}", text)
 
     def test_refresh_attaches_and_updates_without_reset(self):

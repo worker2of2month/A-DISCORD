@@ -1,11 +1,137 @@
 IVN_marches_category = {
-	icon = generic_construction
+	icon = generic_industry
 	allowed = { tag = IVN }
 	visible = {
 		OR = {
 			has_completed_focus = IVN_march_reconstruction
 			has_completed_focus = IVN_citizen_reserve
+			has_completed_focus = IVN_frontier_audit
 		}
 	}
 	priority = 24
+}
+
+# Shows the balance of the committee and the staff from its opening.
+IVN_command_category = {
+	icon = power_struggle
+	allowed = { tag = IVN }
+	visible = {
+		has_power_balance = { id = IVN_command_bop }
+	}
+	visible_when_empty = yes
+	priority = 25
+}
+
+IVN_expedition_category = {
+	icon = military_operation
+	allowed = { tag = IVN }
+	visible = {
+		OR = {
+			has_completed_focus = IVN_expedition_supply_trains
+			has_completed_focus = IVN_expedition_storm_columns
+			has_completed_focus = IVN_expedition_krait_crossing
+		}
+		NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+	}
+	priority = 23
+}
+
+IVN_civil_war_category = {
+	icon = SOV_civil_war
+	allowed = { tag = IVN }
+	visible = {
+		has_global_flag = IVN_marches_revolt_active
+	}
+	priority = 26
+}
+
+IVC_legion_category = {
+	icon = spr_the_inevitable_civil_war
+	allowed = { tag = IVC }
+	visible = {
+		has_global_flag = IVN_marches_revolt_active
+	}
+	priority = 26
+}
+
+# Programmes of the reconstruction council, opened by IVN_rc_ focuses.
+IVN_reconstruction_category = {
+	icon = generic_economy
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_rc_reconstruction_council
+	}
+	priority = 22
+}
+
+# Programmes of the three courses of the western question; each category
+# opens with the first focus of its course sub-tree.
+IVN_shield_course_category = {
+	icon = generic_foreign_policy
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_sh_league_secretariat
+	}
+	priority = 22
+}
+
+IVN_emergency_course_category = {
+	icon = generic_crisis
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_em_cabinet_of_national_defence
+	}
+	priority = 22
+}
+
+IVN_revanche_course_category = {
+	icon = generic_political_actions
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_rv_legion_government
+	}
+	priority = 22
+}
+
+IVC_legion_war_category = {
+	icon = military_operation
+	allowed = { tag = IVC }
+	visible = {
+		has_global_flag = IVN_marches_revolt_active
+	}
+	priority = 25
+}
+
+# The corridor mandate after a successful northern expedition.
+IVN_mandate_category = {
+	icon = generic_foreign_policy
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_nm_mandate_council
+	}
+	priority = 23
+}
+
+# The military reform after the failed northern expedition.
+IVN_retreat_category = {
+	icon = generic_fortification
+	allowed = { tag = IVN }
+	visible = {
+		has_completed_focus = IVN_nm_retreat_inquiry
+	}
+	priority = 23
+}
+
+# Itora after the war for the West; opened by the root of its outcome.
+IVN_west_legacy_category = {
+	icon = generic_democracy
+	allowed = { tag = IVN }
+	visible = {
+		OR = {
+			has_completed_focus = IVN_wl_victors_of_the_west
+			has_completed_focus = IVN_wl_under_the_hegemon
+			has_completed_focus = IVN_wl_armed_truce
+		}
+	}
+	priority = 27
 }

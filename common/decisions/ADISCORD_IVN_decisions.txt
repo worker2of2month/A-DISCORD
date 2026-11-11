@@ -70,4 +70,2879 @@ IVN_marches_category = {
 			}
 		}
 	}
+
+	# --- trust of the frontier marches ---
+	# Measures on the eight frontier marches. Instant measures close a march
+	# for 30 days with IVN_march_measure_recent; timed measures hold the flag
+	# IVN_march_work from payment until they end or are cancelled.
+
+	IVN_march_hospital_train = {
+		icon = generic_civil_support
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_frontier_audit }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 30
+		days_remove = 21
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 30
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_15_tt
+				hidden_effect = {
+					clr_state_flag = IVN_march_work
+					set_temp_variable = { var = IVN_trust_delta value = 15 }
+					IVN_march_trust_change = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	IVN_march_veterans_fund = {
+		icon = ADISCORD_treasury
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_frontier_veterans_fund }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = -0.02
+			}
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_10_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = 10 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+			add_manpower = 2000
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 3
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	# The grant builds a school road: the march keeps the infrastructure.
+	IVN_march_school_grant = {
+		icon = ADISCORD_science
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_frontier_school_grants }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 40
+		days_remove = 45
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 40
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_12_tt
+				hidden_effect = {
+					clr_state_flag = IVN_march_work
+					set_temp_variable = { var = IVN_trust_delta value = 12 }
+					IVN_march_trust_change = yes
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 3
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	IVN_march_commissar = {
+		icon = generic_political_discourse
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_frontier_commissars }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = -0.04
+			}
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_15_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = 15 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 4
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	IVN_march_officer_assembly = {
+		icon = generic_army_support
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_frontier_officer_councils }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.04
+			}
+			army_experience = 3
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_10_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = 10 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 4
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	IVN_march_levy = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_citizen_reserve }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 10
+		fire_only_once = no
+		complete_effect = {
+			add_manpower = 3000
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_minus_8_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = -8 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 6
+				has_war = yes
+				FROM = { check_variable = { var = IVN_march_trust value = 50 compare = greater_than } }
+			}
+		}
+	}
+}
+
+# Balance of the committee and the staff. The two instant measures share a
+# 60-day cooldown; the two programmes deliver their result at the end.
+IVN_command_category = {
+	IVN_command_staff_conference = {
+		icon = generic_army_support
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_command_question }
+		cost = 25
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.05
+			}
+			army_experience = 5
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 4
+				power_balance_value = {
+					id = IVN_command_bop
+					value < -0.30
+				}
+			}
+		}
+	}
+
+	IVN_command_committee_hearings = {
+		icon = generic_political_discourse
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_command_question }
+		cost = 25
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = -0.05
+			}
+			add_stability = 0.01
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 4
+				power_balance_value = {
+					id = IVN_command_bop
+					value > 0.30
+				}
+			}
+		}
+	}
+
+	IVN_command_budget_to_staff = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_command_general_inspectorate }
+		cost = 50
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			civilian_factory_use = 1
+		}
+		remove_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.10
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = IVN
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	# Auditors find what the depots wrote off: the rifles return to the army.
+	IVN_command_civil_audit = {
+		icon = ADISCORD_inspection
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_command_war_ministry_civilians }
+		cost = 50
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		remove_effect = {
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = -0.10
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6300
+				producer = IVN
+			}
+			add_political_power = 25
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+}
+
+# Programmes of the northern expedition: each is a chosen moment while the
+# intervention mission runs.
+IVN_expedition_category = {
+	IVN_expedition_supply_columns = {
+		icon = ADISCORD_logistics
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_expedition_supply_trains }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		}
+		cost = 50
+		days_remove = 90
+		days_re_enable = 60
+		fire_only_once = no
+		modifier = {
+			supply_consumption_factor = -0.15
+			army_org_regain = 0.10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	IVN_expedition_storm_assault = {
+		icon = generic_attack
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_expedition_storm_columns }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		}
+		cost = 50
+		days_remove = 45
+		days_re_enable = 90
+		fire_only_once = no
+		modifier = {
+			army_attack_factor = 0.10
+			breakthrough_factor = 0.10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# The Krait bridgehead is taken in one operation: the crossing troops get
+	# the engineers, the corridor states get the bridges afterwards.
+	IVN_expedition_krait_bridgehead = {
+		icon = generic_operation
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_expedition_krait_crossing }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		}
+		cost = 40
+		days_remove = 30
+		fire_only_once = yes
+		modifier = {
+			river_crossing_factor = 0.25
+			army_speed_factor = 0.10
+		}
+		remove_effect = {
+			if = {
+				limit = { 93 = { is_controlled_by = ROOT } }
+				93 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			if = {
+				limit = { 94 = { is_controlled_by = ROOT } }
+				94 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+}
+
+# The cabinet's measures during the revolt of the marches.
+IVN_civil_war_category = {
+	# A legion march with high trust can be talked back: the decision checks
+	# ownership, trust and the neighbouring front again on delivery and
+	# returns the price when the march can no longer change sides.
+	IVN_cw_amnesty_offer = {
+		icon = generic_political_discourse
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = IVC
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cw_appeal_to_the_marches
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_cw_amnesty_trust_tt
+					check_variable = { var = IVN_march_trust value = 60 compare = greater_than_or_equals }
+				}
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_borders_our_lines_tt
+					IVN_march_borders_root_control = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 60
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVN_cw_amnesty_offer_tt
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { has_global_flag = IVN_marches_revolt_active }
+				FROM = {
+					NOT = { is_owned_by = IVC }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 60
+		}
+		remove_effect = {
+			FROM = {
+				clr_state_flag = IVN_march_work
+				if = {
+					limit = {
+						is_owned_by = IVC
+						check_variable = { var = IVN_march_trust value = 60 compare = greater_than_or_equals }
+						IVN_march_borders_root_control = yes
+					}
+					IVN_march_defect_to_root = yes
+				}
+				else = {
+					ROOT = { add_political_power = 60 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	IVN_cw_capital_militia = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cw_defend_the_old_march
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			add_manpower = 8000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 7200
+				producer = IVN
+			}
+			add_stability = -0.02
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	IVN_cw_issue_war_bonds = {
+		icon = ADISCORD_treasury
+		allowed = { tag = IVN }
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cw_war_loan
+		}
+		cost = 25
+		days_re_enable = 150
+		fire_only_once = no
+		complete_effect = {
+			add_stability = -0.05
+			add_timed_idea = {
+				idea = IVN_cw_war_bonds
+				days = 120
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# Rimat sells from its own arsenals' surplus; nothing leaves the Rimat
+	# stockpile, so the decision needs no answer from Rimat.
+	IVN_cw_rimat_arms = {
+		icon = ADISCORD_deal
+		allowed = { tag = IVN }
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cw_rimat_and_neighbours
+		}
+		available = {
+			WIT = {
+				exists = yes
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		cost = 75
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8100
+				producer = WIT
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 200
+				producer = WIT
+			}
+			WIT = { add_political_power = 25 }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	IVN_cw_military_tribunals = {
+		icon = generic_political_pressure
+		allowed = { tag = IVN }
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cw_government_of_colonels
+		}
+		cost = 25
+		fire_only_once = yes
+		complete_effect = {
+			add_war_support = 0.10
+			add_stability = -0.05
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.05
+			}
+			custom_effect_tooltip = IVN_cw_tribunals_trust_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_all = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	IVN_cw_island_convoys = {
+		icon = generic_naval
+		allowed = { tag = IVN }
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_islands_refuge
+		}
+		available = {
+			IIA = {
+				exists = yes
+				is_subject_of = ROOT
+			}
+		}
+		cost = 30
+		fire_only_once = yes
+		complete_effect = {
+			add_manpower = 5000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = IVN
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+}
+
+# The Marches Legion. Its own marches pay for the war; the cabinet's marches
+# with low trust can be called over.
+IVC_legion_category = {
+	IVC_garrison_appeal = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = IVC }
+		state_target = yes
+		targets = { 92 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = IVN
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVC_appeal_to_the_garrisons
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVC_garrison_appeal_trust_tt
+					check_variable = { var = IVN_march_trust value = 40 compare = less_than }
+				}
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_borders_our_lines_tt
+					IVN_march_borders_root_control = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 60
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVC_garrison_appeal_tt
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { has_global_flag = IVN_marches_revolt_active }
+				FROM = {
+					NOT = { is_owned_by = IVN }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 60
+		}
+		remove_effect = {
+			FROM = {
+				clr_state_flag = IVN_march_work
+				if = {
+					limit = {
+						is_owned_by = IVN
+						check_variable = { var = IVN_march_trust value = 40 compare = less_than }
+						IVN_march_borders_root_control = yes
+					}
+					IVN_march_defect_to_root = yes
+				}
+				else = {
+					ROOT = { add_political_power = 60 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	IVC_requisition_march = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVC }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVC_requisitions_of_the_marches }
+		available = {
+			NOT = { has_completed_focus = IVC_fair_purchase }
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 10
+		fire_only_once = no
+		complete_effect = {
+			add_manpower = 3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = IVC
+			}
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_minus_15_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = -15 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 8
+				FROM = { check_variable = { var = IVN_march_trust value = 25 compare = greater_than } }
+			}
+		}
+	}
+
+	IVC_veterans_muster = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_veterans_of_the_expedition }
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			add_manpower = 12000
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	IVC_march_on_the_capital = {
+		icon = generic_attack
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_march_on_the_old_march }
+		available = {
+			has_war_with = IVN
+		}
+		cost = 75
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			army_attack_factor = 0.15
+			breakthrough_factor = 0.10
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	IVC_border_smugglers = {
+		icon = ADISCORD_deal
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_smuggling_routes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVC_border_smugglers_closed_tt
+				NOT = {
+					IVN = { has_completed_focus = IVN_cw_close_the_boreyan_border }
+				}
+			}
+		}
+		cost = 40
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3600
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+}
+
+# ----- block_reconstruction -----
+# Programmes of the reconstruction council. Paid local work is held by a state
+# flag from payment to delivery or cancellation; every delivery checks the
+# target again and returns the price when the work can no longer finish.
+IVN_reconstruction_category = {
+	# One survey per mining district. IVN_rc_mine_work covers the paid survey,
+	# IVN_rc_mine_opened records the deposit so it is not added twice.
+	IVN_rc_mine_survey = {
+		icon = generic_industry
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 695 696 697 698 714 716 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_rc_industry_census }
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_rc_mine_survey_ready_tt
+					NOT = { has_state_flag = IVN_rc_mine_opened }
+					NOT = { has_state_flag = IVN_rc_mine_work }
+				}
+			}
+		}
+		cost = 50
+		days_remove = 60
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_rc_mine_work }
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_rc_mine_work }
+			}
+			add_political_power = 50
+		}
+		remove_effect = {
+			FROM = {
+				hidden_effect = {
+					clr_state_flag = IVN_rc_mine_work
+					set_state_flag = IVN_rc_mine_opened
+				}
+				add_resource = {
+					type = steel
+					amount = 3
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	# The drained fens become farmland and building ground. A refund keeps the
+	# project open; only a delivered drainage closes it.
+	IVN_rc_fen_drainage = {
+		icon = ADISCORD_construction
+		allowed = { tag = IVN }
+		visible = {
+			has_completed_focus = IVN_rc_roads_commission
+			NOT = { 717 = { has_state_flag = IVN_rc_fens_drained } }
+		}
+		available = {
+			717 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		cost = 75
+		days_remove = 120
+		fire_only_once = no
+		remove_effect = {
+			if = {
+				limit = {
+					717 = { is_owned_and_controlled_by = ROOT }
+				}
+				717 = {
+					hidden_effect = { set_state_flag = IVN_rc_fens_drained }
+					add_extra_state_shared_building_slots = 2
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+				add_manpower = 3000
+			}
+			else = {
+				add_political_power = 75
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_political_power < 120
+			}
+		}
+	}
+
+	# Contracts with the academy; the counter limits the series to three.
+	IVN_rc_laboratory_contracts = {
+		icon = ADISCORD_science
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rc_academy_of_the_marches }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_rc_laboratory_contracts_limit_tt
+				check_variable = { var = IVN_rc_laboratory_contracts_done value = 3 compare = less_than }
+			}
+		}
+		cost = 60
+		days_remove = 90
+		days_re_enable = 60
+		fire_only_once = no
+		modifier = {
+			research_speed_factor = 0.05
+		}
+		remove_effect = {
+			hidden_effect = {
+				add_to_variable = { var = IVN_rc_laboratory_contracts_done value = 1 }
+			}
+			add_tech_bonus = {
+				name = IVN_rc_laboratory_contracts
+				bonus = 0.5
+				uses = 1
+				category = industry
+				category = electronics
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	# Housing on a frontier march shares the march measure slot of
+	# IVN_marches_category: IVN_march_work holds the state while it runs.
+	IVN_rc_housing_programme = {
+		icon = generic_construction
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_rc_social_ministry }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+				custom_trigger_tooltip = {
+					tooltip = IVN_rc_housing_ready_tt
+					NOT = { has_state_flag = IVN_rc_housing_built }
+				}
+			}
+		}
+		cost = 50
+		days_remove = 60
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 50
+		}
+		remove_effect = {
+			FROM = {
+				custom_effect_tooltip = IVN_march_trust_plus_10_tt
+				hidden_effect = {
+					clr_state_flag = IVN_march_work
+					set_state_flag = IVN_rc_housing_built
+					set_temp_variable = { var = IVN_trust_delta value = 10 }
+					IVN_march_trust_change = yes
+				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_manpower = 1500
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 3
+				FROM = { check_variable = { var = IVN_march_trust value = 70 compare = less_than } }
+			}
+		}
+	}
+
+	# Mass reserve route. The drill idea lasts exactly until the next muster
+	# can be completed: 60 days of muster plus 120 days of cooldown.
+	IVN_rc_reserve_musters = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rc_mass_reserve }
+		cost = 40
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			stability_factor = -0.03
+		}
+		remove_effect = {
+			army_experience = 10
+			add_timed_idea = {
+				idea = IVN_rc_reserve_drilled
+				days = 180
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				add = 10
+				has_war = yes
+			}
+		}
+	}
+
+	# Professional army route: 45 days of manoeuvres and 135 days of cooldown
+	# match the 180-day lessons idea.
+	IVN_rc_field_manoeuvres = {
+		icon = ADISCORD_operations
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rc_professional_army }
+		cost = 50
+		days_remove = 45
+		days_re_enable = 135
+		fire_only_once = no
+		remove_effect = {
+			army_experience = 20
+			add_timed_idea = {
+				idea = IVN_rc_manoeuvre_lessons
+				days = 180
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_political_power < 80
+			}
+		}
+	}
+}
+
+# ----- block_courses -----
+# Humanist shield: the League's assembly sways the West, volunteer brigades
+# arm the reserve. The assembly's result is checked again when it closes.
+IVN_shield_course_category = {
+	IVN_sh_league_assembly = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_sh_league_secretariat }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_sh_west_unresolved_tt
+				NOT = { has_global_flag = ADISCORD_west_final_resolved }
+			}
+		}
+		cost = 60
+		days_remove = 45
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			stability_factor = 0.03
+		}
+		remove_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_west_final_resolved } }
+				custom_effect_tooltip = IVN_sh_league_assembly_tt
+				hidden_effect = {
+					set_temp_variable = { var = ADISCORD_west_push value = 8 }
+					ADISCORD_west_push_all_leans = yes
+				}
+			}
+			else = {
+				add_political_power = 60
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	IVN_sh_volunteer_brigades = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_sh_civil_defence_council }
+		cost = 50
+		days_remove = 60
+		days_re_enable = 150
+		fire_only_once = no
+		modifier = {
+			consumer_goods_factor = 0.03
+		}
+		complete_effect = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		remove_effect = {
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVN
+			}
+			army_experience = 10
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+}
+
+# Emergency order: requisitions fill the depots at the expense of the shops;
+# border exercises train the army and bring the war for the West closer.
+IVN_emergency_course_category = {
+	IVN_em_requisition_drive = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_em_cabinet_of_national_defence }
+		cost = 60
+		days_remove = 60
+		days_re_enable = 90
+		fire_only_once = no
+		modifier = {
+			consumer_goods_factor = 0.05
+			stability_factor = -0.03
+		}
+		complete_effect = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		remove_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = IVN
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	IVN_em_border_exercises = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_em_border_commissariat }
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = IVN_em_west_before_war_tt
+				NOT = { has_global_flag = ADISCORD_west_final_started }
+				NOT = { has_global_flag = ADISCORD_west_final_resolved }
+			}
+		}
+		cost = 75
+		days_remove = 30
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			war_support_factor = 0.05
+		}
+		remove_effect = {
+			army_experience = 20
+			add_command_power = 20
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.03
+			}
+			custom_effect_tooltip = IVN_west_crisis_add_tt
+			hidden_effect = { ADISCORD_west_crisis_add = yes }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}
+
+# Revanche: the arsenals work for either legion government; staff war games
+# belong to the legion council and the rallies to the Patriotic Union.
+IVN_revanche_course_category = {
+	IVN_rv_arsenal_shift = {
+		icon = ADISCORD_factory
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rv_legion_government }
+		cost = 75
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			industrial_capacity_factory = 0.05
+			consumer_goods_factor = 0.04
+		}
+		complete_effect = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		remove_effect = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 100
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = IVN
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	IVN_rv_staff_war_games = {
+		icon = ADISCORD_operations
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rv_council_staff_regulations }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_rv_council_rules_tt
+				has_idea = IVN_rule_of_the_legion_council
+			}
+		}
+		cost = 50
+		days_remove = 45
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			planning_speed = 0.10
+		}
+		remove_effect = {
+			army_experience = 25
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	IVN_rv_union_rallies = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_rv_union_mass_rallies }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_rv_union_rules_tt
+				has_idea = IVN_rule_of_the_patriotic_union
+			}
+		}
+		cost = 40
+		days_remove = 30
+		days_re_enable = 90
+		fire_only_once = no
+		modifier = {
+			war_support_factor = 0.05
+			political_power_gain = 0.10
+		}
+		remove_effect = {
+			add_manpower = 5000
+			add_popularity = {
+				ideology = chauvinism
+				popularity = 0.03
+			}
+			custom_effect_tooltip = IVN_trust_all_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = 5 }
+				IVN_frontier_trust_change_all = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+}
+
+# ----- block_legion -----
+# Wartime programmes of the Marches Legion, opened by its focuses. Every
+# timed programme delivers in remove_effect; a target or route lost before
+# delivery returns the price.
+IVC_legion_war_category = {
+	# The drill keeps the assault battalions out of the line for a month; the
+	# timed edge lasts until the earliest next drill can finish.
+	IVC_assault_group_drill = {
+		icon = generic_army_support
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_assault_groups }
+		cost = 40
+		days_remove = 30
+		days_re_enable = 60
+		fire_only_once = no
+		modifier = {
+			army_org_factor = -0.05
+		}
+		remove_effect = {
+			army_experience = 15
+			add_timed_idea = {
+				idea = IVC_assault_groups_idea
+				days = 90
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	IVC_fortify_march = {
+		icon = generic_fortify_the_borders
+		allowed = { tag = IVC }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVC_hill_war_of_vedrina }
+		cost = 35
+		days_remove = 21
+		days_re_enable = 60
+		fire_only_once = no
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_controlled_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			add_political_power = 35
+		}
+		remove_effect = {
+			FROM = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+						}
+						instant_build = yes
+					}
+				}
+				else = {
+					ROOT = { add_political_power = 35 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Requisition route: cheap and large, paid by the marches' order and their
+	# trust in the capital.
+	IVC_requisition_columns = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_requisition_committees }
+		cost = 20
+		days_remove = 30
+		days_re_enable = 30
+		fire_only_once = no
+		modifier = {
+			stability_factor = -0.05
+		}
+		remove_effect = {
+			add_manpower = 3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 60
+				producer = IVC
+			}
+			custom_effect_tooltip = IVN_trust_legion_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# Fair purchase route: dearer, without a cost in order or trust.
+	IVC_fair_purchase_contracts = {
+		icon = ADISCORD_deal
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_fair_purchase }
+		cost = 60
+		days_remove = 30
+		days_re_enable = 30
+		fire_only_once = no
+		remove_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 80
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# Lower trust in the cabinet's marches feeds IVC_garrison_appeal (below 40).
+	IVC_propaganda_cabinet_marches = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_agitators_across_the_front }
+		cost = 40
+		days_remove = 30
+		days_re_enable = 45
+		fire_only_once = no
+		remove_effect = {
+			custom_effect_tooltip = IVC_trust_cabinet_held_minus_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -8 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+			IVN = {
+				add_war_support = -0.02
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# The loss comes out of the cabinet's stockpile of any producer.
+	IVC_depot_sabotage = {
+		icon = ADISCORD_operations
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_depot_saboteurs }
+		available = {
+			has_war_with = IVN
+		}
+		cost = 35
+		days_remove = 21
+		days_re_enable = 60
+		fire_only_once = no
+		remove_effect = {
+			IVN = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = -2700
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = -60
+				}
+				add_stability = -0.02
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# The caravans come over the corridor passes; Serenga, Vedrina and Talara
+	# are the legion's marches on the corridor border. Nothing leaves a northern
+	# stockpile, so no northern country has to answer.
+	IVC_northern_arms_caravan = {
+		icon = ADISCORD_logistics
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_couriers_to_the_corridor }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVC_northern_caravan_route_tt
+				OR = {
+					controls_state = 92
+					controls_state = 95
+					controls_state = 96
+				}
+			}
+		}
+		cost = 45
+		days_remove = 21
+		days_re_enable = 60
+		fire_only_once = no
+		cancel_trigger = {
+			NOT = { controls_state = 92 }
+			NOT = { controls_state = 95 }
+			NOT = { controls_state = 96 }
+		}
+		cancel_effect = {
+			add_political_power = 45
+		}
+		remove_effect = {
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 80
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 60
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 40
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	IVC_officer_defection_talks = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = IVC }
+		visible = { has_completed_focus = IVC_council_letters_to_old_comrades }
+		available = {
+			has_war_with = IVN
+		}
+		cost = 50
+		days_remove = 30
+		days_re_enable = 60
+		fire_only_once = no
+		remove_effect = {
+			add_manpower = 4000
+			army_experience = 15
+			add_command_power = 15
+			IVN = {
+				add_manpower = -4000
+				add_command_power = -15
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+}
+
+# ----- block_north -----
+# Programmes of the corridor mandate. Country targets are the two clients;
+# a delayed delivery checks the client or the state again and returns the
+# price when it is no longer ours to supply.
+IVN_mandate_category = {
+	IVN_nm_mandate_mission = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = IVN }
+		targets = { IBA IBL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+			}
+		}
+		visible = { has_completed_focus = IVN_nm_mandate_council }
+		cost = 30
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			FROM = { add_stability = 0.03 }
+			custom_effect_tooltip = IVN_nm_mission_lean_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_west_push value = 10 }
+				FROM = { ADISCORD_west_push_lean = yes }
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	IVN_nm_mandate_arms_convoy = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVN }
+		targets = { IBA IBL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+			}
+		}
+		visible = { has_completed_focus = IVN_nm_arms_for_norvane }
+		cost = 40
+		days_remove = 30
+		days_re_enable = 60
+		fire_only_once = no
+		modifier = {
+			civilian_factory_use = 1
+		}
+		cancel_trigger = {
+			NOT = {
+				FROM = {
+					exists = yes
+					is_subject_of = ROOT
+				}
+			}
+		}
+		cancel_effect = {
+			add_political_power = 40
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = {
+						exists = yes
+						is_subject_of = ROOT
+					}
+				}
+				FROM = {
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 2700
+						producer = IVN
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = 100
+						producer = IVN
+					}
+				}
+			}
+			else = {
+				add_political_power = 40
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	IVN_nm_corridor_roadworks = {
+		icon = ADISCORD_construction
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 90 91 93 94 }
+		target_trigger = {
+			FROM = {
+				OR = {
+					is_owned_and_controlled_by = IBA
+					is_owned_and_controlled_by = IBL
+				}
+				owner = { is_subject_of = ROOT }
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_nm_corridor_survey }
+		available = {
+			FROM = { infrastructure < 5 }
+		}
+		cost = 35
+		days_remove = 45
+		days_re_enable = 30
+		fire_only_once = no
+		cancel_trigger = {
+			NOT = {
+				FROM = {
+					OR = {
+						is_owned_and_controlled_by = IBA
+						is_owned_and_controlled_by = IBL
+					}
+					owner = { is_subject_of = ROOT }
+				}
+			}
+		}
+		cancel_effect = {
+			add_political_power = 35
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = {
+						OR = {
+							is_owned_and_controlled_by = IBA
+							is_owned_and_controlled_by = IBL
+						}
+						owner = { is_subject_of = ROOT }
+						infrastructure < 5
+					}
+				}
+				FROM = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_political_power = 35
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	# Direct administration: Itoran recruits serve in the client's army.
+	IVN_nm_mandate_officers = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		targets = { IBA IBL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+			}
+		}
+		visible = { has_completed_focus = IVN_nm_direct_administration }
+		available = {
+			NOT = { has_manpower < 3000 }
+		}
+		cost = 25
+		days_re_enable = 90
+		fire_only_once = no
+		complete_effect = {
+			add_manpower = -3000
+			FROM = {
+				add_manpower = 3000
+				army_experience = 5
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				has_manpower < 20000
+			}
+		}
+	}
+
+	# Self-government: a factory in the client's capital, at most two per client.
+	IVN_nm_client_credit = {
+		icon = ADISCORD_factory
+		allowed = { tag = IVN }
+		targets = { IBA IBL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject_of = ROOT
+			}
+		}
+		visible = { has_completed_focus = IVN_nm_client_self_government }
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_nm_client_credit_limit_tt
+					check_variable = { var = IVN_nm_credit_factories value = 2 compare = less_than }
+				}
+			}
+		}
+		cost = 50
+		days_remove = 60
+		days_re_enable = 60
+		fire_only_once = no
+		modifier = {
+			civilian_factory_use = 1
+		}
+		cancel_trigger = {
+			NOT = {
+				FROM = {
+					exists = yes
+					is_subject_of = ROOT
+				}
+			}
+		}
+		cancel_effect = {
+			add_political_power = 50
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = {
+						exists = yes
+						is_subject_of = ROOT
+						capital_scope = { is_controlled_by = FROM }
+					}
+				}
+				FROM = {
+					capital_scope = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
+					hidden_effect = {
+						add_to_variable = { var = IVN_nm_credit_factories value = 1 }
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
+			}
+			else = {
+				add_political_power = 50
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+}
+
+# Programmes of the military reform after the retreat. They stay open during
+# and after the revolt of the marches.
+IVN_retreat_category = {
+	IVN_nm_retreat_debriefing = {
+		icon = ADISCORD_inspection
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_nm_retreat_inquiry }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_nm_debriefing_limit_tt
+				check_variable = { var = IVN_nm_debriefings value = 3 compare = less_than }
+			}
+		}
+		cost = 25
+		days_remove = 30
+		days_re_enable = 30
+		fire_only_once = no
+		remove_effect = {
+			army_experience = 10
+			add_command_power = 10
+			hidden_effect = {
+				add_to_variable = { var = IVN_nm_debriefings value = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	IVN_nm_rearmament_order = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_nm_rearmament_plan }
+		cost = 50
+		days_remove = 60
+		days_re_enable = 90
+		fire_only_once = no
+		modifier = {
+			civilian_factory_use = 2
+		}
+		remove_effect = {
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 200
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = anti_air_equipment
+				amount = 150
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = IVN
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = IVN
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				add = 10
+				has_war = yes
+			}
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	IVN_nm_border_works = {
+		icon = generic_fortification
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = { has_completed_focus = IVN_nm_northern_border_line }
+		cost = 30
+		days_remove = 40
+		days_re_enable = 60
+		fire_only_once = no
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_controlled_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			add_political_power = 30
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = { is_controlled_by = ROOT }
+				}
+				FROM = {
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_political_power = 30
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				add = 8
+				has_war = yes
+			}
+		}
+	}
+
+	# Veterans re-enlist; the northern marches send their sons once more.
+	IVN_nm_veterans_reenlistment = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_nm_veterans_of_the_north }
+		cost = 30
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			add_manpower = 5000
+			army_experience = 5
+			custom_effect_tooltip = IVN_trust_northern_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_northern_marches_trust_change = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = 20
+				has_war = yes
+			}
+		}
+	}
+
+	# Purge route: junior officers from the citizen reserve.
+	IVN_nm_ensign_school = {
+		icon = ADISCORD_science
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_nm_purge_officer_corps }
+		cost = 40
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		modifier = {
+			training_time_army_factor = -0.10
+		}
+		remove_effect = {
+			army_experience = 10
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = -0.03
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	# Rehabilitation route: disgraced commanders return to service.
+	IVN_nm_recall_disgraced_officers = {
+		icon = generic_army_support
+		allowed = { tag = IVN }
+		visible = { has_completed_focus = IVN_nm_rehabilitate_officers }
+		cost = 35
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			add_command_power = 25
+			army_experience = 5
+			add_power_balance_value = {
+				id = IVN_command_bop
+				value = 0.04
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+}
+
+# ----- block_cabinet -----
+IVN_civil_war_category = {
+	# Rifles and money for the underground of a legion march. The march holds
+	# IVN_march_work while the supply runs, so the amnesty waits for it; the
+	# price returns when the march leaves the legion before delivery.
+	IVN_cb_partisan_supply = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = IVC
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cb_behind_the_lines
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_trust_now_tt
+				always = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_cb_partisan_supply_rifles_tt
+				NOT = { has_equipment = { infantry_equipment < 1800 } }
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 35
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -1800
+			}
+			custom_effect_tooltip = IVN_cb_partisan_supply_tt
+			hidden_effect = {
+				FROM = { set_state_flag = IVN_march_work }
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { has_global_flag = IVN_marches_revolt_active }
+				FROM = {
+					NOT = { is_owned_by = IVC }
+				}
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = IVN_march_work }
+			}
+			add_political_power = 35
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1800
+				producer = IVN
+			}
+		}
+		remove_effect = {
+			FROM = {
+				hidden_effect = {
+					clr_state_flag = IVN_march_work
+					set_temp_variable = { var = IVN_trust_delta value = 15 }
+					IVN_march_trust_change = yes
+				}
+				damage_building = {
+					type = infrastructure
+					damage = 1
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { check_variable = { var = IVN_march_trust value = 60 compare = less_than } }
+			}
+		}
+	}
+
+	# The sabotage detachments raid a legion march at once; the march closes
+	# for 30 days and its people pay for the reprisals with their trust.
+	IVN_cb_sabotage_raid = {
+		icon = ADISCORD_operations
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 92 95 96 97 98 99 100 101 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = IVC
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_global_flag = IVN_marches_revolt_active
+			has_completed_focus = IVN_cb_sabotage_detachments
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_march_measure_ready_tt
+					NOT = { has_state_flag = IVN_march_measure_recent }
+					NOT = { has_state_flag = IVN_march_work }
+				}
+			}
+		}
+		cost = 30
+		fire_only_once = no
+		complete_effect = {
+			FROM = {
+				damage_building = {
+					type = arms_factory
+					damage = 1
+					repair_speed_modifier = -0.5
+				}
+				damage_building = {
+					type = infrastructure
+					damage = 1
+				}
+				custom_effect_tooltip = IVN_cb_sabotage_raid_trust_tt
+				hidden_effect = {
+					set_temp_variable = { var = IVN_trust_delta value = -5 }
+					IVN_march_trust_change = yes
+					IVN_march_mark_measure = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+}
+
+# Itora after the war for the West: one programme set for each outcome.
+IVN_west_legacy_category = {
+	# Victory. A corridor district handed over by the settlement becomes a
+	# national region; a district lost before the end returns the price.
+	IVN_wl_integrate_district = {
+		icon = ADISCORD_inspection
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 90 91 93 94 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { is_core_of = ROOT }
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_completed_focus = IVN_wl_corridor_administration
+		}
+		available = {
+			FROM = { is_controlled_by = ROOT }
+		}
+		cost = 75
+		days_remove = 120
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVN_wl_integrate_district_tt
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			add_political_power = 75
+		}
+		remove_effect = {
+			FROM = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_core_of = ROOT
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+				else = {
+					ROOT = { add_political_power = 75 }
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	# Victory. A friendly western republic shares its engineers. The counter
+	# is raised on payment and lowered on a refund, so parallel exchanges
+	# cannot pass the limit.
+	IVN_wl_western_exchange = {
+		icon = ADISCORD_science
+		allowed = { tag = IVN }
+		targets = { WIT IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_subject = no
+			}
+		}
+		visible = {
+			has_completed_focus = IVN_wl_western_congress
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_western_exchange_limit_tt
+				check_variable = { var = IVN_wl_exchanges_done value = 4 compare = less_than }
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = IVN_wl_western_friend_tt
+					NOT = { has_war_with = ROOT }
+					OR = {
+						is_in_faction_with = ROOT
+						ADISCORD_west_leans_to_ivn_ally = yes
+					}
+				}
+			}
+		}
+		cost = 50
+		days_remove = 60
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVN_wl_western_exchange_tt
+			hidden_effect = {
+				add_to_variable = { var = IVN_wl_exchanges_done value = 1 }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = {
+						exists = yes
+						NOT = { has_war_with = ROOT }
+					}
+				}
+				add_tech_bonus = {
+					name = IVN_wl_western_exchange
+					bonus = 0.5
+					uses = 1
+					category = industry
+				}
+				FROM = { add_stability = 0.02 }
+			}
+			else = {
+				add_political_power = 50
+				hidden_effect = {
+					subtract_from_variable = { var = IVN_wl_exchanges_done value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# Victory, demobilisation. Demobilised soldiers leave the reserve and found
+	# a cooperative factory; without a site on delivery the men and the price
+	# return.
+	IVN_wl_veterans_cooperatives = {
+		icon = ADISCORD_construction
+		allowed = { tag = IVN }
+		visible = {
+			has_completed_focus = IVN_wl_demobilisation
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_veterans_cooperatives_limit_tt
+				check_variable = { var = IVN_wl_cooperatives_built value = 3 compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_workshops_site_tt
+				IVN_march_workshop_site_exists = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_veterans_manpower_tt
+				NOT = { has_manpower < 5000 }
+			}
+		}
+		cost = 40
+		days_remove = 60
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = {
+			add_manpower = -5000
+			custom_effect_tooltip = IVN_wl_veterans_cooperatives_tt
+			hidden_effect = {
+				add_to_variable = { var = IVN_wl_cooperatives_built value = 1 }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = { IVN_march_workshop_site_exists = yes }
+				random_owned_controlled_state = {
+					limit = { IVN_march_workshop_site = yes }
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			else = {
+				add_political_power = 40
+				add_manpower = 5000
+				hidden_effect = {
+					subtract_from_variable = { var = IVN_wl_cooperatives_built value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# Victory, standing army. A garrison with its own rifles fortifies the
+	# border of a chosen district; a lost district returns the price.
+	IVN_wl_corridor_garrison = {
+		icon = generic_fortify_the_borders
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 90 91 92 93 94 95 96 97 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_completed_focus = IVN_wl_standing_army
+		}
+		available = {
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_corridor_garrison_rifles_tt
+				NOT = { has_equipment = { infantry_equipment < 1800 } }
+			}
+		}
+		cost = 30
+		days_remove = 30
+		days_re_enable = 90
+		fire_only_once = no
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -1800
+			}
+			custom_effect_tooltip = IVN_wl_corridor_garrison_tt
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		cancel_effect = {
+			add_political_power = 30
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1800
+				producer = IVN
+			}
+		}
+		remove_effect = {
+			FROM = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+				else = {
+					ROOT = {
+						add_political_power = 30
+						add_equipment_to_stockpile = {
+							type = infantry_equipment
+							amount = 1800
+							producer = IVN
+						}
+					}
+				}
+			}
+			army_experience = 5
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	# Defeat, resistance. Saboteurs strike the hegemon's factories in a lost
+	# land; the crackdown costs the capital stability on delivery.
+	IVN_wl_lost_march_sabotage = {
+		icon = ADISCORD_operations
+		allowed = { tag = IVN }
+		state_target = yes
+		targets = { 90 91 92 93 94 95 96 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = event_target:ADISCORD_vorkerland_nation
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = { state = FROM }
+		}
+		visible = {
+			has_completed_focus = IVN_wl_lost_lands_underground
+		}
+		cost = 40
+		days_remove = 30
+		days_re_enable = 90
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVN_wl_lost_march_sabotage_tt
+		}
+		cancel_trigger = {
+			FROM = {
+				NOT = { is_owned_by = event_target:ADISCORD_vorkerland_nation }
+			}
+		}
+		cancel_effect = {
+			add_political_power = 40
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					FROM = { is_owned_by = event_target:ADISCORD_vorkerland_nation }
+				}
+				FROM = {
+					damage_building = {
+						type = arms_factory
+						damage = 1
+						repair_speed_modifier = -0.5
+					}
+					damage_building = {
+						type = industrial_complex
+						damage = 1
+						repair_speed_modifier = -0.5
+					}
+				}
+				add_manpower = 1500
+				add_stability = -0.02
+			}
+			else = {
+				add_political_power = 40
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# Defeat, accommodation. The hegemon's orders pay for a military factory
+	# in Itora; without a site on delivery the price returns.
+	IVN_wl_federal_orders = {
+		icon = ADISCORD_factory
+		allowed = { tag = IVN }
+		visible = {
+			has_completed_focus = IVN_wl_federal_contracts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_vorkerland_subject_tt
+				is_subject_of = event_target:ADISCORD_vorkerland_nation
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_wl_federal_orders_limit_tt
+				check_variable = { var = IVN_wl_federal_orders_built value = 3 compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = IVN_march_workshops_site_tt
+				IVN_march_workshop_site_exists = yes
+			}
+		}
+		cost = 50
+		days_remove = 90
+		days_re_enable = 30
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = IVN_wl_federal_orders_tt
+			hidden_effect = {
+				add_to_variable = { var = IVN_wl_federal_orders_built value = 1 }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = { IVN_march_workshop_site_exists = yes }
+				random_owned_controlled_state = {
+					limit = { IVN_march_workshop_site = yes }
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			else = {
+				add_political_power = 50
+				hidden_effect = {
+					subtract_from_variable = { var = IVN_wl_federal_orders_built value = 1 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 15
+		}
+	}
+
+	# Armistice. A chosen moment of alert on the line of demarcation; the
+	# reserve comes back with field experience.
+	IVN_wl_frontier_alert = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = IVN }
+		visible = {
+			has_completed_focus = IVN_wl_frontier_reserve
+		}
+		cost = 50
+		days_remove = 60
+		days_re_enable = 180
+		fire_only_once = no
+		modifier = {
+			army_core_defence_factor = 0.10
+			conscription_factor = 0.05
+		}
+		remove_effect = {
+			army_experience = 10
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				add = 15
+				has_war = yes
+			}
+		}
+	}
 }

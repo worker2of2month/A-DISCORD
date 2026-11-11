@@ -65,6 +65,7 @@ HIT_ALPHA = 8
 FRAME_COUNTS = {
     "WRK_capital_marker": 6,
     "WRK_capital_route": 3,
+    "WRK_capital_network_link": 2,
     "WRK_intrigue_card": 3,
     **{f"WRK_capital_state_{state}": 6 for state in STATES},
     **{f"WRK_capital_select_{state}": 3 for state in STATES},
@@ -345,6 +346,27 @@ def card_strip():
     return strip
 
 
+def network_link_strip(geometry):
+    """Show a logical connection to the Central cell, not a third street route."""
+    tower, central = geometry['anchors'][40], geometry['anchors'][32]
+    elbow = max(tower[0], central[0]) + 22
+    points = [tower, (elbow, tower[1]), (elbow, central[1]), central]
+    path = rounded_path(points, 6)
+    strip = Image.new('RGBA', (WIDTH * 2, HEIGHT))
+    for frame, color in enumerate((WORX, MUTED)):
+        image = canvas()
+        stroke(image, path, (*GRAPHITE, 235), 4, True)
+        dashed_stroke(image, path, (*color, 255), 2, dash=4, gap=3)
+        for x, y in (tower, central):
+            ellipse(image, (x - 5, y - 5, x + 5, y + 5), (*GRAPHITE, 235), color, 1.5)
+        if frame:
+            x, y = elbow, (tower[1] + central[1]) / 2
+            stroke(image, [(x - 4, y - 4), (x + 4, y + 4)], RED, 2)
+            stroke(image, [(x - 4, y + 4), (x + 4, y - 4)], RED, 2)
+        strip.paste(finish(image), (frame * WIDTH, 0))
+    return strip
+
+
 def render_images():
     geometry = geography()
     streets = street_network(geometry)
@@ -400,6 +422,7 @@ def render_images():
         images[f"WRK_capital_selected_{state}.png"] = selected
     images["WRK_capital_marker.png"] = marker_strip()
     images["WRK_capital_route.png"] = route_strip(geometry)
+    images["WRK_capital_network_link.png"] = network_link_strip(geometry)
     images["WRK_intrigue_card.png"] = card_strip()
     panel = canvas((460, 524))
     stroke(panel, [(10, 39), (450, 39)], (*MUTED, 125), 0.7)
@@ -481,6 +504,9 @@ def gui_block(geometry):
     for state in STATES:
         parts.append(icon(f"WRK_capital_{state}_state", f"GFX_WRK_capital_state_{state}", MAP_X, 48, transparent=True))
     parts.append(icon("WRK_capital_route", "GFX_WRK_capital_route", MAP_X, 48, transparent=True))
+    for frame, status in enumerate(('open', 'closed'), 1):
+        parts.append(icon(f'WRK_capital_network_{status}', 'GFX_WRK_capital_network_link',
+                          MAP_X, 48, frame=frame, transparent=True))
     for state in STATES:
         x, y = geometry["markers"][state]
         parts.append(icon(f"WRK_capital_{state}_marker", "GFX_WRK_capital_marker", MAP_X + x - 14, 48 + y - 14,
@@ -501,6 +527,10 @@ def gui_block(geometry):
         parts.append(textbox(f"WRK_capital_{state}_detail", f"WRK_capital_detail_{state}",
                              12, 360, 436, 52, tooltip=f"WRK_capital_{state}_tt"))
         if state == 40:
+            parts.append(textbox('WRK_capital_network_status', 'WRK_capital_network_status',
+                                 12, 418, 436, 58, tooltip='WRK_capital_network_tt'))
+            parts.append(button('WRK_capital_tower_central', 'GFX_WRK_capital_action',
+                                12, 486, 'WRK_capital_network_tt', 'WRK_capital_tower_central'))
             continue
         for decision, _, _, slot in ACTIONS:
             parts.append(button(f"WRK_capital_{state}_{decision}", "GFX_WRK_capital_action",
@@ -554,10 +584,26 @@ def selection_condition(state):
     return check
 
 
+def network_display_triggers():
+    project = '40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals } }'
+    blocks = []
+    for status, clear in (('open', 'yes'), ('closed', 'no')):
+        blocks.append(f'\t\t\tWRK_capital_network_{status}_visible = {{\n'
+                      f'\t\t\t\t{project}\n'
+                      f'\t\t\t\tWRK_network_exfiltration_route_clear = {clear}\n\t\t\t}}')
+    for name in ('WRK_capital_network_status', 'WRK_capital_tower_central'):
+        blocks.append(f'\t\t\t{name}_visible = {{\n\t\t\t\t{project}\n'
+                      f'\t\t\t\t{selection_condition(40)}\n\t\t\t}}')
+    blocks.append('\t\t\tWRK_capital_tower_central_click_enabled = { always = yes }')
+    return '\n'.join(blocks)
+
+
 def interaction_sections():
     definitions = decision_definitions()
-    effects = []
+    effects = ['\t\t\tWRK_capital_tower_central_click = {\n'
+               '\t\t\t\tset_variable = { var = WRK_capital_selected_state value = 32 }\n\t\t\t}']
     triggers = [f'\t\t\tWRK_capital_legend_text_{n}_visible = {{ always = no }}' for n in range(1, 4)]
+    triggers.append(network_display_triggers())
     for state in STATES:
         selected = selection_condition(state)
         effects.append(f'\t\t\tWRK_capital_{state}_select_click = {{\n'
@@ -642,6 +688,20 @@ def interaction_localisation(language):
              'WRK_capital_overview_tt': report,
              'WRK_capital_symbols_tt': ('Щит - патруль. Восклицательный знак - волнения. Знак запрета - бунт. Наклонная черта - раскрытая ячейка.' if russian else
                                         'Shield: patrol. Exclamation mark: unrest. No-entry sign: riot. Diagonal slash: exposed cell.')}
+    texts['WRK_capital_tower_central'] = 'Центральный дистрикт' if russian else 'Central District'
+    texts['WRK_capital_network_status'] = ('§YУвести Уоркера по линиям сети§!\\nКанал связи с Центром: ' if russian else
+                                         '§YExtract Worker through the network§!\\nCentral link: ') + '[GetVorkerlandNetworkRouteStatus]'
+    texts['WRK_capital_network_tt'] = (
+        '§YБашня - Центральный дистрикт§!\\nСостояние проекта: [GetVorkerlandPrepCommunications]\\n'
+        'Канал: [GetVorkerlandNetworkRouteStatus]. Нужна скрытая ячейка уровня 2 или выше в Центральном дистрикте. '
+        'Затаившаяся подходит; раскрытая или легализованная - нет.\\n'
+        'Зелёный пунктир обозначает связь с ячейкой, крест - закрытую связь. Это не уличный маршрут.\\n'
+        'Прогноз: [GetVorkerlandWorkerFateForecast]' if russian else
+        '§YTower - Central District§!\\nProject status: [GetVorkerlandPrepCommunications]\\n'
+        'Link: [GetVorkerlandNetworkRouteStatus]. Requires a hidden level 2 or higher cell in the Central District. '
+        'Dormant cells qualify; exposed or legalized cells do not.\\n'
+        'Green dashes show the cell connection; a cross marks a closed link. This is not a street route.\\n'
+        'Forecast: [GetVorkerlandWorkerFateForecast]')
     previous_symbols = re.search(r'(?m)^ WRK_capital_symbols_tt:\d* "(.*)"$', source)
 
     def district_tooltip(match):
@@ -652,6 +712,9 @@ def interaction_localisation(language):
         for suffix in suffixes:
             if body.endswith(suffix):
                 body = body[:-len(suffix)]
+        if match[1].startswith(' WRK_capital_40_tt:'):
+            body = '§Y[40.GetName]§!\\n[GetVorkerlandPrepCommunications]\\n' + (
+                'Судьба Уоркера: ' if russian else "Worker's fate: ") + '[GetVorkerlandWorkerFateForecast]'
         # Export complete tooltip text, without a second localisation lookup.
         return match[1] + body + '\\n\\n' + texts['WRK_capital_symbols_tt'] + match[3]
 
@@ -660,11 +723,11 @@ def interaction_localisation(language):
         source = re.sub(pattern, district_tooltip, source)
     for state in STATES:
         note = f'[{state}.WRKGetCapitalDistrictNote]' if state != 40 else (
-            'Эвакуация и судьба Уоркера - в подсказке.' if russian else 'Hover for evacuation and Worker\'s fate.')
+            '[GetVorkerlandPrepCommunications]')
         texts[f'WRK_capital_detail_{state}'] = f'§Y[{state}.GetName]§!\\n' + note
-    results_ru = ('Недовольство -25; с хлебным резервом -30. Без бунта. Перерыв между мерами [?ROOT.WRK_unrest_cooldown|0] дн..',
-                  'Недовольство -30, прекращает бунт. Баланс сил +0.05 к округам. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн..',
-                  'Недовольство -35, прекращает бунт. Стабильность -1%; другие районы без патруля +8. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн..',
+    results_ru = ('Недовольство -25; с хлебным резервом -30. Без бунта. Перерыв между мерами [?ROOT.WRK_unrest_cooldown|0] дн.',
+                  'Недовольство -30, прекращает бунт. Баланс сил +0.05 к округам. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн.',
+                  'Недовольство -35, прекращает бунт. Стабильность -1%; другие районы без патруля +8. Перерыв [?ROOT.WRK_unrest_cooldown|0] дн.',
                   '21 день без роста недовольства, затем -40 и прекращение бунта. Патрулей одновременно: [?ROOT.WRK_unrest_patrol_limit|0].',
                   'Через 21 день ячейка уровня 1. Внимание +10; с аварийными мастерскими +5. Проектов сети одновременно: [?ROOT.WRK_cells_work_limit|0].',
                   'Через 28 дней уровень ячейки +1, внимание +15. Нужна скрытая действующая ячейка ниже уровня 3. Проектов сети одновременно: [?ROOT.WRK_cells_work_limit|0].',
@@ -766,8 +829,10 @@ h1{text-align:center;font-size:17px;margin:0;padding:12px;border:1px solid #514a
 button{font:13px Arial;color:#ddd9ca;background:#28271f;border:1px solid #88794f;padding:5px 3px;height:28px;cursor:pointer}
 button:hover{background:#49432c;border-color:#dcc482}button:disabled{opacity:.35;cursor:default}
 .controls{display:flex;gap:8px;margin:14px 0}.controls button[aria-pressed=true]{color:#eacf8a;border-color:#eacf8a}
+.demo{display:grid;gap:8px;margin-bottom:14px}.demo label{display:flex;justify-content:space-between;align-items:center}.demo select{background:#28271f;color:#ddd9ca;padding:4px;width:280px}.network{grid-column:1 / -1;height:62px;line-height:24px}.network b{color:#ddc680}
 .note{font-size:12px;color:#a8a38e;line-height:1.5}
-</style><main><div class="controls"><button id="mode-unrest" aria-pressed="true">Комитеты</button><button id="mode-cells">Сеть Воркса</button></div>
+</style><main><div class="controls"><button id="mode-unrest">Комитеты</button><button id="mode-cells" aria-pressed="true">Сеть Воркса</button></div>
+<div class="demo"><label>Башня<select id="tower-project"><option value="0">Проект не выбран</option><option value="1">Гражданская эвакуация</option><option value="2">Военная эвакуация</option><option value="3" selected>Увести Уоркера по линиям сети</option></select></label><label>Проект<select id="tower-stage"><option value="pending">Работы идут</option><option value="contested">Идёт спор за Башню</option><option value="ready" selected>Готов</option></select></label><label>Ячейка в Центре<select id="central-cell"><option value="weak">Уровень 1</option><option value="hidden" selected>Уровень 2, скрытая</option><option value="dormant">Уровень 2, затаившаяся</option><option value="exposed">Уровень 2, раскрытая</option><option value="legal">Уровень 2, легализованная</option></select></label></div>
 <section class="category" id="category"><h1>Наследство Конфедерации</h1><div class="camps">Комитеты: <b>40</b> &nbsp; Штаб: <b>30</b> &nbsp; Инженеры: <b>30</b></div>
 <div class="panel" id="capital"><div class="title">Столица Воркерланда</div><span class="report" title="Объекты наследства, лагеря, баланс центра и округов, правила недовольства и сети.">Сводка</span><div class="detail" id="detail"></div><div class="actions" id="actions"></div></div></section>
 <p class="note">Нажмите на район. Наведение выделяет контур; карточка и меры относятся к выбранному району. Значения демонстрационные. Кнопки здесь изменяют только макет.</p>
@@ -779,23 +844,30 @@ function capitalHitAt(x,y){if(x<0||x>=330||y<0||y>=290)return null;x=Math.floor(
 sprite('WRK_capital_panel',460,524,0,0);sprite('WRK_capital_map_background',330,290,65,48);
 const streets={},selects={},markers={};
 data.states.forEach(s=>{selects[s]=sprite('WRK_capital_selected_'+s,330,290,65,48);streets[s]=sprite('WRK_capital_state_'+s,330,290,65,48);});
-sprite('WRK_capital_route',330,290,65,48);
+const route=sprite('WRK_capital_route',330,290,65,48),link=sprite('WRK_capital_network_link',330,290,65,48);
 data.states.forEach(s=>{const [x,y]=data.markers[s];markers[s]=sprite('WRK_capital_marker',28,28,x+51,y+34);});
-let selected=32,hover=null,mode='unrest';const unrest={32:25,33:30,34:35,35:30,36:40,37:65,38:35,39:45,40:0},cells={32:0,33:1,34:0,35:2,36:0,37:1,38:0,39:3,40:0},patrol=new Set();
-function status(s){if(s===40)return 'Эвакуация и судьба Уоркера - в подсказке';if(mode==='cells')return 'Сеть: '+(cells[s]?'ячейка уровня '+cells[s]:'ячейки нет');return 'Недовольство: '+unrest[s]+' / 100 - '+(patrol.has(s)?'патруль':unrest[s]>=100?'бунт':unrest[s]>=60?'волнения':unrest[s]>=40?'напряжённо':'спокойно');}
+let selected=40,hover=null,mode='cells',project=3,stage='ready',central='hidden';const unrest={32:25,33:30,34:35,35:30,36:40,37:65,38:35,39:45,40:0},cells={32:2,33:1,34:0,35:2,36:0,37:1,38:0,39:3,40:0},patrol=new Set();
+function linkOpen(){return cells[32]>=2&&['hidden','dormant'].includes(central);}
+function forecast(){if(stage!=='ready')return 'Исход ещё не обеспечен: проект не завершён или оспаривается.';return linkOpen()?'Уоркер исчезнет: ни комитеты, ни штаб не узнают, где он.':'Канал закрыт: судьбу решит обычный бросок с рычагами сети.';}
+function networkTip(){return 'Нужна скрытая ячейка уровня 2 или выше в Центральном дистрикте. Затаившаяся подходит; раскрытая или легализованная - нет.\nЗелёный пунктир - связь с ячейкой; крест - закрытая связь.\n'+forecast();}
+function status(s){if(s===40)return project===0?'Проект не выбран':stage==='pending'?'Работы идут':stage==='contested'?'Идёт спор за Башню':project===3?'Проект сети готов':'Эвакуация готова';if(mode==='cells')return 'Сеть: '+(cells[s]?'ячейка уровня '+cells[s]:'ячейки нет');return 'Недовольство: '+unrest[s]+' / 100 - '+(patrol.has(s)?'патруль':unrest[s]>=100?'бунт':unrest[s]>=60?'волнения':unrest[s]>=40?'напряжённо':'спокойно');}
 function paint(){for(const s of data.states){let f=mode==='cells'?(cells[s]?4:1):unrest[s]>=100?6:unrest[s]>=60?5:unrest[s]<40?2:1;if(s===40)f=1;streets[s].style.backgroundPosition=`-${(f-1)*330}px 0`;let m=mode==='cells'?(cells[s]?2:1):patrol.has(s)?6:unrest[s]>=100?5:unrest[s]>=60?4:1;markers[s].style.backgroundPosition=`-${(m-1)*28}px 0`;selects[s].style.display=s===selected||s===hover?'block':'none';selects[s].style.opacity=s===selected?'1':'.5';}
+route.style.backgroundPosition=`-${(project===1?1:project===2?2:0)*330}px 0`;link.style.display=project===3?'block':'none';link.style.backgroundPosition=linkOpen()?'0 0':'-330px 0';
 }
-function detail(){document.getElementById('detail').innerHTML='<b>'+data.labels[selected]+'</b><br>'+status(selected);const box=document.getElementById('actions');box.replaceChildren();if(selected===40)return;
+function detail(){const d=document.getElementById('detail');d.innerHTML='<b>'+data.labels[selected]+'</b><br>'+status(selected);d.title=selected===40&&project===3?networkTip():status(selected);const box=document.getElementById('actions');box.replaceChildren();if(selected===40){if(project===3){const text=document.createElement('div');text.className='network';text.innerHTML='<b>Увести Уоркера по линиям сети</b><br>Канал связи с Центром: '+(linkOpen()?'открыт':'закрыт');text.title=networkTip();const jump=document.createElement('button');jump.textContent='Центральный дистрикт';jump.title=networkTip();jump.onclick=()=>{selected=32;paint();detail();};box.append(text,jump);}return;}
 const actions=mode==='unrest'?[['Пайки 35',()=>unrest[selected]=Math.max(0,unrest[selected]-25)],['Цех комитету 45',()=>unrest[selected]=Math.max(0,unrest[selected]-30)],['Уполномоченный 30',()=>unrest[selected]=Math.max(0,unrest[selected]-35)],['Рабочий патруль 40',()=>patrol.add(selected)]]:[['Создать ячейку 30',()=>cells[selected]=1],['Расширить сеть 40',()=>cells[selected]=Math.min(3,cells[selected]+1)],['Залечь на дно 20',()=>{}],['Новые пропуска 45',()=>{}],['Легализовать 35',()=>{}]];
 actions.forEach(([label,run],i)=>{let b=document.createElement('button');b.textContent=label+' ◆';b.title='Демонстрация. В игре проверяются фокус, цена, состояние района и занятость операции.';b.disabled=mode==='cells'&&((i===0&&cells[selected]>0)||(i>0&&cells[selected]===0));b.onclick=()=>{run();paint();detail();};box.append(b);});}
 function point(e){const r=cap.getBoundingClientRect();return capitalHitAt(e.clientX-r.left-65,e.clientY-r.top-48);}
-cap.addEventListener('pointermove',e=>{hover=point(e);cap.style.cursor=hover?'pointer':'default';cap.title=hover?data.labels[hover]+'\n'+status(hover)+'\nЩит - патруль; ! - волнения; запрет - бунт.':'';paint();});
+cap.addEventListener('pointermove',e=>{hover=point(e);cap.style.cursor=hover?'pointer':'default';cap.title=hover?data.labels[hover]+'\n'+status(hover)+(hover===40&&project===3?'\n'+networkTip():'\nЩит - патруль; ! - волнения; запрет - бунт.'):'';paint();});
 cap.addEventListener('pointerleave',()=>{hover=null;paint();});cap.addEventListener('click',e=>{const s=point(e);if(s){selected=s;paint();detail();}});
+document.getElementById('tower-project').onchange=e=>{project=Number(e.target.value);paint();detail();};
+document.getElementById('tower-stage').onchange=e=>{stage=e.target.value;paint();detail();};
+document.getElementById('central-cell').onchange=e=>{central=e.target.value;cells[32]=central==='weak'?1:2;paint();detail();};
 for(const m of ['unrest','cells'])document.getElementById('mode-'+m).onclick=()=>{mode=m;for(const n of ['unrest','cells'])document.getElementById('mode-'+n).setAttribute('aria-pressed',n===m);paint();detail();};paint();detail();
 </script></html>'''.replace('__DATA__',data)).encode('utf-8')
 
 
-def review_image(images, geometry):
+def review_image(images, geometry, network=False):
     """Compose the native-size category with demonstration values in memory."""
     from PIL import ImageFont
 
@@ -817,20 +889,31 @@ def review_image(images, geometry):
     panel.alpha_composite(images['WRK_capital_map_background.png'], (MAP_X, 48))
     for state in STATES:
         frame = 5 if state == 37 else 2 if state in (32, 33, 34, 35, 38) else 1
+        if network:
+            frame = 4 if state in (32, 35, 39, 40) else 1
         panel.alpha_composite(images[f'WRK_capital_state_{state}.png'].crop(((frame - 1) * WIDTH, 0, frame * WIDTH, HEIGHT)), (MAP_X, 48))
-    panel.alpha_composite(images['WRK_capital_selected_37.png'], (MAP_X, 48))
-    x, y = geometry['markers'][37]
-    panel.alpha_composite(images['WRK_capital_marker.png'].crop((84, 0, 112, 28)), (MAP_X + x - 14, y + 34))
+    selected = 40 if network else 37
+    panel.alpha_composite(images[f'WRK_capital_selected_{selected}.png'], (MAP_X, 48))
+    if network:
+        panel.alpha_composite(images['WRK_capital_network_link.png'].crop((0, 0, WIDTH, HEIGHT)), (MAP_X, 48))
+    x, y = geometry['markers'][32 if network else 37]
+    marker_frame = 1 if network else 3
+    panel.alpha_composite(images['WRK_capital_marker.png'].crop((28 * marker_frame, 0, 28 * (marker_frame + 1), 28)), (MAP_X + x - 14, y + 34))
     draw = ImageDraw.Draw(panel)
     draw.text((10, 8), 'Столица Воркерланда', font=font(19), fill=WHITE)
     draw.text((353, 12), 'Сводка', font=font(13), fill=WORKER)
-    draw.text((12, 360), 'Северо-Западный дистрикт', font=font(17), fill=WORKER)
-    draw.text((12, 386), 'Недовольство: 65 / 100 - волнения', font=font(14), fill=WHITE)
+    draw.text((12, 360), 'Башня Единства' if network else 'Северо-Западный дистрикт', font=font(17), fill=WORKER)
+    draw.text((12, 386), 'Проект сети готов' if network else 'Недовольство: 65 / 100 - волнения', font=font(14), fill=WHITE)
     prices = (35, 45, 30, 40)
-    for index, (_, label, _, slot) in enumerate(ACTIONS[:4]):
+    for index, (_, label, _, slot) in enumerate(ACTIONS[:0 if network else 4]):
         x, y = 12 + (slot % 2) * 222, 418 + (slot // 2) * 34
         panel.alpha_composite(images['WRK_capital_action.png'].crop((0, 0, 214, 28)), (x, y))
         draw.text((x + 107, y + 6), f'{label}  {prices[index]}', font=font(13), fill=WHITE, anchor='mt')
+    if network:
+        draw.text((12, 418), 'Увести Уоркера по линиям сети', font=font(16), fill=WORKER)
+        draw.text((12, 442), 'Канал связи с Центром: открыт', font=font(14), fill=WORX)
+        panel.alpha_composite(images['WRK_capital_action.png'].crop((0, 0, 214, 28)), (12, 486))
+        draw.text((119, 492), 'Центральный дистрикт', font=font(13), fill=WHITE, anchor='mt')
     sheet.alpha_composite(panel, (10, 70))
     draw = ImageDraw.Draw(sheet)
     draw.rectangle((1, 1, 478, 600), outline=(*MUTED, 255))

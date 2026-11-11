@@ -17,6 +17,9 @@ scripted_gui = {
 		ai_enabled = { always = no }
 		# BEGIN WRK CAPITAL EFFECTS
 		effects = {
+			WRK_capital_tower_central_click = {
+				set_variable = { var = WRK_capital_selected_state value = 32 }
+			}
 			WRK_capital_32_select_click = {
 				set_variable = { var = WRK_capital_selected_state value = 32 }
 			}
@@ -2126,6 +2129,23 @@ scripted_gui = {
 			WRK_capital_legend_text_1_visible = { always = no }
 			WRK_capital_legend_text_2_visible = { always = no }
 			WRK_capital_legend_text_3_visible = { always = no }
+			WRK_capital_network_open_visible = {
+				40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals } }
+				WRK_network_exfiltration_route_clear = yes
+			}
+			WRK_capital_network_closed_visible = {
+				40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals } }
+				WRK_network_exfiltration_route_clear = no
+			}
+			WRK_capital_network_status_visible = {
+				40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals } }
+				check_variable = { var = WRK_capital_selected_state value = 40 compare = equals }
+			}
+			WRK_capital_tower_central_visible = {
+				40 = { check_variable = { var = ADISCORD_vorkerland_prep_project value = 3 compare = equals } }
+				check_variable = { var = WRK_capital_selected_state value = 40 compare = equals }
+			}
+			WRK_capital_tower_central_click_enabled = { always = yes }
 			WRK_capital_32_select_click_enabled = { always = yes }
 			WRK_capital_32_marker_select_click_enabled = { always = yes }
 			WRK_capital_32_marker_select_visible = {

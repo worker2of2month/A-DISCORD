@@ -828,6 +828,7 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_calculate_monthly_balance = yes
 	ADISCORD_economy_update_ai_state = yes
 	if = { limit = { is_ai = yes } ADISCORD_economy_ai_monthly_policy = yes }
+	ADISCORD_economy_ai_war_mobilisation_step = yes
 	ADISCORD_economy_update_monthly_budget_trend = yes
 	ADISCORD_economy_apply_tax_burden_side_effects = yes
 	ADISCORD_economy_update_fiscal_stress = yes
@@ -5370,6 +5371,46 @@ ADISCORD_economy_ai_monthly_policy = {
 			else_if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = less_than } ADISCORD_economy_can_increase_army_spending = yes } ADISCORD_economy_increase_army_spending = yes }
 			else_if = { limit = { ADISCORD_economy_can_expand_public_capital = yes check_variable = { var = ADISCORD_economy_surplus_streak value = 4 compare = greater_than_or_equals } } ADISCORD_economy_invest_reserves = yes }
 			else_if = { limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 3 compare = greater_than } ADISCORD_economy_can_decrease_tax_burden = yes } ADISCORD_economy_decrease_tax_burden = yes }
+		}
+	}
+}
+
+# COUNTRY, AI on the monthly pulse. Repeatable decisions consume the political
+# power a mobilisation law costs, so a war seen on two consecutive pulses moves
+# a civilian-economy AI straight to partial mobilisation. Vorkerland follows
+# the gate of its own wartime law strategy: claimants of the central civil war
+# keep their economy until the collapse is resolved.
+ADISCORD_economy_ai_war_mobilisation_step = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_war = yes
+			OR = {
+				NOT = {
+					OR = {
+						tag = WRK
+						tag = WKR
+						tag = VAD
+						tag = TVA
+					}
+				}
+				has_global_flag = ADISCORD_vorkerland_collapse_finished
+			}
+			ADISCORD_vorkerland_is_not_wartime_claimant = yes
+			OR = {
+				ADISCORD_economy_has_idea_civilian_oriented_economy = yes
+				ADISCORD_economy_has_idea_civilian_economy = yes
+				ADISCORD_economy_has_idea_low_economic_mobilisation = yes
+			}
+		}
+		if = {
+			limit = { has_country_flag = ADISCORD_ai_war_mobilisation_pending }
+			clr_country_flag = ADISCORD_ai_war_mobilisation_pending
+			add_ideas = partial_economic_mobilisation
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			set_country_flag = { flag = ADISCORD_ai_war_mobilisation_pending value = 1 days = 45 }
 		}
 	}
 }

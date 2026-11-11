@@ -284,6 +284,13 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_WRK_capital_network_link"
+		texturefile = "gfx/interface/vorkerland_capital/WRK_capital_network_link.png"
+		noOfFrames = 2
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_WRK_intrigue_card"
 		texturefile = "gfx/interface/vorkerland_capital/WRK_intrigue_card.png"
 		noOfFrames = 3

@@ -33,16 +33,305 @@ IVN_adopt_emergency_order = {
 	IVN_party_representatives_emergency = yes
 }
 
+# COUNTRY IVN. The cabinet hands power back to the Committee during the
+# revolt. Kulivanov keeps his humanist role; the etatist role stays recorded
+# so a later emergency course does not add it a second time.
+IVN_restore_committee_government = {
+	if = {
+		limit = { NOT = { has_government = humanism } }
+		set_politics = {
+			ruling_party = humanism
+			elections_allowed = yes
+		}
+	}
+	promote_character = {
+		character = IVN_Vadim_Ivanchik
+		ideology = humanism_ideology
+	}
+	add_popularity = {
+		ideology = humanism
+		popularity = 0.10
+	}
+}
+
+# ----- Committee and staff, frontier trust -----
+# IVN_command_bop measures who commands the army of the marches: the civil
+# Committee (negative side) or the Staff of the marches (positive side). The
+# state variable IVN_march_trust (0-100) on the eight frontier marches records
+# how far each march still trusts the capital. The revolt reads both: the
+# balance sets the legion's share of the army, trust decides which marches
+# follow Vedrina.
+
+# COUNTRY IVN. One-time opening from the root focus. The revolt calls it as
+# well, so its consumers exist even if the root focus was never completed.
+IVN_marches_initialize = {
+	if = {
+		limit = { NOT = { has_country_flag = IVN_marches_initialized } }
+		set_country_flag = IVN_marches_initialized
+		set_power_balance = {
+			id = IVN_command_bop
+			set_value = 0.10
+		}
+		92 = { set_variable = { var = IVN_march_trust value = 45 } }
+		95 = { set_variable = { var = IVN_march_trust value = 35 } }
+		96 = { set_variable = { var = IVN_march_trust value = 45 } }
+		97 = { set_variable = { var = IVN_march_trust value = 50 } }
+		98 = { set_variable = { var = IVN_march_trust value = 60 } }
+		99 = { set_variable = { var = IVN_march_trust value = 60 } }
+		100 = { set_variable = { var = IVN_march_trust value = 65 } }
+		101 = { set_variable = { var = IVN_march_trust value = 70 } }
+		IVN_frontier_marches_refresh = yes
+	}
+}
+
+# STATE. Adds the temporary IVN_trust_delta to the march's trust.
+IVN_march_trust_change = {
+	add_to_variable = { var = IVN_march_trust value = IVN_trust_delta }
+	clamp_variable = {
+		var = IVN_march_trust
+		min = 0
+		max = 100
+	}
+	IVN_march_trust_refresh = yes
+}
+
+# STATE. Swaps the visible modifier only when trust crosses 70 or 40.
+IVN_march_trust_refresh = {
+	if = {
+		limit = { check_variable = { var = IVN_march_trust value = 70 compare = greater_than_or_equals } }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = IVN_march_disloyal } }
+			remove_dynamic_modifier = { modifier = IVN_march_disloyal }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = IVN_march_loyal } } }
+			add_dynamic_modifier = { modifier = IVN_march_loyal }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = IVN_march_trust value = 40 compare = less_than } }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = IVN_march_loyal } }
+			remove_dynamic_modifier = { modifier = IVN_march_loyal }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = IVN_march_disloyal } } }
+			add_dynamic_modifier = { modifier = IVN_march_disloyal }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = IVN_march_loyal } }
+			remove_dynamic_modifier = { modifier = IVN_march_loyal }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = IVN_march_disloyal } }
+			remove_dynamic_modifier = { modifier = IVN_march_disloyal }
+		}
+	}
+}
+
+IVN_frontier_marches_refresh = {
+	92 = { IVN_march_trust_refresh = yes }
+	95 = { IVN_march_trust_refresh = yes }
+	96 = { IVN_march_trust_refresh = yes }
+	97 = { IVN_march_trust_refresh = yes }
+	98 = { IVN_march_trust_refresh = yes }
+	99 = { IVN_march_trust_refresh = yes }
+	100 = { IVN_march_trust_refresh = yes }
+	101 = { IVN_march_trust_refresh = yes }
+}
+
+# ANY. Applies the temporary IVN_trust_delta to every frontier march.
+IVN_frontier_trust_change_all = {
+	92 = { IVN_march_trust_change = yes }
+	95 = { IVN_march_trust_change = yes }
+	96 = { IVN_march_trust_change = yes }
+	97 = { IVN_march_trust_change = yes }
+	98 = { IVN_march_trust_change = yes }
+	99 = { IVN_march_trust_change = yes }
+	100 = { IVN_march_trust_change = yes }
+	101 = { IVN_march_trust_change = yes }
+}
+
+# ANY. The four northern marches of the old expedition: 92, 95, 96, 97.
+IVN_northern_marches_trust_change = {
+	92 = { IVN_march_trust_change = yes }
+	95 = { IVN_march_trust_change = yes }
+	96 = { IVN_march_trust_change = yes }
+	97 = { IVN_march_trust_change = yes }
+}
+
+# ANY. The inner frontier behind them: 98, 99, 100, 101.
+IVN_inner_marches_trust_change = {
+	98 = { IVN_march_trust_change = yes }
+	99 = { IVN_march_trust_change = yes }
+	100 = { IVN_march_trust_change = yes }
+	101 = { IVN_march_trust_change = yes }
+}
+
+# ANY. During the revolt: the frontier marches the cabinet still owns.
+IVN_frontier_trust_change_held_by_cabinet = {
+	92 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	95 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	96 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	97 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	98 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	99 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	100 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+	101 = {
+		if = {
+			limit = { is_owned_by = IVN }
+			IVN_march_trust_change = yes
+		}
+	}
+}
+
+# ANY. During the revolt: the frontier marches the legion owns.
+IVN_frontier_trust_change_held_by_legion = {
+	92 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	95 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	96 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	97 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	98 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	99 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	100 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+	101 = {
+		if = {
+			limit = { is_owned_by = IVC }
+			IVN_march_trust_change = yes
+		}
+	}
+}
+
+# STATE. An instant measure closes the march for 30 days; a timed measure
+# holds IVN_march_work from payment to its end or cancellation instead.
+IVN_march_mark_measure = {
+	set_state_flag = {
+		flag = IVN_march_measure_recent
+		days = 30
+		value = 1
+	}
+}
+
+# ----- Defection of a march during the revolt -----
+
+# STATE, ROOT = the side that wins the march. The legion's local garrison
+# deserts with the state; the loser's report names the march.
+IVN_march_defect_to_root = {
+	save_event_target_as = IVN_defected_march
+	ROOT = {
+		transfer_state = PREV
+		add_manpower = 3000
+	}
+	set_state_controller_to = ROOT
+	set_temp_variable = { var = IVN_trust_delta value = 10 }
+	if = {
+		limit = { ROOT = { tag = IVC } }
+		set_temp_variable = { var = IVN_trust_delta value = -10 }
+	}
+	IVN_march_trust_change = yes
+	if = {
+		limit = { ROOT = { tag = IVN } }
+		IVC = {
+			add_manpower = -3000
+			country_event = { id = ADISCORD_ivn.7 }
+		}
+	}
+	else = {
+		IVN = {
+			add_manpower = -3000
+			country_event = { id = ADISCORD_ivn.7 }
+		}
+	}
+	ROOT = { ADISCORD_economy_mark_dirty = yes }
+	IVN = { ADISCORD_economy_mark_dirty = yes }
+	IVC = { ADISCORD_economy_mark_dirty = yes }
+}
+
 # ----- Chauvinist revolt of the marches -----
 # A failed northern expedition hands power to the emergency cabinet, and the
 # frontier army that came back from the north rises as the Marches Legion
 # (IVC). Both outcomes end with IVN annexing IVC, so the Itoran tag, its focus
 # progress and western influence survive whichever side wins.
 
-# COUNTRY IVN. The four frontier marches the legion holds at the start.
+# COUNTRY IVN. The four northern marches of the expedition. Vedrina is the
+# legion's capital and always rises; 92, 96 and 97 stay with the cabinet when
+# their trust is at least 70. All three border Vedrina, so the legion's land
+# stays contiguous whichever of them it keeps.
 IVN_marches_revolt_states = {
-	92 = { IVN_marches_revolt_take_state = yes }
 	95 = { IVN_marches_revolt_take_state = yes }
+	92 = { IVN_marches_revolt_take_state = yes }
 	96 = { IVN_marches_revolt_take_state = yes }
 	97 = { IVN_marches_revolt_take_state = yes }
 }
@@ -53,17 +342,121 @@ IVN_marches_revolt_take_state = {
 		limit = {
 			is_owned_by = IVN
 			is_controlled_by = IVN
+			OR = {
+				state = 95
+				check_variable = { var = IVN_march_trust value = 70 compare = less_than }
+			}
 		}
 		IVC = { transfer_state = PREV }
 		set_state_controller_to = IVC
 	}
 }
 
+# COUNTRY IVN. The inner frontier follows a neighbouring legion march when its
+# trust is below 40: Moressa behind Kantoria, Lakora behind Talara or
+# Kantoria, Ilvan behind Lakora and Olsia behind Ilvan. Each extra march
+# brings its reservists to the legion.
+IVN_marches_revolt_defections = {
+	98 = {
+		if = {
+			limit = {
+				IVN_march_follows_the_legion = yes
+				97 = { is_owned_by = IVC }
+			}
+			IVN_marches_revolt_take_state = yes
+			IVC = { add_manpower = 5000 }
+		}
+	}
+	99 = {
+		if = {
+			limit = {
+				IVN_march_follows_the_legion = yes
+				OR = {
+					96 = { is_owned_by = IVC }
+					97 = { is_owned_by = IVC }
+				}
+			}
+			IVN_marches_revolt_take_state = yes
+			IVC = { add_manpower = 5000 }
+		}
+	}
+	100 = {
+		if = {
+			limit = {
+				IVN_march_follows_the_legion = yes
+				99 = { is_owned_by = IVC }
+			}
+			IVN_marches_revolt_take_state = yes
+			IVC = { add_manpower = 5000 }
+		}
+	}
+	101 = {
+		if = {
+			limit = {
+				IVN_march_follows_the_legion = yes
+				100 = { is_owned_by = IVC }
+			}
+			IVN_marches_revolt_take_state = yes
+			IVC = { add_manpower = 5000 }
+		}
+	}
+}
+
+# COUNTRY IVN. The balance of the committee and the staff decides how much of
+# the army follows the generals: half under the staff's control, a quarter
+# under the committee's, otherwise about a third.
+IVN_marches_revolt_transfer_units = {
+	if = {
+		limit = {
+			power_balance_value = {
+				id = IVN_command_bop
+				value > 0.35
+			}
+		}
+		transfer_units_fraction = {
+			target = IVC
+			size = 0.5
+			stockpile_ratio = 0.35
+			navy_ratio = 0
+			air_ratio = 0.4
+		}
+	}
+	else_if = {
+		limit = {
+			power_balance_value = {
+				id = IVN_command_bop
+				value < -0.35
+			}
+		}
+		transfer_units_fraction = {
+			target = IVC
+			size = 0.25
+			stockpile_ratio = 0.2
+			navy_ratio = 0
+			air_ratio = 0.2
+		}
+	}
+	else = {
+		transfer_units_fraction = {
+			target = IVC
+			size = 0.35
+			stockpile_ratio = 0.3
+			navy_ratio = 0
+			air_ratio = 0.3
+		}
+	}
+}
+
 # COUNTRY IVN. The emergency cabinet takes power and the legion goes to war.
+# Karn's appointment before the expedition gives him his own reserve; a
+# general sent into retirement rises with fewer men and leaves the cabinet
+# a loyal officer corps.
 IVN_start_marches_revolt = {
 	set_global_flag = IVN_marches_revolt_active
+	IVN_marches_initialize = yes
 	IVN_adopt_emergency_order = yes
 	IVN_marches_revolt_states = yes
+	IVN_marches_revolt_defections = yes
 	IVC = {
 		set_capital = { state = 95 }
 		inherit_technology = IVN
@@ -76,13 +469,37 @@ IVN_start_marches_revolt = {
 		set_stability = 0.45
 		set_war_support = 0.70
 		add_manpower = 20000
+		IVC_legion_initialize = yes
 	}
-	transfer_units_fraction = {
-		target = IVC
-		size = 0.4
-		stockpile_ratio = 0.3
-		navy_ratio = 0
-		air_ratio = 0.3
+	if = {
+		limit = { has_completed_focus = IVN_command_promote_karn }
+		IVC = {
+			add_manpower = 10000
+			army_experience = 25
+		}
+	}
+	else_if = {
+		limit = { has_completed_focus = IVN_command_sideline_karn }
+		IVC = { add_manpower = -10000 }
+		add_timed_idea = {
+			idea = IVN_cw_loyal_officers
+			days = 180
+		}
+	}
+	# Parliament's answer on the Patriotic Union: an outlawed union has already
+	# lost its branches, a tolerated one brings them to the legion.
+	if = {
+		limit = { has_completed_focus = IVN_parliament_ban_the_union }
+		IVC = { add_manpower = -5000 }
+	}
+	else_if = {
+		limit = { has_completed_focus = IVN_parliament_tolerate_the_union }
+		IVC = { add_manpower = 5000 }
+	}
+	IVN_marches_revolt_transfer_units = yes
+	add_timed_idea = {
+		idea = IVN_cw_divided_army
+		days = 180
 	}
 	IVC = {
 		declare_war_on = {
@@ -90,12 +507,50 @@ IVN_start_marches_revolt = {
 			type = annex_everything
 		}
 	}
+	mark_focus_tree_layout_dirty = yes
 	ADISCORD_economy_mark_dirty = yes
 	news_event = { id = ADISCORD_ivn.3 hours = 1 }
+	IVN_show_civil_war_superevent = yes
+}
+
+# COUNTRY IVC. The legion's aggregate, its oath and its own tree.
+IVC_legion_initialize = {
+	add_ideas = IVC_legion_vow
+	load_focus_tree = IVC_focus
+	set_variable = { var = IVC_leg_attack value = 0.05 }
+	set_variable = { var = IVC_leg_stability value = -0.05 }
+	IVC_refresh_legion = yes
+}
+
+# COUNTRY IVC. Refreshes the legion's aggregate after a variable change.
+IVC_refresh_legion = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = IVC_legion_dynamic } } }
+		add_dynamic_modifier = { modifier = IVC_legion_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# Shows superevent_itora_civilwar to a human player; an observer-only game
+# receives it on IVN.
+IVN_show_civil_war_superevent = {
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.14 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.14 hours = 1 }
+	}
 }
 
 # COUNTRY IVN after its own capitulation. The legion's government, leader and
-# player move into IVN before the annexation removes IVC.
+# player move into IVN before the annexation removes IVC. The legion's
+# political course survives as the government's spirit; its flag is cleared
+# once converted.
 IVN_hand_power_to_legion = {
 	if = {
 		limit = { IVC = { is_ai = no } }
@@ -119,9 +574,21 @@ IVN_hand_power_to_legion = {
 		ideology = chauvinism_ideology
 	}
 	IVN_party_representatives_legion = yes
+	if = {
+		limit = { has_global_flag = IVN_legion_course_council }
+		add_ideas = IVN_rule_of_the_legion_council
+	}
+	else_if = {
+		limit = { has_global_flag = IVN_legion_course_union }
+		add_ideas = IVN_rule_of_the_patriotic_union
+	}
+	clr_global_flag = IVN_legion_course_council
+	clr_global_flag = IVN_legion_course_union
 }
 
-# COUNTRY IVN. Every terminal path reunites the marches under IVN.
+# COUNTRY IVN. Every terminal path reunites the marches under IVN. Timed
+# measures still running on a frontier march were paid by a side of the
+# revolt; their flags close with it.
 IVN_resolve_marches_revolt = {
 	if = {
 		limit = { has_war_with = IVC }
@@ -136,6 +603,28 @@ IVN_resolve_marches_revolt = {
 	}
 	clr_global_flag = IVN_marches_revolt_active
 	set_global_flag = IVN_marches_revolt_resolved
+	if = {
+		limit = { has_government = chauvinism }
+		set_global_flag = IVN_civil_war_won_by_legion
+	}
+	else = {
+		set_global_flag = IVN_civil_war_won_by_cabinet
+	}
+	clr_global_flag = IVN_legion_course_council
+	clr_global_flag = IVN_legion_course_union
+	if = {
+		limit = { has_idea = IVN_cw_divided_army }
+		remove_ideas = IVN_cw_divided_army
+	}
+	if = {
+		limit = { has_idea = IVN_cw_loyal_officers }
+		remove_ideas = IVN_cw_loyal_officers
+	}
+	if = {
+		limit = { has_idea = IVN_cw_war_bonds }
+		remove_ideas = IVN_cw_war_bonds
+	}
+	mark_focus_tree_layout_dirty = yes
 	ADISCORD_economy_mark_dirty = yes
 	if = {
 		limit = { has_government = chauvinism }

@@ -390,6 +390,22 @@ guiTypes = {
 		}
 
 		iconType = {
+			name = "WRK_capital_network_open"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_network_link"
+			frame = 1
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "WRK_capital_network_closed"
+			position = { x = 65 y = 48 }
+			quadTextureSprite = "GFX_WRK_capital_network_link"
+			frame = 2
+			alwaystransparent = yes
+		}
+
+		iconType = {
 			name = "WRK_capital_32_marker"
 			position = { x = 221 y = 122 }
 			quadTextureSprite = "GFX_WRK_capital_marker"
@@ -1518,6 +1534,27 @@ guiTypes = {
 			maxHeight = 52
 			fixedsize = yes
 			pdx_tooltip = "WRK_capital_40_tt"
+		}
+
+		instantTextBoxType = {
+			name = "WRK_capital_network_status"
+			position = { x = 12 y = 418 }
+			text = "WRK_capital_network_status"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 58
+			fixedsize = yes
+			pdx_tooltip = "WRK_capital_network_tt"
+		}
+
+		buttonType = {
+			name = "WRK_capital_tower_central"
+			position = { x = 12 y = 486 }
+			quadTextureSprite = "GFX_WRK_capital_action"
+			buttonText = "WRK_capital_tower_central"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "WRK_capital_network_tt"
 		}
 
 	}

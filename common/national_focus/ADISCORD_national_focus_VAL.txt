@@ -3153,7 +3153,7 @@ shared_focus = {
 			unlock_decision_tooltip = VAL_recovery_road_corps_program
 			add_ideas = VAL_reclamation_road_crews_idea
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 12 }
 	}
 
 shared_focus = {

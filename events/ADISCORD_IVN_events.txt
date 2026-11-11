@@ -97,3 +97,142 @@ news_event = {
 		name = ADISCORD_ivn.5.a
 	}
 }
+
+# The expedition comes back. The answer sets how the army and the marches
+# meet the 30 days before the revolt.
+country_event = {
+	id = ADISCORD_ivn.6
+	title = ADISCORD_ivn.6.t
+	desc = ADISCORD_ivn.6.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = IVN
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed
+	}
+
+	immediate = {
+		hidden_effect = { IVN_marches_initialize = yes }
+	}
+
+	option = {
+		name = ADISCORD_ivn.6.a
+		add_power_balance_value = {
+			id = IVN_command_bop
+			value = -0.15
+		}
+		custom_effect_tooltip = ADISCORD_ivn.6.a_tt
+		hidden_effect = {
+			set_temp_variable = { var = IVN_trust_delta value = -10 }
+			IVN_northern_marches_trust_change = yes
+		}
+		ai_chance = { base = 30 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.6.b
+		add_stability = -0.10
+		custom_effect_tooltip = ADISCORD_ivn.6.b_tt
+		hidden_effect = {
+			set_temp_variable = { var = IVN_trust_delta value = 10 }
+			IVN_frontier_trust_change_all = yes
+		}
+		ai_chance = { base = 40 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.6.c
+		trigger = {
+			NOT = { has_political_power < 75 }
+		}
+		add_political_power = -75
+		add_power_balance_value = {
+			id = IVN_command_bop
+			value = 0.10
+		}
+		custom_effect_tooltip = ADISCORD_ivn.6.c_tt
+		hidden_effect = {
+			set_temp_variable = { var = IVN_trust_delta value = 15 }
+			IVN_northern_marches_trust_change = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# A march changed sides during the revolt; the side that lost it reads the
+# report. Every consequence is already applied by IVN_march_defect_to_root.
+country_event = {
+	id = ADISCORD_ivn.7
+	title = ADISCORD_ivn.7.t
+	desc = ADISCORD_ivn.7.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_ivn.7.a
+	}
+}
+
+# The Committee pushed the staff aside: the generals stop answering.
+country_event = {
+	id = ADISCORD_ivn.8
+	title = ADISCORD_ivn.8.t
+	desc = ADISCORD_ivn.8.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = IVN }
+
+	option = {
+		name = ADISCORD_ivn.8.a
+		add_power_balance_value = {
+			id = IVN_command_bop
+			value = 0.20
+		}
+		add_stability = -0.03
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.8.b
+		army_experience = -10
+		add_war_support = -0.05
+		custom_effect_tooltip = ADISCORD_ivn.8.b_tt
+		hidden_effect = {
+			set_temp_variable = { var = IVN_trust_delta value = -5 }
+			IVN_northern_marches_trust_change = yes
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# The staff took the army out of the Committee's hands and sets terms.
+country_event = {
+	id = ADISCORD_ivn.9
+	title = ADISCORD_ivn.9.t
+	desc = ADISCORD_ivn.9.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = IVN }
+
+	option = {
+		name = ADISCORD_ivn.9.a
+		add_political_power = -50
+		add_war_support = 0.05
+		custom_effect_tooltip = ADISCORD_ivn.9.a_tt
+		hidden_effect = {
+			set_temp_variable = { var = IVN_trust_delta value = 5 }
+			IVN_northern_marches_trust_change = yes
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.9.b
+		add_power_balance_value = {
+			id = IVN_command_bop
+			value = -0.20
+		}
+		add_stability = -0.05
+		ai_chance = { base = 50 }
+	}
+}

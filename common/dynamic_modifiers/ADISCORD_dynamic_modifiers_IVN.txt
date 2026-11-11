@@ -11,4 +11,42 @@ IVN_order_dynamic = {
 	war_support_factor = IVN_ord_war_support
 	industrial_capacity_factory = IVN_ord_factory_output
 	production_speed_buildings_factor = IVN_ord_construction
+	army_org_factor = IVN_ord_org
+	planning_speed = IVN_ord_planning
+	training_time_army_factor = IVN_ord_training
+	army_defence_factor = IVN_ord_defence
+	consumer_goods_factor = IVN_ord_consumer_goods
+}
+
+# The legion's aggregate; its own focuses and decisions change IVC_leg_*.
+IVC_legion_dynamic = {
+	icon = GFX_idea_IVN_national_spirit
+	enable = { tag = IVC }
+	army_attack_factor = IVC_leg_attack
+	army_defence_factor = IVC_leg_defence
+	army_org_factor = IVC_leg_org
+	breakthrough_factor = IVC_leg_breakthrough
+	war_support_factor = IVC_leg_war_support
+	stability_factor = IVC_leg_stability
+	political_power_gain = IVC_leg_political_power
+	industrial_capacity_factory = IVC_leg_factory_output
+	conscription = IVC_leg_conscription
+	training_time_army_factor = IVC_leg_training
+	production_speed_buildings_factor = IVC_leg_construction
+}
+
+# STATE. A frontier march with trust of at least 70.
+IVN_march_loyal = {
+	icon = GFX_modifiers_tur_kemalist_loyalties
+	enable = { always = yes }
+	recruitable_population_factor = 0.10
+	state_production_speed_buildings_factor = 0.10
+}
+
+# STATE. A frontier march with trust below 40.
+IVN_march_disloyal = {
+	icon = GFX_modifiers_tur_kemalist_unrest
+	enable = { always = yes }
+	recruitable_population_factor = -0.10
+	state_production_speed_buildings_factor = -0.10
 }

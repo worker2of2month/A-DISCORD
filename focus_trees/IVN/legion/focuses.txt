@@ -1,0 +1,3307 @@
+# The Marches Legion (IVC) during the revolt of the marches: the legion's
+# army, its political course, the economy of the frontier, agitation in the
+# cabinet's marches and the northern contacts. Focus deltas use
+# IVC_legion_dynamic. IVC exists only while the revolt lasts; its political
+# course reaches the Itoran government through a global flag read by
+# IVN_hand_power_to_legion.
+focus_tree = {
+	id = IVC_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 30
+			tag = IVC
+		}
+	}
+	default = no
+	continuous_focus_position = {
+		x = 50
+		y = 800
+	}
+
+	# ----- The Marches Legion -----
+	focus = {
+		id = IVC_legion_oath
+		icon = GFX_goal_support_fascism
+		x = 12
+		y = 0
+		cost = 1
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_legion_oath_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 60
+		}
+	}
+
+	focus = {
+		id = IVC_veterans_of_the_expedition
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 5
+		y = 1
+		cost = 2
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_veterans_muster
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_veterans_of_the_expedition_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_org value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_assault_companies
+		icon = GFX_goal_generic_special_forces
+		x = 3
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_veterans_of_the_expedition }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_doctrine_cost_reduction = {
+				name = IVC_assault_companies
+				cost_reduction = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_assault_companies_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_trophy_depots
+		icon = GFX_goal_generic_small_arms
+		x = 7
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_veterans_of_the_expedition }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_vedrina_passes
+		icon = GFX_goal_generic_defence
+		x = 3
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_assault_companies }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			95 = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 2
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_vedrina_passes_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.04 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_frontier_cavalry
+		icon = GFX_goal_generic_army_motorized
+		x = 7
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_trophy_depots }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_frontier_cavalry_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_breakthrough value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_march_on_the_old_march
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = 5
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = IVC_vedrina_passes
+			focus = IVC_frontier_cavalry
+		}
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_march_on_the_capital
+			army_experience = 20
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_storm_the_capital
+		icon = GFX_goal_generic_major_war
+		x = 5
+		y = 5
+		cost = 2
+		prerequisite = { focus = IVC_march_on_the_old_march }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+			has_war_with = IVN
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_storm_of_the_capital
+				days = 90
+			}
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	# The legion's political course survives its victory as the spirit of
+	# the new Itoran government (IVN_hand_power_to_legion).
+	focus = {
+		id = IVC_karn_takes_command
+		icon = GFX_focus_generic_military_dictatorship
+		x = 12
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_karn_takes_command_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.05 }
+				add_to_variable = { var = IVC_leg_stability value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 60
+		}
+	}
+
+	focus = {
+		id = IVC_council_of_the_legion
+		icon = GFX_goal_generic_army_doctrines
+		x = 11
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_karn_takes_command }
+		mutually_exclusive = { focus = IVC_patriotic_union }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			custom_effect_tooltip = IVC_council_of_the_legion_tt
+			hidden_effect = {
+				set_global_flag = IVN_legion_course_council
+				clr_global_flag = IVN_legion_course_union
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_of_the_legion_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_org value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_patriotic_union
+		icon = GFX_goal_support_fascism
+		x = 13
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_karn_takes_command }
+		mutually_exclusive = { focus = IVC_council_of_the_legion }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			custom_effect_tooltip = IVC_patriotic_union_tt
+			hidden_effect = {
+				set_global_flag = IVN_legion_course_union
+				clr_global_flag = IVN_legion_course_council
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_patriotic_union_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_conscription value = 0.02 }
+				add_to_variable = { var = IVC_leg_war_support value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_council_field_courts
+		icon = GFX_focus_generic_court
+		x = 11
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_council_of_the_legion }
+		search_filters = { FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_field_courts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_officers_cabinet
+		icon = GFX_goal_generic_military_sphere
+		x = 11
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_council_field_courts }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 40
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_officers_cabinet_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_mass_rallies
+		icon = GFX_goal_generic_propaganda
+		x = 13
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_patriotic_union }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 10000
+			add_political_power = 50
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_patriotic_press
+		icon = GFX_goal_generic_propaganda
+		x = 13
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_union_mass_rallies }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_patriotic_press_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.1 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_new_itora
+		icon = GFX_goal_generic_national_unity
+		x = 12
+		y = 5
+		cost = 3
+		prerequisite = {
+			focus = IVC_council_officers_cabinet
+			focus = IVC_union_patriotic_press
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_new_itora_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_requisitions_of_the_marches
+		icon = GFX_goal_generic_production2
+		x = 18
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_requisition_march
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_smuggling_routes
+		icon = GFX_focus_generic_smugglers
+		x = 16
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_requisitions_of_the_marches }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_border_smugglers
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_vedrina_workshops
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 20
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_requisitions_of_the_marches }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			95 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 2
+					add_building_construction = {
+						type = arms_factory
+						level = 2
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_roads_of_the_legion
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 16
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_smuggling_routes }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			95 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			96 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_roads_of_the_legion_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_construction value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_war_economy_of_the_marches
+		icon = GFX_goal_generic_production
+		x = 20
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_vedrina_workshops }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_war_economy_of_the_marches_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_factory_output value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_captured_arsenals
+		icon = GFX_goal_generic_army_artillery
+		x = 18
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = IVC_roads_of_the_legion
+			focus = IVC_war_economy_of_the_marches
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_shame_of_the_expedition
+		icon = GFX_goal_generic_propaganda
+		x = 24
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_shame_of_the_expedition_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_appeal_to_the_garrisons
+		icon = GFX_goal_generic_political_pressure
+		x = 22
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_shame_of_the_expedition }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_garrison_appeal
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_legion_newspaper
+		icon = GFX_goal_generic_propaganda
+		x = 26
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_shame_of_the_expedition }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.03
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_legion_newspaper_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_agents_in_the_old_march
+		icon = GFX_goal_generic_intelligence_exchange
+		x = 22
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_appeal_to_the_garrisons }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_stability = -0.05
+				add_war_support = -0.03
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_veterans_letters
+		icon = GFX_focus_generic_treaty
+		x = 26
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_legion_newspaper }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			custom_effect_tooltip = IVN_trust_legion_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_the_marches_rise
+		icon = GFX_goal_generic_occupy_start_war
+		x = 24
+		y = 4
+		cost = 2
+		prerequisite = {
+			focus = IVC_agents_in_the_old_march
+			focus = IVC_veterans_letters
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVN_trust_all_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_all = yes
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_the_marches_rise_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_conscription value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_northern_contacts
+		icon = GFX_goal_generic_improve_relations
+		x = 30
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_northern_contacts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_boreyan_volunteers
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 28
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_northern_contacts }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 5000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_boreyan_volunteers_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_training value = -0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_corridor_veterans
+		icon = GFX_goal_generic_army_doctrines
+		x = 32
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_northern_contacts }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_corridor_veterans_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_promise_of_revanche
+		icon = GFX_goal_generic_major_war
+		x = 30
+		y = 3
+		cost = 2
+		prerequisite = {
+			focus = IVC_boreyan_volunteers
+			focus = IVC_corridor_veterans
+		}
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_promise_of_revanche_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	# ===== block_legion =====
+	# ----- General staff of the legion -----
+	# The legion's doctrine: assault and artillery, the hills of Vedrina,
+	# anti-tank and motorised columns, then the frontier war or the march
+	# on the capital, and the final offensive.
+	focus = {
+		id = IVC_legion_general_staff
+		icon = GFX_focus_generic_military_mission
+		x = 43
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 30
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_assault_groups
+		icon = GFX_focus_generic_urban_training
+		x = 39
+		y = 2
+		cost = 1
+		prerequisite = { focus = IVC_legion_general_staff }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_assault_group_drill
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_assault_groups_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_legion_batteries
+		icon = GFX_goal_generic_army_artillery2
+		x = 39
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_assault_groups }
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 200
+				producer = IVC
+			}
+			add_tech_bonus = {
+				name = IVC_legion_batteries
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_fire_and_assault
+		icon = GFX_focus_generic_combined_arms
+		x = 39
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_legion_batteries }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_fire_and_assault_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.02 }
+				add_to_variable = { var = IVC_leg_breakthrough value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_hill_war_of_vedrina
+		icon = GFX_focus_generic_hill_training
+		x = 43
+		y = 2
+		cost = 1
+		prerequisite = { focus = IVC_legion_general_staff }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_fortify_march
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_hill_war_of_vedrina_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_mountain_rifles
+		icon = GFX_focus_generic_mountain_troops
+		x = 43
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_hill_war_of_vedrina }
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = IVC
+			}
+			add_tech_bonus = {
+				name = IVC_mountain_rifles
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_mountain_rifles_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_org value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_ridge_flak_posts
+		icon = GFX_focus_generic_air_defense
+		x = 43
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_mountain_rifles }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = anti_air_equipment
+				amount = 100
+				producer = IVC
+			}
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_anti_tank_companies
+		icon = GFX_focus_generic_anti_tank_guns
+		x = 47
+		y = 2
+		cost = 1
+		prerequisite = { focus = IVC_legion_general_staff }
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = IVC_anti_tank_companies
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_anti_tank_companies_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_motorised_columns
+		icon = GFX_focus_generic_truck
+		x = 47
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_anti_tank_companies }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_motorised_columns_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_breakthrough value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_armoured_train_hunters
+		icon = GFX_focus_generic_self_propelled_gun
+		x = 47
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_motorised_columns }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 120
+				producer = IVC
+			}
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_legion_campaign_plan
+		icon = GFX_goal_generic_position_armies
+		x = 43
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = IVC_fire_and_assault
+			focus = IVC_ridge_flak_posts
+			focus = IVC_armoured_train_hunters
+		}
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	# The campaign choice: a defensive war on the frontier or the decisive
+	# march on the capital. Both routes rejoin at IVC_army_of_the_marches.
+	focus = {
+		id = IVC_war_on_the_frontier
+		icon = GFX_focus_generic_mountain_fortification
+		x = 41
+		y = 6
+		cost = 2
+		prerequisite = { focus = IVC_legion_campaign_plan }
+		mutually_exclusive = { focus = IVC_decisive_march }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			96 = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+			}
+			97 = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_war_on_the_frontier_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.05 }
+				add_to_variable = { var = IVC_leg_org value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_decisive_march
+		icon = GFX_focus_generic_total_war
+		x = 45
+		y = 6
+		cost = 2
+		prerequisite = { focus = IVC_legion_campaign_plan }
+		mutually_exclusive = { focus = IVC_war_on_the_frontier }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 30
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_decisive_march_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.04 }
+				add_to_variable = { var = IVC_leg_breakthrough value = 0.04 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_hold_every_ridge
+		icon = GFX_focus_generic_defensive_reorganization
+		x = 41
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_war_on_the_frontier }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_defence_in_depth_idea
+				days = 120
+			}
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_counterattacks_from_the_hills
+		icon = GFX_focus_generic_home_defense
+		x = 41
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_hold_every_ridge }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_counterattacks_from_the_hills_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_columns_to_the_south
+		icon = GFX_focus_generic_motor_cycle
+		x = 45
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_decisive_march }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_forced_march_idea
+				days = 60
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 100
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_break_the_lakora_line
+		icon = GFX_goal_generic_attack_allies
+		x = 45
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_columns_to_the_south }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		bypass = {
+			controls_state = 98
+			controls_state = 99
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_break_the_lakora_line_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_breakthrough value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_army_of_the_marches
+		icon = GFX_focus_generic_fascist_troops
+		x = 43
+		y = 9
+		cost = 2
+		prerequisite = {
+			focus = IVC_counterattacks_from_the_hills
+			focus = IVC_break_the_lakora_line
+		}
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 7200
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_army_of_the_marches_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	# The final offensive: the player picks the moment of each timed idea;
+	# the last push needs the war with the cabinet still going.
+	focus = {
+		id = IVC_general_offensive_plan
+		icon = GFX_goal_generic_military_sphere
+		x = 43
+		y = 10
+		cost = 1
+		prerequisite = { focus = IVC_army_of_the_marches }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_offensive_staff_work_idea
+				days = 60
+			}
+			add_command_power = 40
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_artillery_preparation
+		icon = GFX_goal_generic_army_artillery
+		x = 39
+		y = 11
+		cost = 1
+		prerequisite = { focus = IVC_general_offensive_plan }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_artillery_preparation_idea
+				days = 45
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_offensive_supply_dumps
+		icon = GFX_focus_generic_supply_line
+		x = 43
+		y = 11
+		cost = 1
+		prerequisite = { focus = IVC_general_offensive_plan }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_offensive_supply_dumps_idea
+				days = 60
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_last_reserves
+		icon = GFX_focus_generic_manpower
+		x = 47
+		y = 11
+		cost = 1
+		prerequisite = { focus = IVC_general_offensive_plan }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 10000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_last_reserves_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_conscription value = 0.01 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_the_last_push
+		icon = GFX_focus_generic_army_attack
+		x = 43
+		y = 12
+		cost = 2
+		prerequisite = {
+			focus = IVC_artillery_preparation
+			focus = IVC_offensive_supply_dumps
+			focus = IVC_last_reserves
+		}
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+			has_war_with = IVN
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_last_push_idea
+				days = 60
+			}
+			add_command_power = 50
+			if = {
+				limit = { has_completed_focus = IVC_decisive_march }
+				add_timed_idea = {
+					idea = IVC_march_momentum_idea
+					days = 30
+				}
+			}
+			else_if = {
+				limit = { has_completed_focus = IVC_war_on_the_frontier }
+				add_timed_idea = {
+					idea = IVC_hill_counteroffensive_idea
+					days = 30
+				}
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	focus = {
+		id = IVC_hunt_for_the_cabinet
+		icon = GFX_focus_generic_government_in_exile
+		x = 5
+		y = 6
+		cost = 1
+		prerequisite = { focus = IVC_storm_the_capital }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+			has_war_with = IVN
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_stability = -0.05
+				add_war_support = -0.05
+			}
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	# ----- Council of the legion -----
+	# A professional army run by its officers: quality, command and order.
+	focus = {
+		id = IVC_council_military_governors
+		icon = GFX_focus_generic_improve_the_administration
+		x = 9
+		y = 6
+		cost = 1
+		prerequisite = { focus = IVC_council_officers_cabinet }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = IVC_trust_legion_held_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+			custom_effect_tooltip = IVC_amnesty_needs_trust_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_military_governors_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_council_staff_academy
+		icon = GFX_focus_generic_military_academy
+		x = 7
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_council_military_governors }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_staff_academy_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_training value = -0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_war_production_board
+		icon = GFX_focus_generic_military_industry
+		x = 11
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_council_military_governors }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			97 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_war_production_board_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_factory_output value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_letters_to_old_comrades
+		icon = GFX_focus_generic_secret_service_agency
+		x = 7
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_council_staff_academy }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_officer_defection_talks
+			add_command_power = 20
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_military_railway
+		icon = GFX_focus_generic_railroad
+		x = 11
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_council_war_production_board }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = IVC
+			}
+			92 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_military_railway_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_construction value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_council_cross_of_the_marches
+		icon = GFX_focus_generic_soldier_salute
+		x = 9
+		y = 9
+		cost = 2
+		prerequisite = {
+			focus = IVC_council_letters_to_old_comrades
+			focus = IVC_council_military_railway
+		}
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_cross_of_the_marches_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.04 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_professional_cadres
+		icon = GFX_focus_generic_advanced_military_studies
+		x = 7
+		y = 10
+		cost = 2
+		prerequisite = { focus = IVC_council_cross_of_the_marches }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_professional_cadres_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_attack value = 0.03 }
+				add_to_variable = { var = IVC_leg_org value = 0.02 }
+				add_to_variable = { var = IVC_leg_conscription value = -0.005 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_strategic_reserve
+		icon = GFX_goal_generic_axis_build_infantry
+		x = 11
+		y = 10
+		cost = 2
+		prerequisite = { focus = IVC_council_cross_of_the_marches }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_council_rule_of_the_staff
+		icon = GFX_focus_generic_national_security
+		x = 9
+		y = 11
+		cost = 2
+		prerequisite = {
+			focus = IVC_council_professional_cadres
+			focus = IVC_council_strategic_reserve
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_council_unified_command_idea
+				days = 90
+			}
+			add_command_power = 40
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_council_rule_of_the_staff_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_council_terms_for_the_capital
+		icon = GFX_focus_generic_treaty
+		x = 9
+		y = 12
+		cost = 1
+		prerequisite = { focus = IVC_council_rule_of_the_staff }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+			has_war_with = IVN
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_war_support = -0.05
+				add_stability = -0.03
+			}
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	# ----- Patriotic union -----
+	# A mass party at war: manpower, fervour and agitation in the cabinet's lands.
+	focus = {
+		id = IVC_union_militia_of_the_marches
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 15
+		y = 6
+		cost = 1
+		prerequisite = { focus = IVC_union_patriotic_press }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 8000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 7200
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_militia_of_the_marches_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_conscription value = 0.01 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_union_cells_in_the_old_march
+		icon = GFX_focus_generic_conspiracy
+		x = 13
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_union_militia_of_the_marches }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_stability = -0.03
+			}
+			add_political_power = 25
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_workers_detachments
+		icon = GFX_focus_generic_workers
+		x = 17
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_union_militia_of_the_marches }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			96 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_workers_detachments_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_factory_output value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_youth_battalions
+		icon = GFX_focus_generic_full_social_mobilization
+		x = 13
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_union_cells_in_the_old_march }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_youth_battalions_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_lists_of_traitors
+		icon = GFX_focus_generic_expropriate_industrialist
+		x = 17
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_union_workers_detachments }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = IVC_trust_legion_held_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+			custom_effect_tooltip = IVC_amnesty_needs_trust_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_lists_of_traitors_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = -0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_union_great_rally
+		icon = GFX_focus_generic_public_meetings
+		x = 15
+		y = 9
+		cost = 2
+		prerequisite = {
+			focus = IVC_union_youth_battalions
+			focus = IVC_union_lists_of_traitors
+		}
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.05
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_great_rally_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_marching_columns
+		icon = GFX_focus_generic_fascist_propaganda
+		x = 13
+		y = 10
+		cost = 2
+		prerequisite = { focus = IVC_union_great_rally }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = IVC_union_fervour_idea
+				days = 90
+			}
+			add_manpower = 5000
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_agitators_to_the_south
+		icon = GFX_focus_generic_spread_fascism
+		x = 17
+		y = 10
+		cost = 2
+		prerequisite = { focus = IVC_union_great_rally }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVC_trust_cabinet_held_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+			IVN = {
+				add_stability = -0.03
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_union_peoples_legion
+		icon = GFX_focus_generic_fascist_troops
+		x = 15
+		y = 11
+		cost = 2
+		prerequisite = {
+			focus = IVC_union_marching_columns
+			focus = IVC_union_agitators_to_the_south
+		}
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 10000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_union_peoples_legion_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_conscription value = 0.02 }
+				add_to_variable = { var = IVC_leg_attack value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_union_march_of_the_marches
+		icon = GFX_focus_generic_strike_at_democracy2
+		x = 15
+		y = 12
+		cost = 1
+		prerequisite = { focus = IVC_union_peoples_legion }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+			has_war_with = IVN
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_stability = -0.05
+				add_war_support = -0.05
+			}
+			add_war_support = 0.05
+			add_command_power = 25
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	# ----- Rear of the legion -----
+	# Requisitions or fair purchase, workshops in the legion's marches and
+	# their answer to the cabinet's amnesty.
+	focus = {
+		id = IVC_legion_quartermaster_corps
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 57
+		y = 1
+		cost = 1
+		prerequisite = { focus = IVC_legion_oath }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 10
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_requisition_committees
+		icon = GFX_focus_generic_reorient_production
+		x = 55
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_legion_quartermaster_corps }
+		mutually_exclusive = { focus = IVC_fair_purchase }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_requisition_columns
+			add_manpower = 5000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = IVC
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_requisition_committees_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = -0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_fair_purchase
+		icon = GFX_focus_generic_price_controls
+		x = 59
+		y = 2
+		cost = 2
+		prerequisite = { focus = IVC_legion_quartermaster_corps }
+		mutually_exclusive = { focus = IVC_requisition_committees }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_fair_purchase_contracts
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_fair_purchase_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_stability value = 0.03 }
+				add_to_variable = { var = IVC_leg_war_support value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	focus = {
+		id = IVC_confiscated_workshops
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 55
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_requisition_committees }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			96 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_political_power = 50
+			custom_effect_tooltip = IVN_trust_legion_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_labour_service
+		icon = GFX_focus_generic_public_works
+		x = 55
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_confiscated_workshops }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			92 = {
+				if = {
+					limit = { is_controlled_by = ROOT }
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+						instant_build = yes
+					}
+				}
+			}
+			add_manpower = 3000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_labour_service_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_construction value = 0.04 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_legion_receipts
+		icon = GFX_focus_generic_stockpile_currency
+		x = 59
+		y = 3
+		cost = 2
+		prerequisite = { focus = IVC_fair_purchase }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_legion_receipts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_political_power value = 0.05 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_workshop_contracts
+		icon = GFX_focus_generic_license_production
+		x = 59
+		y = 4
+		cost = 2
+		prerequisite = { focus = IVC_legion_receipts }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			97 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_workshop_contracts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_factory_output value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_workshops_of_the_marches
+		icon = GFX_focus_generic_industry_2
+		x = 57
+		y = 5
+		cost = 2
+		prerequisite = {
+			focus = IVC_labour_service
+			focus = IVC_workshop_contracts
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			92 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			95 = {
+				if = {
+					limit = { is_owned_and_controlled_by = ROOT }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_field_hospitals
+		icon = GFX_focus_generic_field_hostpital
+		x = 55
+		y = 6
+		cost = 2
+		prerequisite = { focus = IVC_workshops_of_the_marches }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 5000
+			add_stability = 0.03
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_answer_to_the_amnesty
+		icon = GFX_focus_generic_turning_a_blind_eye
+		x = 59
+		y = 6
+		cost = 2
+		prerequisite = { focus = IVC_workshops_of_the_marches }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVC_trust_legion_held_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_held_by_legion = yes
+			}
+			custom_effect_tooltip = IVC_amnesty_needs_trust_tt
+			add_war_support = 0.03
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_rear_of_the_legion_secured
+		icon = GFX_focus_generic_central_planning
+		x = 57
+		y = 7
+		cost = 2
+		prerequisite = {
+			focus = IVC_field_hospitals
+			focus = IVC_answer_to_the_amnesty
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_rear_of_the_legion_secured_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_factory_output value = 0.03 }
+				add_to_variable = { var = IVC_leg_stability value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	# ----- Agitation in the cabinet's marches -----
+	# Trust of the cabinet's marches in the capital below 40 opens
+	# IVC_garrison_appeal; IVN loses stability, war support and men.
+	focus = {
+		id = IVC_agitators_across_the_front
+		icon = GFX_focus_generic_infiltration
+		x = 24
+		y = 6
+		cost = 1
+		prerequisite = { focus = IVC_the_marches_rise }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_propaganda_cabinet_marches
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+		}
+		ai_will_do = {
+			base = 45
+		}
+	}
+
+	focus = {
+		id = IVC_leaflets_over_moressa
+		icon = GFX_focus_generic_printing_press
+		x = 22
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_agitators_across_the_front }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		bypass = {
+			owns_state = 98
+			owns_state = 99
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVC_trust_moressa_lakora_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				98 = { IVN_march_trust_change = yes }
+				99 = { IVN_march_trust_change = yes }
+			}
+			IVN = {
+				add_war_support = -0.02
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_depot_saboteurs
+		icon = GFX_focus_generic_sabotage
+		x = 26
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_agitators_across_the_front }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_depot_sabotage
+			IVN = {
+				add_stability = -0.02
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_radio_vedrina
+		icon = GFX_focus_generic_radio_communication
+		x = 22
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_leaflets_over_moressa }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_war_support = -0.03
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_radio_vedrina_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_war_support value = 0.03 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_strikes_in_the_old_march
+		icon = GFX_focus_generic_workers_and_farmers_rise
+		x = 26
+		y = 8
+		cost = 2
+		prerequisite = { focus = IVC_depot_saboteurs }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_political_power = -50
+				add_stability = -0.03
+			}
+			add_political_power = 25
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_capital_loses_the_marches
+		icon = GFX_focus_generic_strike_at_democracy1
+		x = 24
+		y = 9
+		cost = 2
+		prerequisite = {
+			focus = IVC_radio_vedrina
+			focus = IVC_strikes_in_the_old_march
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = IVC_trust_cabinet_held_minus_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -10 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+			IVN = {
+				add_war_support = -0.05
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_deserters_welcome
+		icon = GFX_focus_generic_immigration
+		x = 22
+		y = 10
+		cost = 2
+		prerequisite = { focus = IVC_capital_loses_the_marches }
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			IVN = {
+				add_manpower = -6000
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_rumours_of_the_islands
+		icon = GFX_focus_generic_whispers
+		x = 26
+		y = 10
+		cost = 1
+		prerequisite = { focus = IVC_capital_loses_the_marches }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			IVN = {
+				add_war_support = -0.04
+			}
+			custom_effect_tooltip = IVN_trust_cabinet_held_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = IVN_trust_delta value = -5 }
+				IVN_frontier_trust_change_held_by_cabinet = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	# ----- Northern contacts and smuggling -----
+	focus = {
+		id = IVC_couriers_to_the_corridor
+		icon = GFX_goal_generic_dangerous_deal
+		x = 30
+		y = 6
+		cost = 1
+		prerequisite = { focus = IVC_promise_of_revanche }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = IVC_northern_arms_caravan
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 60
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
+
+	focus = {
+		id = IVC_corridor_black_market
+		icon = GFX_focus_generic_arms_trade
+		x = 28
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_couriers_to_the_corridor }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment
+				amount = 100
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = IVC
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_northern_instructors
+		icon = GFX_goal_generic_military_deal
+		x = 32
+		y = 7
+		cost = 2
+		prerequisite = { focus = IVC_couriers_to_the_corridor }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_northern_instructors_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_org value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_quiet_northern_border
+		icon = GFX_goal_generic_neutrality_focus
+		x = 30
+		y = 8
+		cost = 2
+		prerequisite = {
+			focus = IVC_corridor_black_market
+			focus = IVC_northern_instructors
+		}
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 6000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = IVC_legion_dummy_idea
+					add_idea = IVC_leg_quiet_northern_border_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = IVC_leg_defence value = 0.02 }
+				IVC_refresh_legion = yes
+			}
+		}
+		ai_will_do = {
+			base = 35
+		}
+	}
+
+	focus = {
+		id = IVC_northern_debt
+		icon = GFX_focus_generic_concessions
+		x = 30
+		y = 9
+		cost = 2
+		prerequisite = { focus = IVC_quiet_northern_border }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5400
+				producer = IVC
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 100
+				producer = IVC
+			}
+			add_stability = -0.02
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+}

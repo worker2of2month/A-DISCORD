@@ -4812,7 +4812,7 @@ focus_tree = {
 				STP_pc_focus_available = yes
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_tech_bonus = { name = STP_pc_at_bonus bonus = 0.5 uses = 1 category = artillery }
 			unlock_decision_tooltip = STP_pw_army_procurement
