@@ -3358,7 +3358,8 @@ VAL_east_final_rival_can_start = {
 # variable of each republic; the camp threshold and Kefreyt's counterpressure
 # are read from its completed focuses at every evaluation.
 
-# COUNTRY republic of the fixed roster. Subjects follow their overlord.
+# COUNTRY republic of the fixed roster; the rivals MON and RUS are never on it.
+# Subjects follow their overlord.
 VAL_east_contestable = {
 	exists = yes
 	has_capitulated = no
@@ -3366,7 +3367,6 @@ VAL_east_contestable = {
 	NOT = { has_war_with = VAL }
 	hidden_trigger = {
 		NOT = { tag = VAL }
-		NOT = { tag = event_target:VAL_east_rival }
 		OR = {
 			tag = SLA
 			tag = RZA

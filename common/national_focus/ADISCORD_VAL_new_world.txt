@@ -19,7 +19,7 @@ focus_tree = {
 		id = VAL_nw_price
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
+		x = 26
 		y = 0
 		cost = 1
 		# A paid trial or retirement settles the balance itself; its receipt is never cancelled here.
@@ -48,7 +48,7 @@ focus_tree = {
 		id = VAL_peace_silent_lines
 		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
-		x = 12
+		x = 26
 		y = 1
 		cost = 3
 		prerequisite = {
@@ -71,7 +71,7 @@ focus_tree = {
 		id = VAL_peace_two_bills
 		icon = GFX_focus_VAL_Central_Payment_Office
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
+		x = 26
 		y = 4
 		cost = 3
 		prerequisite = {
@@ -99,7 +99,7 @@ focus_tree = {
 		id = VAL_peace_land_for_service
 		icon = GFX_focus_VAL_Market_Roads_North
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
+		x = 22
 		y = 5
 		cost = 5
 		prerequisite = {
@@ -141,7 +141,7 @@ focus_tree = {
 		id = VAL_peace_workers_charter
 		icon = GFX_focus_VAL_Reclamation_Return_Home
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
+		x = 26
 		y = 5
 		cost = 5
 		prerequisite = {
@@ -175,7 +175,7 @@ focus_tree = {
 		id = VAL_peace_shift_law
 		icon = GFX_focus_VAL_Three_Shift_Arsenals
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 16
+		x = 30
 		y = 5
 		cost = 5
 		prerequisite = {
@@ -209,7 +209,7 @@ focus_tree = {
 		id = VAL_peace_archive
 		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
-		x = 12
+		x = 26
 		y = 6
 		cost = 3
 		prerequisite = {
@@ -232,7 +232,7 @@ focus_tree = {
 		id = VAL_peace_night_of_registers
 		icon = GFX_focus_VAL_Closed_Ledgers
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
-		x = 12
+		x = 26
 		y = 7
 		cost = 2
 		prerequisite = {
@@ -252,7 +252,8 @@ focus_tree = {
 		}
 	}
 
-	# Exactly one regime root is shown; every root stands on the same place.
+	# Exactly one regime root is shown. Each regime keeps its own lane, so branches
+	# never overlap whatever the engine shows; the east lane stands between them.
 
 	focus = {
 		id = VAL_peace_throne
@@ -261,7 +262,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 12
+		x = 8
 		y = 8
 		cost = 5
 		prerequisite = {
@@ -291,7 +292,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 12
+		x = 18
 		y = 8
 		cost = 5
 		prerequisite = {
@@ -330,7 +331,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 12
+		x = 34
 		y = 8
 		cost = 5
 		prerequisite = {
@@ -356,7 +357,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 12
+		x = 44
 		y = 8
 		cost = 5
 		prerequisite = {
@@ -382,7 +383,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 12
+		x = 18
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -414,7 +415,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 12
+		x = 34
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -442,7 +443,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 10
+		x = 6
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -475,7 +476,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 14
+		x = 10
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -508,7 +509,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 12
+		x = 8
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -531,7 +532,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 10
+		x = 6
 		y = 11
 		cost = 4
 		prerequisite = {
@@ -564,7 +565,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 14
+		x = 10
 		y = 11
 		cost = 4
 		prerequisite = {
@@ -597,7 +598,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 12
+		x = 8
 		y = 12
 		cost = 4
 		prerequisite = {
@@ -631,7 +632,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 10
+		x = 6
 		y = 13
 		cost = 3
 		prerequisite = {
@@ -669,7 +670,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 14
+		x = 10
 		y = 13
 		cost = 3
 		prerequisite = {
@@ -703,7 +704,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
-		x = 12
+		x = 8
 		y = 14
 		cost = 5
 		prerequisite = {
@@ -723,6 +724,95 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAL_throne_cadet_companies
+		icon = GFX_focus_VAL_Reserve_Battalions
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 11
+		cost = 3
+		prerequisite = {
+			focus = VAL_throne_crown_register
+		}
+		completion_reward = {
+			add_manpower = 5000
+			army_experience = 10
+			effect_tooltip = {
+				add_ideas = VAL_throne_cadets_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_conscription value = 0.05 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_court_armourers
+		icon = GFX_focus_VAL_Standardize_Rifle_Lots
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 4
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_throne_crown_register
+		}
+		completion_reward = {
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = arms_factory size > 1 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+			}
+			add_tech_bonus = {
+				name = VAL_throne_court_armourers
+				bonus = 1.0
+				uses = 1
+				category = infantry_weapons
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_throne_crown_marches
+		icon = GFX_focus_VAL_Integrate_Occidia
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_throne = yes
+		}
+		x = 12
+		y = 13
+		cost = 4
+		prerequisite = {
+			focus = VAL_throne_arsenal_monopoly
+		}
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.03
+			unlock_decision_tooltip = VAL_throne_crown_march
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
 	# Cabinet instead of staff
 
 	focus = {
@@ -732,7 +822,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 10
+		x = 16
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -764,7 +854,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 14
+		x = 20
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -796,7 +886,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 12
+		x = 18
 		y = 11
 		cost = 4
 		prerequisite = {
@@ -829,7 +919,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 10
+		x = 16
 		y = 12
 		cost = 4
 		prerequisite = {
@@ -867,7 +957,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 14
+		x = 20
 		y = 12
 		cost = 4
 		prerequisite = {
@@ -915,7 +1005,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 12
+		x = 18
 		y = 13
 		cost = 4
 		prerequisite = {
@@ -945,7 +1035,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
-		x = 12
+		x = 18
 		y = 14
 		cost = 5
 		prerequisite = {
@@ -964,6 +1054,90 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAL_cabinet_reconstruction_loans
+		icon = GFX_focus_VAL_Brokered_Steel
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 22
+		y = 12
+		cost = 3
+		prerequisite = {
+			focus = VAL_cabinet_civil_combine
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_peace_treasury_300_tt
+			effect_tooltip = {
+				add_ideas = VAL_cabinet_loans_delta
+			}
+			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
+				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.05 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_eastern_mission
+		icon = GFX_focus_VAL_Different_Views_On_Freedom
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 14
+		y = 12
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_civil_combine
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			custom_effect_tooltip = VAL_cabinet_eastern_mission_tt
+			unlock_decision_tooltip = VAL_cabinet_treaty_membership
+			hidden_effect = {
+				ADISCORD_economy_receive_100 = yes
+				set_temp_variable = { var = VAL_east_lean_delta value = 5 }
+				VAL_east_contest_shift_all = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_cabinet_civil_defence
+		icon = GFX_focus_VAL_Morns_Supply_Trains
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		allow_branch = {
+			VAL_peace_regime_cabinet = yes
+		}
+		x = 22
+		y = 14
+		cost = 4
+		prerequisite = {
+			focus = VAL_cabinet_not_for_sale
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 600
+				producer = VAL
+			}
+			add_manpower = 4000
+			army_experience = 10
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
 	# Army Charter
 
 	focus = {
@@ -973,7 +1147,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 10
+		x = 32
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -1006,7 +1180,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 14
+		x = 36
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -1038,7 +1212,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 12
+		x = 34
 		y = 11
 		cost = 4
 		prerequisite = {
@@ -1066,7 +1240,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 10
+		x = 32
 		y = 12
 		cost = 3
 		prerequisite = {
@@ -1097,7 +1271,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 14
+		x = 36
 		y = 12
 		cost = 3
 		prerequisite = {
@@ -1128,7 +1302,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 12
+		x = 34
 		y = 13
 		cost = 4
 		prerequisite = {
@@ -1154,7 +1328,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
-		x = 12
+		x = 34
 		y = 14
 		cost = 5
 		prerequisite = {
@@ -1173,6 +1347,91 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAL_charter_staff_academy
+		icon = GFX_focus_VAL_Ballistics_Schools
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 38
+		y = 12
+		cost = 3
+		prerequisite = {
+			focus = VAL_charter_company_statute
+		}
+		completion_reward = {
+			add_command_power = 25
+			effect_tooltip = {
+				add_ideas = VAL_charter_academy_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_planning value = 0.05 }
+				VAL_peace_order_update = yes
+			}
+			add_doctrine_cost_reduction = {
+				name = VAL_charter_staff_academy
+				cost_reduction = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_garrison_contracts
+		icon = GFX_focus_VAL_The_Steel_Contract
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 30
+		y = 12
+		cost = 4
+		prerequisite = {
+			focus = VAL_charter_company_statute
+		}
+		completion_reward = {
+			army_experience = 20
+			add_political_power = 25
+			unlock_decision_tooltip = VAL_charter_garrison_treaty
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_charter_veteran_reserve
+		icon = GFX_focus_VAL_Reserve_Battalions
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		allow_branch = {
+			VAL_peace_regime_charter = yes
+		}
+		x = 38
+		y = 14
+		cost = 4
+		prerequisite = {
+			focus = VAL_charter_mercenary_power
+		}
+		completion_reward = {
+			add_manpower = 8000
+			effect_tooltip = {
+				add_ideas = VAL_charter_veterans_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_conscription value = 0.03 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
 	# Captains' Republic
 
 	focus = {
@@ -1182,7 +1441,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 10
+		x = 42
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -1211,7 +1470,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 14
+		x = 46
 		y = 9
 		cost = 3
 		prerequisite = {
@@ -1244,7 +1503,7 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 12
+		x = 44
 		y = 10
 		cost = 3
 		prerequisite = {
@@ -1267,11 +1526,14 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 12
+		x = 42
 		y = 11
 		cost = 4
 		prerequisite = {
 			focus = VAL_captains_war_export
+		}
+		mutually_exclusive = {
+			focus = VAL_captains_river_raids
 		}
 		completion_reward = {
 			add_command_power = 50
@@ -1294,11 +1556,12 @@ focus_tree = {
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
-		x = 12
-		y = 12
+		x = 44
+		y = 14
 		cost = 5
 		prerequisite = {
 			focus = VAL_captains_greitz_passes
+			focus = VAL_captains_river_raids
 		}
 		completion_reward = {
 			add_war_support = 0.05
@@ -1313,25 +1576,114 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = VAL_captains_officers_assembly
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 48
+		y = 11
+		cost = 3
+		prerequisite = {
+			focus = VAL_captains_war_export
+		}
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = {
+				add_ideas = VAL_captains_assembly_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_captains_company_markets
+		icon = GFX_focus_VAL_The_Mercenary_State
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_MANPOWER FOCUS_FILTER_VAL_DECISIONS }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 40
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_captains_war_export
+		}
+		completion_reward = {
+			unlock_decision_tooltip = VAL_captains_hire_companies
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_100 = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_captains_river_raids
+		icon = GFX_focus_VAL_Frontier_Assault
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION }
+		allow_branch = {
+			VAL_peace_regime_captains = yes
+		}
+		x = 46
+		y = 11
+		cost = 4
+		prerequisite = {
+			focus = VAL_captains_war_export
+		}
+		mutually_exclusive = {
+			focus = VAL_captains_greitz_passes
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 2700
+				producer = VAL
+			}
+			effect_tooltip = {
+				add_ideas = VAL_captains_raids_delta
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_peace_order_attack value = 0.03 }
+				VAL_peace_order_update = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
 	# The last war of the east
 
 	focus = {
 		id = VAL_east_question
 		icon = GFX_focus_VAL_Border_Survey_Corps
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
-		y = 15
+		x = 26
+		y = 8
 		cost = 3
 		prerequisite = {
-			focus = VAL_throne_two_crowns
-			focus = VAL_cabinet_defence_treaty
-			focus = VAL_charter_general_campaign
-			focus = VAL_captains_last_buyer
+			focus = VAL_peace_night_of_registers
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_east_khan_question_closed_tt
 				VAL_east_khan_question_closed = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_east_regime_chosen_tt
+				VAL_peace_regime_chosen = yes
 			}
 		}
 		completion_reward = {
@@ -1341,7 +1693,98 @@ focus_tree = {
 				custom_effect_tooltip = VAL_east_uncontested_tt
 				hidden_effect = { VAL_east_settle_uncontested = yes }
 			}
+			# The credit targets contested republics, so it is promised only when a rival exists.
+			if = {
+				limit = { VAL_east_rival_exists = yes }
+				custom_effect_tooltip = VAL_east_contest_begin_tt
+				unlock_decision_tooltip = VAL_east_contest_arms_credit
+				hidden_effect = { VAL_east_contest_begin = yes }
+			}
 			country_event = { id = val_peace.80 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_east_trade_missions
+		icon = GFX_focus_VAL_Export_Clearing_House
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 24
+		y = 9
+		cost = 4
+		prerequisite = {
+			focus = VAL_east_question
+		}
+		mutually_exclusive = {
+			focus = VAL_east_krutov_network
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = VAL_east_trade_missions_tt
+			unlock_decision_tooltip = VAL_east_contest_share
+			hidden_effect = {
+				set_temp_variable = { var = VAL_east_lean_delta value = 5 }
+				VAL_east_contest_shift_all = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = VAL_east_krutov_network
+		icon = GFX_focus_VAL_Krutovs_Eyes
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		x = 28
+		y = 9
+		cost = 4
+		prerequisite = {
+			focus = VAL_east_question
+		}
+		mutually_exclusive = {
+			focus = VAL_east_trade_missions
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			add_command_power = 25
+			custom_effect_tooltip = VAL_east_krutov_network_tt
+			unlock_decision_tooltip = VAL_east_contest_expose_agents
+			hidden_effect = {
+				set_temp_variable = { var = VAL_east_lean_delta value = 5 }
+				VAL_east_contest_shift_rival_members = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = VAL_east_border_posts
+		icon = GFX_focus_VAL_Motorized_Columns
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 26
+		y = 10
+		cost = 4
+		prerequisite = {
+			focus = VAL_east_trade_missions
+			focus = VAL_east_krutov_network
+		}
+		bypass = {
+			has_global_flag = VAL_east_final_resolved
+		}
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 30
+			unlock_decision_tooltip = VAL_east_contest_instructors
 		}
 		ai_will_do = {
 			base = 10
@@ -1352,11 +1795,11 @@ focus_tree = {
 		id = VAL_east_shards
 		icon = GFX_focus_VAL_Trading_Partners
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION }
-		x = 10
-		y = 16
+		x = 24
+		y = 11
 		cost = 4
 		prerequisite = {
-			focus = VAL_east_question
+			focus = VAL_east_border_posts
 		}
 		mutually_exclusive = {
 			focus = VAL_east_arsenal
@@ -1365,9 +1808,13 @@ focus_tree = {
 			has_global_flag = VAL_east_final_resolved
 		}
 		completion_reward = {
-			custom_effect_tooltip = VAL_east_shards_tt
 			add_war_support = 0.03
 			add_political_power = 50
+			custom_effect_tooltip = VAL_east_shards_tt
+			hidden_effect = {
+				set_temp_variable = { var = VAL_east_lean_delta value = 15 }
+				VAL_east_contest_shift_partners = yes
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -1378,11 +1825,11 @@ focus_tree = {
 		id = VAL_east_arsenal
 		icon = GFX_focus_VAL_Arsenal_Reserve
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
-		y = 16
+		x = 28
+		y = 11
 		cost = 4
 		prerequisite = {
-			focus = VAL_east_question
+			focus = VAL_east_border_posts
 		}
 		mutually_exclusive = {
 			focus = VAL_east_shards
@@ -1407,12 +1854,18 @@ focus_tree = {
 		id = VAL_east_final
 		icon = GFX_focus_VAL_Seize_The_Northern_Passes
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
-		y = 17
+		x = 26
+		y = 15
 		cost = 3
 		prerequisite = {
 			focus = VAL_east_shards
 			focus = VAL_east_arsenal
+		}
+		prerequisite = {
+			focus = VAL_throne_two_crowns
+			focus = VAL_cabinet_defence_treaty
+			focus = VAL_charter_general_campaign
+			focus = VAL_captains_last_buyer
 		}
 		bypass = {
 			has_global_flag = VAL_east_final_resolved
@@ -1433,7 +1886,7 @@ focus_tree = {
 		id = VAL_peace_ash_shifts
 		icon = GFX_focus_VAL_The_Harvest_Of_Ash
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
-		x = 8
+		x = 22
 		y = 1
 		cost = 3
 		prerequisite = {
@@ -1456,7 +1909,7 @@ focus_tree = {
 		id = VAL_peace_water_convoys
 		icon = GFX_focus_VAL_Reclamation_Clean_Water
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 6
+		x = 20
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -1503,7 +1956,7 @@ focus_tree = {
 		id = VAL_peace_gate_garrison
 		icon = GFX_focus_VAL_Keep_The_Arsenals
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 10
+		x = 24
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -1533,7 +1986,7 @@ focus_tree = {
 		id = VAL_peace_tishin_list
 		icon = GFX_focus_VAL_Dead_Villages_Still_Count
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY }
-		x = 8
+		x = 22
 		y = 3
 		cost = 3
 		prerequisite = {
@@ -1557,7 +2010,7 @@ focus_tree = {
 		id = VAL_peace_captains_bill
 		icon = GFX_focus_VAL_Price_Of_Loyalty
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 16
+		x = 30
 		y = 1
 		cost = 2
 		prerequisite = {
@@ -1580,7 +2033,7 @@ focus_tree = {
 		id = VAL_peace_registry_audit
 		icon = GFX_focus_VAL_Krutovs_Eyes
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 14
+		x = 28
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -1606,7 +2059,7 @@ focus_tree = {
 		id = VAL_peace_share_ledger
 		icon = GFX_focus_VAL_Company_Mandates
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 18
+		x = 32
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -1632,7 +2085,7 @@ focus_tree = {
 		id = VAL_peace_kilnet
 		icon = GFX_focus_VAL_Captains_Cannot_Veto
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION }
-		x = 16
+		x = 30
 		y = 3
 		cost = 3
 		prerequisite = {
@@ -1656,7 +2109,7 @@ focus_tree = {
 		id = VAL_nw_council
 		icon = GFX_focus_VAL_Count_The_Captains
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 28
+		x = 17
 		y = 0
 		cost = 2
 		completion_reward = {
@@ -1672,7 +2125,7 @@ focus_tree = {
 		id = VAL_nw_register
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 26
+		x = 15
 		y = 1
 		cost = 3
 		prerequisite = {
@@ -1698,7 +2151,7 @@ focus_tree = {
 		id = VAL_nw_charters
 		icon = GFX_focus_VAL_The_Contract_State
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 30
+		x = 19
 		y = 1
 		cost = 3
 		prerequisite = {
@@ -1720,7 +2173,7 @@ focus_tree = {
 		id = VAL_nw_clearing
 		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
-		x = 28
+		x = 17
 		y = 2
 		cost = 2
 		prerequisite = {
@@ -1753,7 +2206,7 @@ focus_tree = {
 		id = VAL_nw_khan
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 34
+		x = 9
 		y = 0
 		cost = 1
 		completion_reward = {
@@ -1778,7 +2231,7 @@ focus_tree = {
 		id = VAL_nw_bloc_accord
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 32
+		x = 11
 		y = 1
 		cost = 2
 		prerequisite = {
@@ -1809,7 +2262,7 @@ focus_tree = {
 		id = VAL_nw_bloc_confront
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 36
+		x = 7
 		y = 1
 		cost = 2
 		prerequisite = {
@@ -1849,8 +2302,8 @@ focus_tree = {
 		allow_branch = {
 			VAL_nw_has_settlement_rights = yes
 		}
-		x = 32
-		y = 2
+		x = 13
+		y = 1
 		cost = 3
 		prerequisite = {
 			focus = VAL_nw_khan
@@ -1874,7 +2327,7 @@ focus_tree = {
 		id = VAL_nw_tsaygen_strike
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 36
+		x = 7
 		y = 2
 		cost = 2
 		prerequisite = {
@@ -1905,7 +2358,7 @@ focus_tree = {
 		id = VAL_nw_beyond_perimeter
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 36
+		x = 7
 		y = 3
 		cost = 3
 		prerequisite = {
@@ -1936,7 +2389,7 @@ focus_tree = {
 		id = VAL_nw_perimeter
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 46
+		x = 2
 		y = 0
 		cost = 2
 		completion_reward = {
@@ -1951,7 +2404,7 @@ focus_tree = {
 		id = VAL_nw_inventory
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 46
+		x = 2
 		y = 1
 		cost = 2
 		prerequisite = {
@@ -1975,7 +2428,7 @@ focus_tree = {
 		id = VAL_nw_foundries
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 44
+		x = 0
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -2002,7 +2455,7 @@ focus_tree = {
 		id = VAL_nw_dispatch
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 48
+		x = 4
 		y = 2
 		cost = 3
 		prerequisite = {
@@ -2029,7 +2482,7 @@ focus_tree = {
 		id = VAL_nw_restart
 		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 46
+		x = 2
 		y = 3
 		cost = 3
 		prerequisite = {
@@ -2060,7 +2513,7 @@ focus_tree = {
 		id = VAL_nw_archives
 		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 46
+		x = 2
 		y = 4
 		cost = 3
 		prerequisite = {
@@ -2078,7 +2531,7 @@ focus_tree = {
 		id = VAL_nw_alloys
 		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 46
+		x = 2
 		y = 5
 		cost = 4
 		prerequisite = {
@@ -2109,7 +2562,7 @@ focus_tree = {
 		id = VAL_nw_generation
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 37
+		x = 14
 		y = 6
 		cost = 3
 		prerequisite = {
@@ -2145,8 +2598,8 @@ focus_tree = {
 		id = VAL_nw_steel_peace
 		icon = GFX_focus_VAL_Return_To_World_Market
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
-		x = 12
-		y = 18
+		x = 26
+		y = 16
 		cost = 5
 		prerequisite = {
 			focus = VAL_east_final

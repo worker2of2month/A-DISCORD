@@ -1108,24 +1108,37 @@ class KhanVictoryTests(unittest.TestCase):
 
 
 class ReckoningTreeTests(unittest.TestCase):
-    def test_regime_branches_stack_on_one_area_and_never_share_a_place_within_a_branch(self):
+    def test_regime_branches_keep_separate_lanes(self):
+        focuses = tree_focuses()
         places = {}
-        for name, focus in tree_focuses().items():
-            gate = block(focus, "allow_branch") if any(e.key == "allow_branch" for e in focus) else []
-            key = tuple(sorted(e.key for e in gate))
+        for name, focus in focuses.items():
             place = (scalar(focus, "x"), scalar(focus, "y"))
-            self.assertNotIn((key, place), places, (name, places.get((key, place))))
-            places[(key, place)] = name
+            self.assertNotIn(place, places, (name, places.get(place)))
+            places[place] = name
+        # Each regime and the east lane own a column range; several visible branches never overlap.
+        lanes = {}
         for regime, root in REGIMES.items():
-            gate = block(tree_focuses()[root], "allow_branch")
+            gate = block(focuses[root], "allow_branch")
             self.assertEqual(len(gate), 1, root)
+            lanes[root] = [int(scalar(f, "x")) for f in focuses.values()
+                           if any(e.key == "allow_branch" for e in f)
+                           and [e.key for e in block(f, "allow_branch")] == [e.key for e in gate]]
+        lanes["east"] = [int(scalar(focuses[name], "x")) for name in focuses if name.startswith("VAL_east_")]
+        spans = sorted((min(xs), max(xs), name) for name, xs in lanes.items())
+        for (_, high, left), (low, _, right) in zip(spans, spans[1:]):
+            self.assertGreaterEqual(low - high, 2, (left, right))
 
     def test_every_regime_reaches_its_casus_and_the_last_war(self):
         focuses = tree_focuses()
         question = [e.value for e in focuses["VAL_east_question"] if e.key == "prerequisite"]
-        self.assertEqual([{p.value for p in group} for group in question], [set(CASUS)])
-        self.assertEqual(scalar(block(block(focuses["VAL_east_question"], "available"), "custom_trigger_tooltip"),
-                                "VAL_east_khan_question_closed"), "yes")
+        self.assertEqual([{p.value for p in group} for group in question], [{"VAL_peace_night_of_registers"}])
+        final = [e.value for e in focuses["VAL_east_final"] if e.key == "prerequisite"]
+        self.assertEqual([{p.value for p in group} for group in final],
+                         [{"VAL_east_shards", "VAL_east_arsenal"}, set(CASUS)])
+        gates = {scalar(e.value, "tooltip"): e.value for e in block(focuses["VAL_east_question"], "available")
+                 if e.key == "custom_trigger_tooltip"}
+        self.assertEqual(scalar(gates["VAL_east_khan_question_closed_tt"], "VAL_east_khan_question_closed"), "yes")
+        self.assertEqual(scalar(gates["VAL_east_regime_chosen_tt"], "VAL_peace_regime_chosen"), "yes")
         steel = [e.value for e in focuses["VAL_nw_steel_peace"] if e.key == "prerequisite"]
         self.assertEqual([[p.value for p in group] for group in steel], [["VAL_east_final"]])
         for regime, root in REGIMES.items():
@@ -1177,7 +1190,7 @@ class ReckoningTreeTests(unittest.TestCase):
             event = country_event(event_id)
             if scalar(event, "hidden") == "yes" if any(e.key == "hidden" for e in event) else False:
                 continue
-            keys = {e.value for e in walk(event) if e.key in ("title", "text", "name")}
+            keys = {e.value for e in walk(event) if e.key in ("title", "text", "name") and isinstance(e.value, str)}
             keys |= {e.value for e in event if e.key == "desc" and isinstance(e.value, str)}
             for key in keys:
                 for language, rows in languages.items():
