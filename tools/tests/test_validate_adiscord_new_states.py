@@ -856,7 +856,7 @@ class DamirTransferTests(unittest.TestCase):
         self.assertIn("owner = EFL", source)
         self.assertIn("add_core_of = EFL", source)
         self.assertNotIn("KDR", source)
-        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+3\s*\}")
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+15\s*\}")
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16743\s+1\s*\}")
         self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 1, "Нижний Дамир"),))
         for path, expected in builder.state_metadata_plan({240}).items():
