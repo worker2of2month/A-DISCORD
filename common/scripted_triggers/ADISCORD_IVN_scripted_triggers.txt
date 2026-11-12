@@ -26,22 +26,46 @@ IVN_northern_question_settled = {
 	}
 }
 
-# COUNTRY IVN. The legion can rise only in a sovereign Itora at peace that still
-# holds Vedrina, the legion's capital.
+# COUNTRY IVN. Every guaranteed starting region must still belong to a
+# sovereign Itora at peace; partial creation would strand a participant.
 IVN_marches_revolt_ready = {
 	exists = yes
 	is_subject = no
 	has_war = no
-	owns_state = 95
-	controls_state = 95
 	NOT = { has_global_flag = IVN_marches_revolt_active }
 	NOT = { has_global_flag = IVN_marches_revolt_resolved }
 	NOT = { country_exists = IVC }
-}
-
-# STATE. An inner frontier march that follows a neighbouring legion march.
-IVN_march_follows_the_legion = {
-	check_variable = { var = IVN_march_trust value = 40 compare = less_than }
+	NOT = { country_exists = IMD }
+	NOT = { country_exists = IFC }
+	NOT = { country_exists = IAM }
+	owns_state = 25
+	controls_state = 25
+	owns_state = 92
+	controls_state = 92
+	owns_state = 95
+	controls_state = 95
+	owns_state = 96
+	controls_state = 96
+	owns_state = 97
+	controls_state = 97
+	owns_state = 127
+	controls_state = 127
+	owns_state = 132
+	controls_state = 132
+	owns_state = 715
+	controls_state = 715
+	owns_state = 100
+	controls_state = 100
+	owns_state = 101
+	controls_state = 101
+	owns_state = 129
+	controls_state = 129
+	owns_state = 130
+	controls_state = 130
+	owns_state = 131
+	controls_state = 131
+	owns_state = 164
+	controls_state = 164
 }
 
 # COUNTRY IVN. The Committee holds the balance of command.
@@ -71,4 +95,98 @@ IVN_march_borders_root_control = {
 # COUNTRY IVN. The war ended with the cabinet in the capital.
 IVN_cabinet_won_the_revolt = {
 	has_global_flag = IVN_civil_war_won_by_cabinet
+}
+
+
+# Fixed participant lists avoid scanning unrelated countries.
+IVN_cw_participant = {
+	OR = {
+		tag = IVN
+		tag = IVC
+		tag = IMD
+		tag = IFC
+		tag = IAM
+	}
+}
+
+IVN_cw_principal = {
+	OR = {
+		tag = IVN
+		tag = IVC
+	}
+}
+
+IVN_cw_minor = {
+	OR = {
+		tag = IMD
+		tag = IFC
+		tag = IAM
+	}
+}
+
+# ROOT is the candidate. A separate country blocks unification. An external
+# war delays the tag handoff until its peace callback can check again.
+IVN_cw_last_participant = {
+	exists = yes
+	has_capitulated = no
+	has_war = no
+	IVN_cw_participant = yes
+	IVN = {
+		OR = {
+			exists = no
+			tag = ROOT
+		}
+	}
+	IVC = {
+		OR = {
+			exists = no
+			tag = ROOT
+		}
+	}
+	IMD = {
+		OR = {
+			exists = no
+			tag = ROOT
+		}
+	}
+	IFC = {
+		OR = {
+			exists = no
+			tag = ROOT
+		}
+	}
+	IAM = {
+		OR = {
+			exists = no
+			tag = ROOT
+		}
+	}
+}
+
+# Event ROOT receives the offer; FROM is its original sender, not a global target.
+IVN_cw_offer_valid = {
+	has_global_flag = IVN_marches_revolt_active
+	NOT = { has_global_flag = IVN_cw_awaiting_choice }
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	IVN_cw_minor = yes
+	has_country_flag = IVN_cw_offer_pending
+	OR = {
+		AND = {
+			has_country_flag = IVN_cw_offer_committee
+			FROM = { tag = IVN }
+		}
+		AND = {
+			has_country_flag = IVN_cw_offer_legion
+			FROM = { tag = IVC }
+		}
+	}
+	FROM = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		IVN_cw_principal = yes
+		NOT = { has_political_power < 75 }
+	}
 }

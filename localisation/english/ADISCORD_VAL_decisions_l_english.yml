@@ -206,7 +206,7 @@
  VAL_zeppelin_refund_tt:0 "Returns §G100§! £political_power_texticon, §G1000§! £ADISCORD_economy_treasury_texticon and §G400§! £manpower_texticon. Construction can be paid for again once its requirements are restored."
  VAL_zeppelin_result_tt:0 "§Y1 Kefreyt Air Battleship§! will appear in Kefreyt's capital state, fully crewed and equipped. It fights as a land unit. A second ship cannot be built, and a lost hull cannot be replaced."
  VAL_debug_spawn_zeppelin_trial: "§RDEBUG:§! Spawn a Zeppelin Air Battleship"
- VAL_debug_spawn_zeppelin_trial_desc: "Creates one fully equipped experimental air battleship in the capital state. It is controlled as a land formation: assign it to an army, move it between provinces and send it into battle. Available only to a human VAL player in DEBUG mode; repeatable after one day. Replacement hulls can be produced in military factories only by VAL in DEBUG mode."
+ VAL_debug_spawn_zeppelin_trial_desc: "Creates one fully equipped experimental air battleship in the capital state. It is controlled as a land formation: assign it to an army, move it between provinces and send it into battle. Available only to a human VAL player in DEBUG mode; repeatable after one day. Serial production and replacement hulls are unavailable."
  VAL_spawn_zeppelin_trial_tt: "Creates §Y1 Zeppelin air battleship§! in our owned and controlled capital state: §Y1§! hull and §Y400§! £manpower_texticon . Fully equipped without consuming national reserves. Free trial; available again after §Y1 day§!."
  ADISCORD_zeppelin: "Air Battleship"
  ADISCORD_zeppelin_desc: "A heavy airship with an armored deck, six triple-gun turrets and six propeller engines. The experimental Zeppelin fights in land battles and follows ordinary land movement routes."

@@ -20,6 +20,26 @@ CLAIMANTS = ("WKR", "VAD", "TVA")
 CLAIMANT_GATES = ("ADISCORD_vorkerland_is_main_claimant", "ADISCORD_vorkerland_is_not_wartime_claimant")
 
 
+class NativeCountryFilterTests(unittest.TestCase):
+    def test_difficulty_overrides_do_not_reference_unregistered_countries(self):
+        tags = set()
+        for path in (ROOT / "common/country_tags").glob("*.txt"):
+            tags.update(re.findall(r"(?m)^\s*([A-Z0-9]{3})\s*=", path.read_text(encoding="utf-8-sig")))
+        path = ROOT / "common/difficulty_settings/00_difficulty.txt"
+        self.assertTrue(path.is_file(), "Mask the vanilla country difficulty settings")
+        source = path.read_text(encoding="utf-8-sig")
+        for countries in re.findall(r"countries\s*=\s*\{([^}]*)\}", source):
+            self.assertTrue(set(countries.split()) <= tags)
+
+    def test_native_combat_tactics_keep_generic_combat_without_foreign_tag_filters(self):
+        path = ROOT / "common/combat_tactics.txt"
+        self.assertTrue(path.is_file(), "Override the inherited country-only tactic filters")
+        source = re.sub(r"#.*", "", path.read_text(encoding="utf-8-sig"))
+        self.assertNotRegex(source, r"\b(?:tag|only_show_for)\s*=\s*(?:JAP|SOV|CZE)\b")
+        for tactic in ("tactic_basic_attack", "tactic_basic_defend", "tactic_banzai_charge", "tactic_masterful_blitz"):
+            self.assertRegex(source, rf"(?m)^{tactic}\s*=\s*\{{")
+
+
 class DifficultyAIBehaviorTests(unittest.TestCase):
     # The country target is global. It names WRK until a claimant unifies
     # Vorkerland and names that claimant afterwards; a test rebinds it on its

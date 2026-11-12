@@ -8,6 +8,20 @@ from collections.abc import Mapping
 from pathlib import Path
 
 
+def technology_localisation_path(root: Path, language: str) -> Path:
+    directory = "replace" if language == "russian" else language
+    return root / "localisation" / directory / f"ADISCORD_technology_doctrine_l_{language}.yml"
+
+
+def read_localisation_with_overrides(path: Path) -> str:
+    """Read one family's ordinary entries and its native override entries."""
+    text = path.read_text(encoding="utf-8-sig")
+    override = path.parent.parent / "replace" / path.name
+    if override != path and override.is_file():
+        text += "\n" + override.read_text(encoding="utf-8-sig").partition("\n")[2]
+    return text
+
+
 def sync_builder_english_localisation(root: Path, owner: str, *, apply: bool) -> int:
     """Render reviewed English names without regenerating map or country data.
 

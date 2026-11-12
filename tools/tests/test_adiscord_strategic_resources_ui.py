@@ -4,6 +4,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from tools.lib.localisation import read_localisation_with_overrides
 from tools.builders.build_adiscord_resource_assets import (
     expected_outputs as expected_asset_outputs,
 )
@@ -327,7 +328,7 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         for path, language in ((RU_RESOURCES, "russian"), (EN_RESOURCES, "english")):
             data = path.read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"), language)
-            text = data.decode("utf-8-sig")
+            text = read_localisation_with_overrides(path)
             self.assertEqual(
                 len(re.findall(r"(?m)^\s*PRODUCTION_MATERIALS_RARE_COMPONENTS:", text)),
                 1,
@@ -768,7 +769,7 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         ):
             data = path.read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"), language)
-            text = data.decode("utf-8-sig")
+            text = read_localisation_with_overrides(path)
             for key, expected in TRADE_REGION_NAMES[language].items():
                 matches = re.findall(rf'(?m)^\s*{key}:\d*\s*"([^"]*)"\s*$', text)
                 self.assertEqual(matches, [expected], key)

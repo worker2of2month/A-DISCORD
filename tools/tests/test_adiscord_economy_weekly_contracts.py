@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tools.lib.localisation import read_localisation_with_overrides
 from tools.validators.validate_adiscord_economy_ai import (
     air_production_contract_issues,
     ai_assistance_contract_issues,
@@ -66,12 +67,8 @@ MODIFIER_DEFINITIONS = (
 TOKENS = (
     ROOT / "common" / "synchronized_dynamic_tokens" / "ADISCORD_tokens.txt"
 ).read_text(encoding="utf-8-sig")
-MODIFIER_LOC = (
-    ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
-).read_text(encoding="utf-8-sig")
-ECONOMY_LOC = (
-    ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
-).read_text(encoding="utf-8-sig")
+MODIFIER_LOC = read_localisation_with_overrides(ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml")
+ECONOMY_LOC = read_localisation_with_overrides(ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml")
 ECONOMY_LOC_EN_PATH = (
     ROOT / "localisation" / "english" / "ADISCORD_economy_l_english.yml"
 )
@@ -6981,7 +6978,7 @@ ADISCORD_bad_assistance_owner = {
             english_path.read_bytes().startswith(b"\xef\xbb\xbf"),
             "English recovery-owned economy localisation lost its UTF-8 BOM",
         )
-        russian = russian_path.read_text(encoding="utf-8-sig")
+        russian = read_localisation_with_overrides(russian_path)
         english = english_path.read_text(encoding="utf-8-sig")
         for language, text in (("Russian", russian), ("English", english)):
             duplicates = {

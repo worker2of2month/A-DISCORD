@@ -1,6 +1,33 @@
 ideas = {
 	# Display-only aggregate previews. IVN_order_dynamic holds the real values.
 	country = {
+		IVN_cw_military_guarantees = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				political_power_factor = -0.10
+			}
+		}
+
+		IVN_cw_communal_guarantees = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				conscription_factor = -0.10
+			}
+		}
+
+		IVN_cw_regional_guarantees = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				consumer_goods_factor = 0.03
+			}
+		}
+
 		IVN_order_dummy_idea = {
 			name = IVN_order_dynamic
 			picture = GFX_idea_IVN_national_spirit

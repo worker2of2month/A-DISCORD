@@ -1,8 +1,6 @@
-# Revolt of the marches: both sides commit their whole army to the war
-# between them. The other fronts of the two countries are quiet while the
-# revolt lasts, because the revolt waits for a sovereign Itora at peace.
+# Civil-war opponents are selected only while their war actually exists.
 
-ADISCORD_ivn_cabinet_against_legion = {
+ADISCORD_ivn_IVN_against_IVC = {
 	allowed = { tag = IVN }
 	enable = {
 		has_global_flag = IVN_marches_revolt_active
@@ -14,23 +12,50 @@ ADISCORD_ivn_cabinet_against_legion = {
 		id = IVC
 		value = 200
 	}
-	ai_strategy = {
-		type = front_unit_request
-		tag = IVC
-		value = 100
+}
+
+ADISCORD_ivn_IVN_against_IMD = {
+	allowed = { tag = IVN }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IMD
 	}
 	ai_strategy = {
-		type = front_control
-		tag = IVC
-		ratio = 0.01
-		priority = 100
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
+		type = conquer
+		id = IMD
+		value = 100
 	}
 }
 
-ADISCORD_ivn_legion_against_cabinet = {
+ADISCORD_ivn_IVN_against_IFC = {
+	allowed = { tag = IVN }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IFC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IFC
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IVN_against_IAM = {
+	allowed = { tag = IVN }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IAM
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IVC_against_IVN = {
 	allowed = { tag = IVC }
 	enable = {
 		has_global_flag = IVN_marches_revolt_active
@@ -42,18 +67,214 @@ ADISCORD_ivn_legion_against_cabinet = {
 		id = IVN
 		value = 200
 	}
+}
+
+ADISCORD_ivn_IVC_against_IMD = {
+	allowed = { tag = IVC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IMD
+	}
+	abort_when_not_enabled = yes
 	ai_strategy = {
-		type = front_unit_request
-		tag = IVN
+		type = conquer
+		id = IMD
 		value = 100
 	}
+}
+
+ADISCORD_ivn_IVC_against_IFC = {
+	allowed = { tag = IVC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IFC
+	}
+	abort_when_not_enabled = yes
 	ai_strategy = {
-		type = front_control
-		tag = IVN
-		ratio = 0.01
-		priority = 100
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
+		type = conquer
+		id = IFC
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IVC_against_IAM = {
+	allowed = { tag = IVC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IAM
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IMD_against_IVN = {
+	allowed = { tag = IMD }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVN
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVN
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IMD_against_IVC = {
+	allowed = { tag = IMD }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVC
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IMD_against_IFC = {
+	allowed = { tag = IMD }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IFC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IFC
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IMD_against_IAM = {
+	allowed = { tag = IMD }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IAM
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IFC_against_IVN = {
+	allowed = { tag = IFC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVN
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVN
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IFC_against_IVC = {
+	allowed = { tag = IFC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVC
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IFC_against_IMD = {
+	allowed = { tag = IFC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IMD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IMD
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IFC_against_IAM = {
+	allowed = { tag = IFC }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IAM
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IAM_against_IVN = {
+	allowed = { tag = IAM }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVN
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVN
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IAM_against_IVC = {
+	allowed = { tag = IAM }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IVC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IVC
+		value = 200
+	}
+}
+
+ADISCORD_ivn_IAM_against_IMD = {
+	allowed = { tag = IAM }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IMD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IMD
+		value = 100
+	}
+}
+
+ADISCORD_ivn_IAM_against_IFC = {
+	allowed = { tag = IAM }
+	enable = {
+		has_global_flag = IVN_marches_revolt_active
+		has_war_with = IFC
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = conquer
+		id = IFC
+		value = 100
 	}
 }

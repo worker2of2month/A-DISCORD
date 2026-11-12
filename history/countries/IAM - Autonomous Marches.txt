@@ -1,0 +1,8 @@
+capital = 131
+recruit_character = IVN_Marches_Council
+set_politics = {
+	ruling_party = pragmatism
+	elections_allowed = no
+}
+set_popularities = { pragmatism = 100 }
+set_research_slots = 2

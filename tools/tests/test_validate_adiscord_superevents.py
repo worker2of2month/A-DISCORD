@@ -609,7 +609,7 @@ class SupereventContractTests(unittest.TestCase):
         )
         effects = (ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt").read_text(encoding="utf-8")
         self.assertEqual(effects.count("IVN_show_civil_war_superevent = yes"), 1)
-        start = effects[effects.index("IVN_start_marches_revolt = {"):]
+        start = effects[effects.index("IVN_cw_begin_hostilities = {"):]
         start = start[:start.index("\n}\n")]
         self.assertIn("IVN_show_civil_war_superevent = yes", start)
 

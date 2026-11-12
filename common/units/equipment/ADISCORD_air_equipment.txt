@@ -28,10 +28,8 @@ equipments = {
 		archetype = ADISCORD_zeppelin_equipment
 		picture = ADISCORD_zeppelin_equipment_1
 		active = yes
-		can_be_produced = {
-			is_debug = yes
-			tag = VAL
-		}
+		is_buildable = no
+		can_be_produced = { always = no }
 		priority = 20
 		visual_level = 0
 	}

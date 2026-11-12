@@ -28,8 +28,8 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
-# The first state owns the authored dam position; the second copies it.
-SHARED_BORDER_DAM_STATES = (28, 53)
+# Both province-scoped dams stand next to the same permanent river landmark.
+BORDER_DAM_STATES = (28, 53)
 PORT_ANCHOR_TYPES = {
     "coastal_bunker",
     "dockyard",
@@ -279,11 +279,7 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
                     f"map/buildings.txt:{line_number}: {building_type} is not positioned in a state province"
                 )
             recorded_state = int(fields[0])
-            # The shared border dam rounds into one province for both rows.
-            if recorded_state != actual_state and not (
-                is_shared_border_dam(fields)
-                and actual_state in SHARED_BORDER_DAM_STATES
-            ):
+            if recorded_state != actual_state:
                 mismatches.append(
                     BuildingMismatch(
                         line=line_number,
@@ -338,12 +334,16 @@ def synchronize_buildings(
 ) -> list[BuildingMismatch]:
     lines, mismatches = audit_buildings(root)
     if apply:
+        dam_provinces = load_dam_province_by_state(root)
         for mismatch in mismatches:
+            # A province-scoped dam keeps its history owner; move its anchor
+            # below instead of transferring the model to the neighbouring state.
+            if mismatch.building_type == "dam_spawn" and mismatch.recorded_state in dam_provinces:
+                continue
             fields = lines[mismatch.line - 1].split(";")
             fields[0] = str(mismatch.actual_state)
             lines[mismatch.line - 1] = ";".join(fields)
         lines, _height_changes = mountain_building_heights(root, lines)
-        lines = shared_border_dam_anchor(lines)
         lines, _dam_changes = dam_province_plan(root, lines)
         lines = bezhaysk_castle_clearance(lines)
         lines = khan_bunker_clearance(lines)
@@ -356,37 +356,8 @@ def synchronize_buildings(
     return mismatches
 
 
-def is_shared_border_dam(fields: list[str]) -> bool:
-    return fields[1] == "dam_spawn" and int(fields[0]) in SHARED_BORDER_DAM_STATES
-
-
-def shared_border_dam_anchor(lines: list[str]) -> list[str]:
-    """Give the 28/53 border dam one anchor so both states draw a single model.
-
-    The dam stands on the boundary of provinces 145 and 70; separate anchors
-    leave two models on either side of the river. The state 28 row is the
-    authored position, and the state 53 row copies its coordinates and rotation.
-    """
-    source_state, copy_state = (str(state) for state in SHARED_BORDER_DAM_STATES)
-    source = next(
-        (
-            line.split(";")
-            for line in lines
-            if line.split(";")[:2] == [source_state, "dam_spawn"]
-        ),
-        None,
-    )
-    if source is None:
-        return list(lines)
-    shared = ";".join([copy_state, *source[1:]])
-    result = []
-    for line in lines:
-        if line.split(";")[:2] == [copy_state, "dam_spawn"]:
-            continue
-        result.append(line)
-        if line.split(";")[:2] == [source_state, "dam_spawn"]:
-            result.append(shared)
-    return result
+def is_border_dam(fields: list[str]) -> bool:
+    return fields[1] == "dam_spawn" and int(fields[0]) in BORDER_DAM_STATES
 
 
 def load_dam_province_by_state(root: Path = ROOT) -> dict[int, int]:
@@ -406,7 +377,7 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
     ``dam_spawn`` is province-scoped: an anchor in a neighbouring province of
     the same state leaves the dam without a model. A stray anchor moves to the
     nearest integer pixel of the dam province, so truncation and rounding agree.
-    The shared border dam is exempt because it deliberately sits on the boundary.
+    Border dams also need separate valid anchors in their own provinces.
     """
     dam_provinces = load_dam_province_by_state(root)
     colors = load_province_by_color(root)
@@ -421,7 +392,7 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
 
         for index, line in enumerate(lines):
             fields = line.split(";")
-            if fields[1] != "dam_spawn" or is_shared_border_dam(fields):
+            if fields[1] != "dam_spawn":
                 continue
             province_id = dam_provinces.get(int(fields[0]))
             if province_id is None:
@@ -520,7 +491,7 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
             # The border dam is placed on its river crossing, next to the landmark.
             if (
                 fields[1] not in SEA_POSITIONED_TYPES | PORT_ANCHOR_TYPES
-                and not is_shared_border_dam(fields)
+                and not is_border_dam(fields)
             ):
                 x, z = float(fields[2]), float(fields[4])
                 for zone_state, landmark_x, landmark_z, radius, dx, dy, dz in zones:
@@ -782,8 +753,6 @@ def validate(root: Path = ROOT) -> list[str]:
         f"map/unitstacks.txt:{line}: Khan unit anchor lies outside its province"
         for line in stack_changes
     )
-    if shared_border_dam_anchor(lines) != lines:
-        issues.append("states 28 and 53 dam_spawn must share one border anchor")
     _planned_dams, dam_changes = dam_province_plan(root, lines)
     issues.extend(
         f"map/buildings.txt:{line}: dam_spawn lies outside its dam province"

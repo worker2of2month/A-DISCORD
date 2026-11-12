@@ -2013,10 +2013,6 @@
  ADISCORD_vorkerland_diplomacy.3.d: "Чрезвычайное правительство рабочей республики предлагает Лигу свободных республик. Вольноград сохранит суверенитет и присоединится к действующим фронтам союзника, даже если решающая война уже началась."
  ADISCORD_vorkerland_diplomacy.3.a: "Вступить в лигу"
  ADISCORD_vorkerland_diplomacy.3.b: "Отклонить договор"
- RECALL_VOLUNTEERS_TITLE: "Отозвать добровольцев"
- RECALL_VOLUNTEERS_ACTION_DESC: "Немедленно вернуть отправленный в эту страну добровольческий контингент."
- RECALL_VOLUNTEERS_TOOLTIP: "§Y[This.GetNameWithFlag]§!: §Rв этой стране нет наших добровольцев, которых можно отозвать.§!"
- RECALL_VOLUNTEERS_TOOLTIP_G: "§Y[This.GetNameWithFlag]§!: отозвать наш добровольческий контингент."
 
 # --- focus_decisions_l_russian ---
  ADISCORD_vorkerland_focus_operations_category:0 "Последняя кампания Воркерланда"

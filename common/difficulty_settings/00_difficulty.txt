@@ -1,0 +1,2 @@
+# This file masks the vanilla sliders for countries absent from this map.
+difficulty_settings = {}

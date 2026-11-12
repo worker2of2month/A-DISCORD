@@ -9667,6 +9667,30 @@
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_peace",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_ivn.10",
+      "namespace": "ADISCORD_ivn",
+      "number": 10,
+      "owner": "events/ADISCORD_IVN_events.txt",
+      "subsystem": "ivn",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_ivn.11",
+      "namespace": "ADISCORD_ivn",
+      "number": 11,
+      "owner": "events/ADISCORD_IVN_events.txt",
+      "subsystem": "ivn",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_ivn.12",
+      "namespace": "ADISCORD_ivn",
+      "number": 12,
+      "owner": "events/ADISCORD_IVN_events.txt",
+      "subsystem": "ivn",
+      "status": "active"
     }
   ]
 }

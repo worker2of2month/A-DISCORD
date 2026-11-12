@@ -518,7 +518,7 @@ NEW_DATA_FILES = [
     "interface/ADISCORD_technologies.gfx",
     "interface/countrytechtreeview.gui",
     "localisation/english/ADISCORD_technology_doctrine_l_english.yml",
-    "localisation/russian/ADISCORD_technology_doctrine_l_russian.yml",
+    "localisation/replace/ADISCORD_technology_doctrine_l_russian.yml",
     "localisation/english/ADISCORD_mastery_doctrines_l_english.yml",
     "localisation/russian/ADISCORD_mastery_doctrines_l_russian.yml",
 ]
@@ -3119,7 +3119,7 @@ def check_technology_description_contract(tech_blocks: dict[str, str]) -> list[s
         ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml"
     )
     russian_path = (
-        ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml"
+        ROOT / "localisation" / "replace" / "ADISCORD_technology_doctrine_l_russian.yml"
     )
     english = read_text(english_path) if english_path.exists() else ""
     russian = read_text(russian_path) if russian_path.exists() else ""

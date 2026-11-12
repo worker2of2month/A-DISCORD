@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+from tools.lib.localisation import technology_localisation_path
 from tools.lib.paths import repository_root
 
 ROOT = repository_root()
@@ -3058,12 +3059,7 @@ def localisation(language: str) -> tuple[list[str], set[str]]:
 
 def strip_migrated_localisation(keys: set[str]) -> None:
     for language in ("russian", "english"):
-        path = (
-            ROOT
-            / "localisation"
-            / language
-            / f"ADISCORD_technology_doctrine_l_{language}.yml"
-        )
+        path = technology_localisation_path(ROOT, language)
         if not path.exists():
             continue
         original = path.read_text(encoding="utf-8-sig").splitlines()

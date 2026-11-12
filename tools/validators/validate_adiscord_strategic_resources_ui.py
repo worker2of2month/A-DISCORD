@@ -8,6 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from tools.lib.localisation import read_localisation_with_overrides
 from tools.builders.build_adiscord_resource_assets import (
     expected_outputs,
     validate as validate_assets,
@@ -422,7 +423,7 @@ def validate(root: Path = ROOT) -> list[str]:
         if not path.is_file() or not path.read_bytes().startswith(b"\xef\xbb\xbf"):
             issues.append(f"{relative}: UTF-8 BOM is missing")
             continue
-        localisation = path.read_text(encoding="utf-8-sig")
+        localisation = read_localisation_with_overrides(path)
         visible_energy = "Электроэнергия" if language == "russian" else "Electricity"
         for key in (
             "PRODUCTION_MATERIALS_COAL",

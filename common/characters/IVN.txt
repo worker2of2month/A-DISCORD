@@ -21,8 +21,7 @@ characters = {
 		}
 	}
 
-	# Commander of the Marches Legion; the portrait is a placeholder until
-	# dedicated art exists.
+	# Commander of the Military Directorate.
 	IVN_Rostislav_Karn = {
 		name = IVN_Rostislav_Karn
 		portraits = {
@@ -31,12 +30,44 @@ characters = {
 			}
 		}
 		country_leader = {
-			ideology = chauvinism_ideology
+			ideology = etatism_ideology
 			expire = "2200.1.1.1"
 			id = -1
 		}
 	}
 
+	IVN_Leonid_Stalk = {
+		name = IVN_Leonid_Stalk
+		portraits = {
+			civilian = { large = GFX_portrait_IVN_Leonid_Stalk }
+		}
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	IVN_Commune_Council = {
+		name = IVN_Commune_Council
+		portraits = {
+			civilian = { large = GFX_Portrait_Europe_Generic_land_4 }
+		}
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	IVN_Marches_Council = {
+		name = IVN_Marches_Council
+		portraits = {
+			civilian = { large = GFX_Portrait_Europe_Generic_land_5 }
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
 	# IVN military leadership.
 	ADISCORD_staff_IVN_Sergei_Kurbatov = {
 		name = ADISCORD_staff_IVN_Sergei_Kurbatov

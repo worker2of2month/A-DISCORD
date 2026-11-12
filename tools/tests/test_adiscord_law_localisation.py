@@ -4,6 +4,7 @@ from collections import Counter
 from pathlib import Path
 
 
+from tools.lib.localisation import read_localisation_with_overrides
 from tools.lib.focus_sources import read_focus_source
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,7 +17,7 @@ ENTRY_RE = re.compile(r'(?m)^\s*([A-Za-z0-9_.-]+):\s*"((?:[^"\\]|\\.)*)"\s*$')
 
 
 def parse_localisation(path: Path) -> tuple[str, dict[str, str], dict[str, int]]:
-    text = path.read_text(encoding="utf-8-sig", errors="strict")
+    text = read_localisation_with_overrides(path)
     pairs = ENTRY_RE.findall(text)
     counts = Counter(key for key, _ in pairs)
     return text, dict(pairs), dict(counts)

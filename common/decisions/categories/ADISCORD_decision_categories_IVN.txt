@@ -135,3 +135,22 @@ IVN_west_legacy_category = {
 	}
 	priority = 27
 }
+
+IVN_cw_diplomacy_category = {
+	icon = generic_political_actions
+	allowed = {
+		OR = {
+			tag = IVN
+			tag = IVC
+			tag = IMD
+			tag = IFC
+			tag = IAM
+		}
+	}
+	visible = {
+		has_global_flag = IVN_marches_revolt_active
+		NOT = { has_global_flag = IVN_cw_awaiting_choice }
+	}
+	visible_when_empty = yes
+	priority = 30
+}

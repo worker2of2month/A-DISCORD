@@ -1648,4 +1648,8 @@ spriteTypes = {
 		name = "GFX_idea_SHL_Ramin_Farzan"
 		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_Ramin_Farzan_small.png"
 	}
+	spriteType = {
+		name = "GFX_portrait_IVN_Leonid_Stalk"
+		texturefile = "gfx/leaders/IVN/portrait_IVN_Leonid_Stalk.png"
+	}
 }

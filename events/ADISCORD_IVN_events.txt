@@ -28,9 +28,10 @@ country_event = {
 	}
 }
 
-# The revolt begins before the answer; a human Itora may lead the legion.
+# Countries are created immediately; the answer starts hostilities after handoff.
 country_event = {
 	id = ADISCORD_ivn.2
+	timeout_days = 7
 	title = ADISCORD_ivn.2.t
 	desc = ADISCORD_ivn.2.d
 	picture = GFX_event_adiscord_military_headquarters
@@ -48,15 +49,52 @@ country_event = {
 		name = ADISCORD_ivn.2.a
 		custom_effect_tooltip = ADISCORD_ivn.2.a_tt
 		ai_chance = { base = 100 }
+		hidden_effect = { IVN_cw_begin_hostilities = yes }
 	}
 
 	option = {
 		name = ADISCORD_ivn.2.b
 		trigger = { is_ai = no }
 		custom_effect_tooltip = ADISCORD_ivn.2.b_tt
-		hidden_effect = { IVC = { change_tag_from = IVN } }
+		hidden_effect = {
+			IVC = { change_tag_from = IVN }
+			IVN_cw_begin_hostilities = yes
+		}
 		ai_chance = { base = 0 }
 	}
+	option = {
+		name = ADISCORD_ivn.2.c
+		trigger = { is_ai = no }
+		custom_effect_tooltip = ADISCORD_ivn.2.c_tt
+		hidden_effect = {
+			IMD = { change_tag_from = IVN }
+			IVN_cw_begin_hostilities = yes
+		}
+		ai_chance = { base = 0 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.2.e
+		trigger = { is_ai = no }
+		custom_effect_tooltip = ADISCORD_ivn.2.e_tt
+		hidden_effect = {
+			IFC = { change_tag_from = IVN }
+			IVN_cw_begin_hostilities = yes
+		}
+		ai_chance = { base = 0 }
+	}
+
+	option = {
+		name = ADISCORD_ivn.2.f
+		trigger = { is_ai = no }
+		custom_effect_tooltip = ADISCORD_ivn.2.f_tt
+		hidden_effect = {
+			IAM = { change_tag_from = IVN }
+			IVN_cw_begin_hostilities = yes
+		}
+		ai_chance = { base = 0 }
+	}
+
 }
 
 news_event = {
@@ -235,4 +273,65 @@ country_event = {
 		add_stability = -0.05
 		ai_chance = { base = 50 }
 	}
+}
+
+# One-shot reconciliation after an absorption. ROOT is the actual survivor.
+country_event = {
+	id = ADISCORD_ivn.10
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = IVN_marches_revolt_active
+		IVN_cw_last_participant = yes
+	}
+	immediate = { IVN_cw_finish = yes }
+}
+
+country_event = {
+	id = ADISCORD_ivn.11
+	title = ADISCORD_ivn.11.t
+	desc = ADISCORD_ivn.11.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = { IVN_cw_minor = yes }
+
+	# The first option is also the unattended default: no resources change hands.
+	option = {
+		name = ADISCORD_ivn.11.a
+		hidden_effect = { IVN_cw_decline_offer = yes }
+		ai_chance = { base = 35 }
+	}
+	option = {
+		name = ADISCORD_ivn.11.b
+		trigger = { IVN_cw_offer_valid = yes }
+		custom_effect_tooltip = IVN_cw_accept_offer_tt
+		if = {
+			limit = { tag = IMD }
+			effect_tooltip = { FROM = { add_ideas = IVN_cw_military_guarantees } }
+		}
+		if = {
+			limit = { tag = IFC }
+			effect_tooltip = { FROM = { add_ideas = IVN_cw_communal_guarantees } }
+		}
+		if = {
+			limit = { tag = IAM }
+			effect_tooltip = { FROM = { add_ideas = IVN_cw_regional_guarantees } }
+		}
+		hidden_effect = { IVN_cw_accept_offer = yes }
+		ai_chance = {
+			base = 65
+			modifier = { factor = 2 surrender_progress > 0.15 }
+		}
+	}
+}
+
+news_event = {
+	id = ADISCORD_ivn.12
+	title = ADISCORD_ivn.12.t
+	desc = ADISCORD_ivn.12.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_ivn.12.a }
 }

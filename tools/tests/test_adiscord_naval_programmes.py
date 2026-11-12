@@ -42,6 +42,23 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_naval_unit_names_have_native_small_texticons(self):
+        units = block(entries("common/units/ADISCORD_naval_units.txt"), "sub_units")
+        sprites = block(entries("interface/modifiericons_texticons.gfx"), "spriteTypes")
+        icons = {
+            scalar(row.value, "name").strip('"'): row.value
+            for row in sprites if row.key == "spriteType"
+        }
+        for unit in units:
+            for prefix in ("GFX_ship_", "unit_"):
+                with self.subTest(unit=unit.key, prefix=prefix):
+                    name = f"{prefix}{unit.key}_icon_small"
+                    self.assertTrue(name in icons, name)
+                    texture = scalar(icons[name], "texturefile").strip('"')
+                    visual = scalar(unit.value, "sprite")
+                    native = icons[f"{prefix}{visual}_icon_small"]
+                    self.assertEqual(texture, scalar(native, "texturefile"))
+
     def test_coalition_muster_has_time_to_deploy_and_survives_tree_changes(self):
         effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
         schedule = block(block(effects, "ADISCORD_nam_resource_war_schedule"), "if")

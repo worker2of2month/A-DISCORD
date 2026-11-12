@@ -21,7 +21,15 @@ IVN_order_dynamic = {
 # The legion's aggregate; its own focuses and decisions change IVC_leg_*.
 IVC_legion_dynamic = {
 	icon = GFX_idea_IVN_national_spirit
-	enable = { tag = IVC }
+	enable = {
+		OR = {
+			tag = IVC
+			AND = {
+				tag = IVN
+				has_global_flag = IVN_civil_war_won_by_legion
+			}
+		}
+	}
 	army_attack_factor = IVC_leg_attack
 	army_defence_factor = IVC_leg_defence
 	army_org_factor = IVC_leg_org

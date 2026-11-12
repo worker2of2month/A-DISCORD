@@ -1,0 +1,8 @@
+capital = 100
+recruit_character = IVN_Commune_Council
+set_politics = {
+	ruling_party = anarchism
+	elections_allowed = no
+}
+set_popularities = { anarchism = 100 }
+set_research_slots = 2

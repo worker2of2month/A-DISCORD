@@ -88,7 +88,7 @@ RURAL_SECTORS = tuple(
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
 SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS)
-# Resolve four-province corners and widen short contacts without changing state membership.
+# Resolve province corners, short contacts and frontage loops without changing state membership.
 # Coordinates use the top-left raster origin.
 PROVINCE_PIXEL_REPAIRS = {
     (3971, 1447): (971, 16746),
@@ -134,6 +134,18 @@ PROVINCE_PIXEL_REPAIRS = {
     (3852, 976): (51, 108),
     (3853, 976): (51, 108),
     (3852, 977): (51, 108),
+    # Ishait needs separate northern and southern approaches: province 6 must
+    # not touch both enemy shoulders around the city and repeat in the front.
+    (3848, 984): (6, 51),
+    (3844, 985): (6, 51),
+    (3845, 985): (6, 51),
+    (3846, 985): (6, 51),
+    (3847, 985): (6, 51),
+    (3848, 985): (6, 51),
+    (3842, 986): (6, 16372),
+    (3843, 986): (6, 16372),
+    (3844, 986): (6, 16372),
+    (3845, 986): (6, 16372),
     (3840, 988): (6, 85),
     (3841, 988): (6, 85),
     (3842, 988): (6, 85),

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from PIL import Image
 
+from tools.lib.localisation import read_localisation_with_overrides
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
@@ -248,7 +249,7 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
 
     def test_new_tier_is_bilingual_and_existing_russian_names_stay_stable(self):
         self.assertTrue(RU_LOC_PATH.read_bytes().startswith(b"\xef\xbb\xbf"))
-        ru = RU_LOC_PATH.read_text(encoding="utf-8-sig")
+        ru = read_localisation_with_overrides(RU_LOC_PATH)
         en = EN_LOC_PATH.read_text(encoding="utf-8-sig")
         self.assertEqual(
             "Гражданско-ориентированная экономика",

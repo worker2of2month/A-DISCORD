@@ -1,0 +1,8 @@
+capital = 127
+recruit_character = IVN_Rostislav_Karn
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = { etatism = 100 }
+set_research_slots = 2

@@ -12,29 +12,40 @@ IVN_refresh_order = {
 # already have installed the same etatist role, so the role is added once.
 IVN_adopt_emergency_order = {
 	if = {
-		limit = { NOT = { has_government = etatism } }
-		set_politics = {
-			ruling_party = etatism
-			elections_allowed = no
-		}
-	}
-	if = {
-		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added } }
-		add_country_leader_role = {
-			character = IVN_Vadim_Ivanchik
-			promote_leader = yes
-			country_leader = {
-				ideology = etatism_ideology
-				expire = "2200.1.1.1"
+		limit = {
+			NOT = {
+				OR = {
+					has_global_flag = IVN_civil_war_won_by_directory
+					has_global_flag = IVN_civil_war_won_by_communes
+					has_global_flag = IVN_civil_war_won_by_marches
+				}
 			}
 		}
-		set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
+		if = {
+			limit = { NOT = { has_government = etatism } }
+			set_politics = {
+				ruling_party = etatism
+				elections_allowed = no
+			}
+		}
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added } }
+			add_country_leader_role = {
+				character = IVN_Vadim_Ivanchik
+				promote_leader = yes
+				country_leader = {
+					ideology = etatism_ideology
+					expire = "2200.1.1.1"
+				}
+			}
+			set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
+		}
+		IVN_party_representatives_emergency = yes
 	}
-	IVN_party_representatives_emergency = yes
 }
 
 # COUNTRY IVN. The cabinet hands power back to the Committee during the
-# revolt. Kulivanov keeps his humanist role; the etatist role stays recorded
+# revolt. Vadim keeps his humanist role; the etatist role stays recorded
 # so a later emergency course does not add it a second time.
 IVN_restore_committee_government = {
 	if = {
@@ -59,8 +70,8 @@ IVN_restore_committee_government = {
 # Committee (negative side) or the Staff of the marches (positive side). The
 # state variable IVN_march_trust (0-100) on the eight frontier marches records
 # how far each march still trusts the capital. The revolt reads both: the
-# balance sets the legion's share of the army, trust decides which marches
-# follow Vedrina.
+# balance sets the Directorate's army share, while trusted marches
+# support local mobilisation.
 
 # COUNTRY IVN. One-time opening from the root focus. The revolt calls it as
 # well, so its consumers exist even if the root focus was never completed.
@@ -325,192 +336,375 @@ IVN_march_defect_to_root = {
 # (IVC). Both outcomes end with IVN annexing IVC, so the Itoran tag, its focus
 # progress and western influence survive whichever side wins.
 
-# COUNTRY IVN. The four northern marches of the expedition. Vedrina is the
-# legion's capital and always rises; 92, 96 and 97 stay with the cabinet when
-# their trust is at least 70. All three border Vedrina, so the legion's land
-# stays contiguous whichever of them it keeps.
-IVN_marches_revolt_states = {
-	95 = { IVN_marches_revolt_take_state = yes }
-	92 = { IVN_marches_revolt_take_state = yes }
-	96 = { IVN_marches_revolt_take_state = yes }
-	97 = { IVN_marches_revolt_take_state = yes }
-}
-
-# STATE. Only land Itora still owns and controls passes to the legion.
-IVN_marches_revolt_take_state = {
-	if = {
-		limit = {
-			is_owned_by = IVN
-			is_controlled_by = IVN
-			OR = {
-				state = 95
-				check_variable = { var = IVN_march_trust value = 70 compare = less_than }
-			}
-		}
-		IVC = { transfer_state = PREV }
-		set_state_controller_to = IVC
+# COUNTRY IVN. All assignments are checked by the startup predicate before
+# creating any participant. The four legion states are a connected base.
+IVN_cw_partition = {
+	IVC = {
+		transfer_state = 92
+		transfer_state = 95
+		transfer_state = 96
+		transfer_state = 97
+	}
+	IMD = {
+		transfer_state = 127
+		transfer_state = 132
+		transfer_state = 715
+	}
+	IFC = {
+		transfer_state = 100
+		transfer_state = 101
+	}
+	IAM = {
+		transfer_state = 129
+		transfer_state = 130
+		transfer_state = 131
+		transfer_state = 164
 	}
 }
 
-# COUNTRY IVN. The inner frontier follows a neighbouring legion march when its
-# trust is below 40: Moressa behind Kantoria, Lakora behind Talara or
-# Kantoria, Ilvan behind Lakora and Olsia behind Ilvan. Each extra march
-# brings its reservists to the legion.
-IVN_marches_revolt_defections = {
-	98 = {
-		if = {
-			limit = {
-				IVN_march_follows_the_legion = yes
-				97 = { is_owned_by = IVC }
+# COUNTRY IVN. Ratios after the first transfer refer to the remaining pool.
+# Manpower is captured before country creation and split independently.
+IVN_marches_revolt_transfer_units = {
+	transfer_units_fraction = {
+		target = IVC
+		size = 0.35
+		stockpile_ratio = 0.35
+		navy_ratio = 0.20
+		air_ratio = 0.35
+	}
+	set_variable = { var = IVN_cw_directory_share value = 0.10 }
+	if = {
+		limit = { has_completed_focus = IVN_command_sideline_karn }
+		set_variable = { var = IVN_cw_directory_share value = 0.05 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_completed_focus = IVN_command_promote_karn
+				power_balance_value = { id = IVN_command_bop value > 0.35 }
 			}
-			IVN_marches_revolt_take_state = yes
+		}
+		set_variable = { var = IVN_cw_directory_share value = 0.15 }
+	}
+	set_variable = { var = IVN_cw_remaining_share value = 0.65 }
+	set_variable = { var = IVN_cw_transfer_ratio value = IVN_cw_directory_share }
+	divide_variable = { var = IVN_cw_transfer_ratio value = IVN_cw_remaining_share }
+	transfer_units_fraction = {
+		target = IMD
+		size = var:IVN_cw_transfer_ratio
+		stockpile_ratio = var:IVN_cw_transfer_ratio
+		navy_ratio = 0
+		air_ratio = var:IVN_cw_transfer_ratio
+	}
+	subtract_from_variable = { var = IVN_cw_remaining_share value = IVN_cw_directory_share }
+	set_variable = { var = IVN_cw_transfer_ratio value = 0.08 }
+	divide_variable = { var = IVN_cw_transfer_ratio value = IVN_cw_remaining_share }
+	transfer_units_fraction = {
+		target = IFC
+		size = var:IVN_cw_transfer_ratio
+		stockpile_ratio = var:IVN_cw_transfer_ratio
+		navy_ratio = 0
+		air_ratio = var:IVN_cw_transfer_ratio
+	}
+	subtract_from_variable = { var = IVN_cw_remaining_share value = 0.08 }
+	set_variable = { var = IVN_cw_transfer_ratio value = 0.07 }
+	divide_variable = { var = IVN_cw_transfer_ratio value = IVN_cw_remaining_share }
+	transfer_units_fraction = {
+		target = IAM
+		size = var:IVN_cw_transfer_ratio
+		stockpile_ratio = var:IVN_cw_transfer_ratio
+		navy_ratio = 0.10
+		air_ratio = var:IVN_cw_transfer_ratio
+	}
+	subtract_from_variable = { var = IVN_cw_remaining_share value = 0.07 }
+	IVC = {
+		set_temp_variable = { var = IVN_cw_existing_recruits value = manpower }
+		multiply_temp_variable = { var = IVN_cw_existing_recruits value = -1 }
+		add_manpower = var:IVN_cw_existing_recruits
+		set_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_recruits }
+		multiply_temp_variable = { var = IVN_cw_recruit_share value = 0.35 }
+		add_manpower = var:IVN_cw_recruit_share
+		set_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_start_treasury }
+		multiply_variable = { var = ADISCORD_economy_treasury value = 0.35 }
+		set_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_start_debt }
+		multiply_variable = { var = ADISCORD_economy_debt value = 0.35 }
+	}
+	IMD = {
+		set_temp_variable = { var = IVN_cw_existing_recruits value = manpower }
+		multiply_temp_variable = { var = IVN_cw_existing_recruits value = -1 }
+		add_manpower = var:IVN_cw_existing_recruits
+		set_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_recruits }
+		multiply_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_directory_share }
+		add_manpower = var:IVN_cw_recruit_share
+		set_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_start_treasury }
+		multiply_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_directory_share }
+		set_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_start_debt }
+		multiply_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_directory_share }
+	}
+	IFC = {
+		set_temp_variable = { var = IVN_cw_existing_recruits value = manpower }
+		multiply_temp_variable = { var = IVN_cw_existing_recruits value = -1 }
+		add_manpower = var:IVN_cw_existing_recruits
+		set_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_recruits }
+		multiply_temp_variable = { var = IVN_cw_recruit_share value = 0.08 }
+		add_manpower = var:IVN_cw_recruit_share
+		set_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_start_treasury }
+		multiply_variable = { var = ADISCORD_economy_treasury value = 0.08 }
+		set_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_start_debt }
+		multiply_variable = { var = ADISCORD_economy_debt value = 0.08 }
+	}
+	IAM = {
+		set_temp_variable = { var = IVN_cw_existing_recruits value = manpower }
+		multiply_temp_variable = { var = IVN_cw_existing_recruits value = -1 }
+		add_manpower = var:IVN_cw_existing_recruits
+		set_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_recruits }
+		multiply_temp_variable = { var = IVN_cw_recruit_share value = 0.07 }
+		add_manpower = var:IVN_cw_recruit_share
+		set_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_start_treasury }
+		multiply_variable = { var = ADISCORD_economy_treasury value = 0.07 }
+		set_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_start_debt }
+		multiply_variable = { var = ADISCORD_economy_debt value = 0.07 }
+	}
+	IVN = {
+		set_temp_variable = { var = IVN_cw_existing_recruits value = manpower }
+		multiply_temp_variable = { var = IVN_cw_existing_recruits value = -1 }
+		add_manpower = var:IVN_cw_existing_recruits
+		set_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_recruits }
+		multiply_temp_variable = { var = IVN_cw_recruit_share value = IVN.IVN_cw_remaining_share }
+		add_manpower = var:IVN_cw_recruit_share
+		set_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_start_treasury }
+		multiply_variable = { var = ADISCORD_economy_treasury value = IVN.IVN_cw_remaining_share }
+		set_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_start_debt }
+		multiply_variable = { var = ADISCORD_economy_debt value = IVN.IVN_cw_remaining_share }
+	}
+	clear_variable = IVN_cw_start_treasury
+	clear_variable = IVN_cw_start_debt
+	clear_variable = IVN_cw_recruits
+	clear_variable = IVN_cw_directory_share
+	clear_variable = IVN_cw_remaining_share
+	clear_variable = IVN_cw_transfer_ratio
+}
+
+# COUNTRY. Three militia battalions consume 3000 recruits and 2700 rifles.
+# Local arsenals and a one-time levy fund this initial garrison explicitly.
+IVN_cw_raise_initial_garrison = {
+	if = {
+		limit = { NOT = { has_template = "Itoran Emergency Brigade" } }
+		division_template = {
+			name = "Itoran Emergency Brigade"
+			template_counter = 80
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 1 y = 0 }
+			}
+		}
+	}
+	add_manpower = 3000
+	add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 2700 producer = ROOT }
+	add_manpower = -3000
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
+	capital_scope = {
+		create_unit = {
+			division = "division_template = \"Itoran Emergency Brigade\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = PREV
+		}
+	}
+}
+
+# COUNTRY. No diplomatic UI permissions are changed. Temporary major status
+# prevents an unrelated capitulation from settling this participant's wars.
+IVN_cw_prepare_participant = {
+	if = {
+		limit = { is_major = no }
+		set_country_flag = IVN_cw_added_major
+		set_major = yes
+	}
+	ADISCORD_release_non_participating_minor_optimization = yes
+	IVN_cw_raise_initial_garrison = yes
+	set_war_support = 0.70
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY IVN. Creation and resources precede player choice; hostilities wait
+# for an answer or the event's default option at its seven-day timeout.
+IVN_start_marches_revolt = {
+	if = {
+		limit = { NOT = { has_global_flag = IVN_marches_revolt_active } }
+		set_global_flag = IVN_marches_revolt_active
+		set_global_flag = IVN_cw_awaiting_choice
+		set_variable = { var = IVN_cw_recruits value = manpower }
+		set_variable = { var = IVN_cw_start_treasury value = ADISCORD_economy_treasury }
+		set_variable = { var = IVN_cw_start_debt value = ADISCORD_economy_debt }
+		IVN_marches_initialize = yes
+		IVN_adopt_emergency_order = yes
+		set_cosmetic_tag = IVN_cw_committee
+		every_owned_state = {
+			add_core_of = IVC
+			add_core_of = IMD
+			add_core_of = IFC
+			add_core_of = IAM
+		}
+		IVN_cw_partition = yes
+		IVC = {
+			set_capital = { state = 95 }
+			inherit_technology = IVN
+			add_ideas = minister_IVC_Viktor_Laren
+			ADISCORD_economy_initialize_country = yes
+			promote_character = { character = IVN_Leonid_Stalk ideology = chauvinism_ideology }
+			set_stability = 0.45
+		}
+		IMD = {
+			set_capital = { state = 127 }
+			inherit_technology = IVN
+			ADISCORD_economy_initialize_country = yes
+			promote_character = { character = IVN_Rostislav_Karn ideology = etatism_ideology }
+			set_stability = 0.45
+		}
+		IFC = {
+			set_capital = { state = 100 }
+			inherit_technology = IVN
+			ADISCORD_economy_initialize_country = yes
+			promote_character = { character = IVN_Commune_Council ideology = anarchism_ideology }
+			set_stability = 0.45
+		}
+		IAM = {
+			set_capital = { state = 131 }
+			inherit_technology = IVN
+			ADISCORD_economy_initialize_country = yes
+			promote_character = { character = IVN_Marches_Council ideology = pragmatism_ideology }
+			set_stability = 0.45
+		}
+		IVN_marches_revolt_transfer_units = yes
+		add_manpower = 20000
+		IVC = { add_manpower = 20000 }
+		IMD = { add_manpower = 10000 }
+		IFC = { add_manpower = 5000 }
+		IAM = { add_manpower = 5000 }
+		if = {
+			limit = { has_completed_focus = IVN_command_promote_karn }
+			IMD = {
+				add_manpower = 10000
+				army_experience = 25
+			}
+		}
+		else_if = {
+			limit = { has_completed_focus = IVN_command_sideline_karn }
+			IMD = { add_manpower = -10000 }
+		}
+		if = {
+			limit = { has_completed_focus = IVN_parliament_ban_the_union }
+			IVC = { add_manpower = -5000 }
+		}
+		else_if = {
+			limit = { has_completed_focus = IVN_parliament_tolerate_the_union }
 			IVC = { add_manpower = 5000 }
 		}
-	}
-	99 = {
-		if = {
-			limit = {
-				IVN_march_follows_the_legion = yes
-				OR = {
-					96 = { is_owned_by = IVC }
-					97 = { is_owned_by = IVC }
+		IVN = { IVN_cw_prepare_participant = yes }
+		IVC = { IVN_cw_prepare_participant = yes }
+		IMD = { IVN_cw_prepare_participant = yes }
+		IFC = { IVN_cw_prepare_participant = yes }
+		IAM = { IVN_cw_prepare_participant = yes }
+		IVN_cw_raise_initial_garrison = yes
+		IVC = {
+			IVN_cw_raise_initial_garrison = yes
+			IVC_legion_initialize = yes
+		}
+		IVN = {
+			every_owned_state = {
+				teleport_armies = {
+					limit = {
+						IVN_cw_participant = yes
+						NOT = { controls_state = PREV }
+					}
 				}
 			}
-			IVN_marches_revolt_take_state = yes
-			IVC = { add_manpower = 5000 }
 		}
-	}
-	100 = {
-		if = {
-			limit = {
-				IVN_march_follows_the_legion = yes
-				99 = { is_owned_by = IVC }
-			}
-			IVN_marches_revolt_take_state = yes
-			IVC = { add_manpower = 5000 }
-		}
-	}
-	101 = {
-		if = {
-			limit = {
-				IVN_march_follows_the_legion = yes
-				100 = { is_owned_by = IVC }
-			}
-			IVN_marches_revolt_take_state = yes
-			IVC = { add_manpower = 5000 }
-		}
-	}
-}
-
-# COUNTRY IVN. The balance of the committee and the staff decides how much of
-# the army follows the generals: half under the staff's control, a quarter
-# under the committee's, otherwise about a third.
-IVN_marches_revolt_transfer_units = {
-	if = {
-		limit = {
-			power_balance_value = {
-				id = IVN_command_bop
-				value > 0.35
-			}
-		}
-		transfer_units_fraction = {
-			target = IVC
-			size = 0.5
-			stockpile_ratio = 0.35
-			navy_ratio = 0
-			air_ratio = 0.4
-		}
-	}
-	else_if = {
-		limit = {
-			power_balance_value = {
-				id = IVN_command_bop
-				value < -0.35
-			}
-		}
-		transfer_units_fraction = {
-			target = IVC
-			size = 0.25
-			stockpile_ratio = 0.2
-			navy_ratio = 0
-			air_ratio = 0.2
-		}
-	}
-	else = {
-		transfer_units_fraction = {
-			target = IVC
-			size = 0.35
-			stockpile_ratio = 0.3
-			navy_ratio = 0
-			air_ratio = 0.3
-		}
-	}
-}
-
-# COUNTRY IVN. The emergency cabinet takes power and the legion goes to war.
-# Karn's appointment before the expedition gives him his own reserve; a
-# general sent into retirement rises with fewer men and leaves the cabinet
-# a loyal officer corps.
-IVN_start_marches_revolt = {
-	set_global_flag = IVN_marches_revolt_active
-	IVN_marches_initialize = yes
-	IVN_adopt_emergency_order = yes
-	IVN_marches_revolt_states = yes
-	IVN_marches_revolt_defections = yes
-	IVC = {
-		set_capital = { state = 95 }
-		inherit_technology = IVN
-		add_ideas = minister_IVC_Viktor_Laren
-		ADISCORD_economy_initialize_country = yes
-		promote_character = {
-			character = IVN_Rostislav_Karn
-			ideology = chauvinism_ideology
-		}
-		set_stability = 0.45
-		set_war_support = 0.70
-		add_manpower = 20000
-		IVC_legion_initialize = yes
-	}
-	if = {
-		limit = { has_completed_focus = IVN_command_promote_karn }
 		IVC = {
-			add_manpower = 10000
-			army_experience = 25
+			every_owned_state = {
+				teleport_armies = {
+					limit = {
+						IVN_cw_participant = yes
+						NOT = { controls_state = PREV }
+					}
+				}
+			}
 		}
-	}
-	else_if = {
-		limit = { has_completed_focus = IVN_command_sideline_karn }
-		IVC = { add_manpower = -10000 }
-		add_timed_idea = {
-			idea = IVN_cw_loyal_officers
-			days = 180
+		IMD = {
+			every_owned_state = {
+				teleport_armies = {
+					limit = {
+						IVN_cw_participant = yes
+						NOT = { controls_state = PREV }
+					}
+				}
+			}
 		}
+		IFC = {
+			every_owned_state = {
+				teleport_armies = {
+					limit = {
+						IVN_cw_participant = yes
+						NOT = { controls_state = PREV }
+					}
+				}
+			}
+		}
+		IAM = {
+			every_owned_state = {
+				teleport_armies = {
+					limit = {
+						IVN_cw_participant = yes
+						NOT = { controls_state = PREV }
+					}
+				}
+			}
+		}
+		mark_focus_tree_layout_dirty = yes
 	}
-	# Parliament's answer on the Patriotic Union: an outlawed union has already
-	# lost its branches, a tolerated one brings them to the legion.
+}
+
+IVN_cw_begin_hostilities = {
 	if = {
-		limit = { has_completed_focus = IVN_parliament_ban_the_union }
-		IVC = { add_manpower = -5000 }
+		limit = { has_global_flag = IVN_cw_awaiting_choice }
+		clr_global_flag = IVN_cw_awaiting_choice
+		IVN_cw_declare_wars = yes
+		IVN = { every_owned_state = { set_state_controller_to = PREV } }
+		IVC = { every_owned_state = { set_state_controller_to = PREV } }
+		IMD = { every_owned_state = { set_state_controller_to = PREV } }
+		IFC = { every_owned_state = { set_state_controller_to = PREV } }
+		IAM = { every_owned_state = { set_state_controller_to = PREV } }
+		IVN = {
+			add_timed_idea = { idea = IVN_cw_divided_army days = 180 }
+			if = {
+				limit = { has_completed_focus = IVN_command_sideline_karn }
+				add_timed_idea = { idea = IVN_cw_loyal_officers days = 180 }
+			}
+			news_event = { id = ADISCORD_ivn.3 hours = 1 }
+			IVN_show_civil_war_superevent = yes
+		}
 	}
-	else_if = {
-		limit = { has_completed_focus = IVN_parliament_tolerate_the_union }
-		IVC = { add_manpower = 5000 }
-	}
-	IVN_marches_revolt_transfer_units = yes
-	add_timed_idea = {
-		idea = IVN_cw_divided_army
-		days = 180
+}
+
+IVN_cw_declare_wars = {
+	IVN = {
+		declare_war_on = { target = IVC type = annex_everything }
+		declare_war_on = { target = IMD type = annex_everything }
+		declare_war_on = { target = IFC type = annex_everything }
+		declare_war_on = { target = IAM type = annex_everything }
 	}
 	IVC = {
-		declare_war_on = {
-			target = IVN
-			type = annex_everything
-		}
+		declare_war_on = { target = IMD type = annex_everything }
+		declare_war_on = { target = IFC type = annex_everything }
+		declare_war_on = { target = IAM type = annex_everything }
 	}
-	mark_focus_tree_layout_dirty = yes
-	ADISCORD_economy_mark_dirty = yes
-	news_event = { id = ADISCORD_ivn.3 hours = 1 }
-	IVN_show_civil_war_superevent = yes
+	IMD = {
+		declare_war_on = { target = IFC type = annex_everything }
+		declare_war_on = { target = IAM type = annex_everything }
+	}
+	IFC = {
+		declare_war_on = { target = IAM type = annex_everything }
+	}
 }
 
 # COUNTRY IVC. The legion's aggregate, its oath and its own tree.
@@ -547,10 +741,8 @@ IVN_show_civil_war_superevent = {
 	}
 }
 
-# COUNTRY IVN after its own capitulation. The legion's government, leader and
-# player move into IVN before the annexation removes IVC. The legion's
-# political course survives as the government's spirit; its flag is cleared
-# once converted.
+# COUNTRY IVN after final legion victory. Its political course survives
+# the canonical-country handoff as a government spirit.
 IVN_hand_power_to_legion = {
 	if = {
 		limit = { IVC = { is_ai = no } }
@@ -558,9 +750,9 @@ IVN_hand_power_to_legion = {
 	}
 	IVC = {
 		if = {
-			limit = { has_character = IVN_Rostislav_Karn }
+			limit = { has_character = IVN_Leonid_Stalk }
 			set_nationality = {
-				character = IVN_Rostislav_Karn
+				character = IVN_Leonid_Stalk
 				target_country = IVN
 			}
 		}
@@ -570,10 +762,22 @@ IVN_hand_power_to_legion = {
 		elections_allowed = no
 	}
 	promote_character = {
-		character = IVN_Rostislav_Karn
+		character = IVN_Leonid_Stalk
 		ideology = chauvinism_ideology
 	}
 	IVN_party_representatives_legion = yes
+	set_variable = { var = IVC_leg_attack value = IVC.IVC_leg_attack }
+	set_variable = { var = IVC_leg_breakthrough value = IVC.IVC_leg_breakthrough }
+	set_variable = { var = IVC_leg_conscription value = IVC.IVC_leg_conscription }
+	set_variable = { var = IVC_leg_construction value = IVC.IVC_leg_construction }
+	set_variable = { var = IVC_leg_defence value = IVC.IVC_leg_defence }
+	set_variable = { var = IVC_leg_factory_output value = IVC.IVC_leg_factory_output }
+	set_variable = { var = IVC_leg_org value = IVC.IVC_leg_org }
+	set_variable = { var = IVC_leg_political_power value = IVC.IVC_leg_political_power }
+	set_variable = { var = IVC_leg_stability value = IVC.IVC_leg_stability }
+	set_variable = { var = IVC_leg_training value = IVC.IVC_leg_training }
+	set_variable = { var = IVC_leg_war_support value = IVC.IVC_leg_war_support }
+	IVC_refresh_legion = yes
 	if = {
 		limit = { has_global_flag = IVN_legion_course_council }
 		add_ideas = IVN_rule_of_the_legion_council
@@ -586,52 +790,586 @@ IVN_hand_power_to_legion = {
 	clr_global_flag = IVN_legion_course_union
 }
 
-# COUNTRY IVN. Every terminal path reunites the marches under IVN. Timed
-# measures still running on a frontier march were paid by a side of the
-# revolt; their flags close with it.
+# COUNTRY IVN after every independent participant has been absorbed.
 IVN_resolve_marches_revolt = {
-	if = {
-		limit = { has_war_with = IVC }
-		white_peace = IVC
-	}
-	if = {
-		limit = { country_exists = IVC }
-		annex_country = {
-			target = IVC
-			transfer_troops = yes
-		}
-	}
 	clr_global_flag = IVN_marches_revolt_active
+	clr_global_flag = IVN_cw_awaiting_choice
 	set_global_flag = IVN_marches_revolt_resolved
-	if = {
-		limit = { has_government = chauvinism }
-		set_global_flag = IVN_civil_war_won_by_legion
-	}
-	else = {
-		set_global_flag = IVN_civil_war_won_by_cabinet
-	}
 	clr_global_flag = IVN_legion_course_council
 	clr_global_flag = IVN_legion_course_union
-	if = {
-		limit = { has_idea = IVN_cw_divided_army }
-		remove_ideas = IVN_cw_divided_army
-	}
-	if = {
-		limit = { has_idea = IVN_cw_loyal_officers }
-		remove_ideas = IVN_cw_loyal_officers
-	}
-	if = {
-		limit = { has_idea = IVN_cw_war_bonds }
-		remove_ideas = IVN_cw_war_bonds
-	}
+	IVN_cw_clear_participant = yes
+	IVC = { IVN_cw_clear_participant = yes }
+	IMD = { IVN_cw_clear_participant = yes }
+	IFC = { IVN_cw_clear_participant = yes }
+	IAM = { IVN_cw_clear_participant = yes }
 	mark_focus_tree_layout_dirty = yes
 	ADISCORD_economy_mark_dirty = yes
 	if = {
-		limit = { has_government = chauvinism }
+		limit = { has_global_flag = IVN_civil_war_won_by_legion }
 		news_event = { id = ADISCORD_ivn.5 hours = 2 }
 	}
-	else = {
+	else_if = {
+		limit = { has_global_flag = IVN_civil_war_won_by_cabinet }
 		news_event = { id = ADISCORD_ivn.4 hours = 2 }
+	}
+	else = { news_event = { id = ADISCORD_ivn.12 hours = 2 } }
+}
+
+IVN_cw_clear_participant = {
+	if = {
+		limit = { has_country_flag = IVN_cw_added_major }
+		set_major = no
+		clr_country_flag = IVN_cw_added_major
+	}
+	clr_country_flag = IVN_cw_offer_pending
+	clr_country_flag = IVN_cw_offer_committee
+	clr_country_flag = IVN_cw_offer_legion
+	clr_country_flag = IVN_cw_offer_cooldown
+	remove_ideas = IVN_cw_divided_army
+	remove_ideas = IVN_cw_loyal_officers
+	remove_ideas = IVN_cw_war_bonds
+	remove_ideas = IVN_cw_counterstroke_idea
+	remove_ideas = IVN_cw_storm_of_vedrina
+	remove_ideas = IVC_legion_vow
+	remove_ideas = IVC_storm_of_the_capital
+}
+
+# COUNTRY donor. Recipient is a local event target set by the caller. Refund
+# unfinished work before moving its pools; zero them to prevent a revived tag
+# receiving the same resources for a second time.
+IVN_cw_transfer_reserves = {
+	IVN_cw_close_programmes = yes
+	set_variable = { var = IVN_cw_transfer_manpower value = manpower }
+	set_variable = { var = IVN_cw_transfer_power value = political_power }
+	event_target:IVN_cw_recipient = {
+		add_manpower = var:PREV.IVN_cw_transfer_manpower
+		add_political_power = var:PREV.IVN_cw_transfer_power
+		add_to_variable = { var = ADISCORD_economy_treasury value = PREV.ADISCORD_economy_treasury }
+		add_to_variable = { var = ADISCORD_economy_debt value = PREV.ADISCORD_economy_debt }
+	}
+	multiply_variable = { var = IVN_cw_transfer_manpower value = -1 }
+	multiply_variable = { var = IVN_cw_transfer_power value = -1 }
+	add_manpower = var:IVN_cw_transfer_manpower
+	add_political_power = var:IVN_cw_transfer_power
+	clear_variable = IVN_cw_transfer_manpower
+	clear_variable = IVN_cw_transfer_power
+	set_variable = { var = ADISCORD_economy_treasury value = 0 }
+	set_variable = { var = ADISCORD_economy_debt value = 0 }
+	transfer_units_fraction = {
+		target = event_target:IVN_cw_recipient
+		size = 0
+		stockpile_ratio = 1
+		navy_ratio = 0
+		air_ratio = 0
+	}
+	if = {
+		limit = { has_idea = IVN_cw_military_guarantees }
+		event_target:IVN_cw_recipient = { add_ideas = IVN_cw_military_guarantees }
+		remove_ideas = IVN_cw_military_guarantees
+	}
+	if = {
+		limit = { has_idea = IVN_cw_communal_guarantees }
+		event_target:IVN_cw_recipient = { add_ideas = IVN_cw_communal_guarantees }
+		remove_ideas = IVN_cw_communal_guarantees
+	}
+	if = {
+		limit = { has_idea = IVN_cw_regional_guarantees }
+		event_target:IVN_cw_recipient = { add_ideas = IVN_cw_regional_guarantees }
+		remove_ideas = IVN_cw_regional_guarantees
+	}
+	# The existing island administration remains a subject through government changes.
+	if = {
+		limit = { IIA = { is_subject_of = PREV } }
+		event_target:IVN_cw_recipient = {
+			set_autonomy = { target = IIA autonomy_state = autonomy_island_administration freedom_level = 0 }
+		}
+	}
+	ADISCORD_economy_mark_dirty = yes
+	event_target:IVN_cw_recipient = { ADISCORD_economy_mark_dirty = yes }
+}
+
+# on_capitulation ROOT is the loser and FROM the actual victor. No other
+# independent participant is annexed and no peace callback selects a winner.
+IVN_cw_absorb_defeated = {
+	FROM = {
+		if = {
+			limit = {
+				is_subject = yes
+				OVERLORD = { IVN_cw_participant = yes }
+			}
+			OVERLORD = { save_event_target_as = IVN_cw_recipient }
+		}
+		else = { save_event_target_as = IVN_cw_recipient }
+	}
+	IVN_cw_transfer_reserves = yes
+	IVN_cw_clear_participant = yes
+	event_target:IVN_cw_recipient = {
+		annex_country = { target = ROOT transfer_troops = no }
+		country_event = { id = ADISCORD_ivn.10 hours = 1 }
+	}
+}
+
+# An expired old window cannot clear a different sender's current proposal.
+IVN_cw_decline_offer = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_country_flag = IVN_cw_offer_committee
+					FROM = { tag = IVN }
+				}
+				AND = {
+					has_country_flag = IVN_cw_offer_legion
+					FROM = { tag = IVC }
+				}
+			}
+		}
+		clr_country_flag = IVN_cw_offer_pending
+		clr_country_flag = IVN_cw_offer_committee
+		clr_country_flag = IVN_cw_offer_legion
+	}
+}
+
+IVN_cw_accept_offer = {
+	if = {
+		limit = { IVN_cw_offer_valid = yes }
+		FROM = {
+			add_political_power = -75
+			save_event_target_as = IVN_cw_recipient
+		}
+		if = {
+			limit = { tag = IMD }
+			add_ideas = IVN_cw_military_guarantees
+		}
+		if = {
+			limit = { tag = IFC }
+			add_ideas = IVN_cw_communal_guarantees
+		}
+		if = {
+			limit = { tag = IAM }
+			add_ideas = IVN_cw_regional_guarantees
+		}
+		IVN_cw_transfer_reserves = yes
+		IVN_cw_clear_participant = yes
+		if = {
+			limit = { is_ai = no }
+			FROM = { change_tag_from = ROOT }
+		}
+		FROM = {
+			annex_country = { target = ROOT transfer_troops = yes }
+			country_event = { id = ADISCORD_ivn.10 hours = 1 }
+		}
+	}
+}
+
+# COUNTRY/ROOT sole remaining participant. Restore the canonical IVN only
+# after the contest has ended; its prewar focus history remains on that tag.
+IVN_cw_finish = {
+	if = {
+		limit = {
+			has_global_flag = IVN_marches_revolt_active
+			IVN_cw_last_participant = yes
+		}
+		if = {
+			limit = { tag = IVN }
+			set_global_flag = IVN_civil_war_won_by_cabinet
+			IVN_resolve_marches_revolt = yes
+		}
+		else = {
+			save_event_target_as = IVN_cw_victor
+			IVN = { save_event_target_as = IVN_cw_recipient }
+			capital_scope = { IVN = { transfer_state = PREV } }
+			IVN = { inherit_technology = ROOT }
+			IVN_cw_transfer_reserves = yes
+			if = {
+				limit = { is_ai = no }
+				IVN = { change_tag_from = ROOT }
+			}
+			if = {
+				limit = { tag = IVC }
+				set_global_flag = IVN_civil_war_won_by_legion
+				set_nationality = { character = IVN_Leonid_Stalk target_country = IVN }
+				IVN = {
+					set_politics = { ruling_party = chauvinism elections_allowed = no }
+					promote_character = { character = IVN_Leonid_Stalk ideology = chauvinism_ideology }
+					set_cosmetic_tag = IVN_unified_legion
+					IVN_hand_power_to_legion = yes
+				}
+			}
+			else_if = {
+				limit = { tag = IMD }
+				set_global_flag = IVN_civil_war_won_by_directory
+				set_nationality = { character = IVN_Rostislav_Karn target_country = IVN }
+				IVN = {
+					set_politics = {
+						ruling_party = etatism
+						elections_allowed = no
+						name = IMD_etatism_party
+						long_name = IMD_etatism_party
+					}
+					promote_character = { character = IVN_Rostislav_Karn ideology = etatism_ideology }
+					set_cosmetic_tag = IVN_unified_directory
+				}
+			}
+			else_if = {
+				limit = { tag = IFC }
+				set_global_flag = IVN_civil_war_won_by_communes
+				set_nationality = { character = IVN_Commune_Council target_country = IVN }
+				IVN = {
+					set_politics = {
+						ruling_party = anarchism
+						elections_allowed = no
+						name = IFC_anarchism_party
+						long_name = IFC_anarchism_party
+					}
+					promote_character = { character = IVN_Commune_Council ideology = anarchism_ideology }
+					set_cosmetic_tag = IVN_unified_communes
+				}
+			}
+			else_if = {
+				limit = { tag = IAM }
+				set_global_flag = IVN_civil_war_won_by_marches
+				set_nationality = { character = IVN_Marches_Council target_country = IVN }
+				IVN = {
+					set_politics = {
+						ruling_party = pragmatism
+						elections_allowed = no
+						name = IAM_pragmatism_party
+						long_name = IAM_pragmatism_party
+					}
+					promote_character = { character = IVN_Marches_Council ideology = pragmatism_ideology }
+					set_cosmetic_tag = IVN_unified_marches
+				}
+			}
+			IVN_cw_clear_participant = yes
+			IVN = {
+				annex_country = { target = event_target:IVN_cw_victor transfer_troops = yes }
+				set_capital = { state = 25 }
+				IVN_resolve_marches_revolt = yes
+			}
+		}
+	}
+}
+
+# COUNTRY being absorbed. Paid national programmes use their active decisions;
+# targeted programmes use state receipts because has_decision is not reliable
+# for a targeted instance. remove_decision does not execute its reward.
+IVN_cw_close_programmes = {
+	save_event_target_as = IVN_cw_closing_country
+	if = {
+		limit = { has_decision = IVN_march_workshops }
+		add_political_power = 50
+		remove_decision = IVN_march_workshops
+	}
+	if = {
+		limit = { has_decision = IVN_reserve_call_up }
+		add_political_power = 25
+		remove_decision = IVN_reserve_call_up
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_march_hospital_train
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 30
+		}
+		clr_state_flag = IVN_march_work
+		clear_variable = IVN_paid_IVN_march_hospital_train
+	}
+	remove_decision = IVN_march_hospital_train
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_march_school_grant
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 40
+		}
+		clr_state_flag = IVN_march_work
+		clear_variable = IVN_paid_IVN_march_school_grant
+	}
+	remove_decision = IVN_march_school_grant
+	if = {
+		limit = { has_decision = IVN_command_budget_to_staff }
+		add_political_power = 50
+		remove_decision = IVN_command_budget_to_staff
+	}
+	if = {
+		limit = { has_decision = IVN_command_civil_audit }
+		add_political_power = 50
+		remove_decision = IVN_command_civil_audit
+	}
+	if = {
+		limit = { has_decision = IVN_expedition_krait_bridgehead }
+		add_political_power = 40
+		remove_decision = IVN_expedition_krait_bridgehead
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_cw_amnesty_offer
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 60
+		}
+		clr_state_flag = IVN_march_work
+		clear_variable = IVN_paid_IVN_cw_amnesty_offer
+	}
+	remove_decision = IVN_cw_amnesty_offer
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVC_garrison_appeal
+			event_target:IVN_cw_closing_country = { tag = IVC }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 60
+		}
+		clr_state_flag = IVN_march_work
+		clear_variable = IVN_paid_IVC_garrison_appeal
+	}
+	remove_decision = IVC_garrison_appeal
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_rc_mine_survey
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 50
+		}
+		clr_state_flag = IVN_rc_mine_opened
+		clr_state_flag = IVN_rc_mine_work
+		clear_variable = IVN_paid_IVN_rc_mine_survey
+	}
+	remove_decision = IVN_rc_mine_survey
+	if = {
+		limit = { has_decision = IVN_rc_fen_drainage }
+		add_political_power = 75
+		remove_decision = IVN_rc_fen_drainage
+	}
+	if = {
+		limit = { has_decision = IVN_rc_laboratory_contracts }
+		add_political_power = 60
+		remove_decision = IVN_rc_laboratory_contracts
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_rc_housing_programme
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 50
+		}
+		clr_state_flag = IVN_march_work
+		clr_state_flag = IVN_rc_housing_built
+		clear_variable = IVN_paid_IVN_rc_housing_programme
+	}
+	remove_decision = IVN_rc_housing_programme
+	if = {
+		limit = { has_decision = IVN_rc_reserve_musters }
+		add_political_power = 40
+		remove_decision = IVN_rc_reserve_musters
+	}
+	if = {
+		limit = { has_decision = IVN_rc_field_manoeuvres }
+		add_political_power = 50
+		remove_decision = IVN_rc_field_manoeuvres
+	}
+	if = {
+		limit = { has_decision = IVN_sh_league_assembly }
+		add_political_power = 60
+		remove_decision = IVN_sh_league_assembly
+	}
+	if = {
+		limit = { has_decision = IVN_sh_volunteer_brigades }
+		add_political_power = 50
+		remove_decision = IVN_sh_volunteer_brigades
+	}
+	if = {
+		limit = { has_decision = IVN_em_requisition_drive }
+		add_political_power = 60
+		remove_decision = IVN_em_requisition_drive
+	}
+	if = {
+		limit = { has_decision = IVN_em_border_exercises }
+		add_political_power = 75
+		remove_decision = IVN_em_border_exercises
+	}
+	if = {
+		limit = { has_decision = IVN_rv_arsenal_shift }
+		add_political_power = 75
+		remove_decision = IVN_rv_arsenal_shift
+	}
+	if = {
+		limit = { has_decision = IVN_rv_staff_war_games }
+		add_political_power = 50
+		remove_decision = IVN_rv_staff_war_games
+	}
+	if = {
+		limit = { has_decision = IVN_rv_union_rallies }
+		add_political_power = 40
+		remove_decision = IVN_rv_union_rallies
+	}
+	if = {
+		limit = { has_decision = IVC_assault_group_drill }
+		add_political_power = 40
+		remove_decision = IVC_assault_group_drill
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVC_fortify_march
+			event_target:IVN_cw_closing_country = { tag = IVC }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 35
+		}
+		clear_variable = IVN_paid_IVC_fortify_march
+	}
+	remove_decision = IVC_fortify_march
+	if = {
+		limit = { has_decision = IVC_requisition_columns }
+		add_political_power = 20
+		remove_decision = IVC_requisition_columns
+	}
+	if = {
+		limit = { has_decision = IVC_fair_purchase_contracts }
+		add_political_power = 60
+		remove_decision = IVC_fair_purchase_contracts
+	}
+	if = {
+		limit = { has_decision = IVC_propaganda_cabinet_marches }
+		add_political_power = 40
+		remove_decision = IVC_propaganda_cabinet_marches
+	}
+	if = {
+		limit = { has_decision = IVC_depot_sabotage }
+		add_political_power = 35
+		remove_decision = IVC_depot_sabotage
+	}
+	if = {
+		limit = { has_decision = IVC_northern_arms_caravan }
+		add_political_power = 45
+		remove_decision = IVC_northern_arms_caravan
+	}
+	if = {
+		limit = { has_decision = IVC_officer_defection_talks }
+		add_political_power = 50
+		remove_decision = IVC_officer_defection_talks
+	}
+	if = {
+		limit = { has_decision = IVN_nm_mandate_arms_convoy }
+		add_political_power = 40
+		remove_decision = IVN_nm_mandate_arms_convoy
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_nm_corridor_roadworks
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 35
+		}
+		clear_variable = IVN_paid_IVN_nm_corridor_roadworks
+	}
+	remove_decision = IVN_nm_corridor_roadworks
+	if = {
+		limit = { has_decision = IVN_nm_client_credit }
+		add_political_power = 50
+		remove_decision = IVN_nm_client_credit
+	}
+	if = {
+		limit = { has_decision = IVN_nm_retreat_debriefing }
+		add_political_power = 25
+		remove_decision = IVN_nm_retreat_debriefing
+	}
+	if = {
+		limit = { has_decision = IVN_nm_rearmament_order }
+		add_political_power = 50
+		remove_decision = IVN_nm_rearmament_order
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_nm_border_works
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 30
+		}
+		clear_variable = IVN_paid_IVN_nm_border_works
+	}
+	remove_decision = IVN_nm_border_works
+	if = {
+		limit = { has_decision = IVN_nm_ensign_school }
+		add_political_power = 40
+		remove_decision = IVN_nm_ensign_school
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_cb_partisan_supply
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 35
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 1800 producer = ROOT }
+		}
+		clr_state_flag = IVN_march_work
+		clear_variable = IVN_paid_IVN_cb_partisan_supply
+	}
+	remove_decision = IVN_cb_partisan_supply
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_wl_integrate_district
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 75
+		}
+		clear_variable = IVN_paid_IVN_wl_integrate_district
+	}
+	remove_decision = IVN_wl_integrate_district
+	if = {
+		limit = { has_decision = IVN_wl_western_exchange }
+		add_political_power = 50
+		remove_decision = IVN_wl_western_exchange
+	}
+	if = {
+		limit = { has_decision = IVN_wl_veterans_cooperatives }
+		add_political_power = 40
+		add_manpower = 5000
+		remove_decision = IVN_wl_veterans_cooperatives
+	}
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_wl_corridor_garrison
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 30
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 1800 producer = ROOT }
+		}
+		clear_variable = IVN_paid_IVN_wl_corridor_garrison
+	}
+	remove_decision = IVN_wl_corridor_garrison
+	every_state = {
+		limit = {
+			has_variable = IVN_paid_IVN_wl_lost_march_sabotage
+			event_target:IVN_cw_closing_country = { tag = IVN }
+		}
+		event_target:IVN_cw_closing_country = {
+			add_political_power = 40
+		}
+		clear_variable = IVN_paid_IVN_wl_lost_march_sabotage
+	}
+	remove_decision = IVN_wl_lost_march_sabotage
+	if = {
+		limit = { has_decision = IVN_wl_federal_orders }
+		add_political_power = 50
+		remove_decision = IVN_wl_federal_orders
+	}
+	if = {
+		limit = { has_decision = IVN_wl_frontier_alert }
+		add_political_power = 50
+		remove_decision = IVN_wl_frontier_alert
 	}
 }
 

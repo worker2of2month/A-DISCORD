@@ -366,7 +366,7 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
         )
 
     def test_energy_price_must_be_inside_a_complete_single_line_value(self) -> None:
-        path = validator.ROOT / "localisation/russian/ADISCORD_technology_doctrine_l_russian.yml"
+        path = validator.ROOT / "localisation/replace/ADISCORD_technology_doctrine_l_russian.yml"
         source = validator.read_text(path)
         tech_id = "ADISCORD_tech_concentrated_industrial_zones"
         line = next(line for line in source.splitlines() if f"{tech_id}_desc:" in line)

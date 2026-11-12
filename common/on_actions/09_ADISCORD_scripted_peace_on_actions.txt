@@ -1706,28 +1706,22 @@ on_actions = {
 				# END rin:on_capitulation
 
 				# BEGIN itora_revolt:on_capitulation
-				# The capital that falls loses the revolt; IVN always annexes the legion,
-				# taking its government when the legion wins.
 				if = {
 					limit = {
 						has_global_flag = IVN_marches_revolt_active
-						ROOT = { tag = IVC }
-						FROM = { tag = IVN }
+						ROOT = { IVN_cw_participant = yes }
+						FROM = {
+							OR = {
+								IVN_cw_participant = yes
+								AND = {
+									is_subject = yes
+									OVERLORD = { IVN_cw_participant = yes }
+								}
+							}
+						}
 					}
 					set_global_flag = skip_default_capitulation
-					IVN = { IVN_resolve_marches_revolt = yes }
-				}
-				else_if = {
-					limit = {
-						has_global_flag = IVN_marches_revolt_active
-						ROOT = { tag = IVN }
-						FROM = { tag = IVC }
-					}
-					set_global_flag = skip_default_capitulation
-					IVN = {
-						IVN_hand_power_to_legion = yes
-						IVN_resolve_marches_revolt = yes
-					}
+					ROOT = { IVN_cw_absorb_defeated = yes }
 				}
 				# END itora_revolt:on_capitulation
 
@@ -2251,16 +2245,22 @@ on_actions = {
 				# END rin:on_peace
 
 				# BEGIN itora_revolt:on_peace
-				# An external peace leaves the cabinet in power and reunites the marches.
+				# A single ended war is not reunification. Test only the actual
+				# participants of this peace, after the native callback completes.
 				if = {
-					limit = {
-						has_global_flag = IVN_marches_revolt_active
-						IVN = {
-							exists = yes
-							NOT = { has_war_with = IVC }
+					limit = { has_global_flag = IVN_marches_revolt_active }
+					ROOT = {
+						if = {
+							limit = { IVN_cw_participant = yes }
+							country_event = { id = ADISCORD_ivn.10 hours = 1 }
 						}
 					}
-					IVN = { IVN_resolve_marches_revolt = yes }
+					FROM = {
+						if = {
+							limit = { IVN_cw_participant = yes }
+							country_event = { id = ADISCORD_ivn.10 hours = 1 }
+						}
+					}
 				}
 				# END itora_revolt:on_peace
 

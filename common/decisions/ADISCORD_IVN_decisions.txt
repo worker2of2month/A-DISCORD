@@ -109,6 +109,7 @@ IVN_marches_category = {
 		days_remove = 21
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_march_hospital_train value = 30 } } }
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_march_work }
 			}
@@ -119,19 +120,29 @@ IVN_marches_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_march_hospital_train } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_march_hospital_train } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 30
+
 			}
-			add_political_power = 30
 		}
 		remove_effect = {
-			FROM = {
-				custom_effect_tooltip = IVN_march_trust_plus_15_tt
-				hidden_effect = {
-					clr_state_flag = IVN_march_work
-					set_temp_variable = { var = IVN_trust_delta value = 15 }
-					IVN_march_trust_change = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_march_hospital_train } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_march_hospital_train } }
+				FROM = {
+					custom_effect_tooltip = IVN_march_trust_plus_15_tt
+					hidden_effect = {
+						clr_state_flag = IVN_march_work
+						set_temp_variable = { var = IVN_trust_delta value = 15 }
+						IVN_march_trust_change = yes
+					}
 				}
+
 			}
 		}
 		ai_will_do = {
@@ -232,6 +243,7 @@ IVN_marches_category = {
 		days_remove = 45
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_march_school_grant value = 40 } } }
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_march_work }
 			}
@@ -242,24 +254,34 @@ IVN_marches_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_march_school_grant } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_march_school_grant } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 40
+
 			}
-			add_political_power = 40
 		}
 		remove_effect = {
-			FROM = {
-				custom_effect_tooltip = IVN_march_trust_plus_12_tt
-				hidden_effect = {
-					clr_state_flag = IVN_march_work
-					set_temp_variable = { var = IVN_trust_delta value = 12 }
-					IVN_march_trust_change = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_march_school_grant } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_march_school_grant } }
+				FROM = {
+					custom_effect_tooltip = IVN_march_trust_plus_12_tt
+					hidden_effect = {
+						clr_state_flag = IVN_march_work
+						set_temp_variable = { var = IVN_trust_delta value = 12 }
+						IVN_march_trust_change = yes
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
 				}
-				add_building_construction = {
-					type = infrastructure
-					level = 1
-					instant_build = yes
-				}
+
 			}
 		}
 		ai_will_do = {
@@ -689,6 +711,7 @@ IVN_civil_war_category = {
 		days_remove = 30
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_cw_amnesty_offer value = 60 } } }
 			custom_effect_tooltip = IVN_cw_amnesty_offer_tt
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_march_work }
@@ -703,25 +726,35 @@ IVN_civil_war_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_cw_amnesty_offer } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_cw_amnesty_offer } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 60
+
 			}
-			add_political_power = 60
 		}
 		remove_effect = {
-			FROM = {
-				clr_state_flag = IVN_march_work
-				if = {
-					limit = {
-						is_owned_by = IVC
-						check_variable = { var = IVN_march_trust value = 60 compare = greater_than_or_equals }
-						IVN_march_borders_root_control = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_cw_amnesty_offer } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_cw_amnesty_offer } }
+				FROM = {
+					clr_state_flag = IVN_march_work
+					if = {
+						limit = {
+							is_owned_by = IVC
+							check_variable = { var = IVN_march_trust value = 60 compare = greater_than_or_equals }
+							IVN_march_borders_root_control = yes
+						}
+						IVN_march_defect_to_root = yes
 					}
-					IVN_march_defect_to_root = yes
+					else = {
+						ROOT = { add_political_power = 60 }
+					}
 				}
-				else = {
-					ROOT = { add_political_power = 60 }
-				}
+
 			}
 		}
 		ai_will_do = {
@@ -911,6 +944,7 @@ IVC_legion_category = {
 		days_remove = 30
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVC_garrison_appeal value = 60 } } }
 			custom_effect_tooltip = IVC_garrison_appeal_tt
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_march_work }
@@ -925,25 +959,35 @@ IVC_legion_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVC_garrison_appeal } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVC_garrison_appeal } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 60
+
 			}
-			add_political_power = 60
 		}
 		remove_effect = {
-			FROM = {
-				clr_state_flag = IVN_march_work
-				if = {
-					limit = {
-						is_owned_by = IVN
-						check_variable = { var = IVN_march_trust value = 40 compare = less_than }
-						IVN_march_borders_root_control = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVC_garrison_appeal } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVC_garrison_appeal } }
+				FROM = {
+					clr_state_flag = IVN_march_work
+					if = {
+						limit = {
+							is_owned_by = IVN
+							check_variable = { var = IVN_march_trust value = 40 compare = less_than }
+							IVN_march_borders_root_control = yes
+						}
+						IVN_march_defect_to_root = yes
 					}
-					IVN_march_defect_to_root = yes
+					else = {
+						ROOT = { add_political_power = 60 }
+					}
 				}
-				else = {
-					ROOT = { add_political_power = 60 }
-				}
+
 			}
 		}
 		ai_will_do = {
@@ -1112,6 +1156,7 @@ IVN_reconstruction_category = {
 		days_remove = 60
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_rc_mine_survey value = 50 } } }
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_rc_mine_work }
 			}
@@ -1122,21 +1167,31 @@ IVN_reconstruction_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_rc_mine_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_rc_mine_survey } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_rc_mine_survey } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_rc_mine_work }
+				}
+				add_political_power = 50
+
 			}
-			add_political_power = 50
 		}
 		remove_effect = {
-			FROM = {
-				hidden_effect = {
-					clr_state_flag = IVN_rc_mine_work
-					set_state_flag = IVN_rc_mine_opened
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_rc_mine_survey } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_rc_mine_survey } }
+				FROM = {
+					hidden_effect = {
+						clr_state_flag = IVN_rc_mine_work
+						set_state_flag = IVN_rc_mine_opened
+					}
+					add_resource = {
+						type = steel
+						amount = 3
+					}
 				}
-				add_resource = {
-					type = steel
-					amount = 3
-				}
+
 			}
 		}
 		ai_will_do = {
@@ -1273,6 +1328,7 @@ IVN_reconstruction_category = {
 		days_remove = 60
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_rc_housing_programme value = 50 } } }
 			hidden_effect = {
 				FROM = { set_state_flag = IVN_march_work }
 			}
@@ -1283,23 +1339,33 @@ IVN_reconstruction_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_rc_housing_programme } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_rc_housing_programme } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 50
+
 			}
-			add_political_power = 50
 		}
 		remove_effect = {
-			FROM = {
-				custom_effect_tooltip = IVN_march_trust_plus_10_tt
-				hidden_effect = {
-					clr_state_flag = IVN_march_work
-					set_state_flag = IVN_rc_housing_built
-					set_temp_variable = { var = IVN_trust_delta value = 10 }
-					IVN_march_trust_change = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_rc_housing_programme } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_rc_housing_programme } }
+				FROM = {
+					custom_effect_tooltip = IVN_march_trust_plus_10_tt
+					hidden_effect = {
+						clr_state_flag = IVN_march_work
+						set_state_flag = IVN_rc_housing_built
+						set_temp_variable = { var = IVN_trust_delta value = 10 }
+						IVN_march_trust_change = yes
+					}
+					add_extra_state_shared_building_slots = 1
 				}
-				add_extra_state_shared_building_slots = 1
+				add_manpower = 1500
+
 			}
-			add_manpower = 1500
 		}
 		ai_will_do = {
 			base = 0
@@ -1670,28 +1736,41 @@ IVC_legion_war_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 35
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVC_fortify_march } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVC_fortify_march } }
+				add_political_power = 35
+
+			}
 		}
 		remove_effect = {
-			FROM = {
-				if = {
-					limit = { is_controlled_by = ROOT }
-					add_building_construction = {
-						type = bunker
-						level = 1
-						province = {
-							all_provinces = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVC_fortify_march } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVC_fortify_march } }
+				FROM = {
+					if = {
+						limit = { is_controlled_by = ROOT }
+						add_building_construction = {
+							type = bunker
+							level = 1
+							province = {
+								all_provinces = yes
+							}
+							instant_build = yes
 						}
-						instant_build = yes
+					}
+					else = {
+						ROOT = { add_political_power = 35 }
 					}
 				}
-				else = {
-					ROOT = { add_political_power = 35 }
-				}
+
 			}
 		}
 		ai_will_do = {
 			base = 10
+		}
+		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVC_fortify_march value = 35 } } }
 		}
 	}
 
@@ -2026,30 +2105,40 @@ IVN_mandate_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 35
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_nm_corridor_roadworks } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_nm_corridor_roadworks } }
+				add_political_power = 35
+
+			}
 		}
 		remove_effect = {
 			if = {
-				limit = {
-					FROM = {
-						OR = {
-							is_owned_and_controlled_by = IBA
-							is_owned_and_controlled_by = IBL
+				limit = { FROM = { has_variable = IVN_paid_IVN_nm_corridor_roadworks } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_nm_corridor_roadworks } }
+				if = {
+					limit = {
+						FROM = {
+							OR = {
+								is_owned_and_controlled_by = IBA
+								is_owned_and_controlled_by = IBL
+							}
+							owner = { is_subject_of = ROOT }
+							infrastructure < 5
 						}
-						owner = { is_subject_of = ROOT }
-						infrastructure < 5
+					}
+					FROM = {
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
 					}
 				}
-				FROM = {
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
+				else = {
+					add_political_power = 35
 				}
-			}
-			else = {
-				add_political_power = 35
+
 			}
 		}
 		ai_will_do = {
@@ -2058,6 +2147,9 @@ IVN_mandate_category = {
 				factor = 0
 				has_political_power < 100
 			}
+		}
+		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_nm_corridor_roadworks value = 35 } } }
 		}
 	}
 
@@ -2272,27 +2364,37 @@ IVN_retreat_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 30
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_nm_border_works } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_nm_border_works } }
+				add_political_power = 30
+
+			}
 		}
 		remove_effect = {
 			if = {
-				limit = {
-					FROM = { is_controlled_by = ROOT }
-				}
-				FROM = {
-					add_building_construction = {
-						type = bunker
-						level = 1
-						province = {
-							all_provinces = yes
-							limit_to_border = yes
+				limit = { FROM = { has_variable = IVN_paid_IVN_nm_border_works } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_nm_border_works } }
+				if = {
+					limit = {
+						FROM = { is_controlled_by = ROOT }
+					}
+					FROM = {
+						add_building_construction = {
+							type = bunker
+							level = 1
+							province = {
+								all_provinces = yes
+								limit_to_border = yes
+							}
+							instant_build = yes
 						}
-						instant_build = yes
 					}
 				}
-			}
-			else = {
-				add_political_power = 30
+				else = {
+					add_political_power = 30
+				}
+
 			}
 		}
 		ai_will_do = {
@@ -2301,6 +2403,9 @@ IVN_retreat_category = {
 				add = 8
 				has_war = yes
 			}
+		}
+		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_nm_border_works value = 30 } } }
 		}
 	}
 
@@ -2419,6 +2524,7 @@ IVN_civil_war_category = {
 		days_remove = 30
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_cb_partisan_supply value = 35 } } }
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
 				amount = -1800
@@ -2437,27 +2543,37 @@ IVN_civil_war_category = {
 			}
 		}
 		cancel_effect = {
-			hidden_effect = {
-				FROM = { clr_state_flag = IVN_march_work }
-			}
-			add_political_power = 35
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 1800
-				producer = IVN
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_cb_partisan_supply } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_cb_partisan_supply } }
+				hidden_effect = {
+					FROM = { clr_state_flag = IVN_march_work }
+				}
+				add_political_power = 35
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1800
+					producer = IVN
+				}
+
 			}
 		}
 		remove_effect = {
-			FROM = {
-				hidden_effect = {
-					clr_state_flag = IVN_march_work
-					set_temp_variable = { var = IVN_trust_delta value = 15 }
-					IVN_march_trust_change = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_cb_partisan_supply } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_cb_partisan_supply } }
+				FROM = {
+					hidden_effect = {
+						clr_state_flag = IVN_march_work
+						set_temp_variable = { var = IVN_trust_delta value = 15 }
+						IVN_march_trust_change = yes
+					}
+					damage_building = {
+						type = infrastructure
+						damage = 1
+					}
 				}
-				damage_building = {
-					type = infrastructure
-					damage = 1
-				}
+
 			}
 		}
 		ai_will_do = {
@@ -2554,6 +2670,7 @@ IVN_west_legacy_category = {
 		days_remove = 120
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_wl_integrate_district value = 75 } } }
 			custom_effect_tooltip = IVN_wl_integrate_district_tt
 		}
 		cancel_trigger = {
@@ -2562,24 +2679,34 @@ IVN_west_legacy_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 75
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_integrate_district } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_integrate_district } }
+				add_political_power = 75
+
+			}
 		}
 		remove_effect = {
-			FROM = {
-				if = {
-					limit = { is_owned_and_controlled_by = ROOT }
-					add_core_of = ROOT
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_integrate_district } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_integrate_district } }
+				FROM = {
+					if = {
+						limit = { is_owned_and_controlled_by = ROOT }
+						add_core_of = ROOT
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
+					}
+					else = {
+						ROOT = { add_political_power = 75 }
 					}
 				}
-				else = {
-					ROOT = { add_political_power = 75 }
-				}
+				ADISCORD_economy_mark_dirty = yes
+
 			}
-			ADISCORD_economy_mark_dirty = yes
 		}
 		ai_will_do = {
 			base = 30
@@ -2747,6 +2874,7 @@ IVN_west_legacy_category = {
 		days_re_enable = 90
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_wl_corridor_garrison value = 30 } } }
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
 				amount = -1800
@@ -2759,39 +2887,49 @@ IVN_west_legacy_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 30
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 1800
-				producer = IVN
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_corridor_garrison } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_corridor_garrison } }
+				add_political_power = 30
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1800
+					producer = IVN
+				}
+
 			}
 		}
 		remove_effect = {
-			FROM = {
-				if = {
-					limit = { is_controlled_by = ROOT }
-					add_building_construction = {
-						type = bunker
-						level = 1
-						province = {
-							all_provinces = yes
-							limit_to_border = yes
-						}
-						instant_build = yes
-					}
-				}
-				else = {
-					ROOT = {
-						add_political_power = 30
-						add_equipment_to_stockpile = {
-							type = infantry_equipment
-							amount = 1800
-							producer = IVN
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_corridor_garrison } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_corridor_garrison } }
+				FROM = {
+					if = {
+						limit = { is_controlled_by = ROOT }
+						add_building_construction = {
+							type = bunker
+							level = 1
+							province = {
+								all_provinces = yes
+								limit_to_border = yes
+							}
+							instant_build = yes
 						}
 					}
+					else = {
+						ROOT = {
+							add_political_power = 30
+							add_equipment_to_stockpile = {
+								type = infantry_equipment
+								amount = 1800
+								producer = IVN
+							}
+						}
+					}
 				}
+				army_experience = 5
+
 			}
-			army_experience = 5
 		}
 		ai_will_do = {
 			base = 10
@@ -2822,6 +2960,7 @@ IVN_west_legacy_category = {
 		days_re_enable = 90
 		fire_only_once = no
 		complete_effect = {
+			hidden_effect = { FROM = { set_variable = { var = IVN_paid_IVN_wl_lost_march_sabotage value = 40 } } }
 			custom_effect_tooltip = IVN_wl_lost_march_sabotage_tt
 		}
 		cancel_trigger = {
@@ -2830,30 +2969,40 @@ IVN_west_legacy_category = {
 			}
 		}
 		cancel_effect = {
-			add_political_power = 40
+			if = {
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_lost_march_sabotage } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_lost_march_sabotage } }
+				add_political_power = 40
+
+			}
 		}
 		remove_effect = {
 			if = {
-				limit = {
-					FROM = { is_owned_by = event_target:ADISCORD_vorkerland_nation }
-				}
-				FROM = {
-					damage_building = {
-						type = arms_factory
-						damage = 1
-						repair_speed_modifier = -0.5
+				limit = { FROM = { has_variable = IVN_paid_IVN_wl_lost_march_sabotage } }
+				hidden_effect = { FROM = { clear_variable = IVN_paid_IVN_wl_lost_march_sabotage } }
+				if = {
+					limit = {
+						FROM = { is_owned_by = event_target:ADISCORD_vorkerland_nation }
 					}
-					damage_building = {
-						type = industrial_complex
-						damage = 1
-						repair_speed_modifier = -0.5
+					FROM = {
+						damage_building = {
+							type = arms_factory
+							damage = 1
+							repair_speed_modifier = -0.5
+						}
+						damage_building = {
+							type = industrial_complex
+							damage = 1
+							repair_speed_modifier = -0.5
+						}
 					}
+					add_manpower = 1500
+					add_stability = -0.02
 				}
-				add_manpower = 1500
-				add_stability = -0.02
-			}
-			else = {
-				add_political_power = 40
+				else = {
+					add_political_power = 40
+				}
+
 			}
 		}
 		ai_will_do = {
@@ -2944,5 +3093,80 @@ IVN_west_legacy_category = {
 				has_war = yes
 			}
 		}
+	}
+}
+
+IVN_cw_diplomacy_category = {
+	IVN_cw_send_offer = {
+		icon = generic_political_discourse
+		allowed = {
+			OR = {
+				tag = IVN
+				tag = IVC
+			}
+		}
+		targets = { IMD IFC IAM }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { IVN_cw_principal = yes }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = IVN_cw_offer_price_tt
+				NOT = { has_political_power < 75 }
+			}
+			FROM = {
+				has_capitulated = no
+				is_subject = no
+				custom_trigger_tooltip = {
+					tooltip = IVN_cw_offer_ready_tt
+					NOT = { has_country_flag = IVN_cw_offer_pending }
+					NOT = { has_country_flag = IVN_cw_offer_cooldown }
+				}
+			}
+		}
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = IVN_cw_offer_terms_tt
+			if = {
+				limit = { FROM = { tag = IMD } }
+				effect_tooltip = { add_ideas = IVN_cw_military_guarantees }
+			}
+			if = {
+				limit = { FROM = { tag = IFC } }
+				effect_tooltip = { add_ideas = IVN_cw_communal_guarantees }
+			}
+			if = {
+				limit = { FROM = { tag = IAM } }
+				effect_tooltip = { add_ideas = IVN_cw_regional_guarantees }
+			}
+			hidden_effect = {
+				FROM = {
+					set_country_flag = { flag = IVN_cw_offer_pending days = 10 }
+					set_country_flag = { flag = IVN_cw_offer_cooldown days = 30 }
+					if = {
+						limit = { ROOT = { tag = IVN } }
+						set_country_flag = { flag = IVN_cw_offer_committee days = 10 }
+					}
+					else = { set_country_flag = { flag = IVN_cw_offer_legion days = 10 } }
+					country_event = { id = ADISCORD_ivn.11 hours = 1 }
+				}
+			}
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	IVN_cw_emergency_arms = {
+		icon = ADISCORD_recruitment
+		visible = { IVN_cw_participant = yes }
+		available = { has_capitulated = no }
+		cost = 35
+		days_re_enable = 45
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 1800 producer = ROOT }
+			add_manpower = 2000
+		}
+		ai_will_do = { base = 30 }
 	}
 }

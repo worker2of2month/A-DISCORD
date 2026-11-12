@@ -8,11 +8,14 @@ import sys
 from pathlib import Path
 
 try:
+    from tools.lib.localisation import read_localisation_with_overrides
     from tools.validators.validate_adiscord_division_templates import (
         Entry,
         parse_clausewitz,
     )
 except ModuleNotFoundError:  # Direct ``python tools/validators/...`` invocation.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from tools.lib.localisation import read_localisation_with_overrides
     from validate_adiscord_division_templates import Entry, parse_clausewitz
 
 
@@ -3225,7 +3228,9 @@ def validate(root: Path = ROOT) -> list[str]:
     dynamic_modifiers = strip_comments(
         read_at_root("common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt")
     )
-    localisation = read_at_root("localisation/russian/ADISCORD_economy_l_russian.yml")
+    localisation = read_localisation_with_overrides(
+        root / "localisation/russian/ADISCORD_economy_l_russian.yml"
+    )
 
     def require(condition: bool, message: str) -> None:
         if not condition:

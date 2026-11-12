@@ -10,6 +10,7 @@ from decimal import Decimal
 from pathlib import Path
 from unittest.mock import patch
 
+from tools.lib.localisation import technology_localisation_path
 from tools.builders import build_adiscord_technology_system as generator
 from tools.builders import build_adiscord_technology_ui_assets as ui_builder
 from tools.validators import validate_adiscord_tech_doctrine as validator
@@ -949,7 +950,7 @@ class AircraftTechnologyIconTests(unittest.TestCase):
         }
         outputs = generator.country_equipment_localisation_outputs()
         for language, index in (("russian", 0), ("english", 1)):
-            path = ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml"
+            path = technology_localisation_path(ROOT, language)
             partial = outputs[path].decode("utf-8-sig")
             full = "\n".join(generator.generated_localisation(language))
             for equipment, names in expected.items():
@@ -1078,7 +1079,7 @@ class AssaultInfantryTechnologyTests(unittest.TestCase):
             self.assertIn(f'name = "GFX_{tech.id}_medium"', gfx)
             self.assertIsNotNone(generator.technology_icon_size(generator.icon_for_technology(branch, index)))
         for language in ("russian", "english"):
-            data = (ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml").read_bytes()
+            data = technology_localisation_path(ROOT, language).read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
             text = data.decode("utf-8-sig").replace("\r\n", "\n")
             for tech in branch.techs:
@@ -2076,12 +2077,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for language in ("russian", "english"):
-                path = (
-                    root
-                    / "localisation"
-                    / language
-                    / f"ADISCORD_technology_doctrine_l_{language}.yml"
-                )
+                path = technology_localisation_path(root, language)
                 path.parent.mkdir(parents=True)
                 path.write_text(
                     f'l_{language}:\n infantry_equipment: "Old name"\n unrelated_key: "Keep me"\n',
@@ -3077,12 +3073,7 @@ class RegimentalSupportTests(unittest.TestCase):
                     self.assertEqual(atlas.width % 2, 0)
                     self.assertGreater(atlas.height, 0)
             for language in ("russian", "english"):
-                path = (
-                    ROOT
-                    / "localisation"
-                    / language
-                    / f"ADISCORD_technology_doctrine_l_{language}.yml"
-                )
+                path = technology_localisation_path(ROOT, language)
                 self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
                 text = path.read_text(encoding="utf-8-sig")
                 for suffix in ("", "_desc"):
@@ -3677,7 +3668,8 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
             for tech in generator.BRANCH_BY_KEY["power_shields"].techs:
                 self.assertIn(tech.key, generator.TECHNICAL_TECH_DESCRIPTIONS)
         for name in ("ADISCORD_STP", "ADISCORD_VAL_decisions", "ADISCORD_technology_doctrine"):
-            data = (ROOT / f"localisation/russian/{name}_l_russian.yml").read_bytes()
+            directory = "replace" if name == "ADISCORD_technology_doctrine" else "russian"
+            data = (ROOT / f"localisation/{directory}/{name}_l_russian.yml").read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
             for line in data.decode("utf-8-sig").splitlines():
                 if line.startswith(" STP_pw_") or line.startswith(" ADISCORD_power_shield"):
@@ -3739,7 +3731,7 @@ class SpecialTechnologyFolderTests(unittest.TestCase):
         self.assertNotIn("shield", infantry)
         self.assertIn('name = "ADISCORD_tech_kefreyt_shield_special_forces_tree"', special)
         for language in ("russian", "english"):
-            source = (ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml").read_bytes()
+            source = technology_localisation_path(ROOT, language).read_bytes()
             self.assertTrue(source.startswith(b"\xef\xbb\xbf"))
             self.assertIn(f" {folder}:0", source.decode("utf-8-sig"))
 
@@ -3859,7 +3851,7 @@ class HazardInfantryTests(unittest.TestCase):
             with Image.open(path) as icon:
                 self.assertEqual(icon.size, dimensions)
         for language in ("russian", "english"):
-            path = ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml"
+            path = technology_localisation_path(ROOT, language)
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
             for suffix in ("", "_desc"):

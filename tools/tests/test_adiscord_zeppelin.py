@@ -263,13 +263,15 @@ class ZeppelinIntegrationTests(unittest.TestCase):
         unit = value(value(read("common/units/ADISCORD_land_units.txt"), "sub_units"), "ADISCORD_zeppelin")
         self.assertEqual(value(value(unit, "need"), "ADISCORD_zeppelin_equipment"), "1")
         self.assertEqual(value(unit, "active"), "no")
+
+    def test_project_equipment_cannot_be_factory_produced_even_in_debug(self):
         equipment = value(read("common/units/equipment/ADISCORD_air_equipment.txt"), "equipments")
         variant = value(equipment, "ADISCORD_zeppelin_equipment_1")
         self.assertEqual(value(variant, "archetype"), "ADISCORD_zeppelin_equipment")
         self.assertEqual(value(variant, "active"), "yes")
         production = value(variant, "can_be_produced")
-        self.assertEqual(value(production, "is_debug"), "yes")
-        self.assertEqual(value(production, "tag"), "VAL")
+        self.assertEqual(value(production, "always"), "no")
+        self.assertEqual(value(variant, "is_buildable"), "no")
 
     def test_all_land_states_resolve_to_verified_native_assets(self):
         entities = read("gfx/entities/ADISCORD_zeppelin.asset")

@@ -133,7 +133,8 @@ class RusCrisisPreparationTests(unittest.TestCase):
         self.assertEqual(scalar(model, "archetype"), "ADISCORD_zeppelin_equipment")
         self.assertEqual(scalar(block(subunit, "need"), "ADISCORD_zeppelin_equipment"), "1")
         self.assertEqual(scalar(archetype, "is_buildable"), "no")
-        self.assertEqual(scalar(block(model, "can_be_produced"), "is_debug"), "yes")
+        self.assertEqual(scalar(block(model, "can_be_produced"), "always"), "no")
+        self.assertEqual(scalar(model, "is_buildable"), "no")
 
     def test_montar_offensive_is_limited_to_its_active_crisis_war(self):
         profiles = dict((row.key, row.value) for row in entries("common/ai_strategy/ADISCORD_RUS_ai.txt"))

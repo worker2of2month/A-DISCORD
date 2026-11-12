@@ -10,3 +10,4 @@
  alert_lack_of_power_delayed_header: "Нам не хватает $COAL|R$£out_of_power_texticon ед. электроэнергии\nПромышленность получает $PERCENTAGE|.0H%$ необходимой электроэнергии, что имеет следующие последствия:"
  TOPBAR_COAL_CURRENTLY_USED: "Из §Y$COUNT$§! ед. используемой £energy_consumption_texticon электроэнергии"
  TOPBAR_TOTAL_COAL: "Из §Y$COUNT$§! ед. доступной £energy_consumption_texticon электроэнергии"
+ MODIFIER_ENERGY_GAIN_FACTOR: "Эффективность энергоснабжения"

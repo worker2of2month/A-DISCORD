@@ -25,6 +25,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ProvinceCornerTests(unittest.TestCase):
+    def test_ishait_front_has_distinct_northern_and_southern_approaches(self):
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            grid = geography.province_grid(np.asarray(image), definitions)
+        neighbours = geography.province_neighbours(grid)
+        enemy = {48, 85}
+        self.assertEqual(set(neighbours[16372]) - enemy, {6, 51})
+        self.assertNotIn(48, neighbours[6])
+        for first, second in zip((11496, 6, 16372, 51, 108), (6, 16372, 51, 108, 4)):
+            self.assertIn(second, neighbours[first])
+        for approach in (6, 51):
+            edges = sum(int(((a == 16372) & (b == approach)).sum()) for a, b in (
+                (grid[:, :-1], grid[:, 1:]), (grid[:, 1:], grid[:, :-1]),
+                (grid[:-1, :], grid[1:, :]), (grid[1:, :], grid[:-1, :]),
+            ))
+            self.assertGreaterEqual(edges, 3, approach)
+
     def test_yubor_contacts_have_broad_borders(self):
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))
@@ -60,7 +81,7 @@ class ProvinceCornerTests(unittest.TestCase):
             rgb = np.asarray(image)
         provinces = {
             6, 28, 33, 48, 51, 81, 83, 85, 88, 92, 103, 108, 118, 124, 127, 129, 131,
-            729, 971, 7283, 9633, 10926, 11496, 16597, 16616, 16646, 16649,
+            729, 971, 7283, 9633, 10926, 11496, 16372, 16597, 16616, 16646, 16649,
             16746, 16872, 16877,
         }
         for province in sorted(provinces):

@@ -14312,6 +14312,51 @@
         "kind": "retain",
         "target": "script_vorkerland_imperial_guard_regiment"
       }
+    },
+    {
+      "key": "script_ivn_emergency_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Itoran Emergency Brigade",
+      "display_name": "Itoran Emergency Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700
+        },
+        "supply": 0.12
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_ivn_emergency_brigade"
+      }
     }
   ],
   "references": [
@@ -17081,6 +17126,16 @@
       "technical_name": "Imperial Guard Regiment",
       "legacy_names": [],
       "count": 4
+    },
+    {
+      "key": "ivn_civil_war_local_arsenal_garrison",
+      "path": "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Itoran Emergency Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1,
+      "count": 1
     }
   ]
 }

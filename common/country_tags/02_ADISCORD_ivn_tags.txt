@@ -1,2 +1,5 @@
 IIA = "countries/IIA.txt"
 IVC = "countries/IVC.txt"
+IMD = "countries/IMD.txt"
+IFC = "countries/IFC.txt"
+IAM = "countries/IAM.txt"

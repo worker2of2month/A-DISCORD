@@ -45,38 +45,52 @@ def named_block_span(text: str, name: str) -> tuple[int, int]:
 
 
 class RecallVolunteersContractTests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.action = read(
-            "common/scripted_diplomatic_actions/ADISCORD_recall_volunteers.txt"
+    def test_native_recall_dialog_exposes_engine_controls(self) -> None:
+        from tools.tests.test_validate_adiscord_gui_contracts import named_gui_nodes
+
+        nodes = named_gui_nodes(read("interface/countrydiplomacyview.gui"))
+        dialogs = [
+            parents for _, name, parents in nodes if name == "recall_volunteers"
+        ]
+        self.assertEqual(dialogs, [("diplomacy_action_info_window",)])
+        children = {
+            name
+            for _, name, parents in nodes
+            if parents == ("diplomacy_action_info_window", "recall_volunteers")
+        }
+        self.assertTrue(
+            {
+                "title", "description", "time_icon", "time_text",
+                "send_button", "cancel_button",
+            }
+            <= children
         )
 
-    def test_action_uses_native_recall_effect(self) -> None:
-        self.assertIn("recall_volunteers = {", self.action)
-        self.assertIn("has_volunteers_amount_from = {", self.action)
-        self.assertIn("ROOT = { recall_volunteers_from = PREV }", self.action)
-        self.assertIn("show_acceptance_on_action_button = no", self.action)
+    def test_native_recall_action_has_no_scripted_duplicate(self) -> None:
+        for path in (ROOT / "common/scripted_diplomatic_actions").glob("*.txt"):
+            source = re.sub(r"(?m)#.*$", "", path.read_text(encoding="utf-8-sig"))
+            self.assertNotRegex(source, r"\brecall_volunteers\s*=\s*\{")
 
-    def test_action_excludes_both_sides_of_exclusion_zone_pair(self) -> None:
-        visible = re.search(r"(?s)visible\s*=\s*\{(.{0,300}?)\n\s*\}", self.action)
-        self.assertIsNotNone(visible)
-        body = visible.group(1)
-        self.assertGreaterEqual(body.count("original_tag = EXZ"), 2)
-        self.assertIn("ROOT = { NOT = { original_tag = EXZ } }", body)
+    def test_diplomacy_list_exposes_native_controls(self) -> None:
+        from tools.tests.test_validate_adiscord_gui_contracts import named_gui_nodes
 
-    def test_localisation_exists_in_both_languages(self) -> None:
-        required = (
-            "RECALL_VOLUNTEERS_TITLE",
-            "RECALL_VOLUNTEERS_ACTION_DESC",
-            "RECALL_VOLUNTEERS_TOOLTIP",
-            "RECALL_VOLUNTEERS_TOOLTIP_G",
-        )
-        for relative in (
-            "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
-            "localisation/english/ADISCORD_vorkerland_l_english.yml",
+        nodes = named_gui_nodes(read("interface/countrydiplomacyview.gui"))
+        for parent, required in (
+            ("diplomatic_actions", {"actions_title", "edit_auto_response"}),
+            ("diplomacy_action_entry", {"response_icon", "accept_icon"}),
         ):
-            text = read(relative)
-            for key in required:
-                self.assertRegex(text, rf"(?m)^ {key}: \"")
+            with self.subTest(parent=parent):
+                children = {
+                    name
+                    for _, name, parents in nodes
+                    if parents and parents[-1] == parent
+                }
+                self.assertTrue(required <= children, required - children)
+
+    def test_auto_response_sprite_keeps_three_native_states(self) -> None:
+        gfx = read("interface/frontendgamesetupview.gfx")
+        start, end = named_block_span(gfx, "GFX_generic_3_state_checkbox")
+        self.assertRegex(gfx[start:end + 1], r"noOfFrames\s*=\s*3\b")
 
 
 class DiplomacyLayoutContractTests(unittest.TestCase):

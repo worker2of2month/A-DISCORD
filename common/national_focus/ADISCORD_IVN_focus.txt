@@ -2669,8 +2669,8 @@ focus_tree = {
 		}
 	}
 
-	# General Karn: the expedition's best commander and the legion's future
-	# leader. IVN_start_marches_revolt reads the chosen focus.
+	# Karn's appointment changes the Military Directorate's share of the army
+	# and its mobilization reserve when the civil war begins.
 	focus = {
 		id = IVN_command_promote_karn
 		icon = GFX_goal_generic_occupy_start_war

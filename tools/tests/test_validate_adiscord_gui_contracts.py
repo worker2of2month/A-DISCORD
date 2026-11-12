@@ -2879,5 +2879,107 @@ class CampaignSetupSkinTests(unittest.TestCase):
                 self.assertNotIn('\n', value)
 
 
+class TopbarTradeConstructionGuiContractTests(unittest.TestCase):
+    def assert_gui_node(self, nodes, kind, name, parents):
+        self.assertEqual(nodes.count((kind, name, parents)), 1, (name, parents))
+
+    def test_topbar_shortcuts_have_native_owners_and_keybinds(self):
+        gui = (ROOT / 'interface/topbar.gui').read_text(encoding='utf-8-sig')
+        nodes = named_gui_nodes(gui)
+        research_owner = (
+            'topbar', 'country_menu_window', 'after_faction_button',
+            'after_intel_agency_button',
+        )
+        shortcuts = {
+            'national_focus_shortcut': (('topbar',), 'shortcut = "alt+q"'),
+            'technology_button_shortcut': (research_owner, 'keybind = "research_open"'),
+            'technology_button_ctrl_shortcut': (
+                research_owner, 'keybind = "research_open_facilities"',
+            ),
+            'technology_button_alt_shortcut': (research_owner, 'shortcut = "alt+w"'),
+        }
+        for name, (parents, binding) in shortcuts.items():
+            with self.subTest(name=name):
+                self.assert_gui_node(nodes, 'buttonType', name, parents)
+                body = gui_node_body(gui, name)
+                self.assertIn(binding, body)
+                self.assertEqual(_gui_position(body), (-9000, -9000))
+        self.assertNotRegex(gui_node_body(gui, 'technology_button'), r'\bshortcut\s*=')
+
+    def test_trade_controls_and_priority_templates_have_native_owners(self):
+        gui = (ROOT / 'interface/countrytradeview.gui').read_text(encoding='utf-8-sig')
+        nodes = named_gui_nodes(gui)
+        controls = {
+            'instantTextboxType': (
+                'factories_consumer', 'factories_trade', 'auto_import_label',
+                'auto_import_budget_txt',
+            ),
+            'iconType': ('consumer_goods_icon', 'traded_factories_icon', 'auto_import_budget_bg'),
+            'checkBoxType': ('auto_import_checkbox',),
+            'buttonType': ('auto_import_priority_open_button',),
+            'extendedScrollbarType': ('auto_import_slider',),
+        }
+        for kind, names in controls.items():
+            for name in names:
+                with self.subTest(name=name):
+                    self.assert_gui_node(nodes, kind, name, ('countrytradeview',))
+        slider = gui_node_body(gui, 'auto_import_slider')
+        self.assertRegex(slider, r'\bslider\s*=\s*\{')
+        self.assertRegex(slider, r'\btrack\s*=\s*\{')
+        self.assertIn('horizontal = yes', slider)
+        for template in ('auto_import_priority_window', 'auto_import_priority_entry'):
+            self.assert_gui_node(nodes, 'containerWindowType', template, ())
+        for name in ('auto_import_priority_close_button', 'auto_import_priority_reset_button'):
+            self.assert_gui_node(nodes, 'buttonType', name, ('auto_import_priority_window',))
+        self.assert_gui_node(
+            nodes, 'gridBoxType', 'auto_import_priority_list',
+            ('auto_import_priority_window', 'auto_import_priority_list_window'),
+        )
+        self.assert_gui_node(
+            nodes, 'instantTextBoxType', 'auto_import_priority_number',
+            ('auto_import_priority_entry', 'auto_import_priority_number_window'),
+        )
+        for name in ('auto_import_priority_shortage_sub', 'auto_import_priority_shortage_add'):
+            self.assert_gui_node(nodes, 'buttonType', name, ('auto_import_priority_entry',))
+
+    def test_construction_repair_controls_cover_every_native_entry(self):
+        gui = (ROOT / 'interface/countryconstructionsview.gui').read_text(encoding='utf-8-sig')
+        nodes = named_gui_nodes(gui)
+        self.assert_gui_node(
+            nodes, 'buttonType', 'repair_order_open_button',
+            ('countryconstructionsview', 'count_container'),
+        )
+        for entry in (
+            'start_construction_entry', 'production_building_line_entry',
+            'production_railway_gun_repair_entry', 'repair_order_entry',
+        ):
+            with self.subTest(entry=entry):
+                self.assert_gui_node(
+                    nodes, 'containerWindowType', 'repair_order_number_window', (entry,),
+                )
+                self.assert_gui_node(
+                    nodes, 'instantTextBoxType', 'repair_order_number',
+                    (entry, 'repair_order_number_window'),
+                )
+                self.assert_gui_node(
+                    nodes, 'iconType', 'repair_order_number_frame',
+                    (entry, 'repair_order_number_window'),
+                )
+                if entry.startswith('production_'):
+                    self.assert_gui_node(nodes, 'iconType', 'pin_icon', (entry,))
+        for template in ('repair_order_window', 'repair_order_entry'):
+            self.assert_gui_node(nodes, 'containerWindowType', template, ())
+        self.assert_gui_node(
+            nodes, 'gridBoxType', 'repair_order_list',
+            ('repair_order_window', 'repair_order_list_window'),
+        )
+        for name in (
+            'repair_order_close_button', 'repair_order_reset_queue_button',
+            'repair_order_clear_placement_button', 'repair_order_railway_gun_button',
+        ):
+            self.assert_gui_node(nodes, 'buttonType', name, ('repair_order_window',))
+        self.assert_gui_node(nodes, 'buttonType', 'repair_order_remove_button', ('repair_order_entry',))
+
+
 if __name__ == '__main__':
     unittest.main()

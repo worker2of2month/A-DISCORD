@@ -52,6 +52,12 @@ Zone boundary realignment, then northern population again. The repeated
 northern pass refreshes metadata whose province and owner blocks depend on the
 realigned state boundaries. Technology runs before doctrine so doctrine can
 remove migrated keys from their shared localisation as the final cleanup.
+Russian technology localisation is owned at
+`localisation/replace/ADISCORD_technology_doctrine_l_russian.yml` because the
+same family names native equipment and unit types. Loading messages also live
+in `localisation/replace/`. Economy and resource families keep custom entries
+in `localisation/russian/` and native-key overrides in their matching
+`localisation/replace/` files; consumers must read both layers.
 
 Run the ownership and safe-CLI contract with:
 
@@ -170,3 +176,12 @@ colourmap, because DXT5 blocks extend beyond the urban footprint. Edit the
 source rather than the runtime DDS. Run the builder with `--check` before
 `--apply`, then repeat `--check` to verify stable output. The base retains
 SHA256 `ff8d76680ef6600e146ca72dc0007643e31bca4fd05c01c686be1a408ee83da6`.
+
+The same geography builder owns the bounded province-pixel repairs and their
+surface and unit-anchor updates. Ishait keeps separate approaches through
+provinces 6 and 51, with the city (16372) between them on the front. Preserve
+the city-to-51 contact and the absence of a 6-to-48 contact: joining both enemy
+shoulders through province 6 makes the city a separate front section.
+`ProvinceCornerTests` checks the approaches, connected province shapes and
+native unit-anchor positions. Native front assignment still requires a fresh
+campaign after a full game restart.

@@ -652,41 +652,29 @@ class MarchesRevoltTests(unittest.TestCase):
         for condition in ("has_war = no", "is_subject = no", "owns_state = 95", "NOT = { country_exists = IVC }"):
             self.assertIn(condition, ready)
 
-    def test_the_legion_takes_the_frontier_army_and_declares_the_war(self):
+    def test_the_legion_takes_the_frontier_army_before_player_choice(self):
         start = body(self.IVN_EFFECTS, "IVN_start_marches_revolt")
         history = (ROOT / "history/countries/IVC - Marches Legion.txt").read_text(encoding="utf-8")
-        self.assertIn("recruit_character = IVN_Rostislav_Karn", history)
+        self.assertIn("recruit_character = IVN_Leonid_Stalk", history)
         self.assertNotIn("recruit_character", start)
-        self.assertIn("character = IVN_Rostislav_Karn", start)
-        self.assertLess(start.index("set_global_flag = IVN_marches_revolt_active"), start.index("declare_war_on"))
+        self.assertIn("character = IVN_Leonid_Stalk", start)
+        self.assertNotIn("declare_war_on", start)
         self.assertIn("IVN_adopt_emergency_order = yes", start)
-        self.assertIn("IVN_marches_initialize = yes", start)
-        self.assertLess(start.index("IVN_marches_initialize = yes"), start.index("IVN_marches_revolt_states = yes"))
+        self.assertLess(start.index("IVN_marches_initialize = yes"), start.index("IVN_cw_partition = yes"))
         self.assertIn("IVN_marches_revolt_transfer_units = yes", start)
-        self.assertIn("target = IVN", start)
         transfer = body(self.IVN_EFFECTS, "IVN_marches_revolt_transfer_units")
-        self.assertEqual(re.findall(r"size = ([\d.]+)", transfer), ["0.5", "0.25", "0.35"])
+        self.assertEqual(re.findall(r"size = ([\d.]+)", transfer), ["0.35"])
         self.assertIn("value > 0.35", transfer)
-        self.assertIn("value < -0.35", transfer)
-        states = body(self.IVN_EFFECTS, "IVN_marches_revolt_states")
-        self.assertEqual(set(re.findall(r"\b(\d+) = \{ IVN_marches_revolt_take_state = yes \}", states)), {"92", "95", "96", "97"})
-        take = body(self.IVN_EFFECTS, "IVN_marches_revolt_take_state")
-        self.assertIn("is_controlled_by = IVN", take)
-        # Vedrina always rises; the other marches stay loyal from trust 70.
-        self.assertIn("state = 95", take)
-        self.assertIn("check_variable = { var = IVN_march_trust value = 70 compare = less_than }", take)
+        self.assertIn("has_completed_focus = IVN_command_sideline_karn", transfer)
+        partition = parse_clausewitz(body(self.IVN_EFFECTS, "IVN_cw_partition"))
+        self.assertEqual({e.value for e in block(partition, "IVC") if e.key == "transfer_state"}, {"92", "95", "96", "97"})
 
-    def test_inner_marches_follow_a_neighbouring_legion_march(self):
-        defections = body(self.IVN_EFFECTS, "IVN_marches_revolt_defections")
-        chain = {"98": ["97"], "99": ["96", "97"], "100": ["99"], "101": ["100"]}
-        for state, neighbours in chain.items():
-            section = defections[defections.index(f"\t{state} = {{"):]
-            section = section[:section.index("IVN_marches_revolt_take_state = yes")]
-            self.assertIn("IVN_march_follows_the_legion = yes", section, state)
-            for neighbour in neighbours:
-                self.assertIn(f"{neighbour} = {{ is_owned_by = IVC }}", section, state)
-        follows = body(ROOT / "common/scripted_triggers/ADISCORD_IVN_scripted_triggers.txt", "IVN_march_follows_the_legion")
-        self.assertIn("value = 40 compare = less_than", follows)
+    def test_inner_marches_do_not_displace_the_other_claimants(self):
+        partition = parse_clausewitz(body(self.IVN_EFFECTS, "IVN_cw_partition"))
+        self.assertEqual({e.value for e in block(partition, "IFC") if e.key == "transfer_state"}, {"100", "101"})
+        self.assertNotIn("IVN_marches_revolt_defections", self.IVN_EFFECTS.read_text(encoding="utf-8"))
+        decisions = (ROOT / "common/decisions/ADISCORD_IVN_decisions.txt").read_text(encoding="utf-8")
+        self.assertIn("IVN_march_borders_root_control = yes", decisions)
 
     def test_trust_and_balance_open_once_and_feed_the_revolt(self):
         init = body(self.IVN_EFFECTS, "IVN_marches_initialize")
@@ -703,7 +691,7 @@ class MarchesRevoltTests(unittest.TestCase):
         self.assertIn("max = 100", change)
 
     def test_the_revolt_shows_the_civil_war_superevent(self):
-        start = body(self.IVN_EFFECTS, "IVN_start_marches_revolt")
+        start = body(self.IVN_EFFECTS, "IVN_cw_begin_hostilities")
         self.assertIn("IVN_show_civil_war_superevent = yes", start)
         show = body(self.IVN_EFFECTS, "IVN_show_civil_war_superevent")
         self.assertIn("id = ADISCORD_superevent.14", show)
@@ -737,17 +725,14 @@ class MarchesRevoltTests(unittest.TestCase):
             self.assertNotIn("95", re.search(r"targets = \{([^}]*)\}", section).group(1).split(), name)
 
     def test_resolution_records_the_winner_and_clears_the_war(self):
+        finish = body(self.IVN_EFFECTS, "IVN_cw_finish")
+        for winner in ("legion", "cabinet", "directory", "communes", "marches"):
+            self.assertIn(f"set_global_flag = IVN_civil_war_won_by_{winner}", finish)
+        cleanup = body(self.IVN_EFFECTS, "IVN_cw_clear_participant")
+        for idea in ("IVN_cw_divided_army", "IVN_cw_loyal_officers", "IVN_cw_war_bonds"):
+            self.assertIn(f"remove_ideas = {idea}", cleanup)
         resolve = body(self.IVN_EFFECTS, "IVN_resolve_marches_revolt")
-        for token in (
-            "set_global_flag = IVN_civil_war_won_by_legion",
-            "set_global_flag = IVN_civil_war_won_by_cabinet",
-            "remove_ideas = IVN_cw_divided_army",
-            "remove_ideas = IVN_cw_loyal_officers",
-            "remove_ideas = IVN_cw_war_bonds",
-            "clr_global_flag = IVN_legion_course_council",
-            "clr_global_flag = IVN_legion_course_union",
-            "mark_focus_tree_layout_dirty = yes",
-        ):
+        for token in ("clr_global_flag = IVN_legion_course_council", "clr_global_flag = IVN_legion_course_union", "mark_focus_tree_layout_dirty = yes"):
             self.assertIn(token, resolve)
         handover = body(self.IVN_EFFECTS, "IVN_hand_power_to_legion")
         self.assertIn("add_ideas = IVN_rule_of_the_legion_council", handover)
@@ -786,22 +771,25 @@ class MarchesRevoltTests(unittest.TestCase):
             legion_effects.index("ADISCORD_economy_initialize_country"),
         )
 
-    def test_both_outcomes_keep_the_itoran_tag(self):
+    def test_all_final_outcomes_keep_the_itoran_tag_without_early_resolution(self):
+        finish = body(self.IVN_EFFECTS, "IVN_cw_finish")
+        self.assertIn("IVN_cw_last_participant = yes", finish)
+        self.assertIn("target = event_target:IVN_cw_victor", finish)
+        self.assertIn("IVN = { change_tag_from = ROOT }", finish)
         resolve = body(self.IVN_EFFECTS, "IVN_resolve_marches_revolt")
-        self.assertIn("target = IVC", resolve)
         self.assertIn("clr_global_flag = IVN_marches_revolt_active", resolve)
         self.assertIn("set_global_flag = IVN_marches_revolt_resolved", resolve)
         handover = body(self.IVN_EFFECTS, "IVN_hand_power_to_legion")
-        self.assertIn("change_tag_from = IVC", handover)
         self.assertIn("ruling_party = chauvinism", handover)
-        self.assertIn("target_country = IVN", handover)
+        self.assertIn("character = IVN_Leonid_Stalk", handover)
         text = PEACE.read_text(encoding="utf-8")
         section = text[text.index("# BEGIN itora_revolt:on_capitulation"):text.index("# END itora_revolt:on_capitulation")]
-        self.assertEqual(section.count("set_global_flag = skip_default_capitulation"), 2)
-        self.assertEqual(section.count("IVN_resolve_marches_revolt = yes"), 2)
-        self.assertLess(section.index("IVN_hand_power_to_legion = yes"), section.rindex("IVN_resolve_marches_revolt = yes"))
+        self.assertEqual(section.count("set_global_flag = skip_default_capitulation"), 1)
+        self.assertIn("IVN_cw_absorb_defeated = yes", section)
+        self.assertNotIn("IVN_resolve_marches_revolt", section)
         peace = text[text.index("# BEGIN itora_revolt:on_peace"):text.index("# END itora_revolt:on_peace")]
-        self.assertIn("IVN_resolve_marches_revolt = yes", peace)
+        self.assertIn("id = ADISCORD_ivn.10", peace)
+        self.assertNotIn("IVN_resolve_marches_revolt", peace)
 
     def test_the_revolt_pauses_the_western_question(self):
         self.assertIn("NOT = { has_global_flag = IVN_marches_revolt_active }", body(TRIGGERS, "ADISCORD_west_final_can_start"))

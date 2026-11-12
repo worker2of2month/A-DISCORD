@@ -8,6 +8,7 @@ import json
 import re
 from PIL import Image
 
+from tools.lib.localisation import technology_localisation_path
 from tools.lib.paths import repository_root
 from tools.lib.adiscord_remainder_countries import COUNTRIES as REMAINDER_COUNTRIES
 from tools.builders.build_adiscord_technology_ui_assets import (
@@ -11287,7 +11288,10 @@ def country_equipment_localisation_outputs() -> dict[Path, bytes]:
         names = country_aircraft_names(language)
         for country_file in (True, False):
             stem = "ADISCORD_STP" if country_file else "ADISCORD_technology_doctrine"
-            path = ROOT / f"localisation/{language}/{stem}_l_{language}.yml"
+            if country_file:
+                path = ROOT / f"localisation/{language}/{stem}_l_{language}.yml"
+            else:
+                path = technology_localisation_path(ROOT, language)
             selected = {
                 key: value for key, value in names.items()
                 if (key.split("_", 1)[0] in {"STP", "STS", "SRP"}) == country_file
@@ -12257,7 +12261,7 @@ def write_localisation() -> None:
     targets = {
         "russian": ROOT
         / "localisation"
-        / "russian"
+        / "replace"
         / "ADISCORD_technology_doctrine_l_russian.yml",
         "english": ROOT
         / "localisation"
@@ -12727,7 +12731,7 @@ def civil_technology_outputs() -> dict[Path, bytes]:
     keys.update(f"ADISCORD_TECH_BRANCH_{branch.key.upper()}" for branch in branches)
     key_pattern = re.compile(r"^\s+([A-Za-z0-9_]+)\s*:")
     for language in ("russian", "english"):
-        path = ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml"
+        path = technology_localisation_path(ROOT, language)
         original = path.read_text(encoding="utf-8-sig").splitlines()
         preserved = [line for line in original if not ((match := key_pattern.match(line)) and match[1] in keys)]
         selected = [line for line in generated_localisation(language) if (match := key_pattern.match(line)) and match[1] in keys]
@@ -12780,7 +12784,7 @@ def selected_land_technology_outputs(file_name: str, extra_keys: set[str]) -> di
             keys.update((tech.id, f"{tech.id}_desc", f"{tech.id}_leader_effect_tt"))
     key_pattern = re.compile(r"^\s+([A-Za-z0-9_]+)\s*:")
     for language in ("russian", "english"):
-        path = ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml"
+        path = technology_localisation_path(ROOT, language)
         replacements = {}
         for line in generated_localisation(language):
             match = key_pattern.match(line)
