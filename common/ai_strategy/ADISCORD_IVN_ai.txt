@@ -20,6 +20,7 @@ ADISCORD_ivn_IVN_against_IMD = {
 		has_global_flag = IVN_marches_revolt_active
 		has_war_with = IMD
 	}
+	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = conquer
 		id = IMD
