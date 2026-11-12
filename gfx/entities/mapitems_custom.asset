@@ -274,14 +274,25 @@ entity = {
 # END ADISCORD SHL palace
 
 # BEGIN ADISCORD portal test
-# Particle-only test actor for ADISCORD_portal_open_particle (debug decisions).
+# Both portal actors stay inert until the opening event selects their active state.
 entity = {
 	name = "ADISCORD_portal_test_entity"
 	pdxmesh = "ADISCORD_portal_test_mesh"
+	cull_radius = 300
 	locator = { name = "portal_core" position = { 0.0 0.0 0.0 } }
-	default_state = "open"
-	state = { name = "open"
-		event = { time = 0 node = "portal_core" particle = "ADISCORD_portal_open_particle" keep_particle = yes }
+	default_state = "closed"
+	state = { name = "closed" }
+	state = {
+		name = "open"
+		state_time = 2
+		looping = no
+		event = {
+			time = 0
+			node = "portal_core"
+			particle = "ADISCORD_portal_open_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
 	}
 }
 
@@ -290,13 +301,21 @@ entity = {
 entity = {
 	name = "ADISCORD_portal_burst_entity"
 	pdxmesh = "ADISCORD_portal_test_mesh"
+	cull_radius = 300
 	locator = { name = "portal_core" position = { 0.0 0.0 0.0 } }
-	default_state = "burst"
-	state = { name = "burst"
+	default_state = "spent"
+	state = {
+		name = "burst"
 		state_time = 1.5
 		looping = no
 		next_state = "spent"
-		event = { time = 0 node = "portal_core" particle = "ADISCORD_portal_burst_particle" keep_particle = yes }
+		event = {
+			time = 0
+			node = "portal_core"
+			particle = "ADISCORD_portal_burst_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
 	}
 	state = { name = "spent" }
 }

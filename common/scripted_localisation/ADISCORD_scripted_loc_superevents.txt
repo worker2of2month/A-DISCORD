@@ -310,6 +310,18 @@ defined_text = {
 		localization_key = superevent_nam_veyran_proclamation_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_itora_legion_victory }
+		localization_key = superevent_itora_legion_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_committee_victory }
+		localization_key = superevent_itora_committee_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_stalk_portal }
+		localization_key = superevent_itora_stalk_portal_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -603,6 +615,18 @@ defined_text = {
 		localization_key = superevent_nam_veyran_proclamation_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_itora_legion_victory }
+		localization_key = superevent_itora_legion_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_committee_victory }
+		localization_key = superevent_itora_committee_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_stalk_portal }
+		localization_key = superevent_itora_stalk_portal_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -894,6 +918,18 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_nam_veyran_proclamation }
 		localization_key = superevent_nam_veyran_proclamation_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_legion_victory }
+		localization_key = superevent_itora_legion_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_committee_victory }
+		localization_key = superevent_itora_committee_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_stalk_portal }
+		localization_key = superevent_itora_stalk_portal_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

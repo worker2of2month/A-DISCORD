@@ -478,8 +478,13 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		visible = {
 			has_completed_focus = RUS_seat_the_khan_chancery
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+			RUS_khan_governing = yes
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_proclaim_the_last_empire_no_plot_tt
+				RUS_coup_plot_active = no
+			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_proclaim_the_last_empire_prepared_tt
 				has_completed_focus = RUS_aimaq_reserve
@@ -524,8 +529,8 @@ RUS_reactor_belt_category = {
 		visible = { has_completed_focus = RUS_reactor_belt_inventory }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			FROM = { is_controlled_by = ROOT }
 			custom_trigger_tooltip = {
@@ -592,8 +597,8 @@ RUS_reactor_belt_category = {
 				NOT = { has_variable = RUS_reactor_sortie_receipt }
 			}
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_lab_reactor_access_tt
@@ -1961,8 +1966,8 @@ RUS_bunker_construction = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cost = 0
@@ -1972,7 +1977,7 @@ RUS_bunker_construction = {
 		complete_effect = {
 			if = {
 				limit = {
-					RUS_khan_governing = yes
+					RUS_regime_governing = yes
 					OR = {
 						has_completed_focus = RUS_salvage_inventory
 						RUS_bunker_workshop_active = yes
@@ -2014,8 +2019,8 @@ RUS_bunker_construction = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cost = 0
@@ -2025,7 +2030,7 @@ RUS_bunker_construction = {
 		complete_effect = {
 			if = {
 				limit = {
-					RUS_khan_governing = yes
+					RUS_regime_governing = yes
 					has_completed_focus = RUS_standard_calibres
 					RUS_rifle_order_affordable = yes
 				}
@@ -2064,8 +2069,8 @@ RUS_bunker_construction = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cost = 0
@@ -2075,7 +2080,7 @@ RUS_bunker_construction = {
 		complete_effect = {
 			if = {
 				limit = {
-					RUS_khan_governing = yes
+					RUS_regime_governing = yes
 					has_completed_focus = RUS_winter_granaries
 					RUS_market_surplus_affordable = yes
 				}
@@ -2630,8 +2635,8 @@ RUS_development_programmes = {
 		visible = { has_completed_focus = RUS_bunker_eternal_headquarters }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2647,7 +2652,7 @@ RUS_development_programmes = {
 				limit = {
 					hidden_trigger = {
 						has_completed_focus = RUS_bunker_eternal_headquarters
-						RUS_khan_governing = yes
+						RUS_regime_governing = yes
 						owns_state = 66
 						controls_state = 66
 						check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
@@ -2709,7 +2714,7 @@ RUS_development_programmes = {
 		allowed = { tag = RUS }
 		visible = {
 			has_completed_focus = RUS_summon_the_aimaqs
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -2751,7 +2756,7 @@ RUS_development_programmes = {
 		allowed = { tag = RUS }
 		visible = {
 			has_war = yes
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 			has_completed_focus = RUS_summon_the_aimaqs
 		}
 		available = {
@@ -2787,13 +2792,13 @@ RUS_development_programmes = {
 		state_target = yes
 		targets = { 329 330 292 296 }
 		visible = {
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 			FROM = { RUS_reclamation_region = yes }
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			FROM = { is_controlled_by = RUS }
 			custom_trigger_tooltip = {
@@ -3106,8 +3111,8 @@ RUS_development_programmes = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_civil_service_training_ready_tt
@@ -3188,8 +3193,8 @@ RUS_development_programmes = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_district_health_programme_ready_tt
@@ -3244,8 +3249,8 @@ RUS_development_programmes = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_workshop_training_ready_tt
@@ -3295,8 +3300,8 @@ RUS_development_programmes = {
 		visible = { has_completed_focus = RUS_count_the_hearths }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_community_assemblies_ready_tt
@@ -3342,8 +3347,8 @@ RUS_development_programmes = {
 		visible = { has_completed_focus = RUS_school_of_scribes }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_public_reading_rooms_ready_tt
@@ -3389,8 +3394,8 @@ RUS_development_programmes = {
 		visible = { has_completed_focus = RUS_officer_courses }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_regimental_training_ready_tt
@@ -3602,7 +3607,7 @@ RUS_public_campaigns = {
 		visible = { has_completed_focus = RUS_khan_broadcast_service }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
+				tooltip = RUS_regime_governing_tt
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3645,7 +3650,7 @@ RUS_public_campaigns = {
 		visible = { has_completed_focus = RUS_khan_broadcast_service }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
+				tooltip = RUS_regime_governing_tt
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3688,7 +3693,7 @@ RUS_public_campaigns = {
 		visible = { has_completed_focus = RUS_muster_books }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
+				tooltip = RUS_regime_governing_tt
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3733,6 +3738,7 @@ RUS_public_campaigns = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3775,7 +3781,7 @@ RUS_public_campaigns = {
 		visible = { has_completed_focus = RUS_surface_workshops }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
+				tooltip = RUS_regime_governing_tt
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3815,6 +3821,7 @@ RUS_public_campaigns = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
 				RUS_public_campaigns_operational = yes
 			}
 			custom_trigger_tooltip = {
@@ -3855,6 +3862,62 @@ RUS_public_campaigns = {
 
 # --- rus_balance_of_power ---
 RUS_state_balance_measures_category = {
+	# A faction holding dominance between the expansion and the proclamation
+	# overthrows the Khan when the mission times out. Success is leaving dominance.
+	RUS_scientists_plot = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_scientists_plot_broken_tt
+				OR = {
+					RUS_scientists_dominant = no
+					RUS_coup_window_open = no
+				}
+			}
+		}
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 60
+		complete_effect = { custom_effect_tooltip = RUS_coup_plot_dispersed_tt }
+		timeout_effect = {
+			custom_effect_tooltip = RUS_scientists_plot_coup_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_coup_side value = 1 }
+				RUS_coup_execute = yes
+			}
+		}
+	}
+
+	RUS_black_army_plot = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_black_army_plot_broken_tt
+				OR = {
+					RUS_black_army_dominant = no
+					RUS_coup_window_open = no
+				}
+			}
+		}
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 60
+		complete_effect = { custom_effect_tooltip = RUS_coup_plot_dispersed_tt }
+		timeout_effect = {
+			custom_effect_tooltip = RUS_black_army_plot_coup_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_coup_side value = 2 }
+				RUS_coup_execute = yes
+			}
+		}
+	}
+
 	RUS_bop_relief = {
 		icon = generic_industry
 		visible = { has_power_balance = { id = RUS_state_balance } }
@@ -3910,6 +3973,10 @@ RUS_state_balance_measures_category = {
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				add = 50
+				has_active_mission = RUS_black_army_plot
 			}
 		}
 	}
@@ -3978,6 +4045,10 @@ RUS_state_balance_measures_category = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
 			}
+			modifier = {
+				add = 50
+				has_active_mission = RUS_scientists_plot
+			}
 		}
 	}
 
@@ -4039,6 +4110,10 @@ RUS_state_balance_measures_category = {
 			modifier = {
 				factor = 0
 				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				add = 100
+				RUS_coup_plot_active = yes
 			}
 		}
 	}

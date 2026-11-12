@@ -1138,4 +1138,95 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_itora_legion_victory = {
+		window_name = "superevent_itora_legion_victory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_itora_legion_victory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_itora_legion_victory
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_itora_committee_victory = {
+		window_name = "superevent_itora_committee_victory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_itora_committee_victory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_itora_committee_victory
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_itora_stalk_portal = {
+		window_name = "superevent_itora_stalk_portal"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_itora_stalk_portal
+		}
+
+		# Gate animated children on the presentation flag as well as their parent.
+		triggers = {
+			stalk_portal_strip_0_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_1_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_2_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_3_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_4_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_5_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_6_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_7_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_8_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_9_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_10_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_11_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+			stalk_portal_strip_12_visible = {
+				has_global_flag = superevent_itora_stalk_portal
+			}
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_itora_stalk_portal
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

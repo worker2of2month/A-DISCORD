@@ -1,8 +1,17 @@
 # COUNTRY IVN. Refreshes the focus aggregate after a variable change.
 IVN_refresh_order = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = IVN_order_dynamic } } }
-		add_dynamic_modifier = { modifier = IVN_order_dynamic }
+		limit = {
+			tag = IVN
+			has_global_flag = IVN_civil_war_won_by_legion
+		}
+		IVN_refresh_imperium = yes
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = IVN_order_dynamic } } }
+			add_dynamic_modifier = { modifier = IVN_order_dynamic }
+		}
 	}
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
@@ -716,11 +725,20 @@ IVC_legion_initialize = {
 	IVC_refresh_legion = yes
 }
 
-# COUNTRY IVC. Refreshes the legion's aggregate after a variable change.
+# COUNTRY IVC or reunited IVN. Refresh after a Legion variable change.
 IVC_refresh_legion = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = IVC_legion_dynamic } } }
-		add_dynamic_modifier = { modifier = IVC_legion_dynamic }
+		limit = {
+			tag = IVN
+			has_global_flag = IVN_civil_war_won_by_legion
+		}
+		IVN_refresh_imperium = yes
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = IVC_legion_dynamic } } }
+			add_dynamic_modifier = { modifier = IVC_legion_dynamic }
+		}
 	}
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
@@ -738,6 +756,32 @@ IVN_show_civil_war_superevent = {
 	}
 	else = {
 		country_event = { id = ADISCORD_superevent.14 hours = 1 }
+	}
+}
+
+IVN_show_legion_victory_superevent = {
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.23 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.23 hours = 1 }
+	}
+}
+
+IVN_show_committee_victory_superevent = {
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.24 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.24 hours = 1 }
 	}
 }
 
@@ -766,6 +810,8 @@ IVN_hand_power_to_legion = {
 		ideology = chauvinism_ideology
 	}
 	IVN_party_representatives_legion = yes
+	set_variable = { var = IVN_imp_air_efficiency value = 0.05 }
+	set_variable = { var = IVN_imp_navy_org value = 0.05 }
 	set_variable = { var = IVC_leg_attack value = IVC.IVC_leg_attack }
 	set_variable = { var = IVC_leg_breakthrough value = IVC.IVC_leg_breakthrough }
 	set_variable = { var = IVC_leg_conscription value = IVC.IVC_leg_conscription }
@@ -806,10 +852,12 @@ IVN_resolve_marches_revolt = {
 	ADISCORD_economy_mark_dirty = yes
 	if = {
 		limit = { has_global_flag = IVN_civil_war_won_by_legion }
+		IVN_show_legion_victory_superevent = yes
 		news_event = { id = ADISCORD_ivn.5 hours = 2 }
 	}
 	else_if = {
 		limit = { has_global_flag = IVN_civil_war_won_by_cabinet }
+		IVN_show_committee_victory_superevent = yes
 		news_event = { id = ADISCORD_ivn.4 hours = 2 }
 	}
 	else = { news_event = { id = ADISCORD_ivn.12 hours = 2 } }
@@ -1534,4 +1582,52 @@ IVN_party_representatives_legion = {
 			}
 		}
 	}
+}
+
+# COUNTRY IVN after a Legion victory. Recompute from source pools, never from
+# the previous sum, so focus refreshes cannot compound the inherited bonuses.
+IVN_refresh_imperium = {
+	set_variable = { var = IVN_imp_attack value = IVN_ord_attack }
+	add_to_variable = { var = IVN_imp_attack value = IVC_leg_attack }
+	set_variable = { var = IVN_imp_defence value = IVN_ord_defence }
+	add_to_variable = { var = IVN_imp_defence value = IVC_leg_defence }
+	set_variable = { var = IVN_imp_org value = IVN_ord_org }
+	add_to_variable = { var = IVN_imp_org value = IVC_leg_org }
+	set_variable = { var = IVN_imp_core_defence value = IVN_ord_core_defence }
+	set_variable = { var = IVN_imp_breakthrough value = IVC_leg_breakthrough }
+	set_variable = { var = IVN_imp_conscription value = IVN_ord_conscription }
+	add_to_variable = { var = IVN_imp_conscription value = IVC_leg_conscription }
+	set_variable = { var = IVN_imp_training value = IVN_ord_training }
+	add_to_variable = { var = IVN_imp_training value = IVC_leg_training }
+	set_variable = { var = IVN_imp_planning value = IVN_ord_planning }
+	set_variable = { var = IVN_imp_war_support value = IVN_ord_war_support }
+	add_to_variable = { var = IVN_imp_war_support value = IVC_leg_war_support }
+	set_variable = { var = IVN_imp_stability value = IVN_ord_stability }
+	add_to_variable = { var = IVN_imp_stability value = IVC_leg_stability }
+	set_variable = { var = IVN_imp_political_power value = IVN_ord_political_power }
+	add_to_variable = { var = IVN_imp_political_power value = IVC_leg_political_power }
+	set_variable = { var = IVN_imp_research value = IVN_ord_research }
+	set_variable = { var = IVN_imp_factory_output value = IVN_ord_factory_output }
+	add_to_variable = { var = IVN_imp_factory_output value = IVC_leg_factory_output }
+	set_variable = { var = IVN_imp_construction value = IVN_ord_construction }
+	add_to_variable = { var = IVN_imp_construction value = IVC_leg_construction }
+	set_variable = { var = IVN_imp_consumer_goods value = IVN_ord_consumer_goods }
+	if = {
+		limit = { has_dynamic_modifier = { modifier = IVN_order_dynamic } }
+		remove_dynamic_modifier = { modifier = IVN_order_dynamic }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = IVC_legion_dynamic } }
+		remove_dynamic_modifier = { modifier = IVC_legion_dynamic }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = IVN_exercitus_imperialis } } }
+		add_dynamic_modifier = { modifier = IVN_exercitus_imperialis }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = IVN_oeconomia_solis_nigri } } }
+		add_dynamic_modifier = { modifier = IVN_oeconomia_solis_nigri }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
 }

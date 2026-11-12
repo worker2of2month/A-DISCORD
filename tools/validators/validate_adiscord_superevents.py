@@ -71,6 +71,9 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.20",
     "ADISCORD_superevent.21",
     "ADISCORD_superevent.22",
+    "ADISCORD_superevent.23",
+    "ADISCORD_superevent.24",
+    "ADISCORD_superevent.25",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -366,6 +369,18 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_nam_veyran_proclamation",
         "superevent_nam_veyran_proclamation_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_itora_legion_victory",
+        "superevent_itora_legion_victory_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_itora_committee_victory",
+        "superevent_itora_committee_victory_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_itora_stalk_portal",
+        "superevent_itora_stalk_portal_sound_e",
     ),
 )
 

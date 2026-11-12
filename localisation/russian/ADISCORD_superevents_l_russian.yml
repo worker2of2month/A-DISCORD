@@ -292,3 +292,19 @@
  superevent_nam_veyran_proclamation_title:0 "Провозглашение Вейранской империи"
  superevent_nam_veyran_proclamation_quote:0 "Глава делегации вынул из кармана потемневшую печать. Утром под союзной грамотой стояли обе подписи."
  superevent_nam_veyran_proclamation_comment:0 "Союзная грамота подписана"
+
+ # Virgil, Aeneid I.279: https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296
+ superevent_itora_legion_victory_title:0 "РОЖДЕНИЕ ВЕЧНОГО ИМПЕРИУМА"
+ superevent_itora_legion_victory_quote:0 "Imperium sine fine dedi.\nЯ даровал им власть без конца.\n- Вергилий, \"Энеида\", I, 279 (перевод с латинского)"
+ superevent_itora_legion_victory_comment:0 "Империум восстанет из пепла."
+
+ # Thomas Hobbes, Leviathan XVII: https://www.gutenberg.org/cache/epub/3207/pg3207-images.html
+ superevent_itora_committee_victory_title:0 "ПОБЕДА ЧРЕЗВЫЧАЙНОГО КОМИТЕТА"
+ superevent_itora_committee_victory_quote:0 "А соглашения без меча - лишь слова, которые не в силах гарантировать человеку безопасность.\n- Томас Гоббс, \"Левиафан\", XVII"
+ superevent_itora_committee_victory_comment:0 "Порядок будет восстановлен."
+
+ # Leonid Stalk secret ending: the opening of a portal to another world.
+ # H. P. Lovecraft, From Beyond: https://www.hplovecraft.com/writings/texts/fiction/fb.aspx
+ superevent_itora_stalk_portal_title:0 "ПО ТУ СТОРОНУ МИРА"
+ superevent_itora_stalk_portal_quote:0 "Я заглянул за пределы бесконечности и вызвал демонов со звёзд.\n- Г. Ф. Лавкрафт, \"Извне\" (перевод с английского)"
+ superevent_itora_stalk_portal_comment:0 "Порог пройден."

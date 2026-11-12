@@ -106,6 +106,8 @@ ADISCORD_zeppelin_equipment
 RUS_crisis_invasion_countdown
 RUS_crisis_defence_countdown
 RUS_crisis_laser_countdown
+RUS_scientists_plot
+RUS_black_army_plot
 RUS_bunker_excavate
 RUS_bunker_rush
 RUS_bunker_guard

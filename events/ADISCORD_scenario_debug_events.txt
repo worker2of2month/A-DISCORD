@@ -108,7 +108,7 @@ country_event = {
 				z = 9.6
 				rotation = 0
 				scale = 1
-				min_zoom = 2000
+				min_zoom = 10000
 			}
 			set_entity_animation = { id = 610777 animation = "open" }
 			destroy_entity = 610778
@@ -120,7 +120,7 @@ country_event = {
 				z = 9.6
 				rotation = 0
 				scale = 1
-				min_zoom = 2000
+				min_zoom = 10000
 			}
 			set_entity_animation = { id = 610778 animation = "burst" }
 		}

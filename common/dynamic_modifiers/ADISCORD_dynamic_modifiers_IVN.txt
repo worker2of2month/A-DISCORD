@@ -1,7 +1,10 @@
 # Itoran focus aggregate. Country variables hold the accumulated values.
 IVN_order_dynamic = {
 	icon = GFX_idea_IVN_national_spirit
-	enable = { tag = IVN }
+	enable = {
+		tag = IVN
+		NOT = { has_global_flag = IVN_civil_war_won_by_legion }
+	}
 	stability_factor = IVN_ord_stability
 	political_power_gain = IVN_ord_political_power
 	research_speed_factor = IVN_ord_research
@@ -21,15 +24,7 @@ IVN_order_dynamic = {
 # The legion's aggregate; its own focuses and decisions change IVC_leg_*.
 IVC_legion_dynamic = {
 	icon = GFX_idea_IVN_national_spirit
-	enable = {
-		OR = {
-			tag = IVC
-			AND = {
-				tag = IVN
-				has_global_flag = IVN_civil_war_won_by_legion
-			}
-		}
-	}
+	enable = { tag = IVC }
 	army_attack_factor = IVC_leg_attack
 	army_defence_factor = IVC_leg_defence
 	army_org_factor = IVC_leg_org
@@ -57,4 +52,37 @@ IVN_march_disloyal = {
 	enable = { always = yes }
 	recruitable_population_factor = -0.10
 	state_production_speed_buildings_factor = -0.10
+}
+
+IVN_exercitus_imperialis = {
+	icon = GFX_idea_IVN_national_spirit
+	enable = {
+		tag = IVN
+		has_global_flag = IVN_civil_war_won_by_legion
+	}
+	army_attack_factor = IVN_imp_attack
+	army_defence_factor = IVN_imp_defence
+	army_org_factor = IVN_imp_org
+	army_core_defence_factor = IVN_imp_core_defence
+	breakthrough_factor = IVN_imp_breakthrough
+	conscription = IVN_imp_conscription
+	training_time_army_factor = IVN_imp_training
+	planning_speed = IVN_imp_planning
+	war_support_factor = IVN_imp_war_support
+	air_mission_efficiency = IVN_imp_air_efficiency
+	navy_org_factor = IVN_imp_navy_org
+}
+
+IVN_oeconomia_solis_nigri = {
+	icon = GFX_idea_IVN_national_spirit
+	enable = {
+		tag = IVN
+		has_global_flag = IVN_civil_war_won_by_legion
+	}
+	stability_factor = IVN_imp_stability
+	political_power_gain = IVN_imp_political_power
+	research_speed_factor = IVN_imp_research
+	industrial_capacity_factory = IVN_imp_factory_output
+	production_speed_buildings_factor = IVN_imp_construction
+	consumer_goods_factor = IVN_imp_consumer_goods
 }

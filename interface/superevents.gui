@@ -4729,4 +4729,316 @@ guiTypes = {
 			fixedsize = yes
 		}
 	}
+
+	containerWindowType = {
+		name = "superevent_itora_legion_victory"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_itora_legion_victory_sound_e
+
+		iconType = {
+			name = "superevent_itora_legion_victory"
+			quadTextureSprite = "GFX_superevent_itora_legion_victory"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_itora_committee_victory"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_itora_committee_victory_sound_e
+
+		iconType = {
+			name = "superevent_itora_committee_victory"
+			quadTextureSprite = "GFX_superevent_itora_committee_victory"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
+
+	containerWindowType = {
+		name = "superevent_itora_stalk_portal"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_itora_stalk_portal_sound_e
+
+		iconType = {
+			name = "superevent_itora_stalk_portal"
+			quadTextureSprite = "GFX_superevent_itora_stalk_portal"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_0"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_0"
+			position = { x = 48 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_1"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_1"
+			position = { x = 118 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_2"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_2"
+			position = { x = 188 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_3"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_3"
+			position = { x = 258 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_4"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_4"
+			position = { x = 328 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_5"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_5"
+			position = { x = 398 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_6"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_6"
+			position = { x = 468 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_7"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_7"
+			position = { x = 538 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_8"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_8"
+			position = { x = 608 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_9"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_9"
+			position = { x = 678 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_10"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_10"
+			position = { x = 748 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_11"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_11"
+			position = { x = 818 y = 82 }
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "stalk_portal_strip_12"
+			quadTextureSprite = "GFX_ADISCORD_stalk_portal_strip_12"
+			position = { x = 888 y = 82 }
+			alwaystransparent = yes
+		}
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_supereventframe"
+		}
+		iconType = {
+			name = "supereventframe"
+			quadTextureSprite = "GFX_supereventframe"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "supereventquote_bg"
+			quadTextureSprite = "GFX_supereventquote"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "superevents_title"
+			position = { x = 0 y = 20 }
+			font = "hoi_36header"
+			format = CENTER
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventTitle]"
+			maxWidth = 1000
+			maxHeight = 500
+			fixedsize = yes
+		}
+		instantTextboxType = {
+			name = "superevents_quote"
+			position = { x = 100 y = 470 }
+			font = "hoi_20bs"
+			format = RIGHT
+			borderSize = { x = 0 y = 0 }
+			text = "[GetSupereventQuote]"
+			maxWidth = 800
+			maxHeight = 111
+			fixedsize = yes
+		}
+		buttonType = {
+			name = "superevents_button"
+			spriteType = "GFX_supereventbutton"
+			position = { x = 370 y = 550 }
+			Orientation = "UPPER_LEFT"
+			shortcut = "ESCAPE"
+			clicksound = click_close
+		}
+		instantTextboxType = {
+			name = "superevents_comment"
+			position = { x = 250 y = 200 }
+			font = "hoi_16mbs"
+			format = CENTER
+			borderSize = { x = 0 y = 355 }
+			text = "[GetSupereventComment]"
+			maxWidth = 500
+			maxHeight = 111
+			fixedsize = yes
+		}
+	}
 }

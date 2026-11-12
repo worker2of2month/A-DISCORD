@@ -320,6 +320,47 @@ class ItoraCivilWarTests(unittest.TestCase):
         self.assertIn("IVN_Leonid_Stalk", read("common/characters/IVN.txt"))
         self.assertIn('texturefile = "gfx/leaders/IVN/portrait_IVN_Leonid_Stalk.png"', read("interface/ADISCORD_leader_portraits.gfx"))
 
+    def test_imperial_aggregates_preserve_sources_without_stacking(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        aggregate = self.effect("IVN_refresh_imperium")
+        facts = {
+            ("IVN", "has_dynamic_modifier", "IVN_order_dynamic"): True,
+            ("IVN", "has_dynamic_modifier", "IVC_legion_dynamic"): True,
+        }
+        values = {"IVN_ord_attack": 0.13, "IVC_leg_attack": 0.07,
+                  "IVN_ord_factory_output": 0.12, "IVC_leg_factory_output": 0.06,
+                  "IVN_imp_air_efficiency": 0.05, "IVN_imp_navy_org": 0.05}
+        for _ in range(3):
+            selected = list(selected_effects(aggregate, facts, "IVN"))
+            for _, entry in selected:
+                if entry.key in ("set_variable", "add_to_variable"):
+                    target = scalar(entry.value, "var")
+                    source = scalar(entry.value, "value")
+                    try:
+                        value = float(source)
+                    except ValueError:
+                        value = values.get(source, 0)
+                    values[target] = value if entry.key == "set_variable" else values.get(target, 0) + value
+            self.assertAlmostEqual(values["IVN_imp_attack"], 0.20)
+            self.assertAlmostEqual(values["IVN_imp_factory_output"], 0.18)
+            self.assertAlmostEqual(values["IVN_imp_air_efficiency"], 0.05)
+            self.assertAlmostEqual(values["IVN_imp_navy_org"], 0.05)
+        removals = [scalar(e.value, "modifier") for _, e in selected if e.key == "remove_dynamic_modifier"]
+        additions = [scalar(e.value, "modifier") for _, e in selected if e.key == "add_dynamic_modifier"]
+        self.assertEqual(set(removals), {"IVN_order_dynamic", "IVC_legion_dynamic"})
+        self.assertEqual(set(additions), {"IVN_exercitus_imperialis", "IVN_oeconomia_solis_nigri"})
+        self.assertIn("ADISCORD_economy_mark_dirty", {e.key for _, e in selected})
+
+    def test_postwar_focus_refreshes_select_imperial_aggregates(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        for tag, won in (("IVN", True), ("IVN", False), ("IVC", False)):
+            facts = {(tag, "has_global_flag", "IVN_civil_war_won_by_legion"): won}
+            for effect in ("IVN_refresh_order", "IVC_refresh_legion"):
+                selected = list(selected_effects(self.effect(effect), facts, tag))
+                self.assertEqual(sum(e.key == "IVN_refresh_imperium" for _, e in selected), int(tag == "IVN" and won))
+
     def test_authored_encodings(self):
         for path in (EFFECTS, TRIGGERS, EVENTS, "common/decisions/ADISCORD_IVN_decisions.txt"):
             self.assertFalse((ROOT / path).read_bytes().startswith(b"\xef\xbb\xbf"), path)

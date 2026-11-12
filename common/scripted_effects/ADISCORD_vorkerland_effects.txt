@@ -4771,6 +4771,20 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 71 }
 						has_global_flag = superevent_nam_veyran_proclamation
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 72 }
+						has_global_flag = superevent_itora_legion_victory
+					}
+
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 73 }
+						has_global_flag = superevent_itora_committee_victory
+					}
+
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 74 }
+						has_global_flag = superevent_itora_stalk_portal
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4854,6 +4868,9 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_west_council
 					has_global_flag = superevent_west_world_empire
 					has_global_flag = superevent_nam_veyran_proclamation
+					has_global_flag = superevent_itora_legion_victory
+					has_global_flag = superevent_itora_committee_victory
+					has_global_flag = superevent_itora_stalk_portal
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -5143,6 +5160,22 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 71 } }
 			set_global_flag = superevent_nam_veyran_proclamation
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 72 } }
+			set_global_flag = superevent_itora_legion_victory
+		}
+
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 73 } }
+			set_global_flag = superevent_itora_committee_victory
+		}
+
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 74 } }
+			set_global_flag = superevent_itora_stalk_portal
+			# Start the map opening when this card is displayed, not while it waits.
+			country_event = { id = ADISCORD_portal_test.1 }
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 		if = {
 			limit = {
@@ -5211,6 +5244,9 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_west_council
 	clr_global_flag = superevent_west_world_empire
 	clr_global_flag = superevent_nam_veyran_proclamation
+	clr_global_flag = superevent_itora_legion_victory
+	clr_global_flag = superevent_itora_committee_victory
+	clr_global_flag = superevent_itora_stalk_portal
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
@@ -12500,6 +12536,9 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_west_council days > 6 }
 					has_global_flag = { flag = superevent_west_world_empire days > 6 }
 					has_global_flag = { flag = superevent_nam_veyran_proclamation days > 6 }
+					has_global_flag = { flag = superevent_itora_legion_victory days > 6 }
+					has_global_flag = { flag = superevent_itora_committee_victory days > 6 }
+					has_global_flag = { flag = superevent_itora_stalk_portal days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -12755,6 +12794,20 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_nam_veyran_proclamation days > 6 } }
 				clr_global_flag = superevent_nam_veyran_proclamation
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_itora_legion_victory days > 6 } }
+				clr_global_flag = superevent_itora_legion_victory
+			}
+
+			if = {
+				limit = { has_global_flag = { flag = superevent_itora_committee_victory days > 6 } }
+				clr_global_flag = superevent_itora_committee_victory
+			}
+
+			if = {
+				limit = { has_global_flag = { flag = superevent_itora_stalk_portal days > 6 } }
+				clr_global_flag = superevent_itora_stalk_portal
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}

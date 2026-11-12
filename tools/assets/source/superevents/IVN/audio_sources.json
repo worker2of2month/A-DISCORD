@@ -1,0 +1,283 @@
+{
+  "timeline_seconds": {
+    "fire": [
+      0,
+      56
+    ],
+    "crowd": [
+      4,
+      8
+    ],
+    "volley": [
+      8,
+      10
+    ],
+    "music": [
+      0,
+      56
+    ],
+    "commander_radio": [
+      10,
+      17.955351
+    ],
+    "tank_medium": [
+      21,
+      29
+    ],
+    "tank_light": [
+      40,
+      48
+    ],
+    "distant_rifle": [
+      [
+        25,
+        27
+      ],
+      [
+        34,
+        36
+      ],
+      [
+        49,
+        51
+      ]
+    ],
+    "distant_cannon": [
+      31,
+      34
+    ]
+  },
+  "sources": {
+    "march_of_strength_excerpt.ogg": {
+      "artist": "Sophia",
+      "title": "March of Strength",
+      "selected_video": "https://youtu.be/_Mpw4wwhhio",
+      "source": "https://officialsophia.bandcamp.com/track/march-of-strength",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "license": "All rights reserved",
+      "sha256": "6a68c99cc67f1d880a7661432085cac98baa6784bcb383d5b70748ce57418072"
+    },
+    "fire.ogg": {
+      "source": "https://opengameart.org/content/fire-crackling",
+      "license": "CC0",
+      "sha256": "f922929805bc6afdf0a35727fa3998033db544c1b6f62ed3aeab94341ed6ddeb"
+    },
+    "crowd.mp3": {
+      "artist": "benfree",
+      "title": "RoaringCrowd.wav",
+      "source": "https://freesound.org/people/benfree/sounds/130568/",
+      "license": "CC0",
+      "sha256": "b75957f07b5702256004beb31a59a8dd762785a197e2133bbf8fcf7d92fc6714"
+    },
+    "rifle.ogg": {
+      "source": "Hearts of Iron IV/sound/animations/infantry_fire_standing_state_01.wav",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "551e66894e8070d76605b44f93fefeaecb442c2dd78caa980e8a1469690a0c98"
+    },
+    "panic_crowd.mp3": {
+      "artist": "JohnsonBrandEditing",
+      "title": "human male scream small crowd panic fear.mp3",
+      "source": "https://freesound.org/people/JohnsonBrandEditing/sounds/173945/",
+      "license": "CC0",
+      "sha256": "849517d555ee9e80937d8f01d6dea3ebfe21d7fe2dda7b487bfb0d5c88b7d338"
+    },
+    "commander_radio.flac": {
+      "source": "-GzgNlJT.wav",
+      "license": "Supplied commander recording",
+      "sha256": "5a47bef03dd7247c15d2027839e81a2d64ed2fae6daa3423429cb0387c3529f8"
+    },
+    "tank_medium.ogg": {
+      "source": "Hearts of Iron IV/sound/animations/tank_engine_medium_loop_01.wav",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "4d7f8b16771f449968276900c3f1a48186528bf34efb5a67c8e8cbde6b5620a4"
+    },
+    "tank_light.ogg": {
+      "source": "Hearts of Iron IV/sound/animations/tank_engine_light_loop_03.wav",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "f5ed494a3b55954b3d3782158a674fcbd769388bad975a529c1a670bb5f594db"
+    },
+    "distant_rifle.ogg": {
+      "source": "Hearts of Iron IV/sound/animations/infantry_fire_standing_state_03.wav",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "26d2f91a7e8e73a9ec4372eba5746ec65b1b21681acf3bf6a08a93c6855e87f3"
+    },
+    "distant_cannon.ogg": {
+      "source": "Hearts of Iron IV/sound/animations/medium_armour_fire_02.wav",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "d4b3c419932d712c8b49c399ce21609dd1ac7ec21997be7f180cfeb39efbdb99"
+    },
+    "campfire.mp3": {
+      "artist": "Nox_Sound",
+      "title": "Ambiance_Campfire_Loop_Stereo.wav",
+      "source": "https://freesound.org/people/Nox_Sound/sounds/558967/",
+      "license": "CC0",
+      "sha256": "62ee6ffe5dbfa1f8a5bd50cd7cb5d28c7953659e1234847fd47bd0e33c4d7889"
+    },
+    "the_ever_green_tree_excerpt.flac": {
+      "artist": "Desiderii Marginis",
+      "title": "The Ever Green Tree",
+      "source": "https://desiderii.bandcamp.com/track/the-ever-green-tree",
+      "excerpt_seconds": [
+        90,
+        146
+      ],
+      "license": "All rights reserved",
+      "sha256": "fac8dd1675027efa97d7c70e825f7f6b1bbe7906e420654681f7a4a91b81d5a6"
+    },
+    "committee_marching.mp3": {
+      "artist": "stib",
+      "title": "marching-concrete-loop.aif",
+      "source": "https://freesound.org/people/stib/sounds/240732/",
+      "license": "CC0",
+      "sha256": "90cb7576725ec7a271836277e20bbf975f5dfabc171990400e7638135e3a940b"
+    },
+    "committee_cheers.mp3": {
+      "artist": "craigsmith",
+      "title": "S12-03 Small group men cheering; encouraging.wav",
+      "source": "https://freesound.org/people/craigsmith/sounds/675103/",
+      "license": "CC0",
+      "sha256": "26ca9893285806f2f9231a42b8cb59f3e68940bfef4781496484e4e219cc5a66"
+    },
+    "committee_fireworks.mp3": {
+      "artist": "markedit",
+      "title": "Fireworks.wav",
+      "source": "https://freesound.org/people/markedit/sounds/158727/",
+      "license": "CC0",
+      "sha256": "771fb49f402840cadb3039e3a8dfab74aad005ae0958c95755ad5e647fe5d351"
+    },
+    "light_in_realitys_shadow_excerpt.flac": {
+      "artist": "Desiderii Marginis",
+      "title": "Light in Reality's Shadow",
+      "album": "Tragedy Ecstasy Doom",
+      "source": "https://desiderii.bandcamp.com/track/light-in-realitys-shadow",
+      "excerpt_seconds": [
+        90,
+        146
+      ],
+      "license": "All rights reserved",
+      "sha256": "06a2145dce8c7a1987db0c468c6973308122e13fd8ffa93ba18bd46a781476cb"
+    }
+  },
+  "active_sources": [
+    "campfire.mp3",
+    "panic_crowd.mp3",
+    "rifle.ogg",
+    "march_of_strength_excerpt.ogg",
+    "commander_radio.flac",
+    "tank_medium.ogg",
+    "tank_light.ogg",
+    "distant_rifle.ogg",
+    "distant_cannon.ogg"
+  ],
+  "committee_timeline_seconds": {
+    "music": [
+      0,
+      56
+    ],
+    "fade_in": [
+      0,
+      1.5
+    ],
+    "fade_out": [
+      51,
+      56
+    ],
+    "marching": [
+      [
+        2,
+        24
+      ],
+      [
+        35,
+        52
+      ]
+    ],
+    "cheers": [
+      [
+        7,
+        17
+      ],
+      [
+        34,
+        42
+      ]
+    ],
+    "fireworks": [
+      [
+        18,
+        31
+      ],
+      [
+        43,
+        54
+      ]
+    ]
+  },
+  "committee_active_sources": [
+    "the_ever_green_tree_excerpt.flac",
+    "committee_marching.mp3",
+    "committee_cheers.mp3",
+    "committee_fireworks.mp3"
+  ],
+  "portal_timeline_seconds": {
+    "music": [
+      0,
+      56
+    ],
+    "fade_in": [
+      0,
+      2
+    ],
+    "fade_out": [
+      50,
+      56
+    ],
+    "portal_hum": [
+      [
+        16,
+        17
+      ],
+      [
+        44,
+        45
+      ]
+    ],
+    "mask_stings": [
+      [
+        5,
+        6
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        21,
+        22
+      ],
+      [
+        31,
+        32
+      ],
+      [
+        39,
+        40
+      ],
+      [
+        50,
+        51
+      ]
+    ]
+  },
+  "portal_active_sources": [
+    "light_in_realitys_shadow_excerpt.flac"
+  ],
+  "portal_synthesized_effects": {
+    "portal_hum": "Synthesized 52 Hz modulated drone with 104 Hz and 157 Hz harmonics; 40 ms attack and 240 ms release.",
+    "mix": "Additive, normalize=0; original music gain 0.85 and original intro/outro fades; no ducking or master limiter.",
+    "mask_stings": "Synthesized short low impact: descending 62 Hz pulse with a 93 Hz overtone, exponential decay, 12 ms attack and 350 ms release."
+  }
+}

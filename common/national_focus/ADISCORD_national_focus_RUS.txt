@@ -24,8 +24,8 @@ focus_tree = {
 		cost = 2
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -53,8 +53,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_summon_the_aimaqs }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -98,8 +98,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_arm_the_border_hosts }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -145,8 +145,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_claim_the_opened_zone_available_tt
@@ -182,8 +182,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_claim_the_opened_zone }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_drive_starolesye_back_available_tt
@@ -224,8 +224,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_drive_starolesye_back }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_press_the_closed_zone_available_tt
@@ -259,6 +259,7 @@ focus_tree = {
 		y = 14
 		cost = 5
 		prerequisite = { focus = RUS_press_the_closed_zone }
+		allow_branch = { RUS_coup_regime = no }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -287,6 +288,69 @@ focus_tree = {
 			}
 		}
 		ai_will_do = { base = 120 }
+	}
+
+	# Coup lanes: the scientists to the west of the hidden imperial block,
+	# the Black Army to the east of the reactor belt.
+
+	focus = {
+		id = RUS_sci_channel_night
+		icon = GFX_focus_RUS_scientists_council
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		x = 6
+		y = 14
+		cost = 3
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.05
+			effect_tooltip = { add_ideas = RUS_sci_channel_night_delta }
+			custom_effect_tooltip = RUS_sci_channel_night_power_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_factory_output value = 0.05 }
+				add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
+				RUS_government_refresh = yes
+				add_to_variable = { var = RUS_bunker_power_bonus value = 1 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = RUS_ba_guard_order
+		icon = GFX_focus_RUS_black_army_oath
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		x = 34
+		y = 14
+		cost = 3
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			add_command_power = 25
+			army_experience = 15
+			effect_tooltip = { add_ideas = RUS_ba_guard_order_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_org value = 0.03 }
+				add_to_variable = { var = RUS_army_planning value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
 	}
 
 	# The preparations take 77 days in sequence; the invasion warning lasts 90.
@@ -848,8 +912,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -882,8 +946,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -913,8 +977,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -941,8 +1005,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -970,8 +1034,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -996,8 +1060,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1036,8 +1100,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1071,8 +1135,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_roadside_clinics }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1101,8 +1165,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1138,8 +1202,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1168,8 +1232,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1200,8 +1264,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1241,8 +1305,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1278,8 +1342,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1312,8 +1376,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1356,8 +1420,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1382,8 +1446,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1431,8 +1495,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_strategic_freight_reserve }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_lab_reactor_access_tt
@@ -1463,8 +1527,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_reactor_belt_inventory }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1495,8 +1559,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_reactor_belt_inventory }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1519,8 +1583,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_reactor_sorties }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1559,8 +1623,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1584,8 +1648,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1617,8 +1681,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -1648,8 +1712,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1672,8 +1736,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1705,8 +1769,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1730,8 +1794,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1757,8 +1821,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1786,8 +1850,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_three_tt
@@ -1816,8 +1880,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1843,8 +1907,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_lab_reactor_access_tt
@@ -1878,8 +1942,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1908,8 +1972,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_five_tt
@@ -1953,8 +2017,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_sealed_throne }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -1966,9 +2030,9 @@ focus_tree = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.9 } }
 			custom_effect_tooltip = RUS_course_scientists_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = -0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = -0.1 }
 				}
 			}
 		}
@@ -1989,8 +2053,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_open_city }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2002,9 +2066,9 @@ focus_tree = {
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.10 } }
 			custom_effect_tooltip = RUS_course_black_army_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = 0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = 0.1 }
 				}
 			}
 		}
@@ -2024,8 +2088,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2058,8 +2122,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2083,8 +2147,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_swift_columns }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2113,8 +2177,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_patient_war }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2143,8 +2207,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2175,8 +2239,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2205,8 +2269,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2239,8 +2303,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2280,8 +2344,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2312,8 +2376,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2400,8 +2464,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2440,8 +2504,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2471,8 +2535,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_a_country_of_names }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2509,8 +2573,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_district_paramedics }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2546,8 +2610,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2574,8 +2638,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_engineers_collegium }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2607,8 +2671,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2640,8 +2704,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_second_arsenal_shift }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2677,8 +2741,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_army_of_the_khanate }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2709,8 +2773,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_rifle_inspection_board }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -2734,8 +2798,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_commission }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2767,8 +2831,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_commission }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2799,8 +2863,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2838,8 +2902,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2866,8 +2930,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2904,8 +2968,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2943,8 +3007,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_commission }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -2972,8 +3036,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_surface_market }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3001,8 +3065,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_refugee_quarters }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3033,8 +3097,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_commission }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3057,8 +3121,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_deep_casemates }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3087,8 +3151,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_bunker_mountain_garrison }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3114,8 +3178,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_patient_war }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3135,8 +3199,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_entrenched_reserves }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3166,8 +3230,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_fortress_engineers }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3201,8 +3265,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_swift_columns }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3222,8 +3286,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_mobile_supply_columns }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3252,8 +3316,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_motor_pool_dispatch }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3278,8 +3342,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_scientists_council }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3299,8 +3363,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_local_service_committees }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3325,8 +3389,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_assembly_budget }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3356,8 +3420,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_black_army_oath }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3380,8 +3444,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_inspection_chamber }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3414,8 +3478,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_single_supply_register }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3445,8 +3509,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_underground_fund }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3470,8 +3534,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_surface_contracts }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3513,8 +3577,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_surface_contracts }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3540,8 +3604,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_underground_fund }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3581,8 +3645,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_reserve_shaft }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3615,8 +3679,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_layer_service_school }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3646,8 +3710,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_contingency_reservoir }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3677,8 +3741,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_bunker_water_recycling }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3711,8 +3775,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_count_the_hearths }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3736,8 +3800,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_khan_broadcast_service }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3764,8 +3828,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_quiet_perimeter }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_suspicion_open_tt
@@ -3778,9 +3842,9 @@ focus_tree = {
 			unlock_decision_tooltip = RUS_suspicion_press_tour
 			custom_effect_tooltip = RUS_course_scientists_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = -0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = -0.1 }
 				}
 			}
 		}
@@ -3799,8 +3863,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_foreign_press_bureau }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_suspicion_open_tt
@@ -3812,9 +3876,9 @@ focus_tree = {
 			unlock_decision_tooltip = RUS_suspicion_reactor_camouflage
 			custom_effect_tooltip = RUS_course_black_army_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = 0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = 0.1 }
 				}
 			}
 		}
@@ -3835,8 +3899,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_suspicion_open_tt
@@ -3865,8 +3929,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_black_army_oath }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -3887,9 +3951,9 @@ focus_tree = {
 			custom_effect_tooltip = RUS_course_scientists_10_tt
 			custom_effect_tooltip = RUS_support_scientists_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = -0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = -0.1 }
 				}
 				set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
@@ -3910,8 +3974,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_scientists_council }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3941,8 +4005,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_scientists_workshops }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -3957,9 +4021,9 @@ focus_tree = {
 			custom_effect_tooltip = RUS_course_scientists_15_tt
 			custom_effect_tooltip = RUS_support_scientists_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = -0.15
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = -0.15 }
 				}
 				set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
@@ -3992,8 +4056,8 @@ focus_tree = {
 		mutually_exclusive = { focus = RUS_scientists_council }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4014,9 +4078,9 @@ focus_tree = {
 			custom_effect_tooltip = RUS_course_black_army_10_tt
 			custom_effect_tooltip = RUS_support_black_army_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = 0.1
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = 0.1 }
 				}
 				set_temp_variable = { var = RUS_black_army_support_delta value = 0.10 }
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
@@ -4039,8 +4103,8 @@ focus_tree = {
 			owns_state = 66
 			controls_state = 66
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4068,8 +4132,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_black_army_staff }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4083,9 +4147,9 @@ focus_tree = {
 			custom_effect_tooltip = RUS_course_black_army_15_tt
 			custom_effect_tooltip = RUS_support_black_army_10_tt
 			hidden_effect = {
-				add_power_balance_value = {
-					id = RUS_state_balance
-					value = 0.15
+				if = {
+					limit = { has_power_balance = { id = RUS_state_balance } }
+					add_power_balance_value = { id = RUS_state_balance value = 0.15 }
 				}
 				set_temp_variable = { var = RUS_black_army_support_delta value = 0.10 }
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
@@ -4116,8 +4180,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_regional_self_help }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -4145,8 +4209,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_provincial_commissioners }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -4177,8 +4241,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_count_the_hearths }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4203,8 +4267,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_scientists_council }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4225,8 +4289,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_district_representation }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4251,8 +4315,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_civil_construction_board }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4277,8 +4341,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_black_army_oath }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4302,8 +4366,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_military_governors }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4327,8 +4391,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_military_contract_board }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4354,8 +4418,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_muster_books }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4380,8 +4444,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_staff_college }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4411,8 +4475,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_quartermaster_service }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4448,8 +4512,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_artillery_tables }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4479,8 +4543,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_quartermaster_service }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4505,8 +4569,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_armoured_trial_company }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4531,8 +4595,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_summon_the_aimaqs }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4557,8 +4621,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_flight_school }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -4587,8 +4651,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_capital_airfields }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4624,8 +4688,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_capital_airfields }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4660,8 +4724,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_capital_airfields }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -4691,8 +4755,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 			owns_state = 66
 			controls_state = 66
@@ -4726,8 +4790,8 @@ focus_tree = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {
@@ -4757,8 +4821,8 @@ focus_tree = {
 		prerequisite = { focus = RUS_assault_squadrons }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
 			}
 		}
 		completion_reward = {

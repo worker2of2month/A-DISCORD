@@ -1395,7 +1395,7 @@ class RusCrisisFixture:
                 "VAL_campaign_objectives_met", "STP_heg_northern_final_resolved",
                 "STP_pw_party_external_order_resolved", "STP_pw_party_northern_march_resolved",
                 "RUS_khan_governing", "ADISCORD_west_final_active", "ADISCORD_south_final_active",
-                "ADISCORD_vorkerland_rus_has_empire_territory",
+                "ADISCORD_vorkerland_rus_has_empire_territory", "RUS_coup_plot_active",
             ):
                 return self.outside_predicates.get((current, key), False) == (value == "yes")
             raise AssertionError(f"Unsupported crisis condition {key} in {current}")

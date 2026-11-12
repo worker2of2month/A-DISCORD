@@ -253,6 +253,8 @@ class BunkerWorld:
                 result = value in self.global_flags
             elif key == "has_completed_focus":
                 result = value in self.focuses
+            elif key == "has_active_mission":
+                result = value in self.missions
             elif key == "has_dynamic_modifier":
                 result = scalar(value, "modifier") in self.modifiers
             elif key == "has_decision":
@@ -784,7 +786,7 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertEqual(world.value("RUS_bunker_used_power"), 0)
 
     def test_generation_and_political_development_focuses(self):
-        self.assertEqual(len(self.focuses), 148)
+        self.assertEqual(len(self.focuses), 150)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -3876,7 +3878,8 @@ class RusCampaignTests(unittest.TestCase):
         for name in roots:
             self.assertTrue(world.matches(block(self.focuses[name], "allow_branch")), name)
         hidden = {name for name, rows in self.focuses.items() if any(row.key == "allow_branch" for row in rows)}
-        self.assertEqual(hidden, {"RUS_claim_the_opened_zone", *roots})
+        coup = {"RUS_seat_the_khan_chancery", "RUS_sci_channel_night", "RUS_ba_guard_order"}
+        self.assertEqual(hidden, {"RUS_claim_the_opened_zone", *roots, *coup})
         proclaim = block(self.effects["ADISCORD_vorkerland_rus_proclaim_last_empire"], "if")
         self.assertEqual(scalar(proclaim, "mark_focus_tree_layout_dirty"), "yes")
         events = parse("events/ADISCORD_vorkerland_events.txt")
@@ -4119,7 +4122,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 45)
+        self.assertEqual(len(events), 48)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -4500,6 +4503,9 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertLess(abs(world.bop), abs(value))
                     self.assertLessEqual(abs(world.bop), 0.10)
         for name, rows in decisions.items():
+            # Plot missions succeed when their condition holds; RusCoupTests covers them.
+            if any(row.key == "days_mission_timeout" for row in rows):
+                continue
             for failure in ("bop", "subject", "capitulated", "ruler", "phase"):
                 world = self.world()
                 world.bop = 0.45
@@ -6015,6 +6021,206 @@ class RusLateProgrammeTests(unittest.TestCase):
             for name in ("RUS_district_relief", "RUS_civil_factory_order", "RUS_artillery_order"):
                 for suffix in ("", "_blocked", "_tooltip"):
                     self.assertIn(name + "_cost" + suffix, loc)
+
+
+class RusCoupTests(unittest.TestCase):
+    """Static contracts of the scientists' and Black Army's coup against the Khan."""
+
+    KHAN_FOCUSES = {
+        "RUS_seat_the_khan_chancery", "RUS_imperial_general_staff", "RUS_western_supply_lines",
+        "RUS_imperial_arsenals", "RUS_aimaq_reserve", "RUS_break_the_hegemon",
+        "RUS_register_conquered_lands", "RUS_empire_without_rivals", "RUS_oath_of_the_empire",
+        "RUS_imperial_field_kitchens", "RUS_black_army_tribunals", "RUS_scientists_at_headquarters",
+        "RUS_reserve_of_the_aimaqs", "RUS_imperial_treasury", "RUS_levy_of_the_new_aimaqs",
+        "RUS_reactor_current_for_arsenals", "RUS_imperial_railways", "RUS_postwar_roads",
+        "RUS_imperial_academy", "RUS_tomorrow_above_ground",
+    }
+    ROOTS = {"RUS_sci_channel_night": "RUS_scientists_regime", "RUS_ba_guard_order": "RUS_black_army_regime"}
+
+    @classmethod
+    def setUpClass(cls):
+        tree = block(parse("focus_trees/RUS/main/focuses.txt"), "focus_tree")
+        cls.focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
+        cls.triggers = {row.key: row.value for row in parse(f"common/scripted_triggers/{BASE}_scripted_triggers.txt")}
+        cls.effects = {row.key: row.value for row in parse(f"common/scripted_effects/{BASE}_scripted_effects.txt")}
+        cls.decisions = {}
+        for category in parse(f"common/decisions/{BASE}_decisions.txt"):
+            for row in category.value:
+                if isinstance(row.value, list):
+                    cls.decisions[row.key] = row.value
+        cls.events = {
+            scalar(row.value, "id"): row.value
+            for row in parse(f"events/{BASE}_events.txt") if row.key == "country_event"
+        }
+        cls.loc = {}
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/{BASE}_l_{language}.yml"
+            cls.loc[language] = dict(re.findall(r'^\s*(\S+):\d*\s+"(.*)"\s*$', path.read_text(encoding="utf-8-sig"), re.M))
+
+    def keys(self, rows):
+        return [row.key for row in walk(rows)]
+
+    def test_khan_only_focuses_keep_the_khan_and_shared_focuses_use_the_regime(self):
+        for name, focus in self.focuses.items():
+            keys = self.keys(block(focus, "available")) if any(row.key == "available" for row in focus) else []
+            if name in self.KHAN_FOCUSES:
+                self.assertNotIn("RUS_regime_governing", keys, name)
+            elif "RUS_khan_governing" in keys or "RUS_regime_governing" in keys:
+                self.assertIn("RUS_regime_governing", keys, name)
+                self.assertNotIn("RUS_khan_governing", keys, name)
+        self.assertLessEqual(self.KHAN_FOCUSES, set(self.focuses))
+
+    def test_shared_systems_follow_the_regime_and_the_crisis_follows_the_khan(self):
+        for name in ("RUS_bunker_operational", "RUS_public_campaigns_operational", "RUS_reclamation_available", "RUS_levy_room"):
+            self.assertEqual(scalar(self.triggers[name], "RUS_regime_governing"), "yes", name)
+        for name in ("RUS_crisis_can_begin", "RUS_suspicion_active", "RUS_state_balance_operational", "RUS_morale_active", "RUS_coup_window_open"):
+            self.assertEqual(scalar(self.triggers[name], "RUS_khan_governing"), "yes", name)
+        leaders = [scalar(row.value, "character") for row in walk(self.triggers["RUS_regime_leader_ruling"]) if row.key == "has_country_leader"]
+        self.assertEqual(leaders, ["RUS_Mark_Rustan", "RUS_Gleb_Korneev", "RUS_Tagir_Mansurov"])
+        modifiers = {row.key: row.value for row in parse("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")}
+        self.assertEqual(scalar(block(modifiers["RUS_government_service"], "enable"), "RUS_regime_governing"), "yes")
+        self.assertEqual(scalar(block(modifiers["RUS_government_retained_institutions"], "enable"), "RUS_regime_governing"), "no")
+        self.assertEqual(scalar(block(modifiers["RUS_black_army"], "enable"), "RUS_regime_leader_ruling"), "yes")
+
+    def test_dominance_starts_a_sixty_day_plot_without_polling(self):
+        bop = block(parse("common/bop/RUS.txt"), "RUS_state_balance")
+        ranges = {scalar(row.value, "id"): row.value for row in walk(bop) if row.key == "range"}
+        for name in ("RUS_scientists_dominance", "RUS_black_army_dominance"):
+            self.assertEqual(scalar(block(ranges[name], "on_activate"), "RUS_coup_plot_check"), "yes")
+        self.assertEqual(scalar(block(self.effects["RUS_suspicion_begin"], "if"), "RUS_coup_plot_check"), "yes")
+        tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").split()
+        for side, plot in ((1, "RUS_scientists_plot"), (2, "RUS_black_army_plot")):
+            self.assertEqual(tokens.count(plot), 1)
+            mission = self.decisions[plot]
+            self.assertEqual(scalar(mission, "days_mission_timeout"), "60")
+            self.assertEqual(scalar(block(mission, "activation"), "always"), "no")
+            self.assertTrue(block(mission, "available"))
+            timeout = list(walk(block(mission, "timeout_effect")))
+            temp = [scalar(row.value, "value") for row in timeout if row.key == "set_temp_variable"]
+            self.assertEqual(temp, [str(side)])
+            self.assertIn("RUS_coup_execute", [row.key for row in timeout])
+        check = self.keys(self.effects["RUS_coup_plot_check"])
+        self.assertEqual([row.value for row in walk(self.effects["RUS_coup_plot_check"]) if row.key == "activate_mission"],
+                         ["RUS_scientists_plot", "RUS_black_army_plot"])
+        self.assertIn("RUS_coup_window_open", check)
+
+    def test_a_plot_blocks_the_proclamation_and_turns_exposure_into_the_coup(self):
+        decision = self.decisions["RUS_proclaim_the_last_empire"]
+        self.assertEqual(scalar(block(decision, "visible"), "RUS_khan_governing"), "yes")
+        gates = [row.value for row in block(decision, "available") if row.key == "custom_trigger_tooltip"]
+        self.assertIn("no", [scalar(gate, "RUS_coup_plot_active") for gate in gates if any(row.key == "RUS_coup_plot_active" for row in gate)])
+        expose = self.effects["RUS_suspicion_expose"]
+        first = block(expose, "if")
+        self.assertEqual(scalar(block(first, "limit"), "RUS_coup_plot_active"), "yes")
+        self.assertIn("RUS_coup_execute", [row.key for row in first])
+        self.assertIn("remove_mission", [row.key for row in walk(first)])
+
+    def test_coup_replaces_the_ruler_and_clears_the_khan_systems(self):
+        body = block(self.effects["RUS_coup_execute"], "if")
+        self.assertEqual(scalar(block(body, "limit"), "RUS_coup_window_open"), "yes")
+        rows = list(walk(body))
+        keys = [row.key for row in rows]
+        self.assertIn("RUS_retire_current_ruler", keys)
+        promoted = {scalar(row.value, "character"): scalar(row.value, "ideology") for row in rows if row.key == "promote_character"}
+        self.assertEqual(promoted, {"RUS_Gleb_Korneev": "technocracy_ideology", "RUS_Tagir_Mansurov": "chauvinism_ideology"})
+        self.assertEqual({row.value for row in rows if row.key == "set_cosmetic_tag"}, {"RUS_reactor_council", "RUS_guard_state"})
+        guarded = [row.value for row in body if row.key == "if" and any(item.key == "remove_power_balance" for item in row.value)]
+        self.assertEqual(scalar(block(block(guarded[0], "limit"), "has_power_balance"), "id"), "RUS_state_balance")
+        guarded = [row.value for row in body if row.key == "if" and any(item.key == "remove_dynamic_modifier" for item in row.value)]
+        self.assertEqual(len(guarded), 1)
+        self.assertIn("has_dynamic_modifier", self.keys(block(guarded[0], "limit")))
+        cleared = {row.value for row in rows if row.key == "clear_variable"}
+        self.assertLessEqual({"RUS_suspicion", "RUS_suspicion_warning", "RUS_black_army_support", "RUS_scientists_support"}, cleared)
+        self.assertIn("mark_focus_tree_layout_dirty", keys)
+        characters = {row.key: row.value for row in block(parse("common/characters/RUS.txt"), "characters")}
+        for name, ideology in promoted.items():
+            self.assertEqual(scalar(block(characters[name], "country_leader"), "ideology"), ideology)
+        cosmetic = {row.key for row in parse("common/countries/cosmetic.txt")}
+        for tag in ("RUS_reactor_council", "RUS_guard_state"):
+            self.assertIn(tag, cosmetic)
+            for folder in ("", "medium/", "small/"):
+                self.assertTrue((ROOT / f"gfx/flags/{folder}{tag}.tga").is_file(), folder + tag)
+
+    def test_coup_branches_open_their_own_lanes(self):
+        self.assertEqual(scalar(block(self.focuses["RUS_seat_the_khan_chancery"], "allow_branch"), "RUS_coup_regime"), "no")
+        lanes = {"RUS_sci_channel_night": ("6", "14"), "RUS_ba_guard_order": ("34", "14")}
+        cells = {}
+        for name, focus in self.focuses.items():
+            cells.setdefault((scalar(focus, "x"), scalar(focus, "y")), []).append(name)
+        for name, regime in self.ROOTS.items():
+            focus = self.focuses[name]
+            self.assertEqual(scalar(block(focus, "allow_branch"), regime), "yes")
+            cell = (scalar(focus, "x"), scalar(focus, "y"))
+            self.assertEqual(cell, lanes[name])
+            self.assertEqual(cells[cell], [name])
+            self.assertFalse(any(row.key == "prerequisite" for row in focus), name)
+            x, y = (int(value) for value in cell)
+            for other, others in cells.items():
+                if other != cell and other[1] == str(y):
+                    self.assertGreater(abs(int(other[0]) - x), 1, (name, others))
+
+    def test_root_previews_equal_the_applied_aggregate_deltas(self):
+        ideas = {}
+        for category in block(parse(f"common/ideas/{BASE}_ideas.txt"), "ideas"):
+            for row in category.value:
+                ideas[row.key] = row.value
+        mapping = {
+            "RUS_government_factory_output": "industrial_capacity_factory",
+            "RUS_government_civilian_speed": "production_speed_industrial_complex_factor",
+            "RUS_army_org": "army_org_factor",
+            "RUS_army_planning": "planning_speed",
+        }
+        for name in self.ROOTS:
+            reward = block(self.focuses[name], "completion_reward")
+            preview = scalar(block(reward, "effect_tooltip"), "add_ideas")
+            expected = {row.key: float(row.value) for row in block(ideas[preview], "modifier")}
+            applied = {
+                mapping[scalar(row.value, "var")]: float(scalar(row.value, "value"))
+                for row in walk(reward) if row.key == "add_to_variable" and scalar(row.value, "var") in mapping
+            }
+            self.assertEqual(applied, expected, name)
+
+    def test_other_countries_skip_the_khan_crisis_after_a_coup(self):
+        tree = block(parse("focus_trees/NAM/postwar/focuses.txt"), "focus_tree")
+        focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
+        for name in ("NAM_rus_crisis_watch", "NAM_rus_fuel_for_coalition", "NAM_rus_demand_share", "NAM_rus_expedition_staff"):
+            self.assertEqual(scalar(block(focuses[name], "bypass"), "RUS_crisis_foreclosed"), "yes", name)
+        foreclosed = self.keys(self.triggers["RUS_crisis_foreclosed"])
+        self.assertIn("RUS_coup_regime", foreclosed)
+
+    def test_coup_events_are_registered_and_localised(self):
+        registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
+        for number in (46, 47, 48):
+            name = f"ADISCORD_rus_campaign.{number}"
+            self.assertEqual(sum(row["id"] == name for row in registry), 1)
+            for row in walk(self.events[name]):
+                if row.key in ("text", "name", "custom_effect_tooltip"):
+                    for language in self.loc:
+                        self.assertIn(row.value, self.loc[language], (language, row.value))
+        names = [
+            "RUS_regime_governing_tt", "RUS_Gleb_Korneev", "RUS_Tagir_Mansurov",
+            "RUS_reactor_council", "RUS_reactor_council_DEF", "RUS_reactor_council_ADJ",
+            "RUS_guard_state", "RUS_guard_state_DEF", "RUS_guard_state_ADJ",
+            "RUS_proclaim_the_last_empire_no_plot_tt", "RUS_coup_plot_dispersed_tt",
+            "RUS_ba_guard_order_delta", "RUS_sci_channel_night_power_tt",
+        ]
+        for plot in ("RUS_scientists_plot", "RUS_black_army_plot"):
+            names += [plot, plot + "_desc", plot + "_broken_tt", plot + "_coup_tt"]
+        for focus in self.ROOTS:
+            names += [focus, focus + "_desc"]
+        for language in self.loc:
+            for name in names:
+                self.assertIn(name, self.loc[language], (language, name))
+            for name in names + ["ADISCORD_rus_campaign.47.scientists.d", "ADISCORD_rus_campaign.47.army.d"]:
+                text = self.loc[language].get(name, "")
+                self.assertNotIn("—", text)
+                self.assertNotIn("«", text)
+        for number in (46, 47, 48):
+            for key, text in self.loc["russian"].items():
+                if key.startswith(f"ADISCORD_rus_campaign.{number}.") and key.endswith(".d"):
+                    page = text.replace("\\n", "\n")
+                    self.assertLessEqual(len(page), 3000)
+                    self.assertLessEqual(len(page.encode("utf-8")), 5500)
 
 
 if __name__ == "__main__":

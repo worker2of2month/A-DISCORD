@@ -547,6 +547,27 @@ ideas = {
 			}
 		}
 
+		RUS_sci_channel_night_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		RUS_ba_guard_order_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+
 		RUS_defensive_preparation_spirit = {
 			picture = RUS_defensive_preparation_spirit
 			allowed = { always = no }

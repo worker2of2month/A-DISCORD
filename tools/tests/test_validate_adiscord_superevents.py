@@ -38,6 +38,219 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_stalk_portal_audio_adds_effects_only_during_visual_flashes(self):
+        import array
+        import math
+        from tools.builders.build_adiscord_superevent_animation import FRAME_COUNT, FPS
+
+        def read_pcm(path):
+            with wave.open(str(path)) as audio:
+                self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (2, 2, 44100))
+                self.assertEqual(audio.getnframes(), FRAME_COUNT * 44100 // FPS)
+                return array.array("h", audio.readframes(audio.getnframes()))
+
+        actual = read_pcm(ROOT / "sound/superevents/superevent_itora_stalk_portal_sound.wav")
+        with tempfile.TemporaryDirectory() as folder:
+            baseline = Path(folder) / "music.wav"
+            subprocess.run([
+                "ffmpeg", "-v", "error", "-y", "-i",
+                str(ROOT / "tools/assets/source/superevents/IVN/light_in_realitys_shadow_excerpt.flac"),
+                "-af", "afade=t=in:d=2,afade=t=out:st=50:d=6,volume=0.85",
+                "-t", "56", "-ar", "44100", "-ac", "2", "-c:a", "pcm_s16le", str(baseline),
+            ], check=True)
+            music = read_pcm(baseline)
+        self.assertLess(max(abs(sample) for sample in actual), 32767)
+        flashes = {5, 12, 16, 21, 31, 39, 44, 50}
+        for second in range(56):
+            start = second * 88200
+            residual = [a - b for a, b in zip(actual[start:start + 88200], music[start:start + 88200])]
+            if second in flashes:
+                self.assertGreater(math.sqrt(sum(value * value for value in residual) / len(residual)), 300, second)
+            else:
+                self.assertLessEqual(max(abs(value) for value in residual), 1, second)
+
+    def test_stalk_portal_animation_cycles_eight_paintings_between_flashes(self):
+        from PIL import Image
+        from hashlib import sha256
+        from tools.builders.build_adiscord_superevent_animation import STRIP_WIDTHS
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        gfx = (ROOT / "interface/superevents.gfx").read_text(encoding="utf-8-sig")
+        gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
+        window = next(
+            block for block in blocks(gui, r"^\s*containerWindowType\s*=\s*\{")
+            if re.search(r'\bname\s*=\s*"superevent_itora_stalk_portal"', block)
+        )
+        with Image.open(ROOT / "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png") as backdrop:
+            self.assertEqual(backdrop.size, (1001, 639))
+            self.assertEqual(backdrop.getchannel("A").getbbox(), (48, 82, 956, 592))
+            fallback = backdrop.convert("RGB").crop((48, 82, 956, 592))
+        expected_portal = (16, 44)
+        expected_masks = (5, 12, 21, 31, 39, 50)
+        painting_seconds = set(range(56)) - set(expected_portal) - set(expected_masks)
+        self.assertEqual(len(painting_seconds), 48)
+        offset = 0
+        frame_digests = [sha256() for _ in range(56)]
+        scripted_gui = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
+        for index, width in enumerate(STRIP_WIDTHS):
+            name = f"GFX_ADISCORD_stalk_portal_strip_{index}"
+            sprite = next(
+                block for block in blocks(gfx, r"^\s*frameAnimatedSpriteType\s*=\s*\{")
+                if f'name = "{name}"' in block
+            )
+            for token in ("noOfFrames = 56", "animation_rate_fps = 1", "looping = no", "play_on_show = yes"):
+                self.assertIn(token, sprite)
+            icon = next(
+                block for block in blocks(window, r"^\s*iconType\s*=\s*\{")
+                if f'quadTextureSprite = "{name}"' in block
+            )
+            self.assertIn(f"position = {{ x = {48 + offset} y = 82 }}", icon)
+            self.assertIn('loadType = "INGAME"', sprite)
+            self.assertIn("legacy_lazy_load = no", sprite)
+            visibility = blocks(scripted_gui, rf"^\s*stalk_portal_strip_{index}_visible\s*=\s*\{{")[0]
+            self.assertIn("has_global_flag = superevent_itora_stalk_portal", visibility)
+            texture = re.search(r'textureFile\s*=\s*"([^"]+)"', sprite).group(1)
+            self.assertTrue((ROOT / texture).read_bytes().startswith(b"DDS "))
+            with Image.open(ROOT / texture) as atlas:
+                self.assertEqual(atlas.size, (width * 56, 510))
+                self.assertLessEqual(atlas.width, 4096)
+                pixels = atlas.convert("RGB")
+                frames = [
+                    pixels.crop((second * width, 0, (second + 1) * width, 510)).tobytes()
+                    for second in range(56)
+                ]
+            fallback_strip = fallback.crop((offset, 0, offset + width, 510)).tobytes()
+            self.assertEqual(frames[0], fallback_strip)
+            for second, frame in enumerate(frames):
+                frame_digests[second].update(frame)
+            offset += width
+        self.assertEqual(offset, 908)
+        digests = [digest.hexdigest() for digest in frame_digests]
+        painting_hashes = []
+        for group in range(8):
+            seconds = [second for second in painting_seconds if second // 7 == group]
+            self.assertTrue(seconds)
+            self.assertEqual(len({digests[second] for second in seconds}), 1)
+            painting_hashes.append(digests[seconds[0]])
+        self.assertEqual(len(set(painting_hashes)), 8)
+        self.assertEqual(digests[16], digests[44])
+        self.assertNotIn(digests[16], painting_hashes)
+        self.assertEqual(digests[-1], painting_hashes[-1])
+        self.assertTrue(all(digests[second] not in painting_hashes for second in expected_masks))
+
+    def test_map_portal_starts_once_and_covers_the_full_camera_zoom(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_superevents import _event_block
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+
+        entities = parse_clausewitz((ROOT / "gfx/entities/mapitems_custom.asset").read_text(encoding="utf-8"))
+        for name, idle, active in (
+            ("ADISCORD_portal_test_entity", "closed", "open"),
+            ("ADISCORD_portal_burst_entity", "spent", "burst"),
+        ):
+            entity = next(row.value for row in entities if row.key == "entity" and scalar(row.value, "name") == name)
+            self.assertEqual(scalar(entity, "default_state"), idle)
+            self.assertGreaterEqual(float(scalar(entity, "cull_radius")), 300)
+            states = {scalar(row.value, "name"): row.value for row in entity if row.key == "state"}
+            self.assertFalse(any(row.key == "event" for row in states[idle]))
+            self.assertEqual(scalar(states[active], "looping"), "no")
+            particle_events = [row.value for row in states[active] if row.key == "event"]
+            self.assertEqual(len(particle_events), 1)
+            self.assertEqual(scalar(particle_events[0], "trigger_once"), "yes")
+        source = (ROOT / "events/ADISCORD_scenario_debug_events.txt").read_text(encoding="utf-8")
+        opening = parse_clausewitz(_event_block(source, "ADISCORD_portal_test.1"))[0].value
+        state = block(block(opening, "immediate"), "218")
+        creations = [row.value for row in state if row.key == "create_entity"]
+        self.assertEqual({scalar(row, "id") for row in creations}, {"610777", "610778"})
+        self.assertTrue(all(float(scalar(row, "min_zoom")) > 3000 for row in creations))
+        self.assertEqual(sum(row.key == "set_entity_animation" for row in state), 2)
+        cleanup = parse_clausewitz(_event_block(source, "ADISCORD_portal_test.2"))[0].value
+        self.assertEqual(scalar(block(block(cleanup, "immediate"), "218"), "destroy_entity"), "610778")
+        meshes = (ROOT / "gfx/entities/mapitems_custom.gfx").read_text(encoding="utf-8")
+        from tools.validators.validate_adiscord_superevents import blocks
+        mesh = next(row for row in blocks(meshes, r"^\s*pdxmesh\s*=\s*\{") if 'name = "ADISCORD_portal_test_mesh"' in row)
+        self.assertIn("cull_distance = 10000.0", mesh)
+
+    def test_imperium_runtime_exports_match_the_card_and_audio_contract(self):
+        from PIL import Image
+        import array
+
+        with Image.open(ROOT / "gfx/interface/superevents/IVN/superevent_itora_legion_victory.png") as art:
+            self.assertEqual(art.size, (1001, 639))
+            self.assertEqual(art.getbbox(), (48, 88, 956, 588))
+        for folder, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+            flag = ROOT / "gfx/flags" / folder / "IVN_unified_legion.tga"
+            with Image.open(flag) as image:
+                self.assertEqual(image.size, size)
+            self.assertEqual(flag.read_bytes()[16], 32)
+        with wave.open(str(ROOT / "sound/superevents/superevent_itora_legion_victory_sound.wav")) as audio:
+            self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (2, 2, 44100))
+            self.assertEqual(audio.getnframes(), 56 * 44100)
+            samples = array.array("h", audio.readframes(audio.getnframes()))
+        self.assertLess(max(abs(sample) for sample in samples), 32767)
+        for start, end in ((0, 4), (4, 8), (8, 10), (10, 52)):
+            segment = samples[start * 88200:end * 88200]
+            self.assertGreater(sum(abs(sample) for sample in segment) / len(segment), 100)
+
+    def test_legion_victory_presentation_keeps_preview_separate_from_settlement(self):
+        from tools.validators.validate_adiscord_superevents import _event_block
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+
+        source = (ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt").read_text(encoding="utf-8")
+        definitions = {entry.key: entry.value for entry in parse_clausewitz(source)}
+        for winner in ("legion", "cabinet", "directory", "communes", "marches"):
+            facts = {("IVN", "has_global_flag", f"IVN_civil_war_won_by_{winner}"): True}
+            selected = list(selected_effects(definitions["IVN_resolve_marches_revolt"], facts, "IVN"))
+            calls = [row for _, row in selected if row.key == "IVN_show_legion_victory_superevent"]
+            self.assertEqual(len(calls), int(winner == "legion"), winner)
+        event_source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = parse_clausewitz(_event_block(event_source, "ADISCORD_superevent.23"))[0].value
+        immediate = block(event, "immediate")
+        self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
+        self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "72")
+        self.assertEqual(PRESENTATIONS[71].name, "superevent_itora_legion_victory")
+
+    def test_committee_victory_presentation_keeps_preview_separate_from_settlement(self):
+        from tools.validators.validate_adiscord_superevents import _event_block
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+
+        source = (ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt").read_text(encoding="utf-8")
+        definitions = {entry.key: entry.value for entry in parse_clausewitz(source)}
+        for winner in ("legion", "cabinet", "directory", "communes", "marches"):
+            facts = {("IVN", "has_global_flag", f"IVN_civil_war_won_by_{winner}"): True}
+            selected = list(selected_effects(definitions["IVN_resolve_marches_revolt"], facts, "IVN"))
+            calls = [row for _, row in selected if row.key == "IVN_show_committee_victory_superevent"]
+            self.assertEqual(len(calls), int(winner == "cabinet"), winner)
+        event_source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = parse_clausewitz(_event_block(event_source, "ADISCORD_superevent.24"))[0].value
+        immediate = block(event, "immediate")
+        self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
+        self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "73")
+        self.assertEqual(PRESENTATIONS[72].name, "superevent_itora_committee_victory")
+
+    def test_stalk_portal_is_a_dormant_presentation_without_campaign_entry_point(self):
+        from tools.validators.validate_adiscord_superevents import _event_block
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = parse_clausewitz(_event_block(source, "ADISCORD_superevent.25"))[0].value
+        self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+        immediate = block(event, "immediate")
+        self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
+        self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "74")
+        self.assertEqual(PRESENTATIONS[73].name, "superevent_itora_stalk_portal")
+        callers = []
+        for folder in ("common", "events"):
+            for path in (ROOT / folder).rglob("*.txt"):
+                if path == ROOT / "events/ADISCORD_superevents.txt":
+                    continue
+                if "ADISCORD_superevent.25" in path.read_text(encoding="utf-8-sig"):
+                    callers.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(callers, [])
+
     def test_nam_veyran_proclamation_queues_a_card_for_human_and_ai(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -365,6 +578,7 @@ class SupereventContractTests(unittest.TestCase):
         source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
         definitions = {entry.key: entry.value for entry in parse_clausewitz(source)}
         flags, queue, variables, played = set(), [], {}, []
+        map_openings = []
 
         def fields(body):
             return {entry.key: entry.value for entry in body}
@@ -424,6 +638,10 @@ class SupereventContractTests(unittest.TestCase):
                 elif key == "ADISCORD_vorkerland_play_superevent_sound":
                     self.assertEqual(len(flags), 1)
                     played.append(next(iter(flags)))
+                elif key == "country_event":
+                    self.assertEqual(fields(value), {"id": "ADISCORD_portal_test.1"})
+                    self.assertEqual(flags, {"superevent_itora_stalk_portal"})
+                    map_openings.append(len(played))
                 elif key in definitions and value == "yes":
                     execute(definitions[key])
                 else:
@@ -442,15 +660,27 @@ class SupereventContractTests(unittest.TestCase):
             request(index)
         self.assertEqual(queue, list(order[1:]))
         self.assertEqual(played, [PRESENTATIONS[5].name])
+        self.assertEqual(map_openings, [])
         for index in order:
             window = fields(windows[PRESENTATIONS[index - 1].name])
             execute(fields(window["effects"])["superevents_button_click"])
         self.assertEqual(played, [PRESENTATIONS[i - 1].name for i in order])
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
+        self.assertEqual(map_openings, [order.index(74)])
         # A closed presentation can be replayed; no permanent deduplication lock.
         request(19)
         self.assertEqual(len(played), len(order) + 1)
+        request(74)
+        request(74)
+        self.assertEqual(len(map_openings), 1)
+        window = fields(windows[PRESENTATIONS[18].name])
+        execute(fields(window["effects"])["superevents_button_click"])
+        self.assertEqual(len(map_openings), 2)
+        self.assertEqual(played[-1], "superevent_itora_stalk_portal")
+        request(74)
+        self.assertEqual(len(map_openings), 2)
+        self.assertEqual(queue, [])
 
     def test_requests_do_not_replace_an_active_presentation(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
@@ -1015,6 +1245,9 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_west_council",
                 "superevent_west_world_empire",
                 "superevent_nam_veyran_proclamation",
+                "superevent_itora_legion_victory",
+                "superevent_itora_committee_victory",
+                "superevent_itora_stalk_portal",
             ),
         )
 

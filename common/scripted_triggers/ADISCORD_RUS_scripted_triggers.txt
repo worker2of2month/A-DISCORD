@@ -1084,8 +1084,78 @@ RUS_khan_governing = {
 	is_subject = no
 }
 
-RUS_bunker_operational = {
+# The country's government works under the Khan or under the faction that
+# overthrew him. Khan-only content keeps RUS_khan_governing.
+RUS_regime_governing = {
+	tag = RUS
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	RUS_regime_leader_ruling = yes
+	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+	has_capitulated = no
+	is_subject = no
+}
+
+RUS_regime_leader_ruling = {
+	OR = {
+		has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+		has_country_leader = { character = RUS_Gleb_Korneev ruling_only = yes }
+		has_country_leader = { character = RUS_Tagir_Mansurov ruling_only = yes }
+	}
+}
+
+# The ruling leader is the coup record: Rustan is retired and never returns.
+RUS_scientists_regime = {
+	tag = RUS
+	has_country_leader = { character = RUS_Gleb_Korneev ruling_only = yes }
+}
+
+RUS_black_army_regime = {
+	tag = RUS
+	has_country_leader = { character = RUS_Tagir_Mansurov ruling_only = yes }
+}
+
+RUS_coup_regime = {
+	OR = {
+		RUS_scientists_regime = yes
+		RUS_black_army_regime = yes
+	}
+}
+
+# From the first state taken outside the bunker until the proclamation.
+RUS_coup_window_open = {
 	RUS_khan_governing = yes
+	has_variable = RUS_suspicion
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+	has_power_balance = { id = RUS_state_balance }
+}
+
+# The dominance ranges of RUS_state_balance start at 0.60 on either side.
+RUS_scientists_dominant = {
+	has_power_balance = { id = RUS_state_balance }
+	power_balance_value = { id = RUS_state_balance value < -0.599 }
+}
+
+RUS_black_army_dominant = {
+	has_power_balance = { id = RUS_state_balance }
+	power_balance_value = { id = RUS_state_balance value > 0.599 }
+}
+
+RUS_coup_plot_active = {
+	OR = {
+		has_active_mission = RUS_scientists_plot
+		has_active_mission = RUS_black_army_plot
+	}
+}
+
+# Any scope. A coup makes the Khan's crisis impossible; other countries skip
+# their crisis-response focuses through bypass. Other endings keep their routes.
+RUS_crisis_foreclosed = {
+	country_exists = RUS
+	RUS = { RUS_coup_regime = yes }
+}
+
+RUS_bunker_operational = {
+	RUS_regime_governing = yes
 	owns_state = 66
 	controls_state = 66
 	has_country_flag = RUS_bunker_initialized
@@ -1532,7 +1602,7 @@ RUS_subterranean_supply_contract_available = {
 
 # --- rus_public_campaigns ---
 RUS_public_campaigns_operational = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_khan_broadcast_service
 }
 
@@ -1590,7 +1660,7 @@ RUS_reclamation_region = {
 
 # RUS, FROM is the decision's state. The deposit is the shared project slot.
 RUS_reclamation_available = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	NOT = { has_variable = RUS_reclamation_deposit }
 	FROM = {
 		RUS_reclamation_region = yes
@@ -1762,7 +1832,7 @@ RUS_favour_science_15_affordable = {
 # RUS. Three calls per war, two more after the district courts and one more
 # after the mountain garrison; RUS_levies_monthly resets the count at peace.
 RUS_levy_room = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_summon_the_aimaqs
 	has_war = yes
 	OR = {
@@ -1800,7 +1870,7 @@ RUS_winter_expedition_affordable = {
 }
 
 RUS_bunker_farm_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_bunker_deep_gallery
 	RUS_bunker_operational = yes
 	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
@@ -1814,7 +1884,7 @@ RUS_bunker_farm_affordable = {
 }
 
 RUS_food_requisition_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_summon_the_aimaqs
 	RUS_bunker_operational = yes
 	num_of_controlled_states > 3
@@ -1923,7 +1993,7 @@ RUS_development_programme_affordable = {
 }
 
 RUS_civil_service_training_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	OR = {
 		has_completed_focus = RUS_aimaq_service_charter
 		has_completed_focus = RUS_civil_service_examinations
@@ -1934,7 +2004,7 @@ RUS_civil_service_training_ready = {
 }
 
 RUS_district_health_programme_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	OR = {
 		has_completed_focus = RUS_roadside_clinics
 		RUS_bunker_clinic_active = yes
@@ -1944,7 +2014,7 @@ RUS_district_health_programme_ready = {
 }
 
 RUS_workshop_training_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	OR = {
 		has_completed_focus = RUS_machine_school
 		RUS_bunker_workshop_active = yes
@@ -1974,21 +2044,21 @@ RUS_crisis_other_major_required = {
 }
 
 RUS_community_assemblies_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_count_the_hearths
 	NOT = { ADISCORD_society_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_society_development_progress value = 100 compare = less_than }
 }
 
 RUS_public_reading_rooms_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_school_of_scribes
 	NOT = { ADISCORD_cultural_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_cultural_development_progress value = 100 compare = less_than }
 }
 
 RUS_regimental_training_ready = {
-	RUS_khan_governing = yes
+	RUS_regime_governing = yes
 	has_completed_focus = RUS_officer_courses
 	NOT = { ADISCORD_army_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_army_development_progress value = 100 compare = less_than }

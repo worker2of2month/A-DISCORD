@@ -195,3 +195,19 @@ sound = {
 	name = "superevent_nam_veyran_proclamation_sound"
 	file = "superevents/superevent_nam_veyran_proclamation_sound.wav"
 }
+
+# Sophia - March of Strength: https://officialsophia.bandcamp.com/track/march-of-strength
+sound = {
+	name = "superevent_itora_legion_victory_sound"
+	file = "superevents/superevent_itora_legion_victory_sound.wav"
+}
+
+sound = {
+	name = "superevent_itora_committee_victory_sound"
+	file = "superevents/superevent_itora_committee_victory_sound.wav"
+}
+
+sound = {
+	name = "superevent_itora_stalk_portal_sound"
+	file = "superevents/superevent_itora_stalk_portal_sound.wav"
+}

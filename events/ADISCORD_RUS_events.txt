@@ -1850,3 +1850,86 @@ country_event = {
 	}
 	option = { name = ADISCORD_rus_crisis.43.a }
 }
+
+# RUS. A faction reached dominance inside the coup window; its plot mission
+# is already running when this warning opens.
+country_event = {
+	id = ADISCORD_rus_campaign.46
+	title = {
+		trigger = { has_active_mission = RUS_scientists_plot }
+		text = ADISCORD_rus_campaign.46.scientists.t
+	}
+	title = {
+		trigger = { NOT = { has_active_mission = RUS_scientists_plot } }
+		text = ADISCORD_rus_campaign.46.army.t
+	}
+	desc = {
+		trigger = { has_active_mission = RUS_scientists_plot }
+		text = ADISCORD_rus_campaign.46.scientists.d
+	}
+	desc = {
+		trigger = { NOT = { has_active_mission = RUS_scientists_plot } }
+		text = ADISCORD_rus_campaign.46.army.d
+	}
+	picture = GFX_event_adiscord_signal_archive_basement
+	is_triggered_only = yes
+	trigger = { RUS_coup_plot_active = yes }
+	option = {
+		name = ADISCORD_rus_campaign.46.a
+		custom_effect_tooltip = RUS_coup_plot_warning_tt
+	}
+}
+
+# RUS. Shown after RUS_coup_execute has installed the new government.
+country_event = {
+	id = ADISCORD_rus_campaign.47
+	title = {
+		trigger = { RUS_scientists_regime = yes }
+		text = ADISCORD_rus_campaign.47.scientists.t
+	}
+	title = {
+		trigger = { RUS_black_army_regime = yes }
+		text = ADISCORD_rus_campaign.47.army.t
+	}
+	desc = {
+		trigger = { RUS_scientists_regime = yes }
+		text = ADISCORD_rus_campaign.47.scientists.d
+	}
+	desc = {
+		trigger = { RUS_black_army_regime = yes }
+		text = ADISCORD_rus_campaign.47.army.d
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_coup_regime = yes }
+	option = {
+		trigger = { RUS_scientists_regime = yes }
+		name = ADISCORD_rus_campaign.47.scientists.a
+		custom_effect_tooltip = RUS_coup_channel_closed_tt
+		custom_effect_tooltip = RUS_coup_scientists_branch_tt
+	}
+	option = {
+		trigger = { RUS_black_army_regime = yes }
+		name = ADISCORD_rus_campaign.47.army.a
+		custom_effect_tooltip = RUS_coup_channel_closed_tt
+		custom_effect_tooltip = RUS_coup_black_army_branch_tt
+	}
+}
+
+# Human players outside RUS, sent once by RUS_coup_execute.
+country_event = {
+	id = ADISCORD_rus_campaign.48
+	title = ADISCORD_rus_campaign.48.t
+	desc = {
+		trigger = { RUS = { RUS_scientists_regime = yes } }
+		text = ADISCORD_rus_campaign.48.scientists.d
+	}
+	desc = {
+		trigger = { RUS = { RUS_black_army_regime = yes } }
+		text = ADISCORD_rus_campaign.48.army.d
+	}
+	picture = GFX_event_adiscord_field_switchboard
+	is_triggered_only = yes
+	trigger = { RUS = { RUS_coup_regime = yes } }
+	option = { name = ADISCORD_rus_campaign.48.a }
+}

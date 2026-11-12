@@ -364,3 +364,37 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
+country_event = {
+	id = ADISCORD_superevent.23
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 72 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.24
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 73 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# Leonid Stalk secret ending presentation; no campaign entry point.
+country_event = {
+	id = ADISCORD_superevent.25
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 74 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}

@@ -1,0 +1,604 @@
+# Esperanto infantry voices for WRK.
+# Attack acknowledgements share the combat pool: the engine has no separate attack-order voice hook.
+category = {
+	name = "Voices"
+	soundeffects = {
+		WRK_infantry_idle
+		WRK_infantry_move_out
+		WRK_infantry_neutral_combat
+		WRK_infantry_positive_combat
+		WRK_infantry_retreat
+	}
+	compressor = {
+		enabled = yes
+		pregain = 0.0
+		postgain = 2.0
+		ratio = 10.0
+		threshold = -10.0
+		attacktime = 0.030
+		releasetime = 1.2
+	}
+}
+
+soundeffect = {
+	name = "WRK_infantry_idle"
+	sounds = {
+		sound = "WRK_idle_001"
+		sound = "WRK_idle_002"
+		sound = "WRK_idle_003"
+		sound = "WRK_idle_004"
+		sound = "WRK_idle_005"
+		sound = "WRK_idle_006"
+		sound = "WRK_idle_007"
+		sound = "WRK_idle_008"
+		sound = "WRK_idle_009"
+		sound = "WRK_idle_010"
+		sound = "WRK_idle_011"
+		sound = "WRK_idle_012"
+		sound = "WRK_idle_013"
+		sound = "WRK_idle_014"
+		sound = "WRK_idle_015"
+		sound = "WRK_idle_016"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "WRK_infantry_move_out"
+	sounds = {
+		sound = "WRK_moving_001"
+		sound = "WRK_moving_002"
+		sound = "WRK_moving_003"
+		sound = "WRK_moving_004"
+		sound = "WRK_moving_005"
+		sound = "WRK_moving_006"
+		sound = "WRK_moving_007"
+		sound = "WRK_moving_008"
+		sound = "WRK_moving_009"
+		sound = "WRK_moving_010"
+		sound = "WRK_moving_011"
+		sound = "WRK_moving_012"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "WRK_infantry_neutral_combat"
+	sounds = {
+		sound = "WRK_neutral_001"
+		sound = "WRK_neutral_002"
+		sound = "WRK_neutral_003"
+		sound = "WRK_neutral_004"
+		sound = "WRK_neutral_005"
+		sound = "WRK_neutral_006"
+		sound = "WRK_neutral_007"
+		sound = "WRK_neutral_008"
+		sound = "WRK_neutral_009"
+		sound = "WRK_neutral_010"
+		sound = "WRK_neutral_011"
+		sound = "WRK_neutral_012"
+		sound = "WRK_neutral_013"
+		sound = "WRK_neutral_014"
+		sound = "WRK_neutral_015"
+		sound = "WRK_attack_001"
+		sound = "WRK_attack_002"
+		sound = "WRK_attack_003"
+		sound = "WRK_attack_004"
+		sound = "WRK_attack_005"
+		sound = "WRK_attack_006"
+		sound = "WRK_attack_007"
+		sound = "WRK_attack_008"
+		sound = "WRK_attack_009"
+		sound = "WRK_attack_010"
+		sound = "WRK_attack_011"
+		sound = "WRK_attack_012"
+		sound = "WRK_attack_013"
+		sound = "WRK_attack_014"
+		sound = "WRK_attack_015"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "WRK_infantry_positive_combat"
+	sounds = {
+		sound = "WRK_positive_001"
+		sound = "WRK_positive_002"
+		sound = "WRK_positive_003"
+		sound = "WRK_positive_004"
+		sound = "WRK_positive_005"
+		sound = "WRK_positive_006"
+		sound = "WRK_positive_007"
+		sound = "WRK_positive_008"
+		sound = "WRK_positive_009"
+		sound = "WRK_positive_010"
+		sound = "WRK_positive_011"
+		sound = "WRK_positive_012"
+		sound = "WRK_positive_013"
+		sound = "WRK_positive_014"
+		sound = "WRK_positive_015"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "WRK_infantry_retreat"
+	sounds = {
+		sound = "WRK_retreat_001"
+		sound = "WRK_retreat_002"
+		sound = "WRK_retreat_003"
+		sound = "WRK_retreat_004"
+		sound = "WRK_retreat_005"
+		sound = "WRK_retreat_006"
+		sound = "WRK_retreat_007"
+		sound = "WRK_retreat_008"
+		sound = "WRK_retreat_009"
+		sound = "WRK_retreat_010"
+		sound = "WRK_retreat_011"
+		sound = "WRK_retreat_012"
+		sound = "WRK_retreat_013"
+		sound = "WRK_retreat_014"
+		sound = "WRK_retreat_015"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+sound = {
+	name = "WRK_idle_001"
+	file = "WRK/WRK_idle_001.wav"
+}
+
+sound = {
+	name = "WRK_idle_002"
+	file = "WRK/WRK_idle_002.wav"
+}
+
+sound = {
+	name = "WRK_idle_003"
+	file = "WRK/WRK_idle_003.wav"
+}
+
+sound = {
+	name = "WRK_idle_004"
+	file = "WRK/WRK_idle_004.wav"
+}
+
+sound = {
+	name = "WRK_idle_005"
+	file = "WRK/WRK_idle_005.wav"
+}
+
+sound = {
+	name = "WRK_idle_006"
+	file = "WRK/WRK_idle_006.wav"
+}
+
+sound = {
+	name = "WRK_idle_007"
+	file = "WRK/WRK_idle_007.wav"
+}
+
+sound = {
+	name = "WRK_idle_008"
+	file = "WRK/WRK_idle_008.wav"
+}
+
+sound = {
+	name = "WRK_idle_009"
+	file = "WRK/WRK_idle_009.wav"
+}
+
+sound = {
+	name = "WRK_idle_010"
+	file = "WRK/WRK_idle_010.wav"
+}
+
+sound = {
+	name = "WRK_idle_011"
+	file = "WRK/WRK_idle_011.wav"
+}
+
+sound = {
+	name = "WRK_idle_012"
+	file = "WRK/WRK_idle_012.wav"
+}
+
+sound = {
+	name = "WRK_idle_013"
+	file = "WRK/WRK_idle_013.wav"
+}
+
+sound = {
+	name = "WRK_idle_014"
+	file = "WRK/WRK_idle_014.wav"
+}
+
+sound = {
+	name = "WRK_idle_015"
+	file = "WRK/WRK_idle_015.wav"
+}
+
+sound = {
+	name = "WRK_idle_016"
+	file = "WRK/WRK_idle_016.wav"
+}
+
+sound = {
+	name = "WRK_moving_001"
+	file = "WRK/WRK_moving_001.wav"
+}
+
+sound = {
+	name = "WRK_moving_002"
+	file = "WRK/WRK_moving_002.wav"
+}
+
+sound = {
+	name = "WRK_moving_003"
+	file = "WRK/WRK_moving_003.wav"
+}
+
+sound = {
+	name = "WRK_moving_004"
+	file = "WRK/WRK_moving_004.wav"
+}
+
+sound = {
+	name = "WRK_moving_005"
+	file = "WRK/WRK_moving_005.wav"
+}
+
+sound = {
+	name = "WRK_moving_006"
+	file = "WRK/WRK_moving_006.wav"
+}
+
+sound = {
+	name = "WRK_moving_007"
+	file = "WRK/WRK_moving_007.wav"
+}
+
+sound = {
+	name = "WRK_moving_008"
+	file = "WRK/WRK_moving_008.wav"
+}
+
+sound = {
+	name = "WRK_moving_009"
+	file = "WRK/WRK_moving_009.wav"
+}
+
+sound = {
+	name = "WRK_moving_010"
+	file = "WRK/WRK_moving_010.wav"
+}
+
+sound = {
+	name = "WRK_moving_011"
+	file = "WRK/WRK_moving_011.wav"
+}
+
+sound = {
+	name = "WRK_moving_012"
+	file = "WRK/WRK_moving_012.wav"
+}
+
+sound = {
+	name = "WRK_attack_001"
+	file = "WRK/WRK_attack_001.wav"
+}
+
+sound = {
+	name = "WRK_attack_002"
+	file = "WRK/WRK_attack_002.wav"
+}
+
+sound = {
+	name = "WRK_attack_003"
+	file = "WRK/WRK_attack_003.wav"
+}
+
+sound = {
+	name = "WRK_attack_004"
+	file = "WRK/WRK_attack_004.wav"
+}
+
+sound = {
+	name = "WRK_attack_005"
+	file = "WRK/WRK_attack_005.wav"
+}
+
+sound = {
+	name = "WRK_attack_006"
+	file = "WRK/WRK_attack_006.wav"
+}
+
+sound = {
+	name = "WRK_attack_007"
+	file = "WRK/WRK_attack_007.wav"
+}
+
+sound = {
+	name = "WRK_attack_008"
+	file = "WRK/WRK_attack_008.wav"
+}
+
+sound = {
+	name = "WRK_attack_009"
+	file = "WRK/WRK_attack_009.wav"
+}
+
+sound = {
+	name = "WRK_attack_010"
+	file = "WRK/WRK_attack_010.wav"
+}
+
+sound = {
+	name = "WRK_attack_011"
+	file = "WRK/WRK_attack_011.wav"
+}
+
+sound = {
+	name = "WRK_attack_012"
+	file = "WRK/WRK_attack_012.wav"
+}
+
+sound = {
+	name = "WRK_attack_013"
+	file = "WRK/WRK_attack_013.wav"
+}
+
+sound = {
+	name = "WRK_attack_014"
+	file = "WRK/WRK_attack_014.wav"
+}
+
+sound = {
+	name = "WRK_attack_015"
+	file = "WRK/WRK_attack_015.wav"
+}
+
+sound = {
+	name = "WRK_neutral_001"
+	file = "WRK/WRK_neutral_001.wav"
+}
+
+sound = {
+	name = "WRK_neutral_002"
+	file = "WRK/WRK_neutral_002.wav"
+}
+
+sound = {
+	name = "WRK_neutral_003"
+	file = "WRK/WRK_neutral_003.wav"
+}
+
+sound = {
+	name = "WRK_neutral_004"
+	file = "WRK/WRK_neutral_004.wav"
+}
+
+sound = {
+	name = "WRK_neutral_005"
+	file = "WRK/WRK_neutral_005.wav"
+}
+
+sound = {
+	name = "WRK_neutral_006"
+	file = "WRK/WRK_neutral_006.wav"
+}
+
+sound = {
+	name = "WRK_neutral_007"
+	file = "WRK/WRK_neutral_007.wav"
+}
+
+sound = {
+	name = "WRK_neutral_008"
+	file = "WRK/WRK_neutral_008.wav"
+}
+
+sound = {
+	name = "WRK_neutral_009"
+	file = "WRK/WRK_neutral_009.wav"
+}
+
+sound = {
+	name = "WRK_neutral_010"
+	file = "WRK/WRK_neutral_010.wav"
+}
+
+sound = {
+	name = "WRK_neutral_011"
+	file = "WRK/WRK_neutral_011.wav"
+}
+
+sound = {
+	name = "WRK_neutral_012"
+	file = "WRK/WRK_neutral_012.wav"
+}
+
+sound = {
+	name = "WRK_neutral_013"
+	file = "WRK/WRK_neutral_013.wav"
+}
+
+sound = {
+	name = "WRK_neutral_014"
+	file = "WRK/WRK_neutral_014.wav"
+}
+
+sound = {
+	name = "WRK_neutral_015"
+	file = "WRK/WRK_neutral_015.wav"
+}
+
+sound = {
+	name = "WRK_positive_001"
+	file = "WRK/WRK_positive_001.wav"
+}
+
+sound = {
+	name = "WRK_positive_002"
+	file = "WRK/WRK_positive_002.wav"
+}
+
+sound = {
+	name = "WRK_positive_003"
+	file = "WRK/WRK_positive_003.wav"
+}
+
+sound = {
+	name = "WRK_positive_004"
+	file = "WRK/WRK_positive_004.wav"
+}
+
+sound = {
+	name = "WRK_positive_005"
+	file = "WRK/WRK_positive_005.wav"
+}
+
+sound = {
+	name = "WRK_positive_006"
+	file = "WRK/WRK_positive_006.wav"
+}
+
+sound = {
+	name = "WRK_positive_007"
+	file = "WRK/WRK_positive_007.wav"
+}
+
+sound = {
+	name = "WRK_positive_008"
+	file = "WRK/WRK_positive_008.wav"
+}
+
+sound = {
+	name = "WRK_positive_009"
+	file = "WRK/WRK_positive_009.wav"
+}
+
+sound = {
+	name = "WRK_positive_010"
+	file = "WRK/WRK_positive_010.wav"
+}
+
+sound = {
+	name = "WRK_positive_011"
+	file = "WRK/WRK_positive_011.wav"
+}
+
+sound = {
+	name = "WRK_positive_012"
+	file = "WRK/WRK_positive_012.wav"
+}
+
+sound = {
+	name = "WRK_positive_013"
+	file = "WRK/WRK_positive_013.wav"
+}
+
+sound = {
+	name = "WRK_positive_014"
+	file = "WRK/WRK_positive_014.wav"
+}
+
+sound = {
+	name = "WRK_positive_015"
+	file = "WRK/WRK_positive_015.wav"
+}
+
+sound = {
+	name = "WRK_retreat_001"
+	file = "WRK/WRK_retreat_001.wav"
+}
+
+sound = {
+	name = "WRK_retreat_002"
+	file = "WRK/WRK_retreat_002.wav"
+}
+
+sound = {
+	name = "WRK_retreat_003"
+	file = "WRK/WRK_retreat_003.wav"
+}
+
+sound = {
+	name = "WRK_retreat_004"
+	file = "WRK/WRK_retreat_004.wav"
+}
+
+sound = {
+	name = "WRK_retreat_005"
+	file = "WRK/WRK_retreat_005.wav"
+}
+
+sound = {
+	name = "WRK_retreat_006"
+	file = "WRK/WRK_retreat_006.wav"
+}
+
+sound = {
+	name = "WRK_retreat_007"
+	file = "WRK/WRK_retreat_007.wav"
+}
+
+sound = {
+	name = "WRK_retreat_008"
+	file = "WRK/WRK_retreat_008.wav"
+}
+
+sound = {
+	name = "WRK_retreat_009"
+	file = "WRK/WRK_retreat_009.wav"
+}
+
+sound = {
+	name = "WRK_retreat_010"
+	file = "WRK/WRK_retreat_010.wav"
+}
+
+sound = {
+	name = "WRK_retreat_011"
+	file = "WRK/WRK_retreat_011.wav"
+}
+
+sound = {
+	name = "WRK_retreat_012"
+	file = "WRK/WRK_retreat_012.wav"
+}
+
+sound = {
+	name = "WRK_retreat_013"
+	file = "WRK/WRK_retreat_013.wav"
+}
+
+sound = {
+	name = "WRK_retreat_014"
+	file = "WRK/WRK_retreat_014.wav"
+}
+
+sound = {
+	name = "WRK_retreat_015"
+	file = "WRK/WRK_retreat_015.wav"
+}

@@ -292,3 +292,19 @@
  superevent_nam_veyran_proclamation_title:0 "Proclamation of the Veyran Empire"
  superevent_nam_veyran_proclamation_quote:0 "The head of the delegation drew a tarnished seal from his pocket. By morning, both signatures stood beneath the charter."
  superevent_nam_veyran_proclamation_comment:0 "The charter is signed"
+
+ # Virgil, Aeneid I.279: https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296
+ superevent_itora_legion_victory_title:0 "BIRTH OF THE ETERNAL IMPERIUM"
+ superevent_itora_legion_victory_quote:0 "Imperium sine fine dedi.\nI have granted them empire without end.\n- Virgil, Aeneid, I, 279 (translated from Latin)"
+ superevent_itora_legion_victory_comment:0 "The Imperium shall rise from the ashes."
+
+ # Thomas Hobbes, Leviathan XVII: https://www.gutenberg.org/cache/epub/3207/pg3207-images.html
+ superevent_itora_committee_victory_title:0 "VICTORY OF THE EMERGENCY COMMITTEE"
+ superevent_itora_committee_victory_quote:0 "And covenants, without the sword, are but words and of no strength to secure a man at all.\n- Thomas Hobbes, \"Leviathan\", XVII"
+ superevent_itora_committee_victory_comment:0 "Order will be restored."
+
+ # Leonid Stalk secret ending: the opening of a portal to another world.
+ # H. P. Lovecraft, From Beyond: https://www.hplovecraft.com/writings/texts/fiction/fb.aspx
+ superevent_itora_stalk_portal_title:0 "BEYOND THE WORLD"
+ superevent_itora_stalk_portal_quote:0 "I have seen beyond the bounds of infinity and drawn down daemons from the stars.\n- H. P. Lovecraft, \"From Beyond\""
+ superevent_itora_stalk_portal_comment:0 "The threshold is crossed."

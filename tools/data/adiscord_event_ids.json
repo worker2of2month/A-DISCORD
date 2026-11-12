@@ -8709,6 +8709,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_campaign.46",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 46,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.47",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 47,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_rus_campaign.48",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 48,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_claimant.5",
       "namespace": "ADISCORD_vorkerland_claimant",
       "number": 5,
@@ -9690,6 +9714,30 @@
       "number": 12,
       "owner": "events/ADISCORD_IVN_events.txt",
       "subsystem": "ivn",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.23",
+      "namespace": "ADISCORD_superevent",
+      "number": 23,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevent",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.24",
+      "namespace": "ADISCORD_superevent",
+      "number": 24,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevent",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.25",
+      "namespace": "ADISCORD_superevent",
+      "number": 25,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevent",
       "status": "active"
     }
   ]

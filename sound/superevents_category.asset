@@ -66,6 +66,9 @@ category = {
 		superevent_west_council_sound_e
 		superevent_west_world_empire_sound_e
 		superevent_nam_veyran_proclamation_sound_e
+		superevent_itora_legion_victory_sound_e
+		superevent_itora_committee_victory_sound_e
+		superevent_itora_stalk_portal_sound_e
 	}
 	compressor = {
 		enabled = yes

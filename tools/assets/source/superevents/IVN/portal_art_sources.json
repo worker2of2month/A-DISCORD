@@ -1,0 +1,36 @@
+{
+  "paintings": [
+    {
+      "artwork": 1,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-5b46de54-69bb-4223-906d-6f11612cd0b9.png"
+    },
+    {
+      "artwork": 3,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-c07c3c75-e300-47cc-a4a8-591a8c74f8fa.png"
+    },
+    {
+      "artwork": 4,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-77f7b170-6d3f-44e5-ba66-18cf6cf6c8b0.png"
+    },
+    {
+      "artwork": 5,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-188845f4-f94c-42b6-8355-17d61dd25365.png"
+    },
+    {
+      "artwork": 6,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-c474fe1d-0e82-4bdb-965c-a6653b87e399.png"
+    },
+    {
+      "artwork": 7,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-d576a1f2-725d-461e-b09c-5dae8a064a57.png"
+    },
+    {
+      "artwork": 8,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-a1b9ec22-a5a5-4ef7-bf9a-9c32c25e9388.png"
+    },
+    {
+      "artwork": 9,
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-584c5e5e-c675-4654-8c47-6d02434bf2c2.png"
+    }
+  ]
+}

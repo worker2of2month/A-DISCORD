@@ -57,7 +57,8 @@
     "nam_focus_icons",
     "focus_trees",
     "val_flags",
-    "superevent_music"
+    "superevent_music",
+    "superevent_animation"
   ],
   "families": [
     {
@@ -2508,11 +2509,16 @@
         "sound/RUS/ADISCORD_rus_world_ends.wav",
         "music/one_minute_of_silence.ogg",
         "music/two_minutes_of_silence.ogg",
-        "music/ADISCORD_stp_civil_war_end_after_superevent.ogg"
+        "music/ADISCORD_stp_civil_war_end_after_superevent.ogg",
+        "sound/superevents/superevent_itora_legion_victory_sound.wav",
+        "sound/superevents/superevent_itora_committee_victory_sound.wav",
+        "sound/superevents/superevent_itora_stalk_portal_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
-        "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg"
+          "tools/builders/build_adiscord_superevent_animation.py",
+        "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg",
+        "tools/assets/source/superevents/IVN/*"
       ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive",
@@ -2526,9 +2532,29 @@
         "{python}",
         "-B",
         "-m",
-        "tools.builders.build_adiscord_superevent_music",
-        "--apply"
-      ]
-    }
+          "tools.builders.build_adiscord_superevent_music",
+          "--apply"
+        ]
+      },
+      {
+        "id": "superevent_animation",
+        "owner_module": "tools.builders.build_adiscord_superevent_animation",
+        "source_inputs": [
+          "tools/builders/build_adiscord_superevent_animation.py",
+          "tools/assets/source/superevents/IVN/portal_art_sources.json"
+        ],
+        "output_globs": [
+          "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png",
+          "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_*.dds"
+        ],
+        "check_command": [
+          "{python}", "-B", "-m", "tools.builders.build_adiscord_superevent_animation", "--check"
+        ],
+        "apply_command": [
+          "{python}", "-B", "-m", "tools.builders.build_adiscord_superevent_animation", "--apply"
+        ],
+        "may_delete_outputs": false,
+        "ownership_mode": "exclusive"
+      }
   ]
 }

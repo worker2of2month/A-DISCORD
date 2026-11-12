@@ -37,7 +37,10 @@ RUS_state_balance = {
 				army_org_factor = -0.03
 				stability_factor = -0.03
 			}
-			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+				RUS_coup_plot_check = yes
+			}
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
 	}
@@ -68,7 +71,10 @@ RUS_state_balance = {
 				research_speed_factor = -0.05
 				stability_factor = -0.03
 			}
-			on_activate = { ADISCORD_economy_mark_dirty = yes }
+			on_activate = {
+				ADISCORD_economy_mark_dirty = yes
+				RUS_coup_plot_check = yes
+			}
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
 	}

@@ -90,7 +90,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_itora_civilwar"
-		textureFile = "gfx/interface/superevents/NAM/superevent_resource_war.png"
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_civilwar.png"
 	}
 
 	spriteType = {
@@ -361,6 +361,183 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_superevent_nam_veyran_proclamation"
 		textureFile = "gfx/interface/superevents/WRK/superevent_west_veyran.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_itora_legion_victory"
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_legion_victory.png"
+	}
+
+	# Frank Scherschel, Avranches, summer 1944; LIFE Pictures/Shutterstock.
+	# AI-edited color treatment of the historical photograph.
+	# Source: https://www.life.com/history/before-and-after-d-day-color-photos-from-england-and-france/
+	spriteType = {
+		name = "GFX_superevent_itora_committee_victory"
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_committee_victory.png"
+	}
+
+	# Blizzard Entertainment, Diablo IV, Hell Gate Opened (2019).
+	# Source: https://blizzard.gamespress.com/de/Diablo-IV---BlizzCon-2019-Press-Kit
+	spriteType = {
+		name = "GFX_superevent_itora_stalk_portal"
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png"
+	}
+
+	# Synchronous strips preserve native resolution without oversized textures.
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_0"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_0.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_1"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_1.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_2"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_2.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_3"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_3.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_4"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_4.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_5"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_5.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_6"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_6.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_7"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_7.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_8"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_8.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_9"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_9.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_10"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_10.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_11"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_11.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_stalk_portal_strip_12"
+		loadType = "INGAME"
+		legacy_lazy_load = no
+		textureFile = "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_12.dds"
+		noOfFrames = 56
+		animation_rate_fps = 1
+		looping = no
+		play_on_show = yes
+		pause_on_loop = 0.0
 	}
 
 }

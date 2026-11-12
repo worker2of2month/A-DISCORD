@@ -2238,6 +2238,7 @@ focus_tree = {
 				RUS = { RUS_crisis_project_active = yes }
 			}
 		}
+		bypass = { RUS_crisis_foreclosed = yes }
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
@@ -2293,6 +2294,7 @@ focus_tree = {
 				RUS = { RUS_crisis_project_active = yes }
 			}
 		}
+		bypass = { RUS_crisis_foreclosed = yes }
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
@@ -2331,6 +2333,7 @@ focus_tree = {
 				RUS = { RUS_crisis_project_active = yes }
 			}
 		}
+		bypass = { RUS_crisis_foreclosed = yes }
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
@@ -2367,6 +2370,7 @@ focus_tree = {
 				has_global_flag = ADISCORD_south_hegemon_NAM
 			}
 		}
+		bypass = { RUS_crisis_foreclosed = yes }
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {

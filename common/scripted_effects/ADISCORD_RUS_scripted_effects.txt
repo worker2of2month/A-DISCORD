@@ -1509,7 +1509,7 @@ RUS_reclamation_finish = {
 		}
 		if = {
 			limit = {
-				RUS_khan_governing = yes
+				RUS_regime_governing = yes
 				FROM = {
 					RUS_reclamation_region = yes
 					is_controlled_by = RUS
@@ -1540,6 +1540,8 @@ RUS_suspicion_begin = {
 		}
 		set_variable = { var = RUS_suspicion value = 10 }
 		country_event = { id = ADISCORD_rus_crisis.24 }
+		# Dominance gained before the expansion starts a plot as the window opens.
+		RUS_coup_plot_check = yes
 	}
 }
 
@@ -1613,8 +1615,25 @@ RUS_suspicion_check = {
 
 # RUS. The forced proclamation opens the crisis through its ordinary entry;
 # the coalition launch follows at once and the strike deadline is unchanged.
+# During a plot the conspiring faction uses the exposure to take power instead.
 RUS_suspicion_expose = {
 	if = {
+		limit = {
+			RUS_suspicion_exposure_ready = yes
+			RUS_coup_plot_active = yes
+		}
+		if = {
+			limit = { has_active_mission = RUS_scientists_plot }
+			remove_mission = RUS_scientists_plot
+			set_temp_variable = { var = RUS_coup_side value = 1 }
+		}
+		else = {
+			remove_mission = RUS_black_army_plot
+			set_temp_variable = { var = RUS_coup_side value = 2 }
+		}
+		RUS_coup_execute = yes
+	}
+	else_if = {
 		limit = { RUS_suspicion_exposure_ready = yes }
 		set_country_flag = RUS_suspicion_exposed
 		ADISCORD_vorkerland_rus_proclaim_last_empire = yes
@@ -1622,6 +1641,94 @@ RUS_suspicion_expose = {
 			limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
 			remove_mission = RUS_crisis_invasion_countdown
 			RUS_crisis_launch = yes
+		}
+	}
+}
+
+# --- rus_coup ---
+# RUS. Called when a dominance range activates and when the coup window opens.
+# A plot is a 60-day mission; leaving dominance before the timeout ends it.
+RUS_coup_plot_check = {
+	if = {
+		limit = {
+			RUS_coup_window_open = yes
+			RUS_coup_plot_active = no
+		}
+		if = {
+			limit = { RUS_scientists_dominant = yes }
+			activate_mission = RUS_scientists_plot
+			country_event = { id = ADISCORD_rus_campaign.46 }
+		}
+		else_if = {
+			limit = { RUS_black_army_dominant = yes }
+			activate_mission = RUS_black_army_plot
+			country_event = { id = ADISCORD_rus_campaign.46 }
+		}
+	}
+}
+
+# RUS. Input: temp RUS_coup_side, 1 for the scientists and 2 for the Black Army.
+# Rustan is retired for good, so every Khan-only trigger, including the crisis
+# start, stays false for the rest of the campaign without another marker.
+RUS_coup_execute = {
+	if = {
+		limit = { RUS_coup_window_open = yes }
+		RUS_retire_current_ruler = yes
+		if = {
+			limit = { check_variable = { var = RUS_coup_side value = 1 compare = equals } }
+			set_politics = {
+				ruling_party = technocracy
+				elections_allowed = no
+			}
+			if = {
+				limit = { NOT = { has_character = RUS_Gleb_Korneev } }
+				recruit_character = RUS_Gleb_Korneev
+			}
+			promote_character = {
+				character = RUS_Gleb_Korneev
+				ideology = technocracy_ideology
+			}
+			set_cosmetic_tag = RUS_reactor_council
+		}
+		else = {
+			set_politics = {
+				ruling_party = chauvinism
+				elections_allowed = no
+			}
+			if = {
+				limit = { NOT = { has_character = RUS_Tagir_Mansurov } }
+				recruit_character = RUS_Tagir_Mansurov
+			}
+			promote_character = {
+				character = RUS_Tagir_Mansurov
+				ideology = chauvinism_ideology
+			}
+			set_cosmetic_tag = RUS_guard_state
+		}
+		add_stability = -0.10
+		# The winning faction governs alone; the balance and its support pull end.
+		if = {
+			limit = { has_power_balance = { id = RUS_state_balance } }
+			remove_power_balance = { id = RUS_state_balance }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = RUS_faction_support } }
+			remove_dynamic_modifier = { modifier = RUS_faction_support }
+		}
+		clear_variable = RUS_black_army_support
+		clear_variable = RUS_scientists_support
+		clear_variable = RUS_faction_political_power_gain
+		clear_variable = RUS_faction_power_balance_weekly
+		clear_variable = RUS_suspicion
+		clear_variable = RUS_suspicion_warning
+		clr_country_flag = RUS_dream_finale_pending
+		RUS_government_refresh = yes
+		RUS_black_army_refresh = yes
+		mark_focus_tree_layout_dirty = yes
+		country_event = { id = ADISCORD_rus_campaign.47 }
+		every_other_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_rus_campaign.48 }
 		}
 	}
 }
@@ -4421,7 +4528,7 @@ RUS_government_refresh = {
 	}
 	if = {
 		limit = {
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 			NOT = { has_dynamic_modifier = { modifier = RUS_government_service } }
 		}
 		add_dynamic_modifier = { modifier = RUS_government_service }
@@ -4645,7 +4752,7 @@ RUS_prepare_rifle_template = {
 RUS_reactor_works_begin = {
 	if = {
 		limit = {
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 			RUS_reactor_works_idle = yes
 			RUS_reactor_works_affordable = yes
 			FROM = { RUS_reactor_works_target_valid = yes }
@@ -4678,7 +4785,7 @@ RUS_reactor_works_finish_state = {
 		if = {
 			limit = {
 				RUS_reactor_works_target_valid = yes
-				RUS = { RUS_khan_governing = yes }
+				RUS = { RUS_regime_governing = yes }
 			}
 			clr_state_flag = RUS_reactor_works_in_progress
 			RUS = {
@@ -4847,7 +4954,7 @@ RUS_reactor_foundry_expand = {
 RUS_reactor_sortie_begin = {
 	if = {
 		limit = {
-			RUS_khan_governing = yes
+			RUS_regime_governing = yes
 			RUS_lab_reactor_access = yes
 			has_completed_focus = RUS_reactor_sorties
 			NOT = { has_variable = RUS_reactor_sortie_receipt }
@@ -4881,7 +4988,7 @@ RUS_reactor_sortie_finish = {
 		clear_variable = RUS_reactor_sortie_receipt
 		if = {
 			limit = {
-				RUS_khan_governing = yes
+				RUS_regime_governing = yes
 				RUS_lab_reactor_access = yes
 			}
 			add_to_variable = { var = ADISCORD_economy_treasury value = RUS_reactor_sortie_haul }
