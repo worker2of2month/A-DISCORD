@@ -148,3 +148,27 @@ defined_text = {
 	}
 	text = { localization_key = ADISCORD_south_north_pending }
 }
+
+defined_text = {
+	name = ADISCORDSouthStrain
+	# Champions only; their allies see the status without a cost line.
+	text = {
+		trigger = { NOT = { has_variable = ADISCORD_south_war_strain } }
+		localization_key = ADISCORD_south_strain_none
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_war_strain value = 40 compare = less_than } }
+		localization_key = ADISCORD_south_strain_low
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_war_strain value = 70 compare = less_than } }
+		localization_key = ADISCORD_south_strain_mid
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_war_strain value = 100 compare = less_than } }
+		localization_key = ADISCORD_south_strain_high
+	}
+	text = {
+		localization_key = ADISCORD_south_strain_crisis
+	}
+}

@@ -3221,6 +3221,53 @@ NAM_border_acquisitions_held = {
 	}
 }
 
+# ----- Nationalisation of held regions -----
+
+# COUNTRY NAM. One focus per tree the country can end in: the victorious
+# settlement, the defeat, and the three courses of the exile.
+NAM_nationalisation_unlocked = {
+	OR = {
+		has_completed_focus = NAM_law_after_war
+		has_completed_focus = NAM_defeat_second_chapter
+		has_completed_focus = NAM_hum_federal_districts
+		has_completed_focus = NAM_rad_pacification
+		has_completed_focus = NAM_hum_board_districts
+	}
+}
+
+# COUNTRY NAM. The registers are extended only by a sovereign country at peace.
+NAM_nationalisation_country_ready = {
+	NAM_independent_programmes_operable = yes
+	has_war = no
+}
+
+# STATE: decision target. Nationalisation follows the directly held national
+# frontier, so every new national region opens its own neighbours. The overseas
+# districts border no national land. After the victorious settlement the six
+# treaty districts keep their own incorporation programme.
+NAM_nationalisation_state_valid = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { is_core_of = NAM }
+	NOT = {
+		AND = {
+			NAM_border_integration_region = yes
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
+		}
+	}
+	any_neighbor_state = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+		is_core_of = NAM
+	}
+}
+
+# STATE. The junta's direct rule keeps a conquered district outside citizenship
+# until it is handed to a local council.
+NAM_nationalisation_state_free = {
+	NOT = { has_dynamic_modifier = { modifier = NAM_conquered_state_modifier } }
+}
+
 # Civil agreements use one country contract and one cooldown. A settled
 # constitution closes coups, not economic programmes.
 NAM_agreement_peace = {
@@ -3846,8 +3893,21 @@ NAM_veyran_capitulation_managed = {
 }
 
 # COUNTRY NAM. Wartime programmes close on the current conflict and country lifecycle.
+# COUNTRY NAM. The resource war, or the war for the South once Svetlogorye
+# leads the north and has extended its wartime programmes to it.
+NAM_war_campaign_active = {
+	OR = {
+		ADISCORD_nam_resource_war_active = yes
+		AND = {
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+			has_completed_focus = NAM_sw_conscription_of_the_south
+		}
+	}
+}
+
 NAM_war_programmes_operable = {
 	NAM_independent_programmes_operable = yes
-	ADISCORD_nam_resource_war_active = yes
+	NAM_war_campaign_active = yes
 	has_war = yes
 }

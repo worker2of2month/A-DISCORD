@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 AI_PATH = ROOT / "common/ai_strategy/default.txt"
+BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 
 
 def named_block(source: str, name: str) -> str:
@@ -119,6 +120,337 @@ class GenericWartimeFrontTests(unittest.TestCase):
         priority = re.search(r"\bpriority\s*=\s*(\d+)", control)
         self.assertIsNotNone(priority)
         self.assertLess(int(priority.group(1)), 1000)
+
+    def test_undefended_ground_is_rushed_below_authored_campaign_orders(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_undefended_enemy_ground")
+        self.assertTrue(profile, "missing undefended-ground front policy")
+        enable = named_block(profile, "enable")
+        for guard in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(guard, enable)
+        self.assertIn("abort_when_not_enabled = yes", profile)
+
+        controls = named_blocks(profile, "ai_strategy")
+        self.assertEqual(len(controls), 1)
+        control = controls[0]
+        self.assertRegex(control, r"\btype\s*=\s*front_control\b")
+        self.assertNotIn("country_trigger", control)
+        target = named_block(control, "state_trigger")
+        self.assertIn("FROM = { has_war_with = FROM.FROM }", target)
+        self.assertIn("is_controlled_by = FROM", target)
+        # Every enemy is counted from the planner's scope, not only the controller.
+        planner = named_block(target, "FROM.FROM")
+        self.assertIn("any_enemy_country", named_block(planner, "NOT"))
+        self.assertRegex(
+            planner,
+            r"divisions_in_state\s*=\s*\{\s*state\s*=\s*PREV\.PREV\s+size\s*>\s*0\s*\}",
+        )
+        self.assertIn("execution_type = rush", control)
+        self.assertIn("execute_order = yes", control)
+
+        ratio = re.search(r"\bratio\s*=\s*([\d.]+)", control)
+        self.assertIsNotNone(ratio)
+        self.assertGreater(float(ratio.group(1)), 0.5)
+        self.assertLess(float(ratio.group(1)), 1.0)
+
+        priority = re.search(r"\bpriority\s*=\s*(\d+)", control)
+        self.assertIsNotNone(priority)
+        generic = [
+            int(value)
+            for name in (
+                "ADISCORD_active_enemy_front_control",
+                "ADISCORD_hold_against_stronger_enemy",
+            )
+            for value in re.findall(r"\bpriority\s*=\s*(\d+)", named_block(source, name))
+        ]
+        difficulty = (ROOT / "common/ai_strategy/ADISCORD_difficulty_ai.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        generic.extend(
+            int(value) for value in re.findall(r"\bpriority\s*=\s*(\d+)", difficulty)
+        )
+        self.assertGreater(int(priority.group(1)), max(generic))
+        self.assertLess(int(priority.group(1)), 1000)
+
+    def test_area_defence_shrinks_only_without_a_landing_threat(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_no_landing_threat_area_defence")
+        self.assertTrue(profile, "missing area-defence policy")
+        enable = named_block(profile, "enable")
+        for guard in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(guard, enable)
+        self.assertIn("abort_when_not_enabled = yes", profile)
+
+        threat = named_block(named_block(enable, "NOT"), "any_enemy_country")
+        self.assertTrue(threat, "the threat must be read from actual enemies")
+        port = named_block(threat, "any_controlled_state")
+        self.assertIn("is_coastal = yes", port)
+        self.assertIn("naval_base > 0", port)
+        # ROOT inside the shared port trigger would be the planner, not the enemy.
+        self.assertNotIn("ADISCORD_has_operational_naval_base", threat)
+        capability = named_block(threat, "OR")
+        self.assertIn("is_ai = no", capability)
+
+        convoys = r"has_navy_size\s*=\s*\{\s*size\s*>\s*(\d+)\s+type\s*=\s*convoy\s*\}"
+        gate = re.search(convoys, capability)
+        self.assertIsNotNone(gate)
+        planning = named_block(source, "ADISCORD_coastal_invasion_planning")
+        invasion_gate = re.search(convoys, named_block(planning, "enable"))
+        self.assertIsNotNone(invasion_gate)
+        self.assertEqual(gate.group(1), invasion_gate.group(1))
+
+        strategies = named_blocks(profile, "ai_strategy")
+        self.assertEqual(len(strategies), 1)
+        value = re.search(r"\btype\s*=\s*garrison\s+value\s*=\s*(-?\d+)", strategies[0])
+        self.assertIsNotNone(value)
+        self.assertLess(int(value.group(1)), 0)
+        self.assertGreater(int(value.group(1)), -100)
+
+    def test_overrun_country_leaves_every_ally_frontline(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_leave_ally_frontlines")
+        self.assertTrue(profile, "missing ally-frontline policy")
+        enable = named_block(profile, "enable")
+        for guard in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(guard, enable)
+        cases = named_block(enable, "OR")
+        overrun = named_block(cases, "AND")
+        self.assertIn("is_in_faction = yes", overrun)
+        self.assertIn("ADISCORD_ai_campaign_leaves_ally_frontlines = yes", cases)
+        self.assertNotIn("ADISCORD_ai_campaign_leaves_ally_frontlines", overrun)
+
+        abort = named_block(named_block(profile, "abort"), "OR")
+        for release in ("is_ai = no", "has_war = no", "has_capitulated = yes"):
+            self.assertIn(release, abort)
+        # Recovery releases an overrun army only outside a campaign phase.
+        recovery = named_block(abort, "AND")
+        self.assertIn("ADISCORD_ai_campaign_leaves_ally_frontlines = no", recovery)
+        recovered = named_block(recovery, "OR")
+        self.assertIn("is_in_faction = no", recovered)
+        start = re.search(r"surrender_progress\s*>\s*([\d.]+)", overrun)
+        stop = re.search(r"surrender_progress\s*<\s*([\d.]+)", recovered)
+        self.assertIsNotNone(start)
+        self.assertIsNotNone(stop)
+        self.assertGreaterEqual(float(start.group(1)), 0.5)
+        # Without a gap the army would shuttle between its own and allied fronts.
+        self.assertGreaterEqual(float(start.group(1)) - float(stop.group(1)), 0.1)
+
+        registered = set()
+        for path in sorted((ROOT / "common/country_tags").glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            if re.search(r"(?m)^\s*dynamic_tags\s*=\s*yes", text):
+                continue
+            for line in text.splitlines():
+                tag = re.match(r"\s*([A-Z0-9]{3})\s*=", line.split("#", 1)[0])
+                if tag:
+                    registered.add(tag.group(1))
+        strategies = named_blocks(profile, "ai_strategy")
+        listed = []
+        for strategy in strategies:
+            # The strategy is binary and takes exactly one ally.
+            entry = re.fullmatch(
+                r"ai_strategy\s*=\s*\{\s*type\s*=\s*dont_defend_ally_borders"
+                r"\s+id\s*=\s*([A-Z0-9]{3})\s+value\s*=\s*(\d+)\s*\}",
+                strategy.strip(),
+            )
+            self.assertIsNotNone(entry, strategy)
+            self.assertGreater(int(entry.group(2)), 0)
+            listed.append(entry.group(1))
+        self.assertEqual(len(listed), len(set(listed)))
+        self.assertEqual(set(listed), registered)
+
+    def test_campaign_phases_release_ally_frontlines_through_the_tagged_policy(
+        self,
+    ) -> None:
+        triggers = ROOT / "common/scripted_triggers"
+        generic = (triggers / "ADISCORD_scripted_triggers_generic.txt").read_text(
+            encoding="utf-8"
+        )
+        hook = named_block(generic, "ADISCORD_ai_campaign_leaves_ally_frontlines")
+        self.assertTrue(hook, "missing campaign hook")
+        phases = set(re.findall(r"(\w+)\s*=\s*yes", named_block(hook, "OR")))
+        self.assertEqual(
+            phases,
+            {
+                "STP_cw_shabrat_army_holds_party_front",
+                "ADISCORD_vorkerland_collapse_field_army_active",
+            },
+        )
+
+        stelander = (triggers / "ADISCORD_STP_scripted_triggers.txt").read_text(
+            encoding="utf-8"
+        )
+        shabrat = named_block(stelander, "STP_cw_shabrat_army_holds_party_front")
+        strategies = ROOT / "common/ai_strategy"
+        army = named_block(
+            (strategies / "ADISCORD_STP_civil_war.txt").read_text(encoding="utf-8"),
+            "STS_shabrat_civil_war_army",
+        )
+        self.assertIn("original_tag = STS", named_block(army, "allowed"))
+        self.assertIn("original_tag = STS", shabrat)
+        # The phase ends with the army profile that it belongs to.
+        for condition in ("has_global_flag = STP_cw_started", "has_war_with = STP"):
+            self.assertIn(condition, named_block(army, "enable"))
+            self.assertIn(condition, shabrat)
+
+        vorkerland = (triggers / "ADISCORD_vorkerland_triggers.txt").read_text(
+            encoding="utf-8"
+        )
+        collapse = named_block(
+            vorkerland, "ADISCORD_vorkerland_collapse_field_army_active"
+        )
+        field = named_block(
+            (strategies / "ADISCORD_vorkerland_ai.txt").read_text(encoding="utf-8"),
+            "ADISCORD_vorkerland_collapse_field_army",
+        )
+        tags = r"\btag\s*=\s*([A-Z0-9]{3})"
+        participants = set(re.findall(tags, named_block(field, "allowed")))
+        self.assertGreater(len(participants), 30)
+        self.assertEqual(set(re.findall(tags, collapse)), participants)
+        for condition in (
+            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }",
+            "has_war = yes",
+        ):
+            self.assertIn(condition, named_block(field, "enable"))
+            self.assertIn(condition, collapse)
+
+        # The engine reads one ally per entry; a targetless entry is not relied on.
+        for profile in (army, field):
+            self.assertNotRegex(
+                profile, r"type\s*=\s*dont_defend_ally_borders\s+value\s*="
+            )
+
+    def test_supply_escape_and_deployment_follow_field_army_thresholds(self) -> None:
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(
+            encoding="utf-8"
+        )
+
+        def assigned(name: str) -> float:
+            values = re.findall(
+                rf"(?m)^NDefines\.{re.escape(name)}\s*=\s*([\d.]+)", defines
+            )
+            self.assertEqual(len(values), 1, name)
+            return float(values[0])
+
+        escape = assigned("NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT")
+        self.assertGreater(escape, 0.1)
+        self.assertLessEqual(escape, 0.25)
+
+        peace = assigned("NAI.DEPLOY_MIN_EQUIPMENT_PEACE_FACTOR")
+        war = assigned("NAI.DEPLOY_MIN_EQUIPMENT_WAR_FACTOR")
+        self.assertGreaterEqual(peace, war)
+        triggers = (
+            ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt"
+        ).read_text(encoding="utf-8")
+        replacements = named_block(triggers, "ADISCORD_ai_army_needs_replacements")
+        thresholds = {
+            float(value)
+            for value in re.findall(
+                r"multiply_temp_variable\s*=\s*\{\s*ADISCORD_ai_equipment_threshold\s*=\s*([\d.]+)",
+                replacements,
+            )
+        }
+        self.assertTrue(thresholds)
+        # A division deployed below the replacement threshold would itself
+        # start the replacement brake of the field army.
+        self.assertGreaterEqual(peace, max(thresholds))
+        for name in (
+            "NAI.DEPLOY_MIN_TRAINING_PEACE_FACTOR",
+            "NAI.DEPLOY_MIN_TRAINING_WAR_FACTOR",
+        ):
+            self.assertEqual(assigned(name), 1.0)
+
+    def test_front_and_supply_defines_exist_natively_and_are_assigned_once(self) -> None:
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(
+            encoding="utf-8"
+        )
+        expected = {
+            "NSupply.AI_FRONT_DIVISIONS_PER_SUPPLY_POINT": (0.5, 1.0),
+            "NAI.CONSTRUCTION_PRIO_SUPPLY_BUILDING": (1.6, 4.0),
+            "NAI.ENTRENCHMENT_WEIGHT": (2.0, 6.0),
+            "NAI.MAX_MICRO_ATTACKS_PER_ORDER": (3.0, 8.0),
+            "NAI.PLAN_ACTIVATION_PLAYER_WEIGHT_FACTOR": (1.0, 50.0),
+            "NMilitary.PLAN_MIN_AUTOMATED_EMPTY_POCKET_SIZE": (2.0, 30.0),
+        }
+        native_path = BASE_GAME / "common/defines/00_defines.lua"
+        native = (
+            native_path.read_text(encoding="utf-8-sig") if native_path.is_file() else None
+        )
+        for name, (low, high) in expected.items():
+            with self.subTest(define=name):
+                assigned = re.findall(
+                    rf"(?m)^NDefines\.{re.escape(name)}\s*=\s*([\d.]+)", defines
+                )
+                self.assertEqual(len(assigned), 1)
+                self.assertGreater(float(assigned[0]), low)
+                self.assertLess(float(assigned[0]), high)
+                if native is not None:
+                    field = name.split(".")[1]
+                    self.assertRegex(native, rf"(?m)^\s*{field}\s*=")
+
+    def test_front_cities_draw_more_divisions_without_emptying_a_thin_line(self) -> None:
+        native_path = BASE_GAME / "common/defines/00_defines.lua"
+        if not native_path.is_file():
+            self.skipTest("base game defines are not installed")
+        native = native_path.read_text(encoding="utf-8-sig")
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(
+            encoding="utf-8"
+        )
+
+        def weight(level: str) -> tuple[float, float]:
+            field = f"PLAN_PROVINCE_{level}_VP_IMPORTANCE_FRONT"
+            default = re.search(rf"(?m)^\s*{field}\s*=\s*([\d.]+)", native)
+            self.assertIsNotNone(default, field)
+            assigned = re.findall(
+                rf"(?m)^NDefines\.NMilitary\.{field}\s*=\s*([\d.]+)", defines
+            )
+            self.assertLessEqual(len(assigned), 1, field)
+            value = float(assigned[0]) if assigned else float(default.group(1))
+            return value, float(default.group(1))
+
+        low, native_low = weight("LOW")
+        medium, native_medium = weight("MEDIUM")
+        high, native_high = weight("HIGH")
+        self.assertEqual(low, native_low)
+        self.assertGreater(medium, native_medium)
+        self.assertGreater(high, medium)
+
+        # A ten-province line with one large and two medium cities, held by
+        # fourteen divisions, is the thinnest front measured in a campaign. Its
+        # field provinces must still receive a whole division each.
+        divisions = 14
+        fields = 7
+        total = fields * low + 2 * medium + high
+        self.assertGreaterEqual(divisions * low / total, 1.0)
+        self.assertGreaterEqual(divisions * medium / total, 1.5)
+
+    def test_supply_building_outranks_a_core_factory_on_occupied_ground(self) -> None:
+        native_path = BASE_GAME / "common/defines/00_defines.lua"
+        if not native_path.is_file():
+            self.skipTest("base game defines are not installed")
+        native = native_path.read_text(encoding="utf-8-sig")
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(
+            encoding="utf-8"
+        )
+
+        def value(field: str) -> float:
+            assigned = re.findall(
+                rf"(?m)^NDefines\.NAI\.{field}\s*=\s*([\d.]+)", defines
+            )
+            if assigned:
+                return float(assigned[-1])
+            default = re.search(rf"(?m)^\s*{field}\s*=\s*([\d.]+)", native)
+            self.assertIsNotNone(default, field)
+            return float(default.group(1))
+
+        hub = value("CONSTRUCTION_PRIO_SUPPLY_BUILDING") * value(
+            "CONSTRUCTION_PRIO_FACTOR_OCCUPIED_TERRITORY"
+        )
+        core = value("CONSTRUCTION_PRIO_FACTOR_OWNED_CORE")
+        for factory in ("CONSTRUCTION_PRIO_CIV_FACTORY", "CONSTRUCTION_PRIO_MIL_FACTORY"):
+            with self.subTest(factory=factory):
+                self.assertGreater(hub, value(factory) * core)
 
 
 class FrontAllocationLifecycleTests(unittest.TestCase):

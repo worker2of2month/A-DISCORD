@@ -3369,6 +3369,94 @@ SHL_quarters_and_borders = {
 		ai_will_do = { base = 10 }
 	}
 
+	# Repeatable map programme along the national frontier. The state flag is
+	# the receipt of each paid programme: several regions run in parallel and
+	# every callback settles its own target exactly once.
+	SHL_nationalise_region = {
+		icon = generic_nationalism
+		allowed = { tag = SHL }
+		state_target = any_owned_state
+		target_trigger = {
+			FROM = { SHL_nationalisation_state_valid = yes }
+		}
+		visible = {
+			is_subject = no
+			SHL_nationalisation_unlocked = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_nationalisation_ready_tt
+				SHL_nationalisation_country_ready = yes
+				FROM = { SHL_nationalisation_state_valid = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_nationalisation_slot_tt
+				FROM = { NOT = { has_state_flag = SHL_nationalisation_pending } }
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 50
+		days_remove = 120
+		days_re_enable = 1
+		fire_only_once = no
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_nationalisation_ready_tt_not
+				OR = {
+					SHL_nationalisation_country_ready = no
+					FROM = { SHL_nationalisation_state_valid = no }
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_nationalisation_result_tt
+			hidden_effect = {
+				FROM = { set_state_flag = SHL_nationalisation_pending }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						FROM = { has_state_flag = SHL_nationalisation_pending }
+					}
+				}
+				# Consume the receipt before the reward; a stale callback cannot pay twice.
+				hidden_effect = {
+					FROM = { clr_state_flag = SHL_nationalisation_pending }
+				}
+				if = {
+					limit = {
+						hidden_trigger = {
+							SHL_nationalisation_country_ready = yes
+							FROM = { SHL_nationalisation_state_valid = yes }
+						}
+					}
+					FROM = { add_core_of = ROOT }
+					add_stability = 0.01
+					custom_effect_tooltip = SHL_nationalisation_complete_tt
+					hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+				}
+				else = { add_political_power = 50 }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						FROM = { has_state_flag = SHL_nationalisation_pending }
+					}
+				}
+				hidden_effect = {
+					FROM = { clr_state_flag = SHL_nationalisation_pending }
+				}
+				add_political_power = 50
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
 	# ----- Four districts and foreign affairs -----
 	# Prospecting and the border watch hold their own escrows (SHL_copi_deposit,
 	# SHL_border_watch_deposit) until remove_effect settles them; the trade
@@ -4480,6 +4568,7 @@ SHL_treasury = {
 				has_completed_focus = SHL_h_conclave_mercenaries
 				has_completed_focus = SHL_h_hired_contracts
 				has_completed_focus = SHL_r_hire_armies
+				has_completed_focus = SHL_sw_guard_columns
 			}
 		}
 		available = {
@@ -4632,5 +4721,263 @@ SHL_metal_contracts = {
 			custom_effect_tooltip = SHL_metal_term_finished_tt
 			hidden_effect = { SHL_metal_drop_client = yes }
 		}
+	}
+}
+
+# ----- War for the South -----
+# Programmes opened by SHL_south_war_focus; shown with the shared war operations.
+ADISCORD_south_final_war_category = {
+
+	SHL_sw_raise_quarter_levy = {
+		icon = generic_army_support
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_sw_quarter_levies
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_core_state_controlled_tt
+				any_owned_state = {
+					is_core_of = SHL
+					is_controlled_by = SHL
+				}
+			}
+		}
+		cost = 50
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_sw_raise_quarter_levy_tt
+			hidden_effect = {
+				SHL_sw_raise_quarter_levy = yes
+				add_to_variable = { var = SHL_unrest value = 3 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	# The guns need a neighbouring district held by our side.
+	SHL_sw_siege_battery = {
+		icon = generic_operation
+		allowed = { original_tag = SHL }
+		state_target = yes
+		targets = { 67 688 699 707 700 701 69 }
+		target_trigger = {
+			FROM = { has_variable = ADISCORD_south_initial_side }
+		}
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			has_completed_focus = SHL_sw_siege_of_the_belt
+			ADISCORD_south_final_active = yes
+			FROM = { ADISCORD_south_state_held_by_root_enemy = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_siege_in_range_tt
+				FROM = {
+					any_neighbor_state = { ADISCORD_south_state_held_by_root_side = yes }
+				}
+			}
+		}
+		cost = 40
+		days_re_enable = 45
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_sw_siege_battery_tt
+			hidden_effect = {
+				FROM = {
+					damage_building = {
+						type = infrastructure
+						damage = 1
+					}
+					damage_building = {
+						type = arms_factory
+						damage = 1
+					}
+				}
+			}
+			army_experience = 3
+		}
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				has_political_power < 80
+			}
+		}
+	}
+
+	SHL_sw_market_caravans = {
+		icon = generic_trade
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_sw_keep_the_markets
+			ADISCORD_south_final_active = yes
+		}
+		available = { SHL_country_operable = yes }
+		cost = 30
+		days_re_enable = 56
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_sw_market_caravans_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 90 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 90 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	SHL_sw_ash_fuel = {
+		icon = ADISCORD_factory
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_sw_fuel_from_ash
+			ADISCORD_south_final_active = yes
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_text = SHL_cost_80
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+		days_re_enable = 35
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_fuel = 5000
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_fuel > 30000
+			}
+		}
+	}
+
+	SHL_sw_quarter_relief = {
+		icon = generic_welfare
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_sw_quarters_at_war
+			ADISCORD_south_final_active = yes
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_text = SHL_cost_100
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		days_re_enable = 56
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+				}
+				custom_effect_tooltip = SHL_sw_quarter_relief_tt
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					ADISCORD_economy_mark_dirty = yes
+					add_to_variable = { var = SHL_unrest value = -5 }
+					SHL_clamp_tensions = yes
+					set_temp_variable = { var = ADISCORD_south_strain_delta value = -10 }
+					ADISCORD_south_add_strain = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 5
+				check_variable = { var = ADISCORD_south_war_strain value = 60 compare = greater_than }
+			}
+		}
+	}
+
+	SHL_sw_martial_tribunal = {
+		icon = generic_police_action
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_sw_furnace_martial_law
+			ADISCORD_south_final_active = yes
+		}
+		available = { SHL_country_operable = yes }
+		cost = 40
+		days_re_enable = 56
+		fire_only_once = no
+		complete_effect = {
+			add_stability = -0.03
+			custom_effect_tooltip = SHL_sw_martial_tribunal_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -6 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 4
+				check_variable = { var = SHL_unrest value = 50 compare = greater_than }
+			}
+		}
+	}
+
+	SHL_sw_arm_the_uprising = {
+		icon = generic_army_support
+		allowed = { original_tag = SHL }
+		visible = {
+			has_completed_focus = SHL_k_rifles_for_the_uprising
+			ADISCORD_south_final_active = yes
+			country_exists = SLF
+		}
+		available = {
+			SHL_country_operable = yes
+			SLF = { has_capitulated = no }
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_rifles_1500_tt
+				NOT = { has_equipment = { infantry_equipment < 1500 } }
+			}
+		}
+		cost = 30
+		days_re_enable = 45
+		fire_only_once = no
+		complete_effect = {
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 1500
+				target = SLF
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 }

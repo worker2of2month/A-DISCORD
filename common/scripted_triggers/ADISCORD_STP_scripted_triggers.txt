@@ -129,6 +129,14 @@ STP_has_political_action_slot = {
 	check_variable = { var = STP_political_action_slots_available value = 1 compare = greater_than_or_equals }
 }
 
+# COUNTRY: Shabrat's civil-war army stays on the party front for the whole
+# war with the party. ADISCORD_ai_campaign_leaves_ally_frontlines reads it.
+STP_cw_shabrat_army_holds_party_front = {
+	original_tag = STS
+	has_global_flag = STP_cw_started
+	has_war_with = STP
+}
+
 STP_cw_preparation_open = {
 	hidden_trigger = { NOT = { has_country_flag = STP_cw_participant } }
 	NOT = { has_global_flag = STP_cw_started }

@@ -77,12 +77,12 @@ characters = {
 	}
 	PWR_Alexey_Lange = {
 		name = PWR_Alexey_Lange
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_PWR_Alexey_Lange } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	PSD_Marta_Cinder = {
 		name = PSD_Marta_Cinder
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } }
+		portraits = { civilian = { large = GFX_portrait_PSD_Marta_Cinder } }
 		country_leader = { ideology = etatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	EBA_Vlad_Mecra = {

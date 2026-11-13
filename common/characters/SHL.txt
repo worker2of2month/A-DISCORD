@@ -21,7 +21,7 @@ characters = {
 		name = SHL_Darius_Safir
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_5
+				large = GFX_portrait_SHL_Darius_Safir
 				small = GFX_portrait_SHL_Darius_Safir_small
 			}
 		}
@@ -76,7 +76,7 @@ characters = {
 		name = SHL_Khosrow_Arbin
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_1
+				large = GFX_portrait_SHL_Khosrow_Arbin
 				small = GFX_portrait_SHL_Khosrow_Arbin_small
 			}
 		}
@@ -105,7 +105,7 @@ characters = {
 		name = SHL_Golshan_Loran
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_4
+				large = GFX_portrait_SHL_Golshan_Loran
 				small = GFX_portrait_SHL_Golshan_Loran_small
 			}
 		}
@@ -134,7 +134,7 @@ characters = {
 		name = SHL_Kamran_Nur
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_6
+				large = GFX_portrait_SHL_Kamran_Nur
 				small = GFX_portrait_SHL_Kamran_Nur_small
 			}
 		}
@@ -163,7 +163,7 @@ characters = {
 		name = SHL_Tahmuras_Bayrat
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_2
+				large = GFX_portrait_SHL_Tahmuras_Bayrat
 				small = GFX_portrait_SHL_Tahmuras_Bayrat_small
 			}
 		}
@@ -192,7 +192,7 @@ characters = {
 		name = SHL_Fereydun_Kerdan
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_7
+				large = GFX_portrait_SHL_Fereydun_Kerdan
 				small = GFX_portrait_SHL_Fereydun_Kerdan_small
 			}
 		}
@@ -221,7 +221,7 @@ characters = {
 		name = SHL_Shirin_Sharim
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_9
+				large = GFX_portrait_SHL_Shirin_Sharim
 				small = GFX_portrait_SHL_Shirin_Sharim_small
 			}
 		}
@@ -253,7 +253,7 @@ characters = {
 		name = SHL_Rauf_Darban
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_1
+				large = GFX_portrait_SHL_Rauf_Darban
 				small = GFX_portrait_SHL_Rauf_Darban_small
 			}
 		}
@@ -283,7 +283,7 @@ characters = {
 		name = SHL_Behruz_Veyran
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_land_1
+				large = GFX_portrait_SHL_Behruz_Veyran
 				small = GFX_portrait_SHL_Behruz_Veyran_small
 			}
 		}
@@ -317,7 +317,7 @@ characters = {
 		name = SHL_Mariam_Arbin
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_2
+				large = GFX_portrait_SHL_Mariam_Arbin
 				small = GFX_portrait_SHL_Mariam_Arbin_small
 			}
 		}
@@ -350,7 +350,7 @@ characters = {
 		name = SHL_Salima_Darzi
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_3
+				large = GFX_portrait_SHL_Salima_Darzi
 				small = GFX_portrait_SHL_Salima_Darzi_small
 			}
 		}
@@ -383,7 +383,7 @@ characters = {
 		name = SHL_Amin_Rashad
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_3
+				large = GFX_portrait_SHL_Amin_Rashad
 				small = GFX_portrait_SHL_Amin_Rashad_small
 			}
 		}

@@ -2,7 +2,7 @@
 characters = {
 	PIO_head_of_state = {
 		name = PIO_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } }
+		portraits = { civilian = { large = GFX_portrait_PIO_head_of_state } }
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -12,7 +12,7 @@ characters = {
 	}
 	MRV_head_of_state = {
 		name = MRV_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = { civilian = { large = GFX_portrait_MRV_head_of_state } }
 		country_leader = {
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
@@ -22,7 +22,7 @@ characters = {
 	}
 	RVN_head_of_state = {
 		name = RVN_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		portraits = { civilian = { large = GFX_portrait_RVN_head_of_state } }
 		country_leader = {
 			ideology = etatism_ideology
 			expire = "2200.1.1.1"
@@ -32,7 +32,7 @@ characters = {
 	}
 	SFR_head_of_state = {
 		name = SFR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_2 } }
+		portraits = { civilian = { large = GFX_portrait_SFR_head_of_state } }
 		country_leader = {
 			ideology = etatism_ideology
 			expire = "2200.1.1.1"
@@ -42,7 +42,7 @@ characters = {
 	}
 	FLR_head_of_state = {
 		name = FLR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		portraits = { civilian = { large = GFX_portrait_FLR_head_of_state } }
 		country_leader = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
@@ -52,7 +52,7 @@ characters = {
 	}
 	PRR_head_of_state = {
 		name = PRR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		portraits = { civilian = { large = GFX_portrait_PRR_head_of_state } }
 		country_leader = {
 			ideology = hedonism_ideology
 			expire = "2200.1.1.1"
@@ -62,7 +62,7 @@ characters = {
 	}
 	ULV_head_of_state = {
 		name = ULV_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_ULV_head_of_state } }
 		country_leader = {
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"
@@ -72,7 +72,7 @@ characters = {
 	}
 	LUR_head_of_state = {
 		name = LUR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		portraits = { civilian = { large = GFX_portrait_LUR_head_of_state } }
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -82,7 +82,7 @@ characters = {
 	}
 	CHD_head_of_state = {
 		name = CHD_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = { civilian = { large = GFX_portrait_CHD_head_of_state } }
 		country_leader = {
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
@@ -92,7 +92,7 @@ characters = {
 	}
 	EVR_head_of_state = {
 		name = EVR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		portraits = { civilian = { large = GFX_portrait_EVR_head_of_state } }
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -102,7 +102,7 @@ characters = {
 	}
 	OLR_head_of_state = {
 		name = OLR_head_of_state
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		portraits = { civilian = { large = GFX_portrait_OLR_head_of_state } }
 		country_leader = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"

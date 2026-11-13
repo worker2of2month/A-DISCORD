@@ -1097,6 +1097,7 @@ VAL_nod_border_settled = {
 }
 
 # A vanished tag alone is not victory: its actual heartland must be in our sphere.
+# Kefreyt and its subjects may hold each other's land, as after a capitulation.
 VAL_stelander_dominated = {
 	OR = { STS = { exists = no } STS = { is_subject_of = VAL } }
 	OR = { STP = { exists = no } STP = { is_subject_of = VAL } }
@@ -1104,8 +1105,10 @@ VAL_stelander_dominated = {
 		any_core_state = { always = yes }
 		NOT = { any_core_state = {
 				NOT = { OR = {
-						AND = { is_owned_by = VAL is_controlled_by = VAL }
-						AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } }
+						AND = {
+							OR = { is_owned_by = VAL owner = { is_subject_of = VAL } }
+							OR = { is_controlled_by = VAL controller = { is_subject_of = VAL } }
+						}
 						AND = {
 							OR = { state = 2 state = 3 state = 29 state = 45 state = 46 state = 53 }
 							is_core_of = SRP

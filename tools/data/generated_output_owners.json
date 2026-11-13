@@ -3022,7 +3022,12 @@
         "sound/superevents/superevent_south_free_islands_sound.wav",
         "sound/superevents/superevent_val_council_proclamation_sound.wav",
         "sound/superevents/superevent_south_war_sound.wav",
-        "sound/superevents/superevent_south_houses_sound.wav"
+        "sound/superevents/superevent_south_houses_sound.wav",
+        "sound/superevents/superevent_south_cities_sound.wav",
+        "sound/superevents/superevent_south_nur_victory_sound.wav",
+        "sound/superevents/superevent_west_dorian_sound.wav",
+        "sound/superevents/superevent_south_safir_victory_sound.wav",
+        "sound/superevents/superevent_south_commune_victory_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",

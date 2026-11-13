@@ -1829,6 +1829,8 @@ focus_tree = {
 				add_to_variable = { var = NAM_consolidation value = 5 }
 				NAM_consolidation_clamp = yes
 			}
+			unlock_decision_tooltip = NAM_nationalise_region
+			custom_effect_tooltip = NAM_nationalise_region_unlock_tt
 		}
 		ai_will_do = {
 			base = 30

@@ -325,8 +325,8 @@ characters = {
 		name = VAL_Anton_Rein
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_4
-				small = GFX_Portrait_Forul_Generic_4_small
+				large = GFX_portrait_VAL_Anton_Rein
+				small = GFX_portrait_VAL_Anton_Rein_small
 			}
 		}
 	}
@@ -335,8 +335,8 @@ characters = {
 		name = VAL_Irina_Karst
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_5
-				small = GFX_Portrait_Forul_Generic_5_small
+				large = GFX_portrait_VAL_Irina_Karst
+				small = GFX_portrait_VAL_Irina_Karst_small
 			}
 		}
 	}
@@ -345,8 +345,8 @@ characters = {
 		name = VAL_Viktor_Bran
 		portraits = {
 			army = {
-				large = GFX_Portrait_Forul_Generic_6
-				small = GFX_Portrait_Forul_Generic_6_small
+				large = GFX_portrait_VAL_Viktor_Bran
+				small = GFX_portrait_VAL_Viktor_Bran_small
 			}
 		}
 	}

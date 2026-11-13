@@ -3,4 +3,29 @@ spriteTypes = {
 		name = "GFX_portrait_WCG_Edgar_Raut"
 		texturefile = "gfx/leaders/WCG/portrait_WCG_Edgar_Raut.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_BOR_Elena_Borey"
+		texturefile = "gfx/leaders/BOR/portrait_BOR_Elena_Borey.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_DOL_Marko_Doln"
+		texturefile = "gfx/leaders/DOL/portrait_DOL_Marko_Doln.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RIN_Alaric_IV_Ren"
+		texturefile = "gfx/leaders/RIN/portrait_RIN_Alaric_IV_Ren.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_KRM_Ivo_Kremen"
+		texturefile = "gfx/leaders/KRM/portrait_KRM_Ivo_Kremen.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_LMN_Vera_Lemann"
+		texturefile = "gfx/leaders/LMN/portrait_LMN_Vera_Lemann.png"
+	}
 }

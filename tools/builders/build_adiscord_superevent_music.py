@@ -40,10 +40,15 @@ STP_FESTIVAL_TRACK = "superevent_stelander_party_victory_festival_sound"
 STP_HOUSES_TRACK = "superevent_stelander_party_victory_houses_sound"
 
 WEST_POLICY_TRACKS = {
+    "superevent_west_dorian_sound": "../South/sophia_herbstwerk_excerpt.flac",
     "superevent_west_world_empire_sound": "arcana_opening_of_the_wound_excerpt.flac",
 }
 
 SOUTH_POLICY_TRACKS = {
+    "superevent_south_commune_victory_sound": "test_dept_comrades_excerpt.flac",
+    "superevent_south_safir_victory_sound": "dargaard_rise_and_fall_excerpt.flac",
+    "superevent_south_nur_victory_sound": "karjalan_sissit_melakka_excerpt.flac",
+    "superevent_south_cities_sound": "aaron_martin_captive_witness_excerpt.flac",
     "superevent_south_houses_sound": "arcana_le_serpent_rouge_excerpt.flac",
     "superevent_south_free_islands_sound": "sophie_hutchings_by_night_excerpt.flac",
     "superevent_south_war_sound": "phragments_new_kings_excerpt.flac",
@@ -124,6 +129,15 @@ STP_POLICY_CUES = {
 
 
 WEST_POLICY_CUES = {
+    "superevent_west_dorian_sound": (
+        PolicyCue("South/sfx_factory_machine.flac", 2, 15, 49, 0.14, 4.0),
+        PolicyCue("IVN/committee_marching.mp3", 5, 0, 11, 0.45, 1.5),
+        PolicyCue("STP/sfx_radio_crackle.flac", 19, 2, 1.4, 0.18, 0.15),
+        PolicyCue("STP/sfx_paper_slide.flac", 22, 0, 1.09, 0.25, 0.03),
+        PolicyCue("South/sfx_contract_stamp.flac", 26, 0, 1.59, 0.4, 0.02),
+        PolicyCue("STP/sfx_radio_crackle.flac", 31, 5, 1.2, 0.14, 0.15),
+        PolicyCue("IVN/committee_marching.mp3", 39, 2, 10, 0.3, 2.0),
+    ),
     "superevent_west_world_empire_sound": (
         PolicyCue("WRK/sfx_rail_lever.flac", 2, 0, 1.09, 0.4, 0.02),
         PolicyCue("WRK/sfx_steam_release.flac", 4, 0, 1.68, 0.18, 0.1),
@@ -136,6 +150,43 @@ WEST_POLICY_CUES = {
 
 
 SOUTH_POLICY_CUES = {
+    "superevent_south_commune_victory_sound": (
+        PolicyCue("South/sfx_factory_whistle.flac", 2, 2, 8, 0.24, 0.8),
+        PolicyCue("IVN/committee_cheers.mp3", 7, 0, 8, 0.85, 1.0),
+        PolicyCue("STP/sfx_small_applause.flac", 10, 1, 12, 0.7, 1.5),
+        PolicyCue("South/sfx_factory_whistle.flac", 32, 11, 7, 0.18, 1.0),
+        PolicyCue("IVN/committee_cheers.mp3", 37, 3, 9, 0.75, 1.2),
+        PolicyCue("STP/sfx_small_applause.flac", 40, 0, 13, 0.65, 2.0),
+    ),
+    "superevent_south_safir_victory_sound": (
+        PolicyCue("STP/sfx_banquet_room.flac", 2, 4, 14, 0.1, 2.0),
+        PolicyCue("STP/sfx_guard_steps.flac", 4, 1, 8, 0.4, 0.8),
+        PolicyCue("STP/sfx_paper_slide.flac", 15, 0, 1.09, 0.35, 0.03),
+        PolicyCue("STP/sfx_pen_writing.flac", 17, 8, 4, 3.5, 0.4),
+        PolicyCue("South/sfx_contract_stamp.flac", 22, 0, 1.59, 0.45, 0.02),
+        PolicyCue("STP/sfx_small_applause.flac", 25, 1, 6, 0.45, 1.0),
+        PolicyCue("IVN/committee_marching.mp3", 35, 2, 12, 0.4, 1.5),
+        PolicyCue("IVN/rifle.ogg", 45, 0, 1.2, 0.28, 0.01),
+        PolicyCue("IVN/rifle.ogg", 48, 0, 1.2, 0.25, 0.01),
+        PolicyCue("IVN/rifle.ogg", 51, 0, 1.2, 0.22, 0.01),
+    ),
+    "superevent_south_nur_victory_sound": (
+        PolicyCue("IVN/committee_marching.mp3", 2, 0, 14, 0.5, 1.0),
+        PolicyCue("IVN/tank_medium.ogg", 8, 0, 18, 0.12, 3.0),
+        PolicyCue("STP/sfx_radio_crackle.flac", 24, 2, 1.4, 0.18, 0.15),
+        PolicyCue("STP/sfx_paper_slide.flac", 28, 0, 1.09, 0.25, 0.03),
+        PolicyCue("South/sfx_contract_stamp.flac", 31, 0, 1.59, 0.4, 0.02),
+        PolicyCue("IVN/committee_marching.mp3", 37, 2, 13, 0.4, 2.0),
+        PolicyCue("IVN/tank_light.ogg", 42, 0, 10, 0.08, 2.0),
+    ),
+    "superevent_south_cities_sound": (
+        PolicyCue("STP/sfx_paper_slide.flac", 9, 0, 1.09, 0.25, 0.03),
+        PolicyCue("STP/sfx_pen_writing.flac", 11, 2, 4, 3.0, 0.4),
+        PolicyCue("STP/sfx_vintage_camera.flac", 17, 0, 1.15, 0.12, 0.02),
+        PolicyCue("STP/sfx_small_applause.flac", 21, 1, 3, 0.25, 0.6),
+        PolicyCue("STP/sfx_guard_steps.flac", 35, 1, 7, 0.16, 1.0),
+        PolicyCue("STP/sfx_winter_wind.flac", 37, 0, 14, 0.035, 3.0),
+    ),
     "superevent_south_houses_sound": (
         PolicyCue("STP/sfx_banquet_room.flac", 2, 4, 14, 0.12, 2.0),
         PolicyCue("STP/sfx_paper_slide.flac", 8, 0, 1.09, 0.35, 0.03),

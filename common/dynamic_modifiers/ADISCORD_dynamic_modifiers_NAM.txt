@@ -591,3 +591,31 @@ NAM_south_coast_irrigation = {
 	}
 	local_supplies = 0.30
 }
+
+# War for the South. Results of NAM_south_war_focus act only while a campaign
+# is on: a repelled campaign keeps them for the next war over the same
+# completed tree, and NAM_sw_close_war clears them once the South is settled.
+NAM_south_war_dynamic = {
+	icon = GFX_idea_generic_war_preparation
+	enable = {
+		tag = NAM
+		ADISCORD_south_final_active = yes
+	}
+	war_support_factor = NAM_sw_war_support
+	stability_factor = NAM_sw_stability
+	army_attack_factor = NAM_sw_army_attack
+	army_defence_factor = NAM_sw_army_defence
+	army_org_factor = NAM_sw_army_org
+	breakthrough_factor = NAM_sw_breakthrough
+	max_dig_in = NAM_sw_dig_in
+	conscription_factor = NAM_sw_conscription
+	land_reinforce_rate = NAM_sw_reinforce
+	supply_consumption_factor = NAM_sw_supply_consumption
+	army_fuel_consumption_factor = NAM_sw_fuel_consumption
+	fuel_gain_factor = NAM_sw_fuel_gain
+	industrial_capacity_factory = NAM_sw_factory_output
+	production_speed_arms_factory_factor = NAM_sw_arms_speed
+	consumer_goods_factor = NAM_sw_consumer_goods
+	resistance_growth = NAM_sw_resistance
+	compliance_gain = NAM_sw_compliance
+}

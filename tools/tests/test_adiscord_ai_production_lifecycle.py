@@ -795,6 +795,62 @@ class ArmyQualityTests(unittest.TestCase):
                 child(first, "can_upgrade_in_field"),
             )
 
+    def test_final_stages_follow_their_sources_and_add_firepower(self):
+        def battalions(template: list, section: str) -> dict[str, int]:
+            return {
+                name: int(value)
+                for name, _, value in child(child(template, "target_template"), section)
+            }
+
+        for role, source, target, gun in (
+            (
+                "infantry",
+                "defensive_line_brigade",
+                "field_division",
+                "ADISCORD_line_artillery",
+            ),
+            ("assault", "assault_group", "shock_group", "ADISCORD_line_artillery"),
+            (
+                "tank",
+                "networked_tank_battlegroup",
+                "armoured_division",
+                "ADISCORD_combat_platform",
+            ),
+        ):
+            with self.subTest(target=target):
+                tree = child(self.templates, f"ADISCORD_{role}_templates")
+                first = child(tree, f"ADISCORD_{source}")
+                last = child(tree, f"ADISCORD_{target}")
+                self.assertIn(("replace_with", "=", f"ADISCORD_{target}"), first)
+                self.assertGreater(
+                    float(child(first, "upgrade_prio")[0][2]),
+                    float(child(last, "upgrade_prio")[0][2]),
+                )
+                self.assertIn(
+                    ("ADISCORD_ai_can_refit_field_army", "=", "yes"),
+                    child(first, "can_upgrade_in_field"),
+                )
+                # The source decides the field conversion, so it carries at least
+                # the stock the final stage needs for its own divisions.
+                source_stock = {
+                    value[0][0]: int(value[0][2])
+                    for name, _, value in child(first, "can_upgrade_in_field")
+                    if name == "has_equipment"
+                }
+                for name, _, value in child(last, "enable"):
+                    if name == "has_equipment":
+                        self.assertGreaterEqual(
+                            source_stock.get(value[0][0], 0), int(value[0][2]), value
+                        )
+                self.assertNotIn(
+                    ("replace_with", "=", f"ADISCORD_{source}"), last
+                )
+                self.assertGreater(
+                    battalions(last, "regiments")[gun],
+                    battalions(first, "regiments")[gun],
+                )
+                self.assertEqual(len(battalions(last, "support")), 5)
+
     def test_simultaneous_land_and_air_floors_leave_rifle_capacity(self):
         tech = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text())
         names = (

@@ -521,6 +521,9 @@ class BunkerWorld:
                 self.missions.add(value)
             elif key == "force_update_dynamic_modifier":
                 continue
+            elif key == "random_list":
+                # The model follows the Khan's default course; course weights have their own test.
+                self.execute(value[0].value)
             elif key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt"):
                 self.dirty += 1
             elif key in self.effects:
@@ -4563,7 +4566,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual(intervals, [(-1.0, -0.6), (-0.6, -0.1), (-0.1, 0.1), (0.1, 0.6), (0.6, 1.0)])
         for rows in ranges:
             for callback in ("on_activate", "on_deactivate"):
-                self.assertTrue(any(entry.key == "ADISCORD_economy_mark_dirty" for entry in block(rows, callback)), (scalar(rows, "id"), callback))
+                self.assertTrue(any(entry.key == "ADISCORD_economy_mark_dirty" for entry in walk(block(rows, callback))), (scalar(rows, "id"), callback))
         world = self.world()
         self.assertEqual(world.bop_id, "RUS_state_balance")
         self.assertEqual(world.bop, 0)
@@ -6123,7 +6126,14 @@ class RusCoupTests(unittest.TestCase):
         bop = block(parse("common/bop/RUS.txt"), "RUS_state_balance")
         ranges = {scalar(row.value, "id"): row.value for row in walk(bop) if row.key == "range"}
         for name in ("RUS_scientists_dominance", "RUS_black_army_dominance"):
-            self.assertEqual(scalar(block(ranges[name], "on_activate"), "RUS_coup_plot_check"), "yes")
+            activation = block(ranges[name], "on_activate")
+            self.assertEqual(scalar(block(activation, "hidden_effect"), "RUS_coup_plot_check"), "yes")
+            self.assertEqual(scalar(activation, "custom_effect_tooltip"), name + "_plot_tt")
+        # Economy refreshes dispatch a hidden event; visible, it reads as event "0".
+        for row in walk(bop):
+            if row.key in ("on_activate", "on_deactivate"):
+                visible = [item.key for item in row.value if item.key != "hidden_effect"]
+                self.assertLessEqual(set(visible), {"custom_effect_tooltip"}, row)
         self.assertEqual(scalar(block(self.effects["RUS_suspicion_begin"], "if"), "RUS_coup_plot_check"), "yes")
         warnings = [scalar(row.value, "id") for row in block(self.effects["RUS_suspicion_begin"], "if") if row.key == "country_event"]
         self.assertLessEqual({"ADISCORD_rus_campaign.57", "ADISCORD_rus_campaign.58"}, set(warnings))
@@ -6221,7 +6231,7 @@ class RusCoupTests(unittest.TestCase):
         tree = block(parse("focus_trees/NAM/postwar/focuses.txt"), "focus_tree")
         focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
         for name in ("NAM_rus_crisis_watch", "NAM_rus_fuel_for_coalition", "NAM_rus_demand_share", "NAM_rus_expedition_staff"):
-            self.assertEqual(scalar(block(focuses[name], "bypass"), "RUS_crisis_foreclosed"), "yes", name)
+            self.assertIn(("RUS_crisis_foreclosed", "yes"), [(row.key, row.value) for row in walk(block(focuses[name], "bypass"))], name)
         foreclosed = self.keys(self.triggers["RUS_crisis_foreclosed"])
         self.assertIn("RUS_coup_regime", foreclosed)
 
@@ -6280,10 +6290,37 @@ class RusCoupTests(unittest.TestCase):
         measures = {row.key: row.value for row in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_measures_category")}
         for name in ("RUS_bop_relief", "RUS_bop_reserve", "RUS_bop_mediation"):
             ai = block(measures[name], "ai_will_do")
-            early = [row.value for row in ai if row.key == "modifier" and any(item.key == "RUS_coup_window_open" for item in row.value)]
+            early = [row.value for row in ai if row.key == "modifier" and any(item.key == "RUS_coup_window_open" for item in row.value)
+                     and any(item.key == "power_balance_value" for item in walk(row.value))]
             self.assertEqual(len(early), 1, name)
-            values = [row.value for row in walk(early[0]) if row.key == "" ]
+            values = [row.value for row in walk(early[0]) if row.key == ""]
             self.assertTrue(any(value in ("0.45", "-0.45") for value in values), name)
+
+    def test_ai_khan_takes_each_course_with_its_own_chance(self):
+        choose = block(self.effects["RUS_ai_choose_coup_course"], "if")
+        self.assertEqual(scalar(block(choose, "limit"), "is_ai"), "yes")
+        options = [row for row in block(choose, "random_list")]
+        self.assertEqual([row.key for row in options], ["50", "25", "25"])
+        flags = [block(row.value, "set_country_flag") for row in options[1:]]
+        self.assertEqual([(scalar(flag, "flag"), scalar(flag, "days")) for flag in flags],
+                         [("RUS_ai_scientists_course", "365"), ("RUS_ai_black_army_course", "365")])
+        self.assertFalse(options[0].value)
+        begin = [row.key for row in block(self.effects["RUS_suspicion_begin"], "if")]
+        self.assertLess(begin.index("RUS_ai_choose_coup_course"), begin.index("RUS_coup_plot_check"))
+        cleared = [row.value for row in walk(self.effects["RUS_coup_execute"]) if row.key == "clr_country_flag"]
+        self.assertLessEqual({"RUS_ai_scientists_course", "RUS_ai_black_army_course"}, set(cleared))
+        self.assertEqual(scalar(self.triggers["RUS_ai_proclamation_pending"], "RUS_ai_coup_course_active"), "no")
+        proclaim = block(self.decisions["RUS_proclaim_the_last_empire"], "ai_will_do")
+        self.assertIn("RUS_ai_coup_course_active", [row.key for row in walk(proclaim)])
+        measures = {row.key: row.value for row in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_measures_category")}
+        for name, push, stop in (("RUS_bop_relief", "RUS_ai_scientists_course", "RUS_ai_black_army_course"),
+                                 ("RUS_bop_reserve", "RUS_ai_black_army_course", "RUS_ai_scientists_course")):
+            mods = [row.value for row in block(measures[name], "ai_will_do") if row.key == "modifier"]
+            flags = [(scalar(mod, "has_country_flag"), mod[0].key) for mod in mods if any(item.key == "has_country_flag" for item in mod)]
+            self.assertEqual(flags, [(stop, "factor"), (push, "add")], name)
+        mediation = [row.value for row in block(measures["RUS_bop_mediation"], "ai_will_do") if row.key == "modifier"]
+        self.assertEqual(scalar(mediation[-1], "factor"), "0")
+        self.assertEqual(scalar(mediation[-1], "RUS_ai_coup_course_active"), "yes")
 
 
 class RusScientistsBranchTests(unittest.TestCase):

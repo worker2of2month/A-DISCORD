@@ -94,6 +94,17 @@ ADISCORD_south_crisis_cycle = {
 			ADISCORD_south_dispatch_prepared_war = yes
 		}
 	}
+	# A war declared by this same cycle starts paying from the next one.
+	if = {
+		limit = {
+			ADISCORD_south_final_active = yes
+			has_global_flag = {
+				flag = ADISCORD_south_final_started
+				days > 1
+			}
+		}
+		ADISCORD_south_strain_cycle = yes
+	}
 }
 
 # COUNTRY SHL. Orders take effect after the warning; an unordered automatic
@@ -368,6 +379,7 @@ ADISCORD_south_prepare_champion = {
 		set_country_flag = ADISCORD_south_added_major
 		set_major = yes
 	}
+	ADISCORD_south_open_champion_front = yes
 }
 
 # GLOBAL. Subjects and faction partners enter with their champion. NAM can
@@ -1055,6 +1067,13 @@ ADISCORD_south_close_campaign_state = {
 		if = {
 			limit = { exists = yes }
 			SHL_clean_campaign = yes
+			SHL_sw_close_war = yes
+		}
+	}
+	NAM = {
+		if = {
+			limit = { exists = yes }
+			NAM_sw_close_war = yes
 		}
 	}
 	NAM = { ADISCORD_south_close_member_state = yes }
@@ -1073,6 +1092,7 @@ ADISCORD_south_close_member_state = {
 	if = {
 		limit = { exists = yes }
 		ADISCORD_south_remove_path_spirit = yes
+		ADISCORD_south_close_champion_front = yes
 		ADISCORD_south_restore_prior_tree = yes
 	}
 }
@@ -1213,6 +1233,7 @@ ADISCORD_south_clear_participant = {
 	clear_variable = ADISCORD_south_side
 	clr_country_flag = ADISCORD_south_north_leader
 	clr_country_flag = ADISCORD_south_settlement_pending
+	clr_country_flag = ADISCORD_south_defected
 }
 
 # COUNTRY winner (event ROOT). Applies the stored terms one day after peace.
@@ -1732,6 +1753,364 @@ ADISCORD_south_offer_economic_contract = {
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_variable = { var = ADISCORD_south_offer_kind value = 4 }
 		ADISCORD_south_queue_offer = yes
+	}
+}
+
+# ----- Cost of the war -----
+# ADISCORD_south_war_strain (0-100) belongs to each champion. The furnace cycle
+# raises it; ADISCORD_south_war_strain_dynamic reads the derived field variables.
+# District orders and the hold mission are the champion's operations in the
+# same campaign and close with it.
+
+# COUNTRY champion, at the war start. A new campaign starts from zero.
+ADISCORD_south_open_champion_front = {
+	set_variable = { var = ADISCORD_south_war_strain value = 0 }
+	ADISCORD_south_refresh_strain = yes
+	activate_mission = ADISCORD_south_hold_districts
+}
+
+# COUNTRY champion candidate, on every terminal path.
+ADISCORD_south_close_champion_front = {
+	remove_mission = ADISCORD_south_hold_districts
+	remove_mission = ADISCORD_south_district_order_mission
+	clear_variable = ADISCORD_south_order_state
+	clr_country_flag = ADISCORD_south_home_front_crisis
+	remove_ideas = ADISCORD_south_order_failed
+	ADISCORD_south_refund_expedition = yes
+	ADISCORD_south_refund_defector = yes
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic } }
+		remove_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	clear_variable = ADISCORD_south_war_strain
+	clear_variable = ADISCORD_south_strain_stability
+	clear_variable = ADISCORD_south_strain_war_support
+	clear_variable = ADISCORD_south_strain_factory
+}
+
+# GLOBAL. Called from the furnace cycle while the campaign is active.
+ADISCORD_south_strain_cycle = {
+	SHL = { ADISCORD_south_strain_cycle_member = yes }
+	NAM = { ADISCORD_south_strain_cycle_member = yes }
+	EFL = { ADISCORD_south_strain_cycle_member = yes }
+	AZH = { ADISCORD_south_strain_cycle_member = yes }
+}
+
+# COUNTRY. +3 per cycle and +2 for each own key state held by the enemy side;
+# Shahrabad's ration cards and Svetlogorye's district compact take one point
+# off the base.
+# A hold period that has ended starts again with the cycle.
+ADISCORD_south_strain_cycle_member = {
+	if = {
+		limit = {
+			ADISCORD_south_war_champion = yes
+			ADISCORD_south_champion_viable = yes
+			has_variable = ADISCORD_south_war_strain
+		}
+		ADISCORD_south_count_own_key_states = yes
+		set_temp_variable = { var = ADISCORD_south_strain_delta value = ADISCORD_south_lost_key_states }
+		multiply_temp_variable = { var = ADISCORD_south_strain_delta value = 2 }
+		add_to_temp_variable = { var = ADISCORD_south_strain_delta value = 3 }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						tag = SHL
+						has_completed_focus = SHL_sw_ration_cards
+					}
+					AND = {
+						tag = NAM
+						has_completed_focus = NAM_sw_district_compact_at_war
+					}
+				}
+			}
+			subtract_from_temp_variable = { var = ADISCORD_south_strain_delta value = 1 }
+		}
+		ADISCORD_south_add_strain = yes
+		if = {
+			limit = { NOT = { has_active_mission = ADISCORD_south_hold_districts } }
+			activate_mission = ADISCORD_south_hold_districts
+		}
+	}
+}
+
+# COUNTRY champion. Input: temp ADISCORD_south_strain_delta, negative to relieve.
+# Callers in visible blocks show the change and wrap this call in hidden_effect.
+ADISCORD_south_add_strain = {
+	if = {
+		limit = { has_variable = ADISCORD_south_war_strain }
+		add_to_variable = { var = ADISCORD_south_war_strain value = ADISCORD_south_strain_delta }
+		clamp_variable = {
+			var = ADISCORD_south_war_strain
+			min = 0
+			max = 100
+		}
+		ADISCORD_south_refresh_strain = yes
+		# The crisis clears its own marker in every answer and lowers the cost.
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_war_strain value = 100 compare = greater_than_or_equals }
+				NOT = { has_country_flag = ADISCORD_south_home_front_crisis }
+			}
+			set_country_flag = ADISCORD_south_home_front_crisis
+			country_event = { id = ADISCORD_south.50 hours = 1 }
+		}
+	}
+}
+
+# COUNTRY champion. Per point of strain: -0.2% stability, -0.1% war support and
+# -0.1% factory output.
+ADISCORD_south_refresh_strain = {
+	set_variable = { var = ADISCORD_south_strain_stability value = ADISCORD_south_war_strain }
+	multiply_variable = { var = ADISCORD_south_strain_stability value = -0.002 }
+	set_variable = { var = ADISCORD_south_strain_war_support value = ADISCORD_south_war_strain }
+	multiply_variable = { var = ADISCORD_south_strain_war_support value = -0.001 }
+	set_variable = { var = ADISCORD_south_strain_factory value = ADISCORD_south_war_strain }
+	multiply_variable = { var = ADISCORD_south_strain_factory value = -0.001 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic } } }
+		add_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY champion. Sets temp ADISCORD_south_lost_key_states and
+# ADISCORD_south_held_key_states: own key states of the war-start snapshot held
+# by the enemy side and by the own side. Neutral control counts for neither.
+ADISCORD_south_count_own_key_states = {
+	set_temp_variable = { var = ADISCORD_south_lost_key_states value = 0 }
+	set_temp_variable = { var = ADISCORD_south_held_key_states value = 0 }
+	set_temp_variable = { var = ADISCORD_south_count_side value = ADISCORD_south_side }
+	for_each_scope_loop = {
+		array = global.ADISCORD_south_key_states
+		ADISCORD_south_count_own_key_state = yes
+	}
+}
+
+# STATE. Temporary variables keep the tally of the counting champion.
+ADISCORD_south_count_own_key_state = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_initial_side value = ADISCORD_south_count_side compare = equals } }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { var = ADISCORD_south_count_side value = 1 compare = equals }
+						ADISCORD_south_state_held_by_north_side = yes
+					}
+					AND = {
+						check_variable = { var = ADISCORD_south_count_side value = 2 compare = equals }
+						ADISCORD_south_state_held_by_shl_side = yes
+					}
+				}
+			}
+			add_to_temp_variable = { var = ADISCORD_south_lost_key_states value = 1 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { var = ADISCORD_south_count_side value = 1 compare = equals }
+						ADISCORD_south_state_held_by_shl_side = yes
+					}
+					AND = {
+						check_variable = { var = ADISCORD_south_count_side value = 2 compare = equals }
+						ADISCORD_south_state_held_by_north_side = yes
+					}
+				}
+			}
+			add_to_temp_variable = { var = ADISCORD_south_held_key_states value = 1 }
+		}
+	}
+}
+
+# ----- Expeditions and defectors -----
+# A champion pays when it sends a request; the price waits in escrow under
+# ADISCORD_south_expedition_pending or ADISCORD_south_defector_pending until the
+# other country answers. Refusal, a failed recheck, a lost answer (fallback
+# event ADISCORD_south.66) and the end of the campaign refund it exactly once.
+
+# COUNTRY champion. One fixed, locked template for every expedition.
+ADISCORD_south_ensure_expedition_template = {
+	if = {
+		limit = { NOT = { has_template = "Desert Expedition" } }
+		division_template = {
+			name = "Desert Expedition"
+			template_counter = 3
+			division_names_group = ADISCORD_INF_01
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				infantry = {
+					x = 0
+					y = 0
+				}
+				infantry = {
+					x = 0
+					y = 1
+				}
+				infantry = {
+					x = 1
+					y = 0
+				}
+				infantry = {
+					x = 1
+					y = 1
+				}
+				artillery = {
+					x = 2
+					y = 0
+				}
+			}
+			support = {
+				engineer = {
+					x = 0
+					y = 0
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY champion. Temp ADISCORD_south_expedition_size: 3 after the desert
+# was bought (SHL) or offered protection (NAM), otherwise 2.
+ADISCORD_south_expedition_size = {
+	set_temp_variable = { var = ADISCORD_south_expedition_size value = 2 }
+	if = {
+		limit = {
+			OR = {
+				has_completed_focus = SHL_sw_buy_the_sands
+				has_completed_focus = NAM_sw_protectorate_offers
+			}
+		}
+		set_temp_variable = { var = ADISCORD_south_expedition_size value = 3 }
+	}
+}
+
+# COUNTRY champion. Price of a request, debited when it is sent.
+ADISCORD_south_pay_expedition = {
+	add_political_power = -50
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_south_refund_expedition = {
+	if = {
+		limit = { has_country_flag = ADISCORD_south_expedition_pending }
+		clr_country_flag = ADISCORD_south_expedition_pending
+		add_political_power = 50
+		add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_south_refund_defector = {
+	if = {
+		limit = { has_country_flag = ADISCORD_south_defector_pending }
+		clr_country_flag = ADISCORD_south_defector_pending
+		add_political_power = 80
+	}
+}
+
+# COUNTRY ally (event ROOT), FROM champion. Payment and delivery settle together.
+ADISCORD_south_settle_expedition = {
+	if = {
+		limit = { ADISCORD_south_expedition_possible = yes }
+		FROM = {
+			clr_country_flag = ADISCORD_south_expedition_pending
+			ADISCORD_south_expedition_size = yes
+			ADISCORD_south_ensure_expedition_template = yes
+		}
+		add_manpower = -6000
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -1000
+		}
+		FROM = {
+			capital_scope = {
+				ADISCORD_south_create_expedition_division = yes
+				ADISCORD_south_create_expedition_division = yes
+			}
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_expedition_size value = 3 compare = equals } }
+			add_manpower = -3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -500
+			}
+			FROM = {
+				capital_scope = { ADISCORD_south_create_expedition_division = yes }
+			}
+		}
+		FROM = { country_event = { id = ADISCORD_south.61 hours = 1 } }
+	}
+	else = {
+		FROM = {
+			ADISCORD_south_refund_expedition = yes
+			country_event = { id = ADISCORD_south.62 hours = 1 }
+		}
+	}
+}
+
+# STATE capital of the champion, owner PREV. The division arrives with the men
+# and rifles the ally paid (about 3000 and 500); the champion's stockpile
+# reinforces the rest.
+ADISCORD_south_create_expedition_division = {
+	create_unit = {
+		division = "division_template = \"Desert Expedition\" start_experience_factor = 0.2 start_equipment_factor = 0.12 start_manpower_factor = 0.65"
+		owner = PREV
+		allow_spawning_on_enemy_provs = no
+	}
+}
+
+# COUNTRY defector (event ROOT), FROM champion. The defector makes peace with
+# the champion's side and joins its war against the former leader; the main
+# war goes on.
+ADISCORD_south_settle_defection = {
+	if = {
+		limit = { ADISCORD_south_defection_possible = yes }
+		FROM = { clr_country_flag = ADISCORD_south_defector_pending }
+		set_country_flag = ADISCORD_south_defected
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
+			dismantle_faction = yes
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+		if = {
+			limit = { FROM = { ADISCORD_south_on_shl_side = yes } }
+			every_enemy_country = {
+				limit = { ADISCORD_south_on_shl_side = yes }
+				white_peace = PREV
+			}
+			clear_variable = ADISCORD_south_side
+			ADISCORD_south_join_shl_side = yes
+		}
+		else = {
+			every_enemy_country = {
+				limit = { ADISCORD_south_on_north_side = yes }
+				white_peace = PREV
+			}
+			clear_variable = ADISCORD_south_side
+			ADISCORD_south_join_north_side = yes
+		}
+		FROM = { country_event = { id = ADISCORD_south.64 hours = 1 } }
+	}
+	else = {
+		FROM = {
+			ADISCORD_south_refund_defector = yes
+			country_event = { id = ADISCORD_south.65 hours = 1 }
+		}
 	}
 }
 

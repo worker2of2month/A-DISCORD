@@ -408,27 +408,30 @@
     "superevent_south_cities": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_cities.png",
       "effect": "superevent_south_cities_sound_e",
-      "sample": "superevent_south_directorate_sound",
-      "audio_file": "superevents/superevent_south_directorate_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_cities_sound",
+      "audio_file": "superevents/superevent_south_cities_sound.wav",
+      "theme_note": "Aaron Martin - Captive Witness (Smoke Inscription), with a subdued gathering, treaty signing, brief restrained applause, receding footsteps and wind. Music remains unducked."
     },
     "superevent_south_nur": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_nur.png",
       "effect": "superevent_south_nur_sound_e",
-      "sample": "superevent_south_nur_sound",
-      "audio_file": "superevents/superevent_south_nur_sound.wav"
+      "sample": "superevent_south_nur_victory_sound",
+      "audio_file": "superevents/superevent_south_nur_victory_sound.wav",
+      "theme_note": "Karjalan Sissit - Melakka, with marching formations, passing armor, radio static and a stamped order. Music remains unducked."
     },
     "superevent_south_regency": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_regency.png",
       "effect": "superevent_south_regency_sound_e",
-      "sample": "superevent_south_regency_sound",
-      "audio_file": "superevents/superevent_south_regency_sound.wav"
+      "sample": "superevent_south_safir_victory_sound",
+      "audio_file": "superevents/superevent_south_safir_victory_sound.wav",
+      "theme_note": "Dargaard - Rise And Fall, with a subdued assembly, guard footsteps, land grants signed and sealed, restrained applause, marching and three ceremonial rifle salutes. Music remains unducked."
     },
     "superevent_south_commune": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_commune.png",
       "effect": "superevent_south_commune_sound_e",
-      "sample": "superevent_south_commune_sound",
-      "audio_file": "superevents/superevent_south_commune_sound.wav"
+      "sample": "superevent_south_commune_victory_sound",
+      "audio_file": "superevents/superevent_south_commune_victory_sound.wav",
+      "theme_note": "Test Dept and South Wales Striking Miners Choir - Comrades, with factory steam whistles, joyful voices and applause in two waves around a clear choral passage. Music remains unducked."
     },
     "superevent_south_conclave": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_conclave.png",
@@ -526,7 +529,8 @@
       "texture": "gfx/interface/superevents/WRK/superevent_west_dorian.png",
       "effect": "superevent_west_dorian_sound_e",
       "sample": "superevent_west_dorian_sound",
-      "audio_file": "superevents/superevent_west_dorian_sound.wav"
+      "audio_file": "superevents/superevent_west_dorian_sound.wav",
+      "theme_note": "Sophia - Herbstwerk, with factory machinery, marching formations, radio static and a stamped order. Music remains unducked."
     },
     "superevent_west_anton": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_anton.png",

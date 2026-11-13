@@ -2339,7 +2339,16 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertIn("type = ai_wanted_divisions_factor value = 8", economy)
         field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
         self.assertIn("type = role_ratio id = garrison value = -80", field_army)
-        self.assertIn("type = dont_defend_ally_borders value = 1", field_army)
+        # Ally frontlines are released by the shared tagged policy; the
+        # validator checks its wiring to this profile.
+        self.assertNotIn("dont_defend_ally_borders", field_army)
+        policy = named_block(
+            read("common/ai_strategy/default.txt"), "ADISCORD_leave_ally_frontlines"
+        )
+        for tag in ("WKR", "VAD", "TVA", "EYR", "SCA"):
+            self.assertIn(
+                f"type = dont_defend_ally_borders id = {tag} value = ", policy
+            )
         self.assertNotIn("ADISCORD_vorkerland_collapse_front_commitment", ai)
         for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
             if (
@@ -2420,11 +2429,18 @@ class FrontAndSupplyTests(unittest.TestCase):
     def test_global_ai_preserves_native_readiness_and_supply_checks(self) -> None:
         defines = read("common/defines/ADISCORD_defines_changes.lua")
         self.assertIn("NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200", defines)
-        for key in (
-            "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT",
-            "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
+        self.assertNotRegex(
+            defines,
+            r"(?m)^\s*NDefines\.NAI\.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT\s*=",
+        )
+        # Leaving an undersupplied area earlier than the native 0.1 is allowed;
+        # staying there longer is not.
+        for value in re.findall(
+            r"(?m)^\s*NDefines\.NAITheatre\.AI_THEATRE_SUPPLY_CRISIS_LIMIT\s*=\s*([\d.]+)",
+            defines,
         ):
-            self.assertNotRegex(defines, rf"(?m)^\s*{re.escape(key)}\s*=")
+            self.assertGreaterEqual(float(value), 0.1)
+            self.assertLessEqual(float(value), 0.25)
         # Planned attacks use the native organisation and strength bars; a
         # stricter strength bar halted short-equipped field armies for whole wars.
         for kind in ("ORG", "STRENGTH"):

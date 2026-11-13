@@ -59,7 +59,7 @@
         ]
       ],
       "flag_style": 0,
-      "portrait": "GFX_Portrait_Forul_Generic_1",
+      "portrait": "GFX_portrait_PIO_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -125,7 +125,7 @@
         ]
       ],
       "flag_style": 1,
-      "portrait": "GFX_Portrait_Forul_Generic_7",
+      "portrait": "GFX_portrait_MRV_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -191,7 +191,7 @@
         ]
       ],
       "flag_style": 2,
-      "portrait": "GFX_Portrait_Forul_Generic_3",
+      "portrait": "GFX_portrait_RVN_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -261,7 +261,7 @@
         ]
       ],
       "flag_style": 3,
-      "portrait": "GFX_Portrait_Forul_Generic_2",
+      "portrait": "GFX_portrait_SFR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -332,7 +332,7 @@
         ]
       ],
       "flag_style": 4,
-      "portrait": "GFX_Portrait_Forul_Generic_5",
+      "portrait": "GFX_portrait_FLR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -399,7 +399,7 @@
         ]
       ],
       "flag_style": 5,
-      "portrait": "GFX_Portrait_Forul_Generic_6",
+      "portrait": "GFX_portrait_PRR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -467,7 +467,7 @@
         ]
       ],
       "flag_style": 6,
-      "portrait": "GFX_Portrait_Forul_Generic_4",
+      "portrait": "GFX_portrait_ULV_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -534,7 +534,7 @@
         ]
       ],
       "flag_style": 7,
-      "portrait": "GFX_Portrait_Forul_Generic_8",
+      "portrait": "GFX_portrait_LUR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -606,7 +606,7 @@
         ]
       ],
       "flag_style": 8,
-      "portrait": "GFX_Portrait_Forul_Generic_7",
+      "portrait": "GFX_portrait_CHD_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -671,7 +671,7 @@
         ]
       ],
       "flag_style": 9,
-      "portrait": "GFX_Portrait_Forul_Generic_5",
+      "portrait": "GFX_portrait_EVR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"
@@ -737,7 +737,7 @@
         ]
       ],
       "flag_style": 10,
-      "portrait": "GFX_Portrait_Forul_Generic_6",
+      "portrait": "GFX_portrait_OLR_head_of_state",
       "technology_profiles": [
         "fragment_low_tech",
         "naval"

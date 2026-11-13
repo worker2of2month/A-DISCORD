@@ -85,6 +85,16 @@ ADISCORD_ai_has_adjacent_war_preparation = {
 	}
 }
 
+# COUNTRY: campaign phases in which an army holds no ally's frontline. Each
+# predicate lives in its country's trigger file; ADISCORD_leave_ally_frontlines
+# in default.txt carries the one entry per ally that the engine requires.
+ADISCORD_ai_campaign_leaves_ally_frontlines = {
+	OR = {
+		STP_cw_shabrat_army_holds_party_front = yes
+		ADISCORD_vorkerland_collapse_field_army_active = yes
+	}
+}
+
 # COUNTRY: construction and research also cover scripted threats before a
 # neighbour exists, and overseas preparations that have no shared land border.
 ADISCORD_ai_has_war_preparation = {

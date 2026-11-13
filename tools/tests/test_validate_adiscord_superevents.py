@@ -41,6 +41,38 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_quotes_require_reviewed_text_and_traceable_sources(self):
+        from copy import deepcopy
+        from tools.validators.validate_adiscord_superevents import (
+            EN_LOC, QUOTE_SOURCES, SCRIPTED_LOC, quotation_issues,
+        )
+
+        manifest = json.loads((ROOT / QUOTE_SOURCES).read_text(encoding="utf-8"))
+        loc = {
+            "russian": (ROOT / RU_LOC).read_text(encoding="utf-8-sig"),
+            "english": (ROOT / EN_LOC).read_text(encoding="utf-8-sig"),
+        }
+        scripted = (ROOT / SCRIPTED_LOC).read_text(encoding="utf-8")
+        self.assertEqual(quotation_issues(loc, manifest, scripted), [])
+        key = "superevent_south_cities_quote"
+        changed = dict(loc)
+        changed["russian"] = loc["russian"].replace("Народ, подчиняющийся законам", "Приказом правительства")
+        self.assertIn(
+            f"russian quote: {key} differs from its reviewed citation",
+            quotation_issues(changed, manifest, scripted),
+        )
+        changed["russian"] = loc["russian"].replace('законам, должен', 'законам, "должен')
+        self.assertIn(
+            f"russian quote: invalid quoted value for {key}",
+            quotation_issues(changed, manifest, scripted),
+        )
+        missing = deepcopy(manifest)
+        del missing["quotes"][key]
+        self.assertIn(f"quote sources: no reviewed quotation for {key}", quotation_issues(loc, missing, scripted))
+        incomplete = deepcopy(manifest)
+        incomplete["quotes"][key]["location"] = ""
+        self.assertIn(f"quote sources: incomplete citation for {key}", quotation_issues(loc, incomplete, scripted))
+
     def test_export_never_uses_graded_runtime_as_an_unprocessed_original(self):
         from unittest.mock import patch
         from tools.builders import build_adiscord_superevent_art as art

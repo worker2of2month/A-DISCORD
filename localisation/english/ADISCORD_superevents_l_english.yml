@@ -1,6 +1,6 @@
 ﻿l_english:
   superevent_vorkerland_civilwar_title: "The Vorkerland Civil War"
-  superevent_vorkerland_civilwar_quote: "When words cease to cling closely to things, kingdoms fall, empires wane and vanish.\n\n- Ezra Pound"
+  superevent_vorkerland_civilwar_quote: "War takes away the easy supply of daily wants, and so proves a rough master.\n\n- Thucydides, \"History of the Peloponnesian War\", III.82"
   superevent_vorkerland_civilwar_comment: "No empire has ever been eternal"
 
   superevent_vorkerland_dirty_opening_title: "The Dirty Zone Opens"
@@ -16,7 +16,7 @@
   superevent_vorkerland_utilitarian_victory_comment: "Anton Bagley held Vorkerland as a measurable republic"
 
   superevent_vorkerland_vlad_victory_title: "The Military Restoration of Vorkerland"
-  superevent_vorkerland_vlad_victory_quote: "Where they make a desert they call it peace.\n\n- Tacitus, Agricola"
+  superevent_vorkerland_vlad_victory_quote: "Where they make a desert, they call it peace.\n\n- Tacitus, \"Agricola\", 30"
   superevent_vorkerland_vlad_victory_comment: "Vlad Petrichev imposed an imperial order"
 
   superevent_vorkerland_dorian_victory_title: "The Technical Reconstruction of Vorkerland"
@@ -24,7 +24,7 @@
   superevent_vorkerland_dorian_victory_comment: "Dorian Worx entrusted the country to specialist administrations"
 
   superevent_stelander_empire_title: "Proclamation of the Stelander Imperial Union!"
-  superevent_stelander_empire_quote: "When a man has nothing left to be proud of, he begins to take pride in his ethnicity.\n\n- Arthur Schopenhauer"
+  superevent_stelander_empire_quote: "The cheapest sort of pride is national pride.\n\n- Arthur Schopenhauer, \"The Wisdom of Life\""
   superevent_stelander_empire_comment: "Stelander raises its head again"
 
   superevent_stelander_party_victory_title: "Party Victory in Stelander"
@@ -53,7 +53,7 @@
  superevent_val_council_proclamation_comment:0 "We answer for our country."
 
  superevent_south_war_title: "War for the South"
- superevent_south_war_quote: "The last civilian train left before dawn. Only soldiers remained at the stations."
+ superevent_south_war_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, \"On War\", I.1"
  superevent_south_war_comment: "The desert is a battlefield once more."
 
   superevent_stelander_great_title: "Great Stelander Proclaimed!"
@@ -64,10 +64,10 @@
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""
  superevent_rus_black_banner_title:0 "EMPIRE OF THE BLACK BANNER"
- superevent_rus_black_banner_quote:0 "A headquarters lives while every soldier knows who holds the next line.\n- Tagir Mansurov"
+ superevent_rus_black_banner_quote:0 "Regard your soldiers as your children, and they will follow you into the deepest valleys.\n\n- Sun Tzu, \"The Art of War\", X"
  superevent_rus_black_banner_comment:0 "Hold the common line."
  superevent_rus_restoration_title:0 "THE LAST EMPIRE"
- superevent_rus_restoration_quote:0 "A country begins where tomorrow's bread ceases to be a miracle.\n- Gleb Korneev"
+ superevent_rus_restoration_quote:0 "Knowledge and human power are synonymous.\n\n- Francis Bacon, \"Novum Organum\", I.3"
  superevent_rus_restoration_comment:0 "Open the workshops."
 
  superevent_itora_vorkerland_war_title:0 "Second Itora-Vorkerland War"
@@ -112,11 +112,11 @@
  superevent_stelander_tikhoreva_comment:0 "No life is lost below the final total"
 
   superevent_nam_resource_war_service_title: "The Resource War: The Governors' Order"
-  superevent_nam_resource_war_service_quote: "By dawn forty tankers had passed the eastern checkpoint. The road back was empty."
+  superevent_nam_resource_war_service_quote: "The art of war is of vital importance to the State.\n\n- Sun Tzu, \"The Art of War\", I"
   superevent_nam_resource_war_service_comment: "The governors post guards at the oilfields"
 
   superevent_nam_resource_war_district_title: "The Resource War: The District Militias"
-  superevent_nam_resource_war_district_quote: "Yesterday we handed in our passes at the gate. Today they hand out rifles there."
+  superevent_nam_resource_war_district_quote: "He will win whose army is animated by the same spirit throughout all its ranks.\n\n- Sun Tzu, \"The Art of War\", III"
   superevent_nam_resource_war_district_comment: "The night shift stays at the oilfields"
 
   superevent_stelander_party_victory_houses_title: "The High Houses Rule Stelander"
@@ -128,11 +128,11 @@
   superevent_stelander_party_victory_staff_comment: "August Veil imposes peace by regulation"
 
   superevent_stelander_party_victory_wallets_title: "The Stelander Showcase Reopens"
-  superevent_stelander_party_victory_wallets_quote: "Endless money forms the sinews of war.\n\n- Cicero, Philippics"
+  superevent_stelander_party_victory_wallets_quote: "The sinews of war, infinite treasure.\n\n- Marcus Tullius Cicero, \"Philippics\", V.5"
   superevent_stelander_party_victory_wallets_comment: "Pavel Lanskoy opens the season"
 
   superevent_stelander_party_victory_silence_title: "Silence over Stelander"
-  superevent_stelander_party_victory_silence_quote: "They make a desert and call it peace.\n\n- Tacitus, Agricola"
+  superevent_stelander_party_victory_silence_quote: "Where they make a desert, they call it peace.\n\n- Tacitus, \"Agricola\", 30"
   superevent_stelander_party_victory_silence_comment: "Vera Korvina keeps the silence"
 
   superevent_stelander_party_victory_regent_title: "Nodrul Celebrates a Stelander Victory"
@@ -144,142 +144,142 @@
   superevent_stelander_party_victory_festival_comment: "Rufus Hedersett celebrates the victory"
 
   superevent_south_houses_title: "Concessions of the Ten"
-  superevent_south_houses_quote: "The first tanker carries one trading house's seal. The other nine houses are waiting their turn."
+  superevent_south_houses_quote: "All for ourselves, and nothing for other people, seems, in every age of the world, to have been the vile maxim of the masters of mankind.\n\n- Adam Smith, \"The Wealth of Nations\", III.IV"
   superevent_south_houses_comment: "The concessions take effect"
 
   superevent_south_cities_title: "The Southern City Charters"
-  superevent_south_cities_quote: "Each city takes its own copy of the treaty home from Khazar. The signatures are the same on every copy."
+  superevent_south_cities_quote: "The people, being subject to the laws, ought to be their author.\n\n- Jean-Jacques Rousseau, \"The Social Contract\", II.6"
   superevent_south_cities_comment: "The cities ratify the charters"
 
   superevent_south_nur_title: "Nur Takes Charge of the South"
-  superevent_south_nur_quote: "Station clocks are being set to Khazar time. From today, the trains run to a single timetable."
+  superevent_south_nur_quote: "The chief foundations of all states, new as well as old or composite, are good laws and good arms.\n\n- Niccolo Machiavelli, \"The Prince\", XII"
   superevent_south_nur_comment: "The Directorate takes over the railways"
 
   superevent_south_regency_title: "The Regency Divides the South"
-  superevent_south_regency_quote: "Surveyors went out with the first grants of land. The people who live here will learn their new landlord's name from the boundary post."
+  superevent_south_regency_quote: "Benefits ought to be given little by little, so that the flavour of them may last longer.\n\n- Niccolo Machiavelli, \"The Prince\", VIII"
   superevent_south_regency_comment: "The Regency assigns the fiefs"
 
   superevent_south_commune_title: "Victory of the Fire Commune"
-  superevent_south_commune_quote: "The shift council has the pump room keys. For the first time, the foreman signing the log was elected on the shop floor."
+  superevent_south_commune_quote: "The free development of each is the condition for the free development of all.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
   superevent_south_commune_comment: "The councils take over the oilfields"
 
   superevent_south_conclave_title: "The Council of Nine Holds the South"
-  superevent_south_conclave_quote: "The registers from the captured stations have reached Khazar. All nine seats in the council chamber are still occupied."
+  superevent_south_conclave_quote: "The conversation ends in a conspiracy against the public, or in some contrivance to raise prices.\n\n- Adam Smith, \"The Wealth of Nations\", I.X"
   superevent_south_conclave_comment: "The Conclave takes charge"
 
   superevent_south_service_title: "Governorships of the South"
-  superevent_south_service_quote: "The first report from Khazar bears the new governor's seal. The next is due in a week."
+  superevent_south_service_quote: "The end of obedience is protection.\n\n- Thomas Hobbes, \"Leviathan\", XXI"
   superevent_south_service_comment: "The appointments are signed"
 
   superevent_south_charter_title: "The South Signs the Oil Charter"
-  superevent_south_charter_quote: "Beside Svetlogorsk's signature there was room for every district seal. The last space was filled by dusk."
+  superevent_south_charter_quote: "No one can be put out of this estate, and subjected to the political power of another, without his own consent.\n\n- John Locke, \"Second Treatise of Government\", 95"
   superevent_south_charter_comment: "The charter is ratified"
 
   superevent_south_contracts_title: "Svetlogorye's Southern Contracts"
-  superevent_south_contracts_quote: "The first fuel shipment crosses the border on a new waybill. Dispatchers on both sides sign for it."
+  superevent_south_contracts_quote: "That men perform their covenants made.\n\n- Thomas Hobbes, \"Leviathan\", XV"
   superevent_south_contracts_comment: "Deliveries resume"
 
   superevent_south_rump_title: "The Southern Ports Reopen"
-  superevent_south_rump_quote: "The coast service is taking ships bound for the mainland again. The old quays are already short of pilots."
+  superevent_south_rump_quote: "We have it in our power to begin the world over again.\n\n- Thomas Paine, \"Common Sense\""
   superevent_south_rump_comment: "The harbour is open"
 
   superevent_south_revenge_title: "Victory for the Mainland Veterans"
-  superevent_south_revenge_quote: "They are lifting the barrier on the road where fuel tribute used to be collected. The veterans step aside for the first bus."
+  superevent_south_revenge_quote: "In war, then, let your great object be victory, not lengthy campaigns.\n\n- Sun Tzu, \"The Art of War\", II"
   superevent_south_revenge_comment: "Svetlogorye returns"
 
   superevent_south_radical_title: "The Strongholds Take the South"
-  superevent_south_radical_quote: "The first ship's hold takes three machine tools and a spare drive for each. The captain signs for the entire load."
+  superevent_south_radical_quote: "When you plunder a countryside, let the spoil be divided amongst your men.\n\n- Sun Tzu, \"The Art of War\", VII"
   superevent_south_radical_comment: "Karamyshev claims the spoils"
 
   superevent_south_free_islands_title: "Victory of the Free Islands"
-  superevent_south_free_islands_quote: "The ferry is taking passengers for the return crossing too. On the quay, families separated by the war check the lists."
+  superevent_south_free_islands_quote: "There is nothing dearer to a man than his own country and his parents.\n\n- Homer, \"Odyssey\", IX"
   superevent_south_free_islands_comment: "A homecoming on the quay"
 
   superevent_south_boards_title: "The Boards Acquire the South"
-  superevent_south_boards_quote: "The inventory lists the wells, the workshops and even the clock over the gate. Only the chairman's signature is missing."
+  superevent_south_boards_quote: "The executive of the modern State is but a committee for managing the common affairs of the whole bourgeoisie.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
   superevent_south_boards_comment: "The assets pass to the boards"
 
   superevent_south_restitution_title: "The Alliance Holds the Oil Belt"
-  superevent_south_restitution_quote: "The forward units have returned to the line. From behind the embankment the men can hear the oilfield pump running again."
+  superevent_south_restitution_quote: "The end of law is not to abolish or restrain, but to preserve and enlarge freedom.\n\n- John Locke, \"Second Treatise of Government\", 57"
   superevent_south_restitution_comment: "Shahrabad's campaign is repelled"
 
   superevent_west_worker_title: "The West Joins the Confederation"
-  superevent_west_worker_quote: "The Itoran delegates have desks in the common chamber. Supplies for the towns on both sides of the former front are first on the agenda."
+  superevent_west_worker_quote: "By concord even small states are increased, but by discord, even the greatest fall to nothing.\n\n- Sallust, \"Jugurthine War\", 10"
   superevent_west_worker_comment: "The republics convene"
 
   superevent_west_petrichev_title: "Imperial Vorkerland Wins the West"
-  superevent_west_petrichev_quote: "The garrison train has reached the Old March. The stationmaster takes the coming month's timetable from the commandant."
+  superevent_west_petrichev_quote: "It is much safer to be feared than loved, when, of the two, either must be dispensed with.\n\n- Niccolo Machiavelli, \"The Prince\", XVII"
   superevent_west_petrichev_comment: "The imperial mandate takes effect"
 
   superevent_west_veyran_title: "Restoration of the Veyran Empire"
-  superevent_west_veyran_quote: "The seal came out of a museum case. Vlad Petrichev was the first to set his signature beneath it."
+  superevent_west_veyran_quote: "What's past is prologue.\n\n- William Shakespeare, \"The Tempest\", II.1"
   superevent_west_veyran_comment: "The act of restoration is signed"
 
   superevent_west_dorian_title: "The Forul Technical Union"
-  superevent_west_dorian_quote: "The dispatcher closed the western circuit. For the first time since the war began, the ammeter settled at its working load."
+  superevent_west_dorian_quote: "Nature is only subdued by submission.\n\n- Francis Bacon, \"Novum Organum\", I.3"
   superevent_west_dorian_comment: "The grid takes the load"
 
   superevent_west_anton_title: "Anton Bagli's Western Settlement"
-  superevent_west_anton_quote: "The first shipment of medicine has reached the western hospitals. Doctors have cleared the wards where stretchers were stored during the fighting."
+  superevent_west_anton_quote: "That standard is not the agent's own greatest happiness, but the greatest amount of happiness altogether.\n\n- John Stuart Mill, \"Utilitarianism\", II"
   superevent_west_anton_comment: "The first hospitals reopen"
 
   superevent_west_shield_title: "Victory of the Humanist Shield"
-  superevent_west_shield_quote: "The morning bus crossed the northern corridor under Itoran escort. Every seat on the return journey has been sold."
+  superevent_west_shield_quote: "And all this to be directed to no other end, but the peace, safety, and public good of the people.\n\n- John Locke, \"Second Treatise of Government\", 131"
   superevent_west_shield_comment: "The guarantees take effect"
 
   superevent_west_emergency_title: "Itora's Emergency Trusteeship"
-  superevent_west_emergency_quote: "The night operator finished his shift. By morning, the man at the switchboard had been sent by an Itoran commissioner."
+  superevent_west_emergency_quote: "Where there is no common power, there is no law: where no law, no injustice.\n\n- Thomas Hobbes, \"Leviathan\", XIII"
   superevent_west_emergency_comment: "The commissioners take charge"
 
   superevent_west_revanche_title: "Itora's War of Revanche"
-  superevent_west_revanche_quote: "The old boundary stone was lifted into a lorry and driven away. Surveyors will have to chart the whole march again."
+  superevent_west_revanche_quote: "Injuries ought to be done all at one time, so that, being tasted less, they offend less.\n\n- Niccolo Machiavelli, \"The Prince\", VIII"
   superevent_west_revanche_comment: "The frontier is redrawn"
 
   superevent_west_committee_title: "The Itoran Committee's Western Peace"
-  superevent_west_committee_quote: "An Itoran signalman took the keys to the northern line. Two freight trains had passed by evening."
+  superevent_west_committee_quote: "The obligation of subjects to the sovereign is understood to last as long, and no longer, than the power lasts, by which he is able to protect them.\n\n- Thomas Hobbes, \"Leviathan\", XXI"
   superevent_west_committee_comment: "The corridor passes to Itora"
 
   superevent_vorkerland_world_empire_title: "The World Empire of Vorkerland"
-  superevent_vorkerland_world_empire_quote: "The first edition sold while the ink was still fresh. By evening the typesetters were using the new name of the state."
+  superevent_vorkerland_world_empire_quote: "My name is Ozymandias, king of kings.\n\n- Percy Bysshe Shelley, \"Ozymandias\""
   superevent_vorkerland_world_empire_comment: "Send the edition to press"
 
   superevent_south_iron_title: "The Iron Ladder in the South"
-  superevent_south_iron_quote: "Barracks and civil offices received the same list of appointments. By noon the new governors had taken their oaths."
+  superevent_south_iron_quote: "Men more quickly forget the death of their father than the loss of their patrimony.\n\n- Niccolo Machiavelli, \"The Prince\", XVII"
   superevent_south_iron_comment: "The executive takes office"
 
   superevent_south_civil_service_title: "Victory of the Service Republic"
-  superevent_south_civil_service_quote: "On Monday the district office opened at the usual hour. Its first appointment notice went up beside the public opening times."
+  superevent_south_civil_service_quote: "Equal and exact justice to all men, of whatever state or persuasion, religious or political.\n\n- Thomas Jefferson, First Inaugural Address"
   superevent_south_civil_service_comment: "The civil service opens"
 
   superevent_south_federation_title: "The Federation's Southern Districts"
-  superevent_south_federation_quote: "The delegates are returning from Svetlogorsk with signed charters. Each will be read aloud at an open session back home."
+  superevent_south_federation_quote: "The power indeed may be transmitted, but not the will.\n\n- Jean-Jacques Rousseau, \"The Social Contract\", II.1"
   superevent_south_federation_comment: "The Federation receives the districts"
 
   superevent_south_oil_union_title: "Victory of the Oil Union"
-  superevent_south_oil_union_quote: "At the junction between two district pipelines, the crew waited for working pressure. The southern line is part of the common network."
+  superevent_south_oil_union_quote: "The proletarians have nothing to lose but their chains. They have a world to win.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
   superevent_south_oil_union_comment: "Open the valve"
 
   superevent_south_contract_republic_title: "The Republic of Contracts Wins the South"
-  superevent_south_contract_republic_quote: "The town service is running through the old checkpoint. The conductor has the old ticket stock and a new timetable."
+  superevent_south_contract_republic_quote: "Wherever law ends, tyranny begins.\n\n- John Locke, \"Second Treatise of Government\", 202"
   superevent_south_contract_republic_comment: "The first service departs"
 
   superevent_south_directorate_title: "Victory of the Business Council"
-  superevent_south_directorate_quote: "Requisitions from the southern plants have reached the marshalling yard. The Business Council starts with the allocation of empty tankers."
+  superevent_south_directorate_quote: "Consumption is the sole end and purpose of all production.\n\n- Adam Smith, \"The Wealth of Nations\", IV.VIII"
   superevent_south_directorate_comment: "Approve the delivery schedule"
 
   superevent_south_nam_title: "Svetlogorye Wins the Southern War"
-  superevent_south_nam_quote: "The last barrier has come down on the road to the furnaces of Khazar. Fuel tankers from Svetlogorye were using it by morning."
+  superevent_south_nam_quote: "There is no instance of a country having benefited from prolonged warfare.\n\n- Sun Tzu, \"The Art of War\", II"
   superevent_south_nam_comment: "The southern road is open"
 
   superevent_west_council_title: "The Emergency Council's Western Mandate"
-  superevent_west_council_quote: "The new timetable for the western stations carries two signatures. The army and the civil administration have each taken a copy."
+  superevent_west_council_quote: "If men were angels, no government would be necessary.\n\n- James Madison, \"The Federalist\", 51"
   superevent_west_council_comment: "The council approves the mandate"
  superevent_west_world_empire_title: "The World Empire of Vorkerland defeats Itora"
- superevent_west_world_empire_quote: "The signalman broke the wire seal on the lever. For the first time since war began, a freight train took the western line."
+ superevent_west_world_empire_quote: "To tame the proud, the fetter'd slave to free: These are imperial arts, and worthy thee.\n\n- Virgil, \"Aeneid\", VI (John Dryden translation)"
  superevent_west_world_empire_comment: "The western line is open"
 
  superevent_nam_veyran_proclamation_title:0 "Proclamation of the Veyran Empire"
- superevent_nam_veyran_proclamation_quote:0 "The head of the delegation drew a tarnished seal from his pocket. By morning, both signatures stood beneath the charter."
+ superevent_nam_veyran_proclamation_quote:0 "Reputation of power is power.\n\n- Thomas Hobbes, \"Leviathan\", X"
  superevent_nam_veyran_proclamation_comment:0 "The charter is signed"
 
  # Virgil, Aeneid I.279: https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296

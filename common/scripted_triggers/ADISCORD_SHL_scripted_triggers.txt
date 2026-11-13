@@ -1166,6 +1166,38 @@ SHL_integration_affordable = {
 	}
 }
 
+# ----- Nationalisation of held regions -----
+
+# COUNTRY SHL. The settlement after Keizan, the directorate's administration of
+# taken land and the Crown of the South each open the programme.
+SHL_nationalisation_unlocked = {
+	OR = {
+		has_completed_focus = SHL_peace_has_a_price
+		has_completed_focus = SHL_d_occupation_administration
+		has_completed_focus = SHL_south_crown_of_the_south
+	}
+}
+
+# COUNTRY SHL. The registers are extended only by a sovereign League at peace.
+SHL_nationalisation_country_ready = {
+	SHL_country_operable = yes
+	is_subject = no
+	has_war = no
+}
+
+# STATE: decision target. Nationalisation follows the directly held national
+# frontier, so every new national region opens its own neighbours.
+SHL_nationalisation_state_valid = {
+	is_owned_by = SHL
+	is_controlled_by = SHL
+	NOT = { is_core_of = SHL }
+	any_neighbor_state = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+		is_core_of = SHL
+	}
+}
+
 # ----- Second row: disputes with the neighbours -----
 
 # COUNTRY SHL. The water dispute is settled by the quota treaty (value 2, also

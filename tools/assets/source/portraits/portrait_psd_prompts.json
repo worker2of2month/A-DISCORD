@@ -1,0 +1,1270 @@
+{
+  "tool": "built-in image_gen",
+  "template": "tools/assets/source/portrait.psd",
+  "template_canvas": [
+    156,
+    210
+  ],
+  "portraits": [
+    {
+      "id": "BOR_Elena_Borey",
+      "name": "Евгений Борей",
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "line": 2,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Борея",
+      "description": "Евгений Борей координировал иторские госпитальные колонны ещё до того, как разрозненные поселения объявили себя республикой. Он умеет договариваться с Иторой, местными старостами и военными заставами, но каждый новый договор напоминает Борее, насколько её безопасность зависит от восточного соседа.",
+      "runtime_path": "gfx/leaders/BOR/portrait_BOR_Elena_Borey.png",
+      "sprite": "GFX_portrait_BOR_Elena_Borey",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Evgeny Borey, male 52, former coordinator of hospital convoys and diplomatic republican leader. Long lean face, high forehead, short sandy greying hair, clean shaven, thin round metal glasses, compassionate serious eyes. Worn dark brown civilian wool jacket over muted ivory collar. Three-quarter toward viewer's left. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Евгений Борей координировал иторские госпитальные колонны ещё до того, как разрозненные поселения объявили себя республикой. Он умеет договариваться с Иторой, местными старостами и военными заставами, но каждый новый договор напоминает Борее, насколько её безопасность зависит от восточного соседа.",
+      "source_file": "exec-c6650ac3-a08f-4db3-b0a8-1d9b7379ae41.png",
+      "runtime_sha256": "c82f640a4f99c08f7a5d53ec543670c7d2514c78c313211a8cd2d675c59439a2"
+    },
+    {
+      "id": "DOL_Marko_Doln",
+      "name": "Марко Дольн",
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "line": 13,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Дольн",
+      "description": "Марко Дольн не основал государство - он убедил пять дорожных округов одновременно чинить мосты и признавать одни весовые меры. Союз держится на полезности общего управления и может рассыпаться, если центр потребует от общин больше, чем вернёт им дорогами и безопасностью.",
+      "runtime_path": "gfx/leaders/DOL/portrait_DOL_Marko_Doln.png",
+      "sprite": "GFX_portrait_DOL_Marko_Doln",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Marko Doln, male 46, practical leader of a road-district union. Broad square face, slightly flattened nose, close-cropped black hair, neat dark moustache, stocky shoulders. Slate-grey work coat, open faded shirt, no tie. Near frontal, attentive grounded expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Марко Дольн не основал государство - он убедил пять дорожных округов одновременно чинить мосты и признавать одни весовые меры. Союз держится на полезности общего управления и может рассыпаться, если центр потребует от общин больше, чем вернёт им дорогами и безопасностью.",
+      "source_file": "exec-8b506499-ea93-40c6-93f0-0e5de99d52ab.png",
+      "runtime_sha256": "a4f5b24ad9bd8f46ffe75b059a53a35d61ab8231a04445d1b6011a36ff546f6d"
+    },
+    {
+      "id": "RIN_Alaric_IV_Ren",
+      "name": "Аларик IV Рен",
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "line": 23,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_8",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+        ]
+      ],
+      "country": "Рина",
+      "description": "Аларик IV сохранил трон, обещая Монтере верность северной короне, а воркерландским торговцам - неприкосновенность старых хартий. Обе стороны считают его временным союзником, поэтому палатин превратил дворцовую гвардию в единственный институт, которому доверяет без оговорок.",
+      "runtime_path": "gfx/leaders/RIN/portrait_RIN_Alaric_IV_Ren.png",
+      "sprite": "GFX_portrait_RIN_Alaric_IV_Ren",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Alaric IV Ren, male 63, last palatine and monarch of Rina. Narrow aristocratic face, long hooked nose, receding silver hair brushed straight back, close white Van Dyke beard. Restrained dark burgundy court tunic with high black collar, a single subtle brass fastening, no crown or jewels. Profile turned slightly to viewer's right. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Аларик IV сохранил трон, обещая Монтере верность северной короне, а воркерландским торговцам - неприкосновенность старых хартий. Обе стороны считают его временным союзником, поэтому палатин превратил дворцовую гвардию в единственный институт, которому доверяет без оговорок.",
+      "source_file": "exec-1874213d-61b0-4ce2-bc98-7cf2080b846a.png",
+      "runtime_sha256": "24711bfb407f283cb0a610058dc5806f173675d8905afba64a7b07873c28af66"
+    },
+    {
+      "id": "KRM_Ivo_Kremen",
+      "name": "Иво Кремень",
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "line": 38,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Кременская палата",
+      "description": "После распада Внешнего заслона Иво Кремень собрал управляющих шахтами, перевозчиков и городских пайщиков в Промышленную палату. Он оценивает решения по тоннажу, срокам и числу сохранённых рабочих мест, оставляя вопросы справедливости тем, кто сумеет выразить их в производственном плане.",
+      "runtime_path": "gfx/leaders/KRM/portrait_KRM_Ivo_Kremen.png",
+      "sprite": "GFX_portrait_KRM_Ivo_Kremen",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Ivo Kremen, male 58, industrial chamber chairman, former mining director. Thickset face, bald crown and dark grey hair at sides, heavy eyebrows, clean shaven, deliberate firm mouth. Sturdy charcoal jacket, charcoal waistcoat and off-white shirt. Near frontal, watchful eyes. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): После распада Внешнего заслона Иво Кремень собрал управляющих шахтами, перевозчиков и городских пайщиков в Промышленную палату. Он оценивает решения по тоннажу, срокам и числу сохранённых рабочих мест, оставляя вопросы справедливости тем, кто сумеет выразить их в производственном плане.",
+      "source_file": "exec-ab30f875-1acc-43ac-acb3-2e8b201acdaf.png",
+      "runtime_sha256": "0558d9f779309b3eb466d56a53fdbc753872c962ae6c53aa70ebae0eaf086d87"
+    },
+    {
+      "id": "LMN_Vera_Lemann",
+      "name": "Виктор Леманн",
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "line": 48,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ]
+      ],
+      "country": "Леман",
+      "description": "Виктор Леманн руководил южным сектором Внешнего заслона. Когда Воркерланд перестал присылать приказы и жалование, он подчинил себе фильтрационные пункты Лемана и превратил временные инструкции в законы нового кордона.",
+      "runtime_path": "gfx/leaders/LMN/portrait_LMN_Vera_Lemann.png",
+      "sprite": "GFX_portrait_LMN_Vera_Lemann",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Viktor Lemann, male 49, former commander of a quarantine cordon. Gaunt rectangular face, high cheekbones, very short ash blond crewcut, no beard, stern light eyes. Plain dark grey military tunic with raised collar, practical beltless cropped bust. Slight turn to viewer's left. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Виктор Леманн руководил южным сектором Внешнего заслона. Когда Воркерланд перестал присылать приказы и жалование, он подчинил себе фильтрационные пункты Лемана и превратил временные инструкции в законы нового кордона.",
+      "source_file": "exec-42c9f82d-b5d1-4a45-be38-43d21cde4687.png",
+      "runtime_sha256": "e8a1f0077eb53a833052a7a9d2d8d8c7a1c1f4947cbc2b394581115dd7bb2df3"
+    },
+    {
+      "id": "BRN_Emilia_Brandt",
+      "name": "Эмиль Брандт",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 2,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ]
+      ],
+      "country": "Брайн",
+      "description": "Эмиль Брандт превратил цепь метеостанций, радиомачт и складов в единую администрацию. В Брайне приказ ценят не за торжественность, а за способность дойти до самого удалённого гарнизона до начала бури.",
+      "runtime_path": "gfx/leaders/BRN/portrait_BRN_Emilia_Brandt.png",
+      "sprite": "GFX_portrait_BRN_Emilia_Brandt",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Emil Brandt, male 44, administrator of polar weather stations and radio posts. Fair freckled face, straight nose, wavy auburn hair, short reddish moustache, round wire glasses. Dark brown civilian coat with heavy wool collar. Three-quarter to right, composed alert gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Эмиль Брандт превратил цепь метеостанций, радиомачт и складов в единую администрацию. В Брайне приказ ценят не за торжественность, а за способность дойти до самого удалённого гарнизона до начала бури.",
+      "source_file": "exec-e4f200d3-49e3-4dce-9768-e273aa70e78a.png",
+      "runtime_sha256": "648bce4b850d2b170be8d9c8c2abb8100f8427d5eff186009cb0709307d7b4c4"
+    },
+    {
+      "id": "KRL_Edvard_Karel",
+      "name": "Эдвард Карель",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 12,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_8",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+        ]
+      ],
+      "country": "Карлёд",
+      "description": "Король Эдвард Карель удерживает островные ярлства браками, пожалованиями и личным контролем над ледовыми портами. Двор расточителен, но пограничные дружины умеют пережидать зиму там, где регулярная армия теряет дороги.",
+      "runtime_path": "gfx/leaders/KRL/portrait_KRL_Edvard_Karel.png",
+      "sprite": "GFX_portrait_KRL_Edvard_Karel",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: King Edvard Karel, male 67, ruler of northern island jarldoms and ice ports. Broad weathered face, shoulder-length swept back white hair, short full white beard, prominent eyebrows. Dark blue formal coat with modest fur-lined collar, austere gold fastening, no crown. Frontal dignified expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Король Эдвард Карель удерживает островные ярлства браками, пожалованиями и личным контролем над ледовыми портами. Двор расточителен, но пограничные дружины умеют пережидать зиму там, где регулярная армия теряет дороги.",
+      "source_file": "exec-55f71a5b-4f5c-4c5e-bb95-dfad122ceb2e.png",
+      "runtime_sha256": "da06788df6c0ad01d3dd5f60b1832a1c721ff615d9167db706c79c11cdcf893a"
+    },
+    {
+      "id": "KHV_Ilva_Havren",
+      "name": "Ивар Хаврен",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 43,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ]
+      ],
+      "country": "Хаврен",
+      "description": "Ивар Хаврен возглавляет коллегию геологов и энергетиков, выросшую вокруг глубоких тёплых скважин. Конклав обеспечивает города энергией, но измеряет общественные потребности теми же таблицами, что и давление в трубах.",
+      "runtime_path": "gfx/leaders/KHV/portrait_KHV_Ilva_Havren.png",
+      "sprite": "GFX_portrait_KHV_Ilva_Havren",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Ivar Havren, male 51, geologist and energy-engineering council leader. Broad forehead, oval face, cropped dark hair streaked grey, neatly trimmed short black-grey beard, rectangular steel spectacles. Practical muted olive-brown engineering jacket over dark knit collar. Turn slightly left, analytic expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Ивар Хаврен возглавляет коллегию геологов и энергетиков, выросшую вокруг глубоких тёплых скважин. Конклав обеспечивает города энергией, но измеряет общественные потребности теми же таблицами, что и давление в трубах.",
+      "source_file": "exec-93da2e68-3c52-4c6d-b27c-21d4e1306765.png",
+      "runtime_sha256": "1c014042f04d39d416a75f91d61eec6a2a59323ffac130159c679dff3cc97eba"
+    },
+    {
+      "id": "ELN_Taal_Elander",
+      "name": "Тааль Эландер",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 63,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Эленар",
+      "description": "Тааль Эландер построил власть на всеобщей переписи мастерских, запасов и трудовых бригад. Его директория эффективна, пока реальная жизнь совпадает с отчётами, и беспощадна к тем, кто в них не помещается.",
+      "runtime_path": "gfx/leaders/ELN/portrait_ELN_Taal_Elander.png",
+      "sprite": "GFX_portrait_ELN_Taal_Elander",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Taal Elander, male 56, rigid director of workshop registers and labor brigades. Thin straight nose, angular narrow face, smoothly side-parted nearly black hair with silver at temples, clean-shaven, deep-set eyes. Severe dark stand-collar bureaucratic tunic. Frontal, controlled cold expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Тааль Эландер построил власть на всеобщей переписи мастерских, запасов и трудовых бригад. Его директория эффективна, пока реальная жизнь совпадает с отчётами, и беспощадна к тем, кто в них не помещается.",
+      "source_file": "exec-c2efa6f6-56ee-40fb-a6da-564a531569f0.png",
+      "runtime_sha256": "8146237862bbc019630d97e050042fac561a14bb494de6f894fdc6473f4bb91d"
+    },
+    {
+      "id": "AUR_Sofia_Aurell",
+      "name": "Стефан Аурелль",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 73,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Аур",
+      "description": "Стефан Аурелль добился равного представительства горных и прибрежных общин. Республика богаче соседей институтами, чем оружием, и рассчитывает удержать мир договорами и подготовленным ополчением.",
+      "runtime_path": "gfx/leaders/AUR/portrait_AUR_Sofia_Aurell.png",
+      "sprite": "GFX_portrait_AUR_Sofia_Aurell",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Stefan Aurell, male 41, elected mediator between mountain and coastal communes. Open oval face, curly light brown hair with slightly receding temples, clean shaven, slightly prominent ears. Dark blue-grey suit, cream shirt, simple narrow tie. Slightly turned right, calm earnest gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Стефан Аурелль добился равного представительства горных и прибрежных общин. Республика богаче соседей институтами, чем оружием, и рассчитывает удержать мир договорами и подготовленным ополчением.",
+      "source_file": "exec-a92e411f-9343-4e63-b397-110e2492c308.png",
+      "runtime_sha256": "c40752eb5cd5ff0467ebb15bf2b1bfc3d21e0463900fa1de9ef3da681aaaf7e0"
+    },
+    {
+      "id": "NVR_Leif_Norven",
+      "name": "Лейф Норвен",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 104,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Норвейн",
+      "description": "Лейф Норвен координирует округа, чьи дороги ежегодно меняются вместе с разливами и снегом. Федерация избегает громких доктрин и поддерживает только те учреждения, которые доказали практическую пользу.",
+      "runtime_path": "gfx/leaders/NVR/portrait_NVR_Leif_Norven.png",
+      "sprite": "GFX_portrait_NVR_Leif_Norven",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Leif Norven, male 60, practical coordinator of a snowbound river federation. Weathered broad cheekbones, thinning sandy grey hair, thick short grey moustache, lined skin. Heavy dark tweed jacket and plain wool pullover over a shirt. Three-quarter left, patient reserved expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Лейф Норвен координирует округа, чьи дороги ежегодно меняются вместе с разливами и снегом. Федерация избегает громких доктрин и поддерживает только те учреждения, которые доказали практическую пользу.",
+      "source_file": "exec-2b085831-e5d3-4346-9786-8306a0609d65.png",
+      "runtime_sha256": "5b56715f2bf99173dfe305b747d58e9290da949531b5b6f4fae40f535847f643"
+    },
+    {
+      "id": "SKN_Ren_Skad",
+      "name": "Рен Скад",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 114,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_9",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
+        ]
+      ],
+      "country": "Скад",
+      "description": "Маршал Рен Скад объединил гарнизонные округа после серии приграничных налётов. Его система быстро выставляет резервистов, но подчиняет гражданское хозяйство требованиям штабов.",
+      "runtime_path": "gfx/leaders/SKN/portrait_SKN_Ren_Skad.png",
+      "sprite": "GFX_portrait_SKN_Ren_Skad",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Marshal Ren Skad, male 47, leader of garrison districts. Broad angular face, strong jaw, buzz-cut dark hair, clean shaven, small old scar across one eyebrow. Plain grey-green service uniform with dark collar tabs but no insignia, straight posture. Near frontal, concentrated stern gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Маршал Рен Скад объединил гарнизонные округа после серии приграничных налётов. Его система быстро выставляет резервистов, но подчиняет гражданское хозяйство требованиям штабов.",
+      "source_file": "exec-77bce821-a61a-49a2-9360-29d999569b63.png",
+      "runtime_sha256": "db19f808a3cd3730ca8d85c320aa58339ef4d2f1c6227b61615d5e62025a3e53"
+    },
+    {
+      "id": "TMR_Mira_Timer",
+      "name": "Мирон Тимер",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 125,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Тимер",
+      "description": "Мирон Тимер распределяет средства между округами по измеримой отдаче от дорог, школ и мастерских. Палата умеет экономить, но плохо понимает проекты, выгода которых проявится лишь через поколение.",
+      "runtime_path": "gfx/leaders/TMR/portrait_TMR_Mira_Timer.png",
+      "sprite": "GFX_portrait_TMR_Mira_Timer",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Miron Timer, male 38, budget-minded chamber administrator. Long thin face, high forehead, straight chestnut hair with deep side part, small wire-rim spectacles, clean shaven. Plain brown jacket, white shirt and dark knitted tie. Slight turn to right, thoughtful pursed lips. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Мирон Тимер распределяет средства между округами по измеримой отдаче от дорог, школ и мастерских. Палата умеет экономить, но плохо понимает проекты, выгода которых проявится лишь через поколение.",
+      "source_file": "exec-662d7682-abec-47e9-a9d5-fb55742616e5.png",
+      "runtime_sha256": "2e293384e79875f70081ba1c815a4e3cda830691b6fd817e00e171fe01d2aac1"
+    },
+    {
+      "id": "LYS_Cassian_Lys",
+      "name": "Кассиан Лис",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 135,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_8",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+        ]
+      ],
+      "country": "Лисмар",
+      "description": "Кассиан Лис представляет дома, контролирующие склады, переправы и кредит северо-восточного побережья. Лига открыта для торговли, пока её правила сохраняют прибыль старых компаний.",
+      "runtime_path": "gfx/leaders/LYS/portrait_LYS_Cassian_Lys.png",
+      "sprite": "GFX_portrait_LYS_Cassian_Lys",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Cassian Lys, male 55, spokesman of coastal warehouse and credit houses. Full oval face, slicked-back silver-brown hair, carefully groomed narrow moustache, heavy eyelids. Tailored charcoal suit, dark waistcoat, ivory shirt, muted wine-colored tie. Slight turn to left, calculating composed expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Кассиан Лис представляет дома, контролирующие склады, переправы и кредит северо-восточного побережья. Лига открыта для торговли, пока её правила сохраняют прибыль старых компаний.",
+      "source_file": "exec-d0cfffa7-58eb-4ab4-8193-efd123310bd0.png",
+      "runtime_sha256": "1087387a778c5b5dd245e20537a93dfe6d8f9ca92d809ac062c0d36c2ee140f1"
+    },
+    {
+      "id": "VES_Oskar_Vest",
+      "name": "Оскар Вест",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 155,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_2",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+        ]
+      ],
+      "country": "Вестмар",
+      "description": "Оскар Вест связал четыре обширных округа цепью застав и дорожных обязательств. Вестмар невелик населением, зато его оборона опирается на заранее подготовленные рубежи.",
+      "runtime_path": "gfx/leaders/VES/portrait_VES_Oskar_Vest.png",
+      "sprite": "GFX_portrait_VES_Oskar_Vest",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Oskar Vest, male 62, organizer of defensive outposts and roads. Rugged wide face, broken-looking nose, short bristly grey hair, short salt-grey beard, thick brow. Faded dark field coat over a plain high-collared uniform. Three-quarter right, steadfast wary gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Оскар Вест связал четыре обширных округа цепью застав и дорожных обязательств. Вестмар невелик населением, зато его оборона опирается на заранее подготовленные рубежи.",
+      "source_file": "exec-2b9ff526-55c1-46ed-a491-4d38307b954f.png",
+      "runtime_sha256": "5ae54cbb88dc83c7a58089da20a0da6a1404ad91a49b310ad528afc27e9379d7"
+    },
+    {
+      "id": "ORV_Anton_Orval",
+      "name": "Антон Орваль",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 176,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Орваль",
+      "description": "Антон Орваль поддерживает коалицию городов, фермерских округов и транспортных артелей, обещая каждому только достижимое. Союз редко действует быстро, зато не тратит силы на недоступные цели.",
+      "runtime_path": "gfx/leaders/ORV/portrait_ORV_Anton_Orval.png",
+      "sprite": "GFX_portrait_ORV_Anton_Orval",
+      "identity_reference": null,
+      "prompt": "Paint a realistic portrait cutout of an original fictional adult character for a strategy game. A 50-year-old man with a round face, receding light brown hair, no beard, dark rectangular eyeglasses, a modest charcoal jacket and open cream shirt. Practical, friendly, serious expression. Head and upper chest, near frontal. Entire head visible with a small space above the hair; shoulders reach lower corners. Match the reference image's realistic painted photographic rendering, muted colors and lighting from the upper left. The reference is only for artistic technique, create a different face. Vertical 26:35 composition with a genuine transparent background. No writing or decoration. No scanlines; the Photoshop template will supply the final texture.",
+      "source_file": "exec-27643de8-05ec-452b-b8b2-2067bf2f233a.png",
+      "previous_prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Anton Orval, male 50, negotiator between towns, farms and transport cooperatives. Rounded face, receding light brown hair, clean shaven, dark rectangular glasses. Modest charcoal jacket, open cream shirt, no tie. Near frontal, practical friendly seriousness. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): РђРЅС‚РѕРЅ РћСЂРІР°Р\"СЊ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РєРѕР°Р\"РёС†РёСЋ РіРѕСЂРѕРґРѕРІ, С„РµСЂРјРµСЂСЃРєРёС… РѕРєСЂСѓРіРѕРІ Рё С‚СЂР°РЅСЃРїРѕСЂС‚РЅС‹С… Р°СЂС‚РµР\"РµР№, РѕР±РµС‰Р°СЏ РєР°Р¶РґРѕРјСѓ С‚РѕР\"СЊРєРѕ РґРѕСЃС‚РёР¶РёРјРѕРµ. РЎРѕСЋР· СЂРµРґРєРѕ РґРµР№СЃС‚РІСѓРµС‚ Р±С‹СЃС‚СЂРѕ, Р·Р°С‚Рѕ РЅРµ С‚СЂР°С‚РёС‚ СЃРёР\"С‹ РЅР° РЅРµРґРѕСЃС‚СѓРїРЅС‹Рµ С†РµР\"Рё.",
+      "runtime_sha256": "0aeacef2026511fc4d14f4c5e52ff9caca85c2a7d23fa8fc05250507fc5d276a"
+    },
+    {
+      "id": "VEL_Marten_Rovel",
+      "name": "Мартен Ровель",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 186,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Вельский кантональный союз",
+      "description": "Бывший распорядитель горных переправ, Мартен Ровель убедил северные кантоны учредить общую казну и выборный совет. Каждая долина сохраняет собственный сход и ополчение; пошлины с перевалов оплачивают дороги и общую стражу. Ровель председательствует лишь до следующего съезда и не может собрать чрезвычайный налог без согласия кантонов. Для южных коммун он слишком похож на правителя, для Монтарской империи - слишком зависим от своих избирателей.",
+      "runtime_path": "gfx/leaders/VEL/portrait_VEL_Marten_Rovel.png",
+      "sprite": "GFX_portrait_VEL_Marten_Rovel",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Marten Rovel, male 45, former mountain-pass administrator and elected cantonal chair. Lean weathered face, prominent cheekbones, slightly wavy black hair with a forelock, short dark moustache. Simple brown wool jacket over muted dark green knit collar. Three-quarter left, steady unassuming expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Бывший распорядитель горных переправ, Мартен Ровель убедил северные кантоны учредить общую казну и выборный совет. Каждая долина сохраняет собственный сход и ополчение; пошлины с перевалов оплачивают дороги и общую стражу. Ровель председательствует лишь до следующего съезда и не может собрать чрезвычайный налог без согласия кантонов. Для южных коммун он слишком похож на правителя, для Монтарской империи - слишком зависим от своих избирателей.",
+      "source_file": "exec-2fd417da-e1ff-4db1-b2c8-af850ea0ddec.png",
+      "runtime_sha256": "9d37eacca6a0624e8ef92a866c584f07ef255a10df0ae830a56fef981df75524"
+    },
+    {
+      "id": "ARS_Lina_Arsal",
+      "name": "Линус Арсаль",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 198,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Арсаль",
+      "description": "Линус Арсаль объединил восточные округа после распада Орвальского союза. Республика опирается на выборную Национальную палату, осторожный бюджет и самостоятельные местные администрации.",
+      "runtime_path": "gfx/leaders/ARS/portrait_ARS_Lina_Arsal.png",
+      "sprite": "GFX_portrait_ARS_Lina_Arsal",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Linus Arsal, male 43, elected republican national chamber leader. Pale narrow face, light eyes, short neatly combed blond hair, clean shaven, thin lips. Plain deep-blue suit, light shirt and restrained grey tie. Slight turn to right, thoughtful restrained expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Линус Арсаль объединил восточные округа после распада Орвальского союза. Республика опирается на выборную Национальную палату, осторожный бюджет и самостоятельные местные администрации.",
+      "source_file": "exec-b61db4f0-bfd0-4ecb-bad9-0091fd87a885.png",
+      "runtime_sha256": "448242445694bea00aead9bbc11ef6371295479799bcf236fda63d467806c90a"
+    },
+    {
+      "id": "VLD_Irma_Vald",
+      "name": "Ирвин Вальд",
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "line": 208,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+        ]
+      ],
+      "country": "Вальд",
+      "description": "Ирвин Вальд представляет три южные общины, для которых охрана нефтяных складов и прибрежной дороги важнее политики Орвальского союза. Новый совет невелик, но способен быстро собрать ополчение вокруг единственного промышленного узла.",
+      "runtime_path": "gfx/leaders/VLD/portrait_VLD_Irma_Vald.png",
+      "sprite": "GFX_portrait_VLD_Irma_Vald",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Irvin Vald, male 54, spokesman of coastal oil-store communities. Tanned broad forehead, compact face, dark hair graying at sides, short full neatly clipped grey-black beard. Durable charcoal work jacket and open faded brown shirt. Near frontal, determined calm gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Ирвин Вальд представляет три южные общины, для которых охрана нефтяных складов и прибрежной дороги важнее политики Орвальского союза. Новый совет невелик, но способен быстро собрать ополчение вокруг единственного промышленного узла.",
+      "source_file": "exec-bd424f8f-b36a-4414-a431-275558bfc71c.png",
+      "runtime_sha256": "76d27e1d4fd729cc390a07447ac86dccd1823590fccd520ee618f5e0c975120d"
+    },
+    {
+      "id": "PIO_head_of_state",
+      "name": "Ингвар Сольм",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 3,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ]
+      ],
+      "country": "Союз полярных островов",
+      "description": "Полярные гавани живут рыболовством, метеонаблюдением и проводкой судов среди льдов. Ингвар Сольм связывает островные советы общими складами и спасательными станциями.",
+      "runtime_path": "gfx/leaders/PIO/portrait_PIO_head_of_state.png",
+      "sprite": "GFX_portrait_PIO_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Ingvar Solm, male 64, coordinator of polar fishing harbours and rescue stations. Deeply weathered fair face, ruddy nose, heavy white moustache, thinning white hair, no cap. Heavy navy wool coat with broad collar and brown knit scarf tucked inside. Three-quarter left, resilient calm expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Полярные гавани живут рыболовством, метеонаблюдением и проводкой судов среди льдов. Ингвар Сольм связывает островные советы общими складами и спасательными станциями.",
+      "source_file": "exec-a2afefa0-ec51-4103-ba3e-f1060ba70208.png",
+      "runtime_sha256": "4936125281c55a475fe583295feb03d8a4bccd29b8515afded4cfd54bc63454e"
+    },
+    {
+      "id": "MRV_head_of_state",
+      "name": "Эдвард Марен",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 13,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Морвенская республика",
+      "description": "Морвен контролирует северный выход из Равена к океану. Эдвард Марен опирается на портовые муниципалитеты, выборные советы и договор о совместном содержании маяков.",
+      "runtime_path": "gfx/leaders/MRV/portrait_MRV_head_of_state.png",
+      "sprite": "GFX_portrait_MRV_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Edvard Maren, male 48, elected port-municipality spokesman. Long narrow face, straight brown hair with a silver streak at temple, clean shaven, oval wire spectacles. Dark maritime-blue civilian jacket, white shirt and simple black tie. Slight turn to right, sober attentive expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Морвен контролирует северный выход из Равена к океану. Эдвард Марен опирается на портовые муниципалитеты, выборные советы и договор о совместном содержании маяков.",
+      "source_file": "exec-a8a7f292-ef71-4cd4-8267-42496362b69f.png",
+      "runtime_sha256": "cbef4a93cd504ff2d57841e04e8998ec36c40704276c7092fc64b8f369719cc2"
+    },
+    {
+      "id": "RVN_head_of_state",
+      "name": "Арсен Ровель",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 23,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+        ]
+      ],
+      "country": "Равенская федерация",
+      "description": "Равен объединяет широкие внутренние равнины восточного материка. Арсен Ровель удерживает округа общим зерновым резервом, железнодорожной администрацией и федеральными гарнизонами.",
+      "runtime_path": "gfx/leaders/RVN/portrait_RVN_head_of_state.png",
+      "sprite": "GFX_portrait_RVN_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Arsen Rovel, male 57, federal administrator of grain reserves and railways. Solid square face, broad brow, dark grey hair combed back, short thick moustache. Charcoal high-collared civil-service jacket, no decoration. Near frontal, firm measured gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Равен объединяет широкие внутренние равнины восточного материка. Арсен Ровель удерживает округа общим зерновым резервом, железнодорожной администрацией и федеральными гарнизонами.",
+      "source_file": "exec-20f25038-771d-4427-b3b7-11927aa1f8b7.png",
+      "runtime_sha256": "e45f456b0f70f9f69edd1dbe2d36cc2f2bedf70c23f0d3e1e0f5fb2379c2a8d0"
+    },
+    {
+      "id": "SFR_head_of_state",
+      "name": "Радан Фальк",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 33,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_2",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+        ]
+      ],
+      "country": "Южнофалорская директория",
+      "description": "Директория занимает южный полуостров Равена и близлежащие острова. Радан Фальк управляет портами как единой службой снабжения, обменивая порядок на обязательную береговую службу.",
+      "runtime_path": "gfx/leaders/SFR/portrait_SFR_head_of_state.png",
+      "sprite": "GFX_portrait_SFR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Radan Falk, male 45, coastal-service director and port supply administrator. Angular weathered face, cropped black hair, clean shaven, heavy dark eyebrows. Dark naval-grey plain service tunic, upright collar, no hat. Three-quarter right, exacting serious expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Директория занимает южный полуостров Равена и близлежащие острова. Радан Фальк управляет портами как единой службой снабжения, обменивая порядок на обязательную береговую службу.",
+      "source_file": "exec-322daa4e-8074-4181-b88d-6772a05d817e.png",
+      "runtime_sha256": "f0e0aba9b176f4741819b4279095c02debf8606dd825900579bed44d0210380e"
+    },
+    {
+      "id": "FLR_head_of_state",
+      "name": "Мирен Таль",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 43,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Фалорский союз",
+      "description": "Фалорский союз вырос вокруг земледельческих долин юго-востока. Мирен Таль распределяет воду и материалы через советы округов; право на власть здесь подтверждают работающие каналы и дороги.",
+      "runtime_path": "gfx/leaders/FLR/portrait_FLR_head_of_state.png",
+      "sprite": "GFX_portrait_FLR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Miren Tal, male 53, coordinator of irrigation and agricultural district councils. Sun-lined medium olive face, deep smile lines without smiling, short curly brown-grey hair, clipped grey goatee. Plain brown work jacket and off-white collar. Slight turn to left, calm practical expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Фалорский союз вырос вокруг земледельческих долин юго-востока. Мирен Таль распределяет воду и материалы через советы округов; право на власть здесь подтверждают работающие каналы и дороги.",
+      "source_file": "exec-1642c234-7252-45e6-9009-44ab2467e1eb.png",
+      "runtime_sha256": "02441f7dc8ca38dea8989f9d2c9eed5797201b6ab6fe2e2f3c8e655237c73cf2"
+    },
+    {
+      "id": "PRR_head_of_state",
+      "name": "Леон Перр",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 53,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Перринские вольные порты",
+      "description": "Четыре островных порта Перрина живут перевалкой грузов между центральными и восточными берегами. Леон Перр сохраняет их союз едиными сборами и независимым морским арбитражем.",
+      "runtime_path": "gfx/leaders/PRR/portrait_PRR_head_of_state.png",
+      "sprite": "GFX_portrait_PRR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Paint a realistic portrait cutout of an original fictional adult character for a strategy game. A 59-year-old man with a round heavy face, receding wavy grey hair and a neat grey moustache. Understated dark suit, white shirt, muted blue tie. Calm and confident expression. Head and upper chest, near frontal. Entire head visible with a small space above the hair; shoulders reach lower corners. Match the reference image's realistic painted photographic rendering, muted colors and lighting from the upper left. The reference is only for artistic technique, create a different face. Vertical 26:35 composition with a genuine transparent background. No writing or decoration. No scanlines; the Photoshop template will supply the final texture.",
+      "source_file": "exec-688d9b85-f57a-4e30-b631-9b9a2de4755a.png",
+      "previous_prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Leon Perr, male 59, arbiter of a union of free trading ports. Round heavy face, receding wavy grey hair, neat dark grey moustache, no glasses. Dark understated double-breasted suit, white shirt and muted blue tie. Near frontal, confident guarded expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Р§РµС‚С‹СЂРµ РѕСЃС‚СЂРѕРІРЅС‹С… РїРѕСЂС‚Р° РџРµСЂСЂРёРЅР° Р¶РёРІСѓС‚ РїРµСЂРµРІР°Р\"РєРѕР№ РіСЂСѓР·РѕРІ РјРµР¶РґСѓ С†РµРЅС‚СЂР°Р\"СЊРЅС‹РјРё Рё РІРѕСЃС‚РѕС‡РЅС‹РјРё Р±РµСЂРµРіР°РјРё. Р›РµРѕРЅ РџРµСЂСЂ СЃРѕС…СЂР°РЅСЏРµС‚ РёС… СЃРѕСЋР· РµРґРёРЅС‹РјРё СЃР±РѕСЂР°РјРё Рё РЅРµР·Р°РІРёСЃРёРјС‹Рј РјРѕСЂСЃРєРёРј Р°СЂР±РёС‚СЂР°Р¶РµРј.",
+      "runtime_sha256": "5b034ff7153221aeb000c5ad3633d244c6acb7ca803fafc97b1bd9dde1d8fcaa"
+    },
+    {
+      "id": "ULV_head_of_state",
+      "name": "Сайр Ульв",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 63,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ]
+      ],
+      "country": "Ульвенская лига",
+      "description": "Ульвенская лига связывает цепь островных мастерских у южных берегов центрального материка. Сайр Ульв поддерживает общий стандарт ремонта судов и обучение инженеров.",
+      "runtime_path": "gfx/leaders/ULV/portrait_ULV_head_of_state.png",
+      "sprite": "GFX_portrait_ULV_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Sayr Ulv, male 40, marine repair engineer and island league organizer. Lean long face, short untidy dark blond hair, light stubble, small round steel glasses. Plain faded navy engineering jacket over a grey shirt, open neck. Three-quarter right, focused intelligent expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Ульвенская лига связывает цепь островных мастерских у южных берегов центрального материка. Сайр Ульв поддерживает общий стандарт ремонта судов и обучение инженеров.",
+      "source_file": "exec-c764b851-8a49-4b18-af66-0d79c3ebc140.png",
+      "runtime_sha256": "7d8a94eaffa8081dc778ce93dc55a4775e47e2dfb7748974507efb1964fa4775"
+    },
+    {
+      "id": "LUR_head_of_state",
+      "name": "Тарен Лур",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 73,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_8",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+        ]
+      ],
+      "country": "Луренский архипелаг",
+      "description": "Луренские острова охраняют морские пути между Ульвеном, Фалором и Шарденом. Тарен Лур избирается капитанами и общинами для содержания общих портов и береговой стражи.",
+      "runtime_path": "gfx/leaders/LUR/portrait_LUR_head_of_state.png",
+      "sprite": "GFX_portrait_LUR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Taren Lur, male 61, elected spokesman of island captains and coast guards. Broad deeply tanned face, receding steel-grey hair, thick short grey beard, prominent nose. Dark practical pea coat over cream knit collar, no cap. Three-quarter left, watchful seafarer's eyes. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Луренские острова охраняют морские пути между Ульвеном, Фалором и Шарденом. Тарен Лур избирается капитанами и общинами для содержания общих портов и береговой стражи.",
+      "source_file": "exec-0a611cba-9ea4-46d9-902c-9abd6415093f.png",
+      "runtime_sha256": "b8c157de744057be34653c62131f6102e59b22041a174fa20147f09c336ea19e"
+    },
+    {
+      "id": "CHD_head_of_state",
+      "name": "Амир Шар",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 83,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ]
+      ],
+      "country": "Шарденская конфедерация",
+      "description": "Шарденская конфедерация объединяет большой южный остров и западные прибрежные общины. Амир Шар защищает самоуправление островов, собирая общие средства только на оборону, медицину и морское сообщение.",
+      "runtime_path": "gfx/leaders/CHD/portrait_CHD_head_of_state.png",
+      "sprite": "GFX_portrait_CHD_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Amir Shar, male 46, confederal leader representing a warm southern island and its communities. Olive-brown complexion, broad cheekbones, wavy black hair, neatly trimmed short beard, dark expressive eyes. Plain sand-brown civilian jacket over ivory stand-collar shirt, no headdress. Near frontal, composed approachable dignity. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Шарденская конфедерация объединяет большой южный остров и западные прибрежные общины. Амир Шар защищает самоуправление островов, собирая общие средства только на оборону, медицину и морское сообщение.",
+      "source_file": "exec-8c4b477c-b9c2-412f-955a-47b8d5f4cffb.png",
+      "runtime_sha256": "8e516ff44723092491518906f818a9e717eabae40e65bc33b0d975e5f61e81d1"
+    },
+    {
+      "id": "EVR_head_of_state",
+      "name": "Оскар Эвен",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 93,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Эвенорская республика",
+      "description": "Эвенор занимает длинный остров на дальнем юго-востоке. Оскар Эвен опирается на рыбацкие кооперативы и ремонтные гавани, поддерживая морское сообщение с Фалором даже в сезон штормов.",
+      "runtime_path": "gfx/leaders/EVR/portrait_EVR_head_of_state.png",
+      "sprite": "GFX_portrait_EVR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Oskar Even, male 55, coordinator of fishing cooperatives and repair harbours. Broad weathered fair face, reddish-grey short hair, big reddish-grey moustache, no beard. Worn dark green wool coat, faded navy sweater. Slightly right-facing, resolute practical expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Эвенор занимает длинный остров на дальнем юго-востоке. Оскар Эвен опирается на рыбацкие кооперативы и ремонтные гавани, поддерживая морское сообщение с Фалором даже в сезон штормов.",
+      "source_file": "exec-42d4734d-beec-4557-a1f4-9a57b3bf6ff3.png",
+      "runtime_sha256": "28671a1d719f2bb26352f10518aa40b7f0f3221b7b7b6ef48a023de5579b504e"
+    },
+    {
+      "id": "OLR_head_of_state",
+      "name": "Норен Ольр",
+      "file": "common/characters/ADISCORD_remainder_characters.txt",
+      "line": 103,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Ольринский союз",
+      "description": "Ольринские острова лежат у восточных морских подступов к Равену. Норен Ольр представляет союз самостоятельных общин, совместно содержащих причалы, склады и добровольную береговую охрану.",
+      "runtime_path": "gfx/leaders/OLR/portrait_OLR_head_of_state.png",
+      "sprite": "GFX_portrait_OLR_head_of_state",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Noren Olr, male 39, representative of independent island communes and volunteer coastguard. Lean face, medium-brown sun-weathered skin, black curly cropped hair, light dark stubble, serious dark eyes. Plain charcoal work coat and open pale grey shirt. Slight turn to left, attentive independent expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Ольринские острова лежат у восточных морских подступов к Равену. Норен Ольр представляет союз самостоятельных общин, совместно содержащих причалы, склады и добровольную береговую охрану.",
+      "source_file": "exec-ae718e74-db1f-439b-aa66-b94479b80273.png",
+      "runtime_sha256": "6e1da32316d83a16bc254c26df4d78c49271be91aca34aebbd23c2b6b9af838b"
+    },
+    {
+      "id": "RIV_Mikhail_Arsenyev",
+      "name": "Михаил Арсеньев",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 33,
+      "refs": [
+        [
+          "large",
+          "GFX_portrait_RIV_Mikhail_Arsenyev",
+          "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+        ]
+      ],
+      "country": "Ривен",
+      "description": "RIV_Mikhail_Arsenyev_desc",
+      "runtime_path": "gfx/leaders/RIV/portrait_RIV_Mikhail_Arsenyev.png",
+      "sprite": "GFX_portrait_RIV_Mikhail_Arsenyev",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Mikhail Arsenyev, male 52, pragmatic leader of Riven after Vorkerland's collapse. Broad rugged face, high forehead, short receding dark-grey hair, clean shaven, tired light eyes. Plain grey-green old officer's tunic with dark collar, no rank insignia. Near frontal, cautious stern expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Ривен",
+      "source_file": "exec-3b9f982c-a9ff-4f78-9be0-d3a89b2fa38e.png",
+      "runtime_sha256": "440469fe2a21a375a4d82e2b98d103b508cd85ea51f29d453c5df94387a86621"
+    },
+    {
+      "id": "YOR_Pavel_Korin",
+      "name": "Павел Корин",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 43,
+      "refs": [
+        [
+          "large",
+          "GFX_portrait_YOR_Pavel_Korin",
+          "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+        ]
+      ],
+      "country": "Йорская республика",
+      "description": "YOR_Pavel_Korin_desc",
+      "runtime_path": "gfx/leaders/YOR/portrait_YOR_Pavel_Korin.png",
+      "sprite": "GFX_portrait_YOR_Pavel_Korin",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Pavel Korin, male 43, humanist republican leader of Yor after imperial collapse. Long face, slightly wavy brown hair, clean shaven, straight brows, wire-rim glasses. Worn charcoal civilian suit, cream shirt and simple dark tie. Three-quarter right, earnest sober expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Йорская республика",
+      "source_file": "exec-54df7e2f-caa5-4b4c-b639-374a8b9c0e85.png",
+      "runtime_sha256": "9ce7d18451219aefa716bdb1c793540642f77bfb3689b77c141c8972a039074c"
+    },
+    {
+      "id": "SWB_Oskar_Renn",
+      "name": "Оскар Ренн",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 53,
+      "refs": [
+        [
+          "large",
+          "GFX_portrait_SWB_Oskar_Renn",
+          "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+        ]
+      ],
+      "country": "Старый Воркенсберг",
+      "description": "SWB_Oskar_Renn_desc",
+      "runtime_path": "gfx/leaders/SWB/portrait_SWB_Oskar_Renn.png",
+      "sprite": "GFX_portrait_SWB_Oskar_Renn",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Oskar Renn, male 58, authoritarian administrator of Old Workensberg. Heavy jaw, thick eyebrows, close dark-grey crop, square dark moustache. Dark charcoal military-administrative tunic with high collar, no medals. Three-quarter left, implacable expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Старый Воркенсберг",
+      "source_file": "exec-892eb7eb-1e87-42a7-860b-5e63c338b315.png",
+      "runtime_sha256": "ebc56606df55f214640722177fda6bcfbaddb4372690572d14f8ce2934b85cac"
+    },
+    {
+      "id": "VHV_Sergey_Melnik",
+      "name": "Сергей Мельник",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 58,
+      "refs": [
+        [
+          "large",
+          "GFX_portrait_VHV_Sergey_Melnik",
+          "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+        ]
+      ],
+      "country": "Верховье",
+      "description": "VHV_Sergey_Melnik_desc",
+      "runtime_path": "gfx/leaders/VHV/portrait_VHV_Sergey_Melnik.png",
+      "sprite": "GFX_portrait_VHV_Sergey_Melnik",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Sergey Melnik, male 47, practical regional leader of Verkhovye. Weathered oval face, short sandy-brown hair, broad nose, clean shaven, slightly asymmetric brow. Heavy brown wool work jacket and open grey shirt. Near frontal, direct grounded gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Верховье",
+      "source_file": "exec-1f5449c9-664c-4da7-9a37-5b78835934e8.png",
+      "runtime_sha256": "41c19fd1ce74ba065da91bc5838b4eddb06b655ca4a5a963ee4151d66f0bfd30"
+    },
+    {
+      "id": "PWR_Alexey_Lange",
+      "name": "Алексей Ланге",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 78,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ]
+      ],
+      "country": "Риматская инженерная директория",
+      "description": "PWR_Alexey_Lange_desc",
+      "runtime_path": "gfx/leaders/PWR/portrait_PWR_Alexey_Lange.png",
+      "sprite": "GFX_portrait_PWR_Alexey_Lange",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Alexey Lange, male 62, head of an engineering directorate. Tall narrow forehead, balding with wispy white side hair, long lean nose, rimless spectacles, small trimmed white moustache. Dark worn suit over grey waistcoat and off-white shirt. Slight turn right, studious precise expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Риматская инженерная директория",
+      "source_file": "exec-0dac9711-c028-4ed7-ab0c-bea56a903154.png",
+      "runtime_sha256": "e2c134deca33ee89ae0250fd54f6c46a917e272df202439b4fd768c24d26f65f"
+    },
+    {
+      "id": "PSD_Marta_Cinder",
+      "name": "Мартин Синдер",
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "line": 83,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ]
+      ],
+      "country": "Грейн",
+      "description": "PSD_Marta_Cinder_desc",
+      "runtime_path": "gfx/leaders/PSD/portrait_PSD_Marta_Cinder.png",
+      "sprite": "GFX_portrait_PSD_Marta_Cinder",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Martin Cinder, male 50, authoritarian regional head of Grein. Square face, broad brow, black hair swept back with early grey at temples, clean shaven, compact strong jaw. Severe slate-blue service coat over dark stand collar, no decorations. Slight turn left, contained suspicious gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Грейн",
+      "source_file": "exec-f9f640a8-005e-4445-a5e7-9bfcb4761951.png",
+      "runtime_sha256": "85dbaa239220ae899511f4a3c6d0366616c7d0f5727510deab232f8452b11b75"
+    },
+    {
+      "id": "BHG_Graf_Marcus",
+      "name": "Граф Маркус",
+      "file": "common/characters/BJK.txt",
+      "line": 38,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ]
+      ],
+      "country": "Графство Хачоесия",
+      "description": "BHG_Graf_Marcus_desc",
+      "runtime_path": "gfx/leaders/BHG/portrait_BHG_Graf_Marcus.png",
+      "sprite": "GFX_portrait_BHG_Graf_Marcus",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Count Marcus, male 65, ruler of the feudal County of Khachoesia. Long weathered aristocratic face, pronounced cheekbones, receding slick grey hair, fine white handlebar moustache and small pointed beard. High-collared black formal coat with muted burgundy waistcoat, austere trim, no crown. Three-quarter right, proud stern expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Графство Хачоесия",
+      "source_file": "exec-e17e0da7-4e86-4e7d-9f8b-e1402e0bfe42.png",
+      "runtime_sha256": "b021c268d919673d8f032bd8db415d36e90ac597ef72f6ae840509045011c570"
+    },
+    {
+      "id": "IVN_Rostislav_Karn",
+      "name": "Ростислав Карн",
+      "file": "common/characters/IVN.txt",
+      "line": 25,
+      "refs": [
+        [
+          "large",
+          "GFX_portrait_europe_generic_land_13",
+          "gfx/leaders/Europe/portrait_europe_generic_land_13.dds"
+        ]
+      ],
+      "country": "Итора",
+      "description": "IVN_Rostislav_Karn_desc",
+      "runtime_path": "gfx/leaders/IVN/portrait_IVN_Rostislav_Karn.png",
+      "sprite": "GFX_portrait_IVN_Rostislav_Karn",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Rostislav Karn, male 55, commander of Itora's Military Directorate. Broad weather-beaten face, crewcut silver-grey hair, clean shaven, heavy brow and deeply set grey eyes. Plain grey-green field uniform with dark high collar, no medals or cap. Frontal, unyielding expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Итора",
+      "source_file": "exec-eca37e7d-64b4-4162-b26f-dc011345d87a.png",
+      "runtime_sha256": "34192e282d3830e406910608e6fea7cc960d402428bc54aa5d86dde8a8bbb4d7"
+    },
+    {
+      "id": "RUS_Varlam_Oskol",
+      "name": "Варлам Оскол",
+      "file": "common/characters/RUS.txt",
+      "line": 159,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_2",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+        ],
+        [
+          "small",
+          "GFX_Portrait_Forul_Generic_2_small",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+        ]
+      ],
+      "country": "Земля Хана",
+      "description": "RUS_Varlam_Oskol_desc",
+      "runtime_path": "gfx/leaders/RUS/portrait_RUS_Varlam_Oskol.png",
+      "sprite": "GFX_portrait_RUS_Varlam_Oskol",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Varlam Oskol, male 48, senior civil official serving the Khan's underground state. Narrow pale face, large straight nose, smoothly side-parted black hair, thin black moustache, thin round spectacles. Dark brown formal stand-collar jacket, restrained and worn. Three-quarter left, guarded calculating expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Земля Хана",
+      "source_file": "exec-d9514a9e-6f96-4d55-bb9b-f8957108e645.png",
+      "runtime_sha256": "5a0278af80e00f65794f37f4df0f9d8fc169c751b88a0dedc2549b0a945fe469"
+    },
+    {
+      "id": "RUS_Gleb_Korneev",
+      "name": "Глеб Корнеев",
+      "file": "common/characters/RUS.txt",
+      "line": 321,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ]
+      ],
+      "country": "Земля Хана",
+      "description": "RUS_Gleb_Korneev_desc",
+      "runtime_path": "gfx/leaders/RUS/portrait_RUS_Gleb_Korneev.png",
+      "sprite": "GFX_portrait_RUS_Gleb_Korneev",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Gleb Korneev, male 51, chief engineer and leader of the Khan's scientific opposition. High forehead, thinning ash-brown hair, long thin face, clean shaven, practical rectangular glasses. Dark civilian engineering jacket and grey turtleneck, no labcoat. Near frontal, intense analytic expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Земля Хана",
+      "source_file": "exec-6b7b1913-05fd-4aec-b418-6459a82ada3e.png",
+      "runtime_sha256": "e15e9cc7490c8b03996b178acdbeb6042a7b48b7a405147e587745162d622de5"
+    },
+    {
+      "id": "RUS_Tagir_Mansurov",
+      "name": "Тагир Мансуров",
+      "file": "common/characters/RUS.txt",
+      "line": 335,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Земля Хана",
+      "description": "RUS_Tagir_Mansurov_desc",
+      "runtime_path": "gfx/leaders/RUS/portrait_RUS_Tagir_Mansurov.png",
+      "sprite": "GFX_portrait_RUS_Tagir_Mansurov",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Tagir Mansurov, male 44, guard commander and leader of the Black Army. Broad olive-toned face, heavy dark eyebrows, closely cropped black hair, short dark stubble, strong jaw. Matte black utilitarian military tunic with plain stand collar, no symbols or cap. Slightly turned right, hard resolute gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Земля Хана",
+      "source_file": "exec-2d1aa68f-e3e0-41c0-8007-21f11dbb9282.png",
+      "runtime_sha256": "a2d3d8653e579b0ea2eb52ef7b4defd300a8c7779ccd1ae1dfa47c4dceb01e76"
+    },
+    {
+      "id": "SHL_Darius_Safir",
+      "name": "Дарий Сафир",
+      "file": "common/characters/SHL.txt",
+      "line": 20,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Darius_Safir_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Глава дома Сафир и самый богатый из девяти гербов. Он называет регентство временным, но первым делом вернул домам все печи.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Darius_Safir.png",
+      "sprite": "GFX_portrait_SHL_Darius_Safir",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Darius_Safir_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Identity reference image 1 is the already established small portrait of Darius Safir (Дарий Сафир), head of House Safir, wealthy regent of Shah­rabad's industrial conclave. Preserve exactly its man's age, complexion, face shape, slicked dark hair with grey temples, dark moustache and goatee, facial expression, blue-dark suit and ivory open shirt. Reconstruct at higher detail without changing his identity. Remove the reference card frame, backdrop and its tilt; the person himself remains upright. Image 2 is style/crop only, not identity. One distinct man only.",
+      "source_file": "exec-c6d0a32e-09fa-4e7f-93b4-1740c64fd6ed.png",
+      "runtime_sha256": "e31dd5f5dc7d95afbd3d472d833a8aceaca784687b1de1f393a0a1a6cb28641d"
+    },
+    {
+      "id": "SHL_Khosrow_Arbin",
+      "name": "Хосров Арбин",
+      "file": "common/characters/SHL.txt",
+      "line": 75,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_1",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Khosrow_Arbin_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Khosrow_Arbin_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Глава дома Арбин держит западные печи у кяризов и первым узнаёт, когда общины Кейзана закрывают отводы. Он отец Мариам Арбин и до сих пор не простил ей протоколов городского собрания.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Khosrow_Arbin.png",
+      "sprite": "GFX_portrait_SHL_Khosrow_Arbin",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Khosrow_Arbin_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Khosrow Arbin: preserve the miniature's elderly man's balding crown, thin white side hair, heavy white eyebrows, short squared white beard and moustache, long severe face, dark high-collared coat, stern gaze. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-b81eba67-e84a-4161-af11-55fe4031d7fe.png",
+      "runtime_sha256": "cd14aca81600deceead97e1906b3fc62057fadf106ce3b30101ed4af4e52b39c"
+    },
+    {
+      "id": "SHL_Golshan_Loran",
+      "name": "Голшан Лоран",
+      "file": "common/characters/SHL.txt",
+      "line": 104,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Golshan_Loran_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Golshan_Loran_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Дом Лоран продаёт металл Конклава за Золотыми воротами и знает цену каждого каравана. Голшан считает, что экспорт - единственная политика, которую Шахрабад может себе позволить.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Golshan_Loran.png",
+      "sprite": "GFX_portrait_SHL_Golshan_Loran",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Golshan_Loran_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Golshan Loran: preserve the miniature's middle-aged woman's long narrow olive face, dark straight hair tucked behind ears, dark hoodless brown shawl or high-collared coat, serious sharp gaze and prominent cheekbones. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-51672f6e-578f-4bca-bb6c-0fb87e3ff9b1.png",
+      "runtime_sha256": "6e0d682831a42f436dd07d6d58e2d29555ed4a9666205472deaf4b1f996b0ba7"
+    },
+    {
+      "id": "SHL_Kamran_Nur",
+      "name": "Камран Нур",
+      "file": "common/characters/SHL.txt",
+      "line": 133,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Kamran_Nur_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Kamran_Nur_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Племянник Джалиля Нура представляет в Конклаве малый дом Нур с печью в Нуране. Дом слишком беден, чтобы спорить с гербами, и потому его голос нужен всем как голос посредника.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Kamran_Nur.png",
+      "sprite": "GFX_portrait_SHL_Kamran_Nur",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Kamran_Nur_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Kamran Nur: preserve the miniature's young adult man's slim pale-olive face, thick tousled black hair, clean-shaven jaw, straight nose, dark close-collared jacket and light shirt; do not age him. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-2e3146f5-7e7e-4770-99dd-bbba9b8a6867.png",
+      "runtime_sha256": "2288cbbd8cc6734697ff0b88289d98dd62090421f58742fa04c2877147bb33df"
+    },
+    {
+      "id": "SHL_Tahmuras_Bayrat",
+      "name": "Тахмурас Байрат",
+      "file": "common/characters/SHL.txt",
+      "line": 162,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_2",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Tahmuras_Bayrat_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Tahmuras_Bayrat_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Рудники Байрата дают сырьё всем девяти печам, и Тахмурас помнит, кто из домов задолжал ему за последнюю поставку. Он редко говорит в Конклаве, но без его руды гаснет любой спор.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Tahmuras_Bayrat.png",
+      "sprite": "GFX_portrait_SHL_Tahmuras_Bayrat",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Tahmuras_Bayrat_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Tahmuras Bayrat: preserve the miniature's heavyset elderly man's bald crown, cropped grey side hair, thick grey moustache and full short grey beard, weathered rounded face and dark brown work coat. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-5f0e8c63-742d-4f91-8010-0ff489698ce8.png",
+      "runtime_sha256": "4afcdeccbd5f3ee70082cfa65d19673b9f56479e91667970286ca88d1e19bcaf"
+    },
+    {
+      "id": "SHL_Fereydun_Kerdan",
+      "name": "Ферейдун Кердан",
+      "file": "common/characters/SHL.txt",
+      "line": 191,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Fereydun_Kerdan_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Fereydun_Kerdan_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Дом Кердан держит дорогу к морю и платит сборы Торговой палаты Вейра за каждый обоз. Ферейдун давно считает этот спор делом всего Конклава, а не одной печи.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Fereydun_Kerdan.png",
+      "sprite": "GFX_portrait_SHL_Fereydun_Kerdan",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Fereydun_Kerdan_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Fereydun Kerdan: preserve the miniature's lean older man's side-parted grey hair, fine grey moustache, angular weathered face, olive coat with open collar and stern gaze. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-ecf52a47-2e2b-45e5-8f40-f1a3c8985bb0.png",
+      "runtime_sha256": "fa9b13e61feff4b950849e1c7b329d5d5c7f34860e2ac11d3789c7eaaf3d5add"
+    },
+    {
+      "id": "SHL_Shirin_Sharim",
+      "name": "Ширин Шарим",
+      "file": "common/characters/SHL.txt",
+      "line": 220,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_9",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Shirin_Sharim_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Shirin_Sharim_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Печи Шарима работают самыми тяжёлыми сменами в Шахрабаде. Ширин отвечает на это лазаретами при цехах и жёстким порядком, а советы смен отвечают ей Салимой Дарзи.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Shirin_Sharim.png",
+      "sprite": "GFX_portrait_SHL_Shirin_Sharim",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Shirin_Sharim_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Shirin Sharim: preserve the miniature's middle-aged woman's long angular face, dark-brown straight shoulder-length hair swept to one side, high cheekbones, reserved serious eyes and black high-collared dress or jacket. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-fd03f013-b9d6-4a23-b17c-bcd67b0dc414.png",
+      "runtime_sha256": "2281eb94b17726e56d6b8a8b2c967bc50a302c5e2d4d6d06b5f6d85c945fcac1"
+    },
+    {
+      "id": "SHL_Rauf_Darban",
+      "name": "Рауф Дарбан",
+      "file": "common/characters/SHL.txt",
+      "line": 252,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_1",
+          "gfx/leaders/Europe/Portrait_Europe_Generic_1.dds"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Rauf_Darban_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Инженерный дом Дарбан держит восьмую печь в Девятипечье и чертежи десятой. Рауф считает приказ законченным лишь после доставки и видит в дирекции единственный способ связать цех, склад и фронт.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Rauf_Darban.png",
+      "sprite": "GFX_portrait_SHL_Rauf_Darban",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Rauf_Darban_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Rauf Darban: preserve the miniature's middle-aged clean-shaven man's broad forehead, short black hair combed back, square jaw, deep-set eyes and plain black stand-collar engineering tunic. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-f6ab585a-81a6-4e2e-8d96-507f739e7075.png",
+      "runtime_sha256": "3c18d0ceb5fba1b6c44f7b3f3fb10a5c3df40482abd0af27d993d003992965f4"
+    },
+    {
+      "id": "SHL_Behruz_Veyran",
+      "name": "Бехруз Вейран",
+      "file": "common/characters/SHL.txt",
+      "line": 282,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_land_1",
+          "gfx/leaders/Europe/Portrait_Europe_Generic_land_1.dds"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Behruz_Veyran_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Behruz_Veyran_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Пограничный дом Вейран содержит собственные гвардии и первым встречает отряды с юга. Бехруз уверен, что безопасность Конклава начинается у его ворот и оплачивается из его казны.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Behruz_Veyran.png",
+      "sprite": "GFX_portrait_SHL_Behruz_Veyran",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Behruz_Veyran_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Behruz Veyran: preserve the miniature's middle-aged man's very short black hair, full neatly cropped black beard, strong nose, olive complexion, stern dark eyes and plain brown military high-collared tunic. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-bdc848ff-c4cd-4e2b-ac3f-1b506b2784b2.png",
+      "runtime_sha256": "c4c61c73e712b997d5ca4ca357b36a97290bfe962af5d6b36268b80e23a1a597"
+    },
+    {
+      "id": "SHL_Mariam_Arbin",
+      "name": "Мариам Арбин",
+      "file": "common/characters/SHL.txt",
+      "line": 316,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_2",
+          "gfx/leaders/Europe/Portrait_Europe_Generic_2.dds"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Mariam_Arbin_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Дочь Хосрова Арбина начинала с водяных ведомостей отцовской печи и ушла в городские собрания. Она ведёт самостоятельные города и требует, чтобы расходы Конклава объясняли тем, кто оплачивает их своими сменами.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin.png",
+      "sprite": "GFX_portrait_SHL_Mariam_Arbin",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Mariam Arbin: preserve the miniature's young adult woman's oval olive face, long dark hair swept aside and braided, dark eyes, defined eyebrows, teal-green blouse or jacket and sober gaze. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-a481d74e-9634-48df-84f1-fe869777effd.png",
+      "runtime_sha256": "56b60d0e193e0a3bfee335ba2c98a6be9dcfb56b6bef2abd1fdd248e7cf8e3c0"
+    },
+    {
+      "id": "SHL_Salima_Darzi",
+      "name": "Салима Дарзи",
+      "file": "common/characters/SHL.txt",
+      "line": 349,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_3",
+          "gfx/leaders/Europe/Portrait_Europe_Generic_3.dds"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Salima_Darzi_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Дежурный мастер из Шарима, подписывающая решения советов смен. Салима знает тяжёлые смены по собственному журналу и не верит, что печать Конклава может превратить вчерашний труд в подарок.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Salima_Darzi.png",
+      "sprite": "GFX_portrait_SHL_Salima_Darzi",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Salima Darzi: preserve the miniature's middle-aged woman's broad angular weathered face, short dark hair, heavy eyebrows, firm lips, dark work jacket and grey open shirt. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-cdabcb63-8d19-41cc-83a1-b3bb747589e6.png",
+      "runtime_sha256": "1c2df047590efaedd90a2f1658ecb82260ffc5d7468274281cfd9ae269ef3e6c"
+    },
+    {
+      "id": "SHL_Amin_Rashad",
+      "name": "Амин Рашад",
+      "file": "common/characters/SHL.txt",
+      "line": 382,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+        ],
+        [
+          "small",
+          "GFX_portrait_SHL_Amin_Rashad_small",
+          "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png"
+        ]
+      ],
+      "country": "Шахрабад",
+      "description": "Секретарь Конклава хранит печать и знает, какая подпись стоит денег, а какая - обязательства. Он соединяет ведомства, пока дома спорят, и остаётся при любом порядке, который оставит ему печать.",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Amin_Rashad.png",
+      "sprite": "GFX_portrait_SHL_Amin_Rashad",
+      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Amin_Rashad_small.png",
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Amin Rashad: preserve the miniature's elderly man's bald crown with thin white hair at the sides, thin round spectacles, white moustache and small neat white beard, narrow lined face and black high-collared formal coat. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
+      "source_file": "exec-2c40f9ae-d6ee-4531-b400-e71d7977a960.png",
+      "runtime_sha256": "830d5a40d03fd9c044f78503209bb9a5873573d9430de8dd25784404ee806312"
+    },
+    {
+      "id": "VAL_Anton_Rein",
+      "name": "Антон Рейн",
+      "file": "common/characters/VAL.txt",
+      "line": 324,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ],
+        [
+          "small",
+          "GFX_Portrait_Forul_Generic_4_small",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+        ]
+      ],
+      "country": "Кефрейт",
+      "description": "VAL_Anton_Rein_desc",
+      "runtime_path": "gfx/leaders/VAL/portrait_VAL_Anton_Rein.png",
+      "sprite": "GFX_portrait_VAL_Anton_Rein",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Anton Rein, male 46, army officer of Kefreit. Narrow long face, straight dark hair closely side-parted, clean shaven, high cheekbones and light eyes. Plain dark grey-green officer jacket with restrained dark collar and no medals. Three-quarter left, calculating calm gaze. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Кефрейт",
+      "source_file": "exec-d9705744-5b57-4255-957e-c2c78f67e3fb.png",
+      "runtime_sha256": "e876fb00cab16276f0ac9d62c08ae26b9ecddee7042652b4556e6cd20c228368"
+    },
+    {
+      "id": "VAL_Irina_Karst",
+      "name": "Игорь Карст",
+      "file": "common/characters/VAL.txt",
+      "line": 334,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_5",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ],
+        [
+          "small",
+          "GFX_Portrait_Forul_Generic_5_small",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+        ]
+      ],
+      "country": "Кефрейт",
+      "description": "VAL_Irina_Karst_desc",
+      "runtime_path": "gfx/leaders/VAL/portrait_VAL_Irina_Karst.png",
+      "sprite": "GFX_portrait_VAL_Irina_Karst",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Igor Karst, male 40, army officer of Kefreit. Broad pale face, short light blond hair, short blond moustache, sharp light eyes, prominent ears. Plain dark field-grey military tunic with raised collar. Near frontal, alert serious expression. He is male despite the internal legacy identifier. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Кефрейт",
+      "source_file": "exec-0f7fb688-4be1-40c0-98a1-77abc2b8ae3f.png",
+      "runtime_sha256": "2e4bb555487d73fb87a2c4597db002e8ad04755bbd77d3281c3ba7fa50c4d839"
+    },
+    {
+      "id": "VAL_Viktor_Bran",
+      "name": "Виктор Бран",
+      "file": "common/characters/VAL.txt",
+      "line": 344,
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ],
+        [
+          "small",
+          "GFX_Portrait_Forul_Generic_6_small",
+          "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+        ]
+      ],
+      "country": "Кефрейт",
+      "description": "VAL_Viktor_Bran_desc",
+      "runtime_path": "gfx/leaders/VAL/portrait_VAL_Viktor_Bran.png",
+      "sprite": "GFX_portrait_VAL_Viktor_Bran",
+      "identity_reference": null,
+      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Viktor Bran, male 57, senior army specialist of Kefreit. Stocky square face, broad nose, thick greying dark hair combed back, close trimmed salt-grey beard. Plain charcoal service jacket, dark open collar, no medals. Three-quarter right, seasoned steady expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Кефрейт",
+      "source_file": "exec-5b73d3ce-7aa3-4e3d-8de5-b1d36b860f9d.png",
+      "runtime_sha256": "79d95687553f621d03b320c60892dda42a30adb5811dbaa826b996a97c97e4ba"
+    }
+  ],
+  "template_snapshot": "Native Photoshop export from portrait.psd; adjustment layers, CRT overlay, background and subject shadow retained.",
+  "template_file_sha256": "B3E90D7F944497F9DE055684BCFCDA9C721F9511B7957E0A103C045DC86E2360"
+}

@@ -6383,7 +6383,7 @@ class NamCampaignTests(unittest.TestCase):
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 40),
             "postwar": (self.postwar, 246), "defeated": (self.defeated, 22),
-            "south_war": (self.south_war, 6),
+            "south_war": (self.south_war, 68),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
             "exile_corporate": (self.exile_trees["exile_corporate"][1], 34),
@@ -6395,7 +6395,9 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(len(focuses), count, kind)
             filters = set()
             for name, focus in focuses.items():
-                coordinate = (scalar(focus, "x"), scalar(focus, "y"))
+                # War-tree course branches share cells; allow_branch shows one course.
+                gate = repr([(e.key, repr(e.value)) for e in block(focus, "allow_branch")]) if kind == "south_war" else ""
+                coordinate = (scalar(focus, "x"), scalar(focus, "y"), gate)
                 self.assertNotIn(coordinate, coordinates, name)
                 coordinates.add(coordinate)
                 self.assertTrue(block(focus, "completion_reward"), name)
@@ -10501,6 +10503,11 @@ class NamCampaignTests(unittest.TestCase):
 
     def postwar_focus_position(self, focus, facts):
         x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+        anchor = next((e.value for e in focus if e.key == "relative_position_id"), None)
+        if anchor:
+            ax, ay = self.postwar_focus_position(self.postwar[anchor], facts)
+            x += ax
+            y += ay
         for offset in (e.value for e in focus if e.key == "offset"):
             if self.matches(block(offset, "trigger"), facts):
                 x += int(next((e.value for e in offset if e.key == "x"), 0))
@@ -10540,9 +10547,23 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertNotIn((x, y), coordinates, (name, coordinates.get((x, y))))
                 coordinates[x, y] = name
                 if name == roots[course]:
-                    self.assertEqual((x, y), (34, 4))
-            self.assertLessEqual(max(x for x, y in coordinates), 66)
-            self.assertLessEqual(max(y for x, y in coordinates), 39)
+                    self.assertEqual((x, y), (43, 4))
+            self.assertLessEqual(max(x for x, y in coordinates), 75)
+            self.assertLessEqual(max(y for x, y in coordinates), 27)
+            political_right = max(
+                self.postwar_focus_position(self.postwar[name], facts)[0]
+                for name, route in membership.items() if route == course
+                and self.postwar_focus_position(self.postwar[name], facts)[1] < 22
+            )
+            military_left = min(
+                self.postwar_focus_position(focus, facts)[0]
+                for focus in self.postwar.values()
+                if any(e.key == "relative_position_id" and e.value in (
+                    "NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review",
+                ) for e in focus)
+            )
+            self.assertGreaterEqual(military_left - political_right, 2)
+            self.assertLessEqual(military_left - political_right, 4)
 
     def test_postwar_layout_keeps_connection_corridors_clear(self):
         mandate_keys = {"NAM_prewar_" + route + "_mandate"
@@ -10680,8 +10701,10 @@ class NamCampaignTests(unittest.TestCase):
         stages.extend(closure({name}) for name in sorted(chapter_names))
         economic = ("NAM_pw_industrial_recovery", "NAM_pw_energy_commission",
                     "NAM_oil_ministry", "NAM_pw_transport_commission")
-        for completed in product((False, True), repeat=len(economic)):
-            stages.append(closure(entry | {name for name, active in zip(economic, completed) if active}))
+        military = ("NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review")
+        chapters = economic + military
+        for completed in product((False, True), repeat=len(chapters)):
+            stages.append(closure(entry | {name for name, active in zip(chapters, completed) if active}))
         for balance in (-0.5, 0, 0.5):
             for complete in stages:
                 facts = self.postwar_facts()
@@ -10702,13 +10725,22 @@ class NamCampaignTests(unittest.TestCase):
                         if oy == y:
                             self.assertGreaterEqual(abs(ox - x), 2, (balance, complete, name, other))
                     positions[name] = (x, y)
-                for name in economic:
+                for name in chapters:
                     if name in visible and name not in complete:
                         self.assertEqual(positions[name][1], 4, (complete, name))
+                for left, right in ((economic[0], economic[1]), (economic[2], economic[3])):
+                    if left in complete and right in complete:
+                        self.assertLessEqual(abs(positions[left][1] - positions[right][1]), 3)
+                for name, focus in visible.items():
+                    anchor = next((e.value for e in focus if e.key == "relative_position_id"), None)
+                    if anchor in economic:
+                        self.assertLessEqual(positions[name][1], 14, (complete, name))
+                    if anchor in military:
+                        self.assertLessEqual(positions[name][1], 17, (complete, name))
                 if not complete:
                     self.assertEqual(set(visible), entry | {"NAM_recognition"})
                     self.assertLessEqual(max(x for x, _ in positions.values())
-                                         - min(x for x, _ in positions.values()), 14)
+                                         - min(x for x, _ in positions.values()), 16)
                 pairs = [(n, p.value) for n, f in visible.items()
                          for e in f if e.key == "mutually_exclusive" for p in e.value
                          if p.value in positions and n < p.value]
@@ -10741,15 +10773,20 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(scalar(block(self.postwar[name], "prerequisite"), "focus"), "NAM_veterans_return")
         for name in ("NAM_service_state", "NAM_federal_charter", "NAM_pragmatic_compact"):
             self.assertEqual(scalar(block(self.postwar[name], "prerequisite"), "focus"), "NAM_law_after_war")
+        facts = self.postwar_facts()
+        for name in self.postwar:
+            facts[("NAM", "has_completed_focus", name)] = True
         for name, focus in self.postwar.items():
-            y = int(scalar(focus, "y"))
+            _, y = self.postwar_focus_position(focus, facts)
             for entry in focus:
                 if entry.key == "prerequisite":
                     for parent in entry.value:
-                        self.assertLess(int(scalar(self.postwar[parent.value], "y")), y, (name, parent.value))
+                        self.assertLess(self.postwar_focus_position(self.postwar[parent.value], facts)[1],
+                                        y, (name, parent.value))
                 elif entry.key == "mutually_exclusive":
                     for other in entry.value:
-                        self.assertEqual(int(scalar(self.postwar[other.value], "y")), y, (name, other.value))
+                        self.assertEqual(self.postwar_focus_position(self.postwar[other.value], facts)[1],
+                                         y, (name, other.value))
         for focus in self.postwar.values():
             reward = block(focus, "completion_reward")
             self.assertFalse(len(reward) == 1 and reward[0].key == "add_tech_bonus", scalar(focus, "id"))

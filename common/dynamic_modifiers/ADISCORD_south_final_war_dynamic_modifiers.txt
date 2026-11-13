@@ -1,0 +1,10 @@
+# War for the South. ADISCORD_south_refresh_strain derives the fields from the
+# champion's ADISCORD_south_war_strain; ADISCORD_south_close_champion_front
+# removes the modifier on every terminal path.
+ADISCORD_south_war_strain_dynamic = {
+	icon = GFX_idea_FRA_factory_strikes
+	enable = { always = yes }
+	stability_factor = ADISCORD_south_strain_stability
+	war_support_factor = ADISCORD_south_strain_war_support
+	industrial_capacity_factory = ADISCORD_south_strain_factory
+}

@@ -939,21 +939,33 @@ class FurnaceAccountingTests(unittest.TestCase):
     def test_war_tree_is_separate_and_shows_only_the_current_course(self):
         war = war_tree_focuses()
         self.assertFalse(set(war) & set(whole_tree_focuses()))
-        cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in war.values()]
-        self.assertEqual(len(cells), len(set(cells)))
-        prefixes = {"SHL_h_": 1, "SHL_c_": 2, "SHL_d_": 3, "SHL_r_": 4, "SHL_k_": 5}
+        prefixes = {"SHL_h_": 1, "SHL_c_": 2, "SHL_d_": 3, "SHL_r_": 4, "SHL_k_": 5, "SHL_n_": 0}
+
+        def course_of(identifier):
+            return next((value for prefix, value in prefixes.items() if identifier.startswith(prefix)), None)
+
+        # Course branches share their cells: allow_branch shows one course at a time.
+        common = [name for name in war if course_of(name) is None]
+        for course in set(prefixes.values()):
+            visible = common + [name for name in war if course_of(name) == course]
+            cells = [(int(scalar(war[name], "x")), int(scalar(war[name], "y"))) for name in visible]
+            self.assertEqual(len(cells), len(set(cells)), course)
+            for row in {y for _, y in cells}:
+                columns = sorted(x for x, y in cells if y == row)
+                self.assertTrue(all(b - a >= 2 for a, b in zip(columns, columns[1:])), (course, row, columns))
         for identifier, focus in war.items():
             for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
                 for item in prerequisite:
                     self.assertIn(item.value, war, identifier)
-            course = next((value for prefix, value in prefixes.items() if identifier.startswith(prefix)), None)
+            course = course_of(identifier)
             allow = block(focus, "allow_branch")
             if course is None:
                 self.assertFalse(allow, identifier)
                 continue
             check = block(allow, "check_variable")
             self.assertEqual((scalar(check, "var"), scalar(check, "value")), ("SHL_political_course", str(course)), identifier)
-        self.assertEqual(sum(1 for name in war if any(name.startswith(prefix) for prefix in prefixes)), 10)
+        self.assertEqual(sum(1 for name in war if course_of(name) is not None), 23)
+        self.assertGreaterEqual(len(war), 70)
 
     def test_hidden_courses_are_gated_by_their_crisis_flags(self):
         # The regency and commune sections hang from entry focuses that only the
@@ -3680,6 +3692,7 @@ class CourseTreeStructureTests(unittest.TestCase):
         self.assertEqual(sorted(plans), sorted([
             "SHL_furnaces_plan", "SHL_prepare_houses_plan", "SHL_prepare_cities_plan", "SHL_prepare_directorate_plan",
             "SHL_houses_plan", "SHL_cities_plan", "SHL_directorate_plan", "SHL_regency_plan", "SHL_commune_plan",
+            "SHL_south_war_plan",
         ]))
         for name, plan in plans.items():
             with self.subTest(plan=name):
@@ -3719,7 +3732,10 @@ class CourseTreeStructureTests(unittest.TestCase):
                         changed = True
             self.assertEqual(set(focuses) - queue - omitted, set(), tree)
             self.assertTrue(set(SOUTHERN_SHARED) <= queue, tree)
-            self.assertTrue(set(SOUTHERN_WAR_FRONT) <= queue, tree)
+            self.assertFalse(set(war_tree_focuses()) & queue, tree)
+        war_queue = {e.value for e in block(plans["SHL_south_war_plan"], "ai_national_focuses")}
+        self.assertTrue(set(SOUTHERN_WAR_FRONT) <= war_queue)
+        self.assertEqual(war_queue - set(war_tree_focuses()), set())
         for tree, ranges in (
             ("houses", {"SHL_balance_crests_influence", "SHL_balance_crests_dominance"}),
             ("cities", {"SHL_balance_quarters_influence", "SHL_balance_quarters_dominance"}),

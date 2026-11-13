@@ -27,4 +27,74 @@ spriteTypes = {
 		name = "GFX_portrait_HON_Honter_Woke"
 		texturefile = "gfx/leaders/HON/portrait_HON_honter_woke.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_BRN_Emilia_Brandt"
+		texturefile = "gfx/leaders/BRN/portrait_BRN_Emilia_Brandt.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_KRL_Edvard_Karel"
+		texturefile = "gfx/leaders/KRL/portrait_KRL_Edvard_Karel.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_KHV_Ilva_Havren"
+		texturefile = "gfx/leaders/KHV/portrait_KHV_Ilva_Havren.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ELN_Taal_Elander"
+		texturefile = "gfx/leaders/ELN/portrait_ELN_Taal_Elander.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_AUR_Sofia_Aurell"
+		texturefile = "gfx/leaders/AUR/portrait_AUR_Sofia_Aurell.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NVR_Leif_Norven"
+		texturefile = "gfx/leaders/NVR/portrait_NVR_Leif_Norven.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SKN_Ren_Skad"
+		texturefile = "gfx/leaders/SKN/portrait_SKN_Ren_Skad.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_TMR_Mira_Timer"
+		texturefile = "gfx/leaders/TMR/portrait_TMR_Mira_Timer.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_LYS_Cassian_Lys"
+		texturefile = "gfx/leaders/LYS/portrait_LYS_Cassian_Lys.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VES_Oskar_Vest"
+		texturefile = "gfx/leaders/VES/portrait_VES_Oskar_Vest.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ORV_Anton_Orval"
+		texturefile = "gfx/leaders/ORV/portrait_ORV_Anton_Orval.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VEL_Marten_Rovel"
+		texturefile = "gfx/leaders/VEL/portrait_VEL_Marten_Rovel.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ARS_Lina_Arsal"
+		texturefile = "gfx/leaders/ARS/portrait_ARS_Lina_Arsal.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VLD_Irma_Vald"
+		texturefile = "gfx/leaders/VLD/portrait_VLD_Irma_Vald.png"
+	}
 }

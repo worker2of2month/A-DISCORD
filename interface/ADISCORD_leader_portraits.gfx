@@ -186,6 +186,10 @@ spriteTypes = {
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Dorian_Worx_victory.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_WRK_Dorian_Worx_singularity_victory"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Dorian_Worx_singularity_victory.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_WRK_Richard_Gordon"
 		texturefile = "gfx/leaders/WRK/portrait_WRK_Richard_Gordon.png"
 	}
@@ -920,7 +924,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_RIV_Mikhail_Arsenyev"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+		texturefile = "gfx/leaders/RIV/portrait_RIV_Mikhail_Arsenyev.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_REV_Zagtun_Zoldatanoe"
@@ -928,7 +932,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_YOR_Pavel_Korin"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+		texturefile = "gfx/leaders/YOR/portrait_YOR_Pavel_Korin.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_NDN_Nikit_Mondalov"
@@ -936,11 +940,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_SWB_Oskar_Renn"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+		texturefile = "gfx/leaders/SWB/portrait_SWB_Oskar_Renn.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_VHV_Sergey_Melnik"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+		texturefile = "gfx/leaders/VHV/portrait_VHV_Sergey_Melnik.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_OSV_Marina_Volkova"
@@ -1339,12 +1343,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Nadezhda_Okrug"
-		texturefile = "gfx/leaders/leader_unknown_female.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Nadezhda_Okrug_small"
-		texturefile = "gfx/leaders/leader_unknown_female.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nadezhda_Okrug.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1382,7 +1386,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Taras_Shtyk"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Taras_Shtyk.png"
 	}
 
 	spriteType = {
@@ -1392,7 +1396,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Kirill_Vykup"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Kirill_Vykup.png"
 	}
 
 	spriteType = {
@@ -1402,12 +1406,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Rostislav_Karamyshev"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Rostislav_Karamyshev_small"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rostislav_Karamyshev.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1415,12 +1419,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Mark_Olshansky"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Mark_Olshansky_small"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1428,12 +1432,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_portrait_NAM_Matvei_Prichal"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
 	}
 
 	corneredTileSpriteType = {
 		name = "GFX_portrait_NAM_Matvei_Prichal_small"
-		texturefile = "gfx/leaders/leader_unknown.dds"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
@@ -1651,5 +1655,192 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_IVN_Leonid_Stalk"
 		texturefile = "gfx/leaders/IVN/portrait_IVN_Leonid_Stalk.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_PIO_head_of_state"
+		texturefile = "gfx/leaders/PIO/portrait_PIO_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_MRV_head_of_state"
+		texturefile = "gfx/leaders/MRV/portrait_MRV_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RVN_head_of_state"
+		texturefile = "gfx/leaders/RVN/portrait_RVN_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SFR_head_of_state"
+		texturefile = "gfx/leaders/SFR/portrait_SFR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_FLR_head_of_state"
+		texturefile = "gfx/leaders/FLR/portrait_FLR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_PRR_head_of_state"
+		texturefile = "gfx/leaders/PRR/portrait_PRR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ULV_head_of_state"
+		texturefile = "gfx/leaders/ULV/portrait_ULV_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_LUR_head_of_state"
+		texturefile = "gfx/leaders/LUR/portrait_LUR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_CHD_head_of_state"
+		texturefile = "gfx/leaders/CHD/portrait_CHD_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_EVR_head_of_state"
+		texturefile = "gfx/leaders/EVR/portrait_EVR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_OLR_head_of_state"
+		texturefile = "gfx/leaders/OLR/portrait_OLR_head_of_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_BHG_Graf_Marcus"
+		texturefile = "gfx/leaders/BHG/portrait_BHG_Graf_Marcus.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_IVN_Rostislav_Karn"
+		texturefile = "gfx/leaders/IVN/portrait_IVN_Rostislav_Karn.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Varlam_Oskol"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Varlam_Oskol.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Varlam_Oskol_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Varlam_Oskol.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Gleb_Korneev"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Gleb_Korneev.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Tagir_Mansurov"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Tagir_Mansurov.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Darius_Safir"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Darius_Safir.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Khosrow_Arbin"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Khosrow_Arbin.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Golshan_Loran"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Golshan_Loran.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Kamran_Nur"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Kamran_Nur.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Tahmuras_Bayrat"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Tahmuras_Bayrat.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Fereydun_Kerdan"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Fereydun_Kerdan.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Shirin_Sharim"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Shirin_Sharim.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Rauf_Darban"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Rauf_Darban.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Behruz_Veyran"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Behruz_Veyran.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Mariam_Arbin"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Salima_Darzi"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Salima_Darzi.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Amin_Rashad"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Amin_Rashad.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Anton_Rein"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Anton_Rein.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Anton_Rein_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Anton_Rein.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Irina_Karst"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Irina_Karst.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Irina_Karst_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Irina_Karst.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_Viktor_Bran"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Viktor_Bran.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Viktor_Bran_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Viktor_Bran.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 }

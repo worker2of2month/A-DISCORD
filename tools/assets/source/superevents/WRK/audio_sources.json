@@ -129,5 +129,98 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_west_world_empire_sound.wav",
     "runtime_sha256": "9400e206d17e2d56c61bc1a6bee72d155fcfd764fde0e5dd5db207f7b4ec6d0f"
+  },
+  "superevent_west_dorian_sound": {
+    "music": {
+      "artist": "Sophia",
+      "title": "Herbstwerk",
+      "album": "Herbstwerk",
+      "edition": "The Collective Works (Cyclic Law, 2010)",
+      "source_page": "https://cycliclaw.bandcamp.com/track/herbstwerk-herbstwerk",
+      "file": "../South/sophia_herbstwerk_excerpt.flac",
+      "excerpt_seconds": [
+        45,
+        101
+      ],
+      "sha256": "1a6bdc02316774c86fb34966fd9d879b8b021e77ad673838edd33891fe7207a5",
+      "rights": "Copyrighted recording; public label preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_factory_machine.flac",
+        "start": 2,
+        "offset": 15,
+        "duration": 49,
+        "gain": 0.14,
+        "fade": 4.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 5,
+        "offset": 0,
+        "duration": 11,
+        "gain": 0.45,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 19,
+        "offset": 2,
+        "duration": 1.4,
+        "gain": 0.18,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 22,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.25,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 26,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.4,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 31,
+        "offset": 5,
+        "duration": 1.2,
+        "gain": 0.14,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 39,
+        "offset": 2,
+        "duration": 10,
+        "gain": 0.3,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json",
+      "../South/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_west_dorian_sound.wav",
+    "runtime_sha256": "1833ee46491cc68368bedb0655f3fcc3e5abedbfd457a786121476882c9773b3"
   }
 }

@@ -140,11 +140,23 @@ sound = {
 	file = "superevents/superevent_south_houses_sound.wav"
 }
 
+# Aaron Martin, Captive Witness (Smoke Inscription); credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_cities_sound"
+	file = "superevents/superevent_south_cities_sound.wav"
+}
+
 # Kevin MacLeod, Industrial Cinematic, 25-55 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
 # https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600047
 sound = {
 	name = "superevent_south_nur_sound"
 	file = "superevents/superevent_south_nur_sound.wav"
+}
+
+# Karjalan Sissit, Melakka; music and sound-effect credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_nur_victory_sound"
+	file = "superevents/superevent_south_nur_victory_sound.wav"
 }
 
 # Kevin MacLeod, Moorland, 18-48 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
@@ -182,8 +194,7 @@ sound = {
 	file = "superevents/superevent_west_veyran_sound.wav"
 }
 
-# MASTER BOOT RECORD, IRQ 0 SYSTEM CLOCK (INTERRUPT REQUEST), 28-55 s.
-# https://masterbootrecord.bandcamp.com/track/irq-0-system-clock
+# Sophia, Herbstwerk; music and sound-effect credits in WRK/audio_sources.json.
 sound = {
 	name = "superevent_west_dorian_sound"
 	file = "superevents/superevent_west_dorian_sound.wav"
@@ -298,4 +309,16 @@ sound = {
 sound = {
 	name = "superevent_west_world_empire_sound"
 	file = "superevents/superevent_west_world_empire_sound.wav"
+}
+
+# Dargaard, Rise And Fall; music and sound-effect credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_safir_victory_sound"
+	file = "superevents/superevent_south_safir_victory_sound.wav"
+}
+
+# Test Dept and South Wales Striking Miners Choir, Comrades; credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_commune_victory_sound"
+	file = "superevents/superevent_south_commune_victory_sound.wav"
 }

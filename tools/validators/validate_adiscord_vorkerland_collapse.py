@@ -4994,11 +4994,44 @@ def validate_ai(root: Path, issues: list[str]) -> None:
     field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
     for token in (
         "type = role_ratio id = garrison value = -80",
-        "type = dont_defend_ally_borders value = 1",
         "has_war = yes",
     ):
         if token not in field_army:
             issues.append(f"collapse field-army profile is missing {token}")
+    # dont_defend_ally_borders takes one ally per entry. The shared policy in
+    # default.txt lists them and reads the collapse phase from its predicate.
+    if "dont_defend_ally_borders" in field_army:
+        issues.append(
+            "collapse field-army profile must leave ally frontlines to the shared tagged policy"
+        )
+    participants = set(
+        re.findall(r"\btag\s*=\s*([A-Z0-9]{3})", named_block(field_army, "allowed"))
+    )
+    phase = named_block(
+        read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        "ADISCORD_vorkerland_collapse_field_army_active",
+    )
+    if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})", phase)) != participants:
+        issues.append(
+            "collapse field-army phase predicate must name the profile's participants"
+        )
+    hook = named_block(
+        read(root, "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt", issues),
+        "ADISCORD_ai_campaign_leaves_ally_frontlines",
+    )
+    policy = named_block(default_ai, "ADISCORD_leave_ally_frontlines")
+    if (
+        "ADISCORD_vorkerland_collapse_field_army_active = yes" not in hook
+        or "ADISCORD_ai_campaign_leaves_ally_frontlines = yes" not in policy
+        or not participants
+        or any(
+            f"type = dont_defend_ally_borders id = {tag} value = " not in policy
+            for tag in participants
+        )
+    ):
+        issues.append(
+            "collapse participants must release every participant's frontline through the shared policy"
+        )
     if "ADISCORD_vorkerland_collapse_front_commitment" in ai:
         issues.append("obsolete all-tags front commitment survived")
     validate_adaptive_fronts(ai, issues)
@@ -5006,13 +5039,18 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         issues.append("removed dynamic regional front fallback survived")
     if "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200" not in defines:
         issues.append("collapse AI is missing its small-front plan execution threshold")
-    for key in (
-        "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT",
-        "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
-    ):
-        if re.search(rf"(?m)^\s*{re.escape(key)}\s*=", defines):
+    key = "NDefines.NAI.FRONT_EVAL_UNIT_SUPPLY_AND_ORG_LACK_IMPACT"
+    if re.search(rf"(?m)^\s*{re.escape(key)}\s*=", defines):
+        issues.append(
+            f"collapse AI must inherit native readiness and supply checking: {key}"
+        )
+    # The supply-crisis limit may only be raised: a division then leaves an
+    # undersupplied area earlier than the native 0.1, never later.
+    key = "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT"
+    for value in re.findall(rf"(?m)^\s*{re.escape(key)}\s*=\s*([0-9.]+)", defines):
+        if float(value) < 0.1:
             issues.append(
-                f"collapse AI must inherit native readiness and supply checking: {key}"
+                f"collapse AI must not relax native supply checking: {key}"
             )
 
     for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):

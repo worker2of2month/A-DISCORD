@@ -1388,6 +1388,8 @@ shared_focus = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
 				NAM_corp_capital_add = yes
 			}
+			unlock_decision_tooltip = NAM_nationalise_region
+			custom_effect_tooltip = NAM_nationalise_region_unlock_tt
 		}
 		ai_will_do = {
 			base = 20

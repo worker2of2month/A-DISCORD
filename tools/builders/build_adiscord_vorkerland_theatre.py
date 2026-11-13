@@ -366,9 +366,12 @@ WEST_THEATRE_RAILS = (
     *WEST_CORRIDOR_RAILS,
 )
 # Southern bloc and Furnace Union networks. Every state has a hub in itself or
-# in a neighbouring state of the same country, and every hub is joined to its
-# capital by rail inside the starting territory. Level-1 feeders follow
-# physical borders from the hub to the nearest connected line.
+# in a neighbouring state of the same country, every hub is joined to its
+# capital by rail inside the starting territory, and no land province lies
+# farther than SOUTH_SUPPLY_REACH provinces of own land from an own hub.
+# Level-1 feeders follow physical borders from the hub to the nearest
+# connected line.
+SOUTH_SUPPLY_REACH = 5
 SOUTH_CAPITAL_PROVINCES = {
     "NAM": 16716,
     "RHM": 16726,
@@ -395,10 +398,14 @@ SOUTH_SUPPLY_RAILS = {
         (1, (6193, 9758)),
         (1, (16882, 13019, 12482, 6184, 729)),
     ),
+    "WEF": (
+        (1, (10006, 6579, 4013, 8479)),
+    ),
     "KDR": (
         (1, (12825, 3134, 3139)),
         (1, (7497, 4198, 263, 11862, 7201, 1300, 2632, 4863, 5711)),
         (1, (4349, 3079, 5739, 939, 7201)),
+        (1, (1377, 2785, 10861, 3142, 1459, 10241, 864)),
     ),
     "GLP": (
         (1, (12583, 9672)),
@@ -453,6 +460,29 @@ SOUTH_SUPPLY_HUB_STATES = {
     6193: 729,
     3234: 730,
     6126: 733,
+    # Second ring: closes the provinces left more than four steps from a hub.
+    324: 68,
+    7750: 68,
+    8479: 174,
+    10006: 175,
+    864: 236,
+    1377: 238,
+    4507: 248,
+    1168: 255,
+    321: 261,
+    1992: 266,
+    16730: 270,
+    454: 273,
+    5822: 277,
+    2195: 280,
+    16720: 284,
+    16740: 300,
+    251: 301,
+    1710: 688,
+    493: 692,
+    16713: 699,
+    16716: 700,
+    6495: 723,
 }
 # Coastal NAM states are supplied through their ports; the two GLP states
 # have no land route to the GLP network.
@@ -750,6 +780,35 @@ def south_theatre_issues(
             nearby = {state} | {other for other in state_neighbours[state] if state_owners.get(other) == tag}
             if not nearby & hub_states[tag]:
                 issues.append(f"{tag} state {state} has no supply hub in itself or a neighbouring own state")
+        land = {
+            province
+            for province, state in state_by_province.items()
+            if state_owners.get(state) == tag
+            and state not in SOUTH_DETACHED_STATES
+            and province_types.get(province) == "land"
+        }
+        distance = {
+            int(fields[1]): 0
+            for line in supply_lines
+            if len(fields := line.split()) == 2
+            and fields[1].isdigit()
+            and int(fields[1]) in land
+        }
+        pending = list(distance)
+        for province in pending:
+            for neighbour in physical.get(province, set()):
+                if neighbour in land and neighbour not in distance:
+                    distance[neighbour] = distance[province] + 1
+                    pending.append(neighbour)
+        remote = sorted(
+            province
+            for province in land
+            if distance.get(province, SOUTH_SUPPLY_REACH + 1) > SOUTH_SUPPLY_REACH
+        )
+        if remote:
+            issues.append(
+                f"{tag} provinces lie more than {SOUTH_SUPPLY_REACH} provinces from an own supply hub: {remote}"
+            )
     return issues
 
 

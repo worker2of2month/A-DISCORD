@@ -832,6 +832,8 @@ focus_tree = {
 			add_research_slot = 1
 			add_political_power = 75
 			add_stability = 0.05
+			unlock_decision_tooltip = NAM_nationalise_region
+			custom_effect_tooltip = NAM_nationalise_region_unlock_tt
 			hidden_effect = {
 				country_event = { id = ADISCORD_nam_story.34 days = 3 }
 			}

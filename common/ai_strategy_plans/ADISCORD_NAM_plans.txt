@@ -201,8 +201,8 @@ NAM_resource_war_vertical_plan = {
 }
 
 # The war-for-the-South tree replaces every earlier tree while Svetlogorye
-# leads the north; one plan covers it for every course and takes the allied
-# fuel office of its exclusive pair.
+# leads the north; one plan covers it for every course with one alternative
+# of each exclusive pair. Only the current course branch is visible.
 NAM_south_war_plan = {
 	name = "NAM war for the South"
 	desc = ""
@@ -220,10 +220,58 @@ NAM_south_war_plan = {
 	}
 	ai_national_focuses = {
 		NAM_south_war_council
-		NAM_south_allied_fuel_office
-		NAM_south_oil_tap
+		NAM_sw_conscription_of_the_south
+		NAM_sw_defence_in_depth
 		NAM_south_field_fortresses
+		NAM_sw_district_garrisons
+		NAM_sw_staff_of_the_line
+		NAM_sw_attrition_wall
+		NAM_sw_counter_battery
+		NAM_sw_trench_lines
 		NAM_south_counteroffensive
+		NAM_south_oil_tap
+		NAM_south_allied_fuel_office
+		NAM_sw_refinery_dispersal
+		NAM_sw_fuel_for_the_front
+		NAM_sw_field_pipelines
+		NAM_sw_tanker_trains
+		NAM_sw_fuel_arsenal
+		NAM_sw_charter_of_the_north
+		NAM_sw_protectorate_offers
+		NAM_sw_fuel_guarantees
+		NAM_sw_desert_garrisons
+		NAM_sw_northern_envoys
+		NAM_sw_restitution_ties
+		NAM_sw_league_of_the_north
+		NAM_sw_rear_of_svetlogorye
+		NAM_sw_district_compact_at_war
+		NAM_sw_district_relief
+		NAM_sw_uprising_sweeps
+		NAM_sw_war_bread
+		NAM_sw_home_militia
+		NAM_sw_drive_to_khazar
+		NAM_sw_fall_of_the_furnaces
+		NAM_sw_last_line_of_the_belt
+		NAM_sw_victory_order
+		NAM_sw_s_occupation_namestniks
+		NAM_sw_s_furnace_inspection
+		NAM_sw_s_namestnik_levies
+		NAM_sw_s_iron_ladder
+		NAM_sw_s_victory_office
+		NAM_sw_f_charter_reserve
+		NAM_sw_f_district_volunteers
+		NAM_sw_f_charter_staff
+		NAM_sw_f_shared_arsenal
+		NAM_sw_f_charter_at_war
+		NAM_sw_p_logistics_contracts
+		NAM_sw_p_exchange_war_loans
+		NAM_sw_p_contract_rail
+		NAM_sw_p_insured_convoys
+		NAM_sw_p_war_dividends
+		NAM_sw_n_defence_council
+		NAM_sw_n_districts_voice
+		NAM_sw_n_emergency_budget
+		NAM_sw_n_defence_of_the_line
 	}
 	weight = { factor = 20 }
 }

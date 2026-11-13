@@ -403,6 +403,41 @@ NDefines.NAI.RESERVE_TO_COMMITTED_BALANCE = 0.1
 NDefines.NAI.REDEPLOY_DISTANCE_VS_ORDER_SIZE = 1.0
 NDefines.NAI.UNIT_ASSIGNMENT_TERRAIN_IMPORTANCE = 5.0
 
+-- Supply hubs are sparse on this map. The front planner counts fewer divisions
+-- per supply point, and a hub or port keeps its place in the construction queue
+-- on occupied ground: the native 1.1 loses to a core factory (0.8 * 2.0).
+NDefines.NSupply.AI_FRONT_DIVISIONS_PER_SUPPLY_POINT = 0.85
+NDefines.NAI.CONSTRUCTION_PRIO_SUPPLY_BUILDING = 3.5
+-- A division leaves an area that covers less than a fifth of its supply; the
+-- native limit of a tenth keeps it there until the supply grace has run out.
+NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT = 0.2
+
+-- Peacetime deployment waits for the same share of equipment as wartime
+-- deployment and as the replacement threshold of the field army, so a new
+-- division never lowers the army below it. Training is always completed.
+NDefines.NAI.DEPLOY_MIN_EQUIPMENT_PEACE_FACTOR = 0.85
+NDefines.NAI.DEPLOY_MIN_TRAINING_PEACE_FACTOR = 1.0
+NDefines.NAI.DEPLOY_MIN_TRAINING_WAR_FACTOR = 1.0
+
+-- Entrenched divisions are the last to be reassigned along a front, and each
+-- order may take more local opportunities per evaluation.
+NDefines.NAI.ENTRENCHMENT_WEIGHT = 4.0
+NDefines.NAI.MAX_MICRO_ATTACKS_PER_ORDER = 5
+
+-- Divisions of a front are placed by province weight. The native weights of a
+-- city (2.25 and 2.75) barely differ from an empty field (2.0), which puts one
+-- division on every province of a thin line. A city of 10 victory points now
+-- draws about twice a field's share and one of 25 points two and a half times;
+-- a line of 1.4 divisions per province still covers every field.
+NDefines.NMilitary.PLAN_PROVINCE_MEDIUM_VP_IMPORTANCE_FRONT = 3.5
+NDefines.NMilitary.PLAN_PROVINCE_HIGH_VP_IMPORTANCE_FRONT = 5.0
+
+-- An AI ally keeps executing its own plan beside a human plan in the same area.
+NDefines.NAI.PLAN_ACTIVATION_PLAYER_WEIGHT_FACTOR = 2
+
+-- Battle plans clear undefended pockets of this many provinces without an order.
+NDefines.NMilitary.PLAN_MIN_AUTOMATED_EMPTY_POCKET_SIZE = 15
+
 NDefines.NCountry.BASE_STABILITY_PARTY_POPULARITY_FACTOR = 0.0
 NDefines.NCountry.SPECIAL_FORCES_CAP_BASE = 0.075
 NDefines.NCountry.SPECIAL_FORCES_CAP_MIN = 6

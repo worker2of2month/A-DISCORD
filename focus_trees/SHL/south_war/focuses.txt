@@ -12,18 +12,161 @@ focus_tree = {
 	continuous_focus_position = { x = 100 y = 555555 }
 
 	# Loaded by ADISCORD_south_load_war_tree for the whole war for the South and
-	# replaced by the course tree on every terminal path. The course branches on
-	# the right read SHL_political_course; only the current course is shown.
+	# replaced by the course tree on every terminal path. Permanent results go
+	# to SHL_south_war_dynamic through SHL_refresh_south_war; the course
+	# branches share the cells on the right and read SHL_political_course, so
+	# only the current course is shown. Course 0 is the Conclave without a course.
 
-	# ----- Front of the furnaces -----
+	# ----- War council of the furnaces -----
 
 	focus = {
-		id = SHL_south_furnaces_to_front
-		icon = GFX_goal_generic_construct_mil_factory
-		x = 10
+		id = SHL_sw_war_conclave
+		icon = GFX_goal_generic_major_war
+		x = 21
 		y = 0
 		cost = 2
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 30
+			army_experience = 10
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_war_conclave_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_war_support value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 300 }
+	}
+
+	# ----- Columns of the desert -----
+
+	focus = {
+		id = SHL_sw_desert_columns
+		icon = GFX_focus_generic_desert_training
+		x = 6
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_war_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 20
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 150
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_desert_columns_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_supply_consumption value = -0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 200 }
+	}
+
+	# Levies from any controlled core state; the guard columns are the paid alternative.
+	focus = {
+		id = SHL_sw_quarter_levies
+		icon = GFX_focus_generic_manpower
+		x = 4
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_sw_desert_columns
+		}
+		mutually_exclusive = { focus = SHL_sw_guard_columns }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_raise_quarter_levy
+			custom_effect_tooltip = SHL_sw_quarter_levies_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_quarter_levies_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = 5 }
+				SHL_clamp_tensions = yes
+				SHL_raise_paid_levies_2 = yes
+				add_to_variable = { var = SHL_sw_conscription value = 0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_guard_columns
+		icon = GFX_focus_generic_soldier_salute
+		x = 8
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_desert_columns
+		}
+		mutually_exclusive = { focus = SHL_sw_quarter_levies }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_hire_desert_guard
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_guard_columns_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_org value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_column_staff
+		icon = GFX_focus_generic_military_mission
+		x = 6
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_quarter_levies
+			focus = SHL_sw_guard_columns
+		}
 		available = {
 			SHL_country_operable = yes
 			ADISCORD_south_final_active = yes
@@ -31,20 +174,144 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_command_power = 25
-			unlock_decision_tooltip = SHL_south_war_pour
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_column_staff_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_attack value = 0.04 }
+				SHL_refresh_south_war = yes
+			}
 		}
-		ai_will_do = { base = 200 }
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_field_hospitals
+		icon = GFX_focus_generic_field_hostpital
+		x = 10
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_sw_quarter_levies
+			focus = SHL_sw_guard_columns
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 3000
+			custom_effect_tooltip = SHL_sw_field_hospitals_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_field_hospitals_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -4 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_reinforce value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	# Doctrine pair: manoeuvre raids or the siege of the oil belt; both meet at the storm.
+	focus = {
+		id = SHL_sw_desert_raids
+		icon = GFX_focus_generic_camel_corps
+		x = 4
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_column_staff
+		}
+		mutually_exclusive = { focus = SHL_sw_siege_of_the_belt }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 15
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 200
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_desert_raids_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_out_of_supply value = -0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_siege_of_the_belt
+		icon = GFX_goal_generic_army_artillery
+		x = 8
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_column_staff
+		}
+		mutually_exclusive = { focus = SHL_sw_desert_raids }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_siege_battery
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 120
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_siege_of_the_belt_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_breakthrough value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
 	}
 
 	focus = {
 		id = SHL_south_raid_oil_fields
 		icon = GFX_goal_generic_occupy_states_ongoing_war
-		x = 8
-		y = 1
+		x = 2
+		y = 5
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
-			focus = SHL_south_furnaces_to_front
+			focus = SHL_sw_desert_raids
 		}
 		available = {
 			SHL_country_operable = yes
@@ -53,8 +320,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_raid_oil_tt
-			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
+			add_fuel = 2000
 			unlock_decision_tooltip = SHL_south_raid_oil
+			hidden_effect = {
+				ADISCORD_south_raid_north_fuel = yes
+			}
 		}
 		ai_will_do = { base = 150 }
 	}
@@ -62,12 +332,12 @@ focus_tree = {
 	focus = {
 		id = SHL_south_desert_convoys
 		icon = GFX_focus_generic_camel_corps
-		x = 12
-		y = 1
+		x = 5
+		y = 5
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
-			focus = SHL_south_furnaces_to_front
+			focus = SHL_sw_desert_raids
 		}
 		available = {
 			SHL_country_operable = yes
@@ -79,20 +349,96 @@ focus_tree = {
 				idea = SHL_south_desert_convoys_idea
 				days = 150
 			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 100
+				producer = SHL
+			}
 		}
 		ai_will_do = { base = 150 }
 	}
 
 	focus = {
+		id = SHL_sw_heavy_batteries
+		icon = GFX_goal_generic_army_artillery2
+		x = 8
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = {
+			focus = SHL_sw_siege_of_the_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 150
+				producer = SHL
+			}
+			add_tech_bonus = {
+				name = SHL_sw_heavy_batteries
+				bonus = 1
+				uses = 1
+				category = artillery
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_sapper_companies
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 10
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_siege_of_the_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = SHL
+			}
+			army_experience = 10
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_sapper_companies_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_breakthrough value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
 		id = SHL_south_storm_oil_belt
 		icon = GFX_goal_generic_position_armies
-		x = 10
-		y = 2
+		x = 6
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
 			focus = SHL_south_raid_oil_fields
+			focus = SHL_sw_heavy_batteries
+		}
+		prerequisite = {
 			focus = SHL_south_desert_convoys
+			focus = SHL_sw_sapper_companies
 		}
 		available = {
 			SHL_country_operable = yes
@@ -105,8 +451,1350 @@ focus_tree = {
 				days = 120
 			}
 			army_experience = 15
+			add_command_power = 30
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_veterans_of_the_sands
+		icon = GFX_focus_generic_army_attack
+		x = 4
+		y = 7
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_south_storm_oil_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 20
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_veterans_of_the_sands_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_org value = 0.03 }
+				add_to_variable = { var = SHL_sw_army_defence value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_desert_air_wing
+		icon = GFX_focus_generic_air_bases
+		x = 8
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		prerequisite = {
+			focus = SHL_south_storm_oil_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			air_experience = 25
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_building_construction = { type = air_base level = 2 instant_build = yes }
+				}
+			}
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_building_construction = { type = anti_air_building level = 2 instant_build = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 80 }
+	}
+
+	# ----- Furnaces of the war -----
+
+	focus = {
+		id = SHL_south_furnaces_to_front
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 16
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_war_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 25
+			unlock_decision_tooltip = SHL_south_war_pour
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_south_furnaces_to_front_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_arms_speed value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 200 }
+	}
+
+	# Arms now or the markets: weapons at once against the treasury that pays the war.
+	focus = {
+		id = SHL_sw_all_furnaces_to_arms
+		icon = GFX_focus_generic_military_industry
+		x = 14
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_south_furnaces_to_front
+		}
+		mutually_exclusive = { focus = SHL_sw_keep_the_markets }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			294 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_all_furnaces_to_arms_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_arms_speed value = 0.1 }
+				add_to_variable = { var = SHL_sw_consumer_goods value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_keep_the_markets
+		icon = GFX_goal_generic_trade
+		x = 18
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_south_furnaces_to_front
+		}
+		mutually_exclusive = { focus = SHL_sw_all_furnaces_to_arms }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_market_caravans
+			730 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			custom_effect_tooltip = SHL_sw_keep_the_markets_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_keep_the_markets_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_sw_consumer_goods value = -0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_shell_lines
+		icon = GFX_goal_generic_small_arms
+		x = 13
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_all_furnaces_to_arms
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = SHL
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 100
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_shell_lines_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_max_efficiency value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
 		}
 		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_rail_to_the_front
+		icon = GFX_focus_generic_railroad
+		x = 16
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_all_furnaces_to_arms
+			focus = SHL_sw_keep_the_markets
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			707 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 20
+				producer = SHL
+			}
+			custom_effect_tooltip = SHL_sw_rail_to_the_front_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_rail_to_the_front_idea
+				}
+			}
+			hidden_effect = {
+				build_railway = {
+					level = 1
+					build_only_on_allied = yes
+					fallback = yes
+					start_state = 699
+					target_state = 707
+				}
+				add_to_variable = { var = SHL_sw_supply_consumption value = -0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_market_convoys
+		icon = GFX_focus_generic_merchant_fleet
+		x = 19
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_keep_the_markets
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 12
+				producer = SHL
+			}
+			custom_effect_tooltip = SHL_sw_market_convoys_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_market_convoys_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_sw_consumer_goods value = -0.02 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	# Shahrabad has no oil of its own; ash fuel keeps the columns moving.
+	focus = {
+		id = SHL_sw_fuel_from_ash
+		icon = GFX_goal_generic_oil_refinery
+		x = 15
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_rail_to_the_front
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_ash_fuel
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = synthetic_refinery level = 1 instant_build = yes }
+				}
+			}
+			294 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = synthetic_refinery level = 1 instant_build = yes }
+				}
+			}
+			add_fuel = 3000
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_furnace_artels
+		icon = GFX_focus_generic_industrial_experts
+		x = 17
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		prerequisite = {
+			focus = SHL_sw_rail_to_the_front
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_tech_bonus = {
+				name = SHL_sw_furnace_artels
+				bonus = 1
+				uses = 1
+				category = industry
+			}
+			custom_effect_tooltip = SHL_sw_furnace_artels_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_furnace_artels_idea
+				}
+			}
+			hidden_effect = {
+				SHL_repair_worst_site = yes
+				SHL_repair_worst_site = yes
+				SHL_refresh_furnaces = yes
+				add_to_variable = { var = SHL_sw_factory_output value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_desert_workshops
+		icon = GFX_goal_generic_army_motorized
+		x = 21
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_market_convoys
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 150
+				producer = SHL
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = SHL
+			}
+			731 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_arsenal_of_the_south
+		icon = GFX_goal_generic_construct_military
+		x = 16
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_sw_fuel_from_ash
+		}
+		prerequisite = {
+			focus = SHL_sw_shell_lines
+			focus = SHL_sw_market_convoys
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			291 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			custom_effect_tooltip = SHL_sw_arsenal_of_the_south_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_arsenal_of_the_south_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -5 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_arms_speed value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# ----- The sands choose -----
+
+	focus = {
+		id = SHL_sw_sands_choose
+		icon = GFX_goal_generic_alliance
+		x = 27
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_war_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			every_country = {
+				limit = {
+					NOT = { tag = SHL }
+					ADISCORD_south_on_shl_side = yes
+					has_capitulated = no
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1000
+					producer = SHL
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_sands_choose_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_political_power value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# Subsidies or punitive columns: the desert is paid or broken.
+	focus = {
+		id = SHL_sw_buy_the_sands
+		icon = GFX_focus_generic_money_for_equipment
+		x = 25
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_sands_choose
+		}
+		mutually_exclusive = { focus = SHL_sw_break_the_sands }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_treasury_150_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			every_country = {
+				limit = {
+					NOT = { tag = SHL }
+					ADISCORD_south_on_shl_side = yes
+					has_capitulated = no
+				}
+				add_war_support = 0.10
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = SHL
+				}
+			}
+			custom_effect_tooltip = SHL_sw_buy_the_sands_war_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_break_the_sands
+		icon = GFX_goal_generic_forceful_treaty
+		x = 29
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_sw_sands_choose
+		}
+		mutually_exclusive = { focus = SHL_sw_buy_the_sands }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = SHL_sw_break_the_sands_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_break_the_sands_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_compliance value = 0.05 }
+				add_to_variable = { var = SHL_sw_resistance value = -0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 80 }
+	}
+
+	focus = {
+		id = SHL_sw_desert_subsidies
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 23
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_buy_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			every_country = {
+				limit = {
+					NOT = { tag = SHL }
+					ADISCORD_south_on_shl_side = yes
+					has_capitulated = no
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = SHL
+				}
+				add_fuel = 2000
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_caravan_pacts
+		icon = GFX_focus_generic_british_trade
+		x = 25
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_buy_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_sw_caravan_pacts_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_caravan_pacts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_sw_consumer_goods value = -0.02 }
+				add_to_variable = { var = SHL_sw_supply_consumption value = -0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_punitive_columns
+		icon = GFX_focus_generic_provoke_border_clashes
+		x = 29
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_break_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 15
+			add_equipment_to_stockpile = {
+				type = motorized_equipment_1
+				amount = 100
+				producer = SHL
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_punitive_columns_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_attack value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_occupation_ultimatums
+		icon = GFX_goal_generic_political_pressure
+		x = 31
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_break_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_occupation_ultimatums_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_compliance value = 0.05 }
+				add_to_variable = { var = SHL_sw_resistance value = -0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_desert_envoys
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 27
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_desert_subsidies
+			focus = SHL_sw_caravan_pacts
+			focus = SHL_sw_punitive_columns
+			focus = SHL_sw_occupation_ultimatums
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_request_expedition
+			add_political_power = 60
+			custom_effect_tooltip = SHL_sw_desert_envoys_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_desert_envoys_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -4 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_stability value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_war_correspondents
+		icon = GFX_goal_generic_propaganda
+		x = 24
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_sw_desert_envoys
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_war_correspondents_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_war_support value = 0.05 }
+				add_to_variable = { var = SHL_sw_stability value = 0.02 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_southern_league
+		icon = GFX_goal_generic_major_alliance
+		x = 28
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_desert_envoys
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_court_defector
+			every_country = {
+				limit = {
+					NOT = { tag = SHL }
+					ADISCORD_south_on_shl_side = yes
+					has_capitulated = no
+				}
+				add_war_support = 0.05
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = SHL
+				}
+			}
+			custom_effect_tooltip = SHL_sw_southern_league_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_southern_league_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -6 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_war_support value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	# ----- Home front of the quarters -----
+
+	focus = {
+		id = SHL_sw_quarters_at_war
+		icon = GFX_focus_generic_workers
+		x = 37
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_sw_war_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_quarter_relief
+			add_stability = 0.05
+			custom_effect_tooltip = SHL_sw_quarters_at_war_war_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -5 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -5 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# Rations slow the cost of the war; martial law answers its crises with force.
+	focus = {
+		id = SHL_sw_ration_cards
+		icon = GFX_focus_generic_price_controls
+		x = 35
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_sw_quarters_at_war
+		}
+		mutually_exclusive = { focus = SHL_sw_furnace_martial_law }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_sw_ration_cards_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_ration_cards_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -5 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_consumer_goods value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_sw_furnace_martial_law
+		icon = GFX_focus_generic_military_dictatorship
+		x = 39
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_sw_quarters_at_war
+		}
+		mutually_exclusive = { focus = SHL_sw_ration_cards }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_martial_tribunal
+			custom_effect_tooltip = SHL_sw_furnace_martial_law_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_furnace_martial_law_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_stability value = -0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 80 }
+	}
+
+	focus = {
+		id = SHL_sw_widows_fund
+		icon = GFX_focus_generic_welfare
+		x = 34
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_sw_ration_cards
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_treasury_80_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_sw_widows_fund_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_widows_fund_idea
+				}
+			}
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -8 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_stability value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_crest_war_tax
+		icon = GFX_focus_generic_reduce_unneccessary_expenditure
+		x = 37
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_ration_cards
+			focus = SHL_sw_furnace_martial_law
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 30
+			custom_effect_tooltip = SHL_sw_crest_war_tax_war_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_house_pressure value = 10 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_sw_street_tribunals
+		icon = GFX_focus_generic_court
+		x = 40
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_sw_furnace_martial_law
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_sw_street_tribunals_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_street_tribunals_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -10 }
+				add_to_variable = { var = SHL_house_pressure value = -5 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_political_power value = 0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_quarter_kitchens
+		icon = GFX_focus_generic_low_cost_housing
+		x = 35
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_sw_crest_war_tax
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 2000
+			custom_effect_tooltip = SHL_sw_quarter_kitchens_war_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -5 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -6 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	focus = {
+		id = SHL_sw_home_guard
+		icon = GFX_focus_generic_home_defense
+		x = 39
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_sw_crest_war_tax
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_sw_home_guard_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_home_guard_idea
+				}
+			}
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+				add_to_variable = { var = SHL_sw_army_defence value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	# ----- To the last furnace -----
+
+	focus = {
+		id = SHL_sw_march_on_the_oil_belt
+		icon = GFX_goal_generic_occupy_start_war
+		x = 6
+		y = 8
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_south_storm_oil_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_north_surrender_20_tt
+				OR = {
+					NAM = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.19
+					}
+					EFL = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.19
+					}
+					AZH = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.19
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 40
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_march_on_the_oil_belt_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_attack value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 200 }
+	}
+
+	focus = {
+		id = SHL_sw_the_last_line
+		icon = GFX_goal_generic_demand_territory
+		x = 11
+		y = 9
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_sw_march_on_the_oil_belt
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_north_surrender_50_tt
+				OR = {
+					NAM = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.49
+					}
+					EFL = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.49
+					}
+					AZH = {
+						ADISCORD_south_north_leader_viable = yes
+						surrender_progress > 0.49
+					}
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			custom_effect_tooltip = SHL_sw_the_last_line_war_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -10 }
+				ADISCORD_south_add_strain = yes
+				for_each_scope_loop = {
+					array = global.ADISCORD_south_key_states
+					if = {
+						limit = { check_variable = { var = ADISCORD_south_initial_side value = 2 compare = equals } }
+						add_claim_by = SHL
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 200 }
+	}
+
+	focus = {
+		id = SHL_sw_not_one_step_back
+		icon = GFX_goal_generic_fortify_city
+		x = 21
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_sw_war_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_sw_own_surrender_30_tt
+				surrender_progress > 0.29
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 10000
+			custom_effect_tooltip = SHL_sw_not_one_step_back_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_not_one_step_back_idea
+				}
+			}
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+				add_to_variable = { var = SHL_sw_army_defence value = 0.1 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+			modifier = {
+				factor = 10
+				surrender_progress > 0.39
+			}
+		}
+	}
+
+	focus = {
+		id = SHL_sw_crown_campaign
+		icon = GFX_goal_generic_national_unity
+		x = 16
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_sw_the_last_line
+		}
+		prerequisite = {
+			focus = SHL_sw_arsenal_of_the_south
+			focus = SHL_sw_southern_league
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			custom_effect_tooltip = SHL_sw_crown_campaign_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_crown_campaign_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -15 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_war_support value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 200 }
 	}
 
 	# ----- Course 1: the Conclave of ten -----
@@ -114,7 +1802,7 @@ focus_tree = {
 	focus = {
 		id = SHL_h_hired_contracts
 		icon = GFX_focus_generic_desert_training
-		x = 20
+		x = 46
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -127,6 +1815,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_hire_desert_guard
 			custom_effect_tooltip = SHL_h_hired_contracts_tt
+			army_experience = 10
 		}
 		ai_will_do = { base = 150 }
 	}
@@ -134,7 +1823,7 @@ focus_tree = {
 	focus = {
 		id = SHL_h_buy_garrisons
 		icon = GFX_focus_generic_home_defense
-		x = 20
+		x = 44
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -160,12 +1849,89 @@ focus_tree = {
 		ai_will_do = { base = 120 }
 	}
 
+	focus = {
+		id = SHL_h_concession_war_bonds
+		icon = GFX_focus_generic_concessions
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		prerequisite = {
+			focus = SHL_h_hired_contracts
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_h_concession_war_bonds_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_h_concession_war_bonds_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
+				set_country_flag = SHL_sw_war_bonds_debt
+				add_to_variable = { var = SHL_sw_political_power value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_h_presell_northern_fields
+		icon = GFX_goal_generic_dangerous_deal
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		prerequisite = {
+			focus = SHL_h_buy_garrisons
+		}
+		prerequisite = {
+			focus = SHL_h_concession_war_bonds
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = SHL_h_presell_northern_fields_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_h_presell_northern_fields_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_house_pressure value = -10 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_war_support value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
 	# ----- Course 2: the Southern Compact -----
 
 	focus = {
 		id = SHL_c_charters_for_occupied
 		icon = GFX_focus_generic_improve_the_administration
-		x = 24
+		x = 46
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
@@ -177,6 +1943,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = SHL_charter_occupation
+			add_political_power = 40
 		}
 		ai_will_do = { base = 150 }
 	}
@@ -184,11 +1951,14 @@ focus_tree = {
 	focus = {
 		id = SHL_c_compact_volunteers
 		icon = GFX_focus_generic_diverse_army
-		x = 26
+		x = 44
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		prerequisite = {
+			focus = SHL_c_charters_for_occupied
+		}
 		available = {
 			SHL_country_operable = yes
 			ADISCORD_south_final_active = yes
@@ -200,7 +1970,81 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_c_compact_volunteers_tt
-			hidden_effect = { SHL_raise_paid_levies_2 = yes }
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_c_city_militias
+		icon = GFX_goal_generic_fortify_city
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		prerequisite = {
+			focus = SHL_c_charters_for_occupied
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 5000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_c_city_militias_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_defence value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_c_assembly_of_free_cities
+		icon = GFX_focus_generic_public_meetings
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		prerequisite = {
+			focus = SHL_c_compact_volunteers
+		}
+		prerequisite = {
+			focus = SHL_c_city_militias
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = SHL_c_assembly_of_free_cities_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_c_assembly_of_free_cities_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -5 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -12 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_stability value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
 		}
 		ai_will_do = { base = 150 }
 	}
@@ -210,7 +2054,7 @@ focus_tree = {
 	focus = {
 		id = SHL_d_war_orders_all
 		icon = GFX_focus_generic_money_for_equipment
-		x = 30
+		x = 46
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
@@ -234,11 +2078,14 @@ focus_tree = {
 	focus = {
 		id = SHL_d_guard_to_front
 		icon = GFX_focus_generic_soldier_salute
-		x = 32
+		x = 44
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		prerequisite = {
+			focus = SHL_d_war_orders_all
+		}
 		available = {
 			SHL_country_operable = yes
 			ADISCORD_south_final_active = yes
@@ -257,12 +2104,89 @@ focus_tree = {
 		ai_will_do = { base = 150 }
 	}
 
+	focus = {
+		id = SHL_d_iron_march_norms
+		icon = GFX_focus_generic_stalinist_industry
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		prerequisite = {
+			focus = SHL_d_war_orders_all
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_d_iron_march_norms_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_d_iron_march_norms_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = 5 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_arms_speed value = 0.05 }
+				add_to_variable = { var = SHL_sw_factory_output value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_d_full_requisition
+		icon = GFX_focus_generic_total_war
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		prerequisite = {
+			focus = SHL_d_guard_to_front
+		}
+		prerequisite = {
+			focus = SHL_d_iron_march_norms
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = SHL
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 100
+				producer = SHL
+			}
+			add_fuel = 2000
+			custom_effect_tooltip = SHL_d_full_requisition_war_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = 10 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = 5 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
 	# ----- Course 4: the regency -----
 
 	focus = {
 		id = SHL_r_hire_armies
 		icon = GFX_focus_generic_desert_training
-		x = 36
+		x = 46
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -294,11 +2218,14 @@ focus_tree = {
 	focus = {
 		id = SHL_r_sell_future
 		icon = GFX_goal_generic_trade
-		x = 38
+		x = 44
 		y = 1
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		prerequisite = {
+			focus = SHL_r_hire_armies
+		}
 		available = {
 			SHL_country_operable = yes
 			ADISCORD_south_final_active = yes
@@ -307,6 +2234,71 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_sell_concessions
 			custom_effect_tooltip = SHL_r_sell_future_tt
+			add_political_power = 40
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_r_regent_takes_command
+		icon = GFX_focus_generic_military_dictatorship
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		prerequisite = {
+			focus = SHL_r_hire_armies
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 50
+			army_experience = 10
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_r_regent_takes_command_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_army_org value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_r_noble_retinues
+		icon = GFX_focus_generic_monarchy_2
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		prerequisite = {
+			focus = SHL_r_sell_future
+		}
+		prerequisite = {
+			focus = SHL_r_regent_takes_command
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 15
+			custom_effect_tooltip = SHL_r_noble_retinues_war_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_house_pressure value = -10 }
+				SHL_clamp_tensions = yes
+				SHL_raise_paid_levies_3 = yes
+			}
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -316,7 +2308,7 @@ focus_tree = {
 	focus = {
 		id = SHL_k_shift_brigades
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 42
+		x = 46
 		y = 0
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -339,7 +2331,7 @@ focus_tree = {
 		ai_will_do = { base = 150 }
 	}
 
-	# Решение SHL_south_raid_oil читает завершение этого фокуса и снимает цену в PP.
+	# SHL_south_raid_oil reads this focus and drops its political power price.
 	focus = {
 		id = SHL_k_strikes_on_fields
 		icon = GFX_focus_generic_strike_at_democracy3
@@ -348,6 +2340,9 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		prerequisite = {
+			focus = SHL_k_shift_brigades
+		}
 		available = {
 			SHL_country_operable = yes
 			ADISCORD_south_final_active = yes
@@ -355,9 +2350,197 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_k_strikes_on_fields_now_tt
-			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
 			custom_effect_tooltip = SHL_k_strikes_on_fields_tt
+			army_experience = 10
+			hidden_effect = {
+				ADISCORD_south_raid_north_fuel = yes
+			}
 		}
 		ai_will_do = { base = 120 }
+	}
+
+	# Bypassed while the Svetlogorsk uprising does not stand.
+	focus = {
+		id = SHL_k_rifles_for_the_uprising
+		icon = GFX_focus_generic_smugglers
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		prerequisite = {
+			focus = SHL_k_shift_brigades
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		bypass = {
+			OR = {
+				NOT = { country_exists = SLF }
+				SLF = { has_capitulated = yes }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sw_arm_the_uprising
+			if = {
+				limit = { country_exists = SLF }
+				SLF = {
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 5000
+						producer = SHL
+					}
+					add_war_support = 0.10
+				}
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_k_front_councils
+		icon = GFX_focus_generic_worker_administration
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		prerequisite = {
+			focus = SHL_k_strikes_on_fields
+		}
+		prerequisite = {
+			focus = SHL_k_rifles_for_the_uprising
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = SHL_k_front_councils_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_k_front_councils_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -10 }
+				ADISCORD_south_add_strain = yes
+				add_to_variable = { var = SHL_sw_army_morale value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# ----- No course: the emergency conclave -----
+
+	focus = {
+		id = SHL_n_emergency_conclave
+		icon = GFX_focus_generic_conference
+		x = 46
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			add_command_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_n_emergency_conclave_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_sw_stability value = 0.03 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# The houses' war chest or the directors' war plan: who pays the war decides who leads after it.
+	focus = {
+		id = SHL_n_house_war_chest
+		icon = GFX_focus_generic_stockpile_currency
+		x = 44
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		prerequisite = {
+			focus = SHL_n_emergency_conclave
+		}
+		mutually_exclusive = { focus = SHL_n_directors_war_plan }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_n_house_war_chest_war_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = SHL_house_pressure value = -10 }
+				SHL_clamp_tensions = yes
+				set_temp_variable = { var = SHL_balance_shift value = -0.10 }
+				SHL_balance_shift = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = SHL_n_directors_war_plan
+		icon = GFX_goal_generic_production
+		x = 48
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		prerequisite = {
+			focus = SHL_n_emergency_conclave
+		}
+		mutually_exclusive = { focus = SHL_n_house_war_chest }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+				producer = SHL
+			}
+			custom_effect_tooltip = SHL_n_directors_war_plan_war_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_south_war_dummy_idea
+					add_idea = SHL_sw_n_directors_war_plan_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_house_pressure value = 10 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_sw_arms_speed value = 0.05 }
+				SHL_refresh_south_war = yes
+			}
+		}
+		ai_will_do = { base = 100 }
 	}
 }

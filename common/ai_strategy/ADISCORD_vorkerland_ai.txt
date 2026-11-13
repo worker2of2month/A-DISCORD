@@ -26,7 +26,9 @@ ADISCORD_vorkerland_collapse_war_economy = {
 }
 
 # Field armies stay on live fronts. Default garrison weight and ally-border
-# defence otherwise park collapse participants in rear states.
+# defence otherwise park collapse participants in rear states. Allied
+# frontlines are released by the shared policy in default.txt through
+# ADISCORD_vorkerland_collapse_field_army_active.
 ADISCORD_vorkerland_collapse_field_army = {
 	allowed = {
 		OR = {
@@ -46,7 +48,6 @@ ADISCORD_vorkerland_collapse_field_army = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = garrison value = -80 }
-	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 }
 
 ADISCORD_vorkerland_hazard_forces = {

@@ -1534,6 +1534,7 @@ RUS_suspicion_begin = {
 		}
 		set_variable = { var = RUS_suspicion value = 10 }
 		country_event = { id = ADISCORD_rus_crisis.24 }
+		RUS_ai_choose_coup_course = yes
 		# Dominance gained before the expansion starts a plot as the window opens.
 		RUS_coup_plot_check = yes
 		country_event = { id = ADISCORD_rus_campaign.57 days = 3 }
@@ -1663,6 +1664,36 @@ RUS_coup_plot_check = {
 	}
 }
 
+# AI RUS, once as the coup window opens. The AI Khan keeps the balance in the
+# middle by default; a coup course instead lets one faction reach dominance and
+# delays the proclamation for that course's 365 days. The leaning faction is
+# more likely to be given its chance.
+RUS_ai_choose_coup_course = {
+	if = {
+		limit = {
+			is_ai = yes
+			RUS_coup_window_open = yes
+		}
+		random_list = {
+			50 = { }
+			25 = {
+				modifier = {
+					add = 25
+					power_balance_value = { id = RUS_state_balance value < -0.30 }
+				}
+				set_country_flag = { flag = RUS_ai_scientists_course days = 365 }
+			}
+			25 = {
+				modifier = {
+					add = 25
+					power_balance_value = { id = RUS_state_balance value > 0.30 }
+				}
+				set_country_flag = { flag = RUS_ai_black_army_course days = 365 }
+			}
+		}
+	}
+}
+
 # RUS. Input: temp RUS_coup_side, 1 for the scientists and 2 for the Black Army.
 # Rustan is retired for good, so every Khan-only trigger, including the crisis
 # start, stays false for the rest of the campaign without another marker.
@@ -1718,6 +1749,8 @@ RUS_coup_execute = {
 		clear_variable = RUS_suspicion
 		clear_variable = RUS_suspicion_warning
 		clr_country_flag = RUS_dream_finale_pending
+		clr_country_flag = RUS_ai_scientists_course
+		clr_country_flag = RUS_ai_black_army_course
 		RUS_government_refresh = yes
 		RUS_black_army_refresh = yes
 		mark_focus_tree_layout_dirty = yes

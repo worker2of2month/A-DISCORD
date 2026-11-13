@@ -84,6 +84,10 @@ class StelanderDominionTests(unittest.TestCase):
             ("VAL", "NOD", False, False),
             ("NKA", "NKA", True, True),
             ("NKA", "NOD", True, False),
+            # A capitulated administration can stay occupied by its overlord.
+            ("NKA", "VAL", True, True),
+            ("VAL", "NKA", True, True),
+            ("NKA", "VAL", False, False),
         ):
             facts = {
                 **base,
@@ -341,6 +345,23 @@ class ValStelanderDefeatTests(unittest.TestCase):
             install.index("STP_close_competing_ultimatum_wars_after_defeat = yes"),
             install.index("set_autonomy"),
         )
+
+    def test_new_administration_regains_land_held_by_kefreyt_side(self):
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        install = named_block(effects, "VAL_install_stelander_administration")
+        self.assertLess(
+            install.index("set_autonomy"),
+            install.index("VAL_restore_administration_control = yes"),
+        )
+        restore = named_block(effects, "VAL_restore_administration_control")
+        self.assertIn("NOT = { is_controlled_by = PREV }", restore)
+        self.assertRegex(
+            restore,
+            r"controller = \{\s*OR = \{\s*tag = VAL\s*is_subject_of = VAL\s*\}\s*\}",
+        )
+        self.assertIn("set_state_controller_to = PREV", restore)
 
     def test_commanders_council_is_recruited_and_localised(self):
         chars = read("common/characters/VAL.txt")

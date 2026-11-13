@@ -212,7 +212,8 @@ STS_shabrat_civil_war_army = {
 		manual_attack = yes
 	}
 	ai_strategy = { type = conquer id = STP value = 250 }
-	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	# Allied frontlines are released for this phase by the shared policy in
+	# default.txt through STP_cw_shabrat_army_holds_party_front.
 }
 
 # Native offensive targets select states; province 145 controls this objective's lifetime.

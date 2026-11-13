@@ -7,4 +7,14 @@ spriteTypes = {
 		name = "GFX_portrait_CSL_Miron_Rudakov"
 		texturefile = "gfx/leaders/CSL/portrait_CSL_Miron_Rudakov.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_PWR_Alexey_Lange"
+		texturefile = "gfx/leaders/PWR/portrait_PWR_Alexey_Lange.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_PSD_Marta_Cinder"
+		texturefile = "gfx/leaders/PSD/portrait_PSD_Marta_Cinder.png"
+	}
 }

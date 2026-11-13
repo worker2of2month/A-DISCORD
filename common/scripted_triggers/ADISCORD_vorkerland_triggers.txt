@@ -524,6 +524,25 @@ ADISCORD_vorkerland_is_minor_combatant = {
 	}
 }
 
+# COUNTRY: every collapse participant keeps its field army on its own fronts
+# while the collapse wars last. The tags are those of
+# ADISCORD_vorkerland_collapse_field_army; the shared ally-frontline policy
+# reads this through ADISCORD_ai_campaign_leaves_ally_frontlines.
+ADISCORD_vorkerland_collapse_field_army_active = {
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	has_war = yes
+	OR = {
+		tag = WKR tag = VAD tag = TVA tag = TGD tag = WTD tag = EYR tag = EGC
+		tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV
+		tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD
+		tag = VLA tag = EBA tag = ROM tag = DVA
+		tag = SOL tag = SRA tag = TRU tag = ZTA
+		tag = IBA tag = IBL tag = CSL
+		tag = SLA tag = RZA tag = MLR tag = ERT tag = IRT tag = SCA
+	}
+}
+
 # After winning the centre, the claimant may advance only into neighbouring
 # former confederation territories. WRK recognises ROM and TRU instead.
 ADISCORD_vorkerland_is_reunification_target_for_ROOT = {

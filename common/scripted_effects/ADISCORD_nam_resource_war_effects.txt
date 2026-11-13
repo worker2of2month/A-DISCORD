@@ -2104,6 +2104,67 @@ NAM_refresh_air = {
 	force_update_dynamic_modifier = yes
 }
 
+# ----- War for the South -----
+
+# COUNTRY NAM. Focuses of NAM_south_war_focus add to the NAM_sw_* variables.
+NAM_refresh_south_war = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_south_war_dynamic } } }
+		add_dynamic_modifier = { modifier = NAM_south_war_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY NAM, on every terminal path of the war for the South. The exchanges
+# collect the war loans once. A repelled campaign keeps the war results for
+# the next campaign over the same completed tree; a settled South ends them.
+NAM_sw_close_war = {
+	if = {
+		limit = { has_country_flag = NAM_sw_war_loans_debt }
+		clr_country_flag = NAM_sw_war_loans_debt
+		set_temp_variable = { var = NAM_treasury_amount value = 250 }
+		NAM_spend_treasury = yes
+	}
+	# Inspections belong to one campaign: the furnace districts may change hands again.
+	287 = { clr_state_flag = NAM_sw_furnace_inspected }
+	288 = { clr_state_flag = NAM_sw_furnace_inspected }
+	289 = { clr_state_flag = NAM_sw_furnace_inspected }
+	290 = { clr_state_flag = NAM_sw_furnace_inspected }
+	291 = { clr_state_flag = NAM_sw_furnace_inspected }
+	292 = { clr_state_flag = NAM_sw_furnace_inspected }
+	293 = { clr_state_flag = NAM_sw_furnace_inspected }
+	294 = { clr_state_flag = NAM_sw_furnace_inspected }
+	295 = { clr_state_flag = NAM_sw_furnace_inspected }
+	699 = { clr_state_flag = NAM_sw_furnace_inspected }
+	707 = { clr_state_flag = NAM_sw_furnace_inspected }
+	if = {
+		limit = { has_global_flag = ADISCORD_south_final_resolved }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = NAM_south_war_dynamic } }
+			remove_dynamic_modifier = { modifier = NAM_south_war_dynamic }
+		}
+		clear_variable = NAM_sw_war_support
+		clear_variable = NAM_sw_stability
+		clear_variable = NAM_sw_army_attack
+		clear_variable = NAM_sw_army_defence
+		clear_variable = NAM_sw_army_org
+		clear_variable = NAM_sw_breakthrough
+		clear_variable = NAM_sw_dig_in
+		clear_variable = NAM_sw_conscription
+		clear_variable = NAM_sw_reinforce
+		clear_variable = NAM_sw_supply_consumption
+		clear_variable = NAM_sw_fuel_consumption
+		clear_variable = NAM_sw_fuel_gain
+		clear_variable = NAM_sw_factory_output
+		clear_variable = NAM_sw_arms_speed
+		clear_variable = NAM_sw_consumer_goods
+		clear_variable = NAM_sw_resistance
+		clear_variable = NAM_sw_compliance
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
 # COUNTRY NAM, FROM recipient. Called after the targeted decision debits the exact shipment.
 
 NAM_deliver_charter_fuel = {

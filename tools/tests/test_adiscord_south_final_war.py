@@ -1140,6 +1140,217 @@ class SouthLifecycleTests(unittest.TestCase):
             self.assertIn("ADISCORD_south_submission_to_" + sender.lower() + "_valid", repr(block(branch, "limit")))
 
 
+DECISIONS = ROOT / "common/decisions/ADISCORD_south_final_war_decisions.txt"
+STRAIN_MODIFIER = ROOT / "common/dynamic_modifiers/ADISCORD_south_final_war_dynamic_modifiers.txt"
+STRAIN_FIELDS = ("ADISCORD_south_strain_stability", "ADISCORD_south_strain_war_support", "ADISCORD_south_strain_factory")
+
+
+def south_decisions():
+    category = next(e.value for e in parse_clausewitz(DECISIONS.read_text(encoding="utf-8")) if e.key == "ADISCORD_south_final_war_category")
+    return {e.key: e.value for e in category}
+
+
+def loc_keys(language):
+    raw = (ROOT / f"localisation/{language}/ADISCORD_south_final_war_l_{language}.yml").read_bytes()
+    return set(re.findall(r"(?m)^ ([\w.]+):", raw.decode("utf-8-sig")))
+
+
+class SouthWarOperationsTests(unittest.TestCase):
+    """Cost of the war, district orders and the hold mission shared by both champions."""
+
+    def test_cost_rises_only_in_the_furnace_cycle_after_the_war_starts(self):
+        cycle = body(EFFECTS, "ADISCORD_south_crisis_cycle")
+        guard = cycle[cycle.index("ADISCORD_south_final_active = yes", cycle.rindex("if = {")):]
+        self.assertIn("flag = ADISCORD_south_final_started", guard)
+        self.assertIn("ADISCORD_south_strain_cycle = yes", guard)
+        self.assertEqual(scope_calls(body(EFFECTS, "ADISCORD_south_strain_cycle"), "ADISCORD_south_strain_cycle_member"), {"SHL", "NAM", "EFL", "AZH"})
+        member = body(EFFECTS, "ADISCORD_south_strain_cycle_member")
+        self.assertIn("ADISCORD_south_war_champion = yes", member)
+        self.assertIn("multiply_temp_variable = { var = ADISCORD_south_strain_delta value = 2 }", member)
+        self.assertIn("add_to_temp_variable = { var = ADISCORD_south_strain_delta value = 3 }", member)
+        for path in (ROOT / "common/on_actions").glob("*.txt"):
+            self.assertNotIn("ADISCORD_south_strain", path.read_text(encoding="utf-8-sig"), path.name)
+
+    def test_cost_modifier_reads_the_derived_variables_and_refreshes_the_economy(self):
+        modifier = next(e.value for e in parse_clausewitz(STRAIN_MODIFIER.read_text(encoding="utf-8")) if e.key == "ADISCORD_south_war_strain_dynamic")
+        fields = {e.value for e in modifier if e.key not in ("icon", "enable")}
+        self.assertEqual(fields, set(STRAIN_FIELDS))
+        refresh = body(EFFECTS, "ADISCORD_south_refresh_strain")
+        for field in STRAIN_FIELDS:
+            self.assertIn(f"set_variable = {{ var = {field} value = ADISCORD_south_war_strain }}", refresh)
+        self.assertIn("add_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic }", refresh)
+        self.assertIn("force_update_dynamic_modifier = yes", refresh)
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", refresh)
+        add = body(EFFECTS, "ADISCORD_south_add_strain")
+        self.assertIn("min = 0", add)
+        self.assertIn("max = 100", add)
+        self.assertIn("NOT = { has_country_flag = ADISCORD_south_home_front_crisis }", add)
+        self.assertNotIn("hidden_effect", add)
+
+    def test_every_terminal_path_closes_the_front(self):
+        self.assertIn("ADISCORD_south_open_champion_front = yes", body(EFFECTS, "ADISCORD_south_prepare_champion"))
+        self.assertIn("ADISCORD_south_close_champion_front = yes", body(EFFECTS, "ADISCORD_south_close_member_state"))
+        close = body(EFFECTS, "ADISCORD_south_close_champion_front")
+        guard = close.index("has_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic }")
+        self.assertLess(guard, close.index("remove_dynamic_modifier = { modifier = ADISCORD_south_war_strain_dynamic }"))
+        for variable in ("ADISCORD_south_war_strain", "ADISCORD_south_order_state", *STRAIN_FIELDS):
+            self.assertIn(f"clear_variable = {variable}\n", close)
+        for mission in ("ADISCORD_south_hold_districts", "ADISCORD_south_district_order_mission"):
+            self.assertIn(f"remove_mission = {mission}", close)
+        self.assertIn("clr_country_flag = ADISCORD_south_home_front_crisis", close)
+        self.assertIn("remove_ideas = ADISCORD_south_order_failed", close)
+
+    def test_home_front_crisis_answers_clear_the_marker_and_lower_the_cost(self):
+        event = next(e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8")) if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_south.50")
+        options = [e.value for e in event if e.key == "option"]
+        self.assertEqual(len(options), 2)
+        for option in options:
+            hidden = block(option, "hidden_effect")
+            self.assertIn(("clr_country_flag", "ADISCORD_south_home_front_crisis"), [(e.key, e.value) for e in hidden])
+            delta = next(e for e in hidden if e.key == "set_temp_variable")
+            self.assertLess(float(scalar(delta.value, "value")), 0)
+            self.assertIn("custom_effect_tooltip", [e.key for e in option])
+
+    def test_district_order_charges_one_exact_price_for_one_slot(self):
+        order = south_decisions()["ADISCORD_south_district_order"]
+        self.assertEqual(scalar(order, "cost"), "0")
+        self.assertEqual(scalar(order, "custom_cost_text"), "ADISCORD_south_cost_district_order")
+        text = body(DECISIONS, "ADISCORD_south_final_war_category")
+        order_text = text[text.index("ADISCORD_south_district_order = {"):text.index("ADISCORD_south_district_order_mission = {")]
+        self.assertEqual(order_text.count("add_political_power = -50"), 1)
+        self.assertEqual(order_text.count("add_command_power = -25"), 1)
+        for price in ("NOT = { has_political_power < 50 }", "NOT = { command_power < 25 }"):
+            self.assertEqual(order_text.count(price), 2, price)
+        self.assertEqual(order_text.count("NOT = { has_variable = ADISCORD_south_order_state }"), 2)
+        self.assertIn("activate_mission = ADISCORD_south_district_order_mission", order_text)
+        for language in ("russian", "english"):
+            keys = loc_keys(language)
+            for suffix in ("", "_blocked", "_tooltip"):
+                self.assertIn("ADISCORD_south_cost_district_order" + suffix, keys, language)
+
+    def test_order_mission_succeeds_on_capture_and_releases_the_slot(self):
+        mission = south_decisions()["ADISCORD_south_district_order_mission"]
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "70")
+        goal = [(e.key, e.value) for e in flatten(block(mission, "available"))]
+        self.assertIn(("ADISCORD_south_state_held_by_root_side", "yes"), goal)
+        for name in ("complete_effect", "timeout_effect", "cancel_effect"):
+            self.assertIn("clear_variable", repr(block(mission, name)), name)
+        self.assertIn("ADISCORD_south_final_active", repr(block(mission, "cancel_trigger")))
+
+    def test_hold_mission_is_judged_only_at_timeout(self):
+        mission = south_decisions()["ADISCORD_south_hold_districts"]
+        available = block(mission, "available")
+        self.assertEqual([(e.key, [(part.key, part.value) for part in e.value]) for e in available], [("hidden_trigger", [("always", "no")])])
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "84")
+        self.assertIn("ADISCORD_south_count_own_key_states", repr(block(mission, "timeout_effect")))
+        self.assertIn("activate_mission = ADISCORD_south_hold_districts", body(EFFECTS, "ADISCORD_south_strain_cycle_member"))
+
+    def test_shahrabad_war_tree_feeds_the_shared_operations(self):
+        member = body(EFFECTS, "ADISCORD_south_strain_cycle_member")
+        self.assertIn("has_completed_focus = SHL_sw_ration_cards", member)
+        self.assertIn("subtract_from_temp_variable = { var = ADISCORD_south_strain_delta value = 1 }", member)
+        event = EVENTS.read_text(encoding="utf-8")
+        answer = event[event.index("name = ADISCORD_south.50.a"):event.index("name = ADISCORD_south.50.b")]
+        self.assertIn("has_completed_focus = SHL_sw_furnace_martial_law", answer)
+        self.assertIn("SHL_sw_close_war = yes", body(EFFECTS, "ADISCORD_south_close_campaign_state"))
+        shl = ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"
+        close = body(shl, "SHL_sw_close_war")
+        settled = close[close.index("has_global_flag = ADISCORD_south_final_resolved"):]
+        self.assertIn("remove_dynamic_modifier = { modifier = SHL_south_war_dynamic }", settled)
+        debt = close[:close.index("has_global_flag = ADISCORD_south_final_resolved")]
+        self.assertIn("clr_country_flag = SHL_sw_war_bonds_debt", debt)
+        modifier = (ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt").read_text(encoding="utf-8")
+        enable = modifier[modifier.index("SHL_south_war_dynamic = {"):]
+        self.assertIn("ADISCORD_south_final_active = yes", enable[:enable.index("}")])
+        fields = re.findall(r"= (SHL_sw_\w+)", enable[:enable.index("\n}")])
+        for variable in fields:
+            self.assertIn(f"clear_variable = {variable}\n", settled)
+
+    def test_svetlogorye_war_tree_feeds_the_shared_operations(self):
+        member = body(EFFECTS, "ADISCORD_south_strain_cycle_member")
+        self.assertIn("has_completed_focus = NAM_sw_district_compact_at_war", member)
+        event = EVENTS.read_text(encoding="utf-8")
+        answer = event[event.index("name = ADISCORD_south.50.a"):event.index("name = ADISCORD_south.50.b")]
+        self.assertIn("has_completed_focus = NAM_sw_emergency_powers", answer)
+        self.assertIn("NAM_sw_close_war = yes", body(EFFECTS, "ADISCORD_south_close_campaign_state"))
+        nam = ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        close = body(nam, "NAM_sw_close_war")
+        settled = close[close.index("has_global_flag = ADISCORD_south_final_resolved"):]
+        self.assertIn("remove_dynamic_modifier = { modifier = NAM_south_war_dynamic }", settled)
+        campaign = close[:close.index("has_global_flag = ADISCORD_south_final_resolved")]
+        self.assertIn("clr_country_flag = NAM_sw_war_loans_debt", campaign)
+        decisions = (ROOT / "common/decisions/ADISCORD_nam_resource_war_decisions.txt").read_text(encoding="utf-8")
+        start = decisions.index("NAM_sw_inspect_captured_furnace = {")
+        targets = re.search(r"targets = \{ ([\d ]+) \}", decisions[start:]).group(1).split()
+        for state in targets:
+            self.assertIn(f"{state} = {{ clr_state_flag = NAM_sw_furnace_inspected }}", campaign)
+        modifier = (ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt").read_text(encoding="utf-8")
+        enable = modifier[modifier.index("NAM_south_war_dynamic = {"):]
+        self.assertIn("ADISCORD_south_final_active = yes", enable[:enable.index("}")])
+        for variable in re.findall(r"= (NAM_sw_\w+)", enable[:enable.index("\n}")]):
+            self.assertIn(f"clear_variable = {variable}\n", settled)
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt").read_text(encoding="utf-8")
+        gate = triggers[triggers.index("NAM_war_programmes_operable = {"):]
+        self.assertIn("NAM_war_campaign_active = yes", gate[:gate.index("\n}")])
+        self.assertIn("has_completed_focus = NAM_sw_conscription_of_the_south", triggers[triggers.index("NAM_war_campaign_active = {"):])
+
+    def test_expedition_and_defector_escrow_settles_exactly_once(self):
+        decisions = south_decisions()
+        for name, flag, event, refund in (
+            ("ADISCORD_south_request_expedition", "ADISCORD_south_expedition_pending", "ADISCORD_south.60", "ADISCORD_south_refund_expedition"),
+            ("ADISCORD_south_court_defector", "ADISCORD_south_defector_pending", "ADISCORD_south.63", "ADISCORD_south_refund_defector"),
+        ):
+            decision = decisions[name]
+            self.assertEqual(scalar(decision, "cost"), "0", name)
+            effect = repr(block(decision, "complete_effect"))
+            for part in (flag, event, "ADISCORD_south.66"):
+                self.assertIn(part, effect, (name, part))
+            self.assertIn(flag, repr(block(decision, "available")), name)
+            refunds = body(EFFECTS, refund)
+            self.assertIn(f"has_country_flag = {flag}", refunds)
+            self.assertIn(f"clr_country_flag = {flag}", refunds)
+            self.assertIn(f"{refund} = yes", body(EFFECTS, "ADISCORD_south_close_champion_front"))
+            for language in ("russian", "english"):
+                keys = loc_keys(language)
+                cost = scalar(decision, "custom_cost_text")
+                for suffix in ("", "_blocked", "_tooltip"):
+                    self.assertIn(cost + suffix, keys, (language, cost))
+        events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8")) if e.key == "country_event"}
+        for request, refund, settle in (
+            ("ADISCORD_south.60", "ADISCORD_south_refund_expedition", "ADISCORD_south_settle_expedition"),
+            ("ADISCORD_south.63", "ADISCORD_south_refund_defector", "ADISCORD_south_settle_defection"),
+        ):
+            options = [e.value for e in events[request] if e.key == "option"]
+            self.assertIn(refund, repr(options[0]), request)
+            self.assertIn(settle, repr(options[1]), request)
+            self.assertTrue(block(options[1], "trigger"), request)
+        fallback = repr(events["ADISCORD_south.66"])
+        self.assertIn("ADISCORD_south_refund_expedition", fallback)
+        self.assertIn("ADISCORD_south_refund_defector", fallback)
+        for settle, gate, flag in (
+            ("ADISCORD_south_settle_expedition", "ADISCORD_south_expedition_possible", "ADISCORD_south_expedition_pending"),
+            ("ADISCORD_south_settle_defection", "ADISCORD_south_defection_possible", "ADISCORD_south_defector_pending"),
+        ):
+            source = body(EFFECTS, settle)
+            self.assertLess(source.index(f"{gate} = yes"), source.index(f"clr_country_flag = {flag}"), settle)
+            self.assertIn(f"has_country_flag = {flag}", body(TRIGGERS, gate))
+        template = body(EFFECTS, "ADISCORD_south_ensure_expedition_template")
+        self.assertIn("is_locked = yes", template)
+        self.assertIn('NOT = { has_template = "Desert Expedition" }', template)
+
+    def test_operations_are_localised_in_both_languages(self):
+        source = DECISIONS.read_text(encoding="utf-8")
+        keys = set(south_decisions())
+        keys |= {name + "_desc" for name in south_decisions()}
+        keys |= set(re.findall(r"(?:tooltip|custom_effect_tooltip|custom_cost_text) = (\w+)", source))
+        keys |= {"ADISCORD_south_war_strain_dynamic", "ADISCORD_south_order_failed", "ADISCORD_south_order_failed_desc"}
+        loc = (ROOT / "common/scripted_localisation/ADISCORD_south_final_war_scripted_loc.txt").read_text(encoding="utf-8")
+        start = loc.index("name = ADISCORDSouthStrain")
+        keys |= set(re.findall(r"localization_key = (\w+)", loc[start:]))
+        for language in ("russian", "english"):
+            self.assertEqual(sorted(keys - loc_keys(language)), [], language)
+
+
 class FocusAggregateTests(unittest.TestCase):
     """TFR-style display pairs must show exactly the variable change a focus applies."""
 
@@ -1156,6 +1367,8 @@ class FocusAggregateTests(unittest.TestCase):
         ROOT / "focus_trees/NAM/wartime/focuses.txt",
         ROOT / "focus_trees/NAM/postwar/focuses.txt",
         ROOT / "focus_trees/NAM/defeated/focuses.txt",
+        ROOT / "focus_trees/SHL/south_war/focuses.txt",
+        ROOT / "focus_trees/NAM/south_war/focuses.txt",
         *SHL_TREES,
     )
     REFRESH = {
@@ -1164,6 +1377,8 @@ class FocusAggregateTests(unittest.TestCase):
         "NAM_navy_dynamic": "NAM_refresh_navy",
         "NAM_air_dynamic": "NAM_refresh_air",
         "SHL_conclave_power_dynamic": "SHL_refresh_conclave_power",
+        "SHL_south_war_dynamic": "SHL_refresh_south_war",
+        "NAM_south_war_dynamic": "NAM_refresh_south_war",
     }
 
     def setUp(self):

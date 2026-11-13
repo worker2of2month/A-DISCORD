@@ -1388,7 +1388,18 @@ class WorldEmpireTests(unittest.TestCase):
     def test_western_victory_preserves_the_world_empire(self):
         rename = named_block(self.effects, "ADISCORD_vorkerland_rename_after_itora")
         self.assertNotIn("WRK_veyran_empire", rename)
-        self.assertIn("ADISCORD_vorkerland_world_empire_active = no", named_block(rename, "limit"))
+        identity = block(parse_clausewitz(rename), "ADISCORD_vorkerland_rename_after_itora")
+        for route in ("worker", "utilitarian"):
+            for empire in (True, False):
+                facts = {
+                    ("TVA", "ADISCORD_vorkerland_world_empire_active", "no"): not empire,
+                    ("TVA", "has_country_flag", f"ADISCORD_vorkerland_route_{route}"): True,
+                }
+                changes = [
+                    entry for _, entry in selected_effects(identity, facts, "TVA")
+                    if entry.key == "set_cosmetic_tag"
+                ]
+                self.assertEqual(len(changes), int(not empire), (route, empire))
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_worker \}\s*set_cosmetic_tag = WRK_western_eastern_union")
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_utilitarian \}\s*set_cosmetic_tag = WRK_forul_technical_union")
         self.assertEqual(rename.count("news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }"), 2)

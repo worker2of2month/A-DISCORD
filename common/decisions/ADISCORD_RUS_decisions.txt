@@ -525,7 +525,13 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			custom_effect_tooltip = RUS_proclaim_programme_tt
 			hidden_effect = { ADISCORD_vorkerland_rus_proclaim_last_empire = yes }
 		}
-		ai_will_do = { base = 500 }
+		ai_will_do = {
+			base = 500
+			modifier = {
+				factor = 0
+				RUS_ai_coup_course_active = yes
+			}
+		}
 	}
 }
 
@@ -3935,7 +3941,8 @@ RUS_public_campaigns = {
 
 # --- rus_balance_of_power ---
 # Inside the coup window the AI moves the balance back from 45% before a faction
-# reaches the 60% dominance that starts a plot.
+# reaches the 60% dominance that starts a plot, unless RUS_ai_choose_coup_course gave
+# that faction its chance: then the AI pushes toward it and leaves its plot alone.
 RUS_state_balance_measures_category = {
 	# A faction holding dominance between the expansion and the proclamation
 	# overthrows the Khan when the mission times out. Success is leaving dominance.
@@ -4065,6 +4072,16 @@ RUS_state_balance_measures_category = {
 				RUS_coup_window_open = yes
 				power_balance_value = { id = RUS_state_balance value > 0.45 }
 			}
+			modifier = {
+				factor = 0
+				has_country_flag = RUS_ai_black_army_course
+			}
+			modifier = {
+				add = 60
+				has_country_flag = RUS_ai_scientists_course
+				RUS_coup_window_open = yes
+				RUS_coup_plot_active = no
+			}
 		}
 	}
 
@@ -4142,6 +4159,16 @@ RUS_state_balance_measures_category = {
 				RUS_coup_window_open = yes
 				power_balance_value = { id = RUS_state_balance value < -0.45 }
 			}
+			modifier = {
+				factor = 0
+				has_country_flag = RUS_ai_scientists_course
+			}
+			modifier = {
+				add = 60
+				has_country_flag = RUS_ai_black_army_course
+				RUS_coup_window_open = yes
+				RUS_coup_plot_active = no
+			}
 		}
 	}
 
@@ -4216,6 +4243,10 @@ RUS_state_balance_measures_category = {
 					power_balance_value = { id = RUS_state_balance value < -0.45 }
 					power_balance_value = { id = RUS_state_balance value > 0.45 }
 				}
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_coup_course_active = yes
 			}
 		}
 	}

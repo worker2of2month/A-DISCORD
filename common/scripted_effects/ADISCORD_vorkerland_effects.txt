@@ -12981,6 +12981,22 @@ ADISCORD_vorkerland_empire_install_governor = {
 # Imperial legitimacy is settled by the cabinet's focus route.
 ADISCORD_vorkerland_rename_after_itora = {
 	if = {
+		limit = {
+			has_country_leader = {
+				character = TVA_Dorian_Worx
+				ruling_only = yes
+			}
+		}
+		set_portraits = {
+			character = TVA_Dorian_Worx
+			civilian = { large = GFX_portrait_WRK_Dorian_Worx_singularity_victory }
+		}
+		set_country_leader_portrait = {
+			ideology = technocracy
+			portrait = GFX_portrait_WRK_Dorian_Worx_singularity_victory
+		}
+	}
+	if = {
 		limit = { ADISCORD_vorkerland_world_empire_active = no }
 		if = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }

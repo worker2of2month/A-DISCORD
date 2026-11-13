@@ -30,6 +30,7 @@ MUSIC = Path("music/ADISCORD_music.asset")
 SPECIAL_SONGS = Path("music/ADISCORD_special_songs.txt")
 PRESENTATION_SONGS = Path("music/ADISCORD_superevent_songs.txt")
 ART_SOURCES = Path("tools/assets/source/superevents/art_sources.json")
+QUOTE_SOURCES = Path("tools/data/adiscord_superevent_quotes.json")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -48,6 +49,7 @@ REQUIRED_FILES = (
     SPECIAL_SONGS,
     PRESENTATION_SONGS,
     ART_SOURCES,
+    QUOTE_SOURCES,
 )
 
 SUPEREVENT_IDS = (
@@ -624,6 +626,60 @@ def presentation_asset_issues(gfx: str, effects: str, sounds: str, manifest: dic
     return issues
 
 
+def quotation_issues(localisations: dict[str, str], manifest: dict, scripted_loc: str) -> list[str]:
+    """Keep reviewed quotations and their source references attached to every displayed variant."""
+    issues = []
+    quotes = manifest.get("quotes", {})
+    aliases = manifest.get("aliases", {})
+    sources = manifest.get("sources", {})
+    inactive = "superevent_inactive_quote"
+    expected = set(quotes) | set(aliases) | {inactive}
+    referenced = set(re.findall(r"localization_key\s*=\s*(superevent_\w+_quote)\b", scripted_loc))
+    for key in sorted(referenced - expected):
+        issues.append(f"quote sources: no reviewed quotation for {key}")
+    for key, row in quotes.items():
+        source = sources.get(row.get("source"), {})
+        if not source.get("url", "").startswith("https://") or not row.get("location") or not row.get("source_passage"):
+            issues.append(f"quote sources: incomplete citation for {key}")
+    for key, target in aliases.items():
+        if target not in quotes:
+            issues.append(f"quote sources: unresolved alias {key}")
+    for language, text in localisations.items():
+        seen = set()
+        for line in text.splitlines():
+            declaration = re.match(r"\s*(superevent_\w+_quote):", line)
+            if not declaration:
+                continue
+            key = declaration[1]
+            if key in seen:
+                issues.append(f"{language} quote: duplicate {key}")
+            seen.add(key)
+            match = re.fullmatch(r'\s*superevent_\w+_quote:(?:\d+)?\s*("(?:\\.|[^"\\])*")\s*', line)
+            try:
+                value = json.loads(match[1]) if match else None
+            except json.JSONDecodeError:
+                value = None
+            if value is None:
+                issues.append(f"{language} quote: invalid quoted value for {key}")
+                continue
+            if key not in expected:
+                issues.append(f"quote sources: no reviewed quotation for {key}")
+                continue
+            if key == inactive:
+                approved = ""
+            elif key in aliases:
+                approved = f"${aliases[key]}$"
+            else:
+                approved = quotes[key].get(language)
+                if not approved or "\n- " not in approved:
+                    issues.append(f"quote sources: missing {language} text or attribution for {key}")
+            if value != approved:
+                issues.append(f"{language} quote: {key} differs from its reviewed citation")
+        for key in sorted(expected - seen):
+            issues.append(f"{language} quote: missing {key}")
+    return issues
+
+
 def collect_issues(root: Path = ROOT) -> list[str]:
     root = Path(root)
     issues: list[str] = []
@@ -643,6 +699,12 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     sound_effects = source.get(SOUND_EFFECTS, "")
     sound_category = source.get(SOUND_CATEGORY, "")
     registry_source = source.get(REGISTRY, "")
+    try:
+        quote_sources = json.loads(source.get(QUOTE_SOURCES, ""))
+    except json.JSONDecodeError:
+        issues.append("quote sources: invalid JSON")
+    else:
+        issues.extend(quotation_issues({"russian": russian, "english": english}, quote_sources, scripted_loc))
     try:
         art_sources = json.loads(source.get(ART_SOURCES, ""))
     except json.JSONDecodeError:

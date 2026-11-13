@@ -140,7 +140,14 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             )
             self.assertIsNotNone(expected, field)
             with self.subTest(field=field):
-                if assigned:
+                if not assigned:
+                    continue
+                if field == "AI_THEATRE_SUPPLY_CRISIS_LIMIT":
+                    # Only a stricter limit keeps the safeguard: the division
+                    # leaves an undersupplied area earlier, never later.
+                    self.assertGreaterEqual(float(assigned[-1]), float(expected[1]))
+                    self.assertLessEqual(float(assigned[-1]), 0.25)
+                else:
                     self.assertEqual(float(assigned[-1]), float(expected[1]))
 
     def test_combined_production_minima_leave_capacity_for_rifles(self) -> None:

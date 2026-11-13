@@ -1,0 +1,368 @@
+# War for the South: operations shared by both champions. Country decisions of
+# Shahrabad and Svetlogorye stay in their own decision files.
+
+ADISCORD_south_final_war_category = {
+
+	# ----- District orders -----
+
+	# One order at a time: ADISCORD_south_order_state holds the ordered key
+	# state from payment until the mission succeeds, times out or the war ends.
+	ADISCORD_south_district_order = {
+		icon = generic_operation
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+				tag = EFL
+				tag = AZH
+			}
+		}
+		state_target = yes
+		targets = { 67 688 699 707 700 701 69 }
+		target_trigger = {
+			FROM = { has_variable = ADISCORD_south_initial_side }
+		}
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		visible = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_war_champion = yes
+			FROM = { ADISCORD_south_state_held_by_root_enemy = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_order_slot_free_tt
+				NOT = { has_variable = ADISCORD_south_order_state }
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_district_order
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			NOT = { command_power < 25 }
+		}
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_variable = ADISCORD_south_order_state }
+						NOT = { has_political_power < 50 }
+						NOT = { command_power < 25 }
+					}
+				}
+				add_political_power = -50
+				add_command_power = -25
+				hidden_effect = {
+					set_variable = { var = ADISCORD_south_order_state value = FROM }
+				}
+				activate_mission = ADISCORD_south_district_order_mission
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_neighbor_state = { ADISCORD_south_state_held_by_root_side = yes }
+					}
+				}
+			}
+		}
+	}
+
+	ADISCORD_south_district_order_mission = {
+		icon = generic_operation
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+				tag = EFL
+				tag = AZH
+			}
+		}
+		is_good = yes
+		activation = { always = no }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_order_taken_tt
+				has_variable = ADISCORD_south_order_state
+				var:ADISCORD_south_order_state = { ADISCORD_south_state_held_by_root_side = yes }
+			}
+		}
+		visible = { has_variable = ADISCORD_south_order_state }
+		days_mission_timeout = 70
+		selectable_mission = no
+		fire_only_once = no
+		complete_effect = {
+			add_political_power = 75
+			add_war_support = 0.05
+			custom_effect_tooltip = ADISCORD_south_order_success_strain_tt
+			hidden_effect = {
+				clear_variable = ADISCORD_south_order_state
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -8 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		timeout_effect = {
+			add_timed_idea = {
+				idea = ADISCORD_south_order_failed
+				days = 28
+			}
+			custom_effect_tooltip = ADISCORD_south_order_failure_strain_tt
+			hidden_effect = {
+				clear_variable = ADISCORD_south_order_state
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = 4 }
+				ADISCORD_south_add_strain = yes
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_campaign_over_tt
+				NOT = { ADISCORD_south_final_active = yes }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = { clear_variable = ADISCORD_south_order_state }
+		}
+	}
+
+	# ----- Holding the districts -----
+
+	# Judged only at timeout; the furnace cycle opens the next period.
+	ADISCORD_south_hold_districts = {
+		icon = generic_fortify_the_borders
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+				tag = EFL
+				tag = AZH
+			}
+		}
+		is_good = yes
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_war_champion = yes
+		}
+		days_mission_timeout = 84
+		selectable_mission = no
+		fire_only_once = no
+		timeout_effect = {
+			custom_effect_tooltip = ADISCORD_south_hold_next_tt
+			hidden_effect = { ADISCORD_south_count_own_key_states = yes }
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_south_hold_all_tt
+						check_variable = { var = ADISCORD_south_lost_key_states value = 0 compare = equals }
+					}
+				}
+				add_political_power = 40
+				custom_effect_tooltip = ADISCORD_south_hold_all_strain_tt
+				hidden_effect = {
+					set_temp_variable = { var = ADISCORD_south_strain_delta value = -6 }
+					ADISCORD_south_add_strain = yes
+				}
+			}
+			else_if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_south_hold_one_lost_tt
+						check_variable = { var = ADISCORD_south_lost_key_states value = 1 compare = equals }
+					}
+				}
+				add_war_support = -0.03
+			}
+			else = {
+				add_stability = -0.05
+				add_war_support = -0.05
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_campaign_over_tt
+				NOT = { ADISCORD_south_final_active = yes }
+			}
+		}
+	}
+
+	# ----- Expeditions and defectors -----
+
+	# The price waits in escrow until the ally answers; see the effects file.
+	ADISCORD_south_request_expedition = {
+		icon = generic_army_support
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+			}
+		}
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = {
+			FROM = { exists = yes }
+		}
+		visible = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_war_champion = yes
+			OR = {
+				has_completed_focus = SHL_sw_desert_envoys
+				has_completed_focus = NAM_sw_northern_envoys
+			}
+			FROM = {
+				NOT = { tag = ROOT }
+				has_capitulated = no
+				OR = {
+					AND = {
+						ADISCORD_south_on_shl_side = yes
+						ROOT = { ADISCORD_south_on_shl_side = yes }
+					}
+					AND = {
+						ADISCORD_south_on_north_side = yes
+						ROOT = { ADISCORD_south_on_north_side = yes }
+					}
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_request_slot_free_tt
+				NOT = { has_country_flag = ADISCORD_south_expedition_pending }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_ally_can_send_tt
+				FROM = {
+					NOT = { has_manpower < 9000 }
+					NOT = { has_equipment = { infantry_equipment < 1500 } }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_expedition
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_re_enable = 90
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_country_flag = ADISCORD_south_expedition_pending }
+						NOT = { has_political_power < 50 }
+						check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+					}
+				}
+				custom_effect_tooltip = ADISCORD_south_expedition_request_tt
+				hidden_effect = {
+					ADISCORD_south_pay_expedition = yes
+					set_country_flag = ADISCORD_south_expedition_pending
+					FROM = { country_event = { id = ADISCORD_south.60 hours = 6 } }
+					country_event = { id = ADISCORD_south.66 days = 21 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				has_political_power < 120
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	ADISCORD_south_court_defector = {
+		icon = generic_political_discourse
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+			}
+		}
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = {
+			FROM = { exists = yes }
+		}
+		visible = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_war_champion = yes
+			OR = {
+				has_completed_focus = SHL_sw_southern_league
+				has_completed_focus = NAM_sw_league_of_the_north
+			}
+			FROM = {
+				has_war_with = ROOT
+				is_subject = no
+				NOT = { has_country_flag = ADISCORD_south_north_leader }
+				NOT = { has_country_flag = ADISCORD_south_defected }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_request_slot_free_tt
+				NOT = { has_country_flag = ADISCORD_south_defector_pending }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_defector_wavering_tt
+				FROM = {
+					OR = {
+						capital_scope = { ADISCORD_south_state_held_by_root_side = yes }
+						has_war_support < 0.30
+						AND = {
+							has_war_support < 0.40
+							ROOT = {
+								OR = {
+									has_completed_focus = SHL_sw_break_the_sands
+									has_completed_focus = NAM_sw_punitive_columns
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_defector
+		custom_cost_trigger = {
+			NOT = { has_political_power < 80 }
+		}
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_country_flag = ADISCORD_south_defector_pending }
+						NOT = { has_political_power < 80 }
+					}
+				}
+				add_political_power = -80
+				custom_effect_tooltip = ADISCORD_south_defector_request_tt
+				hidden_effect = {
+					set_country_flag = ADISCORD_south_defector_pending
+					FROM = { country_event = { id = ADISCORD_south.63 hours = 6 } }
+					country_event = { id = ADISCORD_south.66 days = 21 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_political_power < 150
+			}
+		}
+	}
+}

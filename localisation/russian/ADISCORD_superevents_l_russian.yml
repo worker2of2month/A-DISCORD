@@ -1,6 +1,6 @@
 ﻿l_russian:
   superevent_vorkerland_civilwar_title: "Гражданская война в Воркерланде"
-  superevent_vorkerland_civilwar_quote: "Когда слова перестают соответствовать вещам, рушатся королевства, слабеют и угасают империи.\n\n- Эзра Паунд"
+  superevent_vorkerland_civilwar_quote: "Война лишает людей лёгкого удовлетворения повседневных нужд и потому оказывается суровым учителем.\n\n- Фукидид, \"История\", III, 82"
   superevent_vorkerland_civilwar_comment: "Государство оказалось менее прочным, чем его границы"
 
   superevent_vorkerland_dirty_opening_title: "Падение Периметра"
@@ -16,7 +16,7 @@
   superevent_vorkerland_utilitarian_victory_comment: "Антон Багли подчинил новый порядок измеримой общественной пользе"
 
   superevent_vorkerland_vlad_victory_title: "Имперская реставрация"
-  superevent_vorkerland_vlad_victory_quote: "Они создают пустыню и называют её миром.\n\n- Тацит, \"Агрикола\""
+  superevent_vorkerland_vlad_victory_quote: "Где они создают пустыню, они называют это миром.\n\n- Тацит, \"Агрикола\", 30"
   superevent_vorkerland_vlad_victory_comment: "Влад Петричев вернул единство на штыках"
 
   superevent_vorkerland_dorian_victory_title: "Воркеландское поле экспериментов"
@@ -24,7 +24,7 @@
   superevent_vorkerland_dorian_victory_comment: "Воркерланд передан тем, кто умеет считать, строить и управлять"
 
   superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
-  superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
+  superevent_stelander_empire_quote: "Самый дешёвый вид гордости - национальная гордость.\n\n- Артур Шопенгауэр, \"Афоризмы житейской мудрости\""
   superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
 
   superevent_stelander_party_victory_title: "Победа партии в Стеландере"
@@ -53,7 +53,7 @@
  superevent_val_council_proclamation_comment:0 "За страну отвечаем мы."
 
  superevent_south_war_title: "Война за Юг"
- superevent_south_war_quote: "Последний гражданский поезд ушёл до рассвета. На станциях остались только военные."
+ superevent_south_war_quote: "Война есть лишь продолжение политики другими средствами.\n\n- Карл фон Клаузевиц, \"О войне\", I, 1"
  superevent_south_war_comment: "Пустыня снова стала фронтом."
 
   superevent_stelander_great_title: "Провозглашён Великий Стеландер!"
@@ -64,10 +64,10 @@
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""
  superevent_rus_black_banner_title:0 "ИМПЕРИЯ ЧЁРНОГО ЗНАМЕНИ"
- superevent_rus_black_banner_quote:0 "\"Штаб существует, пока последний солдат знает, кто держит соседний рубеж\".\n- Тагир Мансуров"
+ superevent_rus_black_banner_quote:0 "Смотри на солдат как на своих детей, и они пойдут за тобой в самые глубокие долины.\n\n- Сунь-цзы, \"Искусство войны\", X"
  superevent_rus_black_banner_comment:0 "Держать общий строй."
  superevent_rus_restoration_title:0 "ПОСЛЕДНЯЯ ИМПЕРИЯ"
- superevent_rus_restoration_quote:0 "\"Страна начинается там, где завтрашний хлеб перестают считать чудом\".\n- Глеб Корнеев"
+ superevent_rus_restoration_quote:0 "Знание и могущество человека совпадают.\n\n- Фрэнсис Бэкон, \"Новый Органон\", I, 3"
  superevent_rus_restoration_comment:0 "Открыть мастерские."
 
  superevent_itora_vorkerland_war_title:0 "Вторая Иторско-Воркерландская война"
@@ -112,11 +112,11 @@
  superevent_stelander_tikhoreva_comment:0 "Ни одна жизнь не останется за итоговой строкой"
 
   superevent_nam_resource_war_service_title: "Ресурсная война: приказ наместников"
-  superevent_nam_resource_war_service_quote: "К рассвету через восточный пост прошли сорок цистерн. Обратно дорога шла пустая."
+  superevent_nam_resource_war_service_quote: "Искусство войны жизненно важно для государства.\n\n- Сунь-цзы, \"Искусство войны\", I"
   superevent_nam_resource_war_service_comment: "Наместники берут промыслы под охрану"
 
   superevent_nam_resource_war_district_title: "Ресурсная война: ополчение округов"
-  superevent_nam_resource_war_district_quote: "Вчера у проходной сдавали пропуска. Сегодня здесь выдают винтовки."
+  superevent_nam_resource_war_district_quote: "Победит тот, чья армия во всех своих рядах проникнута единым духом.\n\n- Сунь-цзы, \"Искусство войны\", III"
   superevent_nam_resource_war_district_comment: "Ночная смена остаётся на промыслах"
 
   superevent_stelander_party_victory_houses_title: "Высшие Дома правят Стеландером"
@@ -128,11 +128,11 @@
   superevent_stelander_party_victory_staff_comment: "Август Вейль вводит мир по уставу"
 
   superevent_stelander_party_victory_wallets_title: "Стеландская витрина снова открыта"
-  superevent_stelander_party_victory_wallets_quote: "Бесконечные деньги - нерв войны.\n\n- Марк Туллий Цицерон, \"Филиппики\""
+  superevent_stelander_party_victory_wallets_quote: "Нервы войны - неисчислимые деньги.\n\n- Марк Туллий Цицерон, \"Филиппики\", V, 5"
   superevent_stelander_party_victory_wallets_comment: "Павел Ланской открывает сезон"
 
   superevent_stelander_party_victory_silence_title: "Тишина над Стеландером"
-  superevent_stelander_party_victory_silence_quote: "Они создают пустыню и называют это миром.\n\n- Публий Корнелий Тацит, \"Агрикола\""
+  superevent_stelander_party_victory_silence_quote: "Где они создают пустыню, они называют это миром.\n\n- Тацит, \"Агрикола\", 30"
   superevent_stelander_party_victory_silence_comment: "Вера Корвина хранит тишину"
 
   superevent_stelander_party_victory_regent_title: "Нодрул празднует стеландскую победу"
@@ -144,142 +144,142 @@
   superevent_stelander_party_victory_festival_comment: "Руфус Хедерсетт празднует победу"
 
   superevent_south_houses_title: "Цена Юга"
-  superevent_south_houses_quote: "На пломбе первой цистерны стоит клеймо торгового дома. Остальные девять ждут своей очереди."
+  superevent_south_houses_quote: "Всё для себя и ничего для других - таков, по-видимому, во все времена был гнусный девиз властителей человечества.\n\n- Адам Смит, \"Богатство народов\", III, IV"
   superevent_south_houses_comment: "Дома получат свою долю."
 
   superevent_south_cities_title: "Юг вольных городов"
-  superevent_south_cities_quote: "Каждый город увозит из Хазара свой экземпляр договора. Подписи на всех одинаковы."
+  superevent_south_cities_quote: "Народ, подчиняющийся законам, должен быть их автором.\n\n- Жан-Жак Руссо, \"Об общественном договоре\", II, 6"
   superevent_south_cities_comment: "Нам самим решать."
 
   superevent_south_nur_title: "Приказ из Хазара"
-  superevent_south_nur_quote: "Станционные часы переводят на хазарское время. Отныне составы идут по общему расписанию."
+  superevent_south_nur_quote: "Главные основы всех государств, новых, старых или смешанных, - хорошие законы и хорошее войско.\n\n- Никколо Макиавелли, \"Государь\", XII"
   superevent_south_nur_comment: "Хазару подчинятся все."
 
   superevent_south_regency_title: "Земля за верность"
-  superevent_south_regency_quote: "Землемеры вышли в поле с первыми списками пожалований. Жители узнают хозяина по знаку на межевом столбе."
+  superevent_south_regency_quote: "Благодеяния следует оказывать понемногу, чтобы их вкус ощущался дольше.\n\n- Никколо Макиавелли, \"Государь\", VIII"
   superevent_south_regency_comment: "Верность будет вознаграждена."
 
   superevent_south_commune_title: "Наш огонь"
-  superevent_south_commune_quote: "Сменному совету передали ключи от насосной. В журнале впервые расписывается мастер, которого выбрал цех."
+  superevent_south_commune_quote: "Свободное развитие каждого является условием свободного развития всех.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\""
   superevent_south_commune_comment: "Теперь мы здесь хозяева."
 
   superevent_south_conclave_title: "Девять хозяев"
-  superevent_south_conclave_quote: "В Хазар привезли ведомости со всех захваченных станций. Девять мест в палате по-прежнему заняты."
+  superevent_south_conclave_quote: "Разговор заканчивается сговором против общества или какой-нибудь уловкой для повышения цен.\n\n- Адам Смит, \"Богатство народов\", I, X"
   superevent_south_conclave_comment: "Все девять остались на своих местах."
 
   superevent_south_service_title: "Воля наместников"
-  superevent_south_service_quote: "Первый отчёт из Хазара прибыл с печатью нового наместника. Следующий ждут через неделю."
+  superevent_south_service_quote: "Цель повиновения - защита.\n\n- Томас Гоббс, \"Левиафан\", XXI"
   superevent_south_service_comment: "Наместник ответит перед Светлогорском."
 
   superevent_south_charter_title: "Под одной хартией"
-  superevent_south_charter_quote: "Рядом с подписью Светлогорска осталось место для печати каждого округа. К вечеру заполнили последнюю строку."
+  superevent_south_charter_quote: "Никто не может быть выведен из этого состояния и подчинён политической власти другого без собственного согласия.\n\n- Джон Локк, \"Второй трактат о правлении\", 95"
   superevent_south_charter_comment: "Каждый округ имеет голос."
 
   superevent_south_contracts_title: "Сделка заключена"
-  superevent_south_contracts_quote: "Первая партия топлива проходит границу по новой накладной. Груз принимают диспетчеры обеих сторон."
+  superevent_south_contracts_quote: "Люди должны выполнять заключённые ими соглашения.\n\n- Томас Гоббс, \"Левиафан\", XV"
   superevent_south_contracts_comment: "Слово дано."
 
   superevent_south_rump_title: "Снова на материке"
-  superevent_south_rump_quote: "Береговая служба вновь принимает суда для материка. У старых причалов уже не хватает лоцманов."
+  superevent_south_rump_quote: "В наших силах начать мир заново.\n\n- Томас Пейн, \"Здравый смысл\""
   superevent_south_rump_comment: "Наш берег снова рядом."
 
   superevent_south_revenge_title: "Обратный поход"
-  superevent_south_revenge_quote: "На дороге, где забирали топливную дань, снимают шлагбаум. Ветераны уступают путь первому автобусу."
+  superevent_south_revenge_quote: "Пусть главной целью войны будет победа, а не затяжные походы.\n\n- Сунь-цзы, \"Искусство войны\", II"
   superevent_south_revenge_comment: "Мы помнили дорогу."
 
   superevent_south_radical_title: "Добыча победителей"
-  superevent_south_radical_quote: "В трюме первого судна помещаются три станка и запас привода к каждому. Капитан расписался за весь груз."
+  superevent_south_radical_quote: "Грабя чужую землю, разделяй добычу между своими людьми.\n\n- Сунь-цзы, \"Искусство войны\", VII"
   superevent_south_radical_comment: "Победитель забирает своё."
 
   superevent_south_free_islands_title: "Мы вернулись"
-  superevent_south_free_islands_quote: "Паром принимает пассажиров и на обратный рейс. На причале сверяют списки семей, разлучённых войной."
+  superevent_south_free_islands_quote: "Нет для человека ничего дороже родной земли и родителей.\n\n- Гомер, \"Одиссея\", IX"
   superevent_south_free_islands_comment: "Теперь можно домой."
 
   superevent_south_boards_title: "Родина с молотка"
-  superevent_south_boards_quote: "В акте приёмки указаны скважины, мастерские и даже часы над проходной. Председателю осталось поставить подпись."
+  superevent_south_boards_quote: "Современная государственная власть - это лишь комитет, управляющий общими делами всего класса буржуазии.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\""
   superevent_south_boards_comment: "Всё имеет цену."
 
   superevent_south_restitution_title: "Здесь проходит рубеж"
-  superevent_south_restitution_quote: "Передовые части вернулись на рубеж. Из-за вала уже слышно, как на промысле снова заработал насос."
+  superevent_south_restitution_quote: "Цель закона - не упразднять или ограничивать свободу, а сохранять и расширять её.\n\n- Джон Локк, \"Второй трактат о правлении\", 57"
   superevent_south_restitution_comment: "Дальше они не пройдут."
 
   superevent_west_worker_title: "Запад входит в Конфедерацию"
-  superevent_west_worker_quote: "Делегатам Иторы поставили столы в общем зале. Первым вопросом стало снабжение городов по обе стороны бывшего фронта."
+  superevent_west_worker_quote: "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, \"Югуртинская война\", 10"
   superevent_west_worker_comment: "Республики открывают заседание"
 
   superevent_west_petrichev_title: "Победа имперского Воркерланда"
-  superevent_west_petrichev_quote: "В Старую марку прибыл гарнизонный поезд. Начальник станции принял у коменданта расписание на ближайший месяц."
+  superevent_west_petrichev_quote: "Гораздо надёжнее внушать страх, чем любовь, если приходится отказаться от одного из двух.\n\n- Никколо Макиавелли, \"Государь\", XVII"
   superevent_west_petrichev_comment: "Запад переходит под имперский мандат"
 
   superevent_west_veyran_title: "Восстановление Вейранской империи"
-  superevent_west_veyran_quote: "Печать достали из музейной витрины. Первым под ней расписался Влад Петричев."
+  superevent_west_veyran_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, \"Буря\", II, 1"
   superevent_west_veyran_comment: "Акт о восстановлении подписан"
 
   superevent_west_dorian_title: "Технический союз Форула"
-  superevent_west_dorian_quote: "Диспетчер включил западную линию. Стрелка амперметра дрогнула и впервые за всю войну осталась на рабочей отметке."
+  superevent_west_dorian_quote: "Природу побеждают, лишь подчиняясь ей.\n\n- Фрэнсис Бэкон, \"Новый Органон\", I, 3"
   superevent_west_dorian_comment: "Сеть приняла нагрузку"
 
   superevent_west_anton_title: "Запад Антона Багли"
-  superevent_west_anton_quote: "В западные больницы пришёл первый обоз с лекарствами. Врачи освободили палаты, где во время боёв хранили носилки."
+  superevent_west_anton_quote: "Мерило здесь - не наибольшее счастье самого действующего лица, а наибольшее общее количество счастья.\n\n- Джон Стюарт Милль, \"Утилитаризм\", II"
   superevent_west_anton_comment: "Первые больницы открыты"
 
   superevent_west_shield_title: "Победа Гуманистического щита"
-  superevent_west_shield_quote: "Утренний автобус прошёл северный коридор с иторским сопровождением. На обратный рейс продали все места."
+  superevent_west_shield_quote: "И всё это должно служить лишь миру, безопасности и общественному благу народа.\n\n- Джон Локк, \"Второй трактат о правлении\", 131"
   superevent_west_shield_comment: "Гарантии вступили в силу"
 
   superevent_west_emergency_title: "Чрезвычайная опека Иторы"
-  superevent_west_emergency_quote: "Ночной оператор доработал смену. К утру у коммутатора уже сидел связист, присланный иторским комиссаром."
+  superevent_west_emergency_quote: "Где нет общей власти, нет закона; где нет закона, нет несправедливости.\n\n- Томас Гоббс, \"Левиафан\", XIII"
   superevent_west_emergency_comment: "Комиссары принимают управление"
 
   superevent_west_revanche_title: "Иторский реванш"
-  superevent_west_revanche_quote: "Межевой камень подняли со старой границы и увезли на грузовике. Землемерам предстоит заново описать всю марку."
+  superevent_west_revanche_quote: "Обиды следует наносить все разом, чтобы, ощущаемые меньше, они меньше задевали.\n\n- Никколо Макиавелли, \"Государь\", VIII"
   superevent_west_revanche_comment: "Границы пересмотрены"
 
   superevent_west_committee_title: "Западный мир Комитета Иторы"
-  superevent_west_committee_quote: "Ключи от сигнального поста на северной линии принял иторский дежурный. До вечера прошли два товарных состава."
+  superevent_west_committee_quote: "Обязанность подданных перед сувереном длится лишь до тех пор, пока существует власть, способная их защищать.\n\n- Томас Гоббс, \"Левиафан\", XXI"
   superevent_west_committee_comment: "Коридор передан Иторе"
 
   superevent_vorkerland_world_empire_title: "Мировая империя Воркерланда"
-  superevent_vorkerland_world_empire_quote: "Первый тираж разошёлся ещё тёплым. Вечернюю газету уже набирали с новым названием государства."
+  superevent_vorkerland_world_empire_quote: "Имя моё - Озимандия, царь царей.\n\n- Перси Биши Шелли, \"Озимандия\""
   superevent_vorkerland_world_empire_comment: "Выпуск уходит в печать"
 
   superevent_south_iron_title: "Последняя ступень"
-  superevent_south_iron_quote: "Казармы и канцелярии получили один список назначений. К полудню новые наместники приняли присягу."
+  superevent_south_iron_quote: "Люди скорее забывают смерть отца, чем потерю наследства.\n\n- Никколо Макиавелли, \"Государь\", XVII"
   superevent_south_iron_comment: "Приказы не обсуждаются."
 
   superevent_south_civil_service_title: "На службе республики"
-  superevent_south_civil_service_quote: "В понедельник уездная канцелярия открылась в обычный час. Приказ о первом назначении вывесили рядом с часами приёма."
+  superevent_south_civil_service_quote: "Равная и беспристрастная справедливость для всех людей, независимо от их положения, религиозных или политических убеждений.\n\n- Томас Джефферсон, первая инаугурационная речь"
   superevent_south_civil_service_comment: "Власть должна служить."
 
   superevent_south_federation_title: "Союз равных"
-  superevent_south_federation_quote: "Делегаты возвращаются из Светлогорска с подписанными грамотами. Дома каждую предстоит прочитать на открытом заседании."
+  superevent_south_federation_quote: "Власть можно передать, но волю - нельзя.\n\n- Жан-Жак Руссо, \"Об общественном договоре\", II, 1"
   superevent_south_federation_comment: "Никто не решит за нас."
 
   superevent_south_oil_union_title: "Земля нефтяников"
-  superevent_south_oil_union_quote: "На стыке двух окружных труб смена дождалась рабочего давления. Южная ветка впервые вошла в общую сеть."
+  superevent_south_oil_union_quote: "Пролетариям нечего терять, кроме своих цепей. Приобретут же они весь мир.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\""
   superevent_south_oil_union_comment: "Промыслы в наших руках."
 
   superevent_south_contract_republic_title: "Республика держит слово"
-  superevent_south_contract_republic_quote: "Возобновился городской маршрут через бывший блокпост. Кондуктору выдали прежний запас билетов и новое расписание."
+  superevent_south_contract_republic_quote: "Где кончается закон, начинается тирания.\n\n- Джон Локк, \"Второй трактат о правлении\", 202"
   superevent_south_contract_republic_comment: "Договор касается и правителя."
 
   superevent_south_directorate_title: "Большая сделка"
-  superevent_south_directorate_quote: "На сортировочной станции сошлись заявки южных заводов. Деловой совет начинает с распределения порожних цистерн."
+  superevent_south_directorate_quote: "Потребление - единственная цель и назначение всякого производства.\n\n- Адам Смит, \"Богатство народов\", IV, VIII"
   superevent_south_directorate_comment: "Победа должна приносить доход."
 
   superevent_south_nam_title: "Юг за нами"
-  superevent_south_nam_quote: "На дороге к печам Хазара сняли последнее заграждение. Утром по ней пошли бензовозы из Светлогорья."
+  superevent_south_nam_quote: "Не бывало, чтобы затяжная война приносила стране пользу.\n\n- Сунь-цзы, \"Искусство войны\", II"
   superevent_south_nam_comment: "Война за Юг окончена."
 
   superevent_west_council_title: "Запад под мандатом Чрезвычайного совета"
-  superevent_west_council_quote: "На новом расписании для западных станций стоят две подписи. Свою копию взяли и военные, и гражданское управление."
+  superevent_west_council_quote: "Если бы люди были ангелами, никакое правительство не было бы нужно.\n\n- Джеймс Мэдисон, \"Федералист\", 51"
   superevent_west_council_comment: "Совет утвердил мандат"
  superevent_west_world_empire_title: "Мировая империя Воркерланда победила Итору"
- superevent_west_world_empire_quote: "Дежурный снял с рычага проволочную пломбу. По западному пути впервые с начала войны пустили товарный состав."
+ superevent_west_world_empire_quote: "Гордых смирять, освобождать раба от цепей - вот достойное тебя искусство империи.\n\n- Вергилий, \"Энеида\", VI (по переводу Джона Драйдена)"
  superevent_west_world_empire_comment: "Западная линия открыта"
 
  superevent_nam_veyran_proclamation_title:0 "Провозглашение Вейранской империи"
- superevent_nam_veyran_proclamation_quote:0 "Глава делегации вынул из кармана потемневшую печать. Утром под союзной грамотой стояли обе подписи."
+ superevent_nam_veyran_proclamation_quote:0 "Репутация могущества есть могущество.\n\n- Томас Гоббс, \"Левиафан\", X"
  superevent_nam_veyran_proclamation_comment:0 "Союзная грамота подписана"
 
  # Virgil, Aeneid I.279: https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296

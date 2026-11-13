@@ -257,11 +257,12 @@ ADISCORD_infantry_templates = {
 		reinforce_prio = 1
 		upgrade_prio = { base = 8 }
 		can_upgrade_in_field = {
-			has_equipment = { support_equipment > 1300 }
-			has_equipment = { artillery_equipment > 750 }
+			ADISCORD_ai_can_refit_field_army = yes
+			has_equipment = { support_equipment > 1700 }
+			has_equipment = { artillery_equipment > 1100 }
 			has_equipment = { anti_tank_equipment > 240 }
-			has_equipment = { anti_air_equipment > 240 }
 		}
+		target_min_match = 0.75
 		target_template = {
 			support = {
 				engineer = 1
@@ -271,6 +272,44 @@ ADISCORD_infantry_templates = {
 				logistics_company = 1
 			}
 			regiments = { infantry = 7 ADISCORD_line_artillery = 1 }
+		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_field_division
+	}
+
+	# Final line stage. Rifles and manpower limit these armies, so the second
+	# artillery battalion carries the extra firepower: at base equipment the
+	# division has 29% more soft attack than the defensive brigade for 7% more
+	# rifles. The hospital returns casualties and the logistics company cuts
+	# supply use; the anti-tank company is what lets infantry pierce platforms.
+	ADISCORD_field_division = {
+		custom_icon = 3
+		enable = {
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_casualty_evacuation
+			has_tech = ADISCORD_tech_scrap_at_launchers
+			num_of_military_factories > 9
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { support_equipment > 1300 }
+			has_equipment = { artillery_equipment > 800 }
+			has_equipment = { anti_tank_equipment > 160 }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 6 }
+		can_upgrade_in_field = {
+			has_equipment = { support_equipment > 1700 }
+			has_equipment = { artillery_equipment > 1100 }
+			has_equipment = { anti_tank_equipment > 240 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				anti_tank = 1
+				logistics_company = 1
+				field_hospital = 1
+			}
+			regiments = { infantry = 7 ADISCORD_line_artillery = 2 }
 		}
 	}
 }
@@ -315,11 +354,12 @@ ADISCORD_assault_templates = {
 		reinforce_prio = 2
 		upgrade_prio = { base = 9 }
 		can_upgrade_in_field = {
-			NOT = { ADISCORD_economy_ai_is_crisis = yes }
-			has_equipment = { ADISCORD_squad_weapons_equipment > 2200 }
-			has_equipment = { support_equipment > 1600 }
-			has_equipment = { artillery_equipment > 650 }
+			ADISCORD_ai_can_refit_field_army = yes
+			has_equipment = { ADISCORD_squad_weapons_equipment > 2600 }
+			has_equipment = { support_equipment > 2000 }
+			has_equipment = { artillery_equipment > 1300 }
 		}
+		target_min_match = 0.7
 		target_template = {
 			support = {
 				engineer = 1
@@ -331,6 +371,48 @@ ADISCORD_assault_templates = {
 				infantry = 5
 				ADISCORD_assault_infantry = 3
 				ADISCORD_line_artillery = 1
+			}
+		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_shock_group
+	}
+
+	# Final assault stage. Three artillery battalions concentrate the attack on
+	# one defender: 61% more soft attack and 44% more breakthrough than the
+	# assault group at base equipment, for 39% more production cost.
+	ADISCORD_shock_group = {
+		custom_icon = 4
+		enable = {
+			has_tech = ADISCORD_tech_assault_infantry_formations
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			has_tech = ADISCORD_tech_casualty_evacuation
+			num_of_military_factories > 13
+			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+			has_equipment = { ADISCORD_squad_weapons_equipment > 2200 }
+			has_equipment = { support_equipment > 1600 }
+			has_equipment = { artillery_equipment > 1000 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 7 }
+		can_upgrade_in_field = {
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { ADISCORD_squad_weapons_equipment > 2600 }
+			has_equipment = { support_equipment > 2000 }
+			has_equipment = { artillery_equipment > 1300 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				artillery = 1
+				logistics_company = 1
+				signal_company = 1
+				field_hospital = 1
+			}
+			regiments = {
+				infantry = 4
+				ADISCORD_assault_infantry = 4
+				ADISCORD_line_artillery = 3
 			}
 		}
 	}
@@ -546,11 +628,14 @@ ADISCORD_tank_templates = {
 		reinforce_prio = 2
 		upgrade_prio = { base = 10 }
 		can_upgrade_in_field = {
+			ADISCORD_ai_can_refit_field_army = yes
 			ADISCORD_economy_ai_is_healthy = yes
-			has_equipment = { ADISCORD_combat_platform_archetype > 440 }
-			has_equipment = { ADISCORD_armored_carrier_archetype > 480 }
+			has_equipment = { ADISCORD_combat_platform_archetype > 800 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 700 }
 			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
+			has_equipment = { support_equipment > 800 }
 		}
+		target_min_match = 0.7
 		target_template = {
 			support = {
 				engineer = 1
@@ -559,6 +644,47 @@ ADISCORD_tank_templates = {
 				signal_company = 1
 			}
 			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
+		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_armoured_division
+	}
+
+	# Final armoured stage for an industry that can keep six platform battalions
+	# supplied: 35% more soft attack and breakthrough in one division than the
+	# networked battlegroup, with a logistics company for its fuel and supply.
+	ADISCORD_armoured_division = {
+		custom_icon = 86
+		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			has_tech = ADISCORD_tech_drone_recon_swarms
+			has_tech = ADISCORD_tech_remote_repair_sections
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			num_of_military_factories > 17
+			ADISCORD_economy_ai_is_healthy = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 600 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 560 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 24 }
+			has_equipment = { support_equipment > 800 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 9 }
+		can_upgrade_in_field = {
+			ADISCORD_economy_ai_is_healthy = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 800 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 700 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
+		}
+		target_template = {
+			support = {
+				engineer = 1
+				ADISCORD_recon_platform = 1
+				ADISCORD_recovery_platform = 1
+				logistics_company = 1
+				signal_company = 1
+			}
+			regiments = { ADISCORD_mechanized_infantry = 7 ADISCORD_combat_platform = 6 }
 		}
 	}
 

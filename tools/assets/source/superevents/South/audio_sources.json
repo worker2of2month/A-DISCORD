@@ -31,6 +31,27 @@
       "duration_seconds": 18.130045,
       "sha256": "be9d0a8f847ca469709119cfa77caf5d6db61944b39513b5d7e351557eb12fa9",
       "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpts, gain and fades are specified in the cue list."
+    },
+    "sfx_factory_machine.flac": {
+      "file": "sfx_factory_machine.flac",
+      "title": "Factory machine 04",
+      "artist": "jmbphilmes",
+      "source_page": "https://freesound.org/people/jmbphilmes/sounds/194489/",
+      "source_audio": "https://cdn.freesound.org/previews/194/194489_2322692-hq.mp3",
+      "license": "CC0 1.0",
+      "sha256": "e27aeb021d69a1b598142839815dc99c516fc80faf994f72166ec49847d3e819",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpt, gain and fades are specified in the cue list."
+    },
+    "sfx_factory_whistle.flac": {
+      "file": "sfx_factory_whistle.flac",
+      "title": "Tehdas, pilli, sireeni / Steam whistle, old factory siren blowing",
+      "artist": "YleArkisto",
+      "source_page": "https://freesound.org/people/YleArkisto/sounds/322582/",
+      "source_audio": "https://cdn.freesound.org/previews/322/322582_4415905-hq.mp3",
+      "license": "CC BY 4.0",
+      "recorded": "1958-11-05, Kotka, Finland",
+      "sha256": "90af46b378ad34708889c71a9b2b1d936f0e8d21c664db17609618f524603798",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpts, gain and fades are specified in the cue list."
     }
   },
   "superevent_south_free_islands_sound": {
@@ -304,5 +325,384 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_south_houses_sound.wav",
     "runtime_sha256": "5dec59db0d684139b5e3b4ad14d606dc47619e425ce61c565f7e66c05a2b5e4f"
+  },
+  "superevent_south_cities_sound": {
+    "music": {
+      "artist": "Aaron Martin",
+      "title": "Captive Witness (Smoke Inscription)",
+      "album": "A Room Now Empty",
+      "source_page": "https://aaronmartin.bandcamp.com/track/captive-witness-smoke-inscription",
+      "file": "aaron_martin_captive_witness_excerpt.flac",
+      "excerpt_seconds": [
+        45,
+        101
+      ],
+      "sha256": "1a12cac52b1b52b0db75425fac548768f032f69dcf58e4d0a459988052212657",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 9,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.25,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 11,
+        "offset": 2,
+        "duration": 4,
+        "gain": 3.0,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 17,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.12,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 21,
+        "offset": 1,
+        "duration": 3,
+        "gain": 0.25,
+        "fade": 0.6,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 35,
+        "offset": 1,
+        "duration": 7,
+        "gain": 0.16,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_winter_wind.flac",
+        "start": 37,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.035,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_cities_sound.wav",
+    "runtime_sha256": "2e78af9cdff0487000efd0ec0b6e4dea3a89ef6331d0656a94dfc2295fb4f2e1"
+  },
+  "superevent_south_nur_victory_sound": {
+    "music": {
+      "artist": "Karjalan Sissit",
+      "title": "Melakka",
+      "album": "Karjalan Sissit (CSR36CD)",
+      "source_page": "https://coldspring.bandcamp.com/track/melakka",
+      "file": "karjalan_sissit_melakka_excerpt.flac",
+      "excerpt_seconds": [
+        40,
+        96
+      ],
+      "sha256": "eb21fbcb3ab3533a17d88f2a39780dcf2288022050c0da351321b8a6e74d7b79",
+      "rights": "Copyrighted recording; public label preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 2,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.5,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/tank_medium.ogg",
+        "start": 8,
+        "offset": 0,
+        "duration": 18,
+        "gain": 0.12,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 24,
+        "offset": 2,
+        "duration": 1.4,
+        "gain": 0.18,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 28,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.25,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 31,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.4,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 37,
+        "offset": 2,
+        "duration": 13,
+        "gain": 0.4,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/tank_light.ogg",
+        "start": 42,
+        "offset": 0,
+        "duration": 10,
+        "gain": 0.08,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_nur_victory_sound.wav",
+    "runtime_sha256": "b44206d4436efca798a66a06aec47f90a14389dc5b8571d4de9b34850121edc9"
+  },
+  "superevent_south_safir_victory_sound": {
+    "music": {
+      "artist": "Dargaard",
+      "title": "Rise And Fall",
+      "album": "Rise and Fall",
+      "source_page": "https://dargaard.bandcamp.com/track/rise-and-fall",
+      "file": "dargaard_rise_and_fall_excerpt.flac",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "sha256": "23317c59a668af6090478597a6e13603750d59dba45e9d0e0f4388d446c809c0",
+      "rights": "Copyrighted recording; public artist preview. Napalm Records."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_banquet_room.flac",
+        "start": 2,
+        "offset": 4,
+        "duration": 14,
+        "gain": 0.1,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 4,
+        "offset": 1,
+        "duration": 8,
+        "gain": 0.4,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 15,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.35,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 17,
+        "offset": 8,
+        "duration": 4,
+        "gain": 3.5,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 22,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.45,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 25,
+        "offset": 1,
+        "duration": 6,
+        "gain": 0.45,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 35,
+        "offset": 2,
+        "duration": 12,
+        "gain": 0.4,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/rifle.ogg",
+        "start": 45,
+        "offset": 0,
+        "duration": 1.2,
+        "gain": 0.28,
+        "fade": 0.01,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/rifle.ogg",
+        "start": 48,
+        "offset": 0,
+        "duration": 1.2,
+        "gain": 0.25,
+        "fade": 0.01,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/rifle.ogg",
+        "start": 51,
+        "offset": 0,
+        "duration": 1.2,
+        "gain": 0.22,
+        "fade": 0.01,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_safir_victory_sound.wav",
+    "runtime_sha256": "7b2bff5842be010f092dc7db8ad3276c1730591c4f11c39a78c12524077c3a76"
+  },
+  "superevent_south_commune_victory_sound": {
+    "music": {
+      "artist": "Test Dept and South Wales Striking Miners Choir",
+      "title": "Comrades",
+      "album": "Shoulder To Shoulder",
+      "source_page": "https://testdept.org.uk/discography/shoulder-shoulder",
+      "recording_source_page": "https://wfmu.org/archiveplayer/?archive=147834&show=70716",
+      "source_audio": "https://arch.wfmu.org/VE/ve-20170121e.mp4",
+      "recording_note": "Public WFMU Play Vertigo archive, 2017-01-21. Playlist marks Comrades at 00:44:26 and the following track at 00:48:56.",
+      "broadcast_excerpt_seconds": [
+        2711,
+        2767
+      ],
+      "file": "test_dept_comrades_excerpt.flac",
+      "excerpt_seconds": [
+        45,
+        101
+      ],
+      "sha256": "04ea718673930579b64acd30a82cc9ab20e8efe83b54d1bfb1d2d8cce706fa2a",
+      "rights": "Copyrighted recording; excerpt from public radio archive."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_factory_whistle.flac",
+        "start": 2,
+        "offset": 2,
+        "duration": 8,
+        "gain": 0.24,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_cheers.mp3",
+        "start": 7,
+        "offset": 0,
+        "duration": 8,
+        "gain": 0.85,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 10,
+        "offset": 1,
+        "duration": 12,
+        "gain": 0.7,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_factory_whistle.flac",
+        "start": 32,
+        "offset": 11,
+        "duration": 7,
+        "gain": 0.18,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_cheers.mp3",
+        "start": 37,
+        "offset": 3,
+        "duration": 9,
+        "gain": 0.75,
+        "fade": 1.2,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 40,
+        "offset": 0,
+        "duration": 13,
+        "gain": 0.65,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_commune_victory_sound.wav",
+    "runtime_sha256": "bb19309ea209a11eb26e3688e229a52bf2a35557d45f85c87212e5e95c3029a2"
   }
 }

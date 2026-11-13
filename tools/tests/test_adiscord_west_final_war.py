@@ -43,6 +43,38 @@ def nation_as_tag(source):
 
 
 class WestFinalWarContractTests(unittest.TestCase):
+    def test_dorian_robot_portrait_belongs_to_victory_settlement_only(self):
+        path = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+        effect = parse_clausewitz(body(path, "ADISCORD_vorkerland_rename_after_itora"))
+        sprite = "GFX_portrait_WRK_Dorian_Worx_singularity_victory"
+        for leader in ("TVA_Dorian_Worx", "WRK_Anton_Bagley", "WRK_Petrichev", None):
+            for empire in (True, False):
+                facts = {
+                    ("TVA", "ruling_leader"): leader,
+                    ("TVA", "ADISCORD_vorkerland_world_empire_active", "no"): not empire,
+                }
+                with self.subTest(leader=leader, empire=empire):
+                    actions = list(selected_effects(effect, facts, "TVA"))
+                    portraits = [entry for _, entry in actions if entry.key == "set_portraits"]
+                    self.assertEqual(len(portraits), int(leader == "TVA_Dorian_Worx"))
+                    if portraits:
+                        self.assertEqual(scalar(portraits[0].value, "character"), leader)
+                        self.assertEqual(scalar(block(portraits[0].value, "civilian"), "large"), sprite)
+                        fallback = next(entry for _, entry in actions if entry.key == "set_country_leader_portrait")
+                        self.assertEqual(scalar(fallback.value, "portrait"), sprite)
+                        self.assertEqual(scalar(fallback.value, "ideology"), "technocracy")
+        settlement = "ADISCORD_vorkerland_rename_after_itora = yes"
+        self.assertIn(settlement, body(EFFECTS, "ADISCORD_west_final_resolve_wrk_victory"))
+        self.assertIn(settlement, body(EFFECTS, "ADISCORD_west_crisis_month"))
+        self.assertNotIn(settlement, body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory"))
+        presentation = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        self.assertNotIn(settlement, presentation)
+        self.assertNotIn(sprite, presentation)
+        gfx = parse_clausewitz((ROOT / "interface/ADISCORD_leader_portraits.gfx").read_text(encoding="utf-8-sig"))
+        sprites = block(gfx, "spriteTypes")
+        texture = next(entry.value for entry in sprites if scalar(entry.value, "name").strip('"') == sprite)
+        self.assertTrue((ROOT / scalar(texture, "texturefile").strip('"')).is_file())
+
     def test_every_itoran_settlement_subject_uses_its_overlords_color(self):
         source = parse_clausewitz(
             (ROOT / "common/autonomous_states/ADISCORD_west_final_war_subjects.txt").read_text(encoding="utf-8")

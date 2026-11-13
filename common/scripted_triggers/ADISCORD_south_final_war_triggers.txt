@@ -370,6 +370,44 @@ ADISCORD_south_state_held_by_north_side = {
 	controller = { ADISCORD_south_on_north_side = yes }
 }
 
+# COUNTRY. The leader of one side of the current campaign.
+ADISCORD_south_war_champion = {
+	OR = {
+		AND = {
+			tag = SHL
+			ADISCORD_south_on_shl_side = yes
+		}
+		has_country_flag = ADISCORD_south_north_leader
+	}
+}
+
+# STATE; ROOT is a champion.
+ADISCORD_south_state_held_by_root_side = {
+	OR = {
+		AND = {
+			ROOT = { ADISCORD_south_on_shl_side = yes }
+			ADISCORD_south_state_held_by_shl_side = yes
+		}
+		AND = {
+			ROOT = { ADISCORD_south_on_north_side = yes }
+			ADISCORD_south_state_held_by_north_side = yes
+		}
+	}
+}
+
+ADISCORD_south_state_held_by_root_enemy = {
+	OR = {
+		AND = {
+			ROOT = { ADISCORD_south_on_shl_side = yes }
+			ADISCORD_south_state_held_by_north_side = yes
+		}
+		AND = {
+			ROOT = { ADISCORD_south_on_north_side = yes }
+			ADISCORD_south_state_held_by_shl_side = yes
+		}
+	}
+}
+
 # COUNTRY. Already fighting the selected northern leader in a campaign war.
 ADISCORD_south_fights_north_leader = {
 	OR = {
@@ -517,4 +555,43 @@ ADISCORD_south_debug_start_ready = {
 	ADISCORD_south_crisis_open = yes
 	ADISCORD_south_participants_ready = yes
 	NAM = { ADISCORD_south_champion_viable = yes }
+}
+
+# COUNTRY ally (event ROOT); FROM is the champion with the request in escrow.
+# The ally gives 3000 men and 500 rifles for each division it sends.
+ADISCORD_south_expedition_possible = {
+	ADISCORD_south_final_active = yes
+	has_capitulated = no
+	FROM = {
+		has_country_flag = ADISCORD_south_expedition_pending
+		ADISCORD_south_war_champion = yes
+		has_capitulated = no
+	}
+	OR = {
+		AND = {
+			ADISCORD_south_on_shl_side = yes
+			FROM = { ADISCORD_south_on_shl_side = yes }
+		}
+		AND = {
+			ADISCORD_south_on_north_side = yes
+			FROM = { ADISCORD_south_on_north_side = yes }
+		}
+	}
+	NOT = { has_manpower < 9000 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+}
+
+# COUNTRY target (event ROOT); FROM is the champion with the offer in escrow.
+ADISCORD_south_defection_possible = {
+	ADISCORD_south_final_active = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = ADISCORD_south_north_leader }
+	NOT = { tag = SHL }
+	FROM = {
+		has_country_flag = ADISCORD_south_defector_pending
+		ADISCORD_south_war_champion = yes
+		has_capitulated = no
+	}
+	has_war_with = FROM
 }

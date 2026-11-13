@@ -9004,6 +9004,24 @@ VAL_end_administration_wars = {
 	}
 }
 
+# COUNTRY new VAL subject. A capitulation settled on the same tick leaves the
+# administration's occupied land under Kefreyt's side; hand that land back.
+# Land held by unrelated enemies stays with them.
+VAL_restore_administration_control = {
+	every_owned_state = {
+		limit = {
+			NOT = { is_controlled_by = PREV }
+			controller = {
+				OR = {
+					tag = VAL
+					is_subject_of = VAL
+				}
+			}
+		}
+		set_state_controller_to = PREV
+	}
+}
+
 # COUNTRY STP/STS. Reuse the surviving country so armies, technology and the
 # player's seat remain intact. Only owned, uncontested border states are ceded.
 VAL_install_stelander_administration = {
@@ -9023,6 +9041,10 @@ VAL_install_stelander_administration = {
 				set_autonomy = { target = PREV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
 				VAL = { VAL_call_subjects_to_wars = yes }
 			}
+		}
+		if = {
+			limit = { is_subject_of = VAL }
+			VAL_restore_administration_control = yes
 		}
 		if = {
 			limit = { NOT = { has_cosmetic_tag = STL_VAL_administration } }

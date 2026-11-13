@@ -162,7 +162,8 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
         }
         field = named_block(source, "ADISCORD_vorkerland_collapse_field_army")
         self.assertIn("role_ratio id = garrison value = -80", field)
-        self.assertIn("dont_defend_ally_borders value = 1", field)
+        # The targetless form is not relied on; default.txt lists each ally.
+        self.assertNotIn("dont_defend_ally_borders", field)
         checked = 0
         for name in re.findall(r"(?m)^(ADISCORD_vorkerland_\w+)\s*=\s*\{", source):
             profile = named_block(source, name)

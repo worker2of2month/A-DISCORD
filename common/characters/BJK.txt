@@ -39,7 +39,7 @@ characters = {
 		name = BHG_Graf_Marcus
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_1
+				large = GFX_portrait_BHG_Graf_Marcus
 			}
 		}
 		country_leader = {

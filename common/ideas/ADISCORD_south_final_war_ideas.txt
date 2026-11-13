@@ -125,5 +125,24 @@ ideas = {
 				convoy_escort_efficiency = 0.15
 			}
 		}
+
+		# Both champions: a district order that ran out of time.
+		ADISCORD_south_order_failed = {
+			picture = generic_war_preparation
+			allowed = {
+				OR = {
+					original_tag = SHL
+					original_tag = NAM
+					original_tag = EFL
+					original_tag = AZH
+				}
+			}
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.05
+			}
+		}
 }
 }

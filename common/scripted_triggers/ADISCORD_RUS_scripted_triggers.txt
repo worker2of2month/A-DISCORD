@@ -929,6 +929,7 @@ ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
 # Keep their AI weights at zero until the ready proclamation has been paid.
 RUS_ai_proclamation_pending = {
 	is_ai = yes
+	RUS_ai_coup_course_active = no
 	has_war = no
 	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 	has_completed_focus = RUS_aimaq_reserve
@@ -1138,6 +1139,14 @@ RUS_scientists_dominant = {
 RUS_black_army_dominant = {
 	has_power_balance = { id = RUS_state_balance }
 	power_balance_value = { id = RUS_state_balance value > 0.599 }
+}
+
+# AI RUS. A coup course chosen by RUS_ai_choose_coup_course is still running.
+RUS_ai_coup_course_active = {
+	OR = {
+		has_country_flag = RUS_ai_scientists_course
+		has_country_flag = RUS_ai_black_army_course
+	}
 }
 
 RUS_coup_plot_active = {

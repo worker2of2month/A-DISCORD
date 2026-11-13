@@ -160,8 +160,8 @@ characters = {
 		name = RUS_Varlam_Oskol
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_2
-				small = GFX_Portrait_Forul_Generic_2_small
+				large = GFX_portrait_RUS_Varlam_Oskol
+				small = GFX_portrait_RUS_Varlam_Oskol_small
 			}
 		}
 	}
@@ -322,7 +322,7 @@ characters = {
 		name = RUS_Gleb_Korneev
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_4
+				large = GFX_portrait_RUS_Gleb_Korneev
 			}
 		}
 		country_leader = {
@@ -336,7 +336,7 @@ characters = {
 		name = RUS_Tagir_Mansurov
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_6
+				large = GFX_portrait_RUS_Tagir_Mansurov
 			}
 		}
 		country_leader = {

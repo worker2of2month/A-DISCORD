@@ -8,8 +8,8 @@ RUS_state_balance = {
 		min = -0.10
 		max = 0.10
 		modifier = { stability_factor = 0.03 }
-		on_activate = { ADISCORD_economy_mark_dirty = yes }
-		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+		on_activate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+		on_deactivate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 	}
 	side = {
 		id = RUS_scientists_side
@@ -23,8 +23,8 @@ RUS_state_balance = {
 				production_factory_efficiency_gain_factor = 0.03
 				conscription_factor = -0.02
 			}
-			on_activate = { ADISCORD_economy_mark_dirty = yes }
-			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+			on_activate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_deactivate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 		}
 		range = {
 			id = RUS_scientists_dominance
@@ -37,11 +37,16 @@ RUS_state_balance = {
 				army_org_factor = -0.03
 				stability_factor = -0.03
 			}
+			# The economy refresh and the plot start dispatch hidden events; the
+			# tooltip names the plot instead of an anonymous event.
 			on_activate = {
-				ADISCORD_economy_mark_dirty = yes
-				RUS_coup_plot_check = yes
+				custom_effect_tooltip = RUS_scientists_dominance_plot_tt
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					RUS_coup_plot_check = yes
+				}
 			}
-			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 		}
 	}
 	side = {
@@ -56,8 +61,8 @@ RUS_state_balance = {
 				army_org_factor = 0.02
 				ADISCORD_economy_admin_expense_factor = 0.04
 			}
-			on_activate = { ADISCORD_economy_mark_dirty = yes }
-			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+			on_activate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_deactivate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 		}
 		range = {
 			id = RUS_black_army_dominance
@@ -71,11 +76,16 @@ RUS_state_balance = {
 				research_speed_factor = -0.05
 				stability_factor = -0.03
 			}
+			# The economy refresh and the plot start dispatch hidden events; the
+			# tooltip names the plot instead of an anonymous event.
 			on_activate = {
-				ADISCORD_economy_mark_dirty = yes
-				RUS_coup_plot_check = yes
+				custom_effect_tooltip = RUS_black_army_dominance_plot_tt
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					RUS_coup_plot_check = yes
+				}
 			}
-			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
+			on_deactivate = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
 		}
 	}
 }

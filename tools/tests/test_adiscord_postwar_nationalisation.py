@@ -55,25 +55,8 @@ def focuses(path, tree_id):
     return {scalar(e.value, 'id'): e.value for e in tree if e.key == 'focus'}
 
 
-class PostwarNationalisationTests(unittest.TestCase):
-    def setUp(self):
-        self.triggers = {
-            e.key: e.value
-            for e in entries(
-                'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'
-            )
-        }
-        self.decisions = {
-            d.key: d.value
-            for c in entries('common/decisions/ADISCORD_STP_decisions.txt')
-            for d in c.value
-            if isinstance(d.value, list)
-        }
-        self.adjacency = {'1': ['2'], '2': ['1', '3'], '3': ['2'], '4': []}
-
-    def decision(self):
-        self.assertIn('STP_pw_nationalise_region', self.decisions.keys())
-        return self.decisions['STP_pw_nationalise_region']
+class NationalisationHarness:
+    """Scenario helpers; a test case supplies triggers, adjacency and decision()."""
 
     def expand(self, nodes, country='STS', target='2', scope=None):
         scope = scope or country
@@ -124,23 +107,6 @@ class PostwarNationalisationTests(unittest.TestCase):
                 result.append(replace(e, key=key, value=value))
         return result
 
-    def facts(self, country='STS'):
-        return {
-            (country, 'has_capitulated', 'no'): True,
-            (country, 'is_subject', 'no'): True,
-            (country, 'has_war', 'no'): True,
-            (country, 'has_country_flag', 'STP_cw_won_union_battle'): True,
-            (country, 'has_country_flag', 'STP_cw_postwar'): True,
-            (country, 'has_global_flag', 'STP_cw_union_wars_finished'): True,
-            (country, 'has_completed_focus', 'STP_pw_regional_citizenship'): True,
-            **{
-                (n, key, country): True
-                for n in self.adjacency
-                for key in ('is_owned_by', 'is_controlled_by')
-            },
-            ('1', 'is_core_of', country): True,
-        }
-
     def eligible(self, facts, country='STS', target='2'):
         return matches_conditions(
             self.expand(block(self.decision(), 'available'), country, target),
@@ -176,6 +142,44 @@ class PostwarNationalisationTests(unittest.TestCase):
             ):
                 self.fail('Unexpected callback effect: ' + e.key)
         return totals
+
+
+class PostwarNationalisationTests(NationalisationHarness, unittest.TestCase):
+    def setUp(self):
+        self.triggers = {
+            e.key: e.value
+            for e in entries(
+                'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'
+            )
+        }
+        self.decisions = {
+            d.key: d.value
+            for c in entries('common/decisions/ADISCORD_STP_decisions.txt')
+            for d in c.value
+            if isinstance(d.value, list)
+        }
+        self.adjacency = {'1': ['2'], '2': ['1', '3'], '3': ['2'], '4': []}
+
+    def decision(self):
+        self.assertIn('STP_pw_nationalise_region', self.decisions.keys())
+        return self.decisions['STP_pw_nationalise_region']
+
+    def facts(self, country='STS'):
+        return {
+            (country, 'has_capitulated', 'no'): True,
+            (country, 'is_subject', 'no'): True,
+            (country, 'has_war', 'no'): True,
+            (country, 'has_country_flag', 'STP_cw_won_union_battle'): True,
+            (country, 'has_country_flag', 'STP_cw_postwar'): True,
+            (country, 'has_global_flag', 'STP_cw_union_wars_finished'): True,
+            (country, 'has_completed_focus', 'STP_pw_regional_citizenship'): True,
+            **{
+                (n, key, country): True
+                for n in self.adjacency
+                for key in ('is_owned_by', 'is_controlled_by')
+            },
+            ('1', 'is_core_of', country): True,
+        }
 
     def test_map_program_matches_kefreyt_cost_duration_and_repeatability(self):
         d = self.decision()
@@ -449,6 +453,282 @@ class PostwarNationalisationTests(unittest.TestCase):
                     blocked = dict(facts)
                     blocked[country, condition, value] = False
                     self.assertFalse(matches_conditions(available, blocked, country))
+
+
+class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
+    """Svetlogorye and Shahrabad run the same frontier programme as Stelander and Kefreyt."""
+
+    CASES = {
+        'SHL': {
+            'decisions': 'common/decisions/ADISCORD_SHL_decisions.txt',
+            'category': 'SHL_quarters_and_borders',
+            'decision': 'SHL_nationalise_region',
+            'triggers': 'common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt',
+            'receipt': 'SHL_nationalisation_pending',
+            'unlocks': {
+                'SHL_peace_has_a_price': 'focus_trees/SHL/main/focuses.txt',
+                'SHL_d_occupation_administration': 'focus_trees/SHL/directorate/focuses.txt',
+                'SHL_south_crown_of_the_south': 'focus_trees/SHL/shared/focuses.txt',
+            },
+            'localisation': 'ADISCORD_SHL',
+            'keys': (
+                'SHL_nationalise_region',
+                'SHL_nationalise_region_desc',
+                'SHL_nationalisation_ready_tt',
+                'SHL_nationalisation_ready_tt_not',
+                'SHL_nationalisation_slot_tt',
+                'SHL_nationalisation_result_tt',
+                'SHL_nationalisation_complete_tt',
+            ),
+        },
+        'NAM': {
+            'decisions': 'common/decisions/ADISCORD_nam_resource_war_decisions.txt',
+            'category': 'NAM_administration',
+            'decision': 'NAM_nationalise_region',
+            'triggers': 'common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt',
+            'receipt': 'NAM_nationalisation_pending',
+            'unlocks': {
+                'NAM_law_after_war': 'focus_trees/NAM/postwar/focuses.txt',
+                'NAM_defeat_second_chapter': 'focus_trees/NAM/defeated/focuses.txt',
+                'NAM_hum_federal_districts': 'focus_trees/NAM/exile_humanist/focuses.txt',
+                'NAM_rad_pacification': 'focus_trees/NAM/exile_radical/focuses.txt',
+                'NAM_hum_board_districts': 'focus_trees/NAM/exile_corporate/focuses.txt',
+            },
+            'localisation': 'ADISCORD_nam_resource_war',
+            'keys': (
+                'NAM_nationalise_region',
+                'NAM_nationalise_region_desc',
+                'NAM_nationalise_region_unlock_tt',
+                'NAM_nationalisation_ready_tt',
+                'NAM_nationalisation_ready_tt_not',
+                'NAM_nationalisation_free_tt',
+                'NAM_nationalisation_free_tt_not',
+                'NAM_nationalisation_slot_tt',
+                'NAM_nationalisation_result_tt',
+                'NAM_nationalisation_complete_tt',
+            ),
+        },
+    }
+
+    def use(self, country):
+        case = self.CASES[country]
+        self.case = case
+        self.triggers = {e.key: e.value for e in entries(case['triggers'])}
+        self.current = block(
+            block(entries(case['decisions']), case['category']), case['decision']
+        )
+        self.adjacency = {'1': ['2'], '2': ['1', '3'], '3': ['2'], '4': []}
+
+    def decision(self):
+        return self.current
+
+    def facts(self, country):
+        return {
+            (country, 'has_capitulated', 'no'): True,
+            (country, 'exists', 'yes'): True,
+            (country, 'is_subject', 'no'): True,
+            (country, 'has_war', 'no'): True,
+            (country, 'has_country_flag', 'SHL_furnaces_initialized'): country == 'SHL',
+            (country, 'has_country_flag', 'NAM_center_vanished'): country == 'NAM',
+            **{
+                (n, key, country): True
+                for n in self.adjacency
+                for key in ('is_owned_by', 'is_controlled_by')
+            },
+            ('1', 'is_core_of', country): True,
+        }
+
+    def cancelled(self, facts, country, target='2'):
+        return matches_conditions(
+            self.expand(block(self.decision(), 'cancel_trigger'), country, target),
+            facts,
+            country,
+        )
+
+    def focus_source(self, focus, source):
+        text = (ROOT / source).read_text(encoding='utf-8')
+        start = text.index('id = ' + focus + '\n')
+        following = [
+            position
+            for marker in ('\n\tfocus = {', '\nshared_focus = {')
+            if (position := text.find(marker, start)) != -1
+        ]
+        return text[start:min(following, default=len(text))]
+
+    def test_each_route_focus_unlocks_the_programme(self):
+        for country, case in self.CASES.items():
+            self.use(country)
+            visible = self.expand(block(self.decision(), 'visible'), country)
+            facts = self.facts(country)
+            self.assertFalse(matches_conditions(visible, facts, country))
+            for focus, source in case['unlocks'].items():
+                with self.subTest(country=country, focus=focus):
+                    unlocked = dict(facts)
+                    unlocked[country, 'has_completed_focus', focus] = True
+                    self.assertTrue(matches_conditions(visible, unlocked, country))
+                    unlocked[country, 'is_subject', 'no'] = False
+                    self.assertFalse(matches_conditions(visible, unlocked, country))
+                    self.assertIn(
+                        'unlock_decision_tooltip = ' + case['decision'] + '\n',
+                        self.focus_source(focus, source),
+                    )
+
+    def test_programme_matches_the_stelander_contract(self):
+        for country in self.CASES:
+            with self.subTest(country=country):
+                self.use(country)
+                d = self.decision()
+                for key, value in {
+                    'cost': '50',
+                    'days_remove': '120',
+                    'days_re_enable': '1',
+                    'fire_only_once': 'no',
+                    'state_target': 'any_owned_state',
+                    'on_map_mode': 'map_and_decisions_view',
+                }.items():
+                    self.assertEqual(scalar(d, key), value)
+                self.assertTrue(matches_conditions(block(d, 'allowed'), {}, country))
+                target = self.expand(block(d, 'target_trigger'), country, '2')
+                self.assertTrue(matches_conditions(target, self.facts(country), country))
+
+    def test_sovereign_peaceful_country_follows_the_national_frontier(self):
+        for country in self.CASES:
+            with self.subTest(country=country):
+                self.use(country)
+                f = self.facts(country)
+                self.assertTrue(self.eligible(f, country, '2'))
+                # No national neighbour yet, and an island with no neighbour at all.
+                self.assertFalse(self.eligible(f, country, '3'))
+                self.assertFalse(self.eligible(f, country, '4'))
+                for key in [
+                    (country, 'is_subject', 'no'),
+                    (country, 'has_war', 'no'),
+                    (country, 'has_capitulated', 'no'),
+                    ('2', 'is_owned_by', country),
+                    ('2', 'is_controlled_by', country),
+                    ('1', 'is_core_of', country),
+                    ('1', 'is_owned_by', country),
+                    ('1', 'is_controlled_by', country),
+                ]:
+                    changed = dict(f)
+                    changed[key] = False
+                    self.assertFalse(self.eligible(changed, country), key)
+                f['2', 'is_core_of', country] = True
+                self.assertFalse(self.eligible(f, country, '2'))
+                self.assertTrue(self.eligible(f, country, '3'))
+
+    def test_payment_locks_the_target_and_success_opens_the_next_neighbour(self):
+        for country in self.CASES:
+            with self.subTest(country=country):
+                self.use(country)
+                f = self.facts(country)
+                self.apply('complete_effect', f, country)
+                self.assertTrue(f['2', 'has_state_flag', self.case['receipt']])
+                self.assertFalse(self.eligible(f, country, '2'))
+                self.assertFalse(self.cancelled(f, country))
+                self.assertEqual(
+                    self.apply('remove_effect', f, country), {'power': 0, 'cores': 1}
+                )
+                self.assertTrue(self.eligible(f, country, '3'))
+                for callback in ('remove_effect', 'cancel_effect'):
+                    self.assertEqual(
+                        self.apply(callback, f, country), {'power': 0, 'cores': 0}
+                    )
+
+    def test_broken_programme_refunds_exactly_once(self):
+        for country, failure in product(
+            self.CASES,
+            ('war', 'subject', 'ownership', 'control', 'neighbour', 'already_core'),
+        ):
+            with self.subTest(country=country, failure=failure):
+                self.use(country)
+                f = self.facts(country)
+                self.apply('complete_effect', f, country)
+                key = {
+                    'war': (country, 'has_war', 'no'),
+                    'subject': (country, 'is_subject', 'no'),
+                    'ownership': ('2', 'is_owned_by', country),
+                    'control': ('2', 'is_controlled_by', country),
+                    'neighbour': ('1', 'is_core_of', country),
+                    'already_core': ('2', 'is_core_of', country),
+                }[failure]
+                f[key] = failure == 'already_core'
+                self.assertTrue(self.cancelled(f, country))
+                for callback in ('cancel_effect', 'remove_effect'):
+                    copied = dict(f)
+                    self.assertEqual(
+                        self.apply(callback, copied, country), {'power': 50, 'cores': 0}
+                    )
+                    for repeated in ('cancel_effect', 'remove_effect'):
+                        self.assertEqual(
+                            self.apply(repeated, copied, country),
+                            {'power': 0, 'cores': 0},
+                        )
+
+    def test_parallel_programmes_settle_independently(self):
+        for country, first in product(self.CASES, ('remove_effect', 'cancel_effect')):
+            with self.subTest(country=country, first=first):
+                self.use(country)
+                self.adjacency['4'] = ['1']
+                f = self.facts(country)
+                self.apply('complete_effect', f, country, '2')
+                self.assertTrue(self.eligible(f, country, '4'))
+                self.apply('complete_effect', f, country, '4')
+                # A callback for another target never consumes this receipt.
+                self.assertEqual(
+                    self.apply('cancel_effect', f, country, '3'), {'power': 0, 'cores': 0}
+                )
+                self.assertEqual(
+                    self.apply(first, f, country, '2'),
+                    {'power': 0, 'cores': 1}
+                    if first == 'remove_effect'
+                    else {'power': 50, 'cores': 0},
+                )
+                self.assertFalse(self.eligible(f, country, '4'))
+                self.assertEqual(
+                    self.apply('remove_effect', f, country, '4'), {'power': 0, 'cores': 1}
+                )
+
+    def test_svetlogorye_treaty_districts_keep_their_own_programme(self):
+        self.use('NAM')
+        self.adjacency = {'1': ['701'], '701': ['1']}
+        f = self.facts('NAM')
+        self.assertTrue(self.eligible(f, 'NAM', '701'))
+        f['701', 'has_global_flag', 'ADISCORD_nam_resource_war_nam_victory'] = True
+        self.assertFalse(self.eligible(f, 'NAM', '701'))
+        target = self.expand(block(self.decision(), 'target_trigger'), 'NAM', '701')
+        self.assertFalse(matches_conditions(target, f, 'NAM'))
+
+    def test_svetlogorye_direct_rule_blocks_and_refunds(self):
+        self.use('NAM')
+        f = self.facts('NAM')
+        regime = ('2', 'has_dynamic_modifier', 'NAM_conquered_state_modifier')
+        f[regime] = True
+        self.assertFalse(self.eligible(f, 'NAM'))
+        f[regime] = False
+        self.apply('complete_effect', f, 'NAM')
+        f[regime] = True
+        self.assertTrue(self.cancelled(f, 'NAM'))
+        self.assertEqual(self.apply('remove_effect', f, 'NAM'), {'power': 50, 'cores': 0})
+
+    def test_localisation_is_complete_and_descriptions_stay_narrative(self):
+        for country, case in self.CASES.items():
+            for lang in ('russian', 'english'):
+                with self.subTest(country=country, lang=lang):
+                    p = ROOT / f"localisation/{lang}/{case['localisation']}_l_{lang}.yml"
+                    self.assertTrue(p.read_bytes().startswith(b'\xef\xbb\xbf'))
+                    text = p.read_text(encoding='utf-8-sig')
+                    for key in case['keys']:
+                        found = re.findall(
+                            r'^ ' + re.escape(key) + r':\d? "(.*)"$', text, re.M
+                        )
+                        self.assertEqual(len(found), 1, key)
+                    desc = re.search(
+                        r'^ ' + re.escape(case['decision']) + r'_desc:\d? "(.*)"$',
+                        text,
+                        re.M,
+                    ).group(1)
+                    self.assertIsNone(re.search(r'\d|§|£', desc), desc)
 
 
 class CouncilExpansionTests(unittest.TestCase):

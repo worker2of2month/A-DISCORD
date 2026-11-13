@@ -26,7 +26,7 @@ characters = {
 		name = IVN_Rostislav_Karn
 		portraits = {
 			civilian = {
-				large = GFX_portrait_europe_generic_land_13
+				large = GFX_portrait_IVN_Rostislav_Karn
 			}
 		}
 		country_leader = {

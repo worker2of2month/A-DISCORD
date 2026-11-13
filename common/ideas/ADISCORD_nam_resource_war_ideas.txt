@@ -358,6 +358,460 @@ ideas = {
 			}
 		}
 
+		# Display-only pair for the war-for-the-South aggregate; never installed.
+		NAM_south_war_dummy_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		NAM_sw_conscription_of_the_south_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.1
+			}
+		}
+
+		NAM_sw_defence_in_depth_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in = 3
+			}
+		}
+
+		NAM_sw_mobile_reserve_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_fuel_consumption_factor = -0.1
+			}
+		}
+
+		NAM_sw_district_garrisons_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		NAM_sw_fuel_columns_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		NAM_sw_rapid_response_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		NAM_sw_staff_of_the_line_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		NAM_sw_oil_blitz_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+				army_fuel_consumption_factor = 0.05
+			}
+		}
+
+		NAM_sw_attrition_wall_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		NAM_sw_armoured_spearheads_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		NAM_sw_forward_fuel_dumps_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		NAM_sw_trench_lines_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				max_dig_in = 2
+				army_org_factor = 0.03
+			}
+		}
+
+		NAM_sw_refinery_dispersal_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				fuel_gain_factor = 0.05
+			}
+		}
+
+		NAM_sw_fuel_for_the_front_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_fuel_consumption_factor = -0.05
+			}
+		}
+
+		NAM_sw_war_export_tariff_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		NAM_sw_field_pipelines_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		NAM_sw_fuel_arsenal_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		NAM_sw_charter_of_the_north_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		NAM_sw_protectorate_offers_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.05
+			}
+		}
+
+		NAM_sw_punitive_columns_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				resistance_growth = -0.1
+			}
+		}
+
+		NAM_sw_fuel_guarantees_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		NAM_sw_burned_wells_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		NAM_sw_hostage_councils_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.05
+				resistance_growth = -0.1
+			}
+		}
+
+		NAM_sw_northern_envoys_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_sw_league_of_the_north_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		NAM_sw_district_compact_at_war_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		NAM_sw_emergency_powers_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.05
+			}
+		}
+
+		NAM_sw_district_relief_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_sw_uprising_sweeps_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				resistance_growth = -0.05
+			}
+		}
+
+		NAM_sw_namestnik_courts_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.05
+			}
+		}
+
+		NAM_sw_war_bread_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		NAM_sw_home_militia_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		NAM_sw_drive_to_khazar_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+			}
+		}
+
+		NAM_sw_last_line_of_the_belt_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.1
+			}
+		}
+
+		NAM_sw_victory_order_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		NAM_sw_s_occupation_namestniks_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.1
+				resistance_growth = -0.1
+			}
+		}
+
+		NAM_sw_s_furnace_inspection_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		NAM_sw_s_namestnik_levies_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.05
+			}
+		}
+
+		NAM_sw_s_iron_ladder_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		NAM_sw_s_victory_office_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		NAM_sw_f_charter_reserve_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.03
+			}
+		}
+
+		NAM_sw_f_charter_at_war_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_sw_p_logistics_contracts_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		NAM_sw_p_exchange_war_loans_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		NAM_sw_p_war_dividends_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		NAM_sw_n_defence_council_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_sw_n_generals_hand_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+			}
+		}
+
+		NAM_sw_n_districts_voice_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		NAM_sw_n_defence_of_the_line_idea = {
+			name = NAM_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
 		# Display-only pairs for the focus aggregates: an empty base and each
 		# focus delta. They are never installed; country variables are authoritative.
 		NAM_administration_dummy_idea = {

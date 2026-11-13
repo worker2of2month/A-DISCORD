@@ -320,6 +320,32 @@ ADISCORD_garrison_priority = {
 	ai_strategy = { type = garrison_reinforcement_priority value = 20 }
 }
 
+# Area-defence orders reserve divisions for the capital, home areas, ports and
+# coastlines. Only an enemy that can ship a landing force justifies that reserve:
+# the AI gate is the one used by ADISCORD_coastal_invasion_planning, a human
+# needs no more than a port. The value is a percentage of the native demand.
+ADISCORD_no_landing_threat_area_defence = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+		NOT = {
+			any_enemy_country = {
+				any_controlled_state = {
+					is_coastal = yes
+					naval_base > 0
+				}
+				OR = {
+					is_ai = no
+					has_navy_size = { size > 19 type = convoy }
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = garrison value = -75 }
+}
+
 ADISCORD_armor_capability = {
 	enable = {
 		num_of_military_factories > 7
@@ -504,6 +530,42 @@ ADISCORD_hold_against_stronger_enemy = {
 	}
 }
 
+# Ground that no enemy division stands on needs no readiness check. State
+# triggers run in state scope: FROM is the controller, FROM.FROM the planner.
+# Every country at war with the planner is counted, so an ally's division in
+# the controller's state keeps the ordinary profile. The order applies only
+# when such states make up most of the front and stays below authored campaign
+# orders (priority >= 1000), including their deliberate halts.
+ADISCORD_undefended_enemy_ground = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			FROM = { has_war_with = FROM.FROM }
+			is_controlled_by = FROM
+			FROM.FROM = {
+				NOT = {
+					any_enemy_country = {
+						divisions_in_state = { state = PREV.PREV size > 0 }
+					}
+				}
+			}
+		}
+		ratio = 0.8
+		priority = 960
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
 # FROM is the allocating country in a front's country_trigger. Keep a border
 # when either side has a concrete war preparation, even during another war.
 ADISCORD_wartime_neutral_borders = {
@@ -540,6 +602,170 @@ ADISCORD_prewar_front_concentration = {
 		}
 		value = 50
 	}
+}
+
+# An army leaves its allies' frontlines in two cases: a faction member that
+# has lost half of its surrender limit keeps its divisions for its own
+# territory, and a campaign phase named by
+# ADISCORD_ai_campaign_leaves_ally_frontlines holds its own fronts only. The
+# strategy is binary and takes one ally per entry, so every registered
+# non-dynamic tag is listed; an entry for a country that is not an ally has no
+# effect. The gap between the two surrender thresholds keeps an overrun army
+# from shuttling between fronts; a campaign phase ends with its own predicate.
+ADISCORD_leave_ally_frontlines = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+		OR = {
+			AND = {
+				is_in_faction = yes
+				surrender_progress > 0.5
+			}
+			ADISCORD_ai_campaign_leaves_ally_frontlines = yes
+		}
+	}
+	abort = {
+		OR = {
+			is_ai = no
+			has_war = no
+			has_capitulated = yes
+			AND = {
+				ADISCORD_ai_campaign_leaves_ally_frontlines = no
+				OR = {
+					is_in_faction = no
+					surrender_progress < 0.35
+				}
+			}
+		}
+	}
+	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = APH value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ARS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = AUR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = AZH value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BBV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BCM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BGT value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BHG value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BJK value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BLD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BOR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BRN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = BTL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = CHD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = CIN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = COF value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = CSL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = DAN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = DCA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = DOL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = DRV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = DVA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EBA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ECA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EFL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EGC value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ELN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ERT value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EVR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EXZ value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = EYR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = FLR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = FRS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = GLP value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = HON value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IAM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IBA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IBL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IFC value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IIA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IMD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IRT value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IVC value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = IVN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KDL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KDR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KHV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KRL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KRM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KYZ value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = LMN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = LUR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = LYS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = MLR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = MON value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = MRV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = MZR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = NAM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = NDN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = NKA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = NOD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = NVR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = OCA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = OLR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ORV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = OSF value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = OSV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = PIO value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = PIV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = PRR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = PSD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = PWR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = REV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RHM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RIN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RIV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RLY value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ROM value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RSV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RUS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RVN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = RZA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SCA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SDR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SFR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SHL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SKN value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SLA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SLF value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SLI value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SNG value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SOL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SRA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SRP value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SRV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = STP value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = STS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SVL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SWB value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TFF value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TGD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TMR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TRU value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TVA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ULV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VAD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VAL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VEL value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VES value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VHV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VLA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VLD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VRA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WCA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WCG value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WEF value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WIT value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WKR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WPA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WPS value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WRK value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = WTD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = YOR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = YPR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ZAO value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ZTA value = 100 }
 }
 
 # Reduce demand while the field army is being replenished. Role proportions and

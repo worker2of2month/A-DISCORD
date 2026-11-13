@@ -255,12 +255,6 @@ SHL_houses_plan = {
 		SHL_h_golden_gate_festival
 		SHL_h_veyr_harbour_share
 		SHL_south_oil_for_furnaces
-		SHL_south_furnaces_to_front
-		SHL_south_raid_oil_fields
-		SHL_h_hired_contracts
-		SHL_h_buy_garrisons
-		SHL_south_desert_convoys
-		SHL_south_storm_oil_belt
 		SHL_south_crown_of_the_south
 		SHL_h_concession_of_svetlogorye
 		SHL_h_southern_bank
@@ -346,12 +340,6 @@ SHL_cities_plan = {
 		SHL_c_cistern_charter
 		SHL_c_common_rail
 		SHL_south_war_of_charters
-		SHL_south_furnaces_to_front
-		SHL_south_raid_oil_fields
-		SHL_south_desert_convoys
-		SHL_c_charters_for_occupied
-		SHL_c_compact_volunteers
-		SHL_south_storm_oil_belt
 		SHL_south_crown_of_the_south
 		SHL_c_svetlogorye_charter
 		SHL_c_southern_council
@@ -436,12 +424,6 @@ SHL_directorate_plan = {
 		SHL_south_iron_march
 		SHL_d_occupation_administration
 		SHL_south_last_pour
-		SHL_south_furnaces_to_front
-		SHL_south_raid_oil_fields
-		SHL_south_desert_convoys
-		SHL_south_storm_oil_belt
-		SHL_d_war_orders_all
-		SHL_d_guard_to_front
 		SHL_south_crown_of_the_south
 		SHL_d_general_governorate
 		SHL_d_iron_south_rail
@@ -526,12 +508,6 @@ SHL_regency_plan = {
 		SHL_r_fief_promises
 		SHL_r_tolls
 		SHL_south_war_of_arms
-		SHL_south_furnaces_to_front
-		SHL_r_hire_armies
-		SHL_south_raid_oil_fields
-		SHL_south_desert_convoys
-		SHL_south_storm_oil_belt
-		SHL_r_sell_future
 		SHL_south_crown_of_the_south
 		SHL_r_kadir_junior
 		SHL_r_fiefs_of_the_south
@@ -614,12 +590,6 @@ SHL_commune_plan = {
 		SHL_k_strike_support
 		SHL_south_oil_underground
 		SHL_south_oil_uprising
-		SHL_south_furnaces_to_front
-		SHL_south_raid_oil_fields
-		SHL_south_desert_convoys
-		SHL_south_storm_oil_belt
-		SHL_k_shift_brigades
-		SHL_k_strikes_on_fields
 		SHL_south_crown_of_the_south
 		SHL_k_union_of_councils
 		SHL_k_furnace_commune
@@ -662,4 +632,83 @@ SHL_commune_plan = {
 		SHL_law_of_the_written_fire
 	}
 	weight = { factor = 20 }
+}
+
+# The war-for-the-South tree, one alternative of each exclusive pair; only
+# the current course branch is visible.
+SHL_south_war_plan = {
+	name = "SHL: war for the South"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+		has_focus_tree = SHL_south_war_focus
+	}
+	abort = {
+		OR = {
+			NOT = { tag = SHL }
+			NOT = { has_focus_tree = SHL_south_war_focus }
+		}
+	}
+	ai_national_focuses = {
+		SHL_sw_war_conclave
+		SHL_sw_desert_columns
+		SHL_sw_quarter_levies
+		SHL_sw_column_staff
+		SHL_sw_field_hospitals
+		SHL_sw_desert_raids
+		SHL_south_raid_oil_fields
+		SHL_south_desert_convoys
+		SHL_south_storm_oil_belt
+		SHL_sw_veterans_of_the_sands
+		SHL_sw_desert_air_wing
+		SHL_south_furnaces_to_front
+		SHL_sw_all_furnaces_to_arms
+		SHL_sw_shell_lines
+		SHL_sw_rail_to_the_front
+		SHL_sw_fuel_from_ash
+		SHL_sw_furnace_artels
+		SHL_sw_arsenal_of_the_south
+		SHL_sw_sands_choose
+		SHL_sw_buy_the_sands
+		SHL_sw_desert_subsidies
+		SHL_sw_caravan_pacts
+		SHL_sw_desert_envoys
+		SHL_sw_war_correspondents
+		SHL_sw_southern_league
+		SHL_sw_quarters_at_war
+		SHL_sw_ration_cards
+		SHL_sw_widows_fund
+		SHL_sw_crest_war_tax
+		SHL_sw_quarter_kitchens
+		SHL_sw_home_guard
+		SHL_sw_march_on_the_oil_belt
+		SHL_sw_the_last_line
+		SHL_sw_not_one_step_back
+		SHL_sw_crown_campaign
+		SHL_h_hired_contracts
+		SHL_h_buy_garrisons
+		SHL_h_concession_war_bonds
+		SHL_h_presell_northern_fields
+		SHL_c_charters_for_occupied
+		SHL_c_compact_volunteers
+		SHL_c_city_militias
+		SHL_c_assembly_of_free_cities
+		SHL_d_war_orders_all
+		SHL_d_guard_to_front
+		SHL_d_iron_march_norms
+		SHL_d_full_requisition
+		SHL_r_hire_armies
+		SHL_r_sell_future
+		SHL_r_regent_takes_command
+		SHL_r_noble_retinues
+		SHL_k_shift_brigades
+		SHL_k_strikes_on_fields
+		SHL_k_rifles_for_the_uprising
+		SHL_k_front_councils
+		SHL_n_emergency_conclave
+		SHL_n_house_war_chest
+	}
+	weight = { factor = 40 }
 }

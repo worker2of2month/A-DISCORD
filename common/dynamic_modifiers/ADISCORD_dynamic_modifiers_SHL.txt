@@ -39,3 +39,32 @@ SHL_metal_supply = {
 	production_factory_max_efficiency_factor = SHL_metal_efficiency_cap
 	production_lack_of_resource_penalty_factor = SHL_metal_resource_penalty
 }
+
+# War for the South. Results of SHL_south_war_focus act only while a campaign
+# is on: a repelled campaign keeps them for the next war over the same
+# completed tree, and SHL_sw_close_war clears them once the South is settled.
+SHL_south_war_dynamic = {
+	icon = GFX_idea_generic_war_preparation
+	enable = {
+		tag = SHL
+		ADISCORD_south_final_active = yes
+	}
+	war_support_factor = SHL_sw_war_support
+	stability_factor = SHL_sw_stability
+	political_power_gain = SHL_sw_political_power
+	army_attack_factor = SHL_sw_army_attack
+	army_defence_factor = SHL_sw_army_defence
+	army_org_factor = SHL_sw_army_org
+	army_morale_factor = SHL_sw_army_morale
+	breakthrough_factor = SHL_sw_breakthrough
+	conscription_factor = SHL_sw_conscription
+	land_reinforce_rate = SHL_sw_reinforce
+	supply_consumption_factor = SHL_sw_supply_consumption
+	out_of_supply_factor = SHL_sw_out_of_supply
+	industrial_capacity_factory = SHL_sw_factory_output
+	production_speed_arms_factory_factor = SHL_sw_arms_speed
+	production_factory_max_efficiency_factor = SHL_sw_max_efficiency
+	consumer_goods_factor = SHL_sw_consumer_goods
+	resistance_growth = SHL_sw_resistance
+	compliance_gain = SHL_sw_compliance
+}

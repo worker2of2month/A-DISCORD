@@ -387,6 +387,408 @@ ideas = {
 			}
 		}
 
+		# Display-only pair for the war-for-the-South aggregate; never installed.
+		SHL_south_war_dummy_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		SHL_sw_war_conclave_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_sw_desert_columns_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		SHL_sw_quarter_levies_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.1
+			}
+		}
+
+		SHL_sw_guard_columns_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		SHL_sw_column_staff_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+			}
+		}
+
+		SHL_sw_field_hospitals_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.03
+			}
+		}
+
+		SHL_sw_desert_raids_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				out_of_supply_factor = -0.1
+			}
+		}
+
+		SHL_sw_siege_of_the_belt_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+			}
+		}
+
+		SHL_sw_sapper_companies_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+			}
+		}
+
+		SHL_sw_veterans_of_the_sands_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		SHL_sw_south_furnaces_to_front_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_sw_all_furnaces_to_arms_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.1
+				consumer_goods_factor = 0.05
+			}
+		}
+
+		SHL_sw_keep_the_markets_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		SHL_sw_shell_lines_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		SHL_sw_rail_to_the_front_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		SHL_sw_market_convoys_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		SHL_sw_furnace_artels_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		SHL_sw_arsenal_of_the_south_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_sw_sands_choose_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_sw_break_the_sands_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.05
+				resistance_growth = -0.1
+			}
+		}
+
+		SHL_sw_caravan_pacts_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		SHL_sw_punitive_columns_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		SHL_sw_occupation_ultimatums_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.05
+				resistance_growth = -0.1
+			}
+		}
+
+		SHL_sw_desert_envoys_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_sw_war_correspondents_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_sw_southern_league_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		SHL_sw_ration_cards_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = 0.05
+			}
+		}
+
+		SHL_sw_furnace_martial_law_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.05
+			}
+		}
+
+		SHL_sw_widows_fund_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_sw_street_tribunals_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		SHL_sw_home_guard_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		SHL_sw_march_on_the_oil_belt_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+			}
+		}
+
+		SHL_sw_not_one_step_back_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.1
+			}
+		}
+
+		SHL_sw_crown_campaign_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_sw_h_concession_war_bonds_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_sw_h_presell_northern_fields_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		SHL_sw_c_city_militias_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		SHL_sw_c_assembly_of_free_cities_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_sw_d_iron_march_norms_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		SHL_sw_r_regent_takes_command_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		SHL_sw_k_front_councils_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+			}
+		}
+
+		SHL_sw_n_emergency_conclave_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_sw_n_directors_war_plan_idea = {
+			name = SHL_south_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
 		# Display-only pair for the Conclave power aggregate; never installed.
 		SHL_conclave_power_dummy_idea = {
 			name = SHL_conclave_power_dynamic

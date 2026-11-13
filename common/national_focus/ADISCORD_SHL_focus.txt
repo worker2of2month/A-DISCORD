@@ -1668,6 +1668,7 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_reconstruct_south
 			unlock_decision_tooltip = SHL_offer_cistern_charter
+			unlock_decision_tooltip = SHL_nationalise_region
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -6158,6 +6159,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = SHL_general_governorate
+			unlock_decision_tooltip = SHL_nationalise_region
 		}
 		ai_will_do = { base = 5 }
 	}

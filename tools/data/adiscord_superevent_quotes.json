@@ -1,0 +1,646 @@
+{
+  "schema": 1,
+  "translation_policy": "Russian values are faithful translations of the cited passages, not claims to reproduce a particular published Russian translation. Short excerpts may omit surrounding sentences. Source passages retain source spelling; display punctuation and capitalization follow mod rules. Character dialogue is identified in the location or note.",
+  "sources": {
+    "aeneid": {
+      "url": "https://www.gutenberg.org/cache/epub/228/pg228-images.html"
+    },
+    "aristotle": {
+      "url": "https://www.gutenberg.org/cache/epub/8438/pg8438-images.html"
+    },
+    "bacon": {
+      "url": "https://www.gutenberg.org/cache/epub/45988/pg45988-images.html"
+    },
+    "bentham": {
+      "url": "https://constitution.org/2-Authors/jb/frag_gov.htm"
+    },
+    "butler": {
+      "url": "https://prisonfreepress.org/docs/War_is_a_Racket_(S_Butler_1935).pdf"
+    },
+    "cicero_law": {
+      "url": "https://www.thelatinlibrary.com/cicero/leg3.shtml"
+    },
+    "cicero_money": {
+      "url": "https://www.attalus.org/cicero/philippic5.html"
+    },
+    "cicero_state": {
+      "url": "https://www.thelatinlibrary.com/cicero/repub1.shtml"
+    },
+    "clausewitz": {
+      "url": "https://www.gutenberg.org/cache/epub/1946/pg1946-images.html"
+    },
+    "eliot": {
+      "url": "https://www.gutenberg.org/cache/epub/1321/pg1321-images.html"
+    },
+    "engels": {
+      "url": "https://www.marxists.org/archive/marx/works/1877/anti-duhring/ch24.htm"
+    },
+    "federalist": {
+      "url": "https://www.gutenberg.org/cache/epub/1404/pg1404-images.html"
+    },
+    "hobbes": {
+      "url": "https://www.gutenberg.org/cache/epub/3207/pg3207-images.html"
+    },
+    "jefferson": {
+      "url": "https://avalon.law.yale.edu/19th_century/jefinau1.asp"
+    },
+    "juvenal": {
+      "url": "https://www.thelatinlibrary.com/juvenal/10.shtml"
+    },
+    "lampedusa": {
+      "url": "https://vive.cultura.gov.it/en/changing-everything-or-something-leopard"
+    },
+    "lincoln": {
+      "url": "https://www.nps.gov/linc/learn/historyculture/lincoln-second-inaugural.htm"
+    },
+    "lincoln_house": {
+      "url": "https://www.nps.gov/liho/learn/historyculture/housedivided.htm"
+    },
+    "locke": {
+      "url": "https://www.gutenberg.org/cache/epub/7370/pg7370-images.html"
+    },
+    "lovecraft": {
+      "url": "https://www.hplovecraft.com/writings/texts/fiction/fb.aspx"
+    },
+    "marx": {
+      "url": "https://www.gutenberg.org/cache/epub/61/pg61-images.html"
+    },
+    "mill": {
+      "url": "https://www.gutenberg.org/cache/epub/11224/pg11224-images.html"
+    },
+    "mill_war": {
+      "url": "https://www.gutenberg.org/cache/epub/5123/pg5123-images.html"
+    },
+    "odyssey": {
+      "url": "https://www.gutenberg.org/cache/epub/1727/pg1727-images.html"
+    },
+    "orwell": {
+      "url": "https://www.orwellfoundation.com/the-orwell-foundation/orwell/books-by-orwell/nineteen-eighty-four/"
+    },
+    "paine": {
+      "url": "https://www.gutenberg.org/cache/epub/147/pg147-images.html"
+    },
+    "prince": {
+      "url": "https://www.gutenberg.org/cache/epub/1232/pg1232-images.html"
+    },
+    "rousseau": {
+      "url": "https://www.gutenberg.org/cache/epub/46333/pg46333-images.html"
+    },
+    "sallust": {
+      "url": "https://www.gutenberg.org/cache/epub/7990/pg7990-images.html"
+    },
+    "schopenhauer": {
+      "url": "https://www.gutenberg.org/cache/epub/10741/pg10741-images.html"
+    },
+    "shakespeare": {
+      "url": "https://www.gutenberg.org/cache/epub/23042/pg23042-images.html"
+    },
+    "shelley": {
+      "url": "https://www.gutenberg.org/cache/epub/4800/pg4800-images.html"
+    },
+    "smith": {
+      "url": "https://www.gutenberg.org/cache/epub/3300/pg3300-images.html"
+    },
+    "suntzu": {
+      "url": "https://www.gutenberg.org/cache/epub/132/pg132-images.html"
+    },
+    "tacitus": {
+      "url": "https://www.gutenberg.org/cache/epub/7524/pg7524-images.html"
+    },
+    "thucydides": {
+      "url": "https://www.gutenberg.org/cache/epub/7142/pg7142-images.html"
+    },
+    "vegetius": {
+      "url": "https://facultystaff.richmond.edu/~wstevens/history331texts/Vegetius.html"
+    },
+    "virgil": {
+      "url": "https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296"
+    }
+  },
+  "quotes": {
+    "superevent_itora_civilwar_quote": {
+      "source": "lincoln_house",
+      "location": "House Divided speech, Springfield, 16 June 1858",
+      "source_passage": "A house divided against itself cannot stand",
+      "russian": "Дом, разделившийся сам в себе, не устоит.\n\n- Авраам Линкольн, 1858",
+      "english": "A house divided against itself cannot stand.\n\n- Abraham Lincoln, 1858",
+      "note": "Lincoln is quoting Mark 3:25; attribution identifies the documented speech, not original authorship of the biblical expression."
+    },
+    "superevent_itora_committee_victory_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XVII",
+      "source_passage": "And Covenants, without the Sword, are but Words, and of no strength to secure a man at all",
+      "russian": "А соглашения без меча - лишь слова, которые не в силах гарантировать человеку безопасность.\n- Томас Гоббс, \"Левиафан\", XVII",
+      "english": "And covenants, without the sword, are but words and of no strength to secure a man at all.\n- Thomas Hobbes, \"Leviathan\", XVII"
+    },
+    "superevent_itora_legion_victory_quote": {
+      "source": "virgil",
+      "location": "Aeneid, I.279, Jupiter speaking",
+      "source_passage": "imperium sine fine dedi",
+      "russian": "Imperium sine fine dedi.\nЯ даровал им власть без конца.\n- Вергилий, \"Энеида\", I, 279 (перевод с латинского)",
+      "english": "Imperium sine fine dedi.\nI have granted them empire without end.\n- Virgil, Aeneid, I, 279 (translated from Latin)",
+      "note": "Latin macrons omitted in the display; Russian and English translations accompany the original."
+    },
+    "superevent_itora_stalk_portal_quote": {
+      "source": "lovecraft",
+      "location": "From Beyond, Crawford Tillinghast speaking",
+      "source_passage": "I have seen beyond the bounds of infinity and drawn down daemons from the stars",
+      "russian": "Я заглянул за пределы бесконечности и вызвал демонов со звёзд.\n- Г. Ф. Лавкрафт, \"Извне\" (перевод с английского)",
+      "english": "I have seen beyond the bounds of infinity and drawn down daemons from the stars.\n- H. P. Lovecraft, \"From Beyond\""
+    },
+    "superevent_itora_vorkerland_war_anton_quote": {
+      "source": "mill_war",
+      "location": "The Contest in America, 1862",
+      "source_passage": "But war, in a good cause, is not the greatest evil which a nation can suffer",
+      "russian": "Война за правое дело - не величайшее зло, какое может постигнуть народ.\n\n- Джон Стюарт Милль, 1862",
+      "english": "But war, in a good cause, is not the greatest evil which a nation can suffer.\n\n- John Stuart Mill, 1862"
+    },
+    "superevent_itora_vorkerland_war_dorian_quote": {
+      "source": "clausewitz",
+      "location": "On War, I.1, section 2",
+      "source_passage": "War therefore is an act of violence intended to compel our opponent to fulfil our will",
+      "russian": "Итак, война - это акт насилия, имеющий целью заставить противника выполнить нашу волю.\n\n- Карл фон Клаузевиц, \"О войне\"",
+      "english": "War therefore is an act of violence intended to compel our opponent to fulfil our will.\n\n- Carl von Clausewitz, On War"
+    },
+    "superevent_itora_vorkerland_war_quote": {
+      "source": "aristotle",
+      "location": "Nicomachean Ethics, X.7, 1177b",
+      "source_passage": "for we toil that we may rest, and war that we may be at peace",
+      "russian": "Мы ведём войну, чтобы жить в мире.\n\n- Аристотель, \"Никомахова этика\"",
+      "english": "We make war that we may live in peace.\n\n- Aristotle, Nicomachean Ethics"
+    },
+    "superevent_itora_vorkerland_war_vlad_quote": {
+      "source": "prince",
+      "location": "The Prince, III",
+      "source_passage": "war is not to be avoided, but is only to be put off to the advantage of others",
+      "russian": "Войны нельзя избежать, можно лишь оттянуть её - к выгоде противника.\n\n- Никколо Макиавелли, \"Государь\"",
+      "english": "War is not to be avoided, but is only to be put off to the advantage of others.\n\n- Niccolo Machiavelli, The Prince"
+    },
+    "superevent_nam_resource_war_district_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, III.17(3)",
+      "source_passage": "He will win whose army is animated by the same spirit throughout all its ranks",
+      "russian": "Победит тот, чья армия во всех своих рядах проникнута единым духом.\n\n- Сунь-цзы, \"Искусство войны\", III",
+      "english": "He will win whose army is animated by the same spirit throughout all its ranks.\n\n- Sun Tzu, \"The Art of War\", III"
+    },
+    "superevent_nam_resource_war_quote": {
+      "source": "butler",
+      "location": "Chapter IV, How to Smash This Racket",
+      "source_passage": "A few profit - and the many pay.",
+      "russian": "Немногие наживаются - многие платят.\n\n- Смедли Батлер, \"Война - это рэкет\"",
+      "english": "A few profit - and the many pay.\n\n- Smedley Butler, War Is a Racket"
+    },
+    "superevent_nam_resource_war_service_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, I.1",
+      "source_passage": "The art of war is of vital importance to the State",
+      "russian": "Искусство войны жизненно важно для государства.\n\n- Сунь-цзы, \"Искусство войны\", I",
+      "english": "The art of war is of vital importance to the State.\n\n- Sun Tzu, \"The Art of War\", I"
+    },
+    "superevent_nam_veyran_proclamation_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, X",
+      "source_passage": "Reputation of power, is Power",
+      "russian": "Репутация могущества есть могущество.\n\n- Томас Гоббс, \"Левиафан\", X",
+      "english": "Reputation of power is power.\n\n- Thomas Hobbes, \"Leviathan\", X"
+    },
+    "superevent_rus_black_banner_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, X.25",
+      "source_passage": "Regard your soldiers as your children, and they will follow you into the deepest valleys",
+      "russian": "Смотри на солдат как на своих детей, и они пойдут за тобой в самые глубокие долины.\n\n- Сунь-цзы, \"Искусство войны\", X",
+      "english": "Regard your soldiers as your children, and they will follow you into the deepest valleys.\n\n- Sun Tzu, \"The Art of War\", X"
+    },
+    "superevent_rus_khan_defeated_quote": {
+      "source": "shelley",
+      "location": "Ozymandias, lines 11-12",
+      "source_passage": "Look on my works, ye Mighty, and despair! Nothing beside remains.",
+      "russian": "Взгляните на мои творения, сильные мира, и отчаивайтесь! Больше ничего не осталось.\n\n- Перси Биши Шелли, \"Озимандия\"",
+      "english": "Look on my works, ye Mighty, and despair! Nothing beside remains.\n\n- Percy Bysshe Shelley, Ozymandias"
+    },
+    "superevent_rus_last_empire_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XVII",
+      "source_passage": "And Covenants, without the Sword, are but Words",
+      "russian": "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, \"Левиафан\"",
+      "english": "Covenants, without the sword, are but words.\n\n- Thomas Hobbes, Leviathan"
+    },
+    "superevent_rus_restoration_quote": {
+      "source": "bacon",
+      "location": "Novum Organum, I, aphorism III",
+      "source_passage": "Knowledge and human power are synonymous",
+      "russian": "Знание и могущество человека совпадают.\n\n- Фрэнсис Бэкон, \"Новый Органон\", I, 3",
+      "english": "Knowledge and human power are synonymous.\n\n- Francis Bacon, \"Novum Organum\", I.3"
+    },
+    "superevent_south_boards_quote": {
+      "source": "marx",
+      "location": "Manifesto of the Communist Party, I",
+      "source_passage": "The executive of the modern State is but a committee for managing the common affairs of the whole bourgeoisie",
+      "russian": "Современная государственная власть - это лишь комитет, управляющий общими делами всего класса буржуазии.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\"",
+      "english": "The executive of the modern State is but a committee for managing the common affairs of the whole bourgeoisie.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
+    },
+    "superevent_south_charter_quote": {
+      "source": "locke",
+      "location": "Second Treatise of Government, VIII, section 95",
+      "source_passage": "no one can be put out of this estate, and subjected to the political power of another, without his own consent",
+      "russian": "Никто не может быть выведен из этого состояния и подчинён политической власти другого без собственного согласия.\n\n- Джон Локк, \"Второй трактат о правлении\", 95",
+      "english": "No one can be put out of this estate, and subjected to the political power of another, without his own consent.\n\n- John Locke, \"Second Treatise of Government\", 95",
+      "note": "This estate refers to the preceding description of people as naturally free, equal and independent."
+    },
+    "superevent_south_cities_quote": {
+      "source": "rousseau",
+      "location": "The Social Contract, II.6",
+      "source_passage": "The people, being subject to the laws, ought to be their author",
+      "russian": "Народ, подчиняющийся законам, должен быть их автором.\n\n- Жан-Жак Руссо, \"Об общественном договоре\", II, 6",
+      "english": "The people, being subject to the laws, ought to be their author.\n\n- Jean-Jacques Rousseau, \"The Social Contract\", II.6"
+    },
+    "superevent_south_civil_service_quote": {
+      "source": "jefferson",
+      "location": "First Inaugural Address, 4 March 1801",
+      "source_passage": "Equal and exact justice to all men, of whatever state or persuasion, religious or political",
+      "russian": "Равная и беспристрастная справедливость для всех людей, независимо от их положения, религиозных или политических убеждений.\n\n- Томас Джефферсон, первая инаугурационная речь",
+      "english": "Equal and exact justice to all men, of whatever state or persuasion, religious or political.\n\n- Thomas Jefferson, First Inaugural Address"
+    },
+    "superevent_south_commune_quote": {
+      "source": "marx",
+      "location": "Manifesto of the Communist Party, II",
+      "source_passage": "the free development of each is the condition for the free development of all",
+      "russian": "Свободное развитие каждого является условием свободного развития всех.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\"",
+      "english": "The free development of each is the condition for the free development of all.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
+    },
+    "superevent_south_conclave_quote": {
+      "source": "smith",
+      "location": "The Wealth of Nations, I.X, part II",
+      "source_passage": "the conversation ends in a conspiracy against the public, or in some contrivance to raise prices",
+      "russian": "Разговор заканчивается сговором против общества или какой-нибудь уловкой для повышения цен.\n\n- Адам Смит, \"Богатство народов\", I, X",
+      "english": "The conversation ends in a conspiracy against the public, or in some contrivance to raise prices.\n\n- Adam Smith, \"The Wealth of Nations\", I.X",
+      "note": "Excerpt from the sentence about people of the same trade meeting together, even for merriment and diversion."
+    },
+    "superevent_south_contract_republic_quote": {
+      "source": "locke",
+      "location": "Second Treatise of Government, XIX, section 202",
+      "source_passage": "Where-ever law ends, tyranny begins",
+      "russian": "Где кончается закон, начинается тирания.\n\n- Джон Локк, \"Второй трактат о правлении\", 202",
+      "english": "Wherever law ends, tyranny begins.\n\n- John Locke, \"Second Treatise of Government\", 202",
+      "note": "English spelling modernized from Where-ever."
+    },
+    "superevent_south_contracts_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XV, third law of nature",
+      "source_passage": "That Men Performe Their Covenants Made",
+      "russian": "Люди должны выполнять заключённые ими соглашения.\n\n- Томас Гоббс, \"Левиафан\", XV",
+      "english": "That men perform their covenants made.\n\n- Thomas Hobbes, \"Leviathan\", XV",
+      "note": "English spelling modernized from Performe."
+    },
+    "superevent_south_directorate_quote": {
+      "source": "smith",
+      "location": "The Wealth of Nations, IV.VIII",
+      "source_passage": "Consumption is the sole end and purpose of all production",
+      "russian": "Потребление - единственная цель и назначение всякого производства.\n\n- Адам Смит, \"Богатство народов\", IV, VIII",
+      "english": "Consumption is the sole end and purpose of all production.\n\n- Adam Smith, \"The Wealth of Nations\", IV.VIII"
+    },
+    "superevent_south_federation_quote": {
+      "source": "rousseau",
+      "location": "The Social Contract, II.1",
+      "source_passage": "the power indeed may be transmitted, but not the will",
+      "russian": "Власть можно передать, но волю - нельзя.\n\n- Жан-Жак Руссо, \"Об общественном договоре\", II, 1",
+      "english": "The power indeed may be transmitted, but not the will.\n\n- Jean-Jacques Rousseau, \"The Social Contract\", II.1"
+    },
+    "superevent_south_free_islands_quote": {
+      "source": "odyssey",
+      "location": "Odyssey, IX, Odysseus speaking, Samuel Butler translation",
+      "source_passage": "there is nothing dearer to a man than his own country and his parents",
+      "russian": "Нет для человека ничего дороже родной земли и родителей.\n\n- Гомер, \"Одиссея\", IX",
+      "english": "There is nothing dearer to a man than his own country and his parents.\n\n- Homer, \"Odyssey\", IX"
+    },
+    "superevent_south_houses_quote": {
+      "source": "smith",
+      "location": "The Wealth of Nations, III.IV",
+      "source_passage": "All for ourselves, and nothing for other people, seems, in every age of the world, to have been the vile maxim of the masters of mankind",
+      "russian": "Всё для себя и ничего для других - таков, по-видимому, во все времена был гнусный девиз властителей человечества.\n\n- Адам Смит, \"Богатство народов\", III, IV",
+      "english": "All for ourselves, and nothing for other people, seems, in every age of the world, to have been the vile maxim of the masters of mankind.\n\n- Adam Smith, \"The Wealth of Nations\", III.IV"
+    },
+    "superevent_south_iron_quote": {
+      "source": "prince",
+      "location": "The Prince, XVII",
+      "source_passage": "men more quickly forget the death of their father than the loss of their patrimony",
+      "russian": "Люди скорее забывают смерть отца, чем потерю наследства.\n\n- Никколо Макиавелли, \"Государь\", XVII",
+      "english": "Men more quickly forget the death of their father than the loss of their patrimony.\n\n- Niccolo Machiavelli, \"The Prince\", XVII"
+    },
+    "superevent_south_nam_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, II.6",
+      "source_passage": "There is no instance of a country having benefited from prolonged warfare",
+      "russian": "Не бывало, чтобы затяжная война приносила стране пользу.\n\n- Сунь-цзы, \"Искусство войны\", II",
+      "english": "There is no instance of a country having benefited from prolonged warfare.\n\n- Sun Tzu, \"The Art of War\", II"
+    },
+    "superevent_south_nur_quote": {
+      "source": "prince",
+      "location": "The Prince, XII",
+      "source_passage": "The chief foundations of all states, new as well as old or composite, are good laws and good arms",
+      "russian": "Главные основы всех государств, новых, старых или смешанных, - хорошие законы и хорошее войско.\n\n- Никколо Макиавелли, \"Государь\", XII",
+      "english": "The chief foundations of all states, new as well as old or composite, are good laws and good arms.\n\n- Niccolo Machiavelli, \"The Prince\", XII"
+    },
+    "superevent_south_oil_union_quote": {
+      "source": "marx",
+      "location": "Manifesto of the Communist Party, IV",
+      "source_passage": "The proletarians have nothing to lose but their chains. They have a world to win",
+      "russian": "Пролетариям нечего терять, кроме своих цепей. Приобретут же они весь мир.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\"",
+      "english": "The proletarians have nothing to lose but their chains. They have a world to win.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
+    },
+    "superevent_south_radical_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, VII.20",
+      "source_passage": "When you plunder a countryside, let the spoil be divided amongst your men",
+      "russian": "Грабя чужую землю, разделяй добычу между своими людьми.\n\n- Сунь-цзы, \"Искусство войны\", VII",
+      "english": "When you plunder a countryside, let the spoil be divided amongst your men.\n\n- Sun Tzu, \"The Art of War\", VII"
+    },
+    "superevent_south_regency_quote": {
+      "source": "prince",
+      "location": "The Prince, VIII",
+      "source_passage": "benefits ought to be given little by little, so that the flavour of them may last longer",
+      "russian": "Благодеяния следует оказывать понемногу, чтобы их вкус ощущался дольше.\n\n- Никколо Макиавелли, \"Государь\", VIII",
+      "english": "Benefits ought to be given little by little, so that the flavour of them may last longer.\n\n- Niccolo Machiavelli, \"The Prince\", VIII"
+    },
+    "superevent_south_restitution_quote": {
+      "source": "locke",
+      "location": "Second Treatise of Government, VI, section 57",
+      "source_passage": "the end of law is not to abolish or restrain, but to preserve and enlarge freedom",
+      "russian": "Цель закона - не упразднять или ограничивать свободу, а сохранять и расширять её.\n\n- Джон Локк, \"Второй трактат о правлении\", 57",
+      "english": "The end of law is not to abolish or restrain, but to preserve and enlarge freedom.\n\n- John Locke, \"Second Treatise of Government\", 57"
+    },
+    "superevent_south_revenge_quote": {
+      "source": "suntzu",
+      "location": "The Art of War, II.19",
+      "source_passage": "In war, then, let your great object be victory, not lengthy campaigns",
+      "russian": "Пусть главной целью войны будет победа, а не затяжные походы.\n\n- Сунь-цзы, \"Искусство войны\", II",
+      "english": "In war, then, let your great object be victory, not lengthy campaigns.\n\n- Sun Tzu, \"The Art of War\", II"
+    },
+    "superevent_south_rump_quote": {
+      "source": "paine",
+      "location": "Common Sense, Appendix",
+      "source_passage": "We have it in our power to begin the world over again",
+      "russian": "В наших силах начать мир заново.\n\n- Томас Пейн, \"Здравый смысл\"",
+      "english": "We have it in our power to begin the world over again.\n\n- Thomas Paine, \"Common Sense\""
+    },
+    "superevent_south_service_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XXI",
+      "source_passage": "The end of Obedience is Protection",
+      "russian": "Цель повиновения - защита.\n\n- Томас Гоббс, \"Левиафан\", XXI",
+      "english": "The end of obedience is protection.\n\n- Thomas Hobbes, \"Leviathan\", XXI"
+    },
+    "superevent_south_war_quote": {
+      "source": "clausewitz",
+      "location": "On War, I.1, section 24 heading",
+      "source_passage": "WAR IS A MERE CONTINUATION OF POLICY BY OTHER MEANS",
+      "russian": "Война есть лишь продолжение политики другими средствами.\n\n- Карл фон Клаузевиц, \"О войне\", I, 1",
+      "english": "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, \"On War\", I.1"
+    },
+    "superevent_stelander_empire_quote": {
+      "source": "schopenhauer",
+      "location": "The Wisdom of Life, chapter IV, section 1, Reputation",
+      "source_passage": "The cheapest sort of pride is national pride",
+      "russian": "Самый дешёвый вид гордости - национальная гордость.\n\n- Артур Шопенгауэр, \"Афоризмы житейской мудрости\"",
+      "english": "The cheapest sort of pride is national pride.\n\n- Arthur Schopenhauer, \"The Wisdom of Life\""
+    },
+    "superevent_stelander_party_victory_festival_quote": {
+      "source": "juvenal",
+      "location": "Satire X, line 81",
+      "source_passage": "panem et circenses",
+      "russian": "Хлеба и зрелищ.\n\n- Ювенал, \"Сатиры\"",
+      "english": "Bread and circuses.\n\n- Juvenal, Satires"
+    },
+    "superevent_stelander_party_victory_houses_quote": {
+      "source": "lampedusa",
+      "location": "The Leopard, Part I, Tancredi speaking",
+      "source_passage": "If we want things to stay as they are, things will have to change",
+      "russian": "Если мы хотим, чтобы всё осталось как есть, нужно, чтобы всё изменилось.\n\n- Джузеппе Томази ди Лампедуза, \"Леопард\"",
+      "english": "If we want things to stay as they are, things will have to change.\n\n- Giuseppe Tomasi di Lampedusa, The Leopard",
+      "note": "Verified against the Italian Ministry of Culture's quotation of Tancredi's words. Russian is a translation, not a separately verified published Russian edition."
+    },
+    "superevent_stelander_party_victory_quote": {
+      "source": "orwell",
+      "location": "Nineteen Eighty-Four, Part III, chapter 3, O'Brien speaking",
+      "source_passage": "The object of power is power",
+      "russian": "Цель власти - власть.\n\n- Джордж Оруэлл, \"1984\"",
+      "english": "The object of power is power.\n\n- George Orwell, Nineteen Eighty-Four"
+    },
+    "superevent_stelander_party_victory_regent_quote": {
+      "source": "thucydides",
+      "location": "History of the Peloponnesian War, V.89, Athenian envoys in the Melian Dialogue",
+      "source_passage": "the strong do what they can and the weak suffer what they must",
+      "russian": "Сильные делают то, что могут, а слабые терпят то, что должны.\n\n- Фукидид, \"История\"",
+      "english": "The strong do what they can and the weak suffer what they must.\n\n- Thucydides, History of the Peloponnesian War"
+    },
+    "superevent_stelander_party_victory_silence_quote": {
+      "source": "tacitus",
+      "location": "Agricola, 30, speech attributed to Calgacus",
+      "source_passage": "where they make a desert, they call it peace",
+      "russian": "Где они создают пустыню, они называют это миром.\n\n- Тацит, \"Агрикола\", 30",
+      "english": "Where they make a desert, they call it peace.\n\n- Tacitus, \"Agricola\", 30"
+    },
+    "superevent_stelander_party_victory_staff_quote": {
+      "source": "vegetius",
+      "location": "Epitoma rei militaris, III, prologue",
+      "source_passage": "Therefore, he who desires peace, let him prepare for war",
+      "russian": "Кто желает мира, пусть готовится к войне.\n\n- Флавий Вегеций Ренат, \"Краткое изложение военного дела\"",
+      "english": "Let him who desires peace prepare for war.\n\n- Vegetius, Epitoma rei militaris"
+    },
+    "superevent_stelander_party_victory_wallets_quote": {
+      "source": "cicero_money",
+      "location": "Philippic V, section 5",
+      "source_passage": "the sinews of war, infinite treasure",
+      "russian": "Нервы войны - неисчислимые деньги.\n\n- Марк Туллий Цицерон, \"Филиппики\", V, 5",
+      "english": "The sinews of war, infinite treasure.\n\n- Marcus Tullius Cicero, \"Philippics\", V.5",
+      "note": "Excerpt from Cicero's description of the resources Antony would gain in Gaul; not a standalone maxim in the original sentence."
+    },
+    "superevent_stelander_shabrat_republic_quote": {
+      "source": "rousseau",
+      "location": "The Social Contract, I.8",
+      "source_passage": "obedience to a law which we prescribe to ourselves is liberty",
+      "russian": "Подчинение закону, который мы сами себе предписываем, есть свобода.\n\n- Жан-Жак Руссо",
+      "english": "Obedience to a law which we prescribe to ourselves is liberty.\n\n- Jean-Jacques Rousseau"
+    },
+    "superevent_stelander_shabrat_victory_quote": {
+      "source": "shakespeare",
+      "location": "The Tempest, Act II, scene 1, Antonio speaking",
+      "source_passage": "what’s past is prologue",
+      "russian": "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, \"Буря\"",
+      "english": "What's past is prologue.\n\n- William Shakespeare, The Tempest"
+    },
+    "superevent_stelander_sotnikov_charter_quote": {
+      "source": "jefferson",
+      "location": "First Inaugural Address, 4 March 1801",
+      "source_passage": "the supremacy of the civil over the military authority",
+      "russian": "Верховенство гражданской власти над военной.\n\n- Томас Джефферсон",
+      "english": "The supremacy of the civil over the military authority.\n\n- Thomas Jefferson"
+    },
+    "superevent_stelander_sotnikov_civilwar_quote": {
+      "source": "lincoln",
+      "location": "Second Inaugural Address, 4 March 1865, final paragraph",
+      "source_passage": "let us strive on to finish the work we are in to bind up the nation's wounds",
+      "russian": "Давайте стремиться завершить начатое нами дело, залечить раны нации.\n\n- Авраам Линкольн",
+      "english": "Let us strive on to finish the work we are in to bind up the nation's wounds.\n\n- Abraham Lincoln"
+    },
+    "superevent_stelander_sotnikov_directory_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XVII",
+      "source_passage": "And Covenants, without the Sword, are but Words, and of no strength to secure a man at all",
+      "russian": "Договоры без меча - лишь слова, не способные обеспечить человеку безопасность.\n\n- Томас Гоббс",
+      "english": "And covenants, without the sword, are but words, and of no strength to secure a man at all.\n\n- Thomas Hobbes"
+    },
+    "superevent_stelander_tikhoreva_quote": {
+      "source": "mill",
+      "location": "Utilitarianism, chapter II",
+      "source_passage": "The multiplication of happiness is, according to the utilitarian ethics, the object of virtue",
+      "russian": "Приумножение счастья, согласно утилитарной этике, составляет цель добродетели.\n\n- Джон Стюарт Милль",
+      "english": "The multiplication of happiness is, according to the utilitarian ethics, the object of virtue.\n\n- John Stuart Mill"
+    },
+    "superevent_val_commonwealth_quote": {
+      "source": "cicero_state",
+      "location": "De re publica, I.39, Scipio speaking",
+      "source_passage": "res publica res populi",
+      "russian": "Республика есть дело народа.\n\n- Цицерон, \"О государстве\"",
+      "english": "The commonwealth is the people's affair.\n\n- Cicero, On the Republic"
+    },
+    "superevent_val_council_proclamation_quote": {
+      "source": "cicero_law",
+      "location": "De legibus, III.8",
+      "source_passage": "Ollis salus populi suprema lex esto",
+      "russian": "Благо народа да будет высшим законом.\n\n- Цицерон, \"О законах\", III, 8",
+      "english": "Let the welfare of the people be the supreme law.\n\n- Cicero, On the Laws, III, 8"
+    },
+    "superevent_vorkerland_civilwar_quote": {
+      "source": "thucydides",
+      "location": "III.82, civil strife at Corcyra",
+      "source_passage": "war takes away the easy supply of daily wants, and so proves a rough master",
+      "russian": "Война лишает людей лёгкого удовлетворения повседневных нужд и потому оказывается суровым учителем.\n\n- Фукидид, \"История\", III, 82",
+      "english": "War takes away the easy supply of daily wants, and so proves a rough master.\n\n- Thucydides, \"History of the Peloponnesian War\", III.82"
+    },
+    "superevent_vorkerland_dirty_opening_quote": {
+      "source": "eliot",
+      "location": "The Burial of the Dead, line 30",
+      "source_passage": "I will show you fear in a handful of dust",
+      "russian": "Я покажу тебе страх в горсти праха.\n\n- Т. С. Элиот, \"Бесплодная земля\"",
+      "english": "I will show you fear in a handful of dust.\n\n- T. S. Eliot, The Waste Land"
+    },
+    "superevent_vorkerland_dorian_victory_quote": {
+      "source": "engels",
+      "location": "Part III, chapter II, Theoretical",
+      "source_passage": "the government of persons is replaced by the administration of things, and by the conduct of processes of production",
+      "russian": "Управление людьми заменяется управлением вещами и руководством процессами производства.\n\n- Фридрих Энгельс, \"Анти-Дюринг\"",
+      "english": "The government of persons is replaced by the administration of things, and by the conduct of processes of production.\n\n- Friedrich Engels, Anti-Duhring"
+    },
+    "superevent_vorkerland_utilitarian_victory_quote": {
+      "source": "bentham",
+      "location": "Preface, 1776",
+      "source_passage": "it is the greatest happiness of the greatest number that is the measure of right and wrong",
+      "russian": "Величайшее счастье величайшего числа - мера правильного и неправильного.\n\n- Иеремия Бентам",
+      "english": "It is the greatest happiness of the greatest number that is the measure of right and wrong.\n\n- Jeremy Bentham, A Fragment on Government"
+    },
+    "superevent_vorkerland_vlad_victory_quote": {
+      "source": "tacitus",
+      "location": "Agricola, 30, speech attributed to Calgacus",
+      "source_passage": "where they make a desert, they call it peace",
+      "russian": "Где они создают пустыню, они называют это миром.\n\n- Тацит, \"Агрикола\", 30",
+      "english": "Where they make a desert, they call it peace.\n\n- Tacitus, \"Agricola\", 30"
+    },
+    "superevent_vorkerland_worker_victory_quote": {
+      "source": "sallust",
+      "location": "Jugurthine War, 10.6, Micipsa's speech",
+      "source_passage": "for by concord even small states are increased, but by discord, even the greatest fall to nothing",
+      "russian": "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, \"Югуртинская война\"",
+      "english": "By concord even small states are increased, but by discord, even the greatest fall to nothing.\n\n- Sallust, The Jugurthine War"
+    },
+    "superevent_vorkerland_world_empire_quote": {
+      "source": "shelley",
+      "location": "Ozymandias, line 10, inscription on the pedestal",
+      "source_passage": "My name is Ozymandias, king of kings",
+      "russian": "Имя моё - Озимандия, царь царей.\n\n- Перси Биши Шелли, \"Озимандия\"",
+      "english": "My name is Ozymandias, king of kings.\n\n- Percy Bysshe Shelley, \"Ozymandias\""
+    },
+    "superevent_west_anton_quote": {
+      "source": "mill",
+      "location": "Utilitarianism, II",
+      "source_passage": "that standard is not the agent's own greatest happiness, but the greatest amount of happiness altogether",
+      "russian": "Мерило здесь - не наибольшее счастье самого действующего лица, а наибольшее общее количество счастья.\n\n- Джон Стюарт Милль, \"Утилитаризм\", II",
+      "english": "That standard is not the agent's own greatest happiness, but the greatest amount of happiness altogether.\n\n- John Stuart Mill, \"Utilitarianism\", II"
+    },
+    "superevent_west_committee_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XXI",
+      "source_passage": "The Obligation of Subjects to the Soveraign is understood to last as long, and no longer, than the power lasteth, by which he is able to protect them",
+      "russian": "Обязанность подданных перед сувереном длится лишь до тех пор, пока существует власть, способная их защищать.\n\n- Томас Гоббс, \"Левиафан\", XXI",
+      "english": "The obligation of subjects to the sovereign is understood to last as long, and no longer, than the power lasts, by which he is able to protect them.\n\n- Thomas Hobbes, \"Leviathan\", XXI",
+      "note": "English spelling modernized: Soveraign, lasteth."
+    },
+    "superevent_west_council_quote": {
+      "source": "federalist",
+      "location": "The Federalist, No. 51, 1788",
+      "source_passage": "If men were angels, no government would be necessary",
+      "russian": "Если бы люди были ангелами, никакое правительство не было бы нужно.\n\n- Джеймс Мэдисон, \"Федералист\", 51",
+      "english": "If men were angels, no government would be necessary.\n\n- James Madison, \"The Federalist\", 51"
+    },
+    "superevent_west_dorian_quote": {
+      "source": "bacon",
+      "location": "Novum Organum, I, aphorism III",
+      "source_passage": "nature is only subdued by submission",
+      "russian": "Природу побеждают, лишь подчиняясь ей.\n\n- Фрэнсис Бэкон, \"Новый Органон\", I, 3",
+      "english": "Nature is only subdued by submission.\n\n- Francis Bacon, \"Novum Organum\", I.3"
+    },
+    "superevent_west_emergency_quote": {
+      "source": "hobbes",
+      "location": "Leviathan, XIII",
+      "source_passage": "Where there is no common Power, there is no Law: where no Law, no Injustice",
+      "russian": "Где нет общей власти, нет закона; где нет закона, нет несправедливости.\n\n- Томас Гоббс, \"Левиафан\", XIII",
+      "english": "Where there is no common power, there is no law: where no law, no injustice.\n\n- Thomas Hobbes, \"Leviathan\", XIII"
+    },
+    "superevent_west_petrichev_quote": {
+      "source": "prince",
+      "location": "The Prince, XVII",
+      "source_passage": "it is much safer to be feared than loved, when, of the two, either must be dispensed with",
+      "russian": "Гораздо надёжнее внушать страх, чем любовь, если приходится отказаться от одного из двух.\n\n- Никколо Макиавелли, \"Государь\", XVII",
+      "english": "It is much safer to be feared than loved, when, of the two, either must be dispensed with.\n\n- Niccolo Machiavelli, \"The Prince\", XVII"
+    },
+    "superevent_west_revanche_quote": {
+      "source": "prince",
+      "location": "The Prince, VIII",
+      "source_passage": "injuries ought to be done all at one time, so that, being tasted less, they offend less",
+      "russian": "Обиды следует наносить все разом, чтобы, ощущаемые меньше, они меньше задевали.\n\n- Никколо Макиавелли, \"Государь\", VIII",
+      "english": "Injuries ought to be done all at one time, so that, being tasted less, they offend less.\n\n- Niccolo Machiavelli, \"The Prince\", VIII"
+    },
+    "superevent_west_shield_quote": {
+      "source": "locke",
+      "location": "Second Treatise of Government, IX, section 131",
+      "source_passage": "And all this to be directed to no other end, but the peace, safety, and public good of the people",
+      "russian": "И всё это должно служить лишь миру, безопасности и общественному благу народа.\n\n- Джон Локк, \"Второй трактат о правлении\", 131",
+      "english": "And all this to be directed to no other end, but the peace, safety, and public good of the people.\n\n- John Locke, \"Second Treatise of Government\", 131"
+    },
+    "superevent_west_veyran_quote": {
+      "source": "shakespeare",
+      "location": "The Tempest, Act II, scene 1, Antonio speaking",
+      "source_passage": "what’s past is prologue",
+      "russian": "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, \"Буря\", II, 1",
+      "english": "What's past is prologue.\n\n- William Shakespeare, \"The Tempest\", II.1"
+    },
+    "superevent_west_worker_quote": {
+      "source": "sallust",
+      "location": "Jugurthine War, 10.6, Micipsa's speech",
+      "source_passage": "for by concord even small states are increased, but by discord, even the greatest fall to nothing",
+      "russian": "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, \"Югуртинская война\", 10",
+      "english": "By concord even small states are increased, but by discord, even the greatest fall to nothing.\n\n- Sallust, \"Jugurthine War\", 10"
+    },
+    "superevent_west_world_empire_quote": {
+      "source": "aeneid",
+      "location": "Aeneid, VI.851-853, Anchises speaking; John Dryden translation",
+      "source_passage": "To tame the proud, the fetter’d slave to free: These are imperial arts, and worthy thee",
+      "russian": "Гордых смирять, освобождать раба от цепей - вот достойное тебя искусство империи.\n\n- Вергилий, \"Энеида\", VI (по переводу Джона Драйдена)",
+      "english": "To tame the proud, the fetter'd slave to free: These are imperial arts, and worthy thee.\n\n- Virgil, \"Aeneid\", VI (John Dryden translation)",
+      "note": "Russian translates Dryden's English rendering, not the Latin line directly."
+    }
+  },
+  "aliases": {
+    "superevent_stelander_great_quote": "superevent_stelander_party_victory_quote"
+  }
+}
