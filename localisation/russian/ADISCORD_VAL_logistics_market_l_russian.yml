@@ -178,18 +178,18 @@
 
 # Contract reserve recruitment
  VAL_recruit_contract_reserves: "Набрать контрактный резерв"
- VAL_recruit_contract_reserves_desc: "Повышенные подъёмные и гарантированные выплаты семьям привлекут новых добровольцев. Кефрейт сразу получит §G5000§! £population_texticon в свободный людской резерв. Повторный набор доступен через §Y120 дней§!."
+ VAL_recruit_contract_reserves_desc: "Повышенные подъёмные и гарантированные выплаты семьям привлекут новых добровольцев. Кефрейт сразу получит §G5000§! £manpower_texticon в свободный людской резерв. Повторный набор доступен через §Y120 дней§!."
  VAL_recruit_contract_reserves_cost: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_blocked: "§R1000§! £ADISCORD_economy_treasury_texticon  §R50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_tooltip: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recall_contract_veterans: "Предложить ветеранам новые контракты"
- VAL_recall_contract_veterans_desc: "Штаб предложит отслужившим контрактникам вернуться на службу за увеличенные выплаты. Кефрейт сразу получит §G6000§! £population_texticon в свободный людской резерв. Повторное предложение доступно через §Y180 дней§!."
+ VAL_recall_contract_veterans_desc: "Штаб предложит отслужившим контрактникам вернуться на службу за увеличенные выплаты. Кефрейт сразу получит §G6000§! £manpower_texticon в свободный людской резерв. Повторное предложение доступно через §Y180 дней§!."
  VAL_recall_contract_veterans_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
 
  VAL_launch_national_recruitment: "Общий контрактный набор"
- VAL_launch_national_recruitment_desc:0 "Оплатить общий набор из местного резерва: §Y2§! единицы резерва и §Y3000§! £ADISCORD_economy_treasury_texticon. Через §Y60 дней§! Кефрейт получит §G20000§! £population_texticon. Следующий набор - через §Y90 дней§! после завершения. При капитуляции, подчинении или утрате программы деньги и резерв возвращаются."
+ VAL_launch_national_recruitment_desc:0 "Оплатить общий набор из местного резерва: §Y2§! единицы резерва и §Y3000§! £ADISCORD_economy_treasury_texticon. Через §Y60 дней§! Кефрейт получит §G20000§! £manpower_texticon. Следующий набор - через §Y90 дней§! после завершения. При капитуляции, подчинении или утрате программы деньги и резерв возвращаются."
  VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon\nиз местного резерва"
  VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon\nиз местного резерва"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon из местного резерва"

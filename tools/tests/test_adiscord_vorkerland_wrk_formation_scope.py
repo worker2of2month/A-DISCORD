@@ -752,7 +752,8 @@ class VorkerlandUnificationScopeTests(unittest.TestCase):
         anton = named_block(self.all_effects, "ADISCORD_vorkerland_promote_anton_bagley")
         self.assertIn("ADISCORD_vorkerland_promote_anton_bagley = yes", executive)
         self.assertIn("character = WRK_Anton_Bagley", anton)
-        self.assertIn("character = WKR_Emergency_Coordination_Committee", chairman)
+        self.assertNotIn("WKR_Emergency_Coordination_Committee", chairman)
+        self.assertIn("WKR_appoint_executive = yes", chairman)
         sources = (
             named_block(self.effects, "ADISCORD_vorkerland_unify_under_wkr"),
             named_block(self.effects, "ADISCORD_vorkerland_settle_unification_under_wkr"),

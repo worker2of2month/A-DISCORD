@@ -4616,18 +4616,6 @@ ADISCORD_superevent_enqueue = {
 						has_global_flag = superevent_stelander_party_victory_regent
 					}
 					AND = {
-						check_variable = { ADISCORD_superevent_request = 33 }
-						has_global_flag = superevent_stelander_shabrat_victory_staff
-					}
-					AND = {
-						check_variable = { ADISCORD_superevent_request = 34 }
-						has_global_flag = superevent_stelander_shabrat_victory_councils
-					}
-					AND = {
-						check_variable = { ADISCORD_superevent_request = 35 }
-						has_global_flag = superevent_stelander_shabrat_victory_truth
-					}
-					AND = {
 						check_variable = { ADISCORD_superevent_request = 36 }
 						has_global_flag = superevent_stelander_party_victory_festival
 					}
@@ -4829,9 +4817,6 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_stelander_party_victory_wallets
 					has_global_flag = superevent_stelander_party_victory_silence
 					has_global_flag = superevent_stelander_party_victory_regent
-					has_global_flag = superevent_stelander_shabrat_victory_staff
-					has_global_flag = superevent_stelander_shabrat_victory_councils
-					has_global_flag = superevent_stelander_shabrat_victory_truth
 					has_global_flag = superevent_stelander_party_victory_festival
 					has_global_flag = superevent_south_houses
 					has_global_flag = superevent_south_cities
@@ -5003,18 +4988,6 @@ ADISCORD_superevent_dispatch_next = {
 		else_if = {
 			limit = { check_variable = { ADISCORD_superevent_next = 32 } }
 			set_global_flag = superevent_stelander_party_victory_regent
-		}
-		else_if = {
-			limit = { check_variable = { ADISCORD_superevent_next = 33 } }
-			set_global_flag = superevent_stelander_shabrat_victory_staff
-		}
-		else_if = {
-			limit = { check_variable = { ADISCORD_superevent_next = 34 } }
-			set_global_flag = superevent_stelander_shabrat_victory_councils
-		}
-		else_if = {
-			limit = { check_variable = { ADISCORD_superevent_next = 35 } }
-			set_global_flag = superevent_stelander_shabrat_victory_truth
 		}
 		else_if = {
 			limit = { check_variable = { ADISCORD_superevent_next = 36 } }
@@ -5205,9 +5178,6 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_stelander_party_victory_wallets
 	clr_global_flag = superevent_stelander_party_victory_silence
 	clr_global_flag = superevent_stelander_party_victory_regent
-	clr_global_flag = superevent_stelander_shabrat_victory_staff
-	clr_global_flag = superevent_stelander_shabrat_victory_councils
-	clr_global_flag = superevent_stelander_shabrat_victory_truth
 	clr_global_flag = superevent_stelander_party_victory_festival
 	clr_global_flag = superevent_south_houses
 	clr_global_flag = superevent_south_cities
@@ -12172,6 +12142,9 @@ WKR_initialize_administration = {
 	}
 }
 
+# The chairman's course exists only while Nikita stays with the western forces.
+# Without him the executive keeps the government; settlement and the leader
+# repair reach this effect without checking his fate themselves.
 WKR_appoint_chairman = {
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
@@ -12181,16 +12154,10 @@ WKR_appoint_chairman = {
 			ideology = pragmatism
 			portrait = GFX_portrait_WRK_Nikita_Worcker_civilwar
 		}
+		set_cosmetic_tag = WRK_vorkerland_emergency
+		WKR_party_representatives_chairman = yes
 	}
-	else = {
-		promote_character = {
-			character = WKR_Emergency_Coordination_Committee
-			ideology = neo_vorkerism
-		}
-		set_politics = { ruling_party = pragmatism elections_allowed = no }
-	}
-	set_cosmetic_tag = WRK_vorkerland_emergency
-	WKR_party_representatives_chairman = yes
+	else = { WKR_appoint_executive = yes }
 }
 
 WKR_appoint_executive = {
@@ -12497,9 +12464,6 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_stelander_party_victory_wallets days > 6 }
 					has_global_flag = { flag = superevent_stelander_party_victory_silence days > 6 }
 					has_global_flag = { flag = superevent_stelander_party_victory_regent days > 6 }
-					has_global_flag = { flag = superevent_stelander_shabrat_victory_staff days > 6 }
-					has_global_flag = { flag = superevent_stelander_shabrat_victory_councils days > 6 }
-					has_global_flag = { flag = superevent_stelander_shabrat_victory_truth days > 6 }
 					has_global_flag = { flag = superevent_stelander_party_victory_festival days > 6 }
 					has_global_flag = { flag = superevent_south_houses days > 6 }
 					has_global_flag = { flag = superevent_south_cities days > 6 }
@@ -12638,18 +12602,6 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_stelander_party_victory_regent days > 6 } }
 				clr_global_flag = superevent_stelander_party_victory_regent
-			}
-			if = {
-				limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory_staff days > 6 } }
-				clr_global_flag = superevent_stelander_shabrat_victory_staff
-			}
-			if = {
-				limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory_councils days > 6 } }
-				clr_global_flag = superevent_stelander_shabrat_victory_councils
-			}
-			if = {
-				limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory_truth days > 6 } }
-				clr_global_flag = superevent_stelander_shabrat_victory_truth
 			}
 			if = {
 				limit = { has_global_flag = { flag = superevent_stelander_party_victory_festival days > 6 } }

@@ -154,18 +154,6 @@ defined_text = {
 		localization_key = superevent_stelander_party_victory_regent_quote
 	}
 	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
-		localization_key = superevent_stelander_shabrat_victory_staff_quote
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
-		localization_key = superevent_stelander_shabrat_victory_councils_quote
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
-		localization_key = superevent_stelander_shabrat_victory_truth_quote
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory_festival }
 		localization_key = superevent_stelander_party_victory_festival_quote
 	}
@@ -459,18 +447,6 @@ defined_text = {
 		localization_key = superevent_stelander_party_victory_regent_title
 	}
 	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
-		localization_key = superevent_stelander_shabrat_victory_staff_title
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
-		localization_key = superevent_stelander_shabrat_victory_councils_title
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
-		localization_key = superevent_stelander_shabrat_victory_truth_title
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory_festival }
 		localization_key = superevent_stelander_party_victory_festival_title
 	}
@@ -762,18 +738,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory_regent }
 		localization_key = superevent_stelander_party_victory_regent_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_staff }
-		localization_key = superevent_stelander_shabrat_victory_staff_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_councils }
-		localization_key = superevent_stelander_shabrat_victory_councils_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_stelander_shabrat_victory_truth }
-		localization_key = superevent_stelander_shabrat_victory_truth_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory_festival }

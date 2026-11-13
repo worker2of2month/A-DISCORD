@@ -1933,3 +1933,114 @@ country_event = {
 	trigger = { RUS = { RUS_coup_regime = yes } }
 	option = { name = ADISCORD_rus_campaign.48.a }
 }
+
+# RUS. Outcomes of the amnesty, read by RUS_sci_guard_loyalty_settle.
+country_event = {
+	id = ADISCORD_rus_campaign.49
+	title = ADISCORD_rus_campaign.49.t
+	desc = ADISCORD_rus_campaign.49.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_scientists_regime = yes }
+	option = { name = ADISCORD_rus_campaign.49.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.50
+	title = ADISCORD_rus_campaign.50.t
+	desc = ADISCORD_rus_campaign.50.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { RUS_scientists_regime = yes }
+	option = { name = ADISCORD_rus_campaign.50.a }
+}
+
+# RUS and a human Montera. The reactor war has begun; RUS_sci_reactor_war is 1.
+country_event = {
+	id = ADISCORD_rus_campaign.51
+	title = ADISCORD_rus_campaign.51.t
+	desc = ADISCORD_rus_campaign.51.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_scientists_regime = yes }
+	option = { name = ADISCORD_rus_campaign.51.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.52
+	title = ADISCORD_rus_campaign.52.t
+	desc = ADISCORD_rus_campaign.52.d
+	picture = GFX_event_adiscord_field_switchboard
+	is_triggered_only = yes
+	trigger = { tag = MON }
+	option = { name = ADISCORD_rus_campaign.52.a }
+}
+
+# Settlement of the reactor war, sent by its resolution effects.
+country_event = {
+	id = ADISCORD_rus_campaign.53
+	title = ADISCORD_rus_campaign.53.t
+	desc = ADISCORD_rus_campaign.53.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.53.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.54
+	title = ADISCORD_rus_campaign.54.t
+	desc = ADISCORD_rus_campaign.54.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = MON }
+	option = { name = ADISCORD_rus_campaign.54.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.55
+	title = ADISCORD_rus_campaign.55.t
+	desc = ADISCORD_rus_campaign.55.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.55.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.56
+	title = ADISCORD_rus_campaign.56.t
+	desc = ADISCORD_rus_campaign.56.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = MON }
+	option = { name = ADISCORD_rus_campaign.56.a }
+}
+
+# RUS. Warnings sent as the coup window opens: who the factions are and why
+# each would overthrow the Khan rather than follow him to the strike.
+country_event = {
+	id = ADISCORD_rus_campaign.57
+	title = ADISCORD_rus_campaign.57.t
+	desc = ADISCORD_rus_campaign.57.d
+	picture = GFX_event_adiscord_signal_archive_basement
+	is_triggered_only = yes
+	trigger = { RUS_coup_window_open = yes }
+	option = {
+		name = ADISCORD_rus_campaign.57.a
+		custom_effect_tooltip = RUS_coup_faction_warning_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.58
+	title = ADISCORD_rus_campaign.58.t
+	desc = ADISCORD_rus_campaign.58.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_coup_window_open = yes }
+	option = {
+		name = ADISCORD_rus_campaign.58.a
+		custom_effect_tooltip = RUS_coup_faction_warning_tt
+	}
+}

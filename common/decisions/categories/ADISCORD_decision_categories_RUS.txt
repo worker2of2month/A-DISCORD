@@ -184,3 +184,11 @@ RUS_public_campaigns = {
 	visible_when_empty = yes
 	priority = 24
 }
+
+# --- rus_scientists_regime ---
+RUS_reactor_council_category = {
+	icon = generic_industry
+	allowed = { tag = RUS }
+	visible = { RUS_scientists_regime = yes }
+	priority = 27
+}

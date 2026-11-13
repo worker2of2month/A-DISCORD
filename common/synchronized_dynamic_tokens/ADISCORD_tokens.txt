@@ -108,6 +108,8 @@ RUS_crisis_defence_countdown
 RUS_crisis_laser_countdown
 RUS_scientists_plot
 RUS_black_army_plot
+RUS_sci_guard_loyalty
+RUS_sci_montera_deadline
 RUS_bunker_excavate
 RUS_bunker_rush
 RUS_bunker_guard

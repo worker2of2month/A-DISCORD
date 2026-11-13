@@ -1103,6 +1103,21 @@ NAM_underground_active = {
 	owns_state = 688
 }
 
+# COUNTRY NAM. Strike tiers of the network: 30-49 smoulders, from 50 it acts,
+# from 70 it attacks every month and from 90 the city is on the brink. The
+# sabotage roll, its events and the category text read only these triggers.
+NAM_underground_strike_tier_2 = {
+	check_variable = { NAM_underground > 49 }
+}
+
+NAM_underground_strike_tier_3 = {
+	check_variable = { NAM_underground > 69 }
+}
+
+NAM_underground_strike_tier_4 = {
+	check_variable = { NAM_underground > 89 }
+}
+
 # STATE. One of the five oil fields of the basin.
 NAM_field_state = {
 	OR = {
@@ -2892,13 +2907,7 @@ NAM_naval_workshops_supply = {
 NAM_naval_marines_ready = {
 	NAM_naval_home_port = yes
 	has_tech = ADISCORD_tech_svetlogorsk_marine_corps
-	OR = {
-		check_variable = { num_battalions_with_type@ADISCORD_marine_infantry < 4 }
-		AND = {
-			has_completed_focus = NAM_pw_landing_supply
-			check_variable = { num_battalions_with_type@ADISCORD_marine_infantry < 7 }
-		}
-	}
+	check_variable = { num_battalions_with_type@ADISCORD_marine_infantry < 7 }
 }
 
 # STATE. The commissioned plant stays with its site through ownership changes.

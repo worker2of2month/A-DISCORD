@@ -1400,7 +1400,7 @@ NAM_mobilisation = {
 		allowed = { tag = NAM }
 		visible = {
 			NAM_rw_clock_running = yes
-			has_completed_focus = NAM_coastal_battalions
+			has_completed_focus = NAM_reserve_rolls
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10077,10 +10077,7 @@ NAM_defence_orders = {
 		icon = generic_naval
 		allowed = { tag = NAM }
 		visible = {
-			OR = {
-				has_completed_focus = NAM_marine_arsenal
-				has_completed_focus = NAM_pw_landing_supply
-			}
+			has_completed_focus = NAM_pw_landing_supply
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10108,10 +10105,7 @@ NAM_defence_orders = {
 				if = {
 					limit = {
 						NAM_naval_marines_ready = yes
-						OR = {
-							has_completed_focus = NAM_marine_arsenal
-							has_completed_focus = NAM_pw_landing_supply
-						}
+						has_completed_focus = NAM_pw_landing_supply
 						NOT = { has_country_flag = NAM_marine_detachment_paid }
 						NOT = { has_political_power < 50 }
 						NOT = { has_manpower < 3000 }
@@ -10475,6 +10469,29 @@ NAM_defence_orders = {
 		ai_will_do = { base = 5 }
 	}
 
+	# Replaces NAM_mobilisation_office once the restitution clock no longer
+	# offers it: the war began, ended, or the collapse passed without one.
+	NAM_declare_mobilisation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			has_idea = NAM_metropolitan_garrison_charter
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+		}
+		available = {
+			has_capitulated = no
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			remove_ideas = NAM_metropolitan_garrison_charter
+			add_ideas = limited_conscription
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	# Military supply orders and operational programmes.
 	NAM_mil_recruit_depots = {
 		icon = ADISCORD_arms_supply
@@ -10536,7 +10553,7 @@ NAM_defence_orders = {
 				custom_effect_tooltip = NAM_mil_recruit_depots_delivered_tt
 				hidden_effect = {
 					clr_country_flag = NAM_mil_recruit_depots_paid
-					add_manpower = 6000
+					add_manpower = 12000
 				}
 			}
 			else = {

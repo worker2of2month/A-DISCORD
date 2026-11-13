@@ -1945,6 +1945,34 @@ on_actions = {
 					}
 				}
 				# END east_final:on_capitulation
+				# BEGIN khan_coup:on_capitulation
+				# The scientists' reactor war has one settlement in either direction.
+				# Kefreyt's own war against Montera keeps its section above.
+				if = {
+					limit = {
+						country_exists = RUS
+						RUS = { check_variable = { var = RUS_sci_reactor_war value = 1 compare = equals } }
+						OR = {
+							AND = {
+								ROOT = { tag = MON }
+								FROM = { tag = RUS }
+							}
+							AND = {
+								ROOT = { tag = RUS }
+								FROM = { tag = MON }
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = MON } }
+						RUS = { RUS_sci_reactor_war_resolve_victory = yes }
+					}
+					else = {
+						RUS = { RUS_sci_reactor_war_resolve_defeat = yes }
+					}
+				}
+				# END khan_coup:on_capitulation
 
 				# BEGIN vorkerland_diplomacy:on_capitulation
 				if = {
@@ -2180,6 +2208,9 @@ on_actions = {
 				# BEGIN east_final:on_peace
 				VAL_east_final_close_external = yes
 				# END east_final:on_peace
+				# BEGIN khan_coup:on_peace
+				RUS_sci_reactor_war_close_external = yes
+				# END khan_coup:on_peace
 				if = {
 					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
 					log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"

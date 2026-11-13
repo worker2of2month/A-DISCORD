@@ -71,8 +71,8 @@ NAM_prewar_plan = {
 		NAM_escort_school
 		NAM_naval_construction
 		NAM_basin_reconnaissance
-		NAM_landing_school
-		NAM_marine_arsenal
+		NAM_naval_staff
+		NAM_basin_minefields
 		NAM_provisional_statute
 		NAM_rom_address
 		NAM_reserve_rolls

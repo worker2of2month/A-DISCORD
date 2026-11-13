@@ -83,306 +83,368 @@ SUPEREVENT_IDS = (
 
 @dataclass(frozen=True)
 class SupereventPresentation:
+    queue_id: int
     name: str
     dedicated_sound_effect: str | None = None
 
 
 PRESENTATIONS = (
     SupereventPresentation(
+        1,
         "superevent_vorkerland_civilwar",
         "superevent_vorkerland_civilwar_sound_e",
     ),
     SupereventPresentation(
+        2,
         "superevent_vorkerland_dirty_opening",
         "superevent_vorkerland_dirty_opening_sound_e",
     ),
     SupereventPresentation(
+        3,
         "superevent_vorkerland_worker_victory",
         "superevent_vorkerland_worker_victory_sound_e",
     ),
     SupereventPresentation(
+        4,
         "superevent_vorkerland_utilitarian_victory",
         "superevent_vorkerland_utilitarian_victory_sound_e",
     ),
     SupereventPresentation(
+        5,
         "superevent_vorkerland_vlad_victory",
         "superevent_vorkerland_vlad_victory_sound_e",
     ),
     SupereventPresentation(
+        6,
         "superevent_vorkerland_dorian_victory",
         "superevent_vorkerland_dorian_victory_sound_e",
     ),
     SupereventPresentation(
+        7,
         "superevent_stelander_empire",
         "superevent_stelander_empire_sound_e",
     ),
     SupereventPresentation(
+        8,
         "superevent_stelander_party_victory",
         "superevent_stelander_party_victory_sound_e",
     ),
     SupereventPresentation(
+        9,
         "superevent_stelander_shabrat_victory",
         "superevent_stelander_shabrat_victory_sound_e",
     ),
     SupereventPresentation(
+        10,
         "superevent_nam_resource_war", "superevent_nam_resource_war_sound_e"
     ),
     SupereventPresentation(
+        11,
         "superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"
     ),
     SupereventPresentation(
+        12,
         "superevent_val_commonwealth",
         "superevent_val_commonwealth_sound_e",
     ),
     SupereventPresentation(
+        13,
         "superevent_stelander_great", "superevent_stelander_great_sound_e"
     ),
     SupereventPresentation(
+        14,
         "superevent_rus_black_banner",
         "superevent_rus_last_empire_sound_e",
     ),
     SupereventPresentation(
+        15,
         "superevent_rus_restoration",
         "superevent_rus_last_empire_sound_e",
     ),
     SupereventPresentation(
+        16,
         "superevent_itora_vorkerland_war",
         "superevent_itora_vorkerland_war_sound_e",
     ),
     SupereventPresentation(
+        17,
         "superevent_itora_civilwar",
         "superevent_itora_civilwar_sound_e",
     ),
 
     SupereventPresentation(
+        18,
         "superevent_rus_khan_defeated",
         "superevent_rus_khan_defeated_sound_e",
     ),
     SupereventPresentation(
+        19,
         "superevent_vorkerland_joint_victory",
         "superevent_vorkerland_joint_victory_sound_e",
     ),
     SupereventPresentation(
+        20,
         "superevent_stelander_sotnikov_civilwar",
         "superevent_stelander_sotnikov_civilwar_sound_e",
     ),
     SupereventPresentation(
+        21,
         "superevent_stelander_sotnikov_directory",
         "superevent_stelander_shabrat_victory_sound_e",
     ),
     SupereventPresentation(
+        22,
         "superevent_stelander_sotnikov_charter",
         "superevent_stelander_shabrat_victory_sound_e",
     ),
     SupereventPresentation(
+        23,
         "superevent_stelander_shabrat_republic",
         "superevent_stelander_shabrat_republic_sound_e",
     ),
     SupereventPresentation(
+        24,
         "superevent_stelander_tikhoreva",
         "superevent_stelander_shabrat_victory_sound_e",
     ),
     SupereventPresentation(
+        25,
         "superevent_rus_khan_died",
         "superevent_rus_khan_defeated_sound_e",
     ),
     SupereventPresentation(
+        26,
         "superevent_nam_resource_war_service",
         "superevent_nam_resource_war_service_sound_e",
     ),
     SupereventPresentation(
+        27,
         "superevent_nam_resource_war_district",
         "superevent_nam_resource_war_district_sound_e",
     ),
     SupereventPresentation(
+        28,
         "superevent_stelander_party_victory_houses",
         "superevent_stelander_party_victory_houses_sound_e",
     ),
     SupereventPresentation(
+        29,
         "superevent_stelander_party_victory_staff",
         "superevent_stelander_party_victory_staff_sound_e",
     ),
     SupereventPresentation(
+        30,
         "superevent_stelander_party_victory_wallets",
         "superevent_stelander_party_victory_wallets_sound_e",
     ),
     SupereventPresentation(
+        31,
         "superevent_stelander_party_victory_silence",
         "superevent_stelander_party_victory_silence_sound_e",
     ),
     SupereventPresentation(
+        32,
         "superevent_stelander_party_victory_regent",
         "superevent_stelander_party_victory_regent_sound_e",
     ),
     SupereventPresentation(
-        "superevent_stelander_shabrat_victory_staff",
-        "superevent_stelander_shabrat_victory_staff_sound_e",
-    ),
-    SupereventPresentation(
-        "superevent_stelander_shabrat_victory_councils",
-        "superevent_stelander_shabrat_victory_councils_sound_e",
-    ),
-    SupereventPresentation(
-        "superevent_stelander_shabrat_victory_truth",
-        "superevent_stelander_shabrat_victory_truth_sound_e",
-    ),
-    SupereventPresentation(
+        36,
         "superevent_stelander_party_victory_festival",
         "superevent_stelander_party_victory_sound_e",
     ),
     SupereventPresentation(
+        37,
         "superevent_south_houses",
         "superevent_south_houses_sound_e",
     ),
     SupereventPresentation(
+        38,
         "superevent_south_cities",
         "superevent_south_cities_sound_e",
     ),
     SupereventPresentation(
+        39,
         "superevent_south_nur",
         "superevent_south_nur_sound_e",
     ),
     SupereventPresentation(
+        40,
         "superevent_south_regency",
         "superevent_south_regency_sound_e",
     ),
     SupereventPresentation(
+        41,
         "superevent_south_commune",
         "superevent_south_commune_sound_e",
     ),
     SupereventPresentation(
+        42,
         "superevent_south_conclave",
         "superevent_south_conclave_sound_e",
     ),
     SupereventPresentation(
+        43,
         "superevent_south_service",
         "superevent_south_service_sound_e",
     ),
     SupereventPresentation(
+        44,
         "superevent_south_charter",
         "superevent_south_charter_sound_e",
     ),
     SupereventPresentation(
+        45,
         "superevent_south_contracts",
         "superevent_south_contracts_sound_e",
     ),
     SupereventPresentation(
+        46,
         "superevent_south_rump",
         "superevent_south_rump_sound_e",
     ),
     SupereventPresentation(
+        47,
         "superevent_south_revenge",
         "superevent_south_revenge_sound_e",
     ),
     SupereventPresentation(
+        48,
         "superevent_south_radical",
         "superevent_south_radical_sound_e",
     ),
     SupereventPresentation(
+        49,
         "superevent_south_free_islands",
         "superevent_south_free_islands_sound_e",
     ),
     SupereventPresentation(
+        50,
         "superevent_south_boards",
         "superevent_south_boards_sound_e",
     ),
     SupereventPresentation(
+        51,
         "superevent_south_restitution",
         "superevent_south_restitution_sound_e",
     ),
     SupereventPresentation(
+        52,
         "superevent_west_worker",
         "superevent_west_worker_sound_e",
     ),
     SupereventPresentation(
+        53,
         "superevent_west_petrichev",
         "superevent_west_petrichev_sound_e",
     ),
     SupereventPresentation(
+        54,
         "superevent_west_veyran",
         "superevent_west_veyran_sound_e",
     ),
     SupereventPresentation(
+        55,
         "superevent_west_dorian",
         "superevent_west_dorian_sound_e",
     ),
     SupereventPresentation(
+        56,
         "superevent_west_anton",
         "superevent_west_anton_sound_e",
     ),
     SupereventPresentation(
+        57,
         "superevent_west_shield",
         "superevent_west_shield_sound_e",
     ),
     SupereventPresentation(
+        58,
         "superevent_west_emergency",
         "superevent_west_emergency_sound_e",
     ),
     SupereventPresentation(
+        59,
         "superevent_west_revanche",
         "superevent_west_revanche_sound_e",
     ),
     SupereventPresentation(
+        60,
         "superevent_west_committee",
         "superevent_west_committee_sound_e",
     ),
     SupereventPresentation(
+        61,
         "superevent_vorkerland_world_empire",
         "superevent_vorkerland_world_empire_sound_e",
     ),
     SupereventPresentation(
+        62,
         "superevent_south_iron",
         "superevent_south_iron_sound_e",
     ),
     SupereventPresentation(
+        63,
         "superevent_south_civil_service",
         "superevent_south_civil_service_sound_e",
     ),
     SupereventPresentation(
+        64,
         "superevent_south_federation",
         "superevent_south_federation_sound_e",
     ),
     SupereventPresentation(
+        65,
         "superevent_south_oil_union",
         "superevent_south_oil_union_sound_e",
     ),
     SupereventPresentation(
+        66,
         "superevent_south_contract_republic",
         "superevent_south_contract_republic_sound_e",
     ),
     SupereventPresentation(
+        67,
         "superevent_south_directorate",
         "superevent_south_directorate_sound_e",
     ),
     SupereventPresentation(
+        68,
         "superevent_south_nam",
         "superevent_south_nam_sound_e",
     ),
     SupereventPresentation(
+        69,
         "superevent_west_council",
         "superevent_west_council_sound_e",
     ),
     SupereventPresentation(
+        70,
         "superevent_west_world_empire",
         "superevent_west_world_empire_sound_e",
     ),
     SupereventPresentation(
+        71,
         "superevent_nam_veyran_proclamation",
         "superevent_nam_veyran_proclamation_sound_e",
     ),
     SupereventPresentation(
+        72,
         "superevent_itora_legion_victory",
         "superevent_itora_legion_victory_sound_e",
     ),
     SupereventPresentation(
+        73,
         "superevent_itora_committee_victory",
         "superevent_itora_committee_victory_sound_e",
     ),
     SupereventPresentation(
+        74,
         "superevent_itora_stalk_portal",
         "superevent_itora_stalk_portal_sound_e",
     ),
 )
+
+PRESENTATIONS_BY_ID = {item.queue_id: item for item in PRESENTATIONS}
 
 
 def read(root: Path, relative: Path, issues: list[str]) -> str:

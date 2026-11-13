@@ -2512,13 +2512,17 @@
         "music/ADISCORD_stp_civil_war_end_after_superevent.ogg",
         "sound/superevents/superevent_itora_legion_victory_sound.wav",
         "sound/superevents/superevent_itora_committee_victory_sound.wav",
-        "sound/superevents/superevent_itora_stalk_portal_sound.wav"
+        "sound/superevents/superevent_itora_stalk_portal_sound.wav",
+        "sound/superevents/superevent_rus_restoration_sound.wav",
+        "sound/superevents/superevent_rus_black_banner_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
           "tools/builders/build_adiscord_superevent_animation.py",
         "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg",
-        "tools/assets/source/superevents/IVN/*"
+        "tools/assets/source/superevents/IVN/*",
+        "tools/assets/source/superevents/RUS/*.flac",
+        "tools/assets/source/superevents/RUS/asset_sources.json"
       ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive",

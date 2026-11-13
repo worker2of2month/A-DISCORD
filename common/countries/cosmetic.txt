@@ -117,16 +117,6 @@ RUS_last_empire = {
 	color_ui = rgb { 196 92 48 }
 }
 
-RUS_reactor_council = {
-	color = rgb { 52 96 104 }
-	color_ui = rgb { 108 168 176 }
-}
-
-RUS_guard_state = {
-	color = rgb { 40 36 34 }
-	color_ui = rgb { 132 120 112 }
-}
-
 STS_military_junta = {
 	color = rgb { 78 86 48 }
 	color_ui = rgb { 142 151 95 }

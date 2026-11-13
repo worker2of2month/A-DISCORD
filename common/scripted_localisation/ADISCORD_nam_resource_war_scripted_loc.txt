@@ -1040,6 +1040,34 @@ defined_text = {
 	}
 }
 
+# The current strike tier of the network in the NAM_underground category.
+defined_text = {
+	name = NAMGetUndergroundDanger
+	text = {
+		trigger = { NOT = { NAM_underground_active = yes } }
+		localization_key = NAM_underground_danger_idle
+	}
+	text = {
+		trigger = { NAM_underground_strike_tier_4 = yes }
+		localization_key = NAM_underground_danger_4
+	}
+	text = {
+		trigger = { NAM_underground_strike_tier_3 = yes }
+		localization_key = NAM_underground_danger_3
+	}
+	text = {
+		trigger = { NAM_underground_strike_tier_2 = yes }
+		localization_key = NAM_underground_danger_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_underground > 29 } }
+		localization_key = NAM_underground_danger_1
+	}
+	text = {
+		localization_key = NAM_underground_danger_0
+	}
+}
+
 # ----- Island exile -----
 # The coalition's attention in the NAM_piracy category.
 defined_text = {

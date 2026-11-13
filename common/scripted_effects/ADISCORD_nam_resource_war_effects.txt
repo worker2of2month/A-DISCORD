@@ -2109,6 +2109,17 @@ NAM_groups_initialize = {
 		set_variable = { var = NAM_navy_repair_speed value = 0 }
 		set_variable = { var = NAM_navy_landing_speed value = 0 }
 		set_variable = { var = NAM_navy_organisation value = 0 }
+		set_variable = { var = NAM_navy_dockyard_output value = 0 }
+		set_variable = { var = NAM_navy_spotting value = 0 }
+		set_variable = { var = NAM_navy_screen_defence value = 0 }
+		set_variable = { var = NAM_navy_sub_detection value = 0 }
+		set_variable = { var = NAM_navy_convoy_raiding value = 0 }
+		set_variable = { var = NAM_navy_sub_attack value = 0 }
+		set_variable = { var = NAM_navy_coordination value = 0 }
+		set_variable = { var = NAM_navy_positioning value = 0 }
+		set_variable = { var = NAM_navy_mine_planting value = 0 }
+		set_variable = { var = NAM_navy_mine_damage value = 0 }
+		set_variable = { var = NAM_navy_mine_sweeping value = 0 }
 		set_variable = { var = NAM_air_accidents value = 0 }
 		set_variable = { var = NAM_air_mission_efficiency value = 0 }
 		set_variable = { var = NAM_air_intercept_efficiency value = 0 }
@@ -5544,6 +5555,9 @@ NAM_underground_open_event = {
 NAM_underground_close_event = {
 	clr_country_flag = NAM_ug_event_pending
 	clear_variable = NAM_ug_rifles_stolen
+	clear_variable = NAM_ug_strike_damage
+	clear_variable = NAM_ug_strike_fuel
+	clear_variable = NAM_ug_strike_stability
 	if = {
 		limit = { has_event_target = NAM_ug_field }
 		event_target:NAM_ug_field = { clear_variable = NAM_ug_damage_receipt }
@@ -5605,9 +5619,14 @@ NAM_underground_monthly = {
 	}
 }
 
-# COUNTRY NAM. A network of 30 or more may strike once a month: 20% below 50,
-# about 27% from 50 and about 36% from 70, never twice within 60 days. A field
-# strike needs a field in Svetlogorsk hands and a depot raid needs rifles.
+# COUNTRY NAM. A network of 30 or more may strike once a month before the
+# resource war. The chance follows the strike tier: 20% at 30-49, 35% at 50-69,
+# 50% at 70-89 and 65% from 90; both weights of each tier add up to 100. A
+# strike rests the network for 200, 120, 60 or 30 days by the tier it struck
+# at; the roll waits for the next monthly pulse after the rest. A field strike
+# needs a field in Svetlogorsk hands, a
+# depot raid rifles, a pipeline blast fuel and an unguarded line from tier 2;
+# the bombing of Svetlogorsk opens from tier 3.
 NAM_underground_sabotage_roll = {
 	if = {
 		limit = {
@@ -5618,20 +5637,67 @@ NAM_underground_sabotage_roll = {
 			NOT = { has_country_flag = NAM_ug_event_pending }
 		}
 		random_list = {
-			80 = { }
+			80 = {
+				modifier = {
+					factor = 0.8125
+					NAM_underground_strike_tier_2 = yes
+					NAM_underground_strike_tier_3 = no
+				}
+				modifier = {
+					factor = 0.625
+					NAM_underground_strike_tier_3 = yes
+					NAM_underground_strike_tier_4 = no
+				}
+				modifier = {
+					factor = 0.4375
+					NAM_underground_strike_tier_4 = yes
+				}
+			}
 			20 = {
 				modifier = {
-					factor = 1.5
-					check_variable = { NAM_underground > 49 }
+					factor = 1.75
+					NAM_underground_strike_tier_2 = yes
+					NAM_underground_strike_tier_3 = no
 				}
 				modifier = {
-					factor = 1.5
-					check_variable = { NAM_underground > 69 }
+					factor = 2.5
+					NAM_underground_strike_tier_3 = yes
+					NAM_underground_strike_tier_4 = no
 				}
-				set_country_flag = {
-					flag = NAM_ug_sabotage_cooldown
-					value = 1
-					days = 60
+				modifier = {
+					factor = 3.25
+					NAM_underground_strike_tier_4 = yes
+				}
+				if = {
+					limit = { NAM_underground_strike_tier_4 = yes }
+					set_country_flag = {
+						flag = NAM_ug_sabotage_cooldown
+						value = 1
+						days = 30
+					}
+				}
+				else_if = {
+					limit = { NAM_underground_strike_tier_3 = yes }
+					set_country_flag = {
+						flag = NAM_ug_sabotage_cooldown
+						value = 1
+						days = 60
+					}
+				}
+				else_if = {
+					limit = { NAM_underground_strike_tier_2 = yes }
+					set_country_flag = {
+						flag = NAM_ug_sabotage_cooldown
+						value = 1
+						days = 120
+					}
+				}
+				else = {
+					set_country_flag = {
+						flag = NAM_ug_sabotage_cooldown
+						value = 1
+						days = 200
+					}
 				}
 				NAM_underground_open_event = yes
 				random_list = {
@@ -5661,6 +5727,31 @@ NAM_underground_sabotage_roll = {
 					30 = {
 						country_event = { id = ADISCORD_nam_resource_war.87 hours = 6 }
 					}
+					25 = {
+						modifier = {
+							factor = 0
+							NAM_underground_strike_tier_2 = no
+						}
+						modifier = {
+							factor = 0
+							has_fuel < 5000
+						}
+						modifier = {
+							factor = 0
+							OR = {
+								has_decision = NAM_colonial_pipeline_guard
+								has_country_flag = NAM_pipeline_watched
+							}
+						}
+						country_event = { id = ADISCORD_nam_resource_war.116 hours = 6 }
+					}
+					25 = {
+						modifier = {
+							factor = 0
+							NAM_underground_strike_tier_3 = no
+						}
+						country_event = { id = ADISCORD_nam_resource_war.117 hours = 6 }
+					}
 				}
 			}
 		}
@@ -5674,13 +5765,53 @@ NAM_underground_add = {
 	NAM_underground_clamp = yes
 }
 
-# COUNTRY NAM. Event .86: the network carries off up to 1500 rifles of
-# Svetlogorsk make; the exact loss is kept for the event text.
+# COUNTRY NAM. Event .86: the network carries off up to 1500, 2500, 3500 or
+# 5000 rifles of Svetlogorsk make by strike tier; the exact loss is kept for
+# the event text.
 NAM_underground_steal_rifles = {
+	set_temp_variable = { var = NAM_ug_rifles_taken value = -1500 }
+	if = {
+		limit = { NAM_underground_strike_tier_4 = yes }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -5000 }
+	}
+	else_if = {
+		limit = { NAM_underground_strike_tier_3 = yes }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -3500 }
+	}
+	else_if = {
+		limit = { NAM_underground_strike_tier_2 = yes }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -2500 }
+	}
 	set_variable = { var = NAM_ug_rifles_stolen value = num_equipment@infantry_equipment }
-	add_equipment_to_stockpile = { type = infantry_equipment amount = -1500 producer = NAM }
+	add_equipment_to_stockpile = { type = infantry_equipment amount = NAM_ug_rifles_taken producer = NAM }
 	subtract_from_variable = { var = NAM_ug_rifles_stolen value = num_equipment@infantry_equipment }
 	log = "[ADISCORD][NAM][UNDERGROUND] Depot raid: [?NAM_ug_rifles_stolen] rifles taken."
+}
+
+# COUNTRY NAM. Event .116: the blast burns up to 20000, 30000 or 45000 fuel by
+# strike tier. Native fuel_k counts thousands; the exact loss is kept for the
+# event text and never exceeds the stock.
+NAM_underground_burn_fuel = {
+	set_temp_variable = { var = NAM_ug_fuel_cap value = 20000 }
+	if = {
+		limit = { NAM_underground_strike_tier_4 = yes }
+		set_temp_variable = { var = NAM_ug_fuel_cap value = 45000 }
+	}
+	else_if = {
+		limit = { NAM_underground_strike_tier_3 = yes }
+		set_temp_variable = { var = NAM_ug_fuel_cap value = 30000 }
+	}
+	set_variable = { var = NAM_ug_strike_fuel value = fuel_k }
+	multiply_variable = { var = NAM_ug_strike_fuel value = 1000 }
+	clamp_variable = {
+		var = NAM_ug_strike_fuel
+		min = 0
+		max = NAM_ug_fuel_cap
+	}
+	set_temp_variable = { var = NAM_ug_fuel_burnt value = NAM_ug_strike_fuel }
+	multiply_temp_variable = { var = NAM_ug_fuel_burnt value = -1 }
+	add_fuel = NAM_ug_fuel_burnt
+	log = "[ADISCORD][NAM][UNDERGROUND] Pipeline blast: [?NAM_ug_strike_fuel] fuel burnt."
 }
 
 # COUNTRY NAM. Broken-off talks return the treasury deposit of the paid round;

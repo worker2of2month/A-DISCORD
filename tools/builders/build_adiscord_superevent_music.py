@@ -7,6 +7,7 @@ in tools/assets/source/superevents/IVN/audio_sources.json.
 The Committee victory layers marching, cheering and celebratory fireworks
 over The Ever Green Tree, with a continuous music level.
 The Stalk portal uses the visual timeline for low mask impacts and portal hum.
+RUS successor proclamations use separate 56-second music excerpts.
 """
 
 from __future__ import annotations
@@ -19,6 +20,11 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 
+RUS_EMPIRE_TRACKS = {
+    "superevent_rus_restoration_sound": ("lustmord_black_star_excerpt.flac", 0.80),
+    "superevent_rus_black_banner_sound": ("in_slaughter_natives_sacred_worms_excerpt.flac", 0.55),
+}
+
 
 def build(root: Path, output: Path, *, silence_only: bool = False, track: str | None = None) -> list[Path]:
     known_tracks = {
@@ -26,6 +32,7 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
         "superevent_itora_legion_victory_sound",
         "superevent_itora_committee_victory_sound",
         "superevent_itora_stalk_portal_sound",
+        *RUS_EMPIRE_TRACKS,
     }
     if track is not None and track not in known_tracks:
         raise ValueError(f"Unknown presentation track: {track}")
@@ -190,6 +197,18 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
             wav=True,
         )
 
+    if not silence_only:
+        for name, (source_name, gain) in RUS_EMPIRE_TRACKS.items():
+            if track is not None and track != name:
+                continue
+            source = root / "tools/assets/source/superevents/RUS" / source_name
+            encode(
+                name,
+                ["-i", str(source)],
+                ["-af", f"afade=t=in:d=2,afade=t=out:st=50:d=6,volume={gain}", "-t", "56"],
+                wav=True,
+            )
+
     for name, seconds in (("one_minute_of_silence", 60), ("two_minutes_of_silence", 120)):
         encode(
             name,
@@ -216,6 +235,8 @@ def main() -> int:
                 "superevent_itora_legion_victory_sound.wav",
                 "superevent_itora_committee_victory_sound.wav",
                 "superevent_itora_stalk_portal_sound.wav",
+                "superevent_rus_restoration_sound.wav",
+                "superevent_rus_black_banner_sound.wav",
             }:
                 target_directory = "sound/superevents"
             else:

@@ -61,6 +61,8 @@ RUS_government_service = {
 	mobilization_speed = RUS_government_total_mobilization
 	industrial_capacity_factory = RUS_government_factory_output
 	casualty_trickleback = RUS_government_trickleback
+	compliance_growth_on_our_occupied_states = RUS_government_compliance
+	resistance_growth_on_our_occupied_states = RUS_government_resistance
 }
 
 # Mandates and depots remain effective during subordination or capitulation; a coup keeps the main modifier.

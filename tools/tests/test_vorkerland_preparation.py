@@ -2123,21 +2123,33 @@ class WKRPoliticalMandateTests(unittest.TestCase):
                 if script.conditions(event["trigger"], current):
                     script.run(event["immediate"], current)
 
-    def test_all_fates_allow_both_courses_without_reviving_or_stealing_nikita(self):
+    def test_chairman_course_requires_nikita_without_stealing_him(self):
         for fate, option in product(("safe_with_loyalists", "rescued_by_vlad", "killed", "missing"), ("a", "b")):
             with self.subTest(fate=fate, option=option):
                 script = self.campaign(fate)
                 globals_before = set(script.globals)
-                self.assertTrue(self.select(script, option))
                 country = script.scopes["WKR"]
-                expected = "WRK_Anton_Bagley" if option == "b" else (
-                    "WRK_Nikita_Worcker" if fate == "safe_with_loyalists" else "WKR_Emergency_Coordination_Committee")
+                if option == "a" and fate != "safe_with_loyalists":
+                    self.assertFalse(self.select(script, option))
+                    self.assertEqual(country.leader, "WRK_Anton_Bagley")
+                    continue
+                self.assertTrue(self.select(script, option))
+                expected = "WRK_Anton_Bagley" if option == "b" else "WRK_Nikita_Worcker"
                 self.assertEqual(country.leader, expected)
                 self.assertEqual(script.globals, globals_before)
                 self.assertTrue(script.conditions(TRIGGERS["WKR_executive_course" if option == "b" else "WKR_presidential_course"]))
                 if fate == "rescued_by_vlad":
                     self.assertIn("WRK_Nikita_Worcker", script.scopes["VAD"].character_roles)
                     self.assertNotIn("WRK_Nikita_Worcker", country.character_roles)
+
+    def test_chairman_appointment_without_nikita_keeps_the_executive(self):
+        for fate in ("rescued_by_vlad", "killed", "missing"):
+            with self.subTest(fate=fate):
+                script = self.campaign(fate)
+                script.effect("WKR_appoint_chairman")
+                country = script.scopes["WKR"]
+                self.assertEqual(country.leader, "WRK_Anton_Bagley")
+                self.assertTrue(script.conditions(TRIGGERS["WKR_executive_course"]))
 
     def test_initialize_once_and_open_without_any_focus_by_day_seven(self):
         for fate, initial in (("safe_with_loyalists", -.3), ("missing", .3)):
@@ -2161,10 +2173,16 @@ class WKRPoliticalMandateTests(unittest.TestCase):
             self.resolve(script)
             self.assertEqual(script.scopes["WKR"].leader == "WRK_Anton_Bagley", changed)
         for value, changed in ((-.599999, False), (-.60, True), (-1, True)):
+            script = self.campaign()
+            self.select(script, "b")
+            script.scopes["WKR"].power_balances["WKR_bop"] = value
+            self.resolve(script)
+            self.assertEqual(script.scopes["WKR"].leader == "WRK_Nikita_Worcker", changed)
+        for value in (-.60, -1):
             script = self.campaign("missing")
             script.scopes["WKR"].power_balances["WKR_bop"] = value
             self.resolve(script)
-            self.assertEqual(script.scopes["WKR"].leader == "WKR_Emergency_Coordination_Committee", changed)
+            self.assertEqual(script.scopes["WKR"].leader, "WRK_Anton_Bagley")
         for focus, suffix in (("WKR_convene_front_soviets", "a"), ("WKR_empower_front_executive", "b")):
             script = self.campaign()
             self.select(script, suffix)
@@ -2214,6 +2232,8 @@ class WKRPoliticalMandateTests(unittest.TestCase):
             with self.subTest(fate=fate, suffix=suffix):
                 script = self.campaign(fate)
                 self.select(script, suffix)
+                # Without Nikita the chairman option is closed and Bagley keeps office.
+                executive = suffix == "b" or fate != "safe_with_loyalists"
                 country = script.scopes["WKR"]
                 expected = country.leader
                 roster = set(country.character_roles)
@@ -2225,13 +2245,13 @@ class WKRPoliticalMandateTests(unittest.TestCase):
                 self.assertEqual(country.leader, expected)
                 self.assertEqual(set(country.character_roles), roster)
                 self.assertNotIn(expected, script.scopes["WRK"].character_roles)
-                self.assertEqual(receipt in country.flags, suffix == "b")
+                self.assertEqual(receipt in country.flags, executive)
                 # The settlement follows the receipt, not the leader cache.
                 country.leader = ""
                 country.leader_ideology = ""
                 script.run(completion[final:final + 3], "WKR")
                 self.assertEqual(country.leader, expected)
-                self.assertEqual(country.government, "utilitarism" if suffix == "b" else "pragmatism")
+                self.assertEqual(country.government, "utilitarism" if executive else "pragmatism")
 
     def test_leadership_change_preserves_paid_factory_order(self):
         factory = WKRCouncilFormationTests()
@@ -2257,7 +2277,8 @@ class WKRPoliticalMandateTests(unittest.TestCase):
         schedule = ClaimantPreparationScheduleTests()
         schedule.setUpClass()
         entries = {"a": "WKR_convene_front_soviets", "b": "WKR_empower_front_executive"}
-        for fate, suffix in product(("safe_with_loyalists", "missing"), ("a", "b")):
+        # Without Nikita only the executive line remains for the claimant.
+        for fate, suffix in (("safe_with_loyalists", "a"), ("safe_with_loyalists", "b"), ("missing", "b")):
             script = self.campaign(fate)
             self.select(script, suffix)
             country = script.scopes["WKR"]
@@ -2281,7 +2302,7 @@ class WKRPoliticalMandateTests(unittest.TestCase):
 
     def test_initial_identity_reassertion_cannot_overwrite_chosen_course(self):
         repair = EFFECTS[V + "repair_claimant_identities"][0]
-        for fate, suffix in (("safe_with_loyalists", "b"), ("missing", "a")):
+        for fate, suffix in (("safe_with_loyalists", "a"), ("safe_with_loyalists", "b"), ("missing", "b")):
             script = self.campaign(fate)
             self.select(script, suffix)
             country = script.scopes["WKR"]
@@ -2310,9 +2331,11 @@ class WKRPoliticalMandateTests(unittest.TestCase):
             script = self.campaign(fate)
             options = [fields(value) for key, _, value in EVENTS[V + "claimant.1"] if key == "option"]
             first = next(option for option in options if script.conditions(option["trigger"]))
-            self.assertEqual(first["name"], V + "claimant.1.a")
-            self.assertTrue(self.select(script, "a"))
-            self.assertTrue(script.conditions(TRIGGERS["WKR_presidential_course"]))
+            suffix = "a" if fate == "safe_with_loyalists" else "b"
+            self.assertEqual(first["name"], V + "claimant.1." + suffix)
+            self.assertTrue(self.select(script, suffix))
+            course = "WKR_presidential_course" if suffix == "a" else "WKR_executive_course"
+            self.assertTrue(script.conditions(TRIGGERS[course]))
 
 
 class WKRCouncilFormationTests(unittest.TestCase):

@@ -256,7 +256,15 @@ focus_tree = {
 		y = 14
 		cost = 5
 		prerequisite = { focus = RUS_press_the_closed_zone }
-		allow_branch = { RUS_coup_regime = no }
+		# Its own allow_branch makes this a branch root, so it repeats the
+		# zone opening that hides the rest of the expansion spine.
+		allow_branch = {
+			RUS_coup_regime = no
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_dirty_opened
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -287,14 +295,14 @@ focus_tree = {
 		ai_will_do = { base = 120 }
 	}
 
-	# Coup lanes: the scientists to the west of the hidden imperial block,
-	# the Black Army to the east of the reactor belt.
+	# The coup branches take the cells of the Khan's chancery and imperial block;
+	# allow_branch shows exactly one of the three governments.
 
 	focus = {
 		id = RUS_sci_channel_night
 		icon = GFX_focus_RUS_scientists_council
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		x = 6
+		x = 20
 		y = 14
 		cost = 3
 		allow_branch = { RUS_scientists_regime = yes }
@@ -322,10 +330,471 @@ focus_tree = {
 	}
 
 	focus = {
+		id = RUS_sci_engineers_commission
+		icon = GFX_focus_RUS_engineers_collegium
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_POLITICAL }
+		x = 20
+		y = 15
+		cost = 4
+		prerequisite = { focus = RUS_sci_channel_night }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_research_slot = 1
+			add_tech_bonus = {
+				name = RUS_sci_engineers_commission
+				bonus = 0.5
+				uses = 2
+				category = industry
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = RUS_sci_amnesty_for_guard
+		icon = GFX_focus_RUS_officer_courses
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
+		x = 16
+		y = 16
+		cost = 4
+		prerequisite = { focus = RUS_sci_engineers_commission }
+		mutually_exclusive = { focus = RUS_sci_disarm_guard }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = -0.05
+			effect_tooltip = { add_ideas = RUS_sci_amnesty_for_guard_delta }
+			custom_effect_tooltip = RUS_sci_guard_loyalty_start_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_org value = 0.02 }
+				add_to_variable = { var = RUS_army_attack value = 0.03 }
+				RUS_black_army_refresh = yes
+				activate_mission = RUS_sci_guard_loyalty
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = RUS_sci_disarm_guard
+		icon = GFX_focus_RUS_black_army_tribunals
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		x = 24
+		y = 16
+		cost = 4
+		prerequisite = { focus = RUS_sci_engineers_commission }
+		mutually_exclusive = { focus = RUS_sci_amnesty_for_guard }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.10
+			add_political_power = 50
+			effect_tooltip = { add_ideas = RUS_sci_disarm_guard_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_org value = -0.02 }
+				add_to_variable = { var = RUS_army_recruitment value = -0.02 }
+				RUS_black_army_refresh = yes
+				add_to_variable = { var = RUS_government_mandate_stability value = 0.03 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_sci_object_register
+		icon = GFX_focus_VAL_Reclamation_Survey
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		x = 20
+		y = 17
+		cost = 3
+		prerequisite = {
+			focus = RUS_sci_amnesty_for_guard
+			focus = RUS_sci_disarm_guard
+		}
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_sci_zone_pressed_tt
+				has_completed_focus = RUS_press_the_closed_zone
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			unlock_decision_tooltip = RUS_sci_survey_object
+			unlock_decision_tooltip = RUS_sci_launch_object
+			custom_effect_tooltip = RUS_sci_object_register_tt
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
+		id = RUS_sci_reactor_contour
+		icon = GFX_focus_RUS_reactor_decontamination
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 16
+		y = 18
+		cost = 4
+		prerequisite = { focus = RUS_sci_object_register }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_sci_reactor_contour_delta }
+			custom_effect_tooltip = RUS_sci_reactor_contour_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_depot_efficiency value = 0.05 }
+				RUS_government_refresh = yes
+				125 = { set_state_flag = RUS_sci_object_surveyed }
+				176 = { set_state_flag = RUS_sci_object_surveyed }
+				177 = { set_state_flag = RUS_sci_object_surveyed }
+				188 = { set_state_flag = RUS_sci_object_surveyed }
+				192 = { set_state_flag = RUS_sci_object_surveyed }
+			}
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	focus = {
+		id = RUS_sci_grid_for_neighbours
+		icon = GFX_focus_RUS_postwar_roads
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 24
+		y = 18
+		cost = 3
+		prerequisite = { focus = RUS_sci_object_register }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = RUS_sci_grid_for_neighbours_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_power_bonus value = 2 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = RUS_sci_technical_districts
+		icon = GFX_focus_RUS_district_courts
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 16
+		y = 19
+		cost = 4
+		prerequisite = {
+			focus = RUS_sci_reactor_contour
+			focus = RUS_sci_grid_for_neighbours
+		}
+		mutually_exclusive = { focus = RUS_sci_factory_republics }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_sci_technical_districts_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_compliance value = 0.15 }
+				add_to_variable = { var = RUS_government_resistance value = -0.15 }
+				RUS_government_refresh = yes
+				add_to_variable = { var = RUS_army_recruitment value = -0.02 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_sci_factory_republics
+		icon = GFX_focus_RUS_good_neighbour_charter
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		x = 24
+		y = 19
+		cost = 4
+		prerequisite = {
+			focus = RUS_sci_reactor_contour
+			focus = RUS_sci_grid_for_neighbours
+		}
+		mutually_exclusive = { focus = RUS_sci_technical_districts }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			unlock_decision_tooltip = RUS_sci_charter_factory_republic
+			custom_effect_tooltip = RUS_sci_factory_republics_tt
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	focus = {
+		id = RUS_sci_outer_cordon
+		icon = GFX_focus_RUS_quiet_perimeter
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		x = 20
+		y = 20
+		cost = 5
+		prerequisite = {
+			focus = RUS_sci_technical_districts
+			focus = RUS_sci_factory_republics
+		}
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.03
+			151 = { add_claim_by = RUS }
+			156 = { add_claim_by = RUS }
+			157 = { add_claim_by = RUS }
+			158 = { add_claim_by = RUS }
+			159 = { add_claim_by = RUS }
+			160 = { add_claim_by = RUS }
+			161 = { add_claim_by = RUS }
+			162 = { add_claim_by = RUS }
+			163 = { add_claim_by = RUS }
+			223 = { add_claim_by = RUS }
+			unlock_decision_tooltip = RUS_sci_cordon_war
+			unlock_decision_tooltip = RUS_sci_adopt_living_filter
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	focus = {
+		id = RUS_sci_precise_operations
+		icon = GFX_focus_RUS_reactor_sorties
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 16
+		y = 21
+		cost = 4
+		prerequisite = { focus = RUS_sci_outer_cordon }
+		mutually_exclusive = { focus = RUS_sci_energy_blockade }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_sci_precise_operations_delta }
+			custom_effect_tooltip = RUS_sci_precise_operations_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_attack value = 0.03 }
+				add_to_variable = { var = RUS_army_special_forces_min value = 6 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_sci_energy_blockade
+		icon = GFX_focus_RUS_imperial_arsenals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 24
+		y = 21
+		cost = 4
+		prerequisite = { focus = RUS_sci_outer_cordon }
+		mutually_exclusive = { focus = RUS_sci_precise_operations }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = RUS_sci_energy_blockade_power_tt
+			unlock_decision_tooltip = RUS_sci_power_blockade
+			hidden_effect = {
+				add_to_variable = { var = RUS_bunker_power_bonus value = 1 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	focus = {
+		id = RUS_sci_montera_claim
+		icon = GFX_focus_RUS_claim_the_opened_zone
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		x = 20
+		y = 22
+		cost = 3
+		prerequisite = {
+			focus = RUS_sci_precise_operations
+			focus = RUS_sci_energy_blockade
+		}
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		bypass = { RUS_sci_montera_question_closed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			460 = { add_claim_by = RUS }
+			467 = { add_claim_by = RUS }
+			472 = { add_claim_by = RUS }
+			473 = { add_claim_by = RUS }
+			effect_tooltip = { add_ideas = RUS_sci_montera_claim_delta }
+			custom_effect_tooltip = RUS_sci_montera_claim_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_defence value = 0.05 }
+				RUS_black_army_refresh = yes
+				if = {
+					limit = {
+						NOT = { has_variable = RUS_sci_reactor_war }
+						RUS_sci_montera_question_closed = no
+					}
+					activate_mission = RUS_sci_montera_deadline
+				}
+			}
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	focus = {
+		id = RUS_sci_reactor_war
+		icon = GFX_focus_RUS_break_the_hegemon
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		x = 20
+		y = 23
+		cost = 2
+		prerequisite = { focus = RUS_sci_montera_claim }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			RUS_sci_reactor_war_can_start = yes
+		}
+		bypass = {
+			OR = {
+				has_variable = RUS_sci_reactor_war
+				RUS_sci_montera_question_closed = yes
+			}
+		}
+		completion_reward = {
+			add_command_power = 25
+			custom_effect_tooltip = RUS_sci_reactor_war_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_sci_war_declarer value = 1 }
+				RUS_sci_reactor_war_begin = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+			modifier = { factor = 0 num_divisions < 10 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+		}
+	}
+
+	focus = {
+		id = RUS_sci_city_above_reactor
+		icon = GFX_focus_RUS_tomorrow_above_ground
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		x = 20
+		y = 24
+		cost = 5
+		prerequisite = { focus = RUS_sci_reactor_war }
+		allow_branch = { RUS_scientists_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_sci_montera_question_closed_tt
+				RUS_sci_montera_question_closed = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { check_variable = { var = RUS_sci_reactor_war value = 2 compare = equals } }
+				add_stability = 0.10
+				add_political_power = 100
+				effect_tooltip = { add_ideas = RUS_sci_city_won_delta }
+				hidden_effect = {
+					add_to_variable = { var = RUS_government_factory_output value = 0.05 }
+					add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
+					RUS_government_refresh = yes
+				}
+			}
+			else = {
+				add_stability = 0.05
+				add_political_power = 50
+				effect_tooltip = { add_ideas = RUS_sci_city_rebuilt_delta }
+				hidden_effect = {
+					add_to_variable = { var = RUS_government_civilian_speed value = 0.05 }
+					RUS_government_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
 		id = RUS_ba_guard_order
 		icon = GFX_focus_RUS_black_army_oath
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
-		x = 34
+		x = 20
 		y = 14
 		cost = 3
 		allow_branch = { RUS_black_army_regime = yes }

@@ -9080,11 +9080,8 @@ focus_tree = {
 				custom_effect_tooltip = NAM_program_landing_supply_unlock_tt
 			}
 			set_technology = { ADISCORD_tech_svetlogorsk_marine_corps = 1 }
-			if = {
-				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_marine_arsenal } } }
-				unlock_decision_tooltip = NAM_marine_detachment_order
-				custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
-			}
+			unlock_decision_tooltip = NAM_marine_detachment_order
+			custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
 			custom_effect_tooltip = NAM_pw_landing_intake_tt
 		}
 		ai_will_do = { base = 5 }

@@ -178,18 +178,18 @@
 
 # Contract reserve recruitment
  VAL_recruit_contract_reserves: "Recruit Contract Reserves"
- VAL_recruit_contract_reserves_desc: "Signing bonuses and guaranteed family payments attract new volunteers. Kefreyt immediately receives §G5000§! £population_texticon in its free manpower reserve. Recruitment can be repeated after §Y120 days§!."
+ VAL_recruit_contract_reserves_desc: "Signing bonuses and guaranteed family payments attract new volunteers. Kefreyt immediately receives §G5000§! £manpower_texticon in its free manpower reserve. Recruitment can be repeated after §Y120 days§!."
  VAL_recruit_contract_reserves_cost: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_blocked: "§R1000§! £ADISCORD_economy_treasury_texticon  §R50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_tooltip: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recall_contract_veterans: "Offer Veterans New Contracts"
- VAL_recall_contract_veterans_desc: "The staff offers former contractors higher payments to return to service. Kefreyt immediately receives §G6000§! £population_texticon in its free manpower reserve. The offer can be repeated after §Y180 days§!."
+ VAL_recall_contract_veterans_desc: "The staff offers former contractors higher payments to return to service. Kefreyt immediately receives §G6000§! £manpower_texticon in its free manpower reserve. The offer can be repeated after §Y180 days§!."
  VAL_recall_contract_veterans_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
 
  VAL_launch_national_recruitment: "Nationwide Contract Recruitment"
- VAL_launch_national_recruitment_desc:0 "Fund a national intake from the local reserve: §Y2§! reserve units and §Y3000§! £ADISCORD_economy_treasury_texticon. Kefreyt receives §G20000§! £population_texticon after §Y60 days§!. Another intake is available §Y90 days§! after completion. Capitulation, subordination or loss of the programme refunds both cash and recruits."
+ VAL_launch_national_recruitment_desc:0 "Fund a national intake from the local reserve: §Y2§! reserve units and §Y3000§! £ADISCORD_economy_treasury_texticon. Kefreyt receives §G20000§! £manpower_texticon after §Y60 days§!. Another intake is available §Y90 days§! after completion. Capitulation, subordination or loss of the programme refunds both cash and recruits."
  VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"
  VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon from the local reserve"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"

@@ -109,8 +109,8 @@
 Ускоренные проверки исходов не заменяют обычное прохождение календаря.
 
 После загрузки новой кампании проверьте отсутствие ошибок неизвестных фокусов
-`NAM_basin_reconnaissance`, `NAM_active_squadron`, `NAM_naval_construction`
-и `NAM_marine_arsenal`, а также условий `NAM_naval_observation_ready`,
+`NAM_basin_reconnaissance`, `NAM_active_squadron`, `NAM_naval_construction`,
+`NAM_naval_staff` и `NAM_basin_minefields`, а также условий `NAM_naval_observation_ready`,
 `NAM_naval_shipyard_ready` и `NAM_naval_marines_ready`. Все они должны загрузиться
 вместе с деревом и решениями. Горячая перезагрузка части файлов во время
 кампании не подтверждает эту проверку. При расчёте исхода войны отдельно

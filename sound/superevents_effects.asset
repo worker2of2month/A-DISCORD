@@ -311,42 +311,6 @@ soundeffect = {
 }
 
 soundeffect = {
-	name = superevent_stelander_shabrat_victory_staff_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_stelander_shabrat_victory_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 0.80
-}
-
-soundeffect = {
-	name = superevent_stelander_shabrat_victory_councils_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_stelander_shabrat_victory_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 0.80
-}
-
-soundeffect = {
-	name = superevent_stelander_shabrat_victory_truth_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_stelander_shabrat_victory_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 0.80
-}
-
-soundeffect = {
 	name = superevent_south_houses_sound_e
 	loop = no
 	sounds = {

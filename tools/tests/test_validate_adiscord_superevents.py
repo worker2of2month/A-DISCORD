@@ -12,6 +12,7 @@ from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_superevents import (
     GFX,
     PRESENTATIONS,
+    PRESENTATIONS_BY_ID,
     REQUIRED_FILES,
     RU_LOC,
     SCRIPTED_GUI,
@@ -209,7 +210,7 @@ class SupereventContractTests(unittest.TestCase):
         immediate = block(event, "immediate")
         self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
         self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "72")
-        self.assertEqual(PRESENTATIONS[71].name, "superevent_itora_legion_victory")
+        self.assertEqual(PRESENTATIONS_BY_ID[72].name, "superevent_itora_legion_victory")
 
     def test_committee_victory_presentation_keeps_preview_separate_from_settlement(self):
         from tools.validators.validate_adiscord_superevents import _event_block
@@ -228,7 +229,7 @@ class SupereventContractTests(unittest.TestCase):
         immediate = block(event, "immediate")
         self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
         self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "73")
-        self.assertEqual(PRESENTATIONS[72].name, "superevent_itora_committee_victory")
+        self.assertEqual(PRESENTATIONS_BY_ID[73].name, "superevent_itora_committee_victory")
 
     def test_stalk_portal_is_a_dormant_presentation_without_campaign_entry_point(self):
         from tools.validators.validate_adiscord_superevents import _event_block
@@ -241,7 +242,7 @@ class SupereventContractTests(unittest.TestCase):
         immediate = block(event, "immediate")
         self.assertEqual([entry.key for entry in immediate], ["set_temp_variable", "ADISCORD_superevent_enqueue"])
         self.assertEqual(scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request"), "74")
-        self.assertEqual(PRESENTATIONS[73].name, "superevent_itora_stalk_portal")
+        self.assertEqual(PRESENTATIONS_BY_ID[74].name, "superevent_itora_stalk_portal")
         callers = []
         for folder in ("common", "events"):
             for path in (ROOT / folder).rglob("*.txt"):
@@ -269,7 +270,7 @@ class SupereventContractTests(unittest.TestCase):
                              ["NAM_veyran_union"])
             self.assertFalse(any(row.key in ("scoped_play_song", "play_song", "sound_effect")
                                  for _, row in effects))
-        self.assertEqual(PRESENTATIONS[70].name, "superevent_nam_veyran_proclamation")
+        self.assertEqual(PRESENTATIONS_BY_ID[71].name, "superevent_nam_veyran_proclamation")
         for path in (ROOT / "music").glob("*.asset"):
             self.assertNotIn('name = "ADISCORD_nam_veyran_proclamation"', path.read_text(encoding="utf-8-sig"))
         self.assertFalse((ROOT / "music/ADISCORD_nam_veyran_proclamation.ogg").exists())
@@ -482,7 +483,7 @@ class SupereventContractTests(unittest.TestCase):
             ]
             self.assertEqual(len(requests), 1)
             self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
-            return PRESENTATIONS[requests[0] - 1].name
+            return PRESENTATIONS_BY_ID[requests[0]].name
 
         events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
         nam = "superevent_nam_resource_war"
@@ -496,9 +497,9 @@ class SupereventContractTests(unittest.TestCase):
             facts = {("STP", "variable", "STP_pv_outcome"): outcome}
             self.assertEqual(presentation(events, "ADISCORD_STP_cw.71", facts), party + suffix)
 
-        for course, suffix in enumerate(("", "_staff", "_councils", "_truth")):
+        for course in range(4):
             facts = {("STS", "variable", "STP_hw_course"): course}
-            self.assertEqual(presentation(events, "ADISCORD_STP_cw.72", facts), "superevent_stelander_shabrat_victory" + suffix)
+            self.assertEqual(presentation(events, "ADISCORD_STP_cw.72", facts), "superevent_stelander_shabrat_victory")
             facts["STS", "ruling_leader"] = "STP_grigory_sotnikov"
             self.assertEqual(presentation(events, "ADISCORD_STP_cw.72", facts), "superevent_stelander_sotnikov_civilwar")
 
@@ -519,7 +520,7 @@ class SupereventContractTests(unittest.TestCase):
                     for _, row in effects if row.key == "set_temp_variable"
                 ]
                 self.assertEqual(len(requests), 1)
-                self.assertEqual(PRESENTATIONS[requests[0] - 1].name, "superevent_" + expected)
+                self.assertEqual(PRESENTATIONS_BY_ID[requests[0]].name, "superevent_" + expected)
                 self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for _, row in effects), 1)
 
         for course, name in enumerate(("conclave", "houses", "cities", "nur", "regency", "commune")):
@@ -567,7 +568,7 @@ class SupereventContractTests(unittest.TestCase):
                 ("EFL", "ADISCORD_south_north_leader_exists", "yes"): leader,
             }
             selected = [row for _, row in selected_effects(defense, facts, "EFL")]
-            cards = [PRESENTATIONS[int(scalar(row.value, "ADISCORD_superevent_request")) - 1].name
+            cards = [PRESENTATIONS_BY_ID[int(scalar(row.value, "ADISCORD_superevent_request"))].name
                      for row in selected if row.key == "set_temp_variable"]
             self.assertEqual(cards, ["superevent_south_restitution"] if victory else [])
             self.assertEqual(sum(row.key == "ADISCORD_superevent_enqueue" for row in selected), int(victory))
@@ -653,18 +654,18 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 32, 24, 36, 20, 31, 23, 21, 29, 22, 19, 18, 25, 35, 17, 16, 27, 10, 11, 34, 9, 14, 1, 12, 26, 15, 13, 2, 28, 3, 4, 33, 5, 7, 30, 8)
-        order += tuple(reversed(range(37, len(PRESENTATIONS) + 1)))
-        self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
+        order = (6, 32, 24, 36, 20, 31, 23, 21, 29, 22, 19, 18, 25, 17, 16, 27, 10, 11, 9, 14, 1, 12, 26, 15, 13, 2, 28, 3, 4, 5, 7, 30, 8)
+        order += tuple(sorted((i for i in PRESENTATIONS_BY_ID if i >= 37), reverse=True))
+        self.assertEqual(set(order), set(PRESENTATIONS_BY_ID))
         for index in order + order:
             request(index)
         self.assertEqual(queue, list(order[1:]))
-        self.assertEqual(played, [PRESENTATIONS[5].name])
+        self.assertEqual(played, [PRESENTATIONS_BY_ID[6].name])
         self.assertEqual(map_openings, [])
         for index in order:
-            window = fields(windows[PRESENTATIONS[index - 1].name])
+            window = fields(windows[PRESENTATIONS_BY_ID[index].name])
             execute(fields(window["effects"])["superevents_button_click"])
-        self.assertEqual(played, [PRESENTATIONS[i - 1].name for i in order])
+        self.assertEqual(played, [PRESENTATIONS_BY_ID[i].name for i in order])
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
         self.assertEqual(map_openings, [order.index(74)])
@@ -674,7 +675,7 @@ class SupereventContractTests(unittest.TestCase):
         request(74)
         request(74)
         self.assertEqual(len(map_openings), 1)
-        window = fields(windows[PRESENTATIONS[18].name])
+        window = fields(windows[PRESENTATIONS_BY_ID[19].name])
         execute(fields(window["effects"])["superevents_button_click"])
         self.assertEqual(len(map_openings), 2)
         self.assertEqual(played[-1], "superevent_itora_stalk_portal")
@@ -1206,9 +1207,6 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_stelander_party_victory_wallets",
                 "superevent_stelander_party_victory_silence",
                 "superevent_stelander_party_victory_regent",
-                "superevent_stelander_shabrat_victory_staff",
-                "superevent_stelander_shabrat_victory_councils",
-                "superevent_stelander_shabrat_victory_truth",
                 "superevent_stelander_party_victory_festival",
                 "superevent_south_houses",
                 "superevent_south_cities",

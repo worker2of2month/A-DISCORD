@@ -53,6 +53,17 @@ NAM_navy_dynamic = {
 	navy_org_factor = NAM_navy_organisation
 	repair_speed_factor = NAM_navy_repair_speed
 	amphibious_invasion = NAM_navy_landing_speed
+	industrial_capacity_dockyard = NAM_navy_dockyard_output
+	spotting_chance = NAM_navy_spotting
+	navy_screen_defence_factor = NAM_navy_screen_defence
+	navy_submarine_detection_factor = NAM_navy_sub_detection
+	convoy_raiding_efficiency_factor = NAM_navy_convoy_raiding
+	navy_submarine_attack_factor = NAM_navy_sub_attack
+	naval_coordination = NAM_navy_coordination
+	positioning = NAM_navy_positioning
+	mines_planting_by_fleets_factor = NAM_navy_mine_planting
+	naval_mines_damage_factor = NAM_navy_mine_damage
+	mines_sweeping_by_fleets_factor = NAM_navy_mine_sweeping
 }
 
 NAM_air_dynamic = {

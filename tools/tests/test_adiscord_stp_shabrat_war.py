@@ -382,19 +382,21 @@ class CoalitionEventTests(unittest.TestCase):
             for key in (decision, f"{decision}_desc", f"{decision}_tt"):
                 self.assertTrue(ru.get(key) and en.get(key), key)
 
-    def test_superevent_varies_with_the_course(self):
+    def test_superevent_is_shared_by_all_shabrat_courses(self):
         scripted = compact(text(SUPEREVENT_LOC))
         super_ru, super_en = loc_keys(SUPER_RU), loc_keys(SUPER_EN)
         from tools.validators.validate_adiscord_superevents import _event_block
 
         event = compact(_event_block(text(EVENTS), "ADISCORD_STP_cw.72"))
-        for number, _, name in COURSES.values():
-            for kind in ("title", "quote", "comment"):
-                key = f"superevent_stelander_shabrat_victory_{name}_{kind}"
-                self.assertIn(key, scripted)
-                self.assertTrue(super_ru.get(key) and super_en.get(key), key)
-            condition = f"STS = {{ check_variable = {{ var = STP_hw_course value = {number} compare = equals }} }}"
-            self.assertIn(condition, event)
+        for kind in ("title", "quote", "comment"):
+            key = f"superevent_stelander_shabrat_victory_{kind}"
+            self.assertIn(key, scripted)
+            self.assertTrue(super_ru.get(key) and super_en.get(key), key)
+        self.assertNotIn("STP_hw_course", event)
+        self.assertIn("ADISCORD_superevent_request = 9", event)
+        self.assertIn("ADISCORD_superevent_request = 20", event)
+        for _, _, name in COURSES.values():
+            self.assertNotIn(f"superevent_stelander_shabrat_victory_{name}_", scripted)
 
 
 if __name__ == "__main__":

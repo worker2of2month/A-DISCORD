@@ -1542,6 +1542,8 @@ RUS_suspicion_begin = {
 		country_event = { id = ADISCORD_rus_crisis.24 }
 		# Dominance gained before the expansion starts a plot as the window opens.
 		RUS_coup_plot_check = yes
+		country_event = { id = ADISCORD_rus_campaign.57 days = 3 }
+		country_event = { id = ADISCORD_rus_campaign.58 days = 10 }
 	}
 }
 
@@ -1688,7 +1690,7 @@ RUS_coup_execute = {
 				character = RUS_Gleb_Korneev
 				ideology = technocracy_ideology
 			}
-			set_cosmetic_tag = RUS_reactor_council
+			set_cosmetic_tag = RUS_restoration_state
 		}
 		else = {
 			set_politics = {
@@ -1703,7 +1705,7 @@ RUS_coup_execute = {
 				character = RUS_Tagir_Mansurov
 				ideology = chauvinism_ideology
 			}
-			set_cosmetic_tag = RUS_guard_state
+			set_cosmetic_tag = RUS_black_banner_empire
 		}
 		add_stability = -0.10
 		# The winning faction governs alone; the balance and its support pull end.
@@ -1725,7 +1727,11 @@ RUS_coup_execute = {
 		RUS_government_refresh = yes
 		RUS_black_army_refresh = yes
 		mark_focus_tree_layout_dirty = yes
+		RUS_party_representatives_black_banner_empire = yes
+		RUS_party_representatives_restoration_state = yes
 		country_event = { id = ADISCORD_rus_campaign.47 }
+		# The faction's own empire is presented only when it wins power.
+		ADISCORD_vorkerland_show_last_empire_superevent = yes
 		every_other_country = {
 			limit = { is_ai = no }
 			country_event = { id = ADISCORD_rus_campaign.48 }
@@ -3159,18 +3165,9 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 			limit = { NOT = { has_idea = RUS_last_empire_spirit } }
 			add_ideas = RUS_last_empire_spirit
 		}
-		# The faction that outweighs the compromise range names the empire.
-		if = {
-			limit = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
-			set_cosmetic_tag = RUS_black_banner_empire
-		}
-		else_if = {
-			limit = { power_balance_value = { id = RUS_state_balance value < -0.10 } }
-			set_cosmetic_tag = RUS_restoration_state
-		}
-		else = {
-			set_cosmetic_tag = RUS_last_empire
-		}
+		# The Khan's proclamation is always his Last Empire. The Black Banner and
+		# the scientists' Last Empire belong to the factions' coups.
+		set_cosmetic_tag = RUS_last_empire
 		set_politics = {
 			ruling_party = etatism
 			elections_allowed = no
@@ -4596,6 +4593,8 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_government_civilian_speed value = 0 }
 		set_variable = { var = RUS_government_mobilization value = 0 }
 		set_variable = { var = RUS_government_factory_output value = 0 }
+		set_variable = { var = RUS_government_compliance value = 0 }
+		set_variable = { var = RUS_government_resistance value = 0 }
 		set_variable = { var = RUS_government_mandate_political_power value = 0 }
 		set_variable = { var = RUS_government_mandate_mobilization value = 0 }
 		set_variable = { var = RUS_government_mandate_stability value = 0 }
@@ -6168,5 +6167,257 @@ RUS_party_representatives_last_empire = {
 				}
 			}
 		}
+	}
+}
+
+# --- rus_scientists_regime ---
+# RUS. Timeout of RUS_sci_guard_loyalty after the amnesty: a stable council
+# keeps the guard's loyalty, an unstable one faces a mutiny.
+RUS_sci_guard_loyalty_settle = {
+	if = {
+		limit = { has_stability < 0.35 }
+		add_manpower = -10000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }
+		add_war_support = -0.05
+		add_stability = -0.05
+		country_event = { id = ADISCORD_rus_campaign.49 }
+	}
+	else = {
+		army_experience = 25
+		add_war_support = 0.05
+		country_event = { id = ADISCORD_rus_campaign.50 }
+	}
+}
+
+# COUNTRY republic created by RUS_sci_charter_next_republic. A released tag
+# keeps its earlier economy schema; the initializer only fills a missing one.
+RUS_sci_prepare_factory_republic = {
+	set_country_flag = RUS_sci_factory_republic
+	ADISCORD_release_non_participating_minor_optimization = yes
+	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# RUS. Releases the first eligible republic in manifest order; one per decision.
+RUS_sci_charter_next_republic = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
+			NOT = { country_exists = SLA }
+			49 = { is_owned_by = RUS }
+		}
+		release_puppet = SLA
+		SLA = { RUS_sci_prepare_factory_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed
+			NOT = { country_exists = RZA }
+			177 = { is_owned_by = RUS }
+		}
+		release_puppet = RZA
+		RZA = { RUS_sci_prepare_factory_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed
+			NOT = { country_exists = MLR }
+			152 = { is_owned_by = RUS }
+		}
+		release_puppet = MLR
+		MLR = { RUS_sci_prepare_factory_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_ert_absorbed
+			NOT = { country_exists = ERT }
+			169 = { is_owned_by = RUS }
+		}
+		release_puppet = ERT
+		ERT = { RUS_sci_prepare_factory_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_irt_absorbed
+			NOT = { country_exists = IRT }
+			181 = { is_owned_by = RUS }
+		}
+		release_puppet = IRT
+		IRT = { RUS_sci_prepare_factory_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_sca_absorbed
+			NOT = { country_exists = SCA }
+			173 = { is_owned_by = RUS }
+		}
+		release_puppet = SCA
+		SCA = { RUS_sci_prepare_factory_republic = yes }
+	}
+	add_to_variable = { var = RUS_government_factory_output value = 0.02 }
+	add_to_variable = { var = RUS_government_political_power value = 0.05 }
+	RUS_government_refresh = yes
+}
+
+# RUS. The Outer Gate war; its capitulation follows the default annexation.
+RUS_sci_cordon_war_begin = {
+	if = {
+		limit = { RUS_sci_cordon_war_available = yes }
+		WCG = { ADISCORD_release_non_participating_minor_optimization = yes }
+		declare_war_on = {
+			target = WCG
+			type = annex_everything
+		}
+	}
+}
+
+# RUS. Input: temp RUS_sci_war_declarer, 1 when RUS declares and 2 when
+# Montera attacks at the end of its deadline. RUS_sci_reactor_war holds the
+# outcome: 1 active, 2 victory, 3 defeat, 4 ended without a settlement.
+RUS_sci_reactor_war_begin = {
+	if = {
+		limit = { RUS_sci_reactor_war_can_start = yes }
+		set_variable = { var = RUS_sci_reactor_war value = 1 }
+		MON = { ADISCORD_release_non_participating_minor_optimization = yes }
+		if = {
+			limit = { check_variable = { var = RUS_sci_war_declarer value = 2 compare = equals } }
+			MON = {
+				declare_war_on = {
+					target = RUS
+					type = annex_everything
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { has_active_mission = RUS_sci_montera_deadline }
+				remove_mission = RUS_sci_montera_deadline
+			}
+			declare_war_on = {
+				target = MON
+				type = annex_everything
+			}
+		}
+		country_event = { id = ADISCORD_rus_campaign.51 }
+		MON = {
+			if = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_rus_campaign.52 }
+			}
+		}
+	}
+}
+
+# RUS, called from the scripted capitulation dispatch when Montera falls.
+# The outcome is written before white peace so the peace hook sees it settled.
+RUS_sci_reactor_war_resolve_victory = {
+	set_variable = { var = RUS_sci_reactor_war value = 2 }
+	if = {
+		limit = { has_war_with = MON }
+		white_peace = MON
+	}
+	if = {
+		limit = { 460 = { is_owned_by = MON } }
+		transfer_state = 460
+	}
+	if = {
+		limit = { 467 = { is_owned_by = MON } }
+		transfer_state = 467
+	}
+	if = {
+		limit = { 472 = { is_owned_by = MON } }
+		transfer_state = 472
+	}
+	if = {
+		limit = { 473 = { is_owned_by = MON } }
+		transfer_state = 473
+	}
+	country_event = { id = ADISCORD_rus_campaign.53 }
+	MON = {
+		if = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_rus_campaign.54 }
+		}
+	}
+}
+
+# RUS, called from the scripted capitulation dispatch when RUS falls to Montera.
+# Montera takes the reactor belt (RZA's manifest group and laboratory state 176)
+# that RUS still owns; the bunker stays with RUS.
+RUS_sci_reactor_war_resolve_defeat = {
+	set_variable = { var = RUS_sci_reactor_war value = 3 }
+	if = {
+		limit = { has_war_with = MON }
+		white_peace = MON
+	}
+	if = {
+		limit = { 125 = { is_owned_by = RUS } }
+		MON = { transfer_state = 125 }
+	}
+	if = {
+		limit = { 176 = { is_owned_by = RUS } }
+		MON = { transfer_state = 176 }
+	}
+	if = {
+		limit = { 177 = { is_owned_by = RUS } }
+		MON = { transfer_state = 177 }
+	}
+	if = {
+		limit = { 188 = { is_owned_by = RUS } }
+		MON = { transfer_state = 188 }
+	}
+	if = {
+		limit = { 192 = { is_owned_by = RUS } }
+		MON = { transfer_state = 192 }
+	}
+	if = {
+		limit = { 208 = { is_owned_by = RUS } }
+		MON = { transfer_state = 208 }
+	}
+	if = {
+		limit = { 213 = { is_owned_by = RUS } }
+		MON = { transfer_state = 213 }
+	}
+	if = {
+		limit = { 214 = { is_owned_by = RUS } }
+		MON = { transfer_state = 214 }
+	}
+	if = {
+		limit = { 215 = { is_owned_by = RUS } }
+		MON = { transfer_state = 215 }
+	}
+	if = {
+		limit = { 216 = { is_owned_by = RUS } }
+		MON = { transfer_state = 216 }
+	}
+	if = {
+		limit = { 217 = { is_owned_by = RUS } }
+		MON = { transfer_state = 217 }
+	}
+	if = {
+		limit = { 220 = { is_owned_by = RUS } }
+		MON = { transfer_state = 220 }
+	}
+	country_event = { id = ADISCORD_rus_campaign.55 }
+	MON = {
+		if = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_rus_campaign.56 }
+		}
+	}
+}
+
+# Any scope, from the shared on_peace dispatch. A war that ended outside the
+# capitulation dispatch still closes the Montera question.
+RUS_sci_reactor_war_close_external = {
+	if = {
+		limit = {
+			country_exists = RUS
+			RUS = {
+				check_variable = { var = RUS_sci_reactor_war value = 1 compare = equals }
+				NOT = { has_war_with = MON }
+			}
+		}
+		RUS = { set_variable = { var = RUS_sci_reactor_war value = 4 } }
 	}
 }

@@ -1787,6 +1787,8 @@ RUS_energy_customer_valid = {
 	NOT = { is_subject_of = RUS }
 }
 
+# Two base slots plus one for each of the market, the reserve shaft and the
+# council's grid for neighbours.
 RUS_energy_contract_room = {
 	RUS_bunker_operational = yes
 	OR = {
@@ -1795,13 +1797,32 @@ RUS_energy_contract_room = {
 			OR = {
 				has_completed_focus = RUS_bunker_surface_market
 				has_completed_focus = RUS_bunker_reserve_shaft
+				has_completed_focus = RUS_sci_grid_for_neighbours
 			}
 			check_variable = { var = RUS_energy_contracts value = 3 compare = less_than }
 		}
 		AND = {
+			OR = {
+				AND = {
+					has_completed_focus = RUS_bunker_surface_market
+					has_completed_focus = RUS_bunker_reserve_shaft
+				}
+				AND = {
+					has_completed_focus = RUS_bunker_surface_market
+					has_completed_focus = RUS_sci_grid_for_neighbours
+				}
+				AND = {
+					has_completed_focus = RUS_bunker_reserve_shaft
+					has_completed_focus = RUS_sci_grid_for_neighbours
+				}
+			}
+			check_variable = { var = RUS_energy_contracts value = 4 compare = less_than }
+		}
+		AND = {
 			has_completed_focus = RUS_bunker_surface_market
 			has_completed_focus = RUS_bunker_reserve_shaft
-			check_variable = { var = RUS_energy_contracts value = 4 compare = less_than }
+			has_completed_focus = RUS_sci_grid_for_neighbours
+			check_variable = { var = RUS_energy_contracts value = 5 compare = less_than }
 		}
 	}
 }
@@ -2264,5 +2285,121 @@ RUS_bunker_energy_sale_ui_available = {
 		var = RUS_bunker_free_power
 		value = 1
 		compare = greater_than_or_equals
+	}
+}
+
+# --- rus_scientists_regime ---
+RUS_sci_branch_operational = {
+	RUS_scientists_regime = yes
+	RUS_regime_governing = yes
+}
+
+# RUS. A zone republic RUS absorbed can be chartered again while RUS still
+# owns its capital. The capitals are the collapse manifest's fixed anchors.
+RUS_sci_factory_republic_eligible = {
+	OR = {
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
+			NOT = { country_exists = SLA }
+			49 = { is_owned_by = RUS }
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed
+			NOT = { country_exists = RZA }
+			177 = { is_owned_by = RUS }
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed
+			NOT = { country_exists = MLR }
+			152 = { is_owned_by = RUS }
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_ert_absorbed
+			NOT = { country_exists = ERT }
+			169 = { is_owned_by = RUS }
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_irt_absorbed
+			NOT = { country_exists = IRT }
+			181 = { is_owned_by = RUS }
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_rus_sca_absorbed
+			NOT = { country_exists = SCA }
+			173 = { is_owned_by = RUS }
+		}
+	}
+}
+
+RUS_sci_borders_wcg = {
+	any_owned_state = {
+		any_neighbor_state = { is_owned_by = WCG }
+	}
+}
+
+RUS_sci_borders_mon = {
+	any_owned_state = {
+		any_neighbor_state = { is_owned_by = MON }
+	}
+}
+
+# A rival annexed by a third country ends the war without a peace callback.
+RUS_sci_reactor_war_active = {
+	check_variable = { var = RUS_sci_reactor_war value = 1 compare = equals }
+	country_exists = MON
+	has_war_with = MON
+}
+
+RUS_sci_cordon_war_available = {
+	RUS_sci_branch_operational = yes
+	custom_trigger_tooltip = {
+		tooltip = RUS_sci_wcg_free_tt
+		country_exists = WCG
+		WCG = { is_subject = no }
+		NOT = { has_war_with = WCG }
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_sci_no_reactor_war_tt
+		RUS_sci_reactor_war_active = no
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_sci_borders_wcg_tt
+		RUS_sci_borders_wcg = yes
+	}
+}
+
+# RUS. Montera is free when neither Kefreyt's last war nor the northern oath
+# crisis holds it; a second front against it would split one settlement.
+RUS_sci_montera_available = {
+	country_exists = MON
+	MON = {
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = RUS }
+		NOT = { has_war_with = VAL }
+	}
+	NOT = { has_global_flag = ADISCORD_rin_oath_crisis_active }
+}
+
+RUS_sci_reactor_war_can_start = {
+	RUS_sci_branch_operational = yes
+	NOT = { has_variable = RUS_sci_reactor_war }
+	custom_trigger_tooltip = {
+		tooltip = RUS_sci_montera_available_tt
+		RUS_sci_montera_available = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_sci_borders_mon_tt
+		RUS_sci_borders_mon = yes
+	}
+}
+
+# RUS. Montera can no longer contest the reactor: the war has ended or the
+# rival has left the map or independence.
+RUS_sci_montera_question_closed = {
+	OR = {
+		check_variable = { var = RUS_sci_reactor_war value = 1 compare = greater_than }
+		NOT = { country_exists = MON }
+		MON = { is_subject = yes }
 	}
 }

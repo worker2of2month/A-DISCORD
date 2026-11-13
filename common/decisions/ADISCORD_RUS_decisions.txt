@@ -5095,3 +5095,324 @@ RUS_state_balance_category = {
 		ai_will_do = { factor = 0 }
 	}
 }
+
+# --- rus_scientists_regime ---
+# Survey and launch share one fixed object list: the reactor belt and
+# laboratories, the Outer Gate capital and Montera's industrial frontier.
+# State flags hold each project from payment to completion or cancellation.
+RUS_reactor_council_category = {
+	RUS_sci_survey_object = {
+		icon = ADISCORD_inspection
+		allowed = { tag = RUS }
+		state_target = yes
+		targets = { 125 176 177 188 192 159 460 467 472 473 }
+		target_root_trigger = { RUS_sci_branch_operational = yes }
+		visible = {
+			has_completed_focus = RUS_sci_object_register
+			FROM = {
+				NOT = { has_state_flag = RUS_sci_object_surveyed }
+				NOT = { is_owned_by = ROOT }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = RUS_sci_survey_reach_tt
+					any_neighbor_state = { is_controlled_by = ROOT }
+				}
+				hidden_trigger = { NOT = { has_state_flag = RUS_sci_survey_in_progress } }
+			}
+		}
+		cost = 25
+		days_remove = 30
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { FROM = { set_state_flag = RUS_sci_survey_in_progress } }
+			custom_effect_tooltip = RUS_sci_survey_object_tt
+		}
+		cancel_trigger = {
+			NOT = { RUS_sci_branch_operational = yes }
+		}
+		cancel_effect = {
+			hidden_effect = { FROM = { clr_state_flag = RUS_sci_survey_in_progress } }
+		}
+		remove_effect = {
+			hidden_effect = {
+				FROM = {
+					clr_state_flag = RUS_sci_survey_in_progress
+					set_state_flag = RUS_sci_object_surveyed
+				}
+			}
+			custom_effect_tooltip = RUS_sci_survey_object_done_tt
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_sci_launch_object = {
+		icon = ADISCORD_construction
+		allowed = { tag = RUS }
+		state_target = yes
+		targets = { 125 176 177 188 192 159 460 467 472 473 }
+		target_root_trigger = { RUS_sci_branch_operational = yes }
+		visible = {
+			has_completed_focus = RUS_sci_object_register
+			FROM = {
+				has_state_flag = RUS_sci_object_surveyed
+				is_owned_by = ROOT
+				NOT = { has_state_flag = RUS_sci_object_launched }
+			}
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = RUS_sci_launch_controlled_tt
+					is_controlled_by = ROOT
+				}
+				hidden_trigger = { NOT = { has_state_flag = RUS_sci_launch_in_progress } }
+			}
+		}
+		cost = 40
+		days_remove = 45
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = { FROM = { set_state_flag = RUS_sci_launch_in_progress } }
+			custom_effect_tooltip = RUS_sci_launch_object_tt
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { RUS_sci_branch_operational = yes }
+				FROM = { NOT = { is_owned_by = ROOT } }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = { FROM = { clr_state_flag = RUS_sci_launch_in_progress } }
+		}
+		remove_effect = {
+			FROM = {
+				hidden_effect = {
+					clr_state_flag = RUS_sci_launch_in_progress
+					set_state_flag = RUS_sci_object_launched
+				}
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				if = {
+					limit = { ROOT = { has_completed_focus = RUS_sci_precise_operations } }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_tech_bonus = {
+				name = RUS_sci_launch_object
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_sci_charter_factory_republic = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_sci_factory_republics
+			RUS_sci_branch_operational = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_sci_factory_republic_eligible_tt
+				RUS_sci_factory_republic_eligible = yes
+			}
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = { RUS_sci_factory_republic_eligible = yes }
+				custom_effect_tooltip = RUS_sci_charter_factory_republic_tt
+				effect_tooltip = { add_ideas = RUS_sci_factory_republic_delta }
+				hidden_effect = { RUS_sci_charter_next_republic = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_sci_cordon_war = {
+		icon = ADISCORD_operations
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_sci_outer_cordon
+			country_exists = WCG
+			NOT = { has_war_with = WCG }
+		}
+		available = {
+			RUS_sci_cordon_war_available = yes
+		}
+		cost = 50
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = RUS_sci_cordon_war_tt
+			hidden_effect = { RUS_sci_cordon_war_begin = yes }
+		}
+		ai_will_do = {
+			base = 60
+			modifier = { factor = 0 num_divisions < 6 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_sci_adopt_living_filter = {
+		icon = ADISCORD_resettlement
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_sci_outer_cordon
+			RUS_sci_branch_operational = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_sci_living_filter_site_tt
+				159 = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+				}
+			}
+		}
+		cost = 50
+		days_remove = 60
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = RUS_sci_adopt_living_filter_tt
+		}
+		remove_effect = {
+			add_stability = 0.05
+			effect_tooltip = { add_ideas = RUS_sci_living_filter_delta }
+			custom_effect_tooltip = RUS_sci_living_filter_food_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_compliance value = 0.10 }
+				RUS_government_refresh = yes
+				add_to_variable = { var = RUS_bunker_food_output_bonus value = 1 }
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	RUS_sci_power_blockade = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		targets = { MON WCG }
+		target_root_trigger = {
+			has_completed_focus = RUS_sci_energy_blockade
+			RUS_sci_branch_operational = yes
+		}
+		target_trigger = {
+			FROM = { has_war_with = ROOT }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = RUS_sci_power_blockade_free_tt
+					NOT = { has_dynamic_modifier = { modifier = RUS_power_cut } }
+				}
+			}
+		}
+		cost = 30
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			FROM = { add_dynamic_modifier = { modifier = RUS_power_cut days = 90 } }
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
+
+	# Timeout-only: the amnesty's outcome is read on the last day.
+	RUS_sci_guard_loyalty = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 120
+		timeout_effect = {
+			custom_effect_tooltip = RUS_sci_guard_loyalty_tt
+			hidden_effect = { RUS_sci_guard_loyalty_settle = yes }
+		}
+	}
+
+	# Timeout-only: Montera attacks if the council has not opened the war first.
+	RUS_sci_montera_deadline = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 180
+		cancel_trigger = {
+			OR = {
+				has_variable = RUS_sci_reactor_war
+				RUS_sci_montera_question_closed = yes
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = RUS_sci_montera_deadline_tt
+			hidden_effect = {
+				set_temp_variable = { var = RUS_sci_war_declarer value = 2 }
+				RUS_sci_reactor_war_begin = yes
+			}
+		}
+	}
+}

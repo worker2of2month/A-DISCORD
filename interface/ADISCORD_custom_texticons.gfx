@@ -1,9 +1,14 @@
 spriteTypes = {
 	spriteType = {
-		name = "GFX_support_equipment_texticon"
-		texturefile = "gfx/texticons/support_maintenance_small.dds"
+		name = "GFX_war_support_texticon"
+		texturefile = "gfx/texticons/war_support_modifiericons_texticon.dds"
 		legacy_lazy_load = no
-		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_support_equipment_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/support_equipment.png"
+		legacy_lazy_load = no
 	}
 
 	spriteType = {

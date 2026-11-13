@@ -4772,7 +4772,10 @@ ADISCORD_vorkerland_wkr_administration = {
 	WKR_rally_the_chairmans_delegates = {
 		icon = ADISCORD_negotiations
 		allowed = { tag = WKR }
-		visible = { has_completed_focus = WKR_affirm_worker_mandate }
+		visible = {
+			has_completed_focus = WKR_affirm_worker_mandate
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = WKR_administration_active_tt

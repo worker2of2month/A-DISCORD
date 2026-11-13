@@ -112,27 +112,13 @@ class RusLastEmpireTests(unittest.TestCase):
             "ADISCORD_vorkerland_rus_proclaim_last_empire",
         )
         payload = block(effect, "if")
-        branches = [
-            entry
+        # The Khan always proclaims his Last Empire; the factions' forms come
+        # only from their coups, independently of the balance at proclamation.
+        self.assertEqual(scalar(payload, "set_cosmetic_tag"), "RUS_last_empire")
+        self.assertFalse(any(
+            isinstance(entry.value, list) and any(child.key == "set_cosmetic_tag" for child in entry.value)
             for entry in payload
-            if isinstance(entry.value, list)
-            and any(child.key == "set_cosmetic_tag" for child in entry.value)
-        ]
-        expected = (
-            ("if", ">", "0.10", "RUS_black_banner_empire"),
-            ("else_if", "<", "-0.10", "RUS_restoration_state"),
-            ("else", None, None, "RUS_last_empire"),
-        )
-        self.assertEqual(len(branches), len(expected))
-        for branch, (key, operator, threshold, cosmetic) in zip(branches, expected):
-            with self.subTest(cosmetic=cosmetic):
-                self.assertEqual(branch.key, key)
-                self.assertEqual(scalar(branch.value, "set_cosmetic_tag"), cosmetic)
-                self.assertFalse(any(entry.key in ("set_politics", "promote_character", "retire_character") for entry in branch.value))
-                if operator:
-                    balance = block(block(branch.value, "limit"), "power_balance_value")
-                    self.assertEqual(scalar(balance, "id"), "RUS_state_balance")
-                    self.assertEqual([row.value for row in balance if not row.key][1:], [operator, threshold])
+        ))
         self.assertEqual(scalar(block(payload, "set_politics"), "ruling_party"), "etatism")
         portraits = block(payload, "set_portraits")
         self.assertEqual(scalar(portraits, "character"), "RUS_Mark_Rustan")

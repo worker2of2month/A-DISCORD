@@ -37,6 +37,7 @@ country_event = {
 		trigger = {
 			WKR_administration_active = yes
 			WKR_mandate_open = yes
+			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 		}
 		ai_chance = {
 			base = 45
@@ -179,20 +180,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_vorkerland_claimant.5
 	title = ADISCORD_vorkerland_claimant.5.t
-	desc = {
-		trigger = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-		text = ADISCORD_vorkerland_claimant.5.nikita.d
-	}
-	desc = {
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
-		text = ADISCORD_vorkerland_claimant.5.legacy.d
-	}
+	desc = ADISCORD_vorkerland_claimant.5.nikita.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	trigger = {
 		WKR_administration_active = yes
 		WKR_mandate_open = yes
+		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 		WKR_chairman_has_majority = yes
 		WKR_presidential_course = no
 	}

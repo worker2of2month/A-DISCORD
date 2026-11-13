@@ -59,7 +59,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_worker_mandate }
 		completion_reward = {
-			unlock_decision_tooltip = WKR_rally_the_chairmans_delegates
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+				unlock_decision_tooltip = WKR_rally_the_chairmans_delegates
+			}
 			unlock_decision_tooltip = WKR_convene_the_executive_session
 			custom_effect_tooltip = WKR_balance_mandate_tt
 			add_political_power = 15

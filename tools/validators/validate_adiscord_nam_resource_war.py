@@ -182,7 +182,7 @@ DECISION_FOCUS_GATES = {
     "NAM_order_resource_guard": "NAM_mobilisation_office",
     "NAM_order_field_infantry": "NAM_mobilisation_office",
     "NAM_order_motor_column": "NAM_motor_pool",
-    "NAM_order_coastal_battalion": "NAM_coastal_battalions",
+    "NAM_order_coastal_battalion": "NAM_reserve_rolls",
     "NAM_prepare_line": "NAM_line_survey",
     "NAM_scorch_wells": "NAM_scorched_wells",
     "NAM_oil_contract_offer": "NAM_contract_bureau",
@@ -1227,11 +1227,26 @@ def check_colony_and_exile(
     )
     sabotage = named_block(effects, "NAM_underground_sabotage_roll")
     check(
-        all(f"id = ADISCORD_nam_resource_war.{number}" in sabotage for number in (85, 86, 87))
-        and "flag = NAM_ug_sabotage_cooldown" in sabotage,
-        "sabotage must draw one of its three events under a cooldown",
+        all(f"id = ADISCORD_nam_resource_war.{number}" in sabotage for number in (85, 86, 87, 116, 117))
+        and "flag = NAM_ug_sabotage_cooldown" in sabotage
+        and all(
+            f"NAM_underground_strike_tier_{tier} = yes" in sabotage
+            for tier in (2, 3, 4)
+        )
+        and "has_decision = NAM_colonial_pipeline_guard" in sabotage,
+        "sabotage must draw its events by strike tier under a cooldown and spare a guarded pipeline",
     )
-    for event_id in ("82", "83", "84", "85", "86", "87"):
+    close = named_block(effects, "NAM_underground_close_event")
+    steal = named_block(effects, "NAM_underground_steal_rifles")
+    check(
+        all(
+            f"clear_variable = {name}" in close
+            for name in ("NAM_ug_strike_damage", "NAM_ug_strike_fuel", "NAM_ug_strike_stability")
+        )
+        and all(f"NAM_underground_strike_tier_{tier} = yes" in steal for tier in (2, 3, 4)),
+        "every strike receipt must be cleared when its event closes and depot raids must scale by tier",
+    )
+    for event_id in ("82", "83", "84", "85", "86", "87", "116", "117"):
         block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
         extended = event_id in ("85", "86")
         check(

@@ -558,6 +558,114 @@ ideas = {
 			}
 		}
 
+		RUS_sci_amnesty_for_guard_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.02
+				army_attack_factor = 0.03
+			}
+		}
+
+		RUS_sci_disarm_guard_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = -0.02
+				conscription_factor = -0.02
+				stability_factor = 0.03
+			}
+		}
+
+		RUS_sci_reactor_contour_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		RUS_sci_technical_districts_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				compliance_growth_on_our_occupied_states = 0.15
+				resistance_growth_on_our_occupied_states = -0.15
+				conscription_factor = -0.02
+			}
+		}
+
+		RUS_sci_factory_republic_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		RUS_sci_living_filter_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				compliance_growth_on_our_occupied_states = 0.10
+			}
+		}
+
+		RUS_sci_precise_operations_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.03
+				special_forces_min = 6
+			}
+		}
+
+		RUS_sci_montera_claim_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		RUS_sci_city_won_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		RUS_sci_city_rebuilt_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
 		RUS_ba_guard_order_delta = {
 			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }

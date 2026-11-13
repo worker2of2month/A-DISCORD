@@ -515,54 +515,6 @@ scripted_gui = {
 		}
 	}
 
-	superevent_stelander_shabrat_victory_staff = {
-		window_name = "superevent_stelander_shabrat_victory_staff"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_stelander_shabrat_victory_staff
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_stelander_shabrat_victory_staff
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
-	superevent_stelander_shabrat_victory_councils = {
-		window_name = "superevent_stelander_shabrat_victory_councils"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_stelander_shabrat_victory_councils
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_stelander_shabrat_victory_councils
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
-	superevent_stelander_shabrat_victory_truth = {
-		window_name = "superevent_stelander_shabrat_victory_truth"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_stelander_shabrat_victory_truth
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_stelander_shabrat_victory_truth
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
 	superevent_stelander_party_victory_festival = {
 		window_name = "superevent_stelander_party_victory_festival"
 		context_type = player_context

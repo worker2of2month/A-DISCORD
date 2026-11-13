@@ -249,6 +249,21 @@ checking only keys ending in `.d` misses text displayed on the same light paper.
 Use `visible` for completed-focus unlocks and immediate local context; keep shortages and occupied preparation slots readable in `available` or `custom_cost_trigger`. Keep transient commission/asset predicates out of daily-cached `target_trigger` for immediate responses. Hide technical bookkeeping without hiding the price, material result, cancellation consequence or current risk; do not nest `hidden_effect` inside an already hidden payload.
 Narrative and story event prose is not tooltip clutter. Do not shorten, remove, or skip lore/event descriptions as part of focus or tooltip cleanup unless the task explicitly asks to edit that prose.
 For numeric gameplay resources in custom localisation, prefer the native texticon next to the value instead of spelling out the resource name: for example `§G+20§! £political_power_texticon`, not `+20 political power`. Apply the same compact pattern to costs and other well-known resources when an appropriate texticon exists; keep prose references textual when no concrete value is being displayed.
+Equipment and resource texticons must identify the actual item and distinguish
+related roles. A generic aircraft silhouette is insufficient for close air
+support; retain a visible ground-attack cue such as bombs or a dive toward a
+ground target. Keep artillery, anti-tank guns, anti-air guns, trucks, trains and
+support equipment visually distinguishable. Do not infer suitability from a
+sprite name. Inspect the decoded texture, its frame layout and transparency,
+then compare related icons at their native text size; an enlarged preview alone
+does not prove readability. Do not rely only on colour or tiny silhouette
+differences to distinguish equipment roles. Prefer suitable existing artwork; generate new
+artwork only when existing symbols cannot communicate the distinction.
+Use the same symbol for the same resource throughout the mod. Audit shared
+sprite definitions, alternate localisation tokens and all their consumers when
+replacing a symbol. Keep numeric amounts before their icons. If an icon cannot
+identify an equipment role unambiguously, add a short role label beside it
+instead of removing that distinction to make the line shorter.
 Keep generic procurement in national decisions; map decisions need a local
 consequence. Reuse the existing regional map and preparation slots. Prefer an existing completed focus, active decision, character state, or
 numeric value to another flag. Do not mirror the same fact in several markers.

@@ -1400,20 +1400,23 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_anti_tank_texticon"
-		texturefile = "gfx/interface/equipmentdesigner/tanks/role_icons/role_icon_1.dds"
+		texturefile = "gfx/texticons/unit_anti_tank_icon_small.dds"
 		legacy_lazy_load = no
+		noOfFrames = 2
 	}
 
 	SpriteType = {
 		name = "GFX_artillery_texticon"
-		texturefile = "gfx/interface/equipmentdesigner/tanks/role_icons/role_icon_2.dds"
+		texturefile = "gfx/texticons/unit_artillery_icon_small.dds"
 		legacy_lazy_load = no
+		noOfFrames = 2
 	}
 
 	SpriteType = {
 		name = "GFX_anti_air_texticon"
-		texturefile = "gfx/interface/equipmentdesigner/tanks/role_icons/role_icon_3.dds"
+		texturefile = "gfx/texticons/unit_anti_air_icon_small.dds"
 		legacy_lazy_load = no
+		noOfFrames = 2
 	}
 
 	SpriteType = {
@@ -1424,8 +1427,16 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_motorized_texticon"
-		texturefile = "gfx/interface/equipmentdesigner/tanks/role_icons/role_icon_5.dds"
+		texturefile = "gfx/texticons/unit_motorized_icon_small.dds"
 		legacy_lazy_load = no
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_motorized_equipment_texticon"
+		texturefile = "gfx/texticons/unit_motorized_icon_small.dds"
+		legacy_lazy_load = no
+		noOfFrames = 2
 	}
 
 	SpriteType = {
@@ -1642,7 +1653,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_train_texticon"
-		texturefile = "gfx/texticons/train_texticon.dds"
+		texturefile = "gfx/texticons/adiscord/custom/train.png"
 		legacy_lazy_load = no
 	}
 	

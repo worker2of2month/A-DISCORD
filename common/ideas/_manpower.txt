@@ -39,6 +39,10 @@ ideas = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
 				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
+				}
 				#has_manpower_for_recruit_change_to =  { value = 0.015 group = mobilization_laws }
 				NOT = { has_idea = undisturbed_isolation }
 				NOT = { has_idea = isolation }
@@ -77,6 +81,10 @@ ideas = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
 				}
 				#has_manpower_for_recruit_change_to =  { value = 0.025 group = mobilization_laws }
 				has_war_support > 0.1
@@ -122,6 +130,10 @@ ideas = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
 				}
 				#has_manpower_for_recruit_change_to = { value = 0.05 group = mobilization_laws }
 				OR = {
@@ -186,6 +198,10 @@ ideas = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
 				}
 				#has_manpower_for_recruit_change_to =  { value = 0.1 group = mobilization_laws }
 				OR = {
@@ -254,6 +270,10 @@ ideas = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
 				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
+				}
 				#has_manpower_for_recruit_change_to =  { value = 0.2 group = mobilization_laws }
 				has_war = yes
 				OR = {
@@ -314,6 +334,10 @@ ideas = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
 					NOT = { has_idea = VAL_contract_service }
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_metropolitan_garrison_charter_locked_tt
+					NOT = { has_idea = NAM_metropolitan_garrison_charter }
 				}
 				#has_manpower_for_recruit_change_to =  { value = 0.25 group = mobilization_laws }
 				has_war = yes

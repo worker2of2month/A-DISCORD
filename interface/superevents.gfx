@@ -169,21 +169,6 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_superevent_stelander_shabrat_victory_staff"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
-	}
-
-	spriteType = {
-		name = "GFX_superevent_stelander_shabrat_victory_councils"
-		textureFile = "gfx/interface/superevents/WRK/superevent_west_worker.png"
-	}
-
-	spriteType = {
-		name = "GFX_superevent_stelander_shabrat_victory_truth"
-		textureFile = "gfx/interface/superevents/SHL/superevent_south_conclave.png"
-	}
-
-	spriteType = {
 		name = "GFX_superevent_stelander_party_victory_festival"
 		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_festival.png"
 	}

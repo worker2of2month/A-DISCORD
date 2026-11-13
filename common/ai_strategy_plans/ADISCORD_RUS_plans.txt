@@ -153,3 +153,30 @@ ADISCORD_rus_last_sky_plan = {
 	}
 	weight = { factor = 1000 }
 }
+
+# The council's branch replaces the Khan's imperial programme after a coup.
+ADISCORD_rus_reactor_council_plan = {
+	name = "ADISCORD_rus_reactor_council_plan"
+	desc = "ADISCORD_rus_reactor_council_plan"
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_scientists_regime = yes
+	}
+	abort = { RUS_scientists_regime = no }
+	ai_national_focuses = {
+		RUS_sci_channel_night
+		RUS_sci_engineers_commission
+		RUS_sci_disarm_guard
+		RUS_sci_object_register
+		RUS_sci_reactor_contour
+		RUS_sci_grid_for_neighbours
+		RUS_sci_technical_districts
+		RUS_sci_outer_cordon
+		RUS_sci_precise_operations
+		RUS_sci_montera_claim
+		RUS_sci_reactor_war
+		RUS_sci_city_above_reactor
+	}
+	weight = { factor = 1000 }
+}
