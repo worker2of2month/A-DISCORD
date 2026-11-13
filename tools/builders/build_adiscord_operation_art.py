@@ -7,7 +7,8 @@ import hashlib
 import json
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageEnhance, ImageFilter, ImageOps
+import numpy as np
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
 from tools.lib.adiscord_ui_surfaces import apply_or_check, dds_bytes
 from tools.lib.paths import repository_root
@@ -92,9 +93,29 @@ def finish_photo(source, overlay, size):
     left = (crt.width - size[0]) // 2
     top = (crt.height - size[1]) // 2
     crt = crt.crop((left, top, left + size[0], top + size[1]))
-    # Mid-grey CRT pixels are neutral; scanlines must not lift photographic blacks.
-    textured = ImageChops.soft_light(photo, crt.convert("RGB"))
-    return Image.composite(textured, photo, crt.getchannel("A")).convert("RGBA")
+    base = np.asarray(photo, dtype=np.float32)
+    layer = np.asarray(crt, dtype=np.float32)
+    # Photoshop Linear Light clips the blended colour before applying layer alpha.
+    textured = np.clip(base + 2.0 * layer[:, :, :3] - 255.0, 0.0, 255.0)
+    alpha = layer[:, :, 3:4] / 255.0
+    result = np.rint(base * (1.0 - alpha) + textured * alpha).astype(np.uint8)
+    return Image.fromarray(result).convert("RGBA")
+
+
+def load_crt_layer(path, manifest):
+    from psd_tools import PSDImage
+    from psd_tools.constants import BlendMode
+
+    if hashlib.sha256(path.read_bytes()).hexdigest() != manifest["overlay"]["sha256"]:
+        raise ValueError("CRT template hash mismatch")
+    psd = PSDImage.open(path)
+    layers = [layer for layer in psd.descendants() if layer.name == manifest["overlay"]["layer"]]
+    if len(layers) != 1 or layers[0].blend_mode != BlendMode.LINEAR_LIGHT:
+        raise ValueError("Expected a single Linear Light CRT layer")
+    layer = layers[0]
+    image = layer.topil().convert("RGBA")
+    image.putalpha(image.getchannel("A").point(lambda value: round(value * layer.opacity / 255)))
+    return image
 
 
 def verified_image(path, expected):
@@ -106,7 +127,7 @@ def verified_image(path, expected):
 
 
 def expected_outputs(manifest, source_dir, overlay_path):
-    overlay = verified_image(overlay_path, manifest["overlay"]["sha256"])
+    overlay = load_crt_layer(overlay_path, manifest)
     scenes = {
         name: verified_image(source_dir / row["source_file"], row["source_sha256"])
         for name, row in manifest["scenes"].items()
@@ -142,15 +163,16 @@ def main():
     parser.add_argument("--overlay", type=Path)
     args = parser.parse_args()
     manifest = load_manifest()
-    if bool(args.source_dir) != bool(args.overlay):
-        parser.error("--source-dir and --overlay must be supplied together")
+    if args.overlay and not args.source_dir:
+        parser.error("--overlay requires --source-dir")
     if not args.source_dir:
         # Public checkout contains exports; editable originals are kept by the artist.
         result = check_exports(manifest)
         if args.apply and result:
             parser.error("Re-export needs --source-dir and --overlay containing the recorded originals")
         return result
-    outputs = expected_outputs(manifest, args.source_dir, args.overlay)
+    overlay = args.overlay or ROOT / manifest["overlay"]["source_file"]
+    outputs = expected_outputs(manifest, args.source_dir, overlay)
     result = apply_or_check(outputs, args.apply, "Operation art")
     if args.apply and result == 0:
         for row in manifest["bindings"].values():

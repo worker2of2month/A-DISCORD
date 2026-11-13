@@ -505,13 +505,21 @@ def check_ladder(
 ) -> None:
     """Ladder of seals, rivals, underground, endings, memoirs and the war of return."""
     bop = read("common/bop/NAM.txt")
+    ranges = typed_blocks(bop, "range")
     check(
         "NAM_ladder_bop = {" in bop
         and "left_side = NAM_bop_vertical" in bop
         and "right_side = NAM_bop_districts" in bop
-        and bop.count("on_activate = { ADISCORD_economy_mark_dirty = yes }") == bop.count("range = {")
-        and bop.count("on_deactivate = { ADISCORD_economy_mark_dirty = yes }") == bop.count("range = {"),
-        "NAM_ladder_bop must exist and mark the economy dirty on every range change",
+        and len(ranges) == 5
+        and all(
+            has_script_fragment(
+                named_block(range_body, hook),
+                "hidden_effect = { ADISCORD_economy_mark_dirty = yes }",
+            )
+            for range_body in ranges
+            for hook in ("on_activate", "on_deactivate")
+        ),
+        "NAM_ladder_bop must exist and silently mark the economy dirty on every range change",
     )
     declare = named_block(effects, "NAM_ladder_declare_independence")
     check(
@@ -1039,7 +1047,12 @@ def check_exile_revolution(
     # island capital that replaced it.
     founding = named_block(effects, "NAM_exile_found_new_capital")
     check(
-        "NOT = { has_country_flag = NAM_new_capital_founded }" in founding
+        has_script_fragment(
+            founding,
+            "NOT = { custom_trigger_tooltip = { "
+            "tooltip = NAM_new_capital_founded_focus_condition_tt "
+            "has_country_flag = NAM_new_capital_founded } }",
+        )
         and "set_country_flag = NAM_new_capital_founded" in founding
         and "id = 6893" in founding
         and "owns_state = 228" in founding
@@ -1187,7 +1200,8 @@ def check_colony_and_exile(
         "visible = { NAM_colony_phase = yes }" in named_block(categories, "NAM_colony")
         and has_script_fragment(named_block(categories, "NAM_piracy"),
                                 "visible = { OR = { NAM_piracy_open = yes NAM_piracy_victory = yes } }")
-        and "NOT = { has_country_flag = NAM_center_vanished }" in named_block(triggers, "NAM_colony_phase"),
+        and has_script_fragment(named_block(triggers, "NAM_colony_phase"),
+                                "NOT = { custom_trigger_tooltip = { tooltip = NAM_metropolitan_rule_ended_tt has_country_flag = NAM_center_vanished } }"),
         "colonial programmes must close with the centre; sea raids open in radical exile or after victory",
     )
     monthly = named_block(on_actions, "on_monthly_NAM")
@@ -1246,6 +1260,12 @@ def check_colony_and_exile(
         and all(f"NAM_underground_strike_tier_{tier} = yes" in steal for tier in (2, 3, 4)),
         "every strike receipt must be cleared when its event closes and depot raids must scale by tier",
     )
+    for event_id in ("85", "86", "87", "116", "117"):
+        block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
+        check(
+            block.count("custom_effect_tooltip = NAM_ug_strike_cause_tt") == block.count("option = {") - 1,
+            f"every answer of sabotage event .{event_id} must name the cause of the strike first",
+        )
     for event_id in ("82", "83", "84", "85", "86", "87", "116", "117"):
         block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
         extended = event_id in ("85", "86")
@@ -3059,7 +3079,7 @@ def main() -> int:
         67: {6099: 10, 16890: 15},
         68: {6150: 10},
         69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
-        70: {2986: 15},
+        70: {2986: 15, 1198: 10, 16900: 10, 16901: 10},
         723: {6495: 10},
         724: {6796: 5},
         725: {259: 10},
@@ -3098,8 +3118,8 @@ def main() -> int:
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726))
-        == 100,
-        "EFL mainland VP total must be 100",
+        == 130,
+        "EFL mainland VP total must be 130",
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 120,

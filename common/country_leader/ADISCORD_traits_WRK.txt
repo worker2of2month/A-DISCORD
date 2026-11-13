@@ -28,4 +28,23 @@ leader_traits = {
 		random = no
 		sprite = 1
 	}
+
+	# Leader civil-war branches.
+	# Granted to the current VAD leader by the two late block-1 focuses; in the
+	# joint course that leader is the joint council, whose military chair is Petrichev.
+	VAD_regent_trait_general_of_the_first_line = {
+		random = no
+		sprite = 1
+		army_attack_factor = 0.05
+		war_support_factor = 0.05
+		political_power_gain = -0.05
+	}
+
+	VAD_regent_trait_mind_of_the_staff = {
+		random = no
+		sprite = 1
+		planning_speed = 0.10
+		command_power_gain_mult = 0.10
+		experience_gain_army_factor = 0.05
+	}
 }

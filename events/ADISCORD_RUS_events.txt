@@ -2044,3 +2044,88 @@ country_event = {
 		custom_effect_tooltip = RUS_coup_faction_warning_tt
 	}
 }
+
+# RUS. The war of revenge on Vorkerland has begun.
+country_event = {
+	id = ADISCORD_rus_campaign.59
+	title = ADISCORD_rus_campaign.59.t
+	desc = ADISCORD_rus_campaign.59.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_black_army_regime = yes }
+	option = { name = ADISCORD_rus_campaign.59.a }
+}
+
+# Human Vorkerland, sent when the Black Army declares its war of revenge.
+country_event = {
+	id = ADISCORD_rus_campaign.60
+	title = ADISCORD_rus_campaign.60.t
+	desc = ADISCORD_rus_campaign.60.d
+	picture = GFX_event_adiscord_field_switchboard
+	is_triggered_only = yes
+	trigger = { tag = event_target:ADISCORD_vorkerland_nation }
+	option = { name = ADISCORD_rus_campaign.60.a }
+}
+
+# RUS. Settlements of the war of revenge.
+country_event = {
+	id = ADISCORD_rus_campaign.61
+	title = ADISCORD_rus_campaign.61.t
+	desc = ADISCORD_rus_campaign.61.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.61.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.62
+	title = ADISCORD_rus_campaign.62.t
+	desc = ADISCORD_rus_campaign.62.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.62.a }
+}
+
+# RUS and a human eastern power. The eastern war has begun.
+country_event = {
+	id = ADISCORD_rus_campaign.63
+	title = ADISCORD_rus_campaign.63.t
+	desc = ADISCORD_rus_campaign.63.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { RUS_black_army_regime = yes }
+	option = { name = ADISCORD_rus_campaign.63.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.64
+	title = ADISCORD_rus_campaign.64.t
+	desc = ADISCORD_rus_campaign.64.d
+	picture = GFX_event_adiscord_field_switchboard
+	is_triggered_only = yes
+	trigger = { tag = event_target:RUS_ba_east_target }
+	option = { name = ADISCORD_rus_campaign.64.a }
+}
+
+# RUS. Settlements of the eastern war.
+country_event = {
+	id = ADISCORD_rus_campaign.65
+	title = ADISCORD_rus_campaign.65.t
+	desc = ADISCORD_rus_campaign.65.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.65.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_campaign.66
+	title = ADISCORD_rus_campaign.66.t
+	desc = ADISCORD_rus_campaign.66.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.66.a }
+}

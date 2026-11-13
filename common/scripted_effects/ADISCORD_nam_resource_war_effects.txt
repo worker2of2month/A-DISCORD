@@ -1107,14 +1107,22 @@ NAM_rw_exile_move_capital = {
 NAM_exile_found_new_capital = {
 	if = {
 		limit = {
-			NOT = { has_country_flag = NAM_new_capital_founded }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_new_capital_founded_focus_condition_tt
+					has_country_flag = NAM_new_capital_founded
+				}
+			}
 			OR = {
 				AND = {
 					owns_state = 228
 					controls_state = 228
 				}
 				capital_scope = {
-					NAM_rw_island_state = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_island_state_focus_condition_tt
+						NAM_rw_island_state = yes
+					}
 					is_owned_by = NAM
 					is_controlled_by = NAM
 				}
@@ -1921,6 +1929,12 @@ NAM_close_war_programmes = {
 	remove_decision = NAM_war_transport_purchase
 	remove_decision = NAM_war_supply_priority
 	remove_decision = NAM_war_counterstroke_operation
+	remove_decision = NAM_war_frontline_instructors
+	remove_decision = NAM_war_medical_rotation
+	remove_decision = NAM_war_ammunition_push
+	remove_decision = NAM_war_dockyard_rotation
+	remove_decision = NAM_war_air_service_rotation
+	ADISCORD_economy_mark_dirty = yes
 	clr_country_flag = NAM_compact_ratified
 	clr_country_flag = NAM_rw_first_strike
 	clr_country_flag = NAM_rw_war_dispatched
@@ -1942,6 +1956,10 @@ NAM_close_war_programmes = {
 	remove_ideas = NAM_war_interceptor_control_idea
 	remove_ideas = NAM_war_air_ground_liaison_idea
 	remove_ideas = NAM_war_joint_operations_idea
+	remove_ideas = NAM_war_short_training_idea
+	remove_ideas = NAM_war_veteran_cadres_idea
+	remove_ideas = NAM_war_fuel_discipline_idea
+	remove_ideas = NAM_war_extraction_surge_idea
 
 	NAM_oil_refresh = yes
 }
@@ -2737,17 +2755,27 @@ NAM_metropolitan_flight = {
 # Clearing the receipts also makes a later narrative answer harmless.
 NAM_colony_hourglass_payout = {
 	if = {
-		limit = { check_variable = { NAM_hidden_reserve > 0 } }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hidden_reserve_available_tt
+				check_variable = { NAM_hidden_reserve > 0 }
+			}
+		}
 		custom_effect_tooltip = NAM_hidden_reserve_paid_tt
 		hidden_effect = {
 			set_temp_variable = { var = NAM_treasury_amount value = NAM_hidden_reserve }
 			NAM_add_treasury = yes
 		}
 	}
-	clear_variable = NAM_hidden_reserve
+	hidden_effect = { clear_variable = NAM_hidden_reserve }
 	if = {
-		limit = { has_country_flag = NAM_officer_lists_ready }
-		clr_country_flag = NAM_officer_lists_ready
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_officer_lists_ready_tt
+				has_country_flag = NAM_officer_lists_ready
+			}
+		}
+		hidden_effect = { clr_country_flag = NAM_officer_lists_ready }
 		add_manpower = 3000
 		custom_effect_tooltip = NAM_grp_quiet_officer_lists_tt
 		hidden_effect = {
@@ -5558,6 +5586,7 @@ NAM_underground_close_event = {
 	clear_variable = NAM_ug_strike_damage
 	clear_variable = NAM_ug_strike_fuel
 	clear_variable = NAM_ug_strike_stability
+	clear_variable = NAM_ug_strike_power
 	if = {
 		limit = { has_event_target = NAM_ug_field }
 		event_target:NAM_ug_field = { clear_variable = NAM_ug_damage_receipt }
@@ -5700,6 +5729,8 @@ NAM_underground_sabotage_roll = {
 					}
 				}
 				NAM_underground_open_event = yes
+				# Every answer names the strength the network struck with.
+				set_variable = { var = NAM_ug_strike_power value = NAM_underground }
 				random_list = {
 					40 = {
 						modifier = {
@@ -5765,22 +5796,22 @@ NAM_underground_add = {
 	NAM_underground_clamp = yes
 }
 
-# COUNTRY NAM. Event .86: the network carries off up to 1500, 2500, 3500 or
-# 5000 rifles of Svetlogorsk make by strike tier; the exact loss is kept for
+# COUNTRY NAM. Event .86: the network carries off up to 2000, 3500, 5000 or
+# 7500 rifles of Svetlogorsk make by strike tier; the exact loss is kept for
 # the event text.
 NAM_underground_steal_rifles = {
-	set_temp_variable = { var = NAM_ug_rifles_taken value = -1500 }
+	set_temp_variable = { var = NAM_ug_rifles_taken value = -2000 }
 	if = {
 		limit = { NAM_underground_strike_tier_4 = yes }
-		set_temp_variable = { var = NAM_ug_rifles_taken value = -5000 }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -7500 }
 	}
 	else_if = {
 		limit = { NAM_underground_strike_tier_3 = yes }
-		set_temp_variable = { var = NAM_ug_rifles_taken value = -3500 }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -5000 }
 	}
 	else_if = {
 		limit = { NAM_underground_strike_tier_2 = yes }
-		set_temp_variable = { var = NAM_ug_rifles_taken value = -2500 }
+		set_temp_variable = { var = NAM_ug_rifles_taken value = -3500 }
 	}
 	set_variable = { var = NAM_ug_rifles_stolen value = num_equipment@infantry_equipment }
 	add_equipment_to_stockpile = { type = infantry_equipment amount = NAM_ug_rifles_taken producer = NAM }
@@ -5788,18 +5819,18 @@ NAM_underground_steal_rifles = {
 	log = "[ADISCORD][NAM][UNDERGROUND] Depot raid: [?NAM_ug_rifles_stolen] rifles taken."
 }
 
-# COUNTRY NAM. Event .116: the blast burns up to 20000, 30000 or 45000 fuel by
+# COUNTRY NAM. Event .116: the blast burns up to 30000, 50000 or 75000 fuel by
 # strike tier. Native fuel_k counts thousands; the exact loss is kept for the
 # event text and never exceeds the stock.
 NAM_underground_burn_fuel = {
-	set_temp_variable = { var = NAM_ug_fuel_cap value = 20000 }
+	set_temp_variable = { var = NAM_ug_fuel_cap value = 30000 }
 	if = {
 		limit = { NAM_underground_strike_tier_4 = yes }
-		set_temp_variable = { var = NAM_ug_fuel_cap value = 45000 }
+		set_temp_variable = { var = NAM_ug_fuel_cap value = 75000 }
 	}
 	else_if = {
 		limit = { NAM_underground_strike_tier_3 = yes }
-		set_temp_variable = { var = NAM_ug_fuel_cap value = 30000 }
+		set_temp_variable = { var = NAM_ug_fuel_cap value = 50000 }
 	}
 	set_variable = { var = NAM_ug_strike_fuel value = fuel_k }
 	multiply_variable = { var = NAM_ug_strike_fuel value = 1000 }
@@ -5903,9 +5934,14 @@ NAM_rom_take_etatism = {
 }
 
 NAM_apply_ending_iron = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {
@@ -5941,9 +5977,14 @@ NAM_apply_ending_iron = {
 }
 
 NAM_apply_ending_service = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {
@@ -5979,9 +6020,14 @@ NAM_apply_ending_service = {
 }
 
 NAM_apply_ending_federation = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {
@@ -6021,9 +6067,14 @@ NAM_apply_ending_federation = {
 }
 
 NAM_apply_ending_oil_union = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {
@@ -6063,9 +6114,14 @@ NAM_apply_ending_oil_union = {
 # keep their names. The South-war settlement follows NAM_pragmatic_compact and
 # reads the completed ending focus.
 NAM_apply_ending_prag_republic = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {
@@ -6079,9 +6135,14 @@ NAM_apply_ending_prag_republic = {
 }
 
 NAM_apply_ending_prag_directorate = {
-	set_country_flag = NAM_ladder_settled
+	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
-		limit = { has_country_flag = NAM_coup_succeeded }
+		limit = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_coup_succeeded_focus_condition_tt
+				has_country_flag = NAM_coup_succeeded
+			}
+		}
 		custom_effect_tooltip = NAM_ending_coup_leader_tt
 	}
 	else = {

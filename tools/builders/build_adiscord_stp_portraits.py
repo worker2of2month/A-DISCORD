@@ -1,4 +1,8 @@
-"""Export supplied Stelander portraits and Ivanov's shared glitch animation."""
+"""Build Ivanov's shared glitch animation from the supplied Stelander portraits.
+
+The supplied portraits are integrated as runtime PNGs; their originals stay
+with the author outside the repository, so the runtime copies are the inputs.
+"""
 
 from __future__ import annotations
 
@@ -10,14 +14,13 @@ import random
 from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = Path("tools/assets/source/stp_portraits")
 FRAMES = 52
 FPS = 12
 PORTRAITS = {
-    "STP": "portrait_STP_Petr_Ivanov.png",
-    "NOD": "portrait_NOD_STS_administrator.png",
-    "VAL": "portrait_VAL_STS_administrator.png",
-    "NKA": "portrait_STP_northern_administrator.png",
+    "STP": Path("gfx/leaders/STP/portrait_STP_Petr_Ivanov.png"),
+    "NOD": Path("gfx/leaders/NOD/portrait_NOD_STS_administrator.png"),
+    "VAL": Path("gfx/leaders/VAL/portrait_VAL_STS_administrator.png"),
+    "NKA": Path("gfx/leaders/NKA/portrait_STP_northern_administrator.png"),
 }
 ATLAS = Path("gfx/leaders/STP/ivanov_glitch_animation.dds")
 PREVIEW = Path("docs/development/previews/ivanov-glitch.gif")
@@ -53,15 +56,12 @@ def animation_frames(portrait: Image.Image) -> list[Image.Image]:
     return frames
 
 
-def outputs(root: Path = ROOT):
-    for tag, filename in PORTRAITS.items():
-        data = (root / SOURCE / filename).read_bytes()
-        with Image.open(BytesIO(data)) as image:
+def outputs(root: Path = ROOT, preview: bool = False):
+    for portrait in PORTRAITS.values():
+        with Image.open(root / portrait) as image:
             if image.size != (156, 210):
-                raise ValueError(f"Invalid portrait dimensions: {filename}")
-            image.load()
-        yield Path("gfx/leaders") / tag / filename, data
-    with Image.open(root / SOURCE / PORTRAITS["STP"]) as portrait:
+                raise ValueError(f"Invalid portrait dimensions: {portrait.as_posix()}")
+    with Image.open(root / PORTRAITS["STP"]) as portrait:
         frames = animation_frames(portrait)
     atlas = Image.new("RGBA", (156 * FRAMES, 210))
     for index, frame in enumerate(frames):
@@ -69,6 +69,8 @@ def outputs(root: Path = ROOT):
     buffer = BytesIO()
     atlas.save(buffer, format="DDS")
     yield ATLAS, buffer.getvalue()
+    if not preview:
+        return
     buffer = BytesIO()
     # GIF timing is quantised to 10 ms; the native atlas still runs at exactly 12 fps.
     frames[0].save(buffer, format="GIF", save_all=True, append_images=frames[1:],
@@ -81,9 +83,10 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--apply", action="store_true")
     mode.add_argument("--check", action="store_true")
+    parser.add_argument("--preview", action="store_true", help="also write the review GIF")
     args = parser.parse_args()
     changed = []
-    for relative, data in outputs():
+    for relative, data in outputs(preview=args.preview):
         path = ROOT / relative
         if not path.exists() or path.read_bytes() != data:
             changed.append(relative)

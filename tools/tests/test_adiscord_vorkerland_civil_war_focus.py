@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from tools.lib.paths import source_section
+from tools.lib.vorkerland_leader_branches import LEADER_BRANCH_FOCUS_IDS
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     _can_share_view,
     lifecycle_tree,
@@ -246,9 +247,13 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     rows.setdefault(y, []).append((x, name))
             for y, row in rows.items():
                 ordered = sorted(row)
-                for (left_x, left), (right_x, right) in zip(ordered, ordered[1:]):
-                    self.assertGreaterEqual((right_x - left_x) * 96, 165,
-                                            f"{left} and {right} overlap on row {y}")
+                # Course blocks drawn for different governments never meet on screen.
+                for index, (left_x, left) in enumerate(ordered):
+                    for right_x, right in ordered[index + 1:]:
+                        if not _can_share_view(left, right):
+                            continue
+                        self.assertGreaterEqual((right_x - left_x) * 96, 165,
+                                                f"{left} and {right} overlap on row {y}")
 
     def test_integrated_focus_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
@@ -308,7 +313,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
     def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
         # The worker and technocratic routes continue in their own trees after the Unity Tower.
-        self.assertEqual(len(self.blocks), 364)
+        self.assertEqual(len(self.blocks), 364 + len(LEADER_BRANCH_FOCUS_IDS))
         self.assertEqual(len(POSTWAR_EXECUTIVE_FOCUSES), 7)
         self.assertEqual(len(DEPTH_FOCUSES), 45)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
@@ -634,7 +639,9 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 colliding = [
                     other_id
                     for other_id, cell in self.grid.items()
-                    if other_id != focus_id and cell == position
+                    if other_id != focus_id
+                    and cell == position
+                    and lifecycle_tree(other_id) == lifecycle_tree(focus_id)
                 ]
                 self.assertEqual(colliding, [])
                 self.assertEqual(
@@ -4506,7 +4513,7 @@ class ExecutiveConfederationTests(unittest.TestCase):
         for entries in self.localisations.values():
             self.assertIn("§G1§!", entries["WRK_exec_norm_series_tt"])
             self.assertIn("§G300§! £infantry_equipment_texticon", entries["WRK_exec_rolling_audit_tt"])
-            self.assertIn("§G100§! £artillery_texticon", entries["WRK_exec_supply_chain_tt"])
+            self.assertIn("§G100§! £ADISCORD_artillery_texticon", entries["WRK_exec_supply_chain_tt"])
             self.assertIn("§G10§! £political_power_texticon", entries["WRK_exec_order_bureau_tt"])
 
     def test_order_bureau_returns_its_overhead_on_every_accepted_civil_order(self) -> None:

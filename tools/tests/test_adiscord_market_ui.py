@@ -8,6 +8,7 @@ from PIL import Image
 
 from tools.builders import build_adiscord_market_ui_assets as builder
 from tools.lib.adiscord_ui_contracts import native_sprite_blocks
+from tools.lib.adiscord_ui_surfaces import _with_existing_newlines
 from tools.tests.test_validate_adiscord_gui_contracts import gui_node_body
 
 
@@ -93,6 +94,8 @@ class MarketUiContractTests(unittest.TestCase):
                     source[0],
                     f'textureFile = "gfx/interface/international_market/adiscord/{path.name}"',
                 )
+                # The builder drops the trailing tabs of native blocks.
+                expected = re.sub(r"(?m)[ \t]+$", "", expected)
                 self.assertIn(expected, gfx)
 
     def test_generated_outputs_are_current_and_have_no_vanilla_gfx_override(self):
@@ -104,7 +107,7 @@ class MarketUiContractTests(unittest.TestCase):
         for path, data in self.outputs.items():
             with self.subTest(path=path.relative_to(builder.ROOT)):
                 self.assertTrue(path.is_file())
-                self.assertTrue(path.read_bytes() == data)
+                self.assertTrue(path.read_bytes() == _with_existing_newlines(path, data))
 
     def test_purchase_equipment_labels_leave_room_for_quantity_and_convoys(self):
         gui = builder.render_gui("marketpurchasedraftwindow.gui")

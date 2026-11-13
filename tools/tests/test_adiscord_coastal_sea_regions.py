@@ -415,9 +415,12 @@ class CoastalSeaRegionTests(unittest.TestCase):
 
     def test_svetlogorye_massif_is_on_the_mainland_with_snowy_peaks(self) -> None:
         memberships = builder.load_states()
+        # After the NAM state split Svetlogorsk (688) holds Vysokoye 1710 and
+        # the residual coast (689) holds 2231.
+        massif_states = (67, 688, 689, 690, 719)
         self.assertTrue(
             geography.RELIEF_PROVINCES
-            <= memberships[67] | memberships[690] | memberships[719]
+            <= set().union(*(memberships[state] for state in massif_states))
         )
         self.assertEqual(
             len(
@@ -480,8 +483,14 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 )
                 slopes = np.abs(np.diff(elevation.astype(np.int16), axis=axis))
                 self.assertLessEqual(int(slopes[pairs].max()), 6)
+            # Provinces split out of the massif keep its generated surface, so
+            # the relief is recomputed over the whole surface mask.
+            surface = np.logical_or.reduce([
+                np.all(rgb == tuple(map(int, definitions[province][1:4])), axis=2)
+                for province in geography.RELIEF_SURFACE_PROVINCES
+            ])
             self.assertTrue(
-                np.array_equal(geography.mountain_heights(mask, elevation), elevation)
+                np.array_equal(geography.mountain_heights(surface, elevation), elevation)
             )
             for line in (ROOT / "map/unitstacks.txt").read_text().splitlines():
                 fields = line.split(";")
@@ -559,11 +568,13 @@ class CoastalSeaRegionTests(unittest.TestCase):
         self,
     ) -> None:
         memberships = builder.load_states()
-        for tag, capital in (("ORV", 455), ("ARS", 441)):
+        # Orval starts without territory and holds cores on its former
+        # mainland; Arsal owns its states.
+        for tag, capital, relation in (("ORV", 455, "add_core_of"), ("ARS", 441, "owner")):
             provinces = set()
             for path in (ROOT / "history/states").glob("*.txt"):
                 source = path.read_text(encoding="utf-8-sig")
-                if re.search(rf"\bowner\s*=\s*{tag}\b", source):
+                if re.search(rf"\b{relation}\s*=\s*{tag}\b", source):
                     state_id = int(re.search(r"\bid\s*=\s*(\d+)", source)[1])
                     provinces.update(memberships[state_id])
             self.assertEqual(

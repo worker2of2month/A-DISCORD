@@ -149,6 +149,66 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
                     ai,
                 )
 
+    def test_shabrat_ai_keeps_the_dispersal_price_under_watch(self) -> None:
+        triggers = read(TRIGGERS)
+        decisions = read(DECISIONS)
+        reserve = named_block(triggers, "STP_cw_shabrat_ai_cover_reserve_kept")
+        price = named_block(triggers, "STP_cw_can_pay_disperse_network")
+        tiers = re.findall(r"has_political_power < (\d+)", price)
+        kept = re.findall(r"has_political_power < (\d+)", reserve)
+
+        self.assertEqual(tiers, ["20", "40", "60", "80"])
+        self.assertEqual([int(value) for value in kept], [int(t) + 75 for t in tiers])
+        self.assertIn(
+            "var = STP_party_suspicion value = 50 compare = less_than", reserve
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = STP_sided_with_Maksim_flag }", reserve
+        )
+
+        veto = "modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_cover_reserve_kept = yes } }"
+        spenders = (
+            "STP_cw_raise_district_network",
+            "STP_cw_prepare_rifle_cache",
+            "STP_bargain_with_local_councils",
+            "STP_region_unique_operation_2",
+            "STP_region_unique_operation_3",
+            "STP_region_unique_operation_29",
+            "STP_region_unique_operation_45",
+            "STP_region_unique_operation_46",
+            "STP_region_unique_operation_53",
+            "STP_cw_sabotage_capital",
+            "STP_cw_sabotage_party_industry",
+            "STP_cw_prepare_defensive_line",
+            "STP_cw_open_civil_registers",
+            "STP_cw_negotiate_with_delegates",
+            "STP_cw_open_election_campaign",
+        )
+        for decision_id in spenders:
+            with self.subTest(decision=decision_id):
+                ai = named_block(named_block(decisions, decision_id), "ai_will_do")
+                self.assertIn(veto, ai)
+
+        official = named_block(
+            named_block(decisions, "STP_recruit_regional_official"), "ai_will_do"
+        )
+        self.assertIn("NOT = { STP_cw_shabrat_ai_cover_reserve_kept = yes }", official)
+        self.assertIn(
+            "FROM = { NOT = { STP_region_resistance_entrenched = yes } }", official
+        )
+
+        # Cover and transfer-completing actions are what the reserve pays for.
+        for decision_id in (
+            "STP_cw_disperse_network",
+            "STP_prepare_false_trail",
+            "STP_cw_sacrifice_local_contact",
+            "STP_cw_delay_inspection",
+            "STP_cw_secure_niansas_administration",
+        ):
+            with self.subTest(exempt=decision_id):
+                ai = named_block(named_block(decisions, decision_id), "ai_will_do")
+                self.assertNotIn("STP_cw_shabrat_ai_cover_reserve_kept", ai)
+
     def test_shabrat_ai_flips_districts_that_the_mandate_can_transfer(
         self,
     ) -> None:

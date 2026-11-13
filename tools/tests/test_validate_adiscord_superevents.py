@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import json
 import shutil
 import subprocess
 import tempfile
@@ -17,6 +18,7 @@ from tools.validators.validate_adiscord_superevents import (
     RU_LOC,
     SCRIPTED_GUI,
     collect_issues,
+    console_gateway_issues,
 )
 
 
@@ -39,6 +41,177 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_export_never_uses_graded_runtime_as_an_unprocessed_original(self):
+        from unittest.mock import patch
+        from tools.builders import build_adiscord_superevent_art as art
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "template.psd").write_bytes(b"template fixture")
+            (root / "runtime.png").write_bytes(b"graded artwork fixture")
+            row = {
+                "runtime_file": "runtime.png",
+                "source_sha256": art.digest(b"unprocessed artwork fixture"),
+                "runtime_sha256": art.digest(b"graded artwork fixture"),
+            }
+            manifest = {
+                "template": {"file": "template.psd", "sha256": art.digest(b"template fixture")},
+                "exports": {"fixture": row},
+            }
+            with patch.object(art, "ROOT", root), patch.object(art, "apply_template") as apply:
+                self.assertEqual(art.planned_outputs(manifest, root), {})
+                apply.assert_not_called()
+                (root / "runtime.png").write_bytes(b"modified graded artwork fixture")
+                with self.assertRaisesRegex(ValueError, "Original artwork required"):
+                    art.planned_outputs(manifest, root)
+                apply.assert_not_called()
+
+    def test_all_live_scenes_are_covered_by_the_art_effect_inventory(self):
+        from PIL import Image
+        from tools.validators.validate_adiscord_superevents import ART_SOURCES
+
+        manifest = json.loads((ROOT / ART_SOURCES).read_text(encoding="utf-8"))
+        covered = {row["runtime_file"] for row in manifest["exports"].values()}
+        covered.update(manifest["retained"])
+        covered.add("gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png")
+        live = {row["texture"] for row in manifest["bindings"].values()}
+        self.assertFalse(live - covered)
+        for row in manifest["exports"].values():
+            with self.subTest(texture=row["runtime_file"]):
+                with Image.open(ROOT / row["runtime_file"]) as image:
+                    self.assertEqual(image.size, (1001, 639))
+                    self.assertEqual(image.getchannel("A").getbbox(), (48, 82, 956, 592))
+
+    def test_valid_foreign_assets_cannot_replace_an_endings_scene_or_theme(self):
+        from tools.validators.validate_adiscord_superevents import (
+            ART_SOURCES, SOUND_EFFECTS, SOUNDS, presentation_asset_issues,
+        )
+
+        manifest = json.loads((ROOT / ART_SOURCES).read_text(encoding="utf-8"))
+        gfx = (ROOT / GFX).read_text(encoding="utf-8")
+        effects = (ROOT / SOUND_EFFECTS).read_text(encoding="utf-8")
+        sounds = (ROOT / SOUNDS).read_text(encoding="utf-8")
+        self.assertEqual(presentation_asset_issues(gfx, effects, sounds, manifest), [])
+        wrong_scene = gfx.replace(
+            "STP/superevent_stelander_tikhoreva.png",
+            "STP/superevent_stelander_shabrat_victory.png",
+        )
+        self.assertIn(
+            "superevent_stelander_tikhoreva: texture differs from its approved scene",
+            presentation_asset_issues(wrong_scene, effects, sounds, manifest),
+        )
+        wrong_theme = effects.replace(
+            "sound = superevent_stelander_party_victory_houses_sound",
+            "sound = superevent_stelander_shabrat_victory_sound",
+        )
+        self.assertIn(
+            "superevent_stelander_party_victory_houses: sound effect differs from its approved theme",
+            presentation_asset_issues(gfx, wrong_theme, sounds, manifest),
+        )
+        wrong_audio = sounds.replace(
+            "superevents/superevent_stelander_tikhoreva_sound.wav",
+            "superevents/superevent_stelander_shabrat_victory_sound.wav",
+        )
+        self.assertIn(
+            "superevent_stelander_tikhoreva: sample differs from its approved audio file",
+            presentation_asset_issues(gfx, effects, wrong_audio, manifest),
+        )
+
+    def test_council_proclamation_preserves_settlement_and_selects_one_card(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+
+        decisions = parse_clausewitz(
+            (ROOT / "common/decisions/ADISCORD_VAL_decisions.txt").read_text(encoding="utf-8")
+        )
+        decision = next(
+            row.value for category in decisions for row in category.value
+            if row.key == "VAL_proclaim_commonwealth"
+        )
+        payload = block(block(decision, "complete_effect"), "hidden_effect")
+        predicates = {
+            row.key: row.value for row in parse_clausewitz(
+                (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+            )
+        }
+
+        def matches(row, leader):
+            if row.key == "OR":
+                return any(matches(child, leader) for child in row.value)
+            if row.key == "has_country_leader":
+                self.assertEqual(scalar(row.value, "ruling_only"), "yes")
+                return scalar(row.value, "character") == leader
+            self.assertEqual(row.value, "yes")
+            return all(matches(child, leader) for child in predicates[row.key])
+
+        for leader, expected in (
+            ("VAL_Commanders_Council", "ADISCORD_superevent.73"),
+            ("VAL_Gleb_Osten", "ADISCORD_superevent.73"),
+            ("VAL_Tamara_Greitz", "ADISCORD_superevent.73"),
+            ("VAL_Arkadi_Lemm", "ADISCORD_superevent.73"),
+            ("VAL_Mikhail_Velsky", "ADISCORD_superevent.73"),
+            ("VAL_Valera_Solgalov", "ADISCORD_superevent.9"),
+        ):
+            with self.subTest(leader=leader):
+                calls = []
+                matched = False
+                for row in payload:
+                    if row.key == "VAL_adopt_commonwealth":
+                        calls.append((row.key, row.value))
+                    elif row.key == "if":
+                        matched = all(matches(child, leader) for child in block(row.value, "limit"))
+                        if matched:
+                            calls.append(("country_event", scalar(block(row.value, "country_event"), "id")))
+                    elif row.key == "else":
+                        if not matched:
+                            calls.append(("country_event", scalar(block(row.value, "country_event"), "id")))
+                    else:
+                        self.fail(f"Unexpected proclamation effect: {row.key}")
+                self.assertEqual(calls, [("VAL_adopt_commonwealth", "yes"), ("country_event", expected)])
+
+    def test_every_presentation_has_a_console_entry_point(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        self.assertEqual(console_gateway_issues(source), [])
+        for entry in parse_clausewitz(source):
+            if entry.key != "country_event":
+                continue
+            event_id = scalar(entry.value, "id")
+            if not event_id.startswith("ADISCORD_superevent."):
+                continue
+            # These two entry points also select the campaign-specific presentation.
+            if event_id in ("ADISCORD_superevent.1", "ADISCORD_superevent.7"):
+                continue
+            with self.subTest(event_id=event_id):
+                self.assertEqual(scalar(entry.value, "hidden"), "yes")
+                self.assertEqual(scalar(entry.value, "is_triggered_only"), "yes")
+                immediate = block(entry.value, "immediate")
+                self.assertEqual(
+                    [row.key for row in immediate],
+                    ["set_temp_variable", "ADISCORD_superevent_enqueue"],
+                )
+                request = scalar(block(immediate, "set_temp_variable"), "ADISCORD_superevent_request")
+                self.assertIn(int(request), PRESENTATIONS_BY_ID)
+
+    def test_conditional_nam_selector_cannot_replace_a_dedicated_console_entry(self):
+        from tools.validators.validate_adiscord_superevents import _event_block
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        source = source.replace(_event_block(source, "ADISCORD_superevent.29"), "")
+        self.assertEqual(console_gateway_issues(source), [
+            "superevent_nam_resource_war: missing a dedicated ADISCORD_superevent.* entry point"
+        ])
+
+    def test_console_entry_rejects_an_unknown_presentation(self):
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        source = source.replace("ADISCORD_superevent_request = 71", "ADISCORD_superevent_request = 9999")
+        self.assertIn(
+            "ADISCORD_superevent.72: unknown presentation request 9999",
+            console_gateway_issues(source),
+        )
+
     def test_stalk_portal_audio_adds_effects_only_during_visual_flashes(self):
         import array
         import math
@@ -178,7 +351,7 @@ class SupereventContractTests(unittest.TestCase):
 
         with Image.open(ROOT / "gfx/interface/superevents/IVN/superevent_itora_legion_victory.png") as art:
             self.assertEqual(art.size, (1001, 639))
-            self.assertEqual(art.getbbox(), (48, 88, 956, 588))
+            self.assertEqual(art.getbbox(), (48, 82, 956, 592))
         for folder, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
             flag = ROOT / "gfx/flags" / folder / "IVN_unified_legion.tga"
             with Image.open(flag) as image:
@@ -654,7 +827,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 32, 24, 36, 20, 31, 23, 21, 29, 22, 19, 18, 25, 17, 16, 27, 10, 11, 9, 14, 1, 12, 26, 15, 13, 2, 28, 3, 4, 5, 7, 30, 8)
+        order = (6, 32, 24, 36, 20, 31, 23, 21, 29, 22, 18, 17, 16, 27, 10, 11, 9, 14, 1, 12, 26, 15, 13, 2, 28, 3, 4, 5, 7, 30, 8)
         order += tuple(sorted((i for i in PRESENTATIONS_BY_ID if i >= 37), reverse=True))
         self.assertEqual(set(order), set(PRESENTATIONS_BY_ID))
         for index in order + order:
@@ -670,12 +843,12 @@ class SupereventContractTests(unittest.TestCase):
         self.assertEqual(flags, set())
         self.assertEqual(map_openings, [order.index(74)])
         # A closed presentation can be replayed; no permanent deduplication lock.
-        request(19)
+        request(61)
         self.assertEqual(len(played), len(order) + 1)
         request(74)
         request(74)
         self.assertEqual(len(map_openings), 1)
-        window = fields(windows[PRESENTATIONS_BY_ID[19].name])
+        window = fields(windows[PRESENTATIONS_BY_ID[61].name])
         execute(fields(window["effects"])["superevents_button_click"])
         self.assertEqual(len(map_openings), 2)
         self.assertEqual(played[-1], "superevent_itora_stalk_portal")
@@ -921,7 +1094,7 @@ class SupereventContractTests(unittest.TestCase):
             if 'name = "GFX_superevent_itora_civilwar"' in block
         )
         texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
-        self.assertEqual(texture, "gfx/interface/superevents/NAM/superevent_resource_war.png")
+        self.assertEqual(texture, "gfx/interface/superevents/IVN/superevent_itora_civilwar.png")
         self.assertTrue((ROOT / texture).is_file())
 
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
@@ -952,7 +1125,7 @@ class SupereventContractTests(unittest.TestCase):
             if 'name = "GFX_superevent_rus_khan_defeated"' in block
         )
         texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
-        self.assertEqual(texture, "gfx/interface/superevents/NAM/superevent_resource_war.png")
+        self.assertEqual(texture, "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png")
         self.assertTrue((ROOT / texture).is_file())
 
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
@@ -1043,27 +1216,30 @@ class SupereventContractTests(unittest.TestCase):
                 values.append(matches[0])
             self.assertEqual(len(set(values)), 4)
 
-    def test_joint_victory_is_separate_from_vlad_and_uses_council_art(self) -> None:
-        from tools.validators.validate_adiscord_superevents import blocks, _event_block
+    def test_joint_victory_is_news_without_a_superevent_queue_entry(self) -> None:
+        from tools.validators.validate_adiscord_superevents import _event_block
 
-        name = "superevent_vorkerland_joint_victory"
-        events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
-        event = _event_block(events, "ADISCORD_superevent.16")
-        self.assertIn("ADISCORD_superevent_request = 19", event)
-        self.assertIn("ADISCORD_superevent_enqueue = yes", event)
-        for forbidden in ("set_cosmetic_tag", "annex_country", "declare_war_on"):
+        self.assertNotIn(19, PRESENTATIONS_BY_ID)
+        for relative in (
+            "events/ADISCORD_superevents.txt",
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "common/scripted_guis/superevents.txt",
+            "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt",
+            "interface/superevents.gui",
+            "interface/superevents.gfx",
+            "sound/superevents_effects.asset",
+            "sound/superevents_category.asset",
+        ):
+            source = (ROOT / relative).read_text(encoding="utf-8")
+            self.assertNotIn("superevent_vorkerland_joint_victory", source, relative)
+        events = (ROOT / "events/ADISCORD_vorkerland_events.txt").read_text(encoding="utf-8")
+        event = _event_block(events, "ADISCORD_vorkerland_postwar.7")
+        self.assertTrue(event.lstrip().startswith("news_event = {"))
+        self.assertIn("major = yes", event)
+        self.assertIn("is_triggered_only = yes", event)
+        self.assertIn("fire_only_once = yes", event)
+        for forbidden in ("immediate", "hidden = yes", "ADISCORD_superevent", "country_event"):
             self.assertNotIn(forbidden, event)
-        gfx = (ROOT / GFX).read_text(encoding="utf-8")
-        sprite = next(block for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
-                      if f'name = "GFX_{name}"' in block)
-        self.assertIn('textureFile = "gfx/interface/superevents/WRK/'
-                      'superevent_west_council.png"', sprite)
-        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
-        timeout = blocks(source, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
-        self.assertIn(f"flag = {name} days > 6", timeout)
-        self.assertIn(f"clr_global_flag = {name}", timeout)
-        self.assertLess(timeout.index(f"clr_global_flag = {name}"),
-                        timeout.index("ADISCORD_superevent_dispatch_next = yes"))
 
     def test_joint_victory_selection_and_announced_guard_execute_source(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -1144,9 +1320,10 @@ class SupereventContractTests(unittest.TestCase):
                     scheduled = []
                     payload = [entry for entry in route if entry.key != "limit"]
                     execute(payload, flags, shown)
-                    expected = "joint" if joint else "vlad"
+                    expected = ("ADISCORD_vorkerland_show_joint_victory_news" if joint
+                                else "ADISCORD_vorkerland_show_vlad_victory_superevent")
                     self.assertEqual(shown, [] if announced else [
-                        f"ADISCORD_vorkerland_show_{expected}_victory_superevent"
+                        expected
                     ])
                     first_shown = list(shown)
                     self.assertEqual(scheduled, [
@@ -1157,19 +1334,14 @@ class SupereventContractTests(unittest.TestCase):
                     self.assertEqual(shown, first_shown)
                     self.assertEqual(scheduled, first_scheduled)
 
-    def test_joint_localisation_precedes_fallback_and_has_its_own_flag(self) -> None:
+    def test_joint_news_dispatch_stays_in_the_winning_country(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
 
-        source = (ROOT / "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt").read_text(encoding="utf-8")
-        for suffix in ("title", "quote", "comment"):
-            name = f"superevent_vorkerland_joint_victory_{suffix}"
-            getter = next(block for block in blocks(source, r"^defined_text\s*=\s*\{")
-                          if f"localization_key = {name}" in block)
-            choice = next(block for block in blocks(getter, r"^\s*text\s*=\s*\{")
-                          if f"localization_key = {name}" in block)
-            self.assertIn("has_global_flag = superevent_vorkerland_joint_victory", choice)
-            self.assertNotIn("superevent_vorkerland_vlad_victory", choice)
-            self.assertLess(getter.index(name), getter.index(f"superevent_inactive_{suffix}"))
+        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        show = blocks(source, r"^ADISCORD_vorkerland_show_joint_victory_news\s*=\s*\{")[0]
+        self.assertIn("news_event = { id = ADISCORD_vorkerland_postwar.7 }", show)
+        self.assertNotIn("random_country", show)
+        self.assertNotIn("ADISCORD_superevent_enqueue", show)
 
     def test_inventory_order_is_canonical(self) -> None:
         self.assertEqual(
@@ -1187,19 +1359,19 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_nam_resource_war",
                 "superevent_rus_last_empire",
                 "superevent_val_commonwealth",
+                "superevent_val_council_proclamation",
+                "superevent_south_war",
                 "superevent_stelander_great",
                 "superevent_rus_black_banner",
                 "superevent_rus_restoration",
                 "superevent_itora_vorkerland_war",
                 "superevent_itora_civilwar",
                 "superevent_rus_khan_defeated",
-                "superevent_vorkerland_joint_victory",
                 "superevent_stelander_sotnikov_civilwar",
                 "superevent_stelander_sotnikov_directory",
                 "superevent_stelander_sotnikov_charter",
                 "superevent_stelander_shabrat_republic",
                 "superevent_stelander_tikhoreva",
-                "superevent_rus_khan_died",
                 "superevent_nam_resource_war_service",
                 "superevent_nam_resource_war_district",
                 "superevent_stelander_party_victory_houses",
@@ -1334,8 +1506,25 @@ class SupereventContractTests(unittest.TestCase):
             texture = "gfx/interface/superevents/NAM/superevent_resource_war.png"
             (root / texture).unlink()
             issues = collect_issues(root)
-            for scene in ("nam_resource_war", "itora_civilwar", "rus_khan_defeated"):
-                self.assertIn(f"GFX_superevent_{scene}: missing texture {texture}", issues)
+            self.assertIn(f"GFX_superevent_nam_resource_war: missing texture {texture}", issues)
+            self.assertFalse(
+                any("GFX_superevent_rus_khan_defeated: missing texture" in issue for issue in issues)
+            )
+            khan_texture = "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png"
+            (root / khan_texture).unlink()
+            self.assertIn(
+                f"GFX_superevent_rus_khan_defeated: missing texture {khan_texture}",
+                collect_issues(root),
+            )
+            self.assertFalse(
+                any("GFX_superevent_itora_civilwar: missing texture" in issue for issue in issues)
+            )
+            texture = "gfx/interface/superevents/IVN/superevent_itora_civilwar.png"
+            (root / texture).unlink()
+            self.assertIn(
+                f"GFX_superevent_itora_civilwar: missing texture {texture}",
+                collect_issues(root),
+            )
 
     def test_orphan_scripted_gui_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

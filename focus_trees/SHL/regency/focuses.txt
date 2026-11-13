@@ -1,8 +1,9 @@
 # @section regency
 # Курс 4: Регентство (Наследственная республика). Секция главного дерева SHL_focus: корень SHL_regency_council следует за
 # SHL_regency_of_crests; координаты абсолютные, блок курса стоит под стволом
-# (x 76-92, y 15-25). Фронт Юга и корона Юга подключены
-# в главном дереве как shared_focus.
+# (x 76-92, y 15-25). Корона Юга подключена
+# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
+# войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_regency_council
 		icon = GFX_focus_generic_monarchist_sentiment
@@ -911,64 +912,6 @@
 			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = SHL_r_hire_armies
-		icon = GFX_focus_generic_desert_training
-		x = 77
-		y = 25
-		cost = 2
-		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_war_of_arms
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			unlock_decision_tooltip = SHL_hire_desert_guard
-			custom_effect_tooltip = SHL_r_hire_armies_tt
-			hidden_effect = {
-				SHL_ensure_levy_template = yes
-				699 = {
-					if = {
-						limit = {
-							is_owned_by = SHL
-							is_controlled_by = SHL
-						}
-						SHL_create_levy = yes
-					}
-				}
-			}
-		}
-		ai_will_do = { base = 150 }
-	}
-
-	focus = {
-		id = SHL_r_sell_future
-		icon = GFX_goal_generic_trade
-		x = 81
-		y = 25
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_war_of_arms
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			unlock_decision_tooltip = SHL_sell_concessions
-			custom_effect_tooltip = SHL_r_sell_future_tt
-		}
-		ai_will_do = { base = 120 }
 	}
 
 	# ----- После войны: лены и долги -----

@@ -57,7 +57,7 @@ guiTypes = {
 
 			background = {
 				name = "Background"
-				spriteType ="GFX_intelligence_agency_header"
+				spriteType ="GFX_ADISCORD_intelligence_agency_header"
 				alwaystransparent = yes
 			}
 

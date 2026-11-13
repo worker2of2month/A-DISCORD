@@ -917,11 +917,11 @@
       "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "fb77f165affe3362d8cfaecc05ad3a12e885394ecaf49b6494e59480b2cff067",
+    "blend_sha256": "f5de5ad8d79047d28758b38a6af7028671d7924d2a800b3de9e70b6e52328625",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "NAM_early_cas": {
@@ -954,11 +954,11 @@
       "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "84e4e09111ea9527200a4217396c6124294a37b8654f4bfc038810dfe33e8864",
+    "blend_sha256": "c62a1f80a40bbd9ef079eb0f08ef60dedf22a1311e9e11db8d2ad02717ceb76c",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "NAM_fighter": {
@@ -991,11 +991,11 @@
       "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "6c0c5ce7171d91499c911201be1149037c4595b4cfa9f35dd1cebd504d343368",
+    "blend_sha256": "94e2a4aac5ae8b7ff39be19663be4826570011365d468584c6c685f58b8527b4",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "NAM_cas": {
@@ -1028,11 +1028,11 @@
       "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "49f264b637d31ec1a241c51ab7b746e048c0c7c88b5e48156c6e1a92d2812cbb",
+    "blend_sha256": "c6b0b92ada22cb61b51188fc653ce2ba0fab05e2966095d3c38731e4d234ef5f",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "NAM_future_fighter": {
@@ -1065,11 +1065,11 @@
       "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "f38f946a353054dc6601fbc95ba9bbd16e6cf80356c9c2d859f0da887a8f716f",
+    "blend_sha256": "d4a771a049ec81fd22bc75edb08964567c719d5508817b2d4fe115eb7c7aa227",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "NAM_future_cas": {
@@ -1102,11 +1102,11 @@
       "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
       "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
     },
-    "blend_sha256": "58e940c9c973b296b06aa9e07c6576e503bfa2304d4feb7b53701b1325fc45eb",
+    "blend_sha256": "f8b05e28d1d4ad03c75f25e57780b8de8a3ab2421f6c4c33cb04715066c3d8fe",
     "source_hashes": {
-      "tools/assets/source/build_country_aircraft.py": "3bdf92de4283411468c32d23f31358612301d9eac9acc59ce5bc01a3cbd490bb",
+      "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
       "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-      "tools/assets/source/country_vehicles/package_vehicles.py": "278ac07a5c59c2cd6faf1cacda4924f0e321d51d65bd1831f8ff30231164314a"
+      "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
     }
   },
   "SHL_cas": {

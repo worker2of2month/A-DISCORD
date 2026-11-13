@@ -99,6 +99,7 @@ ADISCORD_ai_raise_war_economy = {
 ADISCORD_produce_squad_weapons_low_stock = {
 	enable = {
 		num_of_military_factories > 1
+		ADISCORD_ai_small_air_replacement = no
 		has_equipment = { ADISCORD_squad_weapons_equipment < 600 }
 		OR = {
 			has_war = no
@@ -109,6 +110,7 @@ ADISCORD_produce_squad_weapons_low_stock = {
 	abort = {
 		OR = {
 			num_of_military_factories < 2
+			ADISCORD_ai_small_air_replacement = yes
 			has_equipment = { ADISCORD_squad_weapons_equipment > 1200 }
 			AND = {
 				has_war = yes
@@ -271,12 +273,31 @@ ADISCORD_default_maritime_air_demand = {
 
 ADISCORD_limited_air_program = {
 	enable = {
-		num_of_military_factories > 5
+		ADISCORD_ai_can_develop_air_force = yes
 		has_tech = ADISCORD_tech_reclaimed_jet_platforms
-		ADISCORD_ai_rifle_replacement_emergency = no
+		any_controlled_state = { air_base > 0 }
+		OR = {
+			AND = {
+				num_of_military_factories > 5
+				ADISCORD_ai_rifle_replacement_emergency = no
+			}
+			ADISCORD_ai_small_air_replacement = yes
+		}
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = equipment_production_min_factories id = fighter value = 1 }
+}
+
+# Native construction pays for the first airfield before reserving a factory
+# for aircraft. A one-factory industry retains its basic weapons capacity.
+ADISCORD_first_airfield = {
+	enable = {
+		ADISCORD_ai_can_develop_air_force = yes
+		num_of_military_factories > 1
+		NOT = { any_controlled_state = { air_base > 0 } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = building_target id = air_base value = 1 }
 }
 
 ADISCORD_expanded_air_program = {

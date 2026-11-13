@@ -1,8 +1,9 @@
 # @section directorate
 # Курс 3: Дирекция Нура. Секция главного дерева SHL_focus: корень SHL_war_directorate следует за
 # SHL_state_furnaces; координаты абсолютные, блок курса стоит под стволом
-# (x 53-72, y 15-23). Фронт Юга и корона Юга подключены
-# в главном дереве как shared_focus.
+# (x 53-72, y 15-23). Корона Юга подключена
+# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
+# войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_war_directorate
 		icon = GFX_focus_generic_military_industry
@@ -963,64 +964,6 @@
 			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
-	}
-
-	# Военные фокусы курса: видны с началом войны за Юг, как общий фронт.
-
-	focus = {
-		id = SHL_d_war_orders_all
-		icon = GFX_focus_generic_money_for_equipment
-		x = 56
-		y = 23
-		cost = 2
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_last_pour
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 6750
-				producer = SHL
-			}
-			add_war_support = 0.05
-		}
-		ai_will_do = { base = 150 }
-	}
-
-	focus = {
-		id = SHL_d_guard_to_front
-		icon = GFX_focus_generic_soldier_salute
-		x = 58
-		y = 23
-		cost = 3
-		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_last_pour
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-			699 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			custom_effect_tooltip = SHL_d_guard_to_front_tt
-			hidden_effect = {
-				SHL_raise_paid_levies_2 = yes
-			}
-		}
-		ai_will_do = { base = 150 }
 	}
 
 	# ----- После войны: Железный Юг -----

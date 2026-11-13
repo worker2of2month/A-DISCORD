@@ -4,7 +4,7 @@
  ADISCORD_rin_oath_crisis_category: "Rina's Two Oaths"
  ADISCORD_rin_oath_crisis_category_desc: "Vorkerland's collapse has deprived the palatine court of the ability to serve both the northern crown and the southern charters."
  ADISCORD_rin_palatin_breakup_mission: "The Breakup of the Rina Palatinate"
- ADISCORD_rin_palatin_breakup_mission_desc: "The northern court holds the Palatine Court and the old crown lands, while the southern cities defend their Vorkerland charters. If neither side wins within 180 days, the line of division will become the basis of a forced armistice."
+ ADISCORD_rin_palatin_breakup_mission_desc: "The northern court holds the Palatine Court and the old crown lands, while the southern cities defend their Vorkerland charters."
  ADISCORD_action_cost_treasury_50: "§Y50§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_action_cost_treasury_50_blocked: "§R50§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_action_cost_treasury_100: "§Y100§! £ADISCORD_economy_treasury_texticon"
@@ -247,3 +247,4 @@
  TOPBAR_OFFICER_CORP_DESC: "Manage advisors and theorists, select spirits for the army, navy and air force, and unlock doctrines."
  IDEA_COST_NAVY_XP: "Cost: $VALUE|-0$ £navy_experience"
  IDEA_COST_COMPACT_NAVY_XP: "$VALUE|0$ £navy_experience£"
+ ADISCORD_rin_palatin_breakup_mission_description_rules_tt:0 "If neither side wins within 180 days, the line of division will become the basis of a forced armistice."

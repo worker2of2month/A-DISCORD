@@ -189,9 +189,10 @@ def validate() -> list[str]:
             issues.append(
                 f"shared AIN localisation lost its UTF-8 BOM: {localisation_path.relative_to(ROOT)}"
             )
+        # Party names carry a leading party texticon in the shared party file.
         for key, value in expected_entries.items():
             if not re.search(
-                rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', source
+                rf'(?m)^\s*{re.escape(key)}:\s*"(?:£\S+ )?{re.escape(value)}"\s*$', source
             ):
                 issues.append(f"AIN localisation lacks synchronized key {key}")
 

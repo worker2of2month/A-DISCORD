@@ -292,11 +292,24 @@ def replace_counted(
     return text.replace(old_token, f'"{new}"')
 
 
+TEXT_OUTPUT_SUFFIXES = frozenset({".gui", ".gfx", ".txt", ".yml", ".asset", ".lua"})
+
+
+def _with_existing_newlines(path: Path, data: bytes) -> bytes:
+    """Builders render LF; a checkout may hold the same text with CRLF endings."""
+    if path.suffix not in TEXT_OUTPUT_SUFFIXES or not path.is_file():
+        return data
+    if b"\r\n" in path.read_bytes() and b"\r\n" not in data:
+        return data.replace(b"\n", b"\r\n")
+    return data
+
+
 def apply_or_check(
     outputs: dict[Path, bytes],
     apply: bool,
     label: str,
 ) -> int:
+    outputs = {path: _with_existing_newlines(path, data) for path, data in outputs.items()}
     stale = [
         path
         for path, data in outputs.items()

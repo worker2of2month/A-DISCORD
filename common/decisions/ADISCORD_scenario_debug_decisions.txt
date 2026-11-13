@@ -3,7 +3,10 @@ ADISCORD_scenario_debug_category = {
 		allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
 		visible = { ADISCORD_vorkerland_is_not_wartime_claimant = yes NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } }
 		cost = 0
-		complete_effect = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_start_vorkerland_collapse_description_rules_tt
+			country_event = { id = ADISCORD_vorkerland_collapse.1 }
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -24,6 +27,7 @@ ADISCORD_scenario_debug_category = {
 		available = { RUS = { exists = yes } }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_open_vorkerland_dirty_zone_description_rules_tt
 			# Preserve the real reveal contract: only skip the timer, then let .85
 			# own the superevent and the staggered Dirty Zone country cascade.
 			set_global_flag = ADISCORD_vorkerland_dirty_reveal_v2_scheduled
@@ -43,6 +47,7 @@ ADISCORD_scenario_debug_category = {
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_add_vorkerland_war_exhaustion_description_rules_tt
 			add_to_variable = {
 				var = ADISCORD_vorkerland_civil_war_exhaustion
 				value = 25
@@ -67,7 +72,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 		cost = 0
-		complete_effect = { ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_reset_vorkerland_war_exhaustion_description_rules_tt
+			ADISCORD_vorkerland_reset_civil_war_exhaustion = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -88,7 +96,10 @@ ADISCORD_scenario_debug_category = {
 			}
 		}
 		cost = 0
-		complete_effect = { ADISCORD_vorkerland_form_joint_government = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_form_vorkerland_joint_government_description_rules_tt
+			ADISCORD_vorkerland_form_joint_government = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -106,6 +117,7 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_force_vorkerland_central_victory_description_rules_tt
 			if = {
 				limit = { tag = WKR }
 				ADISCORD_vorkerland_apply_worker_map = yes
@@ -127,6 +139,7 @@ ADISCORD_scenario_debug_category = {
 		visible = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved } }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_open_ivanland_intervention_description_rules_tt
 			if = {
 				limit = {
 					NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
@@ -144,7 +157,10 @@ ADISCORD_scenario_debug_category = {
 		allowed = { tag = IVN }
 		visible = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
 		cost = 0
-		complete_effect = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_resolve_ivanland_success_description_rules_tt
+			ADISCORD_vorkerland_ivanland_intervention_success = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -152,7 +168,10 @@ ADISCORD_scenario_debug_category = {
 		allowed = { tag = IVN }
 		visible = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
 		cost = 0
-		complete_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_resolve_ivanland_failure_description_rules_tt
+			ADISCORD_vorkerland_ivanland_intervention_failure = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -323,7 +342,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		visible = { NAM = { NAM_rw_deadline_open = yes } }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_add_tension = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_add_tension_description_rules_tt
+			ADISCORD_nam_debug_add_tension = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -338,7 +360,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		visible = { country_exists = NAM }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_damage_fields = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_damage_fields_description_rules_tt
+			ADISCORD_nam_debug_damage_fields = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -353,7 +378,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		visible = { NAM = { NAM_ladder_formed = yes } }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_rival_demand = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_rival_demand_description_rules_tt
+			ADISCORD_nam_debug_rival_demand = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -368,7 +396,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		visible = { country_exists = NAM }
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_underground = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_underground_description_rules_tt
+			ADISCORD_nam_debug_underground = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -388,7 +419,10 @@ ADISCORD_scenario_debug_category = {
 			}
 		}
 		cost = 0
-		complete_effect = { ADISCORD_nam_debug_war_of_return = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_war_of_return_description_rules_tt
+			ADISCORD_nam_debug_war_of_return = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -476,6 +510,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_fund_treasury_description_rules_tt
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
 			hidden_effect = { add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 } }
 			ADISCORD_economy_mark_dirty = yes
@@ -490,6 +525,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_balance_crests_description_rules_tt
 			add_power_balance_value = { id = SHL_conclave_balance value = -0.30 }
 		}
 		ai_will_do = { factor = 0 }
@@ -501,6 +537,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_balance_quarters_description_rules_tt
 			add_power_balance_value = { id = SHL_conclave_balance value = 0.30 }
 		}
 		ai_will_do = { factor = 0 }
@@ -515,6 +552,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_ratify_houses_description_rules_tt
 			if = {
 				limit = { has_idea = SHL_hereditary_seats }
 				remove_ideas = SHL_hereditary_seats
@@ -534,6 +572,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_ratify_cities_description_rules_tt
 			if = {
 				limit = { has_idea = SHL_hereditary_seats }
 				remove_ideas = SHL_hereditary_seats
@@ -553,6 +592,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_ratify_directorate_description_rules_tt
 			if = {
 				limit = { has_idea = SHL_hereditary_seats }
 				remove_ideas = SHL_hereditary_seats
@@ -572,7 +612,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		fire_only_once = no
-		complete_effect = { SHL_commit_regency_course = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_regency_description_rules_tt
+			SHL_commit_regency_course = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -584,7 +627,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		fire_only_once = no
-		complete_effect = { SHL_commit_commune_course = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_commune_description_rules_tt
+			SHL_commit_commune_course = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -604,6 +650,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_house_demand_description_rules_tt
 			set_variable = { var = SHL_demand_cycle value = 4 }
 			SHL_house_demand_tick = yes
 		}
@@ -619,6 +666,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_life_vignette_description_rules_tt
 			clr_country_flag = SHL_life_cooldown
 			country_event = { id = ADISCORD_shl_life.20 }
 		}
@@ -634,6 +682,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_south_hegemon_description_rules_tt
 			set_global_flag = ADISCORD_south_final_resolved
 			set_global_flag = ADISCORD_south_hegemon_SHL
 			mark_focus_tree_layout_dirty = yes
@@ -649,6 +698,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_advance_cycle_description_rules_tt
 			SHL_produce_period = yes
 			SHL_refresh_furnaces = yes
 			SHL_update_tensions = yes
@@ -672,6 +722,7 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_val_open_south_route_description_rules_tt
 			set_country_flag = ADISCORD_debug_val_south_route_active
 			set_country_flag = VAL_efl_concession_active
 			VAL_refresh_trade_network = yes
@@ -689,6 +740,7 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_val_close_south_route_description_rules_tt
 			clr_country_flag = ADISCORD_debug_val_south_route_active
 			clr_country_flag = VAL_efl_concession_active
 			clr_country_flag = VAL_route_south_commissioned
@@ -709,6 +761,7 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_val_upgrade_south_route_description_rules_tt
 			set_country_flag = VAL_route_south_upgraded
 			set_country_flag = VAL_route_south_commissioned
 			VAL_refresh_trade_network = yes
@@ -725,7 +778,10 @@ ADISCORD_scenario_debug_category = {
 			has_variable = VAL_corridor_project
 		}
 		cost = 0
-		complete_effect = { VAL_refund_corridor_project = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_val_reset_corridor_project_description_rules_tt
+			VAL_refund_corridor_project = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -738,6 +794,7 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_val_fund_treasury_description_rules_tt
 			# The ledger books the difference, so the next settlement explains it.
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_debug_treasury_delta_temp value = 5000 }
@@ -768,6 +825,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_log_on_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -791,6 +849,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_log_off_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -812,6 +871,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_snapshot_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -850,6 +910,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_start_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -894,6 +955,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_check_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -917,6 +979,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_abort_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -955,6 +1018,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_sts_vs_val_description_rules_tt
 			STS = { set_country_flag = VAL_stelander_refused }
 			declare_war_on = { target = STS type = annex_everything }
 			VAL_call_subjects_to_wars = yes
@@ -992,6 +1056,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_sts_vs_nod_description_rules_tt
 			NOD = { declare_war_on = { target = STS type = annex_everything } }
 		}
 		ai_will_do = { factor = 0 }
@@ -1029,6 +1094,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_sts_vs_val_nod_description_rules_tt
 			STS = { set_country_flag = VAL_stelander_refused }
 			declare_war_on = { target = STS type = annex_everything }
 			NOD = { declare_war_on = { target = STS type = annex_everything } }
@@ -1062,6 +1128,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_stp_vs_val_description_rules_tt
 			STP = { set_country_flag = VAL_stelander_refused }
 			declare_war_on = { target = STP type = annex_everything }
 			VAL_call_subjects_to_wars = yes
@@ -1099,6 +1166,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_stp_vs_nod_description_rules_tt
 			STP = {
 				clr_country_flag = STP_pw_party_nod_compact
 				clr_country_flag = STP_pw_party_nod_invasion_defeated
@@ -1143,6 +1211,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_stp_vs_val_nod_description_rules_tt
 			STP = {
 				clr_country_flag = STP_pw_party_nod_compact
 				clr_country_flag = STP_pw_party_nod_invasion_defeated
@@ -1186,6 +1255,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_frontier_with_nod_description_rules_tt
 			if = {
 				limit = { FROM = { tag = CIN } }
 				set_variable = { var = VAL_frontier_target value = 1 }
@@ -1237,6 +1307,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_join_sts_nod_description_rules_tt
 			clr_country_flag = VAL_joint_nod_settlement_completed
 			NOD = { clr_country_flag = VAL_joint_nod_campaign_target }
 			STS = { declare_war_on = { target = NOD type = annex_everything } }
@@ -1268,6 +1339,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_vs_nod_description_rules_tt
 			clr_country_flag = VAL_joint_nod_campaign_with_sts
 			set_variable = { var = VAL_final_crisis_phase value = 2 }
 			NOD = { VAL_final_crisis_register_member = yes }
@@ -1291,7 +1363,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_debug_force_nodrul_victory = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_nod_victory_description_rules_tt
+			VAL_debug_force_nodrul_victory = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -1312,7 +1387,10 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_debug_force_current_war_victory = yes }
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_victory_description_rules_tt
+			VAL_debug_force_current_war_victory = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -1339,6 +1417,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_val_nod_reconcile_description_rules_tt
 			if = {
 				limit = {
 					NOD = {
@@ -1372,6 +1451,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_external_cleanup_description_rules_tt
 			if = {
 				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 				VAL_frontier_close = yes
@@ -1437,6 +1517,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_war_reserves_description_rules_tt
 			if = {
 				limit = {
 					is_debug = yes
@@ -1462,6 +1543,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_portal_open_description_rules_tt
 			set_global_flag = ADISCORD_debug_portal_open
 			country_event = { id = ADISCORD_portal_test.1 }
 		}
@@ -1478,6 +1560,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_portal_close_description_rules_tt
 			clr_global_flag = ADISCORD_debug_portal_open
 			log = "ADISCORD_PORTAL close"
 			218 = {
@@ -1498,6 +1581,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_orbital_laser_fire_description_rules_tt
 			set_global_flag = ADISCORD_debug_orbital_laser_active
 			country_event = { id = ADISCORD_orbital_laser_test.1 }
 		}
@@ -1514,6 +1598,7 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_debug_orbital_laser_clear_description_rules_tt
 			clr_global_flag = ADISCORD_debug_orbital_laser_active
 			log = "ADISCORD_ORBITAL_LASER clear"
 			125 = {
@@ -1545,6 +1630,7 @@ ADISCORD_test_wars_category = {
 		cost = 0
 
 		complete_effect = {
+			custom_effect_tooltip = APH_start_test_war_with_OSF_description_rules_tt
 			set_global_flag = ADISCORD_aph_osf_test_war_active
 			clr_global_flag = ADISCORD_aph_osf_test_war_finished
 			clr_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked

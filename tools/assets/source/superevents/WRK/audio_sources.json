@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "sound_effect_sources": {
+    "sfx_rail_lever.flac": {
+      "file": "sfx_rail_lever.flac",
+      "title": "Gear metallic lock sound",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/metal/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2858/2858-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.098594,
+      "sha256": "0dcea6a4463af9119a4c849fd728146d006a28f4c396ab342719e58a8f19ee4c"
+    },
+    "sfx_steam_release.flac": {
+      "file": "sfx_steam_release.flac",
+      "title": "Steam swoosh",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/steam/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1458/1458-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.680476,
+      "sha256": "8675ddb1e043d62e8c9161d602613958daed7d2b3357c7d8a7b8dff4053b6d5c"
+    },
+    "sfx_train_departure.flac": {
+      "file": "sfx_train_departure.flac",
+      "title": "Old train departure",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/train/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1628/1628-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 107.269751,
+      "sha256": "c75a7723f5a0e9241224fdfd947d6fb4955eaaffd053ac3a3ebc0253c59339f7"
+    },
+    "sfx_steam_train_passing.flac": {
+      "file": "sfx_steam_train_passing.flac",
+      "title": "Steam train passing",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/train/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1630/1630-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 15.15932,
+      "sha256": "e04aefc440669831f6d9bdd00ce95c04f45f9bcab189acb3d77ca5a8252dacb1"
+    },
+    "sfx_distant_train_horn.flac": {
+      "file": "sfx_distant_train_horn.flac",
+      "title": "Distant train horn",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/train/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1654/1654-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 5.095533,
+      "sha256": "5cbe7879664fb3ab9526f467251536688713c9b20cd9eae50e6d9dcd4c664157"
+    }
+  },
+  "superevent_west_world_empire_sound": {
+    "music": {
+      "artist": "Arcana",
+      "title": "The Opening of the Wound",
+      "album": "Dark Age of Reason",
+      "source_page": "https://arcana.bandcamp.com/track/the-opening-of-the-wound",
+      "file": "arcana_opening_of_the_wound_excerpt.flac",
+      "excerpt_seconds": [
+        30,
+        86
+      ],
+      "sha256": "533b3a4e15b5718ca48d3bb03043b67a3225409b1c73168ea8bf80f506ad44ac",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "WRK/sfx_rail_lever.flac",
+        "start": 2,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.4,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "WRK/sfx_steam_release.flac",
+        "start": 4,
+        "offset": 0,
+        "duration": 1.68,
+        "gain": 0.18,
+        "fade": 0.1,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "WRK/sfx_distant_train_horn.flac",
+        "start": 7,
+        "offset": 0,
+        "duration": 5.09,
+        "gain": 0.22,
+        "fade": 0.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "WRK/sfx_train_departure.flac",
+        "start": 11,
+        "offset": 15,
+        "duration": 26,
+        "gain": 0.18,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "WRK/sfx_steam_train_passing.flac",
+        "start": 35,
+        "offset": 0,
+        "duration": 15.15,
+        "gain": 0.12,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "WRK/sfx_distant_train_horn.flac",
+        "start": 47,
+        "offset": 0,
+        "duration": 5.09,
+        "gain": 0.1,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_west_world_empire_sound.wav",
+    "runtime_sha256": "9400e206d17e2d56c61bc1a6bee72d155fcfd764fde0e5dd5db207f7b4ec6d0f"
+  }
+}

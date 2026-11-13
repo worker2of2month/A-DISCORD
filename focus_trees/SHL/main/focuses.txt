@@ -12,7 +12,6 @@ focus_tree = {
 	# The second row of branches (focus_trees/SHL/shared, x 33-67) is visible from
 	# the first day and survives ratification because every course tree references
 	# the same roots.
-	shared_focus = SHL_south_furnaces_to_front
 	shared_focus = SHL_south_crown_of_the_south
 	shared_focus = SHL_four_districts
 	shared_focus = SHL_chancery_of_the_gate

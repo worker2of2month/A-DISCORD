@@ -22,8 +22,10 @@ SOURCES = {
     "NAM/exile_radical/focuses.txt": "ADISCORD_NAM_exile_radical.txt",
     "NAM/exile_humanist/focuses.txt": "ADISCORD_NAM_exile_humanist.txt",
     "NAM/exile_corporate/focuses.txt": "ADISCORD_NAM_exile_corporate.txt",
+    "NAM/south_war/focuses.txt": "ADISCORD_NAM_south_war.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "SHL/shared/focuses.txt": "ADISCORD_SHL_shared.txt",
+    "SHL/south_war/focuses.txt": "ADISCORD_SHL_south_war.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
     "IVN/legion/focuses.txt": "ADISCORD_IVC_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
@@ -55,11 +57,21 @@ SECTION = re.compile(r"(?m)^# @section (\w+)\n")
 # WKR copies WRK completion through the prewar tree before loading its own tree.
 # Shared history retains preparation rewards without displaying the old branches.
 # Restoration programmes keep their unlocks through a later cabinet transition.
+# The war for the South swaps each champion into its war tree and back: the
+# course trees, every Svetlogorye tree a champion can hold and both war trees
+# keep their completions across both swaps.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
     "NAM/wartime/focuses.txt",
+    "NAM/postwar/focuses.txt",
+    "NAM/defeated/focuses.txt",
     "NAM/exile_humanist/focuses.txt",
+    "NAM/exile_radical/focuses.txt",
+    "NAM/exile_corporate/focuses.txt",
+    "NAM/south_war/focuses.txt",
+    "SHL/main/focuses.txt",
+    "SHL/south_war/focuses.txt",
     "Vorkerland/prewar/focuses.txt",
     "Vorkerland/joint_postwar/focuses.txt",
 })
@@ -103,6 +115,9 @@ def render_shared_history_tree(source: str) -> str:
     if len(trees) != 1:
         raise ValueError("A shared-history source must contain exactly one focus tree")
     focuses = [row for row in trees[0].value if row.key == "focus"]
+    # A tree that already displays another source's shared root also displays
+    # that root's shared descendants, so a prerequisite on such a root is local.
+    referenced = {row.value for row in trees[0].value if row.key == "shared_focus"}
     definitions = {}
     prerequisites = {}
     for focus in focuses:
@@ -116,11 +131,11 @@ def render_shared_history_tree(source: str) -> str:
             for row in focus.value if row.key == "prerequisite"
             for child in row.value if child.key == "focus"
         }
-    unknown = set().union(*prerequisites.values()) - definitions.keys()
+    unknown = set().union(*prerequisites.values()) - definitions.keys() - referenced
     if unknown:
         raise ValueError(f"Shared-history prerequisites leave the source tree: {sorted(unknown)}")
     roots = {name for name, parents in prerequisites.items() if not parents}
-    covered = set(roots)
+    covered = roots | referenced
     while True:
         descendants = {
             name for name, parents in prerequisites.items() if parents & covered
@@ -129,7 +144,7 @@ def render_shared_history_tree(source: str) -> str:
         if expanded == covered:
             break
         covered = expanded
-    if covered != definitions.keys():
+    if covered - referenced != definitions.keys():
         raise ValueError(f"Shared-history roots cannot reach: {sorted(definitions.keys() - covered)}")
 
     offsets = [0]

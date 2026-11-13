@@ -2,7 +2,7 @@
   "style": "Original documentary intelligence dossier photograph for the fictional post-apocalyptic industrial world of A-Discord, circa 2160. Photorealistic candid archival surveillance still, not illustration or cinematic poster. Muted desaturated olive-grey palette, subtle analog grain, natural imperfect light, restrained contrast, readable broad shapes. Exactly ONE undercover agent in the scene: anonymize ONLY that agent's face with obvious coarse square mosaic redaction. All other people's faces are ordinary fully visible faces, absolutely no redaction on them. Slight gentle photographic softness across entire image, not strong defocus. No CRT scanlines (an exact supplied overlay is applied at export). No text, timestamps, UI, flags, brands, watermark, decorative border or collage. Landscape 5:4 composition, important action and agent safely inside central square for 210x176 and 85x85 crops.",
   "export": {
     "gaussian_blur_radius": 0.3,
-    "crt": "Supplied RGBA layer, resized to 448x255 and center-cropped; soft-light blend at original alpha after tonal normalization and light blur.",
+    "crt": "PSD CRTEffectUseGlow layer, resized to 448x255 and center-cropped; Linear Light with original pixel alpha and layer opacity, after tonal normalization and light blur.",
     "contrast": 1.08,
     "autocontrast_cutoff_percent": [
       0.3,
@@ -10,8 +10,12 @@
     ]
   },
   "overlay": {
-    "source_file": "CRTEffectUseGlow.png",
-    "sha256": "f0ce2c1e17ad48859f0fb405d6a32628efe01a119c4110a2094faf8aa36201e9"
+    "source_file": "tools/assets/source/Super_event_bg.psd",
+    "sha256": "37547716112d15e1e3ac3ce7a5774736e475bfe4fc56afb693fbcf1f2c7d81e2",
+    "layer": "CRTEffectUseGlow",
+    "blend_mode": "linear_light",
+    "layer_opacity": 255,
+    "pixel_alpha": 60
   },
   "scenes": {
     "military_mole": {
@@ -169,7 +173,7 @@
         85
       ],
       "scene": "resistance_supply",
-      "sha256": "bc569b38473e33c1e349467dcda232a51115cbbe879c726902aafd27951f3630"
+      "sha256": "fb5930ae4a555ad1adfa4734eaa3adec5156c4df29b6406174c44c8736a9fe59"
     },
     "GFX_operations_capture_ciphers": {
       "path": "gfx/interface/operations/capture_ciphers.dds",
@@ -178,7 +182,7 @@
         85
       ],
       "scene": "cipher",
-      "sha256": "cfb5ed116a21151b81406eb34a784bc8705b5fb91b37863b130019fb973acffd"
+      "sha256": "b0aa2a2016fde1726a3dc90982b8e3f968c755df741998a4cbbd5175169011bd"
     },
     "GFX_operations_collaboration_government": {
       "path": "gfx/interface/operations/collaboration_government.dds",
@@ -187,7 +191,7 @@
         85
       ],
       "scene": "collaboration",
-      "sha256": "d87f27c17b487a998e07194c19dba0a02974dfe193a098f613bec8b9bab64c45"
+      "sha256": "f11ccb6e17e7107132ce9d44df0518c6db4879e5099684e8d890daa95ec6d216"
     },
     "GFX_operations_coordinated_strike": {
       "path": "gfx/interface/operations/coordinated_strike.dds",
@@ -196,7 +200,7 @@
         85
       ],
       "scene": "strike",
-      "sha256": "92824a9b1573ee826dc877062dd0028160c8e940bda516f67926f3fa93cdf377"
+      "sha256": "2f065279725b5277a8da8a150e5654f87df8d4f76311e0653691635cec7b8879"
     },
     "GFX_operations_coup_government": {
       "path": "gfx/interface/operations/coup_government.dds",
@@ -205,7 +209,7 @@
         85
       ],
       "scene": "coup",
-      "sha256": "4d1a155b442435cec259507eea42309b4f730ba45dc079f75ffdf3d40e0ddae7"
+      "sha256": "0a4a64dc0941288411a94af6c4de1081f7ead2a197318b9cf09e474463b61dc2"
     },
     "GFX_operations_fake_intel": {
       "path": "gfx/interface/operations/fake_intel.dds",
@@ -214,7 +218,7 @@
         85
       ],
       "scene": "false_intelligence",
-      "sha256": "189f6af6b1d1a1b3fb0b9d58768df33b13fb931e54c9cc622a6ed209ae1c7a4c"
+      "sha256": "679e457e1c1de23c4692086401dd37df49bdb641c9be88acf308fd728795e55b"
     },
     "GFX_operations_infiltrate_air_forces": {
       "path": "gfx/interface/operations/infiltrate_air_forces.dds",
@@ -223,7 +227,7 @@
         85
       ],
       "scene": "airfield_mole",
-      "sha256": "54d29abb6d97b78341297946571585d82e53a3aa7d6caa5b32a8ad1319ffe782"
+      "sha256": "2f79f5f3884726204b4b37b13637cd0d007a19dd1baf6dd2a3b67dc7f370c0f0"
     },
     "GFX_operations_infiltrate_armed_forces": {
       "path": "gfx/interface/operations/infiltrate_armed_forces.dds",
@@ -232,7 +236,7 @@
         85
       ],
       "scene": "military_mole",
-      "sha256": "e01b4aa943edeabeb78c35850bb03605cd0b3fa839613d543185efb09fd28d38"
+      "sha256": "e736c1b7530c3b58376ac1180b085b86fd5b342adc38380b80821eabe3b811a2"
     },
     "GFX_operations_infiltrate_civilian_govt": {
       "path": "gfx/interface/operations/infiltrate_civilian_govt.dds",
@@ -241,7 +245,7 @@
         85
       ],
       "scene": "civilian_cover",
-      "sha256": "0e4a04a65fe2e2f7f47a2f7d6e41bf14806bb60938424968ccc98df2a038b5d8"
+      "sha256": "dcf00be19c5a450e88a29d331973156b73f23d7d7d85bf8e9ddfcb5200f12cf7"
     },
     "GFX_operations_infiltrate_naval_forces": {
       "path": "gfx/interface/operations/infiltrate_naval_forces.dds",
@@ -250,7 +254,7 @@
         85
       ],
       "scene": "naval_mole",
-      "sha256": "de8f4e0d2149690b1ea5e033d5d99c174c428eb114980f3b8546b5626e944a37"
+      "sha256": "ae48edc78f909457a7f82ae3c7c2b1b634c8b065ae2f8c10ba8ec94df1a69b4e"
     },
     "GFX_operations_make_resistance_contacts": {
       "path": "gfx/interface/operations/make_resistance_contacts.dds",
@@ -259,7 +263,7 @@
         85
       ],
       "scene": "resistance_contact",
-      "sha256": "72dcda4f40aec96668ade3391aa2fe57ea03de661f18e2da9a1897046ecb3acd"
+      "sha256": "0b7cba4a020d2acdc7c8cc4a1a928c1c77d7603bfa070b0b665771cd8021a593"
     },
     "GFX_operations_rescue_captured_operative": {
       "path": "gfx/interface/operations/rescue_captured_operative.dds",
@@ -268,7 +272,7 @@
         85
       ],
       "scene": "rescue",
-      "sha256": "5262746645569be8f65a488bbb64ed62abdff18e4792fa3fc095643045405bfa"
+      "sha256": "637078ae52387b099af57eb66e519caf7a610c51878796ecb33803414d1909fc"
     },
     "GFX_operations_steal_blueprints": {
       "path": "gfx/interface/operations/steal_blueprints.dds",
@@ -277,7 +281,7 @@
         85
       ],
       "scene": "blueprints",
-      "sha256": "a499369390a179215d787a5a4339d658aa2132ad2867d6e4025b921f631a0446"
+      "sha256": "670432c85daf9fd9b876b5451ef1fece4f5de8a644f208610bec88b2188cf09f"
     },
     "GFX_operations_targeted_sabotage": {
       "path": "gfx/interface/operations/targeted_sabotage.dds",
@@ -286,7 +290,7 @@
         85
       ],
       "scene": "sabotage",
-      "sha256": "20e5757ef4ec110ebb3f6432787dd01860d2bc7ac9778ecc3903954ab1f61426"
+      "sha256": "36c80f2fbbaf5abfbbbcd0d28e2f5a1dd45a85972ddf4b6b986fb387451b4ca7"
     },
     "GFX_phase_capture_cyphers_raid": {
       "path": "gfx/interface/operations/images/phase_capture_cyphers_raid.dds",
@@ -295,7 +299,7 @@
         176
       ],
       "scene": "cipher",
-      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+      "sha256": "ddaa111fc988a06101d4bd4cee8e4aac132ce7dbf9adccff652f58157f30cade"
     },
     "GFX_phase_capture_cyphers_raid_small": {
       "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_raid_small.dds",
@@ -304,7 +308,7 @@
         58
       ],
       "scene": "cipher",
-      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+      "sha256": "c78b6202c2a4cd19f60e214d60cbb6324095b948c0b229bfd5b979c296d9d037"
     },
     "GFX_phase_capture_cyphers_reverse_engineer": {
       "path": "gfx/interface/operations/images/phase_capture_cyphers_reverse_engineer.dds",
@@ -313,7 +317,7 @@
         176
       ],
       "scene": "cipher",
-      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+      "sha256": "ddaa111fc988a06101d4bd4cee8e4aac132ce7dbf9adccff652f58157f30cade"
     },
     "GFX_phase_capture_cyphers_reverse_engineer_small": {
       "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_reverse_engineer_small.dds",
@@ -322,7 +326,7 @@
         58
       ],
       "scene": "cipher",
-      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+      "sha256": "c78b6202c2a4cd19f60e214d60cbb6324095b948c0b229bfd5b979c296d9d037"
     },
     "GFX_phase_capture_cyphers_smuggle": {
       "path": "gfx/interface/operations/images/phase_capture_cyphers_smuggle.dds",
@@ -331,7 +335,7 @@
         176
       ],
       "scene": "cipher",
-      "sha256": "757ab39f6e12a22bfd31f830e04641a5168c8cb2b66ff4f58ec1544b9d085f47"
+      "sha256": "ddaa111fc988a06101d4bd4cee8e4aac132ce7dbf9adccff652f58157f30cade"
     },
     "GFX_phase_capture_cyphers_smuggle_small": {
       "path": "gfx/interface/operations/phases_small/phase_capture_cyphers_smuggle_small.dds",
@@ -340,7 +344,7 @@
         58
       ],
       "scene": "cipher",
-      "sha256": "4b7663a4fe85585f46234a159a91e68bbc7f1a1686f180b24d8f56e34ae2cc33"
+      "sha256": "c78b6202c2a4cd19f60e214d60cbb6324095b948c0b229bfd5b979c296d9d037"
     },
     "GFX_phase_collaboration_government_contact_military_officers": {
       "path": "gfx/interface/operations/images/phase_collaboration_government_contact_military_officers.dds",
@@ -349,7 +353,7 @@
         176
       ],
       "scene": "military_mole",
-      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+      "sha256": "fa7d01daa4c8198aabec55a85895859b67e5c352b91f03f96ac668dce39f8f97"
     },
     "GFX_phase_collaboration_government_contact_military_officers_small": {
       "path": "gfx/interface/operations/phases_small/phase_collaboration_government_contact_military_officers_small.dds",
@@ -358,7 +362,7 @@
         58
       ],
       "scene": "military_mole",
-      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+      "sha256": "286925572acfd6512f72fb6c7c2a73a0b766e7bc2d1f7d35922d66c990345d6d"
     },
     "GFX_phase_collaboration_government_set_up_planning_committees": {
       "path": "gfx/interface/operations/images/phase_collaboration_government_set_up_planning_committees.dds",
@@ -367,7 +371,7 @@
         176
       ],
       "scene": "collaboration",
-      "sha256": "c89fb302e042e56ffe655c884cd90d43b41fe9fed8137425e9b9034aa1100ea7"
+      "sha256": "3c92adc57b7d61bbfcbf5f5c827afb905a5d788ca357e1b7203f2fa228e302b9"
     },
     "GFX_phase_collaboration_government_set_up_planning_committees_small": {
       "path": "gfx/interface/operations/phases_small/phase_collaboration_government_set_up_planning_committees_small.dds",
@@ -376,7 +380,7 @@
         58
       ],
       "scene": "collaboration",
-      "sha256": "75432947ab12167558421892db7031f9c92b59f1e90b0f958b387dac2b15bc32"
+      "sha256": "5a9202170d0cfb9855236dac66d6165382c981b187e216a5a056e22d399ce351"
     },
     "GFX_phase_collaboration_government_train_paramilitary_forces": {
       "path": "gfx/interface/operations/images/phase_collaboration_government_train_paramilitary_forces.dds",
@@ -385,7 +389,7 @@
         176
       ],
       "scene": "resistance_supply",
-      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+      "sha256": "f459843f92b257d1964d49bc1a25a4c0a132760162965d5082434f42191a0325"
     },
     "GFX_phase_collaboration_government_train_paramilitary_forces_small": {
       "path": "gfx/interface/operations/phases_small/phase_collaboration_government_train_paramilitary_forces_small.dds",
@@ -394,7 +398,7 @@
         58
       ],
       "scene": "resistance_supply",
-      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+      "sha256": "659d35a961e753d2687a616e1326355335254a4c9c435abcc4b03d6905635763"
     },
     "GFX_phase_coordinate_strike_mark_targets": {
       "path": "gfx/interface/operations/images/phase_coordinate_strike_mark_targets.dds",
@@ -403,7 +407,7 @@
         176
       ],
       "scene": "strike",
-      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+      "sha256": "447e8295bd3a242a1d36d08826e9c23d54ae6786afe8afa5eee3810797b84635"
     },
     "GFX_phase_coordinate_strike_mark_targets_small": {
       "path": "gfx/interface/operations/phases_small/phase_coordinate_strike_mark_targets_small.dds",
@@ -412,7 +416,7 @@
         58
       ],
       "scene": "strike",
-      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+      "sha256": "75fdc033116e231d9c260e7eeff7c13aae290c32154949ce55fd2fa97570b525"
     },
     "GFX_phase_coordinated_strike_direct_units": {
       "path": "gfx/interface/operations/images/phase_coordinated_strike_direct_units.dds",
@@ -421,7 +425,7 @@
         176
       ],
       "scene": "strike",
-      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+      "sha256": "447e8295bd3a242a1d36d08826e9c23d54ae6786afe8afa5eee3810797b84635"
     },
     "GFX_phase_coordinated_strike_direct_units_small": {
       "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_direct_units_small.dds",
@@ -430,7 +434,7 @@
         58
       ],
       "scene": "strike",
-      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+      "sha256": "75fdc033116e231d9c260e7eeff7c13aae290c32154949ce55fd2fa97570b525"
     },
     "GFX_phase_coordinated_strike_occupy_bridges": {
       "path": "gfx/interface/operations/images/phase_coordinated_strike_occupy_bridges.dds",
@@ -439,7 +443,7 @@
         176
       ],
       "scene": "strike",
-      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+      "sha256": "447e8295bd3a242a1d36d08826e9c23d54ae6786afe8afa5eee3810797b84635"
     },
     "GFX_phase_coordinated_strike_occupy_bridges_small": {
       "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_occupy_bridges_small.dds",
@@ -448,7 +452,7 @@
         58
       ],
       "scene": "strike",
-      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+      "sha256": "75fdc033116e231d9c260e7eeff7c13aae290c32154949ce55fd2fa97570b525"
     },
     "GFX_phase_coordinated_strike_sabotage_communications": {
       "path": "gfx/interface/operations/images/phase_coordinated_strike_sabotage_communications.dds",
@@ -457,7 +461,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_coordinated_strike_sabotage_communications_small": {
       "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_sabotage_communications_small.dds",
@@ -466,7 +470,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_coordinated_strike_scout_target": {
       "path": "gfx/interface/operations/images/phase_coordinated_strike_scout_target.dds",
@@ -475,7 +479,7 @@
         176
       ],
       "scene": "strike",
-      "sha256": "8ad58a0297eab7090d40ef0c61762f852a037f82f3437fb1739f7069605afc0a"
+      "sha256": "447e8295bd3a242a1d36d08826e9c23d54ae6786afe8afa5eee3810797b84635"
     },
     "GFX_phase_coordinated_strike_scout_target_small": {
       "path": "gfx/interface/operations/phases_small/phase_coordinated_strike_scout_target_small.dds",
@@ -484,7 +488,7 @@
         58
       ],
       "scene": "strike",
-      "sha256": "1750899247b038a8b1c387404487808df0b8e2d6202a19feaf7e2b4772f820fb"
+      "sha256": "75fdc033116e231d9c260e7eeff7c13aae290c32154949ce55fd2fa97570b525"
     },
     "GFX_phase_exfiltration_air_pickup": {
       "path": "gfx/interface/operations/images/phase_exfiltration_air_pickup.dds",
@@ -493,7 +497,7 @@
         176
       ],
       "scene": "air_extraction",
-      "sha256": "9a14d1af88de17817c526ccc6b954a93c826e6a600e35acac581fe0195e0a8cf"
+      "sha256": "9c5250efca26d5c5cea292f8db6078c71ceda99fdd53dc74e6cfe9a2dafc0fd5"
     },
     "GFX_phase_exfiltration_air_pickup_small": {
       "path": "gfx/interface/operations/phases_small/phase_exfiltration_air_pickup_small.dds",
@@ -502,7 +506,7 @@
         58
       ],
       "scene": "air_extraction",
-      "sha256": "1753cd2583e586273077ddaba396b4eaf5f9bae0c7be9b2e986a0d67c39ee2e8"
+      "sha256": "ddf61b32bb40a58d217e70558dbeb6d8dea1f3c6995e13db46a2469645dbde38"
     },
     "GFX_phase_exfiltration_border": {
       "path": "gfx/interface/operations/images/phase_exfiltration_border.dds",
@@ -511,7 +515,7 @@
         176
       ],
       "scene": "border",
-      "sha256": "22b29c1ace8706f0d789a5ba2873e42a7514dc285e0c64dcf20206d359bdf89b"
+      "sha256": "628b307f65a02b46a82701b48c1da9157bcb33cd4ec3137752c5af8863529cae"
     },
     "GFX_phase_exfiltration_border_small": {
       "path": "gfx/interface/operations/phases_small/phase_exfiltration_border_small.dds",
@@ -520,7 +524,7 @@
         58
       ],
       "scene": "border",
-      "sha256": "90692693a4f051ca3dadb54c143e974b86b50e1728f7b97d66217ef1048242f3"
+      "sha256": "021ee9682c24d51b7fa36bce297e93a73b8fc65d80e290543ca17f66290beea4"
     },
     "GFX_phase_exfiltration_go_to_ground": {
       "path": "gfx/interface/operations/images/phase_exfiltration_go_to_ground.dds",
@@ -529,7 +533,7 @@
         176
       ],
       "scene": "safehouse",
-      "sha256": "52b0ac5431caedd3c74a5e299116241d17d39b3d7a69fe440f7954cbe03b854d"
+      "sha256": "9471f526e3f4e9f5f0bb8ab4fe2aecf03d8f265e104cb8fd6684da7f929d255d"
     },
     "GFX_phase_exfiltration_go_to_ground_small": {
       "path": "gfx/interface/operations/phases_small/phase_exfiltration_go_to_ground_small.dds",
@@ -538,7 +542,7 @@
         58
       ],
       "scene": "safehouse",
-      "sha256": "6b27961ed4e9e5a2cd88dd56a0641418a7ef98b3893b01f4f0cc658aa7edae48"
+      "sha256": "4df237e6a9557f3ae5ca95a55bb08f8cdd2fa62ce858bccaf5f56256117cc19a"
     },
     "GFX_phase_exfiltration_submarine_pickup": {
       "path": "gfx/interface/operations/images/phase_exfiltration_submarine_pickup.dds",
@@ -547,7 +551,7 @@
         176
       ],
       "scene": "coastal_extraction",
-      "sha256": "1f981ce8a31801ab91b1dcd8c992d82e01bd0821cf7277c3f30642cfd61257ce"
+      "sha256": "9bd287be1b60d013e30d1c92321f5a0dc0389c6704a6736d93bb53bb9724acfd"
     },
     "GFX_phase_exfiltration_submarine_pickup_small": {
       "path": "gfx/interface/operations/phases_small/phase_exfiltration_submarine_pickup_small.dds",
@@ -556,7 +560,7 @@
         58
       ],
       "scene": "coastal_extraction",
-      "sha256": "92278a6033d6a52798cf0a41190b85d571cf8fd8ed52b9611dbcb9033bd47417"
+      "sha256": "602f29f89d92f4580097c61d1cf7732f963ac1271cd6e6c4c0acae8b92e61d91"
     },
     "GFX_phase_fake_intel_decoy_tanks": {
       "path": "gfx/interface/operations/images/phase_fake_intel_decoy_tanks.dds",
@@ -565,7 +569,7 @@
         176
       ],
       "scene": "false_intelligence",
-      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+      "sha256": "7804cc1b52f058859550eb15bcd78fca8315bcea0e27390dc62742e2b3302784"
     },
     "GFX_phase_fake_intel_decoy_tanks_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_decoy_tanks_small.dds",
@@ -574,7 +578,7 @@
         58
       ],
       "scene": "false_intelligence",
-      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+      "sha256": "61ebcb78f801024974a9f9ddae2be7f5cc84c6e6c81b0d350d143d4dfdde57f0"
     },
     "GFX_phase_fake_intel_deliberate_leaks": {
       "path": "gfx/interface/operations/images/phase_fake_intel_deliberate_leaks.dds",
@@ -583,7 +587,7 @@
         176
       ],
       "scene": "false_intelligence",
-      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+      "sha256": "7804cc1b52f058859550eb15bcd78fca8315bcea0e27390dc62742e2b3302784"
     },
     "GFX_phase_fake_intel_deliberate_leaks_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_deliberate_leaks_small.dds",
@@ -592,7 +596,7 @@
         58
       ],
       "scene": "false_intelligence",
-      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+      "sha256": "61ebcb78f801024974a9f9ddae2be7f5cc84c6e6c81b0d350d143d4dfdde57f0"
     },
     "GFX_phase_fake_intel_plant_evidence": {
       "path": "gfx/interface/operations/images/phase_fake_intel_plant_evidence.dds",
@@ -601,7 +605,7 @@
         176
       ],
       "scene": "false_intelligence",
-      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+      "sha256": "7804cc1b52f058859550eb15bcd78fca8315bcea0e27390dc62742e2b3302784"
     },
     "GFX_phase_fake_intel_plant_evidence_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_plant_evidence_small.dds",
@@ -610,7 +614,7 @@
         58
       ],
       "scene": "false_intelligence",
-      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+      "sha256": "61ebcb78f801024974a9f9ddae2be7f5cc84c6e6c81b0d350d143d4dfdde57f0"
     },
     "GFX_phase_fake_intel_press_releases": {
       "path": "gfx/interface/operations/images/phase_fake_intel_press_releases.dds",
@@ -619,7 +623,7 @@
         176
       ],
       "scene": "false_intelligence",
-      "sha256": "68d65dad3770f6cb5bc2ce0af3c70a40aabccdc264bb3a8ecd4047a4db1803e6"
+      "sha256": "7804cc1b52f058859550eb15bcd78fca8315bcea0e27390dc62742e2b3302784"
     },
     "GFX_phase_fake_intel_press_releases_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_press_releases_small.dds",
@@ -628,7 +632,7 @@
         58
       ],
       "scene": "false_intelligence",
-      "sha256": "7dbd35915414c3e93f0359d6451bbdad82ca40aa0b46d5837e706afcdb194896"
+      "sha256": "61ebcb78f801024974a9f9ddae2be7f5cc84c6e6c81b0d350d143d4dfdde57f0"
     },
     "GFX_phase_fake_intel_radio_deception": {
       "path": "gfx/interface/operations/images/phase_fake_intel_radio_deception.dds",
@@ -637,7 +641,7 @@
         176
       ],
       "scene": "radio",
-      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+      "sha256": "475a2243891ca6548df13bd32c2ae44549767880453e749f93c939b79808f7c7"
     },
     "GFX_phase_fake_intel_radio_deception_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_radio_deception_small.dds",
@@ -646,7 +650,7 @@
         58
       ],
       "scene": "radio",
-      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+      "sha256": "160db7d26da3e5c0a79f6a6a53e8972250249dd3eb8bcad40fa2b46e50200480"
     },
     "GFX_phase_fake_intel_release_pow": {
       "path": "gfx/interface/operations/images/phase_fake_intel_release_pow.dds",
@@ -655,7 +659,7 @@
         176
       ],
       "scene": "rescue",
-      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+      "sha256": "753980f41c846f18be01e125652ba467a00668cef517acadbcf0a55e6ca81b88"
     },
     "GFX_phase_fake_intel_release_pow_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_release_pow_small.dds",
@@ -664,7 +668,7 @@
         58
       ],
       "scene": "rescue",
-      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+      "sha256": "9cb5c4aee234a643c75e3c18027df1c9a0b031765e11ed6a04ea43f45f0e18fd"
     },
     "GFX_phase_fake_intel_utilize_double_agents": {
       "path": "gfx/interface/operations/images/phase_fake_intel_utilize_double_agents.dds",
@@ -673,7 +677,7 @@
         176
       ],
       "scene": "recruitment",
-      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+      "sha256": "6f4c3a7f629622d1105062758e652dd75cf35598aff4e57598576834552f2aea"
     },
     "GFX_phase_fake_intel_utilize_double_agents_small": {
       "path": "gfx/interface/operations/phases_small/phase_fake_intel_utilize_double_agents_small.dds",
@@ -682,7 +686,7 @@
         58
       ],
       "scene": "recruitment",
-      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+      "sha256": "ff969762bcd88b50ec2eaa4e5828262d15106cb132f49cb96262cf001e73f33f"
     },
     "GFX_phase_free_operative_free_in_transit": {
       "path": "gfx/interface/operations/images/phase_free_operative_free_in_transit.dds",
@@ -691,7 +695,7 @@
         176
       ],
       "scene": "rescue",
-      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+      "sha256": "753980f41c846f18be01e125652ba467a00668cef517acadbcf0a55e6ca81b88"
     },
     "GFX_phase_free_operative_free_in_transit_small": {
       "path": "gfx/interface/operations/phases_small/phase_free_operative_free_in_transit_small.dds",
@@ -700,7 +704,7 @@
         58
       ],
       "scene": "rescue",
-      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+      "sha256": "9cb5c4aee234a643c75e3c18027df1c9a0b031765e11ed6a04ea43f45f0e18fd"
     },
     "GFX_phase_free_operative_liberate_camp": {
       "path": "gfx/interface/operations/images/phase_free_operative_liberate_camp.dds",
@@ -709,7 +713,7 @@
         176
       ],
       "scene": "rescue",
-      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+      "sha256": "753980f41c846f18be01e125652ba467a00668cef517acadbcf0a55e6ca81b88"
     },
     "GFX_phase_free_operative_liberate_camp_small": {
       "path": "gfx/interface/operations/phases_small/phase_free_operative_liberate_camp_small.dds",
@@ -718,7 +722,7 @@
         58
       ],
       "scene": "rescue",
-      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+      "sha256": "9cb5c4aee234a643c75e3c18027df1c9a0b031765e11ed6a04ea43f45f0e18fd"
     },
     "GFX_phase_free_operative_smuggle_in_escape_gear": {
       "path": "gfx/interface/operations/images/phase_free_operative_smuggle_in_escape_gear.dds",
@@ -727,7 +731,7 @@
         176
       ],
       "scene": "rescue",
-      "sha256": "d11a51e52a95cbaddbeaf493a7acbc76a873001969427651e32dec22292ec44e"
+      "sha256": "753980f41c846f18be01e125652ba467a00668cef517acadbcf0a55e6ca81b88"
     },
     "GFX_phase_free_operative_smuggle_in_escape_gear_small": {
       "path": "gfx/interface/operations/phases_small/phase_free_operative_smuggle_in_escape_gear_small.dds",
@@ -736,7 +740,7 @@
         58
       ],
       "scene": "rescue",
-      "sha256": "c5a9969a4274caeb72fcd592a6cedbcbf2484d1dc5b49d767bc92b0824188dbf"
+      "sha256": "9cb5c4aee234a643c75e3c18027df1c9a0b031765e11ed6a04ea43f45f0e18fd"
     },
     "GFX_phase_infiltrate_military_bribe": {
       "path": "gfx/interface/operations/images/phase_infiltrate_military_bribe.dds",
@@ -745,7 +749,7 @@
         176
       ],
       "scene": "military_mole",
-      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+      "sha256": "fa7d01daa4c8198aabec55a85895859b67e5c352b91f03f96ac668dce39f8f97"
     },
     "GFX_phase_infiltrate_military_bribe_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_bribe_small.dds",
@@ -754,7 +758,7 @@
         58
       ],
       "scene": "military_mole",
-      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+      "sha256": "286925572acfd6512f72fb6c7c2a73a0b766e7bc2d1f7d35922d66c990345d6d"
     },
     "GFX_phase_infiltrate_military_ideological_supporter": {
       "path": "gfx/interface/operations/images/phase_infiltrate_military_ideological_supporter.dds",
@@ -763,7 +767,7 @@
         176
       ],
       "scene": "military_mole",
-      "sha256": "06d4c3bcbe4c4837a1c365b2a2fd4cf93849fcdf5c05de62c1dc57985f73ee42"
+      "sha256": "fa7d01daa4c8198aabec55a85895859b67e5c352b91f03f96ac668dce39f8f97"
     },
     "GFX_phase_infiltrate_military_ideological_supporter_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_ideological_supporter_small.dds",
@@ -772,7 +776,7 @@
         58
       ],
       "scene": "military_mole",
-      "sha256": "66695fbc1995b16f4353142d106c40f57dab906f8da6993cf535f8f2aa1268b6"
+      "sha256": "286925572acfd6512f72fb6c7c2a73a0b766e7bc2d1f7d35922d66c990345d6d"
     },
     "GFX_phase_infiltrate_military_seduction": {
       "path": "gfx/interface/operations/images/phase_infiltrate_military_seduction.dds",
@@ -781,7 +785,7 @@
         176
       ],
       "scene": "recruitment",
-      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+      "sha256": "6f4c3a7f629622d1105062758e652dd75cf35598aff4e57598576834552f2aea"
     },
     "GFX_phase_infiltrate_military_seduction_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_seduction_small.dds",
@@ -790,7 +794,7 @@
         58
       ],
       "scene": "recruitment",
-      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+      "sha256": "ff969762bcd88b50ec2eaa4e5828262d15106cb132f49cb96262cf001e73f33f"
     },
     "GFX_phase_infiltrate_military_turned_pow": {
       "path": "gfx/interface/operations/images/phase_infiltrate_military_turned_pow.dds",
@@ -799,7 +803,7 @@
         176
       ],
       "scene": "recruitment",
-      "sha256": "4b6a50b498291a72d984aa6af7d011ef24fc00e8717f954233c8aa5a1bc8f852"
+      "sha256": "6f4c3a7f629622d1105062758e652dd75cf35598aff4e57598576834552f2aea"
     },
     "GFX_phase_infiltrate_military_turned_pow_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltrate_military_turned_pow_small.dds",
@@ -808,7 +812,7 @@
         58
       ],
       "scene": "recruitment",
-      "sha256": "11a99cf8f8ac855511a349d0d8734d19a183780d32fcf98a366fd1d6cae726c3"
+      "sha256": "ff969762bcd88b50ec2eaa4e5828262d15106cb132f49cb96262cf001e73f33f"
     },
     "GFX_phase_infiltration_airplane": {
       "path": "gfx/interface/operations/images/phase_infiltration_airplane.dds",
@@ -817,7 +821,7 @@
         176
       ],
       "scene": "air_extraction",
-      "sha256": "9a14d1af88de17817c526ccc6b954a93c826e6a600e35acac581fe0195e0a8cf"
+      "sha256": "9c5250efca26d5c5cea292f8db6078c71ceda99fdd53dc74e6cfe9a2dafc0fd5"
     },
     "GFX_phase_infiltration_airplane_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltration_airplane_small.dds",
@@ -826,7 +830,7 @@
         58
       ],
       "scene": "air_extraction",
-      "sha256": "1753cd2583e586273077ddaba396b4eaf5f9bae0c7be9b2e986a0d67c39ee2e8"
+      "sha256": "ddf61b32bb40a58d217e70558dbeb6d8dea1f3c6995e13db46a2469645dbde38"
     },
     "GFX_phase_infiltration_border": {
       "path": "gfx/interface/operations/images/phase_infiltration_border.dds",
@@ -835,7 +839,7 @@
         176
       ],
       "scene": "border",
-      "sha256": "22b29c1ace8706f0d789a5ba2873e42a7514dc285e0c64dcf20206d359bdf89b"
+      "sha256": "628b307f65a02b46a82701b48c1da9157bcb33cd4ec3137752c5af8863529cae"
     },
     "GFX_phase_infiltration_border_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltration_border_small.dds",
@@ -844,7 +848,7 @@
         58
       ],
       "scene": "border",
-      "sha256": "90692693a4f051ca3dadb54c143e974b86b50e1728f7b97d66217ef1048242f3"
+      "sha256": "021ee9682c24d51b7fa36bce297e93a73b8fc65d80e290543ca17f66290beea4"
     },
     "GFX_phase_infiltration_diplomatic": {
       "path": "gfx/interface/operations/images/phase_infiltration_diplomatic.dds",
@@ -853,7 +857,7 @@
         176
       ],
       "scene": "civilian_cover",
-      "sha256": "98a98e9e7df451dbbe63417582103cbd6a6a3f87cfa4c366d95d192bdf477024"
+      "sha256": "2bb2a05a881afeae2deabeaa0e2dac9e3e8a77a4085fb8faeac0141f28eb4fcf"
     },
     "GFX_phase_infiltration_diplomatic_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltration_diplomatic_small.dds",
@@ -862,7 +866,7 @@
         58
       ],
       "scene": "civilian_cover",
-      "sha256": "8f3535e14a38b5136a3e96a4a95e9501d8fe0952597c9d9da5dc1330925998e0"
+      "sha256": "882b8839c0bb937a4db48f4c522c5887f271de8bb03007e3b08a7f87e95931ed"
     },
     "GFX_phase_infiltration_submarine": {
       "path": "gfx/interface/operations/images/phase_infiltration_submarine.dds",
@@ -871,7 +875,7 @@
         176
       ],
       "scene": "coastal_extraction",
-      "sha256": "1f981ce8a31801ab91b1dcd8c992d82e01bd0821cf7277c3f30642cfd61257ce"
+      "sha256": "9bd287be1b60d013e30d1c92321f5a0dc0389c6704a6736d93bb53bb9724acfd"
     },
     "GFX_phase_infiltration_submarine_small": {
       "path": "gfx/interface/operations/phases_small/phase_infiltration_submarine_small.dds",
@@ -880,7 +884,7 @@
         58
       ],
       "scene": "coastal_extraction",
-      "sha256": "92278a6033d6a52798cf0a41190b85d571cf8fd8ed52b9611dbcb9033bd47417"
+      "sha256": "602f29f89d92f4580097c61d1cf7732f963ac1271cd6e6c4c0acae8b92e61d91"
     },
     "GFX_phase_lar_fra_coup_launch_coup_small": {
       "path": "gfx/interface/operations/phases_small/phase_lar_fra_launch_coup_small.dds",
@@ -889,7 +893,7 @@
         58
       ],
       "scene": "coup",
-      "sha256": "6ce7ff6f8b89dd5c5e177cdc2a6056b788f598542548c11e42b30278e6251dfc"
+      "sha256": "68b7aec8bea05fc9165b774bfcda27a5a82fed676538fcd0dca4346599c6ee23"
     },
     "GFX_phase_lar_fra_coup_pre_position_units": {
       "path": "gfx/interface/operations/images/phase_lar_fra_coup_pre_position_units.dds",
@@ -898,7 +902,7 @@
         176
       ],
       "scene": "coup",
-      "sha256": "72036d6e83d4674f9ce94e07aec35ad20a6da1eb16acb3c365ee992f03935eb9"
+      "sha256": "ba6ec2937fceb0a4ef260d76824a4fafb9da95b8e2bbdbfd27c321515d21d608"
     },
     "GFX_phase_lar_fra_coup_pre_position_units_small": {
       "path": "gfx/interface/operations/phases_small/phase_lar_fra_coup_pre_position_units_small.dds",
@@ -907,7 +911,7 @@
         58
       ],
       "scene": "coup",
-      "sha256": "6ce7ff6f8b89dd5c5e177cdc2a6056b788f598542548c11e42b30278e6251dfc"
+      "sha256": "68b7aec8bea05fc9165b774bfcda27a5a82fed676538fcd0dca4346599c6ee23"
     },
     "GFX_phase_lar_fra_launch_coup": {
       "path": "gfx/interface/operations/images/phase_lar_fra_launch_coup.dds",
@@ -916,7 +920,7 @@
         176
       ],
       "scene": "coup",
-      "sha256": "72036d6e83d4674f9ce94e07aec35ad20a6da1eb16acb3c365ee992f03935eb9"
+      "sha256": "ba6ec2937fceb0a4ef260d76824a4fafb9da95b8e2bbdbfd27c321515d21d608"
     },
     "GFX_phase_resistance_contacts_briefings": {
       "path": "gfx/interface/operations/images/phase_resistance_contacts_briefings.dds",
@@ -925,7 +929,7 @@
         176
       ],
       "scene": "resistance_contact",
-      "sha256": "b7da1b7da3486f507c61ef6d8dd4009c2203b3450eee22be6a01673ba31b2352"
+      "sha256": "02d39f6384b43a100816517af21a6dc459cef935fd2bfdb384768c4cb3aa89c0"
     },
     "GFX_phase_resistance_contacts_briefings_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_contacts_briefings_small.dds",
@@ -934,7 +938,7 @@
         58
       ],
       "scene": "resistance_contact",
-      "sha256": "b3ab866a4ebfc107a55aea5e0440bf239455821cbef2c75fca3ffeb89d763690"
+      "sha256": "8220d6094ea9e6e4e6ac7aca83e770f736ae880a490b87c2848a1eab4fc3f0e2"
     },
     "GFX_phase_resistance_contacts_radio_circuits": {
       "path": "gfx/interface/operations/images/phase_resistance_contacts_radio_circuits.dds",
@@ -943,7 +947,7 @@
         176
       ],
       "scene": "radio",
-      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+      "sha256": "475a2243891ca6548df13bd32c2ae44549767880453e749f93c939b79808f7c7"
     },
     "GFX_phase_resistance_contacts_radio_circuits_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_contacts_radio_circuits_small.dds",
@@ -952,7 +956,7 @@
         58
       ],
       "scene": "radio",
-      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+      "sha256": "160db7d26da3e5c0a79f6a6a53e8972250249dd3eb8bcad40fa2b46e50200480"
     },
     "GFX_phase_resistance_support_arms_depots": {
       "path": "gfx/interface/operations/images/phase_resistance_support_arms_depots.dds",
@@ -961,7 +965,7 @@
         176
       ],
       "scene": "resistance_supply",
-      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+      "sha256": "f459843f92b257d1964d49bc1a25a4c0a132760162965d5082434f42191a0325"
     },
     "GFX_phase_resistance_support_arms_depots_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_support_arms_depots_small.dds",
@@ -970,7 +974,7 @@
         58
       ],
       "scene": "resistance_supply",
-      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+      "sha256": "659d35a961e753d2687a616e1326355335254a4c9c435abcc4b03d6905635763"
     },
     "GFX_phase_resistance_support_coordinate_groups": {
       "path": "gfx/interface/operations/images/phase_resistance_support_coordinate_groups.dds",
@@ -979,7 +983,7 @@
         176
       ],
       "scene": "resistance_contact",
-      "sha256": "b7da1b7da3486f507c61ef6d8dd4009c2203b3450eee22be6a01673ba31b2352"
+      "sha256": "02d39f6384b43a100816517af21a6dc459cef935fd2bfdb384768c4cb3aa89c0"
     },
     "GFX_phase_resistance_support_coordinate_groups_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_support_coordinate_groups_small.dds",
@@ -988,7 +992,7 @@
         58
       ],
       "scene": "resistance_contact",
-      "sha256": "b3ab866a4ebfc107a55aea5e0440bf239455821cbef2c75fca3ffeb89d763690"
+      "sha256": "8220d6094ea9e6e4e6ac7aca83e770f736ae880a490b87c2848a1eab4fc3f0e2"
     },
     "GFX_phase_resistance_support_distribute_weapons": {
       "path": "gfx/interface/operations/images/phase_resistance_support_distribute_weapons.dds",
@@ -997,7 +1001,7 @@
         176
       ],
       "scene": "resistance_supply",
-      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+      "sha256": "f459843f92b257d1964d49bc1a25a4c0a132760162965d5082434f42191a0325"
     },
     "GFX_phase_resistance_support_distribute_weapons_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_support_distribute_weapons_small.dds",
@@ -1006,7 +1010,7 @@
         58
       ],
       "scene": "resistance_supply",
-      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+      "sha256": "659d35a961e753d2687a616e1326355335254a4c9c435abcc4b03d6905635763"
     },
     "GFX_phase_resistance_support_organize_training": {
       "path": "gfx/interface/operations/images/phase_resistance_support_organize_training.dds",
@@ -1015,7 +1019,7 @@
         176
       ],
       "scene": "resistance_supply",
-      "sha256": "fa3a969461ed1e1594a105d0ee943c1aff7f6091ab5a1e78ee72bb5bb6cf5710"
+      "sha256": "f459843f92b257d1964d49bc1a25a4c0a132760162965d5082434f42191a0325"
     },
     "GFX_phase_resistance_support_organize_training_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_support_organize_training_small.dds",
@@ -1024,7 +1028,7 @@
         58
       ],
       "scene": "resistance_supply",
-      "sha256": "7da6f3239efb30b097abf9a2e3a827f8d750a4742102c5d6d125487089988b2c"
+      "sha256": "659d35a961e753d2687a616e1326355335254a4c9c435abcc4b03d6905635763"
     },
     "GFX_phase_resistance_support_pidgeons": {
       "path": "gfx/interface/operations/images/phase_resistance_support_pidgeons.dds",
@@ -1033,7 +1037,7 @@
         176
       ],
       "scene": "radio",
-      "sha256": "51769570e1729ca6489cf5f7e52b120e3c07959962674a627c656dc413bbaef4"
+      "sha256": "475a2243891ca6548df13bd32c2ae44549767880453e749f93c939b79808f7c7"
     },
     "GFX_phase_resistance_support_pidgeons_small": {
       "path": "gfx/interface/operations/phases_small/phase_resistance_support_pidgeons_small.dds",
@@ -1042,7 +1046,7 @@
         58
       ],
       "scene": "radio",
-      "sha256": "479e25e78f40e28234a4267105f2e9f1cfde8675e359c50957dc8e29e008e321"
+      "sha256": "160db7d26da3e5c0a79f6a6a53e8972250249dd3eb8bcad40fa2b46e50200480"
     },
     "GFX_phase_steal_blueprints_infiltrate_naval_design_office": {
       "path": "gfx/interface/operations/images/phase_steal_blueprints_infiltrate_naval_design_office.dds",
@@ -1051,7 +1055,7 @@
         176
       ],
       "scene": "blueprints",
-      "sha256": "c83b9bc3128f3360066f2712a8a70cb027bbe1b627283e96656520e6628024b7"
+      "sha256": "c38888f21dcf4a8d7782125b5dfbc198d25f7e529b8d6c2865f10104e56a0e87"
     },
     "GFX_phase_steal_blueprints_infiltrate_naval_design_office_small": {
       "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_infiltrate_naval_design_office_small.dds",
@@ -1060,7 +1064,7 @@
         58
       ],
       "scene": "blueprints",
-      "sha256": "4fc59c73a0a8ebd4fe139b89edc1e3e7213c134ca11514a4f923bc6cc296ad8a"
+      "sha256": "de755c316177bfca930880f0afe57456600326db84c2ce703150fb4ce7b2b155"
     },
     "GFX_phase_steal_blueprints_middle_manager": {
       "path": "gfx/interface/operations/images/phase_steal_blueprints_middle_manager.dds",
@@ -1069,7 +1073,7 @@
         176
       ],
       "scene": "civilian_cover",
-      "sha256": "98a98e9e7df451dbbe63417582103cbd6a6a3f87cfa4c366d95d192bdf477024"
+      "sha256": "2bb2a05a881afeae2deabeaa0e2dac9e3e8a77a4085fb8faeac0141f28eb4fcf"
     },
     "GFX_phase_steal_blueprints_middle_manager_small": {
       "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_middle_manager_small.dds",
@@ -1078,7 +1082,7 @@
         58
       ],
       "scene": "civilian_cover",
-      "sha256": "8f3535e14a38b5136a3e96a4a95e9501d8fe0952597c9d9da5dc1330925998e0"
+      "sha256": "882b8839c0bb937a4db48f4c522c5887f271de8bb03007e3b08a7f87e95931ed"
     },
     "GFX_phase_steal_blueprints_steal_prototype": {
       "path": "gfx/interface/operations/images/phase_steal_blueprints_steal_prototype.dds",
@@ -1087,7 +1091,7 @@
         176
       ],
       "scene": "blueprints",
-      "sha256": "c83b9bc3128f3360066f2712a8a70cb027bbe1b627283e96656520e6628024b7"
+      "sha256": "c38888f21dcf4a8d7782125b5dfbc198d25f7e529b8d6c2865f10104e56a0e87"
     },
     "GFX_phase_steal_blueprints_steal_prototype_small": {
       "path": "gfx/interface/operations/phases_small/phase_steal_blueprints_steal_prototype_small.dds",
@@ -1096,7 +1100,7 @@
         58
       ],
       "scene": "blueprints",
-      "sha256": "4fc59c73a0a8ebd4fe139b89edc1e3e7213c134ca11514a4f923bc6cc296ad8a"
+      "sha256": "de755c316177bfca930880f0afe57456600326db84c2ce703150fb4ce7b2b155"
     },
     "GFX_phase_targeted_sabotage_burn_storage": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_burn_storage.dds",
@@ -1105,7 +1109,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_burn_storage_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_burn_storage_small.dds",
@@ -1114,7 +1118,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_collapse_tunnel": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_collapse_tunnel.dds",
@@ -1123,7 +1127,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_collapse_tunnel_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_collapse_tunnel_small.dds",
@@ -1132,7 +1136,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_destroy_bridge": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_destroy_bridge.dds",
@@ -1141,7 +1145,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_destroy_bridge_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_destroy_bridge_small.dds",
@@ -1150,7 +1154,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_destroy_mining_equipment": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_destroy_mining_equipment.dds",
@@ -1159,7 +1163,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_destroy_mining_equipment_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_destroy_mining_equipment_small.dds",
@@ -1168,7 +1172,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_immobilize_rolling_stock": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_immobilize_rolling_stock.dds",
@@ -1177,7 +1181,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_immobilize_rolling_stock_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_immobilize_rolling_stock_small.dds",
@@ -1186,7 +1190,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_organize_more_meetings": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_organize_more_meetings.dds",
@@ -1195,7 +1199,7 @@
         176
       ],
       "scene": "collaboration",
-      "sha256": "c89fb302e042e56ffe655c884cd90d43b41fe9fed8137425e9b9034aa1100ea7"
+      "sha256": "3c92adc57b7d61bbfcbf5f5c827afb905a5d788ca357e1b7203f2fa228e302b9"
     },
     "GFX_phase_targeted_sabotage_organize_more_meetings_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_organize_more_meetings_small.dds",
@@ -1204,7 +1208,7 @@
         58
       ],
       "scene": "collaboration",
-      "sha256": "75432947ab12167558421892db7031f9c92b59f1e90b0f958b387dac2b15bc32"
+      "sha256": "5a9202170d0cfb9855236dac66d6165382c981b187e216a5a056e22d399ce351"
     },
     "GFX_phase_targeted_sabotage_plant_explosives": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_plant_explosives.dds",
@@ -1213,7 +1217,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_plant_explosives_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_plant_explosives_small.dds",
@@ -1222,7 +1226,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     },
     "GFX_phase_targeted_sabotage_remove_roadsigns": {
       "path": "gfx/interface/operations/images/phase_targeted_sabotage_remove_roadsigns.dds",
@@ -1231,7 +1235,7 @@
         176
       ],
       "scene": "sabotage",
-      "sha256": "93265c71baa37fcfe094f2d339908502f4448c22ee279d52dbc91d6def833dab"
+      "sha256": "2e6010f98587e7902315b9a0755d7044db1cd847c2d330b8757162cb7a71a634"
     },
     "GFX_phase_targeted_sabotage_remove_roadsigns_small": {
       "path": "gfx/interface/operations/phases_small/phase_targeted_sabotage_remove_roadsigns_small.dds",
@@ -1240,7 +1244,7 @@
         58
       ],
       "scene": "sabotage",
-      "sha256": "998c1d09ccc5d9b9c935474929ad0bf0ed0fff306eb52f492f1d7bd2d7e7aebb"
+      "sha256": "6ea9e30127d5ca7db5ea4b1223e9f86c6456aff8c9634ad479a46a8fe39a2477"
     }
   }
 }

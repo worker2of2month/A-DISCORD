@@ -60,6 +60,7 @@ IVN_marches_category = {
 			training_time_army_factor = -0.10
 		}
 		remove_effect = {
+			custom_effect_tooltip = IVN_reserve_call_up_description_rules_tt
 			add_manpower = 15000
 		}
 		ai_will_do = {
@@ -1390,6 +1391,7 @@ IVN_reconstruction_category = {
 			stability_factor = -0.03
 		}
 		remove_effect = {
+			custom_effect_tooltip = IVN_rc_reserve_musters_description_rules_tt
 			army_experience = 10
 			add_timed_idea = {
 				idea = IVN_rc_reserve_drilled

@@ -29,7 +29,7 @@
  TFF_coordinate_the_communes: "Coordinate the Communes"
  TFF_coordinate_the_communes_desc: "Settlement delegates will match requests for men, weapons, and routes. Coordination steadies the rear and army organisation."
  TFF_establish_common_supply_depots: "Establish Common Supply Depots"
- TFF_establish_common_supply_depots_desc: "Field depots on the border will cut supply consumption. If Odar is still held, the road to the line will be improved there."
+ TFF_establish_common_supply_depots_desc: "Field depots are being established along the border roads. Quartermasters inspect the approaches and choose unloading sites for convoys."
  TFF_fortify_the_nodrul_border: "Fortify the Nodrul Border"
  TFF_fortify_the_nodrul_border_desc: "In Odar we will raise works only on the three approaches to Esnos. This is not a belt around the whole Frontier."
  TFF_authorize_unified_field_command: "Authorize Unified Field Command"
@@ -62,3 +62,4 @@
  ADISCORD_TFF.21.d:0 "Colt Ardent has declared that the assembly has no right to dissolve the staff while the north is not secure. The bands of Odar and Yorlun have sworn to the Frontier Security Committee, and Kefreyt wagons with rifles are already on their way.\n\nThe assembly withdrew the wartime mandate and left the chair empty again. Now it must be defended with arms: if the Committee wins, the Frontier becomes a Kefreyt contract administration."
  ADISCORD_TFF.21.a:0 "Freedom is not for sale."
  ADISCORD_TFF.21.a_tt:0 "A civil war with the Frontier Security Committee begins. The assembly withdraws the wartime mandate, and the Emergency Frontier Command is dissolved."
+ TFF_establish_common_supply_depots_description_rules_tt:0 "Field depots on the border will cut supply consumption. If Odar is still held, the road to the line will be improved there."

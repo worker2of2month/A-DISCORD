@@ -12,6 +12,16 @@ state = {
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
+			820 = { naval_base = 1 }
+			833 = { naval_base = 1 }
+			1234 = { naval_base = 1 }
+			2166 = { naval_base = 1 }
+			2878 = { naval_base = 1 }
+			3478 = { naval_base = 1 }
+			6860 = { naval_base = 1 }
+			7562 = { naval_base = 1 }
+			7597 = { naval_base = 1 }
+			9750 = { naval_base = 1 }
 		}
 	}
 	provinces = {

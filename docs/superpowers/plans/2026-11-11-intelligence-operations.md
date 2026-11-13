@@ -71,3 +71,15 @@ Extension verification: 39 focused tests passed. The total-conversion validator 
 
 - [x] Export 130 active runtime textures to PNG at their native sizes and verify exact RGBA pixel equality.
 - [x] Verify the field-radio price, level count and network modifier alongside the removed coordinated strike.
+
+## Operation dossier layout and PSD CRT
+
+- [x] Keep the native window hierarchy while placing the right panel below the header.
+- [x] Use dark surfaces, light readable text, single phase photographs and compact progress indicators.
+- [x] Keep the operative background fixed at 254x94 and reduce the reward badge.
+- [x] Apply the named Linear Light CRT layer from the PSD to all operation exports.
+- [x] Check both builders before applying and verify repeatability afterward.
+- [x] Verify 44 focused tests, including alpha/clipping arithmetic and native hierarchy.
+- [x] Complete the general validator and remove temporary review sheets.
+
+Native rendering, long descriptions, running operations and completed results require manual verification in the game. The offline layout preview uses substitute font metrics and does not establish native text wrapping or engine-controlled positions.

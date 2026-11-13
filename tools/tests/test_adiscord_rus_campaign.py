@@ -819,7 +819,7 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertEqual(world.value("RUS_bunker_used_power"), 0)
 
     def test_generation_and_political_development_focuses(self):
-        self.assertEqual(len(self.focuses), 164)
+        self.assertEqual(len(self.focuses), 178)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -3913,7 +3913,7 @@ class RusCampaignTests(unittest.TestCase):
         for name in roots:
             self.assertTrue(world.matches(block(self.focuses[name], "allow_branch")), name)
         hidden = {name for name, rows in self.focuses.items() if any(row.key == "allow_branch" for row in rows)}
-        coup = {"RUS_seat_the_khan_chancery", "RUS_ba_guard_order", *RusScientistsBranchTests.BRANCH}
+        coup = {"RUS_seat_the_khan_chancery", *RusScientistsBranchTests.BRANCH, *RusBlackArmyBranchTests.BRANCH}
         self.assertEqual(hidden, {"RUS_claim_the_opened_zone", *roots, *coup})
         proclaim = block(self.effects["ADISCORD_vorkerland_rus_proclaim_last_empire"], "if")
         self.assertEqual(scalar(proclaim, "mark_focus_tree_layout_dirty"), "yes")
@@ -4156,7 +4156,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 58)
+        self.assertEqual(len(events), 66)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -6259,6 +6259,32 @@ class RusCoupTests(unittest.TestCase):
                     self.assertLessEqual(len(page), 3000)
                     self.assertLessEqual(len(page.encode("utf-8")), 5500)
 
+    def test_ai_fights_every_coup_war_and_keeps_the_khan_out_of_plots(self):
+        strategies = {row.key: row.value for row in parse("common/ai_strategy/ADISCORD_RUS_ai.txt")}
+        expected = {
+            "RUS_sci_reactor_war_offensive": "MON", "MON_reactor_war_offensive_RUS": "RUS",
+            "RUS_sci_cordon_war_offensive": "WCG", "RUS_ba_breach_offensive_WCG": "WCG", "RUS_ba_breach_offensive_TRU": "TRU",
+            "WRK_revenge_defence_RUS": "RUS",
+        }
+        for tag in ("WKR", "VAD", "TVA"):
+            expected[f"RUS_ba_revenge_offensive_{tag}"] = tag
+        for tag in ("VAL", "STS", "STP", "NOD"):
+            expected[f"RUS_ba_east_offensive_{tag}"] = tag
+            expected[f"{tag}_ba_east_defence_RUS"] = "RUS"
+        for name, target in expected.items():
+            fronts = [scalar(row.value, "tag") for row in strategies[name] if row.key == "ai_strategy" and scalar(row.value, "type") == "front_control" and any(item.key == "tag" for item in row.value)]
+            self.assertEqual(fronts, [target], name)
+        defence = strategies["WRK_revenge_defence_RUS"]
+        self.assertEqual({row.value for row in walk(block(defence, "allowed")) if row.key == "tag"}, {"WRK", "WKR", "VAD", "TVA"})
+        self.assertEqual(scalar(block(defence, "enable"), "ADISCORD_vorkerland_is_not_wartime_claimant"), "yes")
+        measures = {row.key: row.value for row in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_measures_category")}
+        for name in ("RUS_bop_relief", "RUS_bop_reserve", "RUS_bop_mediation"):
+            ai = block(measures[name], "ai_will_do")
+            early = [row.value for row in ai if row.key == "modifier" and any(item.key == "RUS_coup_window_open" for item in row.value)]
+            self.assertEqual(len(early), 1, name)
+            values = [row.value for row in walk(early[0]) if row.key == "" ]
+            self.assertTrue(any(value in ("0.45", "-0.45") for value in values), name)
+
 
 class RusScientistsBranchTests(unittest.TestCase):
     """Static contracts of the Reactor Belt Council branch after the scientists' coup."""
@@ -6465,6 +6491,155 @@ class RusScientistsBranchTests(unittest.TestCase):
                 for mark in ("–", "—", "«", "»", "•"):
                     self.assertNotIn(mark, text, (language, name))
         for number in range(49, 57):
+            page = self.loc["russian"][f"ADISCORD_rus_campaign.{number}.d"].replace("\\n", "\n")
+            self.assertLessEqual(len(page), 3000)
+            self.assertLessEqual(len(page.encode("utf-8")), 5500)
+
+
+class RusBlackArmyBranchTests(unittest.TestCase):
+    """Static contracts of the Empire of the Black Banner after the Black Army's coup."""
+
+    BRANCH = [
+        "RUS_ba_guard_order", "RUS_ba_gate_staff", "RUS_ba_purge_laboratories", "RUS_ba_labs_under_escort",
+        "RUS_ba_commandants", "RUS_ba_western_breach", "RUS_ba_reconnaissance_in_force", "RUS_ba_aimaq_militia",
+        "RUS_ba_shock_hundreds", "RUS_ba_revenge_oath", "RUS_ba_march_on_vorkerland", "RUS_ba_military_districts",
+        "RUS_ba_guard_marches", "RUS_ba_black_banner_east", "RUS_ba_guard_state",
+    ]
+    PAIRS = [
+        ("RUS_ba_purge_laboratories", "RUS_ba_labs_under_escort", "RUS_ba_commandants"),
+        ("RUS_ba_aimaq_militia", "RUS_ba_shock_hundreds", "RUS_ba_revenge_oath"),
+        ("RUS_ba_military_districts", "RUS_ba_guard_marches", "RUS_ba_black_banner_east"),
+    ]
+    DECISIONS = ["RUS_ba_commandant_levy", "RUS_ba_breach_war", "RUS_ba_raid"]
+    WEST = [151, 156, 157, 158, 159, 160, 161, 162, 163, 223, 80, 146, 150, 199, 315, 316, 317, 318]
+
+    applied = RusScientistsBranchTests.applied
+    preview = RusScientistsBranchTests.preview
+    reward_keys = RusScientistsBranchTests.reward_keys
+
+    @classmethod
+    def setUpClass(cls):
+        RusScientistsBranchTests.setUpClass.__func__(cls)
+        categories = {row.key: row.value for row in parse(f"common/decisions/{BASE}_decisions.txt")}
+        cls.decisions = {row.key: row.value for row in categories["RUS_guard_state_category"]}
+
+    def test_branch_takes_the_imperial_block_cells(self):
+        cells = {}
+        for name, focus in self.focuses.items():
+            cells.setdefault((int(scalar(focus, "x")), int(scalar(focus, "y"))), []).append(name)
+        for name in self.BRANCH:
+            focus = self.focuses[name]
+            self.assertEqual(scalar(block(focus, "allow_branch"), "RUS_black_army_regime"), "yes", name)
+            x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+            self.assertIn(x, (16, 20, 24), name)
+            self.assertTrue(14 <= y <= 24, name)
+            visible = [other for other in cells[(x, y)] if rus_focus_variant(other, self.focuses[other]) in (None, "black_army")]
+            self.assertEqual(visible, [name])
+            for (other_x, other_y), others in cells.items():
+                shown = [other for other in others if rus_focus_variant(other, self.focuses[other]) in (None, "black_army")]
+                if shown and other_y == y and (other_x, other_y) != (x, y):
+                    self.assertGreater(abs(other_x - x), 1, (name, shown))
+        army = [name for name, focus in self.focuses.items() if rus_focus_variant(name, focus) == "black_army"]
+        self.assertEqual(sorted(army), sorted(self.BRANCH))
+
+    def test_exclusive_pairs_lead_to_one_shared_continuation(self):
+        for first, second, follow in self.PAIRS:
+            self.assertEqual(scalar(block(self.focuses[first], "mutually_exclusive"), "focus"), second)
+            self.assertEqual(scalar(block(self.focuses[second], "mutually_exclusive"), "focus"), first)
+            alternatives = [row.value for row in block(self.focuses[follow], "prerequisite") if row.key == "focus"]
+            self.assertEqual(sorted(alternatives), sorted([first, second]), follow)
+            self.assertNotEqual(self.reward_keys(first), self.reward_keys(second))
+        plan = block(parse(f"common/ai_strategy_plans/{BASE}_plans.txt"), "ADISCORD_rus_guard_state_plan")
+        listed = [row.value for row in block(plan, "ai_national_focuses")]
+        self.assertLessEqual(set(listed), set(self.focuses))
+        for first, second, _ in self.PAIRS:
+            self.assertEqual(len({first, second} & set(listed)), 1, (first, second))
+
+    def test_aggregate_previews_equal_applied_values(self):
+        for name in self.BRANCH:
+            reward = block(self.focuses[name], "completion_reward")
+            branches = [row.value for row in reward if row.key in ("if", "else")]
+            for rows in branches or [reward]:
+                self.assertEqual(self.preview(rows), self.applied(rows), name)
+
+    def test_revenge_waits_for_vorkerland_and_settles_both_ways(self):
+        can_start = self.keys_of(self.triggers["RUS_ba_vorkerland_war_can_start"])
+        self.assertIn("ADISCORD_west_final_active", can_start)
+        self.assertIn("ADISCORD_vorkerland_collapse_finished",
+                      [row.value for row in walk(self.triggers["RUS_ba_vorkerland_war_can_start"]) if row.key == "has_global_flag"])
+        text = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        section = text[text.index("# BEGIN khan_coup:on_capitulation"):text.index("# END khan_coup:on_capitulation")]
+        for needle in ("RUS_ba_vorkerland_resolve_victory = yes", "RUS_ba_vorkerland_resolve_defeat = yes",
+                       "RUS_ba_east_resolve_victory = yes", "RUS_ba_east_resolve_defeat = yes",
+                       "tag = event_target:ADISCORD_vorkerland_nation", "tag = event_target:RUS_ba_east_target"):
+            self.assertIn(needle, section)
+        peace = text[text.index("# BEGIN khan_coup:on_peace"):text.index("# END khan_coup:on_peace")]
+        self.assertIn("RUS_ba_wars_close_external = yes", peace)
+        for name, value in (("RUS_ba_vorkerland_resolve_victory", "2"), ("RUS_ba_vorkerland_resolve_defeat", "3"),
+                            ("RUS_ba_east_resolve_victory", "2"), ("RUS_ba_east_resolve_defeat", "3")):
+            rows = self.effects[name]
+            self.assertEqual(rows[0].key, "set_variable", name)
+            self.assertEqual(scalar(rows[0].value, "value"), value, name)
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS
+
+        def returned(name, target):
+            return sorted(
+                int(scalar(block(row.value, target), "transfer_state")) for row in self.effects[name]
+                if row.key == "if" and any(item.key == target for item in row.value)
+            )
+        self.assertEqual(returned("RUS_ba_vorkerland_resolve_defeat", "event_target:ADISCORD_vorkerland_nation"), sorted(self.WEST))
+        self.assertEqual(returned("RUS_ba_east_resolve_defeat", "event_target:RUS_ba_east_target"),
+                         sorted({*DIRTY_GROUPS["ERT"], *DIRTY_GROUPS["IRT"], 170}))
+        take = self.effects["RUS_ba_take_defeated_power"]
+        marches = block(take, "if")
+        self.assertEqual(scalar(block(block(marches, "limit"), "RUS"), "has_completed_focus"), "RUS_ba_guard_marches")
+        transfers = [row.key for row in walk(block(take, "else"))]
+        self.assertLess(transfers.index("add_to_temp_array"), transfers.index("for_each_scope_loop"))
+        for name in ("RUS_ba_vorkerland_war_begin", "RUS_ba_east_war_begin"):
+            guard = block(self.effects[name], "if")
+            self.assertEqual(block(guard, "limit")[0].key, name.replace("_begin", "_can_start"))
+        targets = [row.value for row in walk(self.effects["RUS_ba_east_war_begin"]) if row.key == "save_global_event_target_as"]
+        self.assertEqual(set(targets), {"RUS_ba_east_target"})
+
+    def keys_of(self, rows):
+        return [row.key for row in walk(rows)]
+
+    def test_decisions_hold_their_local_consequences(self):
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS
+        zone = sorted(set().union(*DIRTY_GROUPS.values()) | {50, 233, 329, 330, 461, 186, 170})
+        levy = self.decisions["RUS_ba_commandant_levy"]
+        self.assertEqual([int(row.value) for row in block(levy, "targets")], zone)
+        burden = [row.value for row in walk(block(levy, "complete_effect")) if row.key == "add_dynamic_modifier"]
+        self.assertEqual([(scalar(row, "modifier"), scalar(row, "days")) for row in burden], [("RUS_ba_levy_burden", "180")])
+        self.assertIn("RUS_ba_levy_burden", [row.value for row in walk(block(levy, "visible")) if row.key == "modifier"])
+        self.assertEqual([row.value for row in block(self.decisions["RUS_ba_breach_war"], "targets")], ["WCG", "TRU"])
+        raid = [scalar(row.value, "type") for row in walk(block(self.decisions["RUS_ba_raid"], "complete_effect")) if row.key == "damage_building"]
+        self.assertEqual(raid, ["infrastructure", "industrial_complex"])
+        modifiers = {row.key for row in parse("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")}
+        self.assertIn("RUS_ba_levy_burden", modifiers)
+
+    def test_branch_text_is_registered_and_localised(self):
+        registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
+        events = {scalar(row.value, "id"): row.value for row in parse(f"events/{BASE}_events.txt") if row.key == "country_event"}
+        names = list(self.BRANCH[1:]) + [name + "_desc" for name in self.BRANCH[1:]]
+        names += self.DECISIONS + [name + "_desc" for name in self.DECISIONS]
+        names += ["RUS_guard_state_category", "RUS_guard_state_category_desc", "RUS_ba_levy_burden"]
+        for number in range(59, 67):
+            name = f"ADISCORD_rus_campaign.{number}"
+            self.assertEqual(sum(row["id"] == name for row in registry), 1)
+            names += [scalar(events[name], key) for key in ("title", "desc")]
+            names += [scalar(row.value, "name") for row in events[name] if row.key == "option"]
+        for rows in [self.focuses[name] for name in self.BRANCH] + list(self.decisions.values()):
+            names += [row.value for row in walk(rows) if row.key in ("tooltip", "custom_effect_tooltip")]
+        for name in self.triggers:
+            if name.startswith("RUS_ba_"):
+                names += [row.value for row in walk(self.triggers[name]) if row.key == "tooltip"]
+        for language in self.loc:
+            for name in names:
+                self.assertIn(name, self.loc[language], (language, name))
+                for mark in ("–", "—", "«", "»", "•"):
+                    self.assertNotIn(mark, self.loc[language][name], (language, name))
+        for number in range(59, 67):
             page = self.loc["russian"][f"ADISCORD_rus_campaign.{number}.d"].replace("\\n", "\n")
             self.assertLessEqual(len(page), 3000)
             self.assertLessEqual(len(page.encode("utf-8")), 5500)

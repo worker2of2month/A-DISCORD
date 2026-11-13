@@ -606,7 +606,7 @@ class PostwarLeaderProgrammeTests(unittest.TestCase):
             facts[("STP", "has_country_flag", "STP_ch_liberated")] = True
             actual = [route for route in range(1, 7) if matches_conditions(
                 self.expanded(self.triggers[f"STP_party_leader_{route}"]), facts)]
-            self.assertEqual(actual, [government or 2])
+            self.assertEqual(actual, [government or 6])
 
     def test_complete_postwar_layout_including_emergency_branch_has_no_overlaps(self):
         from itertools import product
@@ -728,7 +728,7 @@ class PostwarDebugControlsTests(unittest.TestCase):
         for entry in walk(body):
             self.assertNotIn(entry.key, ("uncomplete_national_focus", "complete_national_focus"))
             if entry.key == "set_variable":
-                self.assertEqual(self.one(entry.value, "var"), "STP_ch_government")
+                self.assertIn(self.one(entry.value, "var"), ("STP_ch_government", "STP_pv_mandate"))
             if entry.key == "remove_ideas":
                 self.assertNotIn("STP_law_", str(entry.value))
 
@@ -778,6 +778,155 @@ class FrontReportTests(unittest.TestCase):
                     self.assertEqual(selected, f"ADISCORD_STP_pv.31.t_{outcome}{stage}")
                     for language in (RU, EN):
                         self.assertTrue(loc_keys(language).get(selected), language)
+
+
+class PartySupportAndVictoryTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        cls.scalar = staticmethod(scalar)
+        cls.effects = top_level(EFFECTS)
+        cls.triggers = top_level(TRIGGERS)
+        cls.event = next(
+            entry.value for entry in parse_clausewitz(text(EVENTS))
+            if entry.key == "country_event"
+            and scalar(entry.value, "id") == "ADISCORD_STP_pv.3"
+        )
+
+    def test_ai_weights_cover_all_routes_without_rerolling_or_choosing_for_player(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        body = self.effects["STP_pv_select_ai_candidate"]
+        facts = {("STP", "tag", "STP"): True, ("STP", "is_ai", "yes"): True}
+        payload = [entry for _, entry in selected_effects(body, facts)]
+        draw = next(entry.value for entry in payload if entry.key == "random_list")
+        weights = {}
+        for branch in draw:
+            assignment = next(e.value for e in branch.value if e.key == "set_variable")
+            self.assertEqual(self.scalar(assignment, "var"), "STP_pv_supported_candidate")
+            weights[int(self.scalar(assignment, "value"))] = int(branch.key)
+        self.assertEqual(weights, {1: 24, 2: 22, 3: 18, 4: 14, 5: 14, 6: 8})
+        for variable in ("STP_pv_supported_candidate", "STP_pv_outcome"):
+            self.assertFalse(list(selected_effects(body, {
+                **facts, ("STP", "has_variable", variable): True})))
+        human = {**facts, ("STP", "is_ai", "yes"): False}
+        self.assertFalse(list(selected_effects(body, human)))
+        opponent = {**human, ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        self.assertTrue(list(selected_effects(body, opponent)))
+
+    def test_support_can_change_before_and_during_war_but_not_after_settlement(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, selected_effects
+
+        options = [e.value for e in self.event if e.key == "option"]
+        self.assertEqual(self.scalar(self.event, "timeout_days"), "7")
+        self.assertEqual(self.scalar(options[0], "name"), "STP_pv_support_keep")
+        self.assertFalse(any(e.key == "hidden_effect" for e in options[0]))
+        for candidate, option in enumerate(options[1:7], 1):
+            payload = [e for _, e in selected_effects(block(option, "hidden_effect"), {
+                ("STP", "STP_pv_support_choice_open", "yes"): True})]
+            assignments = [e.value for e in payload if e.key == "set_variable"]
+            self.assertEqual([(self.scalar(e, "var"), self.scalar(e, "value"))
+                              for e in assignments], [("STP_pv_supported_candidate", str(candidate))])
+            self.assertIn("STP_pv_refresh_claims", [e.key for e in payload])
+            self.assertFalse(list(selected_effects(block(option, "hidden_effect"), {})))
+        base = {("STP", "tag", "STP"): True, ("STP", "has_capitulated", "no"): True}
+        prewar = {**base, ("STP", "has_country_flag", "STP_cw_elections_started"): True,
+                  ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
+        wartime = {**base, ("STP", "has_global_flag", "STP_cw_started"): True,
+                   ("STP", "STP_pv_war_current", "yes"): True}
+        gate = self.triggers["STP_pv_support_choice_open"]
+        for facts in (prewar, wartime):
+            for candidate in range(1, 7):
+                facts[("STP", "variable", "STP_pv_supported_candidate")] = candidate
+                self.assertTrue(matches_conditions(gate, facts))
+            for key in (("has_variable", "STP_pv_outcome"),
+                        ("has_global_flag", "STP_cw_union_wars_finished"),
+                        ("has_global_flag", "RUS_crisis_world_ended")):
+                self.assertFalse(matches_conditions(gate, {**facts, ("STP", *key): True}))
+        self.assertFalse(matches_conditions(gate, {
+            **prewar, ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): False}))
+        decision = next(e.value for e in top_level(DECISIONS)["STP_party_factions"]
+                        if e.key == "STP_pv_choose_support")
+        self.assertEqual(self.scalar(decision, "cost"), "0")
+        self.assertEqual(self.scalar(decision, "days_re_enable"), "30")
+        self.assertEqual(self.scalar(options[-1], "name"), "STP_ch_offer_closed")
+
+    def calculate_claims(self, facts):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        for scope, effect in selected_effects(self.effects["STP_pv_refresh_claims"], facts):
+            key = effect.key
+            var = self.scalar(effect.value, "var")
+            index = (scope, "variable", var)
+            previous = facts.get(index, 0)
+            if key == "clamp_variable":
+                lower = float(self.scalar(effect.value, "min"))
+                upper = float(self.scalar(effect.value, "max"))
+                facts[index] = max(lower, min(upper, previous))
+                continue
+            raw = self.scalar(effect.value, "value")
+            try:
+                value = float(raw)
+            except ValueError:
+                value = facts.get((scope, "variable", raw), 0)
+            if key in ("set_variable", "set_temp_variable"):
+                facts[index] = value
+            elif key == "add_to_variable":
+                facts[index] = previous + value
+            elif key == "subtract_from_variable":
+                facts[index] = previous - value
+            elif key == "multiply_temp_variable":
+                facts[index] = previous * value
+            elif key == "divide_temp_variable":
+                facts[index] = previous / value
+            else:
+                self.fail(f"Unsupported claim effect: {key}")
+
+    def test_influence_can_overturn_player_support_and_ai_assistance_covers_all_six(self):
+        groups = {1: "conservatives", 2: "radicals", 3: "army", 4: "merchants", 5: "security", 6: "advisers"}
+        for supported in range(1, 7):
+            for strongest, group in groups.items():
+                if supported == strongest:
+                    continue
+                for ai in (False, True):
+                    facts = {("STP", "has_country_flag", "STP_pf_initialized"): True,
+                             ("STP", "STP_pv_advisers_have_voice", "yes"): True,
+                             ("STP", "is_ai", "yes"): ai,
+                             ("STP", "variable", "STP_pv_supported_candidate"): supported,
+                             ("STP", "variable", f"STP_pf_{group}_contribution"): 100}
+                    self.calculate_claims(facts)
+                    self.assertEqual(facts[("STP", "variable", "STP_pv_claim_lead")],
+                                     supported if ai else strongest)
+                    before = [facts[("STP", "variable", f"STP_pv_claim_{i}")] for i in range(1, 7)]
+                    self.calculate_claims(facts)
+                    self.assertEqual(before, [facts[("STP", "variable", f"STP_pv_claim_{i}")]
+                                              for i in range(1, 7)])
+                    # A new endorsement removes the old bonus instead of accumulating it.
+                    facts[("STP", "variable", "STP_pv_supported_candidate")] = strongest
+                    self.calculate_claims(facts)
+                    self.assertEqual(facts[("STP", "variable", "STP_pv_claim_lead")], strongest)
+
+    def test_victory_locks_current_influence_winner_exactly_once(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        begin = definition(EFFECTS, "STP_cw_begin_elections")
+        self.assertIn("ADISCORD_STP_pv.3", begin)
+        war = definition(EFFECTS, "STP_cw_begin_hostilities")
+        self.assertNotIn("STP_pv_install_victor", war)
+        resolve = definition(EFFECTS, "STP_pv_resolve_victory")
+        self.assertLess(resolve.index("STP_pv_refresh_claims"), resolve.index("var = STP_pv_outcome"))
+        for claim in range(1, 7):
+            facts = {("STP", "tag", "STP"): True,
+                     ("STP", "has_variable", "STP_pv_strain"): True,
+                     ("STP", "variable", "STP_pv_claim_lead"): claim}
+            payload = [e for _, e in selected_effects(self.effects["STP_pv_resolve_victory"], facts)]
+            assignments = {self.scalar(e.value, "var"): self.scalar(e.value, "value")
+                           for e in payload if e.key == "set_variable"}
+            self.assertEqual(assignments["STP_pv_outcome"], "STP_pv_claim_lead")
+            self.assertEqual(assignments["STP_pv_mandate"], "STP_pv_outcome")
+            facts[("STP", "has_variable", "STP_pv_outcome")] = True
+            self.assertFalse(list(selected_effects(self.effects["STP_pv_resolve_victory"], facts)))
 
 
 if __name__ == "__main__":

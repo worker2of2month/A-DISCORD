@@ -337,6 +337,17 @@ def _rus_bunker_outputs() -> dict[Path, bytes]:
     }
     for layer in range(1, 6):
         source_path = RUS_BUNKER_SOURCE / f"bunker_layer_{layer}.png"
+        runtime_path = RUS_BUNKER_DIR / f"bunker_layer_{layer}.dds"
+        if not source_path.is_file():
+            # The author keeps the supplied cross-sections outside the repository;
+            # without them the integrated export is the authored asset.
+            if not runtime_path.is_file():
+                raise FileNotFoundError(f"bunker layer {layer}: neither {source_path} nor {runtime_path} exists")
+            with Image.open(runtime_path) as runtime:
+                if runtime.size != (480, 160):
+                    raise ValueError(f"bunker layer {layer}: {runtime_path} is not 480x160")
+            outputs[runtime_path] = runtime_path.read_bytes()
+            continue
         with Image.open(source_path) as source:
             image = ImageOps.pad(
                 source.convert("RGBA"),
@@ -346,7 +357,7 @@ def _rus_bunker_outputs() -> dict[Path, bytes]:
             )
         stream = BytesIO()
         image.save(stream, format="DDS", pixel_format="DXT5")
-        outputs[RUS_BUNKER_DIR / f"bunker_layer_{layer}.dds"] = stream.getvalue()
+        outputs[runtime_path] = stream.getvalue()
     return outputs
 
 

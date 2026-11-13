@@ -2840,15 +2840,15 @@ class RusCrisisContracts(unittest.TestCase):
         world.variables["RUS", "RUS_crisis_phase"] = 2
         world.controllers.update({"49": "VAL", "51": "VAL"})
         world.run("RUS_khan_death")
-        self.assertIn("RUS_khan_died", world.global_flags)
+        self.assertIn(("RUS", "ADISCORD_rus_crisis.43"), world.events)
         self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 4)
         self.assertIn("RUS_crisis_settlement_rights", world.flags["VAL"])
         self.assertIn(("VAL", "ADISCORD_rus_crisis.4"), world.events)
         self.assertTrue({("VAL", "ADISCORD_rus_crisis.20"), ("MON", "ADISCORD_rus_crisis.20")} <= set(world.events))
         self.assertEqual(world.retired, ["RUS_Mark_Rustan"])
         self.assertFalse({war for war in world.wars if "RUS" in war})
-        presentations = {event for _, event in world.events if event.startswith("ADISCORD_superevent.")}
-        self.assertEqual(presentations, {"ADISCORD_superevent.22"})
+        presentations = [event for _, event in world.events if event.startswith("ADISCORD_superevent.")]
+        self.assertEqual(presentations, ["ADISCORD_superevent.15"])
         for blocker in ("morale", "peace"):
             with self.subTest(blocker=blocker):
                 world = self.dying_empire()
@@ -2857,7 +2857,7 @@ class RusCrisisContracts(unittest.TestCase):
                 else:
                     world.wars.clear()
                 world.run("RUS_khan_death")
-                self.assertNotIn("RUS_khan_died", world.global_flags)
+                self.assertNotIn(("RUS", "ADISCORD_rus_crisis.43"), world.events)
                 self.assertFalse(world.retired)
 
     def test_lost_imperial_state_weights_morale_by_importance(self):

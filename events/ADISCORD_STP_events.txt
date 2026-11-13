@@ -3863,6 +3863,12 @@ country_event = {
 		}
 	}
 	option = {
+		name = ADISCORD_STP_ch.6.6
+		trigger = { STP_ch_candidate_6_wins = yes }
+		ai_chance = { base = 100 }
+		hidden_effect = { STP_ch_elect_6 = yes }
+	}
+	option = {
 		name = STP_ch_offer_closed
 		trigger = {
 			NOT = {
@@ -3872,6 +3878,7 @@ country_event = {
 					STP_ch_candidate_3_wins = yes
 					STP_ch_candidate_4_wins = yes
 					STP_ch_candidate_5_wins = yes
+					STP_ch_candidate_6_wins = yes
 				}
 			}
 		}
@@ -4103,6 +4110,104 @@ country_event = {
 }
 
 # Strain thresholds.
+country_event = {
+	id = ADISCORD_STP_pv.3
+	title = ADISCORD_STP_pv.3.t
+	desc = ADISCORD_STP_pv.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = { STP_pv_support_choice_open = yes }
+	immediate = { STP_pv_refresh_claims = yes }
+	option = {
+		name = STP_pv_support_keep
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 0 }
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.1
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 24 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 1 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.2
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 22 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 2 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.3
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 18 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 3 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.4
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 14 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 4 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.5
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 14 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 5 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pv.3.6
+		trigger = { STP_pv_support_choice_open = yes }
+		ai_chance = { base = 8 }
+		custom_effect_tooltip = STP_pv_support_candidate_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pv_support_choice_open = yes }
+				set_variable = { var = STP_pv_supported_candidate value = 6 }
+				STP_pv_refresh_claims = yes
+			}
+		}
+	}
+	option = {
+		name = STP_ch_offer_closed
+		trigger = { STP_pv_support_choice_open = no }
+	}
+}
+
 country_event = {
 	id = ADISCORD_STP_pv.10
 	title = ADISCORD_STP_pv.10.t

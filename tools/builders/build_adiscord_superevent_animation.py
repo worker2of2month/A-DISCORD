@@ -14,6 +14,7 @@ from PIL import Image
 
 from tools.lib.adiscord_ui_surfaces import apply_or_check
 from tools.lib.paths import repository_root
+from tools.lib.superevent_art import ARTWORK_BOX, apply_template
 
 
 ROOT = repository_root()
@@ -79,6 +80,13 @@ def build_outputs(portal: Path, background: Path, masks: Path, preview: Path | N
                 "[0:v][m]overlay=197:10:shortest=1:format=auto,format=rgb24[out]",
                 "-map", "[out]", "-frames:v", "1", str(work / f"mask_{index}.png"),
             )
+        # Grade each source frame once before it is reused in the native strips.
+        template = ROOT / "tools/assets/source/Super_event_bg.psd"
+        for name in [*(f"painting_{i}" for i in range(8)), "portal", *(f"mask_{i}" for i in range(6))]:
+            path = work / f"{name}.png"
+            with Image.open(path) as image:
+                graded = apply_template(image, template).crop(ARTWORK_BOX).convert("RGB")
+            graded.save(path)
         sequence = timeline()
         for index, name in enumerate(sequence):
             shutil.copyfile(work / f"{name}.png", work / f"frame_{index:02d}.png")

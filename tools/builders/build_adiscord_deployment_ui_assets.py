@@ -631,7 +631,7 @@ def _png_bytes(image: Image.Image) -> bytes:
     return stream.getvalue()
 
 
-def expected_outputs() -> dict[Path, bytes]:
+def expected_outputs(*, include_preview: bool = False) -> dict[Path, bytes]:
     source = load_surface_source(SOURCE)
     assets: list[tuple[SpriteContract, Image.Image]] = []
     for contract in DEPLOYMENT_CONTRACTS:
@@ -658,6 +658,8 @@ def expected_outputs() -> dict[Path, bytes]:
         outputs[ROOT / f"gfx/interface/deploy_{native}_entry.dds"] = outputs[
             OUTPUT_DIR / f"ADISCORD_deployment_{generated}_row.dds"
         ]
+    if not include_preview:
+        outputs.pop(PREVIEW)
     return outputs
 
 
@@ -675,6 +677,7 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument("--preview", action="store_true", help="Include a temporary development contact sheet")
     args = parser.parse_args()
     if not args.apply:
         obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]
@@ -682,7 +685,7 @@ def main() -> int:
             for path in obsolete:
                 print(f"OBSOLETE: {path}")
             return 1
-    result = apply_or_check(expected_outputs(), args.apply, "Deployment UI")
+    result = apply_or_check(expected_outputs(include_preview=args.preview), args.apply, "Deployment UI")
     if result == 0 and args.apply:
         _remove_legacy_outputs()
     return result

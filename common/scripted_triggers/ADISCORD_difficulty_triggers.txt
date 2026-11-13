@@ -37,7 +37,7 @@ ADISCORD_difficulty_ai_offensive_ready = {
 		ADISCORD_economy_ai_is_healthy = yes
 		ADISCORD_economy_ai_is_stressed = yes
 	}
-	ADISCORD_ai_army_replacement_pressure_cleared = yes
+	ADISCORD_ai_field_army_can_attack = yes
 }
 
 # Enemy scope in a front country_trigger; FROM is the allocating country.
@@ -52,12 +52,17 @@ ADISCORD_difficulty_enemy_allows_push = {
 	fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
 }
 
+# An equipment shortfall alone does not halt a clearly stronger army: against
+# an enemy below 0.8 of its strength the base campaign order stays in force.
 ADISCORD_difficulty_enemy_requires_caution = {
 	has_war_with = FROM
 	FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
 	OR = {
-		FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
 		fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
+		AND = {
+			FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
+			NOT = { fighting_army_strength_ratio = { tag = FROM ratio < 0.8 } }
+		}
 	}
 }
 
@@ -86,8 +91,11 @@ ADISCORD_difficulty_state_requires_caution = {
 	FROM.FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
 	FROM = { has_war_with = FROM.FROM }
 	OR = {
-		FROM.FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
 		FROM = { fighting_army_strength_ratio = { tag = FROM.FROM ratio > 1.25 } }
+		AND = {
+			FROM.FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
+			FROM = { NOT = { fighting_army_strength_ratio = { tag = FROM.FROM ratio < 0.8 } } }
+		}
 	}
 }
 

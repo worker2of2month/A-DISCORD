@@ -28,8 +28,11 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
-# Both province-scoped dams stand next to the same permanent river landmark.
+# The dams of provinces 145 and 70 form one river crossing beside a permanent
+# landmark. Both rows share one anchor on the province border so the map shows
+# a single model: truncation places it in 145, rounding in 70.
 BORDER_DAM_STATES = (28, 53)
+BORDER_DAM_ANCHOR = ("3749.00", "11.10", "945.86", "4.09")
 PORT_ANCHOR_TYPES = {
     "coastal_bunker",
     "dockyard",
@@ -279,7 +282,7 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
                     f"map/buildings.txt:{line_number}: {building_type} is not positioned in a state province"
                 )
             recorded_state = int(fields[0])
-            if recorded_state != actual_state:
+            if recorded_state != actual_state and not is_border_dam(fields):
                 mismatches.append(
                     BuildingMismatch(
                         line=line_number,
@@ -377,7 +380,8 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
     ``dam_spawn`` is province-scoped: an anchor in a neighbouring province of
     the same state leaves the dam without a model. A stray anchor moves to the
     nearest integer pixel of the dam province, so truncation and rounding agree.
-    Border dams also need separate valid anchors in their own provinces.
+    Border dams instead keep the shared ``BORDER_DAM_ANCHOR``; two separate
+    anchors in their own provinces render as two offset models.
     """
     dam_provinces = load_dam_province_by_state(root)
     colors = load_province_by_color(root)
@@ -393,6 +397,12 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
         for index, line in enumerate(lines):
             fields = line.split(";")
             if fields[1] != "dam_spawn":
+                continue
+            if is_border_dam(fields):
+                if tuple(fields[2:6]) != BORDER_DAM_ANCHOR:
+                    fields[2:6] = BORDER_DAM_ANCHOR
+                    result[index] = ";".join(fields)
+                    changed.append(index + 1)
                 continue
             province_id = dam_provinces.get(int(fields[0]))
             if province_id is None:
@@ -482,6 +492,7 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
         (125, 3536.24, 906.55, 12.0, "3503.00", "12.03", "890.00"),
         (48, 3718.20, 913.50, 8.0, "3730.00", "10.25", "911.00"),
         (699, 3977.10, 934.50, 10.0, "3970.00", "12.57", "926.00"),
+        (75, 2901.50, 618.50, 4.5, "2914.00", "10.53", "617.00"),
     )
     result = []
     for line in lines:

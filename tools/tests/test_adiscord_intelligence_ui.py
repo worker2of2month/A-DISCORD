@@ -1,7 +1,9 @@
 import io
 from pathlib import Path
 import re
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from PIL import Image, ImageChops, ImageStat
 
@@ -14,12 +16,13 @@ OPERATIVE_GUI = ROOT / "interface/operative.gui"
 LEADER_GUI = ROOT / "interface/operativeleader.gui"
 GFX = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
 HEADER_SOURCE = (
-    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
+    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_agent_cutout.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 
 
 EXPECTED_FIXED = {
+    "GFX_ADISCORD_intelligence_agency_header": ((519, 109), 1),
     "GFX_ADISCORD_intelligence_branches_header": ((519, 109), 1),
     "GFX_ADISCORD_intelligence_agents_header": ((519, 109), 1),
     "GFX_ADISCORD_intelligence_create": ((508, 99), 1),
@@ -161,13 +164,30 @@ class IntelligenceUiContractTests(unittest.TestCase):
     def test_header_source_is_project_owned_and_large_enough(self) -> None:
         self.assertTrue(HEADER_SOURCE.is_file(), HEADER_SOURCE)
         with Image.open(HEADER_SOURCE) as image:
-            self.assertIn(image.mode, ("RGB", "RGBA"))
-            self.assertGreaterEqual(image.width, 1024)
-            self.assertGreaterEqual(image.height, 512)
+            self.assertEqual(image.mode, "RGBA")
+            self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
+            self.assertEqual(image.getpixel((0, 0))[3], 0)
+            self.assertGreaterEqual(image.width, 256)
+            self.assertGreaterEqual(image.height, 384)
         contracts = {item.target_name: item for item in builder.INTELLIGENCE_CONTRACTS}
         self.assertIn("GFX_ADISCORD_intelligence_agents_header", contracts)
         header = contracts["GFX_ADISCORD_intelligence_agents_header"]
         self.assertEqual(header.total_size, (519, 109))
+
+    def test_agent_map_uses_terrain_geography_without_flipping_or_cropping(self) -> None:
+        terrain = Image.new("P", (6, 3), 15)
+        terrain.putpalette([channel for value in range(256) for channel in (value, 0, 0)])
+        terrain.putpixel((1, 0), 4)
+        terrain.putpixel((5, 2), 7)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "terrain.bmp"
+            terrain.save(path)
+            with patch.object(builder, "TERRAIN_SOURCE", path):
+                land = builder._intelligence_land_mask(terrain.size)
+        expected = Image.new("L", terrain.size, 0)
+        expected.putpixel((1, 0), 255)
+        expected.putpixel((5, 2), 255)
+        self.assertEqual(land.tobytes(), expected.tobytes())
 
     def test_dark_agency_tabs_use_a_pale_font(self) -> None:
         gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
@@ -281,16 +301,28 @@ class IntelligenceUiContractTests(unittest.TestCase):
             ).getbbox()
         )
         self.assertGreater(ImageStat.Stat(branches.convert("L")).stddev[0], 4.0)
-        agent_art = agents.crop((190, 10, 510, 100))
+        with Image.open(OUTPUT_DIR / "ADISCORD_intelligence_agency_header.dds") as source:
+            agent_art = source.convert("RGBA").crop((110, 10, 455, 100))
         self.assertGreater(ImageStat.Stat(agent_art.convert("L")).stddev[0], 6.0)
         self.assertGreater(
             sum(
                 1
                 for red, green, blue, _alpha in agent_art.get_flattened_data()
-                if blue >= 65 and green >= 55 and blue > red * 1.2
+                if blue >= 50 and green >= 40 and blue > red * 1.2
             ),
             100,
         )
+
+    def test_agent_art_is_bound_to_agency_nameplate(self) -> None:
+        gui = AGENCY_GUI.read_text(encoding="utf-8")
+        nameplate = named_block(gui, "containerWindowType", "name_logo")
+        agents = named_block(gui, "containerWindowType", "agency_agents")
+        self.assertIn('"GFX_ADISCORD_intelligence_agency_header"', nameplate)
+        self.assertIn('"GFX_ADISCORD_intelligence_agents_header"', agents)
+        self.assertNotIn('"GFX_intelligence_agency_header"', nameplate)
+        metal = builder.load_surface_source(builder.METAL_SOURCE)
+        with Image.open(OUTPUT_DIR / "ADISCORD_intelligence_agents_header.dds") as image:
+            self.assertEqual(image.convert("RGBA").tobytes(), builder._agents_header(metal).tobytes())
 
     def test_nested_agency_commands_use_scoped_semantic_buttons(self) -> None:
         gui = builder.render_gui_files()[AGENCY_GUI].decode("utf-8")

@@ -1884,6 +1884,7 @@ SHL_update_tensions = {
 		set_temp_variable = { var = SHL_balance_shift value = 0.02 }
 		SHL_balance_shift = yes
 	}
+	SHL_ai_steer_ratification = yes
 	# A commune without crests keeps the pressure scale at zero.
 	if = {
 		limit = { has_completed_focus = SHL_k_no_crests }
@@ -5509,6 +5510,77 @@ SHL_ai_allocate_site = {
 			limit = { SHL = { check_variable = { var = SHL_ai_arsenal_left value = 0 compare = greater_than } } }
 			set_variable = { var = SHL_furnace_recipient value = 1 }
 			SHL = { subtract_from_variable = { var = SHL_ai_arsenal_left value = 1 } }
+		}
+	}
+}
+
+# AI only, once per cycle after the pre-ratification drift. The quarters gain
+# every cycle while fewer than seven house furnaces vote, so a preliminary
+# course whose ratification needs another range never opens without player
+# levers. Once the course's focus prerequisites are complete, the balance moves
+# toward the inner part of the required range; the margin keeps the four-week
+# ratification focus valid against the next cycle's drift. The city course also
+# needs its civic mandate.
+SHL_ai_steer_ratification = {
+	if = {
+		limit = {
+			is_ai = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_workers_charter
+			has_power_balance = { id = SHL_conclave_balance }
+		}
+		if = {
+			limit = { has_completed_focus = SHL_common_dispatch }
+			if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value > 0.20 } }
+				set_temp_variable = { var = SHL_balance_shift value = -0.10 }
+				SHL_balance_shift = yes
+			}
+			else_if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value > 0.05 } }
+				set_temp_variable = { var = SHL_balance_shift value = -0.05 }
+				SHL_balance_shift = yes
+			}
+			else_if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value < -0.20 } }
+				set_temp_variable = { var = SHL_balance_shift value = 0.10 }
+				SHL_balance_shift = yes
+			}
+			else_if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value < -0.05 } }
+				set_temp_variable = { var = SHL_balance_shift value = 0.05 }
+				SHL_balance_shift = yes
+			}
+		}
+		else_if = {
+			limit = { has_completed_focus = SHL_house_compromise }
+			if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value > 0 } }
+				set_temp_variable = { var = SHL_balance_shift value = -0.10 }
+				SHL_balance_shift = yes
+			}
+			else_if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value > -0.20 } }
+				set_temp_variable = { var = SHL_balance_shift value = -0.05 }
+				SHL_balance_shift = yes
+			}
+		}
+		else_if = {
+			limit = { has_completed_focus = SHL_city_charters }
+			if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value < 0 } }
+				set_temp_variable = { var = SHL_balance_shift value = 0.10 }
+				SHL_balance_shift = yes
+			}
+			else_if = {
+				limit = { power_balance_value = { id = SHL_conclave_balance value < 0.20 } }
+				set_temp_variable = { var = SHL_balance_shift value = 0.05 }
+				SHL_balance_shift = yes
+			}
+			if = {
+				limit = { check_variable = { var = SHL_city_support value = 35 compare = less_than } }
+				add_to_variable = { var = SHL_city_support value = 5 }
+			}
 		}
 	}
 }

@@ -1,0 +1,363 @@
+focus_tree = {
+	id = SHL_south_war_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 200
+			original_tag = SHL
+			ADISCORD_south_final_active = yes
+		}
+	}
+	default = no
+	continuous_focus_position = { x = 100 y = 555555 }
+
+	# Loaded by ADISCORD_south_load_war_tree for the whole war for the South and
+	# replaced by the course tree on every terminal path. The course branches on
+	# the right read SHL_political_course; only the current course is shown.
+
+	# ----- Front of the furnaces -----
+
+	focus = {
+		id = SHL_south_furnaces_to_front
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 10
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 25
+			unlock_decision_tooltip = SHL_south_war_pour
+		}
+		ai_will_do = { base = 200 }
+	}
+
+	focus = {
+		id = SHL_south_raid_oil_fields
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = 8
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_south_furnaces_to_front
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_raid_oil_tt
+			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
+			unlock_decision_tooltip = SHL_south_raid_oil
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_south_desert_convoys
+		icon = GFX_focus_generic_camel_corps
+		x = 12
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_south_furnaces_to_front
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_timed_idea = {
+				idea = SHL_south_desert_convoys_idea
+				days = 150
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_south_storm_oil_belt
+		icon = GFX_goal_generic_position_armies
+		x = 10
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_south_raid_oil_fields
+			focus = SHL_south_desert_convoys
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_timed_idea = {
+				idea = SHL_south_storm_idea
+				days = 120
+			}
+			army_experience = 15
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	# ----- Course 1: the Conclave of ten -----
+
+	focus = {
+		id = SHL_h_hired_contracts
+		icon = GFX_focus_generic_desert_training
+		x = 20
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_hire_desert_guard
+			custom_effect_tooltip = SHL_h_hired_contracts_tt
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_h_buy_garrisons
+		icon = GFX_focus_generic_home_defense
+		x = 20
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		prerequisite = {
+			focus = SHL_h_hired_contracts
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_h_buy_garrisons_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	# ----- Course 2: the Southern Compact -----
+
+	focus = {
+		id = SHL_c_charters_for_occupied
+		icon = GFX_focus_generic_improve_the_administration
+		x = 24
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_charter_occupation
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_c_compact_volunteers
+		icon = GFX_focus_generic_diverse_army
+		x = 26
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_c_compact_volunteers_tt
+			hidden_effect = { SHL_raise_paid_levies_2 = yes }
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# ----- Course 3: the directorate -----
+
+	focus = {
+		id = SHL_d_war_orders_all
+		icon = GFX_focus_generic_money_for_equipment
+		x = 30
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6750
+				producer = SHL
+			}
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_d_guard_to_front
+		icon = GFX_focus_generic_soldier_salute
+		x = 32
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_d_guard_to_front_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# ----- Course 4: the regency -----
+
+	focus = {
+		id = SHL_r_hire_armies
+		icon = GFX_focus_generic_desert_training
+		x = 36
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_hire_desert_guard
+			custom_effect_tooltip = SHL_r_hire_armies_tt
+			hidden_effect = {
+				SHL_ensure_levy_template = yes
+				699 = {
+					if = {
+						limit = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+						SHL_create_levy = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	focus = {
+		id = SHL_r_sell_future
+		icon = GFX_goal_generic_trade
+		x = 38
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_sell_concessions
+			custom_effect_tooltip = SHL_r_sell_future_tt
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	# ----- Course 5: the commune -----
+
+	focus = {
+		id = SHL_k_shift_brigades
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 42
+		y = 0
+		cost = 3
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_k_shift_brigades_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+			}
+		}
+		ai_will_do = { base = 150 }
+	}
+
+	# Решение SHL_south_raid_oil читает завершение этого фокуса и снимает цену в PP.
+	focus = {
+		id = SHL_k_strikes_on_fields
+		icon = GFX_focus_generic_strike_at_democracy3
+		x = 44
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_final_active = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_k_strikes_on_fields_now_tt
+			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
+			custom_effect_tooltip = SHL_k_strikes_on_fields_tt
+		}
+		ai_will_do = { base = 120 }
+	}
+}

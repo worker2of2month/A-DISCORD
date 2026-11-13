@@ -1,3 +1,24 @@
+# COUNTRY: dormant minors become eligible again when their lifecycle clears
+# the optimization flag; successor and dynamic countries need no tag allowlist.
+ADISCORD_ai_can_develop_air_force = {
+	is_ai = yes
+	has_capitulated = no
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+	NOT = { tag = EXZ }
+	NOT = { tag = RSV }
+	has_tech = ADISCORD_tech_reclaimed_jet_platforms
+}
+
+# Small industries alternate the auxiliary stockpile floor with fighter
+# replacement, leaving a factory for the field army's rifles.
+ADISCORD_ai_small_air_replacement = {
+	ADISCORD_ai_can_develop_air_force = yes
+	num_of_military_factories > 1
+	num_of_military_factories < 6
+	has_equipment = { ADISCORD_fighter_archetype < 100 }
+	any_controlled_state = { air_base > 0 }
+}
+
 # Opt-in guards for available and allowed_to_remove on laws and cabinet ideas.
 # Country flags grant manual changes only to definitions that use these guards.
 ADISCORD_manual_law_change_allowed = {
@@ -211,6 +232,34 @@ ADISCORD_ai_army_replacement_pressure_cleared = {
 		NOT = {
 			stockpile_ratio = {
 				archetype = artillery_equipment
+				ratio < 0.10
+			}
+		}
+	}
+}
+
+# Offensive readiness is a lower bar than the recruitment exit above: a field army
+# at four fifths of its equipment can attack while replacements keep arriving.
+# Reusing the 95% exit kept short-equipped AIs in careful mode for whole wars.
+ADISCORD_ai_field_army_can_attack = {
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.80 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = infantry_equipment
+				ratio < 0.10
+			}
+		}
+	}
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.80 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = ADISCORD_squad_weapons_equipment
 				ratio < 0.10
 			}
 		}

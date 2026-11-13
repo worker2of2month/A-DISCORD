@@ -380,7 +380,7 @@ class STPCoreContractTests(unittest.TestCase):
                 outcomes = [scalar(entry.value, "value") for entry in selected
                             if entry.key == "set_variable"
                             and scalar(entry.value, "var") == "STP_pv_outcome"]
-                expected = "STP_debug_party_victory_choice" if debug and 1 <= choice <= 6 else "STP_pv_claim_lead"
+                expected = "STP_debug_party_victory_choice" if debug and 1 <= choice <= 6 else "STP_pv_mandate"
                 self.assertEqual(outcomes[-1], expected)
                 self.assertEqual(sum(entry.key == "STP_pv_apply_victory_terms" for entry in selected), 1)
                 self.assertTrue(any(entry.key == "clear_variable" and entry.value == "STP_debug_party_victory_choice" for entry in selected))
@@ -626,11 +626,10 @@ class IvanovPortraitAssetTests(unittest.TestCase):
     def test_new_portrait_and_atlas_share_exact_clean_frames_and_alpha(self):
         from PIL import Image
         from tools.builders.build_adiscord_stp_portraits import (
-            ATLAS, FRAMES, PORTRAITS, SOURCE, animation_frames,
+            ATLAS, FRAMES, PORTRAITS, animation_frames,
         )
 
-        source = ROOT / SOURCE / PORTRAITS["STP"]
-        self.assertEqual(source.read_bytes(), (ROOT / "gfx/leaders/STP" / source.name).read_bytes())
+        source = ROOT / PORTRAITS["STP"]
         with Image.open(source) as image:
             base = image.convert("RGBA")
         frames = animation_frames(base)
@@ -645,7 +644,7 @@ class IvanovPortraitAssetTests(unittest.TestCase):
             self.assertEqual(atlas.crop((156 * index, 0, 156 * (index + 1), 210)).tobytes(), frame.tobytes())
 
     def test_all_supplied_administrator_portraits_have_large_and_compact_bindings(self):
-        from tools.builders.build_adiscord_stp_portraits import PORTRAITS, SOURCE
+        from tools.builders.build_adiscord_stp_portraits import PORTRAITS
         sprites = block(parse_clausewitz(read(ROOT / "interface/ADISCORD_leader_portraits.gfx")), "spriteTypes")
         for tag in ("NOD", "VAL", "NKA"):
             character = tag + "_STS_administrator"
@@ -655,7 +654,7 @@ class IvanovPortraitAssetTests(unittest.TestCase):
             for size in ("large", "small"):
                 sprite = next(e.value for e in sprites if scalar(e.value, "name") == scalar(civilian, size))
                 texture = ROOT / scalar(sprite, "texturefile")
-                self.assertEqual(texture.read_bytes(), (ROOT / SOURCE / PORTRAITS[tag]).read_bytes())
+                self.assertEqual(texture.read_bytes(), (ROOT / PORTRAITS[tag]).read_bytes())
                 if size == "small":
                     self.assertEqual(scalar(block(sprite, "size"), "x"), "50")
                     self.assertEqual(scalar(block(sprite, "size"), "y"), "67")

@@ -232,3 +232,233 @@ ADISCORD_vorkerland_tva_administration = {
 	allowed = { tag = TVA }
 	visible = { TVA_administration_active = yes }
 }
+
+# --- leader_branch_categories ---
+# Nikita Worcker's siege regime: propaganda, tribunals and recall sessions,
+# language programmes and the revolutionary security commission.
+ADISCORD_vorkerland_wkr_siege_category = {
+	icon = ADISCORD_propaganda
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		OR = {
+			WKR_presidential_course = yes
+			has_completed_focus = WKR_convene_front_soviets
+		}
+		OR = {
+			has_completed_focus = WKR_siege_the_living_banner
+			has_completed_focus = WKR_siege_unispeech_officer_schools
+			has_completed_focus = WKR_siege_recruitment_in_the_communities
+			has_completed_focus = WKR_siege_revolutionary_security_commission
+		}
+	}
+}
+
+# --- W2: armed people (WKR presidential course) ---
+# Training, arms workshops, partisan operations and railway troops. Opens with
+# the first focus of the branch that unlocks a programme.
+ADISCORD_vorkerland_wkr_armed_people_category = {
+	icon = army_reform
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		OR = {
+			has_completed_focus = WKR_ranks_veterans_as_instructors
+			has_completed_focus = WKR_ranks_shop_arms_workshops
+			has_completed_focus = WKR_ranks_war_behind_the_lines
+			has_completed_focus = WKR_ranks_repair_depots
+		}
+	}
+	priority = 80
+}
+
+# Nikita Worcker's siege economy, the free-republic union and the operations
+# for Vorkensberg. Each decision carries its own unlock focus in visible.
+ADISCORD_vorkerland_wkr_war_communism_category = {
+	icon = ADISCORD_factory
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		WKR_front_presidential_gate = yes
+		OR = {
+			has_completed_focus = WKR_front_declare_war_communism
+			has_completed_focus = WKR_front_arms_from_our_arsenal
+			has_completed_focus = WKR_front_contact_the_underground
+		}
+	}
+	priority = 80
+}
+
+# --- executive_ledger_category ---
+# Anton Bagley's executive: decrees, audits, rations and evacuations. The
+# description shows the calculation-trust ledger opened by any block root.
+ADISCORD_vorkerland_wkr_ledger_category = {
+	icon = ADISCORD_factory
+	picture = GFX_ADISCORD_decision_picture_deal
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		OR = {
+			WKR_executive_course = yes
+			has_completed_focus = WKR_empower_front_executive
+		}
+		OR = {
+			has_completed_focus = WKR_ledger_executive_statute
+			has_completed_focus = WKR_ledger_the_chairmans_shadow
+			has_completed_focus = WKR_ledger_found_the_counting_chamber
+		}
+	}
+}
+
+# Programmes of Anton Bagley's executive army: norms, contract vehicles and the staff.
+# Individual decisions carry their own unlock focus; the category opens with the
+# first focus of any of the three branches.
+ADISCORD_vorkerland_wkr_norm_army_category = {
+	icon = army_reform
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		OR = {
+			WKR_executive_course = yes
+			has_completed_focus = WKR_empower_front_executive
+		}
+		OR = {
+			has_completed_focus = WKR_measure_army_of_norms
+			has_completed_focus = WKR_measure_motorization_by_contract
+			has_completed_focus = WKR_measure_staff_science
+		}
+	}
+}
+
+# Anton Bagley's executive course: issue norms, contracts with the surviving
+# republics and the calculation of the decisive offensive.
+ADISCORD_vorkerland_wkr_contracts_category = {
+	icon = ADISCORD_deal
+	picture = GFX_ADISCORD_decision_picture_deal
+	allowed = { tag = WKR }
+	visible = {
+		WKR_administration_active = yes
+		OR = {
+			WKR_executive_course = yes
+			has_completed_focus = WKR_empower_front_executive
+		}
+		OR = {
+			has_completed_focus = WKR_contract_survey_the_broken_plants
+			has_completed_focus = WKR_contract_open_the_contract_office
+			has_completed_focus = WKR_contract_assault_timetables
+			has_completed_focus = WKR_contract_fortified_bounds
+		}
+	}
+}
+
+# Petrichev's personal programmes and the regency, junta, diarchy or college
+# programmes of the chosen political course. Opens with the first unlock.
+ADISCORD_vorkerland_vad_regency_category = {
+	icon = generic_political_actions
+	allowed = { tag = VAD }
+	visible = {
+		VAD_administration_active = yes
+		OR = {
+			has_completed_focus = VAD_regent_publish_the_service_record
+			has_completed_focus = VAD_regent_ride_along_the_front
+			has_completed_focus = VAD_regent_raise_the_personal_standard
+			has_completed_focus = VAD_regent_open_the_night_map_room
+			has_completed_focus = VAD_regent_found_the_order_of_restoration
+			has_completed_focus = VAD_regent_convene_the_crown_council
+			has_completed_focus = VAD_regent_proclaim_the_officers_dictatorship
+			has_completed_focus = VAD_regent_double_chain_of_command
+			has_completed_focus = VAD_regent_the_generals_insurance
+			has_completed_focus = VAD_regent_rotate_the_front_commanders
+			has_completed_focus = VAD_regent_votes_of_the_generals
+		}
+	}
+}
+
+# The academy, the district directorate and the Second Department report to the staff.
+ADISCORD_vorkerland_vad_army_category = {
+	icon = army_reform
+	allowed = { tag = VAD }
+	visible = {
+		VAD_administration_active = yes
+		OR = {
+			has_completed_focus = VAD_corps_found_the_staff_academy
+			has_completed_focus = VAD_corps_staff_district_directorate
+			has_completed_focus = VAD_corps_found_the_second_department
+		}
+	}
+	priority = 80
+}
+
+ADISCORD_vorkerland_vad_crown_works_category = {
+	icon = ADISCORD_factory
+	allowed = { tag = VAD }
+	visible = {
+		VAD_administration_active = yes
+		OR = {
+			has_completed_focus = VAD_realm_munitions_norms
+			has_completed_focus = VAD_realm_lay_down_arsenals
+			has_completed_focus = VAD_realm_military_requisition
+			has_completed_focus = VAD_realm_industrialist_contracts
+			has_completed_focus = VAD_realm_register_of_lost_provinces
+			has_completed_focus = VAD_realm_union_of_garrisons
+			has_completed_focus = VAD_realm_occupation_staff
+			has_completed_focus = VAD_realm_siege_artillery_park
+			has_completed_focus = VAD_realm_storm_with_the_guards
+			has_completed_focus = VAD_realm_ring_of_siege
+			has_completed_focus = VAD_realm_parade_quartermasters
+		}
+	}
+}
+
+ADISCORD_vorkerland_tva_protocol_category = {
+	icon = ADISCORD_propaganda
+	allowed = { tag = TVA }
+	visible = {
+		TVA_administration_active = yes
+		OR = {
+			has_completed_focus = TVA_protocol_single_operator
+			has_completed_focus = TVA_protocol_engineers_collegium
+			has_completed_focus = TVA_protocol_classify_the_archive
+			has_completed_focus = TVA_protocol_open_the_reactor_log
+			has_completed_focus = TVA_protocol_ration_by_metrics
+			has_completed_focus = TVA_protocol_evacuate_by_queue
+		}
+	}
+}
+
+# Worx's machine army: engineer works, field operations, unattended systems
+# and the repair and supply network. Every focus that can be the first unlock
+# of a programme in one of the three blocks opens the category.
+ADISCORD_vorkerland_tva_machine_army_category = {
+	icon = army_reform
+	allowed = { tag = TVA }
+	visible = {
+		TVA_administration_active = yes
+		OR = {
+			has_completed_focus = TVA_machine_form_the_engineer_corps
+			has_completed_focus = TVA_machine_automatic_strongpoints
+			has_completed_focus = TVA_machine_unmanned_strike_packages
+			has_completed_focus = TVA_machine_radar_shield
+			has_completed_focus = TVA_machine_spare_parts_registry
+			has_completed_focus = TVA_machine_forward_supply_points
+			has_completed_focus = TVA_machine_repair_network
+			has_completed_focus = TVA_machine_supply_network
+		}
+	}
+	priority = 80
+}
+
+ADISCORD_vorkerland_tva_laboratories_category = {
+	icon = ADISCORD_science
+	allowed = { tag = TVA }
+	visible = {
+		TVA_administration_active = yes
+		OR = {
+			has_completed_focus = TVA_lab_convene_the_design_council
+			has_completed_focus = TVA_lab_write_to_karim_dol
+			has_completed_focus = TVA_lab_open_the_firnov_line
+			has_completed_focus = TVA_lab_blackout_the_enemy_sectors
+			has_completed_focus = TVA_lab_repair_columns_behind_the_assault
+		}
+	}
+}

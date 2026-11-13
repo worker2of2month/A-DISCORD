@@ -42,6 +42,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
     "ambient_audio",
     "azhar_palace",
+    "isaiah_clock_tower",
     "coastal_geography",
     "ainholm_mandate",
     "decision_ui_assets",
@@ -53,6 +54,8 @@ REQUIRED_FAMILIES = {
     "focus_ui_assets",
     "focus_trees",
     "superevent_music",
+    "superevent_animation",
+    "superevent_art",
     "event_pictures",
     "production_ui_assets",
     "doctrine_system",
@@ -262,7 +265,8 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 "tools/lib/adiscord_ui_contracts.py",
                 "tools/lib/adiscord_ui_surfaces.py",
                 "tools/assets/source/production_gui/production_surface_source.png",
-                "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png",
+                "tools/assets/source/intelligence_gui/ADISCORD_intelligence_agent_cutout.png",
+                "map/terrain.bmp",
             },
         )
         self.assertTrue(entry["may_delete_outputs"])
@@ -273,7 +277,7 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         entry = self.entries["deployment_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
-            for path in deployment_ui_assets.expected_outputs()
+            for path in deployment_ui_assets.expected_outputs(include_preview=True)
         }
         self.assertEqual(set(entry["output_globs"]), expected_paths)
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))
@@ -294,7 +298,7 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         entry = self.entries["technology_screen_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
-            for path in technology_ui_assets.expected_outputs()
+            for path in technology_ui_assets.expected_outputs(include_preview=True)
         }
         self.assertEqual(set(entry["output_globs"]), expected_paths)
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))

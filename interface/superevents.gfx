@@ -67,6 +67,16 @@ spriteTypes = {
 		textureFile = "gfx/interface/superevents/VAL/superevent_val_commonwealth.png"
 	}
 
+	spriteType = {
+		name = "GFX_superevent_val_council_proclamation"
+		textureFile = "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_south_war"
+		textureFile = "gfx/interface/superevents/South/superevent_south_war.png"
+	}
+
 
 	spriteType = {
 		name = "GFX_superevent_stelander_great"
@@ -75,12 +85,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_rus_black_banner"
-		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+		textureFile = "gfx/interface/superevents/RUS/superevent_rus_black_banner.png"
 	}
 
 	spriteType = {
 		name = "GFX_superevent_rus_restoration"
-		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+		textureFile = "gfx/interface/superevents/RUS/superevent_rus_restoration.png"
 	}
 
 	spriteType = {
@@ -95,12 +105,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_rus_khan_defeated"
-		textureFile = "gfx/interface/superevents/NAM/superevent_resource_war.png"
-	}
-
-	spriteType = {
-		name = "GFX_superevent_vorkerland_joint_victory"
-		textureFile = "gfx/interface/superevents/WRK/superevent_west_council.png"
+		textureFile = "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png"
 	}
 
 	spriteType = {
@@ -110,12 +115,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_sotnikov_directory"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_sotnikov_directory.png"
 	}
 
 	spriteType = {
 		name = "GFX_superevent_stelander_sotnikov_charter"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_sotnikov_charter.png"
 	}
 
 	spriteType = {
@@ -125,12 +130,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_tikhoreva"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
-	}
-
-	spriteType = {
-		name = "GFX_superevent_rus_khan_died"
-		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_tikhoreva.png"
 	}
 
 	spriteType = {
@@ -145,7 +145,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_party_victory_houses"
-		textureFile = "gfx/interface/superevents/SHL/superevent_south_regency.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_houses.png"
 	}
 
 	spriteType = {
@@ -165,7 +165,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_stelander_party_victory_regent"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_staff.png"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_regent.png"
 	}
 
 	spriteType = {
@@ -220,7 +220,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_south_rump"
-		textureFile = "gfx/interface/superevents/WRK/superevent_west_world_empire.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_rump.png"
 	}
 
 	spriteType = {
@@ -230,12 +230,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_south_radical"
-		textureFile = "gfx/interface/superevents/NAM/superevent_nam_resource_war_service.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_radical.png"
 	}
 
 	spriteType = {
 		name = "GFX_superevent_south_free_islands"
-		textureFile = "gfx/interface/superevents/WRK/superevent_west_anton.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_free_islands.png"
 	}
 
 	spriteType = {
@@ -305,7 +305,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_south_civil_service"
-		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory_wallets.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_civil_service.png"
 	}
 
 	spriteType = {
@@ -325,7 +325,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_south_directorate"
-		textureFile = "gfx/interface/superevents/WRK/superevent_west_council.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_directorate.png"
 	}
 
 	spriteType = {

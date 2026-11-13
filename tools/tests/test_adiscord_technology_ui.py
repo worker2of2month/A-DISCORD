@@ -7,6 +7,7 @@ from PIL import Image, ImageChops, ImageStat
 
 from tools.builders.build_adiscord_technology_system import FOLDER_BACKGROUNDS
 from tools.builders import build_adiscord_technology_ui_assets as builder
+from tools.lib.adiscord_ui_surfaces import _with_existing_newlines
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -693,10 +694,10 @@ class TechnologyUiContractTests(unittest.TestCase):
         outputs = builder.expected_outputs()
         self.assertIn(GUI, outputs)
         self.assertIn(GFX, outputs)
-        self.assertIn(PREVIEW, outputs)
+        self.assertIn(PREVIEW, builder.expected_outputs(include_preview=True))
         for path, data in outputs.items():
             self.assertTrue(path.is_file(), path)
-            self.assertEqual(path.read_bytes(), data, path)
+            self.assertEqual(path.read_bytes(), _with_existing_newlines(path, data), path)
             if path.suffix == ".gui":
                 self.assertNotRegex(data.decode("utf-8"), r"(?m)[ \t]+$")
         for path in ASSET_DIR.glob("*.dds"):

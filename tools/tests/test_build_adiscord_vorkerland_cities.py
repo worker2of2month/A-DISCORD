@@ -100,6 +100,24 @@ class VorkerlandCitiesTests(unittest.TestCase):
         self.assertEqual(issues, [])
         self.assertLessEqual(required, frozenset(colours.values()))
 
+    def test_landmark_clearance_does_not_erase_the_rest_of_its_city(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_fixture(root)
+            source = (root / "cities.bmp").read_bytes()
+            with (patch.object(cities, "TARGET_PROVINCES", frozenset({TARGET})),
+                  patch.object(cities, "LANDMARK_CLEARANCES", ((TARGET, 0, 0, 1, 1),)),
+                  Image.open(root / "provinces.bmp") as provinces):
+                colours, issues = cities.target_colours(root / "definition.csv")
+                self.assertEqual(issues, [])
+                generated, _, positions = cities.render_bytes(source, provinces, colours)
+                self.assertEqual(cities.generated_issues(generated, provinces, colours), [])
+                self.assertEqual(cities.render_bytes(generated, provinces, colours)[0], generated)
+            layout = cities.bitmap_layout(generated)
+            self.assertEqual(generated[layout.pixel_position(0, 0)], 1)
+            self.assertEqual(generated[layout.pixel_position(1, 1)], 15)
+            self.assertEqual(cities.unmanaged_difference_count(source, generated, positions), 0)
+
     def test_apply_preserves_mode_size_palette_and_is_byte_idempotent(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)

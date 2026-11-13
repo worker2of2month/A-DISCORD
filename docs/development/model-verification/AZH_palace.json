@@ -37,8 +37,8 @@
   "input_sha256": {
     "tools/builders/build_adiscord_azhar_palace.py": "7127785ce1fdfd8ea91027c093d8948346451d91b23aab3551819c1af88291f3",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
-    "map/heightmap.bmp": "1bbe97fd8c2ea40b6351eb85d24b4e6f782d97663d8a1ade4bedf5ca8054d1d9",
-    "map/provinces.bmp": "17f6141550a9322be17426bd999b83980b51ed0ab30e4d798cb4e14e3b578bb8",
-    "map/definition.csv": "114f105bdaa0e461f88e57bfc065a010ab67a1c97db14bdbe18bc7cfca883e17"
+    "map/heightmap.bmp": "80a3d7f8d1d01c2207b25307077d9bbb6672c1ca69b363b6418d79c202dc6100",
+    "map/provinces.bmp": "93b448a04aaa9a1b30b4240d11710a1e897f13219fd98239e7d1d1a674d0b27b",
+    "map/definition.csv": "a0e3b3df96b34c709cf804d2645fbcc3d0058c1b55ddd3f47dc3ff3cf8875b56"
   }
 }

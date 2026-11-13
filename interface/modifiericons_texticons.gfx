@@ -1405,11 +1405,11 @@ spriteTypes = {
 		noOfFrames = 2
 	}
 
-	SpriteType = {
-		name = "GFX_artillery_texticon"
-		texturefile = "gfx/texticons/unit_artillery_icon_small.dds"
+	# Use a distinct name from the base-game tank-role text icon.
+	spriteType = {
+		name = "GFX_ADISCORD_artillery_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/artillery.png"
 		legacy_lazy_load = no
-		noOfFrames = 2
 	}
 
 	SpriteType = {

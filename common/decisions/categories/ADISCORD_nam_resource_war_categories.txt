@@ -77,16 +77,11 @@ NAM_restitution = {
 	priority = 24
 }
 
+# Army, fleet and air orders, fortification lines and district recruitment.
+# Each decision opens through its own focus or war phase, so an empty category stays hidden.
 NAM_mobilisation = {
 	icon = generic_prepare_civil_war
 	allowed = { tag = NAM }
-	visible = {
-		OR = {
-			NAM_line_programme_open = yes
-			NAM_permanent_lines_authorized = yes
-		}
-	}
-	visible_when_empty = yes
 	priority = 23
 }
 
@@ -98,6 +93,8 @@ NAM_national_programmes = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
+			has_active_mission = NAM_agreement_deadline
+			has_active_mission = NAM_agreement_crisis
 			has_active_mission = NAM_incident_countdown
 			has_active_mission = NAM_incident_response
 			has_completed_focus = NAM_inventory
@@ -115,12 +112,6 @@ NAM_national_programmes = {
 
 # National orders grouped by department. Each decision opens through its own
 # focus, so an empty department stays hidden.
-NAM_defence_orders = {
-	icon = generic_prepare_civil_war
-	allowed = { tag = NAM }
-	priority = 22
-}
-
 NAM_basin_economy = {
 	icon = generic_industry
 	allowed = { tag = NAM }

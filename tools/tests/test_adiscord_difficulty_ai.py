@@ -113,6 +113,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "ADISCORD_economy_ai_can_fund_advanced_forces": True,
             "ADISCORD_ai_has_adjacent_war_preparation": False,
             "ADISCORD_ai_army_replacement_pressure_cleared": True,
+            "ADISCORD_ai_field_army_can_attack": True,
             "ADISCORD_ai_rifle_replacement_emergency": False,
             "ADISCORD_economy_nod_army_at_capacity": False,
             "ADISCORD_has_operational_naval_base": True,
@@ -464,10 +465,11 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             (0.8, True, None, None, 0),
             (1.25, True, None, None, 0),
             (1.26, True, "careful", "no", -25),
-            (0.79, False, "careful", "no", 0),
+            (0.79, False, None, None, 0),
+            (0.8, False, "careful", "no", 0),
         ):
             with self.subTest(ratio=ratio, ready=ready):
-                actor["ADISCORD_ai_army_replacement_pressure_cleared"] = ready
+                actor["ADISCORD_ai_field_army_can_attack"] = ready
                 enemy = self.context("VAL", wars={"SRP"}, army_ratios={"SRP": ratio})
                 strategies = self.front_strategies(actor, enemy)
                 orders = [s for s in strategies if s["type"] == "front_control"]
@@ -487,7 +489,12 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         self.assertEqual(self.front_strategies(actor, dict(enemy, wars=set())), [])
         actor["ADISCORD_economy_ai_is_healthy"] = False
         orders = [s for s in self.front_strategies(actor, enemy) if s["type"] == "front_control"]
+        # A fiscal crisis withholds the push; a clearly stronger army is not halted.
+        self.assertEqual(orders, [])
+        enemy["army_ratios"]["SRP"] = 1
+        orders = [s for s in self.front_strategies(actor, enemy) if s["type"] == "front_control"]
         self.assertEqual([s["execution_type"] for s in orders], ["careful"])
+        enemy["army_ratios"]["SRP"] = 0.5
         # A stressed wartime budget keeps the push; only crisis and recovery withhold it.
         actor["ADISCORD_economy_ai_is_stressed"] = True
         orders = [s for s in self.front_strategies(actor, enemy) if s["type"] == "front_control"]
@@ -611,7 +618,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             enemy = self.context("VAD", wars={"WKR"}, army_ratios={"WKR": ratio})
             actor = self.context("WKR", 4, wars={"VAD"}, countries={"VAD": enemy},
                                  has_global_flag={"ADISCORD_vorkerland_collapse_wars_started"},
-                                 ADISCORD_ai_army_replacement_pressure_cleared=ready)
+                                 ADISCORD_ai_field_army_can_attack=ready)
             with self.subTest(ratio=ratio, ready=ready):
                 self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], expected)
         actor["difficulty"] = 3
@@ -623,10 +630,10 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         for difficulty, ratio, ready, expected in (
             (3, 0.5, True, "rush"), (3, 2, False, "rush"),
             (4, 0.5, True, "rush_weak"), (4, 2, True, "careful"),
-            (4, 0.5, False, "careful"), (4, 1, True, "rush"),
+            (4, 0.5, False, "rush"), (4, 1, False, "careful"), (4, 1, True, "rush"),
         ):
             actor = self.context("EFL", difficulty, wars={"NAM"}, ADISCORD_nam_resource_war_active=True,
-                                 ADISCORD_ai_army_replacement_pressure_cleared=ready)
+                                 ADISCORD_ai_field_army_can_attack=ready)
             enemy = self.context("NAM", wars={"EFL"}, army_ratios={"EFL": ratio})
             self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], expected)
         actor["ADISCORD_nam_resource_war_active"] = False
@@ -650,7 +657,9 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         state = self.context(state=28)
         self.assertEqual(self.campaign_orders(names, actor, enemy, state)[-1]["priority"], "1651")
         self.assertEqual(self.campaign_orders(names, actor, enemy, dict(state, state=29)), [])
-        actor["ADISCORD_ai_army_replacement_pressure_cleared"] = False
+        actor["ADISCORD_ai_field_army_can_attack"] = False
+        self.assertEqual(self.campaign_orders(names, actor, enemy, state)[-1]["priority"], "1650")
+        enemy["army_ratios"]["STS"] = 1
         self.assertEqual(self.campaign_orders(names, actor, enemy, state)[-1]["execution_type"], "careful")
         actor["has_country_flag"].add("STS_ai_regroup")
         order = self.campaign_orders(names, actor, enemy, state)[-1]
@@ -756,7 +765,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             for difficulty, ratio, ready in ((3, 0.5, True), (3, 2, False),
                                              (4, 0.5, True), (4, 0.8, True),
                                              (4, 1.25, True), (4, 2, True), (4, 0.5, False)):
-                actor = self.context("STS", difficulty, ADISCORD_ai_army_replacement_pressure_cleared=ready)
+                actor = self.context("STS", difficulty, ADISCORD_ai_field_army_can_attack=ready)
                 enemy = self.context("STP", wars={"STS"}, army_ratios={"STS": ratio},
                                      scopes={"FROM": actor, "FROM.FROM": actor})
                 state = self.context(scopes={"FROM": enemy, "FROM.FROM": actor})
@@ -770,9 +779,11 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                     self.assertLessEqual(len(matching), 1)
                     winner = max([base, *matching], key=lambda control: int(control["priority"]))
                     peer = name in PEER_CAUTION_PROFILES
-                    if difficulty < 4 or (ready and 0.8 <= ratio <= 1.25) or (peer and not ready and ratio <= 1.25):
+                    caution = ratio > 1.25 or (not peer and not ready and ratio >= 0.8)
+                    push = ready and ratio < 0.8
+                    if difficulty < 4 or not (caution or push):
                         self.assertIs(winner, base)
-                    elif not ready or ratio > 1.25:
+                    elif caution:
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), ("careful", "no"))
                     else:
                         expected = "careful" if base["execution_type"] == "careful" else "rush_weak"

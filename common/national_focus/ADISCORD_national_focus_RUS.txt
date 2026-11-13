@@ -822,6 +822,480 @@ focus_tree = {
 		ai_will_do = { base = 100 }
 	}
 
+	focus = {
+		id = RUS_ba_gate_staff
+		icon = GFX_focus_RUS_imperial_general_staff
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 20
+		y = 15
+		cost = 4
+		prerequisite = { focus = RUS_ba_guard_order }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 50
+			army_experience = 20
+			effect_tooltip = { add_ideas = RUS_ba_gate_staff_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_training value = -0.10 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = RUS_ba_purge_laboratories
+		icon = GFX_focus_RUS_black_army_tribunals
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_POLITICAL }
+		x = 16
+		y = 16
+		cost = 4
+		prerequisite = { focus = RUS_ba_gate_staff }
+		mutually_exclusive = { focus = RUS_ba_labs_under_escort }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_research_slot = -1
+			add_stability = 0.10
+			add_war_support = 0.05
+			add_political_power = 50
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	focus = {
+		id = RUS_ba_labs_under_escort
+		icon = GFX_focus_RUS_scientists_at_headquarters
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 24
+		y = 16
+		cost = 4
+		prerequisite = { focus = RUS_ba_gate_staff }
+		mutually_exclusive = { focus = RUS_ba_purge_laboratories }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = -0.05
+			add_tech_bonus = {
+				name = RUS_ba_labs_under_escort
+				bonus = 0.5
+				uses = 2
+				category = infantry_weapons
+			}
+			add_tech_bonus = {
+				name = RUS_ba_labs_under_escort
+				bonus = 0.5
+				uses = 1
+				category = armor
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_ba_commandants
+		icon = GFX_focus_RUS_military_governors
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_POLITICAL }
+		x = 20
+		y = 17
+		cost = 3
+		prerequisite = {
+			focus = RUS_ba_purge_laboratories
+			focus = RUS_ba_labs_under_escort
+		}
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_sci_zone_pressed_tt
+				has_completed_focus = RUS_press_the_closed_zone
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 10000
+			unlock_decision_tooltip = RUS_ba_commandant_levy
+			custom_effect_tooltip = RUS_ba_commandants_tt
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
+		id = RUS_ba_western_breach
+		icon = GFX_focus_RUS_imperial_railways
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		x = 16
+		y = 18
+		cost = 4
+		prerequisite = { focus = RUS_ba_commandants }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			151 = { add_claim_by = RUS }
+			156 = { add_claim_by = RUS }
+			157 = { add_claim_by = RUS }
+			158 = { add_claim_by = RUS }
+			159 = { add_claim_by = RUS }
+			160 = { add_claim_by = RUS }
+			161 = { add_claim_by = RUS }
+			162 = { add_claim_by = RUS }
+			163 = { add_claim_by = RUS }
+			223 = { add_claim_by = RUS }
+			80 = { add_claim_by = RUS }
+			146 = { add_claim_by = RUS }
+			150 = { add_claim_by = RUS }
+			199 = { add_claim_by = RUS }
+			315 = { add_claim_by = RUS }
+			316 = { add_claim_by = RUS }
+			317 = { add_claim_by = RUS }
+			318 = { add_claim_by = RUS }
+			unlock_decision_tooltip = RUS_ba_breach_war
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
+		id = RUS_ba_reconnaissance_in_force
+		icon = GFX_focus_RUS_patient_war
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 24
+		y = 18
+		cost = 3
+		prerequisite = { focus = RUS_ba_commandants }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 25
+			unlock_decision_tooltip = RUS_ba_raid
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = RUS_ba_aimaq_militia
+		icon = GFX_focus_RUS_levy_of_the_new_aimaqs
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = 16
+		y = 19
+		cost = 4
+		prerequisite = {
+			focus = RUS_ba_western_breach
+			focus = RUS_ba_reconnaissance_in_force
+		}
+		mutually_exclusive = { focus = RUS_ba_shock_hundreds }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 30000
+			effect_tooltip = { add_ideas = RUS_ba_aimaq_militia_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_recruitment value = 0.05 }
+				add_to_variable = { var = RUS_army_org value = -0.02 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_ba_shock_hundreds
+		icon = GFX_focus_RUS_field_sappers
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 24
+		y = 19
+		cost = 4
+		prerequisite = {
+			focus = RUS_ba_western_breach
+			focus = RUS_ba_reconnaissance_in_force
+		}
+		mutually_exclusive = { focus = RUS_ba_aimaq_militia }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = RUS_ba_shock_hundreds_delta }
+			custom_effect_tooltip = RUS_hazard_brigades_2_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_attack value = 0.05 }
+				add_to_variable = { var = RUS_army_org value = 0.03 }
+				RUS_black_army_refresh = yes
+				RUS_prepare_hazard_template = yes
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Khanate CBRN Brigade\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = RUS
+						count = 2
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	focus = {
+		id = RUS_ba_revenge_oath
+		icon = GFX_focus_RUS_drive_starolesye_back
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		x = 20
+		y = 20
+		cost = 3
+		prerequisite = {
+			focus = RUS_ba_aimaq_militia
+			focus = RUS_ba_shock_hundreds
+		}
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.10
+			effect_tooltip = { add_ideas = RUS_ba_revenge_oath_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_defence value = 0.05 }
+				RUS_black_army_refresh = yes
+			}
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	focus = {
+		id = RUS_ba_march_on_vorkerland
+		icon = GFX_focus_RUS_break_the_hegemon
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		x = 20
+		y = 21
+		cost = 2
+		prerequisite = { focus = RUS_ba_revenge_oath }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			RUS_ba_vorkerland_war_can_start = yes
+		}
+		bypass = {
+			OR = {
+				has_variable = RUS_ba_vorkerland_war
+				RUS_ba_vorkerland_question_closed = yes
+			}
+		}
+		completion_reward = {
+			add_command_power = 25
+			custom_effect_tooltip = RUS_ba_march_on_vorkerland_tt
+			hidden_effect = { RUS_ba_vorkerland_war_begin = yes }
+		}
+		ai_will_do = {
+			base = 30
+			modifier = { factor = 0 num_divisions < 12 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+		}
+	}
+
+	focus = {
+		id = RUS_ba_military_districts
+		icon = GFX_focus_RUS_military_contract_board
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		x = 16
+		y = 22
+		cost = 3
+		prerequisite = { focus = RUS_ba_revenge_oath }
+		mutually_exclusive = { focus = RUS_ba_guard_marches }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 10000
+			effect_tooltip = { add_ideas = RUS_ba_military_districts_delta }
+			custom_effect_tooltip = RUS_ba_military_districts_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_mandate_stability value = 0.03 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = RUS_ba_guard_marches
+		icon = GFX_focus_RUS_empire_without_rivals
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 24
+		y = 22
+		cost = 3
+		prerequisite = { focus = RUS_ba_revenge_oath }
+		mutually_exclusive = { focus = RUS_ba_military_districts }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			effect_tooltip = { add_ideas = RUS_ba_guard_marches_delta }
+			custom_effect_tooltip = RUS_ba_guard_marches_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_government_political_power value = 0.10 }
+				RUS_government_refresh = yes
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = RUS_ba_black_banner_east
+		icon = GFX_focus_RUS_imperial_arsenals
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		x = 20
+		y = 23
+		cost = 3
+		prerequisite = {
+			focus = RUS_ba_military_districts
+			focus = RUS_ba_guard_marches
+		}
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			RUS_ba_east_war_can_start = yes
+		}
+		bypass = {
+			OR = {
+				has_variable = RUS_ba_east_war
+				AND = {
+					RUS_ba_vorkerland_question_closed = yes
+					RUS_ba_east_unreachable = yes
+				}
+			}
+		}
+		completion_reward = {
+			add_war_support = 0.05
+			add_command_power = 25
+			custom_effect_tooltip = RUS_ba_black_banner_east_tt
+			hidden_effect = { RUS_ba_east_war_begin = yes }
+		}
+		ai_will_do = {
+			base = 30
+			modifier = { factor = 0 num_divisions < 14 }
+			modifier = {
+				factor = 0
+				ADISCORD_ai_army_needs_replacements = yes
+			}
+		}
+	}
+
+	focus = {
+		id = RUS_ba_guard_state
+		icon = GFX_focus_RUS_seal_chancery
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_ARMY_XP }
+		x = 20
+		y = 24
+		cost = 5
+		prerequisite = { focus = RUS_ba_black_banner_east }
+		allow_branch = { RUS_black_army_regime = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_ba_wars_closed_tt
+				RUS_ba_vorkerland_question_closed = yes
+				OR = {
+					RUS_ba_east_question_closed = yes
+					RUS_ba_east_unreachable = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = RUS_ba_vorkerland_war value = 2 compare = equals }
+						check_variable = { var = RUS_ba_east_war value = 2 compare = equals }
+					}
+				}
+				add_stability = 0.10
+				add_political_power = 100
+				effect_tooltip = { add_ideas = RUS_ba_guard_state_won_delta }
+				hidden_effect = {
+					add_to_variable = { var = RUS_army_org value = 0.03 }
+					add_to_variable = { var = RUS_army_defence value = 0.05 }
+					RUS_black_army_refresh = yes
+				}
+			}
+			else = {
+				add_stability = 0.05
+				add_political_power = 50
+				effect_tooltip = { add_ideas = RUS_ba_guard_state_held_delta }
+				hidden_effect = {
+					add_to_variable = { var = RUS_army_defence value = 0.05 }
+					RUS_black_army_refresh = yes
+				}
+			}
+		}
+		ai_will_do = { base = 50 }
+	}
+
 	# The preparations take 77 days in sequence; the invasion warning lasts 90.
 
 	focus = {

@@ -427,6 +427,25 @@ EXZ_FRINGE_STATE_PROFILES = {
     },
 }
 
+# Each disconnected island territory needs its own ocean supply entrance.
+# Land borders and traversable straits can connect several states to one port.
+ISLAND_SUPPLY_PORTS = {
+    334: (5053,),
+    335: (6897,),
+    339: (12505,),
+    341: (820, 833, 1234, 2166, 2878, 3478, 6860, 7562, 7597, 9750),
+    344: (2387,),
+    347: (1499, 2787, 3831, 5438, 5471, 6373, 7205, 8501, 10694, 12553),
+    355: (12860,),
+    358: (5104,),
+    360: (639, 673, 2401, 3366, 4157, 5485, 5584, 7651, 8554, 9487, 10062, 10440, 11153, 11442),
+    364: (2807, 4476),
+    405: (3419, 7170, 10493),
+    427: (7146,),
+    446: (3617, 6886),
+    457: (12177,),
+}
+
 
 EXPECTED_STATES = set(range(331, 474))
 STATE_OWNER = {
@@ -724,6 +743,10 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
         history.append(f"\t\t\tarms_factory = {profile['military']}")
     if profile["air_base"]:
         history.append(f"\t\t\tair_base = {profile['air_base']}")
+    for province in ISLAND_SUPPLY_PORTS.get(state_id, ()):
+        if province not in profile["provinces"]:
+            raise ValueError(f"State {state_id}: port {province} is outside its territory")
+        history.append(f"\t\t\t{province} = {{ naval_base = 1 }}")
     history.extend(("\t\t}", "\t}"))
 
     resources: list[str] = []
@@ -970,6 +993,14 @@ def main() -> int:
         help="write states, OOBs, victory-point localisation and flags",
     )
     parser.add_argument(
+        "--states-only",
+        nargs="+",
+        type=int,
+        choices=sorted(EXPECTED_STATES),
+        metavar="STATE_ID",
+        help="check or apply only the selected state histories",
+    )
+    parser.add_argument(
         "--flags-only",
         nargs="+",
         choices=tuple(COUNTRIES),
@@ -982,6 +1013,20 @@ def main() -> int:
         help="check or apply only reviewed English names",
     )
     args = parser.parse_args()
+    if args.states_only:
+        if args.flags_only or args.english_localisation:
+            parser.error("--states-only cannot be combined with other output selections")
+        profiles, _principal = build_profiles()
+        changed = []
+        for state_id in sorted(set(args.states_only)):
+            path = state_path(state_id)
+            output = render_state(state_id, profiles[state_id]).encode("utf-8")
+            if path.read_bytes() != output:
+                changed.append(state_id)
+                if args.apply:
+                    path.write_bytes(output)
+        print(f"Selected state changes: {changed}")
+        return int(bool(changed) and not args.apply)
     if args.flags_only:
         if args.english_localisation:
             parser.error("--flags-only cannot be combined with --english-localisation")

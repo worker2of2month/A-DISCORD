@@ -533,7 +533,12 @@ focus_tree = {
 		completion_reward = {
 			# The guard drills the landing only while the exile still prepares it.
 			if = {
-				limit = { NAM_exile_return_programme_open = yes }
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_exile_return_programme_open_focus_condition_tt
+						NAM_exile_return_programme_open = yes
+					}
+				}
 				unlock_decision_tooltip = NAM_exile_drill
 				custom_effect_tooltip = NAM_exile_drill_unlock_tt
 			}
@@ -576,11 +581,28 @@ focus_tree = {
 		# Completed humanist preparation survives the takeover.
 		bypass = {
 			OR = {
-				has_global_flag = NAM_wor_exile_war
+				custom_trigger_tooltip = {
+					tooltip = NAM_wor_exile_war_focus_condition_tt
+					has_global_flag = NAM_wor_exile_war
+				}
 				AND = {
 					has_completed_focus = NAM_hum_marine_contracts
-					check_variable = { var = NAM_marine_order_cap value = 3 compare = greater_than_or_equals }
-					check_variable = { var = NAM_revenge_readiness value = 100 compare = greater_than_or_equals }
+					custom_trigger_tooltip = {
+						tooltip = NAM_focus_marine_capacity_tt
+						check_variable = {
+							var = NAM_marine_order_cap
+							value = 3
+							compare = greater_than_or_equals
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = NAM_focus_return_readiness_tt
+						check_variable = {
+							var = NAM_revenge_readiness
+							value = 100
+							compare = greater_than_or_equals
+						}
+					}
 				}
 			}
 		}
@@ -766,7 +788,10 @@ focus_tree = {
 		cost = 7
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		available = {
-			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_company_capital_ready_tt
 				any_owned_state = { NAM_board_held_site = yes }
@@ -787,19 +812,37 @@ focus_tree = {
 					limit = {
 						NOT = { has_completed_focus = NAM_hum_neo_svetlogorsk }
 						capital_scope = {
-							NAM_rw_island_state = yes
-							NAM_board_held_site = yes
+							custom_trigger_tooltip = {
+								tooltip = NAM_rw_island_state_focus_condition_tt
+								NAM_rw_island_state = yes
+							}
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_held_site_focus_condition_tt
+								NAM_board_held_site = yes
+							}
 						}
 					}
 					NAM_exile_found_new_capital = yes
 				}
 				if = {
-					limit = { capital_scope = { NAM_board_office_site = yes } }
+					limit = {
+						capital_scope = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_office_site_focus_condition_tt
+								NAM_board_office_site = yes
+							}
+						}
+					}
 					capital_scope = { NAM_board_build_company_offices = yes }
 				}
 				else = {
 					random_owned_state = {
-						limit = { NAM_board_office_site = yes }
+						limit = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_office_site_focus_condition_tt
+								NAM_board_office_site = yes
+							}
+						}
 						NAM_board_build_company_offices = yes
 					}
 				}
@@ -831,7 +874,10 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_company_capital }
 		mutually_exclusive = { focus = NAM_board_company_docks }
 		available = {
-			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_company_housing_ready_tt
 				any_owned_state = { NAM_board_housing_site = yes }
@@ -849,16 +895,35 @@ focus_tree = {
 					}
 				}
 				if = {
-					limit = { 231 = { NAM_board_housing_site = yes } }
+					limit = {
+						231 = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_housing_site_focus_condition_tt
+								NAM_board_housing_site = yes
+							}
+						}
+					}
 					231 = { NAM_board_build_company_housing = yes }
 				}
 				else_if = {
-					limit = { capital_scope = { NAM_board_housing_site = yes } }
+					limit = {
+						capital_scope = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_housing_site_focus_condition_tt
+								NAM_board_housing_site = yes
+							}
+						}
+					}
 					capital_scope = { NAM_board_build_company_housing = yes }
 				}
 				else = {
 					random_owned_state = {
-						limit = { NAM_board_housing_site = yes }
+						limit = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_housing_site_focus_condition_tt
+								NAM_board_housing_site = yes
+							}
+						}
 						NAM_board_build_company_housing = yes
 					}
 				}
@@ -886,7 +951,10 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_company_capital }
 		mutually_exclusive = { focus = NAM_board_company_housing }
 		available = {
-			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_company_docks_ready_tt
 				any_owned_state = { NAM_board_dock_site = yes }
@@ -904,12 +972,24 @@ focus_tree = {
 					}
 				}
 				if = {
-					limit = { capital_scope = { NAM_board_yard_site = yes } }
+					limit = {
+						capital_scope = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_yard_site_focus_condition_tt
+								NAM_board_yard_site = yes
+							}
+						}
+					}
 					capital_scope = { NAM_board_build_company_docks = yes }
 				}
 				else = {
 					random_owned_state = {
-						limit = { NAM_board_yard_site = yes }
+						limit = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_yard_site_focus_condition_tt
+								NAM_board_yard_site = yes
+							}
+						}
 						NAM_board_build_company_docks = yes
 					}
 				}
@@ -940,7 +1020,10 @@ focus_tree = {
 			focus = NAM_board_company_docks
 		}
 		available = {
-			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_governing_tt
+				NAM_board_operable = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_company_airport_ready_tt
 				any_owned_state = { NAM_board_held_site = yes }
@@ -958,12 +1041,24 @@ focus_tree = {
 					}
 				}
 				if = {
-					limit = { capital_scope = { NAM_board_airport_site = yes } }
+					limit = {
+						capital_scope = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_airport_site_focus_condition_tt
+								NAM_board_airport_site = yes
+							}
+						}
+					}
 					capital_scope = { NAM_board_expand_company_airport = yes }
 				}
 				else = {
 					random_owned_state = {
-						limit = { NAM_board_airport_site = yes }
+						limit = {
+							custom_trigger_tooltip = {
+								tooltip = NAM_board_airport_site_focus_condition_tt
+								NAM_board_airport_site = yes
+							}
+						}
 						NAM_board_expand_company_airport = yes
 					}
 				}
@@ -994,7 +1089,10 @@ focus_tree = {
 		}
 		# The humanists have already fought or started the war of return.
 		bypass = {
-			has_global_flag = NAM_wor_exile_war
+			custom_trigger_tooltip = {
+				tooltip = NAM_wor_exile_war_focus_condition_tt
+				has_global_flag = NAM_wor_exile_war
+			}
 		}
 		available = {
 			has_capitulated = no
@@ -1206,7 +1304,10 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_stock_mobilisation }
 		# The humanists have already declared the great war.
 		bypass = {
-			has_global_flag = NAM_great_war_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_great_war_started_focus_condition_tt
+				has_global_flag = NAM_great_war_started
+			}
 		}
 		available = {
 			has_capitulated = no
@@ -1294,7 +1395,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				SDR = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}
@@ -1357,7 +1461,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				SDR = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}
@@ -1411,7 +1518,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				RHM = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}
@@ -1468,7 +1578,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				RHM = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}
@@ -1541,7 +1654,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				KDR = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}
@@ -1600,7 +1716,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				KDR = {
-					NAM_board_federal_subject = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_federal_subject_focus_condition_tt
+						NAM_board_federal_subject = yes
+					}
 				}
 			}
 		}

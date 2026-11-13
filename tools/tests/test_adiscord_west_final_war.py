@@ -217,7 +217,7 @@ class WestFinalWarContractTests(unittest.TestCase):
         transfer = body(EFFECTS, "ADISCORD_west_transfer_to_root")
         self.assertIn("has_country_flag = ADISCORD_west_settlement_pending", transfer)
 
-    def test_deadline_scores_only_occupied_enemy_land_and_a_tie_is_a_truce(self):
+    def test_deadline_scores_only_occupied_enemy_land_and_a_tie_extends_the_war(self):
         source = body(EFFECTS, "ADISCORD_west_final_resolve_by_control")
         counted = set(re.findall(r"\b(\d+) = \{ ADISCORD_west_count_occupied_state = yes \}", source))
         self.assertEqual(counted, CORRIDOR_STATES | HOME_STATES)
@@ -230,9 +230,15 @@ class WestFinalWarContractTests(unittest.TestCase):
         # Holding one's own corridor or declaring the war never decides the result.
         self.assertNotIn("ADISCORD_west_count_key_state", effects)
         self.assertNotIn("declarer_side", effects)
-        tie = source[source.rindex("else = {"):]
-        self.assertIn("ADISCORD_west_final_resolve_without_hegemon = yes", tie)
-        self.assertIn("news_event = { id = ADISCORD_west.31 hours = 2 }", tie)
+        # A tie never ends a war the champions still fight: the count repeats.
+        tie = source[source.rindex("else_if = {"):]
+        extension, truce = tie.split("else = {", 1)
+        self.assertIn("event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN }", extension)
+        self.assertIn("country_event = { id = ADISCORD_west.20 days = 90 }", extension)
+        self.assertNotIn("resolve_without_hegemon", extension)
+        # Only a war already ended outside the settlement closes without a hegemon.
+        self.assertIn("ADISCORD_west_final_resolve_without_hegemon = yes", truce)
+        self.assertIn("news_event = { id = ADISCORD_west.31 hours = 2 }", truce)
         self.assertNotIn("_victory", tie)
         events = EVENTS.read_text(encoding="utf-8")
         news = events[events.index("\tid = ADISCORD_west.31\n"):events.index("\tid = ADISCORD_west.40\n")]
@@ -497,6 +503,15 @@ class WesternInfluenceTests(unittest.TestCase):
         self.assertIn("ADISCORD_west_clamp_all_leans = yes", seed)
         for scope in (NATION, "IVN"):
             self.assertIn(f"{scope} = {{ add_to_variable = {{ var = ADISCORD_west_influence_power value = 10 }} }}", seed)
+
+    def test_reunified_vorkerland_enters_the_contest_with_itoran_influence(self):
+        seed = body(EFFECTS, "ADISCORD_west_seed_leans")
+        catch_up = seed[seed.rindex(f"{NATION} = {{"):]
+        # The catch-up follows both base grants, so it compares the final values.
+        self.assertGreater(seed.index(catch_up), seed.index("IVN = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }"))
+        self.assertIn("value = IVN.ADISCORD_west_influence_power compare = less_than", catch_up)
+        self.assertIn("set_variable = { var = ADISCORD_west_influence_power value = IVN.ADISCORD_west_influence_power }", catch_up)
+        self.assertNotIn("subtract_from_variable", catch_up)
 
     def test_push_follows_the_acting_champion_and_stays_bounded(self):
         push = body(EFFECTS, "ADISCORD_west_push_lean")
@@ -1039,6 +1054,27 @@ class WestReconstructionScenarios(unittest.TestCase):
         facts = self.crisis_facts(180, pressure=50)
         effects = list(selected_effects(month, facts, "WRK"))
         self.assertFalse(any(entry.key == "ADISCORD_west_final_war_start" for _, entry in effects))
+
+    def test_an_itoran_war_outside_the_campaign_becomes_the_war_for_the_west(self):
+        self.assertNotIn("has_war_with", body(TRIGGERS, "ADISCORD_west_final_can_start"))
+        month = self.expand(parse_clausewitz(body(EFFECTS, "ADISCORD_west_crisis_month")))
+        for age, expected in ((179, False), (180, True)):
+            facts = self.crisis_facts(age, pressure=50)
+            facts[("WRK", "has_war_with", "IVN")] = True
+            effects = list(selected_effects(month, facts, "WRK"))
+            with self.subTest(age=age):
+                self.assertEqual(any(entry.key == "ADISCORD_west_final_war_start" for _, entry in effects), expected)
+        start = self.expand(parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_war_start")))
+        for declarer, enemy in (("WRK", "IVN"), ("IVN", "WRK")):
+            facts = self.crisis_facts(180)
+            facts[(declarer, "tag", declarer)] = True
+            facts[(declarer, "has_war_with", enemy)] = True
+            selected = list(selected_effects(start, facts, declarer))
+            with self.subTest(declarer=declarer):
+                # The running war is taken over, not duplicated.
+                self.assertFalse(any(row.key == "declare_war_on" for _, row in selected))
+                self.assertTrue(any(row.key == "ADISCORD_west_assign_bound_sides" for _, row in selected))
+                self.assertTrue(any(row.key == "country_event" and scalar(row.value, "id") == "ADISCORD_west.20" for _, row in selected))
 
     def test_war_presentation_follows_either_declarer_and_requires_new_campaign_start(self):
         start = self.expand(parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_war_start")))

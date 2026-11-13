@@ -47,6 +47,15 @@
   superevent_val_commonwealth_quote: "The commonwealth is the people's affair.\n\n- Cicero, On the Republic"
   superevent_val_commonwealth_comment: "Solgalov binds the contract administrations into one order"
 
+ # Cicero, De legibus III.8: https://www.thelatinlibrary.com/cicero/leg3.shtml
+ superevent_val_council_proclamation_title:0 "[VAL.GetName]"
+ superevent_val_council_proclamation_quote:0 "Let the welfare of the people be the supreme law.\n\n- Cicero, On the Laws, III, 8"
+ superevent_val_council_proclamation_comment:0 "We answer for our country."
+
+ superevent_south_war_title: "War for the South"
+ superevent_south_war_quote: "The last civilian train left before dawn. Only soldiers remained at the stations."
+ superevent_south_war_comment: "The desert is a battlefield once more."
+
   superevent_stelander_great_title: "Great Stelander Proclaimed!"
   superevent_stelander_great_quote: "$superevent_stelander_party_victory_quote$"
   superevent_stelander_great_comment: "The northern governments answer to one centre"
@@ -55,10 +64,10 @@
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""
  superevent_rus_black_banner_title:0 "EMPIRE OF THE BLACK BANNER"
- superevent_rus_black_banner_quote:0 "A headquarters lives while every soldier knows who holds the next line.\n- Mark Rustan"
+ superevent_rus_black_banner_quote:0 "A headquarters lives while every soldier knows who holds the next line.\n- Tagir Mansurov"
  superevent_rus_black_banner_comment:0 "Hold the common line."
  superevent_rus_restoration_title:0 "THE LAST EMPIRE"
- superevent_rus_restoration_quote:0 "A country begins where tomorrow's bread ceases to be a miracle.\n- Mark Rustan"
+ superevent_rus_restoration_quote:0 "A country begins where tomorrow's bread ceases to be a miracle.\n- Gleb Korneev"
  superevent_rus_restoration_comment:0 "Open the workshops."
 
  superevent_itora_vorkerland_war_title:0 "Second Itora-Vorkerland War"
@@ -72,13 +81,10 @@
  superevent_itora_civilwar_quote:0 "A house divided against itself cannot stand.\n\n- Abraham Lincoln, 1858"
  superevent_itora_civilwar_comment:0 "Now the front runs through every home"
 
- superevent_rus_khan_defeated_title:0 "The Khan Has Fallen"
+ superevent_rus_khan_defeated_title:0 "Fall of the Empire"
  superevent_rus_khan_defeated_quote:0 "Look on my works, ye Mighty, and despair! Nothing beside remains.\n\n- Percy Bysshe Shelley, Ozymandias"
  superevent_rus_khan_defeated_comment:0 "The last empire belongs to the past"
 
-  superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
- superevent_vorkerland_joint_victory_quote: "Ambition must be made to counteract ambition.\n\n- James Madison, Federalist No. 51"
-  superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
 
  superevent_stelander_sotnikov_civilwar_title:0 "SOTNIKOV'S VICTORY"
  # Source: Second Inaugural Address, 4 March 1865 (excerpt). https://www.nps.gov/linc/learn/historyculture/lincoln-second-inaugural.htm
@@ -104,11 +110,6 @@
  # Source: Utilitarianism, chapter II, 1861 (excerpt). https://www.gutenberg.org/files/11224/old/11224-h/11224-h.htm
  superevent_stelander_tikhoreva_quote:0 "The multiplication of happiness is, according to the utilitarian ethics, the object of virtue.\n\n- John Stuart Mill"
  superevent_stelander_tikhoreva_comment:0 "No life is lost below the final total"
-
- superevent_rus_khan_died_title:0 "The Khan Is Dead"
- # Source: Alexander Pushkin, Boris Godunov, 1825. English translation for this localisation.
- superevent_rus_khan_died_quote:0 "How heavy you are, crown of Monomakh!\n\n- Alexander Pushkin, Boris Godunov"
- superevent_rus_khan_died_comment:0 "The empire did not long outlive its Khan"
 
   superevent_nam_resource_war_service_title: "The Resource War: The Governors' Order"
   superevent_nam_resource_war_service_quote: "By dawn forty tankers had passed the eastern checkpoint. The road back was empty."

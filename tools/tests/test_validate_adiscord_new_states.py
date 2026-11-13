@@ -29,7 +29,7 @@ EXPECTED_DIRTY_REPUBLIC_POPULATION = {
     710: 70_000,
     711: 120_000,
     712: 130_000,
-    125: 120_000,
+    125: 1,
     152: 650_000,
     153: 300_000,
     154: 250_000,
@@ -254,9 +254,9 @@ class DirtyRepublicPopulationTests(unittest.TestCase):
             set(builder.DIRTY_REPUBLIC_STATE_PROFILES),
             set(EXPECTED_DIRTY_REPUBLIC_POPULATION),
         )
-        self.assertEqual(sum(EXPECTED_DIRTY_REPUBLIC_POPULATION.values()), 12_010_000)
+        self.assertEqual(sum(EXPECTED_DIRTY_REPUBLIC_POPULATION.values()), 11_890_001)
         self.assertEqual(
-            builder.DIRTY_REPUBLIC_STATE_PROFILES[125]["population"], 120_000
+            builder.DIRTY_REPUBLIC_STATE_PROFILES[125]["population"], 1
         )
         self.assertEqual(
             builder.DIRTY_REPUBLIC_STATE_PROFILES[168]["population"], 160_000
@@ -563,6 +563,25 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         validator.validate_states()
         self.assertEqual(validator.ERRORS, [])
 
+    def test_generated_capitals_reject_missing_and_incorrect_victory_points(self):
+        original = validator.text
+        for state_id, province, value in ((69, 16893, 25), (47, 3129, 10), (593, 915, 10)):
+            path = builder.state_path(state_id)
+            source = original(path)
+            pattern = rf"victory_points\s*=\s*\{{\s*{province}\s+{value}\s*\}}"
+            for replacement in ("", f"victory_points = {{ {province} 99 }}"):
+                mutated, count = re.subn(pattern, replacement, source)
+                self.assertEqual(count, 1)
+                validator.ERRORS.clear()
+                with self.subTest(state=state_id, replacement=replacement), patch.object(
+                    validator, "text", side_effect=lambda requested: mutated if requested == path else original(requested)
+                ):
+                    validator.validate_states()
+                    self.assertTrue(any(
+                        error.startswith(f"state {state_id}: expected exact generated VPs")
+                        for error in validator.ERRORS
+                    ))
+
     def test_worker_outcome_marks_wartime_wkr_before_it_unifies_vorkerland(self) -> None:
         maps = validator.text(
             validator.ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
@@ -726,6 +745,27 @@ class NorthernStartingStateContracts(unittest.TestCase):
     ) -> None:
         self.core.validate()
         self.assertEqual(self.core.ERRORS, [])
+
+    def test_updated_airfields_and_dockyards_remain_required(self):
+        original = self.core.read_text
+        for state_id, building, value in ((14, "air_base", 2), (30, "dockyard", 3), (48, "dockyard", 2)):
+            path = builder.state_path(state_id)
+            source = original(path)
+            mutated, count = re.subn(
+                rf"(?m)^(\s*{building}\s*=\s*){value}\s*$",
+                r"\g<1>0",
+                source,
+            )
+            self.assertEqual(count, 1)
+            self.core.ERRORS.clear()
+            with self.subTest(state=state_id, building=building), patch.object(
+                self.core, "read_text", side_effect=lambda requested: mutated if requested == path else original(requested)
+            ):
+                self.core.validate()
+                self.assertTrue(any(
+                    error.startswith(f"state {state_id}: wrong direct buildings")
+                    for error in self.core.ERRORS
+                ))
 
     def test_placeholder_population_and_unapproved_settlement_values_are_rejected(
         self,

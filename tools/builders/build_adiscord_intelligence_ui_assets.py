@@ -9,7 +9,7 @@ from io import BytesIO
 from pathlib import Path
 import re
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 from tools.lib.adiscord_ui_contracts import (
     SpriteContract,
@@ -40,8 +40,9 @@ BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 BASE_INTERFACE = BASE_GAME / "interface"
 METAL_SOURCE = ROOT / "tools/assets/source/production_gui/production_surface_source.png"
 HEADER_SOURCE = (
-    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
+    ROOT / "tools/assets/source/intelligence_gui/ADISCORD_intelligence_agent_cutout.png"
 )
+TERRAIN_SOURCE = ROOT / "map/terrain.bmp"
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 PREVIEW = ROOT / "docs/development/previews/ADISCORD_intelligence_preview.png"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
@@ -55,6 +56,13 @@ WARM_COMPLETE = (148, 119, 71, 255)
 
 
 INTELLIGENCE_CONTRACTS = (
+    SpriteContract(
+        "GFX_intelligence_agency_header",
+        "GFX_ADISCORD_intelligence_agency_header",
+        "ADISCORD_intelligence_agency_header.dds",
+        "spriteType",
+        (519, 109),
+    ),
     SpriteContract(
         "GFX_empty_agency_slot_glow",
         "GFX_ADISCORD_intelligence_creation_glow",
@@ -241,10 +249,10 @@ INTELLIGENCE_CONTRACTS = (
 
 
 DOSSIER_SURFACES = (
-    ("GFX_operations_clipboard_top_bg", "dossier_top", (500, 129)),
+    ("GFX_operations_clipboard_top_bg", "dossier_top", (500, 91)),
     ("GFX_operations_clipboard_mid_bg", "dossier_mid", (500, 126)),
     ("GFX_operations_clipboard_bottom_bg", "dossier_bottom", (500, 209)),
-    ("GFX_phase_title_bg", "dossier_caption", (153, 40)),
+    ("GFX_phase_title_bg", "dossier_caption", (147, 40)),
     ("GFX_list_entry_bg", "dossier_resource", (254, 35)),
     ("GFX_resource_bg", "dossier_equipment", (85, 27)),
     ("GFX_operation_bottom_bg", "dossier_footer", (752, 40)),
@@ -293,6 +301,7 @@ FILE_REPLACEMENTS = {
         "GFX_tiled_header": ("GFX_ADISCORD_intelligence_dossier_header", 1),
     },
     "countryintelligenceagencyview.gui": {
+        "GFX_intelligence_agency_header": ("GFX_ADISCORD_intelligence_agency_header", 1),
         "GFX_tiled_window_1b_thin_border": (
             "GFX_ADISCORD_intelligence_content_tile",
             1,
@@ -509,6 +518,79 @@ def _replace_named_container_font(
     return text[:start] + replacement + text[end:]
 
 
+def _operation_dossier_layout(text: str) -> str:
+    # The native handler owns phase placement and result state; keep every named child.
+    changes = (
+        ("containerWindowType", "top_Window", (
+            (r"position = \{ x=0 y=-30 \}", "position = { x=0 y=0 }"),
+            (r"width = 581 height =121", "width = 500 height = 91"),
+        )),
+        ("containerWindowType", "operation_phase_titles_view_entry", (
+            (r"position = \{ x=-10 y=50 \}", "position = { x=-10 y=18 }"),
+            (r"scale = 0.7 # TODO TEMP", "scale = 0.65"),
+        )),
+        ("iconType", "pin", (
+            (r'position = \{ x = 76 y = -14\}', "position = { x = 76 y = -14 }\n\t\t\tscale = 0"),
+        )),
+        ("containerWindowType", "phase_title_title", (
+            (r"position = \{ x=20 y=90 \}", "position = { x=20 y=116 }"),
+            (r"width=150 height=50", "width=147 height=40"),
+            (r"position = \{ x = 10 y = 10 \}", "position = { x = 4 y = 4 }"),
+            (r"maxWidth = 130", "maxWidth = 139"),
+            (r"maxHeight = 20", "maxHeight = 34"),
+            (r"position = \{ x = 0 y = 7 \}", "position = { x = 0 y = 0 }"),
+        )),
+        ("gridBoxType", "phases_grid", (
+            (r"position = \{ x = 0 y = -10 \}", "position = { x = 0 y = -14 }"),
+        )),
+        ("iconType", "phase_entry_icon", (
+            (r"position = \{ x = 10 y = -2 \}", "position = { x = 10 y = -2 }\n\t\t\tscale = 0"),
+        )),
+        ("iconType", "phase_progress_icon", (
+            (r"position = \{ x = 39 y = -8\}", "position = { x = 18 y = 10 }"),
+            (r"GFX_phase_circular_progress_pie_chart", "GFX_ADISCORD_intelligence_phase_progress"),
+        )),
+        ("instantTextboxType", "phase_entry_desc", (
+            (r"position = \{ x = 75 y = 0 \}", "position = { x = 38 y = 0 }"),
+            (r"maxWidth = 400", "maxWidth = 445"),
+        )),
+        ("containerWindowType", "flag_container", (
+            (r"position = \{ x = 87 y = 10 \}", "position = { x = 100 y = 10 }"),
+            (r"maxWidth = 110", "maxWidth = 94"),
+        )),
+        ("iconType", "clip_icon", (
+            (r"position = \{x=15 y=-2\}", "position = { x=15 y=-2 }\n\t\t\t\t\tscale = 0"),
+        )),
+        ("containerWindowType", "operatives_container", (
+            (r'GFX_operatives_view_entry_bg', "GFX_ADISCORD_intelligence_dossier_target"),
+        )),
+        ("iconType", "operation_reward_icon", (
+            (r"position = \{ x = 0 y = -12 \}", "position = { x = 10 y = 12 }\n\t\t\t\tscale = 0.5"),
+        )),
+        ("iconType", "operation_reward_icon_bonus", (
+            (r"position = \{ x = 0 y = -12 \}", "position = { x = 10 y = 12 }\n\t\t\t\tscale = 0.5"),
+        )),
+        ("instantTextboxType", "operation_reward_text", (
+            (r"position = \{ x = 100 y = 10 \}", "position = { x = 62 y = 12 }"),
+            (r"maxWidth = 390", "maxWidth = 425"),
+            (r"maxHeight = 58", "maxHeight = 50"),
+        )),
+    )
+    for kind, name, replacements in changes:
+        start, end = _named_block_bounds(text, kind, name)
+        block = text[start:end]
+        for pattern, replacement in replacements:
+            block, count = re.subn(pattern, lambda _: replacement, block)
+            if count != 1:
+                raise ValueError(f"{name}: expected one {pattern!r}, found {count}")
+        text = text[:start] + block + text[end:]
+    for name in ("phase_title_name", "phase_entry_desc", "operation_outcome_text"):
+        text = _replace_named_block_value(
+            text, "instantTextboxType", name, "hoi4_typewriter16", "hoi_16mbs",
+        )
+    return text
+
+
 def render_gui_files() -> dict[Path, bytes]:
     for name in VANILLA_FILES:
         _verified_source(name)
@@ -518,15 +600,7 @@ def render_gui_files() -> dict[Path, bytes]:
         for old, (new, expected) in replacements.items():
             text = replace_counted(text, old, new, expected)
         if name == "operationoverview.gui":
-            # Native code moves the phase containers; retain their anchors and children.
-            text = replace_gui_block(
-                text, "containerWindowType", "operation_phase_titles_view_entry",
-                ((r"position = \{ x=-10 y=50 \}", "position = { x=-10 y=30 }"),),
-            )
-            text = replace_gui_block(
-                text, "containerWindowType", "phase_title_title",
-                ((r"position = \{ x=20 y=90 \}", "position = { x=20 y=124 }"),),
-            )
+            text = _operation_dossier_layout(text)
         if name == "countryintelligenceagencyview.gui":
             text = replace_gui_block(
                 text,
@@ -591,43 +665,68 @@ def render_gui_files() -> dict[Path, bytes]:
     return outputs
 
 
-def _agents_header(source_art: Image.Image) -> Image.Image:
+def _intelligence_land_mask(size: tuple[int, int]) -> Image.Image:
+    # Terrain palette index 15 is ocean, as in the game's minimap builder.
+    with Image.open(TERRAIN_SOURCE) as terrain:
+        if terrain.mode != "P":
+            raise ValueError("intelligence map requires paletted terrain.bmp")
+        lookup = [255] * 256
+        lookup[15] = 0
+        land = terrain.point(lookup, mode="L")
+    return land.resize(size, Image.Resampling.LANCZOS)
+
+
+def _agency_header(source_art: Image.Image) -> Image.Image:
     palette = PALETTES["intelligence"]
-    fitted = ImageOps.fit(
-        source_art.convert("RGBA"),
-        (519, 109),
-        method=Image.Resampling.LANCZOS,
-        centering=(0.42, 0.48),
+    output = Image.new("RGBA", (519, 109), palette.deep)
+    # Keep the full world visible; a wide image fit would crop its geography.
+    with Image.open(TERRAIN_SOURCE) as terrain:
+        map_size = (300, round(300 * terrain.height / terrain.width))
+    land = _intelligence_land_mask(map_size)
+    chart = Image.composite(
+        Image.new("RGBA", map_size, (27, 43, 55, 255)),
+        Image.new("RGBA", map_size, palette.deep),
+        land,
     )
-    fitted = ImageEnhance.Contrast(fitted).enhance(1.05)
-    fitted = ImageEnhance.Brightness(fitted).enhance(0.76)
-    luminance = ImageOps.grayscale(fitted.convert("RGB"))
-    output = ImageOps.colorize(
-        luminance,
-        black=palette.deep[:3],
-        white=(116, 139, 160),
-    ).convert("RGBA")
+    coast = ImageChops.subtract(land, land.filter(ImageFilter.MinFilter(3)))
+    chart.paste((91, 119, 143, 255), (0, 0), coast)
+    output.alpha_composite(chart, (110, (109 - map_size[1]) // 2))
+    grid = Image.new("RGBA", output.size)
+    draw = ImageDraw.Draw(grid, "RGBA")
+    for x in range(110, 445, 25):
+        draw.line((x, 0, x, 105), fill=(68, 99, 123, 32))
+    for y in range(9, 106, 20):
+        draw.line((110, y, 445, y), fill=(68, 99, 123, 32))
+    output = Image.alpha_composite(output, grid)
+    agent = source_art.copy()
+    agent.thumbnail((90, 145), Image.Resampling.LANCZOS)
+    output.alpha_composite(agent, (355, 5))
     overlay = Image.new("RGBA", output.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay, "RGBA")
     draw.rectangle((0, 0, 518, 108), fill=(4, 7, 11, 18))
-    for x in range(245, 519):
-        alpha = 8 + (x - 245) * 22 // 273
-        draw.line((x, 0, x, 108), fill=(3, 6, 10, alpha))
+    # Agency name, counterintelligence and spymaster status are native overlays.
+    draw.rectangle((105, 0, 457, 36), fill=(3, 6, 10, 100))
+    draw.rectangle((105, 42, 306, 72), fill=(3, 6, 10, 68))
+    draw.rectangle((0, 0, 103, 108), fill=(3, 6, 10, 80))
     output = Image.alpha_composite(output, overlay)
     draw = ImageDraw.Draw(output, "RGBA")
-    signal = (70, 110, 145, 255)
-    signal_soft = (35, 56, 74, 255)
-    draw.rectangle((318, 12, 505, 94), outline=signal_soft)
-    for x in range(330, 500, 28):
-        draw.line((x, 18, x, 88), fill=signal_soft)
-    for y in range(26, 88, 20):
-        draw.line((324, y, 499, y), fill=signal_soft)
-    trace = ((326, 77), (354, 63), (382, 69), (415, 38), (447, 52), (492, 24))
-    draw.line(trace, fill=signal, width=2)
-    for x, y in trace:
-        draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=palette.deep, outline=signal)
     draw.line((5, 106, 513, 106), fill=palette.edge)
     draw.line((12, 108, 506, 108), fill=palette.accent)
+    return output
+
+
+def _agents_header(metal: Image.Image) -> Image.Image:
+    palette = PALETTES["intelligence"]
+    output = metal_surface(metal, (519, 109), palette, 0.60)
+    overlay = Image.new("RGBA", output.size)
+    draw = ImageDraw.Draw(overlay, "RGBA")
+    for x in range(274, 510, 28):
+        draw.line((x, 9, x, 99), fill=(84, 128, 164, 22))
+    for y in range(16, 100, 22):
+        draw.line((265, y, 510, y), fill=(84, 128, 164, 22))
+    output = Image.alpha_composite(output, overlay)
+    partial_rails(output, (5, 5, 513, 105), palette)
+    status_band(output, (8, 106, 510, 108), STEEL_BLUE)
     return output
 
 
@@ -873,17 +972,16 @@ def _dossier_surface(contract: SpriteContract, metal: Image.Image) -> Image.Imag
     role = contract.target_name.rsplit("dossier_", 1)[1]
     size = contract.total_size
     if role in {"top", "mid", "bottom", "caption"}:
-        grain = ImageOps.fit(metal.convert("L"), size, method=Image.Resampling.LANCZOS)
-        output = ImageOps.colorize(grain, (182, 177, 157), (220, 216, 199)).convert("RGBA")
+        palette = PALETTES["intelligence"]
+        output = metal_surface(metal, size, palette, 0.66)
         draw = ImageDraw.Draw(output)
-        edge = (117, 119, 111, 255)
-        draw.line((0, 0, 0, size[1] - 1), fill=edge)
-        draw.line((size[0] - 1, 0, size[0] - 1, size[1] - 1), fill=edge)
+        draw.line((0, 0, 0, size[1] - 1), fill=palette.edge)
+        draw.line((size[0] - 1, 0, size[0] - 1, size[1] - 1), fill=palette.edge)
         if role in {"top", "caption"}:
-            draw.line((0, 0, size[0] - 1, 0), fill=edge)
-            draw.line((5, 4, size[0] - 6, 4), fill=VIOLET)
+            draw.line((0, 0, size[0] - 1, 0), fill=palette.edge)
+            draw.line((5, 3, size[0] - 6, 3), fill=VIOLET)
         if role in {"bottom", "caption"}:
-            draw.line((0, size[1] - 1, size[0] - 1, size[1] - 1), fill=edge)
+            draw.line((0, size[1] - 1, size[0] - 1, size[1] - 1), fill=palette.edge)
         return output
     palette = PALETTES["intelligence"]
     output = metal_surface(metal, size, palette, 0.70)
@@ -921,7 +1019,9 @@ def render_asset(
     if target.endswith("branches_header"):
         return _branches_header(metal)
     if target.endswith("agents_header"):
-        return _agents_header(source_art)
+        return _agents_header(metal)
+    if target.endswith("agency_header"):
+        return _agency_header(source_art)
     if target.endswith("intelligence_create"):
         return _create_agency(metal)
     if target.endswith("branches_popup"):
@@ -961,6 +1061,17 @@ def render_gfx() -> str:
         )
         for contract in INTELLIGENCE_CONTRACTS
     )
+    # Circular progress uses its own radius; iconType scale does not size this widget.
+    entries += (
+        '\tcircularProgressBarType = {\n'
+        '\t\tname = "GFX_ADISCORD_intelligence_phase_progress"\n'
+        '\t\ttextureFile1 = "gfx/interface/operations/circular_progress_bar_bg.dds"\n'
+        '\t\ttextureFile2 = "gfx/interface/operations/circular_progress_bar.dds"\n'
+        '\t\tsize = 10\n'
+        '\t\trotation = 90\n'
+        '\t\tamount = 10\n'
+        '\t}\n'
+    )
     return f"spriteTypes = {{\n{entries}}}\n"
 
 
@@ -990,7 +1101,7 @@ def _intelligence_preview(
 
 def expected_outputs(*, include_preview: bool = False) -> dict[Path, bytes]:
     metal = load_surface_source(METAL_SOURCE)
-    source_art = load_surface_source(HEADER_SOURCE, minimum_size=(1024, 512))
+    source_art = load_surface_source(HEADER_SOURCE, minimum_size=(256, 384))
     assets: list[tuple[SpriteContract, Image.Image]] = []
     for contract in INTELLIGENCE_CONTRACTS:
         image = render_asset(contract, metal, source_art)

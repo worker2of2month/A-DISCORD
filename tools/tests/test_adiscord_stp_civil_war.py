@@ -1499,6 +1499,17 @@ class CivilWarContracts(unittest.TestCase):
             entities,
             r'clone\s*=\s*"STS_ADISCORD_militia_2_entity"\s+name\s*=\s*"STS_ADISCORD_territorial_2_entity"',
         )
+        # Kefreyt receives territorial brigades with Occidia; other recipients
+        # need the sprite-level fallback instead of the engine debug cube.
+        for suffix in ("", "_2", "_3", "_4", "_5", "_6", "_7", "_8"):
+            for name in (
+                f"VAL_ADISCORD_territorial{suffix}_entity",
+                f"ADISCORD_territorial{suffix}_entity",
+            ):
+                with self.subTest(entity=name):
+                    self.assertEqual(
+                        len(re.findall(rf'\bname\s*=\s*"{name}"', entities)), 1
+                    )
         self.assertRegex(
             entities,
             r'name\s*=\s*"STS_infantry_2_entity"[\s\S]{0,200}pdxmesh\s*=\s*"ADISCORD_STS_regular_mesh"',

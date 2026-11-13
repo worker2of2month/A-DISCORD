@@ -451,7 +451,10 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_def_quota_battalions }
-			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_4_tt
+				hidden_effect = { NAM_board_queue_recount = yes }
+			}
 			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Ruslan_Pike = {
@@ -754,7 +757,10 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_eco_quota_keeper }
-			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_1_tt
+				hidden_effect = { NAM_board_queue_recount = yes }
+			}
 			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Yulia_Mera = {
@@ -1374,7 +1380,10 @@ ideas = {
 			visible = { tag = NAM }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_edu_registry_schools }
-			on_add = { hidden_effect = { NAM_board_queue_recount = yes } }
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_2_tt
+				hidden_effect = { NAM_board_queue_recount = yes }
+			}
 			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Lidia_Takt = {
@@ -2136,14 +2145,19 @@ ideas = {
 			removal_cost = -1
 			allowed = { tag = NAM }
 			visible = { tag = NAM }
-			available = { STP_party_minister_change_allowed = yes }
-			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			available = {
+				hidden_trigger = { STP_party_minister_change_allowed = yes }
+			}
+			allowed_to_remove = {
+				hidden_trigger = { STP_party_minister_change_allowed = yes }
+			}
 			traits = { minister_trait_foreign_commissioner }
 			modifier = {
 				political_power_gain = 0.05
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_3_tt
 				hidden_effect = {
 					NAM_board_queue_recount = yes
 					ADISCORD_economy_mark_dirty = yes

@@ -77,6 +77,8 @@ def evaluate(nodes: list, context: dict) -> bool:
                 )
             elif key == "has_equipment":
                 values.append(evaluate(value, context["equipment"]))
+            elif key == "any_controlled_state":
+                values.append(any(evaluate(value, state) for state in context["controlled_states"]))
             elif key == "stockpile_ratio":
                 fields = {name: val for name, _, val in value}
                 comparison = next(op for name, op, _ in value if name == "ratio")
@@ -599,8 +601,90 @@ class ArmyQualityTests(unittest.TestCase):
             "has_capitulated": False,
             "ADISCORD_economy_ai_is_crisis": False,
             "has_manpower": 10000,
-            "equipment": {eq: 10000 for eq in self.equipment},
+            "tag": "VAL",
+            "num_of_military_factories": 10,
+            "has_tech": set(),
+            "has_country_flag": set(),
+            "controlled_states": [],
+            "equipment": {**{eq: 10000 for eq in self.equipment}, "ADISCORD_fighter_archetype": 0},
         }
+
+    def test_small_air_replacement_stops_at_reserve_and_releases_auxiliary_floor(self):
+        air = child(self.policies, "ADISCORD_limited_air_program")
+        auxiliary = child(self.policies, "ADISCORD_produce_squad_weapons_low_stock")
+        for tag in ("EFL", "AZH", "COF", "TFF", "SOL", "SHL", "SRV", "IRT", "RIN", "D01"):
+            for factories in range(1, 7):
+                for stock in (0, 99.9, 100, 200):
+                    for base in (0, 1):
+                        ctx = self.context(0.4, 0)
+                        ctx.update({
+                            "tag": tag,
+                            "num_of_military_factories": factories,
+                            "has_tech": {"ADISCORD_tech_reclaimed_jet_platforms"},
+                            "controlled_states": [{"air_base": base}],
+                            "has_war": True,
+                        })
+                        ctx["equipment"].update({
+                            "ADISCORD_fighter_archetype": stock,
+                            "ADISCORD_squad_weapons_equipment": 0,
+                        })
+                        expected = 2 <= factories < 6 and stock < 100 and base > 0
+                        with self.subTest(tag=tag, factories=factories, stock=stock, base=base):
+                            self.assertEqual(active(air, ctx, True), expected)
+                            self.assertEqual(active(auxiliary, ctx, True), factories >= 2 and not expected)
+        ctx["tag"] = "EFL"
+        ctx["num_of_military_factories"] = 2
+        ctx["equipment"]["ADISCORD_fighter_archetype"] = 0
+        ctx["has_tech"] = set()
+        self.assertFalse(active(air, ctx, True))
+
+    def test_first_airfield_hands_off_to_production_and_reopens_after_loss(self):
+        field = child(self.policies, "ADISCORD_first_airfield")
+        air = child(self.policies, "ADISCORD_limited_air_program")
+        request = dict((key, val) for key, _, val in child(field, "ai_strategy"))
+        self.assertEqual(request, {"type": "building_target", "id": "air_base", "value": "1"})
+        ctx = self.context()
+        ctx["has_tech"] = {"ADISCORD_tech_reclaimed_jet_platforms"}
+        for factories in (0, 1, 2, 5, 6, 20):
+            ctx["num_of_military_factories"] = factories
+            for bases in ([], [{"air_base": 0}], [{"air_base": 1}], []):
+                ctx["controlled_states"] = bases
+                has_base = any(state["air_base"] > 0 for state in bases)
+                with self.subTest(factories=factories, bases=bases):
+                    self.assertEqual(active(field, ctx, True), factories >= 2 and not has_base)
+                    self.assertEqual(active(air, ctx, True), factories >= 2 and has_base)
+
+    def test_air_programs_follow_participation_and_capitulation(self):
+        air = child(self.policies, "ADISCORD_limited_air_program")
+        field = child(self.policies, "ADISCORD_first_airfield")
+        for factories in (2, 6):
+            ctx = self.context()
+            ctx.update({
+                "num_of_military_factories": factories,
+                "has_tech": {"ADISCORD_tech_reclaimed_jet_platforms"},
+            })
+            for policy, bases in ((air, [{"air_base": 1}]), (field, [])):
+                ctx["controlled_states"] = bases
+                self.assertTrue(active(policy, ctx))
+                for key, value in (
+                    ("has_country_flag", {"ADISCORD_non_participating_minor_optimized"}),
+                    ("has_capitulated", True),
+                    ("has_tech", set()),
+                    ("is_ai", False),
+                    ("tag", "EXZ"),
+                    ("tag", "RSV"),
+                ):
+                    with self.subTest(factories=factories, key=key, value=value):
+                        self.assertFalse(active(policy, dict(ctx, **{key: value}), True))
+                        self.assertTrue(active(policy, ctx, False))
+
+    def test_large_air_program_still_releases_its_floor_in_a_rifle_emergency(self):
+        air = child(self.policies, "ADISCORD_limited_air_program")
+        for fill, expected in ((0.4, False), (0.85, True), (1, True)):
+            ctx = self.context(fill, 0)
+            ctx["has_tech"] = {"ADISCORD_tech_reclaimed_jet_platforms"}
+            ctx["controlled_states"] = [{"air_base": 1}]
+            self.assertEqual(active(air, ctx, True), expected)
 
     def test_recruitment_brake_has_recovery_hysteresis(self):
         self.assertIn(
@@ -756,20 +840,24 @@ class ArmyQualityTests(unittest.TestCase):
                         "equipment": dict.fromkeys(stocks, 0),
                     }
                 )
-                floors = 0
-                for policy in policies:
-                    if active(policy, ctx, True):
-                        for name, _, nodes in policy:
-                            if name == "ai_strategy":
-                                fields = dict((key, val) for key, _, val in nodes)
-                                if fields["type"].startswith(
-                                    "equipment_production_min_factories"
-                                ):
-                                    floors += int(fields["value"])
-                with self.subTest(factories=factories, emergency=emergency):
-                    self.assertLessEqual(floors, factories - 1)
-                    if emergency:
-                        self.assertLessEqual(floors, 4)
+                for tag in ("VAL", "EFL", "AZH"):
+                    ctx["tag"] = tag
+                    ctx["controlled_states"] = [{"air_base": 1}]
+                    ctx["equipment"]["ADISCORD_fighter_archetype"] = 0
+                    floors = 0
+                    for policy in policies:
+                        if active(policy, ctx, True):
+                            for name, _, nodes in policy:
+                                if name == "ai_strategy":
+                                    fields = dict((key, val) for key, _, val in nodes)
+                                    if fields["type"].startswith(
+                                        "equipment_production_min_factories"
+                                    ):
+                                        floors += int(fields["value"])
+                    with self.subTest(tag=tag, factories=factories, emergency=emergency):
+                        self.assertLessEqual(floors, factories - 1)
+                        if emergency:
+                            self.assertLessEqual(floors, 4)
 
 
 if __name__ == "__main__":

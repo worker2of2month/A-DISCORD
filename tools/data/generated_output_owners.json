@@ -20,6 +20,7 @@
     "vorkerland_cities",
     "ambient_audio",
     "azhar_palace",
+    "isaiah_clock_tower",
     "nam_oilfields",
     "factory_models",
     "minimap",
@@ -58,6 +59,7 @@
     "focus_trees",
     "val_flags",
     "superevent_music",
+    "superevent_art",
     "superevent_animation"
   ],
   "families": [
@@ -78,8 +80,19 @@
         "docs/development/previews/factories/civilian_*.png",
         "docs/development/previews/factories/military_*.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_factory_models"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_factory_models", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_factory_models"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_factory_models",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns only marked factory sections in shared registries, two native factory models and their shared textures. Other map meshes and building aliases remain unchanged. Native rebuilding requires Blender and io_pdx_mesh; previews are opt-in."
@@ -107,8 +120,19 @@
         "docs/development/model-verification/NAM_oilfield.json",
         "docs/development/previews/NAM_oilfield/*.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_oilfields"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_oilfields", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_oilfields"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_oilfields",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns only marked NAM oilfield sections in shared registries. Other ambient actors remain unchanged. Blender and io_pdx_mesh are required for native export; previews are opt-in."
@@ -190,11 +214,58 @@
         "docs/development/model-verification/AZH_palace.json",
         "docs/development/previews/AZH_palace/*.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_azhar_palace"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_azhar_palace", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_azhar_palace"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_azhar_palace",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns only the marked Azhar Black Harbor palace sections in shared registries. Other ambient actors and entity sections remain unchanged. Blender and io_pdx_mesh are required only to rebuild stale native outputs; previews are opt-in."
+    },
+    {
+      "id": "isaiah_clock_tower",
+      "owner_module": "tools.builders.build_adiscord_isaiah_tower",
+      "source_inputs": [
+        "tools/builders/build_adiscord_isaiah_tower.py",
+        "tools/assets/source/build_shl_palace.py",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/Isaiah_clock_tower/*.mesh",
+        "gfx/models/buildings/Isaiah_clock_tower/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/mapitems_custom.asset",
+        "map/ambient_object.txt",
+        "docs/development/model-verification/Isaiah_clock_tower.json",
+        "docs/development/previews/Isaiah_clock_tower/*.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_isaiah_tower"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_isaiah_tower",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only the marked Isaiah clock tower sections in shared registries and its native model package. The city and map-building generators own surrounding clearance. Native rebuild requires Blender/io_pdx_mesh; previews are opt-in."
     },
     {
       "id": "ideology_icons",
@@ -271,8 +342,7 @@
       "owner_module": "tools.builders.build_adiscord_startup_ui_assets",
       "source_inputs": [
         "tools/builders/build_adiscord_startup_ui_assets.py",
-        "gfx/interface/superevents/NAM/superevent_resource_war.png",
-        "gfx/loadingscreens/load_3.dds"
+        "gfx/interface/superevents/NAM/superevent_resource_war.png"
       ],
       "output_globs": [
         "interface/ADISCORD_startup_menu.gfx",
@@ -282,8 +352,7 @@
         "gfx/interface/startup/launcher.png",
         "gfx/interface/startup/close.png",
         "gfx/interface/startup/setup_*.png",
-        "gfx/interface/startup/shl.png",
-        "gfx/interface/startup/nam.png"
+        "gfx/interface/startup/shl.png"
       ],
       "check_command": [
         "{python}",
@@ -306,14 +375,13 @@
       "owner_module": "tools.builders.build_adiscord_stp_portraits",
       "source_inputs": [
         "tools/builders/build_adiscord_stp_portraits.py",
-        "tools/assets/source/stp_portraits/*.png"
-      ],
-      "output_globs": [
         "gfx/leaders/STP/portrait_STP_Petr_Ivanov.png",
-        "gfx/leaders/STP/ivanov_glitch_animation.dds",
         "gfx/leaders/NOD/portrait_NOD_STS_administrator.png",
         "gfx/leaders/VAL/portrait_VAL_STS_administrator.png",
-        "gfx/leaders/NKA/portrait_STP_northern_administrator.png",
+        "gfx/leaders/NKA/portrait_STP_northern_administrator.png"
+      ],
+      "output_globs": [
+        "gfx/leaders/STP/ivanov_glitch_animation.dds",
         "docs/development/previews/ivanov-glitch.gif"
       ],
       "check_command": [
@@ -335,7 +403,9 @@
     {
       "id": "ambient_audio",
       "owner_module": "tools.builders.build_adiscord_ambient_audio",
-      "output_globs": ["map/ambient_object.txt"],
+      "output_globs": [
+        "map/ambient_object.txt"
+      ],
       "source_inputs": [
         "tools/builders/build_adiscord_ambient_audio.py",
         "map/definition.csv",
@@ -344,8 +414,19 @@
         "map/unitstacks.txt",
         "history/states/*.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ambient_audio"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ambient_audio", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ambient_audio"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ambient_audio",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns only the marked ambient audio section. Authored objects and other builders' landmark sections remain unchanged."
@@ -372,8 +453,19 @@
         "map/definition.csv",
         "map/provinces.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ainholm_mandate"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ainholm_mandate", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ainholm_mandate"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ainholm_mandate",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Ainholm owns metadata inside state history plus generated blocks in shared country, party, character, trait, idea, and victory-point localisation; flag directories are shared with the state and regional country pipelines."
@@ -395,8 +487,19 @@
         "tools/lib/localisation.py",
         "tools/lib/adiscord_technology_applied_programmes.py"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_doctrine_system"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_doctrine_system", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_doctrine_system"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_doctrine_system",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Doctrine generation removes migrated doctrine keys from the technology localisation files that are otherwise emitted by the technology builder."
@@ -436,8 +539,19 @@
         "map/terrain.bmp",
         "map/adjacencies.csv"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_exclusion_zone_boundaries"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_exclusion_zone_boundaries", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_exclusion_zone_boundaries"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_exclusion_zone_boundaries",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Boundary realignment rewrites province and ownership blocks inside state files created and populated by the state and northern-country builders. Owns definition.csv terrain field 6 for the impassable reactor state 125, preserving every other field and row."
@@ -495,8 +609,19 @@
         "map/provinces.bmp",
         "map/unitstacks.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_inner_frontier_countries"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_inner_frontier_countries", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_inner_frontier_countries"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_inner_frontier_countries",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Inner-frontier population and owner metadata layers onto existing state shells; its generated victory-point block and flag directories share engine files with other regional builders."
@@ -504,7 +629,10 @@
     {
       "id": "map_buildings",
       "owner_module": "tools.builders.build_adiscord_map_buildings",
-      "output_globs": ["map/buildings.txt", "map/unitstacks.txt"],
+      "output_globs": [
+        "map/buildings.txt",
+        "map/unitstacks.txt"
+      ],
       "source_inputs": [
         "tools/data/adiscord_western_states.json",
         "tools/data/adiscord_southern_cities.json",
@@ -519,8 +647,19 @@
         "map/unitstacks.txt",
         "history/states/*.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_buildings"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_buildings", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_map_buildings"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_map_buildings",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "State-history, outer, and remainder state builders invoke the same building synchronizer after repartitioning provinces; this dedicated owner is the canonical standalone pass. Unit-stack ownership is limited to invalid anchors in Khan provinces 16512, 16523, 16531 and 16639; all other rows remain byte-identical."
@@ -528,7 +667,10 @@
     {
       "id": "vorkerland_theatre",
       "owner_module": "tools.builders.build_adiscord_vorkerland_theatre",
-      "output_globs": ["map/railways.txt", "map/supply_nodes.txt"],
+      "output_globs": [
+        "map/railways.txt",
+        "map/supply_nodes.txt"
+      ],
       "source_inputs": [
         "tools/builders/build_adiscord_vorkerland_theatre.py",
         "tools/lib/vorkerland_collapse_manifest.py",
@@ -538,8 +680,19 @@
         "map/provinces.bmp",
         "history/states/*.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_theatre"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_theatre",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "The theatre builder owns its declared OSV, STP/YPR, MON, RUS and EFL/AZH rail connections, the MON-Kalten border connection and MON/Vorkerland/EFL/AZH supply hubs, including forward depots across the six Khan campaign countries. It also owns the western theatre: the level-2 trunk from the Vorkerland capital to the Itoran capital, the Itoran network inside IVN's starting borders, the Rimat corridor feeders and their supply hubs. Unmanaged Nudge records and equivalent existing record formatting are preserved."
@@ -606,8 +759,19 @@
         "map/definition.csv",
         "map/provinces.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_new_states"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_new_states", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_new_states"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_new_states",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "The base state-history pass owns generated metadata, coalition regional partitions and selected legacy repairs, then invokes the shared map/buildings synchronizer; later regional builders populate or repartition subsets of the same files."
@@ -673,8 +837,19 @@
         "map/provinces.bmp",
         "map/unitstacks.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_northern_countries"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_northern_countries", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_northern_countries"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_northern_countries",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Northern metadata populates outer state shells and must be reapplied after exclusion-zone repartitioning; its generated victory-point block and flag directories share engine files with other generators."
@@ -703,8 +878,19 @@
         "map/heightmap.bmp",
         "map/adjacencies.csv"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_outer_states"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_outer_states", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_outer_states"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_outer_states",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "layered",
       "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes; their generated name block shares the canonical state localisation, and the builder invokes the shared building synchronizer after repartitioning."
@@ -839,15 +1025,28 @@
         "map/adjacencies.csv",
         "map/unitstacks.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_strategic_regions"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_strategic_regions", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_strategic_regions"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_strategic_regions",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
     {
       "id": "trade_regions",
       "owner_module": "tools.builders.build_adiscord_trade_regions",
-      "output_globs": ["map/definition.csv"],
+      "output_globs": [
+        "map/definition.csv"
+      ],
       "source_inputs": [
         "tools/build_adiscord_trade_regions.py",
         "tools/builders/build_adiscord_trade_regions.py",
@@ -857,8 +1056,19 @@
         "history/states/*.txt",
         "map/strategicregions/*.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_trade_regions"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_trade_regions", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_trade_regions"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_trade_regions",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Trade-region generation owns only definition.csv continent field 7 and preserves the authoritative province ids, colours, types, coast flags, terrain, row order and line endings."
@@ -962,8 +1172,19 @@
         "tools/assets/source/technology_weapons/*.png",
         "tools/assets/source/technology_weapons/*.dds"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_icons"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_technology_icons", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_technology_icons"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_technology_icons",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
@@ -1044,7 +1265,6 @@
         "interface/international_market/marketequipmentstockpilewindow.gui",
         "interface/international_market/addequipmenttomarketwindow.gui",
         "interface/international_market/edit_market_stockpile_window.gui",
-        "interface/international_market/requestautomationoptionswindow.gui",
         "interface/international_market/pricelevelswidgets.gui",
         "interface/international_market/markettutorialhint.gui",
         "gfx/interface/international_market/adiscord/ADISCORD_market_overlay.dds",
@@ -1137,8 +1357,19 @@
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/production_gui/production_surface_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_focus_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_focus_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1167,8 +1398,19 @@
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/production_gui/production_surface_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_logistics_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_logistics_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_logistics_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1218,8 +1460,19 @@
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/production_gui/production_surface_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_deployment_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_deployment_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_deployment_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
@@ -1351,7 +1604,8 @@
       "source_inputs": [
         "tools/builders/build_adiscord_operation_art.py",
         "tools/assets/source/intelligence_operations/operation_art_prompts.json",
-        "tools/lib/adiscord_ui_surfaces.py"
+        "tools/lib/adiscord_ui_surfaces.py",
+        "tools/assets/source/Super_event_bg.psd"
       ],
       "check_command": [
         "{python}",
@@ -1387,6 +1641,7 @@
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_cost_tile.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_header.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_agents_header.dds",
+        "gfx/interface/intelligence/ui/ADISCORD_intelligence_agency_header.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_create.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_branches_popup.dds",
         "gfx/interface/intelligence/ui/ADISCORD_intelligence_branch_row.dds",
@@ -1417,10 +1672,22 @@
         "tools/lib/adiscord_ui_contracts.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/production_gui/production_surface_source.png",
-        "tools/assets/source/intelligence_gui/ADISCORD_intelligence_header_source.png"
+        "tools/assets/source/intelligence_gui/ADISCORD_intelligence_agent_cutout.png",
+        "map/terrain.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_intelligence_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_intelligence_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_intelligence_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
@@ -1442,8 +1709,19 @@
         "tools/assets/source/production_gui/production_surface_source.png",
         "tools/assets/source/event_pictures/event_adiscord_ui_test_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_event_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_event_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1494,8 +1772,19 @@
         "tools/assets/source/event_pictures/news/*.dds",
         "tools/assets/source/event_pictures/news/*.png"
       ],
-        "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_event_pictures", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_event_pictures"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_event_pictures",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1548,7 +1837,9 @@
     {
       "id": "terrain_snow",
       "owner_module": "tools.builders.build_adiscord_terrain_snow",
-      "output_globs": ["map/terrain.bmp"],
+      "output_globs": [
+        "map/terrain.bmp"
+      ],
       "source_inputs": [
         "tools/builders/build_adiscord_terrain_snow.py",
         "tools/lib/coastal_clearance.py",
@@ -1559,8 +1850,19 @@
         "map/definition.csv",
         "common/terrain/00_terrain.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_terrain_snow", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_terrain_snow"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_terrain_snow",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Permanent-snow generation owns polar/high-altitude palette conversion outside the IVN geography footprint and preserves land city-mask pixels as urban palette 13; the IVN geography pass owns the northern terrain layers."
@@ -1568,15 +1870,28 @@
     {
       "id": "vorkerland_cities",
       "owner_module": "tools.builders.build_adiscord_vorkerland_cities",
-      "output_globs": ["map/cities.bmp"],
+      "output_globs": [
+        "map/cities.bmp"
+      ],
       "source_inputs": [
         "tools/builders/build_adiscord_vorkerland_cities.py",
         "map/cities.bmp",
         "map/provinces.bmp",
         "map/definition.csv"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_cities", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_cities"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_cities",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Paints palette index 15 only in TARGET_PROVINCES and preserves every byte outside those province pixels. Coastal geography owns its separately enumerated city masks on the same bitmap."
@@ -1598,18 +1913,28 @@
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_bad.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_select_icon_strip.dds",
         "gfx/interface/ADISCORD_RUS/bunker_layer_*.dds",
-          "gfx/interface/ADISCORD_RUS/bunker_card.dds",
-          "gfx/interface/ADISCORD_RUS/bunker_panel.dds",
-          "gfx/interface/ADISCORD_RUS/bunker_floor_selected.dds",
-          "gfx/interface/ADISCORD_RUS/bunker_floor_shade.dds"
+        "gfx/interface/ADISCORD_RUS/bunker_card.dds",
+        "gfx/interface/ADISCORD_RUS/bunker_panel.dds",
+        "gfx/interface/ADISCORD_RUS/bunker_floor_selected.dds",
+        "gfx/interface/ADISCORD_RUS/bunker_floor_shade.dds"
       ],
       "source_inputs": [
         "tools/assets/source/decisions_gui/decisions_surface_source.png",
-        "tools/assets/source/decisions_gui/decision_approval_seal_source.png",
-        "tools/assets/source/rus_bunker/bunker_layer_*.png"
+        "tools/assets/source/decisions_gui/decision_approval_seal_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_decision_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_decision_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_decision_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_decision_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1644,8 +1969,19 @@
         "tools/assets/source/production_gui/naval_glyph_source.png",
         "tools/assets/source/production_gui/repair_glyph_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_production_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_production_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1680,8 +2016,19 @@
         "gfx/flags/medium/ROM.tga",
         "gfx/flags/medium/TRU.tga"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_west_influence_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_west_influence_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_west_influence_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_west_influence_map",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns west_influence PNGs, the HTML mockup and scripted-GUI file; shared interfaces, UI triggers and localisation are limited to BEGIN/END GENERATED WEST INFLUENCE MAP sections. Existing campaign mechanics and reservation UI remain authored separately."
@@ -1690,14 +2037,12 @@
       "id": "western_diplomacy_assets",
       "owner_module": "tools.builders.build_adiscord_western_diplomacy_assets",
       "output_globs": [
-        "gfx/interface/ADISCORD_western_continent/reservation_wallpaper.dds",
         "gfx/interface/ADISCORD_western_continent/reservation_terminal.dds",
         "gfx/flags/RSV.tga",
         "gfx/flags/medium/RSV.tga",
         "gfx/flags/small/RSV.tga"
       ],
       "source_inputs": [
-        "tools/assets/source/ADISCORD_reservation_reference.png",
         "gfx/fonts/vt323_22.fnt",
         "gfx/fonts/vt323_22.tga",
         "gfx/flags/EXZ.tga",
@@ -1737,8 +2082,19 @@
         "gfx/interface/diplomacy/ADISCORD_diplomacy_focus_button.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_item_bg.dds"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_diplomacy_ui_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_diplomacy_ui_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_diplomacy_ui_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1820,8 +2176,19 @@
         "tools/assets/source/trade_gui/world_tension_defcon_tfr.dds",
         "tools/assets/source/economy_gui/treasury_topbar_source.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_resource_assets"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_resource_assets", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_resource_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_resource_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1861,22 +2228,48 @@
         "map/terrain.bmp",
         "map/heightmap.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_minimap"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_minimap", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_minimap"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_minimap",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
     {
       "id": "val_operations_map",
       "owner_module": "tools.builders.build_adiscord_val_operations_map",
-      "output_globs": ["gfx/interface/VAL_operations/VAL_ops_*.png"],
+      "output_globs": [
+        "gfx/interface/VAL_operations/VAL_ops_*.png",
+        "gfx/interface/VAL_operations/VAL_trade_*.png"
+      ],
       "source_inputs": [
         "history/states/*.txt",
         "map/definition.csv",
-        "map/provinces.bmp"
+        "map/provinces.bmp",
+        "map/railways.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_val_operations_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_val_operations_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_val_operations_map",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
@@ -1922,8 +2315,19 @@
         "map/definition.csv",
         "map/provinces.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_capital_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_capital_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_capital_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_vorkerland_capital_map",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns PNG exports, HTML mockup, marked WRK CAPITAL VISUALS and INTERACTION sections, and the compact prewar category description. Other GUI, scripted GUI and localisation content is preserved. Native decision definitions are read-only inputs for action guards. The development review image is opt-in with --preview."
@@ -1950,8 +2354,19 @@
         "gfx/interface/STP_regions/STP_regions_faction_merchants.png",
         "gfx/interface/STP_regions/STP_regions_faction_radicals.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_regions_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_regions_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_regions_map",
+        "--apply"
+      ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive"
     },
@@ -1970,8 +2385,19 @@
         "map/provinces.bmp",
         "map/heightmap.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_basin_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_basin_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_basin_map",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1991,8 +2417,19 @@
         "map/provinces.bmp",
         "map/heightmap.bmp"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_piracy_map"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_nam_piracy_map", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_piracy_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_piracy_map",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -2114,8 +2551,19 @@
         "gfx/texticons/adiscord/parties/VAL/VAL_etatist_party.png",
         "gfx/texticons/adiscord/parties/WRK/WRK_worker_revolutionary_party.png"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_party_texticons"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_party_texticons",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -2153,8 +2601,19 @@
         "gfx/flags/**/SLI.tga",
         "gfx/flags/**/SLI_mandate.tga"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_flags"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_stp_flags",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -2265,8 +2724,19 @@
         "gfx/flags/IVC.tga",
         "gfx/flags/IVN_chauvinism.tga"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_island_administration_icon", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_island_administration_icon"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_island_administration_icon",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -2289,6 +2759,7 @@
       "source_inputs": [
         "map/railways.txt",
         "tools/data/adiscord_southern_cities.json",
+        "tools/data/adiscord_river_bank_repairs.json",
         "tools/builders/build_adiscord_new_states.py",
         "tools/builders/build_adiscord_coastal_geography.py",
         "tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds",
@@ -2304,11 +2775,22 @@
         "map/world_normal.bmp",
         "map/unitstacks.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_coastal_geography"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_coastal_geography",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, and the Zshat 10926 connection; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house-town city provinces 16895-16899 carved inside their rural parents without sectors, with their native unit anchors and the parents' new border slots. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, the Zshat 10926 connection, and the river-bank repairs in tools/data/adiscord_river_bank_repairs.json that give every land part a river cut off to the province on its own bank or move the river course onto the province border; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, the northern hand-painted urban provinces listed in URBAN_GROWTH, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house-town city provinces 16895-16899 carved inside their rural parents without sectors, with their native unit anchors and the parents' new border slots. Preserves IVN terrain and compatible snow output."
     },
     {
       "id": "ivn_geography",
@@ -2343,8 +2825,19 @@
         "map/railways.txt",
         "common/terrain/00_terrain.txt"
       ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ivn_geography"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_ivn_geography", "--apply"],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ivn_geography"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_ivn_geography",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set, preserves shared land city-mask pixels as urban palette 13, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion. It stamps the reviewed IVN mainland province geometry into provinces.bmp, appends its new definition rows and coastal flags, owns river pixels outside the authored-river provinces, unit-anchor positions and heights of IVN provinces, and IVN railway segments rerouted through the carved cities."
@@ -2361,8 +2854,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_nam_focus_icons.py",
-        "tools/assets/source/focus_icons/NAM/focus_art_prompts.json",
-        "tools/assets/source/focus_icons/NAM/*_composition*.png"
+        "tools/assets/source/focus_icons/NAM/focus_art_prompts.json"
       ],
       "check_command": [
         "{python}",
@@ -2392,8 +2884,10 @@
         "common/national_focus/ADISCORD_NAM_exile_radical.txt",
         "common/national_focus/ADISCORD_NAM_exile_humanist.txt",
         "common/national_focus/ADISCORD_NAM_exile_corporate.txt",
+        "common/national_focus/ADISCORD_NAM_south_war.txt",
         "common/national_focus/ADISCORD_SHL_focus.txt",
         "common/national_focus/ADISCORD_SHL_shared.txt",
+        "common/national_focus/ADISCORD_SHL_south_war.txt",
         "common/national_focus/ADISCORD_IVN_focus.txt",
         "common/national_focus/ADISCORD_IVC_focus.txt",
         "common/national_focus/ADISCORD_national_focus_RUS.txt",
@@ -2514,15 +3008,37 @@
         "sound/superevents/superevent_itora_committee_victory_sound.wav",
         "sound/superevents/superevent_itora_stalk_portal_sound.wav",
         "sound/superevents/superevent_rus_restoration_sound.wav",
-        "sound/superevents/superevent_rus_black_banner_sound.wav"
+        "sound/superevents/superevent_rus_black_banner_sound.wav",
+        "sound/superevents/superevent_stelander_shabrat_republic_sound.wav",
+        "sound/superevents/superevent_stelander_sotnikov_directory_sound.wav",
+        "sound/superevents/superevent_stelander_sotnikov_charter_sound.wav",
+        "sound/superevents/superevent_stelander_tikhoreva_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_festival_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_houses_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_staff_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_wallets_sound.wav",
+        "sound/superevents/superevent_stelander_party_victory_regent_sound.wav",
+        "sound/superevents/superevent_west_world_empire_sound.wav",
+        "sound/superevents/superevent_south_free_islands_sound.wav",
+        "sound/superevents/superevent_val_council_proclamation_sound.wav",
+        "sound/superevents/superevent_south_war_sound.wav",
+        "sound/superevents/superevent_south_houses_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
-          "tools/builders/build_adiscord_superevent_animation.py",
+        "tools/builders/build_adiscord_superevent_animation.py",
         "tools/assets/source/rus_crisis_audio/world_ends_excerpt.ogg",
         "tools/assets/source/superevents/IVN/*",
         "tools/assets/source/superevents/RUS/*.flac",
-        "tools/assets/source/superevents/RUS/asset_sources.json"
+        "tools/assets/source/superevents/RUS/asset_sources.json",
+        "tools/assets/source/superevents/STP/*.flac",
+        "tools/assets/source/superevents/STP/audio_sources.json",
+        "tools/assets/source/superevents/WRK/*.flac",
+        "tools/assets/source/superevents/WRK/audio_sources.json",
+        "tools/assets/source/superevents/South/*.flac",
+        "tools/assets/source/superevents/South/audio_sources.json",
+        "tools/assets/source/superevents/VAL/*.flac",
+        "tools/assets/source/superevents/VAL/audio_sources.json"
       ],
       "may_delete_outputs": true,
       "ownership_mode": "exclusive",
@@ -2536,29 +3052,85 @@
         "{python}",
         "-B",
         "-m",
-          "tools.builders.build_adiscord_superevent_music",
-          "--apply"
-        ]
-      },
-      {
-        "id": "superevent_animation",
-        "owner_module": "tools.builders.build_adiscord_superevent_animation",
-        "source_inputs": [
-          "tools/builders/build_adiscord_superevent_animation.py",
-          "tools/assets/source/superevents/IVN/portal_art_sources.json"
-        ],
-        "output_globs": [
-          "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png",
-          "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_*.dds"
-        ],
-        "check_command": [
-          "{python}", "-B", "-m", "tools.builders.build_adiscord_superevent_animation", "--check"
-        ],
-        "apply_command": [
-          "{python}", "-B", "-m", "tools.builders.build_adiscord_superevent_animation", "--apply"
-        ],
-        "may_delete_outputs": false,
-        "ownership_mode": "exclusive"
-      }
+        "tools.builders.build_adiscord_superevent_music",
+        "--apply"
+      ]
+    },
+    {
+      "id": "superevent_animation",
+      "owner_module": "tools.builders.build_adiscord_superevent_animation",
+      "source_inputs": [
+        "tools/builders/build_adiscord_superevent_animation.py",
+        "tools/assets/source/superevents/IVN/portal_art_sources.json",
+        "tools/lib/superevent_art.py",
+        "tools/assets/source/Super_event_bg.psd"
+      ],
+      "output_globs": [
+        "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png",
+        "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_strip_*.dds"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_animation"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_animation",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "superevent_art",
+      "owner_module": "tools.builders.build_adiscord_superevent_art",
+      "source_inputs": [
+        "tools/builders/build_adiscord_superevent_art.py",
+        "tools/lib/superevent_art.py",
+        "tools/assets/source/superevents/art_sources.json",
+        "tools/assets/source/Super_event_bg.psd"
+      ],
+      "output_globs": [
+        "gfx/interface/superevents/STP/superevent_stelander_tikhoreva.png",
+        "gfx/interface/superevents/STP/superevent_stelander_sotnikov_directory.png",
+        "gfx/interface/superevents/STP/superevent_stelander_sotnikov_charter.png",
+        "gfx/interface/superevents/STP/superevent_stelander_party_victory_houses.png",
+        "gfx/interface/superevents/STP/superevent_stelander_party_victory_regent.png",
+        "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png",
+        "gfx/interface/superevents/South/superevent_south_rump.png",
+        "gfx/interface/superevents/South/superevent_south_free_islands.png",
+        "gfx/interface/superevents/South/superevent_south_civil_service.png",
+        "gfx/interface/superevents/South/superevent_south_radical.png",
+        "gfx/interface/superevents/WRK/superevent_west_anton.png",
+        "gfx/interface/superevents/WRK/superevent_west_council.png",
+        "gfx/interface/superevents/WRK/superevent_west_petrichev.png",
+        "gfx/interface/superevents/WRK/superevent_west_worker.png",
+        "gfx/interface/superevents/WRK/superevent_west_world_empire.png",
+        "gfx/interface/superevents/IVN/superevent_itora_stalk_portal.png",
+        "gfx/interface/superevents/South/superevent_south_directorate.png",
+        "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png",
+        "gfx/interface/superevents/WRK/superevent_west_veyran.png",
+        "gfx/interface/superevents/South/superevent_south_war.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_art"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_superevent_art",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    }
   ]
 }

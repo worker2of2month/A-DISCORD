@@ -192,3 +192,11 @@ RUS_reactor_council_category = {
 	visible = { RUS_scientists_regime = yes }
 	priority = 27
 }
+
+# --- rus_black_army_regime ---
+RUS_guard_state_category = {
+	icon = generic_crisis
+	allowed = { tag = RUS }
+	visible = { RUS_black_army_regime = yes }
+	priority = 27
+}

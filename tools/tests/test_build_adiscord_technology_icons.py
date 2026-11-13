@@ -255,12 +255,7 @@ class TechnologyIconSourceTests(unittest.TestCase):
         self.assertEqual(len({entry["output"] for entry in antitank}), 12)
         self.assertEqual(len({entry["source"] for entry in antitank}), 12)
         self.assertTrue(all(entry["kind"] == "compact" for entry in antitank))
-        self.assertTrue(
-            all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] == 6)
-        )
-        self.assertTrue(
-            all("crop" not in entry for entry in antitank if entry["tier"] != 6)
-        )
+        self.assertTrue(all("crop" not in entry for entry in antitank))
 
     def test_redrawn_personal_antitank_icons_use_individual_sources(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -275,14 +270,14 @@ class TechnologyIconSourceTests(unittest.TestCase):
             {
                 3: "personal_antitank_03_shaped_charge_grenade.dds",
                 4: "personal_antitank_04_antitank_rifle.dds",
-                5: "personal_antitank_05_wire_guidance.png",
-                6: "personal_antitank_06_recoilless_launcher.png",
-                7: "personal_antitank_07_saclos_guidance.png",
+                5: "antitank_05_wire_guidance_runtime.dds",
+                6: "antitank_06_recoilless_launcher_runtime.dds",
+                7: "antitank_07_saclos_guidance_runtime.dds",
                 8: "personal_antitank_08_rocket_launcher.dds",
                 9: "personal_antitank_09_top_attack_seeker.dds",
-                10: "personal_antitank_10_tandem_warhead.png",
-                11: "personal_antitank_11_loitering_munition.png",
-                12: "personal_antitank_12_multispectral_targeting.png",
+                10: "antitank_10_tandem_warhead_runtime.dds",
+                11: "antitank_11_loitering_munition_runtime.dds",
+                12: "antitank_12_multispectral_targeting_runtime.dds",
             },
         )
         self.assertEqual(
@@ -293,8 +288,81 @@ class TechnologyIconSourceTests(unittest.TestCase):
         )
         self.assertEqual(
             {tier for tier, entry in antitank.items() if entry.get("runtime_master")},
-            {1, 2, 3, 4, 8, 9},
+            set(range(1, 13)),
         )
+
+    def test_selected_weapon_masters_preserve_artwork_on_rebuild(self) -> None:
+        from tools.builders import build_adiscord_technology_icons as builder
+
+        outputs = builder.render_outputs(ROOT)
+        expected = {
+            f"ADISCORD_{tag}weapon_{kind}.dds"
+            for tag in ("", "STP_", "VAL_")
+            for kind in (
+                "01_reclaimed_arsenal", "02_recovered_service_rifle",
+                "03_standardized_battle_rifle",
+            )
+        }
+        expected.update({
+            "ADISCORD_squad_01_recovered_fire_support.dds",
+            "ADISCORD_equipment_ammunition.dds",
+        })
+        expected.update({
+            f"ADISCORD_antitank_{kind}.dds"
+            for kind in (
+                "05_wire_guidance", "06_recoilless_launcher", "07_saclos_guidance",
+                "10_tandem_warhead", "11_loitering_munition", "12_multispectral_targeting",
+            )
+        })
+        specs = {spec.output: spec for spec in builder.load_manifest()}
+        for name in expected:
+            with self.subTest(icon=name):
+                spec = specs[name]
+                self.assertTrue(spec.runtime_master)
+                self.assertEqual(
+                    spec.source,
+                    name.removeprefix("ADISCORD_").removesuffix(".dds") + "_runtime.dds",
+                )
+                self.assertIsNone(spec.crop)
+                source_data = (SOURCE_DIR / spec.source).read_bytes()
+                result = outputs[Path("gfx/interface/technologies") / name]
+                with Image.open(BytesIO(source_data)) as source:
+                    with Image.open(BytesIO(result)) as icon:
+                        if source.size == (70, 70):
+                            self.assertEqual(icon.size, (72, 72))
+                            self.assertEqual(icon.crop((1, 1, 71, 71)).tobytes(), source.tobytes())
+                        else:
+                            self.assertEqual(result, source_data)
+
+    def test_selected_weapon_artwork_matches_full_and_partial_sprite_builds(self) -> None:
+        import re
+
+        from tools.builders import build_adiscord_technology_system as generator
+
+        expected = {
+            "belt_fed_recovery": "ADISCORD_squad_01_recovered_fire_support",
+            "squad_grenade_launchers": "ADISCORD_squad_01_recovered_fire_support",
+            "standardized_cartridges": "ADISCORD_equipment_ammunition",
+            "caseless_ammunition_trials": "ADISCORD_equipment_ammunition",
+            "primer_consistency": "ADISCORD_equipment_ammunition",
+        }
+        current = (ROOT / "interface/ADISCORD_technologies.gfx").read_text(encoding="utf-8")
+        partial = generator.weapon_category_gfx_output()
+        found = set()
+        for branch in generator.BRANCHES:
+            for index, tech in enumerate(branch.techs):
+                if tech.key not in expected:
+                    continue
+                found.add(tech.key)
+                icon = expected[tech.key]
+                self.assertEqual(generator.icon_for_technology(branch, index), icon)
+                for gfx in (current, partial):
+                    sprite = re.search(
+                        rf'SpriteType = \{{\s*name = "GFX_{tech.id}_medium"[^{{}}]*\}}', gfx
+                    )
+                    self.assertIsNotNone(sprite)
+                    self.assertIn(f'textureFile = "gfx/interface/technologies/{icon}.dds"', sprite[0])
+        self.assertEqual(found, set(expected))
 
 
 class TechnologyIconBuilderTests(unittest.TestCase):
@@ -373,13 +441,16 @@ class TechnologyIconBuilderTests(unittest.TestCase):
                 alpha = icon.getchannel("A")
                 bbox = alpha.getbbox()
                 self.assertIsNotNone(bbox)
-                self.assertGreaterEqual(bbox[0], 3)
-                self.assertGreaterEqual(bbox[1], 3)
-                self.assertLessEqual(bbox[2], icon.width - 3)
-                self.assertLessEqual(bbox[3], icon.height - 3)
-                self.assertGreater(
-                    alpha.histogram()[0], icon.width * icon.height * 0.25
-                )
+                # Supplied runtime masters are exported unchanged; their framing
+                # is the author's, so only fitted icons must keep the margins.
+                if not spec.runtime_master:
+                    self.assertGreaterEqual(bbox[0], 3)
+                    self.assertGreaterEqual(bbox[1], 3)
+                    self.assertLessEqual(bbox[2], icon.width - 3)
+                    self.assertLessEqual(bbox[3], icon.height - 3)
+                    self.assertGreater(
+                        alpha.histogram()[0], icon.width * icon.height * 0.25
+                    )
                 self.assertFalse(
                     any(
                         opacity >= 32
@@ -393,6 +464,7 @@ class TechnologyIconBuilderTests(unittest.TestCase):
     def test_rendered_personal_antitank_icons_are_clean_alpha_cutouts(self) -> None:
         builder = self._builder()
         outputs = builder.render_outputs(ROOT)
+        specs = {spec.output: spec for spec in builder.load_manifest()}
         issues: list[str] = []
 
         for path, payload in outputs.items():
@@ -424,12 +496,14 @@ class TechnologyIconBuilderTests(unittest.TestCase):
                 issues.append(f"{path.name}: partial_alpha={partial_alpha}")
             if magenta_pixels:
                 issues.append(f"{path.name}: magenta_pixels={magenta_pixels}")
+            # Runtime masters retain their framing inside a transparent border.
+            margin = 1 if specs[path.name].runtime_master else 3
             if (
                 bbox is None
-                or bbox[0] < 3
-                or bbox[1] < 3
-                or bbox[2] > 69
-                or bbox[3] > 69
+                or bbox[0] < margin
+                or bbox[1] < margin
+                or bbox[2] > 72 - margin
+                or bbox[3] > 72 - margin
             ):
                 issues.append(f"{path.name}: unsafe_bbox={bbox}")
 

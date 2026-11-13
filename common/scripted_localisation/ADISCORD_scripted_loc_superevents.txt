@@ -50,6 +50,14 @@ defined_text = {
 		localization_key = superevent_val_commonwealth_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_val_council_proclamation }
+		localization_key = superevent_val_council_proclamation_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_war }
+		localization_key = superevent_south_war_quote
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_quote
 	}
@@ -98,10 +106,6 @@ defined_text = {
 		localization_key = superevent_rus_khan_defeated_quote
 	}
 	text = {
-		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
-		localization_key = superevent_vorkerland_joint_victory_quote
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_sotnikov_civilwar }
 		localization_key = superevent_stelander_sotnikov_civilwar_quote
 	}
@@ -120,10 +124,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_tikhoreva }
 		localization_key = superevent_stelander_tikhoreva_quote
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_khan_died }
-		localization_key = superevent_rus_khan_died_quote
 	}
 	text = {
 		trigger = { has_global_flag = superevent_nam_resource_war_service }
@@ -366,6 +366,14 @@ defined_text = {
 		localization_key = superevent_val_commonwealth_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_val_council_proclamation }
+		localization_key = superevent_val_council_proclamation_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_war }
+		localization_key = superevent_south_war_title
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_title
 	}
@@ -391,10 +399,6 @@ defined_text = {
 		localization_key = superevent_rus_khan_defeated_title
 	}
 	text = {
-		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
-		localization_key = superevent_vorkerland_joint_victory_title
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_sotnikov_civilwar }
 		localization_key = superevent_stelander_sotnikov_civilwar_title
 	}
@@ -413,10 +417,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_tikhoreva }
 		localization_key = superevent_stelander_tikhoreva_title
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_khan_died }
-		localization_key = superevent_rus_khan_died_title
 	}
 	text = {
 		trigger = { has_global_flag = superevent_nam_resource_war_service }
@@ -659,6 +659,14 @@ defined_text = {
 		localization_key = superevent_val_commonwealth_comment
 	}
 	text = {
+		trigger = { has_global_flag = superevent_val_council_proclamation }
+		localization_key = superevent_val_council_proclamation_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_south_war }
+		localization_key = superevent_south_war_comment
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_comment
 	}
@@ -684,10 +692,6 @@ defined_text = {
 		localization_key = superevent_rus_khan_defeated_comment
 	}
 	text = {
-		trigger = { has_global_flag = superevent_vorkerland_joint_victory }
-		localization_key = superevent_vorkerland_joint_victory_comment
-	}
-	text = {
 		trigger = { has_global_flag = superevent_stelander_sotnikov_civilwar }
 		localization_key = superevent_stelander_sotnikov_civilwar_comment
 	}
@@ -706,10 +710,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_tikhoreva }
 		localization_key = superevent_stelander_tikhoreva_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_khan_died }
-		localization_key = superevent_rus_khan_died_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_nam_resource_war_service }

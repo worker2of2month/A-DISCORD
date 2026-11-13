@@ -125,6 +125,10 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         COUNTRY,
         "applied to RUS for 120 days by the scientists' factory current favour",
     ),
+    "RUS_ba_levy_burden": (
+        STATE,
+        "applied for 180 days to a zone state by the Black Army's commandant levy",
+    ),
     "RUS_power_cut": (
         COUNTRY,
         "applied for 90 days to a former energy customer by RUS_energy_contract_cut "

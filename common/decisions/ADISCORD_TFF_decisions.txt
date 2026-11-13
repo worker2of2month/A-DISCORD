@@ -64,6 +64,7 @@ TFF_frontier_at_war = {
 		cost = 30
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = TFF_establish_common_supply_depots_description_rules_tt
 			add_timed_idea = { idea = TFF_common_supply_network days = 90 }
 			if = {
 				limit = { controls_state = 83 }

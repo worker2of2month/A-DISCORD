@@ -1531,6 +1531,25 @@ entity = { clone = "SRP_ADISCORD_militia_5_entity" name = "SRP_ADISCORD_territor
 entity = { clone = "SRP_ADISCORD_militia_6_entity" name = "SRP_ADISCORD_territorial_6_entity" }
 entity = { clone = "SRP_ADISCORD_militia_7_entity" name = "SRP_ADISCORD_territorial_7_entity" }
 entity = { clone = "SRP_ADISCORD_militia_8_entity" name = "SRP_ADISCORD_territorial_8_entity" }
+entity = { clone = "VAL_ADISCORD_militia_entity" name = "VAL_ADISCORD_territorial_entity" }
+entity = { clone = "VAL_ADISCORD_militia_2_entity" name = "VAL_ADISCORD_territorial_2_entity" }
+entity = { clone = "VAL_ADISCORD_militia_3_entity" name = "VAL_ADISCORD_territorial_3_entity" }
+entity = { clone = "VAL_ADISCORD_militia_4_entity" name = "VAL_ADISCORD_territorial_4_entity" }
+entity = { clone = "VAL_ADISCORD_militia_5_entity" name = "VAL_ADISCORD_territorial_5_entity" }
+entity = { clone = "VAL_ADISCORD_militia_6_entity" name = "VAL_ADISCORD_territorial_6_entity" }
+entity = { clone = "VAL_ADISCORD_militia_7_entity" name = "VAL_ADISCORD_territorial_7_entity" }
+entity = { clone = "VAL_ADISCORD_militia_8_entity" name = "VAL_ADISCORD_territorial_8_entity" }
+# Territorial brigades change owners through annexation and unit transfers.
+# A tag without its own binding falls back to these sprite-level entities;
+# without them the engine draws its debug cube on the map.
+entity = { clone = "infantry_entity" name = "ADISCORD_territorial_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_2_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_3_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_4_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_5_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_6_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_7_entity" }
+entity = { clone = "infantry_2_entity" name = "ADISCORD_territorial_8_entity" }
 entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_confederation_infantry_entity" }
 entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_confederation_ADISCORD_militia_entity" }
 entity = { clone = "ADISCORD_WRK_line_infantry_entity" name = "WRK_confederation_mountaineers_entity" }

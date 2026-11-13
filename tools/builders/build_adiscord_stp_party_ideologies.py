@@ -29,7 +29,9 @@ def png_bytes(image: Image.Image) -> bytes:
     return buffer.getvalue()
 
 
-def outputs(root: Path = ROOT, *, include_preview: bool = False):
+def outputs(root: Path = ROOT, *, include_preview: bool = False, reexport: bool = False):
+    """Masters seed missing textures; an installed texture carries the author's
+    final fit and grade and is kept unless reexport is requested."""
     if include_preview:
         preview = Image.new("RGB", (960, 328), "#25242b")
         draw = ImageDraw.Draw(preview)
@@ -40,6 +42,11 @@ def outputs(root: Path = ROOT, *, include_preview: bool = False):
         if subtype == "aristocratic_hedonism":
             with Image.open(root / texture) as source:
                 icon = source.convert("RGBA")
+        elif (root / texture).is_file() and not reexport:
+            data = (root / texture).read_bytes()
+            with Image.open(BytesIO(data)) as installed:
+                icon = installed.convert("RGBA")
+            yield texture, data
         else:
             with Image.open(root / SOURCE / f"{subtype}.png") as source:
                 if source.mode != "RGBA" or source.width != source.height:
@@ -66,9 +73,13 @@ def main() -> int:
         "--preview", action="store_true",
         help="Include the temporary political-window size comparison.",
     )
+    parser.add_argument(
+        "--reexport", action="store_true",
+        help="Replace installed textures with fresh exports of their masters.",
+    )
     args = parser.parse_args()
     changed = []
-    for relative, data in outputs(root=ROOT, include_preview=args.preview):
+    for relative, data in outputs(root=ROOT, include_preview=args.preview, reexport=args.reexport):
         path = ROOT / relative
         if not path.exists() or path.read_bytes() != data:
             changed.append(relative)

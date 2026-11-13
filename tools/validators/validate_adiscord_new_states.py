@@ -14,6 +14,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 from tools.lib.adiscord_core_state_balance_manifest import NON_URBAN_SETTLEMENT_VPS
 from tools.lib.city_terrains import CITY_TERRAINS
+from tools.lib.adiscord_remainder_countries import profiles as remainder_profiles
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -38,6 +39,7 @@ from tools.builders.build_adiscord_new_states import (
     LEGACY_OWNER_OVERRIDES,
     MINOR_VPS,
     NAM_COALITION_FRONT_RESOURCES,
+    NAM_COALITION_REGIONS,
     NAM_LEGACY_VICTORY_POINTS,
     REGIONAL_SETTLEMENTS,
     SECONDARY_CENTRES,
@@ -68,6 +70,11 @@ from tools.builders.build_adiscord_inner_frontier_countries import (
 
 
 _NORTHERN_PROFILES, _NORTHERN_PRINCIPAL_PROVINCES = build_northern_profiles()
+_REMAINDER_PROFILES = remainder_profiles()
+REMAINDER_VICTORY_POINTS = {
+    state_id: ((profile["anchor"], 10),) if profile["capital"] else ()
+    for state_id, profile in _REMAINDER_PROFILES.items()
+}
 _INNER_FRONTIER_PROFILES, _INNER_FRONTIER_PRINCIPAL_PROVINCES = (
     build_inner_frontier_profiles()
 )
@@ -115,6 +122,11 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = (
         for state_id in INNER_FRONTIER_SETTLEMENT_STATES
     )
     | VORKERLAND_THEATRE_VP_PROVINCES
+    | frozenset(
+        province_id
+        for points in REMAINDER_VICTORY_POINTS.values()
+        for province_id, _value in points
+    )
 )
 
 EBA_EXPECTED_VPS = {
@@ -353,7 +365,7 @@ def validate_states() -> None:
         if state_id in STATE_RESOURCES:
             continue
         source = text(state_path(state_id))
-        resource_block = block(source, "resources")
+        resource_block = block(source, "resources") if re.search(r"\bresources\s*=", source) else ""
         actual_resources = {
             resource: int(value)
             for resource, value in re.findall(
@@ -363,7 +375,9 @@ def validate_states() -> None:
         check(
             actual_resources == resources, f"state {state_id}: wrong resource deposit"
         )
-        resource_totals["AZH"] += sum(resources.values())
+        owner = NAM_COALITION_REGIONS[state_id]["owner"]
+        if owner in resource_totals:
+            resource_totals[owner] += sum(resources.values())
     for tag, amount in resource_totals.items():
         if tag == "SHL":
             # The Nine Furnaces are the south's metallurgical core, not a minor.
@@ -739,7 +753,35 @@ def validate_states() -> None:
         **VORKERLAND_MINOR_VPS,
         **SETTLEMENT_CLUSTER_CENTRES,
     }
+    # The coalition split owns complete VP lists, superseding generic centres.
+    exact_victory_points = {
+        **REMAINDER_VICTORY_POINTS,
+        **{
+            state_id: NAM_LEGACY_VICTORY_POINTS[state_id]
+            for state_id in NAM_COALITION_REGIONS
+        },
+    }
+    for state_id, expected_vps in exact_victory_points.items():
+        source = text(state_path(state_id))
+        actual_vps = [
+            (int(province), int(value))
+            for province, value in re.findall(
+                r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source
+            )
+        ]
+        check(
+            sorted(actual_vps) == sorted(expected_vps),
+            f"state {state_id}: expected exact generated VPs {expected_vps}",
+        )
+        for province_id, _value in expected_vps:
+            city_key = rf'(?m)^\s*VICTORY_POINTS_{province_id}:(?:\d+)?\s*".+"'
+            check(
+                len(re.findall(city_key, localisation)) == 1,
+                f"VP {province_id}: expected one Russian city name",
+            )
     for state_id, (province_id, value) in centres.items():
+        if state_id in exact_victory_points:
+            continue
         source = text(state_path(state_id))
         vp_pattern = rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}"
         if (
@@ -889,7 +931,7 @@ def validate_countries() -> None:
         "SDR": ("pragmatism", "pragmatism_ideology"),
         "MZR": ("utilitarism", "utilitarism_ideology"),
         "KYZ": ("anarchism", "anarchism_ideology"),
-        "SHL": ("hedonism", "aristocratic_hedonism"),
+        "SHL": ("hedonism", "industrial_aristocratism"),
         "GLP": ("hedonism", "hedonism_ideology"),
         "AZH": ("etatism", "etatism_ideology"),
         "WEF": ("utilitarism", "utilitarism_ideology"),
@@ -1033,8 +1075,13 @@ def validate_countries() -> None:
             bool(re.search(rf"(?m)^\s*ruling_party\s*=\s*{government}\s*$", history)),
             f"{tag}: expected non-technocratic starting government {government}",
         )
+        # Every country recruits one party representative per ideology; only
+        # the government, popularities and leaders form the political setup.
+        political_setup = "\n".join(
+            line for line in history.splitlines() if "_party_representative_" not in line
+        )
         check(
-            "technocracy" not in history,
+            "technocracy" not in political_setup,
             f"{tag}: technocracy remains in starting political setup",
         )
         popularities = {

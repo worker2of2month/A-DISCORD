@@ -44,7 +44,6 @@ GUI_FILES = (
     "marketequipmentstockpilewindow.gui",
     "addequipmenttomarketwindow.gui",
     "edit_market_stockpile_window.gui",
-    "requestautomationoptionswindow.gui",
     "pricelevelswidgets.gui",
     "markettutorialhint.gui",
 )
@@ -211,7 +210,7 @@ def render_surface(
     return output
 
 
-def expected_outputs() -> dict[Path, bytes]:
+def expected_outputs(*, include_preview: bool = False) -> dict[Path, bytes]:
     metal = load_surface_source(SOURCE)
     market_art = _international_market_source_icon()
     outputs = {
@@ -241,6 +240,8 @@ def expected_outputs() -> dict[Path, bytes]:
             match[0],
             f'textureFile = "gfx/interface/international_market/adiscord/{filename}"',
         )
+        # Native blocks carry trailing tabs; the generated registry keeps clean lines.
+        block = re.sub(r"(?m)[ \t]+$", "", block)
         entries.append(block)
         if role in {
             "buy_tab",
@@ -258,7 +259,8 @@ def expected_outputs() -> dict[Path, bytes]:
     ).encode("utf-8")
     stream = BytesIO()
     contact_sheet(previews, 640).save(stream, "PNG")
-    outputs[PREVIEW] = stream.getvalue()
+    if include_preview:
+        outputs[PREVIEW] = stream.getvalue()
     return outputs
 
 
@@ -267,8 +269,9 @@ def main() -> int:
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--check", action="store_true")
     modes.add_argument("--apply", action="store_true")
+    parser.add_argument("--preview", action="store_true", help="Include a temporary development contact sheet")
     args = parser.parse_args()
-    return apply_or_check(expected_outputs(), args.apply, "Arms market UI")
+    return apply_or_check(expected_outputs(include_preview=args.preview), args.apply, "Arms market UI")
 
 
 if __name__ == "__main__":

@@ -1675,6 +1675,10 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
+		trigger = { check_variable = { var = STP_ch_nominee value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
+	}
+	text = {
 		localization_key = STP_ch_nominee_0
 	}
 }
@@ -1857,6 +1861,10 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_conservatives value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -1915,6 +1923,10 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_borons value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -1977,6 +1989,10 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_security value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -2035,6 +2051,10 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_army value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -2097,6 +2117,10 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_advisers value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -2157,6 +2181,10 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_merchants value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -2215,6 +2243,10 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_endorse_radicals value = 6 compare = equals } }
+		localization_key = STP_ch_nominee_6
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -3013,4 +3045,62 @@ defined_text = {
 	text = {
 		localization_key = STP_pi_empty
 	}
+}
+
+defined_text = {
+	name = STPGetPartyMandate
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 1 compare = equals } }
+		localization_key = STP_pv_claimant_1
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 2 compare = equals } }
+		localization_key = STP_pv_claimant_2
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 3 compare = equals } }
+		localization_key = STP_pv_claimant_3
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 4 compare = equals } }
+		localization_key = STP_pv_claimant_4
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 5 compare = equals } }
+		localization_key = STP_pv_claimant_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_mandate value = 6 compare = equals } }
+		localization_key = STP_pv_claimant_6
+	}
+	text = { localization_key = STP_pv_mandate_unset }
+}
+
+defined_text = {
+	name = STPGetPartySupport
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 1 compare = equals } }
+		localization_key = STP_pv_claimant_1
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 2 compare = equals } }
+		localization_key = STP_pv_claimant_2
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 3 compare = equals } }
+		localization_key = STP_pv_claimant_3
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 4 compare = equals } }
+		localization_key = STP_pv_claimant_4
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 5 compare = equals } }
+		localization_key = STP_pv_claimant_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_supported_candidate value = 6 compare = equals } }
+		localization_key = STP_pv_claimant_6
+	}
+	text = { localization_key = STP_pv_mandate_unset }
 }

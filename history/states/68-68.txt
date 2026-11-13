@@ -4,6 +4,7 @@ state={
 	name="STATE_68"
 	resources = {
 		steel = 2
+		aluminium = 10
 	}
 	provinces={
 		324 1658 2254 2734 3226 4014 4175 4339 4717 5651 5766 6150

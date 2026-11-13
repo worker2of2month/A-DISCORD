@@ -2403,3 +2403,130 @@ RUS_sci_montera_question_closed = {
 		MON = { is_subject = yes }
 	}
 }
+
+# --- rus_black_army_regime ---
+RUS_ba_branch_operational = {
+	RUS_black_army_regime = yes
+	RUS_regime_governing = yes
+}
+
+# COUNTRY. A neighbour on the western road to Vorkerland: the Outer Gate and
+# Zolotorevsk while they stand alone.
+RUS_ba_breach_target = {
+	hidden_trigger = {
+		OR = {
+			tag = WCG
+			tag = TRU
+		}
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	is_neighbor_of = RUS
+	NOT = { has_war_with = RUS }
+}
+
+# RUS. Vorkerland can be attacked once its own collapse has ended and the
+# western final war is not holding it.
+RUS_ba_vorkerland_war_can_start = {
+	RUS_ba_branch_operational = yes
+	NOT = { has_variable = RUS_ba_vorkerland_war }
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_vorkerland_settled_tt
+		has_global_flag = ADISCORD_vorkerland_collapse_finished
+		NOT = { ADISCORD_west_final_active = yes }
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_vorkerland_free_tt
+		event_target:ADISCORD_vorkerland_nation = {
+			exists = yes
+			is_subject = no
+			has_capitulated = no
+			NOT = { has_war_with = RUS }
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_borders_vorkerland_tt
+		any_owned_state = {
+			any_neighbor_state = { is_owned_by = event_target:ADISCORD_vorkerland_nation }
+		}
+	}
+}
+
+RUS_ba_vorkerland_question_closed = {
+	OR = {
+		check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = greater_than }
+		NOT = { event_target:ADISCORD_vorkerland_nation = { exists = yes } }
+		event_target:ADISCORD_vorkerland_nation = { is_subject = yes }
+	}
+}
+
+# COUNTRY. A great eastern power the Black Army can march on: a regional
+# hegemon, or Kefreyt while it stands alone. Kefreyt's own last war and its
+# contest for the zone republics keep their settlements; the army waits.
+RUS_ba_east_candidate = {
+	hidden_trigger = {
+		OR = {
+			tag = VAL
+			tag = STS
+			tag = STP
+			tag = NOD
+		}
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = RUS }
+	OR = {
+		RUS_crisis_eastern_hegemony = yes
+		tag = VAL
+	}
+	OR = {
+		is_neighbor_of = RUS
+		any_subject_country = { is_neighbor_of = RUS }
+	}
+}
+
+RUS_ba_east_war_can_start = {
+	RUS_ba_branch_operational = yes
+	NOT = { has_variable = RUS_ba_east_war }
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_vorkerland_question_closed_tt
+		RUS_ba_vorkerland_question_closed = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_kefreyt_campaign_quiet_tt
+		NOT = { VAL_east_final_active = yes }
+		NOT = { VAL_east_contest_active = yes }
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_ba_east_candidate_tt
+		OR = {
+			VAL = { RUS_ba_east_candidate = yes }
+			STS = { RUS_ba_east_candidate = yes }
+			STP = { RUS_ba_east_candidate = yes }
+			NOD = { RUS_ba_east_candidate = yes }
+		}
+	}
+}
+
+RUS_ba_east_question_closed = {
+	OR = {
+		check_variable = { var = RUS_ba_east_war value = 1 compare = greater_than }
+		AND = {
+			has_variable = RUS_ba_east_war
+			NOT = { event_target:RUS_ba_east_target = { exists = yes } }
+		}
+	}
+}
+
+# RUS. No eastern power can be reached and none of Kefreyt's campaigns holds
+# the east; the branch may end without its eastern war.
+RUS_ba_east_unreachable = {
+	NOT = { VAL_east_final_active = yes }
+	NOT = { VAL_east_contest_active = yes }
+	NOT = { VAL = { RUS_ba_east_candidate = yes } }
+	NOT = { STS = { RUS_ba_east_candidate = yes } }
+	NOT = { STP = { RUS_ba_east_candidate = yes } }
+	NOT = { NOD = { RUS_ba_east_candidate = yes } }
+}

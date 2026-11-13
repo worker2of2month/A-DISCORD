@@ -1,7 +1,7 @@
 state = {
 	id = 258
 	name = "STATE_258"
-	manpower = 21102
+	manpower = 63306
 	state_category = wasteland
 	history = {
 		owner = RHM

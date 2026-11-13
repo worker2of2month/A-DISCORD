@@ -258,9 +258,11 @@ def render_outputs(root: Path = ROOT, family: str | None = None) -> dict[Path, b
                 / "technology_weapons"
                 / spec.source
             ).read_bytes()
-            outputs[relative] = (
-                source_data if source_data.startswith(b"DDS ") else _dds_bytes(icon, lossless=True)
-            )
+            # Compact 70px masters need the transparent border added by render_icon.
+            if source_data.startswith(b"DDS ") and spec.source_size == icon.size:
+                outputs[relative] = source_data
+            else:
+                outputs[relative] = _dds_bytes(icon, lossless=True)
         else:
             outputs[relative] = _dds_bytes(icon)
     if family is None:
@@ -310,6 +312,9 @@ def main() -> int:
         "--family", help="build only one manifest family, preserving other artwork"
     )
     parser.add_argument(
+        "--preview", action="store_true", help="also write the review contact sheet"
+    )
+    parser.add_argument(
         "--normalize-existing",
         action="store_true",
         help="losslessly encode existing technology artwork with DDS headers",
@@ -343,6 +348,9 @@ def main() -> int:
     except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}")
         return 1
+    if not args.preview:
+        # The contact sheet is a temporary review image, written only on request.
+        outputs.pop(CONTACT_SHEET.relative_to(ROOT), None)
     if args.apply:
         apply(outputs, ROOT, clean_connectors=args.family is None)
     issues = validate(outputs, ROOT)
@@ -353,7 +361,7 @@ def main() -> int:
     dds_count = sum(path.suffix == ".dds" for path in outputs)
     print(
         f"A-Discord technology UI assets are current ({dds_count} DDS files"
-        + (" and one contact sheet" if args.family is None else "") + ")."
+        + (" and one contact sheet" if CONTACT_SHEET.relative_to(ROOT) in outputs else "") + ")."
     )
     return 0
 

@@ -482,3 +482,549 @@ VAD_march_commitment = {
 	}
 	local_factories = -0.15
 }
+
+# --- leader_branch_modifiers ---
+# Nikita Worcker's siege regime. Written only by Worker civil-war focuses and their programmes.
+# The aggregate stops applying when the claimant administration ends.
+WKR_siege_regime_dynamic = {
+	icon = GFX_idea_generic_communist_army
+	enable = { WKR_administration_active = yes }
+	political_power_gain = WKR_srm_political_power_gain
+	stability_factor = WKR_srm_stability_factor
+	war_support_factor = WKR_srm_war_support_factor
+	conscription = WKR_srm_conscription
+	army_attack_factor = WKR_srm_army_attack_factor
+	army_defence_factor = WKR_srm_army_defence_factor
+	army_org_factor = WKR_srm_army_org_factor
+	army_org_regain = WKR_srm_army_org_regain
+	army_morale_factor = WKR_srm_army_morale_factor
+	breakthrough_factor = WKR_srm_breakthrough_factor
+	planning_speed = WKR_srm_planning_speed
+	training_time_army_factor = WKR_srm_training_time_army_factor
+	land_reinforce_rate = WKR_srm_land_reinforce_rate
+	supply_consumption_factor = WKR_srm_supply_consumption_factor
+	industrial_capacity_factory = WKR_srm_industrial_capacity_factory
+	production_factory_efficiency_gain_factor = WKR_srm_production_factory_efficiency_gain_factor
+	production_speed_buildings_factor = WKR_srm_production_speed_buildings_factor
+	research_speed_factor = WKR_srm_research_speed_factor
+	experience_gain_army_factor = WKR_srm_experience_gain_army_factor
+	max_dig_in_factor = WKR_srm_max_dig_in_factor
+	army_speed_factor = WKR_srm_army_speed_factor
+	command_power_gain_mult = WKR_srm_command_power_gain_mult
+	consumer_goods_factor = WKR_srm_consumer_goods_factor
+	attrition = WKR_srm_attrition
+}
+
+# Anton Bagley's executive ledger. Written only by executive civil-war focuses and their programmes.
+# The aggregate stops applying when the claimant administration ends.
+WKR_ledger_regime_dynamic = {
+	icon = GFX_idea_generic_central_management
+	enable = { WKR_administration_active = yes }
+	political_power_gain = WKR_lrm_political_power_gain
+	stability_factor = WKR_lrm_stability_factor
+	war_support_factor = WKR_lrm_war_support_factor
+	conscription = WKR_lrm_conscription
+	army_attack_factor = WKR_lrm_army_attack_factor
+	army_defence_factor = WKR_lrm_army_defence_factor
+	army_org_factor = WKR_lrm_army_org_factor
+	army_org_regain = WKR_lrm_army_org_regain
+	army_morale_factor = WKR_lrm_army_morale_factor
+	breakthrough_factor = WKR_lrm_breakthrough_factor
+	planning_speed = WKR_lrm_planning_speed
+	training_time_army_factor = WKR_lrm_training_time_army_factor
+	land_reinforce_rate = WKR_lrm_land_reinforce_rate
+	supply_consumption_factor = WKR_lrm_supply_consumption_factor
+	industrial_capacity_factory = WKR_lrm_industrial_capacity_factory
+	production_factory_efficiency_gain_factor = WKR_lrm_production_factory_efficiency_gain_factor
+	production_speed_buildings_factor = WKR_lrm_production_speed_buildings_factor
+	research_speed_factor = WKR_lrm_research_speed_factor
+	experience_gain_army_factor = WKR_lrm_experience_gain_army_factor
+	max_dig_in_factor = WKR_lrm_max_dig_in_factor
+	army_speed_factor = WKR_lrm_army_speed_factor
+	command_power_gain_mult = WKR_lrm_command_power_gain_mult
+	consumer_goods_factor = WKR_lrm_consumer_goods_factor
+	attrition = WKR_lrm_attrition
+}
+
+# Vlad Petrichev's army regency. Written only by VAD leader-branch focuses and their programmes.
+# The aggregate stops applying when the claimant administration ends.
+VAD_regency_dynamic = {
+	icon = GFX_idea_generic_army_war_college
+	enable = { VAD_administration_active = yes }
+	political_power_gain = VAD_rgm_political_power_gain
+	stability_factor = VAD_rgm_stability_factor
+	war_support_factor = VAD_rgm_war_support_factor
+	conscription = VAD_rgm_conscription
+	army_attack_factor = VAD_rgm_army_attack_factor
+	army_defence_factor = VAD_rgm_army_defence_factor
+	army_org_factor = VAD_rgm_army_org_factor
+	army_org_regain = VAD_rgm_army_org_regain
+	army_morale_factor = VAD_rgm_army_morale_factor
+	breakthrough_factor = VAD_rgm_breakthrough_factor
+	planning_speed = VAD_rgm_planning_speed
+	training_time_army_factor = VAD_rgm_training_time_army_factor
+	land_reinforce_rate = VAD_rgm_land_reinforce_rate
+	supply_consumption_factor = VAD_rgm_supply_consumption_factor
+	industrial_capacity_factory = VAD_rgm_industrial_capacity_factory
+	production_factory_efficiency_gain_factor = VAD_rgm_production_factory_efficiency_gain_factor
+	production_speed_buildings_factor = VAD_rgm_production_speed_buildings_factor
+	research_speed_factor = VAD_rgm_research_speed_factor
+	experience_gain_army_factor = VAD_rgm_experience_gain_army_factor
+	max_dig_in_factor = VAD_rgm_max_dig_in_factor
+	army_speed_factor = VAD_rgm_army_speed_factor
+	command_power_gain_mult = VAD_rgm_command_power_gain_mult
+	consumer_goods_factor = VAD_rgm_consumer_goods_factor
+	attrition = VAD_rgm_attrition
+}
+
+# Dorian Worx's calculation protocol. Written only by TVA leader-branch focuses and their programmes.
+# The aggregate stops applying when the claimant administration ends.
+TVA_protocol_dynamic = {
+	icon = GFX_idea_generic_research_bonus
+	enable = { TVA_administration_active = yes }
+	political_power_gain = TVA_prm_political_power_gain
+	stability_factor = TVA_prm_stability_factor
+	war_support_factor = TVA_prm_war_support_factor
+	conscription = TVA_prm_conscription
+	army_attack_factor = TVA_prm_army_attack_factor
+	army_defence_factor = TVA_prm_army_defence_factor
+	army_org_factor = TVA_prm_army_org_factor
+	army_org_regain = TVA_prm_army_org_regain
+	army_morale_factor = TVA_prm_army_morale_factor
+	breakthrough_factor = TVA_prm_breakthrough_factor
+	planning_speed = TVA_prm_planning_speed
+	training_time_army_factor = TVA_prm_training_time_army_factor
+	land_reinforce_rate = TVA_prm_land_reinforce_rate
+	supply_consumption_factor = TVA_prm_supply_consumption_factor
+	industrial_capacity_factory = TVA_prm_industrial_capacity_factory
+	production_factory_efficiency_gain_factor = TVA_prm_production_factory_efficiency_gain_factor
+	production_speed_buildings_factor = TVA_prm_production_speed_buildings_factor
+	research_speed_factor = TVA_prm_research_speed_factor
+	experience_gain_army_factor = TVA_prm_experience_gain_army_factor
+	max_dig_in_factor = TVA_prm_max_dig_in_factor
+	army_speed_factor = TVA_prm_army_speed_factor
+	command_power_gain_mult = TVA_prm_command_power_gain_mult
+	consumer_goods_factor = TVA_prm_consumer_goods_factor
+	attrition = TVA_prm_attrition
+}
+
+
+# STATE: a commission sweep closes one WKR district for 21 days. Added with
+# days = 21 by WKR_siege_security_sweep_operation and removed early on cancel.
+WKR_siege_sweep_lockdown = {
+	icon = GFX_modifiers_generic_resistance
+	enable = { always = yes }
+	local_factories = -0.10
+	local_manpower = -0.25
+}
+
+# --- W2: armed people, state modifiers ---
+# Every W2 state modifier is added with a duration and expires on its own, so
+# no closing hook is needed. Enable stops each one as soon as the region
+# changes hands or the WKR administration ends.
+
+# WKR district fortified by its quarter committees (WKR_ranks_fortify_quarter).
+WKR_ranks_fortified_quarter = {
+	icon = GFX_modifiers_SOV_factory_worker_militias
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	land_bunker_effectiveness_factor = 0.20
+	enemy_local_supplies = -0.20
+}
+
+# WKR rail district with a depot repair base (WKR_ranks_build_repair_yard).
+WKR_ranks_repair_yard = {
+	icon = GFX_modifiers_ADISCORD_rail_crews
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	state_repair_speed_infrastructure_factor = 0.50
+	state_production_speed_infrastructure_factor = 0.25
+	local_supplies_for_controller = 0.10
+}
+
+# Enemy region with blown junctions (WKR_ranks_blow_rail_junction).
+WKR_ranks_cut_rails = {
+	icon = GFX_modifiers_sabotaged_resource
+	enable = { WKR_ranks_enemy_claimant_region = yes }
+	local_supplies_for_controller = -0.20
+	army_speed_factor_for_controller = -0.15
+}
+
+# Enemy region with a WKR underground cell (WKR_ranks_plant_underground_cell).
+WKR_ranks_underground_cell = {
+	icon = GFX_modifiers_generic_resistance
+	enable = { WKR_ranks_enemy_claimant_region = yes }
+	local_factories = -0.15
+	local_manpower = -0.25
+}
+
+# Enemy region in open revolt (WKR_ranks_raise_uprising).
+WKR_ranks_uprising = {
+	icon = GFX_modifiers_ADISCORD_district_uprising
+	enable = { WKR_ranks_enemy_claimant_region = yes }
+	local_supplies_for_controller = -0.35
+	army_speed_factor_for_controller = -0.20
+	local_factories = -0.30
+}
+
+# --- WKR_front: state modifiers of the operations for Vorkensberg ---
+# All three are disabled while the republic itself controls the state, so a
+# district taken mid-operation never strikes the republic's own troops.
+
+# STATE. A district held by the enemy under the republic's blockade.
+WKR_front_blockaded_district = {
+	icon = GFX_decision_generic_scorched_earth
+	enable = { NOT = { is_controlled_by = WKR } }
+	local_org_regain = -0.25
+	attrition_for_controller = 0.5
+	state_production_speed_buildings_factor = -0.50
+}
+
+# STATE. The blockade after the hunger focus: the garrison runs out of food.
+WKR_front_starving_district = {
+	icon = GFX_decision_generic_scorched_earth
+	enable = { NOT = { is_controlled_by = WKR } }
+	local_org_regain = -0.40
+	attrition_for_controller = 1
+	state_production_speed_buildings_factor = -0.75
+	local_manpower = -0.50
+}
+
+# STATE. Strikes and sabotage of the republic's underground cells.
+WKR_front_underground_strike = {
+	icon = GFX_decision_generic_wreckers
+	enable = { NOT = { is_controlled_by = WKR } }
+	local_org_regain = -0.20
+	army_speed_factor_for_controller = -0.15
+	state_production_speed_buildings_factor = -0.50
+}
+
+# --- executive_ledger_state_modifiers ---
+# District after a council audit: hidden stores are back in the common account.
+# Applied with a duration by WKR_ledger_finish_audit; inactive once the
+# administration closes.
+WKR_ledger_audited_district = {
+	icon = GFX_idea_generic_commission
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_factories = 0.05
+	local_supplies = 0.10
+}
+
+# District emptied by an executive evacuation: its shifts are gone and an enemy
+# who takes it finds no stores. Active while WKR still owns the district.
+WKR_ledger_evacuated_district = {
+	icon = GFX_idea_generic_railroads
+	enable = {
+		is_owned_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_factories = -0.25
+	enemy_local_supplies = -0.30
+}
+
+# District held at all costs: overtime shifts, opened stores, barricaded roads.
+WKR_ledger_held_district = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_factories = 0.10
+	local_supplies = 0.20
+	enemy_army_speed_factor = -0.10
+}
+
+# STATE. Forward depot of WKR_measure_forward_depot_order. It works only while WKR
+# holds the hub and the executive administration lasts; a recaptured hub resumes it.
+WKR_measure_forward_depot = {
+	icon = GFX_modifiers_ADISCORD_forward_depot
+	enable = {
+		is_owned_and_controlled_by = WKR
+		supply_node > 0
+		WKR = { WKR_administration_active = yes }
+	}
+	local_supplies_for_controller = 0.35
+	attrition_for_controller = -0.10
+}
+
+
+
+# --- VAD army institution (P2): state modifiers ---
+
+# A settlement of demobilised soldiers in a VAD district. The call-up decision
+# turns it back into trained manpower; losing the district removes it.
+VAD_corps_veteran_colony = {
+	icon = GFX_modifiers_ADISCORD_officer_estate
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_state_flag = ADISCORD_vorkerland_vad_district_oath
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_manpower = 0.15
+	local_supplies_for_controller = 0.10
+}
+
+# A district that signed a charter of loyalty with the staff.
+VAD_corps_loyal_district = {
+	icon = GFX_modifiers_ADISCORD_regional_autonomy
+	enable = {
+		is_owned_and_controlled_by = VAD
+		has_state_flag = ADISCORD_vorkerland_vad_district_oath
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_factories = 0.10
+	local_manpower = 0.05
+}
+
+# Timed modifiers on enemy-held states. They stop applying as soon as the
+# state passes to VAD or to a country no longer at war with it.
+VAD_corps_sabotaged_rear = {
+	icon = GFX_modifiers_ADISCORD_stripped_state
+	enable = {
+		controller = { has_war_with = VAD }
+	}
+
+	local_supplies_for_controller = -0.30
+	army_speed_factor_for_controller = -0.10
+}
+
+VAD_corps_bribed_garrison = {
+	icon = GFX_modifiers_generic_resistance
+	enable = {
+		controller = { has_war_with = VAD }
+	}
+
+	local_supplies_for_controller = -0.15
+	local_manpower = -0.30
+}
+
+# --- P3: state cost of a military requisition ---
+# Added for 90 days by VAD_realm_requisition_works; it also blocks a second
+# requisition of the same district until it expires.
+VAD_realm_requisitioned_works = {
+	icon = GFX_modifiers_ADISCORD_district_collateral
+	enable = {
+		is_owned_and_controlled_by = VAD
+	}
+	local_factories = -0.25
+}
+
+# STATE 36-39. Hidden committees and informers found by the TVA census. Values
+# are written by TVA_protocol_refresh_district; the modifier goes inert when the
+# district changes hands or the technical administration ends.
+TVA_protocol_district_cells = {
+	icon = GFX_modifiers_generic_resistance
+	enable = {
+		is_owned_and_controlled_by = TVA
+		check_variable = { var = TVA_protocol_cells value = 0 compare = greater_than }
+		TVA = { TVA_administration_active = yes }
+	}
+	local_factories = TVA_protocol_cell_output
+	local_manpower = TVA_protocol_cell_recruits
+}
+
+# --- tva_machine_army_state_modifiers ---
+# STATE scope. Added once per state by TVA_machine_establish_supply_point and
+# never removed: it applies only while TVA holds the state and its
+# administration lasts.
+TVA_machine_forward_supply_point = {
+	icon = GFX_modifiers_ADISCORD_field_depot
+	enable = {
+		is_owned_and_controlled_by = TVA
+		TVA = { TVA_administration_active = yes }
+	}
+	local_supplies_for_controller = 0.20
+	army_speed_factor_for_controller = 0.05
+}
+
+# District after a people's control raid (WKR_audit_control_raid): the
+# controllers broke the private trade in bricks and lorries, so local works
+# run faster. Applied for 120 days by WKR_audit_finish_control_raid.
+WKR_audit_inspected_district = {
+	icon = GFX_idea_generic_local_self_management
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	state_production_speed_buildings_factor = 0.15
+	local_factories = 0.03
+}
+
+# P4: posts of the district gendarmerie, placed by VAD_crownless_send_gendarmerie_companies
+# in charter and commandant districts. They stop applying when the district is lost
+# or the administration ends and expire on their own after 120 days.
+VAD_crownless_gendarmerie_post = {
+	icon = GFX_modifiers_ADISCORD_command_post
+	enable = {
+		is_owned_and_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_supplies_for_controller = 0.10
+	local_factories = 0.05
+}
+
+# --- W5: the decisive days, state modifiers of the liberated city ---
+# Each is added with a duration by its programme and expires on its own.
+# Enable stops it as soon as the district changes hands or the WKR
+# administration ends, so no closing hook is needed.
+
+# STATE. A district fed by a bread train (WKR_last_bread_train).
+WKR_last_fed_district = {
+	icon = GFX_idea_generic_commission
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_manpower = 0.15
+	local_factories = 0.05
+}
+
+# STATE. A district whose people work by labour book (WKR_last_district_labour_draft).
+WKR_last_mobilized_district = {
+	icon = GFX_modifiers_SOV_factory_worker_militias
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_factories = 0.15
+	local_manpower = -0.10
+}
+
+# STATE. A district held by the ring garrison (WKR_last_ring_garrison).
+WKR_last_garrisoned_district = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = {
+		is_owned_and_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	land_bunker_effectiveness_factor = 0.20
+	local_supplies = 0.15
+}
+
+# --- B5 executive story: capital districts ---
+# Every B5 state modifier is added with a duration and expires on its own.
+# Enable stops each one as soon as the district changes hands or the WKR
+# administration ends.
+
+# District fed by the executive's bread trains (WKR_tally_district_relief).
+WKR_tally_fed_district = {
+	icon = GFX_modifiers_ADISCORD_tenant_supply_depot
+	enable = {
+		is_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_manpower = 0.15
+	local_factories = 0.05
+}
+
+# District stripped to pay its own way (WKR_tally_district_requisition).
+WKR_tally_requisitioned_district = {
+	icon = GFX_modifiers_ADISCORD_requisitioned_market
+	enable = {
+		is_controlled_by = WKR
+		WKR = { WKR_administration_active = yes }
+	}
+	local_manpower = -0.20
+	local_factories = -0.10
+}
+
+# Enemy-held district inside the executive's ring (WKR_tally_ring_of_the_districts).
+WKR_tally_ringed_district = {
+	icon = GFX_modifiers_ADISCORD_stripped_state
+	enable = {
+		controller = { has_war_with = WKR }
+		WKR = { WKR_administration_active = yes }
+	}
+	local_supplies_for_controller = -0.25
+	local_manpower = -0.20
+}
+
+# P5: state-scoped modifiers of the captured capital districts (states 32-39).
+# They act only while VAD controls the district and its administration lives.
+
+# Field court in a district: local men are conscripted and work stops at night.
+VAD_standard_field_court_district = {
+	icon = GFX_modifiers_ADISCORD_military_governorate
+	enable = {
+		is_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_non_core_manpower = 0.10
+	local_factories = -0.10
+}
+
+# District council under guard: the quarters run their own bakeries and depots.
+VAD_standard_city_council_district = {
+	icon = GFX_modifiers_ADISCORD_civil_governorate
+	enable = {
+		is_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_supplies_for_controller = 0.10
+	local_factories = 0.10
+}
+
+# Works stripped of their machines for the eastern arsenals.
+VAD_standard_stripped_works = {
+	icon = GFX_modifiers_ADISCORD_stripped_state
+	enable = {
+		is_controlled_by = VAD
+	}
+
+	local_factories = -0.30
+}
+
+# Works restarted in place under military management.
+VAD_standard_restarted_works = {
+	icon = GFX_modifiers_ADISCORD_rail_crews
+	enable = {
+		is_controlled_by = VAD
+		VAD = { VAD_administration_active = yes }
+	}
+
+	local_factories = 0.15
+	local_supplies_for_controller = 0.05
+}
+
+# --- TVA endgame: district modifiers of the siege ---
+# Both are added with days = 120 by the endgame district programmes and expire
+# on their own. Enable stops each one as soon as the district changes hands or
+# the TVA administration ends.
+
+# STATE: house committees and sappers turned the blocks into a line
+# (TVA_endgame_house_block_lines).
+TVA_endgame_fortified_district = {
+	icon = GFX_modifiers_SOV_civilian_labor_in_defense
+	enable = {
+		is_owned_and_controlled_by = TVA
+		TVA = { TVA_administration_active = yes }
+	}
+	land_bunker_effectiveness_factor = 0.15
+	enemy_local_supplies = -0.15
+	local_manpower = -0.10
+}
+
+# STATE: machine tools, foremen and workshop archives left the district
+# (TVA_endgame_calculated_withdrawal).
+TVA_endgame_evacuated_district = {
+	icon = GFX_modifiers_INS_evacuate_state
+	enable = {
+		is_owned_and_controlled_by = TVA
+		TVA = { TVA_administration_active = yes }
+	}
+	local_factories = -0.25
+	local_manpower = -0.30
+	enemy_local_supplies = -0.20
+}

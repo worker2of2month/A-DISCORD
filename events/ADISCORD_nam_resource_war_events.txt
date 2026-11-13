@@ -1,5 +1,15 @@
 add_namespace = ADISCORD_nam_resource_war
 
+# Refresh after the reward so branch gates and offsets read the committed
+# completed-focus state. A replaced tree must not receive the queued refresh.
+country_event = {
+	id = ADISCORD_nam_resource_war.118
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { has_focus_tree = NAM_postwar_focus }
+	immediate = { mark_focus_tree_layout_dirty = yes }
+}
+
 # The mission and a voluntary first strike queue the same bounded war entry.
 # A failed check closes preparation only after every queued dispatch is settled.
 country_event = {
@@ -186,7 +196,7 @@ news_event = {
 	option = {
 		name = ADISCORD_nam_resource_news.3.a
 		if = {
-			limit = { NAM_piracy_victory = yes }
+			limit = { hidden_trigger = { NAM_piracy_victory = yes } }
 			custom_effect_tooltip = NAM_victory_tt
 		}
 	}
@@ -464,12 +474,10 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.11.a
-		custom_effect_tooltip = NAM_war_terms_tt
-		custom_effect_tooltip = NAM_captured_wells_warning_tt
-		custom_effect_tooltip = NAM_prewar_mandate_result_tt
+		custom_effect_tooltip = NAM_war_briefing_tt
 		# The paid mobilisation report: every formation delivered at hostilities.
 		if = {
-			limit = { check_variable = { NAM_orders_delivered > 0 } }
+			limit = { hidden_trigger = { check_variable = { NAM_orders_delivered > 0 } } }
 			custom_effect_tooltip = NAM_orders_delivered_tt
 		}
 		else = {
@@ -692,11 +700,23 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.20.a
 		trigger = { NAM_rw_clock_running = yes }
-		unlock_decision_tooltip = NAM_restitution_note
+		effect_tooltip = {
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_event_deadline_open_tt
+						NAM_rw_deadline_open = yes
+					}
+				}
+				custom_effect_tooltip = NAM_claims_diplomatic_reply_tt
+			}
+		}
 		hidden_effect = {
 			if = {
 				limit = { NAM_rw_deadline_open = yes }
-				set_country_flag = NAM_rw_talks_open
+				add_to_variable = { var = NAM_grp_trade_support value = 10 }
+				add_to_variable = { var = NAM_grp_garr_support value = -5 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_chance = { base = 60 }
@@ -1509,19 +1529,19 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
-			# Base damage by strike tier: 15, 20, 25 or 30 condition points.
-			set_variable = { var = NAM_ug_strike_damage value = 15 }
+			# Base damage by strike tier: 20, 30, 40 or 50 condition points.
+			set_variable = { var = NAM_ug_strike_damage value = 20 }
 			if = {
 				limit = { NAM_underground_strike_tier_4 = yes }
-				set_variable = { var = NAM_ug_strike_damage value = 30 }
+				set_variable = { var = NAM_ug_strike_damage value = 50 }
 			}
 			else_if = {
 				limit = { NAM_underground_strike_tier_3 = yes }
-				set_variable = { var = NAM_ug_strike_damage value = 25 }
+				set_variable = { var = NAM_ug_strike_damage value = 40 }
 			}
 			else_if = {
 				limit = { NAM_underground_strike_tier_2 = yes }
-				set_variable = { var = NAM_ug_strike_damage value = 20 }
+				set_variable = { var = NAM_ug_strike_damage value = 30 }
 			}
 			random_owned_controlled_state = {
 				limit = { NAM_field_state = yes }
@@ -1551,7 +1571,10 @@ country_event = {
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_85_a_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_85_a_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -1611,6 +1634,7 @@ country_event = {
 			NOT = { has_political_power < 25 }
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_political_power = -25
 			custom_effect_tooltip = NAM_ug_85_b_tt
 		}
@@ -1645,6 +1669,7 @@ country_event = {
 			NAM_underground_active = yes
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_stability = -0.02
 			custom_effect_tooltip = NAM_ug_85_c_tt
 		}
@@ -1686,6 +1711,7 @@ country_event = {
 			}
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_command_power = -15
 			custom_effect_tooltip = NAM_ug_85_d_tt
 		}
@@ -1768,6 +1794,7 @@ country_event = {
 			NOT = { has_political_power < 20 }
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_political_power = -20
 			custom_effect_tooltip = NAM_ug_86_a_tt
 		}
@@ -1816,7 +1843,10 @@ country_event = {
 			NAM_underground_active = yes
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_86_b_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_86_b_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -1855,7 +1885,10 @@ country_event = {
 			NAM_country_operable = yes
 			NAM_underground_active = yes
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_86_c_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_86_c_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -1889,6 +1922,7 @@ country_event = {
 			hidden_trigger = { check_variable = { var = NAM_ug_rifles_stolen value = 0 compare = greater_than } }
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_command_power = -15
 			custom_effect_tooltip = NAM_ug_86_d_tt
 		}
@@ -1942,22 +1976,26 @@ country_event = {
 		NAM_underground_active = yes
 	}
 
-	# From strike tier 2 the killing itself shakes the country: stability -2%,
-	# -3% or -5%. The receipt shows the loss in every answer.
+	# The killing itself shakes the country: stability -2%, -4%, -6% or -8% by
+	# strike tier. The receipt shows the loss in every answer.
 	immediate = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_underground_strike_tier_4 = yes }
-				add_stability = -0.05
-				set_variable = { var = NAM_ug_strike_stability value = 5 }
+				add_stability = -0.08
+				set_variable = { var = NAM_ug_strike_stability value = 8 }
 			}
 			else_if = {
 				limit = { NAM_underground_strike_tier_3 = yes }
-				add_stability = -0.03
-				set_variable = { var = NAM_ug_strike_stability value = 3 }
+				add_stability = -0.06
+				set_variable = { var = NAM_ug_strike_stability value = 6 }
 			}
 			else_if = {
 				limit = { NAM_underground_strike_tier_2 = yes }
+				add_stability = -0.04
+				set_variable = { var = NAM_ug_strike_stability value = 4 }
+			}
+			else = {
 				add_stability = -0.02
 				set_variable = { var = NAM_ug_strike_stability value = 2 }
 			}
@@ -1970,24 +2008,15 @@ country_event = {
 			NAM_underground_active = yes
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_stability = -0.03
-			if = {
-				limit = {
-					check_variable = { NAM_ug_strike_stability > 0 }
-				}
-				custom_effect_tooltip = NAM_ug_87_loss_tt
-			}
+			custom_effect_tooltip = NAM_ug_87_loss_tt
 			custom_effect_tooltip = NAM_ug_87_a_tt
 		}
 		hidden_effect = {
 			if = {
 				limit = { NAM_underground_active = yes }
 				add_stability = -0.03
-				if = {
-					limit = {
-						check_variable = { NAM_ug_strike_stability > 0 }
-					}
-				}
 				set_temp_variable = {
 					var = NAM_underground_change
 					value = -10
@@ -2020,24 +2049,15 @@ country_event = {
 			NAM_underground_active = yes
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_political_power = -50
-			if = {
-				limit = {
-					check_variable = { NAM_ug_strike_stability > 0 }
-				}
-				custom_effect_tooltip = NAM_ug_87_loss_tt
-			}
+			custom_effect_tooltip = NAM_ug_87_loss_tt
 			custom_effect_tooltip = NAM_ug_87_b_tt
 		}
 		hidden_effect = {
 			if = {
 				limit = { NAM_underground_active = yes }
 				add_political_power = -50
-				if = {
-					limit = {
-						check_variable = { NAM_ug_strike_stability > 0 }
-					}
-				}
 				set_temp_variable = {
 					var = NAM_underground_change
 					value = -5
@@ -2060,24 +2080,15 @@ country_event = {
 			NAM_underground_active = yes
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_stability = -0.02
-			if = {
-				limit = {
-					check_variable = { NAM_ug_strike_stability > 0 }
-				}
-				custom_effect_tooltip = NAM_ug_87_loss_tt
-			}
+			custom_effect_tooltip = NAM_ug_87_loss_tt
 			custom_effect_tooltip = NAM_ug_87_c_tt
 		}
 		hidden_effect = {
 			if = {
 				limit = { NAM_underground_active = yes }
 				add_stability = -0.02
-				if = {
-					limit = {
-						check_variable = { NAM_ug_strike_stability > 0 }
-					}
-				}
 				add_to_variable = {
 					var = NAM_grp_nam_support
 					value = -8
@@ -2128,6 +2139,7 @@ country_event = {
 			NOT = { has_political_power < 30 }
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_political_power = -30
 			custom_effect_tooltip = NAM_ug_116_a_tt
 		}
@@ -2161,7 +2173,10 @@ country_event = {
 			NAM_country_operable = yes
 			NAM_underground_active = yes
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_116_b_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_116_b_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -2191,6 +2206,7 @@ country_event = {
 			NAM_underground_active = yes
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_stability = -0.02
 			custom_effect_tooltip = NAM_ug_116_c_tt
 		}
@@ -2225,8 +2241,8 @@ country_event = {
 	}
 }
 
-# A bombing in Svetlogorsk from strike tier 3: the blast costs 4% stability,
-# 6% from tier 4, before the chancery answers.
+# A bombing in Svetlogorsk from strike tier 3: the blast costs 6% stability,
+# 10% from tier 4, before the chancery answers.
 country_event = {
 	id = ADISCORD_nam_resource_war.117
 	title = ADISCORD_nam_resource_war.117.t
@@ -2243,12 +2259,12 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_underground_strike_tier_4 = yes }
-				add_stability = -0.06
-				set_variable = { var = NAM_ug_strike_stability value = 6 }
+				add_stability = -0.10
+				set_variable = { var = NAM_ug_strike_stability value = 10 }
 			}
 			else = {
-				add_stability = -0.04
-				set_variable = { var = NAM_ug_strike_stability value = 4 }
+				add_stability = -0.06
+				set_variable = { var = NAM_ug_strike_stability value = 6 }
 			}
 		}
 	}
@@ -2259,7 +2275,10 @@ country_event = {
 			NAM_country_operable = yes
 			NAM_underground_active = yes
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_117_a_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_117_a_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -2294,6 +2313,7 @@ country_event = {
 			NOT = { has_political_power < 60 }
 		}
 		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
 			add_political_power = -60
 			custom_effect_tooltip = NAM_ug_117_b_tt
 		}
@@ -2327,7 +2347,10 @@ country_event = {
 			NAM_country_operable = yes
 			NAM_underground_active = yes
 		}
-		effect_tooltip = { custom_effect_tooltip = NAM_ug_117_c_tt }
+		effect_tooltip = {
+			custom_effect_tooltip = NAM_ug_strike_cause_tt
+			custom_effect_tooltip = NAM_ug_117_c_tt
+		}
 		hidden_effect = {
 			if = {
 				limit = {
@@ -2388,11 +2411,11 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.90.a
 		if = {
-			limit = { check_variable = { NAM_pirate_last_result > 0 } }
+			limit = { hidden_trigger = { check_variable = { NAM_pirate_last_result > 0 } } }
 			custom_effect_tooltip = NAM_pirate_report_haul_tt
 		}
 		else_if = {
-			limit = { check_variable = { NAM_pirate_last_loss = 1 } }
+			limit = { hidden_trigger = { check_variable = { NAM_pirate_last_loss = 1 } } }
 			custom_effect_tooltip = NAM_pirate_report_ship_lost_tt
 		}
 		else = {
@@ -2571,7 +2594,7 @@ country_event = {
 		name = ADISCORD_nam_resource_war.94.a
 		custom_effect_tooltip = NAM_landing_report_tt
 		if = {
-			limit = { check_variable = { NAM_marines_island > 0 } }
+			limit = { hidden_trigger = { check_variable = { NAM_marines_island > 0 } } }
 			custom_effect_tooltip = NAM_landing_island_tt
 		}
 	}
@@ -2742,7 +2765,7 @@ country_event = {
 		name = ADISCORD_nam_resource_war.103.a
 		custom_effect_tooltip = NAM_corp_takeover_tt
 		unlock_decision_tooltip = NAM_board_tender_rail
-		custom_effect_tooltip = NAM_board_tender_rail_unlock_tt
+		custom_effect_tooltip = NAM_board_tender_rail_event_unlock_tt
 		hidden_effect = { NAM_corp_takeover = yes }
 	}
 }

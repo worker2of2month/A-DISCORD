@@ -365,6 +365,98 @@ WEST_THEATRE_RAILS = (
     *ITORA_SUPPLY_RAILS,
     *WEST_CORRIDOR_RAILS,
 )
+# Southern bloc and Furnace Union networks. Every state has a hub in itself or
+# in a neighbouring state of the same country, and every hub is joined to its
+# capital by rail inside the starting territory. Level-1 feeders follow
+# physical borders from the hub to the nearest connected line.
+SOUTH_CAPITAL_PROVINCES = {
+    "NAM": 16716,
+    "RHM": 16726,
+    "SDR": 16727,
+    "AZH": 16893,
+    "WEF": 5869,
+    "KDR": 16723,
+    "GLP": 16740,
+    "EFL": 16717,
+    "SHL": 16713,
+    "MZR": 16732,
+    "KYZ": 16736,
+}
+SOUTH_SUPPLY_RAILS = {
+    "NAM": (
+        (1, (16716, 16881, 2038)),
+        (1, (16890, 12668, 3127, 10967)),
+    ),
+    "SDR": (
+        (1, (12578, 5590)),
+        (1, (8946, 810)),
+    ),
+    "AZH": (
+        (1, (6193, 9758)),
+        (1, (16882, 13019, 12482, 6184, 729)),
+    ),
+    "KDR": (
+        (1, (12825, 3134, 3139)),
+        (1, (7497, 4198, 263, 11862, 7201, 1300, 2632, 4863, 5711)),
+        (1, (4349, 3079, 5739, 939, 7201)),
+    ),
+    "GLP": (
+        (1, (12583, 9672)),
+        (1, (16731, 3643, 10952, 8580, 2073, 4350, 7708)),
+        (1, (3415, 12369, 2342, 5473, 6512, 5595, 7073, 16796)),
+    ),
+    "SHL": (
+        (1, (16899, 16794, 10927, 1149, 9742, 2412, 4995)),
+        (1, (10949, 1900, 5451, 330, 7003, 5042, 7825)),
+        (1, (3234, 7739, 834)),
+        (1, (6126, 4537, 5042)),
+    ),
+    "MZR": (
+        (1, (12452, 2249, 6904)),
+        (1, (2806, 4357, 6747, 409, 9735, 3964, 5083, 1327)),
+        (1, (16729, 261, 8120, 1299, 6153, 5293, 3504, 12452)),
+    ),
+    "KYZ": (
+        (1, (5549, 7101, 3544, 2947, 3767, 10998, 5921, 16785, 16736)),
+        (1, (12033, 10206, 5921)),
+        (1, (16737, 16788, 3306, 1020, 7108, 2319, 2779, 12033)),
+    ),
+}
+SOUTH_SUPPLY_HUB_STATES = {
+    16890: 67,
+    5869: 174,
+    12825: 236,
+    4349: 239,
+    16723: 241,
+    11597: 242,
+    7497: 246,
+    16725: 249,
+    3614: 258,
+    8946: 263,
+    16729: 267,
+    2806: 269,
+    12452: 271,
+    16731: 273,
+    16732: 275,
+    5549: 279,
+    16737: 286,
+    7825: 291,
+    10949: 296,
+    3415: 297,
+    443: 703,
+    12578: 704,
+    12033: 706,
+    16899: 707,
+    12583: 708,
+    8057: 720,
+    16882: 728,
+    6193: 729,
+    3234: 730,
+    6126: 733,
+}
+# Coastal NAM states are supplied through their ports; the two GLP states
+# have no land route to the GLP network.
+SOUTH_DETACHED_STATES = frozenset({225, 226, 227, 228, 229, 230, 231, 304, 305})
 RETIRED_MARKERS = (
     "# BEGIN GENERATED: ADISCORD VORKERLAND THEATRE RAILS",
     "# END GENERATED: ADISCORD VORKERLAND THEATRE RAILS",
@@ -424,6 +516,7 @@ def update_source(source: str) -> str:
         render_rail_line(*MON_KALTEN_RAIL),
         *(render_rail_line(level, route) for routes in COALITION_SUPPLY_RAILS.values() for level, route in routes),
         *(render_rail_line(level, route) for level, route in WEST_THEATRE_RAILS),
+        *(render_rail_line(level, route) for routes in SOUTH_SUPPLY_RAILS.values() for level, route in routes),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -456,6 +549,7 @@ def update_supply_source(source: str) -> str:
         **COALITION_SUPPLY_HUB_STATES,
         **ITORA_SUPPLY_HUB_STATES,
         **WEST_CORRIDOR_HUB_STATES,
+        **SOUTH_SUPPLY_HUB_STATES,
     }
     managed = {
         render_supply_node(province_id) for province_id in hub_states
@@ -591,6 +685,71 @@ def west_theatre_issues(
             issues.append(
                 f"western corridor supply hub {hub} is disconnected from Vorkerland"
             )
+    return issues
+
+
+def south_theatre_issues(
+    rail_lines: list[str],
+    supply_lines: list[str],
+    province_types: dict[int, str],
+    physical: dict[int, set[int]],
+    state_by_province: dict[int, int],
+    state_owners: dict[int, str],
+) -> list[str]:
+    """Validate southern feeders, hub placement, capital links and state coverage."""
+    issues: list[str] = []
+
+    def owner(province: int) -> str | None:
+        return state_owners.get(state_by_province.get(province))
+
+    rail_graph: dict[int, set[int]] = defaultdict(set)
+    for line in rail_lines:
+        route = _rail_route(line)
+        if route is None or int(line.split()[0]) < 1:
+            continue
+        for first, second in zip(route, route[1:]):
+            if second in physical.get(first, set()):
+                rail_graph[first].add(second)
+                rail_graph[second].add(first)
+    for tag, routes in SOUTH_SUPPLY_RAILS.items():
+        for level, route in routes:
+            if rail_lines.count(render_rail_line(level, route)) != 1:
+                issues.append(f"{tag} southern feeder must occur exactly once: {route}")
+            for province in route:
+                if province_types.get(province) != "land" or owner(province) != tag:
+                    issues.append(f"{tag} southern feeder leaves its own land at {province}")
+            for first, second in zip(route, route[1:]):
+                if second not in physical.get(first, set()):
+                    issues.append(f"{tag} southern feeder is not adjacent: {first}-{second}")
+    hub_states: dict[str, set[int]] = defaultdict(set)
+    for line in supply_lines:
+        fields = line.split()
+        if len(fields) == 2 and fields[1].isdigit():
+            state = state_by_province.get(int(fields[1]))
+            if state in state_owners:
+                hub_states[state_owners[state]].add(state)
+    for hub, expected_state in SOUTH_SUPPLY_HUB_STATES.items():
+        if supply_lines.count(render_supply_node(hub)) != 1:
+            issues.append(f"southern supply hub {hub} must occur exactly once")
+        if state_by_province.get(hub) != expected_state or province_types.get(hub) != "land":
+            issues.append(f"southern supply hub {hub} moved outside state {expected_state}")
+    state_neighbours: dict[int, set[int]] = defaultdict(set)
+    for province, neighbours in physical.items():
+        for neighbour in neighbours:
+            first, second = state_by_province.get(province), state_by_province.get(neighbour)
+            if first and second and first != second:
+                state_neighbours[first].add(second)
+    for tag, capital in SOUTH_CAPITAL_PROVINCES.items():
+        reached = _reached_by_rail(capital, rail_graph, lambda province: owner(province) == tag)
+        for hub, state in SOUTH_SUPPLY_HUB_STATES.items():
+            if state_owners.get(state) == tag and hub not in reached:
+                issues.append(f"{tag} supply hub {hub} is disconnected from the capital inside its territory")
+        for state, state_owner in state_owners.items():
+            if state_owner != tag or state in SOUTH_DETACHED_STATES:
+                continue
+            nearby = {state} | {other for other in state_neighbours[state] if state_owners.get(other) == tag}
+            if not nearby & hub_states[tag]:
+                issues.append(f"{tag} state {state} has no supply hub in itself or a neighbouring own state")
     return issues
 
 
@@ -890,6 +1049,16 @@ def validate() -> list[str]:
                 state_owners,
             )
         )
+        issues.extend(
+            south_theatre_issues(
+                source.splitlines(),
+                supply_lines,
+                province_types,
+                physical,
+                state_by_province,
+                state_owners,
+            )
+        )
         campaign_states = {66}
         for tag, core_states in DIRTY_GROUPS.items():
             campaign_states.update(core_states)
@@ -967,7 +1136,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Campaign rail validation passed: OSV spur, STP/YPR connections, MON network, RUS campaign spines, western theatre and managed supply hubs."
+        "Campaign rail validation passed: OSV spur, STP/YPR connections, MON network, RUS campaign spines, western and southern theatres and managed supply hubs."
     )
     return 0
 

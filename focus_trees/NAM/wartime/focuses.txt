@@ -17,6 +17,230 @@ focus_tree = {
 	# Shared history keeps wartime authorisations readable after the settlement.
 
 	focus = {
+		id = NAM_war_conscription_rolls
+		icon = GFX_focus_NAM_oilfield_militia
+		x = 8
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_alarm }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		bypass = { has_idea = scraping_the_barrel }
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { has_idea = disarmed_nation }
+				add_ideas = volunteer_only
+			}
+			else_if = {
+				limit = { has_idea = volunteer_only }
+				add_ideas = limited_conscription
+			}
+			else_if = {
+				limit = { has_idea = limited_conscription }
+				add_ideas = extensive_conscription
+			}
+			else_if = {
+				limit = { has_idea = extensive_conscription }
+				add_ideas = service_by_requirement
+			}
+			else_if = {
+				limit = { has_idea = service_by_requirement }
+				add_ideas = all_adults_serve
+			}
+			else_if = {
+				limit = { has_idea = all_adults_serve }
+				add_ideas = scraping_the_barrel
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = NAM_war_short_training
+		icon = GFX_focus_NAM_oilfield_militia
+		x = 9
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_volunteer_levies }
+		mutually_exclusive = { focus = NAM_war_veteran_cadres }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_war_short_training_idea
+				days = 180
+			}
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	focus = {
+		id = NAM_war_veteran_cadres
+		icon = GFX_focus_NAM_metropolitan_instructors
+		x = 11
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_volunteer_levies }
+		mutually_exclusive = { focus = NAM_war_short_training }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_war_veteran_cadres_idea
+				days = 180
+			}
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	focus = {
+		id = NAM_war_replacement_school
+		icon = GFX_focus_NAM_metropolitan_instructors
+		x = 10
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = NAM_war_short_training
+			focus = NAM_war_veteran_cadres
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 15
+			unlock_decision_tooltip = NAM_war_frontline_instructors
+			custom_effect_tooltip = NAM_war_frontline_instructors_unlock_tt
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	focus = {
+		id = NAM_war_harbour_workshops
+		icon = GFX_focus_VAL_Marine_Contract_Corps
+		x = 16
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_convoy_escort
+			focus = NAM_war_coastal_batteries
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+			700 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				dockyard < 20
+				free_building_slots = {
+					building = dockyard
+					size > 0
+					include_locked = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			700 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						dockyard < 20
+						free_building_slots = {
+							building = dockyard
+							size > 0
+							include_locked = yes
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			navy_experience = 15
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	focus = {
+		id = NAM_war_replacement_aircraft
+		icon = GFX_focus_RUS_aircraft_workshops
+		x = 20
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		prerequisite = {
+			focus = NAM_war_interceptor_control
+			focus = NAM_war_air_ground_liaison
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { has_completed_focus = NAM_war_interceptor_control }
+				NAM_air_deliver_fighter_batch = yes
+			}
+			else = {
+				NAM_air_deliver_cas_batch = yes
+			}
+			air_experience = 15
+		}
+		ai_will_do = { base = 70 }
+	}
+
+	focus = {
 		id = NAM_alarm
 		icon = GFX_focus_NAM_basin_is_ours
 		x = 12
@@ -826,5 +1050,328 @@ focus_tree = {
 		ai_will_do = { base = 70 }
 	}
 
+	focus = {
+		id = NAM_war_procurement_board
+		icon = GFX_focus_VAL_Contract_General_Staff
+		x = 3
+		y = 5
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_civilian_routes
+			focus = NAM_war_factory_shifts
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_war_arms_purchase
+			custom_effect_tooltip = NAM_war_arms_purchase_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_medical_trains
+		icon = GFX_focus_RUS_field_hospitals
+		x = 2
+		y = 6
+		cost = 1
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = NAM_war_procurement_board
+		}
+		mutually_exclusive = { focus = NAM_war_shell_priority }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 3000
+			unlock_decision_tooltip = NAM_war_medical_rotation
+			custom_effect_tooltip = NAM_war_medical_rotation_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_shell_priority
+		icon = GFX_focus_RUS_artillery_tables
+		x = 4
+		y = 6
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_procurement_board
+		}
+		mutually_exclusive = { focus = NAM_war_medical_trains }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = NAM
+			}
+			unlock_decision_tooltip = NAM_war_ammunition_push
+			custom_effect_tooltip = NAM_war_ammunition_push_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_rear_reserve
+		icon = GFX_focus_NAM_concealed_reserve
+		x = 3
+		y = 7
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_medical_trains
+			focus = NAM_war_shell_priority
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 200
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_fuel_barter
+		icon = GFX_focus_NAM_well_register
+		x = 13
+		y = 5
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_oil_score
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_war_oil_for_arms
+			custom_effect_tooltip = NAM_war_oil_for_arms_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_fuel_discipline
+		icon = GFX_focus_VAL_Morns_Supply_Trains
+		x = 12
+		y = 6
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_fuel_barter
+		}
+		mutually_exclusive = { focus = NAM_war_extraction_surge }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_war_fuel_discipline_idea
+				days = 180
+			}
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_extraction_surge
+		icon = GFX_focus_NAM_well_register
+		x = 14
+		y = 6
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_fuel_barter
+		}
+		mutually_exclusive = { focus = NAM_war_fuel_discipline }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_war_extraction_surge_idea
+				days = 180
+			}
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_naval_repair_service
+		icon = GFX_focus_VAL_Marine_Contract_Corps
+		x = 16
+		y = 4
+		cost = 1
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_war_harbour_workshops
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_naval_shipyard_ready_tt
+				NAM_naval_shipyard_ready = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+			unlock_decision_tooltip = NAM_war_dockyard_rotation
+			custom_effect_tooltip = NAM_war_dockyard_rotation_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_air_maintenance
+		icon = GFX_focus_RUS_aircraft_workshops
+		x = 20
+		y = 4
+		cost = 1
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		prerequisite = {
+			focus = NAM_war_replacement_aircraft
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			air_experience = 15
+			unlock_decision_tooltip = NAM_war_air_service_rotation
+			custom_effect_tooltip = NAM_war_air_service_rotation_unlock_tt
+		}
+		ai_will_do = { base = 60 }
+	}
+
+	focus = {
+		id = NAM_war_counterbattery
+		icon = GFX_focus_RUS_artillery_tables
+		x = 6
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_RESEARCH }
+		prerequisite = {
+			focus = NAM_counterstroke
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_current_war_tt
+				ADISCORD_nam_resource_war_active = yes
+			}
+			has_war = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 20
+			add_tech_bonus = {
+				name = NAM_war_counterbattery_research
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+		}
+		ai_will_do = { base = 60 }
+	}
 
 }

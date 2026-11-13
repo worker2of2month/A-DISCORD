@@ -11,6 +11,8 @@ state = {
 		add_core_of = KDL
 		buildings = {
 			infrastructure = 3
+			3617 = { naval_base = 1 }
+			6886 = { naval_base = 1 }
 		}
 	}
 	provinces = {

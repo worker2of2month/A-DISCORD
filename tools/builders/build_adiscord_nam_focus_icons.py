@@ -37,6 +37,17 @@ def expected_outputs() -> dict[Path, bytes]:
         output = OUTPUT / f"GFX_focus_{focus_id}.png"
         if entry["runtime"] != output.as_posix():
             raise ValueError(f"Runtime path does not match focus: {focus_id}")
+        if not source.is_file():
+            # Compositions stay outside the mod unless the author saves them;
+            # without one the integrated export is the authored icon.
+            runtime = ROOT / output
+            if not runtime.is_file():
+                raise FileNotFoundError(f"{focus_id}: neither {source} nor {runtime} exists")
+            with Image.open(runtime) as image:
+                if image.size != CANVAS or image.mode != "RGBA":
+                    raise ValueError(f"{focus_id}: {runtime} is not a {CANVAS[0]}x{CANVAS[1]} RGBA icon")
+            outputs[runtime] = runtime.read_bytes()
+            continue
         with Image.open(source) as image:
             if image.mode != "RGBA":
                 raise ValueError(f"Composition lacks alpha: {source}")

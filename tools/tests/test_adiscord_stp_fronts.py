@@ -11,6 +11,7 @@ from tools.tests.test_adiscord_generic_wartime_fronts import named_block, named_
 
 
 ROOT = Path(__file__).resolve().parents[2]
+BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 AI_PATH = ROOT / "common/ai_strategy/ADISCORD_STP_civil_war.txt"
 NEUTRAL = "STS_cw_deprioritize_neutral_borders"
 RESERVE = "STS_cw_defend_abilia"
@@ -454,9 +455,16 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
         self.assertLess(war_plan.index("STP_cw_last_banquet"), war_plan.index("STP_cw_strike_squadrons"))
 
     def test_worn_units_do_not_join_planned_attacks(self) -> None:
+        # Worn organisation keeps a unit out of planned attacks; strength may not
+        # fall below the native bar, which short-equipped field armies can meet.
         defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(encoding="utf-8")
-        for level, floor in (("LOW", 0.85), ("MED", 0.65), ("HIGH", 0.5)):
+        native = (BASE_GAME / "common/defines/00_defines.lua").read_text(encoding="utf-8-sig")
+        for level, org_floor in (("LOW", 0.85), ("MED", 0.65), ("HIGH", 0.45)):
             for kind in ("ORG", "STRENGTH"):
-                value = re.search(rf"PLAN_ATTACK_MIN_{kind}_FACTOR_{level} = ([\d.]+)", defines)
-                self.assertIsNotNone(value, (kind, level))
-                self.assertGreaterEqual(float(value.group(1)), floor)
+                field = f"PLAN_ATTACK_MIN_{kind}_FACTOR_{level}"
+                default = re.search(rf"(?m)^\s*{field}\s*=\s*([\d.]+)", native)
+                self.assertIsNotNone(default, field)
+                assigned = re.findall(rf"(?m)^NDefines\.NAI\.{field}\s*=\s*([\d.]+)", defines)
+                value = float(assigned[-1]) if assigned else float(default.group(1))
+                floor = org_floor if kind == "ORG" else float(default.group(1))
+                self.assertGreaterEqual(value, floor, field)

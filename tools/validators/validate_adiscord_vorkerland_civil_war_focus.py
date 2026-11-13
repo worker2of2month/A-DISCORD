@@ -10,6 +10,12 @@ from pathlib import Path
 
 from tools.lib.focus_sources import read_focus_source
 from tools.lib.paths import source_section
+from tools.lib.vorkerland_leader_branches import (
+    LEADER_BRANCH_EVENT_NAMESPACES,
+    LEADER_BRANCH_FOCUS_IDS,
+    LEADER_BRANCH_GATES,
+    leader_branch_view,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1539,6 +1545,7 @@ FOCUS_IDS = (
     "TVA_build_the_engineering_service",
     "TVA_print_unattended_strike_packages",
     "TVA_keep_the_interdictors_on_station",
+    *LEADER_BRANCH_FOCUS_IDS,
 )
 
 PREWAR_PHASE = "ADISCORD_vorkerland_phase_prewar"
@@ -3012,9 +3019,9 @@ LAYOUT_BANDS = {
     "postwar_expansion": ((8, 28), (1, 17)),
     "prewar_WRK": ((0, 27), (0, 6)),
     "prewar_VAD": ((24, 32), (0, 8)),
-    "war_WKR": ((0, 24), (7, 20)),
-    "war_VAD": ((26, 64), (7, 20)),
-    "war_TVA": ((56, 90), (7, 20)),
+    "war_WKR": ((0, 90), (7, 35)),
+    "war_VAD": ((26, 124), (7, 34)),
+    "war_TVA": ((56, 160), (7, 34)),
     "postwar_worker": ((0, 10), (21, 29)),
     "postwar_joint": ((0, 10), (0, 9)),
     "postwar_utilitarian": ((24, 34), (21, 29)),
@@ -4550,9 +4557,11 @@ def collect_issues() -> list[str]:
     for focus_id in RETIRED_WARTIME_FOCUSES:
         if focus_id in blocks:
             issues.append(f"retired wartime filler must be removed: {focus_id}")
-    if len(FOCUS_IDS) != 324:
+    expected_definitions = 324 + len(LEADER_BRANCH_FOCUS_IDS)
+    if len(FOCUS_IDS) != expected_definitions:
         issues.append(
-            f"validator manifest must contain 324 definitions, found {len(FOCUS_IDS)}"
+            f"validator manifest must contain {expected_definitions} definitions, "
+            f"found {len(FOCUS_IDS)}"
         )
     issues.extend(_check_graph(blocks))
 
@@ -4694,6 +4703,8 @@ def collect_issues() -> list[str]:
     for tag, focus_ids in SHOWDOWN_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("showdown", tag)
+    for focus_id in LEADER_BRANCH_FOCUS_IDS:
+        category_by_focus[focus_id] = ("leader_branch", focus_id[:3])
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("postwar", route_flag)
@@ -4841,6 +4852,21 @@ def collect_issues() -> list[str]:
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one idempotent showdown bypass")
+        elif category == "leader_branch":
+            if flags != ACTIVE_PHASE_FLAGS:
+                issues.append(f"{focus_id} has wrong leader branch phases {sorted(flags)}")
+            if _phase_flags(allow) != ACTIVE_PHASE_FLAGS:
+                issues.append(
+                    f"{focus_id} allow_branch has wrong leader branch phases "
+                    f"{sorted(_phase_flags(allow))}"
+                )
+            branch_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow))
+            if branch_tags != {gate}:
+                issues.append(f"{focus_id} leader branch tags {sorted(branch_tags)} != {[gate]}")
+            government = LEADER_BRANCH_GATES.get(focus_id)
+            if government and government not in allow:
+                issues.append(f"{focus_id} allow_branch must keep {government}")
+            cost_expected = {2, 3, 4}
         elif category in {
             "postwar",
             "postwar_executive",
@@ -6993,7 +7019,9 @@ def collect_issues() -> list[str]:
         r"\bcountry_event\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.]+)", source
     )
     unexpected_focus_events = sorted(
-        set(focus_event_references) - set(CLAIMANT_FOCUS_EVENT_IDS)
+        event_id
+        for event_id in set(focus_event_references) - set(CLAIMANT_FOCUS_EVENT_IDS)
+        if event_id.rsplit(".", 1)[0] not in LEADER_BRANCH_EVENT_NAMESPACES
     )
     if unexpected_focus_events:
         issues.append(
@@ -7280,6 +7308,15 @@ def collect_issues() -> list[str]:
             "electronics",
             "infantry_weapons",
             "artillery",
+            "support_tech",
+            "armor",
+            "air_equipment",
+            "construction_tech",
+            "computing_tech",
+            "encryption_tech",
+            "decryption_tech",
+            "synth_resources",
+            "rocketry",
         }:
             issues.append(
                 f"focus technology bonus uses an unsupported category: {bonus}"
@@ -8675,6 +8712,12 @@ def _postwar_route_of(focus_id: str) -> str | None:
 def _can_share_view(left: str, right: str) -> bool:
     # Focuses of different native trees are never drawn on one canvas.
     if lifecycle_tree(left) != lifecycle_tree(right):
+        return False
+    # Leader branches drawn for different governments or courses.
+    left_view = leader_branch_view(left)
+    right_view = leader_branch_view(right)
+    common = min(len(left_view), len(right_view))
+    if left_view[:common] != right_view[:common]:
         return False
     # WRK and autonomous-district preparation use disjoint tag gates.
     if ((left in PREWAR_WRK_FOCUSES and right in PREWAR_VAD_FOCUSES)

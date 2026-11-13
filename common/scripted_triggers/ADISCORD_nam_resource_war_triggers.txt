@@ -555,7 +555,10 @@ NAM_independence_recognised = {
 # Subjugation refunds pending work; liberation reopens the existing authorisations.
 NAM_independent_programmes_operable = {
 	NAM_country_operable = yes
-	has_country_flag = NAM_center_vanished
+	custom_trigger_tooltip = {
+		tooltip = NAM_metropolitan_rule_ended_tt
+		has_country_flag = NAM_center_vanished
+	}
 	is_subject = no
 }
 
@@ -1104,8 +1107,9 @@ NAM_underground_active = {
 }
 
 # COUNTRY NAM. Strike tiers of the network: 30-49 smoulders, from 50 it acts,
-# from 70 it attacks every month and from 90 the city is on the brink. The
-# sabotage roll, its events and the category text read only these triggers.
+# from 70 it attacks and from 90 the city is on the brink. The sabotage roll,
+# its events and the category text read these triggers; the cause line of the
+# answers repeats the same bounds for the strength stored at the roll.
 NAM_underground_strike_tier_2 = {
 	check_variable = { NAM_underground > 49 }
 }
@@ -1134,7 +1138,12 @@ NAM_field_state = {
 # and its collapse has not yet begun.
 NAM_colony_phase = {
 	tag = NAM
-	NOT = { has_country_flag = NAM_center_vanished }
+	NOT = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_metropolitan_rule_ended_tt
+			has_country_flag = NAM_center_vanished
+		}
+	}
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 }
 
@@ -3834,4 +3843,11 @@ NAM_veyran_capitulation_managed = {
 			}
 		}
 	}
+}
+
+# COUNTRY NAM. Wartime programmes close on the current conflict and country lifecycle.
+NAM_war_programmes_operable = {
+	NAM_independent_programmes_operable = yes
+	ADISCORD_nam_resource_war_active = yes
+	has_war = yes
 }

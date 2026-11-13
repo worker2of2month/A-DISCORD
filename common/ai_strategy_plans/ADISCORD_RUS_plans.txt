@@ -180,3 +180,30 @@ ADISCORD_rus_reactor_council_plan = {
 	}
 	weight = { factor = 1000 }
 }
+
+# The Black Army's branch replaces the Khan's imperial programme after its coup.
+ADISCORD_rus_guard_state_plan = {
+	name = "ADISCORD_rus_guard_state_plan"
+	desc = "ADISCORD_rus_guard_state_plan"
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_black_army_regime = yes
+	}
+	abort = { RUS_black_army_regime = no }
+	ai_national_focuses = {
+		RUS_ba_guard_order
+		RUS_ba_gate_staff
+		RUS_ba_labs_under_escort
+		RUS_ba_commandants
+		RUS_ba_western_breach
+		RUS_ba_reconnaissance_in_force
+		RUS_ba_aimaq_militia
+		RUS_ba_revenge_oath
+		RUS_ba_march_on_vorkerland
+		RUS_ba_military_districts
+		RUS_ba_black_banner_east
+		RUS_ba_guard_state
+	}
+	weight = { factor = 1000 }
+}

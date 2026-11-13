@@ -881,6 +881,18 @@ defined_text = {
 		trigger = { check_variable = { var = VAD_oath_kind value = 19 compare = equals } }
 		localization_key = VAD_oath_pending_foreign_observers
 	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 30 compare = equals } }
+		localization_key = VAD_corps_oath_pending_colony
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 31 compare = equals } }
+		localization_key = VAD_corps_oath_pending_requisition
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_oath_kind value = 32 compare = equals } }
+		localization_key = VAD_corps_oath_pending_loyalty_charter
+	}
 	text = { localization_key = VAD_oath_idle }
 }
 
@@ -1645,4 +1657,81 @@ defined_text = {
 		localization_key = WRK_capital_note_cell
 	}
 	text = { localization_key = ADISCORD_vorkerland_no_text }
+}
+
+# --- leader_branch_scripted_loc ---
+# --- executive_ledger_scripted_loc ---
+# Verbal band of WKR_ledger_trust for the executive's ledger category.
+defined_text = {
+	name = WKR_ledger_trust_status
+	text = {
+		trigger = { NOT = { check_variable = { WKR_ledger_trust < 70 } } }
+		localization_key = WKR_ledger_trust_status_high
+	}
+	text = {
+		trigger = { NOT = { check_variable = { WKR_ledger_trust < 40 } } }
+		localization_key = WKR_ledger_trust_status_mid
+	}
+	text = {
+		localization_key = WKR_ledger_trust_status_low
+	}
+}
+
+
+
+
+# --- VAD army institution (P2) ---
+
+# Second Department status line in the army category description.
+defined_text = {
+	name = GetVADCorpsOperation
+	text = {
+		trigger = { check_variable = { var = VAD_corps_op_kind value = 1 compare = equals } }
+		localization_key = VAD_corps_op_pending_sabotage
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_corps_op_kind value = 2 compare = equals } }
+		localization_key = VAD_corps_op_pending_bribe
+	}
+	text = {
+		trigger = { check_variable = { var = VAD_corps_op_kind value = 3 compare = equals } }
+		localization_key = VAD_corps_op_pending_defectors
+	}
+	text = { localization_key = VAD_corps_op_idle }
+}
+
+
+# Status lines of ADISCORD_vorkerland_tva_protocol_category; each line appears
+# only once its mechanic exists in the campaign.
+defined_text = {
+	name = GetTVAProtocolDetachment
+	text = {
+		trigger = { has_completed_focus = TVA_protocol_single_operator }
+		localization_key = TVA_protocol_status_detachment
+	}
+	text = {
+		localization_key = TVA_protocol_status_empty
+	}
+}
+
+defined_text = {
+	name = GetTVAProtocolLeak
+	text = {
+		trigger = { has_completed_focus = TVA_protocol_classify_the_archive }
+		localization_key = TVA_protocol_status_leak
+	}
+	text = {
+		localization_key = TVA_protocol_status_empty
+	}
+}
+
+defined_text = {
+	name = GetTVAProtocolCells
+	text = {
+		trigger = { has_country_flag = TVA_protocol_districts_initialized }
+		localization_key = TVA_protocol_status_cells
+	}
+	text = {
+		localization_key = TVA_protocol_status_empty
+	}
 }

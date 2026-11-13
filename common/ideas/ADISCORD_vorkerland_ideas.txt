@@ -3630,5 +3630,6484 @@ ideas = {
 			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
 		}
 
+# --- leader_branch_ideas ---
+		WKR_srm_dummy_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		WKR_lrm_dummy_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		VAD_rgm_dummy_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		TVA_prm_dummy_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		WKR_srm_survivor_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.05
+			}
+		}
+		WKR_lrm_ledger_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+		VAD_rgm_army_state_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+		TVA_prm_calculation_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		# Exact previews of WKR_siege_regime_dynamic deltas written by W1 siege focuses and programmes.
+		# Never installed; the numbers must match the hidden add_to_variable calls.
+		WKR_srm_w1_banner_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w1_portraits_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+				consumer_goods_factor = 0.01
+			}
+		}
+
+		WKR_srm_w1_tribunals_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w1_recall_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w1_defeatists_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				max_dig_in_factor = 0.10
+				attrition = 0.02
+			}
+		}
+
+		WKR_srm_w1_elected_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_factor = -0.02
+			}
+		}
+
+		WKR_srm_w1_front_tour_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		WKR_srm_w1_guard_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		WKR_srm_w1_plenipotentiaries_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w1_tribune_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_srm_w1_siege_chairman_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				army_attack_factor = 0.04
+				war_support_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w1_soviet_republic_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				industrial_capacity_factory = 0.04
+				conscription = 0.005
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_srm_w1_mandate_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		WKR_srm_w1_interpreters_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+			}
+		}
+
+		WKR_srm_w1_unispeech_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				conscription = -0.005
+			}
+		}
+
+		WKR_srm_w1_communal_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+				war_support_factor = 0.03
+				army_org_factor = -0.02
+			}
+		}
+
+		WKR_srm_w1_officer_schools_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w1_recruitment_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.05
+			}
+		}
+
+		WKR_srm_w1_registers_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		WKR_srm_w1_battalions_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.04
+				army_org_factor = -0.02
+			}
+		}
+
+		WKR_srm_w1_command_code_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_srm_w1_community_rights_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_srm_w1_orders_only_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_srm_w1_one_state_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.08
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w1_front_press_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_srm_w1_siege_radio_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		WKR_srm_w1_enemy_cells_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.04
+			}
+		}
+
+		WKR_srm_w1_cell_cleared_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.01
+			}
+		}
+
+		WKR_srm_w1_informants_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.01
+			}
+		}
+
+		WKR_srm_w1_purge_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+				planning_speed = -0.05
+			}
+		}
+
+		WKR_srm_w1_commissars_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+				army_org_factor = 0.03
+				political_power_gain = -0.10
+			}
+		}
+
+		WKR_srm_w1_from_ranks_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.08
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_srm_w1_commissar_courses_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.04
+			}
+		}
+
+		WKR_srm_w1_oath_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_attack_factor = 0.02
+			}
+		}
+
+		WKR_srm_w1_double_signature_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				planning_speed = -0.03
+			}
+		}
+
+		WKR_srm_w1_turned_agents_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+				planning_speed = 0.03
+			}
+		}
+
+		WKR_srm_w1_convict_labour_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_srm_w1_clean_rear_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.03
+			}
+		}
+
+		# --- W2: aggregate deltas (WKR_siege_regime_dynamic previews, never installed) ---
+		WKR_srm_w2_red_guard_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_srm_w2_camps_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_srm_w2_trophy_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_srm_w2_onslaught_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+				army_org_factor = -0.04
+			}
+		}
+
+		WKR_srm_w2_quarters_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.08
+				max_dig_in_factor = 0.10
+				army_attack_factor = -0.03
+			}
+		}
+
+		WKR_srm_w2_commissars_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_srm_w2_militia_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_srm_w2_working_army_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w2_behind_lines_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_srm_w2_partisan_staff_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_srm_w2_land_burns_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_srm_w2_railway_troops_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		WKR_srm_w2_track_battalions_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_srm_w2_armoured_trains_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_srm_w2_supply_trains_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_srm_w2_junction_divisions_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+			}
+		}
+
+		WKR_srm_w2_rolling_depots_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.05
+			}
+		}
+
+		WKR_srm_w2_trunk_line_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.05
+			}
+		}
+
+		WKR_srm_w2_discipline_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_srm_w2_initiative_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_srm_w2_front_priority_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+				army_speed_factor = 0.02
+			}
+		}
+
+		WKR_srm_w2_machines_first_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		# --- W2: timed ideas of the armed-people programmes ---
+		# Thirty days of attacks in depth, paid for by the replacement pool.
+		WKR_ranks_onslaught_wave_idea = {
+			picture = generic_manpower_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_ranks_claimant_war = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.15
+				army_org_regain = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ranks_onslaught_wave_2_idea = {
+			picture = citizen_militia_1
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_ranks_claimant_war = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.12
+				breakthrough_factor = 0.20
+				army_org_regain = -0.10
+				land_reinforce_rate = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# An uprising helps only against the claimant whose rear has risen.
+		WKR_ranks_uprising_vs_vad_idea = {
+			picture = citizen_militia_2
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = VAD } }
+			removal_cost = -1
+			modifier = { }
+			targeted_modifier = {
+				tag = VAD
+				attack_bonus_against = 0.10
+				breakthrough_bonus_against = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ranks_uprising_vs_tva_idea = {
+			picture = citizen_militia_2
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { NOT = { has_war_with = TVA } }
+			removal_cost = -1
+			modifier = { }
+			targeted_modifier = {
+				tag = TVA
+				attack_bonus_against = 0.10
+				breakthrough_bonus_against = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ranks_rail_war_idea = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_ranks_claimant_war = no }
+			removal_cost = -1
+			modifier = { }
+			targeted_modifier = {
+				tag = VAD
+				attack_bonus_against = 0.06
+				defense_bonus_against = 0.06
+			}
+			targeted_modifier = {
+				tag = TVA
+				attack_bonus_against = 0.06
+				defense_bonus_against = 0.06
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ranks_fire_along_the_rails_idea = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_ranks_claimant_war = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				breakthrough_factor = 0.10
+				army_speed_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- WKR_front: delta previews of WKR_siege_regime_dynamic (never installed) ---
+
+		WKR_srm_w3_war_communism_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = -0.02
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w3_food_detachments_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w3_cooperatives_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		WKR_srm_w3_workshops_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_srm_w3_checkpoints_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				consumer_goods_factor = -0.01
+			}
+		}
+
+		WKR_srm_w3_ration_cards_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				conscription = 0.005
+			}
+		}
+
+		WKR_srm_w3_goods_for_grain_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_srm_w3_rear_plants_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		WKR_srm_w3_labour_armies_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+				training_time_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w3_one_plan_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_srm_w3_siege_economy_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = 0.03
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		WKR_srm_w3_union_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w3_liaison_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w3_equal_allies_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w3_protectorate_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.04
+				command_power_gain_mult = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w3_shared_command_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_srm_w3_volunteers_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_srm_w3_war_levies_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+				stability_factor = -0.01
+			}
+		}
+
+		WKR_srm_w3_congress_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_srm_w3_charter_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				army_morale_factor = 0.05
+			}
+		}
+
+		# --- WKR_front: real timed spirits ---
+
+		# Given to WKR and to the coalition partner named in the joint front order.
+		WKR_front_joint_front_idea = {
+			picture = generic_volunteer_expedition_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_front_southern_column_idea = {
+			picture = generic_logistics
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_speed_factor = 0.05
+				breakthrough_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_srm_w3_road_back_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_attack_factor = 0.02
+			}
+		}
+
+		WKR_srm_w3_city_maps_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_srm_w3_tower_promise_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		WKR_srm_w3_storm_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+				attrition = 0.03
+			}
+		}
+
+		WKR_srm_w3_siege_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+				army_attack_factor = -0.02
+			}
+		}
+
+		WKR_srm_w3_assault_groups_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		WKR_srm_w3_ring_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		WKR_srm_w3_tunnels_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+			}
+		}
+
+		WKR_srm_w3_banner_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_front_rising_idea = {
+			picture = generic_guerilla_warfare
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_lrm_b1_statute_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_directorate_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = -0.03
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_lrm_b1_accountable_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				war_support_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b1_first_executive_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		WKR_lrm_b1_plenipotentiaries_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		WKR_lrm_b1_deadlines_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		WKR_lrm_b1_wartime_directorate_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+				war_support_factor = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b1_collegium_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b1_open_ledgers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b1_accountable_republic_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b1_mandate_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b1_shadow_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_hostage_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_rescue_plan_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b1_write_off_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		WKR_lrm_b1_no_hostages_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_impostor_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_rumours_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b1_martyr_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b1_inheritance_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b1_alone_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_lrm_b1_chamber_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_census_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		WKR_lrm_b1_inventory_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b1_triage_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_lrm_b1_lives_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				industrial_capacity_factory = -0.03
+				conscription = 0.005
+			}
+		}
+
+		WKR_lrm_b1_output_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.06
+				stability_factor = -0.04
+			}
+		}
+
+		WKR_lrm_b1_hospitals_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.05
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_lrm_b1_every_life_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_norm_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+				consumer_goods_factor = -0.03
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b1_output_army_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		WKR_lrm_b1_balance_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		WKR_lrm_b1_honorary_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b1_isolation_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_lrm_b1_chairmans_place_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		# Directorate decrees: timed, one slot, closed with the administration.
+		WKR_ledger_decree_deadlines_idea = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_buildings_factor = 0.20
+				industrial_capacity_factory = 0.05
+				stability_factor = -0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ledger_decree_discipline_idea = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			modifier = {
+				army_org_regain = 0.10
+				army_morale_factor = 0.05
+				stability_factor = -0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# Memorial days of the fallen chairman, run by the council radicals.
+		WKR_ledger_memorial_idea = {
+			picture = generic_political_support
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.10
+				army_morale_factor = 0.05
+				stability_factor = -0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# Ration grids of the counting chamber: one grid at a time, each decision
+		# swaps out the other.
+		WKR_ledger_ration_by_output_idea = {
+			picture = generic_improved_industries
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = 0.06
+				consumer_goods_factor = -0.02
+				stability_factor = -0.06
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_ledger_ration_by_dependents_idea = {
+			picture = generic_economic_recovery
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.06
+				recruitable_population_factor = 0.05
+				consumer_goods_factor = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# The honorary chairman on a front tour under the executive's schedule.
+		WKR_ledger_chairman_tour_idea = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				army_morale_factor = 0.08
+				army_org_regain = 0.05
+				political_power_gain = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- B2 executive army: exact dummy previews for WKR_ledger_regime_dynamic ---
+
+		WKR_lrm_b2_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				conscription = -0.005
+			}
+		}
+
+		WKR_lrm_b2_casualty_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b2_guns_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				conscription = -0.005
+			}
+		}
+
+		WKR_lrm_b2_artillery_park_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_battle_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_barrage_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+				army_attack_factor = 0.03
+				supply_consumption_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b2_engineer_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+				army_attack_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b2_consumption_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.04
+			}
+		}
+
+		WKR_lrm_b2_sappers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+				attrition = -0.02
+			}
+		}
+
+		WKR_lrm_b2_shell_trains_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+				breakthrough_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_depth_belt_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_victory_norm_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_morale_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b2_motor_contract_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_recovery_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.03
+			}
+		}
+
+		WKR_lrm_b2_motor_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.02
+				army_speed_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_licences_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				consumer_goods_factor = 0.02
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_lrm_b2_motor_pool_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b2_assembly_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_repair_works_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.04
+				attrition = -0.02
+			}
+		}
+
+		WKR_lrm_b2_import_armour_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				consumer_goods_factor = 0.01
+			}
+		}
+
+		WKR_lrm_b2_chassis_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+				breakthrough_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_armour_contract_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.02
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_driver_courses_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_lrm_b2_fist_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				army_speed_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b2_staff_science_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_lrm_b2_staff_college_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_lrm_b2_logistics_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.04
+			}
+		}
+
+		WKR_lrm_b2_planning_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_hubs_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.02
+			}
+		}
+
+		WKR_lrm_b2_recon_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				army_defence_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_operational_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				army_org_factor = 0.03
+				army_speed_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b2_mobile_reserve_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.05
+				land_reinforce_rate = 0.02
+				planning_speed = -0.05
+			}
+		}
+
+		WKR_lrm_b2_front_maps_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_reserve_echelons_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_lrm_b2_counterstroke_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				army_speed_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b2_staff_counts_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		# --- B2 executive army: unique spirits and event ideas ---
+		# Permanent while the executive administration lasts; granted by Field Dressing Stations.
+		WKR_measure_field_surgery = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			modifier = {
+				casualty_trickleback = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_measure_density_norm = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.06
+				army_morale_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_measure_planned_offensive_idea = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { has_war = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.05
+				planning_speed = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		WKR_measure_reserve_forward_idea = {
+			picture = generic_reserve_divisions
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = { has_war = no }
+			modifier = {
+				army_speed_factor = 0.05
+				army_attack_factor = 0.05
+				attrition = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- WKR_lrm aggregate deltas of the contract, norm and calculation branch ---
+		WKR_lrm_b3_issue_norms_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b3_shift_count_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		WKR_lrm_b3_plant_survey_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b3_ration_norm_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_kairholm_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				stability_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b3_remmel_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b3_overtime_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+				stability_factor = -0.04
+				war_support_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b3_balanced_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+				stability_factor = 0.05
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b3_fixed_shift_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b3_overfulfilment_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b3_norm_law_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				political_power_gain = 0.10
+			}
+		}
+
+		WKR_lrm_b3_contract_office_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b3_standard_contract_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_commercial_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				war_support_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b3_guarantees_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_war_treasury_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b3_joint_staff_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_allied_voice_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b3_pays_its_debts_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_casualty_ledger_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b3_rail_depots_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				army_speed_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b3_march_companies_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.03
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_lrm_b3_price_acceptable_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b3_slow_victory_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+				supply_consumption_factor = -0.05
+				army_attack_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b3_assault_timetables_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_lrm_b3_last_line_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+				army_morale_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b3_attrition_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.05
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		WKR_lrm_b3_cut_supply_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.05
+				army_org_regain = 0.05
+			}
+		}
+
+		WKR_lrm_b3_final_calculation_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		# --- Contract branch spirits ---
+		# WKR: ore trains from Frealor chosen in the envoys' report; added as a timed idea.
+		WKR_contract_frealor_ore_idea = {
+			picture = generic_exploit_mines
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				local_resources_factor = 0.10
+				production_lack_of_resource_penalty_factor = -0.15
+			}
+		}
+
+		# A contract partner of WKR under a guarantee mission; timed, added to the partner.
+		WKR_contract_guaranteed_partner_idea = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.10
+				stability_factor = 0.05
+			}
+		}
+
+		# A coalition partner sharing a staff with WKR; timed, added to the partner.
+		WKR_contract_joint_staff_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				planning_speed = 0.10
+			}
+		}
+
+		VAD_rgm_p1_jibe_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_ride_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+			}
+		}
+
+		VAD_rgm_p1_field_command_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				planning_speed = -0.05
+			}
+		}
+
+		VAD_rgm_p1_staff_mind_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p1_crossing_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_forward_post_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+				supply_consumption_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_map_room_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_defence_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_staff_oath_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p1_not_parquet_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_regency_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		VAD_rgm_p1_veiranian_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				training_time_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_heraldry_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_crown_council_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.03
+				training_time_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_junta_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.15
+				army_org_factor = 0.03
+				stability_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p1_court_prefects_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				conscription = -0.005
+			}
+		}
+
+		VAD_rgm_p1_council_charter_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_corps_districts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+				political_power_gain = -0.05
+			}
+		}
+
+		VAD_rgm_p1_discipline_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p1_regency_marches_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				war_support_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_two_helm_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				planning_speed = -0.05
+			}
+		}
+
+		VAD_rgm_p1_double_chain_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+				command_power_gain_mult = -0.05
+			}
+		}
+
+		VAD_rgm_p1_trust_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+				stability_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_insurance_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		VAD_rgm_p1_delegates_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		VAD_rgm_p1_guard_doors_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p1_two_signatures_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p1_college_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_majority_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.10
+				command_power_gain_mult = -0.05
+			}
+		}
+
+		VAD_rgm_p1_veto_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.10
+				army_attack_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p1_divisional_voice_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p1_bureau_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+			}
+		}
+
+		VAD_rgm_p1_dissenters_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				breakthrough_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p1_last_campaign_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p1_rogov_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_org_regain = 0.03
+			}
+		}
+
+		VAD_rgm_p1_vedenin_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.10
+			}
+		}
+
+		VAD_rgm_p1_frolov_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		VAD_regent_commander_wounded = {
+			picture = generic_army_problems
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = -0.20
+				stability_factor = -0.05
+				war_support_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_war_game_lessons = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.04
+				army_defence_factor = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_tribunal_discipline = {
+			picture = generic_secret_police
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				army_morale_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_fresh_front_command = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_directive_offensive = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.07
+				breakthrough_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_directive_defence = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.08
+				max_dig_in_factor = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_directive_reorganisation = {
+			picture = generic_reserve_divisions
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_regain = 0.10
+				training_time_army_factor = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_regent_directive_chairman = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				planning_speed = 0.15
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_rgm_p2_academy_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p2_attestation_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p2_cadets_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		VAD_rgm_p2_staff_school_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				army_org_factor = 0.03
+				breakthrough_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p2_guards_shock_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.08
+				army_attack_factor = 0.04
+				training_time_army_factor = 0.08
+			}
+		}
+
+		VAD_rgm_p2_encirclement_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p2_spearheads_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+				land_reinforce_rate = 0.03
+			}
+		}
+
+		VAD_rgm_p2_mounted_recon_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+				attrition = -0.03
+			}
+		}
+
+		VAD_rgm_p2_officer_charter_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				army_org_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p2_directorate_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p2_courts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p2_iron_hand_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+				stability_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p2_loyalty_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				conscription = -0.005
+			}
+		}
+
+		VAD_rgm_p2_labour_service_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.08
+			}
+		}
+
+		VAD_rgm_p2_volunteers_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				war_support_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p2_levy_corps_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.05
+				training_time_army_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p2_one_command_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				stability_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p2_second_department_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+				army_defence_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p2_intercepts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p2_card_index_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		VAD_rgm_p2_front_intelligence_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p2_okhrana_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				war_support_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p2_double_agents_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				planning_speed = 0.03
+			}
+		}
+
+		VAD_rgm_p2_department_staffs_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p2_exam_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p2_command_language_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.04
+				conscription = -0.005
+			}
+		}
+
+		VAD_rgm_p2_interpreters_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p2_armour_guards_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		VAD_rgm_p2_armour_reserve_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p2_turned_colonel_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+				planning_speed = 0.03
+			}
+		}
+
+		VAD_rgm_p3_arsenal_board_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_acceptance_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.02
+				army_org_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p3_norms_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p3_arsenals_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_register_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		VAD_rgm_p3_requisition_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.08
+				stability_factor = -0.05
+			}
+		}
+
+		VAD_rgm_p3_contracts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.08
+				stability_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p3_salvage_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		VAD_rgm_p3_repair_trains_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p3_shifts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.06
+				conscription = -0.005
+			}
+		}
+
+		VAD_rgm_p3_bonds_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.08
+			}
+		}
+
+		VAD_rgm_p3_full_capacity_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_lost_provinces_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p3_no_recognition_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p3_memorandum_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p3_defectors_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_garrison_union_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				army_defence_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p3_subjugation_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p3_garrison_belt_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_subdued_draft_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+			}
+		}
+
+		VAD_rgm_p3_no_concessions_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p3_general_plan_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p3_siege_park_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		VAD_rgm_p3_assault_school_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		VAD_rgm_p3_shell_trains_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.04
+			}
+		}
+
+		VAD_rgm_p3_sappers_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.03
+			}
+		}
+
+		VAD_rgm_p3_road_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.04
+			}
+		}
+
+		VAD_rgm_p3_guards_storm_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				attrition = 0.03
+			}
+		}
+
+		VAD_rgm_p3_siege_ring_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+				war_support_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p3_shock_columns_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.04
+			}
+		}
+
+		VAD_rgm_p3_assault_colours_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p3_garrison_terms_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p3_parade_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		TVA_protocol_agreed_campaign_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
+				army_org_regain = 0.05
+			}
+		}
+
+		TVA_prm_x1_delay_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		TVA_prm_x1_operator_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				planning_speed = 0.05
+			}
+		}
+
+		TVA_prm_x1_collegium_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				planning_speed = -0.05
+			}
+		}
+
+		TVA_prm_x1_wire_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+			}
+		}
+
+		TVA_prm_x1_glossary_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_unsigned_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.10
+				breakthrough_factor = 0.03
+			}
+		}
+
+		TVA_prm_x1_noise_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+				stability_factor = -0.03
+			}
+		}
+
+		TVA_prm_x1_operator_protocol_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				planning_speed = 0.05
+			}
+		}
+
+		TVA_prm_x1_councils_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		TVA_prm_x1_veto_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				attrition = -0.05
+			}
+		}
+
+		TVA_prm_x1_chair_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		TVA_prm_x1_charter_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_one_protocol_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_morale_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_secrecy_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				research_speed_factor = -0.02
+			}
+		}
+
+		TVA_prm_x1_clearance_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		TVA_prm_x1_vault_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.02
+			}
+		}
+
+		TVA_prm_x1_open_log_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		TVA_prm_x1_truth_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		TVA_prm_x1_account_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_answer_2130_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_census_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		TVA_prm_x1_ration_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		TVA_prm_x1_dispatch_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		TVA_prm_x1_dashboards_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				army_defence_factor = -0.03
+			}
+		}
+
+		TVA_prm_x1_cameras_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		TVA_prm_x1_reliability_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = 0.02
+			}
+		}
+
+		TVA_prm_x1_load_boards_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		TVA_prm_x1_answer_schedule_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		TVA_prm_x1_city_sees_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				war_support_factor = 0.04
+				army_defence_factor = -0.02
+			}
+		}
+
+		TVA_prm_x1_city_one_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		# Exact aggregate deltas of the machine-army focuses; never installed.
+		TVA_prm_x2_engineer_corps_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		TVA_prm_x2_sapper_school_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+			}
+		}
+
+		TVA_prm_x2_mechanised_battalions_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_battery_grid_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		TVA_prm_x2_breaching_charges_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		TVA_prm_x2_sapper_tractors_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_fire_maps_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_computed_fire_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+				breakthrough_factor = 0.05
+				army_speed_factor = -0.02
+			}
+		}
+
+		TVA_prm_x2_data_manoeuvre_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.04
+				army_org_regain = 0.06
+				max_dig_in_factor = -0.05
+			}
+		}
+
+		TVA_prm_x2_counter_battery_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_staff_vans_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		TVA_prm_x2_fire_assault_groups_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_route_service_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.04
+			}
+		}
+
+		TVA_prm_x2_take_the_line_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_systems_bureau_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_strongpoints_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		TVA_prm_x2_sensor_pickets_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_rail_launch_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_defence_regulations_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_plotting_rooms_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		TVA_prm_x2_flak_belts_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_automated_front_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		TVA_prm_x2_train_depots_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		TVA_prm_x2_parts_registry_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.04
+			}
+		}
+
+		TVA_prm_x2_motor_columns_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		TVA_prm_x2_repair_network_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.03
+				supply_consumption_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_supply_network_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				attrition = -0.02
+				industrial_capacity_factory = -0.02
+			}
+		}
+
+		TVA_prm_x2_maintenance_shifts_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		TVA_prm_x2_track_brigades_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x2_reinforcement_trains_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		TVA_prm_x2_truck_relays_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		TVA_prm_x2_self_repairing_army_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+			}
+		}
+
+		# Exact TVA_administration_dynamic air-policy deltas; never installed.
+		TVA_machine_relay_range_delta_idea = {
+			name = TVA_administration_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				air_range_factor = 0.05
+			}
+		}
+
+		TVA_machine_unmanned_packages_delta_idea = {
+			name = TVA_administration_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				air_cas_efficiency = 0.06
+				air_accidents_factor = 0.05
+			}
+		}
+
+		TVA_machine_radar_shield_delta_idea = {
+			name = TVA_administration_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				air_intercept_efficiency = 0.06
+			}
+		}
+
+		TVA_machine_loitering_munitions_delta_idea = {
+			name = TVA_administration_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				air_cas_efficiency = 0.04
+			}
+		}
+
+		# Timed field operations bought through the machine-army decisions.
+		TVA_machine_computed_barrage_idea = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_artillery_attack_factor = 0.12
+				breakthrough_factor = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_machine_data_manoeuvre_window_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_speed_factor = 0.08
+				army_org_regain = 0.10
+				planning_speed = 0.15
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_prm_x3_design_council_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x3_institute_workshops_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		TVA_prm_x3_uval_range_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		TVA_prm_x3_applied_bureaus_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				research_speed_factor = -0.02
+			}
+		}
+
+		TVA_prm_x3_fundamental_groundwork_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.05
+				industrial_capacity_factory = -0.02
+			}
+		}
+
+		TVA_prm_x3_field_kits_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		TVA_prm_x3_postgraduate_shifts_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				conscription = -0.005
+			}
+		}
+
+		TVA_prm_x3_war_laboratories_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		TVA_prm_x3_colleges_register_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		TVA_prm_x3_technical_congress_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				research_speed_factor = 0.01
+			}
+		}
+
+		TVA_prm_x3_engineering_union_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				research_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x3_contract_engineering_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		TVA_prm_x3_holden_colleges_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		TVA_prm_x3_metal_for_tools_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		TVA_prm_x3_compact_union_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		TVA_prm_x3_compact_contract_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		TVA_prm_x3_restart_scheme_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		TVA_prm_x3_restart_staff_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		TVA_prm_x3_calculated_operation_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+				breakthrough_factor = 0.05
+			}
+		}
+
+		TVA_prm_x3_city_whole_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+				attrition = -0.05
+				army_attack_factor = -0.02
+			}
+		}
+
+		TVA_prm_x3_switchboard_teams_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		TVA_prm_x3_last_correction_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		TVA_prm_x3_capital_restart_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		TVA_lab_series_surge = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.08
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		TVA_lab_calculated_tempo = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.15
+				army_speed_factor = 0.05
+			}
+		}
+
+		TVA_lab_capital_under_current = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			# The weekly budget reads factory output; refresh it when the shift ends.
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.03
+				industrial_capacity_factory = 0.05
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		TVA_lab_capital_war_shift = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			removal_cost = -1
+			# The weekly budget reads factory output; refresh it when the shift ends.
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = 0.10
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w4_rostrum_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				war_support_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w4_doctors_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_srm_w4_truth_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w4_scapegoat_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_attack_factor = 0.03
+			}
+		}
+
+		WKR_srm_w4_scar_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_srm_w4_returned_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				industrial_capacity_factory = -0.02
+			}
+		}
+
+		WKR_srm_w4_debts_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+				war_support_factor = 0.02
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w4_communal_voice_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.02
+				training_time_army_factor = -0.05
+			}
+		}
+
+		WKR_srm_w4_purge_purgers_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_srm_w4_commission_rule_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w4_front_press_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+				stability_factor = 0.02
+			}
+		}
+
+		WKR_srm_w4_guard_front_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				industrial_capacity_factory = -0.02
+			}
+		}
+
+		WKR_srm_w4_guard_benches_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				army_defence_factor = 0.03
+			}
+		}
+
+		WKR_srm_w4_guard_congress_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				army_org_factor = 0.02
+			}
+		}
+
+		WKR_srm_w4_partisan_land_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+				army_org_regain = 0.03
+			}
+		}
+
+		WKR_srm_w4_partisan_line_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				army_speed_factor = 0.03
+			}
+		}
+
+		WKR_srm_w4_detachments_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.02
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		WKR_srm_w4_rail_council_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		WKR_srm_w4_rail_martial_law_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+				supply_consumption_factor = -0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w4_timetable_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_srm_w4_station_markets_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				industrial_capacity_factory = -0.02
+			}
+		}
+
+		WKR_srm_w4_labour_duty_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_srm_w4_bread_steel_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				consumer_goods_factor = -0.01
+			}
+		}
+
+		WKR_srm_w4_federal_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_srm_w4_one_hand_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+				army_attack_factor = 0.02
+			}
+		}
+
+		WKR_srm_w4_union_treaty_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_org_factor = 0.02
+			}
+		}
+
+		WKR_srm_w4_city_tribunal_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w4_engineers_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_srm_w4_first_stone_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		# --- B4 executive story ---
+
+		# Anton Bagley on doctor's orders: the executive works without him for a
+		# few weeks. Added only as a timed idea by events .127 and .130.
+		WKR_audit_executive_on_leave_idea = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			cancel = { WKR_administration_active = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = -0.20
+				stability_factor = -0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- B4 executive story: exact dummy previews for WKR_ledger_regime_dynamic ---
+
+		WKR_lrm_b4_p1_guard_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b4_p1_reception_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p1_answers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p2_title_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				command_power_gain_mult = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b4_p2_executor_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p2_numbers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p3_recount_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				conscription = 0.005
+			}
+		}
+
+		WKR_lrm_b4_p3_seal_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p3_living_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p10_tabulators_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				planning_speed = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p10_control_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_lrm_b4_p10_chamber_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				research_speed_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b4_p4_rotation_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.05
+				army_morale_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p4_hold_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+				army_morale_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b4_p4_price_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p5_raids_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p5_columns_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+				attrition = -0.05
+			}
+		}
+
+		WKR_lrm_b4_p5_wheels_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p6_auditors_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b4_p6_free_hand_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p6_general_staff_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p7_arbitration_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_p7_martial_law_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b4_p7_price_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p8_loan_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b4_p8_concessions_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				political_power_gain = -0.05
+			}
+		}
+
+		WKR_lrm_b4_p8_creditors_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b4_p9_labour_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		WKR_lrm_b4_p9_exchange_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		WKR_lrm_b4_p9_after_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b4_norm_together_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_norm_executive_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b4_norm_war_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b4_numbers_without_mercy_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.04
+				political_power_gain = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b4_numbers_with_names_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b4_numbers_of_the_chairman_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.04
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		# --- P4: aggregate delta previews (VAD_regency_dynamic); never installed ---
+
+		VAD_rgm_p4_greatcoat_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				land_reinforce_rate = 0.03
+			}
+		}
+
+		VAD_rgm_p4_portrait_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+				war_support_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p4_no_crown_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				army_org_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_crown_waits_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		VAD_rgm_p4_regalia_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p4_whole_empire_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_defence_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_one_staff_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				supply_consumption_factor = -0.03
+				command_power_gain_mult = -0.05
+			}
+		}
+
+		VAD_rgm_p4_two_fronts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				conscription = 0.01
+				planning_speed = -0.05
+			}
+		}
+
+		VAD_rgm_p4_common_banner_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_first_equal_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p4_dictator_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.15
+				army_attack_factor = 0.03
+				stability_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p4_college_signs_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p4_honour_court_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_from_ranks_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				training_time_army_factor = -0.05
+			}
+		}
+
+		VAD_rgm_p4_restoration_corps_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				planning_speed = 0.05
+			}
+		}
+
+		VAD_rgm_p4_gendarmerie_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				conscription = -0.005
+			}
+		}
+
+		VAD_rgm_p4_self_defence_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				land_reinforce_rate = 0.02
+			}
+		}
+
+		VAD_rgm_p4_rear_holds_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_staff_watch_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				army_morale_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p4_dept_archive_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_defence_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_shells_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.04
+			}
+		}
+
+		VAD_rgm_p4_motors_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.03
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		VAD_rgm_p4_arsenal_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		VAD_rgm_p4_register_oath_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				war_support_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p4_quiet_borders_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		VAD_rgm_p4_bill_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				war_support_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p4_amnesty_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		VAD_rgm_p4_tribunal_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p4_capital_order_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		# --- P4: timed spirits of the story arcs and programmes ---
+
+		VAD_crownless_coronation_rumours = {
+			picture = generic_monarchist_uprising
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.05
+				stability_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_crownless_staff_split = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = -0.10
+				command_power_gain_mult = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_crownless_berkut_band = {
+			picture = generic_guerilla_warfare
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = 0.05
+				stability_factor = -0.03
+				production_speed_buildings_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_crownless_honour_court_verdict = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.03
+				army_morale_factor = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_crownless_gates_opened = {
+			picture = generic_spy_intel
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.06
+				breakthrough_factor = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- TVA proof: aggregate previews (never installed) ---
+		TVA_prm_x4_default_forecast_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_attack_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_last_signature_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				planning_speed = -0.02
+			}
+		}
+
+		TVA_prm_x4_circuit_audit_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_advisor_off_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				experience_gain_army_factor = 0.05
+				planning_speed = -0.03
+			}
+		}
+
+		TVA_prm_x4_machine_stays_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.04
+				breakthrough_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_command_protocol_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		TVA_prm_x4_recompute_2130_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				stability_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_method_defended_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+				war_support_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_human_coefficient_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_shift_regulations_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		TVA_prm_x4_city_contract_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_after_the_shift_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		TVA_prm_x4_battle_model_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.04
+				army_attack_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_line_initiative_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		TVA_prm_x4_action_ledger_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				breakthrough_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_fire_release_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				breakthrough_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_operator_loop_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_failure_registry_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_duty_table_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		TVA_prm_x4_doctors_triage_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_hospital_trains_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.02
+			}
+		}
+
+		TVA_prm_x4_forecast_centre_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				planning_speed = 0.03
+			}
+		}
+
+		TVA_prm_x4_open_laboratories_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		TVA_prm_x4_proof_by_experiment_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		TVA_prm_x4_grid_standard_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		TVA_prm_x4_grid_licences_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		TVA_prm_x4_postwar_grid_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.04
+			}
+		}
+
+		TVA_prm_x4_capital_calculation_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		TVA_prm_x4_capital_councils_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		TVA_prm_x4_light_everywhere_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		# --- TVA proof: timed results of events and programmes ---
+		TVA_proof_circuit_check_idea = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = -0.10
+				experience_gain_army_factor = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_proof_breach_at_the_junction_idea = {
+			picture = generic_neglected_military
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = -0.05
+				army_morale_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_proof_institute_censured_idea = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				research_speed_factor = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_proof_true_forecast_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				planning_speed = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_proof_false_forecast_idea = {
+			picture = generic_neglected_military
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = -0.05
+				army_org_regain = -0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_proof_rehearsed_offensive_idea = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.06
+				breakthrough_factor = 0.06
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- W5: delta previews of the decisive-days focuses (never installed) ---
+
+		WKR_srm_w5_columns_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				army_attack_factor = 0.03
+			}
+		}
+
+		WKR_srm_w5_rear_councils_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_srm_w5_last_speech_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_org_factor = 0.02
+			}
+		}
+
+		WKR_srm_w5_filtration_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				industrial_capacity_factory = 0.02
+			}
+		}
+
+		WKR_srm_w5_specialists_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_srm_w5_bread_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		WKR_srm_w5_labour_books_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_srm_w5_benches_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_srm_w5_pursuit_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.05
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_srm_w5_shield_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		WKR_srm_w5_decisive_days_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		WKR_srm_w5_three_tongues_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				army_morale_factor = 0.02
+			}
+		}
+
+		WKR_srm_w5_one_tongue_delta_idea = {
+			name = WKR_siege_regime_dynamic
+			picture = generic_communist_army
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				political_power_gain = 0.05
+			}
+		}
+
+		# --- B5 executive story: exact dummy previews for WKR_ledger_regime_dynamic ---
+
+		WKR_lrm_b5_seats_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = -0.03
+			}
+		}
+
+		WKR_lrm_b5_disarm_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b5_congress_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b5_chairmans_name_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_morale_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b5_without_names_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b5_after_chairman_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+				war_support_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b5_bread_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		WKR_lrm_b5_pays_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b5_capital_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b5_tribunal_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.04
+			}
+		}
+
+		WKR_lrm_b5_norm_officers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				experience_gain_army_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b5_general_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				breakthrough_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b5_signed_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+				war_support_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b5_returned_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.04
+				max_dig_in_factor = 0.05
+			}
+		}
+
+		WKR_lrm_b5_last_line_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_morale_factor = 0.03
+			}
+		}
+
+		WKR_lrm_b5_ledger_published_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = -0.02
+			}
+		}
+
+		WKR_lrm_b5_ledger_numbers_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		WKR_lrm_b5_ledger_sealed_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.08
+				stability_factor = -0.03
+			}
+		}
+
+		WKR_lrm_b5_ledger_chairman_delta_idea = {
+			name = WKR_ledger_regime_dynamic
+			picture = generic_central_management
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		# --- P5: aggregate previews of the decisive days (never installed) ---
+		VAD_rgm_p5_refusal_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				political_power_gain = 0.05
+			}
+		}
+
+		VAD_rgm_p5_silence_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+				war_support_factor = 0.03
+				stability_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p5_last_order_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				army_org_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p5_hospital_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				land_reinforce_rate = 0.02
+				attrition = -0.03
+			}
+		}
+
+		VAD_rgm_p5_march_companies_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				training_time_army_factor = -0.05
+				army_morale_factor = -0.02
+			}
+		}
+
+		VAD_rgm_p5_under_the_walls_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.02
+				breakthrough_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p5_field_courts_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.02
+				stability_factor = -0.01
+			}
+		}
+
+		VAD_rgm_p5_city_councils_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p5_commandant_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+				army_org_regain = 0.03
+			}
+		}
+
+		VAD_rgm_p5_commissar_hunt_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				war_support_factor = 0.01
+			}
+		}
+
+		VAD_rgm_p5_engineer_hunt_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		VAD_rgm_p5_card_index_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.03
+				command_power_gain_mult = 0.05
+			}
+		}
+
+		VAD_rgm_p5_machines_east_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		VAD_rgm_p5_restart_works_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		VAD_rgm_p5_capital_works_delta_idea = {
+			name = VAD_regency_dynamic
+			picture = generic_army_war_college
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		# --- P5: timed spirits of the decisive days (events .142-.161) ---
+		VAD_standard_blind_the_observers = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_guards_colours = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.06
+				breakthrough_factor = 0.06
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_line_colours = {
+			picture = generic_infantry_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				army_defence_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_commander_in_the_first_wave = {
+			picture = generic_victors_of_ww1
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_morale_factor = 0.08
+				army_attack_factor = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_decisive_assault = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				breakthrough_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_rolling_barrage = {
+			picture = generic_artillery_manufacturer_1
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				breakthrough_factor = 0.10
+				army_defence_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_hold_the_gains = {
+			picture = generic_wall_line
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.10
+				max_dig_in_factor = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_regrouping = {
+			picture = generic_supply_line
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_regain = 0.10
+				supply_consumption_factor = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_winter_quarters = {
+			picture = generic_supply_depot
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_regain = 0.10
+				attrition = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_single_order = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				army_attack_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_last_counterstroke = {
+			picture = generic_morale_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				army_morale_factor = 0.08
+				army_org_regain = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_eastern_line = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.10
+				max_dig_in_factor = 0.15
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		VAD_standard_commander_on_the_highway = {
+			picture = generic_victors_of_ww1
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_morale_factor = 0.10
+				army_org_factor = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# --- TVA endgame: aggregate previews (never installed) ---
+		TVA_prm_x5_archive_convoy_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				stability_factor = -0.02
+			}
+		}
+
+		TVA_prm_x5_last_broadcast_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+				army_morale_factor = 0.02
+			}
+		}
+
+		TVA_prm_x5_last_shift_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.05
+				army_org_factor = 0.02
+			}
+		}
+
+		TVA_prm_x5_every_district_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				max_dig_in_factor = 0.10
+				army_defence_factor = 0.03
+			}
+		}
+
+		TVA_prm_x5_evacuation_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+				army_defence_factor = -0.02
+			}
+		}
+
+		TVA_prm_x5_siege_map_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_regain = 0.03
+			}
+		}
+
+		TVA_prm_x5_model_interrogation_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.05
+				breakthrough_factor = 0.02
+			}
+		}
+
+		TVA_prm_x5_convention_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_morale_factor = 0.03
+			}
+		}
+
+		TVA_prm_x5_captured_staff_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		TVA_prm_x5_shed_load_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+				stability_factor = -0.03
+			}
+		}
+
+		TVA_prm_x5_line_crews_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		TVA_prm_x5_grid_holds_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		TVA_prm_x5_figures_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		TVA_prm_x5_names_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		TVA_prm_x5_city_counted_delta_idea = {
+			name = TVA_protocol_dynamic
+			picture = generic_research_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+				stability_factor = 0.02
+			}
+		}
+
+		# --- TVA endgame: timed results of events and programmes ---
+		TVA_endgame_calculated_hour_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				planning_speed = 0.10
+				army_attack_factor = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_counterstroke_idea = {
+			picture = generic_artillery_regiments
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_regain = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_bridge_line_idea = {
+			picture = generic_neglected_military
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in_factor = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_depot_fortress_idea = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				max_dig_in_factor = 0.15
+				army_defence_factor = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_read_plans_idea = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.04
+				planning_speed = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_hall_destroyed_idea = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				research_speed_factor = -0.10
+				planning_speed = -0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		TVA_endgame_long_war_idea = {
+			picture = generic_central_management
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				stability_factor = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
 	}
 }

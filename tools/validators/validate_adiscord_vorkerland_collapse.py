@@ -5995,7 +5995,6 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         for name in (
             "dirty_opening",
             "worker_victory",
-            "joint_victory",
             "utilitarian_victory",
             "vlad_victory",
             "dorian_victory",
@@ -6046,7 +6045,6 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     for name, event_id in (
         ("dirty_opening", "ADISCORD_superevent.4"),
         ("worker_victory", "ADISCORD_superevent.2"),
-        ("joint_victory", "ADISCORD_superevent.16"),
         ("utilitarian_victory", "ADISCORD_superevent.3"),
         ("vlad_victory", "ADISCORD_superevent.5"),
         ("dorian_victory", "ADISCORD_superevent.6"),
@@ -6689,8 +6687,10 @@ def validate_bracket_decision(
         issues.append(
             "the AI may take the coalition-join decision while still fighting locally"
         )
-    if "FROM = { tag = VAD }" not in ai_will_do or "factor = 0" not in ai_will_do:
-        issues.append("the AI must not fold surviving administrations into VAD")
+    if re.search(r"factor = 0 FROM = \{ tag = (?:WKR|VAD|TVA) \}", ai_will_do):
+        issues.append("the coalition-join AI must not bar a claimant by its tag")
+    if "FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes }" not in ai_will_do:
+        issues.append("the coalition-join AI must favour the claimant behind in central control")
     if "CSL" not in categories:
         issues.append("the collapse decision category does not reach CSL")
 

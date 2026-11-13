@@ -266,6 +266,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             equipment,
             stock=50,
             factories=5,
+            small_air_replacement=False,
         ):
             ratios = {"infantry_equipment": rifle_ratio, equipment: auxiliary_ratio}
 
@@ -322,6 +323,9 @@ class VorkerlandForceDesignTests(unittest.TestCase):
                     elif key == "has_war":
                         self.assertIn(payload, ("yes", "no"))
                         values.append(war == (payload == "yes"))
+                    elif key == "ADISCORD_ai_small_air_replacement":
+                        self.assertIn(payload, ("yes", "no"))
+                        values.append(small_air_replacement == (payload == "yes"))
                     else:
                         self.fail(f"unsupported policy trigger {key}")
                 return values

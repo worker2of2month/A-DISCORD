@@ -1,0 +1,48 @@
+{
+  "files": {
+    "ADISCORD_isaiah_clock_tower.mesh": "3d02ca260ca32061c4910aa90a098c21944d08bf58078cc0689d55cbe8681e03",
+    "ADISCORD_isaiah_clock_tower_diffuse.dds": "d5a3d90deb90a7d2fc3cf1275521b4cae7c43f7e47e22410321b413708476a19",
+    "ADISCORD_isaiah_clock_tower_normal.dds": "d973a6ddcea4fb700d73f9cf9fc3eed77d2363731fb0381520643c6114917d61",
+    "ADISCORD_isaiah_clock_tower_specular.dds": "21a80e835af565f42933c9857d8829face6831c80dc1f5d3d47d0eb5586eb2da"
+  },
+  "vertices": 21857,
+  "triangles": 10030,
+  "materials": 1,
+  "bounds_blender_xyz": [
+    [
+      -21.0,
+      21.0
+    ],
+    [
+      -13.0,
+      13.0
+    ],
+    [
+      -0.83333,
+      64.0
+    ]
+  ],
+  "native_reimport": true,
+  "placement": {
+    "province": 6192,
+    "position": [
+      2901.5,
+      10.36,
+      618.5
+    ],
+    "scale": 0.12,
+    "rotation": [
+      0,
+      0.349066,
+      0
+    ]
+  },
+  "hoi4_runtime_verified": false,
+  "input_sha256": {
+    "tools/builders/build_adiscord_isaiah_tower.py": "000dcf4130b42fc6c66b3f40b85b667cd6050bf46113063f68fd167c23c76811",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
+    "map/heightmap.bmp": "80a3d7f8d1d01c2207b25307077d9bbb6672c1ca69b363b6418d79c202dc6100",
+    "map/provinces.bmp": "93b448a04aaa9a1b30b4240d11710a1e897f13219fd98239e7d1d1a674d0b27b",
+    "map/definition.csv": "a0e3b3df96b34c709cf804d2645fbcc3d0058c1b55ddd3f47dc3ff3cf8875b56"
+  }
+}

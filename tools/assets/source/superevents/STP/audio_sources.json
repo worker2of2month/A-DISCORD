@@ -1,0 +1,1043 @@
+{
+  "schema": 1,
+  "superevent_stelander_shabrat_republic_sound": {
+    "music": {
+      "composer": "Johan Svendsen",
+      "title": "Festival Polonaise, Op. 12",
+      "performers": "Iceland Symphony Orchestra; Bjarte Engeset, conductor",
+      "album": "Norwegian Classical Favourites",
+      "catalogue": "Naxos 8.557017",
+      "recording_year": 2003,
+      "source_page": "https://www.yourclassical.org/episode/2026/07/13/johan-svendsen-festival-polonaise-op-12",
+      "source_audio": "https://play.publicradio.org/web/o/minnesota/classical/programs/free-downloads/2026/07/13/daily_download_20260713_128.mp3?playLive=false",
+      "file": "svendsen_festival_polonaise_excerpt.flac",
+      "excerpt_seconds": [
+        20,
+        76
+      ],
+      "sha256": "d818a9e5907e0b45ffd42faf2e2fdb71684e094b1926a587705b9e28cc88228b",
+      "rights": "Copyrighted Naxos recording, publicly offered by YourClassical for personal enjoyment; commercial use prohibited by source notice."
+    },
+    "effects": {
+      "committee_marching.mp3": {
+        "artist": "stib",
+        "title": "marching-concrete-loop.aif",
+        "source": "https://freesound.org/people/stib/sounds/240732/",
+        "license": "CC0",
+        "sha256": "90cb7576725ec7a271836277e20bbf975f5dfabc171990400e7638135e3a940b",
+        "file": "../IVN/committee_marching.mp3"
+      },
+      "committee_cheers.mp3": {
+        "artist": "craigsmith",
+        "title": "S12-03 Small group men cheering; encouraging.wav",
+        "source": "https://freesound.org/people/craigsmith/sounds/675103/",
+        "license": "CC0",
+        "sha256": "26ca9893285806f2f9231a42b8cb59f3e68940bfef4781496484e4e219cc5a66",
+        "file": "../IVN/committee_cheers.mp3"
+      },
+      "committee_fireworks.mp3": {
+        "artist": "markedit",
+        "title": "Fireworks.wav",
+        "source": "https://freesound.org/people/markedit/sounds/158727/",
+        "license": "CC0",
+        "sha256": "771fb49f402840cadb3039e3a8dfab74aad005ae0958c95755ad5e647fe5d351",
+        "file": "../IVN/committee_fireworks.mp3"
+      },
+      "tank_medium.ogg": {
+        "source": "Hearts of Iron IV/sound/animations/tank_engine_medium_loop_01.wav",
+        "license": "Base-game sound; runtime mod derivative",
+        "sha256": "4d7f8b16771f449968276900c3f1a48186528bf34efb5a67c8e8cbde6b5620a4",
+        "file": "../IVN/tank_medium.ogg"
+      }
+    },
+    "timeline_seconds": {
+      "music": [
+        0,
+        56
+      ],
+      "marching": [
+        [
+          4,
+          22
+        ],
+        [
+          32,
+          48
+        ]
+      ],
+      "cheers": [
+        [
+          8,
+          16
+        ],
+        [
+          35,
+          44
+        ]
+      ],
+      "fireworks": [
+        [
+          18,
+          25
+        ],
+        [
+          46,
+          54
+        ]
+      ],
+      "passing_tank": [
+        26,
+        36
+      ],
+      "music_fade_in": [
+        0,
+        2
+      ],
+      "music_fade_out": [
+        50,
+        56
+      ]
+    },
+    "mix": {
+      "music_gain": 0.85,
+      "marching_gains": [
+        0.4,
+        0.35
+      ],
+      "cheers_gain": 1.2,
+      "fireworks_gain": 0.22,
+      "passing_tank_gain": 0.08,
+      "ducking": false,
+      "automatic_normalization": false,
+      "sample_rate": 44100,
+      "channels": 2,
+      "format": "PCM s16le"
+    },
+    "builder": "tools/builders/build_adiscord_superevent_music.py",
+    "runtime_file": "sound/superevents/superevent_stelander_shabrat_republic_sound.wav",
+    "runtime_sha256": "f405467a6fea4cfc0ef503db9e363134da268d974655742811d504cadd1f7ca0"
+  },
+  "superevent_stelander_tikhoreva_sound": {
+    "artist": "M. Ostermeier",
+    "title": "Rafters",
+    "album": "Tiny Birds",
+    "source_page": "https://mostermeier.bandcamp.com/track/rafters",
+    "license": "All rights reserved",
+    "source_file": "tools/assets/source/superevents/STP/m_ostermeier_rafters_excerpt.flac",
+    "source_start_seconds": 15,
+    "duration_seconds": 56,
+    "source_sha256": "13bfef653b1ba1d5a53a2e9aa2112eaab41bbb9bf15849615d0c74f340144219",
+    "rationale": "Restrained piano and sound textures for practical reconstruction and public welfare.",
+    "processing": "56-second music layer: loudness target -18 LUFS and -2 dBTP, 1-second fade in and 5-second fade out. Additive effects; no music ducking, master normalization or master limiter.",
+    "runtime_file": "sound/superevents/superevent_stelander_tikhoreva_sound.wav",
+    "runtime_sha256": "9ba15975e582b88c6f2a782a2e2301b37fd0a36492679e2cd4e96e2f040cd979",
+    "effects": [
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 4,
+        "offset": 8,
+        "duration": 11,
+        "gain": 4.0,
+        "fade": 1.5
+      },
+      {
+        "source": "STP/sfx_hand_saw.flac",
+        "start": 20,
+        "offset": 0,
+        "duration": 5,
+        "gain": 0.45,
+        "fade": 0.6
+      },
+      {
+        "source": "STP/sfx_light_hammering.flac",
+        "start": 28,
+        "offset": 0,
+        "duration": 3,
+        "gain": 1.0,
+        "fade": 0.2
+      },
+      {
+        "source": "STP/sfx_light_hammering.flac",
+        "start": 33,
+        "offset": 0,
+        "duration": 3,
+        "gain": 0.85,
+        "fade": 0.2
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 39,
+        "offset": 10,
+        "duration": 5,
+        "gain": 5.0,
+        "fade": 0.4
+      },
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 46,
+        "offset": 25,
+        "duration": 5,
+        "gain": 3.0,
+        "fade": 1.0
+      }
+    ],
+    "effects_peak_limit": 0.16,
+    "music_ducking": false,
+    "music_layer_pcm_sha256": "ef21043818072869cd201a0dce51f6b5309d1113ec68bc66a8c415fa2053c63d"
+  },
+  "superevent_stelander_sotnikov_directory_sound": {
+    "artist": "Phragments",
+    "title": "The Return",
+    "album": "Earth Shall Not Cover Their Blood",
+    "source_page": "https://phragments.bandcamp.com/track/the-return",
+    "license": "All rights reserved",
+    "source_file": "tools/assets/source/superevents/STP/phragments_the_return_excerpt.flac",
+    "source_start_seconds": 80,
+    "duration_seconds": 56,
+    "source_sha256": "55167052a9e682f413ac514b35165a97209e2ba79b39d41f1352ec727c712041",
+    "rationale": "Somber orchestral-industrial music for permanent military administration.",
+    "processing": "56-second music layer: loudness target -18 LUFS and -2 dBTP, 1-second fade in and 5-second fade out. Additive effects; no music ducking, master normalization or master limiter.",
+    "runtime_file": "sound/superevents/superevent_stelander_sotnikov_directory_sound.wav",
+    "runtime_sha256": "34aa99f89062b77facbb8a9e260682f85ed6f04d713fdce238772c358ac575b8",
+    "effects": [
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 4,
+        "offset": 0,
+        "duration": 8,
+        "gain": 0.5,
+        "fade": 1.2
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 15,
+        "offset": 1,
+        "duration": 2,
+        "gain": 0.55,
+        "fade": 0.15
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 21,
+        "offset": 8,
+        "duration": 5,
+        "gain": 6.0,
+        "fade": 0.4
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 29,
+        "offset": 5,
+        "duration": 2,
+        "gain": 0.45,
+        "fade": 0.15
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 37,
+        "offset": 2,
+        "duration": 9,
+        "gain": 0.4,
+        "fade": 1.5
+      }
+    ],
+    "effects_peak_limit": 0.16,
+    "music_ducking": false,
+    "music_layer_pcm_sha256": "71beb2b2a822e9126452ccdfd4ec66062fe7b93b9b3c676f55d1cc1f2a7d0d02"
+  },
+  "superevent_stelander_sotnikov_charter_sound": {
+    "artist": "Danny Norbury",
+    "title": "Light in August",
+    "album": "Light In August",
+    "source_page": "https://flau.bandcamp.com/track/light-in-august",
+    "license": "All rights reserved",
+    "source_file": "tools/assets/source/superevents/STP/danny_norbury_light_in_august_excerpt.flac",
+    "source_start_seconds": 35,
+    "duration_seconds": 56,
+    "source_sha256": "05333b8db3a1c9290686cc6c6c07d2ade7a9d830316137dafbebf9837b681e6c",
+    "rationale": "Intimate chamber music for the transition from military authority to humane constitutional rule.",
+    "processing": "56-second music layer: loudness target -18 LUFS and -2 dBTP, 1-second fade in and 5-second fade out. Additive effects; no music ducking, master normalization or master limiter.",
+    "runtime_file": "sound/superevents/superevent_stelander_sotnikov_charter_sound.wav",
+    "runtime_sha256": "1279b380cd1b2eda37c1b8bc0f6546a56acd1803fbc430794b4e03547017734a",
+    "effects": [
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 5,
+        "offset": 2,
+        "duration": 5,
+        "gain": 6.0,
+        "fade": 0.4
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 12,
+        "offset": 1,
+        "duration": 9,
+        "gain": 1.2,
+        "fade": 1.0
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 30,
+        "offset": 15,
+        "duration": 4,
+        "gain": 5.0,
+        "fade": 0.4
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 39,
+        "offset": 5,
+        "duration": 9,
+        "gain": 1.0,
+        "fade": 1.5
+      }
+    ],
+    "effects_peak_limit": 0.16,
+    "music_ducking": false,
+    "music_layer_pcm_sha256": "82868d0d303bc0b29bb63a5bdffcf7e02bbf243b6d4cbc8bdd1b5bc0b2e6652d"
+  },
+  "sound_effect_sources": {
+    "sfx_pen_writing.flac": {
+      "title": "Pen or marker writing on paper - close up",
+      "artist": "khenshom",
+      "source_page": "https://freesound.org/people/khenshom/sounds/565206/",
+      "source_audio": "https://cdn.freesound.org/previews/565/565206_6652872-hq.mp3",
+      "license": "CC0",
+      "file": "sfx_pen_writing.flac",
+      "sha256": "98374b0948430317584371ed4d80d741078677505f864bfc55d823f2d541f6d9",
+      "duration_seconds": 32.783379
+    },
+    "sfx_small_applause.flac": {
+      "title": "Small crowd clapping",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/applause/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3035/3035-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_small_applause.flac",
+      "sha256": "cf79ed0cb072df5cdfe30e7189e860a03c4ed42347c5590aba25f5a658ae47b5",
+      "duration_seconds": 15.0
+    },
+    "sfx_radio_crackle.flac": {
+      "title": "Radio noise static and crackles",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/radio/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1446/1446-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_radio_crackle.flac",
+      "sha256": "6111f0b2151117c2cfb950025e4d7b7e96514c68b52d80868f9ebd826c2920ff",
+      "duration_seconds": 10.982971
+    },
+    "sfx_courtyard.flac": {
+      "title": "Calm park with people and children",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/park/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/367/367-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_courtyard.flac",
+      "sha256": "7101cbc2d0feebcfcb7a2f0f07456537235c2541351dd73a4c0c402548f3175f",
+      "duration_seconds": 105.858005
+    },
+    "sfx_light_hammering.flac": {
+      "title": "Light hammering on metal",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/construction/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/798/798-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_light_hammering.flac",
+      "sha256": "80150a777121d59ac71f01408982c0af603844eaee2414a58956607ecee9c7aa",
+      "duration_seconds": 3.6
+    },
+    "sfx_hand_saw.flac": {
+      "title": "Hand saw tool on wood",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/construction/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/827/827-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_hand_saw.flac",
+      "sha256": "cc3e078d8f3b41340d12d339390b28a410481c637ed2578253f434d1c4adf07a",
+      "duration_seconds": 1.757982
+    },
+    "committee_marching.mp3": {
+      "artist": "stib",
+      "title": "marching-concrete-loop.aif",
+      "source": "https://freesound.org/people/stib/sounds/240732/",
+      "license": "CC0",
+      "sha256": "90cb7576725ec7a271836277e20bbf975f5dfabc171990400e7638135e3a940b",
+      "file": "../IVN/committee_marching.mp3"
+    },
+    "sfx_banquet_room.flac": {
+      "file": "sfx_banquet_room.flac",
+      "title": "Hotel conversation and laughter with dining noise",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/restaurant/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/366/366-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "sha256": "5ee213f3b6f2439b3ff4e9d79de4257dd5655f8da68680f96085f5e7ca5fa456"
+    },
+    "sfx_wine_glass.flac": {
+      "file": "sfx_wine_glass.flac",
+      "title": "Wine glass clink",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/restaurant/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2936/2936-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "sha256": "aabca41a50234e7f6cba714ea3a07a7513829259064b56b90344a54ce5c3afe9"
+    },
+    "sfx_toast_glasses.flac": {
+      "file": "sfx_toast_glasses.flac",
+      "title": "A couple of glasses clink",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/restaurant/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/154/154-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "sha256": "c0630da0586887f09ea9f9743ef324fc20664cf076ee149b8ea5fbe54321d2ad"
+    },
+    "sfx_rifle_cocking.flac": {
+      "file": "sfx_rifle_cocking.flac",
+      "title": "Gun Cocking Sound.wav",
+      "artist": "ricexzeeb",
+      "source_page": "https://freesound.org/people/ricexzeeb/sounds/262598/",
+      "source_audio": "https://cdn.freesound.org/previews/262/262598_957169-hq.mp3",
+      "license": "CC0",
+      "sha256": "ec95ab4f0a4430cb2a1c16743a9b45276033b543ec7ba14795614f0ccecd2c61"
+    },
+    "sfx_guard_steps.flac": {
+      "file": "sfx_guard_steps.flac",
+      "title": "Walking on stones loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/footsteps/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1269/1269-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "sha256": "2d90aadd1d572c4fb20da9c8536a48cc7b079d37a8605b28fb61a430ccfb21ca"
+    },
+    "tank_medium.ogg": {
+      "file": "../IVN/tank_medium.ogg",
+      "source": "Hearts of Iron IV tank animation sound",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "4d7f8b16771f449968276900c3f1a48186528bf34efb5a67c8e8cbde6b5620a4"
+    },
+    "tank_light.ogg": {
+      "file": "../IVN/tank_light.ogg",
+      "source": "Hearts of Iron IV tank animation sound",
+      "license": "Base-game sound; runtime mod derivative",
+      "sha256": "f5ed494a3b55954b3d3782158a674fcbd769388bad975a529c1a670bb5f594db"
+    },
+    "sfx_ship_engine.flac": {
+      "file": "sfx_ship_engine.flac",
+      "title": "Ship engine loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/boat/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3077/3077-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 5.799478,
+      "sha256": "1c84597747db858a5e484802559157ee8a38f8786918b518eaacf84e3672507a"
+    },
+    "sfx_old_typewriter.flac": {
+      "file": "sfx_old_typewriter.flac",
+      "title": "Old typewriter typing",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/typewriter/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1372/1372-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 24.398209,
+      "sha256": "ddb4b24a86b1b515bec4874d15e944f841d2c0640f796e7ec5c958615e941026"
+    },
+    "sfx_vintage_camera.flac": {
+      "file": "sfx_vintage_camera.flac",
+      "title": "Vintage camera shutter",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/camera/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1438/1438-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.159365,
+      "sha256": "24f36759ab74bb22999c1216ac61e9fde2b26225b192c3821d6800291e11da3d"
+    },
+    "sfx_paper_slide.flac": {
+      "file": "sfx_paper_slide.flac",
+      "title": "Paper slide",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/paper/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1530/1530-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.094263,
+      "sha256": "a59df6511ee99d74a7e17708d618d2d30368217fb262e40b4cb5840d931f80e9"
+    },
+    "sfx_cash_register.flac": {
+      "file": "sfx_cash_register.flac",
+      "artist": "CapsLok",
+      "title": "Cash Register",
+      "source_page": "https://freesound.org/people/CapsLok/sounds/184438/",
+      "source_audio": "https://cdn.freesound.org/previews/184/184438_850742-hq.mp3",
+      "license_urls": [
+        "http://creativecommons.org/publicdomain/zero/1.0/"
+      ],
+      "duration_seconds": 2.195828,
+      "sha256": "84c2f745e838add2d7a371dd7c2c5ca11eb51e5c75d40439e1c856fde3f15ca9"
+    },
+    "sfx_distant_ship_horn.flac": {
+      "file": "sfx_distant_ship_horn.flac",
+      "artist": "monotraum",
+      "title": "ship horn.wav",
+      "source_page": "https://freesound.org/people/monotraum/sounds/208714/",
+      "source_audio": "https://cdn.freesound.org/previews/208/208714_1756543-hq.mp3",
+      "license_urls": [
+        "http://creativecommons.org/publicdomain/zero/1.0/"
+      ],
+      "duration_seconds": 34.374875,
+      "sha256": "c53cebac9c0bc146e6acfe58b359ee7b999795824376d0d9a28c499292dabbf6"
+    },
+    "sfx_winter_wind.flac": {
+      "file": "sfx_winter_wind.flac",
+      "title": "Winter wind loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/wind/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1175/1175-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 13.277596,
+      "sha256": "2c4ed6cd2a24d0fb9f8f71f2951f3cf8a25e17387a8b2796a6a0b6efe511b6f9"
+    }
+  },
+  "superevent_stelander_party_victory_festival_sound": {
+    "music": [
+      {
+        "artist": "Circus Contraption",
+        "title": "Raining Pianos",
+        "source_page": "https://circuscontraption.bandcamp.com/track/raining-pianos",
+        "file": "circus_contraption_raining_pianos_excerpt.flac",
+        "excerpt_seconds": [
+          83,
+          107
+        ],
+        "sha256": "3ef3327c91548bcccb7f25c8d67e3b0ff636f68941552b7bf0d547073154f7df",
+        "rights": "Copyrighted recording; public artist/label preview."
+      },
+      {
+        "artist": "Cities Last Broadcast",
+        "title": "Lights Out",
+        "source_page": "https://cryochamber.bandcamp.com/track/lights-out",
+        "file": "cities_last_broadcast_lights_out_excerpt.flac",
+        "excerpt_seconds": [
+          15,
+          35
+        ],
+        "sha256": "36a8e7310c148ee0fa0b4b25459152304443bbde6fb1b5c471058b55ea3c794b",
+        "rights": "Copyrighted recording; public artist/label preview."
+      }
+    ],
+    "voice": {
+      "file": "festival_announcer.flac",
+      "source": "User-supplied ElevenLabs Professor Nathaniel Mandrake recording",
+      "sha256": "ee3802d9ae4bb669d0def5b7dfb7aa55b34137c13006dc87c9b892aace9a754c",
+      "start_seconds": 46,
+      "duration_seconds": 7.84
+    },
+    "effects": [
+      {
+        "file": "sfx_small_applause.flac",
+        "start": 2,
+        "duration": 6,
+        "source_ref": "sound_effect_sources.sfx_small_applause.flac"
+      },
+      {
+        "file": "sfx_radio_crackle.flac",
+        "windows_seconds": [
+          [
+            22,
+            24
+          ],
+          [
+            28,
+            32
+          ],
+          [
+            32,
+            36
+          ]
+        ],
+        "source_ref": "sound_effect_sources.sfx_radio_crackle.flac"
+      },
+      {
+        "file": "../IVN/panic_crowd.mp3",
+        "windows_seconds": [
+          [
+            35,
+            39
+          ],
+          [
+            41,
+            45.49
+          ]
+        ],
+        "artist": "JohnsonBrandEditing",
+        "source": "https://freesound.org/people/JohnsonBrandEditing/sounds/173945/",
+        "license": "CC0",
+        "sha256": "849517d555ee9e80937d8f01d6dea3ebfe21d7fe2dda7b487bfb0d5c88b7d338"
+      }
+    ],
+    "timeline_seconds": {
+      "clean_song": [
+        0,
+        24
+      ],
+      "original_loop_source": [
+        103,
+        107
+      ],
+      "original_phrase": [
+        20,
+        24
+      ],
+      "additional_repeats": [
+        [
+          24,
+          28
+        ],
+        [
+          28,
+          32
+        ],
+        [
+          32,
+          36
+        ]
+      ],
+      "horror_music": [
+        36,
+        56
+      ],
+      "announcer": [
+        46,
+        53.84
+      ]
+    },
+    "loop_processing": [
+      "lowpass",
+      "pitch -6 percent, compensated tempo, flanger",
+      "pitch -14 percent, compensated tempo, flanger, tremolo"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "mix": "Additive mixing without final normalization or compression; music change is authored at 36 seconds.",
+    "runtime_file": "sound/superevents/superevent_stelander_party_victory_festival_sound.wav",
+    "runtime_sha256": "9433c36301def19a9356e95a2715d2b666aed71e6532dbb3ad181cc19a44f12d"
+  },
+  "superevent_stelander_party_victory_houses_sound": {
+    "music": {
+      "artist": "Camerata Mediolanense",
+      "title": "Dolci Ire",
+      "album": "Vertute, Honor, Bellezza",
+      "source_page": "https://camerata-mediolanense.bandcamp.com/track/dolci-ire-2",
+      "file": "camerata_mediolanense_dolci_ire_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "757c3d81bb4e8acf410d3db824c84c8328cf78dd7dfab0ae48272a489cdfd28f",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "effects": [
+      {
+        "file": "sfx_banquet_room.flac",
+        "start": 0,
+        "duration": 56,
+        "loudness_lufs": -35,
+        "quiet_interval": [
+          20,
+          36
+        ],
+        "quiet_gain": 0.4
+      },
+      {
+        "file": "sfx_wine_glass.flac",
+        "starts": [
+          8,
+          17
+        ],
+        "gain": 0.2
+      },
+      {
+        "file": "sfx_toast_glasses.flac",
+        "start": 35.8,
+        "gain": 0.25
+      },
+      {
+        "file": "sfx_small_applause.flac",
+        "start": 37.2,
+        "source_start": 2,
+        "duration": 7,
+        "gain": 0.75
+      }
+    ],
+    "voice": {
+      "file": "houses_banquet_toast.flac",
+      "source": "User-supplied ElevenLabs Professor Nathaniel Mandrake banquet toast",
+      "sha256": "73d5075b0c5adaa588ccb4a8c23a856e5087c34c645964a7c56865db34107ebd",
+      "start_seconds": 20,
+      "duration_seconds": 14.96,
+      "room_echo_ms": [
+        65,
+        110
+      ]
+    },
+    "reserved_toast_seconds": [
+      20,
+      36
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -20,
+    "mix": "Additive mixing without master normalization or compression. Only guest ambience settles during the toast slot.",
+    "runtime_file": "sound/superevents/superevent_stelander_party_victory_houses_sound.wav",
+    "runtime_sha256": "1d42cb1c6488c3f623547e71c6544601dc0290b28782b6812172955a0cc2b6a7"
+  },
+  "superevent_stelander_party_victory_staff_sound": {
+    "music": {
+      "artist": "Phragments",
+      "title": "All Towers Must Fall",
+      "source_page": "https://phragments.bandcamp.com/album/all-towers-must-fall",
+      "file": "phragments_all_towers_must_fall_excerpt.flac",
+      "excerpt_seconds": [
+        90,
+        146
+      ],
+      "sha256": "35be1a333d32164f86ced191eaf4d83b3783f882bc38cb206c3bd82291035f7a",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": {
+      "file": "staff_broadcast.flac",
+      "source": "User-supplied ElevenLabs Edward announcement",
+      "sha256": "e579ec667cd03e8020594b1a383207f87892ac7c3eaf5aececcea07cc605f99c",
+      "start_seconds": 21,
+      "original_duration_seconds": 10.98,
+      "processing": "Highpass 120 Hz, lowpass 6500 Hz, -18 LUFS, 80 ms echo at 0.08 gain."
+    },
+    "effects": [
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 1,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.7,
+        "fade": 0.2,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/tank_medium.ogg",
+        "start": 5,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.14,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 20,
+        "offset": 2,
+        "duration": 1,
+        "gain": 0.15,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/staff_broadcast.flac",
+        "start": 21,
+        "offset": 0,
+        "duration": 11.06,
+        "gain": 1.0,
+        "fade": 0.02,
+        "peak_limit": 0.75
+      },
+      {
+        "source": "IVN/tank_light.ogg",
+        "start": 39,
+        "offset": 0,
+        "duration": 10,
+        "gain": 0.07,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 43,
+        "offset": 1,
+        "duration": 7,
+        "gain": 0.45,
+        "fade": 0.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_rifle_cocking.flac",
+        "start": 50.5,
+        "offset": 2.45,
+        "duration": 0.9,
+        "gain": 0.65,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_stelander_party_victory_staff_sound.wav",
+    "runtime_sha256": "dec6244f5a9099969137d779a4c5c42ed4eaec2d807e7447570f2d53f77a2b75"
+  },
+  "superevent_stelander_party_victory_wallets_sound": {
+    "music": {
+      "artist": "Trigg & Gusset",
+      "title": "Vanishing Gold",
+      "album": "Adagio for the Blue",
+      "source_page": "https://triggandgusset.bandcamp.com/album/adagio-for-the-blue",
+      "file": "trigg_gusset_vanishing_gold_excerpt.flac",
+      "excerpt_seconds": [
+        40,
+        96
+      ],
+      "sha256": "43d1aab5af5a41160f9538902c7f9a8ca14bb979f26fe68aa65bd45b8ac1772a",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": {
+      "file": "lanskoy_address.flac",
+      "source": "User-supplied ElevenLabs Gideon address",
+      "sha256": "05f3f9004021076af19d256620957fc9c4a186cf09898ecdc9b6e1c9bef6a441",
+      "start_seconds": 21,
+      "original_duration_seconds": 9.52,
+      "processing": "Highpass 80 Hz, -18 LUFS, 60 ms room echo at 0.05 gain."
+    },
+    "effects": [
+      {
+        "source": "STP/sfx_ship_engine.flac",
+        "start": 2,
+        "offset": 0,
+        "duration": 17,
+        "gain": 0.1,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_distant_ship_horn.flac",
+        "start": 2,
+        "offset": 1.5,
+        "duration": 7,
+        "gain": 0.4,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_old_typewriter.flac",
+        "start": 10,
+        "offset": 3,
+        "duration": 5,
+        "gain": 0.22,
+        "fade": 0.25,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 16,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.5,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 17.5,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.4,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 19,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.32,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/lanskoy_address.flac",
+        "start": 21,
+        "offset": 0,
+        "duration": 9.58,
+        "gain": 1.0,
+        "fade": 0.02,
+        "peak_limit": 0.75
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 32,
+        "offset": 3,
+        "duration": 6,
+        "gain": 0.7,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_cash_register.flac",
+        "start": 40,
+        "offset": 0,
+        "duration": 2.19,
+        "gain": 0.35,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_ship_engine.flac",
+        "start": 42,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.08,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_old_typewriter.flac",
+        "start": 44,
+        "offset": 11,
+        "duration": 4,
+        "gain": 0.14,
+        "fade": 0.3,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_distant_ship_horn.flac",
+        "start": 49,
+        "offset": 10,
+        "duration": 6,
+        "gain": 0.22,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_stelander_party_victory_wallets_sound.wav",
+    "runtime_sha256": "38fb900c15d61fe2bfb4aefc7713edbce5f0e934180f452f07a9d73d4bbfee8c"
+  },
+  "superevent_stelander_party_victory_regent_sound": {
+    "music": {
+      "artist": "Peter Bjärgö",
+      "title": "To Replace My Sadness",
+      "album": "Animus Retinentia",
+      "source_page": "https://peterbjargo.bandcamp.com/track/to-replace-my-sadness",
+      "file": "peter_bjargo_to_replace_my_sadness_excerpt.flac",
+      "excerpt_seconds": [
+        35,
+        91
+      ],
+      "sha256": "222de9558dd5241ef3917765bb52ebf1709d9479189ccdf004c07e943ed9b54f",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": {
+      "file": "renner_address.flac",
+      "source": "User-supplied ElevenLabs Tarquin address",
+      "sha256": "8e8be2d0b1e20f2ae38aadf8c6f05d71aa6c7d203fdb49ebb1b1661dadcf7a35",
+      "start_seconds": 18,
+      "original_duration_seconds": 14.56,
+      "processing": "Highpass 80 Hz, -18 LUFS, 70 ms room echo at 0.05 gain."
+    },
+    "effects": [
+      {
+        "source": "STP/sfx_winter_wind.flac",
+        "start": 0,
+        "offset": 0,
+        "duration": 56,
+        "gain": 0.1,
+        "fade": 4.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 6,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.35,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 8,
+        "offset": 10,
+        "duration": 4,
+        "gain": 4.0,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 14,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.28,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/renner_address.flac",
+        "start": 18,
+        "offset": 0,
+        "duration": 14.63,
+        "gain": 1.0,
+        "fade": 0.02,
+        "peak_limit": 0.75
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 34,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.25,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 36,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.24,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 38,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.18,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": {
+      "gain_db": -5,
+      "fade_down_seconds": [
+        17.5,
+        18
+      ],
+      "hold_seconds": [
+        18,
+        32.7
+      ],
+      "fade_up_seconds": [
+        32.7,
+        33.5
+      ]
+    },
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing with a scheduled five-decibel music dip during the address; speech and effects retain their levels. No master normalization or compression.",
+    "runtime_file": "sound/superevents/superevent_stelander_party_victory_regent_sound.wav",
+    "runtime_sha256": "26c6722fc87d2d9f0ce54dad4d858bb447e0a22b718d978065278d880b3f7151"
+  }
+}

@@ -767,6 +767,14 @@ STP_cw_begin_elections = {
 		}
 		STP_cw_open_preparation = yes
 		set_country_flag = STP_cw_elections_started
+		if = {
+			limit = {
+				is_ai = no
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+			country_event = { id = ADISCORD_STP_pv.3 hours = 1 }
+		}
+		else = { STP_pv_select_ai_candidate = yes }
 		# Ivanov remains the public face until the election result replaces the presidency.
 		remove_mission = ivanov_health_is_getting_worse
 		set_variable = { var = STP_cw_completed_public_campaigns value = 0 }
@@ -784,6 +792,8 @@ STP_cw_begin_elections = {
 STP_cw_finish_elections = {
 	if = {
 		limit = { has_country_flag = STP_cw_elections_started NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } }
+		# Select the party opponent's preference before the player handoff.
+		STP_pv_select_ai_candidate = yes
 		set_country_flag = STP_cw_elections_finished
 		STP_cw_end_party_preparation_mandate = yes
 		# Freeze the mandate before closing the BOP or distributing army reserves.
@@ -3448,6 +3458,7 @@ STP_cw_begin_hostilities = {
 		}
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
+			STP_pv_select_ai_candidate = yes
 			set_global_flag = STP_cw_started
 			hidden_effect = {
 				# A pending player handoff must finish before queuing its opening.
@@ -8198,6 +8209,7 @@ STP_debug_party_select_leader = {
 				compare = less_than_or_equals
 			}
 		}
+		set_variable = { var = STP_pv_mandate value = STP_debug_party_choice }
 		set_variable = {
 			var = STP_ch_government
 			value = STP_debug_party_choice
@@ -12889,7 +12901,7 @@ STP_ch_initialize = {
 		}
 		set_variable = {
 			var = STP_ch_nominee
-			value = 0
+			value = STP_pv_mandate
 		}
 		set_variable = {
 			var = STP_ch_cooperation
@@ -14392,6 +14404,29 @@ STP_ch_elect_3 = {
 	}
 }
 
+STP_ch_elect_6 = {
+	if = {
+		limit = {
+			STP_ch_candidate_6_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 6
+		}
+		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
+		STP_ch_leader_6 = yes
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
 STP_ch_begin_crisis = {
 	if = {
 		limit = {
@@ -15055,133 +15090,14 @@ STP_ch_schedule_refresh = {
 	}
 }
 
-# Choose once from the inherited delegates; later coalition agreements keep this nominee.
+# Delegation negotiations use the civil-war victor, for both AI and human governments.
 STP_ch_select_ai_nominee = {
 	if = {
 		limit = {
-			is_ai = yes
-			check_variable = {
-				var = STP_ch_nominee
-				value = 0
-				compare = equals
-			}
+			has_variable = STP_pv_mandate
+			check_variable = { var = STP_ch_nominee value = 0 compare = equals }
 		}
-		set_variable = {
-			var = STP_ch_nominee
-			value = 1
-		}
-		if = {
-			limit = {
-				check_variable = {
-					var = STP_ch_votes_2
-					value = STP_ch_votes_1
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_2
-					value = STP_ch_votes_3
-					compare = greater_than_or_equals
-				}
-				check_variable = {
-					var = STP_ch_votes_2
-					value = STP_ch_votes_4
-					compare = greater_than_or_equals
-				}
-				check_variable = {
-					var = STP_ch_votes_2
-					value = STP_ch_votes_5
-					compare = greater_than_or_equals
-				}
-			}
-			set_variable = {
-				var = STP_ch_nominee
-				value = 2
-			}
-		}
-		if = {
-			limit = {
-				check_variable = {
-					var = STP_ch_votes_3
-					value = STP_ch_votes_1
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_3
-					value = STP_ch_votes_2
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_3
-					value = STP_ch_votes_4
-					compare = greater_than_or_equals
-				}
-				check_variable = {
-					var = STP_ch_votes_3
-					value = STP_ch_votes_5
-					compare = greater_than_or_equals
-				}
-			}
-			set_variable = {
-				var = STP_ch_nominee
-				value = 3
-			}
-		}
-		if = {
-			limit = {
-				check_variable = {
-					var = STP_ch_votes_4
-					value = STP_ch_votes_1
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_4
-					value = STP_ch_votes_2
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_4
-					value = STP_ch_votes_3
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_4
-					value = STP_ch_votes_5
-					compare = greater_than_or_equals
-				}
-			}
-			set_variable = {
-				var = STP_ch_nominee
-				value = 4
-			}
-		}
-		if = {
-			limit = {
-				check_variable = {
-					var = STP_ch_votes_5
-					value = STP_ch_votes_1
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_5
-					value = STP_ch_votes_2
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_5
-					value = STP_ch_votes_3
-					compare = greater_than
-				}
-				check_variable = {
-					var = STP_ch_votes_5
-					value = STP_ch_votes_4
-					compare = greater_than
-				}
-			}
-			set_variable = {
-				var = STP_ch_nominee
-				value = 5
-			}
-		}
+		set_variable = { var = STP_ch_nominee value = STP_pv_mandate }
 	}
 }
 
@@ -15192,7 +15108,7 @@ STP_ch_leader_1 = {
 	}
 	# The High Houses' civil-war victory gives their presidium a named chairman.
 	if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 1 compare = equals } }
 		if = {
 			limit = { NOT = { has_country_leader = { character = STP_Cyan_Crowe } } }
 			add_country_leader_role = {
@@ -15573,9 +15489,11 @@ STP_ch_restore_independent_leader = {
 		}
 		STP_ch_leader_5 = yes
 	}
-	else = {
-		STP_ch_leader_1 = yes
+	else_if = {
+		limit = { check_variable = { var = STP_ch_government value = 6 compare = equals } }
+		STP_ch_leader_6 = yes
 	}
+	else = { STP_pv_install_victor = yes }
 }
 
 STP_ch_install_protectorate_leader = {
@@ -15698,11 +15616,32 @@ STP_ps_plot_timeout = {
 # PARTY WAR: INHERITANCE OF THE FESTIVAL
 # ============================================================
 # COUNTRY STP. The party's own civil war carries a strain gauge, bloc crises,
-# three timed front crises and six claims on the victory. The claims decide
-# who takes power when Shabrat is defeated; the congress later reads the
-# same outcome as the winner's mandate.
+# three timed front crises and six faction claims. Influence and support
+# determine the leader at victory; the postwar congress ratifies that result.
 
-# One-time start at the first defence tick of the party war.
+# AI preference is drawn once, including for the party opponent before a handoff.
+STP_pv_select_ai_candidate = {
+	if = {
+		limit = {
+			tag = STP
+			NOT = { has_variable = STP_pv_outcome }
+			OR = {
+				is_ai = yes
+				has_country_flag = STP_sided_with_Maksim_flag
+			}
+			NOT = { has_variable = STP_pv_supported_candidate }
+		}
+		random_list = {
+			24 = { set_variable = { var = STP_pv_supported_candidate value = 1 } }
+			22 = { set_variable = { var = STP_pv_supported_candidate value = 2 } }
+			18 = { set_variable = { var = STP_pv_supported_candidate value = 3 } }
+			14 = { set_variable = { var = STP_pv_supported_candidate value = 4 } }
+			14 = { set_variable = { var = STP_pv_supported_candidate value = 5 } }
+			8 = { set_variable = { var = STP_pv_supported_candidate value = 6 } }
+		}
+	}
+}
+
 STP_pv_begin_war = {
 	if = {
 		limit = {
@@ -16075,7 +16014,7 @@ STP_pv_front_failure = {
 	STP_pv_change_strain = yes
 }
 
-# Claims are display caches during the war and the authoritative input at victory.
+# Claims combine faction influence, public support and wartime achievements.
 # 1 Crowe and the High Houses, 2 Hedersett, 3 Veil, 4 Lanskoy, 5 Korvina, 6 Renner.
 STP_pv_refresh_claims = {
 	if = {
@@ -16094,7 +16033,7 @@ STP_pv_refresh_claims = {
 			}
 		}
 		set_variable = { var = STP_pv_claim_2 value = STP_pf_radicals_contribution }
-		# Hedersett already leads the wartime government.
+		# The festival apparatus provides Hedersett with an organisational base.
 		add_to_variable = { var = STP_pv_claim_2 value = 10 }
 		if = {
 			limit = { has_completed_focus = STP_pv_glory_festival }
@@ -16161,6 +16100,61 @@ STP_pv_refresh_claims = {
 		clamp_variable = { var = STP_pv_claim_4 min = 0 max = 100 }
 		clamp_variable = { var = STP_pv_claim_5 min = 0 max = 100 }
 		clamp_variable = { var = STP_pv_claim_6 min = 0 max = 100 }
+		# The endorsement replaces its previous bonus; it never accumulates on refresh.
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 1 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_1 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_1 value = 100 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 2 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_2 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_2 value = 100 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 3 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_3 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_3 value = 100 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 4 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_4 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_4 value = 100 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 5 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_5 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_5 value = 100 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pv_supported_candidate value = 6 compare = equals } }
+			add_to_variable = { var = STP_pv_claim_6 value = 15 }
+			# AI assistance makes every weighted preference a reachable victory course.
+			if = {
+				limit = { is_ai = yes }
+				add_to_variable = { var = STP_pv_claim_6 value = 100 }
+			}
+		}
 		# Ties keep the incumbent, then the generals, the service, the Houses, the money and the patron.
 		set_variable = { var = STP_pv_claim_lead value = 2 }
 		set_temp_variable = { var = STP_pv_best_claim value = STP_pv_claim_2 }
@@ -16314,10 +16308,7 @@ STP_pv_resolve_victory = {
 		}
 		STP_pv_refresh_claims = yes
 		set_variable = { var = STP_pv_outcome value = STP_pv_claim_lead }
-		if = {
-			limit = { NOT = { has_country_flag = STP_pf_initialized } }
-			set_variable = { var = STP_pv_outcome value = 2 }
-		}
+		set_variable = { var = STP_pv_mandate value = STP_pv_outcome }
 		# The debug choice survives the delayed settlement and is consumed before rewards.
 		if = {
 			limit = {
@@ -16326,6 +16317,7 @@ STP_pv_resolve_victory = {
 				check_variable = { var = STP_debug_party_victory_choice value = 6 compare = less_than_or_equals }
 			}
 			set_variable = { var = STP_pv_outcome value = STP_debug_party_victory_choice }
+			set_variable = { var = STP_pv_mandate value = STP_debug_party_victory_choice }
 		}
 		clear_variable = STP_debug_party_victory_choice
 		STP_pv_install_victor = yes
@@ -16337,23 +16329,23 @@ STP_pv_resolve_victory = {
 
 STP_pv_install_victor = {
 	if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 1 compare = equals } }
 		STP_ch_leader_1 = yes
 	}
 	else_if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 3 compare = equals } }
 		STP_ch_leader_3 = yes
 	}
 	else_if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 4 compare = equals } }
 		STP_ch_leader_4 = yes
 	}
 	else_if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 5 compare = equals } }
 		STP_ch_leader_5 = yes
 	}
 	else_if = {
-		limit = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
+		limit = { check_variable = { var = STP_pv_mandate value = 6 compare = equals } }
 		STP_ch_leader_6 = yes
 	}
 	else = {

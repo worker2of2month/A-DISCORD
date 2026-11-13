@@ -79,7 +79,55 @@ class OperationArtTests(unittest.TestCase):
         self.assertEqual(named_hierarchy(parse_clausewitz(source)), named_hierarchy(parse_clausewitz(output)))
         self.assertIn('GFX_ADISCORD_intelligence_dossier_top', output)
         start, end = ui._named_block_bounds(output, "containerWindowType", "phase_title_title")
-        self.assertRegex(output[start:end], r'position\s*=\s*\{ x=20 y=124 \}')
+        self.assertRegex(output[start:end], r'position\s*=\s*\{ x=20 y=116 \}')
+
+    def test_dossier_panel_starts_below_header_and_uses_light_text(self):
+        output = (ui.ROOT / "interface/operationoverview.gui").read_text(encoding="utf-8")
+        start, end = ui._named_block_bounds(output, "containerWindowType", "top_Window")
+        self.assertIn("position = { x=0 y=0 }", output[start:end])
+        for name in ("phase_entry_desc", "phase_title_name", "operation_outcome_text"):
+            start, end = ui._named_block_bounds(output, "instantTextboxType", name)
+            self.assertIn('font = "hoi_16mbs"', output[start:end])
+        for name in ("phase_entry_icon", "pin"):
+            start, end = ui._named_block_bounds(output, "iconType", name)
+            self.assertIn("scale = 0\n", output[start:end])
+        for role in ("top", "mid", "bottom", "caption"):
+            with Image.open(ui.OUTPUT_DIR / f"ADISCORD_intelligence_dossier_{role}.dds") as surface:
+                self.assertLess(surface.convert("L").getpixel((surface.width // 2, surface.height // 2)), 60)
+
+    def test_linear_light_applies_original_alpha_after_clipping(self):
+        source = Image.new("RGBA", (210, 176), (128, 128, 128, 255))
+        for colour, expected in ((255, 158), (0, 98)):
+            overlay = Image.new("RGBA", (895, 510), (colour, colour, colour, 60))
+            image = art.finish_photo(source, overlay, (210, 176))
+            self.assertEqual(image.getpixel((100, 100)), (expected, expected, expected, 255))
+
+    def test_phase_progress_uses_native_radius_inside_description_gutter(self):
+        output = ui.render_gui_files()[ui.ROOT / "interface/operationoverview.gui"].decode("utf-8")
+        start, end = ui._named_block_bounds(output, "iconType", "phase_progress_icon")
+        widget = output[start:end]
+        self.assertNotIn("scale", widget)
+        sprite = "GFX_ADISCORD_intelligence_phase_progress"
+        self.assertIn(f'spriteType = "{sprite}"', widget)
+        gfx = ui.render_gfx()
+        start, end = ui._named_block_bounds(gfx, "circularProgressBarType", sprite)
+        properties = {entry.key: entry.value for entry in parse_clausewitz(gfx[start:end])[0].value}
+        radius = int(properties["size"])
+        self.assertGreater(radius, 0)
+        self.assertLessEqual(radius, 12)
+        self.assertEqual(int(properties["rotation"]), 90)
+        self.assertEqual(int(properties["amount"]), 10)
+        for key in ("textureFile1", "textureFile2"):
+            self.assertTrue((ui.BASE_GAME / properties[key]).is_file())
+        self.assertIn("position = { x = 18 y = 10 }", widget)
+        self.assertGreaterEqual(18 - radius, 0)
+        self.assertLess(18 + radius, 38)
+
+    def test_crt_uses_the_recorded_superevent_psd_layer(self):
+        manifest = art.load_manifest()
+        layer = art.load_crt_layer(art.ROOT / manifest["overlay"]["source_file"], manifest)
+        self.assertEqual(layer.size, (895, 510))
+        self.assertEqual(layer.getchannel("A").getextrema(), (60, 60))
 
 
 if __name__ == "__main__":

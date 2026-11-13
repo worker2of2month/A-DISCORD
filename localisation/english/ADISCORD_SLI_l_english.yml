@@ -15,7 +15,7 @@
  STATE_709:0 "Stelander Islands"
  VICTORY_POINTS_16807:0 "Island Harbour"
  VAL_Island_Treaty:0 "Treaty with the Stelander Islands"
- VAL_Island_Treaty_desc:0 "Civil war on the mainland has ended the Nodrul mandate. The Island Council has declared independence, but its harbours still depend on neighbouring markets. This decision immediately annexes the Stelander Islands into Kefreyt with their territories and troops, without war or waiting for a council response."
+ VAL_Island_Treaty_desc:0 "Civil war on the mainland has ended the Nodrul mandate. The Island Council has declared independence, but its harbours still depend on neighbouring markets."
  VAL_island_treaty_available_tt:0 "The Stelander civil war has begun. Kefreyt is independent and has not capitulated. The islands are independent, at peace, outside any faction, and own and control their archipelago."
  ADISCORD_SLI.1.t:0 "The Stelander Islands Declare Independence"
  ADISCORD_SLI.1.d:0 "The outbreak of civil war in Stelander has reached the islands. Declaring that the old arrangement no longer ensures their safety, the Island Council has terminated the Nodrul mandate. The administration's flag, with its Stelander symbols, has been lowered above the harbour. A blue banner bearing seven white stars has taken its place.\n\nThe council will govern the islands independently. As fronts form on the mainland, the young republic must define its relations with Nodrul and Kefreyt. Independence alone guarantees neither safe shipping nor supplies."
@@ -23,3 +23,4 @@
  ADISCORD_SLI.3.t:0 "The Island Council Replies"
  ADISCORD_SLI.3.accepted:0 "The Island Council has accepted the accession treaty. The Stelander Islands have joined Kefreyt and their local forces have entered our command. The harbours and civil administration are joining the common system."
  ADISCORD_SLI.3.a:0 "The reply has arrived."
+ VAL_Island_Treaty_description_rules_tt:0 "This decision immediately annexes the Stelander Islands into Kefreyt with their territories and troops, without war or waiting for a council response."

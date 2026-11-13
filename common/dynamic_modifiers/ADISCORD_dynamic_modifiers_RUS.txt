@@ -104,6 +104,13 @@ RUS_favour_reactor_current = {
 }
 
 # Customer scope for 90 days after a war with RUS cuts the energy contract.
+# STATE for 180 days after a commandant levy took its men and rifles.
+RUS_ba_levy_burden = {
+	icon = GFX_idea_ADISCORD_law_military_total_defense_grid
+	local_manpower = -0.50
+	local_factories = -0.10
+}
+
 RUS_power_cut = {
 	icon = GFX_idea_ADISCORD_law_military_total_defense_grid
 	industrial_capacity_factory = -0.15

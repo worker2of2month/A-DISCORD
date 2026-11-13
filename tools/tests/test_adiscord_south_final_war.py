@@ -326,6 +326,70 @@ class SouthFinalWarContractTests(unittest.TestCase):
         self.assertEqual(sum(e.key == "ADISCORD_south_assign_bound_sides" for e in flatten(common)), 1)
         self.assertEqual(sum(e.key == "ADISCORD_south_record_key_states" for e in flatten(common)), 1)
 
+    def test_war_has_no_deadline_and_only_capitulation_settles_it(self):
+        effects = definitions(EFFECTS)
+        hostilities = flatten(effects["ADISCORD_south_begin_hostilities"])
+        delayed = [e for e in hostilities if e.key == "country_event" and any(item.key == "days" for item in e.value)]
+        self.assertEqual(delayed, [])
+        events = EVENTS.read_text(encoding="utf-8")
+        self.assertNotIn("ADISCORD_south_final_resolve_by_control", events)
+        for language in ("russian", "english"):
+            raw = (ROOT / f"localisation/{language}/ADISCORD_south_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
+            line = next(line for line in raw.splitlines() if line.startswith(" ADISCORD_south_status_war:"))
+            self.assertNotIn("900", line, language)
+
+    def test_champions_swap_into_war_trees_and_back_on_every_terminal_path(self):
+        from tools.builders.build_adiscord_focus_trees import SHARED_HISTORY_SOURCES, SOURCES
+        effects = definitions(EFFECTS)
+        hostilities = flatten(effects["ADISCORD_south_begin_hostilities"])
+        self.assertEqual(sum(e.key == "ADISCORD_south_load_war_tree" for e in hostilities), 2)
+        self.assertIn(("ADISCORD_south_restore_prior_tree", "yes"),
+                      [(e.key, e.value) for e in flatten(effects["ADISCORD_south_close_member_state"])])
+        self.assertEqual(scope_calls(body(EFFECTS, "ADISCORD_south_close_campaign_state"), "ADISCORD_south_close_member_state"),
+                         {"NAM", "SHL", "EFL", "AZH"})
+        for terminal in ("ADISCORD_south_final_resolve_shl_victory", "ADISCORD_south_final_resolve_north_victory",
+                         "ADISCORD_south_final_repel", "ADISCORD_south_final_resolve_without_hegemon"):
+            self.assertIn("ADISCORD_south_close_campaign_state = yes", body(EFFECTS, terminal), terminal)
+
+        def tree_values(source, check):
+            pairs = {}
+            for entry in flatten(source):
+                if entry.key not in ("if", "else_if"):
+                    continue
+                limit = block(entry.value, "limit")
+                trees = [e.value for e in flatten(limit) if e.key == check] if check == "has_focus_tree" else [
+                    scalar(e.value, "value") for e in flatten(limit)
+                    if e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_south_prior_tree"]
+                loads = [scalar(e.value, "tree") for e in entry.value if e.key == "load_focus_tree"]
+                values = [scalar(e.value, "value") for e in entry.value
+                          if e.key == "set_variable" and scalar(e.value, "var") == "ADISCORD_south_prior_tree"]
+                if len(trees) == 1 and (loads or values):
+                    pairs[trees[0]] = (values or loads)[0]
+            return pairs
+
+        recorded = tree_values(effects["ADISCORD_south_load_war_tree"], "has_focus_tree")
+        recorded.pop("SHL_focus")
+        restored = tree_values(effects["ADISCORD_south_restore_prior_tree"], "check_variable")
+        restored["6"] = scalar(block(next(e.value for e in flatten(effects["ADISCORD_south_restore_prior_tree"])
+                                          if e.key == "else"), "load_focus_tree"), "tree")
+        self.assertEqual({value: tree for tree, value in recorded.items()}, restored)
+        # Every tree a champion can hold, and both war trees, keep completions across a swap.
+        by_tree = {}
+        for source in SOURCES:
+            path = ROOT / "focus_trees" / source
+            text = path.read_text(encoding="utf-8")
+            match = re.search(r"(?m)^focus_tree = \{\s*\n\s*id = (\w+)", text)
+            if match:
+                by_tree[match[1]] = source
+        for tree in (*restored.values(), "SHL_focus", "SHL_south_war_focus", "NAM_south_war_focus"):
+            self.assertIn(by_tree[tree], SHARED_HISTORY_SOURCES, tree)
+        for tree, tag in (("SHL_south_war_focus", "SHL"), ("NAM_south_war_focus", "NAM")):
+            source = parse_clausewitz((ROOT / "focus_trees" / by_tree[tree]).read_text(encoding="utf-8"))
+            weight = block(block(block(source, "focus_tree"), "country"), "modifier")
+            self.assertEqual(scalar(weight, "add"), "200", tree)
+            self.assertEqual(scalar(weight, "original_tag"), tag, tree)
+            self.assertEqual(scalar(weight, "ADISCORD_south_final_active"), "yes", tree)
+
     def test_effect_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS):
             self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)

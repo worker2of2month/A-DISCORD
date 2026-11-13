@@ -1,4 +1,8 @@
-"""Convert the supplied reservation illustration and build native terminal atlases."""
+"""Build the reservation terminal atlas and the RSV flags.
+
+The reservation wallpaper is finished author art: the supplied illustration
+was framed and given the CRT layer after export, so it is not regenerated.
+"""
 
 from __future__ import annotations
 
@@ -11,7 +15,6 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "gfx/interface/ADISCORD_western_continent"
-ART_SOURCE = ROOT / "tools/assets/source/ADISCORD_reservation_reference.png"
 # Whole DXT blocks keep stationary text identical across adjacent atlas frames.
 FRAME_SIZE = (240, 512)
 FRAME_COUNT = 17
@@ -107,14 +110,7 @@ def terminal_outputs() -> dict[Path, bytes]:
 
 
 def expected_outputs() -> dict[Path, bytes]:
-    # Keep the complete supplied composition inside the native picture frame.
-    artwork = Image.open(ART_SOURCE).convert("RGBA")
-    artwork.thumbnail((520, 270), Image.Resampling.LANCZOS)
-    wallpaper = Image.new("RGBA", (528, 278), (10, 15, 17, 255))
-    wallpaper.alpha_composite(artwork, ((528 - artwork.width) // 2, (278 - artwork.height) // 2))
-    ImageDraw.Draw(wallpaper).rectangle((2, 2, 525, 275), outline=(91, 101, 102, 255))
-    outputs = {OUTPUT / "reservation_wallpaper.dds": dds_bytes(wallpaper)}
-    outputs.update(terminal_outputs())
+    outputs = terminal_outputs()
     for size in ("", "medium", "small"):
         folder = ROOT / "gfx/flags" / size
         outputs[folder / "RSV.tga"] = (folder / "EXZ.tga").read_bytes()

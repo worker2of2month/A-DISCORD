@@ -418,27 +418,28 @@ class PartyQualityOfLifeTests(unittest.TestCase):
                     visible, {('STP', 'has_country_flag', phase): True}
                 ))
 
-    def test_chapter_nominee_selection_closes_all_other_choices_and_stale_callbacks(self):
-        for selected in range(6):
-            facts = {('STP', 'STP_ch_campaigning', 'yes'): True,
-                     ('STP', 'variable', 'STP_ch_nominee'): selected}
-            shown = [candidate for candidate in range(1, 6)
-                     if matches_conditions(block(self.decisions[f'STP_ch_nominate_{candidate}'], 'visible'), facts)]
-            self.assertEqual(shown, list(range(1, 6)) if selected == 0 else [])
-            for candidate in range(1, 6):
-                decision = self.decisions[f'STP_ch_nominate_{candidate}']
-                self.assertEqual(matches_conditions(block(decision, 'available'), facts), selected == 0)
-                writes = [entry.value for _, entry in selected_effects(block(decision, 'complete_effect'), facts)
-                          if entry.key == 'set_variable' and scalar(entry.value, 'var') == 'STP_ch_nominee']
-                self.assertEqual([scalar(value, 'value') for value in writes],
-                                 [str(candidate)] if selected == 0 else [])
+    def test_chapter_nomination_cannot_override_any_prewar_mandate(self):
+        for mandate in range(1, 7):
+            for selected in range(7):
+                facts = {('STP', 'STP_ch_campaigning', 'yes'): True,
+                         ('STP', 'variable', 'STP_pv_mandate'): mandate,
+                         ('STP', 'variable', 'STP_ch_nominee'): selected}
+                for candidate in range(1, 6):
+                    expected = selected == 0 and candidate == mandate
+                    decision = self.decisions[f'STP_ch_nominate_{candidate}']
+                    self.assertEqual(matches_conditions(block(decision, 'visible'), facts), expected)
+                    self.assertEqual(matches_conditions(block(decision, 'available'), facts), expected)
+                    writes = [scalar(e.value, 'value') for _, e in selected_effects(
+                        block(decision, 'complete_effect'), facts)
+                        if e.key == 'set_variable' and scalar(e.value, 'var') == 'STP_ch_nominee']
+                    self.assertEqual(writes, [str(candidate)] if expected else [])
 
-    def test_chapter_initialization_leaves_the_human_choice_open(self):
+    def test_chapter_initialization_preserves_the_prewar_choice(self):
         facts = {('STP', 'STP_pf_active', 'yes'): True,
                  ('STP', 'STP_pw_can_reconstruct', 'yes'): True}
         writes = [entry.value for _, entry in selected_effects(self.effects['STP_ch_initialize'], facts)
                   if entry.key == 'set_variable' and scalar(entry.value, 'var') == 'STP_ch_nominee']
-        self.assertEqual([scalar(value, 'value') for value in writes], ['0'])
+        self.assertEqual([scalar(value, 'value') for value in writes], ['STP_pv_mandate'])
         for candidate in range(1, 6):
             facts = {('STP', 'is_ai', 'yes'): True,
                      ('STP', 'variable', 'STP_ch_nominee'): candidate}

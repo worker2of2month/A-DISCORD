@@ -227,8 +227,8 @@ def _preview() -> Image.Image:
     return backdrop.convert("RGB")
 
 
-def expected_outputs() -> dict[Path, bytes]:
-    return {
+def expected_outputs(*, include_preview: bool = False) -> dict[Path, bytes]:
+    outputs = {
         POPUP_BG: _png_bytes(_popup_background()),
         POPUP_TOP: _png_bytes(_top_overlay()),
         POPUP_MIDDLE: _png_bytes(_middle_tile()),
@@ -237,6 +237,9 @@ def expected_outputs() -> dict[Path, bytes]:
         PREVIEW: _png_bytes(_preview()),
         TEST_PICTURE: _png_bytes(_test_picture()),
     }
+    if not include_preview:
+        outputs.pop(PREVIEW)
+    return outputs
 
 
 def main() -> int:
@@ -244,8 +247,9 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument("--preview", action="store_true", help="Include a temporary development contact sheet")
     args = parser.parse_args()
-    return apply_or_check(expected_outputs(), args.apply, "Event UI")
+    return apply_or_check(expected_outputs(include_preview=args.preview), args.apply, "Event UI")
 
 
 if __name__ == "__main__":

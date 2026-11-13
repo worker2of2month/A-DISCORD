@@ -42,14 +42,12 @@ ADISCORD_west_reconstruction_grace_elapsed = {
 }
 
 # GLOBAL. The Itoran intervention keeps its own settlement; the final campaign waits for it.
+# Any other war between the champions is taken over by the campaign.
 ADISCORD_west_final_can_start = {
 	ADISCORD_west_crisis_open = yes
 	ADISCORD_west_reconstruction_grace_elapsed = yes
 	event_target:ADISCORD_vorkerland_nation = { ADISCORD_west_champion_viable = yes }
-	IVN = {
-		ADISCORD_west_champion_viable = yes
-		NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
-	}
+	IVN = { ADISCORD_west_champion_viable = yes }
 	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
 	# Itora's revolt of the marches pauses the western question for both sides.
 	NOT = { has_global_flag = IVN_marches_revolt_active }

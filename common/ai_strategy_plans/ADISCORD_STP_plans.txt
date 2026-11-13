@@ -65,6 +65,10 @@ STP_shabrat_preparation_core_plan = {
 		STP_cw_arm_the_north
 		STP_cw_district_printing
 		STP_The_Silent_Mountain_March
+		# Below a 55% mandate only administrations transfer districts; the courier
+		# service then removes suspicion and adds the slot the inspections consume.
+		STP_cw_district_administration
+		STP_cw_courier_service
 		STP_cw_cabinet_archives
 		STP_cw_buy_silence
 		STP_cw_national_mandate
@@ -105,8 +109,6 @@ STP_shabrat_preparation_depth_plan = {
 		STP_cw_abila_workshops
 		STP_cw_warehouse_inventory
 		STP_cw_supply_officers
-		STP_cw_district_administration
-		STP_cw_courier_service
 		STP_cw_local_council_envoys
 		STP_cw_autonomy_guarantees
 		STP_Kefreite_Security_Offer

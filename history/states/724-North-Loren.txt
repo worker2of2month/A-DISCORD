@@ -3,7 +3,7 @@ state={
 	id=724
 	name="STATE_724"
 	resources = {
-		aluminium = 1
+		aluminium = 11
 	}
 	provinces={
 		1982 2167 5249 6051 6796 7220 7688 8738 10847 11763 12425 12576

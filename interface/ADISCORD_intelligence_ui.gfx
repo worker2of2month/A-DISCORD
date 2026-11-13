@@ -1,4 +1,8 @@
 spriteTypes = {
+    spriteType = {
+        name = "GFX_ADISCORD_intelligence_agency_header"
+        textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_agency_header.dds"
+    }
     frameAnimatedSpriteType = {
         name = "GFX_ADISCORD_intelligence_creation_glow"
         textureFile = "gfx/interface/intelligence/ui/ADISCORD_intelligence_creation_glow.dds"
@@ -161,4 +165,12 @@ spriteTypes = {
         borderSize = { x = 8 y = 8 }
         effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
     }
+	circularProgressBarType = {
+		name = "GFX_ADISCORD_intelligence_phase_progress"
+		textureFile1 = "gfx/interface/operations/circular_progress_bar_bg.dds"
+		textureFile2 = "gfx/interface/operations/circular_progress_bar.dds"
+		size = 10
+		rotation = 90
+		amount = 10
+	}
 }

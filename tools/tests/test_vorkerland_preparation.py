@@ -10273,7 +10273,8 @@ class CapitalHoverTextTests(unittest.TestCase):
                 hover = value(f"WRK_capital_{district}_tt")
                 self.assertIn(f"[{district}.GetName]", hover)
                 self.assertIn(f"[{district}.WRKGetCapitalDistrictNote]", hover)
-            self.assertIn("$ADISCORD_vorkerland_phase_worker_fate_tt$", value("WRK_capital_40_tt"))
+            # The capital-map builder exports the forecast inline, without a nested key.
+            self.assertIn("[GetVorkerlandWorkerFateForecast]", value("WRK_capital_40_tt"))
             self.assertIn("[WRKGetUnrestStatus]", value("WRK_capital_note_unrest"))
             self.assertIn("[WRKGetCellStatus]", value("WRK_capital_note_cell"))
             desc = value(V + "court_category_desc")
@@ -10330,16 +10331,39 @@ class VorkerlandDecisionIconTests(unittest.TestCase):
     # Decision sprites of the base game that Vorkerland decisions use. A name of
     # a focus or goal sprite resolves to nothing in the decision list.
     BASE_GAME = frozenset({
+        "border_war",
         "generic_air",
         "generic_army_support",
+        "generic_arrest",
+        "generic_civil_support",
+        "generic_confiscation",
         "generic_construction",
+        "generic_consumer_goods",
+        "generic_electricity",
+        "generic_factory",
         "generic_fortification",
+        "generic_fundraising",
+        "generic_guerilla_base",
         "generic_industry",
+        "generic_intelligence_operation",
+        "generic_military",
+        "generic_motorized",
         "generic_naval",
+        "generic_operation",
         "generic_police_action",
+        "generic_political_address",
         "generic_political_discourse",
+        "generic_political_rally",
         "generic_prepare_civil_war",
         "generic_research",
+        "generic_speech",
+        "generic_tank",
+        "generic_train",
+        "generic_trucks",
+        "generic_welfare",
+        "generic_wreckers",
+        "infiltrate_state",
+        "oppression",
     })
 
     def test_every_decision_icon_names_a_decision_sprite(self):
@@ -10360,15 +10384,28 @@ class VorkerlandIdeaPictureTests(unittest.TestCase):
     BASE_GAME = frozenset({
         "ARG_anti_american_propaganda",
         "CHI_china_merchant_group",
+        "citizen_militia_1",
+        "citizen_militia_2",
+        "generic_army_problems",
+        "generic_army_war_college",
+        "generic_artillery_manufacturer_1",
         "generic_artillery_regiments",
         "generic_build_infrastructure",
         "generic_central_management",
+        "generic_communist_army",
         "generic_constitutional_guarantees",
         "generic_disjointed_gov",
+        "generic_economic_recovery",
+        "generic_exploit_mines",
         "generic_fortify_the_borders",
+        "generic_guerilla_warfare",
+        "generic_improved_industries",
         "generic_infantry_bonus",
         "generic_intel_bonus",
+        "generic_logistics",
         "generic_manpower_bonus",
+        "generic_monarchist_uprising",
+        "generic_morale_bonus",
         "generic_neglected_military",
         "generic_oppression",
         "generic_political_support",
@@ -10376,7 +10413,13 @@ class VorkerlandIdeaPictureTests(unittest.TestCase):
         "generic_production_bonus",
         "generic_research_bonus",
         "generic_reserve_divisions",
+        "generic_secret_police",
+        "generic_spy_intel",
+        "generic_supply_depot",
+        "generic_supply_line",
+        "generic_victors_of_ww1",
         "generic_volunteer_expedition_bonus",
+        "generic_wall_line",
         "generic_war_preparation",
     })
 

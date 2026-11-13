@@ -7,7 +7,12 @@ ideas = {
 			default = no
 			allowed = { tag = NAM }
 			visible = { has_country_flag = NAM_corp_takeover }
-			available = { NAM_board_operable = yes }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
 			allowed_to_remove = { always = yes }
 			on_add = {
 				custom_effect_tooltip = NAM_board_bank_appointment_tt
@@ -37,7 +42,12 @@ ideas = {
 			default = no
 			allowed = { tag = NAM }
 			visible = { has_country_flag = NAM_corp_takeover }
-			available = { NAM_board_operable = yes }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
 			allowed_to_remove = { always = yes }
 			on_add = {
 				custom_effect_tooltip = NAM_board_labor_appointment_tt
@@ -79,8 +89,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		ADISCORD_nam_extraction_defence_corps = {
@@ -174,9 +192,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				max_dig_in = 1
 			}
@@ -187,9 +218,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				army_attack_factor = 0.05
 				planning_speed = 0.1
@@ -201,8 +245,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			cancel = { NOT = { has_war_with = SLF } }
 			modifier = { }
 			targeted_modifier = {
@@ -216,8 +268,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = -0.03
 				industrial_capacity_factory = -0.03
@@ -229,8 +289,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_speed_buildings_factor = 0.05
 			}
@@ -241,9 +309,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { NOT = { ADISCORD_south_final_active = yes } }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_south_war_spirit_ended_tt
+					NOT = { ADISCORD_south_final_active = yes }
+				}
+			}
 			modifier = {
 				army_org_factor = 0.05
 				planning_speed = 0.10
@@ -255,9 +336,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { NOT = { ADISCORD_south_final_active = yes } }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_south_war_spirit_ended_tt
+					NOT = { ADISCORD_south_final_active = yes }
+				}
+			}
 			modifier = {
 				army_attack_factor = 0.10
 				planning_speed = 0.10
@@ -719,8 +813,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				political_power_gain = 0.30
 				ADISCORD_economy_tax_collection_factor = 0.10
@@ -733,8 +835,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				fuel_gain_factor = 0.30
 				production_factory_efficiency_gain_factor = 0.10
@@ -747,8 +857,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.10
 				production_speed_buildings_factor = 0.15
@@ -761,8 +879,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				army_org_factor = 0.10
 				army_defence_factor = 0.10
@@ -775,8 +901,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.20
 				consumer_goods_factor = -0.03
@@ -790,8 +924,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				political_power_gain = 0.15
 				war_support_factor = 0.05
@@ -806,8 +948,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				political_power_gain = 0.15
 				compliance_gain = 0.05
@@ -822,8 +972,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.08
 				ADISCORD_economy_admin_expense_factor = -0.05
@@ -837,8 +995,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.12
 				production_speed_buildings_factor = 0.08
@@ -852,8 +1018,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				fuel_gain_factor = 0.20
 				local_resources_factor = 0.10
@@ -867,8 +1041,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.05
 				political_power_gain = 0.05
@@ -882,8 +1064,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.10
 				production_factory_efficiency_gain_factor = 0.08
@@ -899,8 +1089,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				war_support_factor = 0.10
 				political_power_gain = 0.10
@@ -915,8 +1113,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.08
 				research_speed_factor = 0.03
@@ -930,8 +1136,16 @@ ideas = {
 			picture = generic_economic_crisis
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = -0.10
 				production_speed_buildings_factor = -0.15
@@ -945,8 +1159,16 @@ ideas = {
 			picture = generic_army_problems
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				army_org_factor = -0.10
 				army_morale_factor = -0.10
@@ -961,8 +1183,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				political_power_gain = -0.10
 			}
@@ -1009,8 +1239,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = 0.15
 				production_factory_max_efficiency_factor = 0.05
@@ -1022,8 +1260,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_speed_industrial_complex_factor = 0.2
 				ADISCORD_economy_trade_income_factor = 0.15
@@ -1035,8 +1281,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_speed_industrial_complex_factor = 0.15
 				consumer_goods_factor = -0.05
@@ -1048,8 +1302,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				stability_factor = 0.1
 				research_speed_factor = 0.1
@@ -1062,8 +1324,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.25
 				production_factory_max_efficiency_factor = 0.1
@@ -1075,8 +1345,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.15
 				ADISCORD_economy_trade_income_factor = 0.15
@@ -1277,14 +1555,137 @@ ideas = {
 			}
 		}
 
+		NAM_war_fuel_discipline_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
+			modifier = {
+				army_fuel_consumption_factor = -0.15
+				navy_fuel_consumption_factor = -0.15
+				air_fuel_consumption_factor = -0.15
+			}
+		}
+
+		NAM_war_extraction_surge_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
+			modifier = {
+				fuel_gain_factor = 0.25
+				local_resources_factor = 0.10
+				industrial_capacity_factory = -0.05
+			}
+		}
+
+		NAM_war_short_training_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
+			modifier = {
+				mobilization_speed = 0.25
+				training_time_army_factor = -0.15
+			}
+		}
+
+		NAM_war_veteran_cadres_idea = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
+			modifier = {
+				experience_loss_factor = -0.15
+				army_org_regain = 0.05
+			}
+		}
+
 		NAM_war_depot_network_idea = {
 			picture = GFX_idea_NAM_national_spirit
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				supply_consumption_factor = -0.1
 				army_org_regain = 0.08
@@ -1296,9 +1697,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				attrition = -0.15
 				army_speed_factor = 0.05
@@ -1310,9 +1724,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = 0.15
 				production_factory_efficiency_gain_factor = 0.1
@@ -1325,9 +1752,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				convoy_escort_efficiency = 0.2
 				navy_org_factor = 0.08
@@ -1339,9 +1779,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				air_intercept_efficiency = 0.2
 			}
@@ -1352,9 +1805,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				air_cas_efficiency = 0.15
 			}
@@ -1365,9 +1831,22 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			cancel = { ADISCORD_nam_resource_war_active = no }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_resource_war_spirit_ended_tt
+					ADISCORD_nam_resource_war_active = no
+				}
+			}
 			modifier = {
 				planning_speed = 0.2
 				max_planning = 0.1
@@ -1391,12 +1870,16 @@ ideas = {
 				}
 			}
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
-				NAM = { ADISCORD_economy_mark_dirty = yes }
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					NAM = { ADISCORD_economy_mark_dirty = yes }
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
-				NAM = { ADISCORD_economy_mark_dirty = yes }
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					NAM = { ADISCORD_economy_mark_dirty = yes }
+				}
 			}
 			targeted_modifier = {
 				tag = NAM
@@ -1410,8 +1893,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.15
 				political_power_gain = 0.20
@@ -1423,8 +1914,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = -0.15
 			}
@@ -1435,8 +1934,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				fuel_gain_factor = 0.20
 				local_resources_factor = 0.10
@@ -1448,8 +1955,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				fuel_gain_factor = -0.20
 				local_resources_factor = -0.10
@@ -1461,8 +1976,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_speed_buildings_factor = 0.15
 				stability_factor = 0.05
@@ -1474,8 +1997,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				production_speed_buildings_factor = -0.15
 			}
@@ -1486,8 +2017,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				army_org_factor = 0.10
 				army_org_regain = 0.15
@@ -1499,8 +2038,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				army_org_regain = -0.15
 			}
@@ -1511,8 +2058,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.20
 				consumer_goods_factor = -0.03
@@ -1524,8 +2079,16 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = -0.20
 			}

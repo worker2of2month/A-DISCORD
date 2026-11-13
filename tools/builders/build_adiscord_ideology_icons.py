@@ -29,17 +29,21 @@ def png_bytes(image: Image.Image) -> bytes:
     return buffer.getvalue()
 
 
-def outputs(root: Path = ROOT, only: set[str] | None = None):
+def outputs(root: Path = ROOT, only: set[str] | None = None, *, include_preview: bool = False):
+    """Masters seed missing textures; an installed texture carries the author's
+    final fit and grade and is re-exported only when named in only."""
     preview = Image.new("RGB", (220 * len(LABELS), 328), "#25242b")
     draw = ImageDraw.Draw(preview)
     font = ImageFont.load_default(size=17)
     draw.text((20, 12), "Subideology emblems - 125 px / 70 px", font=font, fill="#e2d9c9")
     for index, (subtype, label) in enumerate(LABELS.items()):
         texture = TEXTURES / f"{subtype}_group.png"
-        if only is not None and subtype not in only:
-            # Partial exports show the currently installed versions of other emblems.
-            with Image.open(root / texture) as current:
+        keep = subtype not in only if only is not None else (root / texture).is_file()
+        if keep:
+            data = (root / texture).read_bytes()
+            with Image.open(BytesIO(data)) as current:
                 icon = current.convert("RGBA")
+            yield texture, data
         else:
             with Image.open(root / SOURCE / f"{subtype}.png") as source:
                 if source.mode != "RGBA" or source.width != source.height:
@@ -52,7 +56,8 @@ def outputs(root: Path = ROOT, only: set[str] | None = None):
             sample = icon.resize((size, size), Image.Resampling.LANCZOS)
             preview.paste(sample, (index * 220 + (220 - size) // 2, top), sample)
         draw.text((index * 220 + 110, 286), label, font=font, fill="#e2d9c9", anchor="mt")
-    yield PREVIEW, png_bytes(preview)
+    if include_preview:
+        yield PREVIEW, png_bytes(preview)
 
 
 def main() -> int:
@@ -61,10 +66,12 @@ def main() -> int:
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--apply", action="store_true")
     parser.add_argument("--only", nargs="+", choices=tuple(LABELS),
-                        help="Export selected emblems and preview other installed textures.")
+                        help="Re-export selected emblems from their masters; others stay installed.")
+    parser.add_argument("--preview", action="store_true",
+                        help="Include the temporary political-window size comparison.")
     args = parser.parse_args()
     changed = []
-    for relative, data in outputs(only=set(args.only) if args.only else None):
+    for relative, data in outputs(only=set(args.only) if args.only else None, include_preview=args.preview):
         path = ROOT / relative
         if not path.exists() or path.read_bytes() != data:
             changed.append(relative)

@@ -515,6 +515,35 @@ STP_cw_shabrat_ai_risk_allowed = {
 	# A commission in another district does not close every operation.
 }
 
+# COUNTRY STP (AI): from 50 suspicion an ordinary operation must leave the price
+# of the next network dispersal (tiers of STP_cw_can_pay_disperse_network) plus
+# 75 PP for the operation itself. At 60 the party runs two shortened commissions
+# whose results outpace one dispersal every 40 days, and at 65 every district
+# operation closes to the AI; without this price it cannot get back below 60.
+# Other routes and tags pass unconditionally.
+STP_cw_shabrat_ai_cover_reserve_kept = {
+	OR = {
+		NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		check_variable = { var = STP_party_suspicion value = 50 compare = less_than }
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = less_than }
+			NOT = { has_political_power < 95 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 1 compare = equals }
+			NOT = { has_political_power < 115 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 2 compare = equals }
+			NOT = { has_political_power < 135 }
+		}
+		AND = {
+			check_variable = { var = STP_cw_disperse_uses value = 3 compare = greater_than_or_equals }
+			NOT = { has_political_power < 155 }
+		}
+	}
+}
+
 STP_cw_two_inspections_active = {
 	OR = {
 		AND = { 2 = { has_state_flag = STP_party_inspection_active } 3 = { has_state_flag = STP_party_inspection_active } }
@@ -3858,95 +3887,26 @@ STP_ch_no_crisis = {
 
 STP_ch_candidate_1_wins = {
 	STP_ch_current = yes
-	check_variable = {
-		var = STP_ch_phase
-		value = 3
-		compare = equals
-	}
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
 	has_country_flag = STP_ch_ballot_closed
 	is_subject = no
-	check_variable = {
-		var = STP_ch_votes_1
-		value = STP_ch_votes_2
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_1
-		value = STP_ch_votes_3
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_1
-		value = STP_ch_votes_4
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_1
-		value = STP_ch_votes_5
-		compare = greater_than_or_equals
-	}
+	check_variable = { var = STP_pv_mandate value = 1 compare = equals }
 }
 
 STP_ch_candidate_2_wins = {
 	STP_ch_current = yes
-	check_variable = {
-		var = STP_ch_phase
-		value = 3
-		compare = equals
-	}
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
 	has_country_flag = STP_ch_ballot_closed
 	is_subject = no
-	check_variable = {
-		var = STP_ch_votes_2
-		value = STP_ch_votes_1
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_2
-		value = STP_ch_votes_3
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_2
-		value = STP_ch_votes_4
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_2
-		value = STP_ch_votes_5
-		compare = greater_than_or_equals
-	}
+	check_variable = { var = STP_pv_mandate value = 2 compare = equals }
 }
 
 STP_ch_candidate_3_wins = {
 	STP_ch_current = yes
-	check_variable = {
-		var = STP_ch_phase
-		value = 3
-		compare = equals
-	}
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
 	has_country_flag = STP_ch_ballot_closed
 	is_subject = no
-	check_variable = {
-		var = STP_ch_votes_3
-		value = STP_ch_votes_1
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_3
-		value = STP_ch_votes_2
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_3
-		value = STP_ch_votes_4
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_3
-		value = STP_ch_votes_5
-		compare = greater_than_or_equals
-	}
+	check_variable = { var = STP_pv_mandate value = 3 compare = equals }
 }
 
 STP_ch_aid_offer_current = {
@@ -3991,64 +3951,18 @@ STP_ch_aid_affordable = {
 
 STP_ch_candidate_4_wins = {
 	STP_ch_current = yes
-	check_variable = {
-		var = STP_ch_phase
-		value = 3
-		compare = equals
-	}
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
 	has_country_flag = STP_ch_ballot_closed
 	is_subject = no
-	check_variable = {
-		var = STP_ch_votes_4
-		value = STP_ch_votes_1
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_4
-		value = STP_ch_votes_2
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_4
-		value = STP_ch_votes_3
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_4
-		value = STP_ch_votes_5
-		compare = greater_than_or_equals
-	}
+	check_variable = { var = STP_pv_mandate value = 4 compare = equals }
 }
 
 STP_ch_candidate_5_wins = {
 	STP_ch_current = yes
-	check_variable = {
-		var = STP_ch_phase
-		value = 3
-		compare = equals
-	}
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
 	has_country_flag = STP_ch_ballot_closed
 	is_subject = no
-	check_variable = {
-		var = STP_ch_votes_5
-		value = STP_ch_votes_1
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_5
-		value = STP_ch_votes_2
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_5
-		value = STP_ch_votes_3
-		compare = greater_than_or_equals
-	}
-	check_variable = {
-		var = STP_ch_votes_5
-		value = STP_ch_votes_4
-		compare = greater_than_or_equals
-	}
+	check_variable = { var = STP_pv_mandate value = 5 compare = equals }
 }
 
 # COUNTRY STP: a bounded AI campaign against the player, separate from paid STS operations.
@@ -4209,24 +4123,7 @@ STP_party_leader_2 = {
 		}
 		AND = {
 			NOT = { has_variable = STP_ch_government }
-			OR = {
-				check_variable = {
-					var = STP_pv_outcome
-					value = 2
-					compare = equals
-				}
-				AND = {
-					has_country_flag = STP_ch_liberated
-					OR = {
-						NOT = { has_variable = STP_pv_outcome }
-						check_variable = {
-							var = STP_pv_outcome
-							value = 6
-							compare = equals
-						}
-					}
-				}
-			}
+			check_variable = { var = STP_pv_outcome value = 2 compare = equals }
 		}
 	}
 }
@@ -4322,14 +4219,10 @@ STP_party_leader_6 = {
 	OR = {
 		has_country_flag = STP_ch_protectorate_leader
 		is_subject_of = NOD
+		check_variable = { var = STP_ch_government value = 6 compare = equals }
 		AND = {
 			NOT = { has_variable = STP_ch_government }
-			NOT = { has_country_flag = STP_ch_liberated }
-			check_variable = {
-				var = STP_pv_outcome
-				value = 6
-				compare = equals
-			}
+			check_variable = { var = STP_pv_outcome value = 6 compare = equals }
 		}
 	}
 }
@@ -5352,4 +5245,29 @@ STP_pi_case_capacity = {
 			}
 		}
 	}
+}
+
+# A stale nomination window cannot rewrite the mandate after selection or war entry.
+STP_pv_support_choice_open = {
+	tag = STP
+	has_capitulated = no
+	NOT = { has_variable = STP_pv_outcome }
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	OR = {
+		AND = {
+			has_country_flag = STP_cw_elections_started
+			has_country_flag = STP_sided_with_the_party_flag
+			NOT = { has_global_flag = STP_cw_started }
+		}
+		STP_pv_war_current = yes
+	}
+}
+
+STP_ch_candidate_6_wins = {
+	STP_ch_current = yes
+	check_variable = { var = STP_ch_phase value = 3 compare = equals }
+	has_country_flag = STP_ch_ballot_closed
+	is_subject = no
+	check_variable = { var = STP_pv_mandate value = 6 compare = equals }
 }

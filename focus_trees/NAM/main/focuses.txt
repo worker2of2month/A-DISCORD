@@ -64,9 +64,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -96,9 +99,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_concealed_reserve }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -145,9 +151,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_metropolitan_quota }
 		mutually_exclusive = { focus = NAM_deliver_the_quota }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -186,9 +195,12 @@ focus_tree = {
 			focus = NAM_concealed_reserve
 		}
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -226,9 +238,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_wrk_trade_house }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -265,9 +280,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_wrk_return_cargo }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -309,9 +327,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -346,9 +367,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_oilfield_militia }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -391,9 +415,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_colonial_watch }
 		mutually_exclusive = { focus = NAM_imperial_gendarmes }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -437,9 +464,12 @@ focus_tree = {
 			focus = NAM_oilfield_militia
 		}
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -486,9 +516,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_pipeline_patrols }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -518,9 +551,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_print_shop_raid }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -559,7 +595,12 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			if = {
-				limit = { NAM_colony_phase = yes }
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_colony_phase_condition_tt
+						NAM_colony_phase = yes
+					}
+				}
 				unlock_decision_tooltip = NAM_colonial_archive_transfer
 				custom_effect_tooltip = NAM_colonial_archive_transfer_unlock_tt
 			}
@@ -593,9 +634,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_inventory }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -625,9 +669,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_centre_hourglass }
 		mutually_exclusive = { focus = NAM_second_ledger }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -666,9 +713,12 @@ focus_tree = {
 		prerequisite = { focus = NAM_centre_hourglass }
 		mutually_exclusive = { focus = NAM_commissioner_plan }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -707,9 +757,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_commissioner_plan }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -747,9 +800,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_second_ledger }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -783,9 +839,12 @@ focus_tree = {
 			focus = NAM_quiet_officer_lists
 		}
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -827,9 +886,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_sand_runs_out }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_center_vanished
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_colony_closed_tt
+				OR = {
+					has_country_flag = NAM_center_vanished
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				}
 			}
 		}
 		available = {
@@ -918,12 +980,15 @@ focus_tree = {
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_basin_is_ours }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -939,8 +1004,6 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_ind_border_dossier
 			custom_effect_tooltip = NAM_ind_border_dossier_unlock_tt
-			unlock_decision_tooltip = NAM_restitution_note
-			custom_effect_tooltip = NAM_restitution_note_unlock_tt
 			add_stability = 0.03
 			add_political_power = 30
 		}
@@ -959,12 +1022,15 @@ focus_tree = {
 		prerequisite = { focus = NAM_independence_day }
 		mutually_exclusive = { focus = NAM_neutral_basin }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -1434,7 +1500,10 @@ focus_tree = {
 		}
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1483,7 +1552,10 @@ focus_tree = {
 		}
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1524,7 +1596,10 @@ focus_tree = {
 		}
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -1566,7 +1641,12 @@ focus_tree = {
 			custom_effect_tooltip = NAM_admin_district_guard_contract_unlock_tt
 
 			if = {
-				limit = { NAM_rw_clock_running = yes }
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_clock_running_condition_tt
+						NAM_rw_clock_running = yes
+					}
+				}
 				NAM_expand_mobilisation_capacity = yes
 			}
 			else = { add_command_power = 20 }
@@ -1588,7 +1668,12 @@ focus_tree = {
 			focus = NAM_supports_oil_compact
 			focus = NAM_supports_export_houses
 		}
-		available = { NAM_independent_programmes_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_programmes_operable_tt
+				NAM_independent_programmes_operable = yes
+			}
+		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
@@ -1622,7 +1707,7 @@ focus_tree = {
 						}
 					}
 				}
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 			else = {
 				custom_effect_tooltip = NAM_receive_250_tt
@@ -1659,7 +1744,10 @@ focus_tree = {
 				NAM_independent_programmes_operable = yes
 			}
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -2591,12 +2679,15 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -2706,12 +2797,15 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = { focus = NAM_mobilisation_office }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -2787,12 +2881,15 @@ focus_tree = {
 		prerequisite = { focus = NAM_field_guards }
 		prerequisite = { focus = NAM_line_survey }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -2832,12 +2929,15 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_line_survey }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -3496,8 +3596,14 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_harbour_service }
 		bypass = {
-			NAM_overseas_service_operable = yes
-			NAM_island_public_works_needed = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_overseas_service_operable_tt
+				NAM_overseas_service_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_island_public_works_needed_focus_condition_not_met_tt
+				NAM_island_public_works_needed = no
+			}
 		}
 		available = {
 			has_capitulated = no
@@ -3563,10 +3669,25 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_island_levy_office }
 		available = {
 			has_capitulated = no
-			231 = { NAM_owned_overseas_district = yes }
+			231 = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_owned_overseas_district_focus_condition_tt
+					NAM_owned_overseas_district = yes
+				}
+			}
 			OR = {
-				VAL = { NAM_steel_concession_target_valid = yes }
-				GLP = { NAM_steel_concession_target_valid = yes }
+				VAL = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_steel_concession_target_valid_focus_condition_tt
+						NAM_steel_concession_target_valid = yes
+					}
+				}
+				GLP = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_steel_concession_target_valid_focus_condition_tt
+						NAM_steel_concession_target_valid = yes
+					}
+				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_independent_tt
@@ -3724,12 +3845,15 @@ focus_tree = {
 			has_completed_focus = NAM_letters_to_the_centre
 		}
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -3747,21 +3871,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_restitution_note
+			custom_effect_tooltip = NAM_restitution_note_unlock_tt
 			if = {
 				limit = {
-					OR = {
-						has_completed_focus = NAM_neutral_basin
-						has_country_flag = NAM_rw_talks_open
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_deadline_open_focus_condition_tt
+						NAM_rw_deadline_open = yes
 					}
 				}
-				add_political_power = 25
-			}
-			else = {
-				unlock_decision_tooltip = NAM_restitution_note
-				custom_effect_tooltip = NAM_restitution_note_unlock_tt
-			}
-			if = {
-				limit = { NAM_rw_deadline_open = yes }
 				add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 45 }
 			}
 		}
@@ -3780,14 +3898,17 @@ focus_tree = {
 		prerequisite = { focus = NAM_restitution_desk }
 		mutually_exclusive = { focus = NAM_fuel_leverage }
 		bypass = {
-			OR = {
-				has_country_flag = NAM_rw_time_bought
-				has_country_flag = NAM_rw_first_strike
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_azhar_delay_closed_tt
+				OR = {
+					has_country_flag = NAM_rw_time_bought
+					has_country_flag = NAM_rw_first_strike
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -3850,12 +3971,15 @@ focus_tree = {
 		prerequisite = { focus = NAM_restitution_desk }
 		mutually_exclusive = { focus = NAM_court_azhar }
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}
@@ -3893,12 +4017,15 @@ focus_tree = {
 			focus = NAM_fuel_leverage
 		}
 		bypass = {
-			OR = {
-				has_global_flag = ADISCORD_nam_resource_war_started
-				has_global_flag = ADISCORD_nam_resource_war_resolved
-				AND = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_preparation_closed_tt
+				OR = {
+					has_global_flag = ADISCORD_nam_resource_war_started
+					has_global_flag = ADISCORD_nam_resource_war_resolved
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+					}
 				}
 			}
 		}

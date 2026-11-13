@@ -29,6 +29,7 @@ REGISTRY = Path("tools/data/adiscord_event_ids.json")
 MUSIC = Path("music/ADISCORD_music.asset")
 SPECIAL_SONGS = Path("music/ADISCORD_special_songs.txt")
 PRESENTATION_SONGS = Path("music/ADISCORD_superevent_songs.txt")
+ART_SOURCES = Path("tools/assets/source/superevents/art_sources.json")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -46,6 +47,7 @@ REQUIRED_FILES = (
     Path("music/ADISCORD_songs.txt"),
     SPECIAL_SONGS,
     PRESENTATION_SONGS,
+    ART_SOURCES,
 )
 
 SUPEREVENT_IDS = (
@@ -64,16 +66,63 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.13",
     "ADISCORD_superevent.14",
     "ADISCORD_superevent.15",
-    "ADISCORD_superevent.16",
     "ADISCORD_superevent.17",
     "ADISCORD_superevent.18",
     "ADISCORD_superevent.19",
     "ADISCORD_superevent.20",
     "ADISCORD_superevent.21",
-    "ADISCORD_superevent.22",
     "ADISCORD_superevent.23",
     "ADISCORD_superevent.24",
     "ADISCORD_superevent.25",
+    "ADISCORD_superevent.26",
+    "ADISCORD_superevent.27",
+    "ADISCORD_superevent.28",
+    "ADISCORD_superevent.29",
+    "ADISCORD_superevent.30",
+    "ADISCORD_superevent.31",
+    "ADISCORD_superevent.32",
+    "ADISCORD_superevent.33",
+    "ADISCORD_superevent.34",
+    "ADISCORD_superevent.35",
+    "ADISCORD_superevent.36",
+    "ADISCORD_superevent.37",
+    "ADISCORD_superevent.38",
+    "ADISCORD_superevent.39",
+    "ADISCORD_superevent.40",
+    "ADISCORD_superevent.41",
+    "ADISCORD_superevent.42",
+    "ADISCORD_superevent.43",
+    "ADISCORD_superevent.44",
+    "ADISCORD_superevent.45",
+    "ADISCORD_superevent.46",
+    "ADISCORD_superevent.47",
+    "ADISCORD_superevent.48",
+    "ADISCORD_superevent.49",
+    "ADISCORD_superevent.50",
+    "ADISCORD_superevent.51",
+    "ADISCORD_superevent.52",
+    "ADISCORD_superevent.53",
+    "ADISCORD_superevent.54",
+    "ADISCORD_superevent.55",
+    "ADISCORD_superevent.56",
+    "ADISCORD_superevent.57",
+    "ADISCORD_superevent.58",
+    "ADISCORD_superevent.59",
+    "ADISCORD_superevent.60",
+    "ADISCORD_superevent.61",
+    "ADISCORD_superevent.62",
+    "ADISCORD_superevent.63",
+    "ADISCORD_superevent.64",
+    "ADISCORD_superevent.65",
+    "ADISCORD_superevent.66",
+    "ADISCORD_superevent.67",
+    "ADISCORD_superevent.68",
+    "ADISCORD_superevent.69",
+    "ADISCORD_superevent.70",
+    "ADISCORD_superevent.71",
+    "ADISCORD_superevent.72",
+    "ADISCORD_superevent.73",
+    "ADISCORD_superevent.74",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -148,18 +197,28 @@ PRESENTATIONS = (
         "superevent_val_commonwealth_sound_e",
     ),
     SupereventPresentation(
+        75,
+        "superevent_val_council_proclamation",
+        "superevent_val_council_proclamation_sound_e",
+    ),
+    SupereventPresentation(
+        76,
+        "superevent_south_war",
+        "superevent_south_war_sound_e",
+    ),
+    SupereventPresentation(
         13,
         "superevent_stelander_great", "superevent_stelander_great_sound_e"
     ),
     SupereventPresentation(
         14,
         "superevent_rus_black_banner",
-        "superevent_rus_last_empire_sound_e",
+        "superevent_rus_black_banner_sound_e",
     ),
     SupereventPresentation(
         15,
         "superevent_rus_restoration",
-        "superevent_rus_last_empire_sound_e",
+        "superevent_rus_restoration_sound_e",
     ),
     SupereventPresentation(
         16,
@@ -178,11 +237,6 @@ PRESENTATIONS = (
         "superevent_rus_khan_defeated_sound_e",
     ),
     SupereventPresentation(
-        19,
-        "superevent_vorkerland_joint_victory",
-        "superevent_vorkerland_joint_victory_sound_e",
-    ),
-    SupereventPresentation(
         20,
         "superevent_stelander_sotnikov_civilwar",
         "superevent_stelander_sotnikov_civilwar_sound_e",
@@ -190,12 +244,12 @@ PRESENTATIONS = (
     SupereventPresentation(
         21,
         "superevent_stelander_sotnikov_directory",
-        "superevent_stelander_shabrat_victory_sound_e",
+        "superevent_stelander_sotnikov_directory_sound_e",
     ),
     SupereventPresentation(
         22,
         "superevent_stelander_sotnikov_charter",
-        "superevent_stelander_shabrat_victory_sound_e",
+        "superevent_stelander_sotnikov_charter_sound_e",
     ),
     SupereventPresentation(
         23,
@@ -205,12 +259,7 @@ PRESENTATIONS = (
     SupereventPresentation(
         24,
         "superevent_stelander_tikhoreva",
-        "superevent_stelander_shabrat_victory_sound_e",
-    ),
-    SupereventPresentation(
-        25,
-        "superevent_rus_khan_died",
-        "superevent_rus_khan_defeated_sound_e",
+        "superevent_stelander_tikhoreva_sound_e",
     ),
     SupereventPresentation(
         26,
@@ -250,7 +299,7 @@ PRESENTATIONS = (
     SupereventPresentation(
         36,
         "superevent_stelander_party_victory_festival",
-        "superevent_stelander_party_victory_sound_e",
+        "superevent_stelander_party_victory_festival_sound_e",
     ),
     SupereventPresentation(
         37,
@@ -510,6 +559,71 @@ def _event_block(text: str, event_id: str) -> str:
     return ""
 
 
+def console_gateway_issues(events: str) -> list[str]:
+    issues: list[str] = []
+    covered: set[int] = set()
+    for event in blocks(events, r"^\s*country_event\s*=\s*\{"):
+        match = re.search(r"(?m)^\s*id\s*=\s*(ADISCORD_superevent\.\d+)\s*$", event)
+        if not match:
+            continue
+        event_id = match.group(1)
+        if event_id not in SUPEREVENT_IDS:
+            issues.append(f"{event_id}: console entry point is missing from the inventory")
+        for field in ("hidden", "is_triggered_only"):
+            if not re.search(rf"(?m)^\s*{field}\s*=\s*yes\s*$", event):
+                issues.append(f"{event_id}: console entry point requires {field} = yes")
+        requests = [
+            int(value)
+            for value in re.findall(r"\bADISCORD_superevent_request\s*=\s*(\d+)\b", event)
+        ]
+        for queue_id in requests:
+            if queue_id not in PRESENTATIONS_BY_ID:
+                issues.append(f"{event_id}: unknown presentation request {queue_id}")
+        if len(requests) == 1:
+            covered.add(requests[0])
+        if not requests or not re.search(r"\bADISCORD_superevent_enqueue\s*=\s*yes\b", event):
+            issues.append(f"{event_id}: console entry point must enqueue a presentation")
+    for item in PRESENTATIONS:
+        if item.queue_id not in covered:
+            issues.append(f"{item.name}: missing a dedicated ADISCORD_superevent.* entry point")
+    return issues
+
+
+def presentation_asset_issues(gfx: str, effects: str, sounds: str, manifest: dict) -> list[str]:
+    """File existence alone cannot catch another ending's valid image or theme."""
+    issues = []
+    approved = manifest.get("bindings", {})
+    expected = {item.name for item in PRESENTATIONS}
+    if set(approved) != expected:
+        issues.append("art sources: presentation bindings must cover the live inventory exactly")
+    textures = {}
+    for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{"):
+        name = re.search(r'\bname\s*=\s*"GFX_(superevent_\w+)"', block)
+        texture = re.search(r'\btexturefile\s*=\s*"([^"]+)"', block, re.I)
+        if name and texture:
+            textures[name[1]] = texture[1]
+    samples = {}
+    for block in blocks(effects, r"^\s*soundeffect\s*=\s*\{"):
+        name = re.search(r"(?m)^\s*name\s*=\s*(\w+)", block)
+        sample = re.search(r"(?m)^\s*sound\s*=\s*(\w+)", block)
+        if name and sample:
+            samples[name[1]] = sample[1]
+    files = {}
+    for block in blocks(sounds, r"^\s*sound\s*=\s*\{"):
+        name = re.search(r'\bname\s*=\s*"([^"]+)"', block)
+        filename = re.search(r'\bfile\s*=\s*"([^"]+)"', block)
+        if name and filename:
+            files[name[1]] = filename[1]
+    for name, row in approved.items():
+        if textures.get(name) != row["texture"]:
+            issues.append(f"{name}: texture differs from its approved scene")
+        if samples.get(row["effect"]) != row["sample"]:
+            issues.append(f"{name}: sound effect differs from its approved theme")
+        if files.get(row["sample"]) != row["audio_file"]:
+            issues.append(f"{name}: sample differs from its approved audio file")
+    return issues
+
+
 def collect_issues(root: Path = ROOT) -> list[str]:
     root = Path(root)
     issues: list[str] = []
@@ -529,6 +643,12 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     sound_effects = source.get(SOUND_EFFECTS, "")
     sound_category = source.get(SOUND_CATEGORY, "")
     registry_source = source.get(REGISTRY, "")
+    try:
+        art_sources = json.loads(source.get(ART_SOURCES, ""))
+    except json.JSONDecodeError:
+        issues.append("art sources: invalid JSON")
+    else:
+        issues.extend(presentation_asset_issues(gfx, sound_effects, sounds, art_sources))
 
     for namespace in (
         "ADISCORD_superevent",
@@ -557,6 +677,8 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(
                 f"events: expected one definition of {event_id}, found {count}"
             )
+
+    issues.extend(console_gateway_issues(events))
 
     expected_names = tuple(item.name for item in PRESENTATIONS)
     expected_set = set(expected_names)

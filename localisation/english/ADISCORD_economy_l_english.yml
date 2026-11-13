@@ -548,7 +548,7 @@
  ADISCORD_economy_demobilization: "Return to Peacetime"
  ADISCORD_economy_demobilization_desc: "After the war, lift emergency measures through decisions or the normal law and budget controls. You have 120 days. Each remaining emergency measure then imposes its own penalty, removed by lowering the corresponding policy.\n\nStatus: [GetADISCORDDemobilizationStatusLoc]\n\nMeeting all requirements starts six months of recovery. A new war closes the requirements. Active scripted preparations defer the transition; an unfinished grace period restarts when the threat ends. Restoring emergency policies after settlement brings back penalties without a new grace period and ends recovery."
  ADISCORD_economy_demobilization_deadline: "Complete Postwar Demobilisation"
- ADISCORD_economy_demobilization_deadline_desc: "Meet the requirements below within §Y120 days§!, using decisions costing §Y50§! £political_power_texticon each or normal law and budget changes.\n\nAfter the deadline, penalties apply only to remaining emergency measures. Meeting each requirement removes its penalty."
+ ADISCORD_economy_demobilization_deadline_desc: "Wartime orders still govern the country's life. Departments prepare a return to civilian administration while people await their familiar laws."
  ADISCORD_economy_demobilize_economy: "End the War Economy"
  ADISCORD_economy_demobilize_economy_desc: "Factories that worked for the front take civilian orders again. Planning commissions give way to ordinary contracts, and workers go home on time for the first time in years."
  ADISCORD_economy_demobilize_manpower: "Restore Limited Conscription"
@@ -615,3 +615,4 @@
  ADISCORD_economy_largest_admin_expenses: "administration"
  ADISCORD_economy_largest_repair_expenses: "repairs"
  ADISCORD_economy_largest_debt_service: "debt interest"
+ ADISCORD_economy_demobilization_deadline_description_rules_tt:0 "Meet the requirements below within §Y120 days§!, using decisions costing §Y50§! £political_power_texticon each or normal law and budget changes.\n\nAfter the deadline, penalties apply only to remaining emergency measures. Meeting each requirement removes its penalty."

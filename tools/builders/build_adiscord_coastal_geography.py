@@ -7,6 +7,7 @@ island masks acquire new land; mainland edits use explicit province masks.
 from __future__ import annotations
 
 import argparse
+import json
 from collections import defaultdict, deque
 from io import BytesIO
 from math import atan2
@@ -79,9 +80,14 @@ ARAB_CITY_TERRAIN = {
     else "desert_city"
     for province in ARAB_CITIES | ARAB_URBAN_GROWTH
 }
-# Lower Loren's hand-painted urban provinces use the northern city raster.
+# Hand-painted urban provinces of the north use the northern city raster:
+# Lower Loren, the Fada centre 145, the outskirts of the state 121 city and the
+# separately carved settlement provinces 16689-16705.
 URBAN_GROWTH = ARAB_URBAN_GROWTH | frozenset({
     1198, 16881, 16884, 16885, 16887, 16890, 16892, 16900, 16901,
+    145, 5245, 16611, 16612,
+    16689, 16690, 16691, 16693, 16694, 16696, 16697, 16698, 16699,
+    16701, 16702, 16703, 16704, 16705,
 })
 RURAL_SECTORS = tuple(
     {**sector, "parent": city["parent"], "parent_terrain": city["parent_terrain"], "terrain": city["parent_terrain"]}
@@ -238,6 +244,44 @@ PROVINCE_PIXEL_REPAIRS = {
     (3123, 1362): (16616, 10926),
     (3123, 1363): (16616, 10926),
 }
+# A river runs on province borders and never cuts a province apart. Every land
+# part a river cut off goes to the province on its own bank. Pixels keep their
+# authored surface unless they carry the urban raster into a province without
+# city terrain; those sample the recipient surface like the repairs above.
+# Where moving land would take a state's coast, buildings or a pinned frontage,
+# the river course itself moves onto the border: "river_courses" lists the
+# rewritten rivers.bmp pixels (254 sea, 255 land, 0 a moved source).
+RIVER_BANK_REPAIRS_PATH = ROOT / "tools/data/adiscord_river_bank_repairs.json"
+
+
+def load_river_bank_repairs(path: Path) -> tuple[dict[tuple[int, int], tuple[int, int]], frozenset[tuple[int, int]]]:
+    repairs = {}
+    kept_surface = set()
+    for entry in json.loads(path.read_text(encoding="utf-8"))["repairs"]:
+        if entry["surface"] not in ("keep", "recipient"):
+            raise ValueError(f"river bank {entry['from']}-{entry['to']}: unknown surface {entry['surface']}")
+        for x, y in entry["pixels"]:
+            if (x, y) in repairs or (x, y) in PROVINCE_PIXEL_REPAIRS:
+                raise ValueError(f"river bank pixel {x}, {y} is repaired twice")
+            repairs[x, y] = (entry["from"], entry["to"])
+            if entry["surface"] == "keep":
+                kept_surface.add((x, y))
+    return repairs, frozenset(kept_surface)
+
+
+def load_river_courses(path: Path) -> dict[tuple[int, int], int]:
+    courses = {}
+    for entry in json.loads(path.read_text(encoding="utf-8"))["river_courses"]:
+        for x, y in entry["pixels"]:
+            if (x, y) in courses:
+                raise ValueError(f"river course pixel {x}, {y} is listed twice")
+            courses[x, y] = entry["value"]
+    return courses
+
+
+RIVER_BANK_REPAIRS, RIVER_BANK_KEPT_SURFACE = load_river_bank_repairs(RIVER_BANK_REPAIRS_PATH)
+RIVER_COURSES = load_river_courses(RIVER_BANK_REPAIRS_PATH)
+PROVINCE_PIXEL_REPAIRS.update(RIVER_BANK_REPAIRS)
 PROVINCE_REPAIR_PROVINCES = frozenset(
     province for pair in PROVINCE_PIXEL_REPAIRS.values() for province in pair
 )
@@ -626,7 +670,7 @@ def repair_surface_references(masks: dict[int, np.ndarray]) -> dict[tuple[int, i
         if not len(points):
             raise ValueError(f"province {province}: no unchanged surface reference")
         for (x, y), (_original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
-            if replacement == province:
+            if replacement == province and (x, y) not in RIVER_BANK_KEPT_SURFACE:
                 references[x, y] = closest_pixel(points, x, y)
     return references
 
@@ -775,6 +819,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                 pixels[arab_cities] = 2
             else:
                 pixels[islands] = value
+                if name == "rivers":
+                    for (x, y), course in RIVER_COURSES.items():
+                        pixels[y, x] = course
                 if name == "terrain":
                     pixels[cities & ~shore] = 13
                     pixels[cities & shore] = URBAN_FALLBACK_PALETTE

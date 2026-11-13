@@ -2,7 +2,7 @@
   "generator_sha256": "8b40d2e95f21b4370735d61ec48e9dda2c5674ac1b27964563b800cec60b7487",
   "donor_sha256": "0d1078fb0f59d78995105083ca2997a4c46a8615644b5fb9a51179fd06536e8a",
   "files": {
-    "NAM_marine.mesh": "1d145a222316fb26592d14dedd221ad50d32928d3c23b287f0dc1e14a91edd35",
+    "NAM_marine.mesh": "748ccf7dcbb4dedd70533104417c68827760860106c05d0180aff6f62873d7ab",
     "NAM_marine_body_diffuse.dds": "3c8b71a6a3a6307978a5bbddb103fb7b8bb993dd5ac8b887d32def4382809c3f",
     "NAM_marine_body_normal.dds": "0e1da3351cd0e20fae33216ee833d6fbeca2eb495fc96cf6e3ea9d6fef43f1d1",
     "NAM_marine_body_specular.dds": "f6f3c85a6fc207fa61bb787711e1edea7dc38e757774384be3a3dd8dd054c5b8",

@@ -2767,7 +2767,7 @@ country_event = {
 			}
 		}
 		if = {
-			limit = { check_variable = { var = VAL_nam_request_terms value = 1 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = VAL_nam_request_terms value = 1 compare = equals } } }
 			custom_effect_tooltip = VAL_nam_concession_terms_tt
 		}
 		else = {
@@ -4109,7 +4109,7 @@ country_event = {
 	id = val_council.1
 	title = val_council.1.t
 	desc = val_council.1.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4130,7 +4130,7 @@ country_event = {
 	id = val_council.2
 	title = val_council.2.t
 	desc = val_council.2.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4143,7 +4143,7 @@ country_event = {
 	id = val_council.3
 	title = val_council.3.t
 	desc = val_council.3.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4156,7 +4156,7 @@ country_event = {
 	id = val_council.4
 	title = val_council.4.t
 	desc = val_council.4.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4169,7 +4169,7 @@ country_event = {
 	id = val_council.5
 	title = val_council.5.t
 	desc = val_council.5.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4182,7 +4182,7 @@ country_event = {
 	id = val_council.6
 	title = val_council.6.t
 	desc = val_council.6.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4195,7 +4195,7 @@ country_event = {
 	id = val_council.7
 	title = val_council.7.t
 	desc = val_council.7.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4208,7 +4208,7 @@ country_event = {
 	id = val_council.8
 	title = val_council.8.t
 	desc = val_council.8.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = no
 	option = {
@@ -4221,7 +4221,7 @@ country_event = {
 	id = val_council.9
 	title = val_council.9.t
 	desc = val_council.9.d
-	picture = GFX_report_event_generic_parliament
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = {
 		name = val_council.9.a
@@ -5867,7 +5867,7 @@ news_event = {
 		}
 		text = val_peace.82.rival
 	}
-	picture = GFX_event_adiscord_military_planning
+	picture = GFX_news_event_adiscord_military_planning
 	is_triggered_only = yes
 	major = yes
 	option = { name = val_peace.82.a }
@@ -5947,7 +5947,7 @@ news_event = {
 		trigger = { has_global_flag = VAL_east_hegemon_rival }
 		text = val_peace.86.lost
 	}
-	picture = GFX_event_adiscord_parliament_chamber
+	picture = GFX_news_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	major = yes
 	option = { name = val_peace.86.a }

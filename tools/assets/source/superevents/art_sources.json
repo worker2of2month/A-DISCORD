@@ -1,0 +1,671 @@
+{
+  "schema": 1,
+  "template": {
+    "file": "tools/assets/source/Super_event_bg.psd",
+    "sha256": "37547716112d15e1e3ac3ce7a5774736e475bfe4fc56afb693fbcf1f2c7d81e2",
+    "layers": [
+      "CRTEffectUseGlow",
+      "Hue/Saturation 1",
+      "Levels 1",
+      "Color Lookup 1",
+      "Brightness/Contrast 1"
+    ],
+    "glass": "Retain existing glass only; do not add Layer 3."
+  },
+  "exports": {
+    "superevent_stelander_tikhoreva": {
+      "runtime_file": "gfx/interface/superevents/STP/superevent_stelander_tikhoreva.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-9c1af1f3-3416-4bef-add9-3f264961fb1d.png",
+      "prompt": "Create a single widescreen 16:9 cinematic photorealistic historical alternate-world strategy-game event illustration, without any text, border, graphic overlay or watermark. Scene: reconstruction and measurable public welfare after a brutal civil war in an alpine Eastern European country, approximately 1940s visual technology. A newly reopened municipal clinic and vocational workshop on a mountain town square, repaired stone buildings, scaffolding on one roof, nurses welcoming a mother and child on the left, an engineer and female civil auditor in a modest grey suit examining practical repair plans at a trestle table on the right, varied natural faces. Street-level documentary composition with foreground details, ordinary citizens, restrained hopeful morning light, muted steel blue and warm cream tones, photographic grain. Emphasize functioning public institutions and civilian dignity, no military parade, no dictator statue, no flags, no recognizable real politicians. Detailed readable main action in upper two thirds; bottom fifth is visually calm for game quote overlay. This is the finale of Vera Tikhoreva's public-benefit government, titled Measure of Common Good, but DO NOT put those words in image.",
+      "source_sha256": "ef7172fcde5d944f6f866e4e10659c71642598ea3d2441ecfcc01f701fd47432",
+      "runtime_sha256": "6aa0cebf89ffa0c3cdc6d084037c580dcfa517b55e7d631baeb33350dee36ac8"
+    },
+    "superevent_stelander_sotnikov_directory": {
+      "runtime_file": "gfx/interface/superevents/STP/superevent_stelander_sotnikov_directory.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-fb33342b-4cce-4776-938d-9fc1d7693bd3.png",
+      "prompt": "Edit the first image, the target military directory conference. The second image is the authoritative portrait reference for Grigory Sotnikov. The central leader, currently seen from behind with short grey hair, must instead be the reference man seen mostly from behind and in slight profile: dark longish hair, rough full dark beard, distinctive soft dark field cap with brass-rimmed goggles, worn brown field jacket, no general shoulder insignia. He is an insurgent commander now heading a directory, not an elderly conventional general. Keep this central figure's seated position and all other staff, lamps, maps, mountain windows and dusk lighting. Do not change the whole composition or add text, frame or graphic effects. Preserve realistic photographic detail.",
+      "source_sha256": "083f8e1d5c3fa8426afc5fb79c8064d1acc289881918d1eaee54fa459949d7e1",
+      "runtime_sha256": "1e0e01474e511f1c58360f58ada7c634b0e46c757705a2496707db44d2dd094c"
+    },
+    "superevent_stelander_sotnikov_charter": {
+      "runtime_file": "gfx/interface/superevents/STP/superevent_stelander_sotnikov_charter.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-11d2de27-3039-4e9a-a2f1-2223629523c5.png",
+      "prompt": "Edit the first image, which is the target assembly scene. The second image is the authoritative reference portrait of Grigory Sotnikov, an alternate-world post-civil-war leader. Replace ONLY the central signing elderly grey-haired mustached general with the same man as the reference: middle-aged rugged face, dark slightly long hair, clean-shaven, dark olive/brown civilian field jacket over an open-collared pale shirt. His distinctive dark soft peaked field cap with brass-rimmed goggles rests on the table beside him. No grey hair, no mustache, no general epaulettes. Preserve the surrounding elected delegates, judge, architecture and daylight. Make the composition more candid and less posed: the leader looks at the charter and witnesses naturally watch the act. Keep cinematic documentary realism. Do not add text, logo, borders or graphic effects.",
+      "source_sha256": "c15f75dab511a504d46e27ccf1e1105ce1521e28a53960288e1be4a4d3c2deb1",
+      "runtime_sha256": "9514a93f565d305bb075e9a869c9857a37c41c1b375202201556314dc2437300"
+    },
+    "superevent_stelander_party_victory_houses": {
+      "runtime_file": "gfx/interface/superevents/STP/superevent_stelander_party_victory_houses.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-b3ce26b3-dec7-40bc-8442-ac657144d703.png",
+      "prompt": "One widescreen 16:9 cinematic photorealistic alternate-history strategy game illustration, 1940s material culture, documentary still with distinct natural human faces and realistic hands, detailed lived-in architecture, muted colour film grain. No text, logos, watermarks, border, modern objects or recognizable historical politicians. No flags or insignia unless specified. Main story in upper two thirds, lower fifth calm for an eventual text overlay. Victory of wealthy patronal aristocratic houses in a mountain European party state. Luxuriously dressed male and female patrons in dark formal suits and jewel-toned evening dresses gather at a palace balcony salon above a battered city. One patron signs a patronage ledger while distant party guards secure the street. Velvet, brass lamps, marbled columns, ration queue far below contrasts privilege. 1940s European elite, no Middle Eastern clothing, no oilfields, no public coronation.",
+      "source_sha256": "1d4828ad91d53c9318cc9b04e83ca8ba57a365835d894151566d658a44390a90",
+      "runtime_sha256": "a039ac5bbdbbfe7109719207262414bc804d0e0c8cc67fb21da982afebad3da3"
+    },
+    "superevent_stelander_party_victory_regent": {
+      "runtime_file": "gfx/interface/superevents/STP/superevent_stelander_party_victory_regent.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-401fff1e-ee84-43e8-ac20-7ed5e401c43a.png",
+      "prompt": "One widescreen 16:9 cinematic photorealistic alternate-history strategy game illustration, 1940s material culture, documentary still with distinct natural human faces and realistic hands, detailed lived-in architecture, muted colour film grain. No text, logos, watermarks, border, modern objects or recognizable historical politicians. No flags or insignia unless specified. Main story in upper two thirds, lower fifth calm for an eventual text overlay. An external republic installs a compliant regent over a defeated alpine European country. In a stern neoclassical ministry office a middle-aged local civilian in a dark suit signs a treaty while two foreign officials stand behind his chair and a foreign military guard waits by the door. Quiet humiliation and restricted sovereignty, snow-covered city visible through windows, folded local flag without visible markings on an adjacent side table. Formal political supervision, no victory parade, no medieval regalia.",
+      "source_sha256": "555e17eb84329d53ac119b22b10be4cc4d690b61bf7e374d3d85dc3767693853",
+      "runtime_sha256": "b7a1d3fe8b3da4873fb2b5aeefcb0d1ad455cc63236971c1e9574e208a6c4f12"
+    },
+    "superevent_rus_khan_defeated": {
+      "runtime_file": "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-2479cf79-6961-4421-b7d9-7686bd52c4ea.png",
+      "prompt": "Create one cinematic widescreen 16:9 photorealistic alternate-history strategy-game event illustration. 1940s material culture in an alpine Eastern European nation, believable distinct people, documentary photograph, restrained muted colours and film grain. No writing, captions, frame, overlays, flags, logos, recognizable real politicians. Main action above lower fifth which stays calm for game text. Death of an imperial Khan in a cold ruined industrial empire. A vast empty throne room at winter dawn: dark throne unoccupied, a heavy fur-lined ceremonial coat draped over its arm, an extinguished brazier, two distant guards standing motionless at the doorway, streaks of light through tall cracked windows. A folded dark cloth and unadorned crown rest on a small table. Human absence and succession crisis, mournful greys and muted amber, not a victorious coronation, not an apocalypse.",
+      "source_sha256": "f5a9db9d4f3bf4f7c855b04d1964a4c9d331ddd19a06a1d053e456d39b268326",
+      "runtime_sha256": "41cad241729cc336e3539e6e1c38894414ea4debbd0a20c054b9375b023b3d61"
+    },
+    "superevent_south_rump": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_rump.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-0d67ac72-a55a-48a3-99a7-07b34fb82003.png",
+      "prompt": "Create a widescreen 16:9 realistic cinematic documentary photograph for an alternate-world strategy-game event, 1940s-era equipment and clothes in a southern Caspian-style oil country. Distinct believable people and natural poses, subtle colour film grain, detailed material textures, muted sunlight. No writing, captions, border, watermarks, flags or recognizable politicians. Leave lower fifth visually calm, place important action above it. Southern seaports return to an isolated mainland republic. Harbour pilots in worn navy-blue coats guide a loaded cargo ship into a busy weathered stone harbour. An older pilot hands a young colleague a brass navigation instrument, dock workers cast off heavy lines, distant warehouses and cranes under fresh sea air. Reopened access to the mainland, no warships, no imperial regalia, no railway signal cabin.",
+      "source_sha256": "eb0d5feb6d42a4bb4038f8eed126c825e1b8113f1d6c21fe38ef8b2fef141aeb",
+      "runtime_sha256": "dbc7c3c599d3b02d759a394f0e257bed0f6e72d044f8a8dcaefdf588214468b6"
+    },
+    "superevent_south_free_islands": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_free_islands.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-66a0c187-282a-4893-8e12-3cf7462bae02.png",
+      "prompt": "One distinct widescreen 16:9 cinematic documentary still for an alternate-world grand-strategy event. Photorealistic believable people, analog mid-20th-century material culture in a southern oil-producing country, worn everyday clothes and equipment, detailed environmental storytelling, muted colour and fine film grain. No text, border, logos, flags or recognizable real politicians. Compose the decisive action in middle and upper frame; no artificial blank band, no conference table, no document signing. Reunification of families separated by war at a free-island ferry port. A middle-aged island woman embraces her adult son stepping off a worn passenger ferry; behind them families carry modest luggage, a harbour clerk checks passenger lists at a small stand. Bright wind, sea spray, weathered turquoise and cream seaside buildings. Natural unposed candid photograph, human relief not military victory.",
+      "source_sha256": "6d951874a532c9015b6b0cbe8493b3fcaf467fead6c787b87bed2573ed3e1730",
+      "runtime_sha256": "6cc9b097d372480153565078700d0274e7e0b2403e58f5e95cc8833bde9b7165"
+    },
+    "superevent_south_civil_service": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_civil_service.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-4aef4081-459f-44e8-8bd4-7ab85ca8c54e.png",
+      "prompt": "One distinct widescreen 16:9 cinematic documentary still for an alternate-world grand-strategy event. Photorealistic believable people, analog mid-20th-century material culture in a southern oil-producing country, worn everyday clothes and equipment, detailed environmental storytelling, muted colour and fine film grain. No text, border, logos, flags or recognizable real politicians. Compose the decisive action in middle and upper frame; no artificial blank band, no conference table, no document signing. The first ordinary morning of a restored civil-service republic. View from a busy old municipal corridor through an open office door: a female civil servant raises the wooden service-window shutter and hands a resident a numbered token while people wait on benches. Repaired walls, mechanical clock, paper cabinets and sunlight, outside the window the southern city wakes after war. Dignity of functioning everyday administration, no propaganda, no grand hall.",
+      "source_sha256": "72cb1dc6d1371033980d4e0c975e8fd10648edf278ad154b8f1ceddc9149aa60",
+      "runtime_sha256": "0c6cdb28311f6adefc3b620f7690b32064f5061a389b675600868966b7d718ea"
+    },
+    "superevent_south_radical": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_radical.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-4952c2d2-d74e-4a4c-bd4c-439319e127b0.png",
+      "prompt": "One distinct widescreen 16:9 cinematic documentary still for an alternate-world grand-strategy event. Photorealistic believable people, analog mid-20th-century material culture in a southern oil-producing country, worn everyday clothes and equipment, detailed environmental storytelling, muted colour and fine film grain. No text, border, logos, flags or recognizable real politicians. Compose the decisive action in middle and upper frame; no artificial blank band, no conference table, no document signing. A radical industrial regime takes the spoils of the southern oil war. At a stark cargo dock a large steel lathe hangs from a ship's crane, workers guide it into a dark hold while a plain-coated political commissioner counts crates from a distance. Machinery is being removed from the conquered coast, tense subdued faces, smoggy orange dusk. Dynamic crane and cargo silhouette, no celebratory delegation.",
+      "source_sha256": "61b5d607a935a104c080f9519cadce5c0c5aa40c70f74f04e0ec1065a9dc5f0f",
+      "runtime_sha256": "a8cbf6911678bc123989db56b8d3bfb0ee19c94caf1bd19c3016e174a230a787"
+    },
+    "superevent_west_anton": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_anton.png",
+      "source_sha256": "9ee83352792b0d289b3bc8f7ed00e6ef8906c54ddf1322c415ebda5e1bd1631c",
+      "processing": "Apply the supplied CRT and colour stack once; preserve existing illustration and glass.",
+      "runtime_sha256": "d978c164d18eaac8131608b98263795da4e94e73c3da35cc465cee41bee50bc1"
+    },
+    "superevent_west_council": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_council.png",
+      "source_sha256": "44748366872c5ec00329a60692c584edb79225dda1fdc33f90fec46a784149ad",
+      "processing": "Apply the supplied CRT and colour stack once; preserve existing illustration and glass.",
+      "runtime_sha256": "5cbbde019f108bbec3deab8c158b7dbeb974b19db7d08b33a4a49be68916a4c4"
+    },
+    "superevent_west_petrichev": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_petrichev.png",
+      "source_sha256": "126cbfa43280f1da86ec36f89d1e7729a7743f4b180b4d56852bad4ab620bdf1",
+      "processing": "Apply the supplied CRT and colour stack once; preserve existing illustration and glass.",
+      "runtime_sha256": "589b6964d544ba93bf9604198cc6d578adf0afac60f0e36a9cf0d808c42fd957"
+    },
+    "superevent_west_worker": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_worker.png",
+      "source_sha256": "3f0689d7299085a867c41f2407be85d423d348e38d056a5e44dfee4d2b94f079",
+      "processing": "Apply the supplied CRT and colour stack once; preserve existing illustration and glass.",
+      "runtime_sha256": "2865fde9a46ce20b7b09c8a8f98ec9f02eafb072a2cf77b43f5d70c6c17b0279"
+    },
+    "superevent_west_world_empire": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_world_empire.png",
+      "source_sha256": "b5061951287b319f3fbe434b48b65d551f8381468e30d94e366f37f6b4504da5",
+      "processing": "Apply the supplied CRT and colour stack once to the full-bleed artwork; export the native super-event viewport.",
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-40c39fbe-33e0-4724-a89e-eef99bdef86b.png",
+      "reference_portrait": "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_victory.png",
+      "prompt": "Create a single new widescreen 16:9 historical cinematic illustration for a Hearts of Iron IV alternate-world super-event: victory of the World Empire of Vorkerland over Itora. Use the attached portrait as the authoritative character reference for Nikita Worcker: a middle-aged man with dark brown collar-length hair, a dark beard, glasses, and a restrained dark civilian coat with a high collar. Show this exact character entirely from behind, standing upright facing a magnificent tall window, looking OUT at his victorious imperial capital, never facing or looking back at the viewer. His recognizable hair and dark clothing are visible from the rear; do not invent a military cap or medals. A grand monumental state chamber with very high stone window reveals and dignified 1930s-1940s architecture, convincing human scale. Outside: a vast believable industrial capital at pale golden sunrise, imposing civic buildings, distant tower of unity, bridges and a steam freight train crossing the reopened western railway far below. The railway is a subtle meaningful detail, not the main foreground subject. Strong composed grandeur, powerful solitary rear silhouette against the luminous city, solemn victory after a costly war. Historically grounded materials, painterly documentary realism with restrained texture, natural anatomy and perspective, coherent architectural details. No crowds or other foreground characters. No text, flags, invented emblems, watermark, border, UI, scanlines, CRT effect, science-fiction skyscrapers or fantasy armour. Keep the lower fifth dark and visually quiet for eventual game text; important silhouette and skyline in upper two thirds. Output one full-bleed landscape image, no collage. The CRT and color filter will be applied separately from our PSD.",
+      "runtime_sha256": "78ad68ef24253bb081ec1224538912b8731da1b19d45b90bd4d34c5ee9420ebb"
+    },
+    "superevent_itora_stalk_portal": {
+      "runtime_file": "gfx/interface/superevents/IVN/superevent_itora_stalk_portal.png",
+      "source_sha256": "154b5a70e9e8d8feb311d0353c216ce917d72166ace6798363a958ed137992dd",
+      "processing": "Apply the supplied CRT and colour stack once; preserve existing illustration and glass.",
+      "runtime_sha256": "599e88f3b1392dbba9da51fe1a331fc605b0a8efdf717cc2905042d967c58b85"
+    },
+    "superevent_south_directorate": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_directorate.png",
+      "generated_file": "01a1d282-57f3-7590-8433-9baf5432c3a7/exec-c1007913-d098-4e2e-9986-6743d33f54b9.png",
+      "prompt": "One widescreen 16:9 cinematic photographic illustration for an alternate-history grand-strategy game: a southern industrial business council takes over the oil freight network after war. The scene is a busy railway dispatch cabin overlooking a large oil-tanker marshalling yard. A senior civilian dispatcher with rolled-up sleeves stands at a mechanical route diagram, a female telephone operator at a switchboard takes factory requests, and a younger clerk passes wooden scheduling tokens through a hatch to a railway worker. Steam locomotives shunt empty tank wagons outside, refineries and dry hills in the distance. Analog 1940s technology, worn practical civilian clothes, specific believable activity, candid documentary framing with strong diagonals from window to switching levers. Soft dusty afternoon light, muted photographic colour, fine grain. No generals, military maps, politics portraits, flags, meeting tables, signing ceremonies, text labels, watermarks, frame or overlays. No artificially empty band along the bottom.",
+      "source_sha256": "ed485030d847e3955925b46f3056acac6515006f21a0fff3345443f5c8dfe3c6",
+      "runtime_sha256": "ec38c35aee84c3aa07779fad74f034bc0fabd90dabce1bd9306de7a853cae7aa"
+    },
+    "superevent_val_council_proclamation": {
+      "runtime_file": "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png",
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-9aaf2399-efbd-4a74-b9ff-0159388a5d5d.png",
+      "prompt": "Create one landscape 16:9 photorealistic cinematic historical photograph for an alternate-world 1940s grand strategy game, a solemn proclamation of a collective military council after victory. Three provided portraits are character and uniform references, not edit targets. Precisely retain their distinct facial features: Gleb Osten, older grey-haired man with thick grey moustache; Tamara Greitz, stern short dark-brown-haired woman; Arkadi Lemm, older bespectacled man with thinning dark hair. All wear the reference's dark olive high-collared tunics with restrained burgundy piping and small brass collar insignia. Scene: a converted industrial assembly hall in Kefreyt, tall steel-framed windows and worn brick, a few distinct seated officer and civilian district delegates in the foreground seen from behind. Midground: three Council members standing together at a low plain wooden dais, no one visibly superior: Osten at left rests a hand on the rail, Greitz at center stands at a single period radio microphone with a sheet of paper, Lemm at right listens, hands naturally clasped. Human-scale documentary scene, not a parade or boardroom. Afternoon sunlight through dusty windows, muted natural colours, realistic cloth and wood, fine analog grain, anatomically correct hands, modest crowd and clearly separated faces. Medium-wide eye-level camera, decisive faces clearly legible in the upper half; bottom fifth quiet dark silhouettes for later quote overlay. Convey collective responsibility, disciplined restraint and a hard-won peace. No flags or heraldry, because three different national identities use this scene. No leader worship, no Solgalov, no modern technology, no explosions, no fantasy armour, no identical faces, no hats, no readable text, no inscriptions, no captions, no watermark, no frame, no CRT filter: template filtering is applied separately.",
+      "reference_images": [
+        "gfx/leaders/VAL/portrait_VAL_Gleb_Osten.png",
+        "gfx/leaders/VAL/portrait_VAL_Tamara_Greitz.png",
+        "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm.png"
+      ],
+      "source_sha256": "db499f92fd2ca23b774e27f606ed02f7dcf49bde59d0aba424edc1af7acddd94",
+      "runtime_sha256": "e9dc6af1336273869fb841712ff0b103fed20bbc864adb2b0bd90eb09679f8b5"
+    },
+    "superevent_west_veyran": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_west_veyran.png",
+      "source_sha256": "eac308326b33daa7e87cf140e5f5e45e3309a05a12660110aab575c5682d493a",
+      "runtime_sha256": "0d742eb4c7c4f1f2d22b85c1ad516331c8933d09e5d53a997aad5754120e166e"
+    },
+    "superevent_south_war": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_war.png",
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-59ef13f9-ff83-4593-a98d-9b698d85de76.png",
+      "prompt": "Create a wide 16:9 historical-scene illustration, photorealistic analogue war correspondent colour photograph, for a fictional mid-20th-century strategy game event titled War for the South (do not write the title). A military convoy starts crossing a vast barren ochre desert toward a distant industrial city with steel furnace smokestacks and oil derricks. View from a rocky roadside rise: one believable weathered 1940s halftrack in middle distance and a staggered line of canvas covered military lorries along a curving road, dust trails partly obscuring vehicles, a few small helmeted soldiers seen from behind beside the lead lorry. The geography is dry Caspian and Iranian plateau, a low ridge, smoking furnaces beyond the horizon, a thin plume of distant artillery smoke, overcast amber-grey dawn. A sense of an irreversible major war beginning, documentary restraint and natural imperfect composition, no parade, no victory celebrations. Distinct coherent vehicles, mechanically plausible wheels and tracks, very few small distant human figures. Muted warm earth tones, cold heavy sky, film grain, photograph rather than glossy game concept art. Important action in central upper three quarters, calm darker ground near bottom for an overlay. No flags, no emblems, no writing, no border, no watermark, no screen effects; a PSD filter will be added later.",
+      "source_sha256": "fd095c9e1f9695e4b59c75f9d35b6d1fd8621d941547dbcd1b0190eaa4cb65a8",
+      "runtime_sha256": "4347ccdbeaea76e349820fb8ee505165430c707348d2cf73c5d3476752644bfa"
+    }
+  },
+  "retained": {
+    "gfx/interface/superevents/IVN/superevent_itora_civilwar.png": "1b09d3f05e14767ea0b82a13d79a55c26391f5f22819a920cf9122af91abb5f8",
+    "gfx/interface/superevents/IVN/superevent_itora_committee_victory.png": "6e68e0b943d7bb72f0b440f6ece9c4c7631c035a9e317fd59f5ee94583980dd5",
+    "gfx/interface/superevents/IVN/superevent_itora_legion_victory.png": "75a0775ac93f9b857394c01ad8372b6d8a07283aca0552c6a592517ae3640cce",
+    "gfx/interface/superevents/IVN/superevent_west_committee.png": "39bd73d00dd71a0092c67c5486754335919aa45b29838d4ee5849846c12cd632",
+    "gfx/interface/superevents/IVN/superevent_west_emergency.png": "d8e29b678a5303f2a306abdc5c111151cfa555faff928643868dd3c58f2e4020",
+    "gfx/interface/superevents/IVN/superevent_west_revanche.png": "70ab0e21df39d2579bbe794803c90050188024b5310a07e96936f24daa9d5eff",
+    "gfx/interface/superevents/IVN/superevent_west_shield.png": "8676842903252b371b7907bfbe5ace6e8816b753ddf3aee3525527c67dc32ca1",
+    "gfx/interface/superevents/NAM/superevent_nam_resource_war_district.png": "965ca9e8b3584d7edbfe26b015578d920b07d090ac725cbe5209a239760ced2f",
+    "gfx/interface/superevents/NAM/superevent_nam_resource_war_service.png": "d0d6e60502df66788113710fb6442099f9ff0d30257fe69fae6140f6305e09f1",
+    "gfx/interface/superevents/NAM/superevent_resource_war.png": "b3f55c182c44220e9d72bb03a8d9368a4d411ae48f709071195f1fe67d22df40",
+    "gfx/interface/superevents/NAM/superevent_south_boards.png": "c24067aab18d30e29544d56f00fcf77b1aeae142f59f1766272dfe25fd9d304f",
+    "gfx/interface/superevents/NAM/superevent_south_iron.png": "3e4b055b5338667d1685063c99531f3c348cd6ccbe61b08ab6ce6e5020ad8076",
+    "gfx/interface/superevents/NAM/superevent_south_nam.png": "0baf83e9ba12e26e4a48b98fb9bd85715e1aba3122f68a3d360d6b94cf5d5daa",
+    "gfx/interface/superevents/RUS/last empire.png": "09390845a5ecf31bb128542448ebe3b3c1bf02b7b776798872366a13315d8cf6",
+    "gfx/interface/superevents/RUS/superevent_rus_black_banner.png": "b10d2f9b3cc336207beeb1116568299ea8f843306dff116da3c4f8dd918e9ee1",
+    "gfx/interface/superevents/RUS/superevent_rus_restoration.png": "f99eb9466a74e4f02e35843da1ddc4412639f3c4d52f82fd2c94fe897ffe39ed",
+    "gfx/interface/superevents/RUS/world_ended.png": "579a4dc76752ac9a8fa0a718dce7edbe3affc02f86ba1850922f2e19bad768f2",
+    "gfx/interface/superevents/SHL/superevent_south_cities.png": "c9348dd486c513f12379ab2b0445812ae8d9265393c2df24bd67ae78a39f3638",
+    "gfx/interface/superevents/SHL/superevent_south_commune.png": "43dd5c732d1cd87038bce4ed7e9da25d37dcfe48c10b3b7034881ea2efebc37e",
+    "gfx/interface/superevents/SHL/superevent_south_conclave.png": "4f2762d22760da329b3428f9c1de698ea0e41a495e9c316c84e7708baaf4f18d",
+    "gfx/interface/superevents/SHL/superevent_south_houses.png": "06befcafdb3a49069fc6a16e8658d9225f1a7d3ee49bf2e447026f744ccb31af",
+    "gfx/interface/superevents/SHL/superevent_south_nur.png": "27a7769bbbe052c98c7953f4085293161e40e07c088ad87b69cc239812405016",
+    "gfx/interface/superevents/SHL/superevent_south_regency.png": "593f68e749e6154e34798e0c2b1a88e3fbcd641d75ddbaaf3ec30a157f21c22c",
+    "gfx/interface/superevents/South/superevent_south_restitution.png": "8a1f348f126baf9970abfb9145c831afab8b328a275740eccfd1d851fb3b368c",
+    "gfx/interface/superevents/STP/superevent_party_victory.png": "a47d5eba0b12ea4e8ee3793950e114fcec027858d4cc74def6ecf176ac61d58b",
+    "gfx/interface/superevents/STP/superevent_stelander_empire.png": "491e96548be7563ae746dc2ff3bdb890ebf2344a4331b910c16328569e448c63",
+    "gfx/interface/superevents/STP/superevent_stelander_party_victory.png": "3db9ea4b288107cdb0cbf345a1d0b62695e0593cc02f06298f2c488850786e8a",
+    "gfx/interface/superevents/STP/superevent_stelander_party_victory_festival.png": "3dfaab604de1ec69cb939069d8e718f0de12f9bb27c889a2a3cf1dc86870383c",
+    "gfx/interface/superevents/STP/superevent_stelander_party_victory_silence.png": "1444ee27e07dd0e5ef7e6a735c286889cef6725cc8e8e275170ddbd278523106",
+    "gfx/interface/superevents/STP/superevent_stelander_party_victory_staff.png": "70ceab5d8194a59289cd8ba2d1ec2b09a8c7123c8bff877d9a1344d6d3cbaabb",
+    "gfx/interface/superevents/STP/superevent_stelander_party_victory_wallets.png": "5784d8798508543ff8691988d4cd086f77618a14ad4d0b1a44f505c6e920063b",
+    "gfx/interface/superevents/STP/superevent_stelander_shabrat_republic.png": "cad4df64887dcf894cb78b2c8d1a4bda6d81ffa14312cf4e71e262308ab2bf69",
+    "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png": "a9c4e451e7d2b78fd66c6fafad7df88f72190f6ea50f9abe63e12c94ac116e28",
+    "gfx/interface/superevents/STP/superevent_stelander_sotnikov_civilwar.png": "9c0c1c1cd5e06cbdd254b822aeb87984ba6d5184d05759852b6402aa1a92dbf9",
+    "gfx/interface/superevents/VAL/superevent_val_commonwealth.png": "49388aea1394d4b7635f705c95836e08dcf12a4755c817f451a4a5e8b9282d56",
+    "gfx/interface/superevents/WRK/superevent_itora_vorkerland_war.png": "be6e8539b796890b49f5227c871943d79387fd6976793be9f1cbfb50d812079f",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png": "b7a6840072f5c172318d99ca0c39c7c7cd309d185da8e96512a5d03a6186bcd8",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png": "f55af0d03f60ae732230c91957c119c8bfcebaea02ef3a2bfd26dc706293d36d",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png": "abab4df803b4c816081f4b1931748d979ea1473eeb951b0d51fd39c12398beca",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png": "4f0ac160a663c4c10edea64a50780044cffaf335201e44aa14ab952ec7c9c8c4",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png": "c36facb1a8350b992f29af87286d2c81809ed34faeb7c9dd0f72959d28921e14",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png": "f34c2990d4a230005bace618eb7f6684b22e845457e4320fac8aa923b0a4fc32",
+    "gfx/interface/superevents/WRK/superevent_vorkerland_world_empire.png": "6c0aac5c07d6bc4a6254de605ae8ad8c5f6401be66fadc012d56e5ba5ada29c8",
+    "gfx/interface/superevents/WRK/superevent_west_dorian.png": "6b69a0a92f15651dc4a18a6d9085e9f89eb0fc12680e5b7f112cc4c269f71279"
+  },
+  "bindings": {
+    "superevent_vorkerland_civilwar": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png",
+      "effect": "superevent_vorkerland_civilwar_sound_e",
+      "sample": "superevent_vorkerland_civilwar_sound",
+      "audio_file": "superevents/superevent_vorkerland_civilwar_sound.wav"
+    },
+    "superevent_vorkerland_dirty_opening": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png",
+      "effect": "superevent_vorkerland_dirty_opening_sound_e",
+      "sample": "superevent_vorkerland_dirty_opening_sound",
+      "audio_file": "superevents/superevent_vorkerland_dirty_opening_sound.wav"
+    },
+    "superevent_vorkerland_worker_victory": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png",
+      "effect": "superevent_vorkerland_worker_victory_sound_e",
+      "sample": "superevent_vorkerland_worker_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_worker_victory_sound.wav"
+    },
+    "superevent_vorkerland_utilitarian_victory": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png",
+      "effect": "superevent_vorkerland_utilitarian_victory_sound_e",
+      "sample": "superevent_vorkerland_utilitarian_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_utilitarian_victory_sound.wav"
+    },
+    "superevent_vorkerland_vlad_victory": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png",
+      "effect": "superevent_vorkerland_vlad_victory_sound_e",
+      "sample": "superevent_vorkerland_vlad_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_vlad_victory_sound.wav"
+    },
+    "superevent_vorkerland_dorian_victory": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png",
+      "effect": "superevent_vorkerland_dorian_victory_sound_e",
+      "sample": "superevent_vorkerland_dorian_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_civilwar_doctor_won.wav",
+      "scene_note": "The canonical Dorian victory scene retains its doctor-won asset filename."
+    },
+    "superevent_stelander_empire": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_empire.png",
+      "effect": "superevent_stelander_empire_sound_e",
+      "sample": "superevent_stelander_empire_sound",
+      "audio_file": "superevents/superevent_stelander_empire_sound.wav"
+    },
+    "superevent_stelander_party_victory": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory.png",
+      "effect": "superevent_stelander_party_victory_sound_e",
+      "sample": "superevent_stelander_party_victory_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_sound.wav",
+      "theme_note": "The existing party theme belongs to every party victory variant."
+    },
+    "superevent_stelander_shabrat_victory": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png",
+      "effect": "superevent_stelander_shabrat_victory_sound_e",
+      "sample": "superevent_stelander_shabrat_victory_sound",
+      "audio_file": "superevents/superevent_stelander_shabrat_victory_sound.wav"
+    },
+    "superevent_nam_resource_war": {
+      "texture": "gfx/interface/superevents/NAM/superevent_resource_war.png",
+      "effect": "superevent_nam_resource_war_sound_e",
+      "sample": "superevent_nam_resource_war_sound",
+      "audio_file": "superevents/superevent_nam_resource_war_sound.wav",
+      "scene_note": "The oil-field war scene belongs to this resource-war presentation."
+    },
+    "superevent_rus_last_empire": {
+      "texture": "gfx/interface/superevents/RUS/last empire.png",
+      "effect": "superevent_rus_last_empire_sound_e",
+      "sample": "superevent_rus_last_empire_sound",
+      "audio_file": "superevents/superevent_rus_last_empire_sound.wav",
+      "scene_note": "The canonical last-empire painting retains its original asset filename."
+    },
+    "superevent_val_commonwealth": {
+      "texture": "gfx/interface/superevents/VAL/superevent_val_commonwealth.png",
+      "effect": "superevent_val_commonwealth_sound_e",
+      "sample": "superevent_val_commonwealth_sound",
+      "audio_file": "superevents/superevent_val_commonwealth.wav"
+    },
+    "superevent_stelander_great": {
+      "texture": "gfx/interface/superevents/STP/superevent_party_victory.png",
+      "effect": "superevent_stelander_great_sound_e",
+      "sample": "superevent_stelander_great_sound",
+      "audio_file": "superevents/superevent_stelander_great_sound.wav",
+      "scene_note": "The canonical Great Stelander proclamation artwork retains its original asset filename."
+    },
+    "superevent_rus_black_banner": {
+      "texture": "gfx/interface/superevents/RUS/superevent_rus_black_banner.png",
+      "effect": "superevent_rus_black_banner_sound_e",
+      "sample": "superevent_rus_black_banner_sound",
+      "audio_file": "superevents/superevent_rus_black_banner_sound.wav"
+    },
+    "superevent_rus_restoration": {
+      "texture": "gfx/interface/superevents/RUS/superevent_rus_restoration.png",
+      "effect": "superevent_rus_restoration_sound_e",
+      "sample": "superevent_rus_restoration_sound",
+      "audio_file": "superevents/superevent_rus_restoration_sound.wav"
+    },
+    "superevent_itora_vorkerland_war": {
+      "texture": "gfx/interface/superevents/WRK/superevent_itora_vorkerland_war.png",
+      "effect": "superevent_itora_vorkerland_war_sound_e",
+      "sample": "superevent_itora_vorkerland_war_sound",
+      "audio_file": "superevents/superevent_itora_vorkerland_war_sound.wav"
+    },
+    "superevent_itora_civilwar": {
+      "texture": "gfx/interface/superevents/IVN/superevent_itora_civilwar.png",
+      "effect": "superevent_itora_civilwar_sound_e",
+      "sample": "superevent_itora_civilwar_sound",
+      "audio_file": "superevents/superevent_itora_civilwar_sound.wav"
+    },
+    "superevent_rus_khan_defeated": {
+      "texture": "gfx/interface/superevents/RUS/superevent_rus_khan_defeated.png",
+      "effect": "superevent_rus_khan_defeated_sound_e",
+      "sample": "superevent_rus_khan_defeated_sound",
+      "audio_file": "superevents/superevent_rus_khan_defeated_sound.wav"
+    },
+    "superevent_stelander_sotnikov_civilwar": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_sotnikov_civilwar.png",
+      "effect": "superevent_stelander_sotnikov_civilwar_sound_e",
+      "sample": "superevent_stelander_sotnikov_civilwar_sound",
+      "audio_file": "superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
+    },
+    "superevent_stelander_sotnikov_directory": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_sotnikov_directory.png",
+      "effect": "superevent_stelander_sotnikov_directory_sound_e",
+      "sample": "superevent_stelander_sotnikov_directory_sound",
+      "audio_file": "superevents/superevent_stelander_sotnikov_directory_sound.wav"
+    },
+    "superevent_stelander_sotnikov_charter": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_sotnikov_charter.png",
+      "effect": "superevent_stelander_sotnikov_charter_sound_e",
+      "sample": "superevent_stelander_sotnikov_charter_sound",
+      "audio_file": "superevents/superevent_stelander_sotnikov_charter_sound.wav"
+    },
+    "superevent_stelander_shabrat_republic": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_shabrat_republic.png",
+      "effect": "superevent_stelander_shabrat_republic_sound_e",
+      "sample": "superevent_stelander_shabrat_republic_sound",
+      "audio_file": "superevents/superevent_stelander_shabrat_republic_sound.wav"
+    },
+    "superevent_stelander_tikhoreva": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_tikhoreva.png",
+      "effect": "superevent_stelander_tikhoreva_sound_e",
+      "sample": "superevent_stelander_tikhoreva_sound",
+      "audio_file": "superevents/superevent_stelander_tikhoreva_sound.wav"
+    },
+    "superevent_nam_resource_war_service": {
+      "texture": "gfx/interface/superevents/NAM/superevent_nam_resource_war_service.png",
+      "effect": "superevent_nam_resource_war_service_sound_e",
+      "sample": "superevent_nam_resource_war_service_sound",
+      "audio_file": "superevents/superevent_nam_resource_war_service_sound.wav"
+    },
+    "superevent_nam_resource_war_district": {
+      "texture": "gfx/interface/superevents/NAM/superevent_nam_resource_war_district.png",
+      "effect": "superevent_nam_resource_war_district_sound_e",
+      "sample": "superevent_nam_resource_war_district_sound",
+      "audio_file": "superevents/superevent_nam_resource_war_district_sound.wav"
+    },
+    "superevent_stelander_party_victory_houses": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_houses.png",
+      "effect": "superevent_stelander_party_victory_houses_sound_e",
+      "sample": "superevent_stelander_party_victory_houses_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_houses_sound.wav",
+      "theme_note": "Camerata Mediolanense - Dolci Ire with a quiet banquet, glass toasts and restrained applause."
+    },
+    "superevent_stelander_party_victory_staff": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_staff.png",
+      "effect": "superevent_stelander_party_victory_staff_sound_e",
+      "sample": "superevent_stelander_party_victory_staff_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_staff_sound.wav",
+      "theme_note": "Phragments - All Towers Must Fall with marching, distant armor, the supplied military announcement and guard foley."
+    },
+    "superevent_stelander_party_victory_wallets": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_wallets.png",
+      "effect": "superevent_stelander_party_victory_wallets_sound_e",
+      "sample": "superevent_stelander_party_victory_wallets_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_wallets_sound.wav",
+      "theme_note": "Trigg & Gusset - Vanishing Gold with harbor sounds, office paperwork, press cameras, the supplied address and a cash register."
+    },
+    "superevent_stelander_party_victory_silence": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_silence.png",
+      "effect": "superevent_stelander_party_victory_silence_sound_e",
+      "sample": "superevent_stelander_party_victory_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_sound.wav",
+      "theme_note": "The existing party theme belongs to every party victory variant."
+    },
+    "superevent_stelander_party_victory_regent": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_regent.png",
+      "effect": "superevent_stelander_party_victory_regent_sound_e",
+      "sample": "superevent_stelander_party_victory_regent_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_regent_sound.wav",
+      "theme_note": "Peter Bjargo - To Replace My Sadness with quiet wind, treaty paperwork, sparse press cameras and the supplied address."
+    },
+    "superevent_stelander_party_victory_festival": {
+      "texture": "gfx/interface/superevents/STP/superevent_stelander_party_victory_festival.png",
+      "effect": "superevent_stelander_party_victory_festival_sound_e",
+      "sample": "superevent_stelander_party_victory_festival_sound",
+      "audio_file": "superevents/superevent_stelander_party_victory_festival_sound.wav",
+      "theme_note": "Raining Pianos repeats 01:43-01:47 before interference, panic, Lights Out and the supplied announcer."
+    },
+    "superevent_south_houses": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_houses.png",
+      "effect": "superevent_south_houses_sound_e",
+      "sample": "superevent_south_houses_sound",
+      "audio_file": "superevents/superevent_south_houses_sound.wav",
+      "theme_note": "Arcana - Le Serpent Rouge, with a reception room, contract signing and stamp, restrained applause and a passing horse cart. Music remains unducked."
+    },
+    "superevent_south_cities": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_cities.png",
+      "effect": "superevent_south_cities_sound_e",
+      "sample": "superevent_south_directorate_sound",
+      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_nur": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_nur.png",
+      "effect": "superevent_south_nur_sound_e",
+      "sample": "superevent_south_nur_sound",
+      "audio_file": "superevents/superevent_south_nur_sound.wav"
+    },
+    "superevent_south_regency": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_regency.png",
+      "effect": "superevent_south_regency_sound_e",
+      "sample": "superevent_south_regency_sound",
+      "audio_file": "superevents/superevent_south_regency_sound.wav"
+    },
+    "superevent_south_commune": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_commune.png",
+      "effect": "superevent_south_commune_sound_e",
+      "sample": "superevent_south_commune_sound",
+      "audio_file": "superevents/superevent_south_commune_sound.wav"
+    },
+    "superevent_south_conclave": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_conclave.png",
+      "effect": "superevent_south_conclave_sound_e",
+      "sample": "superevent_south_regency_sound",
+      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_service": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_iron.png",
+      "effect": "superevent_south_service_sound_e",
+      "sample": "superevent_south_iron_sound",
+      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "scene_note": "Appointment of a civilian governor is shared with the administrative iron-rule ending.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_charter": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_conclave.png",
+      "effect": "superevent_south_charter_sound_e",
+      "sample": "superevent_south_regency_sound",
+      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "scene_note": "A council deliberation serves both constitutional and corporate representative government.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_contracts": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_houses.png",
+      "effect": "superevent_south_contracts_sound_e",
+      "sample": "superevent_south_directorate_sound",
+      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "scene_note": "Oil cargo inspection is shared with the oil-house commercial settlement.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_rump": {
+      "texture": "gfx/interface/superevents/South/superevent_south_rump.png",
+      "effect": "superevent_south_rump_sound_e",
+      "sample": "superevent_south_regency_sound",
+      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_revenge": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_nam.png",
+      "effect": "superevent_south_revenge_sound_e",
+      "sample": "superevent_south_iron_sound",
+      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "scene_note": "The restored tanker road is shared with southern reintegration under NAM.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_radical": {
+      "texture": "gfx/interface/superevents/South/superevent_south_radical.png",
+      "effect": "superevent_south_radical_sound_e",
+      "sample": "superevent_south_commune_sound",
+      "audio_file": "superevents/superevent_south_commune_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_free_islands": {
+      "texture": "gfx/interface/superevents/South/superevent_south_free_islands.png",
+      "effect": "superevent_south_free_islands_sound_e",
+      "sample": "superevent_south_free_islands_sound",
+      "audio_file": "superevents/superevent_south_free_islands_sound.wav",
+      "theme_note": "Sophie Hutchings - By Night, with harbor waves, a ferry horn and a welcoming crowd; continuous music level."
+    },
+    "superevent_south_boards": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
+      "effect": "superevent_south_boards_sound_e",
+      "sample": "superevent_south_directorate_sound",
+      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_restitution": {
+      "texture": "gfx/interface/superevents/South/superevent_south_restitution.png",
+      "effect": "superevent_south_restitution_sound_e",
+      "sample": "superevent_south_nur_sound",
+      "audio_file": "superevents/superevent_south_nur_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_west_worker": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_worker.png",
+      "effect": "superevent_west_worker_sound_e",
+      "sample": "superevent_vorkerland_worker_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_worker_victory_sound.wav"
+    },
+    "superevent_west_petrichev": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_petrichev.png",
+      "effect": "superevent_west_petrichev_sound_e",
+      "sample": "superevent_west_petrichev_sound",
+      "audio_file": "superevents/superevent_west_petrichev_sound.wav"
+    },
+    "superevent_west_veyran": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_veyran.png",
+      "effect": "superevent_west_veyran_sound_e",
+      "sample": "superevent_west_veyran_sound",
+      "audio_file": "superevents/superevent_west_veyran_sound.wav"
+    },
+    "superevent_west_dorian": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_dorian.png",
+      "effect": "superevent_west_dorian_sound_e",
+      "sample": "superevent_west_dorian_sound",
+      "audio_file": "superevents/superevent_west_dorian_sound.wav"
+    },
+    "superevent_west_anton": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_anton.png",
+      "effect": "superevent_west_anton_sound_e",
+      "sample": "superevent_vorkerland_utilitarian_victory_sound",
+      "audio_file": "superevents/superevent_vorkerland_utilitarian_victory_sound.wav"
+    },
+    "superevent_west_shield": {
+      "texture": "gfx/interface/superevents/IVN/superevent_west_shield.png",
+      "effect": "superevent_west_shield_sound_e",
+      "sample": "superevent_west_shield_sound",
+      "audio_file": "superevents/superevent_west_shield_sound.wav"
+    },
+    "superevent_west_emergency": {
+      "texture": "gfx/interface/superevents/IVN/superevent_west_emergency.png",
+      "effect": "superevent_west_emergency_sound_e",
+      "sample": "superevent_west_emergency_sound",
+      "audio_file": "superevents/superevent_west_emergency_sound.wav"
+    },
+    "superevent_west_revanche": {
+      "texture": "gfx/interface/superevents/IVN/superevent_west_revanche.png",
+      "effect": "superevent_west_revanche_sound_e",
+      "sample": "superevent_west_revanche_sound",
+      "audio_file": "superevents/superevent_west_revanche_sound.wav"
+    },
+    "superevent_west_committee": {
+      "texture": "gfx/interface/superevents/IVN/superevent_west_committee.png",
+      "effect": "superevent_west_committee_sound_e",
+      "sample": "superevent_west_emergency_sound",
+      "audio_file": "superevents/superevent_west_emergency_sound.wav"
+    },
+    "superevent_vorkerland_world_empire": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_world_empire.png",
+      "effect": "superevent_vorkerland_world_empire_sound_e",
+      "sample": "superevent_vorkerland_world_empire_sound",
+      "audio_file": "superevents/superevent_vorkerland_world_empire_sound.wav"
+    },
+    "superevent_south_iron": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_iron.png",
+      "effect": "superevent_south_iron_sound_e",
+      "sample": "superevent_south_iron_sound",
+      "audio_file": "superevents/superevent_south_iron_sound.wav"
+    },
+    "superevent_south_civil_service": {
+      "texture": "gfx/interface/superevents/South/superevent_south_civil_service.png",
+      "effect": "superevent_south_civil_service_sound_e",
+      "sample": "superevent_south_iron_sound",
+      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_federation": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_worker.png",
+      "effect": "superevent_south_federation_sound_e",
+      "sample": "superevent_south_regency_sound",
+      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "scene_note": "A civilian delegate assembly also represents a federation settlement.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_oil_union": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
+      "effect": "superevent_south_oil_union_sound_e",
+      "sample": "superevent_south_nur_sound",
+      "audio_file": "superevents/superevent_south_nur_sound.wav",
+      "scene_note": "Joint pipeline commissioning represents both the oil union and oil boards.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_contract_republic": {
+      "texture": "gfx/interface/superevents/SHL/superevent_south_cities.png",
+      "effect": "superevent_south_contract_republic_sound_e",
+      "sample": "superevent_south_directorate_sound",
+      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "scene_note": "Municipal delegates signing agreements also represent the contract republic.",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_south_directorate": {
+      "texture": "gfx/interface/superevents/South/superevent_south_directorate.png",
+      "effect": "superevent_south_directorate_sound_e",
+      "sample": "superevent_south_directorate_sound",
+      "audio_file": "superevents/superevent_south_directorate_sound.wav"
+    },
+    "superevent_south_nam": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_nam.png",
+      "effect": "superevent_south_nam_sound_e",
+      "sample": "superevent_south_iron_sound",
+      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+    },
+    "superevent_west_council": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_council.png",
+      "effect": "superevent_west_council_sound_e",
+      "sample": "superevent_west_petrichev_sound",
+      "audio_file": "superevents/superevent_west_petrichev_sound.wav"
+    },
+    "superevent_west_world_empire": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_world_empire.png",
+      "effect": "superevent_west_world_empire_sound_e",
+      "sample": "superevent_west_world_empire_sound",
+      "audio_file": "superevents/superevent_west_world_empire_sound.wav",
+      "theme_note": "Arcana - The Opening of the Wound with the western railway reopening and a steam train departing."
+    },
+    "superevent_nam_veyran_proclamation": {
+      "texture": "gfx/interface/superevents/WRK/superevent_west_veyran.png",
+      "effect": "superevent_nam_veyran_proclamation_sound_e",
+      "sample": "superevent_nam_veyran_proclamation_sound",
+      "audio_file": "superevents/superevent_nam_veyran_proclamation_sound.wav",
+      "scene_note": "The same Veyran imperial project uses the same fortress approach."
+    },
+    "superevent_itora_legion_victory": {
+      "texture": "gfx/interface/superevents/IVN/superevent_itora_legion_victory.png",
+      "effect": "superevent_itora_legion_victory_sound_e",
+      "sample": "superevent_itora_legion_victory_sound",
+      "audio_file": "superevents/superevent_itora_legion_victory_sound.wav"
+    },
+    "superevent_itora_committee_victory": {
+      "texture": "gfx/interface/superevents/IVN/superevent_itora_committee_victory.png",
+      "effect": "superevent_itora_committee_victory_sound_e",
+      "sample": "superevent_itora_committee_victory_sound",
+      "audio_file": "superevents/superevent_itora_committee_victory_sound.wav"
+    },
+    "superevent_itora_stalk_portal": {
+      "texture": "gfx/interface/superevents/IVN/superevent_itora_stalk_portal_background.png",
+      "effect": "superevent_itora_stalk_portal_sound_e",
+      "sample": "superevent_itora_stalk_portal_sound",
+      "audio_file": "superevents/superevent_itora_stalk_portal_sound.wav",
+      "scene_note": "The animation builder owns the graded fallback and all native strip frames."
+    },
+    "superevent_val_council_proclamation": {
+      "texture": "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png",
+      "effect": "superevent_val_council_proclamation_sound_e",
+      "sample": "superevent_val_council_proclamation_sound",
+      "audio_file": "superevents/superevent_val_council_proclamation_sound.wav",
+      "theme_note": "Les Fragments de la Nuit - Entre Ciel et Fer, with radio crackle, honour guard footsteps, a user-provided address through a loudspeaker with short room echoes, and restrained applause. Music remains unducked; Council proclamation only."
+    },
+    "superevent_south_war": {
+      "texture": "gfx/interface/superevents/South/superevent_south_war.png",
+      "effect": "superevent_south_war_sound_e",
+      "sample": "superevent_south_war_sound",
+      "audio_file": "superevents/superevent_south_war_sound.wav",
+      "theme_note": "Phragments - New Kings, with armour engines, distant gunfire and radio static. Shared opening of the southern war against Shahrabad; music remains unducked."
+    }
+  }
+}

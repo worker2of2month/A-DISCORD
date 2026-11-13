@@ -437,6 +437,7 @@ ADISCORD_economy_demobilization = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_demobilization_deadline_description_rules_tt
 			custom_effect_tooltip = ADISCORD_economy_demobilization_recovery_tt
 			hidden_effect = { ADISCORD_economy_reconcile_demobilization = yes }
 		}

@@ -2,15 +2,21 @@
 NAM_wrk_concession_income = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
 	enable = {
-		has_country_flag = NAM_wrk_concession_active
-		NAM_colony_phase = yes
-		event_target:ADISCORD_vorkerland_nation = { exists = yes }
+		custom_trigger_tooltip = {
+			tooltip = NAM_wrk_concession_income_active_tt
+			has_country_flag = NAM_wrk_concession_active
+			NAM_colony_phase = yes
+			event_target:ADISCORD_vorkerland_nation = { exists = yes }
+		}
 	}
 	remove_trigger = {
-		OR = {
-			NOT = { has_country_flag = NAM_wrk_concession_active }
-			NAM_colony_phase = no
-			event_target:ADISCORD_vorkerland_nation = { exists = no }
+		custom_trigger_tooltip = {
+			tooltip = NAM_wrk_concession_income_removed_tt
+			OR = {
+				NOT = { has_country_flag = NAM_wrk_concession_active }
+				NAM_colony_phase = no
+				event_target:ADISCORD_vorkerland_nation = { exists = no }
+			}
 		}
 	}
 	ADISCORD_economy_weekly_income = NAM_wrk_trade_weekly_income
@@ -107,8 +113,18 @@ NAM_scorched_wells_modifier = {
 
 NAM_klyuchevsk_oil_strike = {
 	icon = GFX_modifiers_ADISCORD_oil_strike
-	enable = { NAM_exile_resistance_site = yes }
-	remove_trigger = { NAM_exile_resistance_site = no }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_klyuchevsk_oil_strike_active_tt
+			NAM_exile_resistance_site = yes
+		}
+	}
+	remove_trigger = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_klyuchevsk_oil_strike_removed_tt
+			NAM_exile_resistance_site = no
+		}
+	}
 	state_resources_factor = -0.50
 }
 
@@ -125,7 +141,12 @@ NAM_fuel_shortage = {
 # penalty together. The native enable also disables it without a basin source.
 NAM_fuel_embargo_modifier = {
 	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
-	enable = { NAM = { NAM_fuel_embargo_source = yes } }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_fuel_embargo_modifier_active_tt
+			NAM = { NAM_fuel_embargo_source = yes }
+		}
+	}
 	remove_trigger = { NOT = { country_exists = NAM } }
 	fuel_gain_factor = -0.20
 	army_fuel_consumption_factor = 0.05
@@ -134,16 +155,36 @@ NAM_fuel_embargo_modifier = {
 # STATE island. Regular convoys carry the islands' ore and their supplies.
 NAM_island_convoy_route = {
 	icon = GFX_modifiers_ADISCORD_island_convoy
-	enable = { NAM_island_route_operable = yes }
-	remove_trigger = { NOT = { NAM_island_route_operable = yes } }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_island_convoy_route_active_tt
+			NAM_island_route_operable = yes
+		}
+	}
+	remove_trigger = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_island_convoy_route_removed_tt
+			NOT = { NAM_island_route_operable = yes }
+		}
+	}
 	state_resources_factor = 0.15
 }
 
 # STATE. A lost district suspends the same levy until recapture or the term ends.
 NAM_island_steel_levy_modifier = {
 	icon = GFX_modifiers_ADISCORD_steel_levy
-	enable = { NAM_island_levy_state_active = yes }
-	remove_trigger = { NAM = { NAM_island_levy_running = no } }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_island_steel_levy_modifier_active_tt
+			NAM_island_levy_state_active = yes
+		}
+	}
+	remove_trigger = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_island_steel_levy_modifier_removed_tt
+			NAM = { NAM_island_levy_running = no }
+		}
+	}
 	state_resources_factor = -0.15
 }
 
@@ -172,7 +213,12 @@ NAM_corp_dynamic = {
 
 NAM_board_industrial_policy = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_operable = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_governing_tt
+			NAM_board_operable = yes
+		}
+	}
 	industrial_capacity_factory = NAM_board_mod_output
 	production_speed_buildings_factor = NAM_board_mod_construction
 	production_factory_efficiency_gain_factor = NAM_board_mod_growth
@@ -195,15 +241,23 @@ NAM_free_zone_state = {
 
 NAM_board_company_quarters_state = {
 	icon = GFX_modifiers_ADISCORD_company_quarters
-	enable = { NAM_board_held_site = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_held_site_focus_condition_tt
+			NAM_board_held_site = yes
+		}
+	}
 	state_production_speed_industrial_complex_factor = 0.35
 }
 
 NAM_air_bridge_deliveries = {
 	icon = GFX_modifiers_ADISCORD_air_bridge
 	enable = {
-		NAM_air_bridge_destination = yes
-		NAM = { NAM_air_bridge_departure = yes }
+		custom_trigger_tooltip = {
+			tooltip = NAM_air_bridge_deliveries_active_tt
+			NAM_air_bridge_destination = yes
+			NAM = { NAM_air_bridge_departure = yes }
+		}
 	}
 	local_supplies_for_controller = 3
 }
@@ -211,9 +265,12 @@ NAM_air_bridge_deliveries = {
 NAM_tenant_supply_depot = {
 	icon = GFX_modifiers_ADISCORD_tenant_supply_depot
 	enable = {
-		is_owned_by = NAM
-		is_controlled_by = NAM
-		NAM = { NAM_pw_operable = yes }
+		custom_trigger_tooltip = {
+			tooltip = NAM_tenant_supply_depot_active_tt
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NAM = { NAM_pw_operable = yes }
+		}
 	}
 	local_supplies = 1
 	state_repair_speed_infrastructure_factor = 0.25
@@ -249,42 +306,72 @@ NAM_consolidation_dynamic = {
 # corporation's profile (NAM_corp_district_owner 1-6).
 NAM_corp_owner_1_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	fuel_gain_factor = 0.25
 	stability_factor = -0.05
 }
 
 NAM_corp_owner_2_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	local_resources_factor = 0.15
 	stability_factor = -0.03
 }
 
 NAM_corp_owner_3_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	ADISCORD_economy_trade_income_factor = 0.15
 	consumer_goods_factor = 0.03
 }
 
 NAM_corp_owner_4_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	production_factory_efficiency_gain_factor = 0.10
 	war_support_factor = -0.05
 }
 
 NAM_corp_owner_5_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	recruitable_population_factor = 0.05
 	stability_factor = -0.08
 }
 
 NAM_corp_owner_6_district = {
 	icon = GFX_idea_ADISCORD_trade_policy_export_focus
-	enable = { NAM_board_federal_subject = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_board_federal_subject_focus_condition_tt
+			NAM_board_federal_subject = yes
+		}
+	}
 	industrial_capacity_factory = 0.05
 	ADISCORD_economy_tax_collection_factor = -0.10
 }
@@ -302,19 +389,37 @@ NAM_conquered_state_modifier = {
 # STATE. Civilian workshops and market stores provision the garrison.
 NAM_rad_requisitioned_market = {
 	icon = GFX_modifiers_ADISCORD_requisitioned_market
-	enable = { NAM_rad_requisition_district = yes }
-	remove_trigger = { NAM_rad_requisition_district = no }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_rad_requisitioned_market_active_tt
+			NAM_rad_requisition_district = yes
+		}
+	}
+	remove_trigger = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_rad_requisitioned_market_removed_tt
+			NAM_rad_requisition_district = no
+		}
+	}
 	local_supplies = 1.5
 	local_factories = -0.50
 }
 
 NAM_rad_command_post = {
 	icon = GFX_modifiers_ADISCORD_command_post
-	enable = { NAM_rad_command_post_staffed = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_rad_command_post_active_tt
+			NAM_rad_command_post_staffed = yes
+		}
+	}
 	remove_trigger = {
-		OR = {
-			NOT = { is_owned_by = NAM }
-			has_state_flag = NAM_rad_local_council
+		custom_trigger_tooltip = {
+			tooltip = NAM_rad_command_post_removed_tt
+			OR = {
+				NOT = { is_owned_by = NAM }
+				has_state_flag = NAM_rad_local_council
+			}
 		}
 	}
 	local_supplies = 1.25
@@ -352,8 +457,18 @@ NAM_south_convoy_blockade = {
 # Temporary operational tempo; payment is made before installation.
 NAM_mil_mobile_operation = {
 	icon = GFX_idea_generic_fortify_the_borders
-	enable = { NAM_mil_mobile_operation_open = yes }
-	remove_trigger = { NOT = { NAM_mil_mobile_operation_open = yes } }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_mil_mobile_operation_active_tt
+			NAM_mil_mobile_operation_open = yes
+		}
+	}
+	remove_trigger = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_mil_mobile_operation_removed_tt
+			NOT = { NAM_mil_mobile_operation_open = yes }
+		}
+	}
 	army_speed_factor = 0.10
 	planning_speed = 0.25
 	army_fuel_consumption_factor = 0.15
@@ -364,21 +479,27 @@ NAM_mil_mobile_operation = {
 NAM_mil_forward_depot = {
 	icon = GFX_modifiers_ADISCORD_forward_depot
 	enable = {
-		is_owned_by = NAM
-		is_controlled_by = NAM
-		NAM = {
-			NAM_independent_programmes_operable = yes
-			NAM_line_programme_open = yes
+		custom_trigger_tooltip = {
+			tooltip = NAM_mil_forward_depot_active_tt
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			NAM = {
+				NAM_independent_programmes_operable = yes
+				NAM_line_programme_open = yes
+			}
 		}
 	}
 	remove_trigger = {
-		NOT = {
-			AND = {
-				is_owned_by = NAM
-				is_controlled_by = NAM
-				NAM = {
-					NAM_independent_programmes_operable = yes
-					NAM_line_programme_open = yes
+		custom_trigger_tooltip = {
+			tooltip = NAM_mil_forward_depot_removed_tt
+			NOT = {
+				AND = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+					NAM = {
+						NAM_independent_programmes_operable = yes
+						NAM_line_programme_open = yes
+					}
 				}
 			}
 		}
@@ -397,8 +518,11 @@ NAM_svetlogorsk_hydropower = {
 NAM_captured_wells_shock = {
 	icon = GFX_modifiers_sabotaged_resource
 	enable = {
-		tag = NAM
-		ADISCORD_nam_resource_war_active = yes
+		custom_trigger_tooltip = {
+			tooltip = NAM_current_war_tt
+			tag = NAM
+			ADISCORD_nam_resource_war_active = yes
+		}
 	}
 	war_support_factor = NAM_captured_war_support
 	industrial_capacity_factory = NAM_captured_factory_output
@@ -407,9 +531,12 @@ NAM_captured_wells_shock = {
 NAM_guarded_wells_modifier = {
 	icon = GFX_modifiers_ADISCORD_guarded_wells
 	enable = {
-		ADISCORD_nam_resource_war_active = yes
-		is_owned_by = NAM
-		is_controlled_by = NAM
+		custom_trigger_tooltip = {
+			tooltip = NAM_guarded_wells_modifier_active_tt
+			ADISCORD_nam_resource_war_active = yes
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
 	}
 	local_supplies = 0.5
 	enemy_army_speed_factor = -0.10
@@ -425,13 +552,23 @@ NAM_pw_district_fleet_called = {
 # Title deeds survive a change of government. Their use requires jurisdiction.
 NAM_pw_district_title_books = {
 	icon = GFX_modifiers_ADISCORD_title_books
-	enable = { NAM_pw_central_civil_district = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_pw_central_civil_modifier_active_tt
+			NAM_pw_central_civil_district = yes
+		}
+	}
 	local_building_slots = 1
 }
 
 NAM_pw_civil_court_awards = {
 	icon = GFX_modifiers_ADISCORD_civil_court_awards
-	enable = { NAM_pw_central_civil_district = yes }
+	enable = {
+		custom_trigger_tooltip = {
+			tooltip = NAM_pw_central_civil_modifier_active_tt
+			NAM_pw_central_civil_district = yes
+		}
+	}
 	state_production_speed_buildings_factor = 0.20
 }
 

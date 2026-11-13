@@ -676,6 +676,89 @@ ideas = {
 			}
 		}
 
+		RUS_ba_gate_staff_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				training_time_army_factor = -0.10
+			}
+		}
+
+		RUS_ba_aimaq_militia_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				conscription_factor = 0.05
+				army_org_factor = -0.02
+			}
+		}
+
+		RUS_ba_shock_hundreds_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		RUS_ba_revenge_oath_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		RUS_ba_military_districts_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		RUS_ba_guard_marches_delta = {
+			name = RUS_government_service
+			picture = RUS_government_service
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+			}
+		}
+
+		RUS_ba_guard_state_won_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.03
+				army_defence_factor = 0.05
+			}
+		}
+
+		RUS_ba_guard_state_held_delta = {
+			name = RUS_black_army
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
 		RUS_defensive_preparation_spirit = {
 			picture = RUS_defensive_preparation_spirit
 			allowed = { always = no }

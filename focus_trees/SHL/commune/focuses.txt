@@ -1,8 +1,9 @@
 # @section commune
 # Курс 5: Коммуна огня. Секция главного дерева SHL_focus: корень SHL_shift_councils следует за
 # SHL_commune_of_shift_councils; координаты абсолютные, блок курса стоит под стволом
-# (x 0-13, y 15-23). Фронт Юга и корона Юга подключены
-# в главном дереве как shared_focus.
+# (x 0-13, y 15-23). Корона Юга подключена
+# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
+# войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_shift_councils
 		icon = GFX_focus_generic_self_management
@@ -832,62 +833,6 @@
 			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
-	}
-
-	# Военные фокусы курса подключаются к общему фронту и видны только во
-	# время войны за Юг, как и сам фронт.
-	focus = {
-		id = SHL_k_shift_brigades
-		icon = GFX_goal_generic_allies_build_infantry
-		x = 13
-		y = 16
-		cost = 3
-		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_furnaces_to_front
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-			699 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			custom_effect_tooltip = SHL_k_shift_brigades_tt
-			hidden_effect = {
-				SHL_raise_paid_levies_2 = yes
-			}
-		}
-		ai_will_do = { base = 150 }
-	}
-
-	# Решение SHL_south_raid_oil читает завершение этого фокуса и снимает цену в PP.
-	focus = {
-		id = SHL_k_strikes_on_fields
-		icon = GFX_focus_generic_strike_at_democracy3
-		x = 13
-		y = 17
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_raid_oil_fields
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			custom_effect_tooltip = SHL_k_strikes_on_fields_now_tt
-			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
-			custom_effect_tooltip = SHL_k_strikes_on_fields_tt
-		}
-		ai_will_do = { base = 120 }
 	}
 
 	# ----- После войны: слияние советов -----

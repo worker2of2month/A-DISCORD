@@ -193,12 +193,44 @@ class NamTreatyCityTransferTests(unittest.TestCase):
 
 
 class VorkerlandNamStateBalanceTests(unittest.TestCase):
+    def test_coalition_air_wings_have_airfields_unlocked_models_and_factory_capacity(self):
+        from tools.builders import build_adiscord_technology_system as technology
+
+        model = "ADISCORD_fighter_airframe_2163"
+        root_tech = "ADISCORD_tech_reclaimed_jet_platforms"
+        self.assertIn(root_tech, technology.STARTING_TECH_PROFILES["common"])
+        air_tech = (builder.ROOT / "common/technologies/ADISCORD_air.txt").read_text(encoding="utf-8")
+        self.assertIn(model, named_block(air_tech, root_tech))
+        for tag, base in (("AZH", 69), ("EFL", 70)):
+            with self.subTest(tag=tag):
+                history = next((builder.ROOT / "history/countries").glob(f"{tag} - *.txt")).read_text(encoding="utf-8")
+                self.assertIn("ADISCORD_grant_technology_profile_common = yes", history)
+                oob = (builder.ROOT / f"history/units/{tag}.txt").read_text(encoding="utf-8")
+                wings = named_block(named_block(oob, "air_wings"), str(base))
+                self.assertRegex(wings, rf'{model}\s*=\s*\{{\s*owner\s*=\s*"{tag}"\s+amount\s*=\s*100\s*\}}')
+                source = state_source(base)
+                self.assertEqual(scalar(source, "owner"), tag)
+                self.assertGreaterEqual(building_level(source, "air_base"), 1)
+                instant = named_block(oob, "instant_effect")
+                lines = [named_block(instant, "add_equipment_production", i) for i in range(instant.count("add_equipment_production"))]
+                self.assertTrue(any(model in line for line in lines))
+                self.assertTrue(any("infantry_equipment_0" in line for line in lines))
+                factories = sum(
+                    building_level(path.read_text(encoding="utf-8-sig"), "arms_factory")
+                    for path in (builder.ROOT / "history/states").glob("*.txt")
+                    if re.search(rf"\bowner\s*=\s*{tag}\b", path.read_text(encoding="utf-8-sig"))
+                )
+                self.assertEqual(factories, 2)
+                self.assertLessEqual(sum(int(scalar(line, "requested_factories")) for line in lines), factories)
+                path = builder.state_path(base)
+                self.assertEqual(builder.state_metadata_plan({base})[path], path.read_bytes())
+
     def test_coalition_regions_preserve_territory_industry_and_population_targets(self):
         families = {
             68: ((68, 725), builder.EFL_UPPER_LOREN_PROVINCES, 5430000, 2, 1, 0),
             70: ((70, 723, 724), builder.EFL_LOWER_LOREN_PROVINCES, 3240000, 2, 1, 1),
             691: ((691, 726), builder.EFL_MIDDLE_LOREN_PROVINCES, 1570000, 0, 0, 0),
-            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 6770000, 2, 1, 0),
+            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 6770000, 2, 2, 0),
             692: ((692, 729), builder.AZH_BLACK_COAST_PROVINCES, 4650000, 1, 0, 1),
         }
         for parent, (members, original, population, civilian, military, dockyards) in families.items():
@@ -227,10 +259,11 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         from collections import Counter
 
         for members, expected in (
-            ((68, 725), {"steel": 3}),
+            ((68, 725), {"steel": 3, "aluminium": 20}),
             ((69, 727, 728), {"oil": 2, "chromium": 1}),
-            ((70, 723, 724), {"aluminium": 2}),
-            ((691, 726), {"tungsten": 2}),
+            ((70, 723, 724), {"aluminium": 22}),
+            ((691, 726), {"tungsten": 2, "aluminium": 10}),
+            ((721,), {"aluminium": 10}),
             ((692, 729), {"oil": 1, "chromium": 1, "tungsten": 1}),
         ):
             actual = Counter()
@@ -837,7 +870,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             67: {6099: 10, 16890: 15},
             68: {6150: 10},
             69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
-            70: {2986: 15},
+            70: {2986: 15, 1198: 10, 16900: 10, 16901: 10},
             723: {6495: 10},
             724: {6796: 5},
             725: {259: 10},
@@ -880,7 +913,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726)),
-            100,
+            130,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 120

@@ -4399,3 +4399,1703 @@ VAD_foreign_observers_receipt_matches = {
 	has_event_target = VAD_foreign_partner
 	FROM = { tag = event_target:VAD_foreign_partner }
 }
+
+# --- leader_branch_triggers ---
+# --- WKR siege regime: chairman's whims ---
+# Nikita Worcker personally leads the loyalists. The emergency committee that
+# can stand in for him has no whims to answer.
+WKR_siege_chairman_present = {
+	has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
+}
+
+# COUNTRY: a queued demand still reaches a living administration.
+WKR_siege_whim_can_fire = {
+	WKR_administration_active = yes
+	WKR_siege_chairman_present = yes
+	NOT = { has_country_flag = WKR_siege_whims_closed }
+}
+
+# The personal dictatorship needs a court that has already been fed twice.
+# Without Worker himself there are no whims, so the counter cannot gate the route.
+WKR_siege_chairman_indulged_enough = {
+	OR = {
+		check_variable = { WKR_siege_whims_indulged > 1 }
+		WKR_siege_chairman_present = no
+	}
+}
+
+# The council republic needs councils that have refused the chairman twice.
+WKR_siege_councils_refused_enough = {
+	OR = {
+		check_variable = { WKR_siege_whims_restrained > 1 }
+		WKR_siege_chairman_present = no
+	}
+}
+
+# --- WKR siege regime: costs ---
+WKR_siege_chronicle_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_siege_plenipotentiary_affordable = {
+	NOT = { has_political_power < 50 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+}
+
+WKR_siege_officer_course_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_siege_sweep_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_manpower < 500 }
+}
+
+WKR_siege_informant_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+# --- WKR siege regime: revolutionary security commission ---
+WKR_siege_cells_remain = {
+	check_variable = { WKR_siege_enemy_cells > 0 }
+}
+
+WKR_siege_has_informants = {
+	check_variable = { WKR_siege_informants > 0 }
+}
+
+# STATE scope (FROM of a targeted decision): a plenipotentiary can still open a line here.
+WKR_siege_plenipotentiary_site = {
+	is_owned_and_controlled_by = ROOT
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+		include_locked = no
+	}
+}
+
+# --- W2: armed people (WKR presidential course) ---
+
+# STATE: a region held by a living enemy claimant that is at war with WKR.
+# VAD and TVA keep their own tags through the civil war; WKR is the only
+# country that can take these decisions.
+WKR_ranks_enemy_claimant_region = {
+	OR = {
+		is_owned_by = VAD
+		is_owned_by = TVA
+	}
+	NOT = { is_controlled_by = WKR }
+	controller = { has_war_with = WKR }
+}
+
+# STATE: WKR troops hold at least one neighbouring region.
+WKR_ranks_borders_our_front = {
+	any_neighbor_state = { is_controlled_by = WKR }
+}
+
+# STATE: a WKR region next to a region held by an enemy.
+WKR_ranks_threatened_quarter = {
+	is_owned_and_controlled_by = WKR
+	any_neighbor_state = {
+		NOT = { is_controlled_by = WKR }
+		controller = { has_war_with = WKR }
+	}
+}
+
+# COUNTRY: onslaught, rail war and partisan results need the war with a claimant.
+WKR_ranks_claimant_war = {
+	OR = {
+		has_war_with = VAD
+		has_war_with = TVA
+	}
+}
+
+# STATE: a free arms-factory slot in a region WKR owns and controls.
+WKR_ranks_arms_factory_site = {
+	is_owned_and_controlled_by = WKR
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+	}
+}
+
+# STATE: a WKR region with room for another level of infrastructure.
+WKR_ranks_infrastructure_site = {
+	is_owned_and_controlled_by = WKR
+	free_building_slots = {
+		building = infrastructure
+		size > 0
+	}
+}
+
+# STATE: a free civilian-factory slot in a region WKR owns and controls.
+WKR_ranks_industrial_site = {
+	is_owned_and_controlled_by = WKR
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+	}
+}
+
+# Prices of the armed-people programmes. Fractional stocks use exact bounds.
+WKR_ranks_training_camp_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { has_manpower < 3000 }
+}
+
+WKR_ranks_workshop_order_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 40 } }
+}
+
+WKR_ranks_onslaught_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_manpower < 2000 }
+}
+
+WKR_ranks_fortify_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+WKR_ranks_raid_affordable = {
+	NOT = { command_power < 15 }
+	NOT = { has_political_power < 10 }
+}
+
+WKR_ranks_rail_sabotage_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+WKR_ranks_arsenal_sabotage_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+WKR_ranks_cell_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+}
+
+WKR_ranks_uprising_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_political_power < 20 }
+}
+
+WKR_ranks_repair_yard_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+	NOT = { has_equipment = { train_equipment < 2 } }
+}
+
+WKR_ranks_railway_gun_affordable = {
+	NOT = { has_political_power < 50 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+	NOT = { has_manpower < 1000 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+WKR_ranks_hospital_trains_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { has_equipment = { train_equipment < 4 } }
+}
+
+# COUNTRY: the railway battery is assembled at an existing railway-council
+# district with an arms factory (the armoured-train workshop site).
+WKR_ranks_railway_gun_site = {
+	any_owned_state = { WKR_armoured_train_site = yes }
+}
+
+# --- WKR_front: Worker siege economy, free republics and the return to Vorkensberg ---
+
+# COUNTRY: the visibility gate of Nikita Worcker's civil-war branch. Mirrors the
+# allow_branch of the branch focuses, so the programmes vanish with the branch.
+WKR_front_presidential_gate = {
+	OR = {
+		WKR_presidential_course = yes
+		has_completed_focus = WKR_convene_front_soviets
+	}
+}
+
+# COUNTRY: an arms shop in the Central or South-Eastern district that the
+# evacuation can still dismantle. The Central district is emptied first.
+WKR_front_evacuation_source_ready = {
+	OR = {
+		AND = {
+			owns_state = 32
+			controls_state = 32
+			32 = { arms_factory > 0 }
+		}
+		AND = {
+			owns_state = 33
+			controls_state = 33
+			33 = { arms_factory > 0 }
+		}
+	}
+}
+
+# STATE, ROOT = WKR: a site that can receive one arms factory at once. Locked
+# shared slots are not counted, so an instant build never fails silently.
+WKR_front_arms_site = {
+	is_owned_and_controlled_by = ROOT
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+	}
+}
+
+# STATE, ROOT = WKR: a rear site for an evacuated or re-erected shop. No
+# neighbouring state may be held by a country at war with the republic.
+WKR_front_rear_arms_site = {
+	WKR_front_arms_site = yes
+	is_fully_controlled_by = ROOT
+	NOT = {
+		any_neighbor_state = {
+			controller = { has_war_with = ROOT }
+		}
+	}
+}
+
+# STATE, ROOT = WKR: a rear site for a cooperative civilian factory.
+WKR_front_rear_civilian_site = {
+	is_owned_and_controlled_by = ROOT
+	is_fully_controlled_by = ROOT
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+	}
+	NOT = {
+		any_neighbor_state = {
+			controller = { has_war_with = ROOT }
+		}
+	}
+}
+
+# COUNTRY, ROOT = WKR: a free republic the western claimant may arm and consult.
+# Frealor and Zolotorevsk count while they hold the existing recognition treaty
+# or still fight their own local war; other governments count only as members
+# of the coalition fighting the same war, or as the Solarino worker protectorate.
+WKR_front_partner_republic = {
+	exists = yes
+	has_capitulated = no
+	NOT = { tag = ROOT }
+	NOT = { has_war_with = ROOT }
+	OR = {
+		AND = {
+			OR = {
+				tag = ROM
+				tag = TRU
+			}
+			is_subject = no
+			OR = {
+				has_country_flag = WKR_independence_treaty
+				AND = {
+					tag = ROM
+					has_war_with = DVA
+				}
+				AND = {
+					tag = TRU
+					has_war_with = ZTA
+				}
+			}
+		}
+		AND = {
+			is_in_faction_with = ROOT
+			has_war_together_with = ROOT
+		}
+		AND = {
+			tag = SOL
+			is_subject_of = ROOT
+		}
+	}
+}
+
+# COUNTRY, ROOT = WKR: a partner bound closely enough to be pressed for levies.
+WKR_front_levy_partner = {
+	WKR_front_partner_republic = yes
+	OR = {
+		is_in_faction_with = ROOT
+		is_subject_of = ROOT
+	}
+}
+
+# COUNTRY, ROOT = WKR: a coalition member in the same war; only such a partner
+# can share a front order.
+WKR_front_joint_front_partner = {
+	WKR_front_partner_republic = yes
+	is_in_faction_with = ROOT
+	has_war_together_with = ROOT
+}
+
+# COUNTRY: the partner's side of a volunteer request. Both parties are checked
+# again on acceptance, before either balance changes.
+WKR_front_volunteer_offer_valid = {
+	has_country_flag = WKR_front_volunteer_request_pending
+	exists = yes
+	has_capitulated = no
+	NOT = { has_manpower < 3000 }
+	WKR = {
+		WKR_administration_active = yes
+		NOT = { has_political_power < 25 }
+		NOT = { has_war_with = PREV }
+	}
+}
+
+# COUNTRY: the partner's side of a levy demand.
+WKR_front_levy_offer_valid = {
+	has_country_flag = WKR_front_levy_request_pending
+	exists = yes
+	has_capitulated = no
+	NOT = { has_manpower < 2000 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+	WKR = {
+		WKR_administration_active = yes
+		NOT = { has_war_with = PREV }
+		NOT = { has_political_power < 10 }
+	}
+}
+
+# COUNTRY: price of one arms delivery to a partner republic.
+WKR_front_arms_delivery_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { has_equipment = { infantry_equipment < 2000 } }
+	NOT = { has_equipment = { artillery_equipment < 24 } }
+}
+
+# COUNTRY, ROOT = WKR: a country at war with the republic controls at least one
+# district of Vorkensberg (states 32-39), so the city operations have a target.
+WKR_front_city_war_live = {
+	OR = {
+		32 = { controller = { has_war_with = ROOT } }
+		33 = { controller = { has_war_with = ROOT } }
+		34 = { controller = { has_war_with = ROOT } }
+		35 = { controller = { has_war_with = ROOT } }
+		36 = { controller = { has_war_with = ROOT } }
+		37 = { controller = { has_war_with = ROOT } }
+		38 = { controller = { has_war_with = ROOT } }
+		39 = { controller = { has_war_with = ROOT } }
+	}
+}
+
+# COUNTRY: the capstone goal - the Central district together with one of Worx's
+# core districts, the Northern or the Industrial one.
+WKR_front_holds_the_capital_core = {
+	controls_state = 32
+	OR = {
+		controls_state = 36
+		controls_state = 39
+	}
+}
+
+# --- executive_ledger_triggers ---
+# Directorate decrees share one slot: a running decree idea blocks the other.
+WKR_ledger_decree_slot_free = {
+	NOT = { has_idea = WKR_ledger_decree_deadlines_idea }
+	NOT = { has_idea = WKR_ledger_decree_discipline_idea }
+}
+
+# STATE, ROOT is the executive: an owned core district with a free arms slot.
+WKR_ledger_arms_site = {
+	is_core_of = ROOT
+	is_owned_and_controlled_by = ROOT
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+		include_locked = yes
+	}
+}
+
+WKR_ledger_has_arms_site = {
+	any_owned_state = { WKR_ledger_arms_site = yes }
+}
+
+# STATE, ROOT is the executive: an owned core district with a free civilian slot.
+WKR_ledger_civilian_site = {
+	is_core_of = ROOT
+	is_owned_and_controlled_by = ROOT
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+		include_locked = yes
+	}
+}
+
+WKR_ledger_has_civilian_site = {
+	any_owned_state = { WKR_ledger_civilian_site = yes }
+}
+
+# STATE, ROOT is the executive: an enemy controls a neighbouring region. Read
+# only in decision availability, never in a daily-cached target_trigger.
+WKR_ledger_district_threatened = {
+	any_neighbor_state = {
+		controller = { has_war_with = ROOT }
+	}
+}
+
+# STATE: the district is not being evacuated, not evacuated and not declared
+# held. The flag covers a running evacuation from payment to delivery.
+WKR_ledger_district_unmarked = {
+	NOT = { has_state_flag = WKR_ledger_evacuating }
+	NOT = { has_dynamic_modifier = { modifier = WKR_ledger_evacuated_district } }
+	NOT = { has_dynamic_modifier = { modifier = WKR_ledger_held_district } }
+}
+
+# --- B2 executive army: the Army of Norms, contract motorization, staff science ---
+
+# STATE. Held by WKR and adjacent to a state controlled by one of its enemies.
+WKR_measure_frontline_state = {
+	is_owned_and_controlled_by = WKR
+	any_neighbor_state = {
+		controller = { has_war_with = WKR }
+	}
+}
+
+# STATE. The marker exists only while WKR_measure_build_depth_belt runs.
+WKR_measure_depth_belt_site = {
+	WKR_measure_frontline_state = yes
+	NOT = { has_state_flag = WKR_measure_depth_belt_marked }
+}
+
+# STATE. A WKR state that can take one more military factory now.
+WKR_measure_arms_works_site = {
+	is_owned_and_controlled_by = WKR
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+	}
+}
+
+WKR_measure_arms_works_available = {
+	OR = {
+		33 = { WKR_measure_arms_works_site = yes }
+		32 = { WKR_measure_arms_works_site = yes }
+		200 = { WKR_measure_arms_works_site = yes }
+		201 = { WKR_measure_arms_works_site = yes }
+	}
+}
+
+# STATE (FROM of WKR_measure_fortified_sector). The flag covers the paid works
+# from payment to completion or cancellation.
+WKR_measure_fortified_sector_site = {
+	WKR_measure_frontline_state = yes
+	NOT = { has_state_flag = WKR_measure_sector_in_progress }
+}
+
+WKR_measure_artillery_park_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_manpower < 2500 }
+}
+
+WKR_measure_fire_plan_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { artillery_equipment < 36 } }
+}
+
+WKR_measure_fortified_sector_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_manpower < 600 }
+	NOT = { has_equipment = { support_equipment < 50 } }
+}
+
+WKR_measure_vehicle_recovery_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+WKR_measure_licence_purchase_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 120 } }
+}
+
+WKR_measure_armour_contract_affordable = {
+	NOT = { has_political_power < 45 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 80 } }
+}
+
+# STATE. A railway hub WKR holds whose roads can still be improved; the marker
+# exists only while WKR_measure_improve_hub_roads runs.
+WKR_measure_hub_road_site = {
+	is_owned_and_controlled_by = WKR
+	supply_node > 0
+	infrastructure < 5
+	NOT = { has_state_flag = WKR_measure_hub_road_marked }
+}
+
+# STATE (FROM of WKR_measure_forward_depot_order).
+WKR_measure_forward_depot_site = {
+	is_owned_and_controlled_by = WKR
+	is_fully_controlled_by = WKR
+	supply_node > 0
+	NOT = { has_dynamic_modifier = { modifier = WKR_measure_forward_depot } }
+	NOT = { has_state_flag = WKR_measure_depot_in_progress }
+}
+
+WKR_measure_recon_sweep_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+WKR_measure_forward_depot_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+	NOT = { has_equipment = { train_equipment < 4 } }
+}
+
+WKR_measure_operational_plan_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { command_power < 10 }
+}
+
+WKR_measure_counteroffensive_affordable = {
+	NOT = { command_power < 35 }
+	NOT = { has_manpower < 1500 }
+}
+
+# --- WKR contract branch triggers (Anton Bagley's executive course) ---
+
+# STATE: a factory site of the norm programmes. The site must stay owned,
+# controlled and free of enemy troops until the building is delivered.
+WKR_contract_building_site = {
+	is_owned_and_controlled_by = WKR
+	is_fully_controlled_by = WKR
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+		include_locked = yes
+	}
+}
+
+WKR_contract_reconstruction_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_manpower < 1500 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+}
+
+WKR_contract_canteens_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 120 } }
+}
+
+# COUNTRY: a contract partner of WKR. Only relations made by the existing
+# recognition treaty, the Solyarino protectorate and coalition membership in a
+# shared war qualify. Contracts never change factions, wars or subjects.
+WKR_contract_is_partner = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = WKR }
+	OR = {
+		AND = {
+			OR = {
+				tag = ROM
+				tag = TRU
+			}
+			is_subject = no
+			has_country_flag = WKR_independence_treaty
+		}
+		AND = {
+			tag = SOL
+			is_subject_of = WKR
+		}
+		AND = {
+			is_in_faction_with = WKR
+			has_war_together_with = WKR
+		}
+	}
+}
+
+# COUNTRY: a partner fighting the same war as WKR.
+WKR_contract_is_coalition_ally = {
+	WKR_contract_is_partner = yes
+	has_war_together_with = WKR
+}
+
+# COUNTRY WKR. Faction members and subjects are read through the allied list,
+# so the check never scans every country.
+WKR_contract_has_any_partner = {
+	OR = {
+		ROM = { WKR_contract_is_partner = yes }
+		TRU = { WKR_contract_is_partner = yes }
+		SOL = { WKR_contract_is_partner = yes }
+		any_allied_country = { WKR_contract_is_partner = yes }
+	}
+}
+
+WKR_contract_partner_order_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 150 } }
+}
+
+WKR_contract_export_lot_affordable = {
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+WKR_contract_raw_material_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+}
+
+WKR_contract_guarantee_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_equipment = { infantry_equipment < 600 } }
+}
+
+WKR_contract_joint_staff_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { support_equipment < 50 } }
+}
+
+# COUNTRY WKR: at war with at least one rival claimant.
+WKR_contract_fights_a_claimant = {
+	OR = {
+		has_war_with = VAD
+		has_war_with = TVA
+	}
+}
+
+# STATE: a WKR-held region facing a rival claimant's front.
+WKR_contract_front_state = {
+	is_owned_and_controlled_by = WKR
+	any_neighbor_state = {
+		controller = {
+			OR = {
+				tag = VAD
+				tag = TVA
+			}
+			has_war_with = WKR
+		}
+	}
+}
+
+WKR_contract_any_price_affordable = {
+	NOT = { command_power < 30 }
+	NOT = { has_manpower < 3000 }
+}
+
+WKR_contract_shock_reserve_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_manpower < 2000 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+}
+
+WKR_contract_fortified_jump_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+WKR_contract_attrition_ledger_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { command_power < 15 }
+}
+
+
+# --- VAD army institution (P2): academy, districts and the Second Department ---
+
+# STATE scope. A held district carrying one of VAD's district institutions:
+# a charter or a commandanture.
+VAD_corps_administered_district = {
+	is_owned_and_controlled_by = VAD
+	has_state_flag = ADISCORD_vorkerland_vad_district_oath
+}
+
+# The district institutions open with whichever course VAD chose first.
+VAD_corps_district_system_open = {
+	OR = {
+		has_completed_focus = VAD_open_imperial_registers
+		has_completed_focus = VAD_form_field_commandantures
+		has_completed_focus = VAD_convene_collegial_staff
+	}
+}
+
+VAD_corps_has_administered_district = {
+	any_owned_state = { VAD_corps_administered_district = yes }
+}
+
+# ---------------------------------------------------------------------
+# Army programmes.
+
+VAD_corps_academy_course_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { command_power < 10 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_corps_staff_operation_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { command_power < 25 }
+}
+
+VAD_corps_guards_breakthrough_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { command_power < 30 }
+	NOT = { has_manpower < 1000 }
+}
+
+# Three reserve vehicle parks exist; each can be reactivated once.
+VAD_corps_armour_parks_remaining = {
+	check_variable = { var = VAD_corps_armour_cadres_formed value = 3 compare = less_than }
+}
+
+VAD_corps_armour_cadres_affordable = {
+	NOT = { has_political_power < 50 }
+	NOT = { has_manpower < 1500 }
+	NOT = { has_equipment = { support_equipment < 150 } }
+}
+
+# ---------------------------------------------------------------------
+# District programmes. They hold the shared chancery receipt (VAD_oath_*)
+# with kinds 30-32, so the existing refund and handoff settle them.
+# FROM is the target state in every predicate below.
+
+VAD_corps_colony_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_corps_land_for_the_regiments
+	FROM = {
+		VAD_corps_administered_district = yes
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		NOT = { has_dynamic_modifier = { modifier = VAD_corps_veteran_colony } }
+	}
+}
+
+VAD_corps_colony_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { has_manpower < 1500 }
+	NOT = { has_equipment = { infantry_equipment < 600 } }
+}
+
+VAD_corps_colony_receipt_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 30 compare = equals }
+	FROM = {
+		state = var:VAD.VAD_oath_state
+		has_state_flag = VAD_oath_in_progress
+	}
+}
+
+VAD_corps_requisition_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_corps_iron_hand
+	FROM = {
+		VAD_corps_administered_district = yes
+		NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+		NOT = { has_state_flag = VAD_corps_requisitioned }
+	}
+}
+
+VAD_corps_requisition_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_corps_requisition_receipt_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 31 compare = equals }
+	FROM = {
+		state = var:VAD.VAD_oath_state
+		has_state_flag = VAD_oath_in_progress
+	}
+}
+
+# A loyalty charter may be negotiated in a revolting district: it ends the revolt.
+VAD_corps_loyalty_charter_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_corps_charters_of_loyalty
+	FROM = {
+		VAD_corps_administered_district = yes
+		NOT = { has_dynamic_modifier = { modifier = VAD_corps_loyal_district } }
+	}
+}
+
+VAD_corps_loyalty_charter_affordable = {
+	NOT = { has_political_power < 50 }
+	NOT = { has_manpower < 500 }
+}
+
+VAD_corps_loyalty_charter_receipt_matches = {
+	has_variable = VAD_oath_pp
+	check_variable = { var = VAD_oath_kind value = 32 compare = equals }
+	FROM = {
+		state = var:VAD.VAD_oath_state
+		has_state_flag = VAD_oath_in_progress
+	}
+}
+
+VAD_corps_call_up_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_corps_frontier_colonies
+	ADISCORD_vorkerland_plan_war_active = yes
+	FROM = {
+		is_owned_and_controlled_by = VAD
+		has_dynamic_modifier = { modifier = VAD_corps_veteran_colony }
+	}
+}
+
+# ---------------------------------------------------------------------
+# Second Department. One field operation at a time is recorded in
+# VAD_corps_op_kind (1 sabotage, 2 garrison bribe, 3 defectors) and, for a
+# state operation, VAD_corps_op_state.
+
+VAD_corps_raid_available = {
+	VAD_administration_active = yes
+	has_completed_focus = VAD_corps_the_okhrana
+	FROM = {
+		is_owned_and_controlled_by = VAD
+		NOT = { has_state_flag = VAD_corps_cells_raided }
+	}
+}
+
+VAD_corps_op_slot_free = {
+	NOT = { has_variable = VAD_corps_op_kind }
+}
+
+# STATE scope: held by a country at war with VAD.
+VAD_corps_enemy_rear_state = {
+	controller = { has_war_with = VAD }
+}
+
+# STATE scope: an enemy-held state on the line of contact with VAD.
+VAD_corps_front_target = {
+	VAD_corps_enemy_rear_state = yes
+	any_neighbor_state = { is_controlled_by = VAD }
+}
+
+VAD_corps_sabotage_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { command_power < 10 }
+	NOT = { has_equipment = { support_equipment < 200 } }
+}
+
+VAD_corps_bribe_affordable = {
+	NOT = { has_political_power < 40 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+}
+
+VAD_corps_defectors_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+}
+
+# COUNTRY VAD with the operation's state in FROM.
+VAD_corps_sabotage_matches = {
+	has_variable = VAD_corps_op_state
+	check_variable = { var = VAD_corps_op_kind value = 1 compare = equals }
+	FROM = { state = var:VAD.VAD_corps_op_state }
+}
+
+VAD_corps_bribe_matches = {
+	has_variable = VAD_corps_op_state
+	check_variable = { var = VAD_corps_op_kind value = 2 compare = equals }
+	FROM = { state = var:VAD.VAD_corps_op_state }
+}
+
+# Only one defector operation can run, so the kind identifies it.
+VAD_corps_defectors_matches = {
+	check_variable = { var = VAD_corps_op_kind value = 3 compare = equals }
+}
+
+# --- P3: crown works, eastern garrisons and the final campaign ---
+
+# State scope. A free, uncontested slot for one new military factory; a state
+# whose arsenal is already being laid down keeps its slot reserved.
+VAD_realm_arsenal_site = {
+	is_owned_and_controlled_by = VAD
+	is_fully_controlled_by = VAD
+	is_demilitarized_zone = no
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+		include_locked = no
+	}
+	NOT = { has_state_flag = VAD_realm_arsenal_in_progress }
+}
+
+# State scope. A productive district that has not been stripped in the last
+# ninety days and is not in revolt.
+VAD_realm_requisition_site = {
+	is_owned_and_controlled_by = VAD
+	is_fully_controlled_by = VAD
+	OR = {
+		industrial_complex > 0
+		arms_factory > 0
+	}
+	NOT = { has_dynamic_modifier = { modifier = VAD_realm_requisitioned_works } }
+	NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_district_uprising } }
+}
+
+# Country scope. The garrison regimes of Zshat, Tikhorechye and Zlatorechye
+# while they remain independent belligerents.
+VAD_realm_garrison_partner_alive = {
+	OR = {
+		tag = EGC
+		tag = DVA
+		tag = ZTA
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+}
+
+# Country scope. The central showdown is live and this claimant still fights
+# one of its participants.
+VAD_realm_showdown_live_war = {
+	has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+	has_global_flag = ADISCORD_vorkerland_central_showdown_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+	OR = {
+		has_war_with = EYR
+		has_war_with = EGC
+		has_war_with = RIV
+		has_war_with = REV
+		has_war_with = YOR
+		has_war_with = NDN
+		has_war_with = SWB
+		has_war_with = VHV
+		has_war_with = OSV
+		has_war_with = WKR
+		has_war_with = TVA
+	}
+}
+
+
+# --- tva_machine_army_triggers ---
+# Country scope. Field operations of the machine army need a live civil-war front.
+TVA_machine_operation_context = {
+	TVA_administration_active = yes
+	ADISCORD_vorkerland_plan_war_active = yes
+}
+
+TVA_machine_engineer_sector_works_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 60 } }
+}
+
+TVA_machine_computed_barrage_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { artillery_equipment < 60 } }
+}
+
+TVA_machine_data_window_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+TVA_machine_strongpoint_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { has_equipment = { support_equipment < 80 } }
+}
+
+# Cancellation follows the context only; network load gates new orders.
+TVA_machine_drone_series_context = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_machine_unmanned_strike_packages
+	TVA_aircraft_industry_ready = yes
+}
+
+TVA_machine_drone_series_available = {
+	TVA_machine_drone_series_context = yes
+	check_variable = { var = TVA_network_load value = 75 compare = less_than_or_equals }
+}
+
+TVA_machine_drone_series_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = { has_manpower < 200 }
+}
+
+TVA_machine_radar_station_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 100 } }
+}
+
+TVA_machine_spare_parts_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_manpower < 800 }
+}
+
+TVA_machine_supply_point_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+TVA_machine_salvage_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { command_power < 10 }
+}
+
+TVA_machine_rail_section_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_manpower < 600 }
+}
+
+# --- TVA laboratories and allies: block 1, laboratory orders ---
+# One paid bureau programme at a time: the prototype series (kinds 1-3) or the
+# theory cycle (kind 4).
+TVA_lab_order_slot_free = {
+	NOT = { has_variable = TVA_lab_order_kind }
+}
+
+TVA_lab_order_is_series = {
+	has_variable = TVA_lab_order_kind
+	check_variable = { var = TVA_lab_order_kind value = 4 compare = less_than }
+}
+
+TVA_lab_prototype_series_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_convene_the_design_council
+}
+
+TVA_lab_prototype_series_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 40 } }
+}
+
+TVA_lab_theory_cycle_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_seidel_network_institute
+}
+
+TVA_lab_theory_cycle_affordable = {
+	NOT = { has_political_power < 45 }
+	NOT = { has_manpower < 500 }
+}
+
+# The range keeps its own schedule and escrow (TVA_lab_range_*), separate from
+# the laboratory order slot.
+TVA_lab_range_trials_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_open_the_uval_test_range
+}
+
+TVA_lab_range_trials_affordable = {
+	NOT = { command_power < 15 }
+	NOT = { has_political_power < 25 }
+}
+
+TVA_lab_accelerated_series_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+}
+
+# --- TVA laboratories and allies: block 2, partners ---
+# Partner scope: the country can still reply to a directorate offer.
+TVA_lab_partner_can_answer = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = TVA }
+}
+
+TVA_lab_holden_payment_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_write_to_karim_dol
+	NOT = { has_equipment = { support_equipment < 30 } }
+	NOT = { has_equipment = { infantry_equipment < 1200 } }
+}
+
+TVA_lab_holden_offer_available = {
+	TVA_lab_holden_payment_available = yes
+	WPS = {
+		TVA_lab_partner_can_answer = yes
+		NOT = { has_country_flag = TVA_lab_holden_offer_pending }
+	}
+}
+
+# WPS scope, checked again when the syndicate answers.
+TVA_lab_holden_exchange_valid = {
+	tag = WPS
+	has_country_flag = TVA_lab_holden_offer_pending
+	TVA_lab_partner_can_answer = yes
+	NOT = { has_manpower < 800 }
+	TVA = { TVA_lab_holden_payment_available = yes }
+}
+
+TVA_lab_firnov_payment_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_open_the_firnov_line
+	NOT = { has_equipment = { support_equipment < 40 } }
+	NOT = { has_equipment = { artillery_equipment < 24 } }
+}
+
+TVA_lab_firnov_offer_available = {
+	TVA_lab_firnov_payment_available = yes
+	TGD = {
+		TVA_lab_partner_can_answer = yes
+		NOT = { has_country_flag = TVA_lab_firnov_offer_pending }
+	}
+}
+
+# TGD scope, checked again when Firnov-Tehlar answers.
+TVA_lab_firnov_supply_valid = {
+	tag = TGD
+	has_country_flag = TVA_lab_firnov_offer_pending
+	TVA_lab_partner_can_answer = yes
+	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+	TVA = { TVA_lab_firnov_payment_available = yes }
+}
+
+TVA_lab_kefreyt_payment_available = {
+	TVA_administration_active = yes
+	has_completed_focus = TVA_lab_kefreyt_technology_contract
+	NOT = { check_variable = { ADISCORD_economy_treasury < 150 } }
+}
+
+TVA_lab_kefreyt_offer_available = {
+	TVA_lab_kefreyt_payment_available = yes
+	VAL = {
+		TVA_lab_partner_can_answer = yes
+		NOT = { has_country_flag = TVA_lab_kefreyt_offer_pending }
+	}
+}
+
+# VAL scope, checked again when Kefreyt answers.
+TVA_lab_kefreyt_contract_valid = {
+	tag = VAL
+	has_country_flag = TVA_lab_kefreyt_offer_pending
+	TVA_lab_partner_can_answer = yes
+	NOT = { has_equipment = { infantry_equipment < 3000 } }
+	NOT = { has_equipment = { support_equipment < 40 } }
+	NOT = { has_equipment = { artillery_equipment < 24 } }
+	TVA = { TVA_lab_kefreyt_payment_available = yes }
+}
+
+TVA_lab_district_courses_affordable = {
+	NOT = { has_political_power < 35 }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+# --- TVA laboratories and allies: block 3, operations of the restart ---
+TVA_lab_operation_slot_free = {
+	NOT = { has_variable = TVA_lab_op_kind }
+}
+
+TVA_lab_blackout_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_lab_blackout_the_enemy_sectors
+}
+
+TVA_lab_blackout_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_political_power < 15 }
+}
+
+TVA_lab_offensive_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_lab_timetable_of_the_last_offensive
+}
+
+TVA_lab_offensive_affordable = {
+	NOT = { command_power < 30 }
+	NOT = { has_political_power < 40 }
+}
+
+TVA_lab_repair_columns_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_lab_repair_columns_behind_the_assault
+}
+
+TVA_lab_repair_columns_affordable = {
+	NOT = { command_power < 15 }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+# Control of the Central District is checked again at delivery; losing it does
+# not cancel the restart but changes its result.
+TVA_lab_grid_restart_available = {
+	TVA_final_operation_context = yes
+	has_completed_focus = TVA_lab_central_switchboard_teams
+}
+
+TVA_lab_grid_restart_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_political_power < 50 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 80 } }
+}
+
+# --- W4: Worker story arcs and round-two choices (WKR presidential course) ---
+
+# COUNTRY: the communities trust the republic while it has kept at least as
+# many promises as it has deferred.
+WKR_vow_communities_trust = {
+	NOT = {
+		check_variable = {
+			var = WKR_vow_promises_owed
+			value = WKR_vow_promises_kept
+			compare = greater_than
+		}
+	}
+}
+
+# STATE, ROOT = WKR: a Vorkensberg district where the first stone can add a
+# level of infrastructure.
+WKR_vow_capital_works_site = {
+	is_owned_and_controlled_by = ROOT
+	OR = {
+		state = 32
+		state = 33
+		state = 34
+		state = 35
+		state = 36
+		state = 37
+		state = 38
+		state = 39
+	}
+	free_building_slots = {
+		building = infrastructure
+		size > 0
+	}
+}
+
+# STATE (FROM of the engineer brigades), ROOT = WKR: a held Vorkensberg
+# district with room for a civilian factory or another level of roads.
+WKR_vow_brigade_site = {
+	is_owned_and_controlled_by = ROOT
+	OR = {
+		free_building_slots = {
+			building = industrial_complex
+			size > 0
+		}
+		free_building_slots = {
+			building = infrastructure
+			size > 0
+		}
+	}
+}
+
+# Prices of the round-two programmes. Fractional stocks use exact bounds.
+WKR_vow_deputies_affordable = {
+	NOT = { command_power < 15 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_vow_witnesses_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_vow_schools_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_vow_march_company_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_vow_overtime_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_vow_partisan_supply_affordable = {
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+WKR_vow_special_run_affordable = {
+	NOT = { command_power < 20 }
+	NOT = { has_equipment = { train_equipment < 2 } }
+}
+
+WKR_vow_brigade_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+}
+
+# --- B4 executive story: prices and sites of the new programmes ---
+
+WKR_audit_field_recount_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_audit_machine_digest_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+}
+
+WKR_audit_planned_rotation_affordable = {
+	NOT = { command_power < 15 }
+	NOT = { has_manpower < 1500 }
+}
+
+WKR_audit_correction_companies_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { has_equipment = { infantry_equipment < 600 } }
+}
+
+WKR_audit_deep_raid_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_equipment = { motorized_equipment < 40 } }
+}
+
+WKR_audit_supply_convoy_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { has_equipment = { motorized_equipment < 30 } }
+}
+
+WKR_audit_staff_war_game_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { command_power < 20 }
+}
+
+WKR_audit_military_acceptance_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { command_power < 20 }
+}
+
+WKR_audit_prisoner_exchange_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { command_power < 15 }
+}
+
+# STATE, ROOT is the executive: an owned core district whose infrastructure is
+# below the cap.
+WKR_audit_infrastructure_site = {
+	is_core_of = ROOT
+	is_owned_and_controlled_by = ROOT
+	infrastructure < 5
+}
+
+WKR_audit_has_infrastructure_site = {
+	any_owned_state = { WKR_audit_infrastructure_site = yes }
+}
+
+# ---------------------------------------------------------------------
+# P4: Petrichev's branch (VAD_crownless_*). All triggers are COUNTRY scope (VAD).
+
+# The Second Department warns about the night meeting (event .116): either the
+# intercepted letter was left to Nox at event .115 or the staff is under watch.
+VAD_crownless_staff_warned = {
+	OR = {
+		has_country_flag = VAD_crownless_nox_on_the_staff
+		has_completed_focus = VAD_crownless_watch_over_the_generals
+	}
+}
+
+# The commander chosen at event .117 does not believe in the assault method
+# chosen in the parade block.
+VAD_crownless_assault_mismatch = {
+	OR = {
+		AND = {
+			has_country_flag = VAD_crownless_assault_by_chernov
+			has_completed_focus = VAD_realm_ring_of_siege
+		}
+		AND = {
+			has_country_flag = VAD_crownless_assault_by_vedenin
+			has_completed_focus = VAD_realm_storm_with_the_guards
+		}
+	}
+}
+
+# Open the gates from within: the capital is held by a country at war with VAD.
+VAD_crownless_capital_held_by_enemy = {
+	32 = { controller = { has_war_with = VAD } }
+}
+
+# --- W5: the decisive days (WKR presidential course) ---
+
+# STATE, ROOT = WKR: a Vorkensberg district the republic owns and controls.
+# The targeted programmes of the liberated city act only here.
+WKR_last_capital_district = {
+	is_owned_and_controlled_by = ROOT
+	OR = {
+		state = 32
+		state = 33
+		state = 34
+		state = 35
+		state = 36
+		state = 37
+		state = 38
+		state = 39
+	}
+}
+
+# STATE, ROOT = WKR: a held district with a free arms-factory slot for the
+# reopened works.
+WKR_last_capital_arms_site = {
+	WKR_last_capital_district = yes
+	free_building_slots = {
+		building = arms_factory
+		size > 0
+	}
+}
+
+# STATE, ROOT = WKR: a held district whose air defence can take another level.
+WKR_last_capital_air_defence_site = {
+	WKR_last_capital_district = yes
+	anti_air_building < 5
+}
+
+# COUNTRY WKR: the last two readers of the chairman's exposure (the last speech
+# and the decisive days) have not both been reached yet.
+WKR_last_exposure_counts = {
+	NOT = {
+		AND = {
+			has_completed_focus = WKR_last_the_last_speech_of_the_war
+			has_completed_focus = WKR_last_the_decisive_days
+		}
+	}
+}
+
+# COUNTRY WKR: a claimant still at war with the republic is close to collapse.
+WKR_last_victory_near = {
+	OR = {
+		AND = {
+			has_war_with = VAD
+			VAD = { surrender_progress > 0.5 }
+		}
+		AND = {
+			has_war_with = TVA
+			TVA = { surrender_progress > 0.5 }
+		}
+	}
+}
+
+# COUNTRY WKR: the republic has lost the Central district or is close to its
+# own collapse.
+WKR_last_republic_bleeding = {
+	OR = {
+		NOT = { controls_state = 32 }
+		surrender_progress > 0.3
+	}
+}
+
+# --- W5: programme prices ---
+WKR_last_session_affordable = {
+	NOT = { has_political_power < 25 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_last_specialists_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { command_power < 15 }
+}
+
+WKR_last_bread_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 50 } }
+}
+
+WKR_last_pursuit_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_manpower < 2000 }
+}
+
+WKR_last_garrison_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { command_power < 10 }
+}
+
+WKR_last_registry_affordable = {
+	NOT = { has_political_power < 30 }
+	NOT = { command_power < 10 }
+}
+
+# --- B5 executive story: the decisive days ---
+# All triggers are COUNTRY scope (WKR) unless marked STATE.
+
+# Results of the earlier executive chains. Each reads the chain's own flag while
+# it lives and the copy taken by event .172 after the chain's finale cleared it.
+WKR_tally_olkhovka_confessed = {
+	OR = {
+		has_country_flag = WKR_audit_line_confessed
+		has_country_flag = WKR_tally_mem_line_confessed
+	}
+}
+
+WKR_tally_olkhovka_censored = {
+	OR = {
+		has_country_flag = WKR_audit_line_censored
+		has_country_flag = WKR_tally_mem_line_censored
+	}
+}
+
+WKR_tally_koltsov_desk = {
+	OR = {
+		has_country_flag = WKR_audit_control_desk
+		has_country_flag = WKR_tally_mem_control_desk
+	}
+}
+
+WKR_tally_bagley_saw_village = {
+	OR = {
+		has_country_flag = WKR_audit_bagley_saw_the_village
+		has_country_flag = WKR_tally_mem_saw_village
+	}
+}
+
+WKR_tally_councils_veto_known = {
+	OR = {
+		has_country_flag = WKR_audit_councils_veto
+		has_country_flag = WKR_tally_mem_councils_veto
+	}
+}
+
+WKR_tally_councils_charter_known = {
+	OR = {
+		has_country_flag = WKR_audit_councils_charter
+		has_country_flag = WKR_tally_mem_councils_charter
+	}
+}
+
+# Irena and Liza are with Bagley: brought across the line in chain C or found
+# in Old Vorkensberg when the district was taken (event .146).
+WKR_tally_family_together = {
+	OR = {
+		has_country_flag = WKR_tally_family_found
+		has_country_flag = WKR_audit_family_home
+		has_country_flag = WKR_tally_mem_family_home
+	}
+}
+
+# The courier was disowned and the letters stopped (chain C, event .128).
+WKR_tally_family_lost = {
+	NOT = { WKR_tally_family_together = yes }
+	OR = {
+		has_country_flag = WKR_audit_family_lost
+		has_country_flag = WKR_tally_mem_family_lost
+	}
+}
+
+# The capital's administrator chosen at event .144 opens the third answer of
+# several district scenes.
+WKR_tally_city_careful_hand = {
+	OR = {
+		has_country_flag = WKR_tally_city_by_need
+		has_country_flag = WKR_tally_city_by_desk
+	}
+}
+
+WKR_tally_collect_arsenal_affordable = {
+	NOT = { has_political_power < 15 }
+	NOT = { command_power < 10 }
+}
+
+WKR_tally_district_relief_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+}
+
+WKR_tally_officer_screening_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { command_power < 10 }
+}
+
+WKR_tally_storm_affordable = {
+	NOT = { command_power < 25 }
+	NOT = { has_manpower < 3000 }
+	NOT = { has_equipment = { infantry_equipment < 500 } }
+}
+
+WKR_tally_ring_affordable = {
+	NOT = { has_political_power < 20 }
+	NOT = { command_power < 15 }
+}
+
+# STATE, ROOT is the executive: an enemy-held capital district on our front line.
+WKR_tally_ring_target = {
+	NOT = { is_controlled_by = ROOT }
+	controller = { has_war_with = ROOT }
+	any_neighbor_state = { is_controlled_by = ROOT }
+}
+
+# STATE, ROOT is the executive: an owned capital district whose infrastructure
+# is below the cap.
+WKR_tally_city_infrastructure_site = {
+	is_owned_and_controlled_by = ROOT
+	infrastructure < 5
+	OR = {
+		state = 32
+		state = 33
+		state = 34
+		state = 35
+		state = 36
+		state = 37
+		state = 38
+		state = 39
+	}
+}
+
+WKR_tally_has_city_infrastructure_site = {
+	any_owned_state = { WKR_tally_city_infrastructure_site = yes }
+}
+
+# --- P5: the decisive days (VAD_standard_*) ---
+
+# State scope. The nine districts of Vorkensberg except the impassable Tower (40).
+VAD_standard_vorkensberg_district = {
+	OR = {
+		state = 32
+		state = 33
+		state = 34
+		state = 35
+		state = 36
+		state = 37
+		state = 38
+		state = 39
+	}
+}
+
+# Country scope (VAD). The army holds at least one district of the capital.
+VAD_standard_holds_a_capital_district = {
+	any_controlled_state = { VAD_standard_vorkensberg_district = yes }
+}
+
+# Country scope (VAD). The army holds a district of the technical administration:
+# the oil and gas district, the northern districts or the industrial district.
+VAD_standard_holds_a_technical_district = {
+	any_controlled_state = {
+		OR = {
+			state = 34
+			state = 36
+			state = 37
+			state = 38
+			state = 39
+		}
+	}
+}
+
+# State scope. A controlled capital district with works that neither programme of
+# the crown-works pair has touched yet.
+VAD_standard_works_district_site = {
+	VAD_standard_vorkensberg_district = yes
+	is_controlled_by = VAD
+	OR = {
+		industrial_complex > 0
+		arms_factory > 0
+	}
+	NOT = { has_dynamic_modifier = { modifier = VAD_standard_stripped_works } }
+	NOT = { has_dynamic_modifier = { modifier = VAD_standard_restarted_works } }
+}
+
+# --- TVA endgame: the reckoning of the central war ---
+# Read by the reckoning events 165-167 on arrival. They describe how the war
+# looks from the hall and never decide its outcome.
+
+# COUNTRY TVA. The directorate is losing: its own surrender progress has passed
+# a third or it no longer controls its capital district.
+TVA_endgame_defeat_in_sight = {
+	OR = {
+		surrender_progress > 0.35
+		NOT = { controls_state = 36 }
+	}
+}
+
+# COUNTRY TVA. The directorate is not losing and either holds the Central
+# District or faces a rival main claimant close to capitulation.
+TVA_endgame_victory_in_sight = {
+	NOT = { TVA_endgame_defeat_in_sight = yes }
+	OR = {
+		controls_state = 32
+		any_enemy_country = {
+			ADISCORD_vorkerland_is_main_claimant = yes
+			surrender_progress > 0.40
+		}
+	}
+}

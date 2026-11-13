@@ -72,26 +72,89 @@ class FocusTooltipCompactnessTests(unittest.TestCase):
                 with self.subTest(decision=decision_id, language=language):
                     self.assertTrue(entries.get(tooltip))
 
-    def test_focus_descriptions_do_not_repeat_quantified_rewards(self) -> None:
-        focus_ids = set()
-        for path in FOCUS_DIR.glob("*.txt"):
-            for entry in walk(parse_clausewitz(path.read_text(encoding="utf-8-sig"))):
-                if entry.key in ("focus", "shared_focus") and isinstance(entry.value, list):
-                    focus_ids.update(item.value for item in entry.value if item.key == "id")
+    def test_focus_and_decision_prose_has_no_mechanical_values(self) -> None:
+        descriptions = set()
+        for focus_id, entries in self.focuses.items():
+            descriptions.add(focus_id + "_desc")
+            for entry in entries:
+                if entry.key == "desc":
+                    if isinstance(entry.value, str):
+                        descriptions.add(entry.value)
+                    else:
+                        descriptions.update(
+                            item.value for item in walk(entry.value)
+                            if item.key == "text" and isinstance(item.value, str)
+                        )
+        for path in (ROOT / "common/decisions").glob("*.txt"):
+            for category in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if not isinstance(category.value, list):
+                    continue
+                for decision in category.value:
+                    if not isinstance(decision.value, list):
+                        continue
+                    descriptions.add(decision.key + "_desc")
+                    for entry in decision.value:
+                        if entry.key != "desc":
+                            continue
+                        if isinstance(entry.value, str):
+                            descriptions.add(entry.value)
+                        else:
+                            descriptions.update(
+                                item.value for item in walk(entry.value)
+                                if item.key == "text" and isinstance(item.value, str)
+                            )
+
+        scripted_text = {}
+        for path in (ROOT / "common/scripted_localisation").glob("*.txt"):
+            for entry in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if isinstance(entry.value, list):
+                    scripted_text[scalar(entry.value, "name")] = {
+                        item.value for item in walk(entry.value)
+                        if item.key == "localization_key"
+                    }
+
         mechanics = re.compile(
-            r"£|[+-]?\d+(?:[.,]\d+)?\s*%|"
+            r"£(?!GFX_)|\[\?|[+-]?\d+(?:[.,]\d+)?\s*%|"
             r"\b\d+[ -]?(?:дн(?:я|ей|ев)|дивизи|человек|days?\b|day-|divisions?\b|personnel\b)",
             re.I,
         )
         offenders = []
         for language in ("russian", "english"):
-            for path in (ROOT / "localisation" / language).glob("*.yml"):
-                for line in path.read_text(encoding="utf-8-sig").splitlines():
-                    match = re.match(r'\s*([^:\s]+)_desc:\d*\s+"(.*)"\s*$', line)
-                    if match and match[1] in focus_ids:
-                        prose = re.sub(r"\[[^\]]*\]", "", match[2])
-                        if mechanics.search(prose):
-                            offenders.append((language, match[1]))
+            catalog = {}
+            paths = list((ROOT / "localisation" / language).rglob("*.yml"))
+            paths += list((ROOT / "localisation/replace").glob(f"*_l_{language}.yml"))
+            for path in paths:
+                for key, value in re.findall(
+                    r'^\s*([^:\s]+):\d*\s+"((?:[^"\\\r\n]|\\.)*)"\s*$',
+                    path.read_text(encoding="utf-8-sig"), re.M,
+                ):
+                    catalog.setdefault(key, set()).add(value)
+            pending = list(descriptions)
+            checked = set()
+            while pending:
+                key = pending.pop()
+                if key in checked:
+                    continue
+                checked.add(key)
+                for value in catalog.get(key, ()):
+                    # Formatting must not conceal a numeric reward; only the
+                    # decorative GFX banner is exempt from the texticon rule.
+                    prose = re.sub(r"§.", "", value)
+                    if mechanics.search(prose):
+                        offenders.append((language, key))
+                    pending.extend(re.findall(r"\$([^$|]+)(?:\|[^$]*)?\$", value))
+                    for token in re.findall(r"\[([^\]]+)\]", value):
+                        pending.extend(scripted_text.get(token.split(".")[-1], ()))
+        self.assertEqual(sorted(set(offenders)), [])
+
+    def test_effect_previews_do_not_use_narrative_description_keys(self) -> None:
+        offenders = []
+        for folder in ("common/decisions", "common/national_focus", "common/scripted_effects"):
+            for path in (ROOT / folder).glob("*.txt"):
+                for entry in walk(parse_clausewitz(path.read_text(encoding="utf-8-sig"))):
+                    if entry.key == "custom_effect_tooltip" and isinstance(entry.value, str):
+                        if entry.value.endswith("_desc"):
+                            offenders.append((path.name, entry.value))
         self.assertEqual(offenders, [])
 
     def test_decision_unlocks_use_scalar_form(self) -> None:

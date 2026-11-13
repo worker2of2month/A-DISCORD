@@ -1040,6 +1040,28 @@ defined_text = {
 	}
 }
 
+# The red first line of every sabotage answer: why the strike hit this hard.
+# It reads the strength stored at the roll, with the tier bounds of
+# NAM_underground_strike_tier_2/3/4.
+defined_text = {
+	name = NAMGetUndergroundStrikeCause
+	text = {
+		trigger = { check_variable = { NAM_ug_strike_power > 89 } }
+		localization_key = NAM_ug_strike_cause_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ug_strike_power > 69 } }
+		localization_key = NAM_ug_strike_cause_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ug_strike_power > 49 } }
+		localization_key = NAM_ug_strike_cause_2
+	}
+	text = {
+		localization_key = NAM_ug_strike_cause_1
+	}
+}
+
 # The current strike tier of the network in the NAM_underground category.
 defined_text = {
 	name = NAMGetUndergroundDanger
@@ -2530,7 +2552,11 @@ defined_text = {
 		trigger = { NAM_line_programme_open = yes }
 		localization_key = NAM_mobilisation_active_desc
 	}
-	text = { localization_key = NAM_mobilisation_border_desc }
+	text = {
+		trigger = { NAM_permanent_lines_authorized = yes }
+		localization_key = NAM_mobilisation_border_desc
+	}
+	text = { localization_key = NAM_mobilisation_orders_desc }
 }
 
 defined_text = {
@@ -2585,6 +2611,19 @@ defined_text = {
 	text = {
 		trigger = { has_variable = NAM_prewar_balance }
 		localization_key = NAM_prewar_mandate_record
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetBalanceCourseTooltip
+	text = {
+		trigger = { has_variable = NAM_prewar_balance }
+		localization_key = NAM_prewar_mandate_record
+	}
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_bw_ladder_course_forecast
 	}
 	text = { localization_key = NAM_prewar_mandate_none }
 }
@@ -2783,6 +2822,59 @@ defined_text = {
 		localization_key = NAM_board_stock_register_pledged
 	}
 	text = { localization_key = NAM_board_stock_register_open }
+}
+
+defined_text = {
+	name = NAMIncidentTimeoutOutcome
+	text = {
+		trigger = {
+			NAM_crisis_case_1 = yes
+			has_completed_focus = NAM_field_firefighters
+		}
+		localization_key = NAM_incident_timeout_firefighters
+	}
+	text = {
+		trigger = { NAM_industrial_claim_payable = yes }
+		localization_key = NAM_incident_timeout_insurance
+	}
+	text = {
+		trigger = { NAM_garrison_families_entitled = yes }
+		localization_key = NAM_incident_timeout_pensions
+	}
+	text = {
+		trigger = {
+			has_country_flag = NAM_crisis_fund
+			OR = {
+				NAM_crisis_case_1 = yes
+				NAM_crisis_case_2 = yes
+				NAM_crisis_case_3 = yes
+				NAM_crisis_case_4 = yes
+				NAM_crisis_case_5 = yes
+			}
+		}
+		localization_key = NAM_incident_timeout_fund
+	}
+	text = {
+		trigger = { NAM_crisis_case_1 = yes }
+		localization_key = NAM_incident_timeout_fire
+	}
+	text = {
+		trigger = { NAM_crisis_case_2 = yes }
+		localization_key = NAM_incident_timeout_strike
+	}
+	text = {
+		trigger = { NAM_crisis_case_3 = yes }
+		localization_key = NAM_incident_timeout_scandal
+	}
+	text = {
+		trigger = { NAM_crisis_case_4 = yes }
+		localization_key = NAM_incident_timeout_customs
+	}
+	text = {
+		trigger = { NAM_crisis_case_5 = yes }
+		localization_key = NAM_incident_timeout_garrison
+	}
+	text = { localization_key = NAM_incident_timeout_closed }
 }
 
 defined_text = {

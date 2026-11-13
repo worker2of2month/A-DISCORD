@@ -23,11 +23,14 @@ SIZES = {
 }
 PORTRAIT = (220, 440)
 # Country portraits cut from existing campaign art at the briefing's 1:2 ratio:
-# the desert city of the southern superevent and the oil towers of a loading screen.
+# the desert city of the southern superevent.
 PORTRAIT_CROPS = {
     'shl': ('gfx/interface/superevents/NAM/superevent_resource_war.png', (290, 86, 542, 590)),
-    'nam': ('gfx/loadingscreens/load_3.dds', (1180, 0, 1900, 1440)),
 }
+# Every briefing portrait in sprite order. Only PORTRAIT_CROPS are rendered; the
+# others are finished author art. The NAM portrait carries the CRT layer applied
+# after its crop, and a rebuild would strip it.
+PORTRAITS = ('stp', 'val', 'rus', 'shl', 'nam')
 
 
 def frame(size: tuple[int, int], button: bool = False) -> Image.Image:
@@ -241,7 +244,7 @@ def expected_outputs(include_portraits: bool = True) -> dict[Path, bytes]:
             stream = BytesIO()
             portrait.save(stream, 'PNG')
             outputs[OUTPUT / f'{tag}.png'] = stream.getvalue()
-    for tag in ('stp', 'val', 'rus', *PORTRAIT_CROPS):
+    for tag in PORTRAITS:
         definitions.extend(
             [
                 '\tspriteType = {',

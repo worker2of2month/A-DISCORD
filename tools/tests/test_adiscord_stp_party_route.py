@@ -1514,7 +1514,7 @@ class PartySecondPackageContracts(unittest.TestCase):
                 )
             for stage in (1, 2, 3):
                 for mode in ('funded', 'administrative'):
-                    self.assertIn('35', loc[f'STP_ps_reorg_{stage}_{mode}_desc'])
+                    self.assertIn('35', loc[f'STP_ps_reorg_{stage}_{mode}_timing_tt'])
         categories = read(
             'common/decisions/categories/ADISCORD_decision_categories_STP.txt'
         )
@@ -3205,22 +3205,18 @@ class PoliticalChapterContracts(unittest.TestCase):
             ]
             self.assertEqual(len(children(payload, "country_event")), count)
 
-    def test_ai_initial_nominee_follows_the_existing_delegate_coalition(self):
-        self.assertIn("STP_ch_select_ai_nominee", self.effects)
-        for votes, expected in (
-            ((40, 20, 15, 0, 0), 1),
-            ((20, 45, 15, 0, 0), 2),
-            ((20, 15, 45, 0, 0), 3),
-            ((10, 15, 20, 40, 30), 4),
-            ((10, 15, 20, 30, 40), 5),
-            ((30, 30, 30, 30, 30), 1),
-            ((10, 15, 20, 40, 40), 4),
-        ):
-            facts = {("STP", "is_ai", "yes"): True}
-            for i, vote in enumerate(votes, 1):
-                facts[("STP", "variable", f"STP_ch_votes_{i}")] = vote
-            self.apply_ledger("STP_ch_select_ai_nominee", facts)
-            self.assertEqual(facts[("STP", "variable", "STP_ch_nominee")], expected)
+    def test_initial_nominee_follows_the_prewar_mandate_for_humans_and_ai(self):
+        for candidate in range(1, 7):
+            for ai in (False, True):
+                facts = {
+                    ("STP", "is_ai", "yes"): ai,
+                    ("STP", "has_variable", "STP_pv_mandate"): True,
+                    ("STP", "variable", "STP_pv_mandate"): candidate,
+                }
+                for i in range(1, 6):
+                    facts[("STP", "variable", f"STP_ch_votes_{i}")] = 100 - i
+                self.apply_ledger("STP_ch_select_ai_nominee", facts)
+                self.assertEqual(facts[("STP", "variable", "STP_ch_nominee")], candidate)
 
     def test_recovery_and_focus_rewards_schedule_a_post_completion_refresh(self):
         for entrypoint in (
@@ -3276,33 +3272,27 @@ class PoliticalChapterContracts(unittest.TestCase):
                 frozen[("STP", "variable", f"STP_ch_votes_{i}")],
             )
 
-    def test_ballot_offers_only_the_leader_or_tied_leaders(self):
-        for votes in (
-            (50, 30, 20),
-            (20, 60, 20),
-            (10, 20, 70),
-            (40, 40, 20),
-            (30, 30, 30),
-        ):
+    def test_ballot_ratifies_all_six_prewar_leaders_despite_opposing_majorities(self):
+        for mandate in range(1, 7):
             facts = {
                 ("STP", "STP_ch_current", "yes"): True,
                 ("STP", "variable", "STP_ch_phase"): 3,
                 ("STP", "has_country_flag", "STP_ch_ballot_closed"): True,
                 ("STP", "is_subject", "no"): True,
+                ("STP", "variable", "STP_pv_mandate"): mandate,
             }
-            facts.update(
-                {
-                    ("STP", "variable", f"STP_ch_votes_{i}"): vote
-                    for i, vote in enumerate(votes, 1)
-                }
-            )
-            for i, vote in enumerate(votes, 1):
-                self.assertEqual(
-                    matches_conditions(
-                        self.triggers[f"STP_ch_candidate_{i}_wins"], facts
-                    ),
-                    vote == max(votes),
-                )
+            for i in range(1, 6):
+                facts[("STP", "variable", f"STP_ch_votes_{i}")] = 0 if i == mandate else 100
+            actual = [i for i in range(1, 7) if matches_conditions(
+                self.triggers[f"STP_ch_candidate_{i}_wins"], facts)]
+            self.assertEqual(actual, [mandate])
+            for closed, independent in ((False, True), (True, False)):
+                blocked = {**facts,
+                    ("STP", "has_country_flag", "STP_ch_ballot_closed"): closed,
+                    ("STP", "is_subject", "no"): independent}
+                self.assertFalse(any(matches_conditions(
+                    self.triggers[f"STP_ch_candidate_{i}_wins"], blocked)
+                    for i in range(1, 7)))
 
     def test_every_group_has_a_separate_promise_and_fulfilment(self):
         for group in self.GROUPS:
@@ -3689,30 +3679,7 @@ class PoliticalChapterContracts(unittest.TestCase):
         for path in (DECISIONS, EFFECTS, EVENTS):
             self.assertFalse((ROOT / path).read_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_five_candidate_ballot_counts_new_blocs_and_preserves_ties(self):
-        from itertools import product
-
-        for votes in product((0, 10, 30), repeat=5):
-            facts = {
-                ("STP", "STP_ch_current", "yes"): True,
-                ("STP", "variable", "STP_ch_phase"): 3,
-                ("STP", "has_country_flag", "STP_ch_ballot_closed"): True,
-                ("STP", "is_subject", "no"): True,
-            }
-            facts.update(
-                {
-                    ("STP", "variable", f"STP_ch_votes_{i}"): v
-                    for i, v in enumerate(votes, 1)
-                }
-            )
-            for i, votes_i in enumerate(votes, 1):
-                self.assertEqual(
-                    matches_conditions(
-                        self.triggers[f"STP_ch_candidate_{i}_wins"], facts
-                    ),
-                    votes_i == max(votes),
-                    (votes, i),
-                )
+    def test_delegate_counts_preserve_the_new_blocs(self):
         facts = {
             ("STP", "STP_ch_campaigning", "yes"): True,
             ("STP", "variable", "STP_ch_endorse_merchants"): 4,
@@ -3935,6 +3902,7 @@ class PartyIdeologyContracts(unittest.TestCase):
             facts = {
                 **elected_leader_facts(candidate),
                 ("STP", "variable", "STP_pv_outcome"): candidate,
+                ("STP", "variable", "STP_pv_mandate"): candidate,
                 ("STP", "variable", "STP_debug_party_choice"): candidate,
                 ("STP", "STP_debug_party_current", "yes"): True,
                 ("STP", "STP_ch_current", "yes"): True,
@@ -3981,6 +3949,7 @@ class PartyIdeologyContracts(unittest.TestCase):
                     ("STP", "has_country_flag", "STP_ch_protectorate_leader"): True,
                     ("STP", "has_variable", "STP_pv_outcome"): True,
                     ("STP", "variable", "STP_pv_outcome"): candidate,
+                ("STP", "variable", "STP_pv_mandate"): candidate,
                 }
                 trace = self.appointment_trace("STP_ch_open_congress", facts)
                 self.assertIn(("leader", candidate, {subtype}), trace)
@@ -4095,6 +4064,7 @@ class PartyIdeologyContracts(unittest.TestCase):
                         ("STP", "has_completed_focus", "STP_pw_party_new_republic"): True,
                         ("STP", "has_variable", "STP_ch_government"): elected,
                         ("STP", "variable", "STP_pv_outcome"): candidate,
+                ("STP", "variable", "STP_pv_mandate"): candidate,
                     }
                     with self.subTest(government=government, candidate=candidate, elected=elected):
                         expected = government == "hedonism" or (government == "etatism" and candidate in (3, 5))

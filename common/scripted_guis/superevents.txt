@@ -195,6 +195,38 @@ scripted_gui = {
 		}
 	}
 
+	superevent_val_council_proclamation = {
+		window_name = "superevent_val_council_proclamation"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_val_council_proclamation
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_val_council_proclamation
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_south_war = {
+		window_name = "superevent_south_war"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_south_war
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_south_war
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
 	superevent_stelander_great = {
 		window_name = "superevent_stelander_great"
 		context_type = player_context
@@ -291,22 +323,6 @@ scripted_gui = {
 		}
 	}
 
-	superevent_vorkerland_joint_victory = {
-		window_name = "superevent_vorkerland_joint_victory"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_vorkerland_joint_victory
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_vorkerland_joint_victory
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
 	superevent_stelander_sotnikov_civilwar = {
 		window_name = "superevent_stelander_sotnikov_civilwar"
 		context_type = player_context
@@ -382,22 +398,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_tikhoreva
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
-	superevent_rus_khan_died = {
-		window_name = "superevent_rus_khan_died"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_rus_khan_died
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_rus_khan_died
 				ADISCORD_superevent_dispatch_next = yes
 			}
 		}

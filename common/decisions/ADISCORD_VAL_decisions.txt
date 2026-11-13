@@ -10,7 +10,9 @@ VAL_military_operations = {
 		days_mission_timeout = 21
 		cancel_trigger = { NOT = { has_country_flag = VAL_cw_mobilizing } }
 		# Event .21 starts the war for both displayed timers.
-		timeout_effect = { }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_cw_intervention_preparation_description_rules_tt
+			}
 	}
 
 	# Three republican districts occupied and only Livonn holding out: the council
@@ -54,6 +56,7 @@ VAL_military_operations = {
 		days_re_enable = 21
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_cw_begin_mobilization_description_rules_tt
 			custom_effect_tooltip = VAL_cw_begin_mobilization_war_tt
 			VAL_cw_start_intervention = yes
 		}
@@ -82,6 +85,7 @@ VAL_military_operations = {
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_ops_finance_cin_contacts_description_rules_tt
 			custom_effect_tooltip = VAL_northern_contacts_reserved_tt
 			hidden_effect = {
 				if = {
@@ -165,6 +169,7 @@ VAL_military_operations = {
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_ops_finance_osf_contacts_description_rules_tt
 			custom_effect_tooltip = VAL_northern_contacts_reserved_tt
 			hidden_effect = {
 				if = {
@@ -282,6 +287,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_return_southern_tsaygen_description_rules_tt
 			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
 			hidden_effect = { VAL_begin_southern_tsaygen_campaign = yes }
 		}
@@ -300,6 +306,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_cross_perimeter_description_rules_tt
 			custom_effect_tooltip = VAL_declares_war_ert_irem_tt
 			declare_war_on = { target = ERT type = take_state_focus generator = { 169 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
@@ -327,6 +334,7 @@ VAL_military_operations = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_secure_perimeter_description_rules_tt
 			custom_effect_tooltip = VAL_secure_perimeter_tt
 			hidden_effect = { VAL_settle_perimeter_war = yes }
 		}
@@ -344,6 +352,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_expand_southern_bridgehead_description_rules_tt
 			custom_effect_tooltip = VAL_declares_war_ert_south_tt
 			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
@@ -376,6 +385,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_reclaim_southern_sector_description_rules_tt
 			custom_effect_tooltip = VAL_declares_war_southern_sector_tt
 			declare_war_on = { target = FROM type = take_state_focus generator = { 167 170 171 184 185 203 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
@@ -447,6 +457,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_operation_eastern_security_belt_description_rules_tt
 			custom_effect_tooltip = VAL_declares_war_irt_tt
 			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
@@ -477,7 +488,10 @@ VAL_military_operations = {
 		}
 		cost = 75
 		days_remove = 21
-		complete_effect = { custom_effect_tooltip = VAL_final_reconnaissance_start_tt }
+		complete_effect = {
+			custom_effect_tooltip = VAL_final_reconnaissance_description_rules_tt
+			custom_effect_tooltip = VAL_final_reconnaissance_start_tt
+		}
 		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
 		cancel_effect = { add_political_power = 75 }
 		remove_effect = {
@@ -503,6 +517,7 @@ VAL_military_operations = {
 		cost = 0
 		days_remove = 35
 		complete_effect = {
+			custom_effect_tooltip = VAL_final_stockpile_supplies_description_rules_tt
 			ADISCORD_economy_spend_500 = yes
 			custom_effect_tooltip = VAL_final_supply_preparation_tt
 			hidden_effect = { set_variable = { var = VAL_final_supply_deposit value = 500 } }
@@ -537,7 +552,10 @@ VAL_military_operations = {
 		available = { has_war_support > 0.1 }
 		cost = 150
 		days_remove = 28
-		complete_effect = { custom_effect_tooltip = VAL_final_reserve_registration_tt }
+		complete_effect = {
+			custom_effect_tooltip = VAL_final_register_reserves_description_rules_tt
+			custom_effect_tooltip = VAL_final_reserve_registration_tt
+		}
 		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
 		cancel_effect = { add_political_power = 150 }
 		remove_effect = {
@@ -571,7 +589,10 @@ VAL_military_operations = {
 				}
 			}
 		}
-		complete_effect = { custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nod_ultimatum_description_rules_tt
+			custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } }
+		}
 		timeout_effect = { custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt hidden_effect = { set_country_flag = VAL_nod_ultimatum_expired country_event = { id = val_rework.119 hours = 1 } } }
 	}
 
@@ -581,7 +602,10 @@ VAL_military_operations = {
 		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
 		available = { VAL_frontier_prewar_eligible = yes has_war = no }
 		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_frontier_war_tt hidden_effect = { VAL_frontier_start_war = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_begin_offensive_description_rules_tt
+			custom_effect_tooltip = VAL_frontier_war_tt hidden_effect = { VAL_frontier_start_war = yes }
+		}
 		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
 	}
 
@@ -590,7 +614,10 @@ VAL_military_operations = {
 		allowed = { tag = VAL }
 		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
 		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_withdraw_and_defer = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_withdraw_demand_description_rules_tt
+			custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_withdraw_and_defer = yes }
+		}
 		ai_will_do = { base = 0 }
 	}
 
@@ -609,6 +636,7 @@ VAL_military_operations = {
 		fire_only_once = no
 
 		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_transport_contract_description_rules_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -639,7 +667,10 @@ VAL_military_operations = {
 		days_mission_timeout = 21
 		selectable_mission = no
 		cancel_trigger = { NOT = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } }
-		timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_frontier_ultimatum_deadline_description_rules_tt
+			hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } }
+		}
 	}
 
 	VAL_defer_northern_expansion = {
@@ -692,6 +723,7 @@ VAL_military_operations = {
 		cost = 75
 		days_re_enable = 180
 		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_demand_CIN_description_rules_tt
 			custom_effect_tooltip = VAL_frontier_demand_CIN_tt
 			custom_effect_tooltip = VAL_frontier_nod_forecast_tt
 			hidden_effect = {
@@ -720,6 +752,7 @@ VAL_military_operations = {
 		cost = 75
 		days_re_enable = 180
 		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_demand_ERT_description_rules_tt
 			custom_effect_tooltip = VAL_frontier_demand_ERT_tt
 			hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
 		}
@@ -774,6 +807,7 @@ VAL_military_operations = {
 		days_remove = 30
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_mandate_description_rules_tt
 			custom_effect_tooltip = VAL_ardent_mandate_start_tt
 			hidden_effect = {
 				if = {
@@ -868,6 +902,7 @@ VAL_military_operations = {
 		days_remove = 30
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_community_debts_description_rules_tt
 			custom_effect_tooltip = VAL_ardent_community_debts_start_tt
 			hidden_effect = {
 				if = {
@@ -962,6 +997,7 @@ VAL_military_operations = {
 		days_remove = 30
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_october_instructors_description_rules_tt
 			custom_effect_tooltip = VAL_ardent_october_instructors_start_tt
 			hidden_effect = {
 				if = {
@@ -1070,6 +1106,7 @@ VAL_military_operations = {
 			NOT = { has_equipment = { infantry_equipment < 18000 } }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_ardent_uprising_description_rules_tt
 			custom_effect_tooltip = VAL_ardent_uprising_tt
 			if = {
 				limit = {
@@ -1115,6 +1152,7 @@ VAL_military_operations = {
 		}
 		cost = 60 days_remove = 30 days_re_enable = 90
 		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_against_nod_description_rules_tt
 			custom_effect_tooltip = VAL_campaign_preparation_tt
 			custom_effect_tooltip = VAL_nod_victory_tt
 			hidden_effect = {
@@ -1210,6 +1248,7 @@ VAL_military_operations = {
 		fire_only_once = no
 		days_remove = 150
 		complete_effect = {
+			custom_effect_tooltip = VAL_build_zeppelin_description_rules_tt
 			custom_effect_tooltip = VAL_zeppelin_project_tt
 			hidden_effect = { VAL_zeppelin_start = yes }
 		}
@@ -1270,6 +1309,7 @@ VAL_military_operations = {
 		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } } }
 		cost = 60 days_remove = 30 days_re_enable = 90
 		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_against_stelander_description_rules_tt
 			custom_effect_tooltip = VAL_campaign_preparation_tt
 			custom_effect_tooltip = VAL_stelander_victory_tt
 			hidden_effect = {
@@ -1334,6 +1374,7 @@ VAL_military_operations = {
 		}
 		cost = 50 days_re_enable = 90
 		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_ultimatum_description_rules_tt
 			custom_effect_tooltip = VAL_stelander_offer_tt
 			hidden_effect = {
 				if = {
@@ -1365,7 +1406,10 @@ VAL_contract_management = {
 		cost = 0
 		custom_cost_text = VAL_cost_treasury1000
 		custom_cost_trigger = { VAL_can_spend_1000 = yes }
-		complete_effect = { custom_effect_tooltip = VAL_quarterly_subcontract_result_tt hidden_effect = { VAL_subcontract_quarterly_norm = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_subcontract_quarterly_norm_description_rules_tt
+			custom_effect_tooltip = VAL_quarterly_subcontract_result_tt hidden_effect = { VAL_subcontract_quarterly_norm = yes }
+		}
 		ai_will_do = { base = 30 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment < 60000 } } } }
 	}
 
@@ -1386,7 +1430,9 @@ VAL_contract_management = {
 			industrial_capacity_factory = 0.05
 			war_support_weekly = 0.001
 		}
-		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_rifles_and_bread_description_rules_tt
+			ADISCORD_campaign_slot_consume = yes }
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
 		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1408,7 +1454,10 @@ VAL_contract_management = {
 			consumer_goods_factor = -0.03
 			stability_weekly = 0.001
 		}
-		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_contracts_feed_families_description_rules_tt
+			ADISCORD_campaign_slot_consume = yes
+		}
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
 		ai_will_do = { base = 2 modifier = { factor = 2 has_stability < 0.60 } }
 	}
@@ -1430,7 +1479,10 @@ VAL_contract_management = {
 		modifier = {
 			stability_weekly = 0.002
 		}
-		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_contracts_mean_order_description_rules_tt
+			ADISCORD_campaign_slot_consume = yes
+		}
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
 		ai_will_do = { base = 3 modifier = { factor = 3 has_stability < 0.60 } }
 	}
@@ -1451,7 +1503,10 @@ VAL_contract_management = {
 		modifier = {
 			stability_weekly = 0.003
 		}
-		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_state_keeps_its_word_description_rules_tt
+			ADISCORD_campaign_slot_consume = yes
+		}
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
 		ai_will_do = { base = 3 modifier = { factor = 4 has_stability < 0.55 } }
 	}
@@ -1473,7 +1528,10 @@ VAL_contract_management = {
 			political_power_gain = 0.50
 			ADISCORD_economy_trade_income_factor = 0.08
 		}
-		complete_effect = { ADISCORD_campaign_slot_consume = yes ADISCORD_economy_mark_dirty = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_no_promise_without_payment_description_rules_tt
+			ADISCORD_campaign_slot_consume = yes ADISCORD_economy_mark_dirty = yes
+		}
 		remove_effect = { ADISCORD_campaign_slot_release = yes ADISCORD_economy_mark_dirty = yes }
 		ai_will_do = { base = 2 }
 	}
@@ -1514,6 +1572,7 @@ VAL_contract_management = {
 		custom_cost_text = ADISCORD_action_cost_treasury_100
 		days_re_enable = 90
 		complete_effect = {
+			custom_effect_tooltip = VAL_fund_contract_chancery_description_rules_tt
 			ADISCORD_economy_spend_100 = yes
 			add_political_power = 75
 		}
@@ -1530,7 +1589,10 @@ VAL_contract_management = {
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		days_mission_timeout = 90
-		timeout_effect = { VAL_resolve_quarterly_contract_norm = yes }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_quarterly_contract_deadline_description_rules_tt
+			VAL_resolve_quarterly_contract_norm = yes
+		}
 	}
 
 	VAL_pay_quarterly_contract_norm = {
@@ -1541,7 +1603,10 @@ VAL_contract_management = {
 		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 40000 } } }
 		custom_cost_text = VAL_cost_pp10_r4000
 		cost = 0
-		complete_effect = { VAL_pay_quarterly_contract_norm = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_pay_quarterly_contract_norm_description_rules_tt
+			VAL_pay_quarterly_contract_norm = yes
+		}
 		ai_will_do = {
 			base = 50
 			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
@@ -1569,6 +1634,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_discontent_description_rules_tt
 			custom_effect_tooltip = VAL_debug_council_discontent_tt
 			hidden_effect = {
 				if = {
@@ -1607,6 +1673,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_ultimatum_description_rules_tt
 			custom_effect_tooltip = VAL_debug_council_ultimatum_tt
 			hidden_effect = {
 				if = {
@@ -1646,6 +1713,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_council_take_power_description_rules_tt
 			custom_effect_tooltip = VAL_debug_council_take_power_tt
 			hidden_effect = {
 				if = {
@@ -1685,6 +1753,7 @@ VAL_rework_debug = {
 		fire_only_once = no
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_spawn_zeppelin_trial_description_rules_tt
 			custom_effect_tooltip = VAL_spawn_zeppelin_trial_tt
 			hidden_effect = { VAL_spawn_zeppelin_trial = yes }
 		}
@@ -1708,6 +1777,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_spawn_crimson_trial_description_rules_tt
 			custom_effect_tooltip = VAL_spawn_crimson_trial_tt
 			hidden_effect = { VAL_spawn_crimson_trial = yes }
 		}
@@ -1720,7 +1790,10 @@ VAL_rework_debug = {
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_initialize_rework = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_initialize_systems_description_rules_tt
+			VAL_initialize_rework = yes
+		}
 	}
 
 	VAL_debug_unlock_operations_map = {
@@ -1730,6 +1803,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_unlock_operations_map_description_rules_tt
 			VAL_unlock_operations_map = yes
 		}
 	}
@@ -1741,6 +1815,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_disrupt_vorkerland_contracts_description_rules_tt
 			set_country_flag = VAL_debug_vorkerland_collapse
 			VAL_handle_vorkerland_war_outbreak = yes
 		}
@@ -1753,6 +1828,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_lose_westerholm_metal_description_rules_tt
 			set_country_flag = VAL_debug_vorkerland_collapse
 			set_country_flag = VAL_westerholm_resource_rights_active
 			VAL_handle_westerholm_loss = yes
@@ -1766,6 +1842,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_reputation_maximum_description_rules_tt
 			set_variable = { var = VAL_contract_reputation_level value = 3 }
 			VAL_refresh_contract_reputation = yes
 		}
@@ -1778,6 +1855,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_reputation_minimum_description_rules_tt
 			set_variable = { var = VAL_contract_reputation_level value = 0 }
 			VAL_refresh_contract_reputation = yes
 		}
@@ -1790,6 +1868,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_grant_contract_reserves_description_rules_tt
 			ADISCORD_economy_receive_50 = yes
 			ADISCORD_economy_receive_50 = yes
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 200000 producer = VAL }
@@ -1804,6 +1883,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_reconcile_campaign_peaces_description_rules_tt
 			VAL_frontier_reconcile = yes
 			VAL_final_crisis_reconcile = yes
 			VAL_finalize_reserved_settlements = yes
@@ -1826,6 +1906,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_settle_stelander_victory_description_rules_tt
 			VAL_cw_settle_republics = yes
 			VAL_frontier_reconcile = yes
 		}
@@ -1838,7 +1919,10 @@ VAL_rework_debug = {
 		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_frontier_settle_victory = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_frontier_victory_description_rules_tt
+			VAL_frontier_settle_victory = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -1848,7 +1932,10 @@ VAL_rework_debug = {
 		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_frontier_settle_armistice = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_frontier_armistice_description_rules_tt
+			VAL_frontier_settle_armistice = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -1858,7 +1945,10 @@ VAL_rework_debug = {
 		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
 		cost = 0
 		fire_only_once = no
-		complete_effect = { VAL_frontier_settle_defeat = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_debug_frontier_defeat_description_rules_tt
+			VAL_frontier_settle_defeat = yes
+		}
 		ai_will_do = { factor = 0 }
 	}
 
@@ -1876,6 +1966,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_final_campaign_reconcile_description_rules_tt
 			VAL_final_crisis_reconcile = yes
 			VAL_finalize_reserved_settlements = yes
 		}
@@ -1906,6 +1997,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_settle_wasteland_description_rules_tt
 			FROM = { VAL_settle_wasteland_capitulation = yes }
 			# Native capitulation routing normally releases this reservation.
 			# A manual debug settlement executes outside that callback.
@@ -1921,6 +2013,7 @@ VAL_rework_debug = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_debug_reset_rework_state_description_rules_tt
 			clr_country_flag = VAL_debug_stp_rupture
 			clr_country_flag = VAL_debug_stp_civil_war
 			clr_country_flag = VAL_debug_stp_postwar
@@ -1960,7 +2053,10 @@ VAL_reclamation = {
 		days_remove = 90
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
-		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_reclamation_roads_description_rules_tt
+			hidden_effect = { VAL_reclamation_begin_project = yes }
+		}
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_roads_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
 		# Wartime work needs a treasury cushion beyond the project's own price.
@@ -1998,7 +2094,10 @@ VAL_reclamation = {
 		days_remove = 90
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
-		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_reclamation_water_description_rules_tt
+			hidden_effect = { VAL_reclamation_begin_project = yes }
+		}
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_water_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
 		# Wartime work needs a treasury cushion beyond the project's own price.
@@ -2036,7 +2135,10 @@ VAL_reclamation = {
 		days_remove = 90
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
-		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_reclamation_settlement_description_rules_tt
+			hidden_effect = { VAL_reclamation_begin_project = yes }
+		}
 		remove_effect = { custom_effect_tooltip = VAL_reclamation_settlement_result_tt hidden_effect = { VAL_reclamation_finish_project = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
 		# Wartime work needs a treasury cushion beyond the project's own price.
@@ -2076,7 +2178,10 @@ VAL_reclamation = {
 		days_remove = 60
 		fire_only_once = no
 		cancel_trigger = { NOT = { VAL_reclamation_industry_target_valid = yes } }
-		complete_effect = { hidden_effect = { VAL_reclamation_begin_industry = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_reclamation_industry_description_rules_tt
+			hidden_effect = { VAL_reclamation_begin_industry = yes }
+		}
 		remove_effect = {
 			custom_effect_tooltip = VAL_reclamation_industry_result_tt
 			hidden_effect = { VAL_reclamation_finish_industry = yes }
@@ -2111,6 +2216,7 @@ VAL_reclamation = {
 		days_remove = 120
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_recovery_road_corps_program_description_rules_tt
 			ADISCORD_economy_spend_500 = yes
 			custom_effect_tooltip = ADISCORD_development_program_result_35
 			add_to_variable = { var = ADISCORD_state_development_progress value = 35 }
@@ -2135,6 +2241,7 @@ VAL_reclamation = {
 		days_remove = 120
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_recovery_field_medicine_program_description_rules_tt
 			ADISCORD_economy_spend_500 = yes
 			custom_effect_tooltip = ADISCORD_development_program_result_35
 			add_to_variable = { var = ADISCORD_social_system_development_progress value = 35 }
@@ -2159,6 +2266,7 @@ VAL_reclamation = {
 		days_remove = 120
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_recovery_workshop_program_description_rules_tt
 			ADISCORD_economy_spend_500 = yes
 			custom_effect_tooltip = ADISCORD_development_program_result_35
 			add_to_variable = { var = ADISCORD_economic_development_progress value = 35 }
@@ -2191,6 +2299,7 @@ VAL_frontier = {
 		cost = 0
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_Island_Treaty_description_rules_tt
 			if = {
 				limit = { VAL_island_treaty_available = yes }
 				annex_country = { target = SLI transfer_troops = yes }
@@ -2231,7 +2340,10 @@ VAL_frontier = {
 			}
 		}
 		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_receive_stelander_border_tt hidden_effect = { FROM = { VAL_cede_stelander_border = yes } } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_receive_stelander_border_description_rules_tt
+			custom_effect_tooltip = VAL_receive_stelander_border_tt hidden_effect = { FROM = { VAL_cede_stelander_border = yes } }
+		}
 		ai_will_do = { base = 100 }
 	}
 
@@ -2263,7 +2375,10 @@ VAL_frontier = {
 		on_map_mode = map_and_decisions_view
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		cancel_trigger = { VAL_frontier_workshop_target_valid = no }
-		complete_effect = { hidden_effect = { VAL_frontier_begin_workshop = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_workshops_description_rules_tt
+			hidden_effect = { VAL_frontier_begin_workshop = yes }
+		}
 		remove_effect = { custom_effect_tooltip = VAL_frontier_workshop_result_tt hidden_effect = { VAL_frontier_finish_workshop = yes } }
 		cancel_effect = { custom_effect_tooltip = VAL_frontier_workshop_refund_tt hidden_effect = { VAL_frontier_refund_workshop = yes } }
 		ai_will_do = { base = 2 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
@@ -2283,6 +2398,7 @@ VAL_frontier = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_ready_tt VAL_can_form_occidian_administration = yes } }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_create_occidian_administration_description_rules_tt
 			custom_effect_tooltip = VAL_occidian_administration_tt
 			hidden_effect = { VAL_form_occidian_administration = yes }
 		}
@@ -2308,7 +2424,10 @@ VAL_frontier = {
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_northern_administration_ready_tt VAL_can_form_northern_administration = yes } }
 		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_northern_administration_tt hidden_effect = { VAL_form_northern_administration = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_create_northern_administration_description_rules_tt
+			custom_effect_tooltip = VAL_northern_administration_tt hidden_effect = { VAL_form_northern_administration = yes }
+		}
 		ai_will_do = { base = 20 }
 	}
 
@@ -2344,6 +2463,7 @@ VAL_frontier = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_nationalise_region_description_rules_tt
 			hidden_effect = {
 				FROM = { set_state_flag = VAL_regional_administration_in_progress }
 			}
@@ -2415,11 +2535,18 @@ VAL_frontier = {
 		cost = 150
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_proclaim_commonwealth_description_rules_tt
 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
 			custom_effect_tooltip = VAL_next_chapter_tt
 			hidden_effect = {
 				VAL_adopt_commonwealth = yes
-				country_event = { id = ADISCORD_superevent.9 }
+				if = {
+					limit = { VAL_council_regime_leader = yes }
+					country_event = { id = ADISCORD_superevent.73 }
+				}
+				else = {
+					country_event = { id = ADISCORD_superevent.9 }
+				}
 			}
 		}
 		ai_will_do = { base = 100 }
@@ -2442,7 +2569,10 @@ VAL_livonn_settlement_category = {
 		}
 		cost = 0
 		fire_only_once = yes
-		complete_effect = { VAL_cw_honor_livonn_agreement = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_honor_livonn_agreement_description_rules_tt
+			VAL_cw_honor_livonn_agreement = yes
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -2456,7 +2586,10 @@ VAL_livonn_settlement_category = {
 		available = { always = yes }
 		cost = 0
 		fire_only_once = yes
-		complete_effect = { VAL_cw_retain_livonn = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_keep_livonn_description_rules_tt
+			VAL_cw_retain_livonn = yes
+		}
 		ai_will_do = { factor = 1 }
 	}
 }
@@ -2518,7 +2651,10 @@ VAL_foreign_sales = {
 		cost = 0
 		custom_cost_text = STP_ps_val_send_supply_cost
 		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 12000 } } }
-		complete_effect = { hidden_effect = { STP_ps_begin_val_supply = yes } }
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_val_send_supply_description_rules_tt
+			hidden_effect = { STP_ps_begin_val_supply = yes }
+		}
 		ai_will_do = { base = 4 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
 	}
 
@@ -2596,6 +2732,7 @@ VAL_foreign_sales = {
 		cost = 100
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_sign_annual_trade_description_rules_tt
 			custom_effect_tooltip = VAL_trade_decision_terms_tt
 			hidden_effect = {
 				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
@@ -2643,6 +2780,7 @@ VAL_foreign_sales = {
 		custom_cost_text = VAL_hire_decision_cost
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_hire_partner_volunteers_description_rules_tt
 			custom_effect_tooltip = VAL_hire_decision_result_tt
 			hidden_effect = {
 				if = {
@@ -2677,6 +2815,7 @@ VAL_foreign_sales = {
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_sell_surplus_arms_market_description_rules_tt
 			custom_effect_tooltip = VAL_abstract_arms_sale_result_tt
 			hidden_effect = {
 				random_country = {
@@ -2743,6 +2882,7 @@ VAL_foreign_sales = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_quarterly_partner_supply_description_rules_tt
 			custom_effect_tooltip = VAL_quarterly_decision_result_tt
 			hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.407 } }
 		}
@@ -2770,6 +2910,7 @@ VAL_foreign_sales = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_ready_partner_supply_description_rules_tt
 			custom_effect_tooltip = VAL_ready_decision_result_tt
 			hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.406 } }
 		}
@@ -2799,6 +2940,7 @@ VAL_foreign_sales = {
 		cost = 0
 		days_re_enable = 7
 		complete_effect = {
+			custom_effect_tooltip = VAL_partner_contract_description_rules_tt
 			custom_effect_tooltip = VAL_partner_menu_tt
 			hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.414 } }
 		}
@@ -2822,6 +2964,7 @@ VAL_foreign_sales = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_export_bulk_order_description_rules_tt
 			custom_effect_tooltip = VAL_partner_bulk_tt
 			hidden_effect = { if = { limit = { FROM = { VAL_partner_bulk_can_offer = yes } } set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
 					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
@@ -2852,6 +2995,7 @@ VAL_foreign_sales = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_export_arsenal_order_description_rules_tt
 			custom_effect_tooltip = VAL_partner_arsenal_tt
 			hidden_effect = { if = { limit = { FROM = { VAL_partner_arsenal_can_offer = yes } } set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
 					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
@@ -2882,6 +3026,7 @@ VAL_foreign_sales = {
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_export_strategic_order_description_rules_tt
 			custom_effect_tooltip = VAL_partner_strategic_tt
 			hidden_effect = { if = { limit = { FROM = { VAL_partner_strategic_can_offer = yes } } set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
 					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
@@ -2900,7 +3045,10 @@ VAL_foreign_sales = {
 		visible = { has_country_flag = VAL_nam_concession_agreed has_global_flag = ADISCORD_nam_resource_war_nam_victory NOT = { has_country_flag = VAL_nam_concession_granted } }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nam_concession_ready_tt VAL_nam_concession_deliverable = yes } }
 		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_nam_concession_reward_tt hidden_effect = { VAL_deliver_nam_concession = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_register_nam_concession_description_rules_tt
+			custom_effect_tooltip = VAL_nam_concession_reward_tt hidden_effect = { VAL_deliver_nam_concession = yes }
+		}
 		ai_will_do = { base = 100 }
 	}
 
@@ -2925,6 +3073,7 @@ VAL_foreign_sales = {
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_ops_sell_rifles_to_cin_description_rules_tt
 			custom_effect_tooltip = VAL_northern_export_reserved_tt
 			hidden_effect = {
 				if = {
@@ -3037,6 +3186,7 @@ VAL_foreign_sales = {
 		days_remove = 21
 		days_re_enable = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_ops_sell_rifles_to_osf_description_rules_tt
 			custom_effect_tooltip = VAL_northern_export_reserved_tt
 			hidden_effect = {
 				if = {
@@ -3153,6 +3303,7 @@ VAL_foreign_sales = {
 		days_re_enable = 30
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_cw_sell_arms_to_resistance_description_rules_tt
 			custom_effect_tooltip = VAL_cw_arms_offer_tt
 			hidden_effect = {
 				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 1 days = 21 }
@@ -3190,6 +3341,7 @@ VAL_foreign_sales = {
 		days_remove = 21
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_cw_offer_contract_formations_description_rules_tt
 			custom_effect_tooltip = VAL_cw_formations_offer_tt
 			hidden_effect = {
 				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 2 days = 35 }
@@ -3241,6 +3393,7 @@ VAL_foreign_sales = {
 		}
 		cost = 20 days_re_enable = 35
 		complete_effect = {
+			custom_effect_tooltip = VAL_export_arms_description_rules_tt
 			custom_effect_tooltip = VAL_partner_arms_tt
 			hidden_effect = {
 				if = {
@@ -3277,6 +3430,7 @@ VAL_foreign_sales = {
 		}
 		cost = 30 days_re_enable = 70
 		complete_effect = {
+			custom_effect_tooltip = VAL_export_advisors_description_rules_tt
 			custom_effect_tooltip = VAL_export_advisors_offer_tt
 			hidden_effect = {
 				if = {
@@ -3335,6 +3489,7 @@ VAL_command_balance_category = {
 		custom_cost_text = VAL_command_trial_cost
 		custom_cost_trigger = { VAL_command_trial_affordable = yes }
 		complete_effect = {
+			custom_effect_tooltip = VAL_command_trial_description_rules_tt
 			custom_effect_tooltip = VAL_command_trial_start_tt
 			hidden_effect = {
 				if = {
@@ -3384,6 +3539,7 @@ VAL_command_balance_category = {
 		custom_cost_text = VAL_command_retirements_cost
 		custom_cost_trigger = { VAL_command_retirements_affordable = yes }
 		complete_effect = {
+			custom_effect_tooltip = VAL_command_retirements_description_rules_tt
 			custom_effect_tooltip = VAL_command_retirements_start_tt
 			hidden_effect = {
 				if = {
@@ -3484,6 +3640,7 @@ VAL_command_balance_category = {
 		cost = 60
 		days_re_enable = 180
 		complete_effect = {
+			custom_effect_tooltip = VAL_staff_operational_mandate_description_rules_tt
 			add_command_power = -25
 			add_power_balance_value = { id = VAL_command_balance value = -0.20 }
 			add_timed_idea = { idea = VAL_staff_war_mandate days = 90 }
@@ -3509,6 +3666,7 @@ VAL_command_balance_category = {
 		cost = 90
 		days_re_enable = 120
 		complete_effect = {
+			custom_effect_tooltip = VAL_reconcile_command_description_rules_tt
 			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.20 } }
 			else = { add_power_balance_value = { id = VAL_command_balance value = -0.20 } }
 		}
@@ -3528,6 +3686,7 @@ VAL_command_balance_category = {
 		cost = 120
 		days_re_enable = 180
 		complete_effect = {
+			custom_effect_tooltip = VAL_settle_command_crisis_description_rules_tt
 			add_power_balance_value = { id = VAL_command_balance value = 0.40 }
 		}
 		ai_will_do = { base = 1 }
@@ -3605,6 +3764,7 @@ VAL_resource_war_aid = {
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_negotiate_nam_metals_description_rules_tt
 			custom_effect_tooltip = VAL_nam_concession_terms_tt
 			hidden_effect = {
 				set_country_flag = { flag = VAL_nam_concession_offer_pending days = 40 }
@@ -3633,6 +3793,7 @@ VAL_resource_war_aid = {
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_negotiate_efl_metals_description_rules_tt
 			custom_effect_tooltip = VAL_efl_concession_terms_tt
 			hidden_effect = {
 				set_country_flag = { flag = VAL_efl_concession_offer_pending days = 40 }
@@ -3654,6 +3815,7 @@ VAL_resource_war_aid = {
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_resource_war_arms_description_rules_tt
 			custom_effect_tooltip = VAL_aid_arms_delivery_tt
 			hidden_effect = { VAL_deliver_resource_aid_arms = yes }
 		}
@@ -3672,6 +3834,7 @@ VAL_resource_war_aid = {
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_resource_war_personnel_description_rules_tt
 			custom_effect_tooltip = VAL_aid_personnel_delivery_tt
 			hidden_effect = { VAL_deliver_resource_aid_personnel = yes }
 		}
@@ -3701,7 +3864,10 @@ VAL_resource_war_aid = {
 				}
 			}
 		}
-		complete_effect = { hidden_effect = { VAL_complete_resource_aid = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_resource_aid_deadline_description_rules_tt
+			hidden_effect = { VAL_complete_resource_aid = yes }
+		}
 		timeout_effect = { hidden_effect = { set_country_flag = VAL_resource_aid_timeout_pending country_event = { id = val_contract.369 hours = 1 } } }
 	}
 }
@@ -3712,7 +3878,10 @@ VAL_northern_war_aid = {
 		visible = { VAL_northern_volunteer_front_open = yes }
 		available = { has_war = no has_capitulated = no is_subject = no NOT = { has_idea = VAL_northern_volunteer_mandate } }
 		cost = 50 days_re_enable = 30
-		complete_effect = { add_ideas = VAL_northern_volunteer_mandate custom_effect_tooltip = VAL_northern_volunteers_tt }
+		complete_effect = {
+			custom_effect_tooltip = VAL_northern_volunteers_description_rules_tt
+			add_ideas = VAL_northern_volunteer_mandate custom_effect_tooltip = VAL_northern_volunteers_tt
+		}
 		ai_will_do = { base = 10 }
 	}
 	VAL_choose_northern_aid = {
@@ -3722,6 +3891,7 @@ VAL_northern_war_aid = {
 		available = { has_capitulated = no is_subject = no }
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_choose_northern_aid_description_rules_tt
 			custom_effect_tooltip = VAL_northern_aid_terms_tt
 			hidden_effect = {
 				if = {
@@ -3745,6 +3915,7 @@ VAL_northern_war_aid = {
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_northern_aid_arms_description_rules_tt
 			custom_effect_tooltip = VAL_aid_arms_delivery_tt
 			hidden_effect = { VAL_deliver_northern_aid_arms = yes }
 		}
@@ -3763,6 +3934,7 @@ VAL_northern_war_aid = {
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
+			custom_effect_tooltip = VAL_northern_aid_personnel_description_rules_tt
 			custom_effect_tooltip = VAL_aid_personnel_delivery_tt
 			hidden_effect = { VAL_deliver_northern_aid_personnel = yes }
 		}
@@ -3792,7 +3964,10 @@ VAL_northern_war_aid = {
 				}
 			}
 		}
-		complete_effect = { hidden_effect = { VAL_complete_northern_aid = yes } }
+		complete_effect = {
+			custom_effect_tooltip = VAL_northern_aid_deadline_description_rules_tt
+			hidden_effect = { VAL_complete_northern_aid = yes }
+		}
 		timeout_effect = { hidden_effect = { country_event = { id = val_contract.370 hours = 1 } } }
 	}
 }
@@ -3807,7 +3982,10 @@ VAL_contract_obligations = {
 		days_mission_timeout = 30
 		is_good = no
 		selectable_mission = no
-		timeout_effect = { hidden_effect = { set_country_flag = VAL_order_1_expired } }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_order_1_deadline_description_rules_tt
+			hidden_effect = { set_country_flag = VAL_order_1_expired }
+		}
 	}
 	VAL_order_1_send = {
 		icon = ADISCORD_deal
@@ -3833,7 +4011,10 @@ VAL_contract_obligations = {
 		days_mission_timeout = 30
 		is_good = no
 		selectable_mission = no
-		timeout_effect = { hidden_effect = { set_country_flag = VAL_order_2_expired } }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_order_2_deadline_description_rules_tt
+			hidden_effect = { set_country_flag = VAL_order_2_expired }
+		}
 	}
 	VAL_order_2_send = {
 		icon = ADISCORD_deal
@@ -3907,7 +4088,10 @@ VAL_contract_obligations = {
 		days_mission_timeout = 90
 		selectable_mission = no
 		is_good = no
-		timeout_effect = { hidden_effect = { set_country_flag = VAL_military_expired } }
+		timeout_effect = {
+			custom_effect_tooltip = VAL_military_deadline_description_rules_tt
+			hidden_effect = { set_country_flag = VAL_military_expired }
+		}
 	}
 }
 
@@ -3930,6 +4114,7 @@ VAL_stelander_war_aid = {
 		cost = 25
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_back_shabrat_description_rules_tt
 			custom_effect_tooltip = VAL_back_shabrat_tt
 			hidden_effect = { VAL_start_stelander_support = yes }
 		}
@@ -3953,6 +4138,7 @@ VAL_stelander_war_aid = {
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_volunteers_description_rules_tt
 			add_ideas = VAL_stelander_volunteer_mandate
 			custom_effect_tooltip = VAL_stelander_volunteers_tt
 		}
@@ -3980,6 +4166,7 @@ VAL_stelander_war_aid = {
 		}
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_rifle_aid_description_rules_tt
 			custom_effect_tooltip = VAL_stelander_rifle_aid_tt
 			hidden_effect = {
 				if = {
@@ -4025,6 +4212,7 @@ VAL_stelander_war_aid = {
 		}
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_staff_fund_description_rules_tt
 			custom_effect_tooltip = VAL_stelander_staff_fund_tt
 			hidden_effect = {
 				if = {
@@ -4233,6 +4421,7 @@ VAL_new_world_category = {
 		}
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_supply_partner_description_rules_tt
 			custom_effect_tooltip = VAL_nw_supply_partner_tt
 			hidden_effect = {
 				if = {
@@ -4297,6 +4486,7 @@ VAL_new_world_category = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		days_remove = 120
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_restore_works_description_rules_tt
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_restoration = yes }
 		}
@@ -4350,6 +4540,7 @@ VAL_new_world_category = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		days_remove = 90
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_expand_foundry_description_rules_tt
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_foundry = yes }
 		}
@@ -4399,6 +4590,7 @@ VAL_new_world_category = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		days_remove = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_rebuild_roads_description_rules_tt
 			custom_effect_tooltip = VAL_nw_project_cancel_tt
 			hidden_effect = { VAL_nw_begin_roads = yes }
 		}
@@ -4441,6 +4633,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 21
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_emergency_arsenals_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_emergency_arsenals_begin = yes }
 		}
@@ -4497,6 +4690,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 21
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_expanded_arsenals_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_expanded_arsenals_begin = yes }
 		}
@@ -4552,6 +4746,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_emergency_reserve_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_emergency_reserve_begin = yes }
 		}
@@ -4608,6 +4803,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_expanded_reserve_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_expanded_reserve_begin = yes }
 		}
@@ -4663,6 +4859,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_survey_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_survey_begin = yes }
 		}
@@ -4700,6 +4897,7 @@ VAL_new_world_category = {
 		days_remove = 21
 		days_re_enable = 180
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_guard_caravans_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_guard_caravans_begin = yes }
 		}
@@ -4739,6 +4937,7 @@ VAL_new_world_category = {
 		}
 		days_remove = 45
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_salvage_archives_description_rules_tt
 			custom_effect_tooltip = VAL_nw_paid_order_tt
 			hidden_effect = { VAL_nw_salvage_archives_begin = yes }
 		}
@@ -4884,6 +5083,7 @@ VAL_new_world_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_nw_challenge_khan_description_rules_tt
 			custom_effect_tooltip = VAL_nw_challenge_khan_tt
 			hidden_effect = {
 				if = {
@@ -5037,6 +5237,7 @@ VAL_peace_payroll_category = {
 		is_good = no
 		days_mission_timeout = 365
 		timeout_effect = {
+			custom_effect_tooltip = VAL_peace_reckoning_description_rules_tt
 			custom_effect_tooltip = VAL_peace_reckoning_timeout_tt
 			hidden_effect = { VAL_peace_open_reckoning = yes }
 		}
@@ -5240,6 +5441,7 @@ VAL_peace_payroll_category = {
 		}
 		days_re_enable = 30
 		complete_effect = {
+			custom_effect_tooltip = VAL_peace_water_delivery_description_rules_tt
 			custom_effect_tooltip = VAL_peace_strike_minus_10_tt
 			hidden_effect = {
 				if = {
@@ -5537,6 +5739,7 @@ VAL_east_war_category = {
 		is_good = no
 		days_mission_timeout = 540
 		timeout_effect = {
+			custom_effect_tooltip = VAL_east_deadline_description_rules_tt
 			custom_effect_tooltip = VAL_east_deadline_timeout_tt
 			hidden_effect = { VAL_east_final_resolve_by_control = yes }
 		}
@@ -5563,6 +5766,7 @@ VAL_east_war_category = {
 		}
 		days_remove = 60
 		complete_effect = {
+			custom_effect_tooltip = VAL_east_war_stockpile_description_rules_tt
 			custom_effect_tooltip = VAL_east_war_stockpile_tt
 			hidden_effect = { VAL_east_begin_stockpile = yes }
 		}
@@ -6115,6 +6319,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 14
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_ultimatum_effect_tt
 			VAL_council_take_power = yes
 		}
 		cancel_trigger = {
@@ -6141,6 +6346,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_accept_ultimatum_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6169,6 +6375,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 30
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_staff_program_timer_effect_tt
 			clr_country_flag = VAL_council_staff_program
 
 			VAL_refresh_contract_modifier = yes
@@ -6196,6 +6403,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_inspection_savings_timer_effect_tt
 			clr_country_flag = VAL_council_inspection_savings
 
 			VAL_refresh_contract_modifier = yes
@@ -6216,6 +6424,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 30
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_inspection_timer_effect_tt
 			clr_country_flag = VAL_council_inspection
 			VAL_council_start_inspection_savings = yes
 			VAL_refresh_contract_modifier = yes
@@ -6243,6 +6452,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 60
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_public_shock_timer_effect_tt
 			clr_country_flag = VAL_council_public_shock
 
 			VAL_refresh_contract_modifier = yes
@@ -6263,6 +6473,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_family_support_timer_effect_tt
 			clr_country_flag = VAL_council_family_support
 
 			VAL_refresh_contract_modifier = yes
@@ -6283,6 +6494,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_acceptance_bonus_timer_effect_tt
 			clr_country_flag = VAL_council_acceptance_bonus
 
 			VAL_refresh_contract_modifier = yes
@@ -6303,6 +6515,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 30
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_discipline_timer_effect_tt
 			clr_country_flag = VAL_council_discipline
 
 			VAL_refresh_contract_modifier = yes
@@ -6323,6 +6536,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_prevention_timer_effect_tt
 			clr_country_flag = VAL_council_prevention
 
 			VAL_refresh_contract_modifier = yes
@@ -6343,6 +6557,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 70
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_emergency_budget_timer_effect_tt
 			clr_country_flag = VAL_council_emergency_budget
 			set_country_flag = { flag = VAL_council_budget_cooldown value = 1 days = 90 }
 			VAL_refresh_contract_modifier = yes
@@ -6395,6 +6610,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_staff_coordination_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6454,6 +6670,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_district_coordination_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6522,6 +6739,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_inspect_accounts_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6599,6 +6817,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_emergency_production_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6666,6 +6885,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_extend_emergency_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6712,6 +6932,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_reserve_rifles_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6751,6 +6972,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_release_reserve_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6820,6 +7042,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_reserve_quarter_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6874,6 +7097,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_loan_deadline_effect_tt
 			if = {
 				limit = {
 					check_variable = { var = ADISCORD_economy_treasury value = VAL_council_loan_debt compare = greater_than_or_equals }
@@ -6908,6 +7132,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_borrow_500_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6954,6 +7179,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_borrow_1000_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6990,6 +7216,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_repay_loan_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7022,6 +7249,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 45
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_order_arrival_effect_tt
 			set_country_flag = VAL_council_order_arrived
 		}
 	}
@@ -7047,6 +7275,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_buy_broker_rifles_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7091,6 +7320,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_buy_direct_rifles_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7135,6 +7365,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_buy_support_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7179,6 +7410,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_buy_trucks_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7239,6 +7471,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_merchant_guarantee_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7276,6 +7509,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_withdraw_merchant_guarantee_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7318,6 +7552,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_buy_installment_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7364,6 +7599,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_schedule_rifles_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7437,6 +7673,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_check_shipment_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7472,6 +7709,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_cancel_purchase_effect_tt
 			hidden_effect = {
 
 				VAL_council_cancel_order = yes
@@ -7533,6 +7771,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_consortium_norm_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7604,6 +7843,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_reopen_talks_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7659,6 +7899,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 14
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_mandate_approval_effect_tt
 			VAL_council_activate_mandate = yes
 		}
 	}
@@ -7677,6 +7918,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 60
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_mandate_deadline_effect_tt
 			if = {
 				limit = {
 					has_variable = VAL_council_mandate_kind
@@ -7745,6 +7987,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_defence_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7845,6 +8088,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_defence_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -7945,6 +8189,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_defence_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8050,6 +8295,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_offensive_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8150,6 +8396,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_offensive_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8250,6 +8497,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_offensive_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8363,6 +8611,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_supply_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8449,6 +8698,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_supply_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8535,6 +8785,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_mandate_supply_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8630,6 +8881,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_guarantee_mandate_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8680,6 +8932,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_withdraw_mandate_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8742,6 +8995,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_extend_mandate_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8803,6 +9057,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_arbitrate_compensation_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8858,6 +9113,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_charter_compensation_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8923,6 +9179,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_closed_hearing_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8964,6 +9221,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 30
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_hearing_deadline_effect_tt
 			clr_country_flag = VAL_council_hearing
 			VAL_council_close_case = yes
 		}
@@ -9000,6 +9258,7 @@ VAL_council_government_category = {
 		}
 		cost = 0
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_discipline_staff_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9056,6 +9315,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_fund_corrections_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9114,6 +9374,7 @@ VAL_council_government_category = {
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_public_hearing_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9179,6 +9440,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_support_families_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9267,6 +9529,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_preventive_review_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9311,6 +9574,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 14
 		is_good = no
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_preventive_deadline_effect_tt
 			clr_country_flag = VAL_council_preventive_review
 			VAL_council_start_prevention = yes
 		}
@@ -9360,6 +9624,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_recall_command_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9406,6 +9671,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_arbitrate_garrison_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9448,6 +9714,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_arbitrate_front_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9490,6 +9757,7 @@ VAL_council_government_category = {
 			}
 		}
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_arbitrate_supply_effect_tt
 			hidden_effect = {
 				if = {
 					limit = {
@@ -9526,6 +9794,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 90
 		is_good = yes
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_plan_hold_line_effect_tt
 			if = {
 				limit = {
 					VAL_council_lines_held = yes
@@ -9570,6 +9839,7 @@ VAL_council_government_category = {
 			VAL_council_plan_success = yes
 		}
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_plan_iron_shield_effect_tt
 			VAL_council_plan_failed = yes
 		}
 		cancel_trigger = {
@@ -9597,6 +9867,7 @@ VAL_council_government_category = {
 		days_mission_timeout = 120
 		is_good = yes
 		timeout_effect = {
+			custom_effect_tooltip = VAL_council_plan_arsenal_effect_tt
 			if = {
 				limit = {
 					VAL_council_plan_goal_met = yes
@@ -9634,6 +9905,7 @@ VAL_council_balance_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_front_execute_effect_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -9665,6 +9937,7 @@ VAL_council_balance_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_council_garrison_execute_effect_tt
 			if = {
 				limit = {
 					hidden_trigger = {

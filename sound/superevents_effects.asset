@@ -143,10 +143,58 @@ soundeffect = {
 }
 
 soundeffect = {
+	name = superevent_val_council_proclamation_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_val_council_proclamation_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_south_war_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_war_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
 	name = superevent_stelander_great_sound_e
 	loop = no
 	sounds = {
 		sound = superevent_stelander_great_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_rus_black_banner_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_rus_black_banner_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_rus_restoration_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_rus_restoration_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -191,18 +239,6 @@ soundeffect = {
 }
 
 soundeffect = {
-	name = superevent_vorkerland_joint_victory_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_west_petrichev_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 1.0
-}
-
-soundeffect = {
 	name = superevent_stelander_sotnikov_civilwar_sound_e
 	loop = no
 	sounds = {
@@ -215,15 +251,51 @@ soundeffect = {
 }
 
 soundeffect = {
-	name = superevent_stelander_shabrat_republic_sound_e
+	name = superevent_stelander_sotnikov_directory_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_stelander_shabrat_victory_sound
+		sound = superevent_stelander_sotnikov_directory_sound
 	}
 	is3d = no
 	max_audible = 1
 	max_audible_behaviour = fail
-	volume = 0.80
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_sotnikov_charter_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_sotnikov_charter_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_shabrat_republic_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_shabrat_republic_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_tikhoreva_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_tikhoreva_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
 }
 
 soundeffect = {
@@ -254,7 +326,7 @@ soundeffect = {
 	name = superevent_stelander_party_victory_houses_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_stelander_party_victory_houses_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -266,7 +338,7 @@ soundeffect = {
 	name = superevent_stelander_party_victory_staff_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_stelander_party_victory_sound
+		sound = superevent_stelander_party_victory_staff_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -278,7 +350,7 @@ soundeffect = {
 	name = superevent_stelander_party_victory_wallets_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_directorate_sound
+		sound = superevent_stelander_party_victory_wallets_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -290,7 +362,7 @@ soundeffect = {
 	name = superevent_stelander_party_victory_silence_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_west_emergency_sound
+		sound = superevent_stelander_party_victory_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -302,7 +374,19 @@ soundeffect = {
 	name = superevent_stelander_party_victory_regent_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_stelander_party_victory_sound
+		sound = superevent_stelander_party_victory_regent_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_stelander_party_victory_festival_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_stelander_party_victory_festival_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -314,7 +398,7 @@ soundeffect = {
 	name = superevent_south_houses_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_houses_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -458,7 +542,7 @@ soundeffect = {
 	name = superevent_south_free_islands_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_free_islands_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -710,7 +794,7 @@ soundeffect = {
 	name = superevent_west_world_empire_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_vorkerland_world_empire_sound
+		sound = superevent_west_world_empire_sound
 	}
 	is3d = no
 	max_audible = 1

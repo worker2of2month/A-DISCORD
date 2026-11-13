@@ -258,24 +258,6 @@ country_event = {
 	}
 }
 
-# Campaign deadline. The age of the campaign flag ignores a previous campaign's callback.
-country_event = {
-	id = ADISCORD_south.20
-	hidden = yes
-	is_triggered_only = yes
-	trigger = {
-		ADISCORD_south_final_active = yes
-		has_global_flag = {
-			flag = ADISCORD_south_final_started
-			days > 899
-		}
-	}
-
-	immediate = {
-		ADISCORD_south_final_resolve_by_control = yes
-	}
-}
-
 # Terms are applied one day after peace, once factions have been dissolved.
 country_event = {
 	id = ADISCORD_south.30
@@ -503,21 +485,23 @@ country_event = {
 		}
 		if = {
 			limit = {
-				check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
-				is_in_faction = yes
+				hidden_trigger = {
+					check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+					is_in_faction = yes
+				}
 			}
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_switch_accept_tt
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_accept_tt
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_annex_accept_tt
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_contract_accept_tt
 		}
 		else = {
@@ -589,15 +573,15 @@ country_event = {
 			ADISCORD_south_offer_answer_valid = yes
 		}
 		if = {
-			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_alliance_refuse_tt
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_contract_refuse_tt
 		}
 		else_if = {
-			limit = { is_in_faction = yes }
+			limit = { hidden_trigger = { is_in_faction = yes } }
 			custom_effect_tooltip = ADISCORD_south_offer_war_refuse_faction_tt
 		}
 		else = {

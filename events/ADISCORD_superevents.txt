@@ -2,7 +2,8 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console compatibility gateways: event ADISCORD_superevent.1 through .8.
+# Console entry points: event ADISCORD_superevent.<number>.
+# Full command inventory: docs/development/focus-effects.md, console superevents.
 # .1 starts the real Vorkerland collapse when possible, including the Unity
 # Tower destruction. Once the collapse has already started it becomes a safe
 # presentation replay. .2 is the Worker-victory presentation gateway used by
@@ -289,17 +290,6 @@ country_event = {
 }
 
 country_event = {
-	id = ADISCORD_superevent.16
-	hidden = yes
-	is_triggered_only = yes
-
-	immediate = {
-		set_temp_variable = { ADISCORD_superevent_request = 19 }
-		ADISCORD_superevent_enqueue = yes
-	}
-}
-
-country_event = {
 	id = ADISCORD_superevent.17
 	hidden = yes
 	is_triggered_only = yes
@@ -355,17 +345,6 @@ country_event = {
 }
 
 country_event = {
-	id = ADISCORD_superevent.22
-	hidden = yes
-	is_triggered_only = yes
-
-	immediate = {
-		set_temp_variable = { ADISCORD_superevent_request = 25 }
-		ADISCORD_superevent_enqueue = yes
-	}
-}
-
-country_event = {
 	id = ADISCORD_superevent.23
 	hidden = yes
 	is_triggered_only = yes
@@ -395,6 +374,594 @@ country_event = {
 
 	immediate = {
 		set_temp_variable = { ADISCORD_superevent_request = 74 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_empire
+country_event = {
+	id = ADISCORD_superevent.26
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 7 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory
+country_event = {
+	id = ADISCORD_superevent.27
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 8 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_shabrat_victory
+country_event = {
+	id = ADISCORD_superevent.28
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 9 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_nam_resource_war
+country_event = {
+	id = ADISCORD_superevent.29
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 10 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_nam_resource_war_service
+country_event = {
+	id = ADISCORD_superevent.30
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 26 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_nam_resource_war_district
+country_event = {
+	id = ADISCORD_superevent.31
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 27 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_houses
+country_event = {
+	id = ADISCORD_superevent.32
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 28 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_staff
+country_event = {
+	id = ADISCORD_superevent.33
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 29 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_wallets
+country_event = {
+	id = ADISCORD_superevent.34
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 30 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_silence
+country_event = {
+	id = ADISCORD_superevent.35
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 31 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_regent
+country_event = {
+	id = ADISCORD_superevent.36
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 32 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_stelander_party_victory_festival
+country_event = {
+	id = ADISCORD_superevent.37
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 36 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_houses
+country_event = {
+	id = ADISCORD_superevent.38
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 37 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_cities
+country_event = {
+	id = ADISCORD_superevent.39
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 38 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_nur
+country_event = {
+	id = ADISCORD_superevent.40
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 39 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_regency
+country_event = {
+	id = ADISCORD_superevent.41
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 40 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_commune
+country_event = {
+	id = ADISCORD_superevent.42
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 41 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_conclave
+country_event = {
+	id = ADISCORD_superevent.43
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 42 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_service
+country_event = {
+	id = ADISCORD_superevent.44
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 43 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_charter
+country_event = {
+	id = ADISCORD_superevent.45
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 44 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_contracts
+country_event = {
+	id = ADISCORD_superevent.46
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 45 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_rump
+country_event = {
+	id = ADISCORD_superevent.47
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 46 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_revenge
+country_event = {
+	id = ADISCORD_superevent.48
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 47 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_radical
+country_event = {
+	id = ADISCORD_superevent.49
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 48 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_free_islands
+country_event = {
+	id = ADISCORD_superevent.50
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 49 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_boards
+country_event = {
+	id = ADISCORD_superevent.51
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 50 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_restitution
+country_event = {
+	id = ADISCORD_superevent.52
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 51 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_worker
+country_event = {
+	id = ADISCORD_superevent.53
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 52 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_petrichev
+country_event = {
+	id = ADISCORD_superevent.54
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 53 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_veyran
+country_event = {
+	id = ADISCORD_superevent.55
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 54 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_dorian
+country_event = {
+	id = ADISCORD_superevent.56
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 55 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_anton
+country_event = {
+	id = ADISCORD_superevent.57
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 56 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_shield
+country_event = {
+	id = ADISCORD_superevent.58
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 57 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_emergency
+country_event = {
+	id = ADISCORD_superevent.59
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 58 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_revanche
+country_event = {
+	id = ADISCORD_superevent.60
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 59 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_committee
+country_event = {
+	id = ADISCORD_superevent.61
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 60 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_vorkerland_world_empire
+country_event = {
+	id = ADISCORD_superevent.62
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 61 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_iron
+country_event = {
+	id = ADISCORD_superevent.63
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 62 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_civil_service
+country_event = {
+	id = ADISCORD_superevent.64
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 63 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_federation
+country_event = {
+	id = ADISCORD_superevent.65
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 64 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_oil_union
+country_event = {
+	id = ADISCORD_superevent.66
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 65 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_contract_republic
+country_event = {
+	id = ADISCORD_superevent.67
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 66 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_directorate
+country_event = {
+	id = ADISCORD_superevent.68
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 67 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_nam
+country_event = {
+	id = ADISCORD_superevent.69
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 68 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_council
+country_event = {
+	id = ADISCORD_superevent.70
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 69 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_west_world_empire
+country_event = {
+	id = ADISCORD_superevent.71
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 70 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_nam_veyran_proclamation
+country_event = {
+	id = ADISCORD_superevent.72
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 71 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_val_council_proclamation
+country_event = {
+	id = ADISCORD_superevent.73
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 75 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+# superevent_south_war
+country_event = {
+	id = ADISCORD_superevent.74
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 76 }
 		ADISCORD_superevent_enqueue = yes
 	}
 }

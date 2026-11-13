@@ -189,7 +189,7 @@
  ADISCORD_rin_oath_crisis_category: "Две присяги Рины"
  ADISCORD_rin_oath_crisis_category_desc: "Распад Воркерланда лишил палатинский двор возможности одновременно служить северной короне и южным хартиям."
  ADISCORD_rin_palatin_breakup_mission: "Распад Ринского палатината"
- ADISCORD_rin_palatin_breakup_mission_desc: "Северный двор удерживает Палатинский Двор и старые владения короны, а южные города защищают воркерландские хартии. Если ни одна сторона не победит за 180 дней, граница раскола станет основой вынужденного перемирия."
+ ADISCORD_rin_palatin_breakup_mission_desc: "Северный двор удерживает Палатинский Двор и старые владения короны, а южные города защищают воркерландские хартии."
  # END CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
 
 # BEGIN CONSOLIDATED: ADISCORD_shared_actions_l_russian.yml
@@ -259,3 +259,4 @@
   ADISCORD_manual_law_change_allowed_tt:0 "Разрешена ручная смена этого закона; иначе он меняется через фокусы, решения и события."
   ADISCORD_manual_minister_change_allowed_tt:0 "Разрешена ручная смена этого министра; иначе его назначение меняется через фокусы, решения и события."
 # END CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: generic UI
+ ADISCORD_rin_palatin_breakup_mission_description_rules_tt:0 "Если ни одна сторона не победит за 180 дней, граница раскола станет основой вынужденного перемирия."

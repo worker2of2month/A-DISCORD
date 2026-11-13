@@ -365,7 +365,20 @@ STS_shabrat_val_front = {
 	enable = { is_ai = yes has_war_with = VAL }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = VAL value = 60 }
-	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1200 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
@@ -375,7 +388,7 @@ STS_shabrat_val_front = {
 		ratio = 0.01
 		priority = 1201
 		ordertype = front
-		execution_type = careful
+		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}

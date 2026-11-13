@@ -2,6 +2,9 @@
 state={
 	id=721
 	name="STATE_721"
+	resources = {
+		aluminium = 10
+	}
 	provinces={
 		2627 7456 7908 10167
 	}

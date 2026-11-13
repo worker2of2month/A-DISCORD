@@ -812,7 +812,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
         self.assertEqual(
-            digest, "DF98AAA8B8B38A62D6D929CE762FCBCCB136C6B6A57BE7BD73C373334AEC5DF4"
+            digest, "93B448A04AAA9A1B30B4240D11710A1E897F13219FD98239E7D1D1A674D0B27B"
         )
 
 

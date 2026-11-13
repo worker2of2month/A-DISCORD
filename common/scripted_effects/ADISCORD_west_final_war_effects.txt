@@ -52,11 +52,18 @@ ADISCORD_west_crisis_month = {
 			set_global_flag = ADISCORD_west_crisis_warned
 			news_event = { id = ADISCORD_west.3 hours = 1 }
 		}
+		# An Itoran war that began outside the campaign, for example over the free
+		# republics, becomes the war for the West at once, so it ends with the
+		# campaign's settlement instead of running without a deadline.
 		if = {
 			limit = {
-				check_variable = { var = global.ADISCORD_west_crisis value = 100 compare = greater_than_or_equals }
+				OR = {
+					check_variable = { var = global.ADISCORD_west_crisis value = 100 compare = greater_than_or_equals }
+					has_war_with = IVN
+				}
 				ADISCORD_west_final_can_start = yes
 			}
+			set_variable = { var = global.ADISCORD_west_crisis value = 100 }
 			ADISCORD_west_final_war_start = yes
 		}
 	}
@@ -77,11 +84,20 @@ ADISCORD_west_final_war_start = {
 			ADISCORD_west_prepare_champion = yes
 			set_variable = { var = ADISCORD_west_side value = 2 }
 		}
+		# A war the champions already fight becomes the campaign's war; side entry
+		# joins it through the champions' alliance.
 		if = {
-			limit = { tag = event_target:ADISCORD_vorkerland_nation }
+			limit = {
+				tag = event_target:ADISCORD_vorkerland_nation
+				NOT = { has_war_with = IVN }
+			}
 			declare_war_on = { target = IVN type = annex_everything }
 		}
-		else = {
+		else_if = {
+			limit = {
+				NOT = { tag = event_target:ADISCORD_vorkerland_nation }
+				NOT = { has_war_with = event_target:ADISCORD_vorkerland_nation }
+			}
 			declare_war_on = { target = event_target:ADISCORD_vorkerland_nation type = annex_everything }
 		}
 
@@ -521,7 +537,10 @@ ADISCORD_west_final_resolve_without_hegemon = {
 # each part of the rival's home ground (the Old March, the Itoran frontier or
 # the Vorkerland federal capital) that it occupies from the other side. Holding
 # one's own land scores nothing, so neither the corridor owners' choice nor the
-# declaration decides the war. An equal score ends in a truce without hegemon.
+# declaration decides the war. An equal score never ends a war the champions
+# still fight: the count repeats every 90 days until one side leads or a
+# champion falls. A truce remains only when the war has already ended outside
+# the settlement with both champions sovereign.
 ADISCORD_west_final_resolve_by_control = {
 	if = {
 		limit = {
@@ -558,6 +577,10 @@ ADISCORD_west_final_resolve_by_control = {
 		else_if = {
 			limit = { check_variable = { var = ADISCORD_west_ivn_hold value = ADISCORD_west_wrk_hold compare = greater_than } }
 			ADISCORD_west_final_resolve_ivn_victory = yes
+		}
+		else_if = {
+			limit = { event_target:ADISCORD_vorkerland_nation = { has_war_with = IVN } }
+			event_target:ADISCORD_vorkerland_nation = { country_event = { id = ADISCORD_west.20 days = 90 } }
 		}
 		else = {
 			ADISCORD_west_final_resolve_without_hegemon = yes
@@ -929,6 +952,17 @@ ADISCORD_west_seed_leans = {
 	ADISCORD_west_clamp_all_leans = yes
 	event_target:ADISCORD_vorkerland_nation = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
 	IVN = { add_to_variable = { var = ADISCORD_west_influence_power value = 10 } }
+	# Itora builds influence through its whole tree while Vorkerland is still at
+	# war with itself. The unified country takes over the federal embassies and
+	# enters the contest with influence no lower than Itora's at this moment.
+	event_target:ADISCORD_vorkerland_nation = {
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_west_influence_power value = IVN.ADISCORD_west_influence_power compare = less_than }
+			}
+			set_variable = { var = ADISCORD_west_influence_power value = IVN.ADISCORD_west_influence_power }
+		}
+	}
 }
 
 ADISCORD_west_clamp_all_leans = {

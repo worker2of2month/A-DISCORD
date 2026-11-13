@@ -1,4 +1,5 @@
 import importlib.util
+import io
 import json
 import re
 import unittest
@@ -333,10 +334,6 @@ class EventWindowUiTests(unittest.TestCase):
             "gfx/interface/event_popup_middle.png": (615, 64),
             "gfx/interface/event_popup_bottom.png": (615, 372),
             "gfx/interface/event_option_entry_adiscord.png": (300, 35),
-            "docs/development/previews/ADISCORD_event_window_preview.png": (
-                1600,
-                900,
-            ),
             "gfx/event_pictures/event_adiscord_ui_test.png": (507, 184),
         }
         for relative_path, expected_size in expected_sizes.items():
@@ -347,6 +344,13 @@ class EventWindowUiTests(unittest.TestCase):
                 )
                 with Image.open(path) as image:
                     self.assertEqual(image.size, expected_size)
+        # The window preview is a temporary review image, rendered only on request.
+        spec = importlib.util.spec_from_file_location("adiscord_event_ui_builder", BUILDER)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        preview = module.expected_outputs(include_preview=True)[module.PREVIEW]
+        with Image.open(io.BytesIO(preview)) as image:
+            self.assertEqual(image.size, (1600, 900))
 
     def test_each_adaptive_section_owns_an_opaque_piece_of_the_shell(self):
         for relative_path in (
@@ -410,7 +414,7 @@ class EventWindowUiTests(unittest.TestCase):
         self.assertIsNotNone(spec.loader)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        outputs = module.expected_outputs()
+        outputs = module.expected_outputs(include_preview=True)
         self.assertEqual(
             {path.relative_to(ROOT).as_posix() for path in outputs},
             set(owner["output_globs"]),

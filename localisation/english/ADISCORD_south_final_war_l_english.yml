@@ -17,7 +17,7 @@
  ADISCORD_south_north_side_azh_plain: "Azhar"
  ADISCORD_south_north_side_unknown_plain: "no one"
  ADISCORD_south_status_crisis: "§YSOUTHERN CRISIS§!\nThe warning begins from §Y2165§! once both sides complete their key focuses.\n\n[ADISCORDSouthShlReadiness]\n\n[ADISCORDSouthNorthReadiness]"
- ADISCORD_south_status_war: "§RWAR FOR THE SOUTH§!\nA champion's capitulation decides the outcome. After §Y900§! days, compare captured key states held by the opposing side at the start. Initial holdings, neutral land and late ally alignment do not score. Equal gains mean peace without a hegemon and a new respite."
+ ADISCORD_south_status_war: "§RWAR FOR THE SOUTH§!\nThe war has no deadline and cannot end in a draw. Only the capitulation of one side's champion decides the outcome."
  ADISCORD_south_status_no_rival: "Shahrabad has no northern rival left. At the end of the next furnace cycle it will be recognised as suzerain of the south."
  ADISCORD_south_status_closed: "The crisis opens once Svetlogorye's resource war has an outcome."
 

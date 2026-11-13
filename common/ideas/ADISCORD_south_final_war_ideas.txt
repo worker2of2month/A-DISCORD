@@ -113,8 +113,12 @@ ideas = {
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
-			on_add = { ADISCORD_economy_mark_dirty = yes }
-			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				supply_consumption_factor = -0.10
 				army_fuel_consumption_factor = -0.15

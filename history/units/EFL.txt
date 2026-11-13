@@ -259,7 +259,11 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+air_wings = {
+	70 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "EFL" amount = 100 }
+	}
+}
 
 instant_effect = {
 	add_fuel = 20000
@@ -269,5 +273,11 @@ instant_effect = {
 		requested_factories = 1
 		progress = 0.60
 		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "EFL" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
 	}
 }

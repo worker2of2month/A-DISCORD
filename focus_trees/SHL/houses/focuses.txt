@@ -1,8 +1,9 @@
 # @section houses
 # Курс 1: Десятый дом (Конклав десяти). Секция главного дерева SHL_focus: корень SHL_golden_gate_cartel следует за
 # SHL_admit_tenth_house; координаты абсолютные, блок курса стоит под стволом
-# (x 16-31, y 15-23). Фронт Юга и корона Юга подключены
-# в главном дереве как shared_focus.
+# (x 16-31, y 15-23). Корона Юга подключена
+# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
+# войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_golden_gate_cartel
 		icon = GFX_goal_generic_positive_trade_relations
@@ -998,59 +999,6 @@
 			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
-	}
-
-	# Военные фокусы курса: видны вместе с фронтом Юга, стоят под его началом в колонке 8.
-	focus = {
-		id = SHL_h_hired_contracts
-		icon = GFX_focus_generic_desert_training
-		x = 24
-		y = 17
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_raid_oil_fields
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			unlock_decision_tooltip = SHL_hire_desert_guard
-			custom_effect_tooltip = SHL_h_hired_contracts_tt
-		}
-		ai_will_do = { base = 150 }
-	}
-
-	focus = {
-		id = SHL_h_buy_garrisons
-		icon = GFX_focus_generic_home_defense
-		x = 24
-		y = 18
-		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_h_hired_contracts
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-			699 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			custom_effect_tooltip = SHL_h_buy_garrisons_tt
-			hidden_effect = {
-				SHL_raise_paid_levies_2 = yes
-			}
-		}
-		ai_will_do = { base = 120 }
 	}
 
 	# ----- После войны: концессия и корона торговли -----

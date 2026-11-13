@@ -2425,13 +2425,11 @@ class FrontAndSupplyTests(unittest.TestCase):
             "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
         ):
             self.assertNotRegex(defines, rf"(?m)^\s*{re.escape(key)}\s*=")
+        # Planned attacks use the native organisation and strength bars; a
+        # stricter strength bar halted short-equipped field armies for whole wars.
         for kind in ("ORG", "STRENGTH"):
-            values = []
             for level in ("LOW", "MED", "HIGH"):
-                match = re.search(rf"PLAN_ATTACK_MIN_{kind}_FACTOR_{level} = ([\d.]+)", defines)
-                self.assertIsNotNone(match)
-                values.append(float(match[1]))
-            self.assertEqual(values, [0.85, 0.65, 0.5])
+                self.assertNotRegex(defines, rf"(?m)^\s*NDefines\.NAI\.PLAN_ATTACK_MIN_{kind}_FACTOR_{level}\s*=")
 
     def test_technograd_is_a_supplied_megalopolis(self) -> None:
         state_paths = list((ROOT / "history" / "states").glob("105-*.txt"))
@@ -5397,8 +5395,10 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
             named_block(decision, "available"),
         )
         join_ai = named_block(decision, "ai_will_do")
-        self.assertIn("FROM = { tag = VAD }", join_ai)
-        self.assertIn("factor = 0", join_ai)
+        # No claimant is barred by tag; the weights follow central control.
+        self.assertNotRegex(join_ai, r"factor = 0 FROM = \{ tag = (WKR|VAD|TVA) \}")
+        self.assertIn("factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes", join_ai)
+        self.assertIn("FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes }", join_ai)
 
     def test_coalition_retry_resolves_its_own_faction_and_clears_terminal_markers(
         self,

@@ -571,7 +571,10 @@ focus_tree = {
 			add_stability = 0.05
 			every_owned_state = {
 				limit = {
-					NAM_rw_island_state = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_island_state_focus_condition_tt
+						NAM_rw_island_state = yes
+					}
 					is_controlled_by = NAM
 				}
 				add_core_of = NAM
@@ -738,7 +741,10 @@ focus_tree = {
 		completion_reward = {
 			every_owned_state = {
 				limit = {
-					NAM_rw_island_state = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_island_state_focus_condition_tt
+						NAM_rw_island_state = yes
+					}
 					is_controlled_by = NAM
 				}
 				add_building_construction = {

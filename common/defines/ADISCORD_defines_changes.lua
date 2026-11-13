@@ -20,13 +20,14 @@ NDefines.NMilitary.ENEMY_AIR_SUPERIORITY_IMPACT = -0.5
 NDefines.NMilitary.ENEMY_AIR_SUPERIORITY_SPEED_IMPACT = -0.2
 NDefines.NMilitary.UNIT_EXPERIENCE_PER_TRAINING_DAY = 0.001
 -- Restore the vanilla damage-dice relationship so attacks can actually
--- degrade a defended formation. The scalar values remain below vanilla
--- to preserve A-Discord's slower, equipment-constrained wars.
+-- degrade a defended formation. Organisation damage is native; strength
+-- damage stays below vanilla so equipment losses remain slower, but high
+-- divisional organisation no longer lets one defender hold for months.
 NDefines.NMilitary.LAND_COMBAT_ORG_DICE_SIZE = 4
 NDefines.NMilitary.LAND_COMBAT_STR_DICE_SIZE = 2
 NDefines.NMilitary.EQUIPMENT_COMBAT_LOSS_FACTOR = 0.40
-NDefines.NMilitary.LAND_COMBAT_STR_DAMAGE_MODIFIER = 0.03
-NDefines.NMilitary.LAND_COMBAT_ORG_DAMAGE_MODIFIER = 0.045
+NDefines.NMilitary.LAND_COMBAT_STR_DAMAGE_MODIFIER = 0.045
+NDefines.NMilitary.LAND_COMBAT_ORG_DAMAGE_MODIFIER = 0.053
 NDefines.NMilitary.BASE_LEADER_TRAIT_GAIN_XP = 0.75
 NDefines.NMilitary.HOURLY_ORG_MOVEMENT_IMPACT = -0.1
 NDefines.NMilitary.ZERO_ORG_MOVEMENT_MODIFIER = -0.2
@@ -327,7 +328,9 @@ NDefines.NAI.MAX_AHEAD_RESEARCH_PENALTY = 4
 NDefines.NAI.RESEARCH_BASE_DAYS = 750
 NDefines.NAI.MIN_DELIVERED_TRADE_FRACTION = 0.6
 NDefines.NAI.MAX_VOLUNTEER_ARMY_FRACTION = 0.5
-NDefines.NAI.DEPLOY_MIN_EQUIPMENT_WAR_FACTOR = 0.60
+-- Wartime deployments still start below full equipment, but not at the 60% that
+-- let AIs field more divisions than their rifle lines could ever refill.
+NDefines.NAI.DEPLOY_MIN_EQUIPMENT_WAR_FACTOR = 0.85
 NDefines.NAI.CALL_ALLY_BASE_DESIRE = 25
 NDefines.NAI.CALL_ALLY_DEMOCRATIC_DESIRE = 25
 NDefines.NAI.CALL_ALLY_FASCIST_DESIRE = 25
@@ -375,27 +378,23 @@ NDefines.NAI.LAND_DESIGN_DEMAND_GARRISON_DIVISION = 10
 NDefines.NAI.LAND_DESIGN_DEMAND_UNUSED_TEMPLATE = 10
 NDefines.NAI.LAND_DESIGN_DEMAND_ABSENT = 10
 
--- A unit joins a planned attack only while it still has this share of organisation
--- and strength (LOW/MED/HIGH = careful/balanced/rush). Worn divisions hold the line
--- instead of feeding repeated assaults into the same province.
-NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_LOW = 0.85
-NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_LOW = 0.85
-NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_MED = 0.65
-NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_MED = 0.65
-NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.5
-NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.5
+-- The native PLAN_ATTACK_MIN_* thresholds stay in force. A-Discord field armies
+-- run below full equipment for most of a war, so a strength bar above the native
+-- one leaves careful and balanced plans without any unit allowed to attack.
 
 NDefines.NAI.PLAN_FACTION_STRONG_TO_EXECUTE = 0.65
 NDefines.NAI.ORG_UNIT_STRONG = 0.75
-NDefines.NAI.STR_UNIT_STRONG = 0.75
+NDefines.NAI.STR_UNIT_STRONG = 0.70
 
+-- Strength shares follow the native values for the same reason; organisation
+-- still marks worn divisions earlier than in the base game.
 NDefines.NAI.PLAN_FACTION_NORMAL_TO_EXECUTE = 0.65
 NDefines.NAI.ORG_UNIT_NORMAL = 0.6
-NDefines.NAI.STR_UNIT_NORMAL = 0.6
+NDefines.NAI.STR_UNIT_NORMAL = 0.4
 
 NDefines.NAI.PLAN_FACTION_WEAK_TO_ABORT = 0.5
 NDefines.NAI.ORG_UNIT_WEAK = 0.45
-NDefines.NAI.STR_UNIT_WEAK = 0.4
+NDefines.NAI.STR_UNIT_WEAK = 0.30
 
 NDefines.NAI.PLAN_AVG_PREPARATION_TO_EXECUTE = 0.5
 NDefines.NAI.AI_FRONT_MOVEMENT_FACTOR_FOR_READY = 0.4

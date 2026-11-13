@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "sound_effect_sources": {
+    "sfx_harbor_waves.flac": {
+      "title": "Small waves harbor rocks",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/waves/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1208/1208-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "file": "sfx_harbor_waves.flac",
+      "sha256": "d9d0d863a967280bdcef2b73fb9bc7b20dcffddd6c5ce715be576b11f16791cd"
+    },
+    "sfx_contract_stamp.flac": {
+      "file": "sfx_contract_stamp.flac",
+      "title": "traditional stamp.wav",
+      "artist": "I.fekry",
+      "source_page": "https://freesound.org/people/I.fekry/sounds/470710/",
+      "source_audio": "https://cdn.freesound.org/previews/470/470710_9906084-hq.mp3",
+      "license": "CC0 1.0",
+      "duration_seconds": 1.590159,
+      "sha256": "8be5dbaa339de6d6d804136cb5151447f51e8719131e6975ba38408a7c3118f4",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpts, gain and fades are specified in the cue list."
+    },
+    "sfx_horse_cart.flac": {
+      "file": "sfx_horse_cart.flac",
+      "title": "horsesteps.20050813.mp3",
+      "artist": "dobroide",
+      "source_page": "https://freesound.org/people/dobroide/sounds/6987/",
+      "source_audio": "https://cdn.freesound.org/previews/6/6987_8043-hq.mp3",
+      "license": "CC BY 4.0",
+      "duration_seconds": 18.130045,
+      "sha256": "be9d0a8f847ca469709119cfa77caf5d6db61944b39513b5d7e351557eb12fa9",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpts, gain and fades are specified in the cue list."
+    }
+  },
+  "superevent_south_free_islands_sound": {
+    "music": {
+      "artist": "Sophie Hutchings",
+      "title": "By Night",
+      "album": "Night Sky",
+      "source_page": "https://sophiehutchings.bandcamp.com/track/by-night",
+      "file": "sophie_hutchings_by_night_excerpt.flac",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "sha256": "ce5edacbbd77c93f2068a392d6a0a641f606f45c52c0a9ca4bb939153761474f",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_harbor_waves.flac",
+        "start": 2,
+        "offset": 8,
+        "duration": 52,
+        "gain": 0.28,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_ship_engine.flac",
+        "start": 4,
+        "offset": 0,
+        "duration": 14,
+        "gain": 0.08,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_distant_ship_horn.flac",
+        "start": 7,
+        "offset": 1.5,
+        "duration": 7,
+        "gain": 0.35,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 18,
+        "offset": 8,
+        "duration": 27,
+        "gain": 1.2,
+        "fade": 4.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_cheers.mp3",
+        "start": 23,
+        "offset": 0,
+        "duration": 7,
+        "gain": 1.1,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 24,
+        "offset": 1,
+        "duration": 13,
+        "gain": 0.55,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_cheers.mp3",
+        "start": 41,
+        "offset": 3,
+        "duration": 6,
+        "gain": 0.8,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_free_islands_sound.wav",
+    "runtime_sha256": "1be2795c2903ca213440b4e6dfc26b783dbafcebad7fecfe71cb4020dfa1af00"
+  },
+  "superevent_south_war_sound": {
+    "music": {
+      "artist": "Phragments",
+      "title": "New Kings",
+      "album": "New Kings And New Queens",
+      "source_page": "https://malignantrecs.bandcamp.com/track/new-kings",
+      "file": "phragments_new_kings_excerpt.flac",
+      "excerpt_seconds": [
+        45,
+        101
+      ],
+      "sha256": "6f899fa86a964bf7c08a7d87068b0ed39c1eb672a76e967fc17262f125432325",
+      "rights": "Copyrighted recording; public label preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_winter_wind.flac",
+        "start": 0,
+        "offset": 0,
+        "duration": 56,
+        "gain": 0.07,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 2,
+        "offset": 2,
+        "duration": 1.5,
+        "gain": 0.22,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/tank_medium.ogg",
+        "start": 5,
+        "offset": 0,
+        "duration": 18,
+        "gain": 0.16,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/distant_cannon.ogg",
+        "start": 19,
+        "offset": 0,
+        "duration": 5,
+        "gain": 0.35,
+        "fade": 0.1,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/distant_rifle.ogg",
+        "start": 27,
+        "offset": 0,
+        "duration": 10,
+        "gain": 0.12,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/tank_light.ogg",
+        "start": 34,
+        "offset": 0,
+        "duration": 16,
+        "gain": 0.1,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/distant_cannon.ogg",
+        "start": 44,
+        "offset": 0,
+        "duration": 5,
+        "gain": 0.28,
+        "fade": 0.1,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_war_sound.wav",
+    "runtime_sha256": "4b4cff264d536ceb14a5ac89aaebdb96d4be150116189efcfc4250f8643ba166"
+  },
+  "superevent_south_houses_sound": {
+    "music": {
+      "artist": "Arcana",
+      "title": "Le Serpent Rouge",
+      "album": "Le Serpent Rouge",
+      "source_page": "https://arcana.bandcamp.com/track/le-serpent-rouge",
+      "file": "arcana_le_serpent_rouge_excerpt.flac",
+      "excerpt_seconds": [
+        50,
+        106
+      ],
+      "sha256": "e44d62e7939b9dc55e76978b051a46dc51c4d28a511648251f68541f2aa5eb9e",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_banquet_room.flac",
+        "start": 2,
+        "offset": 4,
+        "duration": 14,
+        "gain": 0.12,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 8,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.35,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 10,
+        "offset": 8,
+        "duration": 4,
+        "gain": 4.0,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 15,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.6,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 18,
+        "offset": 1,
+        "duration": 7,
+        "gain": 0.65,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 29,
+        "offset": 8,
+        "duration": 20,
+        "gain": 0.8,
+        "fade": 3.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_horse_cart.flac",
+        "start": 30,
+        "offset": 1,
+        "duration": 16,
+        "gain": 0.22,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_houses_sound.wav",
+    "runtime_sha256": "5dec59db0d684139b5e3b4ad14d606dc47619e425ce61c565f7e66c05a2b5e4f"
+  }
+}

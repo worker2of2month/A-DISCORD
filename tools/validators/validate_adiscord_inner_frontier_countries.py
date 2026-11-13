@@ -574,9 +574,10 @@ def validate() -> list[str]:
         "RLY_technocracy_party": "Станционный совет",
         "RLY_Relay_Assembly_17": "Станционный совет Релейна",
     }
+    # Party names carry a leading party texticon in the shared party file.
     for key, value in expected_rly_localisation.items():
         if not re.search(
-            rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', country_loc
+            rf'(?m)^\s*{re.escape(key)}:\s*"(?:£\S+ )?{re.escape(value)}"\s*$', country_loc
         ):
             issues.append(f"RLY visible localisation {key} must be {value}")
     if COUNTRIES["RLY"]["capital_name"] != "Релейн":

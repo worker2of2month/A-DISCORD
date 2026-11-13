@@ -1,8 +1,9 @@
 # @section cities
 # Курс 2: Открытый Конклав (Южный договор). Секция главного дерева SHL_focus: корень SHL_council_of_cities следует за
 # SHL_rights_without_fire; координаты абсолютные, блок курса стоит под стволом
-# (x 34-50, y 15-23). Фронт Юга и корона Юга подключены
-# в главном дереве как shared_focus.
+# (x 34-50, y 15-23). Корона Юга подключена
+# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
+# войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_council_of_cities
 		icon = GFX_focus_generic_the_council_of_europe
@@ -918,58 +919,6 @@
 			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
 		}
 		ai_will_do = { base = 5 }
-	}
-
-	# Военные фокусы курса видны с началом войны за Юг, как и общий фронт;
-	# финал курса пропускается bypass, когда войну начал кризис.
-
-	focus = {
-		id = SHL_c_charters_for_occupied
-		icon = GFX_focus_generic_improve_the_administration
-		x = 37
-		y = 23
-		cost = 2
-		search_filters = { FOCUS_FILTER_STABILITY }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_war_of_charters
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_ideas = SHL_charter_occupation
-		}
-		ai_will_do = { base = 150 }
-	}
-
-	focus = {
-		id = SHL_c_compact_volunteers
-		icon = GFX_focus_generic_diverse_army
-		x = 39
-		y = 23
-		cost = 3
-		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = { has_global_flag = ADISCORD_south_final_started }
-		prerequisite = {
-			focus = SHL_south_war_of_charters
-		}
-		available = {
-			SHL_country_operable = yes
-			ADISCORD_south_final_active = yes
-			699 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			custom_effect_tooltip = SHL_c_compact_volunteers_tt
-			hidden_effect = { SHL_raise_paid_levies_2 = yes }
-		}
-		ai_will_do = { base = 150 }
 	}
 
 	# ----- После войны: Договор Юга -----

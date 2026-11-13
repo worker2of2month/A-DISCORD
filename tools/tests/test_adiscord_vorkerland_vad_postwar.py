@@ -293,30 +293,20 @@ class VadPostwarContractTests(unittest.TestCase):
                 f"set_nationality = {{ target_country = VAD character = {character} }}", rescued
             )
 
-    def test_joint_council_gets_specific_victory_text_before_inactive_fallback(
-        self,
-    ) -> None:
-        scripted = read(
-            "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt"
-        )
-        for suffix in ("title", "quote", "comment"):
-            joint_key = f"superevent_vorkerland_joint_victory_{suffix}"
-            fallback = f"superevent_inactive_{suffix}"
-            self.assertEqual(scripted.count(f"localization_key = {joint_key}"), 1)
-            self.assertLess(scripted.index(joint_key), scripted.index(fallback))
-
-        for path in (
-            "localisation/english/ADISCORD_superevents_l_english.yml",
-            "localisation/russian/ADISCORD_superevents_l_russian.yml",
-        ):
-            localisation = read(path)
-            for suffix in ("title", "quote", "comment"):
-                self.assertIn(
-                    f"superevent_vorkerland_joint_victory_{suffix}:", localisation
-                )
-
-        russian = ROOT / "localisation/russian/ADISCORD_superevents_l_russian.yml"
-        self.assertTrue(russian.read_bytes().startswith(b"\xef\xbb\xbf"))
+    def test_joint_council_victory_news_has_bounded_localisation(self) -> None:
+        for language in ("english", "russian"):
+            path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            localisation = path.read_text(encoding="utf-8-sig")
+            for suffix in ("t", "d", "a"):
+                key = f"ADISCORD_vorkerland_postwar.7.{suffix}"
+                values = re.findall(rf'^ {re.escape(key)}:0 "([^"\n]*)"$', localisation, re.M)
+                self.assertEqual(len(values), 1, (language, key))
+                displayed = values[0].replace(r"\n", "\n")
+                self.assertLessEqual(len(displayed), 3000)
+                self.assertLessEqual(len(displayed.encode("utf-8")), 5500)
+            super_loc = read(f"localisation/{language}/ADISCORD_superevents_l_{language}.yml")
+            self.assertNotIn("superevent_vorkerland_joint_victory", super_loc)
 
     def test_joint_council_ai_prefers_chancery_over_commandantures(self) -> None:
         source = source_section(
@@ -876,6 +866,8 @@ class PostwarExpansionTests(unittest.TestCase):
 
     def test_no_new_periodic_scans_or_legacy_recovery(self):
         source = self.effects[self.effects.index("ADISCORD_vorkerland_pw_ensure_institutions = {"):]
+        # The postwar programmes end at the next authored section of the shared file.
+        source = source.split("\n# --- ", 1)[0]
         for token in ("every_country", "every_possible_country", "on_daily", "on_monthly", "while_loop", "legacy"):
             self.assertNotIn(token, source)
         peace = self.peace
@@ -1054,7 +1046,7 @@ class WorldEmpireTests(unittest.TestCase):
         finalize = named_block(self.effects, "ADISCORD_vorkerland_finalize_reunification")
         joint = finalize[finalize.index("has_country_flag = ADISCORD_vorkerland_route_joint"):]
         joint = joint[:joint.index("ADISCORD_vorkerland_route_utilitarian")]
-        self.assertIn("ADISCORD_vorkerland_show_joint_victory_superevent = yes", joint)
+        self.assertIn("ADISCORD_vorkerland_show_joint_victory_news = yes", joint)
         self.assertIn("country_event = { id = ADISCORD_vorkerland_postwar.4 hours = 1 }", joint)
         self.assertNotIn("days = 7", joint)
         # The callback's guard reads collapse_finished, committed later in the same effect.

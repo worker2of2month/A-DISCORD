@@ -59,8 +59,28 @@ sound = {
 }
 
 sound = {
+	name = "superevent_val_council_proclamation_sound"
+	file = "superevents/superevent_val_council_proclamation_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_war_sound"
+	file = "superevents/superevent_south_war_sound.wav"
+}
+
+sound = {
 	name = "superevent_stelander_great_sound"
 	file = "superevents/superevent_stelander_great_sound.wav"
+}
+
+sound = {
+	name = "superevent_rus_black_banner_sound"
+	file = "superevents/superevent_rus_black_banner_sound.wav"
+}
+
+sound = {
+	name = "superevent_rus_restoration_sound"
+	file = "superevents/superevent_rus_restoration_sound.wav"
 }
 
 # Gustav Holst, Mars, The Bringer of War; US Air Force Band, Frontiers (1998).
@@ -93,6 +113,13 @@ sound = {
 	file = "superevents/superevent_stelander_sotnikov_civilwar_sound.wav"
 }
 
+# Johan Svendsen, Festival Polonaise, Op. 12; Iceland Symphony Orchestra, Bjarte Engeset.
+# Recording and excerpt metadata: tools/assets/source/superevents/STP/audio_sources.json.
+sound = {
+	name = "superevent_stelander_shabrat_republic_sound"
+	file = "superevents/superevent_stelander_shabrat_republic_sound.wav"
+}
+
 # Mind Terrorist, Revolt Against the Modern World (Spiritual Revolution), 0-30 s.
 # https://youtu.be/CVTlt9mqQEY | https://archive.org/details/02.-revolt-against-the-modern-world
 sound = {
@@ -107,6 +134,12 @@ sound = {
 	file = "superevents/superevent_nam_resource_war_district_sound.wav"
 }
 
+# Arcana, Le Serpent Rouge; source and sound-effect credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_houses_sound"
+	file = "superevents/superevent_south_houses_sound.wav"
+}
+
 # Kevin MacLeod, Industrial Cinematic, 25-55 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
 # https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600047
 sound = {
@@ -119,6 +152,13 @@ sound = {
 sound = {
 	name = "superevent_south_regency_sound"
 	file = "superevents/superevent_south_regency_sound.wav"
+}
+
+# Sophie Hutchings, By Night, 60-116 s; harbor homecoming mix.
+# https://sophiehutchings.bandcamp.com/track/by-night
+sound = {
+	name = "superevent_south_free_islands_sound"
+	file = "superevents/superevent_south_free_islands_sound.wav"
 }
 
 # Kevin MacLeod, Steel Rods, 9-41 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
@@ -210,4 +250,52 @@ sound = {
 sound = {
 	name = "superevent_itora_stalk_portal_sound"
 	file = "superevents/superevent_itora_stalk_portal_sound.wav"
+}
+
+# Phragments, The Return; credits and excerpt details in tools/assets/source/superevents/STP/audio_sources.json.
+sound = {
+	name = "superevent_stelander_sotnikov_directory_sound"
+	file = "superevents/superevent_stelander_sotnikov_directory_sound.wav"
+}
+
+# Danny Norbury, Light in August; credits and excerpt details in tools/assets/source/superevents/STP/audio_sources.json.
+sound = {
+	name = "superevent_stelander_sotnikov_charter_sound"
+	file = "superevents/superevent_stelander_sotnikov_charter_sound.wav"
+}
+
+# M. Ostermeier, Rafters; credits and excerpt details in tools/assets/source/superevents/STP/audio_sources.json.
+sound = {
+	name = "superevent_stelander_tikhoreva_sound"
+	file = "superevents/superevent_stelander_tikhoreva_sound.wav"
+}
+
+sound = {
+	name = "superevent_stelander_party_victory_festival_sound"
+	file = "superevents/superevent_stelander_party_victory_festival_sound.wav"
+}
+
+sound = {
+	name = "superevent_stelander_party_victory_houses_sound"
+	file = "superevents/superevent_stelander_party_victory_houses_sound.wav"
+}
+
+sound = {
+	name = "superevent_stelander_party_victory_staff_sound"
+	file = "superevents/superevent_stelander_party_victory_staff_sound.wav"
+}
+
+sound = {
+	name = "superevent_stelander_party_victory_wallets_sound"
+	file = "superevents/superevent_stelander_party_victory_wallets_sound.wav"
+}
+
+sound = {
+	name = "superevent_stelander_party_victory_regent_sound"
+	file = "superevents/superevent_stelander_party_victory_regent_sound.wav"
+}
+
+sound = {
+	name = "superevent_west_world_empire_sound"
+	file = "superevents/superevent_west_world_empire_sound.wav"
 }

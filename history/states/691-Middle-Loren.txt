@@ -4,6 +4,7 @@ state={
 	name="STATE_691"
 	resources = {
 		tungsten = 1
+		aluminium = 10
 	}
 	provinces={
 		786 797 2473 3730 3833 4060 5579 8194 8904 10722 11083 12131

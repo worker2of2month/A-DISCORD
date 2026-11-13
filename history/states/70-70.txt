@@ -3,7 +3,7 @@ state={
 	id=70
 	name="STATE_70"
 	resources = {
-		aluminium = 1
+		aluminium = 11
 	}
 	provinces={
 		627 910 1198 1200 1444 2042 2577 2986 3872 3986 4067 4478
@@ -26,6 +26,7 @@ state={
 			infrastructure = 3
 			industrial_complex = 1
 			arms_factory = 1
+			air_base = 1
 		}
 	}
 }

@@ -149,11 +149,7 @@ ADISCORD_difficulty_abyss_front_deliberate = {
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			has_war_with = FROM
-			OR = {
-				FROM = { ADISCORD_difficulty_ai_offensive_ready = no }
-				fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
-			}
+			ADISCORD_difficulty_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 950

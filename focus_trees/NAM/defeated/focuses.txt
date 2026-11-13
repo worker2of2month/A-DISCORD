@@ -411,7 +411,12 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_hidden_reserve
-		bypass = { has_global_flag = NAM_war_of_return_resolved }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_resolved_focus_condition_tt
+				has_global_flag = NAM_war_of_return_resolved
+			}
+		}
 		icon = GFX_focus_NAM_concealed_reserve
 		x = 18
 		y = 3
@@ -437,7 +442,12 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_officer_cadres
-		bypass = { has_global_flag = NAM_war_of_return_resolved }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_resolved_focus_condition_tt
+				has_global_flag = NAM_war_of_return_resolved
+			}
+		}
 		icon = GFX_focus_NAM_metropolitan_instructors
 		x = 16
 		y = 4
@@ -493,7 +503,12 @@ focus_tree = {
 
 	focus = {
 		id = NAM_defeat_war_chest
-		bypass = { has_global_flag = NAM_war_of_return_resolved }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_resolved_focus_condition_tt
+				has_global_flag = NAM_war_of_return_resolved
+			}
+		}
 		icon = GFX_focus_NAM_second_ledger
 		x = 20
 		y = 5
@@ -530,7 +545,12 @@ focus_tree = {
 			has_capitulated = no
 			is_subject = no
 			has_war = no
-			NOT = { has_country_flag = NAM_rw_tribute }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_rw_tribute_focus_condition_tt
+					has_country_flag = NAM_rw_tribute
+				}
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_war_of_return_ready_tt
 				NAM_war_of_return_can_start = yes
@@ -560,7 +580,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_defeat_accommodation }
 		bypass = {
-			NOT = { has_country_flag = NAM_rw_tribute }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_rw_tribute_focus_condition_tt
+					has_country_flag = NAM_rw_tribute
+				}
+			}
 		}
 		available = {
 			has_capitulated = no
@@ -667,8 +692,18 @@ focus_tree = {
 			focus = NAM_defeat_oil_union
 		}
 		bypass = {
-			EFL = { ADISCORD_south_campaign_target_settled = yes }
-			AZH = { ADISCORD_south_campaign_target_settled = yes }
+			EFL = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
+					ADISCORD_south_campaign_target_settled = yes
+				}
+			}
+			AZH = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
+					ADISCORD_south_campaign_target_settled = yes
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -676,9 +711,17 @@ focus_tree = {
 				ADISCORD_south_nam_story_clear = yes
 			}
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 			is_subject = no
-			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+			}
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -739,7 +782,10 @@ focus_tree = {
 		# to the same second chapter after the war for the South has passed.
 		available = {
 			has_capitulated = no
-			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
 			is_subject = no
 			has_war = no
 			custom_trigger_tooltip = {

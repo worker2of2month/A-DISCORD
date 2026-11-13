@@ -4,12 +4,12 @@ from __future__ import annotations
 
 
 TARGET_STATES = {
-    1: ("history/states/1-Ablia.txt", "STP", 1_200_000, "large_town"),
+    1: ("history/states/1-Ablia.txt", "STP", 2_200_000, "large_town"),
     2: ("history/states/2-New-Monaii.txt", "STP", 3_000_000, "city"),
     3: ("history/states/3-Neansas.txt", "STP", 1_100_000, "rural"),
     10: ("history/states/10-Ashya.txt", "NOD", 525_000, "town"),
     11: ("history/states/11-Ostrium.txt", "NOD", 2200000, "city"),
-    12: ("history/states/12-Kaclana.txt", "NOD", 520_000, "town"),
+    12: ("history/states/12-Kaclana.txt", "NOD", 1_520_000, "town"),
     13: ("history/states/13-Treya.txt", "NOD", 580_000, "town"),
     17: ("history/states/17-Esnos.txt", "NOD", 300_000, "town"),
     18: ("history/states/18-Brioland.txt", "NOD", 285_000, "town"),
@@ -21,7 +21,7 @@ TARGET_STATES = {
     43: ("history/states/43-Balchansk.txt", "STP", 1_200_000, "town"),
     44: ("history/states/44-Iron-Shield.txt", "STP", 900_000, "town"),
     45: ("history/states/45-Livonn.txt", "STP", 1_200_000, "town"),
-    46: ("history/states/46-Hosheit.txt", "STP", 300_000, "town"),
+    46: ("history/states/46-Hosheit.txt", "STP", 1_300_000, "town"),
     48: ("history/states/48-Depoitodron.txt", "VAL", 8_000_000, "megalopolis"),
     53: ("history/states/53-Old-Fada.txt", "STP", 180_000, "pastoral"),
     54: ("history/states/54-Spastlant.txt", "VAL", 1_300_000, "city"),
@@ -35,12 +35,12 @@ TARGET_STATES = {
     15: ("history/states/15-Duchebia.txt", "YPR", 180_000, "town"),
     16: ("history/states/16-Plaoya.txt", "YPR", 210_000, "town"),
     19: ("history/states/19-Cleikshen.txt", "YPR", 140_000, "town"),
-    20: ("history/states/20-Eshait.txt", "YPR", 1230000, "city"),
-    21: ("history/states/21-Teflar.txt", "YPR", 220_000, "town"),
+    20: ("history/states/20-Eshait.txt", "YPR", 1_450_000, "city"),
+    21: ("history/states/21-Teflar.txt", "YPR", 1_220_000, "town"),
     22: ("history/states/22-Otrea.txt", "YPR", 130_000, "town"),
-    14: ("history/states/14-Flaem-Prana.txt", "COF", 720000, "town"),
+    14: ("history/states/14-Flaem-Prana.txt", "COF", 220_000, "town"),
     83: ("history/states/83-83.txt", "TFF", 210_000, "rural"),
-    84: ("history/states/84-84.txt", "TFF", 850000, "town"),
+    84: ("history/states/84-84.txt", "TFF", 2_050_000, "town"),
     85: ("history/states/85-85.txt", "TFF", 190_000, "rural"),
     86: ("history/states/86-86.txt", "TFF", 160_000, "rural"),
     87: ("history/states/87-87.txt", "TFF", 81_000, "rural"),
@@ -48,12 +48,12 @@ TARGET_STATES = {
 }
 
 EXPECTED_POPULATION_TOTALS = {
-    "NOD": 12010000,
-    "STP": 17_830_000,
+    "NOD": 13_010_000,
+    "STP": 19_830_000,
     "VAL": 11_270_000,
-    "YPR": 2300000,
-    "COF": 720000,
-    "TFF": 1500000,
+    "YPR": 3_520_000,
+    "COF": 220_000,
+    "TFF": 2_700_000,
 }
 
 SETTLEMENT_VPS = {
@@ -149,7 +149,7 @@ EXPECTED_DIRECT_BUILDINGS = {
         "infrastructure": 5,
         "industrial_complex": 2,
         "arms_factory": 3,
-        "dockyard": 1,
+        "dockyard": 3,
         "ADISCORD_industrial_cluster": 1,
         "ADISCORD_business_center": 1,
         "air_base": 2,
@@ -168,6 +168,7 @@ EXPECTED_DIRECT_BUILDINGS = {
     48: {
         "infrastructure": 4,
         "arms_factory": 8,
+        "dockyard": 2,
         "industrial_complex": 2,
         "ADISCORD_industrial_cluster": 1,
         "ADISCORD_business_center": 1,
@@ -194,12 +195,12 @@ EXPECTED_DIRECT_BUILDINGS = {
     15: {"infrastructure": 2, "arms_factory": 1},
     16: {"infrastructure": 2},
     19: {"infrastructure": 2, "arms_factory": 1},
-    20: {"infrastructure": 3, "industrial_complex": 2, "arms_factory": 4},
+    20: {"infrastructure": 3, "industrial_complex": 2, "arms_factory": 4, "air_base": 2},
     21: {"infrastructure": 2},
     22: {"infrastructure": 1},
-    14: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 2},
+    14: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 2, "air_base": 2},
     83: {"infrastructure": 2, "arms_factory": 1},
-    84: {"infrastructure": 3, "industrial_complex": 2, "arms_factory": 2},
+    84: {"infrastructure": 3, "industrial_complex": 2, "arms_factory": 2, "air_base": 2},
     85: {"infrastructure": 2, "arms_factory": 1},
     86: {"infrastructure": 2},
     87: {"infrastructure": 1},
@@ -207,9 +208,9 @@ EXPECTED_DIRECT_BUILDINGS = {
 }
 
 EXPECTED_INDUSTRY_TOTALS = {
-    "NOD": {"industrial_complex": 10, "arms_factory": 12, "dockyard": 1},
+    "NOD": {"industrial_complex": 10, "arms_factory": 12, "dockyard": 3},
     "STP": {"industrial_complex": 20, "arms_factory": 7, "dockyard": 3},
-    "VAL": {"industrial_complex": 11, "arms_factory": 12, "dockyard": 0},
+    "VAL": {"industrial_complex": 11, "arms_factory": 12, "dockyard": 2},
     "YPR": {"industrial_complex": 3, "arms_factory": 6, "dockyard": 0},
     "COF": {"industrial_complex": 1, "arms_factory": 2, "dockyard": 0},
     "TFF": {"industrial_complex": 2, "arms_factory": 4, "dockyard": 0},

@@ -83,7 +83,8 @@ guiTypes = {
 
 				iconType = {
 					name = "clip_icon"
-					position = {x=15 y=-2}
+					position = { x=15 y=-2 }
+					scale = 0
 					quadTextureSprite ="GFX_clip"
 					alwaystransparent = yes
 				}
@@ -91,7 +92,7 @@ guiTypes = {
 
 			containerWindowType = {
 				name = "flag_container"
-				position = { x = 87 y = 10 }
+				position = { x = 100 y = 10 }
 				size = { width = 45 height = 31 }
 
 				buttonType = {
@@ -111,7 +112,7 @@ guiTypes = {
 					name = "flag_name"
 					position = { x = 50 y = 0 }
 					font = "hoi_18mbs"
-					maxWidth = 110
+					maxWidth = 94
 					maxHeight = 20
 					#format = right
 				}
@@ -258,7 +259,7 @@ guiTypes = {
 
 					background = {
 						name = "operatives_view_entry_bg"
-						spriteType = "GFX_operatives_view_entry_bg"
+						spriteType = "GFX_ADISCORD_intelligence_dossier_target"
 						position = {x = 0 y = 0}
 						alwaystransparent = yes
 					}
@@ -283,8 +284,8 @@ guiTypes = {
 
 			containerWindowType = {
 				name = "top_Window"
-				position = { x=0 y=-30 }
-				size = { width = 581 height =121 }
+				position = { x=0 y=0 }
+				size = { width = 500 height = 91 }
 				#moveable = yes
 				Orientation = UPPER_LEFT
 
@@ -335,7 +336,7 @@ guiTypes = {
 
 				gridBoxType = {
 					name = "phases_grid"
-					position = { x = 0 y = -10 }
+					position = { x = 0 y = -14 }
 					size = { width = 510 height = 306 }
 					slotsize = { width = 510 height = 70 }
 					max_slots_horizontal = 1
@@ -345,7 +346,7 @@ guiTypes = {
 				instantTextboxType = {
 					name = "operation_outcome_text"
 					position = { x = 20 y = 20 }
-					font = "hoi4_typewriter16"
+					font = "hoi_16mbs"
 					maxWidth = 465
 					maxHeight = 170
 					scrollbarType = standardtext_slider
@@ -462,23 +463,25 @@ guiTypes = {
 
 			iconType = {
 				name = "operation_reward_icon"
-				position = { x = 0 y = -12 }
+				position = { x = 10 y = 12 }
+				scale = 0.5
 				spriteType = "GFX_reward_icon"
 			}
 
 			iconType = { #should toggle once operation is complete and has extra (bonus) outcome
 				name = "operation_reward_icon_bonus"
-				position = { x = 0 y = -12 }
+				position = { x = 10 y = 12 }
+				scale = 0.5
 				spriteType = "GFX_reward_icon_bonus"
 				pdx_tooltip = "OPERATION_BONUS_REWARD"
 			}
 
 			instantTextboxType = {
 				name = "operation_reward_text"
-				position = { x = 100 y = 10 }
+				position = { x = 62 y = 12 }
 				font = "hoi_16mbs"
-				maxWidth = 390
-				maxHeight = 58
+				maxWidth = 425
+				maxHeight = 50
 				scrollbarType = standardtext_slider
 			}
 		}
@@ -560,21 +563,22 @@ guiTypes = {
 
 		iconType = {
 			name = "phase_progress_icon"
-			position = { x = 39 y = -8}
-			spriteType = "GFX_phase_circular_progress_pie_chart"
+			position = { x = 18 y = 10 }
+			spriteType = "GFX_ADISCORD_intelligence_phase_progress"
 		}
 
 
 		iconType = {
 			name = "phase_entry_icon"
 			position = { x = 10 y = -2 }
+			scale = 0
 		}
 
 		instantTextboxType = {
 			name = "phase_entry_desc"
-			position = { x = 75 y = 0 }
-			font = "hoi4_typewriter16"
-			maxWidth = 400
+			position = { x = 38 y = 0 }
+			font = "hoi_16mbs"
+			maxWidth = 445
 			maxHeight = 20
 		}
 	}
@@ -633,19 +637,20 @@ guiTypes = {
 	containerWindowType = {
 		name = "operation_phase_titles_view_entry"
 		#size = { width=150 height=160 }
-		position = { x=-10 y=30 }
+		position = { x=-10 y=18 }
 		clipping = no
 
 		iconType = {
 			name = "phase_title_picture"
 			position = { x = 20 y = 0 }
-			scale = 0.7 # TODO TEMP
+			scale = 0.65
 		}
 
 		iconType = {
 			name = "pin"
 			spriteType = "GFX_phase_pin"
-			position = { x = 76 y = -14}
+			position = { x = 76 y = -14 }
+			scale = 0
 		}
 
 		# TODO supposed to be some postit/tape bg
@@ -656,24 +661,24 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "phase_title_title"
-			size = { width=150 height=50 }
-			position = { x=20 y=124 }
+			size = { width=147 height=40 }
+			position = { x=20 y=116 }
 
 
 			instantTextboxType = {
 				name = "phase_title_name"
 				#position = { x = 15 y = 130 }
-				position = { x = 10 y = 10 }
-				font = "hoi4_typewriter16"
-				maxWidth = 130
-				maxHeight = 20
+				position = { x = 4 y = 4 }
+				font = "hoi_16mbs"
+				maxWidth = 139
+				maxHeight = 34
 				format = center
 			}
 
 			background = {
 				name = "phase_title_background"
 				spriteType = "GFX_ADISCORD_intelligence_dossier_caption"
-				position = { x = 0 y = 7 }
+				position = { x = 0 y = 0 }
 				alwaystransparent = yes
 			}
 		}

@@ -23,30 +23,30 @@
  VAL_open_emergency_bypass_desc: "Пока ранее действовавший коридор перерезан, брокеры могут собрать дорогую временную цепочку из малых дорог, речных переправ и частных складов. В течение §Y56 дней§! обход компенсирует §Y20§! недельного дохода до потерь серого рынка, но сам подпитывает серый рынок."
 
  VAL_close_refugee_border: "Закрыть границу для беженцев"
- VAL_close_refugee_border_desc: "Закрыть приём новых групп беженцев. Это ограничение действует и на открытые предложения о приёме; закрытая граница также сокращает легальную торговлю."
+ VAL_close_refugee_border_desc: "На пограничные посты приходит распоряжение закрыть переходы. За шлагбаумами остаются торговые обозы и семьи, ищущие убежища."
  VAL_open_refugee_border: "Снова открыть переходы"
- VAL_open_refugee_border_desc: "Восстановить торговлю и разрешить приём по ещё действующим предложениям. Повторное открытие границы не создаёт новых волн беженцев."
+ VAL_open_refugee_border_desc: "Пограничным постам передают распоряжение об открытии переходов. По дорогам вновь потянутся люди и торговые обозы."
  VAL_contract_refugee_labor: "Предложить рабочие контракты"
- VAL_contract_refugee_labor_desc:0 "Занять §Y100 тыс.§! £population_texticon свободных переселенцев на строительстве на 90 дней за §Y75§! £political_power_texticon. Пока действует контракт, они недоступны для вербовки и переселения, но по-прежнему занимают жильё. По завершении или отмене все рабочие возвращаются в свободный пул."
+ VAL_contract_refugee_labor_desc:0 "Строительным артелям нужны рабочие, а семьям переселенцев - заработок. Представители казначейства встретятся с бригадирами и старостами поселений."
  VAL_fund_resettlement_depots: "Переселить беженцев в [FROM.GetName]"
- VAL_fund_resettlement_depots_desc: "Переселить §Y100 тыс.§! £population_texticon уже принятых беженцев в [FROM.GetName] за §Y250§! £ADISCORD_economy_treasury_texticon. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
+ VAL_fund_resettlement_depots_desc: "В районе [FROM.GetName] готовят встречу новых соседей. Землемеры, старосты и переселенческие семьи должны договориться о земле и будущем посёлке."
  VAL_organize_refugee_return: "Организовать возвращение"
- VAL_organize_refugee_return_desc: "После окончания региональных войн организовать безопасное возвращение §Y150 тыс.§! £population_texticon человек за §Y35§! £political_power_texticon. Снизится нагрузка на систему размещения; стабильность и политическая власть не начисляются."
+ VAL_organize_refugee_return_desc: "На дорогах к оставленным домам вновь появляются мирные обозы. Людям нужны проводники, документы и уверенность, что их ждут по ту сторону границы."
  VAL_raid_grey_traders:0 "Рейды против теневых торговцев"
- VAL_raid_grey_traders_desc:0 "Политическая поддержка проверяющих позволит перекрыть подпольные склады и вытеснить нелегальных торговцев с договорных маршрутов.\n\nЦена: §Y100§! £political_power_texticon. Давление серого рынка немедленно снизится на §G15§!. Повторное проведение доступно через §Y30 дней§!."
+ VAL_raid_grey_traders_desc:0 "В накладных подпольных складов слишком много пустых строк. Проверяющие отправятся туда, где закон заканчивается у запертой двери."
  VAL_raid_grey_traders_available_tt:0 "Давление серого рынка: не менее §Y15§! (сейчас §Y[?VAL_black_market_pressure|0]§!)."
  VAL_raid_grey_traders_effect_tt:0 "Давление серого рынка: §G-15§!."
  VAL_arrange_direct_supply_contracts:0 "Перевести контракты на прямые поставки"
- VAL_arrange_direct_supply_contracts_desc:0 "Администрация сведёт производителей и заказчиков напрямую, убрав посредников из части договорных цепочек.\n\nЦена: §Y100§! £political_power_texticon. Зависимость от посредников снизится на §G1§! уровень: со следующего недельного расчёта прирост давления серого рынка будет на §G1§! меньше. Повторное проведение доступно через §Y60 дней§!. Новые сделки с серыми брокерами могут снова увеличить зависимость."
+ VAL_arrange_direct_supply_contracts_desc:0 "Заводские представители и армейские заказчики редко встречаются без чужого посредничества. Администрация соберёт их за общим столом."
  VAL_direct_supply_contracts_available_tt:0 "Зависимость от посредников: не менее §Y1§! (сейчас §Y[?VAL_broker_dependence|0]/3§!)."
  VAL_direct_supply_contracts_effect_tt:0 "Зависимость от посредников: §G-1§!. Еженедельное изменение давления серого рынка: §G-1§! со следующего недельного расчёта."
 
  VAL_license_grey_brokers: "Лицензировать серых брокеров"
- VAL_license_grey_brokers_desc: "Не уничтожать подпольную сеть, а заставить её платить за право работать. Казна немедленно получит §G50§!, но давление серого рынка возрастёт на §R15§!."
+ VAL_license_grey_brokers_desc: "Посредников вызывают в торговую канцелярию. Тем, кто привык работать без печатей, предстоит познакомиться с государственными книгами."
  VAL_buy_contraband_arms: "Закупить оружие вне реестра"
- VAL_buy_contraband_arms_desc:0 "Когда официальные коридоры перегружены или перерезаны, часть оружия можно вернуть на рынок через частных посредников. За §Y250§! £ADISCORD_economy_treasury_texticon мы получим §G15 000§! £infantry_equipment_texticon ценой роста серого рынка на §R10§!."
+ VAL_buy_contraband_arms_desc:0 "Частные посредники предлагают ящики без привычных заводских печатей. Арсенальным приёмщикам предстоит выяснить, что скрывается за обещаниями торговцев."
  VAL_audit_broker_houses: "Разгромить брокерские дома"
- VAL_audit_broker_houses_desc:0 "За 250 монет снизить давление на 25 и зависимость от посредников на 1. Проверка закрывает лицензии и контрабандные поставки на 60 дней: заранее оцените запас оружия перед наступлением."
+ VAL_audit_broker_houses_desc:0 "За фасадами торговых домов хранятся книги, которых не видели казначейские ревизоры. Пришло время сопоставить их с договорами армии."
 
  VAL_corridor_network_fragmented: "Разорванная контрактная сеть"
  VAL_corridor_network_fragmented_desc: "Большая часть введённых в эксплуатацию торговых артерий Кефрейта перерезана или сеть ещё слишком узка для устойчивого оборота."
@@ -84,21 +84,21 @@
 
  VAL_accept_vorkerland_refugees: "Принять беженцев из Воркерланда"
 
- VAL_accept_vorkerland_refugees_desc:0 "Принять §Y300 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_vorkerland_refugees_desc:0 "К границе подходят семьи с узлами и дорожными мешками. Приёмные службы готовят ночлег и списки прибывающих."
 
  VAL_accept_stelander_refugees: "Принять беженцев из Стеландера"
 
- VAL_accept_stelander_refugees_desc:0 "Принять §Y200 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_stelander_refugees_desc:0 "К границе подходят семьи с узлами и дорожными мешками. Приёмные службы готовят ночлег и списки прибывающих."
 
  VAL_accept_nodrul_refugees: "Принять беженцев из Нодрула"
 
- VAL_accept_nodrul_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_nodrul_refugees_desc:0 "К границе подходят семьи с узлами и дорожными мешками. Приёмные службы готовят ночлег и списки прибывающих."
 
  VAL_accept_north_refugees: "Принять беженцев из северных стран"
 
- VAL_accept_north_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_north_refugees_desc:0 "К границе подходят семьи с узлами и дорожными мешками. Приёмные службы готовят ночлег и списки прибывающих."
  VAL_accept_perimeter_refugees: "Принять беженцев из-за Периметра"
- VAL_accept_perimeter_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_perimeter_refugees_desc:0 "К границе подходят семьи с узлами и дорожными мешками. Приёмные службы готовят ночлег и списки прибывающих."
  VAL_refugee_resettlement_result_tt:0 "§Y100 тыс.§! £population_texticon перемещённых людей навсегда поселяются в регионе §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked:0 "§R100§! £ADISCORD_economy_treasury_texticon"
  VAL_logistics_cost_100_tooltip:0 "§Y100§! £ADISCORD_economy_treasury_texticon"
@@ -122,7 +122,7 @@
 
  VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
  VAL_train_refugee_volunteers:0 "Обучить беженцев"
- VAL_train_refugee_volunteers_desc:0 "Обучить §Y10 тыс.§! £population_texticon добровольцев из свободных переселенцев. Срок: 35 дней. Повторный набор доступен через §Y45 дней§! после завершения. Цена: §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
+ VAL_train_refugee_volunteers_desc:0 "В пункты набора приходят люди, ещё недавно покинувшие свои дома. Инструкторам предстоит научить их держать оружие и доверять товарищам по строю."
  VAL_refugee_training_start_tt:0 "§Y10 тыс.§! £population_texticon переселенцев начнут §Y35-дневное§! обучение и затем пополнят армейский резерв. При отмене возвращаются люди, §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon."
  VAL_refugee_window_open_tt: "Для этого направления открыто окно приёма беженцев. Оно действует §Y180 дней§! после появления потока. Если условие не выполнено, поток ещё не открыт, срок приёма истёк или все три волны уже приняты."
  VAL_refugee_war_active_tt:0 "Война этого направления продолжается. Приём доступен раз в §Y90 дней§!."
@@ -131,15 +131,15 @@
  VAL_local_training_start_tt:0 "§Y5 тыс.§! £population_texticon местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon."
 
  VAL_offer_settlement_bounties:0 "Выплатить подъёмные переселенцам"
- VAL_offer_settlement_bounties_desc:0 "Оплатить переезд и гарантировать первые контракты рабочим и семьям из-за границы Кефрейта. Программа привлекает §Y30 тыс.§! новых жителей в систему размещения, стоит §Y250§! £ADISCORD_economy_treasury_texticon и повышает давление серого рынка на §R2§!. Доступно раз в §Y90 дней§!."
+ VAL_offer_settlement_bounties_desc:0 "За границей Кефрейта немало семей ищут место для новой жизни. Наши посланники расскажут им о городах, мастерских и земле, где их готовы принять."
  VAL_settlement_bounties_tt:0 "§Y30 тыс.§! £population_texticon новых переселенцев. Давление серого рынка: §R+2§!."
 
  VAL_naturalize_refugee_households:0 "Натурализовать семьи переселенцев"
- VAL_naturalize_refugee_households_desc:0 "Перевести давно обосновавшиеся семьи из временного статуса в постоянное контрактное гражданство. §Y20 тыс.§! человек покинут свободный резерв переселенцев, добавят §Y10 тыс.§! в местный служебный резерв и сразу дадут §G+1 тыс.§! людских ресурсов. Местный резерв - отдельный запас; для его дальнейшей мобилизации используйте \"Экстренные служебные контракты\". Цена: §Y50§! £political_power_texticon. Доступно раз в §Y45 дней§!."
+ VAL_naturalize_refugee_households_desc:0 "Вчерашние приезжие уже знают соседей и работают рядом с местными. Чиновники должны выслушать семьи, для которых временное пристанище стало домом."
  VAL_naturalization_result_tt:0 "§Y20 тыс.§! £population_texticon переселенцев добавлены в §Y10 тыс.§! £manpower_texticon местного служебного резерва и дают §G+1 тыс.§! людских ресурсов сразу. Давление серого рынка: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Экстренные контракты"
- VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! £ADISCORD_economy_treasury_texticon, §Y25§! командного ресурса, §Y10 тыс.§! £infantry_equipment_texticon и §Y10 тыс.§! £population_texticon местного резерва, чтобы немедленно получить §Y10 тыс.§! £manpower_texticon людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y120 дней§!."
+ VAL_emergency_service_contracts_desc:0 "Штаб рассылает срочные повестки контрактникам. В приёмных горит свет, а офицеры сверяют списки людей, которым предстоит вернуться в строй."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power\n§Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_tooltip:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_cost_blocked:0 "§R500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power\n§R10000§! £infantry_equipment_texticon  §R10000§! £population_texticon"
@@ -147,7 +147,7 @@
 
  VAL_recruit_local_volunteers:0 "Местные добровольцы"
 
- VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: §Y5 тыс.§! £population_texticon местных добровольцев, 35 дней, §Y75§! £political_power_texticon и §Y5000§! £infantry_equipment_texticon. При капитуляции или потере независимости - полный возврат."
+ VAL_recruit_local_volunteers_desc:0 "На сборные пункты приходят соседи, рабочие и вчерашние ученики. Для них служба начинается со знакомства с командирами и собственной ротой."
 
  VAL_refugee_training_cost:0 "§Y10000§! £population_texticon  §Y75§! £political_power_texticon  §Y5000§! £infantry_equipment_texticon"
  VAL_refugee_training_cost_blocked:0 "§R10000§! £population_texticon  §R75§! £political_power_texticon  §R5000§! £infantry_equipment_texticon"
@@ -162,7 +162,7 @@
 
  VAL_expand_refugee_housing:0 "Расширить временные поселения"
 
- VAL_expand_refugee_housing_desc:0 "За §Y250§! монет подготовить места для ещё §Y200 тыс.§! человек. Срок: §Y45 дней§!. Максимальная вместимость: 1 млн. При капитуляции или потере независимости деньги возвращаются."
+ VAL_expand_refugee_housing_desc:0 "Строительные бригады готовят жильё для переселенцев. На новых улицах размечают места для домов и общественных служб."
 
  VAL_housing_start_tt:0 "Через 45 дней: +200 тыс. мест размещения."
 
@@ -178,21 +178,31 @@
 
 # Contract reserve recruitment
  VAL_recruit_contract_reserves: "Набрать контрактный резерв"
- VAL_recruit_contract_reserves_desc: "Повышенные подъёмные и гарантированные выплаты семьям привлекут новых добровольцев. Кефрейт сразу получит §G5000§! £manpower_texticon в свободный людской резерв. Повторный набор доступен через §Y120 дней§!."
+ VAL_recruit_contract_reserves_desc: "В пунктах набора снова раскладывают бланки контрактов. Вербовщики должны ответить на вопросы добровольцев и их семей."
  VAL_recruit_contract_reserves_cost: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_blocked: "§R1000§! £ADISCORD_economy_treasury_texticon  §R50§! £political_power_texticon"
  VAL_recruit_contract_reserves_cost_tooltip: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
  VAL_recall_contract_veterans: "Предложить ветеранам новые контракты"
- VAL_recall_contract_veterans_desc: "Штаб предложит отслужившим контрактникам вернуться на службу за увеличенные выплаты. Кефрейт сразу получит §G6000§! £manpower_texticon в свободный людской резерв. Повторное предложение доступно через §Y180 дней§!."
+ VAL_recall_contract_veterans_desc: "Отслужившие контрактники хранят документы и старые знаки различия. Штаб обратится к тем, кто ещё помнит дороги и товарищей своей роты."
  VAL_recall_contract_veterans_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon  §R25§! £command_power_texticon"
  VAL_recall_contract_veterans_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
 
  VAL_launch_national_recruitment: "Общий контрактный набор"
- VAL_launch_national_recruitment_desc:0 "Оплатить общий набор из местного резерва: §Y2§! единицы резерва и §Y3000§! £ADISCORD_economy_treasury_texticon. Через §Y60 дней§! Кефрейт получит §G20000§! £manpower_texticon. Следующий набор - через §Y90 дней§! после завершения. При капитуляции, подчинении или утрате программы деньги и резерв возвращаются."
+ VAL_launch_national_recruitment_desc:0 "Вербовочные комиссии отправятся в города и округа. Казначеям, врачам и офицерам предстоит работать за одним столом."
  VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon\nиз местного резерва"
  VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon\nиз местного резерва"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon из местного резерва"
  VAL_national_recruitment_pending_tt:0 "§Y20000§! £population_texticon из местного резерва проходят подготовку в течение §Y60 дней§!."
  VAL_national_recruitment_refund_tt:0 "Кефрейт получает обратно оплаченные §Y3000§! £ADISCORD_economy_treasury_texticon и §Y2§! единицы местного резерва."
  VAL_national_recruitment_reserve_tt:0 "В местном резерве есть не менее §Y20000§! £population_texticon (две единицы резерва)."
+ VAL_refugee_return_result_tt:0 "Возвращаются домой §Y150 тыс.§! £population_texticon переселенцев. Освобождается занятое ими жильё."
+ VAL_accept_vorkerland_refugees_description_rules_tt:0 "Принять §Y300 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_stelander_refugees_description_rules_tt:0 "Принять §Y200 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_nodrul_refugees_description_rules_tt:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_north_refugees_description_rules_tt:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_accept_perimeter_refugees_description_rules_tt:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
+ VAL_open_refugee_border_description_rules_tt:0 "Восстановить торговлю и разрешить приём по ещё действующим предложениям. Повторное открытие границы не создаёт новых волн беженцев."
+ VAL_expand_refugee_housing_description_rules_tt:0 "За §Y250§! монет подготовить места для ещё §Y200 тыс.§! человек. Срок: §Y45 дней§!. Максимальная вместимость: 1 млн. При капитуляции или потере независимости деньги возвращаются."
+ VAL_license_grey_brokers_description_rules_tt:0 "Не уничтожать подпольную сеть, а заставить её платить за право работать. Казна немедленно получит §G50§!, но давление серого рынка возрастёт на §R15§!."
+ VAL_close_refugee_border_description_rules_tt:0 "Закрыть приём новых групп беженцев. Это ограничение действует и на открытые предложения о приёме; закрытая граница также сокращает легальную торговлю."

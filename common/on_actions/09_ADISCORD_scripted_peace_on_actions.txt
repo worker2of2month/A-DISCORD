@@ -1972,6 +1972,56 @@ on_actions = {
 						RUS = { RUS_sci_reactor_war_resolve_defeat = yes }
 					}
 				}
+				# The Black Army's war of revenge and its eastern war settle by the
+				# guard marches or the military districts, or return the conquests.
+				if = {
+					limit = {
+						country_exists = RUS
+						RUS = { check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = equals } }
+						OR = {
+							AND = {
+								ROOT = { tag = event_target:ADISCORD_vorkerland_nation }
+								FROM = { tag = RUS }
+							}
+							AND = {
+								ROOT = { tag = RUS }
+								FROM = { tag = event_target:ADISCORD_vorkerland_nation }
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = RUS } }
+						RUS = { RUS_ba_vorkerland_resolve_defeat = yes }
+					}
+					else = {
+						RUS = { RUS_ba_vorkerland_resolve_victory = yes }
+					}
+				}
+				if = {
+					limit = {
+						country_exists = RUS
+						RUS = { check_variable = { var = RUS_ba_east_war value = 1 compare = equals } }
+						OR = {
+							AND = {
+								ROOT = { tag = event_target:RUS_ba_east_target }
+								FROM = { tag = RUS }
+							}
+							AND = {
+								ROOT = { tag = RUS }
+								FROM = { tag = event_target:RUS_ba_east_target }
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = RUS } }
+						RUS = { RUS_ba_east_resolve_defeat = yes }
+					}
+					else = {
+						RUS = { RUS_ba_east_resolve_victory = yes }
+					}
+				}
 				# END khan_coup:on_capitulation
 
 				# BEGIN vorkerland_diplomacy:on_capitulation
@@ -2210,6 +2260,7 @@ on_actions = {
 				# END east_final:on_peace
 				# BEGIN khan_coup:on_peace
 				RUS_sci_reactor_war_close_external = yes
+				RUS_ba_wars_close_external = yes
 				# END khan_coup:on_peace
 				if = {
 					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }

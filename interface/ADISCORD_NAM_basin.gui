@@ -3,7 +3,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_NAM_supports_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 178 }
+		size = { width = 460 height = 206 }
 		instantTextBoxType = {
 			name = "NAM_bw_loyalty"
 			position = { x = 12 y = 5 }
@@ -17,12 +17,12 @@ guiTypes = {
 		instantTextBoxType = {
 			name = "NAM_bw_support_help"
 			position = { x = 360 y = 6 }
-			text = "NAM_bw_rules_hint"
+			text = "NAM_bw_balance_hint"
 			font = "hoi_16mbs"
 			maxWidth = 84
 			maxHeight = 20
 			fixedsize = yes
-			pdx_tooltip = "NAM_bw_support_rules"
+			pdx_tooltip = "NAM_bw_ladder_tt"
 		}
 		containerWindowType = {
 			name = "NAM_bw_support_row_nam"
@@ -143,6 +143,36 @@ guiTypes = {
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_support_trade_tt"
 			}
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_support_agreements_help"
+			position = { x = 12 y = 180 }
+			text = "NAM_bw_support_agreements_hint"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_support_agreements_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_support_contracts_help"
+			position = { x = 166 y = 180 }
+			text = "NAM_bw_support_contracts_hint"
+			font = "hoi_16mbs"
+			maxWidth = 140
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_support_contracts_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_support_crisis_help"
+			position = { x = 322 y = 180 }
+			text = "NAM_bw_support_crisis_hint"
+			font = "hoi_16mbs"
+			maxWidth = 122
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_support_crisis_tt"
 		}
 	}
 	# Map selection changes presentation only; actions dispatch the original targeted decisions.

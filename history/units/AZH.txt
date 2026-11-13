@@ -305,7 +305,25 @@ units = {
 	}
 }
 
+air_wings = {
+	69 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "AZH" amount = 100 }
+	}
+}
+
 instant_effect = {
 	add_fuel = 30000
 	add_equipment_to_stockpile = { type = convoy_1 amount = 40 producer = AZH }
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "AZH" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "AZH" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
 }

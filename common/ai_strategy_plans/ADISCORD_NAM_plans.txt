@@ -115,6 +115,7 @@ NAM_resource_war_district_plan = {
 	ai_national_focuses = {
 		NAM_alarm
 		NAM_wells_under_guard
+		NAM_war_conscription_rolls
 		NAM_hold_basin
 		NAM_relief_columns
 		NAM_war_rear_directorate
@@ -122,15 +123,27 @@ NAM_resource_war_district_plan = {
 		NAM_war_dispatch_service
 		NAM_discipline_of_seals
 		NAM_counterstroke
+		NAM_war_counterbattery
 		NAM_volunteer_levies
+		NAM_war_veteran_cadres
+		NAM_war_replacement_school
 		NAM_last_reserve
 		NAM_district_volunteers
 		NAM_oil_score
+		NAM_war_fuel_barter
+		NAM_war_fuel_discipline
 		NAM_war_civilian_routes
+		NAM_war_procurement_board
+		NAM_war_medical_trains
+		NAM_war_rear_reserve
 		NAM_war_naval_staff
 		NAM_war_convoy_escort
+		NAM_war_harbour_workshops
+		NAM_war_naval_repair_service
 		NAM_war_field_airfields
 		NAM_war_interceptor_control
+		NAM_war_replacement_aircraft
+		NAM_war_air_maintenance
 	}
 	weight = { factor = 20 }
 }
@@ -154,6 +167,7 @@ NAM_resource_war_vertical_plan = {
 	ai_national_focuses = {
 		NAM_alarm
 		NAM_wells_under_guard
+		NAM_war_conscription_rolls
 		NAM_hold_basin
 		NAM_relief_columns
 		NAM_war_rear_directorate
@@ -161,15 +175,55 @@ NAM_resource_war_vertical_plan = {
 		NAM_war_dispatch_service
 		NAM_discipline_of_seals
 		NAM_counterstroke
+		NAM_war_counterbattery
 		NAM_volunteer_levies
+		NAM_war_short_training
+		NAM_war_replacement_school
 		NAM_last_reserve
 		NAM_martial_seals
 		NAM_oil_score
+		NAM_war_fuel_barter
+		NAM_war_extraction_surge
 		NAM_war_factory_shifts
+		NAM_war_procurement_board
+		NAM_war_shell_priority
+		NAM_war_rear_reserve
 		NAM_war_naval_staff
 		NAM_war_coastal_batteries
+		NAM_war_harbour_workshops
+		NAM_war_naval_repair_service
 		NAM_war_field_airfields
 		NAM_war_air_ground_liaison
+		NAM_war_replacement_aircraft
+		NAM_war_air_maintenance
+	}
+	weight = { factor = 20 }
+}
+
+# The war-for-the-South tree replaces every earlier tree while Svetlogorye
+# leads the north; one plan covers it for every course and takes the allied
+# fuel office of its exclusive pair.
+NAM_south_war_plan = {
+	name = "NAM war for the South"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_south_war_focus
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_south_war_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_south_war_council
+		NAM_south_allied_fuel_office
+		NAM_south_oil_tap
+		NAM_south_field_fortresses
+		NAM_south_counteroffensive
 	}
 	weight = { factor = 20 }
 }
@@ -252,11 +306,6 @@ NAM_postwar_plan = {
 		NAM_relief_reserves
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_war_council
-		NAM_south_allied_fuel_office
-		NAM_south_oil_tap
-		NAM_south_field_fortresses
-		NAM_south_counteroffensive
 		NAM_south_heritage
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
@@ -373,11 +422,6 @@ NAM_postwar_vertical_plan = {
 		NAM_reconstruction_statute
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_war_council
-		NAM_south_allied_fuel_office
-		NAM_south_oil_tap
-		NAM_south_field_fortresses
-		NAM_south_counteroffensive
 		NAM_south_heritage
 		NAM_veyran_union_charter
 		NAM_veyran_embarkation_staff
@@ -809,11 +853,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_through_waybill
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_war_council
-		NAM_south_allied_fuel_office
-		NAM_south_oil_tap
-		NAM_south_field_fortresses
-		NAM_south_counteroffensive
 		NAM_south_heritage
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition

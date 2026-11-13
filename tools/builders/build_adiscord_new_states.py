@@ -434,14 +434,14 @@ STATE_RESOURCES = {
     **SHL_RESOURCES,
 }
 NAM_COALITION_FRONT_RESOURCES = {
-    68: {"steel": 2},
+    68: {"steel": 2, "aluminium": 10},
     69: {"oil": 1, "chromium": 1},
-    70: {"aluminium": 1},
-    691: {"tungsten": 1},
+    70: {"aluminium": 11},
+    691: {"tungsten": 1, "aluminium": 10},
     692: {"oil": 1},
     723: {},
-    724: {"aluminium": 1},
-    725: {"steel": 1},
+    724: {"aluminium": 11},
+    725: {"steel": 1, "aluminium": 10},
     726: {"tungsten": 1},
     727: {"oil": 1},
     728: {},
@@ -831,8 +831,8 @@ NAM_COALITION_POPULATION = {
 
 NAM_COALITION_FRONT_PROFILES = {
     68: {"population": NAM_COALITION_POPULATION[68], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.8},
-    69: {"population": NAM_COALITION_POPULATION[69], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.4, "air_base": 1},
-    70: {"population": NAM_COALITION_POPULATION[70], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.0},
+    69: {"population": NAM_COALITION_POPULATION[69], "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 2.4, "air_base": 1},
+    70: {"population": NAM_COALITION_POPULATION[70], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.0, "air_base": 1},
     691: {"population": NAM_COALITION_POPULATION[691], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.6},
     692: {"population": NAM_COALITION_POPULATION[692], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 2.5, "custom_buildings": {"dockyard": 1}},
     723: {"population": NAM_COALITION_POPULATION[723], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.0, "custom_buildings": {"dockyard": 1}},
@@ -849,6 +849,9 @@ NAM_VICTORY_BORDER_PROFILES = {
     EFL_MOREN_STATE_ID: {"population": NAM_COALITION_POPULATION[720], "category": "rural", "infrastructure": 3, "supplies": 0.5},
     EFL_LOREN_BORDERLAND_STATE_ID: {"population": NAM_COALITION_POPULATION[721], "category": "rural", "infrastructure": 3, "supplies": 0.5},
     AZH_SEABOARD_STATE_ID: {"population": NAM_COALITION_POPULATION[722], "category": "rural", "infrastructure": 3, "supplies": 0.5},
+}
+NAM_VICTORY_BORDER_RESOURCES = {
+    EFL_LOREN_BORDERLAND_STATE_ID: {"aluminium": 10},
 }
 
 # Every state owned and cored by Ivanland at game start receives a coherent
@@ -1037,7 +1040,8 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
 
 IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
     25: ((16568, "naval_base", 1),),
-    694: ((11841, "naval_base", 2),),
+    693: ((10730, "naval_base", 1),),
+    694: ((11841, "naval_base", 2), (2553, "naval_base", 1)),
 }
 
 # Afrela is populous enough to sustain its regional diplomacy and volunteer
@@ -1515,10 +1519,10 @@ GENERATED_STATE_NAMES = {
 
 COASTAL_CITY_POINTS = {
     699: ((16713, 5), (16714, 1), (16715, 1), (16718, 1), (16719, 1)),
-    700: ((16716, 5), (16881, 5), (16884, 5), (16892, 5)),
-    701: ((16717, 5),),
+    700: NAM_LEGACY_VICTORY_POINTS[700],
+    701: NAM_LEGACY_VICTORY_POINTS[701],
     284: ((16720, 3),),
-    688: ((16721, 5), (1710, 1)),
+    688: NAM_LEGACY_VICTORY_POINTS[NAM_SVETLOGORSK_STATE_ID],
 }
 COASTAL_CITY_NAMES = {
     16713: "Хазар",
@@ -1606,7 +1610,23 @@ def state_path(state_id: int) -> Path:
     return matches[0]
 
 
+# The desert leagues keep their relative sizes against Shahrabad and NAM, but
+# each must be able to raise a field army without scraping the barrel.
+SOUTHERN_LEAGUE_POPULATION_FACTOR = 3
+SOUTHERN_LEAGUES = frozenset({"RHM", "SDR", "GLP", "KDR", "MZR", "KYZ", "WEF"})
+
+
+def league_population(owner: str, population: int) -> int:
+    if owner in SOUTHERN_LEAGUES:
+        return population * SOUTHERN_LEAGUE_POPULATION_FACTOR
+    return population
+
+
 def population(state_id: int, owner: str) -> int:
+    return league_population(owner, base_population(state_id, owner))
+
+
+def base_population(state_id: int, owner: str) -> int:
     if state_id in SHL_POPULATION:
         return SHL_POPULATION[state_id]
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
@@ -2214,7 +2234,7 @@ def split_svetlogorsk_from_nam() -> None:
         (NAM_DRYRIVER_STATE_ID, "690-Dryriver.txt", NAM_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_DRYRIVER_STATE_ID]),
         (NAM_EAST_DRYRIVER_STATE_ID, "719-East-Dryriver.txt", NAM_EAST_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_EAST_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_EAST_DRYRIVER_STATE_ID]),
         (EFL_MOREN_STATE_ID, "720-Moren.txt", EFL_MOREN_PROVINCES, "EFL", NAM_VICTORY_BORDER_PROFILES[EFL_MOREN_STATE_ID], None),
-        (EFL_LOREN_BORDERLAND_STATE_ID, "721-Loren-Borderland.txt", EFL_LOREN_BORDERLAND_PROVINCES, "EFL", NAM_VICTORY_BORDER_PROFILES[EFL_LOREN_BORDERLAND_STATE_ID], None),
+        (EFL_LOREN_BORDERLAND_STATE_ID, "721-Loren-Borderland.txt", EFL_LOREN_BORDERLAND_PROVINCES, "EFL", NAM_VICTORY_BORDER_PROFILES[EFL_LOREN_BORDERLAND_STATE_ID], NAM_VICTORY_BORDER_RESOURCES[EFL_LOREN_BORDERLAND_STATE_ID]),
         (AZH_SEABOARD_STATE_ID, "722-Azhar-Seaboard.txt", AZH_SEABOARD_PROVINCES, "AZH", NAM_VICTORY_BORDER_PROFILES[AZH_SEABOARD_STATE_ID], None),
     )
     province_buildings = {
@@ -2692,6 +2712,7 @@ def render_southern_district(capital: int) -> str:
     district, _city_population, rural_population, provinces = SOUTHERN_CAPITAL_DISTRICTS[capital]
     rural_population = SHL_POPULATION.get(district, rural_population)
     owner = STARTING_OWNERS[capital]
+    rural_population = league_population(owner, rural_population)
     history = [f"\t\towner = {owner}", f"\t\tadd_core_of = {owner}"]
     for province, value, _name in REGIONAL_SETTLEMENTS.get(district, ()):
         if province not in provinces:
@@ -2967,7 +2988,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             if state_id in (689, 691):
                 source = re.sub(r"(?m)^\s*(?:industrial_complex|arms_factory)\s*=\s*\d+\s*\n", "", source)
             if state_id == 689:
-                source = replace_history_victory_points(source, ())
+                source = replace_history_victory_points(source, NAM_LEGACY_VICTORY_POINTS[state_id])
                 source = re.sub(r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source)
         outputs[path] = source.encode("utf-8")
     profiles = {
@@ -3177,10 +3198,17 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
         source = path.read_text(encoding="utf-8-sig")
         opening, closing = named_block(source, "provinces")
         provinces = tuple(map(int, re.findall(r"\d+", source[opening:closing])))
-        if state_id in STARTING_OWNERS:
-            result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
-        elif state_id in NAM_COALITION_REGIONS:
+        if state_id in NAM_COALITION_REGIONS:
             result = coalition_region_source(state_id).encode("utf-8")
+        elif state_id in STARTING_OWNERS:
+            result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
+        elif state_id in IVANLAND_OVERHAUL_PROVINCES:
+            owner = "IIA" if state_id in {128, 693, 694} else "IVN"
+            result = render_resource_war_state(
+                state_id, path.name, provinces, owner, IVANLAND_STATE_PROFILES[state_id],
+                IVANLAND_STATE_RESOURCES.get(state_id), IVANLAND_OVERHAUL_VICTORY_POINTS[state_id],
+                IVANLAND_OVERHAUL_PROVINCE_BUILDINGS.get(state_id, ()),
+            ).encode("utf-8")
         elif state_id == 49:
             result = render_resource_war_state(
                 state_id, path.name, provinces, "EXZ", LEGACY_STATE_PROFILES[state_id],
@@ -3199,7 +3227,7 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
             owner = "AZH" if state_id == AZH_SEABOARD_STATE_ID else "EFL"
             result = render_resource_war_state(
                 state_id, path.name, provinces, owner, NAM_VICTORY_BORDER_PROFILES[state_id],
-                None, NAM_LEGACY_VICTORY_POINTS[state_id],
+                NAM_VICTORY_BORDER_RESOURCES.get(state_id), NAM_LEGACY_VICTORY_POINTS[state_id],
             ).encode("utf-8")
         else:
             raise RuntimeError(f"state {state_id}: no metadata profile")

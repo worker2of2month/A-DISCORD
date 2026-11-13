@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import struct
@@ -13,6 +14,7 @@ from unittest.mock import patch
 from PIL import Image
 from tools.lib.paths import repository_root
 from tools.builders import build_adiscord_azhar_palace as azhar
+from tools.builders import build_adiscord_isaiah_tower as isaiah
 
 ROOT = repository_root()
 KEY = "ADISCORD_kefreyt_arms_combine"
@@ -225,6 +227,86 @@ class AzharPalaceTests(unittest.TestCase):
                 path.write_bytes(serialized.replace(b"3876", b"3886"))
                 with self.assertRaisesRegex(AssertionError, "placement changed in Nudge"):
                     azhar.section_outputs()
+
+
+class IsaiahTowerTests(unittest.TestCase):
+    def test_native_package_and_unique_ambient_binding_are_current(self):
+        self.assertEqual(isaiah.stale_outputs(), [])
+        report = json.loads((ROOT / isaiah.REPORT).read_text())
+        self.assertTrue(report["native_reimport"])
+        self.assertEqual(report["materials"], 1)
+        self.assertLess(report["triangles"], 15000)
+        self.assertLess(report["vertices"], 65536)
+        for name, expected in report["files"].items():
+            raw = (ROOT / isaiah.MODEL_DIR / name).read_bytes()
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), expected)
+            if name.endswith(".dds"):
+                self.assertEqual(raw[84:88], b"DXT5")
+                self.assertEqual(struct.unpack_from("<II", raw, 12), (1024, 1024))
+                self.assertEqual(struct.unpack_from("<I", raw, 28)[0], 11)
+        for relative, declaration in (
+            ("gfx/entities/mapitems_custom.gfx", f'name = "{isaiah.NAME}_mesh"'),
+            ("gfx/entities/mapitems_custom.asset", f'name = "{isaiah.NAME}_entity"'),
+            ("map/ambient_object.txt", f'type = "{isaiah.NAME}_entity"'),
+        ):
+            raw = (ROOT / relative).read_bytes()
+            self.assertFalse(raw.startswith(b"\xef\xbb\xbf"))
+            self.assertEqual(raw.decode().count(declaration), 1)
+        actor = isaiah.ambient_block((ROOT / "map/ambient_object.txt").read_bytes())
+        self.assertIn(b"always_visible = yes", actor)
+        self.assertIn(f"rotation = {{ 0 {isaiah.YAW:.6f} 0 }}".encode(), actor)
+        self.assertEqual(report["placement"]["rotation"], [0, isaiah.YAW, 0])
+
+    def test_footprint_is_in_isaiah_with_clear_ground_and_terrain_contact(self):
+        x, elevation, z = isaiah.POSITION
+        scale = isaiah.SCALE
+        report = json.loads((ROOT / isaiah.REPORT).read_text())
+        self.assertEqual(report["placement"]["province"], 6192)
+        self.assertEqual(report["placement"]["position"], [x, elevation, z])
+        bounds = report["bounds_blender_xyz"]
+        with (Image.open(ROOT / "map/provinces.bmp") as provinces,
+              Image.open(ROOT / "map/heightmap.bmp") as heights,
+              Image.open(ROOT / "map/cities.bmp") as cities):
+            for ix in range(43):
+                for iz in range(27):
+                    lx = bounds[0][0] + ix * (bounds[0][1] - bounds[0][0]) / 42
+                    ly = bounds[1][0] + iz * (bounds[1][1] - bounds[1][0]) / 26
+                    c, s = math.cos(isaiah.YAW), math.sin(isaiah.YAW)
+                    px = x + scale * (c * lx + s * ly)
+                    pz = z + scale * (-s * lx + c * ly)
+                    point = (round(px), provinces.height - 1 - round(pz))
+                    self.assertEqual(provinces.getpixel(point), isaiah.PROVINCE_RGB)
+                    self.assertEqual(cities.getpixel(point), 1)
+                    ground = heights.getpixel(point) / 10
+                    self.assertLessEqual(elevation + scale * bounds[2][0], ground)
+                    # The buried plinth may cross terrain; the door sill must stay clear.
+                    self.assertGreaterEqual(elevation + scale * 2.25, ground)
+        for line in (ROOT / "map/buildings.txt").read_text().splitlines():
+            fields = line.split(";")
+            if len(fields) == 7 and fields[0] == "75":
+                dx, dz = (float(fields[2]) - x) / scale, (float(fields[4]) - z) / scale
+                c, s = math.cos(isaiah.YAW), math.sin(isaiah.YAW)
+                lx, ly = c * dx - s * dz, s * dx + c * dz
+                self.assertFalse(
+                    bounds[0][0] <= lx <= bounds[0][1]
+                    and bounds[1][0] <= ly <= bounds[1][1],
+                    line,
+                )
+
+    def test_registry_generation_preserves_unrelated_bytes_and_is_idempotent(self):
+        original = b'# Unrelated actor\r\ntype={\r\n\ttype="other_entity"\r\n}\r\n'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in ("gfx/entities/mapitems_custom.gfx", "gfx/entities/mapitems_custom.asset", "map/ambient_object.txt"):
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(original)
+            with patch.object(isaiah, "ROOT", root):
+                first = isaiah.section_outputs()
+                for path, data in first.items():
+                    self.assertTrue(data.startswith(original + b"\r\n"))
+                    path.write_bytes(data)
+                self.assertEqual(isaiah.section_outputs(), first)
 
 
 if __name__ == "__main__":

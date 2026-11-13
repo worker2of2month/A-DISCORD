@@ -308,13 +308,23 @@ focus_tree = {
 			add_war_support = 0.05
 			67 = {
 				if = {
-					limit = { NAM_exile_resistance_site = yes }
+					limit = {
+						custom_trigger_tooltip = {
+							tooltip = NAM_exile_resistance_site_tt
+							NAM_exile_resistance_site = yes
+						}
+					}
 					controller = { add_stability = -0.03 }
 				}
 			}
 			700 = {
 				if = {
-					limit = { NAM_exile_resistance_site = yes }
+					limit = {
+						custom_trigger_tooltip = {
+							tooltip = NAM_exile_resistance_site_tt
+							NAM_exile_resistance_site = yes
+						}
+					}
 					controller = { add_stability = -0.03 }
 				}
 			}
@@ -1000,7 +1010,10 @@ focus_tree = {
 		completion_reward = {
 			every_owned_state = {
 				limit = {
-					NAM_rw_island_state = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rw_island_state_focus_condition_tt
+						NAM_rw_island_state = yes
+					}
 					is_controlled_by = NAM
 				}
 				add_building_construction = {
@@ -1024,7 +1037,12 @@ focus_tree = {
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_military_roads }
-		bypass = { NAM_rad_mining_site_available = no }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_rad_mining_site_available_not_met_tt
+				NAM_rad_mining_site_available = no
+			}
+		}
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -2441,7 +2459,10 @@ focus_tree = {
 			NOT = {
 				any_of_scopes = {
 					array = NAM_conquered_states
-					NAM_rad_sardan_levy_district = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rad_sardan_levy_district_focus_condition_tt
+						NAM_rad_sardan_levy_district = yes
+					}
 				}
 			}
 		}
@@ -2627,7 +2648,10 @@ focus_tree = {
 		bypass = {
 			NOT = {
 				any_owned_state = {
-					NAM_rad_direct_rule = yes
+					custom_trigger_tooltip = {
+						tooltip = NAM_rad_direct_rule_focus_condition_tt
+						NAM_rad_direct_rule = yes
+					}
 					is_controlled_by = NAM
 					industrial_complex > 0
 				}
@@ -2700,7 +2724,14 @@ focus_tree = {
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_rad_kadir_tolls }
-		bypass = { 255 = { NAM_rad_held_direct_district = no } }
+		bypass = {
+			255 = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_rad_held_direct_district_focus_condition_not_met_tt
+					NAM_rad_held_direct_district = no
+				}
+			}
+		}
 		available = {
 			has_capitulated = no
 			is_subject = no

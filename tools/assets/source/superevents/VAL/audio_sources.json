@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "superevent_val_council_proclamation_sound": {
+    "music": {
+      "artist": "Les Fragments de la Nuit",
+      "title": "Entre Ciel et Fer",
+      "album": "Musique du Crépuscule",
+      "source_page": "https://lesfragmentsdelanuit.bandcamp.com/track/entre-ciel-et-fer",
+      "file": "les_fragments_de_la_nuit_entre_ciel_et_fer_excerpt.flac",
+      "excerpt_seconds": [
+        30,
+        86
+      ],
+      "sha256": "d8ed7463cc04086e480a7293574adcb0d190d071a74ed31b408445f8195a3f7d",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": {
+      "file": "council_address.flac",
+      "source_file": "ElevenLabs_2026-11-13T11_20_26_Roger - Laid-Back, Casual, Resonant_pre_s30_sim75_v4.mp3",
+      "source_sha256": "31e9070e25b9d971bf9e423954fef20b198bafd6e04d692a21b72720885e1808",
+      "sha256": "033a5a8480c1576f6c881ac6f3efbd6e52f9ced45f9e9636c9e26f03c58408c8",
+      "source_duration_seconds": 24.32,
+      "processed_duration_seconds": 24.65,
+      "start_seconds": 16.5,
+      "processing_filter": "highpass=f=260,lowpass=f=4200,acompressor=threshold=0.12:ratio=2.5:attack=8:release=100:makeup=1.5,aecho=0.8:0.9:90|170:0.18|0.10,loudnorm=I=-14:TP=-3:LRA=8,apad,atrim=duration=24.65",
+      "description": "User-provided recording, loudspeaker band-pass with short room echoes. Music remains unducked."
+    },
+    "effects": [
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 2,
+        "offset": 2,
+        "duration": 1.2,
+        "gain": 0.18,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 4,
+        "offset": 1,
+        "duration": 8,
+        "gain": 0.5,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 13,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.3,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 15,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.2,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "VAL/council_address.flac",
+        "start": 16.5,
+        "offset": 0,
+        "duration": 24.65,
+        "gain": 1.0,
+        "fade": 0.02,
+        "peak_limit": 0.75
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 42,
+        "offset": 1,
+        "duration": 10,
+        "gain": 0.75,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_val_council_proclamation_sound.wav",
+    "runtime_sha256": "6171f23d48e8443e6f0ce9caa956b871ba12cfd835d1141eea84610a971786dd"
+  }
+}

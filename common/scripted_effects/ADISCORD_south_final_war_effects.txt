@@ -185,14 +185,14 @@ ADISCORD_south_begin_hostilities = {
 			ADISCORD_south_prepare_champion = yes
 			set_variable = { var = ADISCORD_south_side value = 1 }
 			SHL_use_campaign_reserve = yes
-			# Reveals the wartime Front of the South branch.
-			mark_focus_tree_layout_dirty = yes
+			ADISCORD_south_load_war_tree = yes
 		}
 		NAM = {
 			if = {
 				limit = { has_country_flag = ADISCORD_south_north_leader }
 				ADISCORD_south_prepare_champion = yes
 				set_variable = { var = ADISCORD_south_side value = 2 }
+				ADISCORD_south_load_war_tree = yes
 			}
 		}
 		EFL = {
@@ -223,11 +223,12 @@ ADISCORD_south_begin_hostilities = {
 		ADISCORD_south_offer_side_choices = yes
 		ADISCORD_south_raise_oil_uprising = yes
 
+		set_temp_variable = { ADISCORD_superevent_request = 76 }
+		ADISCORD_superevent_enqueue = yes
+
 		SHL = {
 			ADISCORD_south_add_path_spirit = yes
-			# The deadline compares the age of the campaign flag, so a relaunch
-			# cannot be settled by the previous campaign's callback.
-			country_event = { id = ADISCORD_south.20 days = 900 }
+			# The war has no deadline: only a champion's capitulation settles it.
 			country_event = { id = ADISCORD_south.1 hours = 1 }
 			news_event = { id = ADISCORD_south.2 hours = 2 }
 		}
@@ -834,8 +835,10 @@ ADISCORD_south_final_resolve_without_hegemon = {
 	ADISCORD_south_clear_participants = yes
 }
 
-# GLOBAL. Only captured enemy key states count at the deadline. Neutral ground
-# and late side choices cannot manufacture an advance; equal gains mean peace.
+# GLOBAL. Fallback for a campaign war ended by another script before either
+# champion capitulated; the war itself has no deadline. Only captured enemy key
+# states count. Neutral ground and late side choices cannot manufacture an
+# advance; equal gains mean peace.
 ADISCORD_south_final_resolve_by_control = {
 	if = {
 		limit = {
@@ -1070,7 +1073,124 @@ ADISCORD_south_close_member_state = {
 	if = {
 		limit = { exists = yes }
 		ADISCORD_south_remove_path_spirit = yes
+		ADISCORD_south_restore_prior_tree = yes
 	}
+}
+
+# COUNTRY SHL or the NAM champion. Records the tree held at the war start in
+# ADISCORD_south_prior_tree and opens the war tree. Every tree is assembled from
+# shared focuses, so both swaps keep all completed focuses. A tree outside the
+# list keeps the country in it for the whole war.
+ADISCORD_south_load_war_tree = {
+	clear_variable = ADISCORD_south_prior_tree
+	if = {
+		limit = {
+			original_tag = SHL
+			has_focus_tree = SHL_focus
+		}
+		set_variable = { var = ADISCORD_south_prior_tree value = 1 }
+		load_focus_tree = {
+			tree = SHL_south_war_focus
+			keep_completed = yes
+		}
+	}
+	else_if = {
+		limit = { original_tag = NAM }
+		if = {
+			limit = { has_focus_tree = NAM_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 1 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_postwar_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 2 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_defeated_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 3 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_exile_humanist_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 4 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_exile_radical_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 5 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_exile_corporate_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 6 }
+		}
+		if = {
+			limit = { has_variable = ADISCORD_south_prior_tree }
+			load_focus_tree = {
+				tree = NAM_south_war_focus
+				keep_completed = yes
+			}
+		}
+	}
+}
+
+# COUNTRY champion. Returns the tree recorded by ADISCORD_south_load_war_tree;
+# a tree loaded by another system during the war is left in place.
+ADISCORD_south_restore_prior_tree = {
+	if = {
+		limit = {
+			has_variable = ADISCORD_south_prior_tree
+			has_focus_tree = SHL_south_war_focus
+		}
+		load_focus_tree = {
+			tree = SHL_focus
+			keep_completed = yes
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = ADISCORD_south_prior_tree
+			has_focus_tree = NAM_south_war_focus
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 1 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_focus
+				keep_completed = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 2 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_postwar_focus
+				keep_completed = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 3 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_defeated_focus
+				keep_completed = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 4 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_exile_humanist_focus
+				keep_completed = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 5 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_exile_radical_focus
+				keep_completed = yes
+			}
+		}
+		else = {
+			load_focus_tree = {
+				tree = NAM_exile_corporate_focus
+				keep_completed = yes
+			}
+		}
+	}
+	clear_variable = ADISCORD_south_prior_tree
 }
 
 # GLOBAL.

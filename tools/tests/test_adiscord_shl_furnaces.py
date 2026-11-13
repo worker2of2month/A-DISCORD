@@ -48,6 +48,7 @@ FOCUS_TREE_SOURCES = {
     for name in ("main", "houses", "cities", "directorate", "regency", "commune")
 }
 SHARED_FOCUS_SOURCE = ROOT / "focus_trees/SHL/shared/focuses.txt"
+WAR_TREE_SOURCE = ROOT / "focus_trees/SHL/south_war/focuses.txt"
 FOCUS_OUTPUTS = {
     "main": "ADISCORD_SHL_focus.txt",
     "shared": "ADISCORD_SHL_shared.txt",
@@ -61,8 +62,10 @@ COURSE_COMMIT_FOCUSES = {
     "regency": "SHL_regency_of_crests",
     "commune": "SHL_commune_of_shift_councils",
 }
-SOUTHERN_SHARED = (
-    "SHL_south_crown_of_the_south", "SHL_south_desert_convoys", "SHL_south_furnaces_to_front",
+SOUTHERN_SHARED = ("SHL_south_crown_of_the_south",)
+# The common front of the separate war-for-the-South tree; course plans queue it whole.
+SOUTHERN_WAR_FRONT = (
+    "SHL_south_desert_convoys", "SHL_south_furnaces_to_front",
     "SHL_south_raid_oil_fields", "SHL_south_storm_oil_belt",
 )
 # commit effect suffix -> (course tree, cosmetic tag)
@@ -111,16 +114,24 @@ def shared_focuses():
 
 
 @lru_cache(maxsize=None)
+def war_tree_focuses():
+    """id -> body of the focuses of the separate war-for-the-South tree."""
+    tree = block(parse_clausewitz(WAR_TREE_SOURCE.read_text(encoding="utf-8")), "focus_tree")
+    return {scalar(entry.value, "id"): entry.value for entry in tree if entry.key == "focus"}
+
+
+@lru_cache(maxsize=None)
 def all_focus_definitions():
     definitions = {}
     for name in FOCUS_TREE_SOURCES:
         definitions.update(tree_focuses(name))
     definitions.update(shared_focuses())
+    definitions.update(war_tree_focuses())
     return definitions
 
 
 def shl_focus_text():
-    paths = (*FOCUS_TREE_SOURCES.values(), SHARED_FOCUS_SOURCE)
+    paths = (*FOCUS_TREE_SOURCES.values(), SHARED_FOCUS_SOURCE, WAR_TREE_SOURCE)
     return "\n".join(path.read_text(encoding="utf-8") for path in paths)
 
 
@@ -900,8 +911,9 @@ class FurnaceAccountingTests(unittest.TestCase):
         for name in FOCUS_TREE_SOURCES:
             ids.extend(tree_focuses(name))
         ids.extend(shared)
-        # Preparation, five course sections and the shared layer form one native tree.
-        self.assertGreaterEqual(len(ids), 280)
+        # Preparation, five course sections and the shared layer form one native
+        # tree; the war-for-the-South tree is separate.
+        self.assertGreaterEqual(len(ids), 270)
         self.assertEqual(len(set(ids)), len(ids))
         focuses = whole_tree_focuses()
         roots = sorted(identifier for identifier, focus in shared.items() if not block(focus, "prerequisite"))
@@ -923,6 +935,25 @@ class FurnaceAccountingTests(unittest.TestCase):
             self.assertTrue((ROOT / "common/national_focus" / output).is_file(), name)
         for name in COURSE_TREES:
             self.assertFalse((ROOT / f"common/national_focus/ADISCORD_SHL_{name}.txt").exists(), name)
+
+    def test_war_tree_is_separate_and_shows_only_the_current_course(self):
+        war = war_tree_focuses()
+        self.assertFalse(set(war) & set(whole_tree_focuses()))
+        cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in war.values()]
+        self.assertEqual(len(cells), len(set(cells)))
+        prefixes = {"SHL_h_": 1, "SHL_c_": 2, "SHL_d_": 3, "SHL_r_": 4, "SHL_k_": 5}
+        for identifier, focus in war.items():
+            for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
+                for item in prerequisite:
+                    self.assertIn(item.value, war, identifier)
+            course = next((value for prefix, value in prefixes.items() if identifier.startswith(prefix)), None)
+            allow = block(focus, "allow_branch")
+            if course is None:
+                self.assertFalse(allow, identifier)
+                continue
+            check = block(allow, "check_variable")
+            self.assertEqual((scalar(check, "var"), scalar(check, "value")), ("SHL_political_course", str(course)), identifier)
+        self.assertEqual(sum(1 for name in war if any(name.startswith(prefix) for prefix in prefixes)), 10)
 
     def test_hidden_courses_are_gated_by_their_crisis_flags(self):
         # The regency and commune sections hang from entry focuses that only the
@@ -1051,6 +1082,36 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.variables["SHL"]["SHL_political_course"] = 3
         m.run("SHL_update_tensions")
         self.assertAlmostEqual(m.power_balance[BALANCE], -0.18)
+
+    def test_ai_preliminary_course_reaches_its_ratification_range(self):
+        m = self.machine
+        m.run("SHL_refresh_furnaces")
+        for site in ("287", "288", "289"):
+            m.run("SHL_extinguish_site", scope=site)
+        m.run("SHL_refresh_furnaces")
+        m.focuses.update({"SHL_workers_charter", "SHL_nur_directorate", "SHL_common_dispatch"})
+        m.power_balance[BALANCE] = 0.45
+        # A player keeps the drift and must use the Conclave levers.
+        m.run("SHL_update_tensions")
+        self.assertAlmostEqual(m.power_balance[BALANCE], 0.47)
+        m.ai = True
+        for _ in range(12):
+            m.run("SHL_update_tensions")
+        low, high = balance_ranges(BALANCE)["SHL_balance_equilibrium"]
+        self.assertTrue(low <= m.power_balance[BALANCE] <= high)
+        # The next cycle's drift must not cancel the four-week ratification focus.
+        m.run("SHL_update_tensions")
+        self.assertTrue(low <= m.power_balance[BALANCE] <= high)
+
+        m.focuses.difference_update({"SHL_nur_directorate", "SHL_common_dispatch"})
+        m.focuses.update({"SHL_open_conclave", "SHL_city_charters"})
+        m.power_balance[BALANCE] = -0.30
+        m.variables["SHL"]["SHL_city_support"] = 10
+        for _ in range(8):
+            m.run("SHL_update_tensions")
+        low, high = balance_ranges(BALANCE)["SHL_balance_quarters_influence"]
+        self.assertTrue(low <= m.power_balance[BALANCE] <= high)
+        self.assertGreaterEqual(m.variables["SHL"]["SHL_city_support"], 30)
 
     def test_supplier_pressure_applies_one_reserve_surcharge(self):
         m = self.machine
@@ -3551,7 +3612,7 @@ class CourseTreeStructureTests(unittest.TestCase):
             self.assertEqual(sum(identifier in focuses for focuses in map(tree_focuses, FOCUS_TREE_SOURCES)), 0, identifier)
         roots = {identifier for identifier, focus in shared.items() if not block(focus, "prerequisite")}
         self.assertEqual(roots, {
-            "SHL_south_furnaces_to_front", "SHL_south_crown_of_the_south",
+            "SHL_south_crown_of_the_south",
             "SHL_four_districts", "SHL_chancery_of_the_gate", "SHL_written_fire",
         })
         references = [e.value for e in focus_tree("main") if e.key == "shared_focus"]
@@ -3559,10 +3620,10 @@ class CourseTreeStructureTests(unittest.TestCase):
         self.assertEqual(len(references), len(roots))
         allow = block(shared["SHL_south_crown_of_the_south"], "allow_branch")
         self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_hegemon_SHL")])
-        allow = block(shared["SHL_south_furnaces_to_front"], "allow_branch")
-        self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_final_started")])
+        self.assertTrue(set(SOUTHERN_WAR_FRONT) <= set(war_tree_focuses()))
+        self.assertFalse(set(war_tree_focuses()) & set(shared))
         # The second-row branches are open all campaign: no allow_branch, every root at row 0.
-        for identifier in roots - {"SHL_south_furnaces_to_front", "SHL_south_crown_of_the_south"}:
+        for identifier in roots - {"SHL_south_crown_of_the_south"}:
             self.assertFalse(block(shared[identifier], "allow_branch"), identifier)
             self.assertEqual(scalar(shared[identifier], "y"), "0", identifier)
             self.assertGreaterEqual(int(scalar(shared[identifier], "x")), 33, identifier)
@@ -3595,7 +3656,9 @@ class CourseTreeStructureTests(unittest.TestCase):
                         self.assertNotIn(COURSE_COMMIT_FOCUSES[name], set().union(*parents), identifier)
                 self.assertEqual(len(roots), 1, roots)
         native = (ROOT / "common/national_focus/ADISCORD_SHL_focus.txt").read_text(encoding="utf-8")
-        self.assertNotIn("shared focus history", native)
+        # The war for the South swaps the tree, so the course tree keeps its
+        # completions as shared focus history.
+        self.assertIn("shared focus history", native)
         self.assertNotIn("load_focus_tree", EFFECT_PATH.read_text(encoding="utf-8"))
         for identifier in COURSE_COMMIT_FOCUSES.values():
             self.assertIn(identifier, main)
@@ -3656,6 +3719,7 @@ class CourseTreeStructureTests(unittest.TestCase):
                         changed = True
             self.assertEqual(set(focuses) - queue - omitted, set(), tree)
             self.assertTrue(set(SOUTHERN_SHARED) <= queue, tree)
+            self.assertTrue(set(SOUTHERN_WAR_FRONT) <= queue, tree)
         for tree, ranges in (
             ("houses", {"SHL_balance_crests_influence", "SHL_balance_crests_dominance"}),
             ("cities", {"SHL_balance_quarters_influence", "SHL_balance_quarters_dominance"}),

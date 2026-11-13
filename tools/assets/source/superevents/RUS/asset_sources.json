@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "artwork": {
+    "superevent_rus_restoration": {
+      "source_url": "https://images.nasa.gov/details/GRC-1961-C-55813",
+      "source_title": "Plum Brook Reactor Facility Control Room during Facility Startup",
+      "source_credit": "NASA Glenn Research Center, 1961",
+      "source_type": "Real colour archival photograph; edited and widened using built-in image generation.",
+      "runtime_file": "gfx/interface/superevents/RUS/superevent_rus_restoration.png",
+      "prompt": "Preserve the real Plum Brook reactor control room and distinct people from the archival photograph. Widen to 16:9, retain analog instruments and industrial architecture. Muted grey-green control panels, white lab coats, restrained amber indicators. Photographic archival colour, no invented futuristic technology, captions or frame.",
+      "runtime_sha256": "f99eb9466a74e4f02e35843da1ddc4412639f3c4d52f82fd2c94fe897ffe39ed"
+    },
+    "superevent_rus_black_banner": {
+      "source_url": "https://www.reddit.com/r/HistoryPorn/comments/1j4m2kh/soviet_sailors_raise_the_red_fleet_flag_over_port/",
+      "source_title": "Archival photograph of Soviet sailors overlooking Port Arthur",
+      "source_type": "Real photograph used for faces and poses. Uniforms, flag and ruined-city background are edited fiction, not an unaltered historical photograph.",
+      "uniform_reference": "tools/assets/reference/focus_icons/RUS/khan_infantry_uniform_reference.png",
+      "flag_reference": "tools/assets/source/vorkerland_flags/RUS_black_banner_empire.png",
+      "runtime_file": "gfx/interface/superevents/RUS/superevent_rus_black_banner.png",
+      "uniform_reference_sha256": "33f215e90f1c055714e0904f722e98f27bdc2fda5d2fa8fc10e41ca8b05413e5",
+      "flag_reference_sha256": "85658a3726fb148c35daa2a191e5cd26e247b06cdf8ca0131e966e460c28f1f2",
+      "runtime_sha256": "b10d2f9b3cc336207beeb1116568299ea8f843306dff116da3c4f8dd918e9ee1"
+    }
+  },
+  "filter": {
+    "template": "tools/assets/source/Super_event_bg.psd",
+    "canvas": [
+      1001,
+      639
+    ],
+    "artwork_bbox": [
+      48,
+      82,
+      956,
+      592
+    ],
+    "layers": [
+      "Layer 3 (Exclusion)",
+      "CRTEffectUseGlow (Linear Light)",
+      "Hue/Saturation 1",
+      "Levels 1",
+      "Color Lookup 1 (Saturation)",
+      "Brightness/Contrast 1"
+    ],
+    "compositing": "psd-tools with the embedded Soft_Warming.look RGB 8x8x8 LUT decoded as little-endian float32, red-fastest coordinates, trilinear interpolation; original adjustment values and blend modes. Placeholder image layers hidden. Transparent canvas outside artwork_bbox.",
+    "hue_saturation_master": [
+      0,
+      -5,
+      0
+    ],
+    "levels_master": {
+      "input": [
+        0,
+        245
+      ],
+      "output": [
+        0,
+        255
+      ],
+      "gamma": 0.9
+    },
+    "brightness": 0,
+    "contrast": 20,
+    "template_sha256": "37547716112d15e1e3ac3ce7a5774736e475bfe4fc56afb693fbcf1f2c7d81e2"
+  },
+  "audio": {
+    "superevent_rus_restoration_sound": {
+      "artist": "Kloob",
+      "title": "Deep Introspection",
+      "album": "Unpredictable Signs",
+      "source_url": "https://winter-light.bandcamp.com/track/deep-introspection",
+      "source_excerpt": "kloob_deep_introspection_excerpt.flac",
+      "source_start_seconds": 150,
+      "duration_seconds": 56,
+      "gain": 0.85,
+      "runtime_file": "sound/superevents/superevent_rus_restoration_sound.wav",
+      "rights": "Commercial copyrighted recording; public Bandcamp preview source.",
+      "source_excerpt_sha256": "f46ce882b30e8ba5934eae075370cb154ce1a117953f074c7f357385d71f6afb",
+      "runtime_sha256": "aab6e07b7c0b0b379d9432567776197ad75c08e6b7ec730fd582629bb1ae78bf"
+    },
+    "superevent_rus_black_banner_sound": {
+      "artist": "In Slaughter Natives",
+      "title": "Sacred Worms",
+      "album": "Enter Now The World",
+      "source_url": "https://inslaughternatives.bandcamp.com/track/sacred-worms-3",
+      "source_excerpt": "in_slaughter_natives_sacred_worms_excerpt.flac",
+      "source_start_seconds": 30,
+      "duration_seconds": 56,
+      "gain": 0.55,
+      "runtime_file": "sound/superevents/superevent_rus_black_banner_sound.wav",
+      "rights": "Commercial copyrighted recording; public Bandcamp preview source.",
+      "source_excerpt_sha256": "332be0371d5333a0589c40854a48d2febbea896db30729c148ee23b4c87f32a4",
+      "runtime_sha256": "9e7cc43ed5e16462d51b661349157cd691b31c7f9c0bbaaeff4aaf8682d6e723"
+    }
+  },
+  "audio_processing": {
+    "builder": "tools/builders/build_adiscord_superevent_music.py",
+    "fade_in_seconds": 2,
+    "fade_out_start_seconds": 50,
+    "fade_out_seconds": 6,
+    "format": "PCM s16le, stereo, 44100 Hz"
+  }
+}

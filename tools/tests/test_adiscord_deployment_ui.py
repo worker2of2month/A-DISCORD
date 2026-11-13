@@ -5,6 +5,7 @@ import unittest
 
 from PIL import Image, ImageChops
 
+from tools.lib.adiscord_ui_surfaces import _with_existing_newlines
 from tools.builders.build_adiscord_deployment_ui_assets import (
     DEPLOYMENT_CONTRACTS,
     VANILLA_GUI,
@@ -259,7 +260,7 @@ class DeploymentUiContractTests(unittest.TestCase):
         outputs = expected_outputs()
         for path, data in outputs.items():
             self.assertTrue(path.is_file(), path)
-            self.assertEqual(path.read_bytes(), data, path)
+            self.assertEqual(path.read_bytes(), _with_existing_newlines(path, data), path)
             if path.suffix == ".dds":
                 with Image.open(path) as image:
                     self.assertEqual(image.mode, "RGBA", path.name)

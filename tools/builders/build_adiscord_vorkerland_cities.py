@@ -22,6 +22,9 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 
 CITY_PALETTE_INDEX = 15
+EMPTY_CITY_PALETTE_INDEX = 1
+# Province and inclusive map X/Z bounds of permanent landmark plazas.
+LANDMARK_CLEARANCES = ((6192, 2898, 2905, 616, 621),)
 TARGET_PROVINCES = frozenset(
     {
         4443,  # Remmel
@@ -169,7 +172,10 @@ def render_bytes(
         x = index % layout.width
         y = index // layout.width
         position = layout.pixel_position(x, y)
-        output[position] = CITY_PALETTE_INDEX
+        z = layout.height - 1 - y
+        clear = any(province == target and xmin <= x <= xmax and zmin <= z <= zmax
+                    for target, xmin, xmax, zmin, zmax in LANDMARK_CLEARANCES)
+        output[position] = EMPTY_CITY_PALETTE_INDEX if clear else CITY_PALETTE_INDEX
         counts[province] += 1
         target_positions.add(position)
     return bytes(output), counts, frozenset(target_positions)
@@ -204,12 +210,11 @@ def generated_issues(
             f"map/cities.bmp: generation would alter {outside} unmanaged bytes"
         )
     missing_city_pixels = sum(
-        source[position] != CITY_PALETTE_INDEX for position in target_positions
+        source[position] != generated[position] for position in target_positions
     )
     if missing_city_pixels:
         issues.append(
-            f"map/cities.bmp: {missing_city_pixels} target pixels are not palette index "
-            f"{CITY_PALETTE_INDEX}"
+            f"map/cities.bmp: {missing_city_pixels} target pixels differ from city/plaza masks"
         )
     return issues
 

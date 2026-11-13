@@ -1121,3 +1121,870 @@ ADISCORD_difficulty_rus_coalition_logistics = {
 		value = 10
 	}
 }
+
+# --- rus_coup_wars ---
+# The coup governments' wars. Each side fights the scripted war it is in; the
+# war variables on RUS identify the campaign, so the crisis strategies stay idle.
+
+RUS_sci_prepare_reactor_war = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_scientists_regime = yes
+		has_completed_focus = RUS_sci_montera_claim
+		NOT = { has_variable = RUS_sci_reactor_war }
+		country_exists = MON
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = MON value = 200 }
+}
+
+RUS_sci_reactor_war_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		RUS_scientists_regime = yes
+		RUS_sci_reactor_war_active = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = MON
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MON
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = MON
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = MON value = 200 }
+}
+
+MON_reactor_war_offensive_RUS = {
+	allowed = { tag = MON }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = RUS
+		RUS = { RUS_sci_reactor_war_active = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+RUS_sci_cordon_war_offensive = {
+	allowed = { tag = RUS }
+	enable = {
+		RUS_scientists_regime = yes
+		country_exists = WCG
+		has_war_with = WCG
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = WCG
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WCG
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WCG
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = WCG value = 200 }
+}
+
+RUS_ba_breach_offensive_WCG = {
+	allowed = { tag = RUS }
+	enable = {
+		RUS_black_army_regime = yes
+		country_exists = WCG
+		has_war_with = WCG
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = WCG
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WCG
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WCG
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = WCG value = 200 }
+}
+
+RUS_ba_breach_offensive_TRU = {
+	allowed = { tag = RUS }
+	enable = {
+		RUS_black_army_regime = yes
+		country_exists = TRU
+		has_war_with = TRU
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = TRU
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TRU
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TRU
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = TRU value = 200 }
+}
+
+RUS_ba_prepare_revenge_WKR = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_black_army_regime = yes
+		has_completed_focus = RUS_ba_revenge_oath
+		NOT = { has_variable = RUS_ba_vorkerland_war }
+		event_target:ADISCORD_vorkerland_nation = { tag = WKR }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 200 }
+}
+
+RUS_ba_revenge_offensive_WKR = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = equals }
+		country_exists = WKR
+		has_war_with = WKR
+		event_target:ADISCORD_vorkerland_nation = { tag = WKR }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = WKR
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = WKR
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = WKR value = 200 }
+}
+
+RUS_ba_prepare_revenge_VAD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_black_army_regime = yes
+		has_completed_focus = RUS_ba_revenge_oath
+		NOT = { has_variable = RUS_ba_vorkerland_war }
+		event_target:ADISCORD_vorkerland_nation = { tag = VAD }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 200 }
+}
+
+RUS_ba_revenge_offensive_VAD = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = equals }
+		country_exists = VAD
+		has_war_with = VAD
+		event_target:ADISCORD_vorkerland_nation = { tag = VAD }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = VAD
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = VAD value = 200 }
+}
+
+RUS_ba_prepare_revenge_TVA = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_black_army_regime = yes
+		has_completed_focus = RUS_ba_revenge_oath
+		NOT = { has_variable = RUS_ba_vorkerland_war }
+		event_target:ADISCORD_vorkerland_nation = { tag = TVA }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TVA value = 200 }
+}
+
+RUS_ba_revenge_offensive_TVA = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = equals }
+		country_exists = TVA
+		has_war_with = TVA
+		event_target:ADISCORD_vorkerland_nation = { tag = TVA }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = TVA
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = TVA
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = TVA value = 200 }
+}
+
+WRK_revenge_defence_RUS = {
+	allowed = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		ADISCORD_vorkerland_is_not_wartime_claimant = yes
+		is_ai = yes
+		has_capitulated = no
+		tag = event_target:ADISCORD_vorkerland_nation
+		has_war_with = RUS
+		RUS = { check_variable = { var = RUS_ba_vorkerland_war value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+RUS_ba_east_offensive_VAL = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_east_war value = 1 compare = equals }
+		country_exists = VAL
+		has_war_with = VAL
+		event_target:RUS_ba_east_target = { tag = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = VAL
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = VAL
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = VAL value = 200 }
+}
+
+VAL_ba_east_defence_RUS = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = RUS
+		tag = event_target:RUS_ba_east_target
+		RUS = { check_variable = { var = RUS_ba_east_war value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+RUS_ba_east_offensive_STS = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_east_war value = 1 compare = equals }
+		country_exists = STS
+		has_war_with = STS
+		event_target:RUS_ba_east_target = { tag = STS }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = STS
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = STS value = 200 }
+}
+
+STS_ba_east_defence_RUS = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = RUS
+		tag = event_target:RUS_ba_east_target
+		RUS = { check_variable = { var = RUS_ba_east_war value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+RUS_ba_east_offensive_STP = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_east_war value = 1 compare = equals }
+		country_exists = STP
+		has_war_with = STP
+		event_target:RUS_ba_east_target = { tag = STP }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = STP
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = STP value = 200 }
+}
+
+STP_ba_east_defence_RUS = {
+	allowed = { tag = STP }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = RUS
+		tag = event_target:RUS_ba_east_target
+		RUS = { check_variable = { var = RUS_ba_east_war value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+RUS_ba_east_offensive_NOD = {
+	allowed = { tag = RUS }
+	enable = {
+		check_variable = { var = RUS_ba_east_war value = 1 compare = equals }
+		country_exists = NOD
+		has_war_with = NOD
+		event_target:RUS_ba_east_target = { tag = NOD }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = NOD
+		ratio = 0.01
+		priority = 1600
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NOD
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1601
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = { type = conquer id = NOD value = 200 }
+}
+
+NOD_ba_east_defence_RUS = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = RUS
+		tag = event_target:RUS_ba_east_target
+		RUS = { check_variable = { var = RUS_ba_east_war value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = RUS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = RUS
+			ADISCORD_difficulty_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}

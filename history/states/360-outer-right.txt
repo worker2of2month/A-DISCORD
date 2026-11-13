@@ -14,6 +14,20 @@ state = {
 			infrastructure = 4
 			industrial_complex = 1
 			arms_factory = 1
+			639 = { naval_base = 1 }
+			673 = { naval_base = 1 }
+			2401 = { naval_base = 1 }
+			3366 = { naval_base = 1 }
+			4157 = { naval_base = 1 }
+			5485 = { naval_base = 1 }
+			5584 = { naval_base = 1 }
+			7651 = { naval_base = 1 }
+			8554 = { naval_base = 1 }
+			9487 = { naval_base = 1 }
+			10062 = { naval_base = 1 }
+			10440 = { naval_base = 1 }
+			11153 = { naval_base = 1 }
+			11442 = { naval_base = 1 }
 		}
 	}
 	provinces = {
