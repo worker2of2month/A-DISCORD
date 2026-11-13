@@ -144,6 +144,57 @@ def reachable(focuses, blocked):
 
 
 class NamCampaignTests(unittest.TestCase):
+    def test_incident_timeout_text_selects_the_actual_settlement_branch(self):
+        definitions = parsed(f"common/scripted_localisation/{BASE}_scripted_loc.txt")
+        definition = next(e.value for e in definitions
+                          if scalar(e.value, "name") == "NAMIncidentTimeoutOutcome")
+        texts = [e.value for e in definition if e.key == "text"]
+        branches = [e.value for e in self.effects["NAM_crisis_response_timeout"]
+                    if e.key in ("if", "else_if", "else")]
+        self.assertEqual(len(texts), len(branches))
+        for number in range(1, 6):
+            for fire, insurance, pension, fund, paid in product((False, True), repeat=5):
+                facts = self.crisis_facts(number)
+                facts.update({
+                    ("NAM", "has_global_flag", BASE + "_nam_victory"): True,
+                    ("NAM", "has_completed_focus", "NAM_field_firefighters"): fire,
+                    ("NAM", "has_completed_focus", "NAM_pw_insurance_fund"): insurance,
+                    ("NAM", "has_completed_focus", "NAM_pw_family_pensions"): pension,
+                    ("NAM", "has_country_flag", "NAM_crisis_fund"): fund,
+                    ("NAM", "has_country_flag", "NAM_industrial_claim_paid"): paid,
+                })
+                shown = next(i for i, text in enumerate(texts)
+                             if self.matches(block(text, "trigger"), facts))
+                settled = next(i for i, branch in enumerate(branches)
+                               if self.matches(block(branch, "limit"), facts))
+                self.assertEqual(shown, settled, (number, fire, insurance, pension, fund, paid))
+        for language in ("russian", "english"):
+            values = {m.group(1): m.group(2) for line in read(
+                f"localisation/{language}/{BASE}_l_{language}.yml").splitlines()
+                if (m := ENTRY.fullmatch(line))}
+            self.assertIn("[NAMIncidentTimeoutOutcome]", values["NAM_incident_response_timeout_tt"])
+            for text in texts:
+                self.assertTrue(values[scalar(text, "localization_key")])
+            for suffix, numbers in {
+                "fire": ("-8000",), "strike": ("-3%",), "scandal": ("-2%",),
+                "customs": ("-2%", "+5", "+100", "+250"),
+                "garrison": ("-2%", "-2000"),
+            }.items():
+                for number in numbers:
+                    self.assertIn(number, values[f"NAM_incident_timeout_{suffix}"])
+
+    def test_delayed_returns_and_southern_deadline_have_phase_tooltips(self):
+        decisions = {d.key: d.value for category in parsed(f"common/decisions/{BASE}_decisions.txt")
+                     for d in category.value if isinstance(d.value, list)}
+        for decision, phase, tooltip in (
+            ("NAM_program_air_supply", "remove_effect", "NAM_air_bridge_end_tt"),
+            ("NAM_hire_relief_shift", "remove_effect", "NAM_labour_shift_ends_tt"),
+            ("NAM_hire_relief_shift", "cancel_effect", "NAM_labour_shift_ends_tt"),
+            ("NAM_hum_refit_landing_transports", "cancel_effect", "NAM_hum_refit_aborted_tt"),
+            ("ADISCORD_south_preparation", "timeout_effect", "ADISCORD_south_preparation_timeout_tt"),
+        ):
+            self.assertEqual(scalar(block(decisions[decision], phase), "custom_effect_tooltip"), tooltip)
+
     def test_metropolitan_rule_tooltip_preserves_programme_lifecycle(self):
         tooltip = block(self.triggers["NAM_independent_programmes_operable"], "custom_trigger_tooltip")
         self.assertEqual(scalar(tooltip, "tooltip"), "NAM_metropolitan_rule_ended_tt")
@@ -11668,7 +11719,11 @@ class NamCampaignTests(unittest.TestCase):
                     if amount:
                         for suffix in ("_cost", "_cost_blocked", "_cost_tooltip"):
                             self.assertRegex(values[name + suffix], rf"{amount}§! £{icon}")
-                self.assertIn(str(days), values[name + "_result_tt"])
+                self.assertEqual(scalar(self.decisions[name], "days_remove"), str(days))
+                self.assertIn(name + "_result_tt", [
+                    e.value for e in walk(block(self.decisions[name], "remove_effect"))
+                    if e.key == "custom_effect_tooltip"
+                ])
             self.assertIn("$STATE_700$", values["NAM_veteran_housing_result_tt"])
             self.assertIn("$STATE_688$", values["NAM_pw_district_cooperative_result_tt"])
         for kind in ("decisions", "scripted_effects", "scripted_triggers"):
