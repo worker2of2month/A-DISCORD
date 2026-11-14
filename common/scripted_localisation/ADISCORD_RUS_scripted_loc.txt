@@ -856,7 +856,7 @@ defined_text = {
 defined_text = {
 	name = GetRUSOrderrifle_ordercash
 	text = {
-		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
 		localization_key = RUS_rifle_order_cost_cash_ok
 	}
 	text = { localization_key = RUS_rifle_order_cost_cash_low }

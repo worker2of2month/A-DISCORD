@@ -24,4 +24,62 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "EVR - Прибрежный флот"
+		naval_base = 6545
+		task_force = {
+			name = "EVR - Первая эскадра"
+			location = 6545
+			ship = {
+				name = "EVR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EVR
+					}
+				}
+			}
+			ship = {
+				name = "EVR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EVR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "EVR - Вторая эскадра"
+			location = 6545
+			ship = {
+				name = "EVR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EVR
+					}
+				}
+			}
+			ship = {
+				name = "EVR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = EVR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

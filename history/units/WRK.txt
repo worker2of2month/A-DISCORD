@@ -143,6 +143,156 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 6713 division_template = "Workerland Militia" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "WRK - Прибрежный флот"
+		naval_base = 4443
+		task_force = {
+			name = "WRK - Первая эскадра"
+			location = 4443
+			ship = {
+				name = "WRK-CA-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "WRK - Вторая эскадра"
+			location = 4443
+			ship = {
+				name = "WRK-CL-02"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "WRK - Подводная группа"
+			location = 4443
+			ship = {
+				name = "WRK-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-SS-02"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+			ship = {
+				name = "WRK-SS-03"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = WRK
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 instant_effect = {

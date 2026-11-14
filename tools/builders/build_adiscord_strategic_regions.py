@@ -47,43 +47,73 @@ class SeaRegion:
     climate: str
     latitude_band: int
     longitude_band: int
-    naval_terrain: str = "water_deep_ocean"
+    naval_terrain: str
 
 
+# Assign terrain explicitly at theatre scale: open basins retain deep ocean,
+# mixed offshore waters use ocean, enclosed shelves use shallow sea, and
+# island channels use fjords/archipelagos. Climate does not determine depth.
 SEA_REGIONS = (
     SeaRegion(
-        1,
-        "northwestern-polar-ocean",
-        "Северо-западный полярный океан",
-        "polar_ocean",
-        0,
-        0,
+        1, "northwestern-polar-ocean", "Северо-западный полярный океан",
+        "polar_ocean", 0, 0, "water_deep_ocean",
     ),
     SeaRegion(
-        26, "northern-polar-ocean", "Северный полярный океан", "polar_ocean", 0, 1
+        26, "northern-polar-ocean", "Северный полярный океан",
+        "polar_ocean", 0, 1, "water_deep_ocean",
     ),
     SeaRegion(
-        27,
-        "northeastern-polar-ocean",
-        "Северо-восточный полярный океан",
-        "polar_ocean",
-        0,
-        2,
+        27, "northeastern-polar-ocean", "Северо-восточный полярный океан",
+        "polar_ocean", 0, 2, "water_deep_ocean",
     ),
-    SeaRegion(28, "northwestern-sea", "Северо-западное море", "subpolar_ocean", 1, 0),
     SeaRegion(
-        29, "northern-inner-sea", "Северное внутреннее море", "subpolar_ocean", 1, 1
+        28, "northwestern-sea", "Северо-западное море",
+        "subpolar_ocean", 1, 0, "ocean",
     ),
-    SeaRegion(30, "northeastern-sea", "Северо-восточное море", "subpolar_ocean", 1, 2),
-    SeaRegion(31, "western-ocean", "Западный океан", "temperate_ocean", 2, 0),
-    SeaRegion(32, "central-seas", "Центральные моря", "temperate_ocean", 2, 1),
-    SeaRegion(33, "eastern-ocean", "Восточный океан", "temperate_ocean", 2, 2),
-    SeaRegion(34, "southwestern-seas", "Юго-западные моря", "warm_ocean", 3, 0),
-    SeaRegion(35, "southern-inner-sea", "Южное внутреннее море", "warm_ocean", 3, 1),
-    SeaRegion(36, "southeastern-seas", "Юго-восточные моря", "warm_ocean", 3, 2),
-    SeaRegion(37, "southwestern-ocean", "Юго-западный океан", "tropical_ocean", 4, 0),
-    SeaRegion(38, "southern-ocean", "Южный океан", "tropical_ocean", 4, 1),
-    SeaRegion(39, "southeastern-ocean", "Юго-восточный океан", "tropical_ocean", 4, 2),
+    SeaRegion(
+        29, "northern-inner-sea", "Северное внутреннее море",
+        "subpolar_ocean", 1, 1, "water_fjords",
+    ),
+    SeaRegion(
+        30, "northeastern-sea", "Северо-восточное море",
+        "subpolar_ocean", 1, 2, "ocean",
+    ),
+    SeaRegion(
+        31, "western-ocean", "Западный океан",
+        "temperate_ocean", 2, 0, "water_deep_ocean",
+    ),
+    SeaRegion(
+        32, "central-seas", "Центральные моря",
+        "temperate_ocean", 2, 1, "water_fjords",
+    ),
+    SeaRegion(
+        33, "eastern-ocean", "Восточный океан",
+        "temperate_ocean", 2, 2, "ocean",
+    ),
+    SeaRegion(
+        34, "southwestern-seas", "Юго-западные моря",
+        "warm_ocean", 3, 0, "ocean",
+    ),
+    SeaRegion(
+        35, "southern-inner-sea", "Южное внутреннее море",
+        "warm_ocean", 3, 1, "water_shallow_sea",
+    ),
+    SeaRegion(
+        36, "southeastern-seas", "Юго-восточные моря",
+        "warm_ocean", 3, 2, "water_shallow_sea",
+    ),
+    SeaRegion(
+        37, "southwestern-ocean", "Юго-западный океан",
+        "tropical_ocean", 4, 0, "water_deep_ocean",
+    ),
+    SeaRegion(
+        38, "southern-ocean", "Южный океан",
+        "tropical_ocean", 4, 1, "ocean",
+    ),
+    SeaRegion(
+        39, "southeastern-ocean", "Юго-восточный океан",
+        "tropical_ocean", 4, 2, "water_deep_ocean",
+    ),
 )
 
 # Dedicated coastal theatres are cut from the macro partition so distant ocean
@@ -108,22 +138,17 @@ DEDICATED_SEA_REGIONS = (
         2,
         "water_shallow_sea",
     ),
-    SeaRegion(230, "kefreite-coast", "Кефрейтское побережье", "temperate_ocean", 2, 2),
     SeaRegion(
-        231,
-        "stelander-approaches",
-        "Стеландские морские подступы",
-        "temperate_ocean",
-        2,
-        2,
+        230, "kefreite-coast", "Кефрейтское побережье",
+        "temperate_ocean", 2, 2, "water_shallow_sea",
     ),
     SeaRegion(
-        232,
-        "strugent-approaches",
-        "Подступы к Стругентскому каналу",
-        "temperate_ocean",
-        2,
-        2,
+        231, "stelander-approaches", "Стеландские морские подступы",
+        "temperate_ocean", 2, 2, "water_shallow_sea",
+    ),
+    SeaRegion(
+        232, "strugent-approaches", "Подступы к Стругентскому каналу",
+        "temperate_ocean", 2, 2, "water_fjords",
     ),
     # Strongest Current: the lore barrier between the western and the central
     # continent. One pole-to-pole corridor split into five zones, each cut from
@@ -175,39 +200,39 @@ DEDICATED_SEA_REGIONS = (
     ),
     SeaRegion(
         238, "svetlogorye-gulf", "Светлогорский залив",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_shallow_sea",
     ),
     SeaRegion(
         239, "svetlogorye-approaches", "Светлогорские морские подступы",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_shallow_sea",
     ),
     SeaRegion(
         240, "azhar-sea", "Ажарское море",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_shallow_sea",
     ),
     SeaRegion(
         241, "black-coast-sea", "Море Чёрного берега",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_shallow_sea",
     ),
     SeaRegion(
         242, "western-svetlogorye-islands", "Море западных островов Светлогорья",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_fjords",
     ),
     SeaRegion(
         243, "svetlogorye-island-straits", "Светлогорские островные проливы",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_fjords",
     ),
     SeaRegion(
         244, "southern-svetlogorye-islands", "Море южных островов Светлогорья",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_fjords",
     ),
     SeaRegion(
         245, "eastern-svetlogorye-approaches", "Восточные подступы к Светлогорью",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_shallow_sea",
     ),
     SeaRegion(
         246, "far-southern-ocean", "Дальний Южный океан",
-        "tropical_ocean", 4, 1,
+        "tropical_ocean", 4, 1, "water_deep_ocean",
     ),
 )
 DEDICATED_SEA_PROVINCES = {

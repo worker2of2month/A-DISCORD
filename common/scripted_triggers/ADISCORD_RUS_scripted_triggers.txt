@@ -1336,7 +1336,7 @@ RUS_engineering_order_affordable = {
 
 RUS_rifle_order_affordable = {
 	NOT = { has_political_power < 50 }
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 }
 
 RUS_market_surplus_affordable = {
@@ -2538,4 +2538,10 @@ RUS_ba_east_unreachable = {
 	NOT = { STS = { RUS_ba_east_candidate = yes } }
 	NOT = { STP = { RUS_ba_east_candidate = yes } }
 	NOT = { NOD = { RUS_ba_east_candidate = yes } }
+}
+
+RUS_surface_industrial_contract_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 45 } }
 }

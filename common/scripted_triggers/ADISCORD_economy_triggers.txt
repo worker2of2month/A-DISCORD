@@ -420,7 +420,7 @@ ADISCORD_economy_research_spending_mode_5 = { check_variable = { var = ADISCORD_
 
 ADISCORD_economy_can_invest_reserves = {
 	has_tech = ADISCORD_tech_hardened_computers
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_investment_price compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_investment value = 1 compare = less_than }
 	OR = {
 		ADISCORD_economy_model_allows_market_expansion = yes
@@ -540,7 +540,7 @@ ADISCORD_economy_can_use_war_taxes = {
 
 ADISCORD_economy_can_use_military_investment = {
 	has_tech = ADISCORD_tech_postwar_weapon_standardization
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_military_investment_price compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_mobilization_economy = yes
 	NOT = { has_idea = ADISCORD_economy_military_investment }

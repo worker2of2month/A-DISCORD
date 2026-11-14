@@ -206,3 +206,7 @@
  VAL_expand_refugee_housing_description_rules_tt:0 "За §Y250§! монет подготовить места для ещё §Y200 тыс.§! человек. Срок: §Y45 дней§!. Максимальная вместимость: 1 млн. При капитуляции или потере независимости деньги возвращаются."
  VAL_license_grey_brokers_description_rules_tt:0 "Не уничтожать подпольную сеть, а заставить её платить за право работать. Казна немедленно получит §G50§!, но давление серого рынка возрастёт на §R15§!."
  VAL_close_refugee_border_description_rules_tt:0 "Закрыть приём новых групп беженцев. Это ограничение действует и на открытые предложения о приёме; закрытая граница также сокращает легальную торговлю."
+
+ VAL_logistics_cost_400:0 "§Y400§! £ADISCORD_economy_treasury_texticon"
+ VAL_logistics_cost_400_blocked:0 "§R400§! £ADISCORD_economy_treasury_texticon"
+ VAL_logistics_cost_400_tooltip:0 "$VAL_logistics_cost_400$"

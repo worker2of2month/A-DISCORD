@@ -110,6 +110,86 @@ units = {
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "COF - Прибрежный флот"
+		naval_base = 8540
+		task_force = {
+			name = "COF - Первая эскадра"
+			location = 8540
+			ship = {
+				name = "COF-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+			ship = {
+				name = "COF-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+			ship = {
+				name = "COF-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "COF - Вторая эскадра"
+			location = 8540
+			ship = {
+				name = "COF-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+			ship = {
+				name = "COF-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+			ship = {
+				name = "COF-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = COF
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 air_wings = {

@@ -24,4 +24,84 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "LUR - Прибрежный флот"
+		naval_base = 11300
+		task_force = {
+			name = "LUR - Первая эскадра"
+			location = 11300
+			ship = {
+				name = "LUR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+			ship = {
+				name = "LUR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+			ship = {
+				name = "LUR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "LUR - Вторая эскадра"
+			location = 11300
+			ship = {
+				name = "LUR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+			ship = {
+				name = "LUR-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+			ship = {
+				name = "LUR-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = LUR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

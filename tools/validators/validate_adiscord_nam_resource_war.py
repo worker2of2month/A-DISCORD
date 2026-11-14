@@ -1199,10 +1199,10 @@ def check_colony_and_exile(
     check(
         "visible = { NAM_colony_phase = yes }" in named_block(categories, "NAM_colony")
         and has_script_fragment(named_block(categories, "NAM_piracy"),
-                                "visible = { OR = { NAM_piracy_open = yes NAM_piracy_victory = yes } }")
+                                "visible = { NAM_piracy_open = yes }")
         and has_script_fragment(named_block(triggers, "NAM_colony_phase"),
                                 "NOT = { custom_trigger_tooltip = { tooltip = NAM_metropolitan_rule_ended_tt has_country_flag = NAM_center_vanished } }"),
-        "colonial programmes must close with the centre; sea raids open in radical exile or after victory",
+        "colonial programmes must close with the centre; sea raids open only in radical exile",
     )
     monthly = named_block(on_actions, "on_monthly_NAM")
     check(
@@ -2894,10 +2894,12 @@ def main() -> int:
         for path in (ROOT / "history" / "units").glob("*.txt")
         if "fleet = {" in path.read_text(encoding="utf-8-sig", errors="strict")
     }
+    from tools.lib.adiscord_starting_navies import EXISTING_FLEET_TAGS, STARTING_NAVIES
+
+    expected_fleet_oobs = {f"{tag}.txt" for tag in EXISTING_FLEET_TAGS | STARTING_NAVIES.keys()}
     check(
-        fleet_oobs
-        == {"NAM.txt", "EFL.txt", "AZH.txt", "NOD.txt", "STP.txt", "VAL.txt"},
-        f"starting fleets must match NAM/EFL/AZH/NOD/STP/VAL, found {sorted(fleet_oobs)}",
+        fleet_oobs == expected_fleet_oobs,
+        f"starting fleets must match the naval roster, found {sorted(fleet_oobs)}",
     )
     technology_manifest = json.loads(
         read("tools/data/adiscord_starting_technology_profiles.json")

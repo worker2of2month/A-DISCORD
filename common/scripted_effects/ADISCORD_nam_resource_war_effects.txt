@@ -1501,7 +1501,6 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		NAM = {
 			NAM_oil_refresh = yes
 			NAM_reset_campaign_cooldowns = yes
-			NAM_pirate_initialize_fleet = yes
 			load_focus_tree = {
 				tree = NAM_postwar_focus
 				keep_completed = yes
@@ -9278,7 +9277,7 @@ NAM_memoir_dispatch = {
 
 # ----- Island exile: piracy -----
 # NAM_pirate_loot is the exile's plunder: it buys arms, drill and marines or is
-# fenced for treasury at a poor rate. NAM_pirate_notoriety (0-100) is the
+# fenced for treasury. NAM_pirate_notoriety (0-100) is the
 # coalition's attention: raids raise it, each month lowers it by 3, and from 50
 # the coalition answers with a blockade or, from 75, a punitive raid on the
 # islands. NAM_revenge_readiness (0-100) is the preparation for the return; at
@@ -9688,53 +9687,12 @@ NAM_pirate_close_event = {
 NAM_pirate_monthly = {
 	if = {
 		limit = {
-			OR = {
-				NAM_piracy_open = yes
-				NAM_piracy_victory = yes
-			}
+			NAM_piracy_open = yes
 			NAM_country_operable = yes
 			has_variable = NAM_pirate_notoriety
 		}
 		add_to_variable = { var = NAM_pirate_notoriety value = -3 }
 		NAM_pirate_notoriety_clamp = yes
-		if = {
-			limit = {
-				NAM_piracy_victory = yes
-				check_variable = { NAM_pirate_notoriety > 59 }
-				NOT = { has_country_flag = NAM_pirate_retaliation_cooldown }
-				OR = {
-					EFL = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-					AZH = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-					RIV = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-					ULV = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-					LUR = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-					CHD = {
-						NAM_pirate_victim_valid = yes
-						has_country_flag = NAM_pirate_alert
-					}
-				}
-			}
-			set_country_flag = {
-				flag = NAM_pirate_retaliation_cooldown
-				days = 120
-			}
-			NAM_pirate_apply_blockade = yes
-		}
 		if = {
 			limit = {
 				NAM_piracy_open = yes

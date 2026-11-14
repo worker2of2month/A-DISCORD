@@ -14424,15 +14424,15 @@ ADISCORD_vorkerland_wkr_norm_army_category = {
 			custom_effect_tooltip = WKR_measure_programme_lapse_tt
 			hidden_effect = {
 				add_political_power = -45
-				set_temp_variable = { WKR_measure_treasury_cost = 80 }
+				set_temp_variable = { WKR_measure_treasury_cost = 275 }
 				WKR_measure_spend_treasury = yes
 			}
 		}
 		cancel_effect = {
 			add_political_power = 45
-			add_to_variable = { var = ADISCORD_economy_treasury value = 80 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 275 }
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 80 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 275 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -14467,7 +14467,7 @@ ADISCORD_vorkerland_wkr_norm_army_category = {
 			base = 2
 			modifier = {
 				factor = 0
-				check_variable = { ADISCORD_economy_treasury < 200 }
+				check_variable = { ADISCORD_economy_treasury < 400 }
 			}
 		}
 	}

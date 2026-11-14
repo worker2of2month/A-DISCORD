@@ -12,8 +12,10 @@ state={
 		owner = WRK
 		add_core_of = WRK
 		buildings = {
+			dockyard = 1
 			industrial_complex = 1
 			infrastructure = 2
+			4443 = { naval_base = 2 }
 		}
 		victory_points = { 4443 2 }
 	}

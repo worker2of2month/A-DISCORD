@@ -543,10 +543,13 @@ ALL_STATE_RESOURCES = {
 # builder prevents a state regeneration from silently deleting the fleets' ports.
 GENERATED_STATE_BUILDINGS = {
     AZH_BLACK_COAST_STATE_ID: {"dockyard": 1},
+    SHL_SAFIR_COAST_STATE_ID: {"dockyard": 1},
 }
 GENERATED_PROVINCE_BUILDINGS = {
     AZH_BLACK_COAST_STATE_ID: ((493, "naval_base", 5),),
     723: ((6495, "naval_base", 4),),
+    SHL_SAFIR_COAST_STATE_ID: ((3234, "naval_base", 2),),
+    200: ((4443, "naval_base", 2),),
 }
 
 # Cities that were victory points before the Vorkerland state split. Keep the
@@ -1163,7 +1166,7 @@ VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
     122: {"population": 1_500_000, "category": "large_town", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 4.0},
     123: {"population": 2_400_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
     124: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.5},
-    200: {"population": 700_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    200: {"population": 700_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0, "custom_buildings": {"dockyard": 1}},
     201: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
     202: {"population": 650_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
 }
@@ -2446,6 +2449,8 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
                 state_id in PWR_PRE_COLLAPSE_DMZ_STATES,
             )
         source = ensure_history_buildings(source, profile)
+        for province, building, level in GENERATED_PROVINCE_BUILDINGS.get(state_id, ()):
+            source = set_history_province_building(source, province, building, level)
         if state_id in EXACT_LEGACY_FACTORY_STATE_IDS:
             source = set_history_building_level(
                 source, "industrial_complex", int(profile.get("civilian", 0))
@@ -3229,6 +3234,11 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
                 state_id, path.name, provinces, owner, NAM_VICTORY_BORDER_PROFILES[state_id],
                 NAM_VICTORY_BORDER_RESOURCES.get(state_id), NAM_LEGACY_VICTORY_POINTS[state_id],
             ).encode("utf-8")
+        elif state_id == 200:
+            source = ensure_history_buildings(source, LEGACY_STATE_PROFILES[state_id])
+            for province, building, level in GENERATED_PROVINCE_BUILDINGS[state_id]:
+                source = set_history_province_building(source, province, building, level)
+            result = source.encode("utf-8")
         else:
             raise RuntimeError(f"state {state_id}: no metadata profile")
         rendered = result.decode("utf-8")

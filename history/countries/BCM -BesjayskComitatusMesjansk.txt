@@ -1,5 +1,6 @@
 capital = 9
 
+ADISCORD_grant_technology_profile_naval = yes
 oob = "BCM"
 ####### Characters
 
@@ -40,3 +41,5 @@ recruit_character = ADISCORD_staff_BCM_Otto_Becker
 recruit_character = ADISCORD_staff_BCM_Wilhelm_Walter
 recruit_character = ADISCORD_staff_BCM_Adrian_Garten
 recruit_character = ADISCORD_staff_BCM_Bruno_Dreyer
+
+set_convoys = 40

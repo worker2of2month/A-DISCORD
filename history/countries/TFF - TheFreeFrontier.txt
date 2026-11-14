@@ -3,6 +3,8 @@ capital = 84
 
 ADISCORD_grant_technology_profile_field_air_defense = yes
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "TFF"
 ####### Characters
 
@@ -44,3 +46,5 @@ recruit_character = ADISCORD_staff_TFF_Gustav_Scholz
 recruit_character = ADISCORD_staff_TFF_Heinrich_Treiber
 recruit_character = ADISCORD_staff_TFF_Johann_Wolff
 recruit_character = ADISCORD_staff_TFF_Karl_Becker
+
+set_convoys = 40

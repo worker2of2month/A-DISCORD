@@ -3,6 +3,8 @@ capital = 20
 
 ADISCORD_grant_technology_profile_field_air_defense = yes
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "YPR"
 ####### Characters
 
@@ -46,3 +48,5 @@ recruit_character = ADISCORD_staff_YPR_Yevgeny_Gradov
 recruit_character = ADISCORD_staff_YPR_Igor_Kurbatov
 recruit_character = ADISCORD_staff_YPR_Kirill_Losev
 recruit_character = ADISCORD_staff_YPR_Leonid_Malinin
+
+set_convoys = 40

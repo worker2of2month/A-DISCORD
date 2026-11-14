@@ -57,6 +57,134 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 16739 division_template = "Conclave Line Brigade" start_experience_factor = 0.15 start_equipment_factor = 0.60 }
 	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 4182 division_template = "Conclave Line Brigade" start_experience_factor = 0.10 start_equipment_factor = 0.55 }
 	division = { division_name = { is_name_ordered = yes name_order = 6 } location = 330 division_template = "Conclave Line Brigade" start_experience_factor = 0.10 start_equipment_factor = 0.55 }
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "SHL - Прибрежный флот"
+		naval_base = 3234
+		task_force = {
+			name = "SHL - Первая эскадра"
+			location = 3234
+			ship = {
+				name = "SHL-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "SHL - Вторая эскадра"
+			location = 3234
+			ship = {
+				name = "SHL-CL-02"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "SHL - Подводная группа"
+			location = 3234
+			ship = {
+				name = "SHL-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+			ship = {
+				name = "SHL-SS-02"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = SHL
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 instant_effect = {

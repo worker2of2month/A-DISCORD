@@ -17,4 +17,110 @@ units = {
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.72
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "IIA - Прибрежный флот"
+		naval_base = 11841
+		task_force = {
+			name = "IIA - Первая эскадра"
+			location = 11841
+			ship = {
+				name = "IIA-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+			ship = {
+				name = "IIA-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+			ship = {
+				name = "IIA-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+			ship = {
+				name = "IIA-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "IIA - Вторая эскадра"
+			location = 11841
+			ship = {
+				name = "IIA-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+			ship = {
+				name = "IIA-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+			ship = {
+				name = "IIA-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "IIA - Подводная группа"
+			location = 11841
+			ship = {
+				name = "IIA-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = IIA
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

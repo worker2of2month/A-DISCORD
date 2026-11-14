@@ -45,6 +45,64 @@ units = {
 		start_experience_factor = 0.21
 		start_equipment_factor = 0.29
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "BCM - Прибрежный флот"
+		naval_base = 16651
+		task_force = {
+			name = "BCM - Первая эскадра"
+			location = 16651
+			ship = {
+				name = "BCM-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = BCM
+					}
+				}
+			}
+			ship = {
+				name = "BCM-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = BCM
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "BCM - Вторая эскадра"
+			location = 16651
+			ship = {
+				name = "BCM-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = BCM
+					}
+				}
+			}
+			ship = {
+				name = "BCM-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = BCM
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 ##### No notable air forces #####

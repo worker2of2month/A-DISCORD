@@ -571,15 +571,16 @@
     "superevent_south_iron": {
       "texture": "gfx/interface/superevents/NAM/superevent_south_iron.png",
       "effect": "superevent_south_iron_sound_e",
-      "sample": "superevent_south_iron_sound",
-      "audio_file": "superevents/superevent_south_iron_sound.wav"
+      "sample": "superevent_south_rom_iron_victory_sound",
+      "audio_file": "superevents/superevent_south_rom_iron_victory_sound.wav",
+      "theme_note": "Puissance - In Shining Armour, with guard footsteps, a signed and stamped order, brief radio static and ceremonial marching. Music remains unducked."
     },
     "superevent_south_civil_service": {
       "texture": "gfx/interface/superevents/South/superevent_south_civil_service.png",
       "effect": "superevent_south_civil_service_sound_e",
-      "sample": "superevent_south_iron_sound",
-      "audio_file": "superevents/superevent_south_iron_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_civil_service_sound",
+      "audio_file": "superevents/superevent_south_civil_service_sound.wav",
+      "theme_note": "In The Nursery - Artisans of Civilisation, with a public gathering, signing, restrained applause and press cameras; no music ducking."
     },
     "superevent_south_federation": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_worker.png",

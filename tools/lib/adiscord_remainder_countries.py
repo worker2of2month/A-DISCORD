@@ -14,6 +14,8 @@ from pathlib import Path
 
 from PIL import Image
 
+from tools.lib.adiscord_starting_navies import with_naval_history, with_starting_navy
+
 from tools.builders.build_adiscord_northern_countries import (
     distribute_levels,
     largest_remainder,
@@ -127,7 +129,7 @@ def populate_state(source: str, state_id: int) -> str:
 
 
 def country_history(tag: str, row: dict) -> str:
-    return HEADER + "\n".join([
+    source = HEADER + "\n".join([
         f"capital = {row['capital']}", f'oob = "{tag}"',
         f"recruit_character = {tag}_head_of_state", "",
         "set_politics = {", f"\truling_party = {row['ideology']}",
@@ -136,6 +138,7 @@ def country_history(tag: str, row: dict) -> str:
         "set_stability = 0.55", "set_war_support = 0.25",
         "set_research_slots = 2", "set_convoys = 30", "",
     ])
+    return with_naval_history(source, tag)
 
 
 def country_oob(tag: str, row: dict) -> str:
@@ -156,7 +159,7 @@ def country_oob(tag: str, row: dict) -> str:
             "\t\tstart_experience_factor = 0.1", "\t\tstart_equipment_factor = 0.7",
             "\t}",
         ]
-    return "\n".join([*lines, "}", ""])
+    return with_starting_navy("\n".join([*lines, "}", ""]), tag)
 
 
 def flag_outputs(tags: tuple[str, ...] | None = None) -> dict[Path, bytes]:

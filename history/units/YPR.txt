@@ -180,6 +180,112 @@ units = {
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "YPR - Прибрежный флот"
+		naval_base = 21
+		task_force = {
+			name = "YPR - Первая эскадра"
+			location = 21
+			ship = {
+				name = "YPR-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+			ship = {
+				name = "YPR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+			ship = {
+				name = "YPR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+			ship = {
+				name = "YPR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "YPR - Вторая эскадра"
+			location = 21
+			ship = {
+				name = "YPR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+			ship = {
+				name = "YPR-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+			ship = {
+				name = "YPR-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "YPR - Подводная группа"
+			location = 21
+			ship = {
+				name = "YPR-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = YPR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 air_wings = {

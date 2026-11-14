@@ -45,6 +45,8 @@ WEST_POLICY_TRACKS = {
 }
 
 SOUTH_POLICY_TRACKS = {
+    "superevent_south_civil_service_sound": "in_the_nursery_artisans_of_civilisation_excerpt.flac",
+    "superevent_south_rom_iron_victory_sound": "puissance_in_shining_armour_excerpt.flac",
     "superevent_south_commune_victory_sound": "test_dept_comrades_excerpt.flac",
     "superevent_south_safir_victory_sound": "dargaard_rise_and_fall_excerpt.flac",
     "superevent_south_nur_victory_sound": "karjalan_sissit_melakka_excerpt.flac",
@@ -150,6 +152,25 @@ WEST_POLICY_CUES = {
 
 
 SOUTH_POLICY_CUES = {
+    "superevent_south_civil_service_sound": (
+        PolicyCue("STP/sfx_courtyard.flac", 2, 8, 11, 1.2, 2.0),
+        PolicyCue("STP/sfx_paper_slide.flac", 14, 0, 1.09, 0.35, 0.03),
+        PolicyCue("STP/sfx_pen_writing.flac", 16, 8, 4, 4.0, 0.4),
+        PolicyCue("South/sfx_contract_stamp.flac", 22, 0, 1.59, 0.35, 0.02),
+        PolicyCue("STP/sfx_small_applause.flac", 25, 1, 7, 0.65, 1.2),
+        PolicyCue("STP/sfx_vintage_camera.flac", 35, 0, 1.15, 0.2, 0.02),
+        PolicyCue("STP/sfx_vintage_camera.flac", 37, 0, 1.15, 0.16, 0.02),
+        PolicyCue("STP/sfx_courtyard.flac", 42, 25, 10, 1.0, 2.0),
+    ),
+    "superevent_south_rom_iron_victory_sound": (
+        PolicyCue("STP/sfx_guard_steps.flac", 3, 1, 8, 0.4, 0.8),
+        PolicyCue("STP/sfx_paper_slide.flac", 13, 0, 1.09, 0.3, 0.03),
+        PolicyCue("STP/sfx_pen_writing.flac", 15, 8, 4, 3.0, 0.4),
+        PolicyCue("South/sfx_contract_stamp.flac", 20, 0, 1.59, 0.45, 0.02),
+        PolicyCue("STP/sfx_radio_crackle.flac", 27, 2, 1.2, 0.14, 0.15),
+        PolicyCue("IVN/committee_marching.mp3", 33, 2, 13, 0.4, 1.5),
+        PolicyCue("STP/sfx_guard_steps.flac", 47, 2, 6, 0.25, 1.0),
+    ),
     "superevent_south_commune_victory_sound": (
         PolicyCue("South/sfx_factory_whistle.flac", 2, 2, 8, 0.24, 0.8),
         PolicyCue("IVN/committee_cheers.mp3", 7, 0, 8, 0.85, 1.0),

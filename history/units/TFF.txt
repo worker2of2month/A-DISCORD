@@ -166,6 +166,112 @@ units = {
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "TFF - Прибрежный флот"
+		naval_base = 4887
+		task_force = {
+			name = "TFF - Первая эскадра"
+			location = 4887
+			ship = {
+				name = "TFF-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+			ship = {
+				name = "TFF-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+			ship = {
+				name = "TFF-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+			ship = {
+				name = "TFF-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "TFF - Вторая эскадра"
+			location = 4887
+			ship = {
+				name = "TFF-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+			ship = {
+				name = "TFF-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+			ship = {
+				name = "TFF-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "TFF - Подводная группа"
+			location = 4887
+			ship = {
+				name = "TFF-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = TFF
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 air_wings = {

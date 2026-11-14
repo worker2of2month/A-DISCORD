@@ -2080,8 +2080,8 @@ RUS_bunker_construction = {
 				add_political_power = -50
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 25000 producer = RUS }
 				hidden_effect = {
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
@@ -3092,20 +3092,20 @@ RUS_development_programmes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = RUS_bunker_command_cost
-		custom_cost_trigger = { RUS_bunker_command_affordable = yes }
+		custom_cost_text = RUS_surface_industrial_contract_cost
+		custom_cost_trigger = { RUS_surface_industrial_contract_affordable = yes }
 		days_re_enable = 180
 		complete_effect = {
 			custom_effect_tooltip = RUS_surface_industrial_contract_description_rules_tt
 			if = {
 				limit = {
 					RUS_surface_industrial_contract_available = yes
-					RUS_bunker_command_affordable = yes
+					RUS_surface_industrial_contract_affordable = yes
 				}
 				hidden_effect = {
 					add_political_power = -25
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 135 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 135 }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 350 }
 					add_equipment_to_stockpile = { type = support_equipment amount = -45 }
 				}
 				66 = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }

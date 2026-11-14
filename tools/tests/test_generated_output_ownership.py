@@ -70,6 +70,7 @@ REQUIRED_FAMILIES = {
     "minimap",
     "map_buildings",
     "state_history",
+    "starting_navies",
     "northern_countries",
     "outer_states",
     "party_texticons",

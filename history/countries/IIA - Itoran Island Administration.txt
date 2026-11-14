@@ -1,4 +1,6 @@
 capital = 693
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "IIA"
 
 recruit_character = IIA_Artem_Severin
@@ -17,3 +19,5 @@ set_popularities = {
 set_stability = 0.50
 set_war_support = 0.35
 set_research_slots = 2
+
+set_convoys = 50

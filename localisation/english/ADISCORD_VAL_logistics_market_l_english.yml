@@ -206,3 +206,7 @@
  VAL_expand_refugee_housing_description_rules_tt:0 "Spend §Y250§! coins to house §Y200,000§! additional people after §Y45 days§!. Maximum capacity: one million. Capitulation or subjugation refunds the payment."
  VAL_license_grey_brokers_description_rules_tt:0 "Do not destroy the underground network; make it pay for permission to operate. The treasury immediately receives §G50§!, while grey-market pressure rises by §R15§!."
  VAL_close_refugee_border_description_rules_tt:0 "Suspend admission of new refugee groups, including outstanding offers. Border restrictions also reduce legal trade."
+
+ VAL_logistics_cost_400:0 "§Y400§! £ADISCORD_economy_treasury_texticon"
+ VAL_logistics_cost_400_blocked:0 "§R400§! £ADISCORD_economy_treasury_texticon"
+ VAL_logistics_cost_400_tooltip:0 "$VAL_logistics_cost_400$"

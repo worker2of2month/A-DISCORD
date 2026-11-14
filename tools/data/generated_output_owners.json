@@ -42,6 +42,7 @@
     "technology_ui_assets",
     "technology_screen_ui_assets",
     "technology_system",
+    "starting_navies",
     "doctrine_system",
     "val_operations_map",
     "stp_regions_map",
@@ -989,7 +990,8 @@
         "tools/assets/source/country_flags/PRR.png",
         "tools/assets/source/country_flags/FLR.png",
         "history/states/47-*.txt",
-        "tools/builders/build_adiscord_northern_countries.py"
+        "tools/builders/build_adiscord_northern_countries.py",
+        "tools/lib/adiscord_starting_navies.py"
       ],
       "check_command": [
         "{python}",
@@ -1815,7 +1817,8 @@
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/data/adiscord_starting_technology_profiles.json",
         "tools/data/adiscord_remainder_countries.json",
-        "tools/lib/adiscord_remainder_countries.py"
+        "tools/lib/adiscord_remainder_countries.py",
+        "tools/lib/adiscord_starting_navies.py"
       ],
       "check_command": [
         "{python}",
@@ -3027,7 +3030,9 @@
         "sound/superevents/superevent_south_nur_victory_sound.wav",
         "sound/superevents/superevent_west_dorian_sound.wav",
         "sound/superevents/superevent_south_safir_victory_sound.wav",
-        "sound/superevents/superevent_south_commune_victory_sound.wav"
+        "sound/superevents/superevent_south_commune_victory_sound.wav",
+        "sound/superevents/superevent_south_rom_iron_victory_sound.wav",
+        "sound/superevents/superevent_south_civil_service_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
@@ -3136,6 +3141,78 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
+    },
+    {
+      "id": "starting_navies",
+      "owner_module": "tools.builders.build_adiscord_starting_navies",
+      "output_globs": [
+        "history/units/BCM.txt",
+        "history/countries/BCM -*.txt",
+        "history/units/CHD.txt",
+        "history/countries/CHD -*.txt",
+        "history/units/COF.txt",
+        "history/countries/COF -*.txt",
+        "history/units/DAN.txt",
+        "history/countries/DAN -*.txt",
+        "history/units/EVR.txt",
+        "history/countries/EVR -*.txt",
+        "history/units/FLR.txt",
+        "history/countries/FLR -*.txt",
+        "history/units/IIA.txt",
+        "history/countries/IIA -*.txt",
+        "history/units/IVN.txt",
+        "history/countries/IVN -*.txt",
+        "history/units/LUR.txt",
+        "history/countries/LUR -*.txt",
+        "history/units/MRV.txt",
+        "history/countries/MRV -*.txt",
+        "history/units/OLR.txt",
+        "history/countries/OLR -*.txt",
+        "history/units/PIO.txt",
+        "history/countries/PIO -*.txt",
+        "history/units/PRR.txt",
+        "history/countries/PRR -*.txt",
+        "history/units/RVN.txt",
+        "history/countries/RVN -*.txt",
+        "history/units/SFR.txt",
+        "history/countries/SFR -*.txt",
+        "history/units/SHL.txt",
+        "history/countries/SHL -*.txt",
+        "history/units/TFF.txt",
+        "history/countries/TFF -*.txt",
+        "history/units/ULV.txt",
+        "history/countries/ULV -*.txt",
+        "history/units/WIT.txt",
+        "history/countries/WIT -*.txt",
+        "history/units/WRK.txt",
+        "history/countries/WRK -*.txt",
+        "history/units/YPR.txt",
+        "history/countries/YPR -*.txt"
+      ],
+      "source_inputs": [
+        "tools/lib/adiscord_starting_navies.py",
+        "tools/builders/build_adiscord_starting_navies.py",
+        "history/states/*.txt",
+        "map/definition.csv",
+        "common/units/equipment/ADISCORD_convoy_equipment.txt",
+        "tools/lib/adiscord_remainder_countries.py"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_starting_navies"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_starting_navies",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns marked starting fleet sections, pre-OOB naval technology grants and minimum convoy reserves. Country generators retain land formations and political history; the remainder-country generator uses the same naval renderer."
     }
   ]
 }

@@ -322,3 +322,15 @@ sound = {
 	name = "superevent_south_commune_victory_sound"
 	file = "superevents/superevent_south_commune_victory_sound.wav"
 }
+
+# Puissance, In Shining Armour; music and sound-effect credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_rom_iron_victory_sound"
+	file = "superevents/superevent_south_rom_iron_victory_sound.wav"
+}
+
+# In The Nursery, Artisans of Civilisation; credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_civil_service_sound"
+	file = "superevents/superevent_south_civil_service_sound.wav"
+}

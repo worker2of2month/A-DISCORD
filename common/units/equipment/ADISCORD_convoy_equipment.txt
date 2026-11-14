@@ -36,6 +36,7 @@ equipments = {
 	}
 
 	ADISCORD_coastal_patrol_ship = {
+		naval_dominance_factor = 20
 		year = 2100
 		is_archetype = yes
 		type = screen_ship
@@ -165,6 +166,7 @@ equipments = {
 	}
 
 	ADISCORD_cruiser_archetype = {
+		naval_dominance_factor = 60
 		year = 2155
 		is_archetype = yes
 		is_buildable = no
@@ -197,6 +199,7 @@ equipments = {
 	}
 
 	ADISCORD_submarine_archetype = {
+		naval_dominance_factor = 4
 		year = 2155
 		is_archetype = yes
 		is_buildable = no
@@ -397,6 +400,7 @@ equipments = {
 	}
 
 	ADISCORD_light_cruiser_archetype = {
+		naval_dominance_factor = 35
 		year = 2155
 		is_archetype = yes
 		is_buildable = no
@@ -520,6 +524,7 @@ equipments = {
 	}
 
 	ADISCORD_battleship_archetype = {
+		naval_dominance_factor = 150
 		year = 2155
 		is_archetype = yes
 		is_buildable = no
@@ -643,6 +648,7 @@ equipments = {
 	}
 
 	ADISCORD_carrier_archetype = {
+		naval_dominance_factor = 120
 		year = 2155
 		is_archetype = yes
 		is_buildable = no

@@ -4933,7 +4933,7 @@ WKR_measure_licence_purchase_affordable = {
 
 WKR_measure_armour_contract_affordable = {
 	NOT = { has_political_power < 45 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 80 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 275 } }
 }
 
 # STATE. A railway hub WKR holds whose roads can still be improved; the marker

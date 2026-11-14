@@ -73,6 +73,156 @@ units = {
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "WIT - Прибрежный флот"
+		naval_base = 16376
+		task_force = {
+			name = "WIT - Первая эскадра"
+			location = 16376
+			ship = {
+				name = "WIT-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "WIT - Вторая эскадра"
+			location = 16376
+			ship = {
+				name = "WIT-CL-02"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-DD-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "WIT - Подводная группа"
+			location = 16376
+			ship = {
+				name = "WIT-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+			ship = {
+				name = "WIT-SS-02"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = WIT
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 ##### No notable air forces #####

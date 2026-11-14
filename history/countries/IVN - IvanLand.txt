@@ -2,6 +2,8 @@ capital = 25
 
 # Equipment variants must exist before the starting divisions are filled.
 ADISCORD_grant_technology_profile_common = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "IVN"
 set_major = yes
 ####### Characters
@@ -96,3 +98,5 @@ recruit_character = IVN_party_representative_anarchism
 recruit_character = IVN_party_representative_technocracy
 recruit_character = IVN_party_representative_etatism
 recruit_character = IVN_party_representative_hedonism
+
+set_convoys = 80

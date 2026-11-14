@@ -2327,7 +2327,7 @@ NAM_mobilisation = {
 		custom_cost_text = NAM_war_arms_purchase_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 35 }
-			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 		}
 		fire_only_once = no
 		days_re_enable = 45
@@ -2338,13 +2338,13 @@ NAM_mobilisation = {
 						NAM_war_programmes_operable = yes
 						has_completed_focus = NAM_war_procurement_board
 						NOT = { has_political_power < 35 }
-						check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 					}
 				}
 				add_political_power = -35
 				custom_effect_tooltip = NAM_war_arms_purchase_treasury_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
 					NAM_spend_treasury = yes
 				}
 				add_equipment_to_stockpile = {
@@ -17993,7 +17993,10 @@ NAM_piracy = {
 					limit = { has_country_flag = NAM_pirate_at_sea_oil }
 					clr_country_flag = NAM_pirate_at_sea_oil
 					if = {
-						limit = { NAM_pirate_commissioned = yes }
+						limit = {
+							NAM_pirate_commissioned = yes
+							NAM_country_operable = yes
+						}
 						set_temp_variable = { NAM_pirate_lane_input = 1 }
 						NAM_pirate_raid_settle = yes
 					}
@@ -18102,7 +18105,10 @@ NAM_piracy = {
 					limit = { has_country_flag = NAM_pirate_at_sea_coast }
 					clr_country_flag = NAM_pirate_at_sea_coast
 					if = {
-						limit = { NAM_pirate_commissioned = yes }
+						limit = {
+							NAM_pirate_commissioned = yes
+							NAM_country_operable = yes
+						}
 						set_temp_variable = { NAM_pirate_lane_input = 2 }
 						NAM_pirate_raid_settle = yes
 					}
@@ -18211,7 +18217,10 @@ NAM_piracy = {
 					limit = { has_country_flag = NAM_pirate_at_sea_strait }
 					clr_country_flag = NAM_pirate_at_sea_strait
 					if = {
-						limit = { NAM_pirate_commissioned = yes }
+						limit = {
+							NAM_pirate_commissioned = yes
+							NAM_country_operable = yes
+						}
 						set_temp_variable = { NAM_pirate_lane_input = 3 }
 						NAM_pirate_raid_settle = yes
 					}
@@ -18319,7 +18328,10 @@ NAM_piracy = {
 					limit = { has_country_flag = NAM_pirate_at_sea_crossing }
 					clr_country_flag = NAM_pirate_at_sea_crossing
 					if = {
-						limit = { NAM_pirate_commissioned = yes }
+						limit = {
+							NAM_pirate_commissioned = yes
+							NAM_country_operable = yes
+						}
 						set_temp_variable = { NAM_pirate_lane_input = 4 }
 						NAM_pirate_raid_settle = yes
 					}
@@ -18360,6 +18372,10 @@ NAM_piracy = {
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_market_ready_tt
+				NOT = { has_country_flag = NAM_pirate_buy_arms_cd }
+			}
+			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
 			}
@@ -18375,6 +18391,10 @@ NAM_piracy = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						has_completed_focus = NAM_exile_black_market
+						NAM_piracy_open = yes
+						NAM_country_operable = yes
+						NOT = { has_country_flag = NAM_pirate_buy_arms_cd }
 						check_variable = { var = NAM_pirate_loot value = 40 compare = greater_than_or_equals }
 					}
 				}
@@ -18414,6 +18434,10 @@ NAM_piracy = {
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_market_ready_tt
+				NOT = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
+			}
+			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
 			}
@@ -18429,6 +18453,10 @@ NAM_piracy = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						has_completed_focus = NAM_exile_black_market
+						NAM_piracy_open = yes
+						NAM_country_operable = yes
+						NOT = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
 						check_variable = { var = NAM_pirate_loot value = 70 compare = greater_than_or_equals }
 					}
 				}
@@ -18464,6 +18492,10 @@ NAM_piracy = {
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_market_ready_tt
+				NOT = { has_country_flag = NAM_pirate_buy_convoys_cd }
+			}
+			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
 			}
@@ -18479,6 +18511,10 @@ NAM_piracy = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						has_completed_focus = NAM_exile_black_market
+						NAM_piracy_open = yes
+						NAM_country_operable = yes
+						NOT = { has_country_flag = NAM_pirate_buy_convoys_cd }
 						check_variable = { var = NAM_pirate_loot value = 60 compare = greater_than_or_equals }
 					}
 				}
@@ -18500,7 +18536,7 @@ NAM_piracy = {
 		}
 	}
 
-	# The fence pays little: 50 loot fetch 100 treasury.
+	# The same receipt gates purchases from the decision list and the chart.
 	NAM_pirate_fence_loot = {
 		icon = ADISCORD_treasury
 		allowed = { tag = NAM }
@@ -18508,6 +18544,10 @@ NAM_piracy = {
 			NAM_pirate_exchange_open = yes
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_fence_ready_tt
+				NOT = { has_country_flag = NAM_pirate_fence_loot_cd }
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
@@ -18519,23 +18559,25 @@ NAM_piracy = {
 			check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
 		}
 		fire_only_once = no
-		days_re_enable = 30
+		days_re_enable = 15
 		complete_effect = {
 			if = {
 				limit = {
 					hidden_trigger = {
 						NAM_pirate_exchange_open = yes
+						NAM_country_operable = yes
+						NOT = { has_country_flag = NAM_pirate_fence_loot_cd }
 						check_variable = { var = NAM_pirate_loot value = 50 compare = greater_than_or_equals }
 					}
 				}
 				custom_effect_tooltip = NAM_pirate_spend_50_tt
-				custom_effect_tooltip = NAM_receive_100_tt
+				custom_effect_tooltip = NAM_pirate_fence_income_tt
 				hidden_effect = {
 					set_temp_variable = { var = NAM_pirate_loot_change value = -50 }
 					NAM_pirate_loot_add = yes
-					set_temp_variable = { var = NAM_treasury_amount value = 100 }
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
 					NAM_add_treasury = yes
-					set_country_flag = { flag = NAM_pirate_fence_loot_cd value = 1 days = 30 }
+					set_country_flag = { flag = NAM_pirate_fence_loot_cd value = 1 days = 15 }
 				}
 			}
 		}

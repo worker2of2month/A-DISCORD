@@ -518,14 +518,16 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     )
 
     def test_southern_capital_districts_conserve_population_and_industry(self) -> None:
-        original_populations = {
-            241: 135000,
-            253: 105000,
-            260: 72000,
-            275: 145000,
-            283: 112000,
-            294: states.SHL_POPULATION[294] + states.SHL_POPULATION[707],
-            300: 118000,
+        # League populations include the threefold army-support balance in
+        # both city and countryside; Shahrabad has its own population profile.
+        expected_populations = {
+            241: (270_000, 135_000),
+            253: (210_000, 105_000),
+            260: (144_000, 72_000),
+            275: (291_000, 144_000),
+            283: (225_000, 111_000),
+            294: (2_200_000, 1_500_000),
+            300: (237_000, 117_000),
         }
         memberships = builder.load_states()
         for capital, (
@@ -536,11 +538,14 @@ class CoastalSeaRegionTests(unittest.TestCase):
         ) in states.SOUTHERN_CAPITAL_DISTRICTS.items():
             city_source = states.state_path(capital).read_text(encoding="utf-8")
             rural_source = states.state_path(district).read_text(encoding="utf-8")
-            total = sum(
+            populations = tuple(
                 int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1])
                 for source in (city_source, rural_source)
             )
-            self.assertEqual(total, original_populations[capital])
+            self.assertEqual(
+                populations, expected_populations[capital],
+                f"capital {capital}, rural district {district}",
+            )
             for building, amount in (
                 ("industrial_complex", 2),
                 ("arms_factory", 1),

@@ -934,8 +934,8 @@ scripted_gui = {
 	# start a running decision again. Every enabled trigger below repeats those
 	# blocks of its decision and must change together with them; each
 	# complete_effect still rechecks the price before its single debit.
-	# Triggers cannot read a native cooldown, so a window purchase marks
-	# <decision>_cd for the decision's days_re_enable; NAM_exile_drill adds its
+	# Triggers cannot read a native cooldown. Purchases record <decision>_cd
+	# in complete_effect for days_re_enable; NAM_exile_drill adds its
 	# 30 days at sea to the 15 of rest.
 	ADISCORD_NAM_piracy_panel = {
 		context_type = decision_category
@@ -946,10 +946,7 @@ scripted_gui = {
 		}
 		visible = {
 			tag = NAM
-			OR = {
-				NAM_piracy_open = yes
-				NAM_piracy_victory = yes
-			}
+			NAM_piracy_open = yes
 		}
 		ai_enabled = { always = no }
 		effects = {
@@ -1011,11 +1008,6 @@ scripted_gui = {
 						NOT = { has_country_flag = NAM_pirate_buy_arms_cd }
 					}
 					activate_decision = NAM_pirate_buy_arms
-					set_country_flag = {
-						flag = NAM_pirate_buy_arms_cd
-						value = 1
-						days = 30
-					}
 				}
 			}
 			NAM_pw_buy_heavy_arms_click = {
@@ -1028,11 +1020,6 @@ scripted_gui = {
 						NOT = { has_country_flag = NAM_pirate_buy_heavy_arms_cd }
 					}
 					activate_decision = NAM_pirate_buy_heavy_arms
-					set_country_flag = {
-						flag = NAM_pirate_buy_heavy_arms_cd
-						value = 1
-						days = 30
-					}
 				}
 			}
 			NAM_pw_buy_convoys_click = {
@@ -1045,11 +1032,6 @@ scripted_gui = {
 						NOT = { has_country_flag = NAM_pirate_buy_convoys_cd }
 					}
 					activate_decision = NAM_pirate_buy_convoys
-					set_country_flag = {
-						flag = NAM_pirate_buy_convoys_cd
-						value = 1
-						days = 30
-					}
 				}
 			}
 			NAM_pw_fence_loot_click = {
@@ -1061,11 +1043,6 @@ scripted_gui = {
 						NOT = { has_country_flag = NAM_pirate_fence_loot_cd }
 					}
 					activate_decision = NAM_pirate_fence_loot
-					set_country_flag = {
-						flag = NAM_pirate_fence_loot_cd
-						value = 1
-						days = 30
-					}
 				}
 			}
 			NAM_pw_exile_drill_click = {

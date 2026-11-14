@@ -17,4 +17,84 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "OLR - Прибрежный флот"
+		naval_base = 8399
+		task_force = {
+			name = "OLR - Первая эскадра"
+			location = 8399
+			ship = {
+				name = "OLR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+			ship = {
+				name = "OLR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+			ship = {
+				name = "OLR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "OLR - Вторая эскадра"
+			location = 8399
+			ship = {
+				name = "OLR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+			ship = {
+				name = "OLR-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+			ship = {
+				name = "OLR-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = OLR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

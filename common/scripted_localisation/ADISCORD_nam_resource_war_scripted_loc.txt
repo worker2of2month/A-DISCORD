@@ -2744,10 +2744,6 @@ defined_text = {
 defined_text = {
 	name = NAMGetPrizeSpending
 	text = {
-		trigger = { NAM_piracy_victory = yes }
-		localization_key = NAM_pw_loot_tt_winner
-	}
-	text = {
 		localization_key = NAM_pw_loot_tt_exile
 	}
 }
@@ -2755,20 +2751,12 @@ defined_text = {
 defined_text = {
 	name = NAMGetPrizeResponse
 	text = {
-		trigger = { NAM_piracy_victory = yes }
-		localization_key = NAM_pw_notoriety_tt_winner
-	}
-	text = {
 		localization_key = NAM_pw_notoriety_tt_exile
 	}
 }
 
 defined_text = {
 	name = NAMGetPrizeFlotillas
-	text = {
-		trigger = { NAM_piracy_victory = yes }
-		localization_key = NAM_pw_fleet_tt_winner
-	}
 	text = {
 		localization_key = NAM_pw_fleet_tt_exile
 	}

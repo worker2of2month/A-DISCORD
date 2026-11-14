@@ -698,7 +698,7 @@ soundeffect = {
 	name = superevent_south_iron_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_iron_sound
+		sound = superevent_south_rom_iron_victory_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -710,7 +710,7 @@ soundeffect = {
 	name = superevent_south_civil_service_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_iron_sound
+		sound = superevent_south_civil_service_sound
 	}
 	is3d = no
 	max_audible = 1

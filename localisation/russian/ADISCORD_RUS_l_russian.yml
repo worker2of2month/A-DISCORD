@@ -571,8 +571,8 @@
  RUS_engineering_order_cost_cash_low:0 "§R60§! £ADISCORD_economy_treasury_texticon"
  RUS_rifle_order_cost_pp_ok:0 "§Y50§! £political_power_texticon"
  RUS_rifle_order_cost_pp_low:0 "§R50§! £political_power_texticon"
- RUS_rifle_order_cost_cash_ok:0 "§Y200§! £ADISCORD_economy_treasury_texticon"
- RUS_rifle_order_cost_cash_low:0 "§R200§! £ADISCORD_economy_treasury_texticon"
+ RUS_rifle_order_cost_cash_ok:0 "§Y300§! £ADISCORD_economy_treasury_texticon"
+ RUS_rifle_order_cost_cash_low:0 "§R300§! £ADISCORD_economy_treasury_texticon"
  RUS_market_surplus_cost_pp_ok:0 "§Y15§! £political_power_texticon"
  RUS_market_surplus_cost_pp_low:0 "§R15§! £political_power_texticon"
  RUS_market_surplus_cost_rifles_ok:0 "§Y10000§! £infantry_equipment_texticon"
@@ -2309,3 +2309,7 @@
  RUS_bunker_upgrade_5_description_rules_tt:0 "Существующее помещение получает вторую очередь оборудования. Назначение слоя сохраняется.\n\nРаботы: §Y28 дней§!.\n\n[GetRUSBunkerForecastUpgrade5]"
  RUS_scientists_plot_description_rules_tt:0 "Если совет не потеряет перевес, однажды утром караул у пульта сменят люди Корнеева."
  RUS_black_army_plot_description_rules_tt:0 "Если армия сохранит перевес, следующий приказ по караулу подпишет уже не Рустан."
+
+ RUS_surface_industrial_contract_cost:0 "§Y25§! £political_power_texticon §Y350§! £ADISCORD_economy_treasury_texticon §Y45§! £support_equipment_texticon"
+ RUS_surface_industrial_contract_cost_blocked:0 "§R25§! £political_power_texticon §R350§! £ADISCORD_economy_treasury_texticon §R45§! £support_equipment_texticon"
+ RUS_surface_industrial_contract_cost_tooltip:0 "$RUS_surface_industrial_contract_cost$"

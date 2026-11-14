@@ -165,6 +165,244 @@ units = {
 		start_experience_factor = 0.12
 		start_equipment_factor = 0.70
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "IVN - Прибрежный флот"
+		naval_base = 16568
+		task_force = {
+			name = "IVN - Первая эскадра"
+			location = 16568
+			ship = {
+				name = "IVN-CA-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-CA-02"
+				definition = heavy_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-CL-02"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "IVN - Вторая эскадра"
+			location = 16568
+			ship = {
+				name = "IVN-CL-03"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-CL-04"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-09"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-DD-10"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "IVN - Подводная группа"
+			location = 16568
+			ship = {
+				name = "IVN-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-SS-02"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-SS-03"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+			ship = {
+				name = "IVN-SS-04"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = IVN
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 ##### No notable air forces #####

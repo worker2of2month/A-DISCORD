@@ -9,6 +9,8 @@ save_global_event_target_as = ADISCORD_vorkerland_nation
 set_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
 
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "WRK"
 
 ####### Characters

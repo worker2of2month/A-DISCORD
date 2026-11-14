@@ -24,4 +24,110 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "MRV - Прибрежный флот"
+		naval_base = 915
+		task_force = {
+			name = "MRV - Первая эскадра"
+			location = 915
+			ship = {
+				name = "MRV-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+			ship = {
+				name = "MRV-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+			ship = {
+				name = "MRV-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+			ship = {
+				name = "MRV-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "MRV - Вторая эскадра"
+			location = 915
+			ship = {
+				name = "MRV-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+			ship = {
+				name = "MRV-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+			ship = {
+				name = "MRV-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "MRV - Подводная группа"
+			location = 915
+			ship = {
+				name = "MRV-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = MRV
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

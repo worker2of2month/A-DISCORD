@@ -31,4 +31,110 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "CHD - Прибрежный флот"
+		naval_base = 1858
+		task_force = {
+			name = "CHD - Первая эскадра"
+			location = 1858
+			ship = {
+				name = "CHD-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+			ship = {
+				name = "CHD-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+			ship = {
+				name = "CHD-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+			ship = {
+				name = "CHD-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "CHD - Вторая эскадра"
+			location = 1858
+			ship = {
+				name = "CHD-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+			ship = {
+				name = "CHD-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+			ship = {
+				name = "CHD-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "CHD - Подводная группа"
+			location = 1858
+			ship = {
+				name = "CHD-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = CHD
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

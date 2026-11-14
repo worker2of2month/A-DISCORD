@@ -9307,6 +9307,11 @@ class EconomyScriptFixture:
                 self.scopes[scope]["idea@" + value] = key == "add_ideas"
             elif key == "clear_variable":
                 self.scopes[scope].pop(value, None)
+            elif key == "round_variable":
+                import math
+
+                current = self.scopes[scope].get(value, 0)
+                self.scopes[scope][value] = math.floor(current + 0.5)
             elif key.endswith("_variable"):
                 fields = {child.key: child.value for child in value}
                 target = fields.get("var", next(iter(fields)))

@@ -196,7 +196,12 @@ news_event = {
 	option = {
 		name = ADISCORD_nam_resource_news.3.a
 		if = {
-			limit = { hidden_trigger = { NAM_piracy_victory = yes } }
+			limit = {
+				hidden_trigger = {
+					NAM_pw_operable = yes
+					NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+				}
+			}
 			custom_effect_tooltip = NAM_victory_tt
 		}
 	}

@@ -1,5 +1,6 @@
 capital = 78
 
+ADISCORD_grant_technology_profile_naval = yes
 oob = "DAN"
 ####### Characters
 
@@ -41,3 +42,5 @@ recruit_character = ADISCORD_staff_DAN_Arkady_Malinin
 recruit_character = ADISCORD_staff_DAN_Vladimir_Nekrasov
 recruit_character = ADISCORD_staff_DAN_Gennady_Ostretsov
 recruit_character = ADISCORD_staff_DAN_Dmitri_Panov
+
+set_convoys = 40

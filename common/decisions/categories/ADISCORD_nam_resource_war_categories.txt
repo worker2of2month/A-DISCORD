@@ -12,10 +12,7 @@ NAM_piracy = {
 	icon = generic_naval
 	allowed = { tag = NAM }
 	visible = {
-		OR = {
-			NAM_piracy_open = yes
-			NAM_piracy_victory = yes
-		}
+		NAM_piracy_open = yes
 	}
 	visible_when_empty = yes
 	priority = 25

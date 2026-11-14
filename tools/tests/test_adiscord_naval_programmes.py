@@ -6,6 +6,9 @@ import re
 import unittest
 
 from tools.builders.build_adiscord_focus_trees import render_source
+from tools.lib.adiscord_starting_navies import (
+    STARTING_NAVIES, with_naval_history, with_starting_navy,
+)
 from tools.tests.test_build_adiscord_focus_trees import semantic
 from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -42,6 +45,110 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_added_starting_fleets_have_owned_ocean_ports_and_landing_reserves(self):
+        from tools.builders import build_adiscord_strategic_regions as regions
+
+        types, colors = regions.load_province_definitions()
+        adjacency = regions.load_province_adjacency(types, colors, include_special_adjacencies=False)
+        navigable = regions.load_province_adjacency(types, colors)
+        ocean = regions.connected_components({p for p, kind in types.items() if kind == "sea"}, navigable)[0]
+        states = {}
+        for path in (ROOT / "history/states").glob("*.txt"):
+            state = block(parse_clausewitz(path.read_text(encoding="utf-8-sig")), "state")
+            for province in block(state, "provinces"):
+                states[int(province.value)] = state
+        grants = entries("common/scripted_effects/ADISCORD_technology_baseline_effects.txt")
+        techs = {}
+        for path in (ROOT / "common/technologies").glob("*.txt"):
+            for row in block(parse_clausewitz(path.read_text(encoding="utf-8-sig")), "technologies"):
+                techs[row.key] = row.value
+        for tag, navy in STARTING_NAVIES.items():
+            with self.subTest(tag=tag):
+                country = next((ROOT / "history/countries").glob(f"{tag} -*.txt"))
+                source = country.read_text(encoding="utf-8")
+                history = parse_clausewitz(source)
+                self.assertEqual(scalar(history, "oob"), tag)
+                self.assertGreaterEqual(int(scalar(history, "set_convoys")), navy.convoys)
+                researched = set()
+                for row in history:
+                    if row.key == "oob":
+                        break
+                    if row.key.startswith("ADISCORD_grant_technology_profile_"):
+                        researched.update(item.key for item in block(block(grants, row.key), "set_technology") if item.key != "popup")
+                self.assertIn("ADISCORD_tech_restored_dockyards", researched)
+                self.assertGreater(int(scalar(techs["ADISCORD_tech_restored_dockyards"], "naval_invasion_capacity")), 0)
+                models = {item.value for tech in researched for row in techs[tech] if row.key == "enable_equipments" for item in row.value}
+                state_history = block(states[navy.port], "history")
+                self.assertEqual(scalar(state_history, "owner"), tag)
+                port = block(block(state_history, "buildings"), str(navy.port))
+                self.assertGreater(int(scalar(port, "naval_base")), 0)
+                self.assertTrue(adjacency[navy.port] & ocean, "Fleet base must reach the ocean, not an inland lake")
+                oob = (ROOT / f"history/units/{tag}.txt").read_text(encoding="utf-8")
+                units = block(parse_clausewitz(oob), "units")
+                self.assertEqual(len([row for row in units if row.key == "fleet"]), 1)
+                fleet = block(units, "fleet")
+                self.assertEqual(int(scalar(fleet, "naval_base")), navy.port)
+                surfaces = 0
+                for row in fleet:
+                    if row.key != "task_force":
+                        continue
+                    self.assertEqual(int(scalar(row.value, "location")), navy.port)
+                    ships = [ship.value for ship in row.value if ship.key == "ship"]
+                    composition = Counter(scalar(ship, "definition") for ship in ships)
+                    if composition["ADISCORD_coastal_patrol_vessel"]:
+                        surfaces += 1
+                        self.assertGreaterEqual(composition["ADISCORD_coastal_patrol_vessel"], max(2, 3 * composition["heavy_cruiser"]))
+                    for ship in ships:
+                        hull = block(ship, "equipment")[0]
+                        self.assertIn(hull.key, models)
+                        self.assertEqual(scalar(hull.value, "owner"), tag)
+                        self.assertEqual(scalar(hull.value, "amount"), "1")
+                self.assertEqual(surfaces, 2, "A landing route needs two independent surface groups")
+                self.assertEqual(with_starting_navy(oob, tag), oob)
+                self.assertEqual(with_naval_history(source, tag), source)
+
+    def test_naval_layer_preserves_land_armies_and_refuses_authored_fleets(self):
+        source = 'division_template = { name = "Guard" }\nunits = {\n\tdivision = { name = "Guard" location = 163 }\n}\n'
+        generated = with_starting_navy(source, "PIO")
+        original_units = block(parse_clausewitz(source), "units")
+        generated_units = block(parse_clausewitz(generated), "units")
+        self.assertEqual(block(original_units, "division"), block(generated_units, "division"))
+        self.assertEqual(with_starting_navy(generated, "PIO"), generated)
+        with self.assertRaises(ValueError):
+            with_starting_navy('units = { fleet = { name = "Local fleet" } }', "PIO")
+
+    def test_small_surface_groups_can_clear_coastal_control_thresholds(self):
+        terrain = block(entries("common/terrain/00_terrain.txt"), "categories")
+        equipment = block(entries("common/units/equipment/ADISCORD_convoy_equipment.txt"), "equipments")
+        # Use only base hull points: range and speed are above their native
+        # neutral values, so the budget does not depend on their extra bonus.
+        escort = block(equipment, "ADISCORD_escort_ship_2155")
+        archetype = block(equipment, "ADISCORD_coastal_patrol_ship")
+        dominance = float(scalar(archetype, "naval_dominance_factor"))
+        self.assertGreaterEqual(float(scalar(escort, "naval_range")), 2000)
+        self.assertGreaterEqual(float(scalar(escort, "naval_speed")), 20)
+        self.assertEqual(float(scalar(block(terrain, "water_strongest_current"), "minimum_seazone_dominance")), 400)
+        for kind, baseline in (("water_fjords", 16), ("water_shallow_sea", 20), ("ocean", 40), ("water_deep_ocean", 80)):
+            self.assertEqual(float(scalar(block(terrain, kind), "minimum_seazone_dominance")), baseline)
+        for kind in ("water_fjords", "water_shallow_sea"):
+            self.assertGreater(2 * dominance, 1.5 * float(scalar(block(terrain, kind), "minimum_seazone_dominance")))
+        for hull in equipment:
+            if hull.key == "convoy" or not any(field.key == "is_archetype" and field.value == "yes" for field in hull.value):
+                continue
+            self.assertGreater(float(scalar(hull.value, "naval_dominance_factor")), 0, hull.key)
+
+    def test_added_fleets_are_allowed_in_native_ai_landing_and_patrol_templates(self):
+        goals = entries("common/ai_navy/goals/ADISCORD_naval_goals.txt")
+        for goal in goals:
+            self.assertTrue(set(STARTING_NAVIES) <= {row.value for row in block(goal.value, "available_for")}, goal.key)
+        templates = entries("common/ai_navy/taskforce/ADISCORD_taskforce_templates.txt")
+        for name in ("ADISCORD_coastal_patrol", "ADISCORD_coastal_invasion_support"):
+            template = block(templates, name)
+            tags = {row.value for row in walk(block(template, "allowed")) if row.key == "original_tag"}
+            self.assertTrue(set(STARTING_NAVIES) <= tags)
+        patrol = block(templates, "ADISCORD_coastal_patrol")
+        self.assertEqual(scalar(block(block(patrol, "min_composition"), "ADISCORD_coastal_patrol_vessel"), "amount"), "2")
+
     def test_naval_unit_names_have_native_small_texticons(self):
         units = block(entries("common/units/ADISCORD_naval_units.txt"), "sub_units")
         sprites = block(entries("interface/modifiericons_texticons.gfx"), "spriteTypes")

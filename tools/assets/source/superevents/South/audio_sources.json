@@ -704,5 +704,194 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_south_commune_victory_sound.wav",
     "runtime_sha256": "bb19309ea209a11eb26e3688e229a52bf2a35557d45f85c87212e5e95c3029a2"
+  },
+  "superevent_south_rom_iron_victory_sound": {
+    "music": {
+      "artist": "Puissance",
+      "title": "In Shining Armour",
+      "album": "Let The State Collapse",
+      "source_page": "https://infinitefog.bandcamp.com/track/in-shining-armour",
+      "file": "puissance_in_shining_armour_excerpt.flac",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "sha256": "9bb8b248d5c56ff8578250b6c063871db317b90873396ffd4d703f9d325d4ee2",
+      "rights": "Copyrighted recording; public label preview. Infinite Fog Productions, 2018 edition."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 3,
+        "offset": 1,
+        "duration": 8,
+        "gain": 0.4,
+        "fade": 0.8,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 13,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.3,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 15,
+        "offset": 8,
+        "duration": 4,
+        "gain": 3.0,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 20,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.45,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_radio_crackle.flac",
+        "start": 27,
+        "offset": 2,
+        "duration": 1.2,
+        "gain": 0.14,
+        "fade": 0.15,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "IVN/committee_marching.mp3",
+        "start": 33,
+        "offset": 2,
+        "duration": 13,
+        "gain": 0.4,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_guard_steps.flac",
+        "start": 47,
+        "offset": 2,
+        "duration": 6,
+        "gain": 0.25,
+        "fade": 1.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json",
+      "../IVN/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_rom_iron_victory_sound.wav",
+    "runtime_sha256": "e7c42edfb7c8b9dfedaf6e3d7d341016d19c1f275fb78dd0b972a444a4e44b58"
+  },
+  "superevent_south_civil_service_sound": {
+    "music": {
+      "artist": "In The Nursery",
+      "title": "Artisans of Civilisation",
+      "album": "Blind Sound",
+      "source_page": "https://inthenursery.bandcamp.com/track/artisans-of-civilisation",
+      "file": "in_the_nursery_artisans_of_civilisation_excerpt.flac",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "sha256": "3d86854464c5f50182c9fef14a15b50df8bb25194724c0748d05f8822fa8b2ab",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 2,
+        "offset": 8,
+        "duration": 11,
+        "gain": 1.2,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 14,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.35,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 16,
+        "offset": 8,
+        "duration": 4,
+        "gain": 4.0,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 22,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.35,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 25,
+        "offset": 1,
+        "duration": 7,
+        "gain": 0.65,
+        "fade": 1.2,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 35,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.2,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 37,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.16,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 42,
+        "offset": 25,
+        "duration": 10,
+        "gain": 1.0,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_civil_service_sound.wav"
   }
 }

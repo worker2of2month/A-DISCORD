@@ -1,4 +1,10 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_NAM_pirate_loot_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/trade.png"
+		legacy_lazy_load = no
+	}
+
 	# The chart, lane frames, markers, gauges and slot pips of the piracy window.
 	# Buttons reuse GFX_NAM_bw_button of the basin window.
 	# BEGIN GENERATED NAM PIRACY MAP

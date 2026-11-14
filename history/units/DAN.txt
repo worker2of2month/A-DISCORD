@@ -62,6 +62,64 @@ units = {
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "DAN - Прибрежный флот"
+		naval_base = 7274
+		task_force = {
+			name = "DAN - Первая эскадра"
+			location = 7274
+			ship = {
+				name = "DAN-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = DAN
+					}
+				}
+			}
+			ship = {
+				name = "DAN-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = DAN
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "DAN - Вторая эскадра"
+			location = 7274
+			ship = {
+				name = "DAN-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = DAN
+					}
+				}
+			}
+			ship = {
+				name = "DAN-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = DAN
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }
 
 ##### No notable air forces #####

@@ -45,4 +45,132 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "RVN - Прибрежный флот"
+		naval_base = 10798
+		task_force = {
+			name = "RVN - Первая эскадра"
+			location = 10798
+			ship = {
+				name = "RVN-CL-01"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "RVN - Вторая эскадра"
+			location = 10798
+			ship = {
+				name = "RVN-CL-02"
+				definition = light_cruiser
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "RVN - Подводная группа"
+			location = 10798
+			ship = {
+				name = "RVN-SS-01"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+			ship = {
+				name = "RVN-SS-02"
+				definition = submarine
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = RVN
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

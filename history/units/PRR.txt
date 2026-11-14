@@ -17,4 +17,84 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "PRR - Прибрежный флот"
+		naval_base = 9970
+		task_force = {
+			name = "PRR - Первая эскадра"
+			location = 9970
+			ship = {
+				name = "PRR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+			ship = {
+				name = "PRR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+			ship = {
+				name = "PRR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "PRR - Вторая эскадра"
+			location = 9970
+			ship = {
+				name = "PRR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+			ship = {
+				name = "PRR-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+			ship = {
+				name = "PRR-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = PRR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

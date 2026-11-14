@@ -31,4 +31,84 @@ units = {
 		start_experience_factor = 0.1
 		start_equipment_factor = 0.7
 	}
+	# BEGIN generated starting navy: tools/builders/build_adiscord_starting_navies.py
+	fleet = {
+		name = "SFR - Прибрежный флот"
+		naval_base = 4230
+		task_force = {
+			name = "SFR - Первая эскадра"
+			location = 4230
+			ship = {
+				name = "SFR-DD-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+			ship = {
+				name = "SFR-DD-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+			ship = {
+				name = "SFR-DD-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "SFR - Вторая эскадра"
+			location = 4230
+			ship = {
+				name = "SFR-DD-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+			ship = {
+				name = "SFR-DD-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+			ship = {
+				name = "SFR-DD-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = SFR
+					}
+				}
+			}
+		}
+	}
+	# END generated starting navy
 }

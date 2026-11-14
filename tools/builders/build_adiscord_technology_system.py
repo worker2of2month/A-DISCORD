@@ -11,6 +11,7 @@ from PIL import Image
 from tools.lib.localisation import technology_localisation_path
 from tools.lib.paths import repository_root
 from tools.lib.adiscord_remainder_countries import COUNTRIES as REMAINDER_COUNTRIES
+from tools.lib.adiscord_starting_navies import STARTING_NAVIES
 from tools.builders.build_adiscord_technology_ui_assets import (
     SPECIAL_TECHNOLOGY_FOLDER,
     STATE_GFX_OUTPUT as TECHNOLOGY_STATE_GFX,
@@ -8255,6 +8256,10 @@ STARTING_COUNTRY_TECH_PROFILES.update({
     tag: tuple(country["technology_profiles"])
     for tag, country in REMAINDER_COUNTRIES.items()
 })
+for tag, navy in STARTING_NAVIES.items():
+    STARTING_COUNTRY_TECH_PROFILES[tag] = tuple(dict.fromkeys(
+        (*STARTING_COUNTRY_TECH_PROFILES[tag], *navy.profiles)
+    ))
 STARTING_COUNTRY_TECH_PROFILE_RATIONALE.update({
     tag: country["description"]["english"]
     for tag, country in REMAINDER_COUNTRIES.items()
