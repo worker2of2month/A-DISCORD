@@ -298,6 +298,7 @@ NAM_postwar_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
+		NAM_foreign_office
 		NAM_federal_charter
 		NAM_public_utilities
 		NAM_civic_audit
@@ -421,6 +422,7 @@ NAM_postwar_vertical_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
+		NAM_foreign_office
 		NAM_service_state
 		NAM_state_plan
 		NAM_unified_standards
@@ -848,6 +850,7 @@ NAM_postwar_pragmatic_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
+		NAM_foreign_office
 		NAM_pragmatic_compact
 		NAM_commercial_courts
 		NAM_export_clearing

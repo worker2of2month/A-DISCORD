@@ -4,6 +4,7 @@ from pathlib import Path
 
 from tools.lib.paths import repository_root
 from tools.builders.build_adiscord_focus_trees import (
+    NAM_POSTWAR_SOURCE,
     SHARED_HISTORY_SOURCES,
     SOURCES,
     render_source,
@@ -38,6 +39,8 @@ def read_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
     resolved = Path(path)
     if not resolved.is_absolute():
         resolved = repository_root() / resolved
+    if resolved.resolve() == (repository_root() / "focus_trees" / NAM_POSTWAR_SOURCE).resolve():
+        return render_source(NAM_POSTWAR_SOURCE)
     for source in SHARED_HISTORY_SOURCES:
         output = repository_root() / "common/national_focus" / SOURCES[source]
         if resolved.resolve() == output.resolve():

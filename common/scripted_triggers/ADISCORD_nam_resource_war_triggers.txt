@@ -3255,6 +3255,20 @@ NAM_border_citizenship_ready = {
 }
 
 # COUNTRY. The same six treaty sites bound visibility without scanning other land.
+# COUNTRY neighbouring government. A bilateral settlement binds later southern demands.
+NAM_neighbour_sovereignty_recognised = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { has_completed_focus = NAM_eflor_accord }
+		}
+		AND = {
+			tag = AZH
+			NAM = { has_completed_focus = NAM_azhar_accord }
+		}
+	}
+}
+
 NAM_border_acquisitions_held = {
 	OR = {
 		owns_state = 701

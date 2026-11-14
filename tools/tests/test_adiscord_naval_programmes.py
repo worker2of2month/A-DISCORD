@@ -45,6 +45,20 @@ def formation_requirements(composition):
 
 
 class NavalProgrammeTests(unittest.TestCase):
+    def test_major_fleets_start_with_headquarters_in_their_home_ports(self):
+        states = {"STP": 28, "VAL": 48, "IVN": 25, "NAM": 700, "NOD": 30, "SHL": 730, "WRK": 200}
+        for tag, state_id in states.items():
+            with self.subTest(tag=tag):
+                fleet = block(block(entries(f"history/units/{tag}.txt"), "units"), "fleet")
+                path, = (ROOT / "history/states").glob(f"{state_id}-*.txt")
+                history = block(block(entries(path), "state"), "history")
+                self.assertEqual(scalar(history, "owner"), tag)
+                port = block(block(history, "buildings"), scalar(fleet, "naval_base"))
+                self.assertGreaterEqual(int(scalar(port, "naval_base")), 8)
+                headquarters = block(port, "naval_headquarters")
+                self.assertEqual(scalar(headquarters, "level"), "1")
+                self.assertEqual(scalar(block(headquarters, "allowed"), "has_dlc"), "No Compromise, No Surrender")
+
     def test_added_starting_fleets_have_owned_ocean_ports_and_landing_reserves(self):
         from tools.builders import build_adiscord_strategic_regions as regions
 

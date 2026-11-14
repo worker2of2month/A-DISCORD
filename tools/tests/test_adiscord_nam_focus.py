@@ -12,7 +12,7 @@ import re
 import unittest
 from unittest.mock import patch
 
-from tools.builders.build_adiscord_focus_trees import expected_outputs
+from tools.builders.build_adiscord_focus_trees import NAM_POSTWAR_SOURCE, expected_outputs, render_source
 from tools.tests.test_adiscord_stp_preparation import (
     block, scalar, walk, matches_conditions, selected_effects, focus_exclusion_crossings,
     event_target,
@@ -113,6 +113,8 @@ class PostedGarrisons(dict):
 
 
 def read(path):
+    if path == "focus_trees/" + NAM_POSTWAR_SOURCE:
+        return render_source(NAM_POSTWAR_SOURCE)
     return (ROOT / path).read_text(encoding="utf-8-sig")
 
 
@@ -1681,26 +1683,38 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "variable", "days_mission_timeout@NAM_resource_war_deadline")] = 1
         self.assertFalse(self.matches(block(dossier, "cancel_trigger"), facts))
 
-    def test_gateway_reveals_preparation_but_war_uses_a_separate_tree(self):
-        gateway = self.focuses["NAM_letters_to_the_centre"]
-        self.assertNotIn("bypass", [e.key for e in gateway])
-        self.assertIn("mark_focus_tree_layout_dirty", repr(block(gateway, "completion_reward")))
-        for name, body in self.focuses.items():
-            if not any(e.key == "allow_branch" for e in body):
-                continue
-            branch = block(body, "allow_branch")
-            self.assertNotIn("NAM_inventory", [child.value for entry in body if entry.key == "prerequisite"
-                                               for child in entry.value], name)
-            self.assertGreater(int(scalar(body, "y")), int(scalar(gateway, "y")), name)
-            facts = self.independent_facts()
-            facts[("NAM", "has_completed_focus", "NAM_letters_to_the_centre")] = False
-            self.assertFalse(self.matches(branch, facts), name)
-            facts[("NAM", "has_completed_focus", "NAM_letters_to_the_centre")] = True
-            self.assertTrue(self.matches(branch, facts), name)
-            colonial = self.colonial_facts()
-            colonial[("NAM", "has_completed_focus", "NAM_letters_to_the_centre")] = True
-            self.assertTrue(self.matches(branch, colonial), name)
-            self.assertFalse(self.matches(block(body, "available"), colonial), name)
+    def test_public_declaration_reveals_the_native_preparation_branch(self):
+        rows = parsed("common/national_focus/ADISCORD_NAM_focus.txt")
+        native = {scalar(e.value, "id"): e.value for e in rows if e.key == "shared_focus"}
+        parents = {name: {child.value for edge in focus if edge.key == "prerequisite"
+                          for child in edge.value if child.key == "focus"} for name, focus in native.items()}
+        independent = {"NAM_independence_day"}
+        for _ in native:
+            independent.update(name for name, previous in parents.items() if previous & independent)
+        self.assertIn("NAM_mobilisation_office", independent)
+        self.assertIn("NAM_seal_courts", independent)
+        self.assertEqual(parents["NAM_independence_day"], {"NAM_letters_to_the_centre"})
+        for declared, letters in product((False, True), repeat=2):
+            facts = self.colonial_facts()
+            facts[("NAM", "has_country_flag", "NAM_declaration_published")] = declared
+            facts[("NAM", "has_completed_focus", "NAM_letters_to_the_centre")] = letters
+
+            def visible(name):
+                gates = [entry.value for entry in native[name] if entry.key == "allow_branch"]
+                if gates:
+                    return all(self.matches(gate, facts) for gate in gates)
+                return not parents[name] or any(visible(parent) for parent in parents[name])
+
+            for name in native:
+                self.assertEqual(visible(name), declared or name not in independent, name)
+        declaration = self.events["ADISCORD_nam_groups.12"]
+        immediate = block(block(declaration, "immediate"), "hidden_effect")
+        self.assertEqual([(entry.key, entry.value) for entry in immediate], [
+            ("set_country_flag", "NAM_declaration_published"), ("mark_focus_tree_layout_dirty", "yes")])
+        for option in (e.value for e in declaration if e.key == "option"):
+            self.assertIn("NAM_declaration_programmes_visible_tt", [e.value for e in option if e.key == "custom_effect_tooltip"])
+
+    def test_war_uses_a_separate_tree(self):
         self.assertFalse(set(self.focuses) & set(self.wartime))
         alarm = self.wartime["NAM_alarm"]
         facts = self.independent_facts()
@@ -1710,10 +1724,6 @@ class NamCampaignTests(unittest.TestCase):
         self.assertNotIn("allow_branch", read(TREES["wartime"][0]))
         self.assertTrue(self.matches(block(alarm, "available"), facts))
         self.assertFalse(any(e.key == "prerequisite" for e in alarm))
-        for language, message in (("russian", "§GОткрывает новые фокусы§!"),
-                                  ("english", "§GUnlocks new focuses§!")):
-            self.assertIn(f' NAM_preparation_gateway_tt:0 "{message}"',
-                          read(f"localisation/{language}/{BASE}_l_{language}.yml"))
 
     def test_extended_ground_preparation_pays_for_diplomacy_and_finishes_before_its_real_deadline(self):
         for administration, economy, army in product(
@@ -6667,7 +6677,7 @@ class NamCampaignTests(unittest.TestCase):
 
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 40),
-            "postwar": (self.postwar, 246), "defeated": (self.defeated, 22),
+            "postwar": (self.postwar, 251), "defeated": (self.defeated, 22),
             "south_war": (self.south_war, 68),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
@@ -6723,10 +6733,7 @@ class NamCampaignTests(unittest.TestCase):
             for requirement in (e.value for e in body if e.key == "prerequisite"):
                 for parent in requirement:
                     self.assertLess(positions[parent.value][1], positions[name][1], (name, parent.value))
-            if any(e.key == "allow_branch" for e in body):
-                self.assertEqual(scalar(block(body, "allow_branch"), "has_completed_focus"), "NAM_letters_to_the_centre")
-                if name != "NAM_independence_day":
-                    self.assertEqual(scalar(block(body, "prerequisite"), "focus"), "NAM_independence_day", name)
+                if any(parent.value == "NAM_independence_day" for parent in requirement):
                     self.assertEqual(positions[name][1], positions["NAM_independence_day"][1] + 1, name)
 
     def test_independent_programmes_can_change_priority_without_skipping_the_final_requirements(self):
@@ -6765,16 +6772,13 @@ class NamCampaignTests(unittest.TestCase):
         self.assertNotIn("NAM_naval_construction", completed)
 
     def test_wartime_tree_retains_shared_history_and_loads_after_war_entry(self):
-        from tools.builders.build_adiscord_focus_trees import SHARED_HISTORY_SOURCES, SOURCES, render_source, swap_plan
-        # Roots carried across the war-tree swap are hidden references, not own roots.
-        carried, _ = swap_plan({source: render_source(source) for source in SOURCES})
+        from tools.builders.build_adiscord_focus_trees import SHARED_HISTORY_SOURCES
         for kind in ("main", "wartime"):
             self.assertIn(TREES[kind][0].removeprefix("focus_trees/"), SHARED_HISTORY_SOURCES)
             native = parsed("common/national_focus/" + TREES[kind][2])
             definitions = [scalar(e.value, "id") for e in native if e.key == "shared_focus"]
             self.assertCountEqual(definitions, self.focuses if kind == "main" else self.wartime)
             roots = {e.value for e in block(native, "focus_tree") if e.key == "shared_focus"}
-            roots -= set(carried.get(TREES[kind][0].removeprefix("focus_trees/"), []))
             source = self.focuses if kind == "main" else self.wartime
             self.assertEqual(roots, {name for name, body in source.items() if not any(e.key == "prerequisite" for e in body)})
         start = list(walk(self.effects["ADISCORD_nam_resource_war_begin_hostilities"]))
@@ -10858,58 +10862,6 @@ class NamCampaignTests(unittest.TestCase):
                 y += int(next((e.value for e in offset if e.key == "y"), 0))
         return x, y
 
-    def test_postwar_mandates_hide_other_courses_and_center_visible_nodes(self):
-        routes = {"service": -0.5, "pragmatic": 0, "district": 0.5}
-        roots = {"service": "NAM_service_state", "pragmatic": "NAM_pragmatic_compact",
-                 "district": "NAM_federal_charter"}
-        membership = {}
-        for name, focus in self.postwar.items():
-            gates = [e.value for e in focus if e.key == "allow_branch"]
-            for route in routes:
-                if gates and any(e.key == "NAM_prewar_" + route + "_mandate" for e in gates[0]):
-                    membership[name] = route
-        self.assertEqual(Counter(membership.values()), {"service": 77, "district": 34, "pragmatic": 34})
-        for balance, course in ((-0.5, "service"), (-0.25, "pragmatic"),
-                                (0, "pragmatic"), (0.25, "pragmatic"), (0.5, "district")):
-            facts = self.postwar_facts()
-            facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
-            facts[("NAM", "variable", "NAM_prewar_balance")] = balance
-            facts[("NAM", "owns_state", "723")] = True
-            facts[("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM")] = True
-            facts[("NAM", "ruling_leader")] = "NAM_Egor_Rom"
-            for name in self.postwar:
-                facts[("NAM", "has_completed_focus", name)] = True
-            coordinates = {}
-            for name, focus in self.postwar.items():
-                gates = [e.value for e in focus if e.key == "allow_branch"]
-                visible = not gates or self.matches(gates[0], facts)
-                if name in membership:
-                    self.assertEqual(visible, membership[name] == course, (balance, name))
-                if not visible:
-                    continue
-                x, y = self.postwar_focus_position(focus, facts)
-                self.assertNotIn((x, y), coordinates, (name, coordinates.get((x, y))))
-                coordinates[x, y] = name
-                if name == roots[course]:
-                    law_x, law_y = self.postwar_focus_position(self.postwar["NAM_law_after_war"], facts)
-                    self.assertEqual((x, y), (law_x, law_y + 2))
-            self.assertLessEqual(max(x for x, y in coordinates), 75)
-            self.assertLessEqual(max(y for x, y in coordinates), 27)
-            political_right = max(
-                self.postwar_focus_position(self.postwar[name], facts)[0]
-                for name, route in membership.items() if route == course
-                and self.postwar_focus_position(self.postwar[name], facts)[1] < 22
-            )
-            military_left = min(
-                self.postwar_focus_position(focus, facts)[0]
-                for focus in self.postwar.values()
-                if any(e.key == "relative_position_id" and e.value in (
-                    "NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review",
-                ) for e in focus)
-            )
-            self.assertGreaterEqual(military_left - political_right, 2)
-            self.assertLessEqual(military_left - political_right, 4)
-
     def test_postwar_layout_keeps_connection_corridors_clear(self):
         mandate_keys = {"NAM_prewar_" + route + "_mandate"
                         for route in ("service", "district", "pragmatic")}
@@ -10958,214 +10910,70 @@ class NamCampaignTests(unittest.TestCase):
                                 blocked = oy == y == ty and min(x, tx) < ox < max(x, tx)
                             self.assertFalse(blocked, (route, name, target.value, other))
 
-    def test_postwar_chapters_only_require_mandatory_ancestors_and_refresh_layout(self):
-        mandatory = {}
-
-        def required(name):
-            if name not in mandatory:
-                result = set()
-                for group in (e.value for e in self.postwar[name] if e.key == "prerequisite"):
-                    result.update(set.intersection(*(required(p.value) | {p.value} for p in group)))
-                mandatory[name] = result
-            return mandatory[name]
-
-        milestones = set()
-        revealed_focuses = {}
-        for name, focus in self.postwar.items():
-            for gate in (e.value for e in focus if e.key == "allow_branch"):
-                for condition in gate:
-                    if condition.key == "has_completed_focus":
-                        self.assertIn(condition.value, required(name), (name, condition.value))
-                        milestones.add(condition.value)
-                        revealed_focuses.setdefault(condition.value, set()).add(name)
-            for offset in (e.value for e in focus if e.key == "offset"):
-                milestones.update(e.value for e in walk(block(offset, "trigger"))
-                                  if e.key == "has_completed_focus")
-        self.assertGreaterEqual(len(milestones), 30)
-        for name in milestones:
-            reward = block(self.postwar[name], "completion_reward")
-            self.assertNotIn("mark_focus_tree_layout_dirty", [e.key for e in walk(reward)], name)
-            callbacks = [e.value for hidden in reward if hidden.key == "hidden_effect"
-                         for e in walk(hidden.value) if e.key == "country_event"
-                         and scalar(e.value, "id") == BASE + ".118"]
-            self.assertEqual(len(callbacks), 1, name)
-            self.assertEqual(scalar(callbacks[0], "hours"), "1", name)
-            self.assertIn(name + "_reveal_tt", [e.value for e in reward if e.key == "custom_effect_tooltip"])
-            for language in ("russian", "english"):
-                loc = ROOT / f"localisation/{language}/{BASE}_l_{language}.yml"
-                self.assertTrue(loc.read_bytes().startswith(b"\xef\xbb\xbf"))
-                text = re.search(rf'(?m)^ {name}_reveal_tt:0 "([^"\n]+)"$',
-                                 loc.read_text(encoding="utf-8-sig"))
-                self.assertIsNotNone(text, (language, name))
-                self.assertEqual(set(re.findall(r"\$(NAM_\w+)\$", text[1])),
-                                 revealed_focuses[name], (language, name))
-                heading = "ДЕРЕВО ФОКУСОВ" if language == "russian" else "FOCUS TREE"
-                self.assertTrue(text[1].startswith(f"§G{heading}§!\\n§Y"), (language, name))
-
-    def test_postwar_reveal_callback_reads_committed_focus_state_and_ignores_other_trees(self):
-        callback = self.events[BASE + ".118"]
-        self.assertEqual(scalar(callback, "hidden"), "yes")
-        self.assertEqual(scalar(callback, "is_triggered_only"), "yes")
-        self.assertFalse(any(e.key == "fire_only_once" for e in callback))
-        self.assertEqual(scalar(block(callback, "trigger"), "has_focus_tree"), "NAM_postwar_focus")
-        self.assertEqual([(e.key, e.value) for e in block(callback, "immediate")],
-                         [("mark_focus_tree_layout_dirty", "yes")])
-        facts = self.postwar_facts()
-        for name in self.postwar:
-            facts[("NAM", "has_completed_focus", name)] = False
-        for entry, children in (
-            ("NAM_pw_army_review", ("NAM_pw_breakthrough_army", "NAM_pw_mobile_army")),
-            ("NAM_pw_industrial_recovery", ("NAM_pw_civil_engineering", "NAM_pw_arms_engineering")),
-        ):
-            for child in children:
-                self.assertFalse(self.matches(block(self.postwar[child], "allow_branch"), facts))
-            facts[("NAM", "has_completed_focus", entry)] = True
-            for child in children:
-                self.assertTrue(self.matches(block(self.postwar[child], "allow_branch"), facts))
-        for loaded in (False, True):
-            facts[("NAM", "has_focus_tree", "NAM_postwar_focus")] = loaded
-            self.assertEqual(self.matches(block(callback, "trigger"), facts), loaded)
-
-    def test_postwar_chapter_stages_keep_visible_nodes_and_connections_separate(self):
-        def ancestors(name):
-            return {p.value for e in self.postwar[name] if e.key == "prerequisite" for p in e.value}
-
-        def closure(names):
-            result = set(names)
-            while True:
-                expanded = result | {p for n in result for p in ancestors(n)}
-                if expanded == result:
-                    return result
-                result = expanded
-
-        chapter_names = {e.value for f in self.postwar.values() for g in f if g.key == "allow_branch"
-                         for e in g.value if e.key == "has_completed_focus"}
-        entry = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
-        stages = [set(), closure(entry), set(self.postwar)]
-        stages.extend(closure({name}) for name in sorted(chapter_names))
-        economic = ("NAM_pw_industrial_recovery", "NAM_pw_energy_commission",
-                    "NAM_oil_ministry", "NAM_pw_transport_commission")
-        military = ("NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review")
-        chapters = economic + military
-        stages.extend(closure(set(chapters) | {name}) for name in sorted(chapter_names))
-        families = {}
-
-        def family(name):
-            if name not in families:
-                if name in ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return",
-                            "NAM_south_heritage", "NAM_recognition"):
-                    families[name] = name
-                else:
-                    anchor = next(e.value for e in self.postwar[name] if e.key == "relative_position_id")
-                    families[name] = family(anchor)
-            return families[name]
-
-        for completed in product((False, True), repeat=len(chapters)):
-            stages.append(closure(entry | {name for name, active in zip(chapters, completed) if active}))
-        for balance in (-0.5, 0, 0.5):
-            for complete in stages:
-                facts = self.postwar_facts()
-                facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
-                facts[("NAM", "variable", "NAM_prewar_balance")] = balance
-                for flag in ("ADISCORD_south_final_started", "ADISCORD_south_final_resolved",
-                             "ADISCORD_south_hegemon_NAM"):
-                    facts[("NAM", "has_global_flag", flag)] = bool(complete)
-                for name in self.postwar:
-                    facts[("NAM", "has_completed_focus", name)] = name in complete
-                visible = {n: f for n, f in self.postwar.items() if all(
-                    self.matches(e.value, facts) for e in f if e.key == "allow_branch")}
-                positions = {}
-                for name, focus in visible.items():
-                    x, y = self.postwar_focus_position(focus, facts)
-                    self.assertNotIn((x, y), positions.values(), (balance, complete, name, positions))
-                    for other, (ox, oy) in positions.items():
-                        if oy == y:
-                            self.assertGreaterEqual(abs(ox - x), 2, (balance, complete, name, other))
-                    positions[name] = (x, y)
-                bounds = {
-                    root: (min(x for name, (x, _) in positions.items() if family(name) == root),
-                           max(x for name, (x, _) in positions.items() if family(name) == root))
-                    for root in ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
-                }
-                self.assertEqual(bounds["NAM_law_after_war"][0] - bounds["NAM_civil_repair"][1],
-                                 2, (balance, complete, bounds))
-                self.assertEqual(bounds["NAM_veterans_return"][0] - bounds["NAM_law_after_war"][1],
-                                 2, (balance, complete, bounds))
-                for name in chapters:
-                    if name in visible and name not in complete:
-                        self.assertEqual(positions[name][1], 4, (complete, name))
-                for left, right in ((economic[0], economic[1]), (economic[2], economic[3])):
-                    if left in complete and right in complete:
-                        self.assertLessEqual(abs(positions[left][1] - positions[right][1]), 3)
-                for name, focus in visible.items():
-                    anchor = next((e.value for e in focus if e.key == "relative_position_id"), None)
-                    if anchor in economic:
-                        self.assertLessEqual(positions[name][1], 14, (complete, name))
-                    if anchor in military:
-                        self.assertLessEqual(positions[name][1], 17, (complete, name))
-                if not complete:
-                    self.assertEqual(len(visible), 25)
-                    self.assertTrue(entry | {"NAM_recognition"} | set(chapters) <= visible.keys())
-                    self.assertLessEqual(max(x for x, _ in positions.values())
-                                         - min(x for x, _ in positions.values()), 30)
-                    self.assertLessEqual(max(y for _, y in positions.values()), 7)
-                pairs = [(n, p.value) for n, f in visible.items()
-                         for e in f if e.key == "mutually_exclusive" for p in e.value
-                         if p.value in positions and n < p.value]
-                for name, focus in visible.items():
-                    x, y = positions[name]
-                    for group in (e.value for e in focus if e.key == "prerequisite"):
-                        for parent in group:
-                            if parent.value not in positions:
-                                continue
-                            _, py = positions[parent.value]
-                            self.assertLess(py, y, (balance, complete, name, parent.value))
-                            for left, right in pairs:
-                                if parent.value in (left, right):
-                                    continue
-                                lx, ly = positions[left]
-                                rx, _ = positions[right]
-                                self.assertFalse(min(lx, rx) < x < max(lx, rx) and py < ly < y,
-                                                 (balance, complete, name, parent.value, left, right))
-                            for other, (ox, oy) in positions.items():
-                                if other not in (name, parent.value):
-                                    self.assertFalse(ox == x and py < oy < y,
-                                                     (balance, complete, name, parent.value, other))
-
-    def test_postwar_opening_choices_are_visible_but_still_require_the_entry_focuses(self):
-        entries = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
-        for balance, course in ((-0.5, "NAM_service_state"), (0, "NAM_pragmatic_compact"),
-                                (0.5, "NAM_federal_charter")):
+    def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
+        roots = ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
+        for balance, course, count in ((-0.5, "service_state", 161), (0, "pragmatic_compact", 128),
+                                       (0.5, "federal_charter", 128)):
             facts = self.postwar_facts()
             facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
             facts[("NAM", "variable", "NAM_prewar_balance")] = balance
-            for name in self.postwar:
-                facts[("NAM", "has_completed_focus", name)] = False
+            for won_south in (False, True):
+                for flag in ("ADISCORD_south_final_resolved", "ADISCORD_south_hegemon_NAM"):
+                    facts[("NAM", "has_global_flag", flag)] = won_south
+                facts[("NAM", "ruling_leader")] = "NAM_Egor_Rom"
+                snapshots = []
+                for complete in (False, True):
+                    for name in self.postwar:
+                        facts[("NAM", "has_completed_focus", name)] = complete
+                    snapshot = {}
+                    for name, focus in self.postwar.items():
+                        for entry in focus:
+                            if entry.key in ("allow_branch", "offset"):
+                                self.assertFalse(any(e.key == "has_completed_focus" for e in walk(entry.value)), name)
+                        if all(self.matches(e.value, facts) for e in focus if e.key == "allow_branch"):
+                            snapshot[name] = self.postwar_focus_position(focus, facts)
+                    snapshots.append(snapshot)
+                self.assertEqual(*snapshots)
+                points = snapshots[0]
+                self.assertEqual([points[n] for n in roots], [(28, 2), (30, 2), (32, 2)])
+                self.assertEqual("NAM_south_heritage" in points, won_south)
+                if not won_south:
+                    self.assertEqual(len(points), count)
+                    self.assertEqual({n for n in points if not any(e.key == "prerequisite" for e in self.postwar[n])},
+                                     {"NAM_recognition"})
+                for other in ("service_state", "pragmatic_compact", "federal_charter"):
+                    self.assertEqual("NAM_" + other in points, other == course)
+                for name in ("foreign_office", "eflor_accord", "eflor_ultimatum", "azhar_accord", "azhar_ultimatum",
+                             "border_administration", "border_security", "border_compacts", "border_citizenship"):
+                    self.assertIn("NAM_" + name, points)
+                ordered = sorted((y, x, name) for name, (x, y) in points.items())
+                for (y, x, name), (oy, ox, other) in zip(ordered, ordered[1:]):
+                    if y == oy:
+                        self.assertGreaterEqual(ox - x, 2, (name, other))
 
-            def visible_positions():
-                return {name: self.postwar_focus_position(focus, facts)
-                        for name, focus in self.postwar.items()
-                        if all(self.matches(e.value, facts) for e in focus if e.key == "allow_branch")}
-
-            initial = visible_positions()
-            self.assertEqual(len(initial), 25)
-            self.assertIn(course, initial)
-            for name in ("NAM_civil_dividend", "NAM_armed_peace", "NAM_normalisation",
-                         "NAM_border_revenge", "NAM_pw_army_review", "NAM_pw_naval_review",
-                         "NAM_pw_air_review", "NAM_pw_industrial_recovery", "NAM_pw_energy_commission",
-                         "NAM_oil_ministry", "NAM_pw_transport_commission"):
-                self.assertIn(name, initial)
-            ready = {name for name in initial if all(
-                any(facts.get(("NAM", "has_completed_focus", p.value), False) for p in e.value)
-                for e in self.postwar[name] if e.key == "prerequisite")}
-            self.assertEqual(ready, {"NAM_recognition"})
-            for name in entries:
-                reward = block(self.postwar[name], "completion_reward")
-                self.assertNotIn(name + "_reveal_tt", [e.value for e in walk(reward)])
-                self.assertFalse(any(e.key == "country_event" and scalar(e.value, "id") == BASE + ".118"
-                                     for e in walk(reward)))
-                facts[("NAM", "has_completed_focus", name)] = True
-                self.assertEqual(visible_positions(), initial)
+    def test_neighbour_policy_is_independent_for_each_country_and_binds_later_demands(self):
+        southern = {r.key: r.value for r in parsed("common/scripted_effects/ADISCORD_south_final_war_effects.txt")}
+        recognition = self.triggers["NAM_neighbour_sovereignty_recognised"]
+        for side, tag, other in (("eflor", "EFL", "AZH"), ("azhar", "AZH", "EFL")):
+            accord, demand = ("NAM_" + side + suffix for suffix in ("_accord", "_ultimatum"))
+            for name, alternative in ((accord, demand), (demand, accord)):
+                focus = self.postwar[name]
+                self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_foreign_office")
+                self.assertEqual(scalar(block(focus, "mutually_exclusive"), "focus"), alternative)
+            treaty = block(self.postwar[accord], "completion_reward")
+            self.assertEqual(scalar(treaty, "give_guarantee"), tag)
+            self.assertIn("NAM_reparations_to_svetlogorye", [e.value for e in walk(block(treaty, tag))
+                                                             if e.key == "remove_ideas"])
+            ultimatum = block(block(self.postwar[demand], "completion_reward"), "hidden_effect")
+            self.assertEqual(scalar(block(ultimatum, tag), "ADISCORD_south_demand_submission"), "yes")
+            for recipient in (tag, other):
+                facts = {("NAM", "has_completed_focus", accord): True, (recipient, "tag", recipient): True}
+                self.assertEqual(self.matches(recognition, facts, recipient), recipient == tag)
+        for action in ("demand_submission", "demand_annexation", "offer_economic_contract"):
+            guard = block(block(southern["ADISCORD_south_" + action], "if"), "limit")
+            self.assertIn("NAM_neighbour_sovereignty_recognised", [e.key for e in walk(guard)], action)
+        self.assertEqual(scalar(block(self.postwar["NAM_border_administration"], "prerequisite"), "focus"),
+                         "NAM_foreign_office")
 
     def test_postwar_three_branches_and_compact_prerequisites(self):
         roots = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
@@ -12017,7 +11825,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertFalse(retired & self.postwar.keys())
         for name, other in (("NAM_normalisation", "NAM_border_revenge"), ("NAM_border_revenge", "NAM_normalisation")):
             focus = self.postwar[name]
-            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_law_after_war")
+            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_foreign_office")
             self.assertEqual(scalar(block(focus, "mutually_exclusive"), "focus"), other)
             self.assertEqual(int(scalar(focus, "cost")) * 7, 35)
             reward = block(focus, "completion_reward")

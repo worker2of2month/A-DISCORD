@@ -572,7 +572,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             15,
         )
         self.assertNotRegex(east_dryriver, r"(?m)^\s*chromium\s*=")
-        self.assertRegex(harbour, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
+        self.assertEqual(building_level(named_block(harbour, "16716"), "naval_base"), 8)
 
     def test_nam_victory_uses_connected_eflorian_border_state(self) -> None:
         effects = (
@@ -959,7 +959,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertEqual(scalar(source, "state_category"), "city")
         self.assertGreaterEqual(float(scalar(source, "local_supplies")), 2.5)
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16716\s+20\s*\}")
-        self.assertRegex(source, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
+        self.assertEqual(building_level(named_block(source, "16716"), "naval_base"), 8)
 
         country = (
             builder.ROOT / "history" / "countries" / "NAM - NamestnikLand.txt"

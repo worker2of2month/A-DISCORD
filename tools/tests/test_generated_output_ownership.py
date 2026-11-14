@@ -85,6 +85,7 @@ REQUIRED_FAMILIES = {
     "nam_oilfields",
     "nam_focus_icons",
     "factory_models",
+    "map_facility_models",
     "stp_flags",
     "stp_portraits",
     "stp_party_ideologies",
@@ -183,11 +184,11 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                 self.assertEqual(owners, [], relative)
 
     def test_focus_registry_covers_every_current_authored_output(self) -> None:
-        from tools.builders.build_adiscord_focus_trees import SOURCES
+        from tools.builders.build_adiscord_focus_trees import NAM_POSTWAR_BRANCHES, SOURCES
 
         self.assertEqual(
             set(self.entries["focus_trees"]["output_globs"]),
-            {f"common/national_focus/{name}" for name in SOURCES.values()},
+            {f"common/national_focus/{name}" for name in (*SOURCES.values(), *NAM_POSTWAR_BRANCHES.values())},
         )
 
     def test_weapon_icon_registry_does_not_claim_other_technology_art(self) -> None:

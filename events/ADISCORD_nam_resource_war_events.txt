@@ -1094,9 +1094,8 @@ country_event = {
 
 # ----- The vanished centre -----
 # The Vorkerland collapse: NAM_ladder_declare_independence fires this at the
-# collapse edge. The colony ends in immediate, so the colonial category closes
-# and the post-collapse branches of the tree open even for an unanswered
-# window; the answer opens the declaration event ADISCORD_nam_groups.12.
+# collapse edge. The colony closes when this window appears. Its answer
+# schedules the public declaration, which reveals the independent programmes.
 country_event = {
 	id = ADISCORD_nam_resource_war.80
 	title = ADISCORD_nam_resource_war.80.t
@@ -3213,8 +3212,16 @@ country_event = {
 	fire_only_once = yes
 	trigger = { tag = NAM }
 
+	immediate = {
+		hidden_effect = {
+			set_country_flag = NAM_declaration_published
+			mark_focus_tree_layout_dirty = yes
+		}
+	}
+
 	option = {
 		name = ADISCORD_nam_groups.12.a
+		custom_effect_tooltip = NAM_declaration_programmes_visible_tt
 		trigger = { NAM_ladder_formed = yes }
 		add_power_balance_value = {
 			id = NAM_ladder_bop
@@ -3239,6 +3246,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_groups.12.b
+		custom_effect_tooltip = NAM_declaration_programmes_visible_tt
 		trigger = { NAM_ladder_formed = yes }
 		add_power_balance_value = {
 			id = NAM_ladder_bop
@@ -3263,6 +3271,7 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.close
+		custom_effect_tooltip = NAM_declaration_programmes_visible_tt
 		trigger = { NOT = { NAM_ladder_formed = yes } }
 		ai_chance = { base = 100 }
 	}

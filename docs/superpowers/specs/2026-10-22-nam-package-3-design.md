@@ -308,9 +308,9 @@ The seven authored NAM trees contain 369 distinct focuses:
 
 All three colonial chains, choosing one alternative in each pair, reach
 `NAM_letters_to_the_centre` in 329 focus-days. The gateway requires the
-three endings in separate prerequisite blocks and displays the green unlock
-message. Independent branch roots depend directly on `NAM_independence_day`;
-the gateway exposes those branches without a chain between unrelated programmes.
+three endings in separate prerequisite blocks. The declaration event reveals
+`NAM_independence_day` and its descendants. Choosing the focus still requires
+completion of the colonial gateway.
 The main tree spans at most 73 horizontal coordinate units and reaches row 13.
 Visual spacing and legibility still require a manual in-game check.
 

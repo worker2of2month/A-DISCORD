@@ -13,6 +13,7 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from tools.builders.build_adiscord_focus_trees import NAM_POSTWAR_BRANCHES
 from tools.lib.focus_sources import read_focus_source
 
 try:
@@ -198,6 +199,7 @@ SOUTH_FINAL_WAR_FILES = {
     Path("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"),
     Path("common/national_focus/ADISCORD_NAM_postwar.txt"),
+    *(Path("common/national_focus") / name for name in NAM_POSTWAR_BRANCHES.values()),
     Path("common/national_focus/ADISCORD_SHL_focus.txt"),
     *SHAHRABAD_COURSE_TREES,
     Path("common/scripted_effects/ADISCORD_south_final_war_effects.txt"),

@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from tools.builders.build_adiscord_focus_trees import expected_outputs
+from tools.builders.build_adiscord_focus_trees import expected_outputs, render_source
 from tools.lib.paths import source_section
 from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -6228,7 +6228,7 @@ class RusCoupTests(unittest.TestCase):
             self.assertEqual(applied, expected, name)
 
     def test_other_countries_skip_the_khan_crisis_after_a_coup(self):
-        tree = block(parse("focus_trees/NAM/postwar/focuses.txt"), "focus_tree")
+        tree = block(parse_clausewitz(render_source("NAM/postwar/focuses.txt")), "focus_tree")
         focuses = {scalar(row.value, "id"): row.value for row in tree if row.key == "focus"}
         for name in ("NAM_rus_crisis_watch", "NAM_rus_fuel_for_coalition", "NAM_rus_demand_share", "NAM_rus_expedition_staff"):
             self.assertIn(("RUS_crisis_foreclosed", "yes"), [(row.key, row.value) for row in walk(block(focuses[name], "bypass"))], name)

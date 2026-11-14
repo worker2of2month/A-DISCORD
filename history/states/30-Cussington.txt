@@ -19,7 +19,11 @@ state={
 			ADISCORD_industrial_cluster = 1
 			ADISCORD_business_center = 1
 			12434 = {
-				naval_base = 5
+				naval_base = 8
+				naval_headquarters = {
+					level = 1
+					allowed = { has_dlc = "No Compromise, No Surrender" }
+				}
 			}
 		}
 		add_core_of = NOD

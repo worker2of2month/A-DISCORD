@@ -10,6 +10,7 @@ import json
 import re
 import unittest
 
+from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, selected_effects
 
@@ -265,7 +266,7 @@ SHL_TREES = tuple(
 
 def focus_blocks(path):
     """id -> body of the authored focuses; a shared layer has top-level shared_focus blocks."""
-    entries = parse_clausewitz(path.read_text(encoding="utf-8"))
+    entries = parse_clausewitz(read_focus_source(path))
     tree = next((e.value for e in entries if e.key == "focus_tree"), entries)
     result = {}
     for entry in tree:
@@ -1566,19 +1567,21 @@ class SouthWarOperationsTests(unittest.TestCase):
                 for root in builder.shown_roots(expanded[war]):
                     self.assertRegex(prior_output, rf"(?m)^\tshared_focus = {root}$", (prior, root))
                     self.assertIn(f"allow_branch = {{ has_focus_tree = {tree_id}", definition(root), root)
-        # A focus with its own allow_branch is shown independently of a hidden
-        # parent, so every focus of a carried source carries the swap clause.
+        # Ungated descendants inherit campaign visibility from their parents.
         per_source = builder.source_clauses(expanded, builder.swap_plan(expanded)[1])
         for source, clause in per_source.items():
+            authored = parse_clausewitz(expanded[source])
+            rows = next((e.value for e in authored if e.key == "focus_tree"), authored)
+            gated = {scalar(row.value, "id") for row in rows if row.key in ("focus", "shared_focus")
+                     and isinstance(row.value, list) and (not any(e.key == "prerequisite" for e in row.value)
+                     or any(e.key == "allow_branch" for e in row.value))}
             native = parse_clausewitz(outputs[builder.SOURCES[source]])
-            focuses = [e.value for e in native if e.key == "shared_focus" and isinstance(e.value, list)]
-            self.assertTrue(focuses, source)
-            for focus in focuses:
-                allow = block(focus, "allow_branch")
-                rendered = " ".join(f"{e.key} = {e.value}" if isinstance(e.value, str) else repr(e) for e in allow)
-                expected = "has_focus_tree" if clause.startswith("has_focus_tree") else "NOT"
-                self.assertIn("has_focus_tree", repr(allow), (source, scalar(focus, "id")))
-                self.assertEqual(allow[0].key, expected if expected == "NOT" else "has_focus_tree", (source, scalar(focus, "id"), rendered))
+            gates = {scalar(row.value, "id"): e.value for row in native if row.key == "shared_focus"
+                     for e in row.value if e.key == "allow_branch"}
+            self.assertEqual(set(gates), gated, source)
+            for name, gate in gates.items():
+                self.assertEqual(gate[0].key, "NOT" if clause.startswith("NOT") else "has_focus_tree", name)
+                self.assertIn("has_focus_tree", repr(gate[0]), name)
         for name in ("ADISCORD_south_load_war_tree", "ADISCORD_south_restore_prior_tree"):
             self.assertIn("mark_focus_tree_layout_dirty = yes", body(EFFECTS, name))
 
@@ -1720,7 +1723,7 @@ class FocusAggregateTests(unittest.TestCase):
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)
         for tree in self.TREES:
-            text = tree.read_text(encoding="utf-8")
+            text = read_focus_source(tree)
             for name in names:
                 self.assertNotIn(f"add_ideas = {name}", text)
                 self.assertNotIn(f"add_timed_idea = {{ idea = {name}", text)

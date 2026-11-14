@@ -23,6 +23,7 @@
     "isaiah_clock_tower",
     "nam_oilfields",
     "factory_models",
+    "map_facility_models",
     "nam_combine",
     "nam_export_office_icons",
     "nam_export_offices",
@@ -102,6 +103,34 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns only marked factory sections in shared registries, two native factory models and their shared textures. Other map meshes and building aliases remain unchanged. Native rebuilding requires Blender and io_pdx_mesh; previews are opt-in."
+    },
+    {
+      "id": "map_facility_models",
+      "owner_module": "tools.builders.build_adiscord_map_facility_models",
+      "source_inputs": [
+        "tools/builders/build_adiscord_map_facility_models.py",
+        "tools/assets/source/build_shl_palace.py",
+        "tools/assets/source/buildings/bunkers/bunker_prototype.blend",
+        "tools/assets/source/buildings/bunkers/bunker_destroyed_prototype.blend",
+        "tools/assets/source/buildings/airfield/airfield_prototype.blend",
+        "tools/assets/source/buildings/airfield/airfield_damaged_prototype.blend",
+        "tools/assets/source/buildings/dockyard/dockyard_prototype.blend",
+        "tools/assets/source/buildings/dockyard/dockyard_damaged_prototype.blend",
+        "tools/assets/source/buildings/port/port_prototype.blend",
+        "tools/assets/source/buildings/port/port_damaged_prototype.blend"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/ADISCORD_map_facilities/*.mesh",
+        "gfx/models/buildings/ADISCORD_map_facilities/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/zz_ADISCORD_building_entities.asset",
+        "docs/development/model-verification/map_facility_models.json"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_facility_models"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_map_facility_models", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns the marked map facility sections of the shared mesh and entity registries, the corresponding model exports and their texture atlases."
     },
     {
       "id": "nam_combine",
@@ -2959,6 +2988,10 @@
         "common/national_focus/ADISCORD_NAM_focus.txt",
         "common/national_focus/ADISCORD_NAM_wartime.txt",
         "common/national_focus/ADISCORD_NAM_postwar.txt",
+        "common/national_focus/ADISCORD_NAM_postwar_government.txt",
+        "common/national_focus/ADISCORD_NAM_postwar_economy.txt",
+        "common/national_focus/ADISCORD_NAM_postwar_armed_forces.txt",
+        "common/national_focus/ADISCORD_NAM_postwar_southern_settlement.txt",
         "common/national_focus/ADISCORD_NAM_defeated.txt",
         "common/national_focus/ADISCORD_NAM_exile_radical.txt",
         "common/national_focus/ADISCORD_NAM_exile_humanist.txt",

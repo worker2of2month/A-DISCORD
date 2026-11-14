@@ -53,8 +53,10 @@ coastal crossings do. Starting reserves above the listed minima are preserved.
 
 All bases are owned, built ports with physical access to navigable sea. Antolla
 uses its existing canal connection. SHL's base is at Safir province 3234 in
-state 730; WRK's is at Remmel province 4443 in state 200. Each has a level-2 base
-and one dockyard, owned by `build_adiscord_new_states.py`. RUS starts inland
+state 730. WRK's is at Remmel province 4443 in state 200. Each has a level-8 base
+and one dockyard, owned by `build_adiscord_new_states.py`. With No Compromise, No
+Surrender, STP, VAL, IVN, NAM, NOD, SHL and WRK each start with one naval
+headquarters in their fleet's home port. RUS starts inland
 and receives no stranded ships. Successor tags and RUS may use native naval AI
 templates when they obtain a coast and ships through their campaign routes.
 

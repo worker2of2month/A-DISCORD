@@ -1,0 +1,196 @@
+{
+  "inputs": {
+    "tools/builders/build_adiscord_map_facility_models.py": "4e8cb26c719d50d28349fe889098ddcbc0c3a3b8bd883d65560b457a5ba05110",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
+    "tools/assets/source/buildings/bunkers/bunker_prototype.blend": "ef5a0417d27a624ca0cb61e8692301508203b6dbce2e6dda7e517c2913a62ca0",
+    "tools/assets/source/buildings/bunkers/bunker_destroyed_prototype.blend": "d58442c59a9e23a32bc8e5541990911a361aa175bc306c9c72649389ac7b3991",
+    "tools/assets/source/buildings/airfield/airfield_prototype.blend": "50f4604e27ab9423bc07c7eaaf03612057fccc13b7b10b0218bce89a63fe70c5",
+    "tools/assets/source/buildings/airfield/airfield_damaged_prototype.blend": "520c3a3e9667dee9562a3ba3d7fc1bae55808f1b94f1100f26f5afbfe090e003",
+    "tools/assets/source/buildings/dockyard/dockyard_prototype.blend": "d5f55e30432ada56248c24f2606784fe2535b65eb08228267aefa14f0f9ae670",
+    "tools/assets/source/buildings/dockyard/dockyard_damaged_prototype.blend": "d9e3f06c3add68a85a1c8d0b91fee6301eb9d60dfff9c5e77da8a42637ea4ef3",
+    "tools/assets/source/buildings/port/port_prototype.blend": "f732bab24b63dc1a6af4e17cdc5f7d61c8953eff4487f05bf6d0a69b8387d9ec",
+    "tools/assets/source/buildings/port/port_damaged_prototype.blend": "59dff2d481f1161fdf5b6984b734c52b8d1da726073c06133468c6a73ebba44f"
+  },
+  "files": {
+    "ADISCORD_map_bunker.mesh": "afc04aae67b676aa7bef8b28e058832c206da4666b399fe9f0eb04ea4a078309",
+    "ADISCORD_map_bunker_diffuse.dds": "28bc082c948341c119fc872b4772a514a7f4e56e16b1a261eebe08f60a36d1b4",
+    "ADISCORD_map_bunker_normal.dds": "987a1d1065596e84395d77ebd2039d5c7ebee353e57ef7d1f613bfe9a8febe50",
+    "ADISCORD_map_bunker_specular.dds": "f7a20a5c420d3ce1f93f9b78b6de88b24ae87c244a44fa0e2948c0fccb2af208",
+    "ADISCORD_map_bunker_destroyed.mesh": "68961fb99058949fe93b6bec96bd01e07ef635c8e0c36a3089e29d4cfb38f9f4",
+    "ADISCORD_map_bunker_destroyed_diffuse.dds": "4f7a1c802a6901621c56d4bc5038cc3156de6db041014ebfd34578a0c5eb1bfc",
+    "ADISCORD_map_bunker_destroyed_normal.dds": "1914f82d84a588fb0bf2f345e67d39fd7464f6c0c2fecd4e43ee1f00bbe41cd8",
+    "ADISCORD_map_bunker_destroyed_specular.dds": "4b70b3d1a1f50406588620436924492a1a267f9ff264951140c21ddd5531e540",
+    "ADISCORD_map_air_base.mesh": "deeff8b21963d50a53faca9255fe9cdced9107165fed515c2a5ee44f8c8b823a",
+    "ADISCORD_map_air_base_diffuse.dds": "d66b239d411c1e7d9ba234dcbe56ce3724fb7679acd0aaa925e11c345d3d56d8",
+    "ADISCORD_map_air_base_normal.dds": "ddf18b2df3255d1f55b6c317e80f749a926b4dd2114af261fea148938de3791b",
+    "ADISCORD_map_air_base_specular.dds": "91d1aab93c38979c4f46e893aef8a21850a42058052fcc0f4d858fb783edf7c8",
+    "ADISCORD_map_air_base_destroyed.mesh": "d1d6a925fe069bb7e395b856a078f8a0d5a1127bbdd28b508f23e311a597c7aa",
+    "ADISCORD_map_air_base_destroyed_diffuse.dds": "c8acc9142d56acf7c56b996d0069f6795105ecfbcb12f9b85fb0c9154c356422",
+    "ADISCORD_map_air_base_destroyed_normal.dds": "726edf6c2e1c9bb892dada9dc28d1dd944701bb88bc0c7f796e93b575c0f2472",
+    "ADISCORD_map_air_base_destroyed_specular.dds": "b2cc6b310e8088da54a6b8a3165c2b7193e040b1b0988f9e2b4bb412d12f900d",
+    "ADISCORD_map_dockyard.mesh": "4566174fedc1ee04e5bf0586f7fc4da4886d442918fd5605f2b0f4222c9bd335",
+    "ADISCORD_map_dockyard_diffuse.dds": "f19ff1c33a99f7bfebd4ac8c62e14eb600572f28487af68ce7f3d80c9c4d3291",
+    "ADISCORD_map_dockyard_normal.dds": "62ae4d2710023a0ff3e12f97dfd49f2db45eae7e0202ecaf6eec2d7b32c332bb",
+    "ADISCORD_map_dockyard_specular.dds": "9c0936da885d266edcb0705e3fc3c151f8740b70174c5cc058fb7a43b0a4bae7",
+    "ADISCORD_map_dockyard_destroyed.mesh": "43c580f9f532d499ff29d0dde8c95f8988bdae8e93c3fb864a81dfded37bdf81",
+    "ADISCORD_map_dockyard_destroyed_diffuse.dds": "dc2cfbfb2e3a13e613788929802e6d169f2f69e128dda7eb61ca54ff115e7389",
+    "ADISCORD_map_dockyard_destroyed_normal.dds": "185d0f3c0d4baa4f6d8ddcc0acd7b7a27d58238e7449921d517adf221d6b6c05",
+    "ADISCORD_map_dockyard_destroyed_specular.dds": "6d35b75ca3f036227ee01192830996ae9f70507a62827de9f9fc37433eea46af",
+    "ADISCORD_map_naval_base.mesh": "58615b83376489158372df46f222f3f0718a739d1682ff35ed0330cd703e221b",
+    "ADISCORD_map_naval_base_diffuse.dds": "41fec3d52724db55fc89ef09736bedfcc1b6b575c517103c846ec51001e69342",
+    "ADISCORD_map_naval_base_normal.dds": "f0c686dbc994aff130e7802bbde6a48dbde4571c57499984b8b80f1372849cbb",
+    "ADISCORD_map_naval_base_specular.dds": "f6b3c2275f27e5faa4887f739e1041f0512dcbace0a282bae6369132b484edd9",
+    "ADISCORD_map_naval_base_destroyed.mesh": "978b978f9195256edb3f5475022576d28f1e1ae4bc71ee7d543ae8b7cba72308",
+    "ADISCORD_map_naval_base_destroyed_diffuse.dds": "75d7a4ed51cc3d3963c39ff0aaadd68d96b04edab5d0d81a1bfe38d967fbf83b",
+    "ADISCORD_map_naval_base_destroyed_normal.dds": "eb6778cf10ff2ccb6b29b5eff5794c54e6d6229f7c74f3d2e06af15e7aca6ca4",
+    "ADISCORD_map_naval_base_destroyed_specular.dds": "e6247e318befda33aad0b121a081e38cd2326f0976dd057af7a0518e57c0b496"
+  },
+  "models": {
+    "bunker": {
+      "triangles": 1304,
+      "vertices": 3427,
+      "native_bounds_xyz": [
+        [
+          -1.6411962509155273,
+          2.27239990234375
+        ],
+        [
+          -0.025999998673796654,
+          0.9619999527931213
+        ],
+        [
+          -1.7981963157653809,
+          1.621625542640686
+        ]
+      ]
+    },
+    "bunker_destroyed": {
+      "triangles": 2274,
+      "vertices": 6321,
+      "native_bounds_xyz": [
+        [
+          -1.6411962509155273,
+          2.27239990234375
+        ],
+        [
+          -0.025999998673796654,
+          0.9619999527931213
+        ],
+        [
+          -1.7981963157653809,
+          1.621625542640686
+        ]
+      ]
+    },
+    "air_base": {
+      "triangles": 2730,
+      "vertices": 7024,
+      "native_bounds_xyz": [
+        [
+          -1.8515000343322754,
+          2.7115001678466797
+        ],
+        [
+          -0.0021937501151114702,
+          0.7195500135421753
+        ],
+        [
+          -1.2658500671386719,
+          1.5246001482009888
+        ]
+      ]
+    },
+    "air_base_destroyed": {
+      "triangles": 2778,
+      "vertices": 7168,
+      "native_bounds_xyz": [
+        [
+          -1.8515000343322754,
+          2.7115001678466797
+        ],
+        [
+          -0.016938114538788795,
+          0.7195500135421753
+        ],
+        [
+          -1.2658500671386719,
+          1.5246001482009888
+        ]
+      ]
+    },
+    "dockyard": {
+      "triangles": 2608,
+      "vertices": 6952,
+      "native_bounds_xyz": [
+        [
+          -1.0255001783370972,
+          1.0255001783370972
+        ],
+        [
+          0.0,
+          0.912695050239563
+        ],
+        [
+          -2.515500068664551,
+          0.7075000405311584
+        ]
+      ]
+    },
+    "dockyard_destroyed": {
+      "triangles": 2628,
+      "vertices": 7020,
+      "native_bounds_xyz": [
+        [
+          -1.0255001783370972,
+          1.0255001783370972
+        ],
+        [
+          0.0,
+          0.912695050239563
+        ],
+        [
+          -2.515500068664551,
+          0.7075000405311584
+        ]
+      ]
+    },
+    "naval_base": {
+      "triangles": 7080,
+      "vertices": 17998,
+      "native_bounds_xyz": [
+        [
+          -1.6635375022888184,
+          1.6635375022888184
+        ],
+        [
+          -0.14174999296665192,
+          1.2160124778747559
+        ],
+        [
+          -3.1625499725341797,
+          0.7527874708175659
+        ]
+      ]
+    },
+    "naval_base_destroyed": {
+      "triangles": 6860,
+      "vertices": 17354,
+      "native_bounds_xyz": [
+        [
+          -1.6635375022888184,
+          1.6635375022888184
+        ],
+        [
+          -0.14174999296665192,
+          0.9639000296592712
+        ],
+        [
+          -3.1625499725341797,
+          0.7527874708175659
+        ]
+      ]
+    }
+  },
+  "native_reimport": true,
+  "hoi4_runtime_verified": false
+}

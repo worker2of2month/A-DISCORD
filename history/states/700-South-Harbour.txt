@@ -20,7 +20,13 @@ state = {
 			industrial_complex = 1
 			arms_factory = 2
 			fuel_silo = 2
-			16716 = { naval_base = 1 }
+			16716 = {
+				naval_base = 8
+				naval_headquarters = {
+					level = 1
+					allowed = { has_dlc = "No Compromise, No Surrender" }
+				}
+			}
 		}
 	}
 }

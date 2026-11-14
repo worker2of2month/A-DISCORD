@@ -117,7 +117,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_columns
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_desert_training
 		x = 6
 		y = 1
@@ -154,7 +153,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_quarter_levies
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_manpower
 		x = 4
 		y = 2
@@ -191,7 +189,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_guard_columns
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_soldier_salute
 		x = 8
 		y = 2
@@ -225,7 +222,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_column_staff
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_military_mission
 		x = 6
 		y = 3
@@ -263,7 +259,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_field_hospitals
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_field_hostpital
 		x = 10
 		y = 3
@@ -299,7 +294,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_raids
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_camel_corps
 		x = 4
 		y = 4
@@ -337,7 +331,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_siege_of_the_belt
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_army_artillery
 		x = 8
 		y = 4
@@ -375,7 +368,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_raid_oil_fields
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_occupy_states_ongoing_war
 		x = 2
 		y = 5
@@ -402,7 +394,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_desert_convoys
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_camel_corps
 		x = 5
 		y = 5
@@ -432,7 +423,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_heavy_batteries
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_army_artillery2
 		x = 8
 		y = 5
@@ -464,7 +454,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_sapper_companies
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_construct_infrastructure
 		x = 10
 		y = 5
@@ -501,7 +490,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_storm_oil_belt
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_position_armies
 		x = 6
 		y = 6
@@ -533,7 +521,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_veterans_of_the_sands
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_army_attack
 		x = 4
 		y = 7
@@ -566,7 +553,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_air_wing
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_air_bases
 		x = 8
 		y = 7
@@ -606,7 +592,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_furnaces_to_front
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_construct_mil_factory
 		x = 16
 		y = 1
@@ -639,7 +624,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_all_furnaces_to_arms
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_military_industry
 		x = 14
 		y = 2
@@ -692,7 +676,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_keep_the_markets
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_trade
 		x = 18
 		y = 2
@@ -739,7 +722,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_shell_lines
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_small_arms
 		x = 13
 		y = 3
@@ -780,7 +762,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_rail_to_the_front
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_railroad
 		x = 16
 		y = 3
@@ -834,7 +815,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_market_convoys
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_merchant_fleet
 		x = 19
 		y = 3
@@ -874,7 +854,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_fuel_from_ash
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_oil_refinery
 		x = 15
 		y = 4
@@ -917,7 +896,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_furnace_artels
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_industrial_experts
 		x = 17
 		y = 4
@@ -958,7 +936,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_workshops
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_army_motorized
 		x = 21
 		y = 4
@@ -999,7 +976,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_arsenal_of_the_south
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_construct_military
 		x = 16
 		y = 5
@@ -1057,7 +1033,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_sands_choose
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_alliance
 		x = 27
 		y = 1
@@ -1101,7 +1076,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_buy_the_sands
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_money_for_equipment
 		x = 25
 		y = 2
@@ -1146,7 +1120,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_break_the_sands
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_forceful_treaty
 		x = 29
 		y = 2
@@ -1181,7 +1154,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_subsidies
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_positive_trade_relations
 		x = 23
 		y = 3
@@ -1216,7 +1188,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_caravan_pacts
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_british_trade
 		x = 25
 		y = 3
@@ -1252,7 +1223,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_punitive_columns
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_provoke_border_clashes
 		x = 29
 		y = 3
@@ -1289,7 +1259,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_occupation_ultimatums
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_political_pressure
 		x = 31
 		y = 3
@@ -1322,7 +1291,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_desert_envoys
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 27
 		y = 4
@@ -1361,7 +1329,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_war_correspondents
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_propaganda
 		x = 24
 		y = 5
@@ -1394,7 +1361,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_southern_league
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_major_alliance
 		x = 28
 		y = 5
@@ -1442,7 +1408,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_quarters_at_war
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_workers
 		x = 37
 		y = 1
@@ -1472,7 +1437,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_ration_cards
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_price_controls
 		x = 35
 		y = 2
@@ -1507,7 +1471,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_furnace_martial_law
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_military_dictatorship
 		x = 39
 		y = 2
@@ -1543,7 +1506,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_widows_fund
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_welfare
 		x = 34
 		y = 3
@@ -1584,7 +1546,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_crest_war_tax
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
 		x = 37
 		y = 3
@@ -1615,7 +1576,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_street_tribunals
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_court
 		x = 40
 		y = 3
@@ -1650,7 +1610,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_quarter_kitchens
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_low_cost_housing
 		x = 35
 		y = 4
@@ -1679,7 +1638,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_home_guard
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_focus_generic_home_defense
 		x = 39
 		y = 4
@@ -1712,7 +1670,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_march_on_the_oil_belt
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_occupy_start_war
 		x = 6
 		y = 8
@@ -1762,7 +1719,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_the_last_line
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_demand_territory
 		x = 11
 		y = 9
@@ -1813,7 +1769,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_not_one_step_back
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_fortify_city
 		x = 21
 		y = 7
@@ -1857,7 +1812,6 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_sw_crown_campaign
-		allow_branch = { has_focus_tree = SHL_south_war_focus }
 		icon = GFX_goal_generic_national_unity
 		x = 16
 		y = 10

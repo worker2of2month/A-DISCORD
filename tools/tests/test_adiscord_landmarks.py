@@ -15,6 +15,7 @@ from PIL import Image
 from tools.lib.paths import repository_root
 from tools.builders import build_adiscord_azhar_palace as azhar
 from tools.builders import build_adiscord_isaiah_tower as isaiah
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = repository_root()
 KEY = "ADISCORD_kefreyt_arms_combine"
@@ -114,14 +115,19 @@ class NamHarbourTests(unittest.TestCase):
         ambient = (ROOT / "map/ambient_object.txt").read_text()
         self.assertEqual(gfx.count(f'name = "{key}_mesh"'), 1)
         self.assertEqual(entities.count(f'name = "{key}_entity"'), 1)
-        self.assertEqual(ambient.count(f'type = "{key}_entity"'), 1)
         self.assertIn(f'pdxmesh = "{key}_mesh"', entities)
         self.assertIn(f'file = "gfx/models/buildings/NAM_harbour/{key}.mesh"', gfx)
-        block = ambient.split("# BEGIN ADISCORD NAM harbour", 1)[1].split("# END ADISCORD NAM harbour", 1)[0]
-        self.assertIn("always_visible = yes", block)
-        self.assertIn("use_animation = no", block)
+        placements = [
+            row.value for row in parse_clausewitz(ambient) if row.key == "type"
+            and any(field.key == "type" and field.value == f"{key}_entity" for field in row.value)
+        ]
+        self.assertEqual(len(placements), 1)
+        fields = {field.key: field.value for field in placements[0]}
+        self.assertEqual(fields["always_visible"], "yes")
+        self.assertEqual(fields["use_animation"], "no")
+        self.assertEqual(sum(field.key == "object" for field in placements[0]), 1)
         state = (ROOT / "history/states/700-South-Harbour.txt").read_text()
-        self.assertIn("16716 = { naval_base = 1 }", state)
+        self.assertRegex(state, r"\b16716\s*=\s*\{\s*naval_base\s*=\s*8\b")
 
     def test_quay_reaches_water_while_rear_wing_meets_south_harbour_land(self):
         report = json.loads((ROOT / "docs/development/model-verification/NAM_harbour.json").read_text())

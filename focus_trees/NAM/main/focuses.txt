@@ -51,9 +51,8 @@ focus_tree = {
 	}
 
 	# ----- Colony: trade with the metropole and the underground -----
-	# The gateway reveals preparation after all three colonial routes. Its
-	# institutions remain unavailable until independence. Collapse closes the
-	# colonial decisions and bypasses any unfinished colonial prerequisites.
+	# The three colonial routes converge before the independent programmes.
+	# Collapse closes colonial decisions and bypasses unfinished colonial prerequisites.
 
 	focus = {
 		id = NAM_metropolitan_quota
@@ -604,8 +603,6 @@ focus_tree = {
 				unlock_decision_tooltip = NAM_colonial_archive_transfer
 				custom_effect_tooltip = NAM_colonial_archive_transfer_unlock_tt
 			}
-			custom_effect_tooltip = NAM_preparation_gateway_tt
-			hidden_effect = { mark_focus_tree_layout_dirty = yes }
 			add_political_power = 40
 			add_stability = 0.02
 			country_event = {
@@ -930,8 +927,7 @@ focus_tree = {
 	}
 
 	# ----- Independence -----
-	# Opens with the collapse; the posture towards the restitution claim
-	# follows the declaration.
+	# The public declaration reveals this branch even if colonial paperwork is unfinished.
 
 	focus = {
 		id = NAM_independence_day
@@ -942,7 +938,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_letters_to_the_centre }
 		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
+			has_country_flag = NAM_declaration_published
 		}
 		available = {
 			has_capitulated = no
@@ -1116,9 +1112,6 @@ focus_tree = {
 		}
 	}
 
-	# The gateway reveals preparation; the declaration of independence
-	# is the shared prerequisite for every independent programme.
-
 	# ----- Administration and the ladder of seals -----
 
 	focus = {
@@ -1129,9 +1122,6 @@ focus_tree = {
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		prerequisite = {
 			focus = NAM_independence_day
 		}
@@ -1873,9 +1863,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -2037,9 +2024,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_independent_tt
@@ -2615,9 +2599,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_independent_tt
@@ -3077,9 +3058,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_RESEARCH }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -3277,9 +3255,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_independent_tt
@@ -3850,9 +3825,6 @@ focus_tree = {
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_independence_day }
-		allow_branch = {
-			has_completed_focus = NAM_letters_to_the_centre
-		}
 		bypass = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_focus_preparation_closed_tt

@@ -488,7 +488,7 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
             'triggers': 'common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt',
             'receipt': 'NAM_nationalisation_pending',
             'unlocks': {
-                'NAM_law_after_war': 'focus_trees/NAM/postwar/focuses.txt',
+                'NAM_law_after_war': 'focus_trees/NAM/postwar/government.txt',
                 'NAM_defeat_second_chapter': 'focus_trees/NAM/defeated/focuses.txt',
                 'NAM_hum_federal_districts': 'focus_trees/NAM/exile_humanist/focuses.txt',
                 'NAM_rad_pacification': 'focus_trees/NAM/exile_radical/focuses.txt',

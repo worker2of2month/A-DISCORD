@@ -50,6 +50,11 @@ SOURCES = {
     "Vorkerland/iba_norvane/focuses.txt": "ADISCORD_Vorkerland_iba_norvane.txt",
     "Vorkerland/zao/focuses.txt": "ADISCORD_Vorkerland_zao.txt",
 }
+NAM_POSTWAR_SOURCE = "NAM/postwar/focuses.txt"
+NAM_POSTWAR_BRANCHES = {
+    f"NAM/postwar/{chapter}.txt": f"ADISCORD_NAM_postwar_{chapter}.txt"
+    for chapter in ("government", "economy", "armed_forces", "southern_settlement")
+}
 INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
 # The humanist exile tree is replaced by the corporate tree at the takeover;
@@ -77,24 +82,8 @@ SHARED_HISTORY_SOURCES = frozenset({
 })
 
 
-# A war tree replaces each of its prior trees for one campaign and gives it
-# back. Native load_focus_tree keeps only the completed focuses that exist in
-# the new tree, so the war tree also lists every root shown by its prior trees
-# and each prior tree lists the war tree's roots. allow_branch on has_focus_tree
-# hides every focus of a carried source outside its own tree: a focus with its
-# own allow_branch is shown or hidden independently of its parent.
+# Shahrabad also references shared roots from its course sources during the swap.
 TREE_SWAPS = {
-    "NAM/south_war/focuses.txt": (
-        "NAM_south_war_focus",
-        (
-            "NAM/main/focuses.txt",
-            "NAM/postwar/focuses.txt",
-            "NAM/defeated/focuses.txt",
-            "NAM/exile_humanist/focuses.txt",
-            "NAM/exile_radical/focuses.txt",
-            "NAM/exile_corporate/focuses.txt",
-        ),
-    ),
     "SHL/south_war/focuses.txt": ("SHL_south_war_focus", ("SHL/main/focuses.txt",)),
 }
 
@@ -143,7 +132,7 @@ def source_clauses(sources: dict[str, str], clauses: dict[str, str]) -> dict[str
     """The swap clause of each source that defines a carried root.
 
     A focus with its own allow_branch is evaluated separately from its parent,
-    so every focus of such a source carries the clause, not only the root.
+    so each authored gate in that source must also carry the swap clause.
     """
     owners: dict[str, str] = {}
     for source, text in sources.items():
@@ -163,7 +152,7 @@ def source_clauses(sources: dict[str, str], clauses: dict[str, str]) -> dict[str
 
 
 def hide_carried_roots(source: str, clause: str | None) -> str:
-    """Add the swap clause to the allow_branch of every focus defined here."""
+    """Guard roots and explicit branch gates while preserving native inheritance."""
     if clause is None:
         return source
     for match in reversed(list(FOCUS_DEFINITION.finditer(source))):
@@ -175,7 +164,7 @@ def hide_carried_roots(source: str, clause: str | None) -> str:
         if existing:
             insert = match.end() + existing.end()
             source = source[:insert] + f" {clause}" + source[insert:]
-        else:
+        elif not re.search(r"(?m)^[ \t]*prerequisite\s*=", body):
             source = source[:match.end()] + f"{indent}allow_branch = {{ {clause} }}\n" + source[match.end():]
     return source
 
@@ -223,7 +212,7 @@ def block_end(source: str, opening: int) -> int:
     raise ValueError("Unterminated focus block")
 
 
-def render_shared_history_tree(source: str) -> str:
+def render_shared_history_tree(source: str, *, separate_definitions: bool = False) -> str:
     """Keep one definition per old focus so native tree changes retain its completion."""
     trees = [row for row in parse_clausewitz(source) if row.key == "focus_tree"]
     if len(trees) != 1:
@@ -278,17 +267,18 @@ def render_shared_history_tree(source: str) -> str:
         if focus_id in roots:
             chunks.append(f"\tshared_focus = {focus_id}")
         # The original body is retained byte for byte, including quoted unit payloads.
-        shared.append("shared_focus = " + source[opening:end])
+        if not separate_definitions:
+            shared.append("shared_focus = " + source[opening:end])
         cursor = end
     chunks.append(source[cursor:])
     tree = re.sub(r"\n(?:[ \t]*\n){2,}", "\n\n", "".join(chunks)).rstrip()
-    return tree + "\n\n" + "\n\n".join(shared) + "\n"
+    return "\n\n".join([tree, *shared]) + "\n"
 
 
 def render_native_source(relative: str, source: str) -> str:
     """Compose engine definitions separately from the authored tooling view."""
     if relative in SHARED_HISTORY_SOURCES:
-        return render_shared_history_tree(source)
+        return render_shared_history_tree(source, separate_definitions=relative == NAM_POSTWAR_SOURCE)
     return source
 
 
@@ -345,6 +335,15 @@ def expected_outputs() -> dict[Path, bytes]:
         native = render_native_source(source, hidden[source])
         native = carry_shared_roots(native, carried.get(source, []))
         outputs[OUTPUT_ROOT / filename] = (header + native).encode("utf-8")
+    postwar_includes = INCLUDE.findall((SOURCE_ROOT / NAM_POSTWAR_SOURCE).read_text(encoding="utf-8"))
+    for source, filename in NAM_POSTWAR_BRANCHES.items():
+        chapter = (SOURCE_ROOT / source).read_text(encoding="utf-8")
+        sections = list(SECTION.finditer(chapter))
+        if len(sections) != 1 or postwar_includes.count((source, sections[0][1])) != 1:
+            raise ValueError(f"Postwar branch must be included once by its tree: {source}")
+        body = re.sub(r"(?m)^\tfocus = \{", "shared_focus = {", chapter[sections[0].end():])
+        header = f"# Generated by tools/builders/build_adiscord_focus_trees.py; do not edit.\n# Source: focus_trees/{source}\n\n"
+        outputs[OUTPUT_ROOT / filename] = (header + body).encode("utf-8")
     for path in SOURCE_ROOT.rglob("*.txt"):
         text = path.read_text(encoding="utf-8")
         if text.startswith("\ufeff"):
@@ -366,8 +365,11 @@ def main() -> int:
     parser.add_argument("--source", choices=tuple(SOURCES), help="Check or write only this authored tree")
     args = parser.parse_args()
     stale = []
+    selected = {SOURCES[args.source]} if args.source else set()
+    if args.source == NAM_POSTWAR_SOURCE:
+        selected.update(NAM_POSTWAR_BRANCHES.values())
     for path, data in expected_outputs().items():
-        if args.source and path.name != SOURCES[args.source]:
+        if selected and path.name not in selected:
             continue
         if path.is_file() and path.read_bytes() == data:
             continue

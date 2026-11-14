@@ -548,9 +548,16 @@ GENERATED_STATE_BUILDINGS = {
 GENERATED_PROVINCE_BUILDINGS = {
     AZH_BLACK_COAST_STATE_ID: ((493, "naval_base", 5),),
     723: ((6495, "naval_base", 4),),
-    SHL_SAFIR_COAST_STATE_ID: ((3234, "naval_base", 2),),
-    200: ((4443, "naval_base", 2),),
+    SHL_SAFIR_COAST_STATE_ID: ((3234, "naval_base", 8),),
+    200: ((4443, "naval_base", 8),),
 }
+GENERATED_HEADQUARTERS_PORTS = {3234, 4443, 16568, 16716}
+NAVAL_HEADQUARTERS = (
+    "naval_headquarters = {",
+    "\tlevel = 1",
+    '\tallowed = { has_dlc = "No Compromise, No Surrender" }',
+    "}",
+)
 
 # Cities that were victory points before the Vorkerland state split. Keep the
 # points on their actual urban provinces instead of losing them during rebuild.
@@ -1042,7 +1049,7 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
 }
 
 IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
-    25: ((16568, "naval_base", 1),),
+    25: ((16568, "naval_base", 8),),
     693: ((10730, "naval_base", 1),),
     694: ((11841, "naval_base", 2), (2553, "naval_base", 1)),
 }
@@ -1671,6 +1678,17 @@ def category(state_id: int) -> str:
     return "rural"
 
 
+def province_building_lines(province: int, building: str, level: int) -> list[str]:
+    if building == "naval_base" and province in GENERATED_HEADQUARTERS_PORTS:
+        return [
+            f"{province} = {{",
+            f"\tnaval_base = {level}",
+            *("\t" + line for line in NAVAL_HEADQUARTERS),
+            "}",
+        ]
+    return [f"{province} = {{ {building} = {level} }}"]
+
+
 def buildings(state_id: int, owner: str) -> list[str]:
     if owner == "EXZ":
         return []
@@ -1709,10 +1727,8 @@ def buildings(state_id: int, owner: str) -> list[str]:
         f"{building} = {level}"
         for building, level in GENERATED_STATE_BUILDINGS.get(state_id, {}).items()
     )
-    lines.extend(
-        f"{province} = {{ {building} = {level} }}"
-        for province, building, level in GENERATED_PROVINCE_BUILDINGS.get(state_id, ())
-    )
+    for province, building, level in GENERATED_PROVINCE_BUILDINGS.get(state_id, ()):
+        lines.extend(province_building_lines(province, building, level))
     return lines
 
 
@@ -1962,17 +1978,26 @@ def set_history_province_building(source: str, province: int, building: str, lev
     building_open = history.find("{", building_match.start(), building_match.end())
     building_close = matching_brace(history, building_open)
     block = history[building_open:building_close + 1]
-    entry = re.search(rf"(?m)^([ \t]*){province}\s*=\s*\{{([^}}]*)\}}[ \t]*$", block)
+    entry = re.search(rf"(?m)^([ \t]*){province}\s*=\s*\{{", block)
     if entry:
-        body = entry.group(2)
+        end = matching_brace(block, entry.end() - 1)
+        body = block[entry.end():end].strip()
+        indent = entry.group(1)
         if re.search(rf"\b{re.escape(building)}\s*=\s*\d+", body):
             body = re.sub(rf"\b{re.escape(building)}\s*=\s*\d+", f"{building} = {level}", body, count=1)
         else:
-            body = f"{body.rstrip()} {building} = {level} "
-        line = f"{entry.group(1)}{province} = {{ {body.strip()} }}"
-        block = block[:entry.start()] + line + block[entry.end():]
+            body += f"\n{indent}\t{building} = {level}"
+        if building == "naval_base" and province in GENERATED_HEADQUARTERS_PORTS:
+            if not re.search(r"\bnaval_headquarters\s*=", body):
+                body += "".join(f"\n{indent}\t{line}" for line in NAVAL_HEADQUARTERS)
+        if "\n" in body:
+            line = f"{indent}{province} = {{\n{indent}\t{body}\n{indent}}}"
+        else:
+            line = f"{indent}{province} = {{ {body} }}"
+        block = block[:entry.start()] + line + block[end + 1:]
     else:
-        block = block[:-1].rstrip() + f"\n\t\t\t{province} = {{ {building} = {level} }}\n\t\t}}"
+        lines = province_building_lines(province, building, level)
+        block = block[:-1].rstrip() + "".join(f"\n\t\t\t{line}" for line in lines) + "\n\t\t}"
     history = history[:building_open] + block + history[building_close + 1:]
     return source[:history_open] + history + source[history_close + 1:]
 
@@ -2117,10 +2142,8 @@ def render_resource_war_state(
         for building, level in state_buildings.items()
         if level
     )
-    lines.extend(
-        f"\t\t\t{province_id} = {{ {building} = {level} }}"
-        for province_id, building, level in province_buildings
-    )
+    for province_id, building, level in province_buildings:
+        lines.extend("\t\t\t" + line for line in province_building_lines(province_id, building, level))
     lines.extend(["\t\t}", "\t}", "}", ""])
     return "\n".join(lines)
 
@@ -3034,7 +3057,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             lines.append(f"\t\t\tarms_factory = {military}")
         if state_id == 700:
             lines.append("\t\t\tfuel_silo = 2")
-            lines.append("\t\t\t16716 = { naval_base = 1 }")
+            lines.extend("\t\t\t" + line for line in province_building_lines(16716, "naval_base", 8))
         lines.extend(["\t\t}", "\t}", "}", ""])
         outputs[path] = "\n".join(lines).encode("utf-8")
     for filename, names in (

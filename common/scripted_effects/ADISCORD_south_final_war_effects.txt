@@ -1117,12 +1117,8 @@ ADISCORD_south_close_member_state = {
 	}
 }
 
-# COUNTRY SHL or the NAM champion. Records the tree held at the war start in
-# ADISCORD_south_prior_tree and opens the war tree. Native load_focus_tree keeps
-# only completed focuses that exist in the new tree: the focus builder carries
-# every root of the prior trees into the war tree and back as hidden shared
-# focuses (TREE_SWAPS), so both swaps keep all completed focuses. A tree
-# outside the list keeps the country in it for the whole war.
+# COUNTRY SHL or the NAM champion. Restore the recorded tree after the war.
+# Completed shared focuses retain their history when a country loads another tree.
 ADISCORD_south_load_war_tree = {
 	clear_variable = ADISCORD_south_prior_tree
 	if = {
@@ -1170,7 +1166,7 @@ ADISCORD_south_load_war_tree = {
 			}
 		}
 	}
-	# allow_branch of the carried roots reads the tree just loaded.
+	# Re-evaluate branch visibility against the newly loaded tree.
 	mark_focus_tree_layout_dirty = yes
 }
 
@@ -1235,7 +1231,7 @@ ADISCORD_south_restore_prior_tree = {
 		}
 	}
 	clear_variable = ADISCORD_south_prior_tree
-	# allow_branch of the carried roots reads the tree just loaded.
+	# Re-evaluate branch visibility against the newly loaded tree.
 	mark_focus_tree_layout_dirty = yes
 }
 
@@ -1418,7 +1414,13 @@ ADISCORD_south_queue_offer = {
 # becomes FROM of the offer event.
 ADISCORD_south_demand_submission = {
 	if = {
-		limit = { ADISCORD_south_campaign_target_valid = yes }
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			OR = {
+				ROOT = { NOT = { tag = NAM } }
+				NAM_neighbour_sovereignty_recognised = no
+			}
+		}
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_variable = { var = ADISCORD_south_offer_kind value = 1 }
 		ADISCORD_south_queue_offer = yes
@@ -1427,7 +1429,13 @@ ADISCORD_south_demand_submission = {
 
 ADISCORD_south_demand_annexation = {
 	if = {
-		limit = { ADISCORD_south_campaign_target_valid = yes }
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			OR = {
+				ROOT = { NOT = { tag = NAM } }
+				NAM_neighbour_sovereignty_recognised = no
+			}
+		}
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_variable = { var = ADISCORD_south_offer_kind value = 2 }
 		ADISCORD_south_queue_offer = yes
@@ -1790,6 +1798,7 @@ ADISCORD_south_offer_economic_contract = {
 	if = {
 		limit = {
 			ADISCORD_south_campaign_target_valid = yes
+			NAM_neighbour_sovereignty_recognised = no
 			ROOT = {
 				tag = NAM
 				has_completed_focus = NAM_pragmatic_compact

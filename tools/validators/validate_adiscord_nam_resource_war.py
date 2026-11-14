@@ -606,7 +606,7 @@ def check_ladder(
         and "set_country_flag = NAM_center_vanished" in colony_close
         and "mark_focus_tree_layout_dirty = yes" in colony_close
         and "fire_only_once = yes" in centre,
-        "the vanished-centre event must close the colony, reveal the tree and open the declaration .12",
+        "the vanished-centre event must close the colony, refresh the tree and open the declaration .12",
     )
     runtime = "\n".join((effects, events, decisions))
     for course, value in (("etatism", "-0.5"), ("pragmatism", "0"), ("humanism", "0.5")):
@@ -2876,7 +2876,7 @@ def main() -> int:
             f"missing critical part {part}",
         )
     fleet_contracts = (
-        ("NAM", "history/units/NAM.txt", 22, 30, 16716, 700, 1, 688),
+        ("NAM", "history/units/NAM.txt", 22, 30, 16716, 700, 8, 688),
         ("EFL", "history/units/EFL.txt", 9, 40, 6495, 723, 4, 723),
         ("AZH", "history/units/AZH.txt", 13, 40, 493, 692, 5, 692),
     )
