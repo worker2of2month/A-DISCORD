@@ -474,5 +474,17 @@ objectTypes = {
 		file = "gfx/models/buildings/ADISCORD_map_facilities/ADISCORD_map_naval_base_destroyed.mesh"
 		scale = 1
 	}
+
+	pdxmesh = {
+		name = "ADISCORD_map_synthetic_refinery_mesh"
+		file = "gfx/models/buildings/ADISCORD_map_facilities/ADISCORD_map_synthetic_refinery.mesh"
+		scale = 1
+	}
+
+	pdxmesh = {
+		name = "ADISCORD_map_synthetic_refinery_destroyed_mesh"
+		file = "gfx/models/buildings/ADISCORD_map_facilities/ADISCORD_map_synthetic_refinery_destroyed.mesh"
+		scale = 1
+	}
 }
 # END ADISCORD map facility models

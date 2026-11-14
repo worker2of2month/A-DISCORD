@@ -348,4 +348,81 @@ entity = {
 		}
 	}
 }
+
+entity = {
+	name = "building_synthetic_refinery"
+	version = 1
+	pdxmesh = "ADISCORD_map_synthetic_refinery_mesh"
+	locator = {
+		name = "damage_1"
+		position = { -0.939800 1.716800 -1.228400 }
+	}
+	locator = {
+		name = "damage_2"
+		position = { 0.777000 0.614200 1.243200 }
+	}
+	locator = {
+		name = "damage_3"
+		position = { -0.869500 0.592000 0.943500 }
+	}
+	default_state = "idle"
+	state = {
+		name = "idle"
+	}
+	state = {
+		name = "damaged"
+		event = {
+			time = 0.1
+			node = "damage_1"
+			particle = "building_damaged_particle"
+		}
+		event = {
+			time = 0.1
+			node = "damage_2"
+			particle = "building_damaged_particle"
+		}
+		event = {
+			time = 0.1
+			node = "damage_3"
+			particle = "building_damaged_particle"
+		}
+	}
+}
+
+entity = {
+	name = "building_synthetic_refinery_destroyed"
+	version = 1
+	pdxmesh = "ADISCORD_map_synthetic_refinery_destroyed_mesh"
+	locator = {
+		name = "damage_1"
+		position = { -0.939800 0.777000 -1.228400 }
+	}
+	locator = {
+		name = "damage_2"
+		position = { 0.777000 0.214600 1.243200 }
+	}
+	locator = {
+		name = "damage_3"
+		position = { -0.869500 0.592000 0.943500 }
+	}
+	default_state = "idle"
+	state = {
+		name = "idle"
+		event = {
+			time = 0.1
+			node = "damage_1"
+			particle = "building_damaged_particle"
+		}
+		event = {
+			time = 0.1
+			node = "damage_2"
+			particle = "building_damaged_particle"
+		}
+		event = {
+			time = 0.1
+			node = "damage_3"
+			particle = "building_damaged_particle"
+		}
+	}
+}
 # END ADISCORD map facility models

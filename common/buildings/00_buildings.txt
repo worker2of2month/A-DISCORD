@@ -258,6 +258,7 @@ buildings = {
 
 	synthetic_refinery = {
 		show_on_map = 1
+		has_destroyed_mesh = yes
 		base_cost = 14500
 		icon_frame = 10
 		#local_resources_oil = 1 # May use local_resources_ + any resource name

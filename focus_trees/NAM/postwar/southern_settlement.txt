@@ -2,10 +2,10 @@
 	focus = {
 		id = NAM_south_heritage
 		relative_position_id = NAM_law_after_war
-		x = 6
-		y = 26
+		x = 8
+		y = 22
 		offset = {
-			y = -3
+			y = -7
 			trigger = { NAM_prewar_service_mandate = no }
 		}
 		icon = GFX_focus_NAM_independence_day
@@ -58,7 +58,7 @@
 	focus = {
 		id = NAM_svetlogorsk_settlement
 		relative_position_id = NAM_south_heritage
-		x = 2
+		x = 3
 		y = 1
 		icon = GFX_focus_NAM_recognition
 		cost = 3
@@ -196,7 +196,7 @@
 	focus = {
 		id = NAM_veyran_arsenal_contract
 		relative_position_id = NAM_south_heritage
-		x = 8
+		x = 7
 		y = 3
 		icon = GFX_focus_NAM_metropolitan_depots
 		cost = 4
@@ -330,7 +330,7 @@
 	focus = {
 		id = NAM_rus_crisis_watch
 		relative_position_id = NAM_south_heritage
-		x = 12
+		x = 9
 		y = 1
 		icon = GFX_focus_VAL_Wireless_Contract_Bureau
 		cost = 2
@@ -391,7 +391,7 @@
 	focus = {
 		id = NAM_rus_fuel_for_coalition
 		relative_position_id = NAM_south_heritage
-		x = 10
+		x = 9
 		y = 2
 		icon = GFX_focus_NAM_well_register
 		cost = 3
@@ -436,7 +436,7 @@
 	focus = {
 		id = NAM_rus_demand_share
 		relative_position_id = NAM_south_heritage
-		x = 14
+		x = 12
 		y = 2
 		icon = GFX_focus_NAM_second_ledger
 		cost = 3
@@ -481,7 +481,7 @@
 	focus = {
 		id = NAM_rus_expedition_staff
 		relative_position_id = NAM_south_heritage
-		x = 12
+		x = 10
 		y = 3
 		icon = GFX_focus_VAL_Contract_General_Staff
 		cost = 3
@@ -537,7 +537,7 @@
 	focus = {
 		id = NAM_pw_postwar_commission
 		relative_position_id = NAM_south_heritage
-		x = -10
+		x = -8
 		y = 1
 		icon = GFX_focus_NAM_open_ledgers
 		cost = 3
@@ -583,7 +583,7 @@
 	focus = {
 		id = NAM_pw_strategic_reserve
 		relative_position_id = NAM_south_heritage
-		x = -6
+		x = -3
 		y = 1
 		icon = GFX_focus_NAM_concealed_reserve
 		cost = 3
@@ -621,7 +621,7 @@
 	focus = {
 		id = NAM_pw_development_fund
 		relative_position_id = NAM_south_heritage
-		x = -2
+		x = 0
 		y = 1
 		icon = GFX_focus_NAM_second_ledger
 		cost = 3
@@ -661,7 +661,7 @@
 	focus = {
 		id = NAM_pw_war_accounts
 		relative_position_id = NAM_south_heritage
-		x = -4
+		x = -3
 		y = 2
 		icon = GFX_focus_NAM_second_ledger
 		cost = 3
@@ -705,7 +705,7 @@
 	focus = {
 		id = NAM_pw_southern_schools
 		relative_position_id = NAM_south_heritage
-		x = -8
+		x = -6
 		y = 2
 		icon = GFX_focus_RUS_district_courts
 		cost = 3
@@ -763,7 +763,7 @@
 	focus = {
 		id = NAM_pw_unified_budget
 		relative_position_id = NAM_south_heritage
-		x = -2
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_second_ledger
 		cost = 3
@@ -809,7 +809,7 @@
 	focus = {
 		id = NAM_pw_demobilisation_board
 		relative_position_id = NAM_south_heritage
-		x = -12
+		x = -9
 		y = 2
 		icon = GFX_focus_NAM_quiet_officer_lists
 		cost = 3
@@ -892,7 +892,7 @@
 	focus = {
 		id = NAM_pw_civil_administration
 		relative_position_id = NAM_south_heritage
-		x = -2
+		x = 0
 		y = 3
 		icon = GFX_focus_RUS_trained_administrators
 		cost = 3
@@ -942,7 +942,7 @@
 	focus = {
 		id = NAM_pw_permanent_institutions
 		relative_position_id = NAM_south_heritage
-		x = -12
+		x = -9
 		y = 3
 		icon = GFX_focus_RUS_district_courts
 		cost = 3

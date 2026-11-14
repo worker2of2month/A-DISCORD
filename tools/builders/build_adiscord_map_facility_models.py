@@ -28,6 +28,8 @@ SCENES = {
     "dockyard_destroyed": SOURCE / "dockyard/dockyard_damaged_prototype.blend",
     "naval_base": SOURCE / "port/port_prototype.blend",
     "naval_base_destroyed": SOURCE / "port/port_damaged_prototype.blend",
+    "synthetic_refinery": SOURCE / "refinery/refinery_prototype.blend",
+    "synthetic_refinery_destroyed": SOURCE / "refinery/refinery_damaged_prototype.blend",
 }
 INPUTS = [Path(__file__).relative_to(ROOT), Path("tools/assets/source/build_shl_palace.py"), *SCENES.values()]
 GFX = Path("gfx/entities/mapitems_custom.gfx")
@@ -36,6 +38,7 @@ MARKER = "ADISCORD map facility models"
 SIZE = 1024
 CHANNELS = ("diffuse", "normal", "specular")
 PORT_SCALE = .405
+REFINERY_SCALE = .37
 # Authoring coordinates before the uniform map transform.
 DAMAGE = {
     "bunker": [],
@@ -46,6 +49,8 @@ DAMAGE = {
     "dockyard_destroyed": [(-2.6, 2.9, .6), (2.3, -.65, .85)],
     "naval_base": [(-2.45, -4.72, 2.04), (-3.07, 2.08, 1.98), (1.63, 2.93, 1.60)],
     "naval_base_destroyed": [(-1.25, -4.82, .63), (-3.07, 2.08, .74), (1.63, 2.93, 1.60)],
+    "synthetic_refinery": [(-3.32, 2.54, 4.64), (3.36, -2.10, 1.66), (2.55, 2.35, 1.60)],
+    "synthetic_refinery_destroyed": [(-3.32, 2.54, 2.10), (3.36, -2.10, .58), (2.55, 2.35, 1.60)],
 }
 
 
@@ -64,6 +69,9 @@ def files(kind):
 
 def map_point(kind, point):
     x, y, z = point
+    if kind.startswith("synthetic_refinery"):
+        # The long side of the original refinery runs along native Z.
+        return (-REFINERY_SCALE * y, REFINERY_SCALE * x, REFINERY_SCALE * z)
     if kind.startswith("naval_base"):
         # Both quays project along native -Z. Match the original outer pier
         # at Z = -3.13 relative to the shared coastal spawn point.
@@ -224,6 +232,9 @@ def write_meshes(stage):
         if kind.startswith("dockyard"):
             rotation = Matrix.Rotation(-math.pi / 2, 4, "Z")
             scale = .293
+        elif kind.startswith("synthetic_refinery"):
+            rotation = Matrix.Rotation(math.pi / 2, 4, "Z")
+            scale = REFINERY_SCALE
         elif kind.startswith("naval_base"):
             rotation = Matrix.Identity(4)
             scale = PORT_SCALE

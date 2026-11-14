@@ -117,7 +117,9 @@
         "tools/assets/source/buildings/dockyard/dockyard_prototype.blend",
         "tools/assets/source/buildings/dockyard/dockyard_damaged_prototype.blend",
         "tools/assets/source/buildings/port/port_prototype.blend",
-        "tools/assets/source/buildings/port/port_damaged_prototype.blend"
+        "tools/assets/source/buildings/port/port_damaged_prototype.blend",
+        "tools/assets/source/buildings/refinery/refinery_prototype.blend",
+        "tools/assets/source/buildings/refinery/refinery_damaged_prototype.blend"
       ],
       "output_globs": [
         "gfx/models/buildings/ADISCORD_map_facilities/*.mesh",

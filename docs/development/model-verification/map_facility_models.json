@@ -1,6 +1,6 @@
 {
   "inputs": {
-    "tools/builders/build_adiscord_map_facility_models.py": "4e8cb26c719d50d28349fe889098ddcbc0c3a3b8bd883d65560b457a5ba05110",
+    "tools/builders/build_adiscord_map_facility_models.py": "33aacdce0ab5a3e066a166f924ba863f5bfacb7c4b64f7aa667f6e4d7a514991",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
     "tools/assets/source/buildings/bunkers/bunker_prototype.blend": "ef5a0417d27a624ca0cb61e8692301508203b6dbce2e6dda7e517c2913a62ca0",
     "tools/assets/source/buildings/bunkers/bunker_destroyed_prototype.blend": "d58442c59a9e23a32bc8e5541990911a361aa175bc306c9c72649389ac7b3991",
@@ -9,7 +9,9 @@
     "tools/assets/source/buildings/dockyard/dockyard_prototype.blend": "d5f55e30432ada56248c24f2606784fe2535b65eb08228267aefa14f0f9ae670",
     "tools/assets/source/buildings/dockyard/dockyard_damaged_prototype.blend": "d9e3f06c3add68a85a1c8d0b91fee6301eb9d60dfff9c5e77da8a42637ea4ef3",
     "tools/assets/source/buildings/port/port_prototype.blend": "f732bab24b63dc1a6af4e17cdc5f7d61c8953eff4487f05bf6d0a69b8387d9ec",
-    "tools/assets/source/buildings/port/port_damaged_prototype.blend": "59dff2d481f1161fdf5b6984b734c52b8d1da726073c06133468c6a73ebba44f"
+    "tools/assets/source/buildings/port/port_damaged_prototype.blend": "59dff2d481f1161fdf5b6984b734c52b8d1da726073c06133468c6a73ebba44f",
+    "tools/assets/source/buildings/refinery/refinery_prototype.blend": "64963cdacc600c32cd00e3c2ff4a96b9f1eca0b4f46668b1f55914d4b618e1ce",
+    "tools/assets/source/buildings/refinery/refinery_damaged_prototype.blend": "dd10c699b9ad8cee04d3391028bb9217ec85ba0646d70d976f4a2fc771484736"
   },
   "files": {
     "ADISCORD_map_bunker.mesh": "afc04aae67b676aa7bef8b28e058832c206da4666b399fe9f0eb04ea4a078309",
@@ -43,7 +45,15 @@
     "ADISCORD_map_naval_base_destroyed.mesh": "978b978f9195256edb3f5475022576d28f1e1ae4bc71ee7d543ae8b7cba72308",
     "ADISCORD_map_naval_base_destroyed_diffuse.dds": "75d7a4ed51cc3d3963c39ff0aaadd68d96b04edab5d0d81a1bfe38d967fbf83b",
     "ADISCORD_map_naval_base_destroyed_normal.dds": "eb6778cf10ff2ccb6b29b5eff5794c54e6d6229f7c74f3d2e06af15e7aca6ca4",
-    "ADISCORD_map_naval_base_destroyed_specular.dds": "e6247e318befda33aad0b121a081e38cd2326f0976dd057af7a0518e57c0b496"
+    "ADISCORD_map_naval_base_destroyed_specular.dds": "e6247e318befda33aad0b121a081e38cd2326f0976dd057af7a0518e57c0b496",
+    "ADISCORD_map_synthetic_refinery.mesh": "562d33e9ae62a635f253bd1050f50cf21e6c06dd51c7c5d8b77e4dcce8b93edf",
+    "ADISCORD_map_synthetic_refinery_diffuse.dds": "d487e06b96123ecc0ecde0049386cf71b85005c221ea7179e1e9f6d5566b5598",
+    "ADISCORD_map_synthetic_refinery_normal.dds": "6b2ba2b2bf4ed2ae393378d65338e5e92c7ddcba1ce090a992e4030303525d10",
+    "ADISCORD_map_synthetic_refinery_specular.dds": "db7aa8379e5e783cf3d46b508cf50cb6e2787138b6d26ceb7c8025ff81329a23",
+    "ADISCORD_map_synthetic_refinery_destroyed.mesh": "3ad7c582e529517562d03b582cde75ac89339e33682393a787beff40109c9e26",
+    "ADISCORD_map_synthetic_refinery_destroyed_diffuse.dds": "431028bebe49eb74e3e9ae1ca83f92e7fc14b439677256eae5b6f921f66c829e",
+    "ADISCORD_map_synthetic_refinery_destroyed_normal.dds": "fc62d23edad37d8fbe61918a69fd4893ed12feea24f536c8a404351f4e012c6c",
+    "ADISCORD_map_synthetic_refinery_destroyed_specular.dds": "737ad7ecfa8db67817ccb0e865d9f45ce01c209466cbfdaaa1b3cdfed0568d8a"
   },
   "models": {
     "bunker": {
@@ -187,6 +197,42 @@
         [
           -3.1625499725341797,
           0.7527874708175659
+        ]
+      ]
+    },
+    "synthetic_refinery": {
+      "triangles": 16602,
+      "vertices": 44700,
+      "native_bounds_xyz": [
+        [
+          -1.3986001014709473,
+          1.339400053024292
+        ],
+        [
+          -0.03700000047683716,
+          2.017982006072998
+        ],
+        [
+          -1.7649000883102417,
+          1.7427000999450684
+        ]
+      ]
+    },
+    "synthetic_refinery_destroyed": {
+      "triangles": 13672,
+      "vertices": 37014,
+      "native_bounds_xyz": [
+        [
+          -1.3986001014709473,
+          1.339400053024292
+        ],
+        [
+          -0.03700000047683716,
+          2.017982006072998
+        ],
+        [
+          -1.7649000883102417,
+          1.7427000999450684
         ]
       ]
     }

@@ -5,7 +5,7 @@ from decimal import Decimal
 from collections import ChainMap, Counter
 from contextlib import redirect_stdout
 from io import StringIO
-from itertools import permutations, product
+from itertools import combinations, permutations, product
 from pathlib import Path
 import json
 import re
@@ -10910,6 +10910,30 @@ class NamCampaignTests(unittest.TestCase):
                                 blocked = oy == y == ty and min(x, tx) < ox < max(x, tx)
                             self.assertFalse(blocked, (route, name, target.value, other))
 
+            # Each prerequisite runs sideways below its parent, then down the child's column.
+            edges = [(parent.value, child) for child, focus in visible.items()
+                     for group in focus if group.key == "prerequisite"
+                     for parent in group.value if parent.value in positions]
+            for parent, child in edges:
+                column, bottom = positions[child]
+                top = positions[parent][1]
+                for source, target in edges:
+                    left, row = positions[source]
+                    right = positions[target][0]
+                    if top < row < bottom and min(left, right) < column < max(left, right):
+                        self.fail(f"{route}: {parent} -> {child} crosses {source} -> {target}")
+
+            children = {}
+            for parent, child in edges:
+                children.setdefault(parent, set()).add(child)
+            for first, second in combinations(children, 2):
+                if positions[first][1] != positions[second][1] or children[first] & children[second]:
+                    continue
+                first_xs = [positions[n][0] for n in children[first] | {first}]
+                second_xs = [positions[n][0] for n in children[second] | {second}]
+                overlap = min(max(first_xs), max(second_xs)) - max(min(first_xs), min(second_xs))
+                self.assertLessEqual(overlap, 0, (route, first, second))
+
     def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
         roots = ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
         for balance, course, count in ((-0.5, "service_state", 161), (0, "pragmatic_compact", 128),
@@ -10935,7 +10959,36 @@ class NamCampaignTests(unittest.TestCase):
                     snapshots.append(snapshot)
                 self.assertEqual(*snapshots)
                 points = snapshots[0]
-                self.assertEqual([points[n] for n in roots], [(28, 2), (30, 2), (32, 2)])
+                origin_x, origin_y = points["NAM_recognition"]
+                self.assertEqual([points[n] for n in roots],
+                                 [(origin_x + dx, origin_y + 1) for dx in (-3, 0, 3)])
+                xs = [x for x, _ in points.values()]
+                self.assertLessEqual(max(xs) - min(xs), 78)
+                western_programmes = {"NAM_pw_energy_commission", "NAM_pw_industrial_recovery"}
+                for name, (x, y) in points.items():
+                    for group in (e for e in self.postwar[name] if e.key == "prerequisite"):
+                        for parent in (p.value for p in group.value if p.value in points):
+                            px, py = points[parent]
+                            limit = 18 if parent in roots and name not in western_programmes else 24
+                            self.assertLessEqual(abs(x - px), limit, (parent, name))
+                            if parent in roots:
+                                self.assertLessEqual(y - py, 5, (parent, name))
+                for name in ("NAM_oil_ministry", "NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review"):
+                    self.assertEqual(points[name][1], origin_y + 2, name)
+                energy_x, energy_y = points["NAM_pw_energy_commission"]
+                self.assertEqual(energy_y, points["NAM_middle_loren_wells"][1])
+                self.assertLess(energy_x, points["NAM_middle_loren_wells"][0])
+                self.assertEqual(energy_x, points["NAM_pw_oilfield_substations"][0] + 1)
+                if "NAM_pw_constitutional_committee" in points:
+                    commission_x, commission_y = points["NAM_pw_constitutional_committee"]
+                    cabinet_x, cabinet_y = points["NAM_pw_cabinet_statute"]
+                    chamber_x, chamber_y = points["NAM_pw_state_chamber"]
+                    self.assertEqual(cabinet_y, chamber_y)
+                    self.assertLess(commission_y, cabinet_y)
+                    self.assertLessEqual(abs(2 * commission_x - cabinet_x - chamber_x), 1)
+                if "NAM_south_seal_over_furnaces" in points:
+                    agreements_x, agreements_y = points["NAM_south_desert_offices"]
+                    self.assertEqual(points["NAM_south_seal_over_furnaces"], (agreements_x, agreements_y + 1))
                 self.assertEqual("NAM_south_heritage" in points, won_south)
                 if not won_south:
                     self.assertEqual(len(points), count)
@@ -10946,10 +10999,17 @@ class NamCampaignTests(unittest.TestCase):
                 for name in ("foreign_office", "eflor_accord", "eflor_ultimatum", "azhar_accord", "azhar_ultimatum",
                              "border_administration", "border_security", "border_compacts", "border_citizenship"):
                     self.assertIn("NAM_" + name, points)
+                for chapter in ("NAM_pw_air_review", "NAM_pw_naval_review", "NAM_pw_transport_commission",
+                                "NAM_pw_energy_commission"):
+                    for name, focus in self.postwar.items():
+                        if name in points and any(
+                            p.value == chapter for g in focus if g.key == "prerequisite" for p in g.value
+                        ):
+                            self.assertLessEqual(points[name][1] - points[chapter][1], 3, (chapter, name))
                 ordered = sorted((y, x, name) for name, (x, y) in points.items())
                 for (y, x, name), (oy, ox, other) in zip(ordered, ordered[1:]):
                     if y == oy:
-                        self.assertGreaterEqual(ox - x, 2, (name, other))
+                        self.assertGreaterEqual(ox - x, 3, (name, other))
 
     def test_neighbour_policy_is_independent_for_each_country_and_binds_later_demands(self):
         southern = {r.key: r.value for r in parsed("common/scripted_effects/ADISCORD_south_final_war_effects.txt")}
@@ -11618,6 +11678,15 @@ class NamCampaignTests(unittest.TestCase):
             for channel in ("civil", "military"):
                 self.assertFalse(facts[("NAM", "has_country_flag", f"NAM_pw_{channel}_busy")])
             offensive = self.postwar["NAM_south_seal_over_furnaces" if vertical else "NAM_south_oil_charter"]
+            if vertical:
+                self.assertIn("NAM_svetlogorye", [e.value for e in block(offensive, "available")
+                                                  if e.key == "has_completed_focus"])
+                for restored in (False, True):
+                    bypass_facts = {
+                        ("NAM", "has_completed_focus", "NAM_svetlogorye"): restored,
+                        ("NAM", "has_global_flag", "ADISCORD_south_final_started"): True,
+                    }
+                    self.assertEqual(self.matches(block(offensive, "bypass"), bypass_facts), restored)
             for prerequisite in (e.value for e in offensive if e.key == "prerequisite"):
                 self.assertTrue(any(facts.get(("NAM", "has_completed_focus", e.value)) for e in prerequisite))
             offensive_days = int(scalar(offensive, "cost")) * 7
